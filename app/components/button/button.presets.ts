@@ -25,7 +25,12 @@ export const viewPresets: Record<string, ViewStyle> = {
   /**
    * A smaller piece of secondard information.
    */
-  primary: { ...BASE_VIEW, backgroundColor: color.palette.orange } as ViewStyle,
+  primary: {
+    ...BASE_VIEW,
+    backgroundColor: color.palette.green,
+    paddingVertical: spacing[3],
+    borderRadius: 5
+  } as ViewStyle,
 
   /**
    * A button without extras.

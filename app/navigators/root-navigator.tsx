@@ -30,7 +30,7 @@ const RootStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        cardStyle: { backgroundColor: color.palette.deepPurple },
+        cardStyle: { backgroundColor: color.palette.white },
         headerShown: false,
       }}
     >
