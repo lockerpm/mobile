@@ -77,3 +77,15 @@ export async function clear(): Promise<void> {
     await AsyncStorage.clear()
   } catch {}
 }
+
+/**
+ * Check if exists
+ */
+export async function has(key: string): Promise<boolean> {
+  try {
+    const val = await load(key)
+    return val !== null
+  } catch {
+    return false
+  }
+}

@@ -8,6 +8,7 @@ import React from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
+import { IntroScreen, Login1Screen } from "../screens"
 import { color } from "../theme"
 
 /**
@@ -21,6 +22,8 @@ import { color } from "../theme"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type RootParamList = {
+  intro: undefined,
+  'login-1': undefined,
   mainStack: undefined
 }
 
@@ -29,11 +32,15 @@ const Stack = createStackNavigator<RootParamList>()
 const RootStack = () => {
   return (
     <Stack.Navigator
+      initialRouteName="intro"
       screenOptions={{
         cardStyle: { backgroundColor: color.palette.white },
         headerShown: false,
       }}
     >
+      <Stack.Screen name="intro" component={IntroScreen} />
+      <Stack.Screen name="login-1" component={Login1Screen} />
+
       <Stack.Screen
         name="mainStack"
         component={MainNavigator}
