@@ -6,7 +6,7 @@
  */
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen, IntroScreen, Login1Screen } from "../screens"
+import { WelcomeScreen, DemoScreen, DemoListScreen, InitMasterPasswordScreen } from "../screens"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -22,8 +22,7 @@ import { WelcomeScreen, DemoScreen, DemoListScreen, IntroScreen, Login1Screen } 
  */
 export type PrimaryParamList = {
   // CyStack
-  intro: undefined,
-  'login-1': undefined,
+  'init-master-password': undefined,
 
   // Demo
   welcome: undefined,
@@ -37,13 +36,13 @@ const Stack = createStackNavigator<PrimaryParamList>()
 export function MainNavigator() {
   return (
     <Stack.Navigator
+      initialRouteName="init-master-password"
       screenOptions={{
         cardStyle: { backgroundColor: "transparent" },
         headerShown: false,
       }}
     >
-      <Stack.Screen name="intro" component={IntroScreen} />
-      <Stack.Screen name="login-1" component={Login1Screen} />
+      <Stack.Screen name="init-master-password" component={InitMasterPasswordScreen} />
 
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />

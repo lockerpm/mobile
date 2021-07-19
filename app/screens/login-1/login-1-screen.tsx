@@ -52,7 +52,7 @@ export const Login1Screen = observer(function Login1Screen() {
             preset="link"
             text="Sign up"
             textStyle={{ color: color.palette.green, fontSize: 14 }}
-            onPress={() => navigation.navigate("login-1")}
+            onPress={() => navigation.navigate("mainStack")}
           />
         </View>
       </SafeAreaView>
