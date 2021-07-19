@@ -1,4 +1,4 @@
-import * as crypto from 'crypto-browserify';
+import * as crypto from 'crypto';
 import * as forge from 'node-forge';
 import { CryptoFunctionService } from "../../../../core/abstractions/cryptoFunction.service"
 import { SymmetricCryptoKey } from "../../../../core/models/domain"

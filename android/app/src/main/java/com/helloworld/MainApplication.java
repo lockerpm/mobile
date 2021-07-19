@@ -8,6 +8,7 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.bitgo.randombytes.RandomBytesPackage;
+import com.bitgo.randombytes.RandomBytesPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

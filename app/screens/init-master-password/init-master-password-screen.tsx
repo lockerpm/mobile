@@ -24,11 +24,13 @@ export const InitMasterPasswordScreen = observer(function InitMasterPasswordScre
   // @ts-ignore
   const { cryptoService } = useCoreService()
 
-  const createMasterPassword = async (email, password) => {
+  const createMasterPassword = async (email : string, password : string) => {
     const kdf = KdfType.PBKDF2_SHA256
     const kdfIterations = 5000
     const key = await cryptoService.makeKey(password, email, kdf, kdfIterations)
+    console.log(typeof key)
     console.log(key)
+    // console.log(email + password)
   }
 
   return (

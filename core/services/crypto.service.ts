@@ -93,7 +93,7 @@ export class CryptoService implements CryptoServiceAbstraction {
             return this.key;
         }
 
-        keySuffix ||= 'auto';
+        keySuffix = keySuffix || 'auto';
         const symmetricKey = await this.getKeyFromStorage(keySuffix);
 
         if (symmetricKey != null) {
