@@ -1,5 +1,6 @@
 import React from 'react';
-import { CryptoService } from "../../../core/services"
+import { CryptoService, PasswordGenerationService, UserService, TokenService } from "../../../core/services"
+import { PolicyService } from "../../../core/services/policy.service"
 import { MobileStorageService } from "./services/MobileStorageService"
 import { SecureStorageService } from "./services/SecureStorageService"
 import { MobileCryptoFunctionService } from "./services/MobileCryptoFunctionService"
@@ -8,36 +9,49 @@ import { MobileLogService } from "./services/MobileLogService"
 
 const { createContext, useContext } = React
 
-const CoreContext = createContext({})
+const storageService = new MobileStorageService()
+const secureStorageService = new SecureStorageService()
+const cryptoFunctionService = new MobileCryptoFunctionService()
+const platformUtilsService = new MobilePlatformUtilsService()
+const logService = new MobileLogService()
 
-export const CoreProvider = (props) => {
-  const storageService = new MobileStorageService()
-  const secureStorageService = new SecureStorageService()
-  const cryptoFunctionService = new MobileCryptoFunctionService()
-  const platformUtilsService = new MobilePlatformUtilsService()
-  const logService = new MobileLogService()
-  const cryptoService = new CryptoService(
-    storageService,
-    secureStorageService,
-    cryptoFunctionService,
-    platformUtilsService,
-    logService
-  )
+const tokenService = new TokenService(storageService)
+const userService = new UserService(tokenService, storageService)
+const policyService = new PolicyService(userService, storageService)
+const cryptoService = new CryptoService(
+  storageService,
+  secureStorageService,
+  cryptoFunctionService,
+  platformUtilsService,
+  logService
+)
+const passwordGenerationService = new PasswordGenerationService(
+  cryptoService,
+  storageService,
+  policyService
+)
 
-  const services = {
-    cryptoService,
-    logService,
-    platformUtilsService,
-    storageService,
-    secureStorageService,
-    cryptoFunctionService
-  }
-
-  return (
-    <CoreContext.Provider value={services}>
-      {props.children}
-    </CoreContext.Provider>
-  )
+const services = {
+  cryptoService,
+  logService,
+  platformUtilsService,
+  storageService,
+  secureStorageService,
+  cryptoFunctionService,
+  passwordGenerationService,
+  tokenService,
+  userService,
+  policyService
 }
+
+const CoreContext = createContext(services)
+
+// export const CoreProvider = (props) => {
+//   return (
+//     <CoreContext.Provider value={services}>
+//       {props.children}
+//     </CoreContext.Provider>
+//   )
+// }
 
 export const useCoreService = () => useContext(CoreContext)

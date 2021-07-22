@@ -20,17 +20,32 @@ export const InitMasterPasswordScreen = observer(function InitMasterPasswordScre
   // Pull in navigation via hook
   // const navigation = useNavigation()
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const { cryptoService } = useCoreService()
+  const { cryptoService, passwordGenerationService } = useCoreService()
 
   const createMasterPassword = async (email : string, password : string) => {
     const kdf = KdfType.PBKDF2_SHA256
     const kdfIterations = 5000
     const key = await cryptoService.makeKey(password, email, kdf, kdfIterations)
-    console.log(typeof key)
-    console.log(key)
-    // console.log(email + password)
+    const encKey = await cryptoService.makeEncKey(key)
+    const hashedPassword = await cryptoService.hashPassword(password, key)
+    const keys = await cryptoService.makeKeyPair(encKey[0])
+    const payload = {
+      email,
+      kdf,
+      kdfIterations,
+      masterPasswordHash: hashedPassword,
+      key: encKey[1].encryptedString,
+      keys: {
+        publicKey: keys[0],
+        privateKey: keys[1].encryptedString
+      }
+    }
+    console.log(payload)
+  }
+
+  const evaluatePassword = async (password: string) => {
+    const passwordStrength = passwordGenerationService.passwordStrength(password)
+    console.log(passwordStrength)
   }
 
   return (
@@ -39,6 +54,10 @@ export const InitMasterPasswordScreen = observer(function InitMasterPasswordScre
       <Button
         text="TEST"
         onPress={() => createMasterPassword('test@gmail.com', '12345678')}
+      />
+      <Button
+        text="TEST 2"
+        onPress={() => evaluatePassword('12345678')}
       />
     </Screen>
   )

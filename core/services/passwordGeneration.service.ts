@@ -1,4 +1,5 @@
-import * as zxcvbn from 'zxcvbn';
+// import zxcvbn from 'zxcvbn';
+const zxcvbn = require('zxcvbn')
 
 import { EncString } from '../models/domain/encString';
 import { GeneratedPasswordHistory } from '../models/domain/generatedPasswordHistory';
