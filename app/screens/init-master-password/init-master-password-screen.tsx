@@ -20,7 +20,7 @@ export const InitMasterPasswordScreen = observer(function InitMasterPasswordScre
   // Pull in navigation via hook
   // const navigation = useNavigation()
 
-  const { cryptoService, passwordGenerationService } = useCoreService()
+  const { cryptoService, passwordGenerationService, storageService, secureStorageService } = useCoreService()
 
   const createMasterPassword = async (email : string, password : string) => {
     const kdf = KdfType.PBKDF2_SHA256
@@ -58,6 +58,38 @@ export const InitMasterPasswordScreen = observer(function InitMasterPasswordScre
       <Button
         text="TEST 2"
         onPress={() => evaluatePassword('12345678')}
+      />
+      <Button
+        text="Store abc"
+        onPress={() => storageService.save('abc', 123, undefined)}
+      />
+      <Button
+        text="Get abc"
+        onPress={async () => console.log(await storageService.get('abc', undefined))}
+      />
+      <Button
+        text="Store abc with suffix"
+        onPress={() => storageService.save('abc', 1234, { keySuffix: 'auto' })}
+      />
+      <Button
+        text="Get abc with suffix"
+        onPress={async () => console.log(await storageService.get('abc', { keySuffix: 'auto' }))}
+      />
+      <Button
+        text="Store abc secure"
+        onPress={() => secureStorageService.save('abc', 123, undefined)}
+      />
+      <Button
+        text="Get abc secure"
+        onPress={async () => console.log(await secureStorageService.get('abc', undefined))}
+      />
+      <Button
+        text="Store abc with suffix secure"
+        onPress={() => secureStorageService.save('abc', 1234, { keySuffix: 'auto' })}
+      />
+      <Button
+        text="Get abc with suffix secure"
+        onPress={async() => console.log(await secureStorageService.get('abc', { keySuffix: 'auto' }))}
       />
     </Screen>
   )
