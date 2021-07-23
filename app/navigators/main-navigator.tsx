@@ -4,11 +4,14 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react"
+import React, { useEffect } from "react"
+import { AppState } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainTabNavigator } from "./main-tab-navigator"
 import { SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen } from "../screens"
+import UserInactivity from 'react-native-user-inactivity'
 import { color } from "../theme"
+import { INACTIVE_TIMEOUT } from "../config/constants"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -33,19 +36,37 @@ export type PrimaryParamList = {
 const Stack = createStackNavigator<PrimaryParamList>()
 
 export function MainNavigator() {
+  useEffect(() => {
+    AppState.addEventListener("change", _handleAppStateChange)
+    return () => {
+      AppState.removeEventListener("change", _handleAppStateChange)
+    };
+  }, []);
+
+  const _handleAppStateChange = (nextAppState: string) => {
+    if (nextAppState === "active") {
+      console.log("App has come to the foreground!");
+    }
+  };
+
   return (
-    <Stack.Navigator
-      initialRouteName="start"
-      screenOptions={{
-        cardStyle: { backgroundColor: color.palette.white },
-        headerShown: false
-      }}
+    <UserInactivity
+      timeForInactivity={INACTIVE_TIMEOUT}
+      onAction={isActive => { console.log(`App active state: ${isActive}`) }}
     >
-      <Stack.Screen name="start" component={StartScreen} />
-      <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
-      <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
-      <Stack.Screen name="mainTab" component={MainTabNavigator} />
-    </Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName="start"
+        screenOptions={{
+          cardStyle: { backgroundColor: color.palette.white },
+          headerShown: false
+        }}
+      >
+        <Stack.Screen name="start" component={StartScreen} />
+        <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
+        <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
+        <Stack.Screen name="mainTab" component={MainTabNavigator} />
+      </Stack.Navigator>
+    </UserInactivity>
   )
 }
 
