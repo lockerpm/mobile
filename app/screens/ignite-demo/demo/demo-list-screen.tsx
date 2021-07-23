@@ -2,9 +2,9 @@ import React, { useEffect } from "react"
 import { FlatList, TextStyle, View, ViewStyle, ImageStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { Header, Screen, Text, Wallpaper, AutoImage as Image } from "../../components"
-import { color, spacing } from "../../theme"
-import { useStores } from "../../models"
+import { Header, Screen, Text, Wallpaper, AutoImage as Image } from "../../../components"
+import { color, spacing } from "../../../theme"
+import { useStores } from "../../../models"
 
 const FULL: ViewStyle = {
   flex: 1,

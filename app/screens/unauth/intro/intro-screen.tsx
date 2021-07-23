@@ -1,10 +1,10 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { SafeAreaView, View, ViewStyle, TouchableOpacity } from "react-native"
-import { AutoImage as Image, Button, Text } from "../../components"
+import { AutoImage as Image, Button, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
-import { color, spacing } from "../../theme"
+import { color, spacing } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 
 
@@ -79,7 +79,7 @@ export const IntroScreen = observer(function IntroScreen() {
             preset="link"
             text="SKIP"
             textStyle={{ color: color.palette.green, fontSize: 14 }}
-            onPress={() => navigation.navigate("login-1")}
+            onPress={() => navigation.navigate("onBoarding")}
           />
         </View>
       </SafeAreaView>
@@ -121,7 +121,7 @@ export const IntroScreen = observer(function IntroScreen() {
             tx="welcomeScreen.continue"
             onPress={() => {
               if (index === routes.length - 1) {
-                navigation.navigate("login-1")
+                navigation.navigate("onBoarding")
               } else {
                 setIndex((index + 1) % routes.length)
               }
