@@ -6,7 +6,9 @@
  */
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen, InitMasterPasswordScreen } from "../screens"
+import { MainTabNavigator } from "./main-tab-navigator"
+import { SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen } from "../screens"
+import { color } from "../theme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -21,13 +23,10 @@ import { WelcomeScreen, DemoScreen, DemoListScreen, InitMasterPasswordScreen } f
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
-  // CyStack
-  'init-master-password': undefined,
-
-  // Demo
-  welcome: undefined,
-  demo: undefined,
-  demoList: undefined
+  start: undefined,
+  switchDevice: undefined,
+  biometricUnlockIntro: undefined,
+  mainTab: undefined,
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -36,17 +35,16 @@ const Stack = createStackNavigator<PrimaryParamList>()
 export function MainNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="init-master-password"
+      initialRouteName="start"
       screenOptions={{
-        cardStyle: { backgroundColor: "transparent" },
-        headerShown: false,
+        cardStyle: { backgroundColor: color.palette.white },
+        headerShown: false
       }}
     >
-      <Stack.Screen name="init-master-password" component={InitMasterPasswordScreen} />
-
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
+      <Stack.Screen name="start" component={StartScreen} />
+      <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
+      <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
+      <Stack.Screen name="mainTab" component={MainTabNavigator} />
     </Stack.Navigator>
   )
 }
@@ -60,5 +58,5 @@ export function MainNavigator() {
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ["welcome"]
+const exitRoutes = ["start", "mainTab", "switchDevice", "biometricUnlockIntro"]
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)

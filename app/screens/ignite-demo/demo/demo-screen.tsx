@@ -10,10 +10,10 @@ import {
   Screen,
   Wallpaper,
   AutoImage as Image,
-} from "../../components"
-import { color, spacing } from "../../theme"
-import { Api } from "../../services/api"
-import { save } from "../../utils/storage"
+} from "../../../components"
+import { color, spacing } from "../../../theme"
+import { Api } from "../../../services/api"
+import { save } from "../../../utils/storage"
 export const logoIgnite = require("./logo-ignite.png")
 export const heart = require("./heart.png")
 
