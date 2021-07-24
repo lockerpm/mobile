@@ -27,7 +27,7 @@ export const LoginScreen = observer(function LoginScreen() {
       />
       <Button
         text="Welcome back"
-        onPress={() => navigation.navigate('welcomeBack')}
+        onPress={() => navigation.navigate('lock')}
       />
       <Button
         text="Create master pass"
