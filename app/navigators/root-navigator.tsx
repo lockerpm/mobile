@@ -9,7 +9,7 @@ import { NavigationContainer, NavigationContainerRef } from "@react-navigation/n
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
 import { 
-  IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, WelcomeBackScreen, CreateMasterPasswordScreen 
+  IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, CreateMasterPasswordScreen 
 } from "../screens"
 import { color } from "../theme"
 
@@ -30,7 +30,6 @@ export type RootParamList = {
   lock: undefined,
   login: undefined,
   signup: undefined,
-  welcomeBack: undefined,
   createMasterPassword: undefined,
   mainStack: undefined
 }
@@ -52,7 +51,6 @@ const RootStack = () => {
       <Stack.Screen name="lock" component={LockScreen} />
       <Stack.Screen name="login" component={LoginScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />
-      <Stack.Screen name="welcomeBack" component={WelcomeBackScreen} />
       <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
       <Stack.Screen
         name="mainStack"
