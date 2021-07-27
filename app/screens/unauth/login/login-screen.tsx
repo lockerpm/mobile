@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
@@ -13,7 +13,7 @@ export const LoginScreen = observer(function LoginScreen() {
   const navigation = useNavigation()
 
   // Params
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   // Helpers
   const getParamFromUrl = (name : string, url: string) => {
@@ -46,6 +46,11 @@ export const LoginScreen = observer(function LoginScreen() {
       }
     }
   }
+
+  // Mounted
+  useEffect(() => {
+    setIsLoading(false)
+  }, [])
 
   return isLoading ? (
     <Loading />

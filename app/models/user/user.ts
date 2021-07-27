@@ -1,5 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withEnvironment } from ".."
+import { SessionLoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 
 /**
@@ -78,7 +79,39 @@ export const UserModel = types
       } else {
         return false
       }
-    } 
+    },
+
+    sessionLogin: async (payload: SessionLoginData) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.sessionLogin(payload)
+      if (res.kind === "ok") {
+        return res
+      } else {
+        return null
+      }
+    },
+
+    logout: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.logout()
+      if (res.kind === "ok") {
+        self.clearToken()
+        self.clearUser()
+        return true
+      } else {
+        return false
+      }
+    },
+
+    syncData: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.syncData()
+      if (res.kind === "ok") {
+        return res
+      } else {
+        return null
+      }
+    }
   }))
 
 /**
