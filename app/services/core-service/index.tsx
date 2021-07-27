@@ -8,11 +8,12 @@ import {
 import { PolicyService } from "../../../core/services/policy.service"
 import { FileUploadService } from "../../../core/services/fileUpload.service"
 import { SearchService } from "../../../core/services/search.service"
-import { ConsoleLogService } from "../../../core/services/consoleLog.service"
 import { 
   MobileStorageService, SecureStorageService, MobileCryptoFunctionService, MobilePlatformUtilsService,
   MobileLogService, MobileMessagingService
 } from './services'
+import en from "../../i18n/en.json"
+import vi from "../../i18n/vi.json"
 
 const { createContext, useContext } = React
 
@@ -31,18 +32,10 @@ const logService = new MobileLogService()
 const messagingService = new MobileMessagingService()
 const i18nService = new I18nService(deviceLanguage, localesDirectory, (formattedLocale : string) => {
   return new Promise((resolve) => {
-    const filePath = `${localesDirectory}/${formattedLocale}.json`
-    let res = {}
-    try {
-      res = require(filePath)
-    } catch(e) {
-      console.log(`Cannot find locale ${formattedLocale}, default to EN`)
-      res = require(`${localesDirectory}/en.json`)
-    }
-    resolve(res)
+    const localeJson = formattedLocale.toLowerCase() === 'vi' ? vi : en
+    resolve(localeJson)
   })
 })
-const consoleLogService = new ConsoleLogService(__DEV__)
 
 // Dependency injected services
 const tokenService = new TokenService(storageService)
@@ -131,7 +124,7 @@ const authService = new AuthService(
   platformUtilsService,
   messagingService,
   vaultTimeoutService,
-  consoleLogService
+  logService
 )
 
 // All services to be used
