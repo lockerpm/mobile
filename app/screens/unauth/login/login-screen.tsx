@@ -13,7 +13,6 @@ export const LoginScreen = observer(function LoginScreen() {
   const navigation = useNavigation()
 
   // Params
-  let tokenFlag = false
   const [isLoading, setIsLoading] = useState(false)
 
   // Helpers
@@ -29,13 +28,19 @@ export const LoginScreen = observer(function LoginScreen() {
   // Actions
   const onWebViewNavigationStateChange = async (state: WebViewNavigation) => {
     const token = getParamFromUrl('token', state.url)
-    if (token && !tokenFlag) {
-      tokenFlag = true
+    if (token && !user.token) {
       setIsLoading(true)
       user.saveToken(token)
-      const isSuccess = await user.getUser()
-      if (isSuccess) {
-        navigation.navigate('lock')
+      const [getUserRes, getUserPwRes] = await Promise.all([
+        user.getUser(),
+        user.getUserPw()
+      ])
+      if (getUserRes && getUserPwRes) {
+        if (user.is_pwd_manager) {
+          navigation.navigate('lock')
+        } else {
+          navigation.navigate('createMasterPassword')
+        }
       } else {
         navigation.navigate('onBoarding')
       }
