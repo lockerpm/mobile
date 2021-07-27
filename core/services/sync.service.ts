@@ -274,7 +274,7 @@ export class SyncService implements SyncServiceAbstraction {
         return true;
     }
 
-    private async syncProfile(response: ProfileResponse) {
+    async syncProfile(response: ProfileResponse) {
         const stamp = await this.userService.getSecurityStamp();
         if (stamp != null && stamp !== response.securityStamp) {
             if (this.logoutCallback != null) {
@@ -297,7 +297,7 @@ export class SyncService implements SyncServiceAbstraction {
         return await this.userService.replaceOrganizations(organizations);
     }
 
-    private async syncFolders(userId: string, response: FolderResponse[]) {
+    async syncFolders(userId: string, response: FolderResponse[]) {
         const folders: { [id: string]: FolderData; } = {};
         response.forEach(f => {
             folders[f.id] = new FolderData(f, userId);
@@ -305,7 +305,7 @@ export class SyncService implements SyncServiceAbstraction {
         return await this.folderService.replace(folders);
     }
 
-    private async syncCollections(response: CollectionDetailsResponse[]) {
+    async syncCollections(response: CollectionDetailsResponse[]) {
         const collections: { [id: string]: CollectionData; } = {};
         response.forEach(c => {
             collections[c.id] = new CollectionData(c);
@@ -313,7 +313,7 @@ export class SyncService implements SyncServiceAbstraction {
         return await this.collectionService.replace(collections);
     }
 
-    private async syncCiphers(userId: string, response: CipherResponse[]) {
+    async syncCiphers(userId: string, response: CipherResponse[]) {
         const ciphers: { [id: string]: CipherData; } = {};
         response.forEach(c => {
             ciphers[c.id] = new CipherData(c, userId);
@@ -321,7 +321,7 @@ export class SyncService implements SyncServiceAbstraction {
         return await this.cipherService.replace(ciphers);
     }
 
-    private async syncSends(userId: string, response: SendResponse[]) {
+    async syncSends(userId: string, response: SendResponse[]) {
         const sends: { [id: string]: SendData; } = {};
         response.forEach(s => {
             sends[s.id] = new SendData(s, userId);
@@ -329,7 +329,7 @@ export class SyncService implements SyncServiceAbstraction {
         return await this.sendService.replace(sends);
     }
 
-    private async syncSettings(userId: string, response: DomainsResponse) {
+    async syncSettings(userId: string, response: DomainsResponse) {
         let eqDomains: string[][] = [];
         if (response != null && response.equivalentDomains != null) {
             eqDomains = eqDomains.concat(response.equivalentDomains);
@@ -346,7 +346,7 @@ export class SyncService implements SyncServiceAbstraction {
         return this.settingsService.setEquivalentDomains(eqDomains);
     }
 
-    private async syncPolicies(response: PolicyResponse[]) {
+    async syncPolicies(response: PolicyResponse[]) {
         const policies: { [id: string]: PolicyData; } = {};
         if (response != null) {
             response.forEach(p => {

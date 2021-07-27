@@ -3,11 +3,12 @@ import { NativeModules, Platform } from 'react-native';
 import { 
   CryptoService, PasswordGenerationService, UserService, TokenService, AuthService, ApiService,
   AppIdService, I18nService, VaultTimeoutService, CipherService, SettingsService, FolderService,
-  CollectionService
+  CollectionService, SyncService
 } from "../../../core/services"
 import { PolicyService } from "../../../core/services/policy.service"
 import { FileUploadService } from "../../../core/services/fileUpload.service"
 import { SearchService } from "../../../core/services/search.service"
+import { SendService } from "../../../core/services/send.service"
 import { 
   MobileStorageService, SecureStorageService, MobileCryptoFunctionService, MobilePlatformUtilsService,
   MobileLogService, MobileMessagingService
@@ -57,6 +58,7 @@ const apiService = new ApiService(
   tokenService,
   platformUtilsService,
   (expired: boolean) => {
+    console.log('apiService logout callback')
     return new Promise((resolve) => {
       resolve(null)
     })
@@ -126,6 +128,34 @@ const authService = new AuthService(
   vaultTimeoutService,
   logService
 )
+const sendService = new SendService(
+  cryptoService,
+  userService,
+  apiService,
+  fileUploadService,
+  storageService,
+  i18nService,
+  cryptoFunctionService
+)
+const syncService = new SyncService(
+  userService,
+  apiService,
+  settingsService,
+  folderService,
+  cipherService,
+  cryptoService,
+  collectionService,
+  storageService,
+  messagingService,
+  policyService,
+  sendService,
+  (expired: boolean) => {
+    console.log('apiService logout callback')
+    return new Promise((resolve) => {
+      resolve(null)
+    })
+  }
+)
 
 // All services to be used
 const services = {
@@ -139,7 +169,13 @@ const services = {
   tokenService,
   userService,
   policyService,
-  authService
+  authService,
+  folderService,
+  cipherService,
+  searchService,
+  collectionService,
+  messagingService,
+  syncService
 }
 
 const CoreContext = createContext(services)
