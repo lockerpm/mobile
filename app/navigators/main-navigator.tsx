@@ -12,6 +12,10 @@ import { SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen } from "../
 import UserInactivity from 'react-native-user-inactivity'
 import { color } from "../theme"
 import { INACTIVE_TIMEOUT } from "../config/constants"
+import { useStores } from "../models"
+import { ApiResponse } from "apisauce"
+import { getGeneralApiProblem } from "../services/api/api-problem"
+import { useNavigation } from "@react-navigation/native"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -36,23 +40,44 @@ export type PrimaryParamList = {
 const Stack = createStackNavigator<PrimaryParamList>()
 
 export function MainNavigator() {
+  // App lock trigger
   useEffect(() => {
     AppState.addEventListener("change", _handleAppStateChange)
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
     };
   }, []);
-
   const _handleAppStateChange = (nextAppState: string) => {
     if (nextAppState === "active") {
       console.log("App has come to the foreground!");
+      navigation.navigate('lock')
     }
-  };
+  }
+
+  // App inactive trigger
+  const handleInactive = (isActive : boolean) => {
+    console.log(`App active state: ${isActive}`)
+    navigation.navigate('lock')
+  }
+
+  // Auto API error handling
+  const { user } = useStores()
+  const navigation = useNavigation()
+  const monitor = (response : ApiResponse<any>) => {
+    const problem = getGeneralApiProblem(response)
+    if (problem) {
+      if (problem.kind === 'unauthorized') {
+        user.clearToken()
+        navigation.navigate('login')
+      }
+    }
+  }
+  user.environment.api.apisauce.addMonitor(monitor)
 
   return (
     <UserInactivity
       timeForInactivity={INACTIVE_TIMEOUT}
-      onAction={isActive => { console.log(`App active state: ${isActive}`) }}
+      onAction={handleInactive}
     >
       <Stack.Navigator
         initialRouteName="start"

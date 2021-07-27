@@ -1,5 +1,6 @@
-import { ApisauceInstance, create } from "apisauce"
+import { ApiResponse, ApisauceInstance, create } from "apisauce"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
+import { getGeneralApiProblem } from "./api-problem"
 
 /**
  * Manages all requests to the API.
@@ -40,5 +41,17 @@ export class Api {
         Accept: "application/json",
       },
     })
+    
+    // add monitor for error logging
+    const monitor = (response : ApiResponse<any>) => {
+      if (__DEV__) {
+        console.log(`Calling ${response.config.baseURL}${response.config.url}`)
+        const problem = getGeneralApiProblem(response)
+        if (problem) {
+          console.log(`URL: ${response.config.url} - Status: ${response.status} - Message: ${response.data.message}`)
+        }
+      }
+    }
+    this.apisauce.addMonitor(monitor)
   }
 }
