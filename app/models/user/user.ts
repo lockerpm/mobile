@@ -9,29 +9,40 @@ import { UserApi } from "../../services/api/user-api"
 export const UserModel = types
   .model("User")
   .props({
-    token: types.maybe(types.string),
+    token: types.maybeNull(types.string),
 
     // ID
-    email: types.maybe(types.string),
-    username: types.maybe(types.string),
-    full_name: types.maybe(types.string),
-    avatar: types.maybe(types.string),
+    isLoggedIn: types.maybeNull(types.boolean),
+    email: types.maybeNull(types.string),
+    username: types.maybeNull(types.string),
+    full_name: types.maybeNull(types.string),
+    avatar: types.maybeNull(types.string),
 
     // PM
-    pwd_user_id: types.maybe(types.string),
-    is_pwd_manager: types.maybe(types.string),
-    default_team_id: types.maybe(types.string)
+    isLoggedInPw: types.maybeNull(types.boolean),
+    pwd_user_id: types.maybeNull(types.string),
+    is_pwd_manager: types.maybeNull(types.boolean),
+    default_team_id: types.maybeNull(types.string)
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    // Environment
+    checkApiHeader: () => {
+      if (self.token && !self.environment.api.apisauce.headers['Authorization']) {
+        self.environment.api.apisauce.setHeader('Authorization', `Bearer ${self.token}`)
+      }
+    },
+
     // Token
     saveToken: (token: string) => {
       self.token = token
+      self.isLoggedIn = true
       self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
     },
     clearToken: () => {
       self.token = ''
+      self.isLoggedIn = false
       self.environment.api.apisauce.deleteHeader('Authorization')
     },
 
@@ -48,18 +59,24 @@ export const UserModel = types
       self.default_team_id = userSnapshot.default_team_id
     },
     clearUser: () => {
+      self.isLoggedIn = false
+      self.isLoggedInPw = false
       self.token = ''
       self.email = ''
       self.username = ''
       self.full_name = ''
       self.avatar = ''
       self.pwd_user_id = ''
-      self.is_pwd_manager = ''
+      self.is_pwd_manager = false
       self.default_team_id = ''
+    },
+    setLoggedInPw: (isLoggedInPw: boolean) => {
+      self.isLoggedInPw = isLoggedInPw
     }
   }))
   .actions((self) => ({
     getUser: async () => {
+      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser()
       if (res.kind === "ok") {
@@ -71,10 +88,11 @@ export const UserModel = types
     },
 
     getUserPw: async () => {
+      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUserPw()
       if (res.kind === "ok") {
-        self.saveUser(res.user)
+        self.saveUserPw(res.user)
         return true
       } else {
         return false
@@ -82,16 +100,23 @@ export const UserModel = types
     },
 
     sessionLogin: async (payload: SessionLoginData) => {
+      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.sessionLogin(payload)
       if (res.kind === "ok") {
-        return res
+        self.setLoggedInPw(true)
+        return res.data
       } else {
         return null
       }
     },
 
+    lock: () => {
+      self.setLoggedInPw(false)
+    },
+
     logout: async () => {
+      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.logout()
       if (res.kind === "ok") {
@@ -104,10 +129,11 @@ export const UserModel = types
     },
 
     syncData: async () => {
+      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.syncData()
       if (res.kind === "ok") {
-        return res
+        return res.data
       } else {
         return null
       }

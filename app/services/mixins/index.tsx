@@ -45,6 +45,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
       const hashedPassword = await cryptoService.hashPassword(masterPassword, key)
+
+      // Session login
       const res = await user.sessionLogin({
         client_id: 'mobile',
         password: hashedPassword,
@@ -52,15 +54,24 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         device_type: platformUtilsService.getDevice(),
         device_identifier: await storageService.get('device_id', undefined) || randomString()
       })
+      if (!res) {
+        notify('error', 'Error', 'Session login failed')
+        return false
+      }
+
+      // Setup service
       messagingService.send('loggedIn')
-      await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
+      await tokenService.setTokens(res.access_token, res.refresh_token)
       await userService.setInformation(tokenService.getUserId(), user.email, kdf, kdfIterations)
       await cryptoService.setKey(key)
       await cryptoService.setKeyHash(hashedPassword)
-      await cryptoService.setEncKey(res.data.key)
-      await cryptoService.setEncPrivateKey(res.data.private_key)
+      await cryptoService.setEncKey(res.key)
+      await cryptoService.setEncPrivateKey(res.private_key)
+
+      // Return value
       return true
     } catch (e) {
+      console.log(e)
       notify('error', 'Error', 'Session login failed')
       return false
     }
@@ -87,24 +98,35 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     cipherService.clearCache()
     // searchService.clearCache()
     collectionService.clearCache()
+    user.lock()
   }
 
   // ------------------------ DATA ---------------------------
   const getSyncData = async () => {
     try {
       messagingService.send('syncStarted')
+
+      // Sync api
       const res = await user.syncData()
+      if (!res) {
+        notify('error', 'Error', 'Sync failed')
+        messagingService.send('syncCompleted', { successfully: false })
+        return
+      }
+
+      // Sync service
       const userId = await userService.getUserId()
-      await syncService.syncProfile(res.data.profile)
-      await syncService.syncFolders(userId, res.data.folders)
-      await syncService.syncCollections(res.data.collections)
-      await syncService.syncCiphers(userId, res.data.ciphers)
-      await syncService.syncSends(userId, res.data.sends)
-      await syncService.syncSettings(userId, res.data.domains)
-      await syncService.syncPolicies(res.data.policies)
+      await syncService.syncProfile(res.profile)
+      await syncService.syncFolders(userId, res.folders)
+      await syncService.syncCollections(res.collections)
+      await syncService.syncCiphers(userId, res.ciphers)
+      await syncService.syncSends(userId, res.sends)
+      await syncService.syncSettings(userId, res.domains)
+      await syncService.syncPolicies(res.policies)
       await syncService.setLastSync(new Date())
       messagingService.send('syncCompleted', { successfully: true })
     } catch (e) {
+      notify('error', 'Error', 'Sync failed')
       messagingService.send('syncCompleted', { successfully: false })
     }
   }

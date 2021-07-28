@@ -9,6 +9,20 @@ const CONTAINER: ViewStyle = {
   flex: 1
 }
 
+const OVERLAY_CONTAINER: ViewStyle = {
+  flex: 1,
+  position: 'absolute',
+  height: '100%',
+  width: '100%',
+  top: 0,
+  left: 0,
+  zIndex: 1000,
+  backgroundColor: 'white',
+  opacity: 0.5,
+  justifyContent: "center",
+  alignItems: "center"
+}
+
 
 export interface LoadingProps {
   /**
@@ -23,6 +37,17 @@ export interface LoadingProps {
 export const Loading = observer(function Loading(props: LoadingProps) {
   const { style } = props
   const styles = flatten([CONTAINER, style])
+
+  return (
+    <View style={styles}>
+      <ActivityIndicator size="large" color="green" />
+    </View>
+  )
+})
+
+export const OverlayLoading = observer(function OverlayLoading(props: LoadingProps) {
+  const { style } = props
+  const styles = flatten([OVERLAY_CONTAINER, style])
 
   return (
     <View style={styles}>
