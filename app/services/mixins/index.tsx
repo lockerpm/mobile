@@ -1,11 +1,8 @@
-// import { useNavigation } from '@react-navigation/native'
-import { ApiResponse } from 'apisauce'
 import React from 'react'
 import { Alert } from "react-native"
 import { nanoid } from 'nanoid'
 import { KdfType } from '../../../core/enums/kdfType'
 import { useStores } from '../../models'
-import { getGeneralApiProblem } from '../api/api-problem'
 import { useCoreService } from '../core-service'
 
 const { createContext, useContext } = React
@@ -15,7 +12,6 @@ const defaultData = {
   logout: async () => {},
   lock: async () => {},
   getSyncData: async () => {},
-  monitorApiResponse: (response : ApiResponse<any>) => {},
   notify: (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string) => {},
   randomString: () => ''
 }
@@ -25,7 +21,6 @@ const MixinsContext = createContext(defaultData)
 
 export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const { user } = useStores()
-  // const navigation = useNavigation()
   const { 
     cryptoService, 
     userService, 
@@ -64,7 +59,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await cryptoService.setKeyHash(hashedPassword)
       await cryptoService.setEncKey(res.data.key)
       await cryptoService.setEncPrivateKey(res.data.private_key)
-      // navigation.navigate('mainStack')
       return true
     } catch (e) {
       notify('error', 'Error', 'Session login failed')
@@ -79,7 +73,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       cryptoService.clearKeys(),
       userService.clear()
     ])
-    // navigation.navigate('onBoarding')
   }
 
   // Lock screen
@@ -94,7 +87,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     cipherService.clearCache()
     // searchService.clearCache()
     collectionService.clearCache()
-    // navigation.navigate('lock')
   }
 
   // ------------------------ DATA ---------------------------
@@ -119,17 +111,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // ------------------------ SUPPORT -------------------------
 
-  // Monitor api responses
-  const monitorApiResponse = (response : ApiResponse<any>) => {
-    const problem = getGeneralApiProblem(response)
-    if (problem) {
-      if (problem.kind === 'unauthorized') {
-        user.clearToken()
-        // navigation.navigate('login')
-      }
-    }
-  }
-
   // Alert message
   const notify = (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string) => {
     Alert.alert(title, text)
@@ -145,7 +126,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     sessionLogin,
     logout,
     lock,
-    monitorApiResponse,
     notify,
     randomString,
     getSyncData

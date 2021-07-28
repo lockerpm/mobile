@@ -14,6 +14,9 @@ import { color } from "../theme"
 import { INACTIVE_TIMEOUT } from "../config/constants"
 import { useStores } from "../models"
 import { useMixins } from "../services/mixins"
+import { useNavigation } from "@react-navigation/native"
+import { getGeneralApiProblem } from "../services/api/api-problem"
+import { ApiResponse } from "apisauce"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -38,7 +41,9 @@ export type PrimaryParamList = {
 const Stack = createStackNavigator<PrimaryParamList>()
 
 export function MainNavigator() {
-  const { lock, monitorApiResponse } = useMixins()
+  const navigation = useNavigation()
+  const { lock } = useMixins()
+  const { user } = useStores()
 
   // App lock trigger
   useEffect(() => {
@@ -50,6 +55,7 @@ export function MainNavigator() {
   const _handleAppStateChange = (nextAppState: string) => {
     if (nextAppState === "active") {
       lock()
+      navigation.navigate('lock')
     }
   }
 
@@ -57,11 +63,20 @@ export function MainNavigator() {
   const handleInactive = (isActive : boolean) => {
     if (!isActive) {
       lock()
+      navigation.navigate('lock')
     }
   }
 
   // Auto API error handling
-  const { user } = useStores()
+  const monitorApiResponse = (response : ApiResponse<any>) => {
+    const problem = getGeneralApiProblem(response)
+    if (problem) {
+      if (problem.kind === 'unauthorized') {
+        user.clearToken()
+        navigation.navigate('login')
+      }
+    }
+  }
   user.environment.api.apisauce.addMonitor(monitorApiResponse)
 
   return (
