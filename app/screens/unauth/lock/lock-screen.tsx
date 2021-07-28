@@ -1,33 +1,61 @@
-import React from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Screen, Text, Button } from "../../../components"
+import { ViewStyle, TextInput } from "react-native"
+import { Screen, Text, Button, OverlayLoading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
+// import { useStores } from "../../../models"
 import { color } from "../../../theme"
+import { useMixins } from "../../../services/mixins"
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
-  flex: 1,
+  backgroundColor: color.palette.white,
+  flex: 1
 }
 
 export const LockScreen = observer(function LockScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-
-  // Pull in navigation via hook
   const navigation = useNavigation()
+  const { logout, sessionLogin, notify } = useMixins()
 
+  // Params
+  const [masterPassword, setMasterPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  
   return (
     <Screen style={ROOT} preset="scroll">
+      {
+        isLoading && (
+          <OverlayLoading />
+        )
+      }
       <Text preset="header" text="Lock" />
-      <Button
-        text="Logout"
-        onPress={() => navigation.navigate('onBoarding')}
+      <TextInput
+        onChangeText={setMasterPassword}
+        value={masterPassword}
+        secureTextEntry
       />
       <Button
-        text="Main"
-        onPress={() => navigation.navigate('mainStack')}
+        text="Unlock"
+        onPress={async () => {
+          if (masterPassword) {
+            setIsLoading(true)
+            const isSuccess = await sessionLogin(masterPassword)
+            setIsLoading(false)
+            if (isSuccess) {
+              navigation.navigate('mainStack')
+            }
+          } else {
+            notify('error', 'Missing data', 'Enter password pls')
+          }
+        }}
+      />
+      <Button
+        text="Logout"
+        onPress={async () => {
+          setIsLoading(true)
+          await logout()
+          setIsLoading(false)
+          navigation.navigate('onBoarding')
+        }}
       />
     </Screen>
   )
