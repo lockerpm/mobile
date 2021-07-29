@@ -2,6 +2,8 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withEnvironment } from ".."
 import { SessionLoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
+import { save, load, remove, USER_STORAGE_KEY } from "../../utils/storage"
+
 
 /**
  * Model description here for TypeScript hints.
@@ -25,8 +27,27 @@ export const UserModel = types
     default_team_id: types.maybeNull(types.string)
   })
   .extend(withEnvironment)
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({
+    get info() {
+      return {
+        token: self.token,
+        email: self.email,
+        username: self.username,
+        full_name: self.full_name,
+        avatar: self.avatar,
+        isLoggedIn: self.isLoggedIn
+      }
+    }
+  }))
   .actions((self) => ({
+    // Storage
+    saveToStorage: async () => {
+      await save(USER_STORAGE_KEY, self.info)
+    },
+    clearStorage: async () => {
+      await remove(USER_STORAGE_KEY)
+    },
+
     // Environment
     checkApiHeader: () => {
       if (self.token && !self.environment.api.apisauce.headers['Authorization']) {
@@ -75,12 +96,22 @@ export const UserModel = types
     }
   }))
   .actions((self) => ({
+    loadFromStorage: async () => {
+      const res = await load(USER_STORAGE_KEY)
+      if (res) {
+        self.saveToken(res.token)
+        self.saveUser(res)
+        self.saveUserPw(res)
+      }
+    },
+
     getUser: async () => {
       self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser()
       if (res.kind === "ok") {
         self.saveUser(res.user)
+        self.saveToStorage()
       }
       return res
     },
@@ -91,6 +122,7 @@ export const UserModel = types
       const res = await userApi.getUserPw()
       if (res.kind === "ok") {
         self.saveUserPw(res.user)
+        self.saveToStorage()
       }
       return res
     },
@@ -116,6 +148,7 @@ export const UserModel = types
       if (res.kind === "ok") {
         self.clearToken()
         self.clearUser()
+        self.clearStorage()
       }
       return res
     },

@@ -6,7 +6,7 @@ import { ReactotronConfig, DEFAULT_REACTOTRON_CONFIG } from "./reactotron-config
 import { mst } from "reactotron-mst"
 import { clear } from "../../utils/storage"
 import { RootNavigation } from "../../navigators/navigation-utilities"
-import { Platform } from "react-native"
+import { Platform, NativeModules } from "react-native"
 
 // Teach TypeScript about the bad things we want to do.
 declare global {
@@ -112,10 +112,12 @@ export class Reactotron {
   async setup() {
     // only run this in dev... metro bundler will ignore this block: 🎉
     if (__DEV__) {
+      const host = NativeModules.SourceCode.scriptURL.split('://')[1].split(':')[0];
+
       // configure reactotron
       Tron.configure({
         name: this.config.name || require("../../../package.json").name,
-        host: this.config.host,
+        host: host || this.config.host,
       })
 
       // hookup middleware

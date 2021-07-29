@@ -1,5 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
+export const USER_STORAGE_KEY = 'user_info'
+export const APP_IS_FRESH_INSTALL_KEY = 'app__is_fresh_install'
+
 /**
  * Loads a string from storage.
  *

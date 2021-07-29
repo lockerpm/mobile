@@ -1,34 +1,38 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Screen, Text, Button } from "../../../components"
+import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
+import { APP_IS_FRESH_INSTALL_KEY, load } from "../../../utils/storage"
+import { useMixins } from "../../../services/mixins"
 // import { useStores } from "../../../models"
-import { color } from "../../../theme"
-
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
-  flex: 1,
-}
 
 export const StartScreen = observer(function StartScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-
-  // Pull in navigation via hook
+  const { getSyncData } = useMixins()
   const navigation = useNavigation()
 
+  const mounted = async () => {
+    await getSyncData()
+
+    // TODO
+    const isDeviceLimitReached = false
+    if (isDeviceLimitReached) {
+      navigation.navigate('switchDevice')
+    }
+
+    const isFreshInstall = await load(APP_IS_FRESH_INSTALL_KEY)
+    if (isFreshInstall === true) {
+      navigation.navigate('biometricUnlockIntro')
+    } else {
+      navigation.navigate('mainTab')
+    }
+  }
+
+  // Life cycle
+  useEffect(() => {
+    mounted()
+  }, [])
+
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text="Start " />
-      <Button
-        text="Switch device"
-        onPress={() => navigation.navigate('switchDevice')}
-      />
-      <Button
-        text="Biometric"
-        onPress={() => navigation.navigate('biometricUnlockIntro')}
-      />
-    </Screen>
+    <Loading />
   )
 })

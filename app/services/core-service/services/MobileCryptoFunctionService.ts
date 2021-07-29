@@ -20,7 +20,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
       //     resolve(this.toArrayBuffer(key));
       //   }
       // });
-      const key = await RNSimpleCrypto.PBKDF2.hash(nodePassword, nodeSalt, iterations, len, 'SHA256')
+      const key = await RNSimpleCrypto.PBKDF2.hash(nodePassword, nodeSalt, iterations, len, algorithm === 'sha256' ? 'SHA256' : 'SHA512')
       resolve(this.toArrayBuffer(key))
     });
   }

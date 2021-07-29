@@ -1,34 +1,35 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Screen, Text, Button } from "../../../components"
+import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
-import { color } from "../../../theme"
-
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
-  flex: 1,
-}
+import { useStores } from "../../../models"
+import { load, APP_IS_FRESH_INSTALL_KEY } from "../../../utils/storage"
 
 export const InitScreen = observer(function InitScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-
-  // Pull in navigation via hook
+  const { user } = useStores()
   const navigation = useNavigation()
 
+  const mounted = async () => {
+    await user.loadFromStorage()
+    if (user.isLoggedIn) {
+      navigation.navigate('lock')
+      return
+    }
+
+    const isFreshInstall = await load(APP_IS_FRESH_INSTALL_KEY)
+    if (isFreshInstall === true) {
+      navigation.navigate('intro')
+    } else {
+      navigation.navigate('onBoarding')
+    }
+  }
+
+  // Life cycle
+  useEffect(() => {
+    mounted()
+  }, [])
+
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text="Init screen" />
-      <Button
-        text="Intro"
-        onPress={() => navigation.navigate('intro')}
-      />
-      <Button
-        text="Lock"
-        onPress={() => navigation.navigate('lock')}
-      />
-    </Screen>
+    <Loading />
   )
 })
