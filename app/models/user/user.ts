@@ -81,10 +81,8 @@ export const UserModel = types
       const res = await userApi.getUser()
       if (res.kind === "ok") {
         self.saveUser(res.user)
-        return true
-      } else {
-        return false
       }
+      return res
     },
 
     getUserPw: async () => {
@@ -93,10 +91,8 @@ export const UserModel = types
       const res = await userApi.getUserPw()
       if (res.kind === "ok") {
         self.saveUserPw(res.user)
-        return true
-      } else {
-        return false
       }
+      return res
     },
 
     sessionLogin: async (payload: SessionLoginData) => {
@@ -105,10 +101,8 @@ export const UserModel = types
       const res = await userApi.sessionLogin(payload)
       if (res.kind === "ok") {
         self.setLoggedInPw(true)
-        return res.data
-      } else {
-        return null
       }
+      return res
     },
 
     lock: () => {
@@ -122,21 +116,15 @@ export const UserModel = types
       if (res.kind === "ok") {
         self.clearToken()
         self.clearUser()
-        return true
-      } else {
-        return false
       }
+      return res
     },
 
     syncData: async () => {
       self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.syncData()
-      if (res.kind === "ok") {
-        return res.data
-      } else {
-        return null
-      }
+      return res
     }
   }))
 

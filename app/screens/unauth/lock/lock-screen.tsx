@@ -38,10 +38,12 @@ export const LockScreen = observer(function LockScreen() {
         onPress={async () => {
           if (masterPassword) {
             setIsLoading(true)
-            const isSuccess = await sessionLogin(masterPassword)
+            const res = await sessionLogin(masterPassword)
             setIsLoading(false)
-            if (isSuccess) {
+            if (res.kind === 'ok') {
               navigation.navigate('mainStack')
+            } else if (res.kind === 'unauthorized') {
+              navigation.navigate('login')
             }
           } else {
             notify('error', 'Missing data', 'Enter password pls')

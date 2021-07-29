@@ -48,7 +48,7 @@ export class Api {
         console.log(`Calling ${response.config.baseURL}${response.config.url}`)
         const problem = getGeneralApiProblem(response)
         if (problem) {
-          console.log(`URL: ${response.config.url} - Status: ${response.status} - Message: ${response.data}`)
+          console.log(`URL: ${response.config.url} - Status: ${response.status} - Message: ${JSON.stringify(response.data)}`)
         }
       }
     }

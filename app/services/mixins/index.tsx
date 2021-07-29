@@ -8,7 +8,7 @@ import { useCoreService } from '../core-service'
 const { createContext, useContext } = React
 
 const defaultData = {
-  sessionLogin: async (masterPassword : string) => { return false },
+  sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   logout: async () => {},
   lock: async () => {},
   getSyncData: async () => {},
@@ -38,7 +38,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // -------------------- AUTHENTICATION --------------------
 
   // Session login
-  const sessionLogin = async (masterPassword : string) => {
+  const sessionLogin = async (masterPassword: string): Promise<{ kind: string }> => {
     try {
       await cryptoService.clearKeys()
       const kdf = KdfType.PBKDF2_SHA256
@@ -54,26 +54,31 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         device_type: platformUtilsService.getDevice(),
         device_identifier: await storageService.get('device_id', undefined) || randomString()
       })
-      if (!res) {
+      if (res.kind === 'unauthorized') {
+        notify('error', 'Error', 'Token expired')
+        user.clearToken()
+        return { kind: 'unauthorized' }
+      }
+      if (res.kind !== 'ok') {
         notify('error', 'Error', 'Session login failed')
-        return false
+        return { kind: 'bad-data' }
       }
 
       // Setup service
       messagingService.send('loggedIn')
-      await tokenService.setTokens(res.access_token, res.refresh_token)
+      await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
       await userService.setInformation(tokenService.getUserId(), user.email, kdf, kdfIterations)
       await cryptoService.setKey(key)
       await cryptoService.setKeyHash(hashedPassword)
-      await cryptoService.setEncKey(res.key)
-      await cryptoService.setEncPrivateKey(res.private_key)
+      await cryptoService.setEncKey(res.data.key)
+      await cryptoService.setEncPrivateKey(res.data.private_key)
 
       // Return value
-      return true
+      return { kind: 'ok' }
     } catch (e) {
       console.log(e)
       notify('error', 'Error', 'Session login failed')
-      return false
+      return { kind: 'bad-data' }
     }
   }
 
@@ -108,7 +113,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
       // Sync api
       const res = await user.syncData()
-      if (!res) {
+      if (res.kind !== 'ok') {
         notify('error', 'Error', 'Sync failed')
         messagingService.send('syncCompleted', { successfully: false })
         return
@@ -116,13 +121,13 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
       // Sync service
       const userId = await userService.getUserId()
-      await syncService.syncProfile(res.profile)
-      await syncService.syncFolders(userId, res.folders)
-      await syncService.syncCollections(res.collections)
-      await syncService.syncCiphers(userId, res.ciphers)
-      await syncService.syncSends(userId, res.sends)
-      await syncService.syncSettings(userId, res.domains)
-      await syncService.syncPolicies(res.policies)
+      await syncService.syncProfile(res.data.profile)
+      await syncService.syncFolders(userId, res.data.folders)
+      await syncService.syncCollections(res.data.collections)
+      await syncService.syncCiphers(userId, res.data.ciphers)
+      await syncService.syncSends(userId, res.data.sends)
+      await syncService.syncSettings(userId, res.data.domains)
+      await syncService.syncPolicies(res.data.policies)
       await syncService.setLastSync(new Date())
       messagingService.send('syncCompleted', { successfully: true })
     } catch (e) {

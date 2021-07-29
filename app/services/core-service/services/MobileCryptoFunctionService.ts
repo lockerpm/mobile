@@ -4,6 +4,7 @@ import { CryptoFunctionService } from "../../../../core/abstractions/cryptoFunct
 import { SymmetricCryptoKey } from "../../../../core/models/domain"
 import { DecryptParameters } from "../../../../core/models/domain/decryptParameters"
 import { Utils } from "../../../../core/misc/utils"
+import RNSimpleCrypto from "react-native-simple-crypto"
 
 export class MobileCryptoFunctionService implements CryptoFunctionService {
   pbkdf2(password: string | ArrayBuffer, salt: string | ArrayBuffer, algorithm: 'sha256' | 'sha512',
@@ -11,14 +12,16 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     const len = algorithm === 'sha256' ? 32 : 64;
     const nodePassword = this.toNodeValue(password);
     const nodeSalt = this.toNodeValue(salt);
-    return new Promise<ArrayBuffer>((resolve, reject) => {
-      crypto.pbkdf2(nodePassword, nodeSalt, iterations, len, algorithm, (error, key) => {
-        if (error != null) {
-          reject(error);
-        } else {
-          resolve(this.toArrayBuffer(key));
-        }
-      });
+    return new Promise<ArrayBuffer>(async (resolve, reject) => {
+      // crypto.pbkdf2(nodePassword, nodeSalt, iterations, len, algorithm, (error, key) => {
+      //   if (error != null) {
+      //     reject(error);
+      //   } else {
+      //     resolve(this.toArrayBuffer(key));
+      //   }
+      // });
+      const key = await RNSimpleCrypto.PBKDF2.hash(nodePassword, nodeSalt, iterations, len, 'SHA256')
+      resolve(this.toArrayBuffer(key))
     });
   }
 
