@@ -46,24 +46,20 @@ export function MainNavigator() {
   const { user } = useStores()
 
   // App lock trigger
-  useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange)
-    return () => {
-      AppState.removeEventListener("change", _handleAppStateChange)
-    };
-  }, []);
   const _handleAppStateChange = (nextAppState: string) => {
     if (nextAppState === "active") {
-      lock()
-      navigation.navigate('lock')
+      console.log('lock screen')
+      // lock()
+      // navigation.navigate('lock')
     }
   }
 
   // App inactive trigger
   const handleInactive = (isActive : boolean) => {
     if (!isActive) {
-      lock()
-      navigation.navigate('lock')
+      console.log('lock screen due to inactive')
+      // lock()
+      // navigation.navigate('lock')
     }
   }
 
@@ -78,6 +74,14 @@ export function MainNavigator() {
     }
   }
   user.environment.api.apisauce.addMonitor(monitorApiResponse)
+
+  // Life cycle
+  useEffect(() => {
+    AppState.addEventListener("change", _handleAppStateChange)
+    return () => {
+      AppState.removeEventListener("change", _handleAppStateChange)
+    };
+  }, []);
 
   return (
     <UserInactivity

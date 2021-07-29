@@ -49,6 +49,7 @@ export const LoginScreen = observer(function LoginScreen() {
 
   // Mounted
   useEffect(() => {
+    // user.clearToken()
     setIsLoading(false)
   }, [])
 
