@@ -3,7 +3,7 @@ import { NativeModules, Platform } from 'react-native';
 import { 
   CryptoService, PasswordGenerationService, UserService, TokenService, AuthService, ApiService,
   AppIdService, I18nService, VaultTimeoutService, CipherService, SettingsService, FolderService,
-  CollectionService, SyncService
+  CollectionService, SyncService, ContainerService
 } from "../../../core/services"
 import { PolicyService } from "../../../core/services/policy.service"
 import { FileUploadService } from "../../../core/services/fileUpload.service"
@@ -156,6 +156,8 @@ const syncService = new SyncService(
     })
   }
 )
+const containerService = new ContainerService(cryptoService)
+containerService.attachToGlobal(global)
 
 // All services to be used
 const services = {
@@ -175,7 +177,8 @@ const services = {
   searchService,
   collectionService,
   messagingService,
-  syncService
+  syncService,
+  containerService
 }
 
 const CoreContext = createContext(services)
