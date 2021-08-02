@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { CipherModel, Cipher } from "../cipher/cipher"
+import { CipherStore, CipherStoreModel } from "../cipher-store/cipher-store"
 import { UserModel, User } from "../user/user"
 
 /**
@@ -8,7 +8,7 @@ import { UserModel, User } from "../user/user"
 // prettier-ignore
 export const RootStoreModel = types.model("RootStore").props({
   user: types.optional(UserModel, {} as User),
-  cipher: types.optional(CipherModel, {} as Cipher)
+  cipherStore: types.optional(CipherStoreModel, {} as CipherStore)
 })
 
 /**

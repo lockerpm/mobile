@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
 import { Loading, Screen, Text, Button } from "../../../../components"
 // import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
+import { useStores } from "../../../../models"
 import { color } from "../../../../theme"
 import { useCoreService } from "../../../../services/core-service"
 import { CardView, CipherView, IdentityView, LoginUriView, LoginView, SecureNoteView } from "../../../../../core/models/view"
@@ -16,7 +16,7 @@ const ROOT: ViewStyle = {
 }
 
 export const AllItemScreen = observer(function AllItemScreen() {
-  // const { someStore, anotherStore } = useStores()
+  const { cipherStore } = useStores()
   // const navigation = useNavigation()
   const { searchService, cipherService } = useCoreService()
   const [isLoading, setIsLoading] = useState(false)
@@ -38,10 +38,12 @@ export const AllItemScreen = observer(function AllItemScreen() {
   const createCipher = async () => {
     setIsLoading(true)
     const cipher = newCipher()
-    cipher.name = 'test'
-    setIsLoading(false)
+    cipher.name = 'test 123'
     const cipherEnc = await cipherService.encrypt(cipher)
     const data = new CipherRequest(cipherEnc)
+    const res = await cipherStore.createCipher(data)
+    console.log(res)
+    setIsLoading(false)
   }
 
   const newCipher = () => {
