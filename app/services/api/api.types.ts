@@ -24,3 +24,67 @@ export type SessionLoginData = {
     device_type: DeviceType
     device_identifier: string
 }
+
+export type LoginUri = {
+    match: string | null,
+    response: string | null,
+    uri: string | null
+}
+
+export type CipherData = {
+    collectionIds: string[] | null,
+    organizationId: string | null,
+    folderId: string | null,
+    favorite: boolean,
+    fields: {
+        name: string,
+        response: string | null,
+        types: number | null,
+        value: string
+    },
+    score: number | 0,
+    name: string,
+    notes: string | null,
+    type: number,
+    login: {
+        username: string | null,
+        password: string | null,
+        totp: string | null,
+        response: string | null,
+        uris: LoginUri[] | null
+    } | null,
+    secureNote: {
+        type: number,
+        response: string | null
+    } | null,
+    card: {
+        brand: string | null,
+        cardholderName: string | null,
+        code: string | null,
+        expMonth: string | null,
+        expYear: string | null,
+        number: string | null,
+        response: string | null
+    } | null,
+    identity: {
+        address1: string | null,
+        address2: string | null,
+        address3: string | null,
+        city: string | null,
+        company: string | null,
+        country: string | null,
+        email: string | null,
+        firstName: string | null,
+        middleName: string | null,
+        lastName: string | null,
+        licenseNumber: string | null,
+        postalCode: string | null,
+        phone: string | null,
+        passportNumber: string | null,
+        response: string | null,
+        ssn: string | null,
+        state: string | null,
+        title: string | null,
+        username: string | null
+    } | null
+}
