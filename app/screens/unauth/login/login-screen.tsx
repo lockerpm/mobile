@@ -14,6 +14,7 @@ export const LoginScreen = observer(function LoginScreen() {
 
   // Params
   const [isLoading, setIsLoading] = useState(true)
+  const [isScreenReady, setIsScreenReady] = useState(false)
 
   // Helpers
   const getParamFromUrl = (name : string, url: string) => {
@@ -49,9 +50,12 @@ export const LoginScreen = observer(function LoginScreen() {
 
   // Mounted
   useEffect(() => {
-    user.clearToken()
-    setIsLoading(false)
-  }, [])
+    if (!isScreenReady) {
+      user.clearToken()
+      setIsLoading(false)
+      setIsScreenReady(true)
+    }
+  }, [isScreenReady])
 
   return isLoading ? (
     <Loading />

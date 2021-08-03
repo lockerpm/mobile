@@ -10,7 +10,7 @@ const Tab = createBottomTabNavigator()
 export function MainTabNavigator() {
     return (
       <Tab.Navigator
-        initialRouteName="homeStack"
+        initialRouteName="homeTab"
       >
         <Tab.Screen name="homeTab" component={HomeNavigator} />
         <Tab.Screen name="browseTab" component={BrowseNavigator} />
