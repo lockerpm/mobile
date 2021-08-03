@@ -12,11 +12,8 @@ import { SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen } from "../
 import UserInactivity from 'react-native-user-inactivity'
 import { color } from "../theme"
 import { INACTIVE_TIMEOUT } from "../config/constants"
-import { useStores } from "../models"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
-import { getGeneralApiProblem } from "../services/api/api-problem"
-import { ApiResponse } from "apisauce"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -43,7 +40,6 @@ const Stack = createStackNavigator<PrimaryParamList>()
 export function MainNavigator() {
   const navigation = useNavigation()
   const { lock } = useMixins()
-  const { user } = useStores()
 
   // App lock trigger
   const _handleAppStateChange = (nextAppState: string) => {
@@ -62,18 +58,6 @@ export function MainNavigator() {
       // navigation.navigate('lock')
     }
   }
-
-  // Auto API error handling
-  const monitorApiResponse = (response : ApiResponse<any>) => {
-    const problem = getGeneralApiProblem(response)
-    if (problem) {
-      if (problem.kind === 'unauthorized') {
-        user.clearToken()
-        navigation.navigate('login')
-      }
-    }
-  }
-  user.environment.api.apisauce.addMonitor(monitorApiResponse)
 
   // Life cycle
   useEffect(() => {

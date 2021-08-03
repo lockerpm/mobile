@@ -20,6 +20,7 @@ export const AllItemScreen = observer(function AllItemScreen() {
   // const navigation = useNavigation()
   const { searchService, cipherService } = useCoreService()
   const [isLoading, setIsLoading] = useState(false)
+  const [isScreenReady, setIsScreenReady] = useState(false)
 
   const getCiphers = async () => {
     setIsLoading(true)
@@ -62,8 +63,11 @@ export const AllItemScreen = observer(function AllItemScreen() {
   }
 
   useEffect(() => {
-    getCiphers()
-  }, [])
+    if (!isScreenReady) {
+      getCiphers()
+      setIsScreenReady(true)
+    }
+  }, [isScreenReady])
 
   return isLoading ? <Loading /> : (
     <Screen style={ROOT} preset="scroll">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
@@ -9,6 +9,7 @@ import { useMixins } from "../../../services/mixins"
 export const StartScreen = observer(function StartScreen() {
   const { getSyncData } = useMixins()
   const navigation = useNavigation()
+  const [isScreenReady, setIsScreenReady] = useState(false)
 
   const mounted = async () => {
     await getSyncData()
@@ -29,8 +30,11 @@ export const StartScreen = observer(function StartScreen() {
 
   // Life cycle
   useEffect(() => {
-    mounted()
-  }, [])
+    if (!isScreenReady) {
+      mounted()
+      setIsScreenReady(true)
+    }
+  }, [isScreenReady])
 
   return (
     <Loading />
