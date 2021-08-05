@@ -2,6 +2,7 @@ import * as React from "react"
 import { StyleProp, View, ViewStyle, ActivityIndicator } from "react-native"
 import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
+import { color } from "../../theme"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
@@ -40,7 +41,7 @@ export const Loading = observer(function Loading(props: LoadingProps) {
 
   return (
     <View style={styles}>
-      <ActivityIndicator size="large" color="green" />
+      <ActivityIndicator size="large" color={color.palette.green} />
     </View>
   )
 })
@@ -51,7 +52,7 @@ export const OverlayLoading = observer(function OverlayLoading(props: LoadingPro
 
   return (
     <View style={styles}>
-      <ActivityIndicator size="large" color="green" />
+      <ActivityIndicator size="large" color={color.palette.green} />
     </View>
   )
 })

@@ -1,7 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export const USER_STORAGE_KEY = 'user_info'
-export const APP_IS_FRESH_INSTALL_KEY = 'app__is_fresh_install'
+export const APP_SHOW_INTRO = 'app__show_intro'
+export const APP_SHOW_BIOMETRIC_INTRO = 'app__show_biometric_intro'
 
 /**
  * Loads a string from storage.

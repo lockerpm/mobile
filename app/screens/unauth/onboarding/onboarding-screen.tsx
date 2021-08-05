@@ -25,8 +25,9 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
       <View style={[SECTION_PADDING, { flex: 1, justifyContent: "center", alignItems: "center" }]}>
         <Image source={require("./logo.png")} />
         <Text
+          preset="header"
           text="Your daily needs"
-          style={{ fontSize: 14, marginTop: 31, color: color.palette.blackTitle }}
+          style={{ fontSize: 14, marginTop: 31 }}
         />
       </View>
 

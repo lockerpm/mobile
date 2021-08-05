@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { SafeAreaView, View, ViewStyle, TouchableOpacity } from "react-native"
-import { AutoImage as Image, Button, Text } from "../../../components"
+import { View, ViewStyle, TouchableOpacity } from "react-native"
+import { AutoImage as Image, Button, Text, Layout } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, spacing } from "../../../theme"
@@ -58,12 +58,9 @@ export const IntroScreen = observer(function IntroScreen() {
         }}
       >
         <Image source={item.img} />
-        <Text text={item.title} style={{
+        <Text preset="header" text={item.title} style={{
           marginTop: 30,
-          marginBottom: 10,
-          fontSize: 24,
-          fontWeight: '600',
-          color: color.palette.blackTitle
+          marginBottom: 10
         }} />
         <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24 }} />
       </View>
@@ -71,19 +68,38 @@ export const IntroScreen = observer(function IntroScreen() {
   })
   const renderScene = SceneMap(map)
 
-  return (
-    <View style={{ flex: 1 }}>
-      <SafeAreaView>
-        <View style={[SECTION_PADDING, { alignItems: "flex-end" }]}>
-          <Button
-            preset="link"
-            text="SKIP"
-            textStyle={{ color: color.palette.green, fontSize: 14 }}
-            onPress={() => navigation.navigate("onBoarding")}
-          />
-        </View>
-      </SafeAreaView>
+  const header = () => (
+    <View style={[SECTION_PADDING, { alignItems: "flex-end" }]}>
+      <Button
+        preset="link"
+        text="SKIP"
+        textStyle={{ color: color.palette.green, fontSize: 14 }}
+        onPress={() => navigation.navigate("onBoarding")}
+      />
+    </View>
+  )
 
+  const footer = () => (
+    <View style={SECTION_PADDING}>
+      <Button
+        tx="welcomeScreen.continue"
+        onPress={() => {
+          if (index === routes.length - 1) {
+            navigation.navigate("onBoarding")
+          } else {
+            setIndex((index + 1) % routes.length)
+          }
+        }}
+      />
+    </View>
+  )
+
+  return (
+    <Layout
+      header={header}
+      footer={footer}
+      noScroll
+    >
       <View style={{ flex: 1 }}>
         <View style={{ flex: 3 }}>
           <TabView
@@ -114,21 +130,6 @@ export const IntroScreen = observer(function IntroScreen() {
           }
         </View>
       </View>
-
-      <SafeAreaView>
-        <View style={SECTION_PADDING}>
-          <Button
-            tx="welcomeScreen.continue"
-            onPress={() => {
-              if (index === routes.length - 1) {
-                navigation.navigate("onBoarding")
-              } else {
-                setIndex((index + 1) % routes.length)
-              }
-            }}
-          />
-        </View>
-      </SafeAreaView>
-    </View>
+    </Layout>
   )
 })
