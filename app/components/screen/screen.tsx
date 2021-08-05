@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, View } from "rea
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { ScreenProps } from "./screen.props"
 import { isNonScrolling, offsets, presets } from "./screen.presets"
+import { Loading, OverlayLoading } from "../loading/loading"
 
 const isIos = Platform.OS === "ios"
 
@@ -20,7 +21,16 @@ function ScreenWithoutScrolling(props: ScreenProps) {
       keyboardVerticalOffset={offsets[props.keyboardOffset || "none"]}
     >
       <StatusBar barStyle={props.statusBar || "light-content"} />
-      <View style={[preset.inner, style, insetStyle]}>{props.children}</View>
+      {
+        props.isLoading ? (
+          <Loading />
+        ) : (
+          <View style={[preset.inner, style, insetStyle]}>
+            {props.isOverlayLoading && <OverlayLoading />}
+            {props.children}
+          </View>
+        )
+      }
     </KeyboardAvoidingView>
   )
 }

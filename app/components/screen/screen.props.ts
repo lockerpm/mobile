@@ -42,5 +42,11 @@ export interface ScreenProps {
    * Should keyboard persist on screen tap. Defaults to handled.
    * Only applies to scroll preset.
    */
-  keyboardShouldPersistTaps?: "handled" | "always" | "never"
+  keyboardShouldPersistTaps?: "handled" | "always" | "never",
+
+  /**
+   * Is full screen loading? Defaults to false.
+   */
+  isLoading?: boolean,
+  isOverlayLoading?: boolean
 }

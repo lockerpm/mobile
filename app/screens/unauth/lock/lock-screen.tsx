@@ -29,7 +29,7 @@ export const LockScreen = observer(function LockScreen() {
         )
       }
       <Text preset="header" text="Lock" />
-      <Text preset="secondary" text={"Hello " + user.username} />
+      <Text text={"Hello " + user.username} />
       <TextInput
         onChangeText={setMasterPassword}
         value={masterPassword}
@@ -59,6 +59,12 @@ export const LockScreen = observer(function LockScreen() {
           await logout()
           setIsLoading(false)
           navigation.navigate('onBoarding')
+        }}
+      />
+      <Button
+        text="Intro"
+        onPress={() => {
+          navigation.navigate('intro')
         }}
       />
     </Screen>
