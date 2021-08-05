@@ -1,23 +1,19 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle, TouchableOpacity } from "react-native"
-import { AutoImage as Image, Button, Text, Layout } from "../../../components"
+import { View, ViewStyle, TouchableOpacity, ScrollView } from "react-native"
+import { Button } from 'native-base'
+import { AutoImage as Image, Text, Layout } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color, spacing } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 
 
 const SECTION_PADDING: ViewStyle = {
   paddingVertical: spacing[2],
-  paddingHorizontal: spacing[4]
+  paddingHorizontal: 20
 }
 
 export const IntroScreen = observer(function IntroScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-
-  // Pull in navigation via hook
   const navigation = useNavigation()
 
   const tabs = [
@@ -47,9 +43,9 @@ export const IntroScreen = observer(function IntroScreen() {
   tabs.forEach((item, index) => {
     // eslint-disable-next-line react/display-name
     map[index.toString()] = () => (
-      <View
+      <ScrollView
         key={index}
-        style={{
+        contentContainerStyle={{
           flex: 1,
           justifyContent: "flex-end",
           alignItems: 'center',
@@ -63,7 +59,7 @@ export const IntroScreen = observer(function IntroScreen() {
           marginBottom: 10
         }} />
         <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24 }} />
-      </View>
+      </ScrollView>
     )
   })
   const renderScene = SceneMap(map)
@@ -71,18 +67,19 @@ export const IntroScreen = observer(function IntroScreen() {
   const header = () => (
     <View style={[SECTION_PADDING, { alignItems: "flex-end" }]}>
       <Button
-        preset="link"
-        text="SKIP"
-        textStyle={{ color: color.palette.green, fontSize: 14 }}
+        colorScheme="csGreen"
+        variant="outline"
         onPress={() => navigation.navigate("onBoarding")}
-      />
+      >
+        SKIP
+      </Button>
     </View>
   )
 
   const footer = () => (
     <View style={SECTION_PADDING}>
       <Button
-        tx="welcomeScreen.continue"
+        colorScheme="csGreen"
         onPress={() => {
           if (index === routes.length - 1) {
             navigation.navigate("onBoarding")
@@ -90,7 +87,9 @@ export const IntroScreen = observer(function IntroScreen() {
             setIndex((index + 1) % routes.length)
           }
         }}
-      />
+      >
+        <Text tx="welcomeScreen.continue" style={{color: 'white'}} />
+      </Button>
     </View>
   )
 
@@ -100,8 +99,8 @@ export const IntroScreen = observer(function IntroScreen() {
       footer={footer}
       noScroll
     >
-      <View style={{ flex: 1 }}>
-        <View style={{ flex: 3 }}>
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <View style={{ flex: 3, minHeight: 300 }}>
           <TabView
             lazy
             renderTabBar={() => null}

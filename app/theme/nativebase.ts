@@ -8,21 +8,26 @@ export const nativebaseTheme = {
     mono: typography.code
   },
   colors: {
-    darkText: {
-      400: color.text,
-      600: color.title,
-      700: color.title
+    csGreen: {
+      50: '#e4fbe8',
+      100: '#c1efc8',
+      200: '#9be2a6',
+      300: color.palette.green,
+      400: color.palette.green,
+      500: color.palette.green,
+      600: '#288a37',
+      700: '#1b6326',
+      800: '#0c3b16',
+      900: '#001601',
     }
   },
-  // components: {
-  //   Button: {
-  //     baseStyle: {},
-  //     defaultProps: {},
-  //     variants: {
-  //       rounded: {
-
-  //       }
-  //     }
-  //   }
-  // }
+  components: {
+    Button: {
+      baseStyle: {
+        _text: {
+          fontWeight: 400
+        }
+      }
+    }
+  }
 }
