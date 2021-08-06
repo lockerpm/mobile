@@ -1,5 +1,6 @@
 import React from 'react'
-import { Alert } from "react-native"
+import { useToast } from 'native-base'
+import { Text } from "../../components"
 import { nanoid } from 'nanoid'
 import { KdfType } from '../../../core/enums/kdfType'
 import { useStores } from '../../models'
@@ -20,6 +21,7 @@ const defaultData = {
 const MixinsContext = createContext(defaultData)
 
 export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
+  const toast = useToast()
   const { user } = useStores()
   const { 
     cryptoService, 
@@ -140,7 +142,25 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Alert message
   const notify = (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string) => {
-    Alert.alert(title, text)
+    toast.show({
+      title: (
+        <Text
+          preset="header"
+          style={{ fontSize: 14 }}
+        >
+          {title}
+        </Text>
+      ),
+      description: (
+        <Text
+          style={{ fontSize: 12 }}
+        >
+          {text}
+        </Text>
+      ),
+      placement: 'top',
+      status: type
+    })
   }
 
   // Random string

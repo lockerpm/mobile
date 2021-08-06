@@ -19,7 +19,7 @@ const OVERLAY_CONTAINER: ViewStyle = {
   left: 0,
   zIndex: 1000,
   backgroundColor: 'white',
-  opacity: 0.5,
+  opacity: 0.8,
   justifyContent: "center",
   alignItems: "center"
 }

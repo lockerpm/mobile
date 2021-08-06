@@ -22,11 +22,31 @@ export const nativebaseTheme = {
     }
   },
   components: {
-    Button: {
+    Toast: {
       baseStyle: {
-        _text: {
-          fontWeight: 400
-        }
+        _closeIcon: {
+          size: 3,
+        },
+      }
+    },
+    Input: {
+      baseStyle: {
+        _focus: {
+          borderColor: 'csGreen.400'
+        },
+        _android: {
+          _focus: {
+            borderColor: 'csGreen.400',
+          },
+        },
+        _ios: {
+          _focus: {
+            borderColor: 'csGreen.400',
+          },
+        },
+      },
+      defaultProps: {
+        size: 'sm'
       }
     }
   }
