@@ -6,6 +6,12 @@ const CENTER_VIEW: ViewStyle = {
     alignItems: "center"
 }
 
+const SECTION_PADDING: ViewStyle = {
+    paddingHorizontal: 20, 
+    paddingVertical: 16
+  }
+
 export const commonStyles = {
-    CENTER_VIEW
+    CENTER_VIEW,
+    SECTION_PADDING
 }

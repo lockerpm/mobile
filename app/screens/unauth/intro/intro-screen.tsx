@@ -1,16 +1,11 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle, TouchableOpacity } from "react-native"
+import { View, TouchableOpacity } from "react-native"
 import { AutoImage as Image, Text, Layout, Button } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, spacing } from "../../../theme"
+import { color, commonStyles, spacing } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 
-
-const SECTION_PADDING: ViewStyle = {
-  paddingVertical: spacing[2],
-  paddingHorizontal: 20
-}
 
 export const IntroScreen = observer(function IntroScreen() {
   const tabs = [
@@ -42,13 +37,11 @@ export const IntroScreen = observer(function IntroScreen() {
     map[index.toString()] = () => (
       <View
         key={index}
-        style={{
+        style={[commonStyles.SECTION_PADDING, {
           flex: 1,
           justifyContent: "flex-end",
-          alignItems: 'center',
-          paddingBottom: spacing[6],
-          paddingHorizontal: spacing[5]
-        }}
+          alignItems: 'center'
+        }]}
       >
         <Image source={item.img} />
         <Text preset="header" text={item.title} style={{
@@ -63,10 +56,10 @@ export const IntroScreen = observer(function IntroScreen() {
 
   // Header
   const header = (
-    <View style={[SECTION_PADDING, { alignItems: "flex-end" }]}>
+    <View style={{ alignItems: "flex-end" }}>
       <Button
         text="SKIP"
-        textStyle={{ fontSize: 14 }}
+        textStyle={{ fontSize: 12 }}
         preset="link"
         onPress={() => navigation.navigate("onBoarding")}
       >
@@ -76,7 +69,7 @@ export const IntroScreen = observer(function IntroScreen() {
 
   // Footer
   const footer = (
-    <View style={SECTION_PADDING}>
+    <View>
       <Button
         isNativeBase
         tx="welcomeScreen.continue"

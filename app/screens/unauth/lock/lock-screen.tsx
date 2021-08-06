@@ -1,16 +1,13 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, TextInput } from "react-native"
-import { Screen, Text, Button, OverlayLoading } from "../../../components"
+import { View } from "react-native"
+import { Input } from 'native-base'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { AutoImage as Image, Button, Layout, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { color } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
-
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.white,
-  flex: 1
-}
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
@@ -18,55 +15,161 @@ export const LockScreen = observer(function LockScreen() {
   const { user } = useStores()
 
   // Params
-  const [masterPassword, setMasterPassword] = useState('11$23581321Duc')
-  const [isLoading, setIsLoading] = useState(false)
-  
-  return (
-    <Screen style={ROOT} preset="scroll">
-      {
-        isLoading && (
-          <OverlayLoading />
-        )
+  const [masterPassword, setMasterPassword] = useState('')
+  const [isScreenLoading, setIsScreenLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+
+  // Methods
+  const handleLogout = async () => {
+    setIsScreenLoading(true)
+    await logout()
+    setIsScreenLoading(false)
+    navigation.navigate('onBoarding')
+  }
+
+  const handleUnlock = async () => {
+    if (masterPassword) {
+      setIsError(false)
+      setIsScreenLoading(true)
+      const res = await sessionLogin(masterPassword)
+      setIsScreenLoading(false)
+      if (res.kind === 'ok') {
+        navigation.navigate('mainStack')
+      } else if (res.kind === 'unauthorized') {
+        navigation.navigate('login')
+      } else {
+        setIsError(true)
       }
-      <Text preset="header" text="Lock" />
-      <Text text={"Hello " + user.username} />
-      <TextInput
-        onChangeText={setMasterPassword}
-        value={masterPassword}
-        secureTextEntry
-      />
+    } else {
+      setIsError(true)
+      notify('error', 'Missing data', 'Enter password pls')
+    }
+  }
+
+  const handleUnlockBiometric = () => {}
+
+  const handleGetHint = () => {}
+
+  // Components
+  const header = (
+    <View style={{ alignItems: "flex-end" }}>
       <Button
-        text="Unlock"
-        onPress={async () => {
-          if (masterPassword) {
-            setIsLoading(true)
-            const res = await sessionLogin(masterPassword)
-            setIsLoading(false)
-            if (res.kind === 'ok') {
-              navigation.navigate('mainStack')
-            } else if (res.kind === 'unauthorized') {
-              navigation.navigate('login')
-            }
-          } else {
-            notify('error', 'Missing data', 'Enter password pls')
+        text="LOG OUT"
+        textStyle={{ fontSize: 12 }}
+        preset="link"
+        onPress={handleLogout}
+      >
+      </Button>
+    </View>
+  )
+
+  return (
+    <Layout
+      isOverlayLoading={isScreenLoading}
+      header={header}
+    >
+      <View style={{ alignItems: 'center', paddingTop: '10%' }}>
+        <Image source={require("./locker.png")} style={{ height: 63, width: 63 }} />
+
+        <Text
+          preset="header"
+          style={{ marginBottom: 10, marginTop: 25 }}
+        >
+          Welcome Back!
+        </Text>
+
+        <Text style={{ textAlign: 'center' }}>
+          Enter your Master Password to Log In
+        </Text>
+
+        {/* Current user */}
+        <View
+          style={{
+            marginTop: 16,
+            marginBottom: 26,
+            borderRadius: 20,
+            backgroundColor: color.block,
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 4
+          }}
+        >
+          <Image 
+            source={{ uri: user.avatar }} 
+            style={{ 
+              height: 28, 
+              width: 28,
+              borderRadius: 14,
+              backgroundColor: color.palette.white
+            }} 
+          />
+          <Text 
+            style={{ 
+              fontSize: 12,
+              color: color.title,
+              marginHorizontal: 10
+            }}
+          >
+            {user.email}
+          </Text>
+        </View>
+        {/* Current user end */}
+
+        {/* Master pass input */}
+        <Input
+          isInvalid={isError}
+          type={showPassword ? "text" : "password"}
+          InputRightElement={
+            <Button
+              preset="link"
+              onPress={() => setShowPassword(!showPassword)}
+              style={{ paddingRight: 15 }}
+            >
+              <Icon 
+                name={showPassword ? "eye-slash" : "eye"} 
+                size={16} 
+                color={color.palette.green} 
+              />
+            </Button>
           }
-        }}
-      />
-      <Button
-        text="Logout"
-        onPress={async () => {
-          setIsLoading(true)
-          await logout()
-          setIsLoading(false)
-          navigation.navigate('onBoarding')
-        }}
-      />
-      <Button
-        text="Intro"
-        onPress={() => {
-          navigation.navigate('intro')
-        }}
-      />
-    </Screen>
+          placeholder="Master Password"
+          onChangeText={setMasterPassword}
+          value={masterPassword}
+        />
+        {/* Master pass input end */}
+
+        <Button
+          isNativeBase
+          text="Unlock"
+          onPress={handleUnlock}
+          style={{
+            width: '100%',
+            marginTop: 20
+          }}
+        />
+
+        <Button
+          isNativeBase
+          variant="outline"
+          text="Unlock using biometric"
+          onPress={handleUnlockBiometric}
+          style={{
+            width: '100%',
+            marginVertical: 10
+          }}
+        />
+
+        <Button
+          isNativeBase
+          variant="ghost"
+          text="Get Master Password hint"
+          onPress={handleGetHint}
+          style={{
+            width: '100%'
+          }}
+        />
+      </View>
+    </Layout>
   )
 })

@@ -44,7 +44,11 @@ export const viewPresets: Record<string, ViewStyle> = {
 }
 
 export const textPresets: Record<ButtonPresetNames, TextStyle> = {
-  primary: { ...BASE_TEXT, fontSize: 16, color: color.palette.white } as TextStyle,
+  primary: { 
+    ...BASE_TEXT, 
+    fontSize: 14, 
+    color: color.palette.white 
+  } as TextStyle,
   link: {
     ...BASE_TEXT,
     color: color.palette.green,

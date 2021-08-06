@@ -7,7 +7,7 @@ import { color, typography } from "../../theme"
 const BASE: TextStyle = {
   fontFamily: typography.primary,
   color: color.text,
-  fontSize: 16,
+  fontSize: 14,
 }
 
 /**
@@ -34,12 +34,12 @@ export const presets = {
   /**
    * headers.
    */
-  header: { ...BASE, fontSize: 24, fontWeight: '600', color: color.title } as TextStyle,
+  header: { ...BASE, fontSize: 22, fontWeight: '600', color: color.title } as TextStyle,
 
   /**
    * Large headers.
    */
-   largeHeader: { ...BASE, fontSize: 26, fontWeight: 'bold', color: color.title } as TextStyle
+   largeHeader: { ...BASE, fontSize: 24, fontWeight: 'bold', color: color.title } as TextStyle
 }
 
 /**

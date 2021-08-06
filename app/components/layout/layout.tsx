@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite"
 import { Screen } from "../screen/screen"
 import { Container } from "../container/container"
 import { View } from "react-native"
+import { commonStyles } from "../../theme"
 
 export interface LayoutProps {
   children?: React.ReactNode,
@@ -24,15 +25,23 @@ export const Layout = observer(function Layout(props: LayoutProps) {
       isLoading={props.isScreenLoading} 
       isOverlayLoading={props.isOverlayLoading}
     >
-      <View style={{ paddingHorizontal: 20 }}>
-        {props.header}
-      </View>
+      {
+        props.header && (
+          <View style={commonStyles.SECTION_PADDING}>
+            {props.header}
+          </View>
+        )
+      }
       <Container isLoading={props.isContentLoading} noScroll={props.noScroll}>
         {props.children}
       </Container>
-      <View style={{ paddingHorizontal: 20, paddingBottom: 16 }}>
-        {props.footer}
-      </View>
+      {
+        props.footer && (
+          <View style={commonStyles.SECTION_PADDING}>
+            {props.footer}
+          </View>
+        )
+      }
     </Screen>
   )
 })
