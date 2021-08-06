@@ -52,7 +52,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         password: hashedPassword,
         device_name: platformUtilsService.getDeviceString(),
         device_type: platformUtilsService.getDevice(),
-        device_identifier: await storageService.get('device_id', undefined) || randomString()
+        device_identifier: await storageService.get('device_id') || randomString()
       })
       if (res.kind === 'unauthorized') {
         notify('error', 'Error', 'Token expired')
