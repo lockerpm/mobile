@@ -62,12 +62,12 @@ export const AllItemScreen = observer(function AllItemScreen() {
     return cipher
   }
 
-  useEffect(() => {
-    if (!isScreenReady) {
-      getCiphers()
-      setIsScreenReady(true)
-    }
-  }, [isScreenReady])
+  // useEffect(() => {
+  //   if (!isScreenReady) {
+  //     getCiphers()
+  //     setIsScreenReady(true)
+  //   }
+  // }, [isScreenReady])
 
   return isLoading ? <Loading /> : (
     <Screen style={ROOT} preset="scroll">

@@ -12,6 +12,11 @@ export const StartScreen = observer(function StartScreen() {
   const [isScreenReady, setIsScreenReady] = useState(false)
 
   const mounted = async () => {
+    if (__DEV__) {
+      navigation.navigate('mainTab')
+      return
+    }
+
     await getSyncData()
 
     // TODO

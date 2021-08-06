@@ -1,34 +1,64 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Screen, Text, Button } from "../../../components"
+import { AutoImage as Image, Text, Button, Layout } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
-import { color } from "../../../theme"
-
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
-  flex: 1,
-}
+import { View } from "react-native"
 
 export const SwitchDeviceScreen = observer(function SwitchDeviceScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-
-  // Pull in navigation via hook
   const navigation = useNavigation()
 
+  // Methods
+  const handleSwitchDevice = () => {
+    navigation.navigate('mainTab')
+  }
+
+  const handleBuyPremium = () => {}
+
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text="" />
-      <Button
-        text="Biometric"
-        onPress={() => navigation.navigate('biometricUnlockIntro')}
-      />
-      <Button
-        text="App"
-        onPress={() => navigation.navigate('mainTab')}
-      />
-    </Screen>
+    <Layout>
+      <View style={{ alignItems: 'center', paddingTop: '5%' }}>
+        <Image source={require("./switch.png")} />
+
+        <Text
+          preset="header"
+          style={{ marginBottom: 10, marginTop: 30 }}
+        >
+          2 device switches left
+        </Text>
+
+        <Text style={{ textAlign: 'center' }}>
+          Active device type: 
+        </Text>
+
+        <Text preset="bold">
+          Computer
+        </Text>
+
+        <Text style={{ textAlign: 'center', marginTop: 10 }}>
+        You can only use CyStack Locker for free one type of device. Switch up to 3 times to find the right option for you. 
+        </Text>
+
+        <Button
+          isNativeBase
+          text="Switch to mobile"
+          onPress={handleSwitchDevice}
+          style={{
+            width: '100%',
+            marginTop: 30,
+            marginBottom: 10
+          }}
+        />
+
+        <Button
+          isNativeBase
+          variant="outline"
+          text="Go Premium for unlimited access"
+          onPress={handleBuyPremium}
+          style={{
+            width: '100%'
+          }}
+        />
+      </View>
+    </Layout>
   )
 })
