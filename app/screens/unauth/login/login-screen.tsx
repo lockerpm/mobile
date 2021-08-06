@@ -6,10 +6,7 @@ import { WebView, WebViewNavigation  } from 'react-native-webview';
 import { Loading } from "../../../components";
 
 export const LoginScreen = observer(function LoginScreen() {
-  // Pull in one of our MST stores
   const { user } = useStores()
-
-  // Pull in navigation via hook
   const navigation = useNavigation()
 
   // Params
