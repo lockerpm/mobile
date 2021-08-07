@@ -18,7 +18,15 @@ export interface ContainerProps {
   isLoading?: boolean,
 
   /**
+   * Is overlay loading? Defaults to false.
+   */
+   isOverlayLoading?: boolean,
+
+  /**
    * Is fixed or scroll view? Defaults to scroll.
    */
    noScroll?: boolean
+
+   borderTop?: boolean,
+   borderBottom?: boolean
 }

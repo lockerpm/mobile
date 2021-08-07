@@ -10,9 +10,12 @@ export interface LayoutProps {
   isScreenLoading?: boolean,
   isOverlayLoading?: boolean,
   isContentLoading?: boolean,
+  isContentOverlayLoading?: boolean,
   header?: JSX.Element,
   footer?: JSX.Element,
-  noScroll?: boolean
+  noScroll?: boolean,
+  borderTop?: boolean,
+  borderBottom?: boolean
 }
 
 /**
@@ -32,7 +35,13 @@ export const Layout = observer(function Layout(props: LayoutProps) {
           </View>
         )
       }
-      <Container isLoading={props.isContentLoading} noScroll={props.noScroll}>
+      <Container 
+        isLoading={props.isContentLoading}
+        isOverlayLoading={props.isContentOverlayLoading}
+        noScroll={props.noScroll}
+        borderTop={props.borderTop}
+        borderBottom={props.borderBottom}
+      >
         {props.children}
       </Container>
       {

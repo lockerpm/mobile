@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ScrollView, View } from "react-native"
 import { ContainerProps } from "./container.props"
-import { OverlayLoading } from "../loading/loading"
+import { OverlayLoading, Loading } from "../loading/loading"
 import { color } from "../../theme"
 import { ViewStyle } from "react-native"
 
@@ -10,8 +10,7 @@ export function Container(props: ContainerProps) {
   const preset = {
     outer: {
       backgroundColor: color.background,
-      flex: 1,
-      height: "100%"
+      flex: 1
     } as ViewStyle,
     inner: {
       justifyContent: "flex-start",
@@ -23,9 +22,26 @@ export function Container(props: ContainerProps) {
   }
   const style = props.style || {}
 
-  return (
-    <View style={[preset.outer]}>
-      {props.isLoading && <OverlayLoading />}
+  let borderStyle = {}
+  if (props.borderTop) {
+    borderStyle = {
+      borderTopWidth: 1,
+      borderTopColor: color.line
+    }
+  }
+  if (props.borderBottom) {
+    borderStyle = {
+      ...borderStyle,
+      borderBottomWidth: 1,
+      borderBottomColor: color.line
+    }
+  }
+
+  return props.isLoading ? (
+    <Loading />
+  ) : (
+    <View style={[preset.outer, borderStyle]}>
+      {props.isOverlayLoading && <OverlayLoading />}
       {
         !props.noScroll ? (
           <ScrollView

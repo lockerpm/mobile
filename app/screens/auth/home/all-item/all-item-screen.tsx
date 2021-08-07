@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Loading, Screen, Text, Button } from "../../../../components"
+import { View } from "react-native"
+import { Input } from "native-base"
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { Loading, Screen, Text, Button, Layout, Header } from "../../../../components"
 // import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
-import { color } from "../../../../theme"
+import { color, commonStyles } from "../../../../theme"
 import { useCoreService } from "../../../../services/core-service"
 import { CardView, CipherView, IdentityView, LoginUriView, LoginView, SecureNoteView } from "../../../../../core/models/view"
 import { CipherType, SecureNoteType } from "../../../../../core/enums"
 import { CipherRequest } from "../../../../../core/models/request/cipherRequest"
 
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
-  flex: 1,
-}
 
 export const AllItemScreen = observer(function AllItemScreen() {
   const { cipherStore } = useStores()
@@ -21,6 +19,8 @@ export const AllItemScreen = observer(function AllItemScreen() {
   const { searchService, cipherService } = useCoreService()
   const [isLoading, setIsLoading] = useState(false)
   const [isScreenReady, setIsScreenReady] = useState(false)
+
+  // ------------ METHODS -------------------
 
   const getCiphers = async () => {
     setIsLoading(true)
@@ -62,6 +62,61 @@ export const AllItemScreen = observer(function AllItemScreen() {
     return cipher
   }
 
+  // ------------ COMPONENTS -------------------
+  const header = (
+    <Header
+      showLogo
+      right={(
+        <View 
+          style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+            justifyContent: 'space-between',
+            maxWidth: 50
+          }]}
+        >
+          <Button preset="link">
+            <Icon 
+              name="sliders"
+              size={19} 
+              color={color.title} 
+            />
+          </Button>
+          
+          <Button preset="link">
+            <Icon 
+              name="plus"
+              size={18} 
+              color={color.title} 
+            />
+          </Button>
+        </View>
+      )}
+    >
+      <View style={{ marginTop: 15 }}>
+        <Input
+          size="xs"
+          placeholder="Search"
+          style={{ 
+            backgroundColor: color.block, 
+            paddingBottom: 5,
+            paddingTop: 5 
+          }}
+          InputRightElement={
+            <Button
+              preset="link"
+              style={{ paddingRight: 15 }}
+            >
+              <Icon 
+                name="search"
+                size={16} 
+                color={color.text} 
+              />
+            </Button>
+          }
+        />
+      </View>
+    </Header>
+  )
+
   // useEffect(() => {
   //   if (!isScreenReady) {
   //     getCiphers()
@@ -69,13 +124,12 @@ export const AllItemScreen = observer(function AllItemScreen() {
   //   }
   // }, [isScreenReady])
 
-  return isLoading ? <Loading /> : (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text="All item" />
-      <Button
-        text="Test create cipher"
-        onPress={createCipher}
-      />
-    </Screen>
+  return (
+    <Layout
+      isContentLoading={isLoading}
+      header={header}
+      borderBottom
+    >
+    </Layout>
   )
 })
