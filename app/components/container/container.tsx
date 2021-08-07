@@ -17,7 +17,8 @@ export function Container(props: ContainerProps) {
       alignItems: "stretch",
       paddingTop: 16,
       paddingBottom: 32,
-      paddingHorizontal: 20
+      paddingHorizontal: 20,
+      minHeight: '100%'
     } as ViewStyle,
   }
   const style = props.style || {}
