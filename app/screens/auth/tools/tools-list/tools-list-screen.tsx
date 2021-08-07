@@ -1,38 +1,64 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Screen, Text, Button } from "../../../../components"
+import { View } from "react-native"
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { Text, Button, Layout, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color } from "../../../../theme"
-
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
-  flex: 1,
-}
+import { TOOLS_ITEMS } from "../../../../common/mappings"
 
 export const ToolsListScreen = observer(function ToolsListScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-
-  // Pull in navigation via hook
   const navigation = useNavigation()
 
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text="Tools list" />
-      <Button
-        text="Pass gen"
-        onPress={() => navigation.navigate('passwordGenerator')}
-      />
-      <Button
-        text="Pass health"
-        onPress={() => navigation.navigate('passwordHealth')}
-      />
-      <Button
-        text="Data Breach"
-        onPress={() => navigation.navigate('dataBreachScanner')}
-      />
-    </Screen>
+    <Layout
+      style={{ backgroundColor: color.block }}
+      containerStyle={{ backgroundColor: color.block, paddingTop: 0 }}
+      header={(
+        <Text preset="largeHeader" text="Tools" />
+      )}
+    >
+      <View 
+        style={{ 
+          backgroundColor: color.palette.white,
+          borderRadius: 10,
+          paddingHorizontal: 14
+        }}
+      >
+        {
+          Object.values(TOOLS_ITEMS).map((item, index) => (
+            <Button
+              key={index}
+              preset="link"
+              onPress={() => {
+                navigation.navigate(item.routeName)
+              }}
+              style={{
+                borderBottomColor: color.line,
+                borderBottomWidth: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 12
+              }}
+            >
+              <Image source={item.icon} style={{ height: 40 }} />
+              <View
+                style={{ flex: 1, paddingHorizontal: 10 }}
+              >
+                <Text
+                  text={item.label}
+                  style={{ color: color.title }}
+                />
+                <Text
+                  text={item.desc}
+                  style={{ fontSize: 10 }}
+                />
+              </View>
+              <Icon name="angle-right" size={20} color={color.title} />
+            </Button>
+          ))
+        }
+      </View>
+    </Layout>
   )
 })

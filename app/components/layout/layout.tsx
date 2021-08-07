@@ -2,7 +2,7 @@ import * as React from "react"
 import { observer } from "mobx-react-lite"
 import { Screen } from "../screen/screen"
 import { Container } from "../container/container"
-import { View } from "react-native"
+import { StyleProp, View, ViewStyle } from "react-native"
 import { commonStyles } from "../../theme"
 
 export interface LayoutProps {
@@ -15,7 +15,9 @@ export interface LayoutProps {
   footer?: JSX.Element,
   noScroll?: boolean,
   borderTop?: boolean,
-  borderBottom?: boolean
+  borderBottom?: boolean,
+  style?: StyleProp<ViewStyle>,
+  containerStyle?: StyleProp<ViewStyle>
 }
 
 /**
@@ -27,6 +29,7 @@ export const Layout = observer(function Layout(props: LayoutProps) {
       preset="fixed" 
       isLoading={props.isScreenLoading} 
       isOverlayLoading={props.isOverlayLoading}
+      style={props.style}
     >
       {
         props.header && (
@@ -41,6 +44,7 @@ export const Layout = observer(function Layout(props: LayoutProps) {
         noScroll={props.noScroll}
         borderTop={props.borderTop}
         borderBottom={props.borderBottom}
+        style={props.containerStyle}
       >
         {props.children}
       </Container>
