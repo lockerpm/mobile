@@ -24,7 +24,8 @@ export const color = {
   disabled: palette.lighterGray,
   line: palette.lightGray,
   block: palette.gray,
-  text: palette.lightBlack,
+  text: palette.lighterBlack,
+  textBlack: palette.lightBlack,
   title: palette.black,
   error: palette.danger,
 

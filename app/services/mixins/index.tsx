@@ -5,6 +5,8 @@ import { nanoid } from 'nanoid'
 import { KdfType } from '../../../core/enums/kdfType'
 import { useStores } from '../../models'
 import { useCoreService } from '../core-service'
+import { CardView, CipherView, IdentityView, LoginUriView, LoginView, SecureNoteView } from '../../../core/models/view'
+import { CipherType, SecureNoteType } from '../../../core/enums'
 
 const { createContext, useContext } = React
 
@@ -14,7 +16,8 @@ const defaultData = {
   lock: async () => {},
   getSyncData: async () => {},
   notify: (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string) => {},
-  randomString: () => ''
+  randomString: () => '',
+  newCipher: () => {}
 }
 
 
@@ -138,6 +141,21 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
   }
 
+  const newCipher = () => {
+    const cipher = new CipherView()
+    cipher.organizationId = null
+    cipher.type = CipherType.Login
+    cipher.login = new LoginView()
+    cipher.login.uris = [new LoginUriView]
+    cipher.card = new CardView()
+    cipher.identity = new IdentityView()
+    cipher.secureNote = new SecureNoteView()
+    cipher.secureNote.type = SecureNoteType.Generic
+    cipher.folderId = null
+    cipher.collectionIds = []
+    return cipher
+  }
+
   // ------------------------ SUPPORT -------------------------
 
   // Alert message
@@ -175,7 +193,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     lock,
     notify,
     randomString,
-    getSyncData
+    getSyncData,
+    newCipher
   }
 
   return (
