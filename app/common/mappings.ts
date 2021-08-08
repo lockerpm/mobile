@@ -2,37 +2,44 @@ export const BROWSE_ITEMS = {
   folder: {
     label: 'Folders',
     icon: require('./images/icons/folder.png'),
-    routeName: 'folders'
+    routeName: 'folders',
+    addable: false
   },
   password: {
     label: 'Passwords',
     icon: require('./images/icons/password.png'),
-    routeName: 'passwords'
+    routeName: 'passwords',
+    addable: true
   },
   note: {
     label: 'Secure Notes',
     icon: require('./images/icons/note.png'),
-    routeName: 'notes'
+    routeName: 'notes',
+    addable: true
   },
   card: {
     label: 'Cards',
     icon: require('./images/icons/card.png'),
-    routeName: 'cards'
+    routeName: 'cards',
+    addable: true
   },
   indentity: {
     label: 'Personal Info',
     icon: require('./images/icons/info.png'),
-    routeName: 'identities'
+    routeName: 'identities',
+    addable: true
   },
   shared: {
     label: 'Shared Items',
     icon: require('./images/icons/shared.png'),
-    routeName: 'shares'
+    routeName: 'shares',
+    addable: false
   },
   trash: {
     label: 'Trash',
     icon: require('./images/icons/trash.png'),
-    routeName: 'trash'
+    routeName: 'trash',
+    addable: false
   }
 }
 
