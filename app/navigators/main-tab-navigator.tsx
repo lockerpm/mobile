@@ -1,13 +1,12 @@
 import React from "react"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { HomeNavigator } from "./home/home-navigator"
 import { BrowseNavigator } from "./browse/browse-navigator"
-import { ToolsNavigator } from "./tools/tools-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
 import { View } from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Button, Text } from "../components"
 import { color } from "../theme"
+import { AllItemScreen, ToolsListScreen } from "../screens"
 
 const Tab = createBottomTabNavigator()
 
@@ -102,9 +101,9 @@ export function MainTabNavigator() {
         initialRouteName="homeTab"
         tabBar={props => <TabBar {...props} />}
       >
-        <Tab.Screen name="homeTab" component={HomeNavigator} />
+        <Tab.Screen name="homeTab" component={AllItemScreen} />
         <Tab.Screen name="browseTab" component={BrowseNavigator} />
-        <Tab.Screen name="toolsTab" component={ToolsNavigator} />
+        <Tab.Screen name="toolsTab" component={ToolsListScreen} />
         <Tab.Screen name="menuTab" component={MenuNavigator} />
       </Tab.Navigator>
     )
