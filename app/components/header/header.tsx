@@ -19,6 +19,7 @@ export interface HeaderProps {
   left?: JSX.Element,
   right?: JSX.Element,
   goBack?: Function,
+  goBackText?: string,
   showLogo?: boolean
 }
 
@@ -37,11 +38,20 @@ export const Header = observer(function Header(props: HeaderProps) {
             ? props.left 
             : props.goBack ? (
               <Button preset="link" onPress={() => props.goBack()}>
-                  <Icon 
-                    name="arrow-left"
-                    size={16} 
-                    color={color.title} 
-                  />
+                {
+                  props.goBackText ? (
+                    <Text
+                      text={props.goBackText}
+                      style={{ fontSize: 12 }}
+                    />
+                  ) : (
+                    <Icon 
+                      name="long-arrow-left"
+                      size={16} 
+                      color={color.title} 
+                    />
+                  )
+                }
               </Button>
             ) : props.showLogo && (
               <Image source={require('./locker-logo.png')} style={{ height: 24 }} />

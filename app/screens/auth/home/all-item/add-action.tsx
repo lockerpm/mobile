@@ -26,6 +26,7 @@ export const AddAction = (props: Props) => {
               <Actionsheet.Item 
                 key={index}
                 onPress={() => {
+                  props.onClose()
                   props.navigation.navigate(`${item.routeName}__edit`, {
                     mode: 'add'
                   })

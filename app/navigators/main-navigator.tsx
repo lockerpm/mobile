@@ -8,7 +8,11 @@ import React, { useEffect } from "react"
 import { AppState } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainTabNavigator } from "./main-tab-navigator"
-import { SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen } from "../screens"
+import { 
+  SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen, PasswordEditScreen, 
+  PasswordInfoScreen , FolderActionScreen, PasswordGeneratorScreen, PasswordHealthScreen,
+  DataBreachScannerScreen
+} from "../screens"
 import UserInactivity from 'react-native-user-inactivity'
 import { color } from "../theme"
 import { INACTIVE_TIMEOUT } from "../config/constants"
@@ -32,6 +36,16 @@ export type PrimaryParamList = {
   switchDevice: undefined,
   biometricUnlockIntro: undefined,
   mainTab: undefined,
+  passwordGenerator: undefined,
+  passwordHealth: undefined,
+  dataBreachScanner: undefined,
+  passwords__info: undefined,
+  passwords__edit: {
+    mode: 'add' | 'edit'
+  },
+  folders__action: {
+    mode: 'add' | 'move'
+  }
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -83,6 +97,15 @@ export function MainNavigator() {
         <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
+
+        {/* Inner screens */}
+        <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} />
+        <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
+        <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
+
+        <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
+        <Stack.Screen name="passwords__edit" component={PasswordEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="folders__action" component={FolderActionScreen} initialParams={{ mode: 'add' }} />
       </Stack.Navigator>
     </UserInactivity>
   )
