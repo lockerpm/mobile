@@ -1,6 +1,6 @@
 import React from "react"
 import { Actionsheet, Divider } from "native-base"
-import { Text, Button } from "../../../../../components"
+import { Text, Button, ActionItem } from "../../../../../components"
 import { color } from "../../../../../theme"
 import { View } from "react-native"
 
@@ -44,7 +44,11 @@ export const OwnershipAction = (props: Props) => {
 
         {
           sortOptions.map((item, index) => (
-            <Actionsheet.Item key={index}>
+            <ActionItem
+              key={index}
+              icon="check"
+              iconColor={color.palette.green}
+            >
               <View>
                 <Text
                   text={item.label}
@@ -55,7 +59,7 @@ export const OwnershipAction = (props: Props) => {
                   style={{ fontSize: 12 }}
                 />
               </View>
-            </Actionsheet.Item>
+            </ActionItem>
           ))
         }
 

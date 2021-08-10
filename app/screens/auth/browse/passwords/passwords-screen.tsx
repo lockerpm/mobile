@@ -1,25 +1,46 @@
-import React from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Screen, Text } from "../../../../components"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
-import { color } from "../../../../theme"
+import { Layout, CipherList } from "../../../../components"
+import { useNavigation } from "@react-navigation/native"
+import { PasswordsEmptyContent } from "./empty-content"
+import { PasswordsHeader } from "./passwords-header"
+import { SortAction } from "../../home/all-item/sort-action"
 
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
-  flex: 1,
-}
 
 export const PasswordsScreen = observer(function PasswordsScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
+  const navigation = useNavigation()
+  
+  const [isSortOpen, setIsSortOpen] = useState(false)
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text="" />
-    </Screen>
+    <Layout
+      header={(
+        <PasswordsHeader 
+          openSort={() => setIsSortOpen(true)}
+          openAdd={() => {
+            navigation.navigate('passwords__edit', { mode: 'add' })
+          }}
+          navigation={navigation}
+        />
+      )}
+      borderBottom
+      containerStyle={{ paddingTop: 0 }}
+    >
+      <SortAction 
+        isOpen={isSortOpen} 
+        onClose={() => setIsSortOpen(false)}
+      />
+      
+      <CipherList
+        navigation={navigation}
+        emptyContent={(
+          <PasswordsEmptyContent 
+            addItem={() => {
+              navigation.navigate('passwords__edit', { mode: 'add' })
+            }}
+          />
+        )}
+      />
+    </Layout>
   )
 })
