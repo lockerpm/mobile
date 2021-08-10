@@ -1,10 +1,9 @@
 import React, { useState } from "react"
 import { Actionsheet, Divider } from "native-base"
-import { Text, AutoImage as Image, ActionItem } from "../../../../../components"
+import { Text, AutoImage as Image, ActionItem, OwnershipAction } from "../../../../../components"
 import { color, commonStyles } from "../../../../../theme"
 import { View, ScrollView } from "react-native"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import { OwnershipAction } from "../password-edit/ownership-action"
 
 
 type Props = {

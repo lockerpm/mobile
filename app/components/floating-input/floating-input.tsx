@@ -18,7 +18,8 @@ export interface FloatingInputProps {
   fixedLabel?: boolean,
   editable?: boolean,
   disabled?: boolean,
-  buttonRight?: JSX.Element
+  buttonRight?: JSX.Element,
+  textarea?: boolean
 }
 
 const BUTTON_BASE: ViewStyle = {
@@ -34,7 +35,7 @@ const BUTTON_BASE: ViewStyle = {
 export const FloatingInput = observer(function FloatingInput(props: FloatingInputProps) {
   const { 
     style, inputStyle, isInvalid, isRequired, label, value, onChangeText, isPassword,
-    fixedLabel, editable = true, disabled, buttonRight
+    fixedLabel, editable = true, disabled, buttonRight, textarea
   } = props
 
   const [isFocused, setFocus] = useState(false)
@@ -45,7 +46,7 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
       {
         borderBottomColor: isInvalid ? color.error : isFocused ? color.palette.green : color.line,
         borderBottomWidth: 1,
-        height: 48
+        height: textarea ? 90 : 48
       }, style
     ]}>
       <View
@@ -87,6 +88,8 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
         }, inputStyle]}
         secureTextEntry={isPassword && !showPassword}
         editable={editable && !disabled}
+        multiline={textarea}
+        numberOfLines={textarea ? 4 : 1}
       />
       {
         isPassword && (

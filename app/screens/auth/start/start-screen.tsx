@@ -13,7 +13,7 @@ export const StartScreen = observer(function StartScreen() {
 
   const mounted = async () => {
     if (__DEV__) {
-      navigation.navigate('mainTab')
+      navigation.navigate('cards__edit')
       return
     }
 

@@ -11,7 +11,7 @@ import { MainTabNavigator } from "./main-tab-navigator"
 import { 
   SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen, PasswordEditScreen, 
   PasswordInfoScreen , FolderActionScreen, PasswordGeneratorScreen, PasswordHealthScreen,
-  DataBreachScannerScreen
+  DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen
 } from "../screens"
 import UserInactivity from 'react-native-user-inactivity'
 import { color } from "../theme"
@@ -45,7 +45,16 @@ export type PrimaryParamList = {
   },
   folders__action: {
     mode: 'add' | 'move'
-  }
+  },
+  notes__edit: {
+    mode: 'add' | 'edit'
+  },
+  cards__edit: {
+    mode: 'add' | 'edit'
+  },
+  identities__edit: {
+    mode: 'add' | 'edit'
+  },
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -106,6 +115,9 @@ export function MainNavigator() {
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
         <Stack.Screen name="passwords__edit" component={PasswordEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__action" component={FolderActionScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="notes__edit" component={NoteEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="cards__edit" component={CardEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
       </Stack.Navigator>
     </UserInactivity>
   )

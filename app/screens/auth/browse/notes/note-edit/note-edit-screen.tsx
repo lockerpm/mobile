@@ -11,24 +11,20 @@ import { color, commonStyles } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 
 
-type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
+type NoteEditScreenProp = RouteProp<PrimaryParamList, 'notes__edit'>;
 
 
-export const PasswordEditScreen = observer(function PasswordEditScreen() {
+export const NoteEditScreen = observer(function NoteEditScreen() {
   const navigation = useNavigation()
-  const route = useRoute<PasswordEditScreenProp>()
+  const route = useRoute<NoteEditScreenProp>()
   const { mode } = route.params
 
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
 
   // Forms
   const [title, setTitle] = useState()
-  const [username, setUsername] = useState()
-  const [password, setPassword] = useState()
-  const [url, setUrl] = useState()
   const [note, setNote] = useState()
 
   return (
@@ -39,7 +35,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       }}
       header={(
         <Header
-          title={mode === 'add' ? 'Add Password' : 'Edit'}
+          title={mode === 'add' ? 'Add Secure Note' : 'Edit'}
           goBack={() => navigation.goBack()}
           goBackText="Cancel"
           right={(
@@ -62,7 +58,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
           style={[commonStyles.CENTER_HORIZONTAL_VIEW]}
         >
           <Image
-            source={BROWSE_ITEMS.password.icon}
+            source={BROWSE_ITEMS.note.icon}
             style={{ height: 40, marginRight: 10 }}
           />
           <View style={{ flex: 1 }}>
@@ -78,7 +74,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       {/* Title end */}
 
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="LOGIN DETAILS" style={{ fontSize: 10 }} />
+        <Text text="DETAILS" style={{ fontSize: 10 }} />
       </View>
 
       {/* Info */}
@@ -88,86 +84,17 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
           paddingBottom: 32
         }]}
       >
-        {/* Username */}
-        <View style={{ flex: 1 }}>
-          <FloatingInput
-            label="Email or Username"
-            value={username}
-            onChangeText={setUsername}
-          />
-        </View>
-        {/* Username end */}
-
-        {/* Password */}
+        {/* Note */}
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
-            isPassword
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-          />
-          <Text
-            preset="green"
-            style={{
-              marginTop: 10,
-              fontSize: 10
-            }}
-          >
-            <IoniconsIcon
-              name="shield-checkmark"
-              size={12}
-              color={color.palette.green}
-            />
-            {" Strong"}
-          </Text>
-        </View>
-        {/* Password end */}
-
-        {/* Generate password */}
-        <Button
-          preset="link"
-          onPress={() => navigation.navigate('passwordGenerator')}
-          style={{
-            marginTop: 20
-          }}
-        >
-          <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesomeIcon
-                name="repeat"
-                size={18}
-                color={color.palette.green}
-              />
-              <Text
-                preset="green"
-                text="Generate"
-                style={{ fontSize: 12, marginLeft: 7 }}
-              />
-            </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
-          </View>
-        </Button>
-        {/* Generate password end */}
-
-        {/* Web url */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            isRequired
-            label="Website URL"
-            value={url}
-            onChangeText={setUrl}
+            fixedLabel
+            textarea
+            label="Note"
+            value={note}
+            onChangeText={setNote}
           />
         </View>
-        {/* Web url end */}
+        {/* Note end */}
       </View>
       {/* Info end */}
 
@@ -246,18 +173,6 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
           </View>
         </Button>
         {/* Ownership end */}
-
-        {/* Note */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            fixedLabel
-            textarea
-            label="Note"
-            value={note}
-            onChangeText={setNote}
-          />
-        </View>
-        {/* Note end */}
       </View>
       {/* Others end */}
 
