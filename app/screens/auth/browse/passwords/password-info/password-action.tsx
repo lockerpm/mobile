@@ -1,10 +1,10 @@
-import React from "react"
+import React, { useState } from "react"
 import { Actionsheet, Divider } from "native-base"
-import { Text, AutoImage as Image } from "../../../../../components"
+import { Text, AutoImage as Image, ActionItem } from "../../../../../components"
 import { color, commonStyles } from "../../../../../theme"
 import { View, ScrollView } from "react-native"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import { OwnershipAction } from "../password-edit/ownership-action"
 
 
 type Props = {
@@ -13,51 +13,18 @@ type Props = {
   navigation: any
 }
 
-type ActionItemProps = {
-  name: string,
-  icon: string,
-  color?: string,
-  action?: Function
-}
-
 
 export const PasswordAction = (props: Props) => {
   const { navigation, isOpen, onClose } = props
-
-  const ActionItem = (actionProps: ActionItemProps) => {
-    const {
-      icon,
-      name,
-      action
-    } = actionProps
-
-    return (
-      <Actionsheet.Item
-        onPress={() => action && action()}
-        endIcon={(
-          <FontAwesomeIcon 
-            name={icon}
-            size={18} 
-            color={actionProps.color || color.text}
-          />
-        )}
-        _stack={{
-          style: {
-            flex: 1,
-            justifyContent: 'space-between'
-          }
-        }}
-      >
-        <Text
-          text={name}
-          style={{ color: actionProps.color || color.textBlack }}
-        />
-      </Actionsheet.Item>
-    )
-  }
+  const [showOwnershipAction, setShowOwnershipAction] = useState(false)
 
   return (
     <View>
+      <OwnershipAction
+        isOpen={showOwnershipAction}
+        onClose={() => setShowOwnershipAction(false)}
+      />
+
       <Actionsheet
         isOpen={isOpen}
         onClose={onClose}
@@ -118,6 +85,7 @@ export const PasswordAction = (props: Props) => {
               icon="user-o"
               action={() => {
                 onClose()
+                setTimeout(() => setShowOwnershipAction(true), 500)
               }}
             />
 
@@ -140,7 +108,7 @@ export const PasswordAction = (props: Props) => {
             <ActionItem
               name="Move to Trash"
               icon="trash"
-              color={color.error}
+              textColor={color.error}
             />
           </ScrollView>
         </Actionsheet.Content>

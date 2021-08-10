@@ -1,21 +1,22 @@
 import React from "react"
 import { View } from "react-native"
-import { Button, Header } from "../../../../components"
+import { Button, Header, Text } from "../../../../components"
 import { color, commonStyles } from "../../../../theme"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Input } from "native-base"
 
 interface Props {
   openSort?: Function,
-  openAdd?: Function
+  openAdd?: Function,
+  navigation: any
 }
 
-export const ItemsHeader = (props: Props) => {
-  const { openAdd, openSort} = props
+export const PasswordsHeader = (props: Props) => {
+  const { openAdd, openSort, navigation } = props
 
   return (
     <Header
-      showLogo
+      goBack={() => navigation.goBack()}
       right={(
         <View 
           style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -48,7 +49,13 @@ export const ItemsHeader = (props: Props) => {
         </View>
       )}
     >
-      <View style={{ marginTop: 15 }}>
+      <View style={{ marginTop: 5 }}>
+				<Text 
+					preset="largeHeader"
+					text="Password"
+          style={{ marginBottom: 10 }}
+				/>
+				
         <Input
           size="xs"
           placeholder="Search"

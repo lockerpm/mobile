@@ -6,26 +6,26 @@ interface Props {
   addItem?: Function
 }
 
-export const ItemEmptyContent = (props: Props) => {
+export const PasswordsEmptyContent = (props: Props) => {
   return (
     <View 
       style={{ alignItems: 'center', marginTop: '10%' }}
     >
-      <Image source={require('./empty-img.png')} style={{ height: 55 }} />
+      <Image source={require('./empty-img.png')} />
 
       <Text
         preset="semibold"
         style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}
-        text="Add your first item"
+        text="Foget password resets"
       />
 
       <Text 
-        text="Create your first item to start building your vault"
+        text="Add your passwords and access them on any device, anytime"
         style={{ textAlign: 'center', fontSize: 12 }}
       />
 
       <Button
-        text="Add Item"
+        text="Add Password"
         onPress={() => props.addItem && props.addItem()}
         style={{
           marginTop: 26,

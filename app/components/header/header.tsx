@@ -3,7 +3,7 @@ import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Text, Button, AutoImage as Image } from "../"
 import { flatten } from "ramda"
-import Icon from 'react-native-vector-icons/FontAwesome'
+import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { color } from "../../theme"
 
 const CONTAINER: ViewStyle = {
@@ -45,9 +45,9 @@ export const Header = observer(function Header(props: HeaderProps) {
                       style={{ fontSize: 12 }}
                     />
                   ) : (
-                    <Icon 
-                      name="long-arrow-left"
-                      size={16} 
+                    <IoniconsIcon 
+                      name="md-arrow-back"
+                      size={20} 
                       color={color.title} 
                     />
                   )
