@@ -11,15 +11,14 @@ import { color, commonStyles } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 
 
-type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
+type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'identities__edit'>;
 
 
-export const PasswordEditScreen = observer(function PasswordEditScreen() {
+export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const navigation = useNavigation()
-  const route = useRoute<PasswordEditScreenProp>()
+  const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
 
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
@@ -39,7 +38,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       }}
       header={(
         <Header
-          title={mode === 'add' ? 'Add Password' : 'Edit'}
+          title={mode === 'add' ? 'Add Personal Info' : 'Edit'}
           goBack={() => navigation.goBack()}
           goBackText="Cancel"
           right={(
@@ -62,7 +61,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
           style={[commonStyles.CENTER_HORIZONTAL_VIEW]}
         >
           <Image
-            source={BROWSE_ITEMS.password.icon}
+            source={BROWSE_ITEMS.indentity.icon}
             style={{ height: 40, marginRight: 10 }}
           />
           <View style={{ flex: 1 }}>
@@ -78,7 +77,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       {/* Title end */}
 
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="LOGIN DETAILS" style={{ fontSize: 10 }} />
+        <Text text="CONTACT DETAILS" style={{ fontSize: 10 }} />
       </View>
 
       {/* Info */}
@@ -106,57 +105,8 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
             value={password}
             onChangeText={setPassword}
           />
-          <Text
-            preset="green"
-            style={{
-              marginTop: 10,
-              fontSize: 10
-            }}
-          >
-            <IoniconsIcon
-              name="shield-checkmark"
-              size={12}
-              color={color.palette.green}
-            />
-            {" Strong"}
-          </Text>
         </View>
         {/* Password end */}
-
-        {/* Generate password */}
-        <Button
-          preset="link"
-          onPress={() => navigation.navigate('passwordGenerator')}
-          style={{
-            marginTop: 20
-          }}
-        >
-          <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesomeIcon
-                name="repeat"
-                size={18}
-                color={color.palette.green}
-              />
-              <Text
-                preset="green"
-                text="Generate"
-                style={{ fontSize: 12, marginLeft: 7 }}
-              />
-            </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
-          </View>
-        </Button>
-        {/* Generate password end */}
 
         {/* Web url */}
         <View style={{ flex: 1, marginTop: 20 }}>

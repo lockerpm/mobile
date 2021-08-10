@@ -1,16 +1,23 @@
-import React from "react"
-import { Actionsheet, Divider } from "native-base"
-import { Text, Button, ActionItem } from "../../../../../components"
-import { color } from "../../../../../theme"
+import * as React from "react"
 import { View } from "react-native"
+import { observer } from "mobx-react-lite"
+import { color } from "../../theme"
+import { ActionItem, Button, Text } from "../"
+import { Actionsheet, Divider } from "native-base"
 
-interface Props {
+
+export interface OwnershipActionProps {
   isOpen?: boolean,
   onClose?: Function
 }
 
-export const OwnershipAction = (props: Props) => {
-  const sortOptions = [
+/**
+ * Describe your component here
+ */
+export const OwnershipAction = observer(function OwnershipAction(props: OwnershipActionProps) {
+  const { isOpen, onClose } = props
+
+  const owners = [
     {
       label: 'CyStack',
       desc: 'Anyone in this group can view',
@@ -25,8 +32,8 @@ export const OwnershipAction = (props: Props) => {
 
   return (
     <Actionsheet
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isOpen={isOpen}
+      onClose={onClose}
     >
       <Actionsheet.Content>
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
@@ -43,7 +50,7 @@ export const OwnershipAction = (props: Props) => {
         <Divider borderColor={color.line} style={{ marginBottom: 10 }} />
 
         {
-          sortOptions.map((item, index) => (
+          owners.map((item, index) => (
             <ActionItem
               key={index}
               icon="check"
@@ -72,4 +79,4 @@ export const OwnershipAction = (props: Props) => {
       </Actionsheet.Content>
     </Actionsheet>
   )
-}
+})
