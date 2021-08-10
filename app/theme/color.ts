@@ -21,9 +21,9 @@ export const color = {
    */
   transparent: "rgba(0, 0, 0, 0)",
   background: palette.white,
-  disabled: palette.lighterGray,
+  disabled: palette.gray,
   line: palette.lightGray,
-  block: palette.gray,
+  block: palette.lighterGray,
   text: palette.lighterBlack,
   textBlack: palette.lightBlack,
   title: palette.black,
