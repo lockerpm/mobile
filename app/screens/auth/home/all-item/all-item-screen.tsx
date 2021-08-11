@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Layout } from "../../../../components"
+import { CipherList, Layout } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useCoreService } from "../../../../services/core-service"
 import { ItemEmptyContent } from "./empty-content"
@@ -61,16 +61,28 @@ export const AllItemScreen = observer(function AllItemScreen() {
         />
       )}
       borderBottom
+      noScroll
     >
-      <ItemEmptyContent addItem={() => setIsAddOpen(true)} />
       <SortAction 
         isOpen={isSortOpen} 
         onClose={() => setIsSortOpen(false)}
       />
+      
       <AddAction 
         isOpen={isAddOpen} 
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
+      />
+
+      <CipherList
+        navigation={navigation}
+        emptyContent={(
+          <ItemEmptyContent 
+            addItem={() => {
+              setIsAddOpen(true)
+            }}
+          />
+        )}
       />
     </Layout>
   )

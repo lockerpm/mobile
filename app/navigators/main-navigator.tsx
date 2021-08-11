@@ -11,7 +11,8 @@ import { MainTabNavigator } from "./main-tab-navigator"
 import { 
   SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen, PasswordEditScreen, 
   PasswordInfoScreen , FolderActionScreen, PasswordGeneratorScreen, PasswordHealthScreen,
-  DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen
+  DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
+  CountrySelectorScreen
 } from "../screens"
 import UserInactivity from 'react-native-user-inactivity'
 import { color } from "../theme"
@@ -39,6 +40,7 @@ export type PrimaryParamList = {
   passwordGenerator: undefined,
   passwordHealth: undefined,
   dataBreachScanner: undefined,
+  countrySelector: undefined,
   passwords__info: undefined,
   passwords__edit: {
     mode: 'add' | 'edit'
@@ -108,6 +110,8 @@ export function MainNavigator() {
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
 
         {/* Inner screens */}
+        <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
+
         <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} />
         <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />

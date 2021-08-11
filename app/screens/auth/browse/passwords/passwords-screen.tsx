@@ -24,7 +24,7 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
         />
       )}
       borderBottom
-      containerStyle={{ paddingTop: 0 }}
+      noScroll
     >
       <SortAction 
         isOpen={isSortOpen} 
