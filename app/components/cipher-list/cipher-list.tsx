@@ -24,23 +24,21 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   const [showPasswodAction, setShowPasswodAction] = useState(false)
 
   // Data
-  const items = []
-  // const items = [
-  //   {
-  //     id: 1,
-  //     logo: BROWSE_ITEMS.password.icon,
-  //     name: 'Facebook',
-  //     owner: 'duchm',
-  //     type: CipherType.Login
-  //   },
-  //   {
-  //     id: 2,
-  //     logo: BROWSE_ITEMS.password.icon,
-  //     name: 'Facebook',
-  //     owner: 'duchm',
-  //     type: CipherType.Login
-  //   }
-  // ]
+  // const items = []
+  const items = [
+    {
+      id: 1,
+      logo: BROWSE_ITEMS.password.icon,
+      name: 'Facebook',
+      type: CipherType.Login
+    },
+    {
+      id: 2,
+      logo: BROWSE_ITEMS.password.icon,
+      name: 'Facebook',
+      type: CipherType.Login
+    }
+  ]
 
   // Methods
   const openActionMenu = (type: any) => {
@@ -105,12 +103,6 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                 <Text
                   preset="semibold"
                   text={item.name}
-                />
-                <Text
-                  text={item.owner}
-                  style={{
-                    fontSize: 12
-                  }}
                 />
               </View>
 

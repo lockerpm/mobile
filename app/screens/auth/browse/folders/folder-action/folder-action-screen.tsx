@@ -8,7 +8,7 @@ import { RouteProp } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { NewFolderModal } from "./new-folder-modal"
+import { NewFolderModal } from "../new-folder-modal"
 
 
 type FolderActionScreenProp = RouteProp<PrimaryParamList, 'folders__action'>;
@@ -82,7 +82,7 @@ export const FolderActionScreen = observer(function FolderActionScreen() {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
-            source={require('./folder-add.png')}
+            source={require('../folder-add.png')}
             style={{ height: 30, marginRight: 10 }}
           />
           <Text preset="black" style={{ flex: 1 }}>
@@ -106,7 +106,7 @@ export const FolderActionScreen = observer(function FolderActionScreen() {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
-            source={require('./folder-share.png')}
+            source={require('../folder-share.png')}
             style={{ height: 30, marginRight: 10 }}
           />
           <Text preset="black" style={{ flex: 1 }}>
@@ -123,7 +123,7 @@ export const FolderActionScreen = observer(function FolderActionScreen() {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
-            source={require('./folder.png')}
+            source={require('../folder.png')}
             style={{ height: 30, marginRight: 10 }}
           />
           <Text preset="black" style={{ flex: 1 }}>

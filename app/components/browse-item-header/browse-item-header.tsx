@@ -1,18 +1,24 @@
-import React from "react"
+import * as React from "react"
 import { View } from "react-native"
-import { Button, Header, Text } from "../../../../components"
-import { color, commonStyles } from "../../../../theme"
+import { observer } from "mobx-react-lite"
+import { color, commonStyles } from "../../theme"
+import { Button, Header, Text } from "../"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Input } from "native-base"
 
-interface Props {
+
+export interface BrowseItemHeaderProps {
   openSort?: Function,
   openAdd?: Function,
-  navigation: any
+  navigation: any,
+  header: string
 }
 
-export const PasswordsHeader = (props: Props) => {
-  const { openAdd, openSort, navigation } = props
+/**
+ * Describe your component here
+ */
+export const BrowseItemHeader = observer(function BrowseItemHeader(props: BrowseItemHeaderProps) {
+  const { openAdd, openSort, navigation, header } = props
 
   return (
     <Header
@@ -52,7 +58,7 @@ export const PasswordsHeader = (props: Props) => {
       <View style={{ marginTop: 5 }}>
 				<Text 
 					preset="largeHeader"
-					text="Password"
+					text={header}
           style={{ marginBottom: 10 }}
 				/>
 				
@@ -80,4 +86,4 @@ export const PasswordsHeader = (props: Props) => {
       </View>
     </Header>
   )
-}
+})
