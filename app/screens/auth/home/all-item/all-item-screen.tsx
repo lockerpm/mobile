@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { CipherList, Layout } from "../../../../components"
+import { CipherList, Layout, BrowseItemEmptyContent } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useCoreService } from "../../../../services/core-service"
-import { ItemEmptyContent } from "./empty-content"
 import { ItemsHeader } from "./items-header"
 import { SortAction } from "./sort-action"
 import { AddAction } from "./add-action"
@@ -77,7 +76,11 @@ export const AllItemScreen = observer(function AllItemScreen() {
       <CipherList
         navigation={navigation}
         emptyContent={(
-          <ItemEmptyContent 
+          <BrowseItemEmptyContent
+            img={require('./empty-img.png')}
+            title="Add your first item"
+            desc="Create your first item to start building your vault"
+            buttonText="Add Item"
             addItem={() => {
               setIsAddOpen(true)
             }}

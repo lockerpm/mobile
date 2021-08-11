@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Modal } from "native-base"
-import { FloatingInput, Button, Text } from "../../../../../components"
+import { FloatingInput, Button, Text } from "../../../../components"
 
 interface Props {
   isOpen?: boolean,
@@ -10,7 +10,7 @@ interface Props {
 
 export const NewFolderModal = (props: Props) => {
   const { isOpen, onClose, createFolder } = props
-  const [name, setName] = useState()
+  const [name, setName] = useState('')
   
   return (
     <Modal
