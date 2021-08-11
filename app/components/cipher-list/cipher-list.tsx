@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View } from "react-native"
+import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, commonStyles } from "../../theme"
 import { Button, AutoImage as Image, Text } from "../"
@@ -24,20 +24,23 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   const [showPasswodAction, setShowPasswodAction] = useState(false)
 
   // Data
-  const items = [
-    {
-      logo: BROWSE_ITEMS.password.icon,
-      name: 'Facebook',
-      owner: 'duchm',
-      type: CipherType.Login
-    },
-    {
-      logo: BROWSE_ITEMS.password.icon,
-      name: 'Facebook',
-      owner: 'duchm',
-      type: CipherType.Login
-    }
-  ]
+  const items = []
+  // const items = [
+  //   {
+  //     id: 1,
+  //     logo: BROWSE_ITEMS.password.icon,
+  //     name: 'Facebook',
+  //     owner: 'duchm',
+  //     type: CipherType.Login
+  //   },
+  //   {
+  //     id: 2,
+  //     logo: BROWSE_ITEMS.password.icon,
+  //     name: 'Facebook',
+  //     owner: 'duchm',
+  //     type: CipherType.Login
+  //   }
+  // ]
 
   // Methods
   const openActionMenu = (type: any) => {
@@ -61,9 +64,11 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   }
 
   return !items.length && emptyContent ? (
-    emptyContent
+    <View style={{ paddingHorizontal: 20 }}>
+      {emptyContent}
+    </View>
   ) : (
-    <View>
+    <View style={{ flex: 1 }}>
       {/* Action menus */}
       <PasswordAction
         isOpen={showPasswodAction}
@@ -73,10 +78,12 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       {/* Action menus end */}
 
       {/* Cipher list */}
-      {
-        items.map((item, index) => (
+      <FlatList
+        style={{ paddingHorizontal: 20 }}
+        data={items}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => (
           <Button
-            key={index}
             preset="link"
             onPress={() => goToDetail(item.type)}
             style={{
@@ -119,8 +126,8 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
               </Button>
             </View>
           </Button>
-        ))
-      }
+        )}
+      />
       {/* Cipher list end */}
     </View>
   )

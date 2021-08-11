@@ -2,8 +2,7 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { 
-  AutoImage as Image, Text, Layout, Button, Header, FloatingInput,
-  OwnershipAction
+  AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 // import { useStores } from "../../models"
@@ -14,6 +13,13 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
 
 type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'identities__edit'>;
+type InputItem = {
+  label: string,
+  value: string,
+  setter: Function,
+  isRequired?: boolean,
+  type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
+}
 
 
 export const IdentityEditScreen = observer(function IdentityEditScreen() {
@@ -21,14 +27,68 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
 
-  const [showOwnershipAction, setShowOwnershipAction] = useState(false)
-
   // Forms
-  const [title, setTitle] = useState()
-  const [username, setUsername] = useState()
-  const [password, setPassword] = useState()
-  const [url, setUrl] = useState()
-  const [note, setNote] = useState()
+  const [title, setTitle] = useState('')
+  const [fullName, setfullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [address1, setAddress1] = useState('')
+  const [address2, setAddress2] = useState('')
+  const [city, setCity] = useState('')
+  const [state, setState] = useState('')
+  const [zip, setZip] = useState('')
+  const [country, setCountry] = useState()
+  const [note, setNote] = useState('')
+
+  const contactDetails: InputItem[] = [
+    {
+      label: 'Full Name',
+      value: fullName,
+      setter: setfullName,
+      isRequired: true
+    },
+    {
+      label: 'Email',
+      value: email,
+      setter: setEmail,
+      type: 'email-address'
+    },
+    {
+      label: 'Phone',
+      value: phone,
+      setter: setPhone,
+      type: 'numeric'
+    }
+  ]
+
+  const addressDetails: InputItem[] = [
+    {
+      label: 'Address 1',
+      value: address1,
+      setter: setAddress1
+    },
+    {
+      label: 'Address 2',
+      value: address2,
+      setter: setAddress2
+    },
+    {
+      label: 'City',
+      value: city,
+      setter: setCity
+    },
+    {
+      label: 'State or Region',
+      value: state,
+      setter: setState
+    },
+    {
+      label: 'ZIP or Postal Code',
+      value: zip,
+      setter: setZip,
+      type: 'numeric'
+    }
+  ]
 
   return (
     <Layout
@@ -87,57 +147,55 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
           paddingBottom: 32
         }]}
       >
-        {/* Username */}
-        <View style={{ flex: 1 }}>
-          <FloatingInput
-            label="Email or Username"
-            value={username}
-            onChangeText={setUsername}
-          />
-        </View>
-        {/* Username end */}
-
-        {/* Password */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            isPassword
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View>
-        {/* Password end */}
-
-        {/* Web url */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            isRequired
-            label="Website URL"
-            value={url}
-            onChangeText={setUrl}
-          />
-        </View>
-        {/* Web url end */}
+        {
+          contactDetails.map((item, index) => (
+            <FloatingInput
+              key={index}
+              isRequired={item.isRequired}
+              keyboardType={item.type || 'default'}
+              label={item.label}
+              value={item.value}
+              onChangeText={(text) => item.setter(text)}
+              style={{
+                marginTop: index !== 0 ? 20 : 0
+              }}
+            />
+          ))
+        }
       </View>
       {/* Info end */}
 
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="OTHERS" style={{ fontSize: 10 }} />
+        <Text text="ADDRESS DETAILS" style={{ fontSize: 10 }} />
       </View>
 
-      {/* Others */}
+      {/* Address */}
       <View
         style={[commonStyles.SECTION_PADDING, {
           backgroundColor: color.palette.white,
           paddingBottom: 32
         }]}
       >
-        {/* Folder */}
+        {
+          addressDetails.map((item, index) => (
+            <FloatingInput
+              key={index}
+              isRequired={item.isRequired}
+              keyboardType={item.type || 'default'}
+              label={item.label}
+              value={item.value}
+              onChangeText={(text) => item.setter(text)}
+              style={{
+                marginTop: index !== 0 ? 20 : 0
+              }}
+            />
+          ))
+        }
+
         <Button
           preset="link"
-          onPress={() => {
-            navigation.navigate('folders__action', { mode: mode === 'add' ? 'add' : 'move' })
-          }}
+          onPress={() => navigation.navigate('countrySelector')}
+          style={{ marginTop: 20 }}
         >
           <View
             style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -146,13 +204,13 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
             }]}
           >
             <View>
-              <Text
-                text="Folder"
+              <Text 
+                text="Country"
                 style={{ fontSize: 10 }}
               />
               <Text
                 preset="black"
-                text="None"
+                text="Vietnam"
               />
             </View>
             <FontAwesomeIcon
@@ -162,59 +220,18 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
             />
           </View>
         </Button>
-        {/* Folder end */}
-
-        {/* Ownership */}
-        <Button
-          preset="link"
-          onPress={() => setShowOwnershipAction(true)}
-          style={{
-            marginTop: 20
-          }}
-        >
-          <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
-          >
-            <View>
-              <Text
-                text="Ownership"
-                style={{ fontSize: 10 }}
-              />
-              <Text
-                preset="black"
-                text="None"
-              />
-            </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
-          </View>
-        </Button>
-        {/* Ownership end */}
-
-        {/* Note */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            fixedLabel
-            textarea
-            label="Note"
-            value={note}
-            onChangeText={setNote}
-          />
-        </View>
-        {/* Note end */}
       </View>
-      {/* Others end */}
+      {/* Address end */}
 
-      <OwnershipAction
-        isOpen={showOwnershipAction}
-        onClose={() => setShowOwnershipAction(false)}
+      {/* Others */}
+      <CipherOthersInfo
+        navigation={navigation}
+        mode={mode === 'add' ? 'add' : 'move'}
+        hasNote
+        note={note}
+        onChangeNote={setNote}
       />
+      {/* Others end */}
     </Layout>
   )
 })

@@ -2,15 +2,13 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { 
-  AutoImage as Image, Text, Layout, Button, Header, FloatingInput,
-  OwnershipAction
+  AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, commonStyles } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, 'notes__edit'>;
@@ -21,11 +19,9 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
   const route = useRoute<NoteEditScreenProp>()
   const { mode } = route.params
 
-  const [showOwnershipAction, setShowOwnershipAction] = useState(false)
-
   // Forms
-  const [title, setTitle] = useState()
-  const [note, setNote] = useState()
+  const [title, setTitle] = useState('')
+  const [note, setNote] = useState('')
 
   return (
     <Layout
@@ -98,88 +94,12 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
       </View>
       {/* Info end */}
 
-      <View style={commonStyles.SECTION_PADDING}>
-        <Text text="OTHERS" style={{ fontSize: 10 }} />
-      </View>
-
       {/* Others */}
-      <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white,
-          paddingBottom: 32
-        }]}
-      >
-        {/* Folder */}
-        <Button
-          preset="link"
-          onPress={() => {
-            navigation.navigate('folders__action', { mode: mode === 'add' ? 'add' : 'move' })
-          }}
-        >
-          <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
-          >
-            <View>
-              <Text
-                text="Folder"
-                style={{ fontSize: 10 }}
-              />
-              <Text
-                preset="black"
-                text="None"
-              />
-            </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
-          </View>
-        </Button>
-        {/* Folder end */}
-
-        {/* Ownership */}
-        <Button
-          preset="link"
-          onPress={() => setShowOwnershipAction(true)}
-          style={{
-            marginTop: 20
-          }}
-        >
-          <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
-          >
-            <View>
-              <Text
-                text="Ownership"
-                style={{ fontSize: 10 }}
-              />
-              <Text
-                preset="black"
-                text="None"
-              />
-            </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
-          </View>
-        </Button>
-        {/* Ownership end */}
-      </View>
-      {/* Others end */}
-
-      <OwnershipAction
-        isOpen={showOwnershipAction}
-        onClose={() => setShowOwnershipAction(false)}
+      <CipherOthersInfo
+        navigation={navigation}
+        mode={mode === 'add' ? 'add' : 'move'}
       />
+      {/* Others end */}
     </Layout>
   )
 })

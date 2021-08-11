@@ -2,18 +2,26 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { 
-  AutoImage as Image, Text, Layout, Button, Header, FloatingInput,
-  OwnershipAction
+  AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color, commonStyles } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
 
 type CardEditScreenProp = RouteProp<PrimaryParamList, 'cards__edit'>;
+type InputItem = {
+  label: string,
+  value: string,
+  setter: Function,
+  isRequired?: boolean,
+  type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad',
+  mask?: string,
+  placeholder?: string,
+  isPassword?: boolean
+}
 
 
 export const CardEditScreen = observer(function CardEditScreen() {
@@ -21,14 +29,56 @@ export const CardEditScreen = observer(function CardEditScreen() {
   const route = useRoute<CardEditScreenProp>()
   const { mode } = route.params
 
-  const [showOwnershipAction, setShowOwnershipAction] = useState(false)
 
   // Forms
-  const [title, setTitle] = useState()
-  const [username, setUsername] = useState()
-  const [password, setPassword] = useState()
-  const [url, setUrl] = useState()
-  const [note, setNote] = useState()
+  const [title, setTitle] = useState('')
+  const [name, setName] = useState('')
+  const [number, setNumber] = useState('')
+  const [expDate, setExpDate] = useState('')
+  const [securityCode, setSecurityCode] = useState('')
+  const [zipCode, setZipCode] = useState('')
+  const [note, setNote] = useState('')
+
+  const cardDetails: InputItem[] = [
+    {
+      label: 'Cardholder Name',
+      value: name,
+      setter: setName
+    },
+    {
+      label: 'Card Number',
+      value: number,
+      setter: setNumber,
+      isRequired: true,
+      type: 'numeric',
+      mask: '9999 9999 9999 9999',
+      placeholder: '0000 0000 0000 0000'
+
+    },
+    {
+      label: 'Expiration Date',
+      value: expDate,
+      setter: setExpDate,
+      type: 'numeric',
+      mask: '99 / 99',
+      placeholder: 'MM / YY'
+    },
+    {
+      label: 'Security Code (CVV/CVC)',
+      value: securityCode,
+      setter: setSecurityCode,
+      mask: '999',
+      type: 'numeric',
+      placeholder: '000',
+      isPassword: true
+    },
+    {
+      label: 'ZIP or Postal Code',
+      value: zipCode,
+      setter: setZipCode,
+      type: 'numeric'
+    }
+  ]
 
   return (
     <Layout
@@ -87,134 +137,34 @@ export const CardEditScreen = observer(function CardEditScreen() {
           paddingBottom: 32
         }]}
       >
-        {/* Username */}
-        <View style={{ flex: 1 }}>
-          <FloatingInput
-            label="Email or Username"
-            value={username}
-            onChangeText={setUsername}
-          />
-        </View>
-        {/* Username end */}
-
-        {/* Password */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            isPassword
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View>
-        {/* Password end */}
-
-        {/* Web url */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            isRequired
-            label="Website URL"
-            value={url}
-            onChangeText={setUrl}
-          />
-        </View>
-        {/* Web url end */}
+        {
+          cardDetails.map((item, index) => (
+            <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
+              <FloatingInput
+                isRequired={item.isRequired}
+                isPassword={item.isPassword}
+                keyboardType={item.type || 'default'}
+                mask={item.mask}
+                label={item.label}
+                value={item.value}
+                onChangeText={(text) => item.setter(text)}
+                placeholder={item.placeholder}
+              />
+            </View>
+          ))
+        }
       </View>
       {/* Info end */}
 
-      <View style={commonStyles.SECTION_PADDING}>
-        <Text text="OTHERS" style={{ fontSize: 10 }} />
-      </View>
-
       {/* Others */}
-      <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white,
-          paddingBottom: 32
-        }]}
-      >
-        {/* Folder */}
-        <Button
-          preset="link"
-          onPress={() => {
-            navigation.navigate('folders__action', { mode: mode === 'add' ? 'add' : 'move' })
-          }}
-        >
-          <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
-          >
-            <View>
-              <Text
-                text="Folder"
-                style={{ fontSize: 10 }}
-              />
-              <Text
-                preset="black"
-                text="None"
-              />
-            </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
-          </View>
-        </Button>
-        {/* Folder end */}
-
-        {/* Ownership */}
-        <Button
-          preset="link"
-          onPress={() => setShowOwnershipAction(true)}
-          style={{
-            marginTop: 20
-          }}
-        >
-          <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
-          >
-            <View>
-              <Text
-                text="Ownership"
-                style={{ fontSize: 10 }}
-              />
-              <Text
-                preset="black"
-                text="None"
-              />
-            </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
-          </View>
-        </Button>
-        {/* Ownership end */}
-
-        {/* Note */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            fixedLabel
-            textarea
-            label="Note"
-            value={note}
-            onChangeText={setNote}
-          />
-        </View>
-        {/* Note end */}
-      </View>
-      {/* Others end */}
-
-      <OwnershipAction
-        isOpen={showOwnershipAction}
-        onClose={() => setShowOwnershipAction(false)}
+      <CipherOthersInfo
+        navigation={navigation}
+        mode={mode === 'add' ? 'add' : 'move'}
+        hasNote
+        note={note}
+        onChangeNote={setNote}
       />
+      {/* Others end */}
     </Layout>
   )
 })
