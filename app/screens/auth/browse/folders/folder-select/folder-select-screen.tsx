@@ -11,12 +11,12 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { NewFolderModal } from "../new-folder-modal"
 
 
-type FolderActionScreenProp = RouteProp<PrimaryParamList, 'folders__action'>;
+type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
 
 
-export const FolderActionScreen = observer(function FolderActionScreen() {
+export const FolderSelectScreen = observer(function FolderSelectScreen() {
   const navigation = useNavigation()
-  const route = useRoute<FolderActionScreenProp>()
+  const route = useRoute<FolderSelectScreenProp>()
   const { mode } = route.params
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)

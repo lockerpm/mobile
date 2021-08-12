@@ -10,7 +10,7 @@ export * from "./browse-list/browse-list-screen"
 // Inner screens
 export * from "./passwords/password-edit/password-edit-screen"
 export * from "./passwords/password-info/password-info-screen"
-export * from "./folders/folder-action/folder-action-screen"
+export * from "./folders/folder-select/folder-select-screen"
 export * from "./notes/note-edit/note-edit-screen"
 export * from "./cards/card-edit/card-edit-screen"
 export * from "./identities/identity-edit/identity-edit-screen"

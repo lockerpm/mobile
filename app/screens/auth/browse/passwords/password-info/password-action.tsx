@@ -75,7 +75,7 @@ export const PasswordAction = (props: Props) => {
               icon="folder-o"
               action={() => {
                 onClose()
-                navigation.navigate('folders__action', { mode: 'move' })
+                navigation.navigate('folders__select', { mode: 'move' })
               }}
             />
 

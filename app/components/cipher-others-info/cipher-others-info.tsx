@@ -38,7 +38,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
         <Button
           preset="link"
           onPress={() => {
-            navigation.navigate('folders__action', { mode: mode })
+            navigation.navigate('folders__select', { mode: mode })
           }}
         >
           <View
