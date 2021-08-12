@@ -1,61 +1,75 @@
-import React from "react"
-import { View, ViewStyle, TextStyle } from "react-native"
-import { HeaderProps } from "./header.props"
-import { Button } from "../button/button"
-import { Text } from "../text/text"
-import { Icon } from "../icon/icon"
-import { spacing } from "../../theme"
-import { translate } from "../../i18n/"
+import * as React from "react"
+import { StyleProp, View, ViewStyle } from "react-native"
+import { observer } from "mobx-react-lite"
+import { Text, Button, AutoImage as Image } from "../"
+import { flatten } from "ramda"
+import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import { color } from "../../theme"
 
-// static styles
-const ROOT: ViewStyle = {
-  flexDirection: "row",
-  paddingHorizontal: spacing[4],
-  alignItems: "center",
-  paddingTop: spacing[5],
-  paddingBottom: spacing[5],
-  justifyContent: "flex-start",
+const CONTAINER: ViewStyle = {
+  flexDirection: 'row',
+  justifyContent: "space-between",
+  alignItems: 'center'
 }
-const TITLE: TextStyle = { textAlign: "center" }
-const TITLE_MIDDLE: ViewStyle = { flex: 1, justifyContent: "center" }
-const LEFT: ViewStyle = { width: 32 }
-const RIGHT: ViewStyle = { width: 32 }
+
+export interface HeaderProps {
+  children?: React.ReactNode,
+  style?: StyleProp<ViewStyle>,
+  title?: string,
+  left?: JSX.Element,
+  right?: JSX.Element,
+  goBack?: Function,
+  goBackText?: string,
+  showLogo?: boolean
+}
 
 /**
- * Header that appears on many screens. Will hold navigation buttons and screen title.
+ * Describe your component here
  */
-export function Header(props: HeaderProps) {
-  const {
-    onLeftPress,
-    onRightPress,
-    rightIcon,
-    leftIcon,
-    headerText,
-    headerTx,
-    style,
-    titleStyle,
-  } = props
-  const header = headerText || (headerTx && translate(headerTx)) || ""
+export const Header = observer(function Header(props: HeaderProps) {
+  const { style } = props
+  const styles = flatten([CONTAINER, style])
 
   return (
-    <View style={[ROOT, style]}>
-      {leftIcon ? (
-        <Button preset="link" onPress={onLeftPress}>
-          <Icon icon={leftIcon} />
-        </Button>
-      ) : (
-        <View style={LEFT} />
-      )}
-      <View style={TITLE_MIDDLE}>
-        <Text style={[TITLE, titleStyle]} text={header} />
+    <View> 
+      <View style={styles}>
+        {
+          props.left 
+            ? props.left 
+            : props.goBack ? (
+              <Button preset="link" onPress={() => props.goBack()}>
+                {
+                  props.goBackText ? (
+                    <Text
+                      text={props.goBackText}
+                      style={{ fontSize: 12 }}
+                    />
+                  ) : (
+                    <IoniconsIcon 
+                      name="md-arrow-back"
+                      size={20} 
+                      color={color.title} 
+                    />
+                  )
+                }
+              </Button>
+            ) : props.showLogo && (
+              <Image source={require('./locker-logo.png')} style={{ height: 24 }} />
+            )
+        }
+        {
+          props.title && (
+          <Text preset="semibold">
+            {props.title}
+          </Text>
+          )
+        }
+        {
+          props.right && props.right
+        }
       </View>
-      {rightIcon ? (
-        <Button preset="link" onPress={onRightPress}>
-          <Icon icon={rightIcon} />
-        </Button>
-      ) : (
-        <View style={RIGHT} />
-      )}
+
+      {props.children}
     </View>
   )
-}
+})

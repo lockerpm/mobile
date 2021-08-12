@@ -98,6 +98,8 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
     const previousRouteName = routeNameRef.current
     const currentRouteName = getActiveRouteName(state)
 
+    console.log(`Currnent route: ${currentRouteName}`)
+
     if (previousRouteName !== currentRouteName) {
       // track screens.
       __DEV__ && console.tron.log(currentRouteName)
@@ -119,9 +121,9 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
     }
   }
 
-  useEffect(() => {
-    if (isRestoringNavigationState) restoreState()
-  }, [isRestoringNavigationState])
+  // useEffect(() => {
+  //   if (isRestoringNavigationState) restoreState()
+  // }, [isRestoringNavigationState])
 
   return { onNavigationStateChange, restoreState, initialNavigationState }
 }

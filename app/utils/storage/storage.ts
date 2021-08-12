@@ -1,5 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
+export const USER_STORAGE_KEY = 'user_info'
+export const APP_SHOW_INTRO = 'app__show_intro'
+export const APP_SHOW_BIOMETRIC_INTRO = 'app__show_biometric_intro'
+
 /**
  * Loads a string from storage.
  *
@@ -76,4 +80,16 @@ export async function clear(): Promise<void> {
   try {
     await AsyncStorage.clear()
   } catch {}
+}
+
+/**
+ * Check if exists
+ */
+export async function has(key: string): Promise<boolean> {
+  try {
+    const val = await load(key)
+    return val !== null
+  } catch {
+    return false
+  }
 }

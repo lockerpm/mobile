@@ -1,6 +1,7 @@
 import { StyleProp, TextStyle, TouchableOpacityProps, ViewStyle } from "react-native"
 import { ButtonPresetNames } from "./button.presets"
 import { TxKeyPath } from "../../i18n"
+import { ResponsiveValue } from "native-base/lib/typescript/components/types"
 
 export interface ButtonProps extends TouchableOpacityProps {
   /**
@@ -31,5 +32,14 @@ export interface ButtonProps extends TouchableOpacityProps {
   /**
    * One of the different types of text presets.
    */
-  children?: React.ReactNode
+  children?: React.ReactNode,
+
+  // Native base button
+  isNativeBase?: boolean,
+  colorScheme?: string,
+  variant?: ResponsiveValue<"solid" | "outline" | "ghost" | "link" | "unstyled">,
+  isLoading?: boolean ,
+  startIcon?: JSX.Element | JSX.Element[],
+  endIcon?: JSX.Element | JSX.Element[],
+  isDisabled?: boolean
 }

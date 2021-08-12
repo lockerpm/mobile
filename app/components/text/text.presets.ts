@@ -7,7 +7,7 @@ import { color, typography } from "../../theme"
 const BASE: TextStyle = {
   fontFamily: typography.primary,
   color: color.text,
-  fontSize: 15,
+  fontSize: 14,
 }
 
 /**
@@ -21,25 +21,29 @@ export const presets = {
    */
   default: BASE,
 
+  // Colored
+  black: { ...BASE, color: color.textBlack } as TextStyle,
+  green: { ...BASE, color: color.palette.green } as TextStyle,
+
   /**
    * A bold version of the default text.
    */
-  bold: { ...BASE, fontWeight: "bold" } as TextStyle,
+  bold: { ...BASE, fontWeight: "bold", color: color.title } as TextStyle,
+
+  /**
+   * A semibold version of the default text.
+   */
+  semibold: { ...BASE, fontWeight: "600", color: color.title } as TextStyle,
+
+  /**
+   * headers.
+   */
+  header: { ...BASE, fontSize: 22, fontWeight: '600', color: color.title } as TextStyle,
 
   /**
    * Large headers.
    */
-  header: { ...BASE, fontSize: 24, fontWeight: '600' } as TextStyle,
-
-  /**
-   * Field labels that appear on forms above the inputs.
-   */
-  fieldLabel: { ...BASE, fontSize: 13, color: color.dim } as TextStyle,
-
-  /**
-   * A smaller piece of secondard information.
-   */
-  secondary: { ...BASE, fontSize: 9, color: color.dim } as TextStyle,
+   largeHeader: { ...BASE, fontSize: 24, fontWeight: 'bold', color: color.title } as TextStyle
 }
 
 /**

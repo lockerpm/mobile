@@ -20,34 +20,14 @@ export const color = {
    * by their under-powered GPUs.
    */
   transparent: "rgba(0, 0, 0, 0)",
-  /**
-   * The screen background.
-   */
   background: palette.white,
-  /**
-   * The main tinting color.
-   */
-  primary: palette.orange,
-  /**
-   * The main tinting color, but darker.
-   */
-  primaryDarker: palette.orangeDarker,
-  /**
-   * A subtle color used for borders and lines.
-   */
-  line: palette.offWhite,
-  /**
-   * The default color of text in many components.
-   */
-  text: palette.grayText,
-  /**
-   * Secondary information.
-   */
-  dim: palette.lightGrey,
-  /**
-   * Error messages and icons.
-   */
-  error: palette.angry,
+  disabled: palette.gray,
+  line: palette.lightGray,
+  block: palette.lighterGray,
+  text: palette.lighterBlack,
+  textBlack: palette.lightBlack,
+  title: palette.black,
+  error: palette.danger,
 
   /**
    * Storybook background for Text stories, or any stories where
