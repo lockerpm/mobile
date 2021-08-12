@@ -9,12 +9,19 @@ import { SortAction } from "../../home/all-item/sort-action"
 import { SectionList, View } from "react-native"
 import { color, commonStyles } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import { NewFolderModal } from "./new-folder-modal"
+import { FolderAction } from "./folder-action"
+import { RenameModal } from "./rename-modal"
 
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
   
   const [isSortOpen, setIsSortOpen] = useState(false)
+  const [isActionOpen, setIsActionOpen] = useState(false)
+  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [isRenameOpen, setIsRenameOpen] = useState(false)
+
   // const sections = []
   const sections = [
     {
@@ -53,27 +60,46 @@ export const FoldersScreen = observer(function FoldersScreen() {
         <BrowseItemHeader
           header="Folders"
           openSort={() => setIsSortOpen(true)}
-          openAdd={() => {}}
+          openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
         />
       )}
       borderBottom
       noScroll
     >
+      {/* Modals / Actions */}
+      <FolderAction 
+        isOpen={isActionOpen} 
+        onClose={() => setIsActionOpen(false)}
+        rename={() => setIsRenameOpen(true)}
+      />
+
       <SortAction 
         isOpen={isSortOpen} 
         onClose={() => setIsSortOpen(false)}
       />
 
+      <NewFolderModal 
+        isOpen={isAddOpen}
+        onClose={() => setIsAddOpen(false)}
+      />
+
+      <RenameModal 
+        isOpen={isRenameOpen}
+        onClose={() => setIsRenameOpen(false)}
+      />
+      {/* Modals / Actions end */}
+
+      {/* Content */}
       {
         !sections.length ? (
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
-            title="Foget password resets"
-            desc="Add your passwords and access them on any device, anytime"
-            buttonText="Add Password"
+            title="Organize items in Folder"
+            desc="Keep passwords and other items in groups"
+            buttonText="Add Folder"
             addItem={() => {
-              navigation.navigate('passwords__edit', { mode: 'add' })
+              setIsAddOpen(true)
             }}
           />
         ) : (
@@ -114,6 +140,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
                     <Button
                       preset="link"
+                      onPress={() => setIsActionOpen(true)}
                     >
                       <IoniconsIcon
                         name="ellipsis-horizontal"
@@ -128,6 +155,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
           />
         )
       }
+      {/* Content end */}
     </Layout>
   )
 })

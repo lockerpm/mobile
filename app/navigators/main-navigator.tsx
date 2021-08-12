@@ -10,7 +10,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { MainTabNavigator } from "./main-tab-navigator"
 import { 
   SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen, PasswordEditScreen, 
-  PasswordInfoScreen , FolderActionScreen, PasswordGeneratorScreen, PasswordHealthScreen,
+  PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen, PasswordHealthScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen
 } from "../screens"
@@ -45,7 +45,7 @@ export type PrimaryParamList = {
   passwords__edit: {
     mode: 'add' | 'edit'
   },
-  folders__action: {
+  folders__select: {
     mode: 'add' | 'move'
   },
   notes__edit: {
@@ -118,7 +118,7 @@ export function MainNavigator() {
 
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
         <Stack.Screen name="passwords__edit" component={PasswordEditScreen} initialParams={{ mode: 'add' }} />
-        <Stack.Screen name="folders__action" component={FolderActionScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="notes__edit" component={NoteEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="cards__edit" component={CardEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
