@@ -12,7 +12,8 @@ import {
   SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen, PasswordEditScreen, 
   PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen, PasswordHealthScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
-  CountrySelectorScreen
+  CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
+  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen
 } from "../screens"
 import UserInactivity from 'react-native-user-inactivity'
 import { color } from "../theme"
@@ -45,18 +46,24 @@ export type PrimaryParamList = {
   passwords__edit: {
     mode: 'add' | 'edit'
   },
-  folders__select: {
-    mode: 'add' | 'move'
-  },
+  notes__info: undefined,
   notes__edit: {
     mode: 'add' | 'edit'
   },
+  cards__info: undefined,
   cards__edit: {
     mode: 'add' | 'edit'
   },
+  identities__info: undefined,
   identities__edit: {
     mode: 'add' | 'edit'
   },
+  folders__select: {
+    mode: 'add' | 'move'
+  },
+  settings: undefined,
+  changeMasterPassword: undefined,
+  help: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -118,10 +125,17 @@ export function MainNavigator() {
 
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
         <Stack.Screen name="passwords__edit" component={PasswordEditScreen} initialParams={{ mode: 'add' }} />
-        <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="notes__info" component={NoteInfoScreen} />
         <Stack.Screen name="notes__edit" component={NoteEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="cards__info" component={CardInfoScreen} />
         <Stack.Screen name="cards__edit" component={CardEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="identities__info" component={IdentityInfoScreen} />
         <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
+
+        <Stack.Screen name="settings" component={SettingsScreen} />
+        <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
+        <Stack.Screen name="help" component={HelpScreen} />
       </Stack.Navigator>
     </UserInactivity>
   )

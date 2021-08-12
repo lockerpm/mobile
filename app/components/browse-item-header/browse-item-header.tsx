@@ -42,16 +42,20 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
             />
           </Button>
           
-          <Button 
-            preset="link"
-            onPress={() => openAdd && openAdd()}
-          >
-            <Icon 
-              name="plus"
-              size={18} 
-              color={color.title} 
-            />
-          </Button>
+          {
+            openAdd && (
+              <Button 
+                preset="link"
+                onPress={() => openAdd && openAdd()}
+              >
+                <Icon 
+                  name="plus"
+                  size={18} 
+                  color={color.title} 
+                />
+              </Button>
+            )
+          }
         </View>
       )}
     >

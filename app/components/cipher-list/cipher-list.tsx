@@ -6,7 +6,10 @@ import { Button, AutoImage as Image, Text } from "../"
 import { BROWSE_ITEMS } from "../../common/mappings"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { CipherType } from "../../../core/enums"
-import { PasswordAction } from "../../screens/auth/browse/passwords/password-info/password-action"
+import { PasswordAction } from "../../screens/auth/browse/passwords/password-action"
+import { CardAction } from "../../screens/auth/browse/cards/card-action"
+import { IdentityAction } from "../../screens/auth/browse/identities/identity-action"
+import { NoteAction } from "../../screens/auth/browse/notes/note-action"
 
 
 export interface CipherListProps {
@@ -21,7 +24,10 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   const { emptyContent, navigation } = props
 
   // Action menu opener
-  const [showPasswodAction, setShowPasswodAction] = useState(false)
+  const [showPasswordAction, setShowPasswordAction] = useState(false)
+  const [showNoteAction, setShowNoteAction] = useState(false)
+  const [showIdentityAction, setShowIdentityAction] = useState(false)
+  const [showCardAction, setShowCardAction] = useState(false)
 
   // Data
   // const items = []
@@ -34,9 +40,21 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     },
     {
       id: 2,
-      logo: BROWSE_ITEMS.password.icon,
-      name: 'Facebook',
-      type: CipherType.Login
+      logo: BROWSE_ITEMS.card.icon,
+      name: 'Visa',
+      type: CipherType.Card
+    },
+    {
+      id: 3,
+      logo: BROWSE_ITEMS.indentity.icon,
+      name: 'Info',
+      type: CipherType.Identity
+    },
+    {
+      id: 4,
+      logo: BROWSE_ITEMS.note.icon,
+      name: 'Note',
+      type: CipherType.SecureNote
     }
   ]
 
@@ -44,7 +62,16 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   const openActionMenu = (type: any) => {
     switch (type) {
       case CipherType.Login:
-        setShowPasswodAction(true)
+        setShowPasswordAction(true)
+        break
+      case CipherType.Card:
+        setShowCardAction(true)
+        break
+      case CipherType.Identity:
+        setShowIdentityAction(true)
+        break
+      case CipherType.SecureNote:
+        setShowNoteAction(true)
         break
       default:
         return
@@ -55,6 +82,15 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     switch (type) {
       case CipherType.Login:
         navigation.navigate('passwords__info')
+        break
+      case CipherType.Card:
+        navigation.navigate('cards__info')
+        break
+      case CipherType.Identity:
+        navigation.navigate('identities__info')
+        break
+      case CipherType.SecureNote:
+        navigation.navigate('notes__info')
         break
       default:
         return
@@ -69,8 +105,23 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     <View style={{ flex: 1 }}>
       {/* Action menus */}
       <PasswordAction
-        isOpen={showPasswodAction}
-        onClose={() => setShowPasswodAction(false)}
+        isOpen={showPasswordAction}
+        onClose={() => setShowPasswordAction(false)}
+        navigation={navigation}
+      />
+      <CardAction
+        isOpen={showCardAction}
+        onClose={() => setShowCardAction(false)}
+        navigation={navigation}
+      />
+      <IdentityAction
+        isOpen={showIdentityAction}
+        onClose={() => setShowIdentityAction(false)}
+        navigation={navigation}
+      />
+      <NoteAction
+        isOpen={showNoteAction}
+        onClose={() => setShowNoteAction(false)}
         navigation={navigation}
       />
       {/* Action menus end */}

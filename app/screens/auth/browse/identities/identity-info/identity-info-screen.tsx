@@ -7,10 +7,10 @@ import { color, commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import { PasswordAction } from "../password-action"
+import { IdentityAction } from "../identity-action"
 
 
-export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
+export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
   const navigation = useNavigation()
 
   const [showAction, setShowAction] = useState(false)
@@ -40,7 +40,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         />
       )}
     >
-      <PasswordAction
+      <IdentityAction
         navigation={navigation}
         isOpen={showAction}
         onClose={setShowAction}
@@ -55,12 +55,12 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           marginBottom: 10
         }]}>
           <Image
-            source={BROWSE_ITEMS.password.icon}
+            source={BROWSE_ITEMS.indentity.icon}
             style={{ height: 55, width: 55, marginBottom: 5 }}
           />
           <Text
             preset="header"
-            text="whitehub.net"
+            text="Duc Ha"
           />
         </View>
       </View>
@@ -71,20 +71,6 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           backgroundColor: color.palette.white,
           paddingVertical: 22
       }]}>
-        <FloatingInput
-          label="Email or Username"
-          value="duchm@cystack.net"
-          editable={false}
-        />
-
-        <FloatingInput
-          isPassword
-          label="Password"
-          value="password"
-          editable={false}
-          style={{ marginTop: 20 }}
-        />
-
         <FloatingInput
           label="Website URL"
           value="https://whitehub.net"
@@ -102,25 +88,6 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
             </Button>
           )}
         />
-
-        <Text
-          text="Password Security"
-          style={{ fontSize: 10 }}
-        />
-        <Text
-            preset="green"
-            style={{
-              marginTop: 5,
-              fontSize: 12
-            }}
-          >
-            <IoniconsIcon
-              name="shield-checkmark"
-              size={14}
-              color={color.palette.green}
-            />
-            {" Strong Password"}
-          </Text>
       </View>
       {/* Info end */}
     </Layout>

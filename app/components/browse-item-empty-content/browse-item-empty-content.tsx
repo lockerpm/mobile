@@ -16,7 +16,7 @@ export interface BrowseItemEmptyContentProps {
   img: any,
   title: string,
   desc: string,
-  buttonText: string,
+  buttonText?: string,
   addItem?: Function
 }
 
@@ -42,14 +42,18 @@ export const BrowseItemEmptyContent = observer(function BrowseItemEmptyContent(p
         style={{ textAlign: 'center', fontSize: 12 }}
       />
 
-      <Button
-        text={buttonText}
-        onPress={() => addItem && addItem()}
-        style={{
-          marginTop: 26,
-          paddingHorizontal: 42
-        }}
-      />
+      {
+        (buttonText || addItem) && (
+          <Button
+            text={buttonText}
+            onPress={() => addItem && addItem()}
+            style={{
+              marginTop: 26,
+              paddingHorizontal: 42
+            }}
+          />
+        )
+      }
     </View>
   )
 })
