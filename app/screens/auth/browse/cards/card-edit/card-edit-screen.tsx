@@ -9,6 +9,7 @@ import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
+import { TextInputMaskOptionProp, TextInputMaskTypeProp } from "react-native-masked-text"
 
 
 type CardEditScreenProp = RouteProp<PrimaryParamList, 'cards__edit'>;
@@ -18,9 +19,10 @@ type InputItem = {
   setter: Function,
   isRequired?: boolean,
   type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad',
-  mask?: string,
   placeholder?: string,
-  isPassword?: boolean
+  isPassword?: boolean,
+  maskType?: TextInputMaskTypeProp,
+  maskOptions?: TextInputMaskOptionProp
 }
 
 
@@ -51,23 +53,27 @@ export const CardEditScreen = observer(function CardEditScreen() {
       setter: setNumber,
       isRequired: true,
       type: 'numeric',
-      mask: '9999 9999 9999 9999',
+      maskType: 'credit-card',
       placeholder: '0000 0000 0000 0000'
-
     },
     {
       label: 'Expiration Date',
       value: expDate,
       setter: setExpDate,
       type: 'numeric',
-      mask: '99 / 99',
-      placeholder: 'MM / YY'
+      maskType: 'datetime',
+      maskOptions: {
+        format: 'MM/YY'
+      },
+      placeholder: 'MM/YY'
     },
     {
       label: 'Security Code (CVV/CVC)',
       value: securityCode,
       setter: setSecurityCode,
-      mask: '999',
+      maskOptions: {
+        mask: '999'
+      },
       type: 'numeric',
       placeholder: '000',
       isPassword: true
@@ -144,7 +150,8 @@ export const CardEditScreen = observer(function CardEditScreen() {
                 isRequired={item.isRequired}
                 isPassword={item.isPassword}
                 keyboardType={item.type || 'default'}
-                mask={item.mask}
+                maskType={item.maskType}
+                maskOptions={item.maskOptions}
                 label={item.label}
                 value={item.value}
                 onChangeText={(text) => item.setter(text)}

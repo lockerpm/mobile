@@ -1,9 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Input } from 'native-base'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import { AutoImage as Image, Button, Layout, Text } from "../../../components"
+import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { color } from "../../../theme"
@@ -18,7 +16,6 @@ export const LockScreen = observer(function LockScreen() {
   const [masterPassword, setMasterPassword] = useState('')
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
 
   // Methods
   const handleLogout = async () => {
@@ -117,25 +114,13 @@ export const LockScreen = observer(function LockScreen() {
         {/* Current user end */}
 
         {/* Master pass input */}
-        <Input
+        <FloatingInput
+          isPassword
           isInvalid={isError}
-          type={showPassword ? "text" : "password"}
-          InputRightElement={
-            <Button
-              preset="link"
-              onPress={() => setShowPassword(!showPassword)}
-              style={{ paddingRight: 15 }}
-            >
-              <Icon 
-                name={showPassword ? "eye-slash" : "eye"} 
-                size={16} 
-                color={color.palette.green} 
-              />
-            </Button>
-          }
-          placeholder="Master Password"
+          label="Master Password"
           onChangeText={setMasterPassword}
           value={masterPassword}
+          style={{ width: '100%' }}
         />
         {/* Master pass input end */}
 

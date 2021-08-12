@@ -1,4 +1,5 @@
 import { ViewStyle } from "react-native";
+import { color } from "./color";
 
 const CENTER_VIEW: ViewStyle = {
   flex: 1,
@@ -17,8 +18,14 @@ const SECTION_PADDING: ViewStyle = {
   paddingVertical: 16
 }
 
+const GRAY_SCREEN_SECTION: ViewStyle = {
+  paddingHorizontal: 20,
+  backgroundColor: color.palette.white
+}
+
 export const commonStyles = {
   CENTER_VIEW,
   SECTION_PADDING,
-  CENTER_HORIZONTAL_VIEW
+  CENTER_HORIZONTAL_VIEW,
+  GRAY_SCREEN_SECTION
 }

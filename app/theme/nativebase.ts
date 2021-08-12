@@ -19,6 +19,18 @@ export const nativebaseTheme = {
       700: '#1b6326',
       800: '#0c3b16',
       900: '#001601',
+    },
+    csError: {
+      50: '#ffe4e9',
+      100: '#ffb5be',
+      200: '#f98595',
+      300: color.error,
+      400: color.error,
+      500: color.error,
+      600: '#a90a1e',
+      700: '#7a0514',
+      800: '#4a000b',
+      900: '#1f0002',
     }
   },
   components: {

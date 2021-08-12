@@ -12,7 +12,7 @@ export const InitScreen = observer(function InitScreen() {
 
   const mounted = async () => {
     if (__DEV__) {
-      navigation.navigate('mainStack')
+      navigation.navigate('lock')
       return
     }
 

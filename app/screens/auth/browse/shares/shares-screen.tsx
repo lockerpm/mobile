@@ -1,25 +1,42 @@
-import React from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Screen, Text } from "../../../../components"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
-import { color } from "../../../../theme"
+import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../components"
+import { useNavigation } from "@react-navigation/native"
+import { SortAction } from "../../home/all-item/sort-action"
 
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
-  flex: 1,
-}
 
 export const SharesScreen = observer(function SharesScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
+  const navigation = useNavigation()
+  
+  const [isSortOpen, setIsSortOpen] = useState(false)
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text="" />
-    </Screen>
+    <Layout
+      header={(
+        <BrowseItemHeader
+          header="Share Items"
+          openSort={() => setIsSortOpen(true)}
+          navigation={navigation}
+        />
+      )}
+      borderBottom
+      noScroll
+    >
+      <SortAction 
+        isOpen={isSortOpen} 
+        onClose={() => setIsSortOpen(false)}
+      />
+      
+      <CipherList
+        navigation={navigation}
+        emptyContent={(
+          <BrowseItemEmptyContent
+            img={require('./empty-img.png')}
+            title="Securely share items"
+            desc="Any shared or received passwords, notes or credit cards will appear here"
+          />
+        )}
+      />
+    </Layout>
   )
 })

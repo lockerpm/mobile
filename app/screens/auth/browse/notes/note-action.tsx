@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { Actionsheet, Divider } from "native-base"
-import { Text, AutoImage as Image, ActionItem, OwnershipAction } from "../../../../../components"
-import { color, commonStyles } from "../../../../../theme"
+import { Text, AutoImage as Image, ActionItem, OwnershipAction } from "../../../../components"
+import { color, commonStyles } from "../../../../theme"
 import { View, ScrollView } from "react-native"
-import { BROWSE_ITEMS } from "../../../../../common/mappings"
+import { BROWSE_ITEMS } from "../../../../common/mappings"
 
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
 }
 
 
-export const PasswordAction = (props: Props) => {
+export const NoteAction = (props: Props) => {
   const { navigation, isOpen, onClose } = props
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
 
@@ -32,7 +32,7 @@ export const PasswordAction = (props: Props) => {
           <View style={{ width: '100%', paddingHorizontal: 20 }}>
             <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
               <Image
-                source={BROWSE_ITEMS.password.icon}
+                source={BROWSE_ITEMS.note.icon}
                 style={{ height: 40, width: 40, marginRight: 10 }}
               />
               <View>
@@ -53,23 +53,6 @@ export const PasswordAction = (props: Props) => {
           <ScrollView
             style={{ width: '100%' }}
           >
-            <ActionItem
-              name="Launch Website"
-              icon="external-link"
-            />
-
-            <ActionItem
-              name="Copy Email or Username"
-              icon="copy"
-            />
-
-            <ActionItem
-              name="Copy Password"
-              icon="copy"
-            />
-
-            <Divider borderColor={color.line} marginY={1} />
-
             <ActionItem
               name="Move to Folder"
               icon="folder-o"
@@ -95,7 +78,7 @@ export const PasswordAction = (props: Props) => {
               icon="edit"
               action={() => {
                 onClose()
-                navigation.navigate('passwords__edit', { mode: 'edit' })
+                navigation.navigate('notes__edit', { mode: 'edit' })
               }}
             />
 

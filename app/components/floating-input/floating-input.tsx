@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { color } from "../../theme"
 import { Text, Button } from ".."
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { MaskedTextInput } from "react-native-mask-text"
+import { TextInputMask, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
 
 
 export interface FloatingInputProps extends TextInputProps {
@@ -19,7 +19,8 @@ export interface FloatingInputProps extends TextInputProps {
   disabled?: boolean,
   buttonRight?: JSX.Element,
   textarea?: boolean,
-  mask?: string,
+  maskType?: TextInputMaskTypeProp,
+  maskOptions?: TextInputMaskOptionProp
 }
 
 const BUTTON_BASE: ViewStyle = {
@@ -35,7 +36,8 @@ const BUTTON_BASE: ViewStyle = {
 export const FloatingInput = observer(function FloatingInput(props: FloatingInputProps) {
   const { 
     style, inputStyle, isInvalid, isRequired, label, isPassword, value, placeholder,
-    fixedLabel, editable = true, disabled, buttonRight, textarea, mask, onChangeText,
+    fixedLabel, editable = true, disabled, buttonRight, textarea, onChangeText,
+    maskType, maskOptions,
     ...rest
   } = props
 
@@ -95,11 +97,12 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
         </Text>
       </View>
       {
-        mask ? (
-          <MaskedTextInput 
-            mask={mask}
+        maskType || maskOptions ? (
+          <TextInputMask 
+            type={maskType || 'custom'}
+            options={maskOptions}
             {...textInputProps}
-            onChangeText={(text, rawText) => onChangeText(text)}
+            onChangeText={(text) => onChangeText(text)}
           />
         ) : (
           <TextInput
