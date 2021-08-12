@@ -8,6 +8,9 @@ import React from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
+import { 
+  IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, CreateMasterPasswordScreen 
+} from "../screens"
 import { color } from "../theme"
 
 /**
@@ -21,6 +24,13 @@ import { color } from "../theme"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type RootParamList = {
+  init: undefined,
+  intro: undefined,
+  onBoarding: undefined,
+  lock: undefined,
+  login: undefined,
+  signup: undefined,
+  createMasterPassword: undefined,
   mainStack: undefined
 }
 
@@ -29,11 +39,19 @@ const Stack = createStackNavigator<RootParamList>()
 const RootStack = () => {
   return (
     <Stack.Navigator
+      initialRouteName="init"
       screenOptions={{
         cardStyle: { backgroundColor: color.palette.white },
         headerShown: false,
       }}
     >
+      <Stack.Screen name="init" component={InitScreen} />
+      <Stack.Screen name="intro" component={IntroScreen} />
+      <Stack.Screen name="onBoarding" component={OnboardingScreen} />
+      <Stack.Screen name="lock" component={LockScreen} />
+      <Stack.Screen name="login" component={LoginScreen} />
+      <Stack.Screen name="signup" component={SignupScreen} />
+      <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
       <Stack.Screen
         name="mainStack"
         component={MainNavigator}
