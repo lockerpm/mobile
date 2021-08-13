@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { load, APP_SHOW_INTRO } from "../../../utils/storage"
+import { load, save, storageKeys } from "../../../utils/storage"
 
 export const InitScreen = observer(function InitScreen() {
   const { user } = useStores()
@@ -12,7 +12,7 @@ export const InitScreen = observer(function InitScreen() {
 
   const mounted = async () => {
     if (__DEV__) {
-      navigation.navigate('lock')
+      navigation.navigate('createMasterPassword')
       return
     }
 
@@ -22,8 +22,9 @@ export const InitScreen = observer(function InitScreen() {
       return
     }
 
-    const isFreshInstall = await load(APP_SHOW_INTRO)
-    if (isFreshInstall) {
+    const introShown = await load(storageKeys.APP_SHOW_INTRO)
+    if (!introShown) {
+      await save(storageKeys.APP_SHOW_INTRO, 1)
       navigation.navigate('intro')
     } else {
       navigation.navigate('onBoarding')

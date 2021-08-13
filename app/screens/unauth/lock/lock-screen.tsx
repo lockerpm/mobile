@@ -15,6 +15,8 @@ export const LockScreen = observer(function LockScreen() {
   // Params
   const [masterPassword, setMasterPassword] = useState('')
   const [isScreenLoading, setIsScreenLoading] = useState(false)
+  const [isUnlocking, setIsUnlocking] = useState(false)
+  const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
 
   // Methods
@@ -28,9 +30,9 @@ export const LockScreen = observer(function LockScreen() {
   const handleUnlock = async () => {
     if (masterPassword) {
       setIsError(false)
-      setIsScreenLoading(true)
+      setIsUnlocking(true)
       const res = await sessionLogin(masterPassword)
-      setIsScreenLoading(false)
+      setIsUnlocking(false)
       if (res.kind === 'ok') {
         navigation.navigate('mainStack')
       } else if (res.kind === 'unauthorized') {
@@ -46,7 +48,16 @@ export const LockScreen = observer(function LockScreen() {
 
   const handleUnlockBiometric = () => {}
 
-  const handleGetHint = () => {}
+  const handleGetHint = async () => {
+    setIsSendingHint(true)
+    const res = await user.sendPasswordHint(user.email)
+    setIsSendingHint(false)
+    if (res.kind === 'ok') {
+      notify('success', 'Master Password hint sent', 'Please check your email for instructions')
+    } else {
+      notify('error', 'Error', 'Something went wrong')
+    }
+  }
 
   // Components
   const header = (
@@ -126,6 +137,8 @@ export const LockScreen = observer(function LockScreen() {
 
         <Button
           isNativeBase
+          isLoading={isUnlocking}
+          isDisabled={isUnlocking}
           text="Unlock"
           onPress={handleUnlock}
           style={{
@@ -147,6 +160,8 @@ export const LockScreen = observer(function LockScreen() {
 
         <Button
           isNativeBase
+          isLoading={isSendingHint}
+          isDisabled={isSendingHint}
           variant="ghost"
           text="Get Master Password hint"
           onPress={handleGetHint}

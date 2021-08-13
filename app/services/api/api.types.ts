@@ -25,6 +25,10 @@ export type SessionLoginData = {
     device_identifier: string
 }
 
+export type PasswordHintRequestData = {
+    email: string
+}
+
 export type LoginUri = {
     match: string | null,
     response: string | null,
