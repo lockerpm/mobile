@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withEnvironment } from ".."
 import { SessionLoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
-import { save, load, remove, USER_STORAGE_KEY } from "../../utils/storage"
+import { save, load, remove, storageKeys } from "../../utils/storage"
 
 
 /**
@@ -30,41 +30,36 @@ export const UserModel = types
   .views((self) => ({
     get info() {
       return {
-        token: self.token,
         email: self.email,
         username: self.username,
         full_name: self.full_name,
-        avatar: self.avatar,
-        isLoggedIn: self.isLoggedIn
+        avatar: self.avatar
       }
     }
   }))
   .actions((self) => ({
     // Storage
     saveToStorage: async () => {
-      await save(USER_STORAGE_KEY, self.info)
+      await save(storageKeys.USER_INFO_KEY, self.info)
+      await save(storageKeys.USER_TOKEN_KEY, self.token)
     },
     clearStorage: async () => {
-      await remove(USER_STORAGE_KEY)
-    },
-
-    // Environment
-    checkApiHeader: () => {
-      if (self.token && !self.environment.api.apisauce.headers['Authorization']) {
-        self.environment.api.apisauce.setHeader('Authorization', `Bearer ${self.token}`)
-      }
+      await remove(storageKeys.USER_INFO_KEY)
+      await remove(storageKeys.USER_TOKEN_KEY)
     },
 
     // Token
-    saveToken: (token: string) => {
+    saveToken: async (token: string) => {
       self.token = token
       self.isLoggedIn = true
       self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      await save(storageKeys.USER_TOKEN_KEY, self.token)
     },
-    clearToken: () => {
+    clearToken: async () => {
       self.token = ''
       self.isLoggedIn = false
       self.environment.api.apisauce.deleteHeader('Authorization')
+      await remove(storageKeys.USER_TOKEN_KEY)
     },
 
     // Info
@@ -97,16 +92,19 @@ export const UserModel = types
   }))
   .actions((self) => ({
     loadFromStorage: async () => {
-      const res = await load(USER_STORAGE_KEY)
+      const res = await load(storageKeys.USER_INFO_KEY)
       if (res) {
-        self.saveToken(res.token)
         self.saveUser(res)
         self.saveUserPw(res)
+      }
+      const tokenRes = await load(storageKeys.USER_TOKEN_KEY)
+      if (tokenRes) {
+        self.saveToken(tokenRes)
+        self.isLoggedIn = true
       }
     },
 
     getUser: async () => {
-      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser()
       if (res.kind === "ok") {
@@ -116,8 +114,13 @@ export const UserModel = types
       return res
     },
 
+    sendPasswordHint: async (email: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.sendMasterPasswordHint({ email })
+      return res
+    },
+
     getUserPw: async () => {
-      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUserPw()
       if (res.kind === "ok") {
@@ -128,7 +131,6 @@ export const UserModel = types
     },
 
     sessionLogin: async (payload: SessionLoginData) => {
-      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.sessionLogin(payload)
       if (res.kind === "ok") {
@@ -142,7 +144,6 @@ export const UserModel = types
     },
 
     logout: async () => {
-      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.logout()
       if (res.kind === "ok") {
@@ -154,7 +155,6 @@ export const UserModel = types
     },
 
     syncData: async () => {
-      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.syncData()
       return res

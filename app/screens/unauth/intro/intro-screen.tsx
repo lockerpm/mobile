@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View, TouchableOpacity } from "react-native"
 import { AutoImage as Image, Text, Layout, Button } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles, spacing } from "../../../theme"
+import { color, commonStyles } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 
 
