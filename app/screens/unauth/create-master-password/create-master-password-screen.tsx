@@ -1,23 +1,30 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
+import { AutoImage as Image, Button, Layout, Text, FloatingInput, PasswordStrength } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { color } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
+import { useCoreService } from "../../../services/core-service"
 
 export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
   const navigation = useNavigation()
   const { logout } = useMixins()
+  const { passwordGenerationService } = useCoreService()
   const { user } = useStores()
 
   // Params
   const [masterPassword, setMasterPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [hint, setHint] = useState('')
+
+  // UI
+  const [passwordStrength, setPasswordStrength] = useState(-1)
   const [isScreenLoading, setIsScreenLoading] = useState(false)
-  const [isError, setIsError] = useState(false)
+  const [isCreating, setIsCreating] = useState(false)
+  const isError = !!masterPassword && !!confirmPassword && (masterPassword !== confirmPassword)
+  const isReady = !isError && !!masterPassword && !!confirmPassword
 
   // Methods
   const handleLogout = async () => {
@@ -27,25 +34,25 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
     navigation.navigate('onBoarding')
   }
 
-  const handleCreate = () => {}
+  const handleCreate = () => {
+    setIsCreating(true)
+  }
 
-  // Components
-  const header = (
-    <View style={{ alignItems: "flex-end" }}>
-      <Button
-        text="LOG OUT"
-        textStyle={{ fontSize: 12 }}
-        preset="link"
-        onPress={handleLogout}
-      >
-      </Button>
-    </View>
-  )
-
+  // Render
   return (
     <Layout
       isOverlayLoading={isScreenLoading}
-      header={header}
+      header={(
+        <View style={{ alignItems: "flex-end" }}>
+          <Button
+            text="LOG OUT"
+            textStyle={{ fontSize: 12 }}
+            preset="link"
+            onPress={handleLogout}
+          >
+          </Button>
+        </View>
+      )}
     >
       <View style={{ alignItems: 'center' }}>
         <Image source={require("./locker.png")} style={{ height: 63, width: 63 }} />
@@ -99,10 +106,20 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
           isPassword
           isInvalid={isError}
           label="Master Password"
-          onChangeText={setMasterPassword}
+          onChangeText={(text) => {
+            setMasterPassword(text)
+            const strength = passwordGenerationService.passwordStrength(text, ['cystack'])
+            setPasswordStrength(strength ? strength.score : -1)
+          }}
           value={masterPassword}
-          style={{ width: '100%', marginBottom: 20 }}
+          style={{ width: '100%' }}
         />
+
+        {
+          !!masterPassword && (
+            <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />
+          )
+        }
         {/* Master pass input end */}
 
         {/* Master pass confirm */}
@@ -112,7 +129,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
           label="Confirm Master Password"
           onChangeText={setConfirmPassword}
           value={confirmPassword}
-          style={{ width: '100%', marginBottom: 20 }}
+          style={{ width: '100%', marginVertical: 20 }}
         />
         {/* Master pass confirm end */}
 
@@ -127,6 +144,8 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
 
         <Button
           isNativeBase
+          isDisabled={isCreating || !isReady}
+          isLoading={isCreating}
           text="Create Password"
           onPress={handleCreate}
           style={{

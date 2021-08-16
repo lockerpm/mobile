@@ -1,37 +1,66 @@
 import * as React from "react"
-import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, typography } from "../../theme"
+import { color } from "../../theme"
 import { Text } from "../"
-import { flatten } from "ramda"
+import { Progress, Box } from "native-base"
+import { StyleProp, ViewStyle } from "react-native"
 
-const CONTAINER: ViewStyle = {
-  justifyContent: "center",
-}
-
-const TEXT: TextStyle = {
-  fontFamily: typography.primary,
-  fontSize: 14,
-  color: color.primary,
-}
 
 export interface PasswordStrengthProps {
-  /**
-   * An optional style override useful for padding & margin.
-   */
   style?: StyleProp<ViewStyle>
+  value: number,
 }
 
 /**
  * Describe your component here
  */
 export const PasswordStrength = observer(function PasswordStrength(props: PasswordStrengthProps) {
-  const { style } = props
-  const styles = flatten([CONTAINER, style])
+  const { value, style } = props
+
+  const config = {
+    '-1': {
+      text: '',
+      color: 'primary'
+    },
+    0: {
+      text: 'Very weak',
+      color: 'csError'
+    },
+    1: {
+      text: 'Weak',
+      color: 'orange'
+    },
+    2: {
+      text: 'Medium',
+      color: 'yellow'
+    },
+    3: {
+      text: 'Good',
+      color: 'lightblue'
+    },
+    4: {
+      text: 'Strong',
+      color: 'csGreen'
+    }
+  }
 
   return (
-    <View style={styles}>
-      <Text style={TEXT}>Hello</Text>
-    </View>
+    <Box w="100%" style={style}>
+      <Progress
+        size="lg"
+        colorScheme={config[value].color}
+        bg={color.block}
+        max={5}
+        value={value + 1}
+      >
+        <Text
+          text={config[value].text}
+          style={{
+            fontSize: 8,
+            color: color.palette.white
+          }}
+        />
+      </Progress>
+    </Box>
   )
 })
