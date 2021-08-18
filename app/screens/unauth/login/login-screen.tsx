@@ -4,9 +4,11 @@ import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { WebView, WebViewNavigation  } from 'react-native-webview';
 import { Loading } from "../../../components";
+import { useMixins } from "../../../services/mixins";
 
 export const LoginScreen = observer(function LoginScreen() {
   const { user } = useStores()
+  const { getUserInfo } = useMixins()
   const navigation = useNavigation()
 
   // Params
@@ -29,15 +31,12 @@ export const LoginScreen = observer(function LoginScreen() {
     if (token && !user.token) {
       setIsLoading(true)
       user.saveToken(token)
-      const [getUserRes, getUserPwRes] = await Promise.all([
-        user.getUser(),
-        user.getUserPw()
-      ])
-      if (getUserRes && getUserPwRes) {
+      const isSuccess = await getUserInfo()
+      if (isSuccess) {
         if (user.is_pwd_manager) {
-          navigation.navigate('lock')
+          navigation.navigate('lock', { skipCheck: true })
         } else {
-          navigation.navigate('createMasterPassword')
+          navigation.navigate('createMasterPassword', { skipCheck: true })
         }
       } else {
         navigation.navigate('onBoarding')

@@ -11,14 +11,12 @@ export const InitScreen = observer(function InitScreen() {
   const [isScreenReady, setIsScreenReady] = useState(false)
 
   const mounted = async () => {
-    if (__DEV__) {
-      navigation.navigate('createMasterPassword')
-      return
-    }
-
-    await user.loadFromStorage()
     if (user.isLoggedIn) {
-      navigation.navigate('lock')
+      if (user.is_pwd_manager) {
+        navigation.navigate('lock')
+      } else {
+        navigation.navigate('createMasterPassword')
+      }
       return
     }
 

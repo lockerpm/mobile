@@ -25,6 +25,22 @@ export type SessionLoginData = {
     device_identifier: string
 }
 
+export type RegisterData = {
+    name: string,
+    email: string,
+    master_password_hash: string,
+    master_password_hint: string,
+    key: string,
+    kdf: number,
+    kdf_iterations: number,
+    reference_data: string,
+    keys: {
+        public_key: string,
+        encrypted_private_key: string
+    },
+    score: number
+}
+
 export type PasswordHintRequestData = {
     email: string
 }

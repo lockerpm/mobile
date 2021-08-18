@@ -18,7 +18,8 @@ const defaultData = {
   notify: (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string) => {},
   randomString: () => '',
   newCipher: () => {},
-  setMasterPassword: async (masterPassword : string) => { return { kind: 'unknown' } },
+  register: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
+  getUserInfo: async () => false
 }
 
 
@@ -60,11 +61,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         device_type: platformUtilsService.getDevice(),
         device_identifier: await storageService.get('device_id') || randomString()
       })
-      if (res.kind === 'unauthorized') {
-        notify('error', 'Error', 'Token expired')
-        user.clearToken()
-        return { kind: 'unauthorized' }
-      }
       if (res.kind !== 'ok') {
         notify('error', 'Error', 'Session login failed')
         return { kind: 'bad-data' }
@@ -88,10 +84,11 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   }
 
   // Set master password
-  const setMasterPassword = async (masterPassword: string) => {
+  const register = async (masterPassword: string, hint: string, passwordStrength: number) => {
     try {
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
+      const referenceData = ''
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
       const encKey = await cryptoService.makeEncKey(key)
       const hashedPassword = await cryptoService.hashPassword(masterPassword, key)
@@ -102,6 +99,30 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await cryptoService.setEncKey(encKey[1].encryptedString)
       await cryptoService.setEncPrivateKey(keys[1].encryptedString)
 
+      const res = await user.register({
+        name: user.full_name,
+        email: user.email,
+        master_password_hash: hashedPassword,
+        master_password_hint: hint,
+        key: encKey[1].encryptedString,
+        kdf,
+        kdf_iterations: kdfIterations,
+        reference_data: referenceData,
+        keys: {
+          public_key: keys[0],
+          encrypted_private_key: keys[1].encryptedString
+        },
+        score: passwordStrength
+      })
+
+      // API failed
+      if (res.kind !== 'ok') {
+        notify('error', 'Error', 'Session login failed')
+        return { kind: 'bad-data' }
+      }
+
+      // Success
+      notify('success', 'Success', 'Master password is set')
       return { kind: 'ok' }
     } catch (e) {
       notify('error', 'Error', 'Set master password failed')
@@ -134,6 +155,14 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   }
 
   // ------------------------ DATA ---------------------------
+  const getUserInfo = async () => {
+    const [userRes, userPwRes] = await Promise.all([
+      user.getUser(),
+      user.getUserPw()
+    ])
+    return userRes.kind === 'ok' && userPwRes.kind === 'ok'
+  }
+
   const getSyncData = async () => {
     try {
       messagingService.send('syncStarted')
@@ -217,7 +246,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     randomString,
     getSyncData,
     newCipher,
-    setMasterPassword
+    register,
+    getUserInfo
   }
 
   return (

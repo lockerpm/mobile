@@ -1,16 +1,21 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput, PasswordStrength } from "../../../components"
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { color } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { useCoreService } from "../../../services/core-service"
+import { RootParamList } from "../../../navigators"
+import { create } from "apisauce"
+
+type ScreenProp = RouteProp<RootParamList, 'createMasterPassword'>;
 
 export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
   const navigation = useNavigation()
-  const { logout } = useMixins()
+  const route = useRoute<ScreenProp>()
+  const { logout, register, getUserInfo } = useMixins()
   const { passwordGenerationService } = useCoreService()
   const { user } = useStores()
 
@@ -21,12 +26,25 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
 
   // UI
   const [passwordStrength, setPasswordStrength] = useState(-1)
-  const [isScreenLoading, setIsScreenLoading] = useState(false)
+  const [isScreenLoading, setIsScreenLoading] = useState(true)
   const [isCreating, setIsCreating] = useState(false)
   const isError = !!masterPassword && !!confirmPassword && (masterPassword !== confirmPassword)
   const isReady = !isError && !!masterPassword && !!confirmPassword
 
   // Methods
+  const mounted = async () => {
+    console.log(1)
+    const api = create({ baseURL: 'https://api.cystack.net/v3' })
+    console.log(2)
+    const response = await api.get('/me')
+    console.log(response)
+
+    if (!route.params || !route.params.skipCheck) {
+      await getUserInfo()
+    }
+    setIsScreenLoading(false)
+  }
+
   const handleLogout = async () => {
     setIsScreenLoading(true)
     await logout()
@@ -34,9 +52,20 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
     navigation.navigate('onBoarding')
   }
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     setIsCreating(true)
+    const res = await register(masterPassword, hint, passwordStrength)
+    setIsCreating(false)
+    if (res.kind === 'ok') {
+      navigation.navigate('lock')
+    }
   }
+
+  // Mounted
+  useEffect(() => {
+    mounted()
+    console.log('effect')
+  }, [])
 
   // Render
   return (

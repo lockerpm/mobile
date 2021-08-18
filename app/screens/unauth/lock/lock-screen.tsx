@@ -1,14 +1,15 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { color } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
+  const route = useRoute()
   const { logout, sessionLogin, notify } = useMixins()
   const { user } = useStores()
 
@@ -72,6 +73,12 @@ export const LockScreen = observer(function LockScreen() {
     </View>
   )
 
+  // Mounted
+  useEffect(() => {
+    console.log('effect')
+  }, [])
+
+  // Render
   return (
     <Layout
       isOverlayLoading={isScreenLoading}

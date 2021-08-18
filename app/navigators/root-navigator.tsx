@@ -27,10 +27,14 @@ export type RootParamList = {
   init: undefined,
   intro: undefined,
   onBoarding: undefined,
-  lock: undefined,
+  lock: {
+    skipCheck?: boolean
+  },
   login: undefined,
   signup: undefined,
-  createMasterPassword: undefined,
+  createMasterPassword: {
+    skipCheck?: boolean
+  },
   mainStack: undefined
 }
 
