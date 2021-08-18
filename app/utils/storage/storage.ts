@@ -43,6 +43,9 @@ export async function saveString(key: string, value: string): Promise<boolean> {
  */
 export async function load(key: string): Promise<any | null> {
   try {
+    if (__DEV__) {
+      console.log(`Getting from async storage ${key}`)
+    }
     const almostThere = await AsyncStorage.getItem(key)
     return JSON.parse(almostThere)
   } catch {
@@ -58,6 +61,9 @@ export async function load(key: string): Promise<any | null> {
  */
 export async function save(key: string, value: any): Promise<boolean> {
   try {
+    if (__DEV__) {
+      console.log(`Saving to async storage ${key}`)
+    }
     await AsyncStorage.setItem(key, JSON.stringify(value))
     return true
   } catch {
@@ -72,6 +78,9 @@ export async function save(key: string, value: any): Promise<boolean> {
  */
 export async function remove(key: string): Promise<void> {
   try {
+    if (__DEV__) {
+      console.log(`Removing from async storage ${key}`)
+    }
     await AsyncStorage.removeItem(key)
   } catch {}
 }

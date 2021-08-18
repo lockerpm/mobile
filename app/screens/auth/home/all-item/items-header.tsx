@@ -7,11 +7,12 @@ import { Input } from "native-base"
 
 interface Props {
   openSort?: Function,
-  openAdd?: Function
+  openAdd?: Function,
+  onSearch?: Function
 }
 
 export const ItemsHeader = (props: Props) => {
-  const { openAdd, openSort} = props
+  const { openAdd, openSort, onSearch } = props
 
   return (
     <Header
@@ -52,6 +53,7 @@ export const ItemsHeader = (props: Props) => {
         <Input
           size="xs"
           placeholder="Search"
+          onChangeText={(text) => onSearch(text)}
           style={{ 
             backgroundColor: color.block, 
             paddingBottom: 5,

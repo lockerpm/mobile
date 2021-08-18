@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, commonStyles } from "../../theme"
@@ -14,14 +14,16 @@ import { NoteAction } from "../../screens/auth/browse/notes/note-action"
 
 export interface CipherListProps {
   emptyContent?: JSX.Element,
-  navigation: any
+  navigation: any,
+  searchText?: string,
+  onLoadingChange?: Function
 }
 
 /**
  * Describe your component here
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
-  const { emptyContent, navigation } = props
+  const { emptyContent, navigation, searchText } = props
 
   // Action menu opener
   const [showPasswordAction, setShowPasswordAction] = useState(false)
@@ -29,7 +31,6 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
 
-  // Data
   // const items = []
   const items = [
     {
@@ -57,6 +58,11 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       type: CipherType.SecureNote
     }
   ]
+
+  // Watcher
+  useEffect(() => {
+    console.log(searchText)
+  }, [searchText])
 
   // Methods
   const openActionMenu = (type: any) => {
@@ -97,6 +103,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     }
   }
 
+  // Render
   return !items.length && emptyContent ? (
     <View style={{ paddingHorizontal: 20 }}>
       {emptyContent}

@@ -1,8 +1,8 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withEnvironment } from ".."
-import { SessionLoginData } from "../../services/api"
+import { RegisterData, SessionLoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
-import { save, load, remove, storageKeys } from "../../utils/storage"
+import { save, remove, storageKeys } from "../../utils/storage"
 
 
 /**
@@ -38,16 +38,6 @@ export const UserModel = types
     }
   }))
   .actions((self) => ({
-    // Storage
-    saveToStorage: async () => {
-      await save(storageKeys.USER_INFO_KEY, self.info)
-      await save(storageKeys.USER_TOKEN_KEY, self.token)
-    },
-    clearStorage: async () => {
-      await remove(storageKeys.USER_INFO_KEY)
-      await remove(storageKeys.USER_TOKEN_KEY)
-    },
-
     // Token
     saveToken: async (token: string) => {
       self.token = token
@@ -91,25 +81,11 @@ export const UserModel = types
     }
   }))
   .actions((self) => ({
-    loadFromStorage: async () => {
-      const res = await load(storageKeys.USER_INFO_KEY)
-      if (res) {
-        self.saveUser(res)
-        self.saveUserPw(res)
-      }
-      const tokenRes = await load(storageKeys.USER_TOKEN_KEY)
-      if (tokenRes) {
-        self.saveToken(tokenRes)
-        self.isLoggedIn = true
-      }
-    },
-
     getUser: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser()
       if (res.kind === "ok") {
         self.saveUser(res.user)
-        self.saveToStorage()
       }
       return res
     },
@@ -125,7 +101,6 @@ export const UserModel = types
       const res = await userApi.getUserPw()
       if (res.kind === "ok") {
         self.saveUserPw(res.user)
-        self.saveToStorage()
       }
       return res
     },
@@ -139,6 +114,12 @@ export const UserModel = types
       return res
     },
 
+    register: async (payload: RegisterData) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.register(payload)
+      return res
+    },
+
     lock: () => {
       self.setLoggedInPw(false)
     },
@@ -149,7 +130,6 @@ export const UserModel = types
       if (res.kind === "ok") {
         self.clearToken()
         self.clearUser()
-        self.clearStorage()
       }
       return res
     },
