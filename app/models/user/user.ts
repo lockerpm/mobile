@@ -1,8 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { withEnvironment } from ".."
 import { RegisterData, SessionLoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
-import { save, remove, storageKeys } from "../../utils/storage"
+import { withEnvironment } from "../extensions/with-environment"
 
 
 /**
@@ -43,13 +42,11 @@ export const UserModel = types
       self.token = token
       self.isLoggedIn = true
       self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      await save(storageKeys.USER_TOKEN_KEY, self.token)
     },
     clearToken: async () => {
       self.token = ''
       self.isLoggedIn = false
       self.environment.api.apisauce.deleteHeader('Authorization')
-      await remove(storageKeys.USER_TOKEN_KEY)
     },
 
     // Info

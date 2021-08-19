@@ -115,15 +115,15 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
   const restoreState = async () => {
     try {
       const state = await storage.load(persistenceKey)
-      if (state) setInitialNavigationState(state)
+      // if (state) setInitialNavigationState(state)
     } finally {
       setIsRestoringNavigationState(false)
     }
   }
 
-  // useEffect(() => {
-  //   if (isRestoringNavigationState) restoreState()
-  // }, [isRestoringNavigationState])
+  useEffect(() => {
+    if (isRestoringNavigationState) restoreState()
+  }, [isRestoringNavigationState])
 
   return { onNavigationStateChange, restoreState, initialNavigationState }
 }
