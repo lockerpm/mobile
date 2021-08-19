@@ -8,14 +8,13 @@ import { color } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { useCoreService } from "../../../services/core-service"
 import { RootParamList } from "../../../navigators"
-import { create } from "apisauce"
 
 type ScreenProp = RouteProp<RootParamList, 'createMasterPassword'>;
 
 export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
   const navigation = useNavigation()
   const route = useRoute<ScreenProp>()
-  const { logout, register, getUserInfo } = useMixins()
+  const { logout, register } = useMixins()
   const { passwordGenerationService } = useCoreService()
   const { user } = useStores()
 
@@ -33,15 +32,10 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
 
   // Methods
   const mounted = async () => {
-    console.log(1)
-    const api = create({ baseURL: 'https://api.cystack.net/v3' })
-    console.log(2)
-    const response = await api.get('/me')
-    console.log(response)
-
     if (!route.params || !route.params.skipCheck) {
-      await getUserInfo()
+      await user.getUser()
     }
+    console.log('test')
     setIsScreenLoading(false)
   }
 
@@ -63,8 +57,8 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
 
   // Mounted
   useEffect(() => {
+    // setTimeout(mounted, 100)
     mounted()
-    console.log('effect')
   }, [])
 
   // Render

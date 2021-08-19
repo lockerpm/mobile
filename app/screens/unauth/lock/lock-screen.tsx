@@ -2,25 +2,35 @@ import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { color } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
+import { RootParamList } from "../../../navigators/root-navigator"
+
+type ScreenProp = RouteProp<RootParamList, 'lock'>;
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
-  const route = useRoute()
+  const route = useRoute<ScreenProp>()
   const { logout, sessionLogin, notify } = useMixins()
   const { user } = useStores()
 
   // Params
   const [masterPassword, setMasterPassword] = useState('')
-  const [isScreenLoading, setIsScreenLoading] = useState(false)
+  const [isScreenLoading, setIsScreenLoading] = useState(true)
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
 
   // Methods
+  const mounted = async () => {
+    if (!route.params || !route.params.skipCheck) {
+      await user.getUser()
+    }
+    setIsScreenLoading(false)
+  }
+
   const handleLogout = async () => {
     setIsScreenLoading(true)
     await logout()
@@ -75,7 +85,8 @@ export const LockScreen = observer(function LockScreen() {
 
   // Mounted
   useEffect(() => {
-    console.log('effect')
+    // setTimeout(mounted, 2000)
+    mounted()
   }, [])
 
   // Render

@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { withEnvironment } from ".."
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CipherApi } from "../../services/api/cipher-api"
+import { withEnvironment } from "../extensions/with-environment"
 
 /**
  * Model description here for TypeScript hints.
