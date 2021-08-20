@@ -3,15 +3,19 @@ import { observer } from "mobx-react-lite"
 import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
+import { CipherType } from "../../../../../core/enums"
 
 
 export const PasswordsScreen = observer(function PasswordsScreen() {
   const navigation = useNavigation()
   
   const [isSortOpen, setIsSortOpen] = useState(false)
+  const [searchText, setSearchText] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
           header="Password"
@@ -19,6 +23,7 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
           openAdd={() => {
             navigation.navigate('passwords__edit', { mode: 'add' })
           }}
+          onSearch={setSearchText}
           navigation={navigation}
         />
       )}
@@ -32,6 +37,9 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
       
       <CipherList
         navigation={navigation}
+        onLoadingChange={setIsLoading}
+        searchText={searchText}
+        cipherType={CipherType.Login}
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
