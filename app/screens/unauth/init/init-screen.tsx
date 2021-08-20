@@ -11,7 +11,9 @@ export const InitScreen = observer(function InitScreen() {
 
   const mounted = async () => {
     if (user.isLoggedIn) {
-      user.saveToken(user.token)
+      if (user.token) {
+        user.saveToken(user.token)
+      }
       if (user.is_pwd_manager) {
         navigation.navigate('lock')
       } else {

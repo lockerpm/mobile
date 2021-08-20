@@ -11,14 +11,15 @@ export interface BrowseItemHeaderProps {
   openSort?: Function,
   openAdd?: Function,
   navigation: any,
-  header: string
+  header: string,
+  onSearch?: Function
 }
 
 /**
  * Describe your component here
  */
 export const BrowseItemHeader = observer(function BrowseItemHeader(props: BrowseItemHeaderProps) {
-  const { openAdd, openSort, navigation, header } = props
+  const { openAdd, openSort, navigation, header, onSearch } = props
 
   return (
     <Header
@@ -69,6 +70,7 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
         <Input
           size="xs"
           placeholder="Search"
+          onChangeText={(txt) => onSearch && onSearch(txt)}
           style={{ 
             backgroundColor: color.block, 
             paddingBottom: 5,

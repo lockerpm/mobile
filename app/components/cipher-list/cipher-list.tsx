@@ -10,61 +10,103 @@ import { PasswordAction } from "../../screens/auth/browse/passwords/password-act
 import { CardAction } from "../../screens/auth/browse/cards/card-action"
 import { IdentityAction } from "../../screens/auth/browse/identities/identity-action"
 import { NoteAction } from "../../screens/auth/browse/notes/note-action"
+import { useCoreService } from "../../services/core-service"
+import { CipherView } from "../../../core/models/view"
 
 
 export interface CipherListProps {
   emptyContent?: JSX.Element,
   navigation: any,
   searchText?: string,
-  onLoadingChange?: Function
+  onLoadingChange?: Function,
+  cipherType?: CipherType,
+  deleted?: boolean
 }
 
 /**
  * Describe your component here
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
-  const { emptyContent, navigation, searchText } = props
+  const { emptyContent, navigation, onLoadingChange, searchText, deleted = false } = props
+  const { searchService } = useCoreService()
 
-  // Action menu opener
+  // ------------------------ PARAMS ----------------------------
+
   const [showPasswordAction, setShowPasswordAction] = useState(false)
   const [showNoteAction, setShowNoteAction] = useState(false)
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
+  const [ciphers, setCiphers] = useState([])
 
-  // const items = []
-  const items = [
-    {
-      id: 1,
-      logo: BROWSE_ITEMS.password.icon,
-      name: 'Facebook',
-      type: CipherType.Login
-    },
-    {
-      id: 2,
-      logo: BROWSE_ITEMS.card.icon,
-      name: 'Visa',
-      type: CipherType.Card
-    },
-    {
-      id: 3,
-      logo: BROWSE_ITEMS.indentity.icon,
-      name: 'Info',
-      type: CipherType.Identity
-    },
-    {
-      id: 4,
-      logo: BROWSE_ITEMS.note.icon,
-      name: 'Note',
-      type: CipherType.SecureNote
-    }
-  ]
+  // ------------------------ WATCHERS ----------------------------
 
-  // Watcher
   useEffect(() => {
-    console.log(searchText)
+    getCiphers()
   }, [searchText])
 
-  // Methods
+  useEffect(() => {
+    getCiphers()
+  }, [])
+
+  // ------------------------ METHODS ----------------------------
+
+  const getCiphers = async () => {
+    onLoadingChange(true)
+
+    // Filter
+    const deletedFilter = (c : CipherView) => c.isDeleted === deleted
+    const filters = [deletedFilter]
+    if (props.cipherType) {
+      console.log(1)
+      filters.push((c : CipherView) => c.type === props.cipherType)
+    }
+
+    // Data is similar to CipherView
+    const searchRes = await searchService.searchCiphers(searchText || '', filters, null) || []
+    const res = searchRes.map((c: CipherView) => {
+      const data = { ...c, logo: null }
+      switch (c.type) {
+        case CipherType.Login: {
+          if (c.login.uri) {
+            // TODO: FIX DIS
+            // const imgUri = `https://locker.io/logo/${c.login.uri.split('//')[1]}?size=40`
+            // data.logo = { uri: imgUri }
+            data.logo = BROWSE_ITEMS.password.icon
+          } else {
+            data.logo = BROWSE_ITEMS.password.icon
+          }
+          break
+        }
+          
+        case CipherType.SecureNote: {
+          data.logo = BROWSE_ITEMS.note.icon
+          break
+        }
+          
+        case CipherType.Card: {
+          data.logo = BROWSE_ITEMS.card.icon
+          break
+        }
+          
+        case CipherType.Identity: {
+          data.logo = BROWSE_ITEMS.indentity.icon
+          break
+        }
+          
+        default:
+          data.logo = BROWSE_ITEMS.trash.icon
+      }
+      return data
+    })
+
+    setTimeout(() => {
+      onLoadingChange(false)
+    }, 500)
+    
+    setCiphers(res)
+    console.log(`Get ${res.length} items`)
+  }
+
   const openActionMenu = (type: any) => {
     switch (type) {
       case CipherType.Login:
@@ -103,8 +145,9 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     }
   }
 
-  // Render
-  return !items.length && emptyContent ? (
+  // ------------------------ RENDER ----------------------------
+
+  return !ciphers.length && emptyContent ? (
     <View style={{ paddingHorizontal: 20 }}>
       {emptyContent}
     </View>
@@ -136,7 +179,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       {/* Cipher list */}
       <FlatList
         style={{ paddingHorizontal: 20 }}
-        data={items}
+        data={ciphers}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <Button

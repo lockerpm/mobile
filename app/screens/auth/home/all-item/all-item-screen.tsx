@@ -9,14 +9,14 @@ import { AddAction } from "./add-action"
 
 export const AllItemScreen = observer(function AllItemScreen() {
   const navigation = useNavigation()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
 
   return (
     <Layout
-      isContentLoading={isLoading}
+      isContentOverlayLoading={isLoading}
       header={(
         <ItemsHeader 
           openSort={() => setIsSortOpen(true)}
