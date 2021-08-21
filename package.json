@@ -45,6 +45,7 @@
     "expo-localization": "9.1.0",
     "https-browserify": "~0.0.0",
     "i18n-js": "3.8.0",
+    "lodash": "^4.17.21",
     "lunr": "^2.3.9",
     "mobx": "6.1.8",
     "mobx-react-lite": "3.2.0",

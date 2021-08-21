@@ -4,15 +4,19 @@ import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { storageKeys, load, save } from "../../../utils/storage"
 import { useMixins } from "../../../services/mixins"
-// import { useStores } from "../../../models"
+import { useStores } from "../../../models"
 
 export const StartScreen = observer(function StartScreen() {
+  const { user } = useStores()
   const { getSyncData } = useMixins()
   const navigation = useNavigation()
   const [isScreenReady, setIsScreenReady] = useState(false)
 
   const mounted = async () => {
-    await getSyncData()
+    await Promise.all([
+      getSyncData(),
+      user.loadTeams()
+    ])
 
     // TODO
     const isDeviceLimitReached = false

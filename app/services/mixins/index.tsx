@@ -2,6 +2,7 @@ import React from 'react'
 import { useToast } from 'native-base'
 import { Text } from "../../components"
 import { nanoid } from 'nanoid'
+import find from 'lodash/find'
 import { KdfType } from '../../../core/enums/kdfType'
 import { useStores } from '../../models'
 import { useCoreService } from '../core-service'
@@ -19,7 +20,9 @@ const defaultData = {
   randomString: () => '',
   newCipher: () => {},
   register: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
-  getUserInfo: async () => false
+  getUserInfo: async () => false,
+  getWebsiteLogo: (uri: string) => { uri: '' },
+  getTeam: (teams: object[], orgId: string) => ({ name: '' })
 }
 
 
@@ -27,7 +30,7 @@ const MixinsContext = createContext(defaultData)
 
 export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const toast = useToast()
-  const { user } = useStores()
+  const { user, cipherStore } = useStores()
   const { 
     cryptoService, 
     userService, 
@@ -132,6 +135,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Logout
   const logout = async () => {
+    cipherStore.clearToken()
     await Promise.all([
       user.logout(),
       cryptoService.clearKeys(),
@@ -155,6 +159,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   }
 
   // ------------------------ DATA ---------------------------
+
   const getUserInfo = async () => {
     const [userRes, userPwRes] = await Promise.all([
       user.getUser(),
@@ -168,7 +173,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       messagingService.send('syncStarted')
 
       // Sync api
-      const res = await user.syncData()
+      const res = await cipherStore.syncData()
       if (res.kind !== 'ok') {
         notify('error', 'Error', 'Sync failed')
         messagingService.send('syncCompleted', { successfully: false })
@@ -237,7 +242,19 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return nanoid()
   }
 
+  // Get website logo
+  const getWebsiteLogo = (uri: string) => {
+    const imgUri = `https://locker.io/logo/${uri.split('//')[1]}?size=40`
+    return { uri: imgUri }
+  }
+
+  // Get team
+  const getTeam = (teams: object[], orgId: string) => {
+    return find(teams, e => e.id === orgId) || { name: '' }
+  }
+
   // -------------------- REGISTER FUNCTIONS ------------------
+
   const data = {
     sessionLogin,
     logout,
@@ -247,7 +264,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     getSyncData,
     newCipher,
     register,
-    getUserInfo
+    getUserInfo,
+    getWebsiteLogo,
+    getTeam
   }
 
   return (

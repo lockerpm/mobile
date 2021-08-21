@@ -1,5 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
+import { CipherView } from "../../../core/models/view"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -9,11 +10,38 @@ import { withEnvironment } from "../extensions/with-environment"
 export const CipherStoreModel = types
   .model("CipherStore")
   .props({
-    test: types.maybe(types.null)
+    token: types.maybeNull(types.string),
+    selectedCipher: types.maybeNull(types.frozen())
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    // ----------------- CACHE -------------------
+
+    setSelectedCipher: (cipher: null | CipherView) => {
+      self.selectedCipher = cipher
+    },
+
+    // ----------------- TOKEN -------------------
+
+    saveToken: async (token: string) => {
+      self.token = token
+      self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+    },
+
+    clearToken: async () => {
+      self.token = ''
+      self.environment.api.apisauce.deleteHeader('Authorization')
+    },
+
+    // ----------------- CRUD -------------------
+
+    syncData: async () => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.syncData()
+      return res
+    },
+
     createCipher: async (data: CipherRequest) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.postCipher(data)

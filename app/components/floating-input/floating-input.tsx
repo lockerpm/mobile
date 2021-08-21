@@ -79,9 +79,9 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
         }}
       >
         <Text
-          style={{
+          style={[{
             fontSize: isFocused || !!value || fixedLabel ? 10 : 14
-          }}
+          }]}
         >
           {label}
           {

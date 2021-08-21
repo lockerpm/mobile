@@ -6,13 +6,14 @@ import { useStores } from "../../../models"
 import { load, save, storageKeys } from "../../../utils/storage"
 
 export const InitScreen = observer(function InitScreen() {
-  const { user } = useStores()
+  const { user, cipherStore } = useStores()
   const navigation = useNavigation()
 
   const mounted = async () => {
     if (user.isLoggedIn) {
       if (user.token) {
         user.saveToken(user.token)
+        cipherStore.saveToken(user.token)
       }
       if (user.is_pwd_manager) {
         navigation.navigate('lock')

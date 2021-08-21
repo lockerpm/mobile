@@ -15,6 +15,7 @@ export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | General
 export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
 export type EmptyResult = { kind: "ok" } | GeneralApiProblem
 export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
+export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
 
 // Request data
 export type SessionLoginData = {
