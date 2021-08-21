@@ -1,19 +1,33 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Header, Button, AutoImage as Image, Text, FloatingInput } from "../../../../../components"
+import { Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { PasswordAction } from "../password-action"
+import { useStores } from "../../../../../models"
+import { useMixins } from "../../../../../services/mixins"
+import { useCoreService } from "../../../../../services/core-service"
 
 
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const navigation = useNavigation()
+  const { cipherStore, user } = useStores()
+  const { getWebsiteLogo, getTeam } = useMixins()
+  const { passwordGenerationService } = useCoreService()
 
   const [showAction, setShowAction] = useState(false)
+
+  // ------------------ COMPUTED --------------------
+
+  const cipher = cipherStore.selectedCipher
+  const passwordStrength = passwordGenerationService.passwordStrength(cipher.login.password, ['cystack']) || {}
+
+
+  // ------------------ RENDER --------------------
 
   return (
     <Layout
@@ -55,12 +69,17 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           marginBottom: 10
         }]}>
           <Image
-            source={BROWSE_ITEMS.password.icon}
+            source={
+              cipher.login.uri 
+                ? getWebsiteLogo(cipher.login.uri)
+                : BROWSE_ITEMS.password.icon
+            }
+            backupSource={BROWSE_ITEMS.password.icon}
             style={{ height: 55, width: 55, marginBottom: 5 }}
           />
           <Text
             preset="header"
-            text="whitehub.net"
+            text={cipher.name}
           />
         </View>
       </View>
@@ -71,23 +90,36 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           backgroundColor: color.palette.white,
           paddingVertical: 22
       }]}>
+        {/* Username */}
         <FloatingInput
+          fixedLabel
           label="Email or Username"
-          value="duchm@cystack.net"
+          value={cipher.login.username}
           editable={false}
         />
 
+        {/* Password */}
         <FloatingInput
           isPassword
+          fixedLabel
           label="Password"
-          value="password"
+          value={cipher.login.password}
           editable={false}
-          style={{ marginTop: 20 }}
+          style={{ marginVertical: 20 }}
         />
 
+        {/* Password strength */}
+        <Text
+          text="Password Security"
+          style={{ fontSize: 10 }}
+        />
+        <PasswordStrength preset="text" value={passwordStrength.score} />
+
+        {/* Website URL */}
         <FloatingInput
+          fixedLabel
           label="Website URL"
-          value="https://whitehub.net"
+          value={cipher.login.uri}
           editable={false}
           style={{ marginVertical: 20 }}
           buttonRight={(
@@ -103,24 +135,30 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           )}
         />
 
+        {/* Notes */}
+        <FloatingInput
+          label="Notes"
+          value={cipher.notes}
+          editable={false}
+          textarea
+          fixedLabel
+        />
+
+        {/* Owned by */}
         <Text
-          text="Password Security"
-          style={{ fontSize: 10 }}
+          text="Owned by"
+          style={{ fontSize: 10, marginTop: 20 }}
         />
         <Text
-            preset="green"
-            style={{
-              marginTop: 5,
-              fontSize: 12
-            }}
-          >
-            <IoniconsIcon
-              name="shield-checkmark"
-              size={14}
-              color={color.palette.green}
-            />
-            {" Strong Password"}
-          </Text>
+          preset="black"
+          text={getTeam(user.teams, cipher.organizationId).name || 'Me'}
+        />
+
+        {/* Folder */}
+        <Text
+          text="Folder"
+          style={{ fontSize: 10, marginTop: 20 }}
+        />
       </View>
       {/* Info end */}
     </Layout>

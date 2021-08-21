@@ -12,6 +12,8 @@ import { IdentityAction } from "../../screens/auth/browse/identities/identity-ac
 import { NoteAction } from "../../screens/auth/browse/notes/note-action"
 import { useCoreService } from "../../services/core-service"
 import { CipherView } from "../../../core/models/view"
+import { useStores } from "../../models"
+import { useMixins } from "../../services/mixins"
 
 
 export interface CipherListProps {
@@ -29,6 +31,8 @@ export interface CipherListProps {
 export const CipherList = observer(function CipherList(props: CipherListProps) {
   const { emptyContent, navigation, onLoadingChange, searchText, deleted = false } = props
   const { searchService } = useCoreService()
+  const { cipherStore } = useStores()
+  const { getWebsiteLogo } = useMixins()
 
   // ------------------------ PARAMS ----------------------------
 
@@ -50,6 +54,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // ------------------------ METHODS ----------------------------
 
+  // Get cipher
   const getCiphers = async () => {
     onLoadingChange(true)
 
@@ -57,24 +62,23 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     const deletedFilter = (c : CipherView) => c.isDeleted === deleted
     const filters = [deletedFilter]
     if (props.cipherType) {
-      console.log(1)
       filters.push((c : CipherView) => c.type === props.cipherType)
     }
 
     // Data is similar to CipherView
     const searchRes = await searchService.searchCiphers(searchText || '', filters, null) || []
     const res = searchRes.map((c: CipherView) => {
-      const data = { ...c, logo: null }
+      const data = { 
+        ...c,
+        logo: null,
+        imgLogo: null
+      }
       switch (c.type) {
         case CipherType.Login: {
           if (c.login.uri) {
-            // TODO: FIX DIS
-            // const imgUri = `https://locker.io/logo/${c.login.uri.split('//')[1]}?size=40`
-            // data.logo = { uri: imgUri }
-            data.logo = BROWSE_ITEMS.password.icon
-          } else {
-            data.logo = BROWSE_ITEMS.password.icon
+            data.imgLogo = getWebsiteLogo(c.login.uri)
           }
+          data.logo = BROWSE_ITEMS.password.icon
           break
         }
           
@@ -107,8 +111,10 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     console.log(`Get ${res.length} items`)
   }
 
-  const openActionMenu = (type: any) => {
-    switch (type) {
+  // Handle action menu open
+  const openActionMenu = (item: CipherView) => {
+    cipherStore.setSelectedCipher(item)
+    switch (item.type) {
       case CipherType.Login:
         setShowPasswordAction(true)
         break
@@ -126,8 +132,10 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     }
   }
 
-  const goToDetail = (type: any) => {
-    switch (type) {
+  // Go to detail
+  const goToDetail = (item: CipherView) => {
+    cipherStore.setSelectedCipher(item)
+    switch (item.type) {
       case CipherType.Login:
         navigation.navigate('passwords__info')
         break
@@ -184,7 +192,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
         renderItem={({ item }) => (
           <Button
             preset="link"
-            onPress={() => goToDetail(item.type)}
+            onPress={() => goToDetail(item)}
             style={{
               borderBottomColor: color.line,
               borderBottomWidth: 1,
@@ -193,7 +201,8 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
           >
             <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
               <Image
-                source={item.logo}
+                source={item.imgLogo || item.logo}
+                backupSource={item.logo}
                 style={{
                   height: 40,
                   marginRight: 12
@@ -209,7 +218,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
               <Button
                 preset="link"
-                onPress={() => openActionMenu(item.type)}
+                onPress={() => openActionMenu(item)}
               >
                 <IoniconsIcon
                   name="ellipsis-horizontal"

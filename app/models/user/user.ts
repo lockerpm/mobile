@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { RegisterData, SessionLoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 import { withEnvironment } from "../extensions/with-environment"
@@ -23,19 +23,13 @@ export const UserModel = types
     isLoggedInPw: types.maybeNull(types.boolean),
     pwd_user_id: types.maybeNull(types.string),
     is_pwd_manager: types.maybeNull(types.boolean),
-    default_team_id: types.maybeNull(types.string)
+    default_team_id: types.maybeNull(types.string),
+
+    // Others
+    teams: types.maybeNull(types.array(types.frozen()))
   })
   .extend(withEnvironment)
-  .views((self) => ({
-    get info() {
-      return {
-        email: self.email,
-        username: self.username,
-        full_name: self.full_name,
-        avatar: self.avatar
-      }
-    }
-  }))
+  .views((self) => ({}))
   .actions((self) => ({
     // Token
     saveToken: async (token: string) => {
@@ -75,6 +69,11 @@ export const UserModel = types
     },
     setLoggedInPw: (isLoggedInPw: boolean) => {
       self.isLoggedInPw = isLoggedInPw
+    },
+
+    // Others
+    setTeams: (teams: object[]) => {
+      self.teams = cast(teams)
     }
   }))
   .actions((self) => ({
@@ -131,9 +130,12 @@ export const UserModel = types
       return res
     },
 
-    syncData: async () => {
+    loadTeams: async () => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.syncData()
+      const res = await userApi.getTeams()
+      if (res.kind === "ok") {
+        self.setTeams(res.teams)
+      }
       return res
     }
   }))

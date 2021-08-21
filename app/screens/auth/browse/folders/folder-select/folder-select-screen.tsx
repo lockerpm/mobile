@@ -9,6 +9,7 @@ import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { NewFolderModal } from "../new-folder-modal"
+import { FOLDER_IMG } from "../../../../../common/mappings"
 
 
 type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
@@ -82,7 +83,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
-            source={require('../folder-add.png')}
+            source={FOLDER_IMG.add.img}
             style={{ height: 30, marginRight: 10 }}
           />
           <Text preset="black" style={{ flex: 1 }}>
@@ -106,7 +107,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
-            source={require('../folder-share.png')}
+            source={FOLDER_IMG.share.img}
             style={{ height: 30, marginRight: 10 }}
           />
           <Text preset="black" style={{ flex: 1 }}>
@@ -123,7 +124,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
-            source={require('../folder.png')}
+            source={FOLDER_IMG.normal.img}
             style={{ height: 30, marginRight: 10 }}
           />
           <Text preset="black" style={{ flex: 1 }}>
