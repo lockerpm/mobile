@@ -1,6 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
-import { CipherView } from "../../../core/models/view"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -10,18 +9,11 @@ import { withEnvironment } from "../extensions/with-environment"
 export const CipherStoreModel = types
   .model("CipherStore")
   .props({
-    token: types.maybeNull(types.string),
-    selectedCipher: types.maybeNull(types.frozen())
+    token: types.maybeNull(types.string)
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    // ----------------- CACHE -------------------
-
-    setSelectedCipher: (cipher: null | CipherView) => {
-      self.selectedCipher = cipher
-    },
-
     // ----------------- TOKEN -------------------
 
     saveToken: async (token: string) => {

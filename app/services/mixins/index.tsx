@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useToast } from 'native-base'
 import { Text } from "../../components"
 import { nanoid } from 'nanoid'
@@ -11,7 +11,21 @@ import { CipherType, SecureNoteType } from '../../../core/enums'
 
 const { createContext, useContext } = React
 
+// Funtion params
+
+type GetCiphersParams = {
+  deleted: boolean,
+  searchText: string,
+  filters: Function[]
+}
+
+// Mixins data
+
 const defaultData = {
+  // Data
+  selectedCipher: new CipherView(),
+
+  // Methods
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   logout: async () => {},
   lock: async () => {},
@@ -20,9 +34,13 @@ const defaultData = {
   randomString: () => '',
   newCipher: () => {},
   register: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
-  getUserInfo: async () => false,
-  getWebsiteLogo: (uri: string) => { uri: '' },
-  getTeam: (teams: object[], orgId: string) => ({ name: '' })
+  getWebsiteLogo: (uri: string) => ({ uri: '' }),
+  getTeam: (teams: object[], orgId: string) => ({ name: '' }),
+  setSelectedCipher: (c: CipherView) => {},
+  getCiphers: async (params: GetCiphersParams) => { return [] },
+  getCollections: async () => { return [] },
+  getFolders: async () => { return [] },
+  getPasswordStrength: (password: string) => ({ score: 0 })
 }
 
 
@@ -36,14 +54,17 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     userService, 
     folderService, 
     cipherService,
-    // searchService,
+    searchService,
     collectionService,
     platformUtilsService,
     storageService,
     messagingService,
     tokenService,
-    syncService
+    syncService,
+    passwordGenerationService
   } = useCoreService()
+
+  const [selectedCipher, setSelectedCipher] = useState(new CipherView())
 
   // -------------------- AUTHENTICATION --------------------
 
@@ -160,14 +181,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // ------------------------ DATA ---------------------------
 
-  const getUserInfo = async () => {
-    const [userRes, userPwRes] = await Promise.all([
-      user.getUser(),
-      user.getUserPw()
-    ])
-    return userRes.kind === 'ok' && userPwRes.kind === 'ok'
-  }
-
+  // Sync
   const getSyncData = async () => {
     try {
       messagingService.send('syncStarted')
@@ -197,6 +211,28 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
   }
 
+  // Get ciphers
+  const getCiphers = async (params: GetCiphersParams) => {
+    // Filter
+    const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
+    const filters = [deletedFilter, ...params.filters]
+    return await searchService.searchCiphers(params.searchText || '', filters, null) || []
+  }
+
+  // Get collections
+  const getCollections = async () => {
+    let res = await collectionService.getAllDecrypted() || []
+    res = res.filter(item => item.id)
+    return res
+  }
+
+  // Get folders
+  const getFolders = async () => {
+    return await folderService.getAllDecrypted() || []
+  }
+
+  // ------------------------ SUPPORT -------------------------
+
   const newCipher = () => {
     const cipher = new CipherView()
     cipher.organizationId = null
@@ -212,7 +248,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return cipher
   }
 
-  // ------------------------ SUPPORT -------------------------
+  const getPasswordStrength = (password: string) => {
+    return passwordGenerationService.passwordStrength(password, ['cystack']) || { score: 0 }
+  }
 
   // Alert message
   const notify = (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string) => {
@@ -256,6 +294,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
+    selectedCipher,
     sessionLogin,
     logout,
     lock,
@@ -264,9 +303,13 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     getSyncData,
     newCipher,
     register,
-    getUserInfo,
     getWebsiteLogo,
-    getTeam
+    getTeam,
+    setSelectedCipher,
+    getCiphers,
+    getCollections,
+    getFolders,
+    getPasswordStrength
   }
 
   return (

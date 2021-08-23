@@ -10,9 +10,7 @@ import { PasswordAction } from "../../screens/auth/browse/passwords/password-act
 import { CardAction } from "../../screens/auth/browse/cards/card-action"
 import { IdentityAction } from "../../screens/auth/browse/identities/identity-action"
 import { NoteAction } from "../../screens/auth/browse/notes/note-action"
-import { useCoreService } from "../../services/core-service"
 import { CipherView } from "../../../core/models/view"
-import { useStores } from "../../models"
 import { useMixins } from "../../services/mixins"
 
 
@@ -30,9 +28,7 @@ export interface CipherListProps {
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
   const { emptyContent, navigation, onLoadingChange, searchText, deleted = false } = props
-  const { searchService } = useCoreService()
-  const { cipherStore } = useStores()
-  const { getWebsiteLogo } = useMixins()
+  const { getWebsiteLogo, getCiphers, setSelectedCipher } = useMixins()
 
   // ------------------------ PARAMS ----------------------------
 
@@ -45,28 +41,31 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   // ------------------------ WATCHERS ----------------------------
 
   useEffect(() => {
-    getCiphers()
+    loadData()
   }, [searchText])
 
   useEffect(() => {
-    getCiphers()
+    loadData()
   }, [])
 
   // ------------------------ METHODS ----------------------------
 
-  // Get cipher
-  const getCiphers = async () => {
+  // Get ciphers list
+  const loadData = async () => {
     onLoadingChange(true)
 
     // Filter
-    const deletedFilter = (c : CipherView) => c.isDeleted === deleted
-    const filters = [deletedFilter]
+    const filters = []
     if (props.cipherType) {
       filters.push((c : CipherView) => c.type === props.cipherType)
     }
 
     // Data is similar to CipherView
-    const searchRes = await searchService.searchCiphers(searchText || '', filters, null) || []
+    const searchRes = await getCiphers({
+      filters,
+      searchText,
+      deleted
+    })
     const res = searchRes.map((c: CipherView) => {
       const data = { 
         ...c,
@@ -113,7 +112,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // Handle action menu open
   const openActionMenu = (item: CipherView) => {
-    cipherStore.setSelectedCipher(item)
+    setSelectedCipher(item)
     switch (item.type) {
       case CipherType.Login:
         setShowPasswordAction(true)
@@ -134,7 +133,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // Go to detail
   const goToDetail = (item: CipherView) => {
-    cipherStore.setSelectedCipher(item)
+    setSelectedCipher(item)
     switch (item.type) {
       case CipherType.Login:
         navigation.navigate('passwords__info')
