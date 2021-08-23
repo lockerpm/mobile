@@ -2,8 +2,9 @@ import React, { useState } from "react"
 import { Actionsheet, Divider } from "native-base"
 import { Text, AutoImage as Image, ActionItem, OwnershipAction } from "../../../../components"
 import { color, commonStyles } from "../../../../theme"
-import { View, ScrollView } from "react-native"
+import { View, ScrollView, Linking } from "react-native"
 import { BROWSE_ITEMS } from "../../../../common/mappings"
+import { useMixins } from "../../../../services/mixins"
 
 
 type Props = {
@@ -16,6 +17,8 @@ type Props = {
 export const PasswordAction = (props: Props) => {
   const { navigation, isOpen, onClose } = props
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
+
+  const { selectedCipher, copyToClipboard } = useMixins()
 
   return (
     <View>
@@ -38,12 +41,16 @@ export const PasswordAction = (props: Props) => {
               <View>
                 <Text
                   preset="semibold"
-                  text="gate.io"
+                  text={selectedCipher.name}
                 />
-                <Text
-                  text="duchm"
-                  style={{ fontSize: 12 }}
-                />
+                {
+                  !!selectedCipher.login.username && (
+                    <Text
+                      text={selectedCipher.login.username}
+                      style={{ fontSize: 12 }}
+                    />
+                  )
+                }
               </View>
             </View>
           </View>
@@ -56,19 +63,34 @@ export const PasswordAction = (props: Props) => {
             <ActionItem
               name="Launch Website"
               icon="external-link"
+              action={() => Linking.openURL(selectedCipher.login.uri)}
+              disabled={!selectedCipher.login.uri}
             />
 
             <ActionItem
               name="Copy Email or Username"
               icon="copy"
+              action={() => copyToClipboard(selectedCipher.login.username)}
+              disabled={!selectedCipher.login.username}
             />
 
             <ActionItem
               name="Copy Password"
               icon="copy"
+              action={() => copyToClipboard(selectedCipher.login.password)}
+              disabled={!selectedCipher.login.password}
             />
 
             <Divider borderColor={color.line} marginY={1} />
+
+            <ActionItem
+              name="Clone"
+              icon="clone"
+              action={() => {
+                onClose()
+                navigation.navigate('passwords__edit', { mode: 'clone' })
+              }}
+            />
 
             <ActionItem
               name="Move to Folder"

@@ -1,49 +1,77 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Header, Text, Button } from "../../../../components"
+import { Layout, Header, Text, Button, PasswordStrength } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color, commonStyles } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { Checkbox, Slider } from "native-base"
+import { useMixins } from "../../../../services/mixins"
+import { useCoreService } from "../../../../services/core-service"
 
 
 export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen() {
   const navigation = useNavigation()
+  const { getPasswordStrength, copyToClipboard, setGeneratedPassword } = useMixins()
+  const { passwordGenerationService } = useCoreService()
   
-  const [options, setOptions] = useState([])
-  const [passwordLength, setPasswordLength] = useState(12)
+  const [password, setPassword] = useState('')
+  const [passwordLen, setPasswordLen] = useState(16)
+  const [options, setOptions] = useState({
+    length: 16,
+    uppercase: true,
+    lowercase: true,
+    number: true,
+    special: true,
+    ambiguous: false
+  })
 
   const OPTIONS = [
     {
       label: 'Use uppercase letters (A-Z)',
-      value: '0'
+      key: 'uppercase'
     },
     {
       label: 'Use lowercase letters (a-z)',
-      value: '1'
+      key: 'lowercase'
     },
     {
       label: 'Use digits (0-9)',
-      value: '2'
+      key: 'number'
     },
     {
       label: 'Use symbols (@!$%*)',
-      value: '3'
+      key: 'special'
     },
     {
       label: 'Avoid ambiguous characters',
-      value: '4'
+      key: 'ambiguous'
     }
   ]
 
+  // Methods
+  const regenerate = async () => {
+    const opt = { ...options }
+    if (!opt.lowercase && !opt.uppercase && !opt.lowercase && !opt.number && !opt.special) {
+      opt.lowercase = true
+    }
+    const password = await passwordGenerationService.generatePassword(opt)
+    setPassword(password)
+  }
+
+  // Watchers
+  useEffect(() => {
+    regenerate()
+  }, [options])
+
+  // Render
   return (
     <Layout
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0
       }}
+      borderBottom
       header={(
         <Header
           title="Password Generator"
@@ -54,10 +82,24 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         />
       )}
       footer={(
-        <Button
-          isNativeBase
-          text="Use Password"
-        />
+        <View>
+          <Button
+            isNativeBase
+            text="Use Password"
+            onPress={() => {
+              setGeneratedPassword(password)
+              console.log(password)
+              navigation.goBack()
+            }}
+          />
+          <Button
+            isNativeBase
+            variant="outline"
+            text="Regenerate"
+            onPress={regenerate}
+            style={{ marginTop: 10 }}
+          />
+        </View>
       )}
     >
       {/* Password */}
@@ -67,30 +109,28 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Text preset="black" style={{ flex: 1, fontSize: 16 }}>
-            jPk%4TJ%K^87
-          </Text>
-          <IoniconsIcon
-            name="copy-outline"
-            size={18}
-            color={color.textBlack}
+          <Text 
+            preset="black" 
+            text={password}
+            style={{ flex: 1, fontSize: 16 }}
           />
+
+          <Button
+            preset="link"
+            onPress={() => copyToClipboard(password)}
+          >
+            <IoniconsIcon
+              name="copy-outline"
+              size={18}
+              color={color.textBlack}
+            />
+          </Button>
         </View>
 
-        <Text
-          preset="green"
-          style={{
-            marginTop: 10,
-            fontSize: 10
-          }}
-        >
-          <IoniconsIcon
-            name="shield-checkmark"
-            size={12}
-            color={color.palette.green}
-          />
-          {" Strong"}
-        </Text>
+        <PasswordStrength
+          preset="text"
+          value={getPasswordStrength(password).score} 
+        />
       </View>
       {/* Password end */}
 
@@ -111,13 +151,14 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         />
         <Slider
           colorScheme="csGreen"
-          defaultValue={12}
-          minValue={0}
-          maxValue={30}
-          accessibilityLabel="hello world"
+          defaultValue={16}
+          minValue={8}
+          maxValue={64}
+          accessibilityLabel="length"
           step={1}
           mb={7}
-          onChange={setPasswordLength}
+          onChange={setPasswordLen}
+          onChangeEnd={len => setOptions({ ...options, length: len })}
         >
           <Slider.Track bg={color.block}>
             <Slider.FilledTrack />
@@ -135,24 +176,25 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
               <Text
                 preset="black"
                 style={{ fontSize: 12, textAlign: 'center' }}
-                text={passwordLength.toString()}
+                text={passwordLen.toString()}
               />
             </View>
           </Slider.Thumb>
         </Slider>
 
-        <Checkbox.Group
-          colorScheme="csGreen"
-          onChange={setOptions}
-          value={options}
-        >
+        <Checkbox.Group colorScheme="csGreen">
           {
             OPTIONS.map((item) => (
               <Checkbox
-                key={item.value}
-                value={item.value}
+                key={item.key}
+                value={item.key}
                 my={1}
-                accessibilityLabel={item.value}
+                accessibilityLabel={item.key}
+                onChange={checked => {
+                  const newOptions = { ...options }
+                  newOptions[item.key] = checked
+                  setOptions(newOptions)
+                }}
               >
                 <Text
                   text={item.label}

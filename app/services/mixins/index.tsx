@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useToast } from 'native-base'
+import { IToastProps, useToast } from 'native-base'
 import { Text } from "../../components"
 import { nanoid } from 'nanoid'
 import find from 'lodash/find'
@@ -8,6 +8,7 @@ import { useStores } from '../../models'
 import { useCoreService } from '../core-service'
 import { CardView, CipherView, IdentityView, LoginUriView, LoginView, SecureNoteView } from '../../../core/models/view'
 import { CipherType, SecureNoteType } from '../../../core/enums'
+import Clipboard from '@react-native-clipboard/clipboard'
 
 const { createContext, useContext } = React
 
@@ -24,23 +25,26 @@ type GetCiphersParams = {
 const defaultData = {
   // Data
   selectedCipher: new CipherView(),
+  generatedPassword: '',
 
   // Methods
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   logout: async () => {},
   lock: async () => {},
   getSyncData: async () => {},
-  notify: (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string) => {},
+  notify: (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string, duration: number) => {},
   randomString: () => '',
   newCipher: () => {},
   register: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getTeam: (teams: object[], orgId: string) => ({ name: '' }),
   setSelectedCipher: (c: CipherView) => {},
+  setGeneratedPassword: (password: string) => {},
   getCiphers: async (params: GetCiphersParams) => { return [] },
   getCollections: async () => { return [] },
   getFolders: async () => { return [] },
-  getPasswordStrength: (password: string) => ({ score: 0 })
+  getPasswordStrength: (password: string) => ({ score: 0 }),
+  copyToClipboard: (text: string) => {}
 }
 
 
@@ -65,6 +69,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   } = useCoreService()
 
   const [selectedCipher, setSelectedCipher] = useState(new CipherView())
+  const [generatedPassword, setGeneratedPassword] = useState('')
 
   // -------------------- AUTHENTICATION --------------------
 
@@ -253,31 +258,50 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   }
 
   // Alert message
-  const notify = (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string) => {
-    toast.show({
-      title: (
+  const notify = (
+    type : 'error' | 'success' | 'warning' | 'info', 
+    title : null | string, 
+    text: null | string,
+    duration?: undefined | number
+  ) => {
+    const options: IToastProps = {
+      placement: 'top',
+      status: type,
+      duration,
+      title: undefined,
+      description: undefined
+    }
+    if (title) {
+      options.title = (
         <Text
           preset="header"
-          style={{ fontSize: 14 }}
+          style={{ fontSize: 14, minWidth: 300 }}
         >
           {title}
         </Text>
-      ),
-      description: (
+      )
+    }
+    if (text) {
+      options.description = (
         <Text
-          style={{ fontSize: 12 }}
+          style={{ fontSize: 12, minWidth: 300 }}
         >
           {text}
         </Text>
-      ),
-      placement: 'top',
-      status: type
-    })
+      )
+    }
+    toast.show(options)
   }
 
   // Random string
   const randomString = () => {
     return nanoid()
+  }
+
+  // Clipboard
+  const copyToClipboard = (text: string) => {
+    notify('success', undefined, 'Copied', 500)
+    Clipboard.setString(text)
   }
 
   // Get website logo
@@ -294,7 +318,11 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
+    // Data
     selectedCipher,
+    generatedPassword,
+
+    // Methods
     sessionLogin,
     logout,
     lock,
@@ -306,10 +334,12 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     getWebsiteLogo,
     getTeam,
     setSelectedCipher,
+    setGeneratedPassword,
     getCiphers,
     getCollections,
     getFolders,
-    getPasswordStrength
+    getPasswordStrength,
+    copyToClipboard
   }
 
   return (

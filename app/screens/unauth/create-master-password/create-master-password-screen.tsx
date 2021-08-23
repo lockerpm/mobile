@@ -6,7 +6,6 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { color } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
-import { useCoreService } from "../../../services/core-service"
 import { RootParamList } from "../../../navigators"
 
 type ScreenProp = RouteProp<RootParamList, 'createMasterPassword'>;
@@ -15,8 +14,8 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
   const navigation = useNavigation()
   const route = useRoute<ScreenProp>()
   const { logout, register } = useMixins()
-  const { passwordGenerationService } = useCoreService()
   const { user } = useStores()
+  const { getPasswordStrength } = useMixins()
 
   // Params
   const [masterPassword, setMasterPassword] = useState('')
@@ -35,7 +34,6 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
     if (!route.params || !route.params.skipCheck) {
       await user.getUser()
     }
-    console.log('test')
     setIsScreenLoading(false)
   }
 
@@ -131,7 +129,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
           label="Master Password"
           onChangeText={(text) => {
             setMasterPassword(text)
-            const strength = passwordGenerationService.passwordStrength(text, ['cystack'])
+            const strength = getPasswordStrength(text)
             setPasswordStrength(strength ? strength.score : -1)
           }}
           value={masterPassword}

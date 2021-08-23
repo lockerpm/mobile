@@ -71,6 +71,7 @@
     "react-native-randombytes": "^3.6.1",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "2.18.1",
+    "react-native-secure-storage": "^0.1.2",
     "react-native-simple-crypto": "^0.2.15",
     "react-native-svg": "^12.1.1",
     "react-native-tab-view": "^3.0.1",

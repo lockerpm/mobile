@@ -17,23 +17,25 @@ export interface ActionItemProps {
   iconColor?: string,
   textColor?: string
   action?: Function,
-  children?: React.ReactNode
+  children?: React.ReactNode,
+  disabled?: boolean
 }
 
 /**
  * Describe your component here
  */
 export const ActionItem = observer(function ActionItem(props: ActionItemProps) {
-  const { style, name, icon, textColor, action, children, iconColor } = props
+  const { style, name, icon, textColor, action, children, iconColor, disabled } = props
 
   return (
     <Actionsheet.Item
+      disabled={disabled}
       style={style}
       onPress={() => action && action()}
       endIcon={(
         <FontAwesomeIcon 
           name={icon}
-          size={18} 
+          size={16} 
           color={iconColor || textColor || color.text}
         />
       )}
