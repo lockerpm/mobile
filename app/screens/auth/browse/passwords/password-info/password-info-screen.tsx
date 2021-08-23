@@ -1,30 +1,27 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength } from "../../../../../components"
+import { 
+  Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength, CipherInfoCommon 
+} from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { PasswordAction } from "../password-action"
-import { useStores } from "../../../../../models"
 import { useMixins } from "../../../../../services/mixins"
-import { useCoreService } from "../../../../../services/core-service"
 
 
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const navigation = useNavigation()
-  const { cipherStore, user } = useStores()
-  const { getWebsiteLogo, getTeam } = useMixins()
-  const { passwordGenerationService } = useCoreService()
+  const { getWebsiteLogo, selectedCipher, getPasswordStrength } = useMixins()
 
   const [showAction, setShowAction] = useState(false)
 
   // ------------------ COMPUTED --------------------
 
-  const cipher = cipherStore.selectedCipher
-  const passwordStrength = passwordGenerationService.passwordStrength(cipher.login.password, ['cystack']) || {}
+  const passwordStrength = getPasswordStrength(selectedCipher.login.password)
 
 
   // ------------------ RENDER --------------------
@@ -70,8 +67,8 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         }]}>
           <Image
             source={
-              cipher.login.uri 
-                ? getWebsiteLogo(cipher.login.uri)
+              selectedCipher.login.uri 
+                ? getWebsiteLogo(selectedCipher.login.uri)
                 : BROWSE_ITEMS.password.icon
             }
             backupSource={BROWSE_ITEMS.password.icon}
@@ -79,7 +76,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           />
           <Text
             preset="header"
-            text={cipher.name}
+            text={selectedCipher.name}
           />
         </View>
       </View>
@@ -94,7 +91,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         <FloatingInput
           fixedLabel
           label="Email or Username"
-          value={cipher.login.username}
+          value={selectedCipher.login.username}
           editable={false}
         />
 
@@ -103,7 +100,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           isPassword
           fixedLabel
           label="Password"
-          value={cipher.login.password}
+          value={selectedCipher.login.password}
           editable={false}
           style={{ marginVertical: 20 }}
         />
@@ -119,7 +116,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         <FloatingInput
           fixedLabel
           label="Website URL"
-          value={cipher.login.uri}
+          value={selectedCipher.login.uri}
           editable={false}
           style={{ marginVertical: 20 }}
           buttonRight={(
@@ -138,27 +135,14 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         {/* Notes */}
         <FloatingInput
           label="Notes"
-          value={cipher.notes}
+          value={selectedCipher.notes}
           editable={false}
           textarea
           fixedLabel
         />
 
-        {/* Owned by */}
-        <Text
-          text="Owned by"
-          style={{ fontSize: 10, marginTop: 20 }}
-        />
-        <Text
-          preset="black"
-          text={getTeam(user.teams, cipher.organizationId).name || 'Me'}
-        />
-
-        {/* Folder */}
-        <Text
-          text="Folder"
-          style={{ fontSize: 10, marginTop: 20 }}
-        />
+        {/* Others common info */}
+        <CipherInfoCommon cipher={selectedCipher} />
       </View>
       {/* Info end */}
     </Layout>

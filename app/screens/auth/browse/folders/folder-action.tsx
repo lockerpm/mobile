@@ -3,6 +3,7 @@ import { Actionsheet, Divider } from "native-base"
 import { Text, AutoImage as Image, ActionItem, OwnershipAction } from "../../../../components"
 import { color, commonStyles } from "../../../../theme"
 import { View, ScrollView } from "react-native"
+import { FOLDER_IMG } from "../../../../common/mappings"
 
 
 type Props = {
@@ -31,7 +32,7 @@ export const FolderAction = (props: Props) => {
           <View style={{ width: '100%', paddingHorizontal: 20 }}>
             <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
               <Image
-                source={require('./folder-share.png')}
+                source={FOLDER_IMG.share.img}
                 style={{ height: 30, marginRight: 10 }}
               />
               <View>

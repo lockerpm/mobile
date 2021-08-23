@@ -14,6 +14,9 @@ export class SecureStorageService implements StorageService {
   }
 
   save(key: string, obj: any, options?: StorageServiceOptions): Promise<any> {
+    if (__DEV__) {
+      console.log(`Saving SECURE key ${key}`)
+    }
     const targetKey = this.getTargetKey(key, options)
     if (obj == null) {
       return this.remove(key, options);
@@ -23,6 +26,9 @@ export class SecureStorageService implements StorageService {
   }
 
   remove(key: string, options?: StorageServiceOptions): Promise<any> {
+    if (__DEV__) {
+      console.log(`Removing SECURE key ${key}`)
+    }
     const targetKey = this.getTargetKey(key, options)
     this.store.delete(targetKey);
     return Promise.resolve();

@@ -12,6 +12,7 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { NewFolderModal } from "./new-folder-modal"
 import { FolderAction } from "./folder-action"
 import { RenameModal } from "./rename-modal"
+import { FOLDER_IMG } from "../../../../common/mappings"
 
 
 export const FoldersScreen = observer(function FoldersScreen() {
@@ -124,7 +125,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                 >
                   <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
                     <Image
-                      source={require('./folder.png')}
+                      source={FOLDER_IMG.normal.img}
                       style={{
                         height: 30,
                         marginRight: 12
