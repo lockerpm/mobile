@@ -44,19 +44,19 @@ export type PrimaryParamList = {
   countrySelector: undefined,
   passwords__info: undefined,
   passwords__edit: {
-    mode: 'add' | 'edit'
+    mode: 'add' | 'edit' | 'clone'
   },
   notes__info: undefined,
   notes__edit: {
-    mode: 'add' | 'edit'
+    mode: 'add' | 'edit' | 'clone'
   },
   cards__info: undefined,
   cards__edit: {
-    mode: 'add' | 'edit'
+    mode: 'add' | 'edit' | 'clone'
   },
   identities__info: undefined,
   identities__edit: {
-    mode: 'add' | 'edit'
+    mode: 'add' | 'edit' | 'clone'
   },
   folders__select: {
     mode: 'add' | 'move'

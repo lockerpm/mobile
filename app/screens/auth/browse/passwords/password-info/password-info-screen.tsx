@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View } from "react-native"
+import { Linking, View } from "react-native"
 import { 
   Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength, CipherInfoCommon 
 } from "../../../../../components"
@@ -90,6 +90,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         {/* Username */}
         <FloatingInput
           fixedLabel
+          copyAble
           label="Email or Username"
           value={selectedCipher.login.username}
           editable={false}
@@ -99,6 +100,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         <FloatingInput
           isPassword
           fixedLabel
+          copyAble
           label="Password"
           value={selectedCipher.login.password}
           editable={false}
@@ -121,11 +123,15 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           style={{ marginVertical: 20 }}
           buttonRight={(
             <Button
+              disabled={!selectedCipher.login.uri}
               preset="link"
+              onPress={() => {
+                Linking.openURL(selectedCipher.login.uri)
+              }}
             >
               <FontAwesomeIcon 
                 name="external-link"
-                size={18} 
+                size={14} 
                 color={color.text} 
               />
             </Button>
@@ -139,6 +145,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           editable={false}
           textarea
           fixedLabel
+          copyAble
         />
 
         {/* Others common info */}

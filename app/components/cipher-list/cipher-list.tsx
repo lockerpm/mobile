@@ -44,10 +44,6 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     loadData()
   }, [searchText])
 
-  useEffect(() => {
-    loadData()
-  }, [])
-
   // ------------------------ METHODS ----------------------------
 
   // Get ciphers list
