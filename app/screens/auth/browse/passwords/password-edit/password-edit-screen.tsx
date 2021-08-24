@@ -5,12 +5,12 @@ import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, PasswordStrength
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color, commonStyles } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../../services/mixins"
+import { useStores } from "../../../../../models"
 
 
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
@@ -20,7 +20,9 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<PasswordEditScreenProp>()
   const { mode } = route.params
-  const { selectedCipher, getPasswordStrength } = useMixins()
+  const { getPasswordStrength } = useMixins()
+  const { cipherStore } = useStores()
+  const selectedCipher = cipherStore.cipherView
 
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
@@ -32,7 +34,10 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
   // Watchers
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      console.log('focus')
+      if (cipherStore.generatedPassword) {
+        setPassword(cipherStore.generatedPassword)
+        cipherStore.setGeneratedPassword('')
+      }
     });
 
     return unsubscribe

@@ -17,7 +17,7 @@ export const LockScreen = observer(function LockScreen() {
   const { user } = useStores()
 
   // Params
-  const [masterPassword, setMasterPassword] = useState('11$23581321Duc')
+  const [masterPassword, setMasterPassword] = useState('')
   const [isScreenLoading, setIsScreenLoading] = useState(true)
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
@@ -58,7 +58,7 @@ export const LockScreen = observer(function LockScreen() {
   }
 
   const handleUnlockBiometric = () => {
-    
+    navigation.navigate('mainStack')
   }
 
   const handleGetHint = async () => {

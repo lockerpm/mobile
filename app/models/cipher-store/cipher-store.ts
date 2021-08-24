@@ -1,5 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { omit } from "ramda"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
+import { CipherView } from "../../../core/models/view"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -9,10 +11,16 @@ import { withEnvironment } from "../extensions/with-environment"
 export const CipherStoreModel = types
   .model("CipherStore")
   .props({
-    token: types.maybeNull(types.string)
+    token: types.maybeNull(types.string),
+    generatedPassword: types.maybeNull(types.string),
+    selectedCipher: types.maybeNull(types.frozen())
   })
   .extend(withEnvironment)
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({
+    get cipherView() {
+      return self.selectedCipher || new CipherView()
+    }
+  }))
   .actions((self) => ({
     // ----------------- TOKEN -------------------
 
@@ -24,6 +32,16 @@ export const CipherStoreModel = types
     clearToken: async () => {
       self.token = ''
       self.environment.api.apisauce.deleteHeader('Authorization')
+    },
+
+    // ----------------- CACHE -------------------
+
+    setGeneratedPassword: (password: string) => {
+      self.generatedPassword = password
+    },
+
+    setSelectedCipher: (cipher: CipherView) => {
+      self.selectedCipher = cipher
     },
 
     // ----------------- CRUD -------------------
@@ -39,7 +57,7 @@ export const CipherStoreModel = types
       const res = await cipherApi.postCipher(data)
       return res
     }
-  }))
+  })).postProcessSnapshot(omit(['generatedPassword', 'selectedCipher']))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).
