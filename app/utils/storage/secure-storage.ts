@@ -13,9 +13,9 @@ const options = {
  */
 export async function loadSecure(key: string): Promise<any | null> {
   try {
-    // if (__DEV__) {
-    //   console.log(`Getting from ASYNC STORAGE key ${key}`)
-    // }
+    if (__DEV__) {
+      console.log(`Getting from SECURE key ${key}`)
+    }
     const almostThere = await RNSecureStorage.get(key)
     return JSON.parse(almostThere)
   } catch {
@@ -32,7 +32,7 @@ export async function loadSecure(key: string): Promise<any | null> {
 export async function saveSecure(key: string, value: any): Promise<boolean> {
   try {
     if (__DEV__) {
-      console.log(`Saving to ASYNC STORAGE key ${key}`)
+      console.log(`Saving to SECURE key ${key}`)
     }
     await RNSecureStorage.set(key, JSON.stringify(value), options)
     return true
@@ -49,7 +49,7 @@ export async function saveSecure(key: string, value: any): Promise<boolean> {
 export async function removeSecure(key: string): Promise<void> {
   try {
     if (__DEV__) {
-      console.log(`Removing from ASYNC STORAGE key ${key}`)
+      console.log(`Removing from SECURE key ${key}`)
     }
     await RNSecureStorage.remove(key)
   } catch {}
@@ -60,7 +60,11 @@ export async function removeSecure(key: string): Promise<void> {
  */
 export async function hasSecure(key: string): Promise<boolean> {
   try {
-    return await RNSecureStorage.exists(key)
+    if (__DEV__) {
+      console.log(`Checking from SECURE key ${key}`)
+    }
+    const res = await RNSecureStorage.exists(key)
+    return res
   } catch {
     return false
   }

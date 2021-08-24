@@ -59,7 +59,8 @@ export type PrimaryParamList = {
     mode: 'add' | 'edit' | 'clone'
   },
   folders__select: {
-    mode: 'add' | 'move'
+    mode: 'add' | 'move',
+    initialId?: string
   },
   settings: undefined,
   changeMasterPassword: undefined,

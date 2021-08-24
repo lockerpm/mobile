@@ -61,9 +61,9 @@ export async function load(key: string): Promise<any | null> {
  */
 export async function save(key: string, value: any): Promise<boolean> {
   try {
-    if (__DEV__) {
-      console.log(`Saving to ASYNC STORAGE key ${key}`)
-    }
+    // if (__DEV__) {
+    //   console.log(`Saving to ASYNC STORAGE key ${key}`)
+    // }
     await AsyncStorage.setItem(key, JSON.stringify(value))
     return true
   } catch {
@@ -78,9 +78,9 @@ export async function save(key: string, value: any): Promise<boolean> {
  */
 export async function remove(key: string): Promise<void> {
   try {
-    if (__DEV__) {
-      console.log(`Removing from ASYNC STORAGE key ${key}`)
-    }
+    // if (__DEV__) {
+    //   console.log(`Removing from ASYNC STORAGE key ${key}`)
+    // }
     await AsyncStorage.removeItem(key)
   } catch {}
 }

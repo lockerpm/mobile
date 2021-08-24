@@ -306,7 +306,7 @@ export class CipherService implements CipherServiceAbstraction {
         const decCiphers: CipherView[] = [];
         const hasKey = await this.cryptoService.hasKey();
         if (!hasKey) {
-            throw new Error('No key.');
+            throw new Error('No key get cipher.');
         }
 
         const promises: any[] = [];

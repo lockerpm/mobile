@@ -5,12 +5,16 @@ import { FloatingInput, Button, Text } from "../../../../components"
 interface Props {
   isOpen?: boolean,
   onClose?: Function,
-  createFolder?: Function
+  onCreateFolder?: Function
 }
 
 export const NewFolderModal = (props: Props) => {
-  const { isOpen, onClose, createFolder } = props
+  const { isOpen, onClose, onCreateFolder } = props
   const [name, setName] = useState('')
+
+  const handleCreateFolder = async () => {
+    onCreateFolder && onCreateFolder(name)
+  }
   
   return (
     <Modal
@@ -40,7 +44,7 @@ export const NewFolderModal = (props: Props) => {
           <Button
             isNativeBase
             text="Create"
-            onPress={() => createFolder && createFolder()}
+            onPress={handleCreateFolder}
             style={{
               width: '100%'
             }}

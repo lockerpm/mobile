@@ -10,6 +10,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { NewFolderModal } from "../new-folder-modal"
 import { FOLDER_IMG } from "../../../../../common/mappings"
+import { useStores } from "../../../../../models"
 
 
 type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
@@ -18,9 +19,11 @@ type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
 export const FolderSelectScreen = observer(function FolderSelectScreen() {
   const navigation = useNavigation()
   const route = useRoute<FolderSelectScreenProp>()
-  const { mode } = route.params
+  const { mode, initialId } = route.params
+  const { folderStore } = useStores()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
+  const [selectedFolder, setSelectedFolder] = useState(initialId)
 
   return (
     <Layout
@@ -55,6 +58,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       {/* None */}
       <Button
         preset="link"
+        onPress={() => setSelectedFolder(null)}
         style={[commonStyles.SECTION_PADDING, {
           backgroundColor: color.palette.white,
           marginBottom: 10
@@ -62,13 +66,18 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Text preset="black" style={{ flex: 1 }}>
-            None
+            No folder
           </Text>
-          <IoniconsIcon
-            name="checkmark"
-            size={18}
-            color={color.palette.green}
-          />
+
+          {
+            !selectedFolder && (
+              <IoniconsIcon
+                name="checkmark"
+                size={18}
+                color={color.palette.green}
+              />
+            )
+          }
         </View>
       </Button>
       {/* None end */}
@@ -99,39 +108,38 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       {/* Create end */}
 
       {/* Other folders */}
-      <Button
-        preset="link"
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white
-        }]}
-      >
-        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Image
-            source={FOLDER_IMG.share.img}
-            style={{ height: 30, marginRight: 10 }}
-          />
-          <Text preset="black" style={{ flex: 1 }}>
-            CyStack
-          </Text>
-        </View>
-      </Button>
+      {
+        folderStore.folders.filter(i => i.id).map((item, index) => (
+          <Button
+            key={index}
+            preset="link"
+            onPress={() => setSelectedFolder(item.id)}
+            style={[commonStyles.SECTION_PADDING, {
+              backgroundColor: color.palette.white
+            }]}
+          >
+            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+              <Image
+                source={FOLDER_IMG.normal.img}
+                style={{ height: 30, marginRight: 10 }}
+              />
+              <Text preset="black" style={{ flex: 1 }}>
+                {item.name}
+              </Text>
 
-      <Button
-        preset="link"
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white
-        }]}
-      >
-        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Image
-            source={FOLDER_IMG.normal.img}
-            style={{ height: 30, marginRight: 10 }}
-          />
-          <Text preset="black" style={{ flex: 1 }}>
-            Test
-          </Text>
-        </View>
-      </Button>
+              {
+                selectedFolder === item.id && (
+                  <IoniconsIcon
+                    name="checkmark"
+                    size={18}
+                    color={color.palette.green}
+                  />
+                )
+              }
+            </View>
+          </Button>
+        ))
+      }
       {/* Other folders end */}
     </Layout>
   )

@@ -36,7 +36,7 @@ const defaultData = {
   getTeam: (teams: object[], orgId: string) => ({ name: '' }),
   getCiphers: async (params: GetCiphersParams) => { return [] },
   getCollections: async () => { return [] },
-  getFolders: async () => { return [] },
+  loadFolders: async () => {},
   getPasswordStrength: (password: string) => ({ score: 0 }),
   copyToClipboard: (text: string) => {}
 }
@@ -46,7 +46,7 @@ const MixinsContext = createContext(defaultData)
 
 export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const toast = useToast()
-  const { user, cipherStore } = useStores()
+  const { user, cipherStore, folderStore } = useStores()
   const { 
     cryptoService, 
     userService, 
@@ -153,6 +153,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // Logout
   const logout = async () => {
     cipherStore.clearToken()
+    folderStore.clearToken()
     await Promise.all([
       user.logout(),
       cryptoService.clearKeys(),
@@ -207,6 +208,12 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
   }
 
+  // Load folders
+  const loadFolders = async () => {
+    const res = await folderService.getAllDecrypted() || []
+    folderStore.setFolders(res)
+  }
+
   // Get ciphers
   const getCiphers = async (params: GetCiphersParams) => {
     // Filter
@@ -222,10 +229,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return res
   }
 
-  // Get folders
-  const getFolders = async () => {
-    return await folderService.getAllDecrypted() || []
-  }
 
   // ------------------------ SUPPORT -------------------------
 
@@ -321,7 +324,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     getTeam,
     getCiphers,
     getCollections,
-    getFolders,
+    loadFolders,
     getPasswordStrength,
     copyToClipboard
   }

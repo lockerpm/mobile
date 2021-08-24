@@ -2,6 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CipherView } from "../../../core/models/view"
+import { MoveFolderData } from "../../services/api"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -24,12 +25,12 @@ export const CipherStoreModel = types
   .actions((self) => ({
     // ----------------- TOKEN -------------------
 
-    saveToken: async (token: string) => {
+    saveToken: (token: string) => {
       self.token = token
       self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
     },
 
-    clearToken: async () => {
+    clearToken: () => {
       self.token = ''
       self.environment.api.apisauce.deleteHeader('Authorization')
     },
@@ -55,6 +56,12 @@ export const CipherStoreModel = types
     createCipher: async (data: CipherRequest) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.postCipher(data)
+      return res
+    },
+
+    moveToFolder: async (data: MoveFolderData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.moveToFolder(data)
       return res
     }
   })).postProcessSnapshot(omit(['generatedPassword', 'selectedCipher']))
