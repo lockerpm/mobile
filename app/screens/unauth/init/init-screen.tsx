@@ -6,7 +6,7 @@ import { useStores } from "../../../models"
 import { load, save, storageKeys } from "../../../utils/storage"
 
 export const InitScreen = observer(function InitScreen() {
-  const { user, cipherStore } = useStores()
+  const { user, cipherStore, folderStore } = useStores()
   const navigation = useNavigation()
 
   const mounted = async () => {
@@ -14,6 +14,7 @@ export const InitScreen = observer(function InitScreen() {
       if (user.token) {
         user.saveToken(user.token)
         cipherStore.saveToken(user.token)
+        folderStore.saveToken(user.token)
       }
       if (user.is_pwd_manager) {
         navigation.navigate('lock')
@@ -34,7 +35,7 @@ export const InitScreen = observer(function InitScreen() {
 
   // Life cycle
   useEffect(() => {
-    setTimeout(mounted, 100)
+    setTimeout(mounted, 1000)
     // mounted()
   }, [])
 

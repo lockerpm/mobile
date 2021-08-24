@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
@@ -8,15 +8,15 @@ import { useStores } from "../../../models"
 
 export const StartScreen = observer(function StartScreen() {
   const { user } = useStores()
-  const { getSyncData } = useMixins()
+  const { getSyncData, loadFolders } = useMixins()
   const navigation = useNavigation()
-  const [isScreenReady, setIsScreenReady] = useState(false)
 
   const mounted = async () => {
     await Promise.all([
       getSyncData(),
       user.loadTeams()
     ])
+    await loadFolders()
 
     // TODO
     const isDeviceLimitReached = false
@@ -35,11 +35,8 @@ export const StartScreen = observer(function StartScreen() {
 
   // Life cycle
   useEffect(() => {
-    if (!isScreenReady) {
-      mounted()
-      setIsScreenReady(true)
-    }
-  }, [isScreenReady])
+    mounted()
+  }, [])
 
   return (
     <Loading />

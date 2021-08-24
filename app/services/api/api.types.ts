@@ -2,6 +2,7 @@ import { GeneralApiProblem } from "./api-problem"
 import { UserSnapshot } from "../../models/user/user"
 import { DeviceType } from "../../../core/enums"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
+import { FolderResponse } from "../../../core/models/response/folderResponse"
 
 type SessionSnapshot = {
     access_token: string
@@ -16,6 +17,7 @@ export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProbl
 export type EmptyResult = { kind: "ok" } | GeneralApiProblem
 export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
 export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
+export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
 
 // Request data
 export type SessionLoginData = {
@@ -50,6 +52,11 @@ export type LoginUri = {
     match: string | null,
     response: string | null,
     uri: string | null
+}
+
+export type MoveFolderData = {
+    ids: string[],
+    folderId: string
 }
 
 export type CipherData = {

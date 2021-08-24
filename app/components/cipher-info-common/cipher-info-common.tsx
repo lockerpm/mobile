@@ -24,11 +24,10 @@ export interface CipherInfoCommonProps {
  */
 export const CipherInfoCommon = observer(function CipherInfoCommon(props: CipherInfoCommonProps) {
   const { style, cipher } = props
-  const { getTeam, getCollections, getFolders } = useMixins()
-  const { user } = useStores()
+  const { getTeam, getCollections } = useMixins()
+  const { user, folderStore } = useStores()
 
   const [collections, setCollections] = React.useState([])
-  const [folders, setFolders] = React.useState([])
 
   const styles = flatten([CONTAINER, style])
 
@@ -38,18 +37,16 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
   })()
 
   const folder = (() => {
-    return find(folders, e => e.id === cipher.folderId) || {}
+    return find(folderStore.folders, e => e.id === cipher.folderId) || {}
   })()
 
   // Mounted
   React.useEffect(() => {
     const mounted = async () => {
-      const [collectionRes, folderRes] = await Promise.all([
+      const [collectionRes] = await Promise.all([
         getCollections(),
-        getFolders()
       ])
       setCollections(collectionRes)
-      setFolders(folderRes)
     }
     mounted()
   }, [])

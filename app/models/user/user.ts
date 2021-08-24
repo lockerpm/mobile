@@ -32,12 +32,12 @@ export const UserModel = types
   .views((self) => ({}))
   .actions((self) => ({
     // Token
-    saveToken: async (token: string) => {
+    saveToken: (token: string) => {
       self.token = token
       self.isLoggedIn = true
       self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
     },
-    clearToken: async () => {
+    clearToken: () => {
       self.token = ''
       self.isLoggedIn = false
       self.environment.api.apisauce.deleteHeader('Authorization')

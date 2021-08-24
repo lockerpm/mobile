@@ -1,29 +1,28 @@
 import { ApiResponse } from "apisauce"
-import { EmptyResult, MoveFolderData, SyncResult } from "."
-import { CipherRequest } from "../../../core/models/request/cipherRequest"
-import { SyncResponse } from "../../../core/models/response/syncResponse"
+import { FolderRequest } from "../../../core/models/request/folderRequest"
+import { FolderResponse } from "../../../core/models/response/folderResponse"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
+import { EmptyResult, PostFolderResult } from "./api.types"
 
-export class CipherApi {
+export class FolderApi {
   private api: Api
 
   constructor(api: Api) {
     this.api = api
   }
 
-  // Sync
-  async syncData(): Promise<SyncResult> {
+  // Create folder
+  async postFolder(data: FolderRequest): Promise<PostFolderResult> {
     try {
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get('/cystack_platform/pm/sync')
+      const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/folders', data)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      const res = new SyncResponse(response.data)
-
+      const res = new FolderResponse(response.data)
       return { kind: "ok", data: res }
     } catch (e) {
       __DEV__ && console.log(e.message)
@@ -31,28 +30,29 @@ export class CipherApi {
     }
   }
 
-  // Create cipher
-  async postCipher(data: CipherRequest): Promise<EmptyResult> {
+  // Update folder
+  async putFolder(id: string, data: FolderRequest): Promise<PostFolderResult> {
     try {
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/ciphers/vaults', data)
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/folders/${id}`, data)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      const res = new FolderResponse(response.data)
+      return { kind: "ok", data: res }
     } catch (e) {
       __DEV__ && console.log(e.message)
       return { kind: "bad-data" }
     }
   }
 
-  // Move to folder
-  async moveToFolder(data: MoveFolderData): Promise<EmptyResult> {
+  // Delete folder
+  async deleteFolder(id: string): Promise<EmptyResult> {
     try {
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.put('/cystack_platform/pm/ciphers/move', data)
+      const response: ApiResponse<any> = await this.api.apisauce.delete(`/cystack_platform/pm/folders/${id}`)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
