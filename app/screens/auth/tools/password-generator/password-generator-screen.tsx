@@ -8,12 +8,14 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { Checkbox, Slider } from "native-base"
 import { useMixins } from "../../../../services/mixins"
 import { useCoreService } from "../../../../services/core-service"
+import { useStores } from "../../../../models"
 
 
 export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen() {
   const navigation = useNavigation()
-  const { getPasswordStrength, copyToClipboard, setGeneratedPassword } = useMixins()
+  const { getPasswordStrength, copyToClipboard } = useMixins()
   const { passwordGenerationService } = useCoreService()
+  const { cipherStore } = useStores()
   
   const [password, setPassword] = useState('')
   const [passwordLen, setPasswordLen] = useState(16)
@@ -87,8 +89,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
             isNativeBase
             text="Use Password"
             onPress={() => {
-              setGeneratedPassword(password)
-              console.log(password)
+              cipherStore.setGeneratedPassword(password)
               navigation.goBack()
             }}
           />

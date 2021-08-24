@@ -11,11 +11,14 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { PasswordAction } from "../password-action"
 import { useMixins } from "../../../../../services/mixins"
+import { useStores } from "../../../../../models"
 
 
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const navigation = useNavigation()
-  const { getWebsiteLogo, selectedCipher, getPasswordStrength } = useMixins()
+  const { getWebsiteLogo, getPasswordStrength } = useMixins()
+  const { cipherStore } = useStores()
+  const selectedCipher = cipherStore.cipherView
 
   const [showAction, setShowAction] = useState(false)
 

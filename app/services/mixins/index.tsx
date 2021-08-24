@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { IToastProps, useToast } from 'native-base'
 import { Text } from "../../components"
 import { nanoid } from 'nanoid'
@@ -23,23 +23,17 @@ type GetCiphersParams = {
 // Mixins data
 
 const defaultData = {
-  // Data
-  selectedCipher: new CipherView(),
-  generatedPassword: '',
-
   // Methods
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   logout: async () => {},
   lock: async () => {},
   getSyncData: async () => {},
-  notify: (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string, duration: number) => {},
+  notify: (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string, duration?: undefined | number) => {},
   randomString: () => '',
   newCipher: () => {},
   register: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getTeam: (teams: object[], orgId: string) => ({ name: '' }),
-  setSelectedCipher: (c: CipherView) => {},
-  setGeneratedPassword: (password: string) => {},
   getCiphers: async (params: GetCiphersParams) => { return [] },
   getCollections: async () => { return [] },
   getFolders: async () => { return [] },
@@ -67,9 +61,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     syncService,
     passwordGenerationService
   } = useCoreService()
-
-  const [selectedCipher, setSelectedCipher] = useState(new CipherView())
-  const [generatedPassword, setGeneratedPassword] = useState('')
 
   // -------------------- AUTHENTICATION --------------------
 
@@ -318,11 +309,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
-    // Data
-    selectedCipher,
-    generatedPassword,
-
-    // Methods
     sessionLogin,
     logout,
     lock,
@@ -333,8 +319,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     register,
     getWebsiteLogo,
     getTeam,
-    setSelectedCipher,
-    setGeneratedPassword,
     getCiphers,
     getCollections,
     getFolders,

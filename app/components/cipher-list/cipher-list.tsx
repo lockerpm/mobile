@@ -12,6 +12,7 @@ import { IdentityAction } from "../../screens/auth/browse/identities/identity-ac
 import { NoteAction } from "../../screens/auth/browse/notes/note-action"
 import { CipherView } from "../../../core/models/view"
 import { useMixins } from "../../services/mixins"
+import { useStores } from "../../models"
 
 
 export interface CipherListProps {
@@ -28,7 +29,8 @@ export interface CipherListProps {
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
   const { emptyContent, navigation, onLoadingChange, searchText, deleted = false } = props
-  const { getWebsiteLogo, getCiphers, setSelectedCipher } = useMixins()
+  const { getWebsiteLogo, getCiphers } = useMixins()
+  const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
 
@@ -108,7 +110,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // Handle action menu open
   const openActionMenu = (item: CipherView) => {
-    setSelectedCipher(item)
+    cipherStore.setSelectedCipher(item)
     switch (item.type) {
       case CipherType.Login:
         setShowPasswordAction(true)
@@ -129,7 +131,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // Go to detail
   const goToDetail = (item: CipherView) => {
-    setSelectedCipher(item)
+    cipherStore.setSelectedCipher(item)
     switch (item.type) {
       case CipherType.Login:
         navigation.navigate('passwords__info')

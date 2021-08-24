@@ -5,6 +5,7 @@ import { color, commonStyles } from "../../../../theme"
 import { View, ScrollView, Linking } from "react-native"
 import { BROWSE_ITEMS } from "../../../../common/mappings"
 import { useMixins } from "../../../../services/mixins"
+import { useStores } from "../../../../models"
 
 
 type Props = {
@@ -18,7 +19,9 @@ export const PasswordAction = (props: Props) => {
   const { navigation, isOpen, onClose } = props
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
 
-  const { selectedCipher, copyToClipboard } = useMixins()
+  const { copyToClipboard } = useMixins()
+  const { cipherStore } = useStores()
+  const selectedCipher = cipherStore.cipherView
 
   return (
     <View>
