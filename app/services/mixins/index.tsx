@@ -9,6 +9,7 @@ import { useCoreService } from '../core-service'
 import { CardView, CipherView, IdentityView, LoginUriView, LoginView, SecureNoteView } from '../../../core/models/view'
 import { CipherType, SecureNoteType } from '../../../core/enums'
 import Clipboard from '@react-native-clipboard/clipboard'
+import { CipherRequest } from '../../../core/models/request/cipherRequest'
 
 const { createContext, useContext } = React
 
@@ -30,7 +31,7 @@ const defaultData = {
   getSyncData: async () => {},
   notify: (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string, duration?: undefined | number) => {},
   randomString: () => '',
-  newCipher: () => {},
+  newCipher: (type: CipherType) => { return new CipherView() },
   register: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getTeam: (teams: object[], orgId: string) => ({ name: '' }),
@@ -38,7 +39,12 @@ const defaultData = {
   getCollections: async () => { return [] },
   loadFolders: async () => {},
   getPasswordStrength: (password: string) => ({ score: 0 }),
-  copyToClipboard: (text: string) => {}
+  copyToClipboard: (text: string) => {},
+  createCipher: async (cipher: CipherView, score: number, collectionIds: string[]) => { return { kind: 'unknown' } },
+  updateCipher: async (id: string, cipher: CipherView, score: number, collectionIds: string[]) => { return { kind: 'unknown' } },
+  toTrashCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
+  deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
+  restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } }
 }
 
 
@@ -229,13 +235,69 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return res
   }
 
+  // ------------------------ CIPHERS ---------------------------
+
+  const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
+    const cipherEnc = await cipherService.encrypt(cipher)
+    const data = new CipherRequest(cipherEnc)
+    const res = await cipherStore.createCipher(data, score, collectionIds)
+    if (res.kind === 'ok') {
+      notify('success', '', 'New item created')
+    } else {
+      notify('error', '', 'Something went wrong')
+    }
+    return res
+  }
+
+  const updateCipher = async (id: string, cipher: CipherView, score: number, collectionIds: string[]) => {
+    const cipherEnc = await cipherService.encrypt(cipher)
+    const data = new CipherRequest(cipherEnc)
+    const res = await cipherStore.updateCipher(id, data, score, collectionIds)
+    if (res.kind === 'ok') {
+      notify('success', '', 'Item updated')
+    } else {
+      notify('error', '', 'Something went wrong')
+    }
+    return res
+  }
+
+  const deleteCiphers = async (ids: string[]) => {
+    const res = await cipherStore.deleteCiphers(ids)
+    if (res.kind === 'ok') {
+      notify('success', '', 'Deleted')
+    } else {
+      notify('error', '', 'Something went wrong')
+    }
+    return res
+  }
+
+  const toTrashCiphers = async (ids: string[]) => {
+    const res = await cipherStore.toTrashCiphers(ids)
+    if (res.kind === 'ok') {
+      notify('success', '', 'Moved to trash')
+    } else {
+      notify('error', '', 'Something went wrong')
+    }
+    return res
+  }
+
+  const restoreCiphers = async (ids: string[]) => {
+    const res = await cipherStore.restoreCiphers(ids)
+    if (res.kind === 'ok') {
+      notify('success', '', 'Restored')
+    } else {
+      notify('error', '', 'Something went wrong')
+    }
+    return res
+  }
+
 
   // ------------------------ SUPPORT -------------------------
 
-  const newCipher = () => {
+  const newCipher = (type: CipherType) => {
     const cipher = new CipherView()
     cipher.organizationId = null
-    cipher.type = CipherType.Login
+    cipher.type = type
     cipher.login = new LoginView()
     cipher.login.uris = [new LoginUriView]
     cipher.card = new CardView()
@@ -326,7 +388,12 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     getCollections,
     loadFolders,
     getPasswordStrength,
-    copyToClipboard
+    copyToClipboard,
+    createCipher,
+    updateCipher,
+    deleteCiphers,
+    toTrashCiphers,
+    restoreCiphers
   }
 
   return (

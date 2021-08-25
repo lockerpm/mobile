@@ -11,6 +11,7 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { NewFolderModal } from "../new-folder-modal"
 import { FOLDER_IMG } from "../../../../../common/mappings"
 import { useStores } from "../../../../../models"
+import { useMixins } from "../../../../../services/mixins"
 
 
 type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
@@ -19,14 +20,39 @@ type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
 export const FolderSelectScreen = observer(function FolderSelectScreen() {
   const navigation = useNavigation()
   const route = useRoute<FolderSelectScreenProp>()
-  const { mode, initialId } = route.params
-  const { folderStore } = useStores()
+  const { mode, initialId, cipherIds = [] } = route.params
+  const { folderStore, cipherStore } = useStores()
+  const { notify } = useMixins()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [selectedFolder, setSelectedFolder] = useState(initialId)
 
+  // Methods
+
+  const handleMove = async () => {
+    if (mode === 'move') {
+      setIsLoading(true)
+      const res = await cipherStore.moveToFolder({
+        ids: cipherIds,
+        folderId: selectedFolder
+      })
+      if (res.kind === 'ok') {
+        notify('success', '', 'Moved to new folder')
+      } else {
+        notify('error', '', 'Something went wrong')
+      }
+      setIsLoading(false)
+    } else {
+      cipherStore.setSelectedFolder(selectedFolder)
+    }
+    navigation.goBack()
+  }
+
+  // Render
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0
@@ -36,16 +62,15 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
           title={mode === 'add' ? 'Add to Folder' : 'Move to Folder'}
           goBack={() => navigation.goBack()}
           goBackText={mode === 'move' ? "Cancel" : undefined}
-          right={mode === 'move' ? (
+          right={(
             <Button
               preset="link"
               text="Save"
+              onPress={handleMove}
               textStyle={{
                 fontSize: 12
               }}
             />
-          ) : (
-            <View style={{ width: 10 }} />
           )}
         />
       )}

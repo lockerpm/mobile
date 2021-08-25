@@ -60,7 +60,8 @@ export type PrimaryParamList = {
   },
   folders__select: {
     mode: 'add' | 'move',
-    initialId?: string
+    initialId?: string,
+    cipherIds?: string[]
   },
   settings: undefined,
   changeMasterPassword: undefined,
