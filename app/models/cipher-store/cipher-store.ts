@@ -14,7 +14,8 @@ export const CipherStoreModel = types
   .props({
     token: types.maybeNull(types.string),
     generatedPassword: types.maybeNull(types.string),
-    selectedCipher: types.maybeNull(types.frozen())
+    selectedCipher: types.maybeNull(types.frozen()),
+    selectedFolder: types.maybeNull(types.string)
   })
   .extend(withEnvironment)
   .views((self) => ({
@@ -45,6 +46,10 @@ export const CipherStoreModel = types
       self.selectedCipher = cipher
     },
 
+    setSelectedFolder: (folderId: string) => {
+      self.selectedFolder = folderId
+    },
+
     // ----------------- CRUD -------------------
 
     syncData: async () => {
@@ -53,9 +58,33 @@ export const CipherStoreModel = types
       return res
     },
 
-    createCipher: async (data: CipherRequest) => {
+    createCipher: async (data: CipherRequest, score: number, collectionIds: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.postCipher(data)
+      const res = await cipherApi.postCipher(data, score, collectionIds)
+      return res
+    },
+
+    updateCipher: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.putCipher(id, data, score, collectionIds)
+      return res
+    },
+
+    toTrashCiphers: async (ids: string[]) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.toTrashCiphers(ids)
+      return res
+    },
+
+    deleteCiphers: async (ids: string[]) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.deleteCiphers(ids)
+      return res
+    },
+
+    restoreCiphers: async (ids: string[]) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.restoresCiphers(ids)
       return res
     },
 

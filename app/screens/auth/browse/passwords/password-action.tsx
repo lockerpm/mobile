@@ -100,7 +100,11 @@ export const PasswordAction = (props: Props) => {
               icon="folder-o"
               action={() => {
                 onClose()
-                navigation.navigate('folders__select', { mode: 'move', initialId: selectedCipher.folderId })
+                navigation.navigate('folders__select', {
+                  mode: 'move', 
+                  initialId: selectedCipher.folderId,
+                  cipherIds: [selectedCipher.id]
+                })
               }}
             />
 

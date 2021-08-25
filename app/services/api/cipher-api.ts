@@ -32,10 +32,86 @@ export class CipherApi {
   }
 
   // Create cipher
-  async postCipher(data: CipherRequest): Promise<EmptyResult> {
+  async postCipher(data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
     try {
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/ciphers/vaults', data)
+      const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/ciphers/vaults', {
+        ...data,
+        score,
+        collectionIds
+      })
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      __DEV__ && console.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Update cipher
+  async putCipher(id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/ciphers/${id}`, {
+        ...data,
+        score,
+        collectionIds
+      })
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      __DEV__ && console.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Permanent delete ciphers
+  async deleteCiphers(ids: string[]): Promise<EmptyResult> {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/ciphers/permanent_delete`, { ids })
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      __DEV__ && console.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Move to trash ciphers
+  async toTrashCiphers(ids: string[]): Promise<EmptyResult> {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/ciphers/delete`, { ids })
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      __DEV__ && console.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Restore ciphers
+  async restoresCiphers(ids: string[]): Promise<EmptyResult> {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/ciphers/restore`, { ids })
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
