@@ -13,6 +13,7 @@ export const CipherStoreModel = types
   .model("CipherStore")
   .props({
     token: types.maybeNull(types.string),
+    lastSync: types.maybeNull(types.number),
     generatedPassword: types.maybeNull(types.string),
     selectedCipher: types.maybeNull(types.frozen()),
     selectedFolder: types.maybeNull(types.string)
@@ -48,6 +49,10 @@ export const CipherStoreModel = types
 
     setSelectedFolder: (folderId: string) => {
       self.selectedFolder = folderId
+    },
+
+    setLastSync: (ts: number) => {
+      self.lastSync = ts
     },
 
     // ----------------- CRUD -------------------
@@ -93,7 +98,7 @@ export const CipherStoreModel = types
       const res = await cipherApi.moveToFolder(data)
       return res
     }
-  })).postProcessSnapshot(omit(['generatedPassword', 'selectedCipher']))
+  })).postProcessSnapshot(omit(['generatedPassword', 'selectedCipher', 'lastSync']))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

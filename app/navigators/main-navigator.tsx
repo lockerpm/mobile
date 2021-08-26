@@ -4,7 +4,7 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { AppState } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainTabNavigator } from "./main-tab-navigator"
@@ -20,6 +20,7 @@ import { color } from "../theme"
 import { INACTIVE_TIMEOUT } from "../config/constants"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
+import { useStores } from "../models"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -73,7 +74,8 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export function MainNavigator() {
   const navigation = useNavigation()
-  const { lock } = useMixins()
+  const { lock, getSyncData, getCipherById } = useMixins()
+  const { user, cipherStore } = useStores()
 
   // App lock trigger
   const _handleAppStateChange = (nextAppState: string) => {
@@ -93,11 +95,62 @@ export function MainNavigator() {
     }
   }
 
+  // Web socket
+  const wsUrl = `wss://api.cystack.net/ws/cystack_platform/pm/sync?token=${user.token}`
+  const generateSocket = () => {
+    const ws = new WebSocket(wsUrl)
+    ws.onopen = () => {
+      if (__DEV__) {
+        console.log('SOCKET OPEN')
+      }
+    }
+
+    ws.onmessage = async (e) => {
+      if (__DEV__) {
+        console.log('SOCKET MESSAGE')
+      }
+      const data = JSON.parse(e.data)
+      switch (data.event) {
+        case 'sync':
+          await getSyncData()
+          cipherStore.setLastSync(new Date().getTime())
+          if (cipherStore.selectedCipher) {
+            const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
+            cipherStore.setSelectedCipher(updatedCipher)
+          }
+          break
+        case 'members':
+          // getInvitations()
+          break
+        default:
+          break
+      }
+    }
+
+    ws.onerror = (e) => {
+      if (__DEV__) {
+        console.log(`SOCKET ERROR: ${e}`)
+      }
+    }
+
+    ws.onclose = (e) => {
+      if (__DEV__) {
+        console.log(`SOCKET CLOSE: ${e}`);
+      }
+    }
+
+    return ws
+  }
+
+  const [socket, setSocket] = useState(null)
+
   // Life cycle
   useEffect(() => {
     AppState.addEventListener("change", _handleAppStateChange)
+    setSocket(generateSocket())
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
+      socket && socket.close()
     };
   }, []);
 

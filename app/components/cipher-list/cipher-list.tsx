@@ -44,7 +44,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   useEffect(() => {
     loadData()
-  }, [searchText])
+  }, [searchText, cipherStore.lastSync])
 
   // ------------------------ METHODS ----------------------------
 
