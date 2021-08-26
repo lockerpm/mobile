@@ -36,6 +36,7 @@ const defaultData = {
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getTeam: (teams: object[], orgId: string) => ({ name: '' }),
   getCiphers: async (params: GetCiphersParams) => { return [] },
+  getCipherById: async (id: string) => new CipherView(),
   getCollections: async () => { return [] },
   loadFolders: async () => {},
   getPasswordStrength: (password: string) => ({ score: 0 }),
@@ -228,6 +229,16 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return await searchService.searchCiphers(params.searchText || '', filters, null) || []
   }
 
+  // Get cipher by id
+  const getCipherById = async (id: string) => {
+    const ciphers = await getCiphers({
+      deleted: false,
+      searchText: '',
+      filters: []
+    })
+    return find(ciphers, e => e.id === id) || new CipherView()
+  }
+
   // Get collections
   const getCollections = async () => {
     let res = await collectionService.getAllDecrypted() || []
@@ -385,6 +396,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     getWebsiteLogo,
     getTeam,
     getCiphers,
+    getCipherById,
     getCollections,
     loadFolders,
     getPasswordStrength,
