@@ -12,6 +12,11 @@ export const CardsScreen = observer(function CardsScreen() {
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [sortList, setSortList] = useState({
+    orderField: 'name',
+    order: 'asc'
+  })
+  const [sortOption, setSortOption] = useState('az')
 
   return (
     <Layout
@@ -33,6 +38,11 @@ export const CardsScreen = observer(function CardsScreen() {
       <SortAction 
         isOpen={isSortOpen} 
         onClose={() => setIsSortOpen(false)}
+        onSelect={(value: string, obj: { orderField: string, order: string }) => {
+          setSortOption(value)
+          setSortList(obj)
+        }}
+        value={sortOption}
       />
       
       <CipherList
@@ -40,6 +50,7 @@ export const CardsScreen = observer(function CardsScreen() {
         onLoadingChange={setIsLoading}
         searchText={searchText}
         cipherType={CipherType.Card}
+        sortList={sortList}
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}

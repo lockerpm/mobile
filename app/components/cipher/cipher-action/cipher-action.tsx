@@ -83,7 +83,9 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
       <DeleteConfirmModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
-        onConfirm={toTrashCiphers}
+        onConfirm={async () => {
+          await toTrashCiphers([selectedCipher.id])
+        }}
         title="Move to trash"
         desc="This item will be moved to trash where you can restore or pernamently delete it."
         btnText="Ok"
@@ -158,7 +160,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
               icon="user-o"
               action={() => {
                 onClose()
-                setTimeout(() => setShowOwnershipAction(true), 500)
+                setTimeout(() => setShowOwnershipAction(true), 100)
               }}
             />
 
@@ -184,7 +186,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
               textColor={color.error}
               action={() => {
                 onClose()
-                setTimeout(() => setShowConfirmModal(true), 500)
+                setTimeout(() => setShowConfirmModal(true), 100)
               }}
             />
           </ScrollView>

@@ -13,6 +13,11 @@ export const AllItemScreen = observer(function AllItemScreen() {
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
+  const [sortList, setSortList] = useState({
+    orderField: 'name',
+    order: 'asc'
+  })
+  const [sortOption, setSortOption] = useState('az')
 
   return (
     <Layout
@@ -30,6 +35,11 @@ export const AllItemScreen = observer(function AllItemScreen() {
       <SortAction 
         isOpen={isSortOpen} 
         onClose={() => setIsSortOpen(false)}
+        onSelect={(value: string, obj: { orderField: string, order: string }) => {
+          setSortOption(value)
+          setSortList(obj)
+        }}
+        value={sortOption}
       />
       
       <AddAction 
@@ -42,6 +52,7 @@ export const AllItemScreen = observer(function AllItemScreen() {
         navigation={navigation}
         onLoadingChange={setIsLoading}
         searchText={searchText}
+        sortList={sortList}
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}

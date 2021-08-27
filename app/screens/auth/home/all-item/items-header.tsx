@@ -2,7 +2,8 @@ import React from "react"
 import { View } from "react-native"
 import { Button, Header } from "../../../../components"
 import { color, commonStyles } from "../../../../theme"
-import Icon from 'react-native-vector-icons/FontAwesome'
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import EntypoIcon from 'react-native-vector-icons/Entypo'
 import { Input } from "native-base"
 
 interface Props {
@@ -29,9 +30,9 @@ export const ItemsHeader = (props: Props) => {
             style={{ marginRight: 20 }}
             onPress={() => openSort && openSort()}
           >
-            <Icon 
+            <FontAwesomeIcon 
               name="sliders"
-              size={19} 
+              size={18} 
               color={color.title}
             />
           </Button>
@@ -40,9 +41,9 @@ export const ItemsHeader = (props: Props) => {
             preset="link"
             onPress={() => openAdd && openAdd()}
           >
-            <Icon 
+            <EntypoIcon 
               name="plus"
-              size={18} 
+              size={21} 
               color={color.title} 
             />
           </Button>
@@ -64,9 +65,9 @@ export const ItemsHeader = (props: Props) => {
               preset="link"
               style={{ paddingRight: 15, backgroundColor: color.block, height: 38 }}
             >
-              <Icon 
+              <FontAwesomeIcon 
                 name="search"
-                size={16} 
+                size={14} 
                 color={color.text} 
               />
             </Button>

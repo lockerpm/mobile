@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
+import orderBy from 'lodash/orderBy'
 import { Button, AutoImage as Image, Text } from "../../"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { CipherType } from "../../../../core/enums"
@@ -21,14 +22,18 @@ export interface CipherListProps {
   searchText?: string,
   onLoadingChange?: Function,
   cipherType?: CipherType,
-  deleted?: boolean
+  deleted?: boolean,
+  sortList?: {
+    orderField: string,
+    order: string
+  }
 }
 
 /**
  * Describe your component here
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
-  const { emptyContent, navigation, onLoadingChange, searchText, deleted = false } = props
+  const { emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList } = props
   const { getWebsiteLogo, getCiphers } = useMixins()
   const { cipherStore } = useStores()
 
@@ -44,7 +49,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   useEffect(() => {
     loadData()
-  }, [searchText, cipherStore.lastSync])
+  }, [searchText, cipherStore.lastSync, sortList])
 
   // ------------------------ METHODS ----------------------------
 
@@ -58,13 +63,15 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       filters.push((c : CipherView) => c.type === props.cipherType)
     }
 
-    // Data is similar to CipherView
+    // Search
     const searchRes = await getCiphers({
       filters,
       searchText,
       deleted
     })
-    const res = searchRes.map((c: CipherView) => {
+
+    // Add image
+    let res = searchRes.map((c: CipherView) => {
       const data = { 
         ...c,
         logo: null,
@@ -100,10 +107,22 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       return data
     })
 
+    // Sort
+    if (sortList) {
+      const { orderField, order } = sortList
+      res = orderBy(
+        res, 
+        [c => orderField === 'name' ? (c.name && c.name.toLowerCase()) : c.revisionDate],
+        [order]
+      ) || []
+    }
+
+    // Delay loading
     setTimeout(() => {
       onLoadingChange(false)
     }, 500)
     
+    // Done
     setCiphers(res)
     console.log(`Get ${res.length} items`)
   }
