@@ -3,7 +3,8 @@ import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, commonStyles } from "../../theme"
 import { Button, Header, Text } from "../"
-import Icon from 'react-native-vector-icons/FontAwesome'
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import EntypoIcon from 'react-native-vector-icons/Entypo'
 import { Input } from "native-base"
 
 
@@ -36,9 +37,9 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
             style={{ marginRight: 20 }}
             onPress={() => openSort && openSort()}
           >
-            <Icon 
+            <FontAwesomeIcon 
               name="sliders"
-              size={19} 
+              size={18} 
               color={color.title}
             />
           </Button>
@@ -49,9 +50,9 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
                 preset="link"
                 onPress={() => openAdd && openAdd()}
               >
-                <Icon 
+                <EntypoIcon 
                   name="plus"
-                  size={18} 
+                  size={21} 
                   color={color.title} 
                 />
               </Button>
@@ -81,9 +82,9 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
               preset="link"
               style={{ paddingRight: 15, backgroundColor: color.block, height: 38 }}
             >
-              <Icon 
+              <FontAwesomeIcon 
                 name="search"
-                size={16} 
+                size={14} 
                 color={color.text} 
               />
             </Button>
