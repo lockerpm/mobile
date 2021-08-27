@@ -1,8 +1,8 @@
 import * as React from "react"
 import { StyleProp, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color } from "../../theme"
-import { Text } from "../"
+import { color } from "../../../theme"
+import { Text } from "../.."
 import { Actionsheet } from "native-base"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 

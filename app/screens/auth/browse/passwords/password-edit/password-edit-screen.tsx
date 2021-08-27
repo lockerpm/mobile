@@ -12,7 +12,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherType } from "../../../../../../core/enums"
-import { CipherView, LoginView } from "../../../../../../core/models/view"
+import { CipherView, LoginUriView, LoginView } from "../../../../../../core/models/view"
 
 
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
@@ -61,14 +61,16 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
     if (mode === 'add') {
       payload = newCipher(CipherType.Login)
     } else {
-      payload = { ...selectedCipher }
+      payload = {...selectedCipher}
     }
 
     const data = new LoginView()
     data.username = username
     data.password = password
     if (url) {
-      data.uris = [url]
+      const uriView = new LoginUriView()
+      uriView.uri = url
+      data.uris = [uriView]
     }
 
     payload.name = name
@@ -79,7 +81,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
     const collectionIds = payload.collectionIds
 
     let res = { kind: 'unknown' }
-    if (mode === 'add') {
+    if (['add', 'clone'].includes(mode)) {
       res = await createCipher(payload, passwordStrength, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, passwordStrength, collectionIds)

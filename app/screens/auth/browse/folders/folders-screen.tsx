@@ -11,7 +11,7 @@ import { color, commonStyles } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { NewFolderModal } from "./new-folder-modal"
 import { FolderAction } from "./folder-action"
-import { RenameModal } from "./rename-modal"
+import { RenameFolderModal } from "./rename-folder-modal"
 import { FOLDER_IMG } from "../../../../common/mappings"
 
 
@@ -85,7 +85,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
         onClose={() => setIsAddOpen(false)}
       />
 
-      <RenameModal 
+      <RenameFolderModal 
         isOpen={isRenameOpen}
         onClose={() => setIsRenameOpen(false)}
       />

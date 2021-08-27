@@ -1,14 +1,14 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Text, AutoImage as Image } from "../"
+import { Text, AutoImage as Image } from "../../"
 import { flatten } from "ramda"
 import find from 'lodash/find'
-import { CipherView } from "../../../core/models/view"
-import { commonStyles } from "../../theme"
-import { FOLDER_IMG } from "../../common/mappings"
-import { useMixins } from "../../services/mixins"
-import { useStores } from "../../models"
+import { CipherView } from "../../../../core/models/view"
+import { useMixins } from "../../../services/mixins"
+import { useStores } from "../../../models"
+import { commonStyles } from "../../../theme"
+import { FOLDER_IMG } from "../../../common/mappings"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",

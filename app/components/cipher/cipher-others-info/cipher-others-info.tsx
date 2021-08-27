@@ -1,11 +1,12 @@
 import React, { useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, commonStyles } from "../../theme"
-import { Button, FloatingInput, OwnershipAction, Text } from "../"
+import { Button, FloatingInput, Text } from "../../"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { useStores } from "../../models"
 import find from 'lodash/find'
+import { useStores } from "../../../models"
+import { OwnershipAction } from "../cipher-action/ownership-action"
+import { color, commonStyles } from "../../../theme"
 
 
 export interface CipherOthersInfoProps {
