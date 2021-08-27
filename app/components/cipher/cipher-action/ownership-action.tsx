@@ -1,9 +1,10 @@
 import * as React from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color } from "../../theme"
-import { ActionItem, Button, Text } from "../"
+import { color } from "../../../theme"
+import { Button, Text } from "../.."
 import { Actionsheet, Divider } from "native-base"
+import { ActionItem } from "./action-item"
 
 
 export interface OwnershipActionProps {

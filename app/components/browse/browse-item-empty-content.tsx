@@ -1,7 +1,7 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Text, Button, AutoImage as Image } from "../"
+import { Text, Button, AutoImage as Image } from ".."
 import { flatten } from "ramda"
 
 

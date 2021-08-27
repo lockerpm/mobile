@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, commonStyles } from "../../theme"
-import { Button, AutoImage as Image, Text } from "../"
-import { BROWSE_ITEMS } from "../../common/mappings"
+import { Button, AutoImage as Image, Text } from "../../"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { CipherType } from "../../../core/enums"
-import { PasswordAction } from "../../screens/auth/browse/passwords/password-action"
-import { CardAction } from "../../screens/auth/browse/cards/card-action"
-import { IdentityAction } from "../../screens/auth/browse/identities/identity-action"
-import { NoteAction } from "../../screens/auth/browse/notes/note-action"
-import { CipherView } from "../../../core/models/view"
-import { useMixins } from "../../services/mixins"
-import { useStores } from "../../models"
+import { CipherType } from "../../../../core/enums"
+import { useMixins } from "../../../services/mixins"
+import { useStores } from "../../../models"
+import { CipherView } from "../../../../core/models/view"
+import { BROWSE_ITEMS } from "../../../common/mappings"
+import { PasswordAction } from "../../../screens/auth/browse/passwords/password-action"
+import { CardAction } from "../../../screens/auth/browse/cards/card-action"
+import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
+import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
+import { color, commonStyles } from "../../../theme"
 
 
 export interface CipherListProps {
@@ -159,6 +159,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   ) : (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
+
       <PasswordAction
         isOpen={showPasswordAction}
         onClose={() => setShowPasswordAction(false)}
@@ -179,6 +180,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
         onClose={() => setShowNoteAction(false)}
         navigation={navigation}
       />
+      
       {/* Action menus end */}
 
       {/* Cipher list */}

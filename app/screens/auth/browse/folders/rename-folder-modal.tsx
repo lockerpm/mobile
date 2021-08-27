@@ -8,7 +8,7 @@ interface Props {
   renameFolder?: Function
 }
 
-export const RenameModal = (props: Props) => {
+export const RenameFolderModal = (props: Props) => {
   const { isOpen, onClose, renameFolder } = props
   const [name, setName] = useState('')
   
