@@ -1,17 +1,19 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Header, Button, AutoImage as Image, Text, FloatingInput } from "../../../../../components"
+import { Layout, Header, Button, AutoImage as Image, Text, FloatingInput, CipherInfoCommon } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { NoteAction } from "../note-action"
+import { useStores } from "../../../../../models"
 
 
 export const NoteInfoScreen = observer(function NoteInfoScreen() {
   const navigation = useNavigation()
+  const { cipherStore } = useStores()
+  const selectedCipher = cipherStore.cipherView
 
   const [showAction, setShowAction] = useState(false)
 
@@ -60,7 +62,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
           />
           <Text
             preset="header"
-            text="Test Note"
+            text={selectedCipher.name}
           />
         </View>
       </View>
@@ -71,23 +73,18 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
           backgroundColor: color.palette.white,
           paddingVertical: 22
       }]}>
+        {/* Notes */}
         <FloatingInput
-          label="Website URL"
-          value="https://whitehub.net"
+          label="Notes"
+          value={selectedCipher.notes}
           editable={false}
-          style={{ marginVertical: 20 }}
-          buttonRight={(
-            <Button
-              preset="link"
-            >
-              <FontAwesomeIcon 
-                name="external-link"
-                size={18} 
-                color={color.text} 
-              />
-            </Button>
-          )}
+          textarea
+          fixedLabel
+          copyAble
         />
+
+        {/* Others common info */}
+        <CipherInfoCommon cipher={selectedCipher} />
       </View>
       {/* Info end */}
     </Layout>
