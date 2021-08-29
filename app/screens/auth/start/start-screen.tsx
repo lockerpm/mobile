@@ -8,7 +8,7 @@ import { useStores } from "../../../models"
 
 export const StartScreen = observer(function StartScreen() {
   const { user } = useStores()
-  const { getSyncData, loadFolders } = useMixins()
+  const { getSyncData, loadFolders, loadCollections } = useMixins()
   const navigation = useNavigation()
 
   const mounted = async () => {
@@ -16,7 +16,10 @@ export const StartScreen = observer(function StartScreen() {
       getSyncData(),
       user.loadTeams()
     ])
-    await loadFolders()
+    await Promise.all([
+      loadFolders(),
+      loadCollections()
+    ])
 
     // TODO
     const isDeviceLimitReached = false

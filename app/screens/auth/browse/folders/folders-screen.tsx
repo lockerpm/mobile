@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
+import groupBy from 'lodash/groupBy'
+import orderBy from 'lodash/orderBy'
 import { 
   Layout, BrowseItemHeader, BrowseItemEmptyContent, Text, Button,
   AutoImage as Image
@@ -13,46 +15,60 @@ import { NewFolderModal } from "./new-folder-modal"
 import { FolderAction } from "./folder-action"
 import { RenameFolderModal } from "./rename-folder-modal"
 import { FOLDER_IMG } from "../../../../common/mappings"
+import { useStores } from "../../../../models"
+import { FolderView } from "../../../../../core/models/view/folderView"
+import { CollectionView } from "../../../../../core/models/view/collectionView"
+import { useMixins } from "../../../../services/mixins"
 
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
+  const { getTeam } = useMixins()
+  const { folderStore, collectionStore, user } = useStores()
+  const folders: FolderView[] = folderStore.folders
+  const collections: CollectionView[] = collectionStore.collections
   
+  // Params
+
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isActionOpen, setIsActionOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [isRenameOpen, setIsRenameOpen] = useState(false)
+  const [searchText, setSearchText] = useState('')
+  const [sortList, setSortList] = useState({
+    orderField: 'name',
+    order: 'asc'
+  })
+  const [sortOption, setSortOption] = useState('az')
 
-  // const sections = []
+  // Computed
+
+  const getFilteredData = (items: any[]) => {
+    const filtered = items.filter((item: FolderView | CollectionView) => {
+      return item.name.toLowerCase().includes(searchText.toLowerCase())
+    })
+    if (sortList) {
+      const { orderField, order } = sortList
+      return orderBy(
+        filtered, 
+        [f => orderField === 'name' ? (f.name && f.name.toLowerCase()) : f.revisionDate],
+        [order]
+      )
+    }
+    return filtered
+  }
+  const filteredCollection = groupBy(collections, 'organizationId')
   const sections = [
     {
-      id: 1,
-      title: 'CyStack',
-      data: [
-        {
-          id: 3,
-          name: 'Platform'
-        },
-        {
-          id: 4,
-          name: 'WhiteHub'
-        }
-      ]
+      title: 'Me',
+      data: getFilteredData(folders),
+      shared: false
     },
-    {
-      id: 2,
-      title: 'CyStack',
-      data: [
-        {
-          id: 5,
-          name: 'Platform'
-        },
-        {
-          id: 6,
-          name: 'WhiteHub'
-        }
-      ]
-    }
+    ...Object.keys(filteredCollection).map((id) => ({
+      title: getTeam(user.teams, id).name,
+      data: getFilteredData(filteredCollection[id]),
+      shared: true
+    }))
   ]
 
   return (
@@ -63,6 +79,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
+          onSearch={setSearchText}
         />
       )}
       borderBottom
@@ -78,6 +95,11 @@ export const FoldersScreen = observer(function FoldersScreen() {
       <SortAction 
         isOpen={isSortOpen} 
         onClose={() => setIsSortOpen(false)}
+        onSelect={(value: string, obj: { orderField: string, order: string }) => {
+          setSortOption(value)
+          setSortList(obj)
+        }}
+        value={sortOption}
       />
 
       <NewFolderModal 
@@ -125,7 +147,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                 >
                   <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
                     <Image
-                      source={FOLDER_IMG.normal.img}
+                      source={FOLDER_IMG[item.shared ? 'share' : 'normal'].img}
                       style={{
                         height: 30,
                         marginRight: 12

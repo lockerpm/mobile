@@ -24,7 +24,6 @@ type GetCiphersParams = {
 // Mixins data
 
 const defaultData = {
-  // Methods
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   logout: async () => {},
   lock: async () => {},
@@ -39,6 +38,7 @@ const defaultData = {
   getCipherById: async (id: string) => new CipherView(),
   getCollections: async () => { return [] },
   loadFolders: async () => {},
+  loadCollections: async () => {},
   getPasswordStrength: (password: string) => ({ score: 0 }),
   copyToClipboard: (text: string) => {},
   createCipher: async (cipher: CipherView, score: number, collectionIds: string[]) => { return { kind: 'unknown' } },
@@ -53,7 +53,7 @@ const MixinsContext = createContext(defaultData)
 
 export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const toast = useToast()
-  const { user, cipherStore, folderStore } = useStores()
+  const { user, cipherStore, folderStore, collectionStore } = useStores()
   const { 
     cryptoService, 
     userService, 
@@ -219,6 +219,12 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   const loadFolders = async () => {
     const res = await folderService.getAllDecrypted() || []
     folderStore.setFolders(res)
+  }
+
+  // Load collections
+  const loadCollections = async () => {
+    const res = await collectionService.getAllDecrypted() || []
+    collectionStore.setCollections(res)
   }
 
   // Get ciphers
@@ -399,6 +405,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     getCipherById,
     getCollections,
     loadFolders,
+    loadCollections,
     getPasswordStrength,
     copyToClipboard,
     createCipher,

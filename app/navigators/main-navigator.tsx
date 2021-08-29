@@ -13,7 +13,7 @@ import {
   PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen, PasswordHealthScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
-  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen
+  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen
 } from "../screens"
 import UserInactivity from 'react-native-user-inactivity'
 import { color } from "../theme"
@@ -64,6 +64,9 @@ export type PrimaryParamList = {
     initialId?: string,
     cipherIds?: string[]
   },
+  folders__ciphers: {
+    folderId?: string
+  },
   settings: undefined,
   changeMasterPassword: undefined,
   help: undefined
@@ -74,7 +77,7 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export function MainNavigator() {
   const navigation = useNavigation()
-  const { lock, getSyncData, getCipherById } = useMixins()
+  const { lock, getSyncData, getCipherById, loadFolders, loadCollections } = useMixins()
   const { user, cipherStore } = useStores()
 
   // App lock trigger
@@ -114,6 +117,10 @@ export function MainNavigator() {
         case 'sync':
           await getSyncData()
           cipherStore.setLastSync(new Date().getTime())
+          await Promise.all([
+            loadFolders(),
+            loadCollections()
+          ])
           if (cipherStore.selectedCipher) {
             const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
             cipherStore.setSelectedCipher(updatedCipher)
@@ -187,6 +194,7 @@ export function MainNavigator() {
         <Stack.Screen name="identities__info" component={IdentityInfoScreen} />
         <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
 
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
