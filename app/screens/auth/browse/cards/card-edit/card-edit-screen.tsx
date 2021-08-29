@@ -1,15 +1,18 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { 
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color, commonStyles } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { TextInputMaskOptionProp, TextInputMaskTypeProp } from "react-native-masked-text"
+import { useStores } from "../../../../../models"
+import { useMixins } from "../../../../../services/mixins"
+import { CardView, CipherView } from "../../../../../../core/models/view"
+import { CipherType } from "../../../../../../core/enums"
 
 
 type CardEditScreenProp = RouteProp<PrimaryParamList, 'cards__edit'>;
@@ -30,28 +33,97 @@ export const CardEditScreen = observer(function CardEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<CardEditScreenProp>()
   const { mode } = route.params
+  const { newCipher, createCipher, updateCipher } = useMixins()
+  const { cipherStore } = useStores()
+  const selectedCipher = cipherStore.cipherView
 
+  // Params
+
+  const [isLoading, setIsLoading] = useState(false)
 
   // Forms
-  const [title, setTitle] = useState('')
-  const [name, setName] = useState('')
-  const [number, setNumber] = useState('')
-  const [expDate, setExpDate] = useState('')
-  const [securityCode, setSecurityCode] = useState('')
-  const [zipCode, setZipCode] = useState('')
-  const [note, setNote] = useState('')
+
+  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [cardName, setCardName] = useState(mode !== 'add' ? selectedCipher.card.cardholderName : '')
+  const [brand, setBrand] = useState(mode !== 'add' ? selectedCipher.card.brand : '')
+  const [cardNumber, setCardNumber] = useState(mode !== 'add' ? selectedCipher.card.number : '')
+  const [expDate, setExpDate] = useState(mode !== 'add' ? `${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}` : '')
+  const [securityCode, setSecurityCode] = useState(mode !== 'add' ? selectedCipher.card.code : '')
+  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
+
+  // Watchers
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (cipherStore.selectedFolder) {
+        setFolder(cipherStore.selectedFolder)
+        cipherStore.setSelectedFolder(null)
+      }
+    });
+
+    return unsubscribe
+  }, [navigation])
+
+  // Methods
+
+  const handleSave = async () => {
+    setIsLoading(true)
+    let payload: CipherView
+    if (mode === 'add') {
+      payload = newCipher(CipherType.Card)
+    } else {
+      payload = {...selectedCipher}
+    }
+
+    const data = new CardView()
+    data.cardholderName = cardName
+    data.brand = brand
+    data.number = cardNumber
+    if (expDate) {
+      const splitDate = expDate.split('/')
+      data.expMonth = splitDate[0]
+      data.expYear = splitDate[1]
+    }
+    data.code = securityCode
+
+    payload.name = name
+    payload.notes = note
+    payload.folderId = folder
+    payload.card = data
+    const collectionIds = payload.collectionIds
+
+    let res = { kind: 'unknown' }
+    if (['add', 'clone'].includes(mode)) {
+      res = await createCipher(payload, 0, collectionIds)
+    } else {
+      res = await updateCipher(payload.id, payload, 0, collectionIds)
+    }
+    
+    setIsLoading(false)
+    if (res.kind === 'ok') {
+      navigation.goBack()
+    }
+  }
+
+  // Render
 
   const cardDetails: InputItem[] = [
     {
       label: 'Cardholder Name',
-      value: name,
-      setter: setName
+      value: cardName,
+      setter: setCardName,
+      isRequired: true
+    },
+    {
+      label: 'Brand',
+      value: brand,
+      setter: setBrand
     },
     {
       label: 'Card Number',
-      value: number,
-      setter: setNumber,
-      isRequired: true,
+      value: cardNumber,
+      setter: setCardNumber,
       type: 'numeric',
       maskType: 'credit-card',
       placeholder: '0000 0000 0000 0000'
@@ -77,17 +149,12 @@ export const CardEditScreen = observer(function CardEditScreen() {
       type: 'numeric',
       placeholder: '000',
       isPassword: true
-    },
-    {
-      label: 'ZIP or Postal Code',
-      value: zipCode,
-      setter: setZipCode,
-      type: 'numeric'
     }
   ]
 
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       containerStyle={{ 
         backgroundColor: color.block,
         paddingHorizontal: 0
@@ -101,6 +168,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
             <Button
               preset="link"
               text="Save"
+              onPress={handleSave}
               textStyle={{
                 fontSize: 12
               }}
@@ -123,9 +191,9 @@ export const CardEditScreen = observer(function CardEditScreen() {
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label="Title"
-              value={title}
-              onChangeText={setTitle}
+              label="Name"
+              value={name}
+              onChangeText={setName}
             />
           </View>
         </View>
@@ -166,10 +234,10 @@ export const CardEditScreen = observer(function CardEditScreen() {
       {/* Others */}
       <CipherOthersInfo
         navigation={navigation}
-        mode={mode === 'add' ? 'add' : 'move'}
         hasNote
         note={note}
         onChangeNote={setNote}
+        folderId={folder}
       />
       {/* Others end */}
     </Layout>

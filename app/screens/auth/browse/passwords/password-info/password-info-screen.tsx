@@ -150,9 +150,11 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           fixedLabel
           copyAble
         />
+        {/* Notes end */}
 
         {/* Others common info */}
         <CipherInfoCommon cipher={selectedCipher} />
+        {/* Others common info end */}
       </View>
       {/* Info end */}
     </Layout>

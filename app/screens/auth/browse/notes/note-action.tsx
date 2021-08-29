@@ -1,5 +1,7 @@
 import React from "react"
-import { CipherAction } from "../../../../components"
+import { ActionItem, CipherAction } from "../../../../components"
+import { useStores } from "../../../../models"
+import { useMixins } from "../../../../services/mixins"
 
 
 type Props = {
@@ -10,8 +12,18 @@ type Props = {
 
 
 export const NoteAction = (props: Props) => {
+  const { copyToClipboard } = useMixins()
+  const { cipherStore } = useStores()
+  const selectedCipher = cipherStore.cipherView
+
   return (
     <CipherAction {...props}>
+      <ActionItem
+        name="Copy Note"
+        icon="copy"
+        action={() => copyToClipboard(selectedCipher.notes)}
+        disabled={!selectedCipher.notes}
+      />
     </CipherAction>
   )
 }
