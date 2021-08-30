@@ -12,6 +12,7 @@ import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { PasswordAction } from "../password-action"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
+import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 
 
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
@@ -54,11 +55,23 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         />
       )}
     >
-      <PasswordAction
-        navigation={navigation}
-        isOpen={showAction}
-        onClose={setShowAction}
-      />
+      {/* Actions */}
+      {
+        selectedCipher.deletedDate ? (
+          <DeletedAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={setShowAction}
+          />
+        ) : (
+          <PasswordAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={setShowAction}
+          />
+        )
+      }
+      {/* Actions end */}
 
       {/* Intro */}
       <View>

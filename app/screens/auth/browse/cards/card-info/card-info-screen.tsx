@@ -9,6 +9,7 @@ import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { CardAction } from "../card-action"
 import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
+import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 
 
 export const CardInfoScreen = observer(function CardInfoScreen() {
@@ -43,11 +44,23 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
         />
       )}
     >
-      <CardAction
-        navigation={navigation}
-        isOpen={showAction}
-        onClose={setShowAction}
-      />
+      {/* Actions */}
+      {
+        selectedCipher.deletedDate ? (
+          <DeletedAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={setShowAction}
+          />
+        ) : (
+          <CardAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={setShowAction}
+          />
+        )
+      }
+      {/* Actions end */}
 
       {/* Intro */}
       <View>

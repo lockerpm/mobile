@@ -8,6 +8,7 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { NoteAction } from "../note-action"
 import { useStores } from "../../../../../models"
+import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 
 
 export const NoteInfoScreen = observer(function NoteInfoScreen() {
@@ -42,11 +43,23 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
         />
       )}
     >
-      <NoteAction
-        navigation={navigation}
-        isOpen={showAction}
-        onClose={setShowAction}
-      />
+      {/* Actions */}
+      {
+        selectedCipher.deletedDate ? (
+          <DeletedAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={setShowAction}
+          />
+        ) : (
+          <NoteAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={setShowAction}
+          />
+        )
+      }
+      {/* Actions end */}
 
       {/* Intro */}
       <View>
