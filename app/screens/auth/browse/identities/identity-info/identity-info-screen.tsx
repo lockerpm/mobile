@@ -150,6 +150,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
               label={item.label}
               value={item.value}
               editable={false}
+              style={index !== 0 ? { marginVertical: 10 } : { marginBottom: 10 }}
             />
           ))
         }
@@ -162,6 +163,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
           textarea
           fixedLabel
           copyAble
+          style={{ marginTop: 10 }}
         />
         {/* Notes end */}
 

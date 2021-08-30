@@ -13,7 +13,6 @@ import { color, commonStyles } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { NewFolderModal } from "./new-folder-modal"
 import { FolderAction } from "./folder-action"
-import { RenameFolderModal } from "./rename-folder-modal"
 import { FOLDER_IMG } from "../../../../common/mappings"
 import { useStores } from "../../../../models"
 import { FolderView } from "../../../../../core/models/view/folderView"
@@ -23,23 +22,24 @@ import { useMixins } from "../../../../services/mixins"
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
-  const { getTeam } = useMixins()
+  const { getTeam, randomString } = useMixins()
   const { folderStore, collectionStore, user } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
-  
+
   // Params
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isActionOpen, setIsActionOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
-  const [isRenameOpen, setIsRenameOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [sortList, setSortList] = useState({
     orderField: 'name',
     order: 'asc'
   })
   const [sortOption, setSortOption] = useState('az')
+  const [selectedFolder, setSelectedFolder] = useState(new FolderView())
+  const [isLoading, setIsLoading] = useState(false)
 
   // Computed
 
@@ -53,18 +53,20 @@ export const FoldersScreen = observer(function FoldersScreen() {
         filtered, 
         [f => orderField === 'name' ? (f.name && f.name.toLowerCase()) : f.revisionDate],
         [order]
-      )
+      ) || []
     }
     return filtered
   }
   const filteredCollection = groupBy(collections, 'organizationId')
   const sections = [
     {
+      id: randomString(),
       title: 'Me',
       data: getFilteredData(folders),
       shared: false
     },
     ...Object.keys(filteredCollection).map((id) => ({
+      id: randomString(),
       title: getTeam(user.teams, id).name,
       data: getFilteredData(filteredCollection[id]),
       shared: true
@@ -73,6 +75,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
           header="Folders"
@@ -86,10 +89,12 @@ export const FoldersScreen = observer(function FoldersScreen() {
       noScroll
     >
       {/* Modals / Actions */}
+
       <FolderAction 
         isOpen={isActionOpen} 
         onClose={() => setIsActionOpen(false)}
-        rename={() => setIsRenameOpen(true)}
+        folder={selectedFolder}
+        onLoadingChange={setIsLoading}
       />
 
       <SortAction 
@@ -107,10 +112,6 @@ export const FoldersScreen = observer(function FoldersScreen() {
         onClose={() => setIsAddOpen(false)}
       />
 
-      <RenameFolderModal 
-        isOpen={isRenameOpen}
-        onClose={() => setIsRenameOpen(false)}
-      />
       {/* Modals / Actions end */}
 
       {/* Content */}
@@ -128,7 +129,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
         ) : (
           <SectionList
             sections={sections}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item.id}
             renderSectionHeader={({ section }) => (
               <Text
                 text={`${section.title} (${section.data.length})`}
@@ -139,6 +140,9 @@ export const FoldersScreen = observer(function FoldersScreen() {
               <View style={{ paddingHorizontal: 20 }}>
                 <Button
                   preset="link"
+                  onPress={() => {
+                    navigation.navigate('folders__ciphers', { folderId: item.id })
+                  }}
                   style={{
                     borderBottomColor: color.line,
                     borderBottomWidth: 1,
@@ -157,20 +161,27 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     <View style={{ flex: 1 }}>
                       <Text
                         preset="semibold"
-                        text={item.name}
+                        text={item.name || 'Unassigned'}
                       />
                     </View>
-
-                    <Button
-                      preset="link"
-                      onPress={() => setIsActionOpen(true)}
-                    >
-                      <IoniconsIcon
-                        name="ellipsis-horizontal"
-                        size={16}
-                        color={color.textBlack}
-                      />
-                    </Button>
+                    
+                    {
+                      !!item.id && (
+                        <Button
+                          preset="link"
+                          onPress={() => {
+                            setSelectedFolder(item)
+                            setIsActionOpen(true)
+                          }}
+                        >
+                          <IoniconsIcon
+                            name="ellipsis-horizontal"
+                            size={16}
+                            color={color.textBlack}
+                          />
+                        </Button>
+                      )
+                    }
                   </View>
                 </Button>
               </View>

@@ -10,6 +10,7 @@ import { CardView, CipherView, IdentityView, LoginUriView, LoginView, SecureNote
 import { CipherType, SecureNoteType } from '../../../core/enums'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { CipherRequest } from '../../../core/models/request/cipherRequest'
+import { load } from '../../utils/storage'
 
 const { createContext, useContext } = React
 
@@ -45,7 +46,8 @@ const defaultData = {
   updateCipher: async (id: string, cipher: CipherView, score: number, collectionIds: string[]) => { return { kind: 'unknown' } },
   toTrashCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
-  restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } }
+  restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
+  getRouteName: async () => { return '' }
 }
 
 
@@ -326,8 +328,19 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return cipher
   }
 
+  // Password strength
   const getPasswordStrength = (password: string) => {
     return passwordGenerationService.passwordStrength(password, ['cystack']) || { score: 0 }
+  }
+
+  // Get current route name
+  const getRouteName = async () => {
+    const res = await load('NAVIGATION_STATE')
+    let route = res.routes.slice(-1)[0]
+    while (route.state && route.state.routes) {
+      route = route.state.routes.slice(-1)[0]
+    }
+    return route.name
   }
 
   // Alert message
@@ -412,7 +425,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     updateCipher,
     deleteCiphers,
     toTrashCiphers,
-    restoreCiphers
+    restoreCiphers,
+    getRouteName
   }
 
   return (

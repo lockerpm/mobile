@@ -1,6 +1,8 @@
 import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { omit } from "ramda"
+import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { FolderView } from "../../../core/models/view/folderView"
+import { FolderApi } from "../../services/api/folder-api"
 import { withEnvironment } from "../extensions/with-environment"
 
 /**
@@ -31,7 +33,27 @@ export const FolderStoreModel = types
 
     setFolders: (folders: FolderView[]) => {
       self.folders = cast(folders)
-    }
+    },
+
+    // ----------------- CRUD -------------------
+
+    createFolder: async (data: FolderRequest) => {
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.postFolder(data)
+      return res
+    },
+
+    updateFolder: async (id: string, data: FolderRequest) => {
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.putFolder(id, data)
+      return res
+    },
+
+    deleteFolder: async (id: string) => {
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.deleteFolder(id)
+      return res
+    },
   }))
   .postProcessSnapshot(omit(['folders']))
 
