@@ -72,6 +72,7 @@
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "2.18.1",
     "react-native-simple-crypto": "^0.2.15",
+    "react-native-splash-screen": "^3.2.0",
     "react-native-svg": "^12.1.1",
     "react-native-tab-view": "^3.0.1",
     "react-native-tcp": "^4.0.0",
