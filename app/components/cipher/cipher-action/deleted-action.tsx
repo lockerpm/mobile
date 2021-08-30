@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite"
 import { color, commonStyles } from "../../../theme"
 import { Text, AutoImage as Image } from "../.."
 import { useStores } from "../../../models"
-import { OwnershipAction } from "./ownership-action"
 import { Actionsheet, Divider } from "native-base"
 import { BROWSE_ITEMS } from "../../../common/mappings"
 import { ActionItem } from "./action-item"
@@ -12,7 +11,7 @@ import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
 
-export interface CipherActionProps {
+export interface DeletedActionProps {
   children?: React.ReactNode,
   isOpen?: boolean,
   onClose?: Function,
@@ -22,13 +21,12 @@ export interface CipherActionProps {
 /**
  * Describe your component here
  */
-export const CipherAction = observer(function CipherAction(props: CipherActionProps) {
+export const DeletedAction = observer(function DeletedAction(props: DeletedActionProps) {
   const { navigation, isOpen, onClose, children } = props
 
-  const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
-  const { toTrashCiphers, getRouteName } = useMixins()
+  const { deleteCiphers, getRouteName, restoreCiphers } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
@@ -71,8 +69,12 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
 
   // Methods
 
-  const handelDelete = async () => {
-    const res = await toTrashCiphers([selectedCipher.id])
+  const handleRestore = async () => {
+    await restoreCiphers([selectedCipher.id])
+  }
+
+  const handleDelete = async () => {
+    const res = await deleteCiphers([selectedCipher.id])
     if (res.kind === 'ok') {
       let routeName = await getRouteName()
       if (routeName.endsWith('__info')) {
@@ -87,17 +89,12 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
     <View>
       {/* Modals */}
 
-      <OwnershipAction
-        isOpen={showOwnershipAction}
-        onClose={() => setShowOwnershipAction(false)}
-      />
-
       <DeleteConfirmModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
-        onConfirm={handelDelete}
-        title="Move to trash"
-        desc="This item will be moved to trash where you can restore or pernamently delete it."
+        onConfirm={handleDelete}
+        title="Warning"
+        desc="Are you sure you want to permanently delete this item?"
         btnText="Ok"
       />
 
@@ -142,39 +139,6 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 <Divider borderColor={color.line} marginY={1} />
               )
             }
-            
-            <ActionItem
-              name="Clone"
-              icon="clone"
-              action={() => {
-                onClose()
-                navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'clone' })
-              }}
-            />
-
-            <ActionItem
-              name="Move to Folder"
-              icon="folder-o"
-              action={() => {
-                onClose()
-                navigation.navigate('folders__select', {
-                  mode: 'move', 
-                  initialId: selectedCipher.folderId,
-                  cipherIds: [selectedCipher.id]
-                })
-              }}
-            />
-
-            <ActionItem
-              name="Change Ownership"
-              icon="user-o"
-              action={() => {
-                onClose()
-                setTimeout(() => setShowOwnershipAction(true), 100)
-              }}
-            />
-
-            <Divider borderColor={color.line}  marginY={1} />
 
             <ActionItem
               name="Edit"
@@ -186,12 +150,16 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
             />
 
             <ActionItem
-              name="Share"
-              icon="share-square-o"
+              name="Restore"
+              icon="repeat"
+              action={() => {
+                onClose()
+                handleRestore()
+              }}
             />
 
             <ActionItem
-              name="Move to Trash"
+              name="Permanently Delete"
               icon="trash"
               textColor={color.error}
               action={() => {

@@ -9,6 +9,7 @@ import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { IdentityAction } from "../identity-action"
 import { CipherView } from "../../../../../../core/models/view"
 import { useStores } from "../../../../../models"
+import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 
 
 export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
@@ -110,11 +111,24 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
         />
       )}
     >
-      <IdentityAction
-        navigation={navigation}
-        isOpen={showAction}
-        onClose={setShowAction}
-      />
+      
+      {/* Actions */}
+      {
+        selectedCipher.deletedDate ? (
+          <DeletedAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={setShowAction}
+          />
+        ) : (
+          <IdentityAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={setShowAction}
+          />
+        )
+      }
+      {/* Actions end */}
 
       {/* Intro */}
       <View>

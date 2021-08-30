@@ -14,6 +14,7 @@ import { CardAction } from "../../../screens/auth/browse/cards/card-action"
 import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
 import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
 import { color, commonStyles } from "../../../theme"
+import { DeletedAction } from "../cipher-action/deleted-action"
 
 
 export interface CipherListProps {
@@ -27,7 +28,8 @@ export interface CipherListProps {
     orderField: string,
     order: string
   },
-  folderId?: string
+  folderId?: string,
+  organizationId?: string
 }
 
 /**
@@ -35,7 +37,7 @@ export interface CipherListProps {
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
   const { 
-    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId
+    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId, organizationId
   } = props
   const { getWebsiteLogo, getCiphers } = useMixins()
   const { cipherStore } = useStores()
@@ -46,6 +48,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   const [showNoteAction, setShowNoteAction] = useState(false)
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
+  const [showDeletedAction, setShowDeletedAction] = useState(false)
   const [ciphers, setCiphers] = useState([])
 
   // ------------------------ WATCHERS ----------------------------
@@ -58,7 +61,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // Get ciphers list
   const loadData = async () => {
-    onLoadingChange(true)
+    onLoadingChange && onLoadingChange(true)
 
     // Filter
     const filters = []
@@ -114,6 +117,13 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     if (folderId !== undefined) {
       res = res.filter(i => i.folderId === folderId)
     }
+    if (organizationId !== undefined) {
+      if (organizationId === null) {
+        res = res.filter(i => !!i.organizationId)
+      } else {
+        res = res.filter(i => i.organizationId === organizationId)
+      }
+    }
 
     // Sort
     if (sortList) {
@@ -127,7 +137,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
     // Delay loading
     setTimeout(() => {
-      onLoadingChange(false)
+      onLoadingChange && onLoadingChange(false)
     }, 500)
     
     // Done
@@ -138,6 +148,11 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   // Handle action menu open
   const openActionMenu = (item: CipherView) => {
     cipherStore.setSelectedCipher(item)
+    if (deleted) {
+      setShowDeletedAction(true)
+      return
+    }
+
     switch (item.type) {
       case CipherType.Login:
         setShowPasswordAction(true)
@@ -192,19 +207,28 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
         onClose={() => setShowPasswordAction(false)}
         navigation={navigation}
       />
+
       <CardAction
         isOpen={showCardAction}
         onClose={() => setShowCardAction(false)}
         navigation={navigation}
       />
+
       <IdentityAction
         isOpen={showIdentityAction}
         onClose={() => setShowIdentityAction(false)}
         navigation={navigation}
       />
+
       <NoteAction
         isOpen={showNoteAction}
         onClose={() => setShowNoteAction(false)}
+        navigation={navigation}
+      />
+
+      <DeletedAction
+        isOpen={showDeletedAction}
+        onClose={() => setShowDeletedAction(false)}
         navigation={navigation}
       />
       

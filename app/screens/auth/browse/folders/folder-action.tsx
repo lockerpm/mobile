@@ -49,14 +49,14 @@ export const FolderAction = (props: Props) => {
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={async () => {
-          onLoadingChange(true)
+          onLoadingChange && onLoadingChange(true)
           const res = await folderStore.deleteFolder(folder.id)
           if (res.kind === 'ok') {
             notify('success', '', 'Folder deleted')
           } else {
             notify('error', '', 'Something went wrong')
           }
-          onLoadingChange(false)
+          onLoadingChange && onLoadingChange(false)
         }}
         title="Delete folder"
         desc="After folder deleted, all items will be moved to trash. Are you sure you want to delete the folder?"

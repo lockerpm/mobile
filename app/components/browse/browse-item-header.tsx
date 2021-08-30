@@ -34,7 +34,7 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
         >
           <Button 
             preset="link"
-            style={{ marginRight: 20 }}
+            style={{ marginRight: openAdd ? 20 : 0 }}
             onPress={() => openSort && openSort()}
           >
             <FontAwesomeIcon 

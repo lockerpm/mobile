@@ -9,13 +9,22 @@ export const TrashScreen = observer(function TrashScreen() {
   const navigation = useNavigation()
   
   const [isSortOpen, setIsSortOpen] = useState(false)
+  const [searchText, setSearchText] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
+  const [sortList, setSortList] = useState({
+    orderField: 'name',
+    order: 'asc'
+  })
+  const [sortOption, setSortOption] = useState('az')
 
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
           header="Trash"
           openSort={() => setIsSortOpen(true)}
+          onSearch={setSearchText}
           navigation={navigation}
         />
       )}
@@ -25,10 +34,19 @@ export const TrashScreen = observer(function TrashScreen() {
       <SortAction 
         isOpen={isSortOpen} 
         onClose={() => setIsSortOpen(false)}
+        onSelect={(value: string, obj: { orderField: string, order: string }) => {
+          setSortOption(value)
+          setSortList(obj)
+        }}
+        value={sortOption}
       />
 
       <CipherList
         navigation={navigation}
+        onLoadingChange={setIsLoading}
+        searchText={searchText}
+        sortList={sortList}
+        deleted={true}
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
