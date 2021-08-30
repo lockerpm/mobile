@@ -65,7 +65,7 @@ export type PrimaryParamList = {
     cipherIds?: string[]
   },
   folders__ciphers: {
-    folderId?: string
+    folderId?: string | null
   },
   settings: undefined,
   changeMasterPassword: undefined,

@@ -26,14 +26,17 @@ export interface CipherListProps {
   sortList?: {
     orderField: string,
     order: string
-  }
+  },
+  folderId?: string
 }
 
 /**
  * Describe your component here
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
-  const { emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList } = props
+  const { 
+    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId
+  } = props
   const { getWebsiteLogo, getCiphers } = useMixins()
   const { cipherStore } = useStores()
 
@@ -106,6 +109,11 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       }
       return data
     })
+
+    // Filter
+    if (folderId !== undefined) {
+      res = res.filter(i => i.folderId === folderId)
+    }
 
     // Sort
     if (sortList) {

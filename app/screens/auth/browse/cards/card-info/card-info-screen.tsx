@@ -81,6 +81,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           label="Cardholder name"
           value={selectedCipher.card.cardholderName}
           editable={false}
+          style={{ marginBottom: 10 }}
         />
         {/* Cardholder name end */}
 
@@ -91,6 +92,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           label="Brand"
           value={selectedCipher.card.brand}
           editable={false}
+          style={{ marginVertical: 10 }}
         />
         {/* Brand end */}
 
@@ -101,6 +103,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           label="Card number"
           value={selectedCipher.card.number}
           editable={false}
+          style={{ marginVertical: 10 }}
         />
         {/* Number end */}
 
@@ -111,6 +114,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           label="Expiration month"
           value={selectedCipher.card.expMonth}
           editable={false}
+          style={{ marginVertical: 10 }}
         />
         {/* Exp month end */}
 
@@ -121,6 +125,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           label="Expiration year"
           value={selectedCipher.card.expYear}
           editable={false}
+          style={{ marginVertical: 10 }}
         />
         {/* Exp year end */}
 
@@ -132,6 +137,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           label="Security code (CVV)"
           value={selectedCipher.card.code}
           editable={false}
+          style={{ marginVertical: 10 }}
         />
         {/* CVV end */}
 
@@ -143,6 +149,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           textarea
           fixedLabel
           copyAble
+          style={{ marginTop: 10 }}
         />
         {/* Notes end */}
 

@@ -28,7 +28,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
-  const { toTrashCiphers } = useMixins()
+  const { toTrashCiphers, getRouteName } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
@@ -85,6 +85,10 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         onClose={() => setShowConfirmModal(false)}
         onConfirm={async () => {
           await toTrashCiphers([selectedCipher.id])
+          let routeName = await getRouteName()
+          if (routeName.endsWith('__info')) {
+            navigation.goBack()
+          }
         }}
         title="Move to trash"
         desc="This item will be moved to trash where you can restore or pernamently delete it."
