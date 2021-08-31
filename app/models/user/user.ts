@@ -26,7 +26,11 @@ export const UserModel = types
     default_team_id: types.maybeNull(types.string),
 
     // Others
-    teams: types.maybeNull(types.array(types.frozen()))
+    teams: types.maybeNull(types.array(types.frozen())),
+
+    // UI
+    isOffline: types.maybeNull(types.boolean),
+    showNetworkError: types.maybeNull(types.boolean)
   })
   .extend(withEnvironment)
   .views((self) => ({}))
@@ -74,6 +78,14 @@ export const UserModel = types
     // Others
     setTeams: (teams: object[]) => {
       self.teams = cast(teams)
+    },
+
+    // UI
+    setIsOffline: (isOffline: boolean) => {
+      self.isOffline = isOffline
+    },
+    setShowNetworkError: (value: boolean) => {
+      self.showNetworkError = value
     }
   }))
   .actions((self) => ({

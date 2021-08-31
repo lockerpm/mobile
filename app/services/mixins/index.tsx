@@ -91,7 +91,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         device_identifier: await storageService.get('device_id') || randomString()
       })
       if (res.kind !== 'ok') {
-        notify('error', 'Error', 'Session login failed')
+        notify('error', '', 'Session login failed')
         return { kind: 'bad-data' }
       }
 
@@ -107,7 +107,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // Return value
       return { kind: 'ok' }
     } catch (e) {
-      notify('error', 'Error', 'Session login failed')
+      notify('error', '', 'Session login failed')
       return { kind: 'bad-data' }
     }
   }
