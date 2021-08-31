@@ -1,4 +1,4 @@
-package com.helloworld.generated;
+package com.cystack.locker.generated;
 
 import java.util.Arrays;
 import java.util.List;

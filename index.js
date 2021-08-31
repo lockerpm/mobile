@@ -11,5 +11,5 @@ import './shim.js'
 import App from "./app/app.tsx"
 import { AppRegistry } from "react-native"
 
-AppRegistry.registerComponent("HelloWorld", () => App)
+AppRegistry.registerComponent("CyStackLocker", () => App)
 export default App
