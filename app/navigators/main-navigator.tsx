@@ -16,6 +16,7 @@ import {
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen
 } from "../screens"
 import UserInactivity from 'react-native-user-inactivity'
+import NetInfo from "@react-native-community/netinfo"
 import { color } from "../theme"
 import { INACTIVE_TIMEOUT } from "../config/constants"
 import { useMixins } from "../services/mixins"
@@ -109,9 +110,6 @@ export function MainNavigator() {
     }
 
     ws.onmessage = async (e) => {
-      if (__DEV__) {
-        console.log('SOCKET MESSAGE')
-      }
       const data = JSON.parse(e.data)
       switch (data.event) {
         case 'sync':
@@ -155,9 +153,22 @@ export function MainNavigator() {
   useEffect(() => {
     AppState.addEventListener("change", _handleAppStateChange)
     setSocket(generateSocket())
+    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+      const offline = !(state.isConnected && state.isInternetReachable)
+      if (user.isOffline && !offline) {
+        setSocket(generateSocket())
+      }
+      if (offline) {
+        socket && socket.close()
+        setSocket(null)
+      }
+      user.setIsOffline(offline)
+    })
+
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
       socket && socket.close()
+      removeNetInfoSubscription()
     };
   }, []);
 
