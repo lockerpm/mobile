@@ -1,7 +1,7 @@
-package com.helloworld;
+package com.cystack.locker;
 
 // Unimodules https://docs.expo.io/bare/installing-unimodules/#configuration-for-android
-import com.helloworld.generated.BasePackageList;
+import com.cystack.locker.generated.BasePackageList;
 
 import android.app.Application;
 import android.content.Context;
