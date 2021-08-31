@@ -13,13 +13,14 @@ type ScreenProp = RouteProp<RootParamList, 'lock'>;
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
   const route = useRoute<ScreenProp>()
-  const { logout, sessionLogin, notify } = useMixins()
+  const { logout, sessionLogin, notify, biometricLogin } = useMixins()
   const { user } = useStores()
 
   // Params
   const [masterPassword, setMasterPassword] = useState('11$23581321Duc')
   const [isScreenLoading, setIsScreenLoading] = useState(true)
   const [isUnlocking, setIsUnlocking] = useState(false)
+  const [isBioUnlocking, setIsBioUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
 
@@ -53,12 +54,17 @@ export const LockScreen = observer(function LockScreen() {
       }
     } else {
       setIsError(true)
-      notify('error', 'Missing data', 'Enter password pls')
+      notify('error', '', 'Enter password pls')
     }
   }
 
-  const handleUnlockBiometric = () => {
-    navigation.navigate('mainStack')
+  const handleUnlockBiometric = async () => {
+    setIsBioUnlocking(true)
+    const res = await biometricLogin()
+    setIsBioUnlocking(false)
+    if (res.kind === 'ok') {
+      navigation.navigate('mainStack')
+    }
   }
 
   const handleGetHint = async () => {
@@ -169,6 +175,8 @@ export const LockScreen = observer(function LockScreen() {
 
         <Button
           isNativeBase
+          isLoading={isBioUnlocking}
+          isDisabled={isBioUnlocking}
           variant="outline"
           text="Unlock using biometric"
           onPress={handleUnlockBiometric}
