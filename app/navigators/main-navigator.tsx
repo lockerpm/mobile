@@ -151,8 +151,13 @@ export function MainNavigator() {
 
   // Life cycle
   useEffect(() => {
+    // Check device screen on/off
     AppState.addEventListener("change", _handleAppStateChange)
+
+    // Connect web socket
     setSocket(generateSocket())
+
+    // Check network
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !(state.isConnected && state.isInternetReachable)
       if (user.isOffline && !offline) {

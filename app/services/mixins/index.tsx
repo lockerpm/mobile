@@ -11,6 +11,7 @@ import { CipherType, SecureNoteType } from '../../../core/enums'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { CipherRequest } from '../../../core/models/request/cipherRequest'
 import { load } from '../../utils/storage'
+import { delay } from '../../utils/delay'
 
 const { createContext, useContext } = React
 
@@ -26,6 +27,7 @@ type GetCiphersParams = {
 
 const defaultData = {
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
+  biometricLogin: async () => { return { kind: 'unknown' } },
   logout: async () => {},
   lock: async () => {},
   getSyncData: async () => {},
@@ -76,20 +78,40 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // Session login
   const sessionLogin = async (masterPassword: string): Promise<{ kind: string }> => {
     try {
-      await cryptoService.clearKeys()
+      await delay(200)
+
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
-      const hashedPassword = await cryptoService.hashPassword(masterPassword, key)
 
-      // Session login
+      // Offline compare
+      const storedKeyHash = await cryptoService.getKeyHash()
+      if (storedKeyHash) {
+        const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
+        if (passwordValid) {
+          messagingService.send('loggedIn')
+          await cryptoService.setKey(key)
+          return { kind: 'ok' }
+        }
+      } 
+      
+      // Online session login
+      const keyHash = await cryptoService.hashPassword(masterPassword, key)
+
+      // Session login API
       const res = await user.sessionLogin({
         client_id: 'mobile',
-        password: hashedPassword,
+        password: keyHash,
         device_name: platformUtilsService.getDeviceString(),
         device_type: platformUtilsService.getDevice(),
         device_identifier: await storageService.get('device_id') || randomString()
       })
+      if (res.kind === 'unauthorized') {
+        notify('error', '', 'Token expired')
+        user.clearToken()
+        return { kind: 'unauthorized' }
+      }
+
       if (res.kind !== 'ok') {
         notify('error', '', 'Session login failed')
         return { kind: 'bad-data' }
@@ -100,14 +122,26 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
       await userService.setInformation(tokenService.getUserId(), user.email, kdf, kdfIterations)
       await cryptoService.setKey(key)
-      await cryptoService.setKeyHash(hashedPassword)
+      await cryptoService.setKeyHash(keyHash)
       await cryptoService.setEncKey(res.data.key)
       await cryptoService.setEncPrivateKey(res.data.private_key)
-
-      // Return value
       return { kind: 'ok' }
     } catch (e) {
       notify('error', '', 'Session login failed')
+      return { kind: 'bad-data' }
+    }
+  }
+
+  // Biometric login
+  const biometricLogin =  async (): Promise<{ kind: string }> => {
+    try {
+      await delay(200)
+      messagingService.send('loggedIn')
+      const storedKey = await cryptoService.getKey()
+      await cryptoService.setKey(storedKey)
+      return { kind: 'ok' }
+    } catch (e) {
+      notify('error', '', 'Biometric login failed')
       return { kind: 'bad-data' }
     }
   }
@@ -405,6 +439,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   const data = {
     sessionLogin,
+    biometricLogin,
     logout,
     lock,
     notify,
