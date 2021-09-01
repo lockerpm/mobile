@@ -1,25 +1,44 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
-import { useNavigation } from "@react-navigation/native"
+import { AutoImage as Image, Button, Layout, Text, FloatingInput, PasswordStrength } from "../../../components"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { color } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
+import { RootParamList } from "../../../navigators"
+
+type ScreenProp = RouteProp<RootParamList, 'createMasterPassword'>;
 
 export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
   const navigation = useNavigation()
-  const { logout } = useMixins()
+  const route = useRoute<ScreenProp>()
+  const { logout, register } = useMixins()
   const { user } = useStores()
+  const { getPasswordStrength } = useMixins()
 
   // Params
   const [masterPassword, setMasterPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [hint, setHint] = useState('')
-  const [isScreenLoading, setIsScreenLoading] = useState(false)
-  const [isError, setIsError] = useState(false)
+
+  // UI
+  const [passwordStrength, setPasswordStrength] = useState(-1)
+  const [isScreenLoading, setIsScreenLoading] = useState(true)
+  const [isCreating, setIsCreating] = useState(false)
+  const isError = !!masterPassword && !!confirmPassword && (masterPassword !== confirmPassword)
+  const isReady = !isError && !!masterPassword && !!confirmPassword
 
   // Methods
+  const mounted = async () => {
+    if (!route.params || !route.params.skipCheck) {
+      if (!user.isOffline) {
+        await user.getUser()
+      }
+    }
+    setIsScreenLoading(false)
+  }
+
   const handleLogout = async () => {
     setIsScreenLoading(true)
     await logout()
@@ -27,25 +46,36 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
     navigation.navigate('onBoarding')
   }
 
-  const handleCreate = () => {}
+  const handleCreate = async () => {
+    setIsCreating(true)
+    const res = await register(masterPassword, hint, passwordStrength)
+    setIsCreating(false)
+    if (res.kind === 'ok') {
+      navigation.navigate('lock')
+    }
+  }
 
-  // Components
-  const header = (
-    <View style={{ alignItems: "flex-end" }}>
-      <Button
-        text="LOG OUT"
-        textStyle={{ fontSize: 12 }}
-        preset="link"
-        onPress={handleLogout}
-      >
-      </Button>
-    </View>
-  )
+  // Mounted
+  useEffect(() => {
+    // setTimeout(mounted, 100)
+    mounted()
+  }, [])
 
+  // Render
   return (
     <Layout
       isOverlayLoading={isScreenLoading}
-      header={header}
+      header={(
+        <View style={{ alignItems: "flex-end" }}>
+          <Button
+            text="LOG OUT"
+            textStyle={{ fontSize: 12 }}
+            preset="link"
+            onPress={handleLogout}
+          >
+          </Button>
+        </View>
+      )}
     >
       <View style={{ alignItems: 'center' }}>
         <Image source={require("./locker.png")} style={{ height: 63, width: 63 }} />
@@ -73,15 +103,19 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
             padding: 4
           }}
         >
-          <Image 
-            source={{ uri: user.avatar }} 
-            style={{ 
-              height: 28, 
-              width: 28,
-              borderRadius: 14,
-              backgroundColor: color.palette.white
-            }} 
-          />
+          {
+            !!user.avatar && (
+              <Image 
+                source={{ uri: user.avatar }} 
+                style={{ 
+                  height: 28, 
+                  width: 28,
+                  borderRadius: 14,
+                  backgroundColor: color.palette.white
+                }} 
+              />
+            )
+          }
           <Text 
             style={{ 
               fontSize: 12,
@@ -99,10 +133,20 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
           isPassword
           isInvalid={isError}
           label="Master Password"
-          onChangeText={setMasterPassword}
+          onChangeText={(text) => {
+            setMasterPassword(text)
+            const strength = getPasswordStrength(text)
+            setPasswordStrength(strength ? strength.score : -1)
+          }}
           value={masterPassword}
-          style={{ width: '100%', marginBottom: 20 }}
+          style={{ width: '100%' }}
         />
+
+        {
+          !!masterPassword && (
+            <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />
+          )
+        }
         {/* Master pass input end */}
 
         {/* Master pass confirm */}
@@ -112,7 +156,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
           label="Confirm Master Password"
           onChangeText={setConfirmPassword}
           value={confirmPassword}
-          style={{ width: '100%', marginBottom: 20 }}
+          style={{ width: '100%', marginVertical: 20 }}
         />
         {/* Master pass confirm end */}
 
@@ -127,6 +171,8 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
 
         <Button
           isNativeBase
+          isDisabled={isCreating || !isReady}
+          isLoading={isCreating}
           text="Create Password"
           onPress={handleCreate}
           style={{

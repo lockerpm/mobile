@@ -3,15 +3,20 @@ import { observer } from "mobx-react-lite"
 import { AutoImage as Image, Text, Button, Layout } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { View } from "react-native"
+import { save, storageKeys } from "../../../utils/storage"
 
 
 export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntroScreen() {
   const navigation = useNavigation()
 
   // Methods
-  const handleUseBiometric = () => {}
+  const handleUseBiometric = async () => {
+    await save(storageKeys.APP_SHOW_BIOMETRIC_INTRO, 1)
+    navigation.navigate('settings', { fromIntro: true })
+  }
 
-  const handleSkip = () => {
+  const handleSkip = async () => {
+    await save(storageKeys.APP_SHOW_BIOMETRIC_INTRO, 1)
     navigation.navigate('mainTab')
   }
 
@@ -24,16 +29,16 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
           preset="header"
           style={{ marginBottom: 10, marginTop: 30 }}
         >
-          Unlock vault with Face ID
+          Unlock vault with biometric
         </Text>
 
         <Text style={{ textAlign: 'center', maxWidth: 250 }}>
-          Use face recognition to protect your passwords
+          Use face recognition or fingerprint to protect your passwords
         </Text>
 
         <Button
           isNativeBase
-          text="Use Face ID"
+          text="Use Biometric"
           onPress={handleUseBiometric}
           style={{
             width: '100%',

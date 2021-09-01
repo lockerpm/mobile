@@ -1,9 +1,8 @@
-import React, { useState } from "react"
-import { Actionsheet, Divider } from "native-base"
-import { Text, AutoImage as Image, ActionItem, OwnershipAction } from "../../../../components"
-import { color, commonStyles } from "../../../../theme"
-import { View, ScrollView } from "react-native"
-import { BROWSE_ITEMS } from "../../../../common/mappings"
+import React from "react"
+import { CipherView } from "../../../../../core/models/view"
+import { ActionItem, CipherAction } from "../../../../components"
+import { useStores } from "../../../../models"
+import { useMixins } from "../../../../services/mixins"
 
 
 type Props = {
@@ -14,87 +13,30 @@ type Props = {
 
 
 export const IdentityAction = (props: Props) => {
-  const { navigation, isOpen, onClose } = props
-  const [showOwnershipAction, setShowOwnershipAction] = useState(false)
-
+  const { copyToClipboard } = useMixins()
+  const { cipherStore } = useStores()
+  const selectedCipher: CipherView = cipherStore.cipherView
+  
   return (
-    <View>
-      <OwnershipAction
-        isOpen={showOwnershipAction}
-        onClose={() => setShowOwnershipAction(false)}
+    <CipherAction {...props}>
+      <ActionItem
+        name="Copy full name"
+        icon="copy"
+        action={() => copyToClipboard(selectedCipher.identity.fullName)}
+        disabled={!selectedCipher.identity.fullName}
       />
-
-      <Actionsheet
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <Actionsheet.Content>
-          <View style={{ width: '100%', paddingHorizontal: 20 }}>
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              <Image
-                source={BROWSE_ITEMS.indentity.icon}
-                style={{ height: 40, width: 40, marginRight: 10 }}
-              />
-              <View>
-                <Text
-                  preset="semibold"
-                  text="gate.io"
-                />
-                <Text
-                  text="duchm"
-                  style={{ fontSize: 12 }}
-                />
-              </View>
-            </View>
-          </View>
-
-          <Divider borderColor={color.line} marginBottom={1} marginTop={5} />
-
-          <ScrollView
-            style={{ width: '100%' }}
-          >
-            <ActionItem
-              name="Move to Folder"
-              icon="folder-o"
-              action={() => {
-                onClose()
-                navigation.navigate('folders__select', { mode: 'move' })
-              }}
-            />
-
-            <ActionItem
-              name="Change Ownership"
-              icon="user-o"
-              action={() => {
-                onClose()
-                setTimeout(() => setShowOwnershipAction(true), 500)
-              }}
-            />
-
-            <Divider borderColor={color.line}  marginY={1} />
-
-            <ActionItem
-              name="Edit"
-              icon="edit"
-              action={() => {
-                onClose()
-                navigation.navigate('identities__edit', { mode: 'edit' })
-              }}
-            />
-
-            <ActionItem
-              name="Share"
-              icon="share-square-o"
-            />
-
-            <ActionItem
-              name="Move to Trash"
-              icon="trash"
-              textColor={color.error}
-            />
-          </ScrollView>
-        </Actionsheet.Content>
-      </Actionsheet>
-    </View>
+      <ActionItem
+        name="Copy full address"
+        icon="copy"
+        action={() => copyToClipboard(selectedCipher.identity.fullAddress)}
+        disabled={!selectedCipher.identity.fullAddress}
+      />
+      <ActionItem
+        name="Copy full address part 2"
+        icon="copy"
+        action={() => copyToClipboard(selectedCipher.identity.fullAddressPart2)}
+        disabled={!selectedCipher.identity.fullAddressPart2}
+      />
+    </CipherAction>
   )
 }

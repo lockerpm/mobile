@@ -29,15 +29,15 @@ export const LoginScreen = observer(function LoginScreen() {
     if (token && !user.token) {
       setIsLoading(true)
       user.saveToken(token)
-      const [getUserRes, getUserPwRes] = await Promise.all([
+      const [userRes, userPwRes] = await Promise.all([
         user.getUser(),
         user.getUserPw()
       ])
-      if (getUserRes && getUserPwRes) {
+      if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
         if (user.is_pwd_manager) {
-          navigation.navigate('lock')
+          navigation.navigate('lock', { skipCheck: true })
         } else {
-          navigation.navigate('createMasterPassword')
+          navigation.navigate('createMasterPassword', { skipCheck: true })
         }
       } else {
         navigation.navigate('onBoarding')

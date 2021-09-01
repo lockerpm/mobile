@@ -77,7 +77,7 @@ export class FolderService implements FolderServiceAbstraction {
 
         const hasKey = await this.cryptoService.hasKey();
         if (!hasKey) {
-            throw new Error('No key.');
+            throw new Error('No key get folder.');
         }
 
         const decFolders: FolderView[] = [];

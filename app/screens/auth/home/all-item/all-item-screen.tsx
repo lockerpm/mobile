@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { CipherList, Layout, BrowseItemEmptyContent } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { useCoreService } from "../../../../services/core-service"
 import { ItemsHeader } from "./items-header"
 import { SortAction } from "./sort-action"
 import { AddAction } from "./add-action"
@@ -10,53 +9,24 @@ import { AddAction } from "./add-action"
 
 export const AllItemScreen = observer(function AllItemScreen() {
   const navigation = useNavigation()
-  const { searchService } = useCoreService()
-
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
-
-  // ------------ METHODS -------------------
-
-  const getCiphers = async () => {
-    setIsLoading(true)
-    try {
-      const searchText = null
-      const searchFilter = null
-      const res = await searchService.searchCiphers(searchText, [searchFilter], null)
-      console.log(res)
-    } catch (e) {
-      console.log('main error')
-      console.log(e)
-    }
-    setIsLoading(false)
-  }
-
-  // const createCipher = async () => {
-  //   setIsLoading(true)
-  //   const cipher = newCipher()
-  //   cipher.name = 'test 123'
-  //   const cipherEnc = await cipherService.encrypt(cipher)
-  //   const data = new CipherRequest(cipherEnc)
-  //   const res = await cipherStore.createCipher(data)
-  //   console.log(res)
-  //   setIsLoading(false)
-  // }
-
-  // useEffect(() => {
-  //   if (!isScreenReady) {
-  //     getCiphers()
-  //     setIsScreenReady(true)
-  //   }
-  // }, [isScreenReady])
+  const [searchText, setSearchText] = useState('')
+  const [sortList, setSortList] = useState({
+    orderField: 'name',
+    order: 'asc'
+  })
+  const [sortOption, setSortOption] = useState('az')
 
   return (
     <Layout
-      isContentLoading={isLoading}
+      isContentOverlayLoading={isLoading}
       header={(
         <ItemsHeader 
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
+          onSearch={setSearchText}
         />
       )}
       borderBottom
@@ -65,6 +35,11 @@ export const AllItemScreen = observer(function AllItemScreen() {
       <SortAction 
         isOpen={isSortOpen} 
         onClose={() => setIsSortOpen(false)}
+        onSelect={(value: string, obj: { orderField: string, order: string }) => {
+          setSortOption(value)
+          setSortList(obj)
+        }}
+        value={sortOption}
       />
       
       <AddAction 
@@ -75,6 +50,9 @@ export const AllItemScreen = observer(function AllItemScreen() {
 
       <CipherList
         navigation={navigation}
+        onLoadingChange={setIsLoading}
+        searchText={searchText}
+        sortList={sortList}
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}

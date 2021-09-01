@@ -1,16 +1,30 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Button, Header, FloatingInput } from "../../../../components"
+import { Layout, Button, Header, FloatingInput, PasswordStrength } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../theme"
+import { useMixins } from "../../../../services/mixins"
 
 
 export const ChangeMasterPasswordScreen = observer(function ChangeMasterPasswordScreen() {
   const navigation = useNavigation()
+  const { getPasswordStrength, changeMasterPassword } = useMixins()
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [passwordStrength, setPasswordStrength] = useState(-1)
   const [current, setCurrent] = useState('')
   const [newPass, setNewPass] = useState('')
   const [confirm, setConfirm] = useState('')
+
+  const handleChangePassword = async () => {
+    setIsLoading(true)
+    const res = await changeMasterPassword(current, newPass)
+    if (res.kind === 'ok') {
+      navigation.navigate('lock')
+    }
+    setIsLoading(false)
+  }
 
   return (
     <Layout
@@ -36,20 +50,33 @@ export const ChangeMasterPasswordScreen = observer(function ChangeMasterPassword
           isPassword
           label="New Master Password"
           value={newPass}
-          onChangeText={setNewPass}
-          style={{ marginBottom: 20 }}
+          onChangeText={(text) => {
+            setNewPass(text)
+            const strength = getPasswordStrength(text)
+            setPasswordStrength(strength ? strength.score : -1)
+          }}
         />
+
+        {
+          !!newPass && (
+            <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />
+          )
+        }
 
         <FloatingInput
           isPassword
+          isInvalid={newPass !== confirm}
           label="Confirm Master Password"
           value={confirm}
           onChangeText={setConfirm}
-          style={{ marginBottom: 30 }}
+          style={{ marginBottom: 30, marginTop: 20 }}
         />
 
         <Button
           isNativeBase
+          isLoading={isLoading}
+          disabled={isLoading || !current || !newPass || !confirm || (newPass !== confirm)}
+          onPress={handleChangePassword}
           text="Save"
         />
       </View>

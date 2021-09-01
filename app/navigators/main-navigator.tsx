@@ -4,7 +4,7 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { AppState } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainTabNavigator } from "./main-tab-navigator"
@@ -13,13 +13,14 @@ import {
   PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen, PasswordHealthScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
-  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen
+  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen
 } from "../screens"
 import UserInactivity from 'react-native-user-inactivity'
+import NetInfo from "@react-native-community/netinfo"
 import { color } from "../theme"
-import { INACTIVE_TIMEOUT } from "../config/constants"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
+import { useStores } from "../models"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -38,30 +39,39 @@ export type PrimaryParamList = {
   switchDevice: undefined,
   biometricUnlockIntro: undefined,
   mainTab: undefined,
-  passwordGenerator: undefined,
+  passwordGenerator: {
+    fromTools?: boolean
+  },
   passwordHealth: undefined,
   dataBreachScanner: undefined,
   countrySelector: undefined,
   passwords__info: undefined,
   passwords__edit: {
-    mode: 'add' | 'edit'
+    mode: 'add' | 'edit' | 'clone'
   },
   notes__info: undefined,
   notes__edit: {
-    mode: 'add' | 'edit'
+    mode: 'add' | 'edit' | 'clone'
   },
   cards__info: undefined,
   cards__edit: {
-    mode: 'add' | 'edit'
+    mode: 'add' | 'edit' | 'clone'
   },
   identities__info: undefined,
   identities__edit: {
-    mode: 'add' | 'edit'
+    mode: 'add' | 'edit' | 'clone'
   },
   folders__select: {
-    mode: 'add' | 'move'
+    mode: 'add' | 'move',
+    initialId?: string,
+    cipherIds?: string[]
   },
-  settings: undefined,
+  folders__ciphers: {
+    folderId?: string | null
+  },
+  settings: {
+    fromIntro?: boolean
+  },
   changeMasterPassword: undefined,
   help: undefined
 }
@@ -71,37 +81,116 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export function MainNavigator() {
   const navigation = useNavigation()
-  const { lock } = useMixins()
+  const { lock, getSyncData, getCipherById, loadFolders, loadCollections, logout } = useMixins()
+  const { user, cipherStore } = useStores()
 
-  // App lock trigger
-  const _handleAppStateChange = (nextAppState: string) => {
-    if (nextAppState === "active") {
-      console.log('lock screen')
-      // lock()
-      // navigation.navigate('lock')
+  // App screen lock trigger
+  const _handleAppStateChange = async (nextAppState: string) => {
+    if (nextAppState === "active" && user.appTimeout && user.appTimeout === -1) {
+      if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
+        await logout()
+        navigation.navigate('onBoarding')
+      } else {
+        await lock()
+        navigation.navigate('lock')
+      }
     }
   }
 
   // App inactive trigger
-  const handleInactive = (isActive : boolean) => {
-    if (!isActive) {
-      console.log('lock screen due to inactive')
-      // lock()
-      // navigation.navigate('lock')
+  const handleInactive = async (isActive : boolean) => {
+    if (!isActive && user.appTimeout && user.appTimeout > 0) {
+      if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
+        await logout()
+        navigation.navigate('onBoarding')
+      } else {
+        await lock()
+        navigation.navigate('lock')
+      }
     }
   }
 
+  // Web socket
+  const wsUrl = `wss://api.cystack.net/ws/cystack_platform/pm/sync?token=${user.token}`
+  const generateSocket = () => {
+    const ws = new WebSocket(wsUrl)
+    ws.onopen = () => {
+      if (__DEV__) {
+        console.log('SOCKET OPEN')
+      }
+    }
+
+    ws.onmessage = async (e) => {
+      const data = JSON.parse(e.data)
+      switch (data.event) {
+        case 'sync':
+          await getSyncData()
+          cipherStore.setLastSync(new Date().getTime())
+          await Promise.all([
+            loadFolders(),
+            loadCollections()
+          ])
+          if (cipherStore.selectedCipher) {
+            const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
+            cipherStore.setSelectedCipher(updatedCipher)
+          }
+          break
+        case 'members':
+          // getInvitations()
+          break
+        default:
+          break
+      }
+    }
+
+    ws.onerror = (e) => {
+      if (__DEV__) {
+        console.log(`SOCKET ERROR: ${e}`)
+      }
+    }
+
+    ws.onclose = (e) => {
+      if (__DEV__) {
+        console.log(`SOCKET CLOSE: ${e}`);
+      }
+    }
+
+    return ws
+  }
+
+  const [socket, setSocket] = useState(null)
+
   // Life cycle
   useEffect(() => {
+    // Check device screen on/off
     AppState.addEventListener("change", _handleAppStateChange)
+
+    // Connect web socket
+    setSocket(generateSocket())
+
+    // Check network
+    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+      const offline = !(state.isConnected && state.isInternetReachable)
+      if (user.isOffline && !offline) {
+        setSocket(generateSocket())
+      }
+      if (offline) {
+        socket && socket.close()
+        setSocket(null)
+      }
+      user.setIsOffline(offline)
+    })
+
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
+      socket && socket.close()
+      removeNetInfoSubscription()
     };
   }, []);
 
   return (
     <UserInactivity
-      timeForInactivity={INACTIVE_TIMEOUT}
+      timeForInactivity={(user.appTimeout && (user.appTimeout > 0)) ? user.appTimeout : 1000}
       onAction={handleInactive}
     >
       <Stack.Navigator
@@ -119,7 +208,7 @@ export function MainNavigator() {
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
-        <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} />
+        <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} initialParams={{ fromTools: false }} />
         <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
 
@@ -132,8 +221,9 @@ export function MainNavigator() {
         <Stack.Screen name="identities__info" component={IdentityInfoScreen} />
         <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
 
-        <Stack.Screen name="settings" component={SettingsScreen} />
+        <Stack.Screen name="settings" component={SettingsScreen} initialParams={{ fromIntro: false }} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />
       </Stack.Navigator>

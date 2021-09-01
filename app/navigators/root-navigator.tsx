@@ -4,7 +4,7 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React from "react"
+import React, { useEffect } from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
@@ -12,6 +12,8 @@ import {
   IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, CreateMasterPasswordScreen 
 } from "../screens"
 import { color } from "../theme"
+import { useMixins } from "../services/mixins"
+import { useStores } from "../models"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -27,16 +29,30 @@ export type RootParamList = {
   init: undefined,
   intro: undefined,
   onBoarding: undefined,
-  lock: undefined,
+  lock: {
+    skipCheck?: boolean
+  },
   login: undefined,
   signup: undefined,
-  createMasterPassword: undefined,
+  createMasterPassword: {
+    skipCheck?: boolean
+  },
   mainStack: undefined
 }
 
 const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = () => {
+  const { notify } = useMixins()
+  const { user } = useStores()
+
+  useEffect(() => {
+    if (user.showNetworkError) {
+      notify('error', '', 'Network error')
+      user.setShowNetworkError(false)
+    }
+  }, [user.showNetworkError])
+
   return (
     <Stack.Navigator
       initialRouteName="init"

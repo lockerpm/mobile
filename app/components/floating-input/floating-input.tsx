@@ -5,6 +5,7 @@ import { color } from "../../theme"
 import { Text, Button } from ".."
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { TextInputMask, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
+import { useMixins } from "../../services/mixins"
 
 
 export interface FloatingInputProps extends TextInputProps {
@@ -20,14 +21,8 @@ export interface FloatingInputProps extends TextInputProps {
   buttonRight?: JSX.Element,
   textarea?: boolean,
   maskType?: TextInputMaskTypeProp,
-  maskOptions?: TextInputMaskOptionProp
-}
-
-const BUTTON_BASE: ViewStyle = {
-  position: 'absolute',
-  zIndex: 100,
-  top: 16,
-  right: 0
+  maskOptions?: TextInputMaskOptionProp,
+  copyAble?: boolean
 }
 
 /**
@@ -37,10 +32,11 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
   const { 
     style, inputStyle, isInvalid, isRequired, label, isPassword, value, placeholder,
     fixedLabel, editable = true, disabled, buttonRight, textarea, onChangeText,
-    maskType, maskOptions,
+    maskType, maskOptions, copyAble,
     ...rest
   } = props
 
+  const { notify, copyToClipboard } = useMixins()
   const [isFocused, setFocus] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -63,6 +59,20 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
     ...rest
   }
 
+  const BUTTON_CONTAINER: ViewStyle = {
+    position: 'absolute',
+    zIndex: 100,
+    top: textarea ? 0 : 16,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
+  
+  const BUTTON: ViewStyle = {
+    alignItems: 'center',
+    width: 30,
+  }
+
   return (
     <View style={[
       {
@@ -79,9 +89,10 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
         }}
       >
         <Text
-          style={{
-            fontSize: isFocused || !!value || fixedLabel ? 10 : 14
-          }}
+          style={[{
+            fontSize: isFocused || !!value || fixedLabel ? 10 : 14,
+            marginTop: isRequired ? -5 : undefined
+          }]}
         >
           {label}
           {
@@ -102,38 +113,55 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
             type={maskType || 'custom'}
             options={maskOptions}
             {...textInputProps}
-            onChangeText={(text) => onChangeText(text)}
+            onChangeText={(text) => onChangeText && onChangeText(text)}
           />
         ) : (
           <TextInput
             {...textInputProps}
-            onChangeText={(text) => onChangeText(text)}
+            onChangeText={(text) => onChangeText && onChangeText(text)}
           />
         )
       }
-      
-      {
-        isPassword && (
-          <Button
-            preset="link"
-            onPress={() => setShowPassword(!showPassword)}
-            style={BUTTON_BASE}
-          >
-            <Icon 
-              name={showPassword ? "eye-slash" : "eye"} 
-              size={18} 
-              color={color.text} 
-            />
-          </Button>
-        )
-      }
-      {
-        buttonRight && (
-          <View style={BUTTON_BASE}>
-            {buttonRight}
-          </View>
-        )
-      }
+
+      <View style={BUTTON_CONTAINER}>
+        {
+          isPassword && (
+            <Button
+              preset="link"
+              onPress={() => setShowPassword(!showPassword)}
+              style={BUTTON}
+            >
+              <Icon 
+                name={showPassword ? "eye-slash" : "eye"} 
+                size={16} 
+                color={color.text} 
+              />
+            </Button>
+          )
+        }
+        {
+          copyAble && (
+            <Button
+              preset="link"
+              onPress={() => copyToClipboard(value)}
+              style={BUTTON}
+            >
+              <Icon 
+                name="copy"
+                size={15} 
+                color={color.text} 
+              />
+            </Button>
+          )
+        }
+        {
+          buttonRight && (
+            <View style={BUTTON}>
+              {buttonRight}
+            </View>
+          )
+        }
+      </View>
     </View>
   )
 })

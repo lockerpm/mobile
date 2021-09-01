@@ -164,9 +164,8 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
     return false;
   }
 
-  // TODO
   supportsSecureStorage(): boolean {
-    return false;
+    return true;
   }
 
   supportsWebAuthn(win: Window): boolean {
