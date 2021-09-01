@@ -32,7 +32,9 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
   // Methods
   const mounted = async () => {
     if (!route.params || !route.params.skipCheck) {
-      await user.getUser()
+      if (!user.isOffline) {
+        await user.getUser()
+      }
     }
     setIsScreenLoading(false)
   }
@@ -101,15 +103,19 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
             padding: 4
           }}
         >
-          <Image 
-            source={{ uri: user.avatar }} 
-            style={{ 
-              height: 28, 
-              width: 28,
-              borderRadius: 14,
-              backgroundColor: color.palette.white
-            }} 
-          />
+          {
+            !!user.avatar && (
+              <Image 
+                source={{ uri: user.avatar }} 
+                style={{ 
+                  height: 28, 
+                  width: 28,
+                  borderRadius: 14,
+                  backgroundColor: color.palette.white
+                }} 
+              />
+            )
+          }
           <Text 
             style={{ 
               fontSize: 12,

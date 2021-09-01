@@ -9,24 +9,11 @@ import { withEnvironment } from "../extensions/with-environment"
 export const CollectionStoreModel = types
   .model("CollectionStore")
   .props({
-    token: types.maybeNull(types.string),
     collections: types.array(types.frozen())
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    // ----------------- TOKEN -------------------
-
-    saveToken: (token: string) => {
-      self.token = token
-      self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-    },
-
-    clearToken: () => {
-      self.token = ''
-      self.environment.api.apisauce.deleteHeader('Authorization')
-    },
-
     // ----------------- DATA -------------------
 
     setCollections: (collections: CollectionView[]) => {

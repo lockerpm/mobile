@@ -3,6 +3,7 @@ import { IToastProps, useToast } from 'native-base'
 import { Text } from "../../components"
 import { nanoid } from 'nanoid'
 import find from 'lodash/find'
+import ReactNativeBiometrics from 'react-native-biometrics'
 import { KdfType } from '../../../core/enums/kdfType'
 import { useStores } from '../../models'
 import { useCoreService } from '../core-service'
@@ -90,6 +91,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
         if (passwordValid) {
           messagingService.send('loggedIn')
+
+          // Fake set key
           await cryptoService.setKey(key)
           return { kind: 'ok' }
         }
@@ -135,7 +138,23 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // Biometric login
   const biometricLogin =  async (): Promise<{ kind: string }> => {
     try {
-      await delay(200)
+      // await delay(200)
+      const { available } = await ReactNativeBiometrics.isSensorAvailable()
+      if (!available) {
+        notify('error', '', 'Biometric is not supported')
+        return { kind: 'bad-data' }
+      }
+
+      // Validate
+      const { success } = await ReactNativeBiometrics.simplePrompt({
+        promptMessage: 'Unlock Locker'
+      })
+      if (!success) {
+        notify('error', '', 'Biometric login failed')
+        return { kind: 'bad-data' }
+      }
+      
+      // Fake set key
       messagingService.send('loggedIn')
       const storedKey = await cryptoService.getKey()
       await cryptoService.setKey(storedKey)
@@ -195,8 +214,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Logout
   const logout = async () => {
-    cipherStore.clearToken()
-    folderStore.clearToken()
     await Promise.all([
       user.logout(),
       cryptoService.clearKeys(),
@@ -206,12 +223,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Lock screen
   const lock = async () => {
-    await Promise.all([
-      cryptoService.clearKey(),
-      cryptoService.clearOrgKeys(true),
-      cryptoService.clearKeyPair(true),
-      cryptoService.clearEncKey(true)
-    ])
     folderService.clearCache()
     cipherService.clearCache()
     // searchService.clearCache()

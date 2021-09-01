@@ -18,6 +18,13 @@ export type EmptyResult = { kind: "ok" } | GeneralApiProblem
 export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
 export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
+export type GetPlanResult = {
+    kind: 'ok',
+    data: {
+        name: string,
+        alias: string
+    }
+} | GeneralApiProblem
 
 // Request data
 export type SessionLoginData = {

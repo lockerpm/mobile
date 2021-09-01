@@ -12,10 +12,14 @@ export const StartScreen = observer(function StartScreen() {
   const navigation = useNavigation()
 
   const mounted = async () => {
-    await Promise.all([
-      getSyncData(),
-      user.loadTeams()
-    ])
+    if (!user.isOffline) {
+      await Promise.all([
+        getSyncData(),
+        user.loadTeams(),
+        user.loadPlan()
+      ])
+    }
+    
     await Promise.all([
       loadFolders(),
       loadCollections()
