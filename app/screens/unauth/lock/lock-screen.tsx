@@ -48,6 +48,7 @@ export const LockScreen = observer(function LockScreen() {
       const res = await sessionLogin(masterPassword)
       setIsUnlocking(false)
       if (res.kind === 'ok') {
+        setMasterPassword('')
         navigation.navigate('mainStack')
       } else if (res.kind === 'unauthorized') {
         navigation.navigate('login')
@@ -61,10 +62,14 @@ export const LockScreen = observer(function LockScreen() {
   }
 
   const handleUnlockBiometric = async () => {
+    if (!user.isBiometricUnlock) {
+      notify('error', '', 'Biometric unlock is not enabled')
+    }
     setIsBioUnlocking(true)
     const res = await biometricLogin()
     setIsBioUnlocking(false)
     if (res.kind === 'ok') {
+      setMasterPassword('')
       navigation.navigate('mainStack')
     }
   }

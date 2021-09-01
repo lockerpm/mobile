@@ -93,7 +93,7 @@ export const IntroScreen = observer(function IntroScreen() {
     >
       <View style={{ flex: 1, justifyContent: 'center' }}>
         {/* Tabs */}
-        <View style={{ flex: 3, minHeight: 300 }}>
+        <View style={{ flex: 3, minHeight: 300, maxHeight: 500 }}>
           <TabView
             lazy
             renderTabBar={() => null}

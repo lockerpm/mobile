@@ -68,7 +68,9 @@ export type PrimaryParamList = {
   folders__ciphers: {
     folderId?: string | null
   },
-  settings: undefined,
+  settings: {
+    fromIntro?: boolean
+  },
   changeMasterPassword: undefined,
   help: undefined
 }

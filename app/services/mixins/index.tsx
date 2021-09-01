@@ -50,7 +50,8 @@ const defaultData = {
   toTrashCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
-  getRouteName: async () => { return '' }
+  getRouteName: async () => { return '' },
+  isBiometricAvailable: async () => { return false }
 }
 
 
@@ -446,6 +447,12 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return find(teams, e => e.id === orgId) || { name: '' }
   }
 
+  // Check if biometric is viable
+  const isBiometricAvailable = async () => {
+    const { available } = await ReactNativeBiometrics.isSensorAvailable()
+    return available
+  }
+
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
@@ -472,7 +479,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     deleteCiphers,
     toTrashCiphers,
     restoreCiphers,
-    getRouteName
+    getRouteName,
+    isBiometricAvailable
   }
 
   return (

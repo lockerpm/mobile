@@ -2,13 +2,13 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View } from "react-native"
 import { Layout, Text, Header } from "../../../../components"
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../theme"
 import { Select, Switch } from "native-base"
 import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
-import ReactNativeBiometrics from 'react-native-biometrics'
 import { useMixins } from "../../../../services/mixins"
+import { PrimaryParamList } from "../../../../navigators/main-navigator"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -17,11 +17,14 @@ const SECTION_TITLE: TextStyle = {
   marginBottom: 8,
 }
 
+type ScreenProp = RouteProp<PrimaryParamList, 'settings'>;
 
 export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
   const { user } = useStores()
-  const { notify } = useMixins()
+  const { notify, isBiometricAvailable } = useMixins()
+  const route = useRoute<ScreenProp>()
+  const { fromIntro } = route.params
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -29,12 +32,13 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
   const enableBiometric = async () => {
     setIsLoading(true)
-    const { available } = await ReactNativeBiometrics.isSensorAvailable()
+    const available = await isBiometricAvailable()
 
     if (!available) {
       notify('error', '', 'Biometric is not supported')
     } else {
-      user.setBiometricUnlock(false)
+      user.setBiometricUnlock(true)
+      console.log(user.isBiometricUnlock)
       notify('success', '', 'Biometric unlock is enabled')
     }
     
@@ -115,7 +119,13 @@ export const SettingsScreen = observer(function SettingsScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <Header
-          goBack={() => navigation.goBack()}
+          goBack={() => {
+            if (fromIntro) {
+              navigation.navigate('mainTab')
+            } else {
+              navigation.goBack()
+            }
+          }}
           title="Settings"
           right={(<View style={{ width: 10 }} />)}
         />
@@ -168,7 +178,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
           noCaret
           right={(
             <Switch
-              value={settings.biometric.value}
+              isChecked={settings.biometric.value}
               onToggle={settings.biometric.onChage}
               colorScheme="csGreen"
             />
