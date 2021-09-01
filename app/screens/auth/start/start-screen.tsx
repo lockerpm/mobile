@@ -8,7 +8,7 @@ import { useStores } from "../../../models"
 
 export const StartScreen = observer(function StartScreen() {
   const { user } = useStores()
-  const { getSyncData, loadFolders, loadCollections } = useMixins()
+  const { getSyncData, loadFolders, loadCollections, isBiometricAvailable } = useMixins()
   const navigation = useNavigation()
 
   const mounted = async () => {
@@ -32,12 +32,15 @@ export const StartScreen = observer(function StartScreen() {
     }
 
     const introShown = await load(storageKeys.APP_SHOW_BIOMETRIC_INTRO)
-    if (!introShown) {
-      await save(storageKeys.APP_SHOW_BIOMETRIC_INTRO, 1)
-      navigation.navigate('biometricUnlockIntro')
-    } else {
-      navigation.navigate('mainTab')
+    if (introShown) {
+      const available = await isBiometricAvailable()
+      if (available) {
+        navigation.navigate('biometricUnlockIntro')
+        return
+      }
     }
+
+    navigation.navigate('mainTab')
   }
 
   // Life cycle
