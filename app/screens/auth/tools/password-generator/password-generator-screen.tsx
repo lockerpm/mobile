@@ -2,20 +2,25 @@ import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Header, Text, Button, PasswordStrength } from "../../../../components"
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { Checkbox, Slider } from "native-base"
 import { useMixins } from "../../../../services/mixins"
 import { useCoreService } from "../../../../services/core-service"
 import { useStores } from "../../../../models"
+import { PrimaryParamList } from "../../../../navigators/main-navigator"
 
+
+type ScreenProp = RouteProp<PrimaryParamList, 'passwordGenerator'>;
 
 export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen() {
   const navigation = useNavigation()
   const { getPasswordStrength, copyToClipboard } = useMixins()
   const { passwordGenerationService } = useCoreService()
   const { cipherStore } = useStores()
+  const route = useRoute<ScreenProp>()
+  const { fromTools } = route.params
   
   const [password, setPassword] = useState('')
   const [passwordLen, setPasswordLen] = useState(16)
@@ -89,8 +94,12 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
             isNativeBase
             text="Use Password"
             onPress={() => {
-              cipherStore.setGeneratedPassword(password)
-              navigation.goBack()
+              if (fromTools) {
+                copyToClipboard(password)
+              } else {
+                cipherStore.setGeneratedPassword(password)
+                navigation.goBack()
+              }
             }}
           />
           <Button

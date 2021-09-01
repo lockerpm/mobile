@@ -31,7 +31,7 @@ const defaultData = {
   biometricLogin: async () => { return { kind: 'unknown' } },
   logout: async () => {},
   lock: async () => {},
-  getSyncData: async () => {},
+  getSyncData: async () => { return { kind: 'unknown' } },
   notify: (type : 'error' | 'success' | 'warning' | 'info', title : string, text: string, duration?: undefined | number) => {},
   randomString: () => '',
   newCipher: (type: CipherType) => { return new CipherView() },
@@ -297,7 +297,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       if (res.kind !== 'ok') {
         notify('error', 'Error', 'Sync failed')
         messagingService.send('syncCompleted', { successfully: false })
-        return
+        return res
       }
 
       // Sync service
@@ -314,9 +314,11 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await syncService.syncPolicies(res.data.policies)
       await syncService.setLastSync(new Date())
       messagingService.send('syncCompleted', { successfully: true })
+      return { kind: 'ok' }
     } catch (e) {
       notify('error', 'Error', 'Sync failed')
       messagingService.send('syncCompleted', { successfully: false })
+      return { kind: 'bad-data' }
     }
   }
 

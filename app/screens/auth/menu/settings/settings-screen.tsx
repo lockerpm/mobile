@@ -77,24 +77,24 @@ export const SettingsScreen = observer(function SettingsScreen() {
       onChange: user.setAppTimeout,
       options: [
         {
+          label: '30 seconds',
+          value: 30 * 1000
+        },
+        {
           label: '1 minute',
-          value: '1 * 60 * 1000'
+          value: 1 * 60 * 1000
         },
         {
-          label: '5 minute',
-          value: '5 * 60 * 1000'
-        },
-        {
-          label: '15 minute',
-          value: '15 * 60 * 1000'
+          label: '3 minutes',
+          value: 3 * 60 * 1000
         },
         {
           label: 'On screen off',
-          value: '-1'
+          value: -1
         },
         {
           label: 'On app close',
-          value: '0'
+          value: 0
         }
       ]
     },
@@ -196,7 +196,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
             >
               {
                 settings.timeout.options.map(item => (
-                  <Select.Item key={item.value} label={item.label} value={item.value} />
+                  <Select.Item key={item.value} label={item.label} value={item.value.toString()} />
                 ))
               }
             </Select>
