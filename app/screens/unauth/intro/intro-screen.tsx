@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View, TouchableOpacity } from "react-native"
 import { AutoImage as Image, Text, Layout, Button } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles, spacing } from "../../../theme"
+import { color, commonStyles } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 
 
@@ -93,7 +93,7 @@ export const IntroScreen = observer(function IntroScreen() {
     >
       <View style={{ flex: 1, justifyContent: 'center' }}>
         {/* Tabs */}
-        <View style={{ flex: 3, minHeight: 300 }}>
+        <View style={{ flex: 3, minHeight: 300, maxHeight: 500 }}>
           <TabView
             lazy
             renderTabBar={() => null}

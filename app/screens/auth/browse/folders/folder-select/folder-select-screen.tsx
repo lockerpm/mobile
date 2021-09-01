@@ -9,6 +9,9 @@ import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { NewFolderModal } from "../new-folder-modal"
+import { FOLDER_IMG } from "../../../../../common/mappings"
+import { useStores } from "../../../../../models"
+import { useMixins } from "../../../../../services/mixins"
 
 
 type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
@@ -17,12 +20,39 @@ type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
 export const FolderSelectScreen = observer(function FolderSelectScreen() {
   const navigation = useNavigation()
   const route = useRoute<FolderSelectScreenProp>()
-  const { mode } = route.params
+  const { mode, initialId, cipherIds = [] } = route.params
+  const { folderStore, cipherStore } = useStores()
+  const { notify } = useMixins()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [selectedFolder, setSelectedFolder] = useState(initialId)
 
+  // Methods
+
+  const handleMove = async () => {
+    if (mode === 'move') {
+      setIsLoading(true)
+      const res = await cipherStore.moveToFolder({
+        ids: cipherIds,
+        folderId: selectedFolder
+      })
+      if (res.kind === 'ok') {
+        notify('success', '', 'Moved to new folder')
+      } else {
+        notify('error', '', 'Something went wrong')
+      }
+      setIsLoading(false)
+    } else {
+      cipherStore.setSelectedFolder(selectedFolder)
+    }
+    navigation.goBack()
+  }
+
+  // Render
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0
@@ -32,16 +62,15 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
           title={mode === 'add' ? 'Add to Folder' : 'Move to Folder'}
           goBack={() => navigation.goBack()}
           goBackText={mode === 'move' ? "Cancel" : undefined}
-          right={mode === 'move' ? (
+          right={(
             <Button
               preset="link"
               text="Save"
+              onPress={handleMove}
               textStyle={{
                 fontSize: 12
               }}
             />
-          ) : (
-            <View style={{ width: 10 }} />
           )}
         />
       )}
@@ -54,6 +83,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       {/* None */}
       <Button
         preset="link"
+        onPress={() => setSelectedFolder(null)}
         style={[commonStyles.SECTION_PADDING, {
           backgroundColor: color.palette.white,
           marginBottom: 10
@@ -61,13 +91,18 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Text preset="black" style={{ flex: 1 }}>
-            None
+            No folder
           </Text>
-          <IoniconsIcon
-            name="checkmark"
-            size={18}
-            color={color.palette.green}
-          />
+
+          {
+            !selectedFolder && (
+              <IoniconsIcon
+                name="checkmark"
+                size={18}
+                color={color.palette.green}
+              />
+            )
+          }
         </View>
       </Button>
       {/* None end */}
@@ -82,7 +117,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
-            source={require('../folder-add.png')}
+            source={FOLDER_IMG.add.img}
             style={{ height: 30, marginRight: 10 }}
           />
           <Text preset="black" style={{ flex: 1 }}>
@@ -98,39 +133,38 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       {/* Create end */}
 
       {/* Other folders */}
-      <Button
-        preset="link"
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white
-        }]}
-      >
-        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Image
-            source={require('../folder-share.png')}
-            style={{ height: 30, marginRight: 10 }}
-          />
-          <Text preset="black" style={{ flex: 1 }}>
-            CyStack
-          </Text>
-        </View>
-      </Button>
+      {
+        folderStore.folders.filter(i => i.id).map((item, index) => (
+          <Button
+            key={index}
+            preset="link"
+            onPress={() => setSelectedFolder(item.id)}
+            style={[commonStyles.SECTION_PADDING, {
+              backgroundColor: color.palette.white
+            }]}
+          >
+            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+              <Image
+                source={FOLDER_IMG.normal.img}
+                style={{ height: 30, marginRight: 10 }}
+              />
+              <Text preset="black" style={{ flex: 1 }}>
+                {item.name}
+              </Text>
 
-      <Button
-        preset="link"
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white
-        }]}
-      >
-        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Image
-            source={require('../folder.png')}
-            style={{ height: 30, marginRight: 10 }}
-          />
-          <Text preset="black" style={{ flex: 1 }}>
-            Test
-          </Text>
-        </View>
-      </Button>
+              {
+                selectedFolder === item.id && (
+                  <IoniconsIcon
+                    name="checkmark"
+                    size={18}
+                    color={color.palette.green}
+                  />
+                )
+              }
+            </View>
+          </Button>
+        ))
+      }
       {/* Other folders end */}
     </Layout>
   )

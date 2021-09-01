@@ -63,3 +63,15 @@ export const TOOLS_ITEMS = {
     routeName: 'dataBreachScanner'
   }
 }
+
+export const FOLDER_IMG = {
+  add: {
+    img: require('./images/folder/folder-add.png')
+  },
+  share: {
+    img: require('./images/folder/folder-share.png')
+  },
+  normal: {
+    img: require('./images/folder/folder.png')
+  }
+}

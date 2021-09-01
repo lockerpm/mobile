@@ -1,11 +1,12 @@
-import React from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ScrollView, ViewStyle } from "react-native"
-import { Button, Layout, Text, AutoImage as Image } from "../../../../components"
+import { Layout, Text, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
 import { color, commonStyles } from "../../../../theme"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import { useMixins } from "../../../../services/mixins"
+import { MenuItem, MenuItemProps } from "./menu-item"
 
 
 const ITEM_CONTAINER: ViewStyle = {
@@ -14,27 +15,22 @@ const ITEM_CONTAINER: ViewStyle = {
   paddingHorizontal: 14,
 }
 
-type MenuItemProps = {
-  icon: string,
-  name: string,
-  noCaret?: boolean,
-  noBorder?: boolean,
-  action?: Function
-}
-
 
 export const MenuScreen = observer(function MenuScreen() {
   const navigation = useNavigation()
   const { user } = useStores()
+  const { lock, logout } = useMixins()
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const items: MenuItemProps[] = [
     {
       icon: 'star-o',
-      name: 'Go Premium Plan'
+      name: 'Manage Plan',
     },
     {
       icon: 'users',
-      name: 'Invite friends'
+      name: 'Invite Friends',
     },
     {
       icon: 'gear',
@@ -49,43 +45,36 @@ export const MenuScreen = observer(function MenuScreen() {
     }
   ]
 
-  const MenuItem = (props: MenuItemProps) => {
-    return (
-      <Button
-        preset="link"
-        onPress={() => props.action && props.action()}
-        style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-          paddingVertical: 16,
-          borderBottomColor: color.line,
-          borderBottomWidth: props.noBorder? 0 : 1
-        }]}
-      >
-        <FontAwesomeIcon
-          name={props.icon}
-          size={18}
-          color={color.textBlack}
-        />
-        <Text
-          preset="black"
-          text={props.name}
-          style={{ flex: 1, paddingHorizontal: 10 }}
-        />
-        {
-          !props.noCaret && (
-            <FontAwesomeIcon
-              name="angle-right"
-              size={18}
-              color={color.textBlack}
-            />
-          )
-        }
-      </Button>
-    )
-  }
+  const items2: MenuItemProps[] = [
+    {
+      icon: 'lock',
+      name: 'Lock',
+      action: async () => {
+        setIsLoading(true)
+        await lock()
+        setIsLoading(false)
+        navigation.navigate('lock')
+      }
+    },
+    {
+      icon: 'sign-out',
+      name: 'Log Out',
+      action: async () => {
+        setIsLoading(true)
+        await logout()
+        setIsLoading(false)
+        navigation.navigate('onBoarding')
+      },
+      noBorder: true
+    }
+  ]
+
+  
 
   return (
     <Layout
       borderBottom
+      isContentOverlayLoading={isLoading}
       containerStyle={{ backgroundColor: color.block }}
     >
       <Text
@@ -99,17 +88,21 @@ export const MenuScreen = observer(function MenuScreen() {
           commonStyles.CENTER_HORIZONTAL_VIEW,
           { marginBottom: 15, paddingVertical: 14 }
         ]}>
-          <Image
-            source={{ uri: user.avatar }}
-            style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
-          />
+          {
+            !!user.avatar && (
+              <Image
+                source={{ uri: user.avatar }}
+                style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
+              />
+            )
+          }
           <View>
             <Text
               preset="black"
               text={user.email}
             />
             <Text style={{ fontSize: 10 }}>
-              Free Account - EXP: 19 MAY 21
+              {user.plan.name}
             </Text>
           </View>
         </View>
@@ -126,12 +119,14 @@ export const MenuScreen = observer(function MenuScreen() {
         </View>
 
         <View style={[ITEM_CONTAINER]}>
-          <MenuItem
-            icon="lock"
-            name="Lock CyStack Locker Now"
-            noBorder
-            noCaret
-          />
+          {
+            items2.map((item, index) => (
+              <MenuItem
+                key={index}
+                {...item}
+              />
+            ))
+          }
         </View>
       </ScrollView>
     </Layout>

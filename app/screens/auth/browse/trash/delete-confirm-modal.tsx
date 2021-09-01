@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Modal } from "native-base"
 import { Button, Text, AutoImage as Image } from "../../../../components"
 import { color } from "../../../../theme"
@@ -6,11 +6,24 @@ import { color } from "../../../../theme"
 interface Props {
   isOpen?: boolean,
   onClose?: Function,
-  deleteItem?: Function
+  onConfirm?: Function,
+  title?: string,
+  desc?: string,
+  btnText?: string
 }
 
 export const DeleteConfirmModal = (props: Props) => {
-  const { isOpen, onClose, deleteItem } = props
+  const { isOpen, onClose, onConfirm, title, desc, btnText } = props
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleConfirm = async () => {
+    setIsLoading(true)
+    if (onConfirm) {
+      await onConfirm()
+    }
+    setIsLoading(false)
+    onClose()
+  }
   
   return (
     <Modal
@@ -19,6 +32,8 @@ export const DeleteConfirmModal = (props: Props) => {
     >
       <Modal.Content>
         <Modal.CloseButton />
+
+        {/* Body */}
         <Modal.Body style={{ alignItems: 'center' }}>
           <Image
             source={require('./trash.png')}
@@ -26,29 +41,35 @@ export const DeleteConfirmModal = (props: Props) => {
           />
           <Text
             preset="black"
-						text="Delete item?"
+						text={title || "Delete item?"}
 						style={{ fontSize: 18, marginBottom: 5, marginTop: 15 }}
           />
 					<Text
-						text="This item will be lost and you will no longer be able to restore it."
+						text={desc || "This item will be lost and you will no longer be able to restore it."}
 						style={{ textAlign: 'center', fontSize: 12 }}
 					/>
         </Modal.Body>
+        {/* Body end */}
+
+        {/* Footer */}
         <Modal.Footer style={{ marginRight: 20, marginBottom: 16, paddingRight: 0 }}>
           <Button
             isNativeBase
 						colorScheme="csError"
-            onPress={() => deleteItem && deleteItem()}
+            disabled={isLoading}
+            isLoading={isLoading}
+            onPress={handleConfirm}
             style={{
               width: '100%'
             }}
           >
 						<Text
-							text="Delete"
+							text={btnText || "Delete"}
 							style={{ color: color.palette.white }}
 						/>
 					</Button>
         </Modal.Footer>
+        {/* Footer end */}
       </Modal.Content>
     </Modal>
   )

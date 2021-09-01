@@ -2,6 +2,7 @@ import { GeneralApiProblem } from "./api-problem"
 import { UserSnapshot } from "../../models/user/user"
 import { DeviceType } from "../../../core/enums"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
+import { FolderResponse } from "../../../core/models/response/folderResponse"
 
 type SessionSnapshot = {
     access_token: string
@@ -15,6 +16,15 @@ export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | General
 export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
 export type EmptyResult = { kind: "ok" } | GeneralApiProblem
 export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
+export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
+export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
+export type GetPlanResult = {
+    kind: 'ok',
+    data: {
+        name: string,
+        alias: string
+    }
+} | GeneralApiProblem
 
 // Request data
 export type SessionLoginData = {
@@ -25,10 +35,41 @@ export type SessionLoginData = {
     device_identifier: string
 }
 
+export type RegisterData = {
+    name: string,
+    email: string,
+    master_password_hash: string,
+    master_password_hint: string,
+    key: string,
+    kdf: number,
+    kdf_iterations: number,
+    reference_data: string,
+    keys: {
+        public_key: string,
+        encrypted_private_key: string
+    },
+    score: number
+}
+
+export type ChangePasswordData = {
+    key: string,
+    new_master_password_hash: string,
+    master_password_hash: string
+}
+
+export type PasswordHintRequestData = {
+    email: string
+}
+
 export type LoginUri = {
     match: string | null,
     response: string | null,
     uri: string | null
+}
+
+export type MoveFolderData = {
+    ids: string[],
+    folderId: string
 }
 
 export type CipherData = {

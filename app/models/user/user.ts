@@ -1,8 +1,7 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { withEnvironment } from ".."
-import { SessionLoginData } from "../../services/api"
+import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
+import { ChangePasswordData, RegisterData, SessionLoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
-import { save, load, remove, USER_STORAGE_KEY } from "../../utils/storage"
+import { withEnvironment } from "../extensions/with-environment"
 
 
 /**
@@ -24,37 +23,26 @@ export const UserModel = types
     isLoggedInPw: types.maybeNull(types.boolean),
     pwd_user_id: types.maybeNull(types.string),
     is_pwd_manager: types.maybeNull(types.boolean),
-    default_team_id: types.maybeNull(types.string)
+    default_team_id: types.maybeNull(types.string),
+
+    // Others data
+    teams: types.maybeNull(types.array(types.frozen())),
+    plan: types.maybeNull(types.frozen()),
+
+    // User
+    language: types.maybeNull(types.string),
+    isBiometricUnlock: types.maybeNull(types.boolean),
+    appTimeout: types.maybeNull(types.number),
+    appTimeoutAction: types.maybeNull(types.string),
+
+    // UI
+    isOffline: types.maybeNull(types.boolean),
+    showNetworkError: types.maybeNull(types.boolean),
+    passwordChanged: types.maybeNull(types.boolean)
   })
   .extend(withEnvironment)
-  .views((self) => ({
-    get info() {
-      return {
-        token: self.token,
-        email: self.email,
-        username: self.username,
-        full_name: self.full_name,
-        avatar: self.avatar,
-        isLoggedIn: self.isLoggedIn
-      }
-    }
-  }))
+  .views((self) => ({}))
   .actions((self) => ({
-    // Storage
-    saveToStorage: async () => {
-      await save(USER_STORAGE_KEY, self.info)
-    },
-    clearStorage: async () => {
-      await remove(USER_STORAGE_KEY)
-    },
-
-    // Environment
-    checkApiHeader: () => {
-      if (self.token && !self.environment.api.apisauce.headers['Authorization']) {
-        self.environment.api.apisauce.setHeader('Authorization', `Bearer ${self.token}`)
-      }
-    },
-
     // Token
     saveToken: (token: string) => {
       self.token = token
@@ -90,45 +78,75 @@ export const UserModel = types
       self.pwd_user_id = ''
       self.is_pwd_manager = false
       self.default_team_id = ''
+      self.teams = null
+      self.plan = null
+      self.isBiometricUnlock = false
+      self.appTimeout = -1
+      self.appTimeoutAction = 'lock'
     },
     setLoggedInPw: (isLoggedInPw: boolean) => {
       self.isLoggedInPw = isLoggedInPw
+    },
+
+    // Others data
+    setTeams: (teams: object[]) => {
+      self.teams = cast(teams)
+    },
+    setPlan: (plan: object) => {
+      self.plan = cast(plan)
+    },
+
+    // User
+    setLanguage: (lang: string) => {
+      self.language = lang
+    },
+    setBiometricUnlock: (isActive: boolean) => {
+      self.isBiometricUnlock = isActive
+    },
+    setAppTimeout: (timeout: number) => {
+      self.appTimeout = timeout
+    },
+    setAppTimeoutAction: (action: string) => {
+      self.appTimeoutAction = action
+    },
+
+    // UI
+    setIsOffline: (isOffline: boolean) => {
+      self.isOffline = isOffline
+    },
+    setShowNetworkError: (value: boolean) => {
+      self.showNetworkError = value
+    },
+    setPasswordChanged: (value: boolean) => {
+      self.passwordChanged = value
     }
   }))
   .actions((self) => ({
-    loadFromStorage: async () => {
-      const res = await load(USER_STORAGE_KEY)
-      if (res) {
-        self.saveToken(res.token)
-        self.saveUser(res)
-        self.saveUserPw(res)
-      }
-    },
-
     getUser: async () => {
-      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser()
       if (res.kind === "ok") {
         self.saveUser(res.user)
-        self.saveToStorage()
       }
       return res
     },
 
+    sendPasswordHint: async (email: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.sendMasterPasswordHint({ email })
+      return res
+    },
+
     getUserPw: async () => {
-      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUserPw()
       if (res.kind === "ok") {
         self.saveUserPw(res.user)
-        self.saveToStorage()
       }
       return res
     },
 
     sessionLogin: async (payload: SessionLoginData) => {
-      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.sessionLogin(payload)
       if (res.kind === "ok") {
@@ -137,26 +155,47 @@ export const UserModel = types
       return res
     },
 
+    register: async (payload: RegisterData) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.register(payload)
+      return res
+    },
+
+    changeMasterPassword: async (payload: ChangePasswordData) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.changeMasterPassword(payload)
+      return res
+    },
+
     lock: () => {
       self.setLoggedInPw(false)
     },
 
     logout: async () => {
-      self.checkApiHeader()
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.logout()
       if (res.kind === "ok") {
         self.clearToken()
         self.clearUser()
-        self.clearStorage()
       }
       return res
     },
 
-    syncData: async () => {
-      self.checkApiHeader()
+    loadTeams: async () => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.syncData()
+      const res = await userApi.getTeams()
+      if (res.kind === "ok") {
+        self.setTeams(res.teams)
+      }
+      return res
+    },
+
+    loadPlan: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getPlan()
+      if (res.kind === "ok") {
+        self.setPlan(res.data)
+      }
       return res
     }
   }))

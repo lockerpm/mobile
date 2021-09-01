@@ -31,7 +31,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
               key={index}
               preset="link"
               onPress={() => {
-                navigation.navigate(item.routeName)
+                navigation.navigate(item.routeName, { fromTools: true })
               }}
               style={{
                 borderBottomColor: color.line,

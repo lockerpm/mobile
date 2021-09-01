@@ -4,14 +4,18 @@ import { Text, AutoImage as Image } from "../../../../components"
 import { color, commonStyles } from "../../../../theme"
 import { BROWSE_ITEMS } from "../../../../common/mappings"
 import { View, ScrollView } from "react-native"
+import { useStores } from "../../../../models"
 
 interface Props {
   isOpen?: boolean,
   onClose?: Function,
-  navigation?: any
+  navigation?: any,
+  defaultFolder?: string
 }
 
 export const AddAction = (props: Props) => {
+  const { cipherStore } = useStores()
+
   return (
     <Actionsheet
       isOpen={props.isOpen}
@@ -27,6 +31,9 @@ export const AddAction = (props: Props) => {
                 key={index}
                 onPress={() => {
                   props.onClose()
+                  if (props.defaultFolder) {
+                    cipherStore.setSelectedFolder(props.defaultFolder)
+                  }
                   props.navigation.navigate(`${item.routeName}__edit`, {
                     mode: 'add'
                   })

@@ -1,19 +1,34 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View } from "react-native"
-import { Layout, Header, Button, AutoImage as Image, Text, FloatingInput } from "../../../../../components"
+import { Linking, View } from "react-native"
+import { 
+  Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength, CipherInfoCommon 
+} from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { PasswordAction } from "../password-action"
+import { useMixins } from "../../../../../services/mixins"
+import { useStores } from "../../../../../models"
+import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 
 
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const navigation = useNavigation()
+  const { getWebsiteLogo, getPasswordStrength } = useMixins()
+  const { cipherStore } = useStores()
+  const selectedCipher = cipherStore.cipherView
 
   const [showAction, setShowAction] = useState(false)
+
+  // ------------------ COMPUTED --------------------
+
+  const passwordStrength = getPasswordStrength(selectedCipher.login.password)
+
+
+  // ------------------ RENDER --------------------
 
   return (
     <Layout
@@ -40,11 +55,23 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         />
       )}
     >
-      <PasswordAction
-        navigation={navigation}
-        isOpen={showAction}
-        onClose={setShowAction}
-      />
+      {/* Actions */}
+      {
+        selectedCipher.deletedDate ? (
+          <DeletedAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={setShowAction}
+          />
+        ) : (
+          <PasswordAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={setShowAction}
+          />
+        )
+      }
+      {/* Actions end */}
 
       {/* Intro */}
       <View>
@@ -55,12 +82,17 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           marginBottom: 10
         }]}>
           <Image
-            source={BROWSE_ITEMS.password.icon}
+            source={
+              selectedCipher.login.uri 
+                ? getWebsiteLogo(selectedCipher.login.uri)
+                : BROWSE_ITEMS.password.icon
+            }
+            backupSource={BROWSE_ITEMS.password.icon}
             style={{ height: 55, width: 55, marginBottom: 5 }}
           />
           <Text
             preset="header"
-            text="whitehub.net"
+            text={selectedCipher.name}
           />
         </View>
       </View>
@@ -71,56 +103,71 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           backgroundColor: color.palette.white,
           paddingVertical: 22
       }]}>
+        {/* Username */}
         <FloatingInput
+          fixedLabel
+          copyAble
           label="Email or Username"
-          value="duchm@cystack.net"
+          value={selectedCipher.login.username}
           editable={false}
         />
 
+        {/* Password */}
         <FloatingInput
           isPassword
+          fixedLabel
+          copyAble
           label="Password"
-          value="password"
+          value={selectedCipher.login.password}
           editable={false}
-          style={{ marginTop: 20 }}
+          style={{ marginVertical: 20 }}
         />
 
+        {/* Password strength */}
+        <Text
+          text="Password Security"
+          style={{ fontSize: 10 }}
+        />
+        <PasswordStrength preset="text" value={passwordStrength.score} />
+
+        {/* Website URL */}
         <FloatingInput
+          fixedLabel
           label="Website URL"
-          value="https://whitehub.net"
+          value={selectedCipher.login.uri}
           editable={false}
           style={{ marginVertical: 20 }}
           buttonRight={(
             <Button
+              disabled={!selectedCipher.login.uri}
               preset="link"
+              onPress={() => {
+                Linking.openURL(selectedCipher.login.uri)
+              }}
             >
               <FontAwesomeIcon 
                 name="external-link"
-                size={18} 
+                size={14} 
                 color={color.text} 
               />
             </Button>
           )}
         />
 
-        <Text
-          text="Password Security"
-          style={{ fontSize: 10 }}
+        {/* Notes */}
+        <FloatingInput
+          label="Notes"
+          value={selectedCipher.notes}
+          editable={false}
+          textarea
+          fixedLabel
+          copyAble
         />
-        <Text
-            preset="green"
-            style={{
-              marginTop: 5,
-              fontSize: 12
-            }}
-          >
-            <IoniconsIcon
-              name="shield-checkmark"
-              size={14}
-              color={color.palette.green}
-            />
-            {" Strong Password"}
-          </Text>
+        {/* Notes end */}
+
+        {/* Others common info */}
+        <CipherInfoCommon cipher={selectedCipher} />
+        {/* Others common info end */}
       </View>
       {/* Info end */}
     </Layout>

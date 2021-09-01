@@ -1,15 +1,17 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { 
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color, commonStyles } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import { useMixins } from "../../../../../services/mixins"
+import { useStores } from "../../../../../models"
+import { CipherView, IdentityView } from "../../../../../../core/models/view"
+import { CipherType } from "../../../../../../core/enums"
 
 
 type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'identities__edit'>;
@@ -26,26 +28,120 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
+  const { newCipher, createCipher, updateCipher } = useMixins()
+  const { cipherStore } = useStores()
+  const selectedCipher = cipherStore.cipherView
+
+  // Params
+
+  const [isLoading, setIsLoading] = useState(false)
 
   // Forms
-  const [title, setTitle] = useState('')
-  const [fullName, setfullName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [address1, setAddress1] = useState('')
-  const [address2, setAddress2] = useState('')
-  const [city, setCity] = useState('')
-  const [state, setState] = useState('')
-  const [zip, setZip] = useState('')
-  const [country, setCountry] = useState()
-  const [note, setNote] = useState('')
+  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [title, setTitle] = useState(mode !== 'add' ? selectedCipher.identity.title : '')
+  const [firstName, setFirstName] = useState(mode !== 'add' ? selectedCipher.identity.firstName : '')
+  const [lastName, setLastName] = useState(mode !== 'add' ? selectedCipher.identity.lastName : '')
+  const [username, setUsername] = useState(mode !== 'add' ? selectedCipher.identity.username : '')
+  const [email, setEmail] = useState(mode !== 'add' ? selectedCipher.identity.email : '')
+  const [phone, setPhone] = useState(mode !== 'add' ? selectedCipher.identity.phone : '')
+  const [company, setCompany] = useState(mode !== 'add' ? selectedCipher.identity.company : '')
+  const [ssn, setSsn] = useState(mode !== 'add' ? selectedCipher.identity.ssn : '')
+  const [passport, setPassport] = useState(mode !== 'add' ? selectedCipher.identity.passportNumber : '')
+  const [license, setLicense] = useState(mode !== 'add' ? selectedCipher.identity.licenseNumber : '')
+  const [address1, setAddress1] = useState(mode !== 'add' ? selectedCipher.identity.address1 : '')
+  const [address2, setAddress2] = useState(mode !== 'add' ? selectedCipher.identity.address2 : '')
+  // const [address3, setAddress3] = useState(mode !== 'add' ? selectedCipher.identity.address3 : '')
+  const [city, setCity] = useState(mode !== 'add' ? selectedCipher.identity.city : '')
+  const [state, setState] = useState(mode !== 'add' ? selectedCipher.identity.state : '')
+  const [zip, setZip] = useState(mode !== 'add' ? selectedCipher.identity.postalCode : '')
+  const [country, setCountry] = useState(mode !== 'add' ? selectedCipher.identity.country : '')
+  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
+
+  // Watchers
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (cipherStore.selectedFolder) {
+        setFolder(cipherStore.selectedFolder)
+        cipherStore.setSelectedFolder(null)
+      }
+    });
+
+    return unsubscribe
+  }, [navigation])
+
+  // Methods
+
+  const handleSave = async () => {
+    setIsLoading(true)
+    let payload: CipherView
+    if (mode === 'add') {
+      payload = newCipher(CipherType.Identity)
+    } else {
+      payload = {...selectedCipher}
+    }
+
+    const data = new IdentityView()
+    data.title = title
+    data.firstName = firstName
+    data.lastName = lastName
+    data.username = username
+    data.email = email
+    data.company = company
+    data.phone = phone
+    data.ssn = ssn
+    data.passportNumber = passport
+    data.licenseNumber = license
+    data.address1 = address1
+    data.address2 = address2
+    // data.address3 = address3
+    data.city = city
+    data.state = state
+    data.postalCode = zip
+    data.country = country
+
+    payload.name = name
+    payload.notes = note
+    payload.folderId = folder
+    payload.identity = data
+    const collectionIds = payload.collectionIds
+
+    let res = { kind: 'unknown' }
+    if (['add', 'clone'].includes(mode)) {
+      res = await createCipher(payload, 0, collectionIds)
+    } else {
+      res = await updateCipher(payload.id, payload, 0, collectionIds)
+    }
+    
+    setIsLoading(false)
+    if (res.kind === 'ok') {
+      navigation.goBack()
+    }
+  }
+
+  // Render
 
   const contactDetails: InputItem[] = [
     {
-      label: 'Full Name',
-      value: fullName,
-      setter: setfullName,
-      isRequired: true
+      label: 'Title',
+      value: title,
+      setter: setTitle
+    },
+    {
+      label: 'First name',
+      value: firstName,
+      setter: setFirstName
+    },
+    {
+      label: 'Last name',
+      value: lastName,
+      setter: setLastName
+    },
+    {
+      label: 'Username',
+      value: username,
+      setter: setUsername
     },
     {
       label: 'Email',
@@ -54,9 +150,32 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
       type: 'email-address'
     },
     {
+      label: 'Company',
+      value: company,
+      setter: setCompany
+    },
+    {
       label: 'Phone',
       value: phone,
       setter: setPhone,
+      type: 'numeric'
+    },
+    {
+      label: 'Social security number',
+      value: ssn,
+      setter: setSsn,
+      type: 'numeric'
+    },
+    {
+      label: 'Passport number',
+      value: passport,
+      setter: setPassport,
+      type: 'numeric'
+    },
+    {
+      label: 'License number',
+      value: license,
+      setter: setLicense,
       type: 'numeric'
     }
   ]
@@ -72,13 +191,18 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
       value: address2,
       setter: setAddress2
     },
+    // {
+    //   label: 'Address 3',
+    //   value: address3,
+    //   setter: setAddress3
+    // },
     {
-      label: 'City',
+      label: 'City / Town',
       value: city,
       setter: setCity
     },
     {
-      label: 'State or Region',
+      label: 'State / Province',
       value: state,
       setter: setState
     },
@@ -87,11 +211,17 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
       value: zip,
       setter: setZip,
       type: 'numeric'
-    }
+    },
+    {
+      label: 'Country',
+      value: country,
+      setter: setCountry
+    },
   ]
 
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       containerStyle={{ 
         backgroundColor: color.block,
         paddingHorizontal: 0
@@ -105,6 +235,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
             <Button
               preset="link"
               text="Save"
+              onPress={handleSave}
               textStyle={{
                 fontSize: 12
               }}
@@ -113,7 +244,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
         />
       )}
     >
-      {/* Title */}
+      {/* Name */}
       <View
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
       >
@@ -127,17 +258,17 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label="Title"
-              value={title}
-              onChangeText={setTitle}
+              label="Name"
+              value={name}
+              onChangeText={setName}
             />
           </View>
         </View>
       </View>
-      {/* Title end */}
+      {/* Name end */}
 
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="CONTACT DETAILS" style={{ fontSize: 10 }} />
+        <Text text="PERSONAL INFORMATION" style={{ fontSize: 10 }} />
       </View>
 
       {/* Info */}
@@ -191,42 +322,12 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
             />
           ))
         }
-
-        <Button
-          preset="link"
-          onPress={() => navigation.navigate('countrySelector')}
-          style={{ marginTop: 20 }}
-        >
-          <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
-          >
-            <View>
-              <Text 
-                text="Country"
-                style={{ fontSize: 10 }}
-              />
-              <Text
-                preset="black"
-                text="Vietnam"
-              />
-            </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
-          </View>
-        </Button>
       </View>
       {/* Address end */}
 
       {/* Others */}
       <CipherOthersInfo
         navigation={navigation}
-        mode={mode === 'add' ? 'add' : 'move'}
         hasNote
         note={note}
         onChangeNote={setNote}

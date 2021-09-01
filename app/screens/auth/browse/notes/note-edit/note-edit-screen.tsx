@@ -1,14 +1,17 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { 
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color, commonStyles } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
+import { useStores } from "../../../../../models"
+import { useMixins } from "../../../../../services/mixins"
+import { CipherView } from "../../../../../../core/models/view"
+import { CipherType } from "../../../../../../core/enums"
 
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, 'notes__edit'>;
@@ -18,26 +21,76 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<NoteEditScreenProp>()
   const { mode } = route.params
+  const { cipherStore } = useStores()
+  const selectedCipher = cipherStore.cipherView
+  const { newCipher, createCipher, updateCipher } = useMixins()
 
   // Forms
-  const [title, setTitle] = useState('')
-  const [note, setNote] = useState('')
+  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
 
+  // Params
+  const [isLoading, setIsLoading] = useState(false)
+
+  // Watchers
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (cipherStore.selectedFolder) {
+        setFolder(cipherStore.selectedFolder)
+        cipherStore.setSelectedFolder(null)
+      }
+    });
+
+    return unsubscribe
+  }, [navigation])
+
+  // Methods
+  const handleSave = async () => {
+    setIsLoading(true)
+    let payload: CipherView
+    if (mode === 'add') {
+      payload = newCipher(CipherType.SecureNote)
+    } else {
+      payload = {...selectedCipher}
+    }
+
+    payload.name = name
+    payload.notes = note
+    payload.folderId = folder
+    const collectionIds = payload.collectionIds
+
+    let res = { kind: 'unknown' }
+    if (['add', 'clone'].includes(mode)) {
+      res = await createCipher(payload, 0, collectionIds)
+    } else {
+      res = await updateCipher(payload.id, payload, 0, collectionIds)
+    }
+    
+    setIsLoading(false)
+    if (res.kind === 'ok') {
+      navigation.goBack()
+    }
+  }
+
+  // Render
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       containerStyle={{ 
         backgroundColor: color.block,
         paddingHorizontal: 0
       }}
       header={(
         <Header
-          title={mode === 'add' ? 'Add Secure Note' : 'Edit'}
+          title={mode !== 'edit' ? 'Add Secure Note' : 'Edit'}
           goBack={() => navigation.goBack()}
           goBackText="Cancel"
           right={(
             <Button
               preset="link"
               text="Save"
+              onPress={handleSave}
               textStyle={{
                 fontSize: 12
               }}
@@ -46,7 +99,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
         />
       )}
     >
-      {/* Title */}
+      {/* Name */}
       <View
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
       >
@@ -60,14 +113,14 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label="Title"
-              value={title}
-              onChangeText={setTitle}
+              label="Name"
+              value={name}
+              onChangeText={setName}
             />
           </View>
         </View>
       </View>
-      {/* Title end */}
+      {/* Name end */}
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text text="DETAILS" style={{ fontSize: 10 }} />
@@ -97,7 +150,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
       {/* Others */}
       <CipherOthersInfo
         navigation={navigation}
-        mode={mode === 'add' ? 'add' : 'move'}
+        folderId={folder}
       />
       {/* Others end */}
     </Layout>
