@@ -25,8 +25,15 @@ export const UserModel = types
     is_pwd_manager: types.maybeNull(types.boolean),
     default_team_id: types.maybeNull(types.string),
 
-    // Others
+    // Others data
     teams: types.maybeNull(types.array(types.frozen())),
+    plan: types.maybeNull(types.frozen()),
+
+    // User
+    language: types.maybeNull(types.string),
+    isBiometricUnlock: types.maybeNull(types.boolean),
+    appTimeout: types.maybeNull(types.number),
+    appTimeoutAction: types.maybeNull(types.string),
 
     // UI
     isOffline: types.maybeNull(types.boolean),
@@ -70,14 +77,36 @@ export const UserModel = types
       self.pwd_user_id = ''
       self.is_pwd_manager = false
       self.default_team_id = ''
+      self.teams = null
+      self.plan = null
+      self.isBiometricUnlock = false
+      self.appTimeout = -1
+      self.appTimeoutAction = 'lock'
     },
     setLoggedInPw: (isLoggedInPw: boolean) => {
       self.isLoggedInPw = isLoggedInPw
     },
 
-    // Others
+    // Others data
     setTeams: (teams: object[]) => {
       self.teams = cast(teams)
+    },
+    setPlan: (plan: object) => {
+      self.plan = cast(plan)
+    },
+
+    // User
+    setLanguage: (lang: string) => {
+      self.language = lang
+    },
+    setBiometricUnlock: (isActive: boolean) => {
+      self.isBiometricUnlock = isActive
+    },
+    setAppTimeout: (timeout: number) => {
+      self.appTimeout = timeout
+    },
+    setAppTimeoutAction: (action: string) => {
+      self.appTimeoutAction = action
     },
 
     // UI
@@ -147,6 +176,15 @@ export const UserModel = types
       const res = await userApi.getTeams()
       if (res.kind === "ok") {
         self.setTeams(res.teams)
+      }
+      return res
+    },
+
+    loadPlan: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getPlan()
+      if (res.kind === "ok") {
+        self.setPlan(res.data)
       }
       return res
     }

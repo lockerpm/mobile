@@ -17,7 +17,7 @@ export const LockScreen = observer(function LockScreen() {
   const { user } = useStores()
 
   // Params
-  const [masterPassword, setMasterPassword] = useState('11$23581321Duc')
+  const [masterPassword, setMasterPassword] = useState('')
   const [isScreenLoading, setIsScreenLoading] = useState(true)
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isBioUnlocking, setIsBioUnlocking] = useState(false)
@@ -27,7 +27,9 @@ export const LockScreen = observer(function LockScreen() {
   // Methods
   const mounted = async () => {
     if (!route.params || !route.params.skipCheck) {
-      await user.getUser()
+      if (!user.isOffline) {
+        await user.getUser()
+      }
     }
     setIsScreenLoading(false)
   }
@@ -129,15 +131,19 @@ export const LockScreen = observer(function LockScreen() {
             padding: 4
           }}
         >
-          <Image 
-            source={{ uri: user.avatar }} 
-            style={{ 
-              height: 28, 
-              width: 28,
-              borderRadius: 14,
-              backgroundColor: color.palette.white
-            }} 
-          />
+          {
+            !!user.avatar && (
+              <Image 
+                source={{ uri: user.avatar }} 
+                style={{ 
+                  height: 28, 
+                  width: 28,
+                  borderRadius: 14,
+                  backgroundColor: color.palette.white
+                }} 
+              />
+            )
+          }
           <Text 
             style={{ 
               fontSize: 12,

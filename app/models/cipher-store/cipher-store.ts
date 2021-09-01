@@ -12,7 +12,6 @@ import { withEnvironment } from "../extensions/with-environment"
 export const CipherStoreModel = types
   .model("CipherStore")
   .props({
-    token: types.maybeNull(types.string),
     lastSync: types.maybeNull(types.number),
     generatedPassword: types.maybeNull(types.string),
     selectedCipher: types.maybeNull(types.frozen()),
@@ -25,18 +24,6 @@ export const CipherStoreModel = types
     }
   }))
   .actions((self) => ({
-    // ----------------- TOKEN -------------------
-
-    saveToken: (token: string) => {
-      self.token = token
-      self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-    },
-
-    clearToken: () => {
-      self.token = ''
-      self.environment.api.apisauce.deleteHeader('Authorization')
-    },
-
     // ----------------- CACHE -------------------
 
     setGeneratedPassword: (password: string) => {

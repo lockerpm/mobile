@@ -11,24 +11,11 @@ import { withEnvironment } from "../extensions/with-environment"
 export const FolderStoreModel = types
   .model("FolderStore")
   .props({
-    token: types.maybeNull(types.string),
     folders: types.array(types.frozen())
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    // ----------------- TOKEN -------------------
-
-    saveToken: (token: string) => {
-      self.token = token
-      self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-    },
-
-    clearToken: () => {
-      self.token = ''
-      self.environment.api.apisauce.deleteHeader('Authorization')
-    },
-
     // ----------------- DATA -------------------
 
     setFolders: (folders: FolderView[]) => {
