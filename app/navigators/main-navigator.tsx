@@ -214,7 +214,7 @@ export function MainNavigator() {
         <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
 
-        <Stack.Screen name="settings" component={SettingsScreen} />
+        <Stack.Screen name="settings" component={SettingsScreen} initialParams={{ fromIntro: false }} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />
       </Stack.Navigator>

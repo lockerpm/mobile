@@ -64,7 +64,13 @@ export const LockScreen = observer(function LockScreen() {
   const handleUnlockBiometric = async () => {
     if (!user.isBiometricUnlock) {
       notify('error', '', 'Biometric unlock is not enabled')
+      return
     }
+    if (user.passwordChanged) {
+      notify('error', 'Master password changed', 'Please login using new password')
+      return
+    }
+
     setIsBioUnlocking(true)
     const res = await biometricLogin()
     setIsBioUnlocking(false)

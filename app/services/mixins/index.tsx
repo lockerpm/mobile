@@ -36,6 +36,7 @@ const defaultData = {
   randomString: () => '',
   newCipher: (type: CipherType) => { return new CipherView() },
   register: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
+  changeMasterPassword: async (oldPassword: string, newPassword: string) => { return { kind: 'unknown' } },
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getTeam: (teams: object[], orgId: string) => ({ name: '' }),
   getCiphers: async (params: GetCiphersParams) => { return [] },
@@ -88,7 +89,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
       // Offline compare
       const storedKeyHash = await cryptoService.getKeyHash()
-      if (storedKeyHash) {
+      if (storedKeyHash && !user.passwordChanged) {
         const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
         if (passwordValid) {
           messagingService.send('loggedIn')
@@ -129,6 +130,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await cryptoService.setKeyHash(keyHash)
       await cryptoService.setEncKey(res.data.key)
       await cryptoService.setEncPrivateKey(res.data.private_key)
+
+      if (user.passwordChanged) {
+        user.setPasswordChanged(false)
+      }
       return { kind: 'ok' }
     } catch (e) {
       notify('error', '', 'Session login failed')
@@ -154,6 +159,13 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         notify('error', '', 'Biometric login failed')
         return { kind: 'bad-data' }
       }
+
+      // Check key
+      const hasKey = await cryptoService.hasKey()
+      if (!hasKey) {
+        notify('error', '', 'Biometric login failed')
+        return { kind: 'bad-data' }
+      }
       
       // Fake set key
       messagingService.send('loggedIn')
@@ -169,6 +181,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // Set master password
   const register = async (masterPassword: string, hint: string, passwordStrength: number) => {
     try {
+      await delay(200)
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const referenceData = ''
@@ -213,6 +226,47 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
   }
 
+  // Change master password
+  const changeMasterPassword = async (oldPassword: string, newPassword: string): Promise<{ kind: string }> => {
+    try {
+      await delay(200)
+      const kdf = KdfType.PBKDF2_SHA256
+      const kdfIterations = 100000
+      const key = await cryptoService.makeKey(newPassword, user.email, kdf, kdfIterations)
+      const keyHash = await cryptoService.hashPassword(newPassword, key)
+      let encKey = null
+      const existingEncKey = await cryptoService.getEncKey()
+      if (existingEncKey == null) {
+        encKey = await cryptoService.makeEncKey(key)
+      } else {
+        encKey = await cryptoService.remakeEncKey(key)
+      }
+
+      const oldKeyHash = await cryptoService.hashPassword(oldPassword, null)
+
+      // Send API
+      const res = await user.changeMasterPassword({
+        key: encKey[1].encryptedString,
+        new_master_password_hash: keyHash,
+        master_password_hash: oldKeyHash
+      })
+      if (res.kind !== 'ok') {
+        notify('error', '', 'Session login failed')
+        return { kind: 'bad-data' }
+      }
+
+      // Setup service
+      notify('success', '', 'Master password changed')
+      user.setPasswordChanged(true)
+      await lock()
+      await cryptoService.clearKeys()
+      return { kind: 'ok' }
+    } catch (e) {
+      notify('error', '', 'Session login failed')
+      return { kind: 'bad-data' }
+    }
+  }
+
   // Logout
   const logout = async () => {
     await Promise.all([
@@ -248,7 +302,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
       // Sync service
       const userId = await userService.getUserId()
-      await syncService.syncProfile(res.data.profile)
+
+      // TODO: this one got error
+      // await syncService.syncProfile(res.data.profile)
+
       await syncService.syncFolders(userId, res.data.folders)
       await syncService.syncCollections(res.data.collections)
       await syncService.syncCiphers(userId, res.data.ciphers)
@@ -465,6 +522,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     getSyncData,
     newCipher,
     register,
+    changeMasterPassword,
     getWebsiteLogo,
     getTeam,
     getCiphers,
