@@ -51,6 +51,12 @@ export type RegisterData = {
     score: number
 }
 
+export type ChangePasswordData = {
+    key: string,
+    new_master_password_hash: string,
+    master_password_hash: string
+}
+
 export type PasswordHintRequestData = {
     email: string
 }

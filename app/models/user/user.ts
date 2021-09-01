@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
-import { RegisterData, SessionLoginData } from "../../services/api"
+import { ChangePasswordData, RegisterData, SessionLoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -37,7 +37,8 @@ export const UserModel = types
 
     // UI
     isOffline: types.maybeNull(types.boolean),
-    showNetworkError: types.maybeNull(types.boolean)
+    showNetworkError: types.maybeNull(types.boolean),
+    passwordChanged: types.maybeNull(types.boolean)
   })
   .extend(withEnvironment)
   .views((self) => ({}))
@@ -115,6 +116,9 @@ export const UserModel = types
     },
     setShowNetworkError: (value: boolean) => {
       self.showNetworkError = value
+    },
+    setPasswordChanged: (value: boolean) => {
+      self.passwordChanged = value
     }
   }))
   .actions((self) => ({
@@ -154,6 +158,12 @@ export const UserModel = types
     register: async (payload: RegisterData) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.register(payload)
+      return res
+    },
+
+    changeMasterPassword: async (payload: ChangePasswordData) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.changeMasterPassword(payload)
       return res
     },
 
