@@ -18,7 +18,6 @@ import {
 import UserInactivity from 'react-native-user-inactivity'
 import NetInfo from "@react-native-community/netinfo"
 import { color } from "../theme"
-import { INACTIVE_TIMEOUT } from "../config/constants"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../models"
@@ -40,7 +39,9 @@ export type PrimaryParamList = {
   switchDevice: undefined,
   biometricUnlockIntro: undefined,
   mainTab: undefined,
-  passwordGenerator: undefined,
+  passwordGenerator: {
+    fromTools?: boolean
+  },
   passwordHealth: undefined,
   dataBreachScanner: undefined,
   countrySelector: undefined,
@@ -80,24 +81,32 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export function MainNavigator() {
   const navigation = useNavigation()
-  const { lock, getSyncData, getCipherById, loadFolders, loadCollections } = useMixins()
+  const { lock, getSyncData, getCipherById, loadFolders, loadCollections, logout } = useMixins()
   const { user, cipherStore } = useStores()
 
-  // App lock trigger
-  const _handleAppStateChange = (nextAppState: string) => {
-    if (nextAppState === "active") {
-      console.log('lock screen')
-      // lock()
-      // navigation.navigate('lock')
+  // App screen lock trigger
+  const _handleAppStateChange = async (nextAppState: string) => {
+    if (nextAppState === "active" && user.appTimeout && user.appTimeout === -1) {
+      if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
+        await logout()
+        navigation.navigate('onBoarding')
+      } else {
+        await lock()
+        navigation.navigate('lock')
+      }
     }
   }
 
   // App inactive trigger
-  const handleInactive = (isActive : boolean) => {
-    if (!isActive) {
-      console.log('lock screen due to inactive')
-      // lock()
-      // navigation.navigate('lock')
+  const handleInactive = async (isActive : boolean) => {
+    if (!isActive && user.appTimeout && user.appTimeout > 0) {
+      if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
+        await logout()
+        navigation.navigate('onBoarding')
+      } else {
+        await lock()
+        navigation.navigate('lock')
+      }
     }
   }
 
@@ -181,7 +190,7 @@ export function MainNavigator() {
 
   return (
     <UserInactivity
-      timeForInactivity={INACTIVE_TIMEOUT}
+      timeForInactivity={(user.appTimeout && (user.appTimeout > 0)) ? user.appTimeout : 1000}
       onAction={handleInactive}
     >
       <Stack.Navigator
@@ -199,7 +208,7 @@ export function MainNavigator() {
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
-        <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} />
+        <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} initialParams={{ fromTools: false }} />
         <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
 

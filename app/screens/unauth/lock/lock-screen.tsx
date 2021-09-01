@@ -195,7 +195,7 @@ export const LockScreen = observer(function LockScreen() {
           isLoading={isBioUnlocking}
           isDisabled={isBioUnlocking}
           variant="outline"
-          text="Unlock using biometric"
+          text="Biometric Unlocking"
           onPress={handleUnlockBiometric}
           style={{
             width: '100%',
