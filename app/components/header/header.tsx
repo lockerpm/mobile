@@ -1,10 +1,12 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Text, Button, AutoImage as Image } from "../"
 import { flatten } from "ramda"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { color } from "../../theme"
+import { Button } from "../button/button"
+import { Text } from "../text/text"
+import { AutoImage as Image } from "../auto-image/auto-image"
 
 const CONTAINER: ViewStyle = {
   flexDirection: 'row',

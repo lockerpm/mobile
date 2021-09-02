@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import { Modal } from "native-base"
-import { Button, Text, AutoImage as Image } from "../../../../components"
+import { Button } from "../../../../components/button/button"
+import { Text } from "../../../../components/text/text"
+import { AutoImage as Image } from "../../../../components/auto-image/auto-image"
 import { color } from "../../../../theme"
 
 interface Props {
