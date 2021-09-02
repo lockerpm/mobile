@@ -2,10 +2,12 @@ import * as React from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, commonStyles } from "../../theme"
-import { Button, Header, Text } from "../"
+import { Button } from "../button/button"
+import { Text } from "../text/text"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import { Input } from "native-base"
+import { Header } from "../header/header"
 
 
 export interface BrowseItemHeaderProps {

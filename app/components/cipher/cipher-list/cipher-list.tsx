@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
-import { Button, AutoImage as Image, Text } from "../../"
+import { Button } from "../../button/button"
+import { Text } from "../../text/text"
+import { AutoImage as Image } from "../../auto-image/auto-image"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"

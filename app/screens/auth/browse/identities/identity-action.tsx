@@ -1,6 +1,7 @@
 import React from "react"
 import { CipherView } from "../../../../../core/models/view"
-import { ActionItem, CipherAction } from "../../../../components"
+import { ActionItem } from "../../../../components/cipher/cipher-action/action-item"
+import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
 
