@@ -1,7 +1,7 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
 import { color } from "../../theme"
-import { Text } from "../"
+import { Text } from "../text/text"
 import { Progress, Box } from "native-base"
 import { StyleProp, ViewStyle } from "react-native"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'

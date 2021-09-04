@@ -2,7 +2,8 @@ import React, { useState } from "react"
 import { StyleProp, View, ViewStyle, TextInput, TextInputProps } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color } from "../../theme"
-import { Text, Button } from ".."
+import { Button } from "../button/button"
+import { Text } from "../text/text"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { TextInputMask, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
 import { useMixins } from "../../services/mixins"
@@ -36,7 +37,7 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
     ...rest
   } = props
 
-  const { notify, copyToClipboard } = useMixins()
+  const { copyToClipboard } = useMixins()
   const [isFocused, setFocus] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
