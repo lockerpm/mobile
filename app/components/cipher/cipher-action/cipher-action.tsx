@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { ScrollView, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, commonStyles } from "../../../theme"
-import { Text, AutoImage as Image } from "../.."
 import { useStores } from "../../../models"
 import { OwnershipAction } from "./ownership-action"
 import { Actionsheet, Divider } from "native-base"
@@ -11,6 +10,8 @@ import { ActionItem } from "./action-item"
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
+import { Text } from "../../text/text"
+import { AutoImage as Image } from "../../auto-image/auto-image"
 
 export interface CipherActionProps {
   children?: React.ReactNode,

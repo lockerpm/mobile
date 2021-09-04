@@ -1,8 +1,9 @@
 import React from "react"
-import { ActionItem, CipherAction } from "../../../../components"
 import { Linking } from "react-native"
 import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
+import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
+import { ActionItem } from "../../../../components/cipher/cipher-action/action-item"
 
 
 type Props = {

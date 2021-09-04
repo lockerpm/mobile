@@ -1,6 +1,6 @@
 import React from 'react'
 import { IToastProps, useToast } from 'native-base'
-import { Text } from "../../components"
+import { Text } from "../../components/text/text"
 import { nanoid } from 'nanoid'
 import find from 'lodash/find'
 import ReactNativeBiometrics from 'react-native-biometrics'

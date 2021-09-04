@@ -1,8 +1,9 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Text, AutoImage as Image } from "../../"
 import { flatten } from "ramda"
+import { Text } from "../../text/text"
+import { AutoImage as Image } from "../../auto-image/auto-image"
 import find from 'lodash/find'
 import { CipherView } from "../../../../core/models/view"
 import { useMixins } from "../../../services/mixins"

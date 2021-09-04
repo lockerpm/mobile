@@ -1,5 +1,5 @@
 import React from "react"
-import { CipherAction } from "../../../../components"
+import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 
 
 type Props = {
