@@ -1,34 +1,271 @@
 {
   "common": {
-    "ok": "OK!",
+    "account": "Account",
+    "add": "Add",
+    "biometric_unlocking": "Biometric Unlocking",
+    "browse": "Browse",
     "cancel": "Cancel",
-    "back": "Back"
+    "card": "Card",
+    "change_ownership": "Change Ownership",
+    "clone": "Clone",
+    "continue": "Continue",
+    "create": "Create",
+    "delete": "Delete",
+    "details": "Details",
+    "edit": "Edit",
+    "folder": "Folder",
+    "generate": "Generate",
+    "help": "Help",
+    "home": "Home",
+    "identity": "Personal Info",
+    "language": "Language",
+    "length": "Length",
+    "lock": "Lock",
+    "logout": "Log Out",
+    "master_pass": "Master Password",
+    "minute": "minute",
+    "minutes": "minutes",
+    "me": "Me",
+    "menu": "Menu",
+    "name": "Name",
+    "none": "None",
+    "note": "Secure Note",
+    "notes": "Notes",
+    "options": "Options",
+    "others": "Others",
+    "owned_by": "Owned by",
+    "ownership": "Ownership",
+    "password": "Password",
+    "regenerate": "Regenerate",
+    "rename": "Rename",
+    "restore": "Restore",
+    "save": "Save",
+    "search": "Search",
+    "second": "second",
+    "seconds": "seconds",
+    "settings": "Settings",
+    "security": "Security",
+    "share": "Share",
+    "sign_up": "Sign up",
+    "skip": "Skip",
+    "sort": "Sort",
+    "trash": "Trash",
+    "tools": "Tools",
+    "unlock": "Unlock"
   },
-  "errors": {
-    "invalidEmail": "Invalid email address."
+  "navigator": {
+    "is_offline": "Locker is currently in offline mode."
   },
-  "welcomeScreen": {
-    "poweredBy": "POWERED BY IGNITE",
-    "readyForLaunch": "Ready for launch.",
-    "continue": "CONTINUE"
+  "error": {
+    "biometric_not_enable": "Biometric unlocking is not enabled",
+    "biometric_not_support": "Biometric unlocking is not supported",
+    "session_login_failed": "Session login failed",
+    "something_went_wrong": "Something went wrong",
+    "sync_failed": "Synchronize data failed",
+    "token_expired": "Session token expired"
   },
-  "demoScreen": {
-    "howTo": "HOW TO",
-    "title": "What’s In This Stack?",
-    "tagLine": "Congratulations, you’ve got a very advanced React Native app template here.  Take advantage of this boilerplate!",
-    "reactotron": "Demo Reactotron",
-    "demoList": "Demo List",
-    "androidReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running, run adb reverse tcp:9090 tcp:9090 from your terminal, and reload the app.",
-    "iosReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
-    "macosReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
-    "webReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app.",
-    "windowsReactotronHint": "If this doesn't work, ensure the Reactotron desktop app is running and reload app."
+  "success": {
+    "master_password_updated": "Master password updated",
+    "biometric_enabled": "Biometric unlocking is enabled",
+    "cipher_created": "New item created",
+    "cipher_deleted": "Item deleted",
+    "cipher_restored": "Item restored",
+    "cipher_trashed": "Item moved to trash",
+    "cipher_updated": "Item updated",
+    "sync_success": "Data synchronized"
   },
-  "demoListScreen": {
-    "title": "Demo List"
+  "password_strength": {
+    "very_weak": "Very weak",
+    "weak": "Weak",
+    "medium": "Medium",
+    "good": "Good",
+    "strong": "Strong"
   },
-  "storybook": {
-    "placeholder": "Placeholder",
-    "field": "Field"
+  "create_master_pass": {
+    "title": "Create Master Password",
+    "desc": "Master Password is your Locker unlock password. This is the only password you need to remember to access all other passwords stored in Locker. Please do not share this password with anyone.",
+    "confirm_master_pass": "Confirm Master Password",
+    "hint": "Hint (optional)",
+    "btn": "Create Password",
+    "note": "Note: CyStack cannot view, store, or re-issue Master Password in case you forget or lose it."
+  },
+  "intro": {
+    "item_1": {
+      "title": "Trusted and secure",
+      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+    },
+    "item_2": {
+      "title": "Trusted and secure",
+      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+    },
+    "item_3": {
+      "title": "Trusted and secure",
+      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+    }
+  },
+  "lock": {
+    "master_pass_changed": "Master password changed. Please login using new password",
+    "hint_sent": "Master Password hint sent. Please check your email for instructions",
+    "title": "Welcome Back!",
+    "desc": "Enter your Master Password to Log In",
+    "get_hint": "Get Master Password hint"
+  },
+  "onBoarding": {
+    "no_account": "Don't have an account?",
+    "title": "Your daily needs"
+  },
+  "biometric_intro": {
+    "title": "Unlock vault with biometric",
+    "desc": "Use face recognition or fingerprint to protect your passwords",
+    "use_btn": "Use Biometric",
+    "later_btn": "I’ll do it later"
+  },
+  "card": {
+    "card_name": "Cardholder Name",
+    "brand": "Brand",
+    "card_number": "Card Number",
+    "exp_date": "Expiration Date",
+    "cvv": "Security Code (CVV/CVC)",
+    "card_details": "Card Details",
+    "empty": {
+      "title": "Quick & convenient shopping",
+      "desc": "Add payment card details to autofill when shopping online",
+      "btn": "Add Card"
+    }
+  },
+  "folder": {
+    "unassigned": "Unassigned",
+    "item_moved": "Item moved to new folder",
+    "add_to_folder": "Add to Folder",
+    "move_to_folder": "Move to Folder",
+    "no_folder": "No folder",
+    "folder_deleted": "Folder deleted",
+    "folder_created": "Folder created",
+    "folder_updated": "Folder updated",
+    "create_folder": "Create New Folder",
+    "delete_folder": "Delete Folder",
+    "rename_folder": "Rename Folder",
+    "delete_modal": {
+      "title": "Delete Folder",
+      "desc": "After folder deleted, all items will be moved to trash. Are you sure you want to delete the folder?",
+      "btn": "OK"
+    },
+    "empty": {
+      "title": "Organize items in Folder",
+      "desc": "Keep passwords and other items in groups",
+      "btn": "Add Folder"
+    }
+  },
+  "identity": {
+    "title": "Title",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "username": "Username",
+    "email": "Email",
+    "company": "Company",
+    "phone": "Phone",
+    "ssn": "Social security number",
+    "passport": "Passport number",
+    "license": "License number",
+    "address": "Address",
+    "city": "City / Town",
+    "state": "State / Province",
+    "zip": "ZIP or Postal Code",
+    "country": "Country",
+    "personal_info": "Personal Information",
+    "address_details": "Address Details",
+    "copy_full_name": "Copy full name",
+    "copy_full_address": "Copy full address",
+    "copy_full_address_2": "Copy full address part 2",
+    "empty": {
+      "title": "Fill out online forms",
+      "desc": "Save your address and contact details to fill out registration forms quickly",
+      "btn": "Add Identity"
+    }
+  },
+  "note": {
+    "copy_note": "Free your memory",
+    "empty": {
+      "title": "Add your first item",
+      "desc": "Jot down a WiFi code, office security alarm code or your friend’s birthday",
+      "btn": "Add Note"
+    }
+  },
+  "password": {
+    "login_details": "Login Details",
+    "username": "Email or Username",
+    "website_url": "Website URL",
+    "password_security": "Password Security",
+    "launch_website": "Launch Website",
+    "copy_username": "Copy Email or Username",
+    "copy_password": "Copy Password",
+    "empty": {
+      "title": "Forget password resets",
+      "desc": "Add your passwords and access them on any device, anytime",
+      "btn": "Add Password"
+    }
+  },
+  "shares": {
+    "share_items": "Shared Items",
+    "empty": {
+      "title": "Securely share items",
+      "desc": "Any shared or received passwords, notes or credit cards will appear here"
+    }
+  },
+  "trash": {
+    "delete_item": "Delete Item",
+    "delete_desc": "This item will be lost and you will no longer be able to restore it.",
+    "to_trash": "Move to Trash",
+    "to_trash_desc": "This item will be moved to trash where you can restore or permanently delete it.",
+    "perma_delete": "Permanently Delete",
+    "perma_delete_desc": "Are you sure you want to permanently delete this item?",
+    "empty": {
+      "title": "Empty trash",
+      "desc": "All items moved to Trash can be restored until you delete them permanently"
+    }
+  },
+  "all_items": {
+    "last_updated": "Last Updated",
+    "first_updated": "First Updated",
+    "empty": {
+      "title": "Add your first item",
+      "desc": "Create your first item to start building your vault",
+      "btn": "Add Item"
+    }
+  },
+  "change_master_pass": {
+    "title": "Change Master Password",
+    "current": "Current Master Password",
+    "new": "New Master Password",
+    "confirm": "Confirm Master Password"
+  },
+  "help": {
+    "help_center": "Help Center",
+    "terms": "Terms of Service",
+    "policy": "Privacy Policy"
+  },
+  "menu": {
+    "plan": "Manage Plan",
+    "invite": "Invite Friends"
+  },
+  "pass_generator": {
+    "title": "Password Generator",
+    "use_upper": "Use uppercase letters (A-Z)",
+    "use_lower": "Use lowercase letters (a-z)",
+    "use_digits": "Use digits (0-9)",
+    "use_symbol": "Use symbols (@!$%*)",
+    "avoid_ambiguous": "Avoid ambiguous characters",
+    "use_password": "Use Password"
+  },
+  "settings": {
+    "change_master_pass": "Change Master Password",
+    "danger_zone": "Danger Zone",
+    "deauthorize_sessions": "Deauthorize sessions",
+    "delete_account": "Delete account",
+    "delete_all_items": "Delete all account items",
+    "on_app_close": "On app close",
+    "on_screen_off": "On screen off",
+    "timeout": "Timeout",
+    "timeout_action": "Timeout Action"
   }
 }

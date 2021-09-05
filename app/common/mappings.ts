@@ -23,7 +23,7 @@ export const BROWSE_ITEMS = {
     routeName: 'cards',
     addable: true
   },
-  indentity: {
+  identity: {
     label: 'Personal Info',
     icon: require('./images/icons/info.png'),
     routeName: 'identities',

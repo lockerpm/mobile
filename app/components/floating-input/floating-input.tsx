@@ -30,7 +30,7 @@ export interface FloatingInputProps extends TextInputProps {
  * Describe your component here
  */
 export const FloatingInput = observer(function FloatingInput(props: FloatingInputProps) {
-  const { 
+  const {
     style, inputStyle, isInvalid, isRequired, label, isPassword, value, placeholder,
     fixedLabel, editable = true, disabled, buttonRight, textarea, onChangeText,
     maskType, maskOptions, copyAble,
@@ -68,7 +68,7 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
     flexDirection: 'row',
     alignItems: 'center'
   }
-  
+
   const BUTTON: ViewStyle = {
     alignItems: 'center',
     width: 30,
@@ -90,10 +90,10 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
         }}
       >
         <Text
-          style={[{
+          style={{
             fontSize: isFocused || !!value || fixedLabel ? 10 : 14,
             marginTop: isRequired ? -5 : undefined
-          }]}
+          }}
         >
           {label}
           {
@@ -110,7 +110,7 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
       </View>
       {
         maskType || maskOptions ? (
-          <TextInputMask 
+          <TextInputMask
             type={maskType || 'custom'}
             options={maskOptions}
             {...textInputProps}
@@ -132,10 +132,10 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
               onPress={() => setShowPassword(!showPassword)}
               style={BUTTON}
             >
-              <Icon 
-                name={showPassword ? "eye-slash" : "eye"} 
-                size={16} 
-                color={color.text} 
+              <Icon
+                name={showPassword ? "eye-slash" : "eye"}
+                size={16}
+                color={color.text}
               />
             </Button>
           )
@@ -147,10 +147,10 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
               onPress={() => copyToClipboard(value)}
               style={BUTTON}
             >
-              <Icon 
+              <Icon
                 name="copy"
-                size={15} 
-                color={color.text} 
+                size={15}
+                color={color.text}
               />
             </Button>
           )

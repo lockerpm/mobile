@@ -7,6 +7,7 @@ import { useStores } from "../../../../models"
 import { color, commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
+import { translate } from "../../../../i18n"
 
 
 const ITEM_CONTAINER: ViewStyle = {
@@ -26,20 +27,20 @@ export const MenuScreen = observer(function MenuScreen() {
   const items: MenuItemProps[] = [
     {
       icon: 'star-o',
-      name: 'Manage Plan',
+      name: translate('menu.plan'),
     },
     {
       icon: 'users',
-      name: 'Invite Friends',
+      name: translate('menu.invite'),
     },
     {
       icon: 'gear',
-      name: 'Settings',
+      name: translate('common.settings'),
       action: () => navigation.navigate('settings')
     },
     {
       icon: 'question-circle-o',
-      name: 'Help',
+      name: translate('common.help'),
       action: () => navigation.navigate('help'),
       noBorder: true
     }
@@ -48,7 +49,7 @@ export const MenuScreen = observer(function MenuScreen() {
   const items2: MenuItemProps[] = [
     {
       icon: 'lock',
-      name: 'Lock',
+      name: translate('common.lock'),
       action: async () => {
         setIsLoading(true)
         await lock()
@@ -58,7 +59,7 @@ export const MenuScreen = observer(function MenuScreen() {
     },
     {
       icon: 'sign-out',
-      name: 'Log Out',
+      name: translate('common.logout'),
       action: async () => {
         setIsLoading(true)
         await logout()
@@ -69,7 +70,7 @@ export const MenuScreen = observer(function MenuScreen() {
     }
   ]
 
-  
+
 
   return (
     <Layout
@@ -79,12 +80,12 @@ export const MenuScreen = observer(function MenuScreen() {
     >
       <Text
         preset="largeHeader"
-        text="Menu"
+        text={translate('common.menu')}
         style={{ marginBottom: 16}}
       />
       <ScrollView>
         <View style={[
-          ITEM_CONTAINER, 
+          ITEM_CONTAINER,
           commonStyles.CENTER_HORIZONTAL_VIEW,
           { marginBottom: 15, paddingVertical: 14 }
         ]}>
@@ -118,7 +119,7 @@ export const MenuScreen = observer(function MenuScreen() {
           }
         </View>
 
-        <View style={[ITEM_CONTAINER]}>
+        <View style={ITEM_CONTAINER}>
           {
             items2.map((item, index) => (
               <MenuItem

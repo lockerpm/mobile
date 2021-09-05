@@ -2,6 +2,7 @@ import React from "react"
 import { Actionsheet, Divider } from "native-base"
 import { Text, ActionItem } from "../../../../components"
 import { color } from "../../../../theme"
+import { translate } from "../../../../i18n"
 
 interface Props {
   isOpen: boolean,
@@ -15,7 +16,7 @@ export const SortAction = (props: Props) => {
 
   const sortOptions = [
     {
-      label: 'Last Updated',
+      label: translate('all_items.last_updated'),
       value: 'last_updated',
       sort: {
         orderField: 'revisionDate',
@@ -23,7 +24,7 @@ export const SortAction = (props: Props) => {
       }
     },
     {
-      label: 'First Updated',
+      label: translate('all_items.first_updated'),
       value: 'first_updated',
       sort: {
         orderField: 'revisionDate',
@@ -31,7 +32,7 @@ export const SortAction = (props: Props) => {
       }
     },
     {
-      label: 'A to Z',
+      label: 'A - Z',
       value: 'az',
       sort: {
         orderField: 'name',
@@ -39,7 +40,7 @@ export const SortAction = (props: Props) => {
       }
     },
     {
-      label: 'Z to A',
+      label: 'Z - A',
       value: 'za',
       sort: {
         orderField: 'name',
@@ -56,7 +57,7 @@ export const SortAction = (props: Props) => {
       <Actionsheet.Content>
         <Text
           preset="semibold"
-          text="Sort"
+          text={translate('common.sort')}
           style={{
             fontSize: 18,
             marginBottom: 15

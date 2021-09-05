@@ -4,6 +4,7 @@ import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { ActionItem } from "../../../../components/cipher/cipher-action/action-item"
+import { translate } from "../../../../i18n"
 
 
 type Props = {
@@ -21,21 +22,21 @@ export const PasswordAction = (props: Props) => {
   return (
     <CipherAction {...props}>
       <ActionItem
-        name="Launch Website"
+        name={translate('password.launch_website')}
         icon="external-link"
         action={() => Linking.openURL(selectedCipher.login.uri)}
         disabled={!selectedCipher.login.uri}
       />
 
       <ActionItem
-        name="Copy Email or Username"
+        name={translate('password.copy_username')}
         icon="copy"
         action={() => copyToClipboard(selectedCipher.login.username)}
         disabled={!selectedCipher.login.username}
       />
 
       <ActionItem
-        name="Copy Password"
+        name={translate('password.copy_password')}
         icon="copy"
         action={() => copyToClipboard(selectedCipher.login.password)}
         disabled={!selectedCipher.login.password}

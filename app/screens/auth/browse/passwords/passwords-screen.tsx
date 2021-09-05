@@ -4,11 +4,12 @@ import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "..
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { CipherType } from "../../../../../core/enums"
+import { translate } from "../../../../i18n"
 
 
 export const PasswordsScreen = observer(function PasswordsScreen() {
   const navigation = useNavigation()
-  
+
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -23,7 +24,7 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header="Password"
+          header={translate('common.password')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
             navigation.navigate('passwords__edit', { mode: 'add' })
@@ -35,8 +36,8 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
       borderBottom
       noScroll
     >
-      <SortAction 
-        isOpen={isSortOpen} 
+      <SortAction
+        isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {
           setSortOption(value)
@@ -44,7 +45,7 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
         }}
         value={sortOption}
       />
-      
+
       <CipherList
         navigation={navigation}
         onLoadingChange={setIsLoading}
@@ -54,9 +55,9 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
-            title="Foget password resets"
-            desc="Add your passwords and access them on any device, anytime"
-            buttonText="Add Password"
+            title={translate('password.empty.title')}
+            desc={translate('password.empty.desc')}
+            buttonText={translate('password.empty.btn')}
             addItem={() => {
               navigation.navigate('passwords__edit', { mode: 'add' })
             }}

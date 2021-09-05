@@ -8,6 +8,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import { Input } from "native-base"
 import { Header } from "../header/header"
+import { translate } from "../../i18n"
 
 
 export interface BrowseItemHeaderProps {
@@ -28,34 +29,34 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
     <Header
       goBack={() => navigation.goBack()}
       right={(
-        <View 
+        <View
           style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
             justifyContent: 'space-between',
             maxWidth: 50
           }]}
         >
-          <Button 
+          <Button
             preset="link"
             style={{ marginRight: openAdd ? 20 : 0 }}
             onPress={() => openSort && openSort()}
           >
-            <FontAwesomeIcon 
+            <FontAwesomeIcon
               name="sliders"
-              size={18} 
+              size={18}
               color={color.title}
             />
           </Button>
-          
+
           {
             openAdd && (
-              <Button 
+              <Button
                 preset="link"
                 onPress={() => openAdd && openAdd()}
               >
-                <EntypoIcon 
+                <EntypoIcon
                   name="plus"
-                  size={21} 
-                  color={color.title} 
+                  size={21}
+                  color={color.title}
                 />
               </Button>
             )
@@ -64,30 +65,30 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
       )}
     >
       <View style={{ marginTop: 5 }}>
-				<Text 
+				<Text
 					preset="largeHeader"
 					text={header}
           style={{ marginBottom: 10 }}
 				/>
-				
+
         <Input
           size="xs"
-          placeholder="Search"
+          placeholder={translate('common.search')}
           onChangeText={(txt) => onSearch && onSearch(txt)}
-          style={{ 
-            backgroundColor: color.block, 
+          style={{
+            backgroundColor: color.block,
             paddingBottom: 5,
-            paddingTop: 5 
+            paddingTop: 5
           }}
           InputRightElement={
             <Button
               preset="link"
               style={{ paddingRight: 15, backgroundColor: color.block, height: 38 }}
             >
-              <FontAwesomeIcon 
+              <FontAwesomeIcon
                 name="search"
-                size={14} 
-                color={color.text} 
+                size={14}
+                color={color.text}
               />
             </Button>
           }

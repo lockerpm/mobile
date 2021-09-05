@@ -7,6 +7,7 @@ import { useStores } from "../../../models"
 import { color } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { RootParamList } from "../../../navigators/root-navigator"
+import { translate } from "../../../i18n"
 
 type ScreenProp = RouteProp<RootParamList, 'lock'>;
 
@@ -57,17 +58,16 @@ export const LockScreen = observer(function LockScreen() {
       }
     } else {
       setIsError(true)
-      notify('error', '', 'Enter password pls')
     }
   }
 
   const handleUnlockBiometric = async () => {
     if (!user.isBiometricUnlock) {
-      notify('error', '', 'Biometric unlock is not enabled')
+      notify('error', '', translate('error.biometric_not_enable'))
       return
     }
     if (user.passwordChanged) {
-      notify('error', 'Master password changed', 'Please login using new password')
+      notify('error', '', translate('lock.master_pass_changed'))
       return
     }
 
@@ -85,9 +85,9 @@ export const LockScreen = observer(function LockScreen() {
     const res = await user.sendPasswordHint(user.email)
     setIsSendingHint(false)
     if (res.kind === 'ok') {
-      notify('success', 'Master Password hint sent', 'Please check your email for instructions')
+      notify('success', 'Master Password hint sent', translate('lock.hint_sent'))
     } else {
-      notify('error', 'Error', 'Something went wrong')
+      notify('error', 'Error', translate('error.something_went_wrong'))
     }
   }
 
@@ -95,7 +95,7 @@ export const LockScreen = observer(function LockScreen() {
   const header = (
     <View style={{ alignItems: "flex-end" }}>
       <Button
-        text="LOG OUT"
+        text={translate('common.logout').toUpperCase()}
         textStyle={{ fontSize: 12 }}
         preset="link"
         onPress={handleLogout}
@@ -122,13 +122,13 @@ export const LockScreen = observer(function LockScreen() {
         <Text
           preset="header"
           style={{ marginBottom: 10, marginTop: 25 }}
-        >
-          Welcome Back!
-        </Text>
+          tx={"lock.title"}
+        />
 
-        <Text style={{ textAlign: 'center' }}>
-          Enter your Master Password to Log In
-        </Text>
+        <Text
+          style={{ textAlign: 'center' }}
+          tx={"lock.desc"}
+        />
 
         {/* Current user */}
         <View
@@ -144,19 +144,19 @@ export const LockScreen = observer(function LockScreen() {
         >
           {
             !!user.avatar && (
-              <Image 
-                source={{ uri: user.avatar }} 
-                style={{ 
-                  height: 28, 
+              <Image
+                source={{ uri: user.avatar }}
+                style={{
+                  height: 28,
                   width: 28,
                   borderRadius: 14,
                   backgroundColor: color.palette.white
-                }} 
+                }}
               />
             )
           }
-          <Text 
-            style={{ 
+          <Text
+            style={{
               fontSize: 12,
               color: color.title,
               marginHorizontal: 10
@@ -171,7 +171,7 @@ export const LockScreen = observer(function LockScreen() {
         <FloatingInput
           isPassword
           isInvalid={isError}
-          label="Master Password"
+          label={translate('common.master_pass')}
           onChangeText={setMasterPassword}
           value={masterPassword}
           style={{ width: '100%' }}
@@ -182,7 +182,7 @@ export const LockScreen = observer(function LockScreen() {
           isNativeBase
           isLoading={isUnlocking}
           isDisabled={isUnlocking}
-          text="Unlock"
+          text={"common.unlock"}
           onPress={handleUnlock}
           style={{
             width: '100%',
@@ -195,7 +195,7 @@ export const LockScreen = observer(function LockScreen() {
           isLoading={isBioUnlocking}
           isDisabled={isBioUnlocking}
           variant="outline"
-          text="Biometric Unlocking"
+          tx="common.biometric_unlocking"
           onPress={handleUnlockBiometric}
           style={{
             width: '100%',
@@ -208,7 +208,7 @@ export const LockScreen = observer(function LockScreen() {
           isLoading={isSendingHint}
           isDisabled={isSendingHint}
           variant="ghost"
-          text="Get Master Password hint"
+          tx="lock.get_hint"
           onPress={handleGetHint}
           style={{
             width: '100%'

@@ -8,6 +8,7 @@ import { FolderView } from "../../../../../core/models/view/folderView"
 import { FolderRequest } from "../../../../../core/models/request/folderRequest"
 import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
+import { translate } from "../../../../i18n"
 
 interface Props {
   isOpen?: boolean,
@@ -37,10 +38,10 @@ export const RenameFolderModal = observer((props: Props) => {
     }
 
     if (res.kind === 'ok') {
-      notify('success', '', 'Folder updated')
+      notify('success', '', translate('folder.folder_updated'))
       onClose()
     } else {
-      notify('error', '', 'Something went wrong')
+      notify('error', '', translate('error.something_went_wrong'))
     }
     setIsLoading(false)
   }
@@ -48,7 +49,7 @@ export const RenameFolderModal = observer((props: Props) => {
   useEffect(() => {
     setName(folder.name || '')
   }, [isOpen])
-  
+
   return (
     <Modal
       isOpen={isOpen}
@@ -59,16 +60,15 @@ export const RenameFolderModal = observer((props: Props) => {
         <Modal.Header>
           <Text
             preset="header"
+            text={translate('folder.rename_folder')}
             style={{
               fontSize: 18
             }}
-          >
-            Rename Folder
-          </Text>
+          />
         </Modal.Header>
         <Modal.Body>
           <FloatingInput
-            label="Name"
+            label={translate('common.name')}
             value={name}
             onChangeText={txt => setName(txt)}
           />
@@ -76,7 +76,7 @@ export const RenameFolderModal = observer((props: Props) => {
         <Modal.Footer style={{ marginRight: 20, marginBottom: 16, paddingRight: 0 }}>
           <Button
             isNativeBase
-            text="Save"
+            text={translate('common.save')}
             disabled={isLoading || !name.trim()}
             isLoading={isLoading}
             onPress={renameFolder}

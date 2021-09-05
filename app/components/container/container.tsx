@@ -46,7 +46,7 @@ export function Container(props: ContainerProps) {
       {
         !props.noScroll ? (
           <ScrollView
-            style={[preset.outer]}
+            style={preset.outer}
             contentContainerStyle={[preset.inner, style]}
           >
             {props.children}

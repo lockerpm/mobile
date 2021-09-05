@@ -9,11 +9,12 @@ import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
+import { translate, setLang } from "../../../../i18n"
 
 
 const SECTION_TITLE: TextStyle = {
-  fontSize: 10, 
-  marginHorizontal: 20, 
+  fontSize: 10,
+  marginHorizontal: 20,
   marginBottom: 8,
 }
 
@@ -35,13 +36,12 @@ export const SettingsScreen = observer(function SettingsScreen() {
     const available = await isBiometricAvailable()
 
     if (!available) {
-      notify('error', '', 'Biometric is not supported')
+      notify('error', '', translate('error.biometric_not_support'))
     } else {
       user.setBiometricUnlock(true)
-      console.log(user.isBiometricUnlock)
-      notify('success', '', 'Biometric unlock is enabled')
+      notify('success', '', translate('success.biometric_enabled'))
     }
-    
+
     setIsLoading(false)
   }
 
@@ -50,7 +50,10 @@ export const SettingsScreen = observer(function SettingsScreen() {
   const settings = {
     language: {
       value: user.language || 'en',
-      onChange: user.setLanguage,
+      onChange: (lang: string) => {
+        user.setLanguage(lang)
+        setLang(lang)
+      },
       options: [
         {
           label: 'Tiếng Việt',
@@ -77,23 +80,23 @@ export const SettingsScreen = observer(function SettingsScreen() {
       onChange: user.setAppTimeout,
       options: [
         {
-          label: '30 seconds',
+          label: `30 ${translate('common.seconds')}`,
           value: 30 * 1000
         },
         {
-          label: '1 minute',
+          label: `1 ${translate('common.minute')}`,
           value: 1 * 60 * 1000
         },
         {
-          label: '3 minutes',
+          label: `3 ${translate('common.minutes')}`,
           value: 3 * 60 * 1000
         },
         {
-          label: 'On screen off',
+          label: translate('settings.on_screen_off'),
           value: -1
         },
         {
-          label: 'On app close',
+          label: translate('settings.on_app_close'),
           value: 0
         }
       ]
@@ -103,11 +106,11 @@ export const SettingsScreen = observer(function SettingsScreen() {
       onChange: user.setAppTimeoutAction,
       options: [
         {
-          label: 'Lock',
+          label: translate('common.lock'),
           value: 'lock'
         },
         {
-          label: 'Log Out',
+          label: translate('common.logout'),
           value: 'logout'
         }
       ]
@@ -126,7 +129,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
               navigation.goBack()
             }
           }}
-          title="Settings"
+          title={translate('common.settings')}
           right={(<View style={{ width: 10 }} />)}
         />
       )}
@@ -134,17 +137,17 @@ export const SettingsScreen = observer(function SettingsScreen() {
     >
       {/* Account */}
       <Text
-        text="ACCOUNT"
-        style={[SECTION_TITLE]}
+        text={translate('common.account').toUpperCase()}
+        style={SECTION_TITLE}
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
         <SettingsItem
-          name="Change Master Password"
+          name={translate('settings.change_master_pass')}
           action={() => navigation.navigate('changeMasterPassword')}
         />
 
         <SettingsItem
-          name="Language"
+          name={translate('common.language')}
           noBorder
           noPadding
           right={(
@@ -167,14 +170,14 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
       {/* Security */}
       <Text
-        text="SECURITY"
-        style={[SECTION_TITLE, { 
+        text={translate('common.security').toUpperCase()}
+        style={[SECTION_TITLE, {
           marginTop: 15,
         }]}
       />
-      <View style={[commonStyles.GRAY_SCREEN_SECTION]}>
+      <View style={commonStyles.GRAY_SCREEN_SECTION}>
         <SettingsItem
-          name="Biometric Unlock"
+          name={translate('common.biometric_unlocking')}
           noCaret
           right={(
             <Switch
@@ -185,7 +188,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
           )}
         />
         <SettingsItem
-          name="Timeout"
+          name={translate('settings.timeout')}
           noPadding
           right={(
             <Select
@@ -203,7 +206,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
           )}
         />
         <SettingsItem
-          name="Timeout Action"
+          name={translate('settings.timeout_action')}
           noBorder
           noPadding
           right={(
@@ -226,24 +229,24 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
       {/* Danger zone */}
       <Text
-        text="DANGER ZONE"
-        style={[SECTION_TITLE, { 
+        text={translate('settings.danger_zone').toUpperCase()}
+        style={[SECTION_TITLE, {
           marginTop: 15
         }]}
       />
-      <View style={[commonStyles.GRAY_SCREEN_SECTION]}>
+      <View style={commonStyles.GRAY_SCREEN_SECTION}>
         <SettingsItem
-          name="Deauthorize sessions"
+          name={translate('settings.deauthorize_sessions')}
           noCaret
           color={color.error}
         />
         <SettingsItem
-          name="Delete all account items"
+          name={translate('settings.delete_all_items')}
           noCaret
           color={color.error}
         />
         <SettingsItem
-          name="Delete account"
+          name={translate('settings.delete_account')}
           noCaret
           noBorder
           color={color.error}

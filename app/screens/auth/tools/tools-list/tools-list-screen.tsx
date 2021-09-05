@@ -6,6 +6,7 @@ import { Text, Button, Layout, AutoImage as Image } from "../../../../components
 import { useNavigation } from "@react-navigation/native"
 import { color } from "../../../../theme"
 import { TOOLS_ITEMS } from "../../../../common/mappings"
+import { translate } from "../../../../i18n"
 
 export const ToolsListScreen = observer(function ToolsListScreen() {
   const navigation = useNavigation()
@@ -15,11 +16,11 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
       style={{ backgroundColor: color.block }}
       containerStyle={{ backgroundColor: color.block, paddingTop: 0 }}
       header={(
-        <Text preset="largeHeader" text="Tools" />
+        <Text preset="largeHeader" text={translate('common.tools')} />
       )}
     >
-      <View 
-        style={{ 
+      <View
+        style={{
           backgroundColor: color.palette.white,
           borderRadius: 10,
           paddingHorizontal: 14

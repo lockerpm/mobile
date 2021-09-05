@@ -9,6 +9,7 @@ import { useStores } from "../../../models"
 import { OwnershipAction } from "../cipher-action/ownership-action"
 import { color, commonStyles } from "../../../theme"
 import { FloatingInput } from "../../floating-input/floating-input"
+import { translate } from "../../../i18n"
 
 
 export interface CipherOthersInfoProps {
@@ -27,7 +28,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
   const { folderStore } = useStores()
 
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
-  
+
   const folder = (() => {
     return folderId ? find(folderStore.folders, e => e.id === folderId) || {} : {}
   })()
@@ -35,7 +36,10 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
   return (
     <View>
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="OTHERS" style={{ fontSize: 10 }} />
+        <Text
+          text={translate('common.others')}
+          style={{ fontSize: 10 }}
+        />
       </View>
 
       {/* Others */}
@@ -63,12 +67,12 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
           >
             <View>
               <Text
-                text="Folder"
+                text={translate('common.folder')}
                 style={{ fontSize: 10 }}
               />
               <Text
                 preset="black"
-                text={folder.name || 'None'}
+                text={folder.name || translate('common.none')}
               />
             </View>
             <FontAwesomeIcon
@@ -96,12 +100,12 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
           >
             <View>
               <Text
-                text="Ownership"
+                text={translate('common.ownership')}
                 style={{ fontSize: 10 }}
               />
               <Text
                 preset="black"
-                text="None"
+                text={translate('common.none')}
               />
             </View>
             <FontAwesomeIcon
@@ -120,7 +124,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
               <FloatingInput
                 fixedLabel
                 textarea
-                label="Note"
+                label={translate('common.notes')}
                 value={note}
                 onChangeText={(text) => onChangeNote(text)}
               />

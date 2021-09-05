@@ -9,24 +9,25 @@ import { color } from "../theme"
 import { AllItemScreen, ToolsListScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import NetInfo from "@react-native-community/netinfo"
+import { translate } from "../i18n"
 
 const Tab = createBottomTabNavigator()
 
 const mappings = {
   homeTab: {
-    label: 'Home',
+    label: translate('common.home'),
     icon: 'home'
   },
   browseTab: {
-    label: 'Browse',
+    label: translate('common.browse'),
     icon: 'apps'
   },
   toolsTab: {
-    label: 'Tools',
+    label: translate('common.tools'),
     icon: 'build'
   },
   menuTab: {
-    label: 'Menu',
+    label: translate('common.menu'),
     icon: 'menu'
   }
 }
@@ -37,8 +38,8 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
       {/* Offline mode */}
       {
         isOffline && (
-          <View style={{ 
-            backgroundColor: '#161922', 
+          <View style={{
+            backgroundColor: '#161922',
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
@@ -55,7 +56,7 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
                 color: color.palette.white,
                 marginLeft: 5
               }}
-              text="Locker is currently in offline mode."
+              text={translate('navigator.is_offline')}
             />
           </View>
         )
@@ -104,7 +105,7 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
                 onLongPress={onLongPress}
                 style={{ flex: 1, alignItems: 'center' }}
               >
-                <Icon 
+                <Icon
                   name={icon}
                   size={20}
                   color={isFocused ? color.palette.green : color.text}
@@ -126,7 +127,7 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
       </View>
       {/* Tab items end */}
     </View>
-  ); 
+  );
 }
 
 export function MainTabNavigator() {

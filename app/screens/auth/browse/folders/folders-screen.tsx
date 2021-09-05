@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
-import { 
+import {
   Layout, BrowseItemHeader, BrowseItemEmptyContent, Text, Button,
   AutoImage as Image
 } from "../../../../components"
@@ -18,6 +18,7 @@ import { useStores } from "../../../../models"
 import { FolderView } from "../../../../../core/models/view/folderView"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { useMixins } from "../../../../services/mixins"
+import { translate } from "../../../../i18n"
 
 
 export const FoldersScreen = observer(function FoldersScreen() {
@@ -50,7 +51,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
     if (sortList) {
       const { orderField, order } = sortList
       return orderBy(
-        filtered, 
+        filtered,
         [f => orderField === 'name' ? (f.name && f.name.toLowerCase()) : f.revisionDate],
         [order]
       ) || []
@@ -61,7 +62,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
   const sections = [
     {
       id: randomString(),
-      title: 'Me',
+      title: translate('common.me'),
       data: getFilteredData(folders),
       shared: false
     },
@@ -78,7 +79,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header="Folders"
+          header={translate('common.folder')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
@@ -90,15 +91,15 @@ export const FoldersScreen = observer(function FoldersScreen() {
     >
       {/* Modals / Actions */}
 
-      <FolderAction 
-        isOpen={isActionOpen} 
+      <FolderAction
+        isOpen={isActionOpen}
         onClose={() => setIsActionOpen(false)}
         folder={selectedFolder}
         onLoadingChange={setIsLoading}
       />
 
-      <SortAction 
-        isOpen={isSortOpen} 
+      <SortAction
+        isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {
           setSortOption(value)
@@ -107,7 +108,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
         value={sortOption}
       />
 
-      <NewFolderModal 
+      <NewFolderModal
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
       />
@@ -119,9 +120,9 @@ export const FoldersScreen = observer(function FoldersScreen() {
         !sections.length ? (
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
-            title="Organize items in Folder"
-            desc="Keep passwords and other items in groups"
-            buttonText="Add Folder"
+            title={translate('folder.empty.title')}
+            desc={translate('folder.empty.desc')}
+            buttonText={translate('folder.empty.btn')}
             addItem={() => {
               setIsAddOpen(true)
             }}
@@ -149,7 +150,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     paddingVertical: 15,
                   }}
                 >
-                  <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+                  <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
                     <Image
                       source={FOLDER_IMG[item.shared ? 'share' : 'normal'].img}
                       style={{
@@ -161,10 +162,10 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     <View style={{ flex: 1 }}>
                       <Text
                         preset="semibold"
-                        text={item.name || 'Unassigned'}
+                        text={item.name || translate('folder.unassigned')}
                       />
                     </View>
-                    
+
                     {
                       !!item.id && (
                         <Button

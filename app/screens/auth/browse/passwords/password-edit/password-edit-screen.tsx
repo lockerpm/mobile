@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { 
+import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, PasswordStrength
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
@@ -13,6 +13,7 @@ import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherType } from "../../../../../../core/enums"
 import { CipherView, LoginUriView, LoginView } from "../../../../../../core/models/view"
+import { translate } from "../../../../../i18n"
 
 
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
@@ -86,7 +87,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
     } else {
       res = await updateCipher(payload.id, payload, passwordStrength, collectionIds)
     }
-    
+
     setIsLoading(false)
     if (res.kind === 'ok') {
       navigation.goBack()
@@ -97,19 +98,23 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
   return (
     <Layout
       isContentOverlayLoading={isLoading}
-      containerStyle={{ 
+      containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0
       }}
       header={(
         <Header
-          title={mode === 'edit' ? 'Edit' : 'Add Password'}
+          title={
+            mode === 'add'
+              ? `${translate('common.add')} ${translate('common.password')}`
+              : translate('common.edit')
+          }
           goBack={() => navigation.goBack()}
-          goBackText="Cancel"
+          goBackText={translate('common.cancel')}
           right={(
             <Button
               preset="link"
-              text="Save"
+              text={translate('common.save')}
               onPress={handleSave}
               textStyle={{
                 fontSize: 12
@@ -123,9 +128,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       <View
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
       >
-        <View
-          style={[commonStyles.CENTER_HORIZONTAL_VIEW]}
-        >
+        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
             source={BROWSE_ITEMS.password.icon}
             style={{ height: 40, marginRight: 10 }}
@@ -133,7 +136,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label="Name"
+              label={translate('common.name')}
               value={name}
               onChangeText={setName}
             />
@@ -143,7 +146,10 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       {/* Name end */}
 
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="LOGIN DETAILS" style={{ fontSize: 10 }} />
+        <Text
+          text={translate('password.login_details').toUpperCase()}
+          style={{ fontSize: 10 }}
+        />
       </View>
 
       {/* Info */}
@@ -156,7 +162,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
         {/* Username */}
         <View style={{ flex: 1 }}>
           <FloatingInput
-            label="Email or Username"
+            label={translate('password.username')}
             value={username}
             onChangeText={setUsername}
           />
@@ -167,15 +173,15 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
             isPassword
-            label="Password"
+            label={translate('common.password')}
             value={password}
             onChangeText={setPassword}
           />
-          
+
           {
             !!password && (
-              <PasswordStrength 
-                value={getPasswordStrength(password).score} 
+              <PasswordStrength
+                value={getPasswordStrength(password).score}
                 style={{ marginTop: 15 }}
               />
             )
@@ -205,7 +211,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
               />
               <Text
                 preset="green"
-                text="Generate"
+                text={translate('common.generate')}
                 style={{ fontSize: 12, marginLeft: 7 }}
               />
             </View>
@@ -221,7 +227,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
         {/* Web url */}
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
-            label="Website URL"
+            label={translate('password.website_url')}
             value={url}
             onChangeText={setUrl}
           />

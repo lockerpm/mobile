@@ -4,6 +4,7 @@ import { Button } from "../../../../components/button/button"
 import { Text } from "../../../../components/text/text"
 import { AutoImage as Image } from "../../../../components/auto-image/auto-image"
 import { color } from "../../../../theme"
+import { translate } from "../../../../i18n"
 
 interface Props {
   isOpen?: boolean,
@@ -26,7 +27,7 @@ export const DeleteConfirmModal = (props: Props) => {
     setIsLoading(false)
     onClose()
   }
-  
+
   return (
     <Modal
       isOpen={isOpen}
@@ -43,11 +44,11 @@ export const DeleteConfirmModal = (props: Props) => {
           />
           <Text
             preset="black"
-						text={title || "Delete item?"}
+						text={title || translate('trash.delete_item')}
 						style={{ fontSize: 18, marginBottom: 5, marginTop: 15 }}
           />
 					<Text
-						text={desc || "This item will be lost and you will no longer be able to restore it."}
+						text={desc || translate('trash.delete_desc')}
 						style={{ textAlign: 'center', fontSize: 12 }}
 					/>
         </Modal.Body>
@@ -66,7 +67,7 @@ export const DeleteConfirmModal = (props: Props) => {
             }}
           >
 						<Text
-							text={btnText || "Delete"}
+							text={btnText || translate('common.delete')}
 							style={{ color: color.palette.white }}
 						/>
 					</Button>

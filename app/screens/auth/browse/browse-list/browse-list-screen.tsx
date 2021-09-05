@@ -15,11 +15,11 @@ export const BrowseListScreen = observer(function BrowseListScreen() {
       style={{ backgroundColor: color.block }}
       containerStyle={{ backgroundColor: color.block, paddingTop: 0 }}
       header={(
-        <Text preset="largeHeader" text="Browse" />
+        <Text preset="largeHeader" tx="common.browse" />
       )}
     >
-      <View 
-        style={{ 
+      <View
+        style={{
           backgroundColor: color.palette.white,
           borderRadius: 10,
           paddingHorizontal: 14

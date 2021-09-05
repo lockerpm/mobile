@@ -10,6 +10,7 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import { commonStyles } from "../../../theme"
 import { FOLDER_IMG } from "../../../common/mappings"
+import { translate } from "../../../i18n"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
@@ -34,7 +35,7 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
 
   // Computed
   const collection = (() => {
-    return { name: 'Unassigned Folder', id: 'unassigned' }
+    return { name: translate('folder.unassigned'), id: 'unassigned' }
   })()
 
   const folder = (() => {
@@ -48,6 +49,9 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
         getCollections(),
       ])
       setCollections(collectionRes)
+      if (__DEV__) {
+        console.log(collections)
+      }
     }
     mounted()
   }, [])
@@ -56,7 +60,7 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
     <View style={styles}>
       {/* Owned by */}
       <Text
-        text="Owned by"
+        text={translate('common.owned_by')}
         style={{ fontSize: 10, marginTop: 20, marginBottom: 5 }}
       />
       <Text
@@ -66,12 +70,12 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
 
       {/* Folder */}
       <Text
-        text="Folder"
+        text={translate('common.folder')}
         style={{ fontSize: 10, marginTop: 20, marginBottom: 10 }}
       />
       {
-        !!cipher.organizationId ? (
-          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+        cipher.organizationId ? (
+          <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             <Image
               source={FOLDER_IMG[collection.id === 'unassigned' ? 'normal' : 'share'].img}
               style={{
@@ -84,7 +88,7 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
             />
           </View>
         ) : (
-          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+          <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             <Image
               source={FOLDER_IMG.normal.img}
               style={{
@@ -93,7 +97,7 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
             />
             <Text
               preset="black"
-              text={folder.name || 'No folder'}
+              text={folder.name || translate('folder.unassigned')}
             />
           </View>
         )

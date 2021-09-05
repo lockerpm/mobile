@@ -20,7 +20,7 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
         }}
       >
         <Text
-          text="Don't have an account?"
+          tx="onBoarding.no_account"
           style={{
             fontSize: 14,
             marginRight: 8,
@@ -28,7 +28,7 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
         />
         <Button
           preset="link"
-          text="Sign up"
+          tx="common.sign_up"
           textStyle={{ fontSize: 14 }}
           onPress={() => navigation.navigate("signup")}
         />
@@ -37,15 +37,15 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
   )
 
   return (
-    <Layout 
+    <Layout
       noScroll
       footer={footer}
     >
-      <View style={[commonStyles.CENTER_VIEW]}>
+      <View style={commonStyles.CENTER_VIEW}>
         <Image source={require("./logo.png")} />
         <Text
           preset="header"
-          text="Your daily needs"
+          tx="onBoarding.title"
           style={{ fontSize: 14, marginTop: 31 }}
         />
       </View>

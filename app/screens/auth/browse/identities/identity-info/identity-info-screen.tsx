@@ -10,6 +10,7 @@ import { IdentityAction } from "../identity-action"
 import { CipherView } from "../../../../../../core/models/view"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
+import { translate } from "../../../../../i18n"
 
 
 export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
@@ -21,74 +22,78 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
 
   const textFields = [
     {
-      label: 'Title',
+      label: translate('identity.title'),
       value: selectedCipher.identity.title
     },
     {
-      label: 'First name',
+      label: translate('identity.first_name'),
       value: selectedCipher.identity.firstName
     },
     {
-      label: 'Last name',
+      label: translate('identity.last_name'),
       value: selectedCipher.identity.lastName
     },
     {
-      label: 'Username',
+      label: translate('identity.username'),
       value: selectedCipher.identity.username
     },
     {
-      label: 'Email',
+      label: translate('identity.email'),
       value: selectedCipher.identity.email
     },
     {
-      label: 'Company',
+      label: translate('identity.company'),
       value: selectedCipher.identity.company
     },
     {
-      label: 'Social security number',
+      label: translate('identity.phone'),
+      value: selectedCipher.identity.phone
+    },
+    {
+      label: translate('identity.ssn'),
       value: selectedCipher.identity.ssn
     },
     {
-      label: 'Passport number',
+      label: translate('identity.passport'),
       value: selectedCipher.identity.passportNumber
     },
     {
-      label: 'License number',
+      label: translate('identity.license'),
       value: selectedCipher.identity.licenseNumber
     },
     {
-      label: 'Address 1',
+      label: translate('identity.address') + ' 1',
       value: selectedCipher.identity.address1
     },
     {
-      label: 'Address 2',
+      label: translate('identity.address') + ' 2',
       value: selectedCipher.identity.address2
     },
     // {
-    //   label: 'Address 3',
+    //   label: translate('identity.address') + ' 3',
     //   value: selectedCipher.identity.address3
     // },
     {
-      label: 'City / Town',
+      label: translate('identity.city'),
       value: selectedCipher.identity.city
     },
     {
-      label: 'State / Province',
+      label: translate('identity.state'),
       value: selectedCipher.identity.state
     },
     {
-      label: 'Zip / Postal code',
+      label: translate('identity.zip'),
       value: selectedCipher.identity.postalCode
     },
     {
-      label: 'Country',
+      label: translate('identity.country'),
       value: selectedCipher.identity.country
     }
   ]
 
   return (
     <Layout
-      containerStyle={{ 
+      containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
         paddingTop: 0
@@ -111,7 +116,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
         />
       )}
     >
-      
+
       {/* Actions */}
       {
         selectedCipher.deletedDate ? (
@@ -139,7 +144,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
           marginBottom: 10
         }]}>
           <Image
-            source={BROWSE_ITEMS.indentity.icon}
+            source={BROWSE_ITEMS.identity.icon}
             style={{ height: 55, width: 55, marginBottom: 5 }}
           />
           <Text
@@ -171,7 +176,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
 
         {/* Notes */}
         <FloatingInput
-          label="Notes"
+          label={translate('common.notes')}
           value={selectedCipher.notes}
           editable={false}
           textarea

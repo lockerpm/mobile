@@ -11,13 +11,14 @@ import { DeleteConfirmModal } from "../trash/delete-confirm-modal"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
+import { translate } from "../../../../i18n"
 
 
 type Props = {
   isOpen?: boolean,
   onClose?: Function,
   folder: FolderView | CollectionView,
-  onLoadingChange?: Function 
+  onLoadingChange?: Function
 }
 
 
@@ -39,7 +40,7 @@ export const FolderAction = (props: Props) => {
         onClose={() => setShowOwnershipAction(false)}
       />
 
-      <RenameFolderModal 
+      <RenameFolderModal
         isOpen={isRenameOpen}
         onClose={() => setIsRenameOpen(false)}
         folder={folder}
@@ -52,15 +53,15 @@ export const FolderAction = (props: Props) => {
           onLoadingChange && onLoadingChange(true)
           const res = await folderStore.deleteFolder(folder.id)
           if (res.kind === 'ok') {
-            notify('success', '', 'Folder deleted')
+            notify('success', '', translate('folder.folder_deleted'))
           } else {
-            notify('error', '', 'Something went wrong')
+            notify('error', '', translate('error.something_went_wrong'))
           }
           onLoadingChange && onLoadingChange(false)
         }}
-        title="Delete folder"
-        desc="After folder deleted, all items will be moved to trash. Are you sure you want to delete the folder?"
-        btnText="Ok"
+        title={translate('folder.delete_modal.title')}
+        desc={translate('folder.delete_modal.desc')}
+        btnText={translate('folder.delete_modal.btn')}
       />
 
       {/* Modals / Actions end */}
@@ -91,7 +92,7 @@ export const FolderAction = (props: Props) => {
             style={{ width: '100%' }}
           >
             <ActionItem
-              name="Rename"
+              name={translate('common.rename')}
               icon="edit"
               action={() => {
                 onClose()
@@ -102,7 +103,7 @@ export const FolderAction = (props: Props) => {
             />
 
             <ActionItem
-              name="Delete Folder"
+              name={translate('folder.delete_folder')}
               icon="trash"
               textColor={color.error}
               action={() => {

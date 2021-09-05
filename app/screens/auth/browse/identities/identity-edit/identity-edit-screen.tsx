@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { 
+import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
@@ -12,6 +12,7 @@ import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherView, IdentityView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
+import { translate } from "../../../../../i18n"
 
 
 type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'identities__edit'>;
@@ -113,7 +114,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
-    
+
     setIsLoading(false)
     if (res.kind === 'ok') {
       navigation.goBack()
@@ -124,56 +125,56 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
 
   const contactDetails: InputItem[] = [
     {
-      label: 'Title',
+      label: translate('identity.title'),
       value: title,
       setter: setTitle
     },
     {
-      label: 'First name',
+      label: translate('identity.first_name'),
       value: firstName,
       setter: setFirstName
     },
     {
-      label: 'Last name',
+      label: translate('identity.last_name'),
       value: lastName,
       setter: setLastName
     },
     {
-      label: 'Username',
+      label: translate('identity.username'),
       value: username,
       setter: setUsername
     },
     {
-      label: 'Email',
+      label: translate('identity.email'),
       value: email,
       setter: setEmail,
       type: 'email-address'
     },
     {
-      label: 'Company',
+      label: translate('identity.company'),
       value: company,
       setter: setCompany
     },
     {
-      label: 'Phone',
+      label: translate('identity.phone'),
       value: phone,
       setter: setPhone,
       type: 'numeric'
     },
     {
-      label: 'Social security number',
+      label: translate('identity.ssn'),
       value: ssn,
       setter: setSsn,
       type: 'numeric'
     },
     {
-      label: 'Passport number',
+      label: translate('identity.passport'),
       value: passport,
       setter: setPassport,
       type: 'numeric'
     },
     {
-      label: 'License number',
+      label: translate('identity.license'),
       value: license,
       setter: setLicense,
       type: 'numeric'
@@ -182,38 +183,38 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
 
   const addressDetails: InputItem[] = [
     {
-      label: 'Address 1',
+      label: translate('identity.address') + ' 1',
       value: address1,
       setter: setAddress1
     },
     {
-      label: 'Address 2',
+      label: translate('identity.address') + ' 2',
       value: address2,
       setter: setAddress2
     },
     // {
-    //   label: 'Address 3',
+    //   label: translate('identity.address') + ' 3',
     //   value: address3,
     //   setter: setAddress3
     // },
     {
-      label: 'City / Town',
+      label: translate('identity.city'),
       value: city,
       setter: setCity
     },
     {
-      label: 'State / Province',
+      label: translate('identity.state'),
       value: state,
       setter: setState
     },
     {
-      label: 'ZIP or Postal Code',
+      label: translate('identity.zip'),
       value: zip,
       setter: setZip,
       type: 'numeric'
     },
     {
-      label: 'Country',
+      label: translate('identity.country'),
       value: country,
       setter: setCountry
     },
@@ -222,19 +223,23 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   return (
     <Layout
       isContentOverlayLoading={isLoading}
-      containerStyle={{ 
+      containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0
       }}
       header={(
         <Header
-          title={mode === 'add' ? 'Add Personal Info' : 'Edit'}
+          title={
+            mode === 'add'
+              ? `${translate('common.add')} ${translate('common.identity')}`
+              : translate('common.edit')
+          }
           goBack={() => navigation.goBack()}
-          goBackText="Cancel"
+          goBackText={translate('common.cancel')}
           right={(
             <Button
               preset="link"
-              text="Save"
+              text={translate('common.save')}
               onPress={handleSave}
               textStyle={{
                 fontSize: 12
@@ -248,11 +253,9 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
       <View
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
       >
-        <View
-          style={[commonStyles.CENTER_HORIZONTAL_VIEW]}
-        >
+        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
-            source={BROWSE_ITEMS.indentity.icon}
+            source={BROWSE_ITEMS.identity.icon}
             style={{ height: 40, marginRight: 10 }}
           />
           <View style={{ flex: 1 }}>
@@ -268,7 +271,10 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
       {/* Name end */}
 
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="PERSONAL INFORMATION" style={{ fontSize: 10 }} />
+        <Text
+          text={translate('identity.personal_info').toUpperCase()}
+          style={{ fontSize: 10 }}
+        />
       </View>
 
       {/* Info */}
@@ -297,7 +303,10 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
       {/* Info end */}
 
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="ADDRESS DETAILS" style={{ fontSize: 10 }} />
+        <Text
+          text={translate('identity.address_details').toUpperCase()}
+          style={{ fontSize: 10 }}
+        />
       </View>
 
       {/* Address */}
