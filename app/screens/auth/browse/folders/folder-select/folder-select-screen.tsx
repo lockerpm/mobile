@@ -12,6 +12,7 @@ import { NewFolderModal } from "../new-folder-modal"
 import { FOLDER_IMG } from "../../../../../common/mappings"
 import { useStores } from "../../../../../models"
 import { useMixins } from "../../../../../services/mixins"
+import { translate } from "../../../../../i18n"
 
 
 type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
@@ -38,9 +39,9 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
         folderId: selectedFolder
       })
       if (res.kind === 'ok') {
-        notify('success', '', 'Moved to new folder')
+        notify('success', '', translate('folder.item_moved'))
       } else {
-        notify('error', '', 'Something went wrong')
+        notify('error', '', translate('error.something_went_wrong'))
       }
       setIsLoading(false)
     } else {
@@ -59,13 +60,17 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       }}
       header={(
         <Header
-          title={mode === 'add' ? 'Add to Folder' : 'Move to Folder'}
+          title={
+            mode === 'add'
+              ? translate('folder.add_to_folder')
+              : translate('folder.move_to_folder')
+          }
           goBack={() => navigation.goBack()}
-          goBackText={mode === 'move' ? "Cancel" : undefined}
+          goBackText={mode === 'move' ? translate('common.cancel') : undefined}
           right={(
             <Button
               preset="link"
-              text="Save"
+              text={translate('common.save')}
               onPress={handleMove}
               textStyle={{
                 fontSize: 12
@@ -90,9 +95,11 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
         }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Text preset="black" style={{ flex: 1 }}>
-            No folder
-          </Text>
+          <Text
+            tx={"folder.no_folder"}
+            preset="black"
+            style={{ flex: 1 }}
+          />
 
           {
             !selectedFolder && (

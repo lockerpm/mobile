@@ -1,7 +1,271 @@
 {
   "common": {
-    "ok": "OK 🇯🇵",
-    "cancel": "Cancel 🇯🇵",
-    "back": "Back 🇯🇵"
+    "account": "Tài khoản",
+    "add": "Thêm",
+    "biometric_unlocking": "Mở khóa bằng sinh trắc học",
+    "browse": "Kho",
+    "cancel": "Hủy",
+    "card": "Thẻ tín dụng",
+    "change_ownership": "Thay đổi quyền sở hữu",
+    "clone": "Tạo bản sao",
+    "continue": "Tiếp tục",
+    "create": "Tạo",
+    "delete": "Xóa",
+    "details": "Chi tiết",
+    "edit": "Sửa",
+    "folder": "Thư mục",
+    "generate": "Tạo mới",
+    "help": "Trợ giúp",
+    "home": "Tất cả",
+    "identity": "Danh tính",
+    "language": "Ngôn ngữ",
+    "length": "Độ dài",
+    "lock": "Khóa",
+    "logout": "Đăng xuất",
+    "master_pass": "Mật khẩu chính",
+    "minute": "phút",
+    "minutes": "phút",
+    "me": "Cá nhân",
+    "menu": "Tùy chọn",
+    "name": "Tên",
+    "none": "Không xác định",
+    "note": "Ghi chú",
+    "notes": "Ghi chú",
+    "options": "Tùy chọn",
+    "others": "Khác",
+    "owned_by": "Sở hữu bởi",
+    "ownership": "Quyền sở hữu",
+    "password": "Mật khẩu",
+    "regenerate": "Tạo lại",
+    "rename": "Đổi tên",
+    "restore": "Khôi phục",
+    "save": "Lưu",
+    "search": "Tìm kiếm",
+    "second": "giây",
+    "seconds": "giây",
+    "settings": "Cài đặt",
+    "security": "Bảo mật",
+    "share": "Chia sẻ",
+    "sign_up": "Đăng ký",
+    "skip": "Bỏ qua",
+    "sort": "Sắp xếp",
+    "trash": "Thùng rác",
+    "tools": "Công cụ",
+    "unlock": "Mở khóa"
+  },
+  "navigator": {
+    "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
+  },
+  "error": {
+    "biometric_not_enable": "Mở khóa bằng sinh trắc học chưa được kích hoạt",
+    "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng sinh trắc học",
+    "session_login_failed": "Đăng nhập phiên không thành công",
+    "something_went_wrong": "Đã có lỗi xảy ra",
+    "sync_failed": "Đồng bộ hóa không thành công",
+    "token_expired": "Phiên của bạn đã hết hạn"
+  },
+  "success": {
+    "master_password_updated": "Mật khẩu chính đã được cập nhật",
+    "biometric_enabled": "Mở khóa bằng sinh trắc học đã được kích hoạt",
+    "cipher_created": "Thêm mới thành công",
+    "cipher_deleted": "Xóa thành công",
+    "cipher_restored": "Khôi phục thành công",
+    "cipher_trashed": "Đã chuyển vào thùng rác",
+    "cipher_updated": "Cập nhật thành công",
+    "sync_success": "Đồng bộ hóa hoàn tất"
+  },
+  "password_strength": {
+    "very_weak": "Rất yếu",
+    "weak": "Yếu",
+    "medium": "Trung bình",
+    "good": "Tốt",
+    "strong": "Mạnh"
+  },
+  "create_master_pass": {
+    "title": "Tạo mật khẩu chính",
+    "desc": "Master Password là mật khẩu mở khóa Locker của bạn. Đây là mật khẩu duy nhất bạn cần nhớ để truy cập tất cả các mật khẩu khác được lưu trữ trong Locker. Vui lòng không chia sẻ mật khẩu này với bất kỳ ai.",
+    "confirm_master_pass": "Xác nhận mật khẩu chính",
+    "hint": "Gợi ý (không bắt buộc)",
+    "btn": "Tạo mật khẩu",
+    "note": "Lưu ý: CyStack không thể xem, không thể lưu trữ, cũng như không thể cấp lại Master Password trong trường hợp bạn quên hoặc đánh mất."
+  },
+  "intro": {
+    "item_1": {
+      "title": "Trusted and secure",
+      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+    },
+    "item_2": {
+      "title": "Trusted and secure",
+      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+    },
+    "item_3": {
+      "title": "Trusted and secure",
+      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+    }
+  },
+  "lock": {
+    "master_pass_changed": "Mật khẩu chính đã thay đổi. Vui lòng đăng nhập bằng mật khẩu mới",
+    "hint_sent": "Gợi ý mật khẩu chính đã được gửi. Vui lòng kiểm tra email của bạn để được hướng dẫn",
+    "title": "Chào mừng trở lại!",
+    "desc": "Nhập mật khẩu chính của bạn để đăng nhập",
+    "get_hint": "Nhận gợi ý"
+  },
+  "onBoarding": {
+    "no_account": "Chưa có tài khoản?",
+    "title": "Your daily needs"
+  },
+  "biometric_intro": {
+    "title": "Mở khóa Locker bằng sinh trắc học",
+    "desc": "Sử dụng nhận dạng khuôn mặt hoặc vân tay để bảo vệ mật khẩu của bạn",
+    "use_btn": "Sử dụng sinh trắc học",
+    "later_btn": "Để sau"
+  },
+  "card": {
+    "card_name": "Tên chủ thẻ",
+    "brand": "Nhãn hiệu",
+    "card_number": "Số thẻ",
+    "exp_date": "Hạn sử dụng",
+    "cvv": "Mã bảo mật (CVV/CVC)",
+    "card_details": "Chi tiết thẻ",
+    "empty": {
+      "title": "Mua sắm nhanh chóng và tiện lợi",
+      "desc": "Thêm chi tiết thẻ thanh toán để tự động điền khi mua sắm trực tuyến",
+      "btn": "Thêm thẻ"
+    }
+  },
+  "folder": {
+    "unassigned": "Không xác định",
+    "item_moved": "Chuyển đến thư mục mới thành công",
+    "add_to_folder": "Thêm vào thư mục",
+    "move_to_folder": "Di chuyển đến thư mục",
+    "no_folder": "Không xác định",
+    "folder_deleted": "Xóa thư mục thành công",
+    "folder_created": "Tạo thư mục thành công",
+    "folder_updated": "Cập nhật thư mục thành công",
+    "create_folder": "Tạo thư mục mới",
+    "delete_folder": "Xóa thư mục",
+    "rename_folder": "Sửa tên thư mục",
+    "delete_modal": {
+      "title": "Xóa thư mục",
+      "desc": "Sau khi xóa thư mục, tất cả các mục sẽ được chuyển vào thùng rác. Bạn có chắc chắn muốn xóa thư mục không?",
+      "btn": "OK"
+    },
+    "empty": {
+      "title": "Sắp xếp tài nguyên vào các thư mục",
+      "desc": "Giữ mật khẩu và các mục khác trong nhóm",
+      "btn": "Thêm thư mục"
+    }
+  },
+  "identity": {
+    "title": "Tiêu đề",
+    "first_name": "Tên",
+    "last_name": "Họ",
+    "username": "Username",
+    "email": "Email",
+    "company": "Công ty",
+    "phone": "Số điện thoại",
+    "ssn": "CMND/CCCD",
+    "passport": "Hộ chiếu",
+    "license": "Giấy phép lái xe",
+    "address": "Địa chỉ",
+    "city": "Quận / Huyện",
+    "state": "Tỉnh / Thành phố",
+    "zip": "Mã bưu chính",
+    "country": "Quốc gia",
+    "personal_info": "Thông tin cá nhân",
+    "address_details": "Địa chỉ chi tiết",
+    "copy_full_name": "Sao chép họ tên",
+    "copy_full_address": "Sao chép địa chỉ 1",
+    "copy_full_address_2": "Sao chép địa chỉ 2",
+    "empty": {
+      "title": "Điền vào các biểu mẫu trực tuyến",
+      "desc": "Lưu địa chỉ và chi tiết liên hệ của bạn để điền vào các mẫu đăng ký một cách nhanh chóng",
+      "btn": "Thêm danh tính"
+    }
+  },
+  "note": {
+    "copy_note": "Giải phóng bộ nhớ của bạn",
+    "empty": {
+      "title": "Thêm ghi chú đầu tiên của bạn",
+      "desc": "Ghi lại mã WiFi, mã báo vào cửa hoặc sinh nhật của bạn bè bạn",
+      "btn": "Thêm ghi chú"
+    }
+  },
+  "password": {
+    "login_details": "Thông tin đăng nhập",
+    "username": "Email / Username",
+    "website_url": "Địa chỉ website",
+    "password_security": "Mức độ bảo mật",
+    "launch_website": "Mở website",
+    "copy_username": "Sao chép Email / Username",
+    "copy_password": "Sao chép mật khẩu",
+    "empty": {
+      "title": "Khỏi lo quên mật khẩu",
+      "desc": "Thêm mật khẩu của bạn và truy cập chúng trên mọi thiết bị, bất kỳ lúc nào",
+      "btn": "Thêm mật khẩu"
+    }
+  },
+  "shares": {
+    "share_items": "Các mục được chia sẻ",
+    "empty": {
+      "title": "Chia sẻ tài nguyên một cách an toàn",
+      "desc": "Mọi mật khẩu, ghi chú hoặc thẻ tín dụng được chia sẻ hoặc nhận được sẽ xuất hiện ở đây"
+    }
+  },
+  "trash": {
+    "delete_item": "Xóa",
+    "delete_desc": "Mục này sẽ bị mất và bạn sẽ không thể khôi phục được nữa.",
+    "to_trash": "Đưa vào thùng rác",
+    "to_trash_desc": "Mục này sẽ được chuyển vào thùng rác nơi bạn có thể khôi phục hoặc xóa vĩnh viễn.",
+    "perma_delete": "Xóa vĩnh viễn",
+    "perma_delete_desc": "Bạn có chắc chắn muốn xóa vĩnh viễn mục này không?",
+    "empty": {
+      "title": "Thùng rác trống",
+      "desc": "Tất cả các mục đã chuyển vào thùng rác có thể được khôi phục cho đến khi bạn xóa chúng vĩnh viễn"
+    }
+  },
+  "all_items": {
+    "last_updated": "Thời gian giảm dần",
+    "first_updated": "Thời gian tăng dần",
+    "empty": {
+      "title": "Thêm mật khẩu đầu tiên của bạn",
+      "desc": "Tạo mật khẩu đầu tiên để bắt đầu xây dựng kho của bạn",
+      "btn": "Thêm mục"
+    }
+  },
+  "change_master_pass": {
+    "title": "Thay đổi mật khẩu chính",
+    "current": "Mật khẩu hiện tại",
+    "new": "Mật khẩu mới",
+    "confirm": "Xác nhận mật khẩu mới"
+  },
+  "help": {
+    "help_center": "Trung tâm trợ giúp",
+    "terms": "Điều khoản dịch vụ",
+    "policy": "Chính sách bảo mật"
+  },
+  "menu": {
+    "plan": "Quản lý gói cước",
+    "invite": "Mời bạn bè"
+  },
+  "pass_generator": {
+    "title": "Tạo mật khẩu mạnh",
+    "use_upper": "Sử dụng chữ in hoa (A-Z)",
+    "use_lower": "Sử dụng chữ in thường (a-z)",
+    "use_digits": "Sử dụng số (0-9)",
+    "use_symbol": "Sử dụng ký tự đặc biệt (@!$%*)",
+    "avoid_ambiguous": "Tránh các ký tự dễ nhầm lẫn",
+    "use_password": "Sử dụng mật khẩu"
+  },
+  "settings": {
+    "change_master_pass": "Thay đổi mật khẩu chính",
+    "danger_zone": "Khu vực nguy hiểm",
+    "deauthorize_sessions": "Vô hiệu hóa tất cả các phiên",
+    "delete_account": "Xóa tài khoản",
+    "delete_all_items": "Xóa tất cả dữ liệu",
+    "on_app_close": "Khi tắt ứng dụng",
+    "on_screen_off": "Khi tắt màn hình",
+    "timeout": "Hẹn giờ",
+    "timeout_action": "Hành động khi hết giờ"
   }
 }

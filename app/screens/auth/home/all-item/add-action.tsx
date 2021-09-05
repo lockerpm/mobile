@@ -27,7 +27,7 @@ export const AddAction = (props: Props) => {
         >
           {
             Object.values(BROWSE_ITEMS).filter(item => item.addable).map((item, index) => (
-              <Actionsheet.Item 
+              <Actionsheet.Item
                 key={index}
                 onPress={() => {
                   props.onClose()
@@ -40,9 +40,7 @@ export const AddAction = (props: Props) => {
                 }}
                 style={{ borderBottomColor: color.line, borderBottomWidth: 1 }}
               >
-                <View
-                  style={[commonStyles.CENTER_HORIZONTAL_VIEW]}
-                >
+                <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
                   <Image
                     source={item.icon}
                     style={{ height: 40, marginRight: 12 }}

@@ -3,6 +3,7 @@ import { ActionItem } from "../../../../components/cipher/cipher-action/action-i
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
+import { translate } from "../../../../i18n"
 
 
 type Props = {
@@ -20,7 +21,7 @@ export const NoteAction = (props: Props) => {
   return (
     <CipherAction {...props}>
       <ActionItem
-        name="Copy Note"
+        name={translate('note.copy_note')}
         icon="copy"
         action={() => copyToClipboard(selectedCipher.notes)}
         disabled={!selectedCipher.notes}

@@ -9,6 +9,7 @@ import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { NoteAction } from "../note-action"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
+import { translate } from "../../../../../i18n"
 
 
 export const NoteInfoScreen = observer(function NoteInfoScreen() {
@@ -20,7 +21,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
 
   return (
     <Layout
-      containerStyle={{ 
+      containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
         paddingTop: 0
@@ -88,7 +89,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
       }]}>
         {/* Notes */}
         <FloatingInput
-          label="Notes"
+          label={translate('common.notes')}
           value={selectedCipher.notes}
           editable={false}
           textarea

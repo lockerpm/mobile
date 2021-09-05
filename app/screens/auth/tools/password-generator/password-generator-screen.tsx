@@ -10,6 +10,7 @@ import { useMixins } from "../../../../services/mixins"
 import { useCoreService } from "../../../../services/core-service"
 import { useStores } from "../../../../models"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
+import { translate } from "../../../../i18n"
 
 
 type ScreenProp = RouteProp<PrimaryParamList, 'passwordGenerator'>;
@@ -21,7 +22,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
   const { cipherStore } = useStores()
   const route = useRoute<ScreenProp>()
   const { fromTools } = route.params
-  
+
   const [password, setPassword] = useState('')
   const [passwordLen, setPasswordLen] = useState(16)
   const [options, setOptions] = useState({
@@ -35,23 +36,23 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
 
   const OPTIONS = [
     {
-      label: 'Use uppercase letters (A-Z)',
+      label: translate('pass_generator.use_upper'),
       key: 'uppercase'
     },
     {
-      label: 'Use lowercase letters (a-z)',
+      label: translate('pass_generator.use_lower'),
       key: 'lowercase'
     },
     {
-      label: 'Use digits (0-9)',
+      label: translate('pass_generator.use_digits'),
       key: 'number'
     },
     {
-      label: 'Use symbols (@!$%*)',
+      label: translate('pass_generator.use_symbol'),
       key: 'special'
     },
     {
-      label: 'Avoid ambiguous characters',
+      label: translate('pass_generator.avoid_ambiguous'),
       key: 'ambiguous'
     }
   ]
@@ -81,7 +82,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
       borderBottom
       header={(
         <Header
-          title="Password Generator"
+          title={translate('pass_generator.title')}
           goBack={() => navigation.goBack()}
           right={(
             <View style={{ width: 10 }} />
@@ -92,7 +93,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         <View>
           <Button
             isNativeBase
-            text="Use Password"
+            text={translate('pass_generator.use_password')}
             onPress={() => {
               if (fromTools) {
                 copyToClipboard(password)
@@ -105,7 +106,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
           <Button
             isNativeBase
             variant="outline"
-            text="Regenerate"
+            text={translate('common.regenerate')}
             onPress={regenerate}
             style={{ marginTop: 10 }}
           />
@@ -119,8 +120,8 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Text 
-            preset="black" 
+          <Text
+            preset="black"
             text={password}
             style={{ flex: 1, fontSize: 16 }}
           />
@@ -139,13 +140,16 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
 
         <PasswordStrength
           preset="text"
-          value={getPasswordStrength(password).score} 
+          value={getPasswordStrength(password).score}
         />
       </View>
       {/* Password end */}
 
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="OPTIONS" style={{ fontSize: 10 }} />
+        <Text
+          text={translate('common.options').toUpperCase()}
+          style={{ fontSize: 10 }}
+        />
       </View>
 
       {/* Options */}
@@ -155,7 +159,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         }]}
       >
         <Text
-          text="Length"
+          text={translate('common.length')}
           preset="black"
           style={{ fontSize: 12 }}
         />

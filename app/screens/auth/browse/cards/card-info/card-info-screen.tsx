@@ -10,6 +10,7 @@ import { CardAction } from "../card-action"
 import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
+import { translate } from "../../../../../i18n"
 
 
 export const CardInfoScreen = observer(function CardInfoScreen() {
@@ -21,7 +22,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
 
   return (
     <Layout
-      containerStyle={{ 
+      containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
         paddingTop: 0
@@ -91,7 +92,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
         <FloatingInput
           fixedLabel
           copyAble
-          label="Cardholder name"
+          label={translate('card.card_name')}
           value={selectedCipher.card.cardholderName}
           editable={false}
           style={{ marginBottom: 10 }}
@@ -102,7 +103,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
         <FloatingInput
           fixedLabel
           copyAble
-          label="Brand"
+          label={translate('card.brand')}
           value={selectedCipher.card.brand}
           editable={false}
           style={{ marginVertical: 10 }}
@@ -113,41 +114,30 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
         <FloatingInput
           fixedLabel
           copyAble
-          label="Card number"
+          label={translate('card.card_number')}
           value={selectedCipher.card.number}
           editable={false}
           style={{ marginVertical: 10 }}
         />
         {/* Number end */}
 
-        {/* Exp month */}
+        {/* Exp date */}
         <FloatingInput
           fixedLabel
           copyAble
-          label="Expiration month"
-          value={selectedCipher.card.expMonth}
+          label={translate('card.exp_date')}
+          value={`${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}`}
           editable={false}
           style={{ marginVertical: 10 }}
         />
-        {/* Exp month end */}
-
-        {/* Exp year */}
-        <FloatingInput
-          fixedLabel
-          copyAble
-          label="Expiration year"
-          value={selectedCipher.card.expYear}
-          editable={false}
-          style={{ marginVertical: 10 }}
-        />
-        {/* Exp year end */}
+        {/* Exp date end */}
 
         {/* CVV */}
         <FloatingInput
           fixedLabel
           copyAble
           isPassword
-          label="Security code (CVV)"
+          label={translate('card.cvv')}
           value={selectedCipher.card.code}
           editable={false}
           style={{ marginVertical: 10 }}
@@ -156,7 +146,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
 
         {/* Notes */}
         <FloatingInput
-          label="Notes"
+          label={translate('common.notes')}
           value={selectedCipher.notes}
           editable={false}
           textarea

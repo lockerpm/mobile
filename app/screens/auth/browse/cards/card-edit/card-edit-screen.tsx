@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { 
+import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
@@ -13,6 +13,7 @@ import { useStores } from "../../../../../models"
 import { useMixins } from "../../../../../services/mixins"
 import { CardView, CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
+import { translate } from "../../../../../i18n"
 
 
 type CardEditScreenProp = RouteProp<PrimaryParamList, 'cards__edit'>;
@@ -99,7 +100,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
-    
+
     setIsLoading(false)
     if (res.kind === 'ok') {
       navigation.goBack()
@@ -110,18 +111,18 @@ export const CardEditScreen = observer(function CardEditScreen() {
 
   const cardDetails: InputItem[] = [
     {
-      label: 'Cardholder Name',
+      label: translate('card.card_name'),
       value: cardName,
       setter: setCardName,
       isRequired: true
     },
     {
-      label: 'Brand',
+      label: translate('card.brand'),
       value: brand,
       setter: setBrand
     },
     {
-      label: 'Card Number',
+      label: translate('card.card_number'),
       value: cardNumber,
       setter: setCardNumber,
       type: 'numeric',
@@ -129,7 +130,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
       placeholder: '0000 0000 0000 0000'
     },
     {
-      label: 'Expiration Date',
+      label: translate('card.exp_date'),
       value: expDate,
       setter: setExpDate,
       type: 'numeric',
@@ -140,7 +141,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
       placeholder: 'MM/YY'
     },
     {
-      label: 'Security Code (CVV/CVC)',
+      label: translate('card.cvv'),
       value: securityCode,
       setter: setSecurityCode,
       maskOptions: {
@@ -155,19 +156,23 @@ export const CardEditScreen = observer(function CardEditScreen() {
   return (
     <Layout
       isContentOverlayLoading={isLoading}
-      containerStyle={{ 
+      containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0
       }}
       header={(
         <Header
-          title={mode === 'add' ? 'Add Card' : 'Edit'}
+          title={
+            mode === 'add'
+              ? `${translate('common.add')} ${translate('common.card')}`
+              : translate('common.edit')
+          }
           goBack={() => navigation.goBack()}
-          goBackText="Cancel"
+          goBackText={translate('common.cancel')}
           right={(
             <Button
               preset="link"
-              text="Save"
+              text={translate('common.save')}
               onPress={handleSave}
               textStyle={{
                 fontSize: 12
@@ -181,9 +186,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
       <View
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
       >
-        <View
-          style={[commonStyles.CENTER_HORIZONTAL_VIEW]}
-        >
+        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
             source={BROWSE_ITEMS.card.icon}
             style={{ height: 40, marginRight: 10 }}
@@ -191,7 +194,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label="Name"
+              label={translate('common.name')}
               value={name}
               onChangeText={setName}
             />
@@ -201,7 +204,10 @@ export const CardEditScreen = observer(function CardEditScreen() {
       {/* Title end */}
 
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="CARD DETAILS" style={{ fontSize: 10 }} />
+        <Text
+          text={translate('card.card_details').toUpperCase()}
+          style={{ fontSize: 10 }}
+        />
       </View>
 
       {/* Info */}

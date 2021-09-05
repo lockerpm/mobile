@@ -4,6 +4,7 @@ import { ActionItem } from "../../../../components/cipher/cipher-action/action-i
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
+import { translate } from "../../../../i18n"
 
 
 type Props = {
@@ -17,23 +18,23 @@ export const IdentityAction = (props: Props) => {
   const { copyToClipboard } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-  
+
   return (
     <CipherAction {...props}>
       <ActionItem
-        name="Copy full name"
+        name={translate('identity.copy_full_name')}
         icon="copy"
         action={() => copyToClipboard(selectedCipher.identity.fullName)}
         disabled={!selectedCipher.identity.fullName}
       />
       <ActionItem
-        name="Copy full address"
+        name={translate('identity.copy_full_address')}
         icon="copy"
         action={() => copyToClipboard(selectedCipher.identity.fullAddress)}
         disabled={!selectedCipher.identity.fullAddress}
       />
       <ActionItem
-        name="Copy full address part 2"
+        name={translate('identity.copy_full_address_2')}
         icon="copy"
         action={() => copyToClipboard(selectedCipher.identity.fullAddressPart2)}
         disabled={!selectedCipher.identity.fullAddressPart2}

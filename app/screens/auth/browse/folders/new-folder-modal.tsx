@@ -7,6 +7,7 @@ import { FolderView } from "../../../../../core/models/view/folderView"
 import { useCoreService } from "../../../../services/core-service"
 import { FolderRequest } from "../../../../../core/models/request/folderRequest"
 import { useMixins } from "../../../../services/mixins"
+import { translate } from "../../../../i18n"
 
 interface Props {
   isOpen?: boolean,
@@ -30,14 +31,14 @@ export const NewFolderModal = observer((props: Props) => {
     const payload = new FolderRequest(folderEnc)
     const res = await folderStore.createFolder(payload)
     if (res.kind === 'ok') {
-      notify('success', '', 'Folder created')
+      notify('success', '', translate('folder.folder_created'))
       onClose()
     } else {
-      notify('error', '', 'Something went wrong')
+      notify('error', '', translate('error.something_went_wrong'))
     }
     setIsLoading(false)
   }
-  
+
   return (
     <Modal
       isOpen={isOpen}
@@ -48,16 +49,15 @@ export const NewFolderModal = observer((props: Props) => {
         <Modal.Header>
           <Text
             preset="header"
+            text={translate('folder.create_folder')}
             style={{
               fontSize: 18
             }}
-          >
-            Create New Folder
-          </Text>
+          />
         </Modal.Header>
         <Modal.Body>
           <FloatingInput
-            label="Name"
+            label={translate('common.name')}
             value={name}
             onChangeText={txt => setName(txt)}
           />
@@ -65,7 +65,7 @@ export const NewFolderModal = observer((props: Props) => {
         <Modal.Footer style={{ marginRight: 20, marginBottom: 16, paddingRight: 0 }}>
           <Button
             isNativeBase
-            text="Create"
+            text={translate('common.create')}
             disabled={isLoading || !name.trim()}
             isLoading={isLoading}
             onPress={handleCreateFolder}

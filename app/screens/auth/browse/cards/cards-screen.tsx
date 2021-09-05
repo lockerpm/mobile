@@ -4,11 +4,12 @@ import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "..
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { CipherType } from "../../../../../core/enums"
+import { translate } from "../../../../i18n"
 
 
 export const CardsScreen = observer(function CardsScreen() {
   const navigation = useNavigation()
-  
+
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -23,7 +24,7 @@ export const CardsScreen = observer(function CardsScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header="Credit Card"
+          header={translate('common.card')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
             navigation.navigate('cards__edit', { mode: 'add' })
@@ -35,8 +36,8 @@ export const CardsScreen = observer(function CardsScreen() {
       borderBottom
       noScroll
     >
-      <SortAction 
-        isOpen={isSortOpen} 
+      <SortAction
+        isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {
           setSortOption(value)
@@ -44,7 +45,7 @@ export const CardsScreen = observer(function CardsScreen() {
         }}
         value={sortOption}
       />
-      
+
       <CipherList
         navigation={navigation}
         onLoadingChange={setIsLoading}
@@ -54,9 +55,9 @@ export const CardsScreen = observer(function CardsScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
-            title="Quick & convenient shopping"
-            desc="Add payment card details to autofill when shopping online"
-            buttonText="Add Card"
+            title={translate('card.empty.title')}
+            desc={translate('card.empty.desc')}
+            buttonText={translate('card.empty.btn')}
             addItem={() => {
               navigation.navigate('cards__edit', { mode: 'add' })
             }}

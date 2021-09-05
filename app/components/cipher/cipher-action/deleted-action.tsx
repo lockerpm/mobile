@@ -11,6 +11,7 @@ import { ActionItem } from "./action-item"
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
+import { translate } from "../../../i18n"
 
 export interface DeletedActionProps {
   children?: React.ReactNode,
@@ -49,8 +50,8 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
         }
       case CipherType.Identity:
         return {
-          img: BROWSE_ITEMS.indentity.icon,
-          backup: BROWSE_ITEMS.indentity.icon,
+          img: BROWSE_ITEMS.identity.icon,
+          backup: BROWSE_ITEMS.identity.icon,
           path: 'identities'
         }
       case CipherType.SecureNote:
@@ -83,7 +84,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
       }
     }
   }
-  
+
   // Render
 
   return (
@@ -94,9 +95,9 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        title="Warning"
-        desc="Are you sure you want to permanently delete this item?"
-        btnText="Ok"
+        title={translate('trash.perma_delete')}
+        desc={translate('trash.perma_delete_desc')}
+        btnText="OK"
       />
 
       {/* Modals end */}
@@ -142,7 +143,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
             }
 
             <ActionItem
-              name="Edit"
+              name={translate('common.edit')}
               icon="edit"
               action={() => {
                 onClose()
@@ -151,7 +152,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
             />
 
             <ActionItem
-              name="Restore"
+              name={translate('common.restore')}
               icon="repeat"
               action={() => {
                 onClose()
@@ -160,7 +161,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
             />
 
             <ActionItem
-              name="Permanently Delete"
+              name={translate('trash.perma_delete')}
               icon="trash"
               textColor={color.error}
               action={() => {

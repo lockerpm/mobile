@@ -12,6 +12,7 @@ import { useMixins } from "../../../services/mixins"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
 import { Text } from "../../text/text"
 import { AutoImage as Image } from "../../auto-image/auto-image"
+import { translate } from "../../../i18n"
 
 export interface CipherActionProps {
   children?: React.ReactNode,
@@ -51,8 +52,8 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         }
       case CipherType.Identity:
         return {
-          img: BROWSE_ITEMS.indentity.icon,
-          backup: BROWSE_ITEMS.indentity.icon,
+          img: BROWSE_ITEMS.identity.icon,
+          backup: BROWSE_ITEMS.identity.icon,
           path: 'identities'
         }
       case CipherType.SecureNote:
@@ -75,13 +76,13 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const handelDelete = async () => {
     const res = await toTrashCiphers([selectedCipher.id])
     if (res.kind === 'ok') {
-      let routeName = await getRouteName()
+      const routeName = await getRouteName()
       if (routeName.endsWith('__info')) {
         navigation.goBack()
       }
     }
   }
-  
+
   // Render
 
   return (
@@ -97,9 +98,9 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handelDelete}
-        title="Move to trash"
-        desc="This item will be moved to trash where you can restore or pernamently delete it."
-        btnText="Ok"
+        title={translate('trash.to_trash')}
+        desc={translate('trash.to_trash_desc')}
+        btnText="OK"
       />
 
       {/* Modals end */}
@@ -143,9 +144,9 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 <Divider borderColor={color.line} marginY={1} />
               )
             }
-            
+
             <ActionItem
-              name="Clone"
+              name={translate('common.clone')}
               icon="clone"
               action={() => {
                 onClose()
@@ -154,12 +155,12 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
             />
 
             <ActionItem
-              name="Move to Folder"
+              name={translate('folder.move_to_folder')}
               icon="folder-o"
               action={() => {
                 onClose()
                 navigation.navigate('folders__select', {
-                  mode: 'move', 
+                  mode: 'move',
                   initialId: selectedCipher.folderId,
                   cipherIds: [selectedCipher.id]
                 })
@@ -167,7 +168,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
             />
 
             <ActionItem
-              name="Change Ownership"
+              name={translate('common.change_ownership')}
               icon="user-o"
               action={() => {
                 onClose()
@@ -178,7 +179,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
             <Divider borderColor={color.line}  marginY={1} />
 
             <ActionItem
-              name="Edit"
+              name={translate('common.edit')}
               icon="edit"
               action={() => {
                 onClose()
@@ -187,12 +188,12 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
             />
 
             <ActionItem
-              name="Share"
+              name={translate('common.share')}
               icon="share-square-o"
             />
 
             <ActionItem
-              name="Move to Trash"
+              name={translate('trash.to_trash')}
               icon="trash"
               textColor={color.error}
               action={() => {

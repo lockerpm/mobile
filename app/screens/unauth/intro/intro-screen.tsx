@@ -5,24 +5,25 @@ import { AutoImage as Image, Text, Layout, Button } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
+import { translate } from "../../../i18n"
 
 
 export const IntroScreen = observer(function IntroScreen() {
   const tabs = [
     {
       img: require("./intro.png"),
-      title: 'Trusted and secure',
-      desc: 'Your vault is protected with world-class security. It’s so secure, not even we can access your passwords.'
+      title: translate('intro.item_1.title'),
+      desc: translate('intro.item_1.desc')
     },
     {
       img: require("./intro.png"),
-      title: 'Trusted and secure',
-      desc: 'Your vault is protected with world-class security. It’s so secure, not even we can access your passwords.'
+      title: translate('intro.item_2.title'),
+      desc: translate('intro.item_2.desc')
     },
     {
       img: require("./intro.png"),
-      title: 'Trusted and secure',
-      desc: 'Your vault is protected with world-class security. It’s so secure, not even we can access your passwords.'
+      title: translate('intro.item_2.title'),
+      desc: translate('intro.item_2.desc')
     }
   ]
   const map = {}
@@ -58,7 +59,7 @@ export const IntroScreen = observer(function IntroScreen() {
   const header = (
     <View style={{ alignItems: "flex-end" }}>
       <Button
-        text="SKIP"
+        text={translate('common.skip').toUpperCase()}
         textStyle={{ fontSize: 12 }}
         preset="link"
         onPress={() => navigation.navigate("onBoarding")}
@@ -72,7 +73,7 @@ export const IntroScreen = observer(function IntroScreen() {
     <View>
       <Button
         isNativeBase
-        tx="welcomeScreen.continue"
+        tx="common.continue"
         onPress={() => {
           if (index === routes.length - 1) {
             navigation.navigate("onBoarding")

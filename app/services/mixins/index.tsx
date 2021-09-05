@@ -13,6 +13,7 @@ import Clipboard from '@react-native-clipboard/clipboard'
 import { CipherRequest } from '../../../core/models/request/cipherRequest'
 import { load } from '../../utils/storage'
 import { delay } from '../../utils/delay'
+import { translate } from "../../i18n"
 
 const { createContext, useContext } = React
 
@@ -61,10 +62,10 @@ const MixinsContext = createContext(defaultData)
 export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const toast = useToast()
   const { user, cipherStore, folderStore, collectionStore } = useStores()
-  const { 
-    cryptoService, 
-    userService, 
-    folderService, 
+  const {
+    cryptoService,
+    userService,
+    folderService,
     cipherService,
     searchService,
     collectionService,
@@ -98,8 +99,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
           await cryptoService.setKey(key)
           return { kind: 'ok' }
         }
-      } 
-      
+      }
+
       // Online session login
       const keyHash = await cryptoService.hashPassword(masterPassword, key)
 
@@ -112,13 +113,13 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         device_identifier: await storageService.get('device_id') || randomString()
       })
       if (res.kind === 'unauthorized') {
-        notify('error', '', 'Token expired')
+        notify('error', '', translate('error.token_expired'))
         user.clearToken()
         return { kind: 'unauthorized' }
       }
 
       if (res.kind !== 'ok') {
-        notify('error', '', 'Session login failed')
+        notify('error', '', translate('error.session_login_failed'))
         return { kind: 'bad-data' }
       }
 
@@ -136,7 +137,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       }
       return { kind: 'ok' }
     } catch (e) {
-      notify('error', '', 'Session login failed')
+      notify('error', '', translate('error.session_login_failed'))
       return { kind: 'bad-data' }
     }
   }
@@ -147,7 +148,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // await delay(200)
       const { available } = await ReactNativeBiometrics.isSensorAvailable()
       if (!available) {
-        notify('error', '', 'Biometric is not supported')
+        notify('error', '', translate('error.biometric_not_support'))
         return { kind: 'bad-data' }
       }
 
@@ -156,24 +157,24 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         promptMessage: 'Unlock Locker'
       })
       if (!success) {
-        notify('error', '', 'Biometric login failed')
+        notify('error', '', translate('error.session_login_failed'))
         return { kind: 'bad-data' }
       }
 
       // Check key
       const hasKey = await cryptoService.hasKey()
       if (!hasKey) {
-        notify('error', '', 'Biometric login failed')
+        notify('error', '', translate('error.session_login_failed'))
         return { kind: 'bad-data' }
       }
-      
+
       // Fake set key
       messagingService.send('loggedIn')
       const storedKey = await cryptoService.getKey()
       await cryptoService.setKey(storedKey)
       return { kind: 'ok' }
     } catch (e) {
-      notify('error', '', 'Biometric login failed')
+      notify('error', '', translate('error.session_login_failed'))
       return { kind: 'bad-data' }
     }
   }
@@ -189,7 +190,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const encKey = await cryptoService.makeEncKey(key)
       const hashedPassword = await cryptoService.hashPassword(masterPassword, key)
       const keys = await cryptoService.makeKeyPair(encKey[0])
-  
+
       await cryptoService.setKey(key)
       await cryptoService.setKeyHash(hashedPassword)
       await cryptoService.setEncKey(encKey[1].encryptedString)
@@ -213,15 +214,15 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
       // API failed
       if (res.kind !== 'ok') {
-        notify('error', 'Error', 'Session login failed')
+        notify('error', '', translate('error.something_went_wrong'))
         return { kind: 'bad-data' }
       }
 
       // Success
-      notify('success', 'Success', 'Master password is set')
+      notify('success', '', translate('success.master_password_updated'))
       return { kind: 'ok' }
     } catch (e) {
-      notify('error', 'Error', 'Set master password failed')
+      notify('error', '', translate('error.something_went_wrong'))
       return { kind: 'bad-data' }
     }
   }
@@ -251,18 +252,18 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         master_password_hash: oldKeyHash
       })
       if (res.kind !== 'ok') {
-        notify('error', '', 'Session login failed')
+        notify('error', '', translate('error.something_went_wrong'))
         return { kind: 'bad-data' }
       }
 
       // Setup service
-      notify('success', '', 'Master password changed')
+      notify('success', '', translate('success.master_password_updated'))
       user.setPasswordChanged(true)
       await lock()
       await cryptoService.clearKeys()
       return { kind: 'ok' }
     } catch (e) {
-      notify('error', '', 'Session login failed')
+      notify('error', '', translate('error.something_went_wrong'))
       return { kind: 'bad-data' }
     }
   }
@@ -295,7 +296,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // Sync api
       const res = await cipherStore.syncData()
       if (res.kind !== 'ok') {
-        notify('error', 'Error', 'Sync failed')
+        notify('error', '', translate('error.sync_failed'))
         messagingService.send('syncCompleted', { successfully: false })
         return res
       }
@@ -314,9 +315,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await syncService.syncPolicies(res.data.policies)
       await syncService.setLastSync(new Date())
       messagingService.send('syncCompleted', { successfully: true })
+      notify('success', '', translate('success.sync_success'))
       return { kind: 'ok' }
     } catch (e) {
-      notify('error', 'Error', 'Sync failed')
+      notify('error', 'Error', translate('error.sync_failed'))
       messagingService.send('syncCompleted', { successfully: false })
       return { kind: 'bad-data' }
     }
@@ -366,9 +368,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     const data = new CipherRequest(cipherEnc)
     const res = await cipherStore.createCipher(data, score, collectionIds)
     if (res.kind === 'ok') {
-      notify('success', '', 'New item created')
+      notify('success', '', translate('success.cipher_created'))
     } else {
-      notify('error', '', 'Something went wrong')
+      notify('error', '', translate('error.something_went_wrong'))
     }
     return res
   }
@@ -378,9 +380,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     const data = new CipherRequest(cipherEnc)
     const res = await cipherStore.updateCipher(id, data, score, collectionIds)
     if (res.kind === 'ok') {
-      notify('success', '', 'Item updated')
+      notify('success', '', translate('success.cipher_updated'))
     } else {
-      notify('error', '', 'Something went wrong')
+      notify('error', '', translate('error.something_went_wrong'))
     }
     return res
   }
@@ -388,9 +390,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   const deleteCiphers = async (ids: string[]) => {
     const res = await cipherStore.deleteCiphers(ids)
     if (res.kind === 'ok') {
-      notify('success', '', 'Deleted')
+      notify('success', '', translate('success.cipher_deleted'))
     } else {
-      notify('error', '', 'Something went wrong')
+      notify('error', '', translate('error.something_went_wrong'))
     }
     return res
   }
@@ -398,9 +400,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   const toTrashCiphers = async (ids: string[]) => {
     const res = await cipherStore.toTrashCiphers(ids)
     if (res.kind === 'ok') {
-      notify('success', '', 'Moved to trash')
+      notify('success', '', translate('success.cipher_trashed'))
     } else {
-      notify('error', '', 'Something went wrong')
+      notify('error', '', translate('error.something_went_wrong'))
     }
     return res
   }
@@ -408,9 +410,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   const restoreCiphers = async (ids: string[]) => {
     const res = await cipherStore.restoreCiphers(ids)
     if (res.kind === 'ok') {
-      notify('success', '', 'Restored')
+      notify('success', '', translate('success.cipher_restored'))
     } else {
-      notify('error', '', 'Something went wrong')
+      notify('error', '', translate('error.something_went_wrong'))
     }
     return res
   }
@@ -450,8 +452,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Alert message
   const notify = (
-    type : 'error' | 'success' | 'warning' | 'info', 
-    title : null | string, 
+    type : 'error' | 'success' | 'warning' | 'info',
+    title : null | string,
     text: null | string,
     duration?: undefined | number
   ) => {

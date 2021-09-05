@@ -4,11 +4,12 @@ import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "..
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { CipherType } from "../../../../../core/enums"
+import { translate } from "../../../../i18n"
 
 
 export const NotesScreen = observer(function NotesScreen() {
   const navigation = useNavigation()
-  
+
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -23,7 +24,7 @@ export const NotesScreen = observer(function NotesScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header="Secure Note"
+          header={translate('common.note')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
             navigation.navigate('notes__edit', { mode: 'add' })
@@ -35,8 +36,8 @@ export const NotesScreen = observer(function NotesScreen() {
       borderBottom
       noScroll
     >
-      <SortAction 
-        isOpen={isSortOpen} 
+      <SortAction
+        isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {
           setSortOption(value)
@@ -44,7 +45,7 @@ export const NotesScreen = observer(function NotesScreen() {
         }}
         value={sortOption}
       />
-      
+
       <CipherList
         navigation={navigation}
         onLoadingChange={setIsLoading}
@@ -54,9 +55,9 @@ export const NotesScreen = observer(function NotesScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
-            title="Free your memory"
-            desc="Jot down a WiFi code, office security alarm code or your friend’s birthday"
-            buttonText="Add Note"
+            title={translate('note.empty.title')}
+            desc={translate('note.empty.desc')}
+            buttonText={translate('note.empty.btn')}
             addItem={() => {
               navigation.navigate('notes__edit', { mode: 'add' })
             }}

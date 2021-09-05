@@ -5,6 +5,7 @@ import { Text } from "../text/text"
 import { Progress, Box } from "native-base"
 import { StyleProp, ViewStyle } from "react-native"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import { translate } from "../../i18n"
 
 
 export interface PasswordStrengthProps {
@@ -25,30 +26,30 @@ export const PasswordStrength = observer(function PasswordStrength(props: Passwo
       color: 'primary'
     },
     0: {
-      text: 'Very weak',
+      text: translate('password_strength.very_weak'),
       color: 'csError',
       textColor: color.error,
       icon: 'shield-outline'
     },
     1: {
-      text: 'Weak',
+      text: translate('password_strength.weak'),
       color: 'csError',
       textColor: color.error,
       icon: 'shield-outline'
     },
     2: {
-      text: 'Medium',
+      text: translate('password_strength.medium'),
       color: 'yellow',
       icon: 'shield'
     },
     3: {
-      text: 'Good',
+      text: translate('password_strength.good'),
       color: 'csGreen',
       textColor: color.palette.green,
       icon: 'shield-checkmark-outline'
     },
     4: {
-      text: 'Strong',
+      text: translate('password_strength.strong'),
       color: 'csGreen',
       textColor: color.palette.green,
       icon: 'shield-checkmark'
