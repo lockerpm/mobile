@@ -31,10 +31,10 @@ export const NewFolderModal = observer((props: Props) => {
     const payload = new FolderRequest(folderEnc)
     const res = await folderStore.createFolder(payload)
     if (res.kind === 'ok') {
-      notify('success', '', translate('folder.folder_created'))
+      notify('success', translate('folder.folder_created'))
       onClose()
     } else {
-      notify('error', '', translate('error.something_went_wrong'))
+      notify('error', translate('error.something_went_wrong'))
     }
     setIsLoading(false)
   }

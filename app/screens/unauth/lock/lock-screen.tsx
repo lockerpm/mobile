@@ -15,7 +15,7 @@ export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
   const route = useRoute<ScreenProp>()
   const { logout, sessionLogin, notify, biometricLogin } = useMixins()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
 
   // Params
   const [masterPassword, setMasterPassword] = useState('')
@@ -28,7 +28,7 @@ export const LockScreen = observer(function LockScreen() {
   // Methods
   const mounted = async () => {
     if (!route.params || !route.params.skipCheck) {
-      if (!user.isOffline) {
+      if (!uiStore.isOffline) {
         await user.getUser()
       }
     }
@@ -63,11 +63,11 @@ export const LockScreen = observer(function LockScreen() {
 
   const handleUnlockBiometric = async () => {
     if (!user.isBiometricUnlock) {
-      notify('error', '', translate('error.biometric_not_enable'))
+      notify('error', translate('error.biometric_not_enable'))
       return
     }
-    if (user.passwordChanged) {
-      notify('error', '', translate('lock.master_pass_changed'))
+    if (uiStore.passwordChanged) {
+      notify('error', translate('lock.master_pass_changed'))
       return
     }
 
@@ -85,9 +85,9 @@ export const LockScreen = observer(function LockScreen() {
     const res = await user.sendPasswordHint(user.email)
     setIsSendingHint(false)
     if (res.kind === 'ok') {
-      notify('success', 'Master Password hint sent', translate('lock.hint_sent'))
+      notify('success', translate('lock.hint_sent'))
     } else {
-      notify('error', 'Error', translate('error.something_went_wrong'))
+      notify('error', translate('error.something_went_wrong'))
     }
   }
 
@@ -182,7 +182,7 @@ export const LockScreen = observer(function LockScreen() {
           isNativeBase
           isLoading={isUnlocking}
           isDisabled={isUnlocking}
-          text={"common.unlock"}
+          text={translate("common.unlock")}
           onPress={handleUnlock}
           style={{
             width: '100%',

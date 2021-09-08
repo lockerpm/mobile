@@ -36,10 +36,10 @@ export const SettingsScreen = observer(function SettingsScreen() {
     const available = await isBiometricAvailable()
 
     if (!available) {
-      notify('error', '', translate('error.biometric_not_support'))
+      notify('error', translate('error.biometric_not_support'))
     } else {
       user.setBiometricUnlock(true)
-      notify('success', '', translate('success.biometric_enabled'))
+      notify('success', translate('success.biometric_enabled'))
     }
 
     setIsLoading(false)

@@ -30,15 +30,10 @@ export const UserModel = types
     plan: types.maybeNull(types.frozen()),
 
     // User
-    language: types.maybeNull(types.string),
+    language: types.optional(types.string, 'en'),
     isBiometricUnlock: types.maybeNull(types.boolean),
-    appTimeout: types.maybeNull(types.number),
-    appTimeoutAction: types.maybeNull(types.string),
-
-    // UI
-    isOffline: types.maybeNull(types.boolean),
-    showNetworkError: types.maybeNull(types.boolean),
-    passwordChanged: types.maybeNull(types.boolean)
+    appTimeout: types.optional(types.number, -1),
+    appTimeoutAction: types.optional(types.string, 'lock'),
   })
   .extend(withEnvironment)
   .views((self) => ({}))
@@ -108,17 +103,6 @@ export const UserModel = types
     },
     setAppTimeoutAction: (action: string) => {
       self.appTimeoutAction = action
-    },
-
-    // UI
-    setIsOffline: (isOffline: boolean) => {
-      self.isOffline = isOffline
-    },
-    setShowNetworkError: (value: boolean) => {
-      self.showNetworkError = value
-    },
-    setPasswordChanged: (value: boolean) => {
-      self.passwordChanged = value
     }
   }))
   .actions((self) => ({
