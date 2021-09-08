@@ -38,10 +38,10 @@ export const RenameFolderModal = observer((props: Props) => {
     }
 
     if (res.kind === 'ok') {
-      notify('success', '', translate('folder.folder_updated'))
+      notify('success', translate('folder.folder_updated'))
       onClose()
     } else {
-      notify('error', '', translate('error.something_went_wrong'))
+      notify('error', translate('error.something_went_wrong'))
     }
     setIsLoading(false)
   }

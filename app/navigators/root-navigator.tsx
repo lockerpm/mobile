@@ -14,6 +14,7 @@ import {
 import { color } from "../theme"
 import { useMixins } from "../services/mixins"
 import { useStores } from "../models"
+import { translate } from "../i18n"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -44,14 +45,14 @@ const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = () => {
   const { notify } = useMixins()
-  const { user } = useStores()
+  const { uiStore } = useStores()
 
   useEffect(() => {
-    if (user.showNetworkError) {
-      notify('error', '', 'Network error')
-      user.setShowNetworkError(false)
+    if (uiStore.showNetworkError) {
+      notify('error', translate('error.network_error'))
+      uiStore.setShowNetworkError(false)
     }
-  }, [user.showNetworkError])
+  }, [uiStore.showNetworkError])
 
   return (
     <Stack.Navigator

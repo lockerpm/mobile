@@ -39,9 +39,9 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
         folderId: selectedFolder
       })
       if (res.kind === 'ok') {
-        notify('success', '', translate('folder.item_moved'))
+        notify('success', translate('folder.item_moved'))
       } else {
-        notify('error', '', translate('error.something_went_wrong'))
+        notify('error', translate('error.something_went_wrong'))
       }
       setIsLoading(false)
     } else {

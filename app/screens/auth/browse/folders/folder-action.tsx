@@ -53,9 +53,9 @@ export const FolderAction = (props: Props) => {
           onLoadingChange && onLoadingChange(true)
           const res = await folderStore.deleteFolder(folder.id)
           if (res.kind === 'ok') {
-            notify('success', '', translate('folder.folder_deleted'))
+            notify('success', translate('folder.folder_deleted'))
           } else {
-            notify('error', '', translate('error.something_went_wrong'))
+            notify('error', translate('error.something_went_wrong'))
           }
           onLoadingChange && onLoadingChange(false)
         }}

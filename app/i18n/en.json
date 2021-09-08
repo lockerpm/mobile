@@ -9,6 +9,7 @@
     "change_ownership": "Change Ownership",
     "clone": "Clone",
     "continue": "Continue",
+    "copied_to_clipboard": "Copied to clipboard",
     "create": "Create",
     "delete": "Delete",
     "details": "Details",
@@ -59,6 +60,7 @@
   "error": {
     "biometric_not_enable": "Biometric unlocking is not enabled",
     "biometric_not_support": "Biometric unlocking is not supported",
+    "network_error": "Network error",
     "session_login_failed": "Session login failed",
     "something_went_wrong": "Something went wrong",
     "sync_failed": "Synchronize data failed",

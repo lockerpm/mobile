@@ -9,6 +9,7 @@
     "change_ownership": "Thay đổi quyền sở hữu",
     "clone": "Tạo bản sao",
     "continue": "Tiếp tục",
+    "copied_to_clipboard": "Đã sao chép",
     "create": "Tạo",
     "delete": "Xóa",
     "details": "Chi tiết",
@@ -59,6 +60,7 @@
   "error": {
     "biometric_not_enable": "Mở khóa bằng sinh trắc học chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng sinh trắc học",
+    "network_error": "Kết nối mạng không thành công",
     "session_login_failed": "Đăng nhập phiên không thành công",
     "something_went_wrong": "Đã có lỗi xảy ra",
     "sync_failed": "Đồng bộ hóa không thành công",

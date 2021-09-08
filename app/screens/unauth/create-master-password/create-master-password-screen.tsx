@@ -15,7 +15,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
   const navigation = useNavigation()
   const route = useRoute<ScreenProp>()
   const { logout, register } = useMixins()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { getPasswordStrength } = useMixins()
 
   // Params
@@ -33,7 +33,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
   // Methods
   const mounted = async () => {
     if (!route.params || !route.params.skipCheck) {
-      if (!user.isOffline) {
+      if (!uiStore.isOffline) {
         await user.getUser()
       }
     }
