@@ -5,7 +5,7 @@ import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { useStores } from "../../../../../models"
@@ -97,7 +97,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
               text={translate('common.save')}
               onPress={handleSave}
               textStyle={{
-                fontSize: 12
+                fontSize: fontSize.small
               }}
             />
           )}
@@ -128,7 +128,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
       <View style={commonStyles.SECTION_PADDING}>
         <Text
           text={translate('common.details').toUpperCase()}
-          style={{ fontSize: 10 }}
+          style={{ fontSize: fontSize.small }}
         />
       </View>
 

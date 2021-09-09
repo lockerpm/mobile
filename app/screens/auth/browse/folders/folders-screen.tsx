@@ -9,7 +9,7 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { SectionList, View } from "react-native"
-import { color, commonStyles } from "../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { NewFolderModal } from "./new-folder-modal"
 import { FolderAction } from "./folder-action"
@@ -134,7 +134,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
             renderSectionHeader={({ section }) => (
               <Text
                 text={`${section.title} (${section.data.length})`}
-                style={{ fontSize: 10, paddingHorizontal: 20, marginTop: 20 }}
+                style={{ fontSize: fontSize.small, paddingHorizontal: 20, marginTop: 20 }}
               />
             )}
             renderItem={({ item }) => (

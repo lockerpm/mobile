@@ -5,7 +5,7 @@ import { MenuNavigator } from "./menu/menu-navigator"
 import { View } from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Button, Text } from "../components"
-import { color } from "../theme"
+import { color, fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import NetInfo from "@react-native-community/netinfo"
@@ -52,7 +52,7 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
             />
             <Text
               style={{
-                fontSize: 10,
+                fontSize: fontSize.small,
                 color: color.palette.white,
                 marginLeft: 5
               }}
@@ -116,7 +116,7 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
                 <Text
                   text={label}
                   style={{
-                    fontSize: 12,
+                    fontSize: fontSize.small,
                     color: isFocused ? color.palette.green : color.text
                   }}
                 />

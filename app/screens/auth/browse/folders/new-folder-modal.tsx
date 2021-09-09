@@ -8,6 +8,7 @@ import { useCoreService } from "../../../../services/core-service"
 import { FolderRequest } from "../../../../../core/models/request/folderRequest"
 import { useMixins } from "../../../../services/mixins"
 import { translate } from "../../../../i18n"
+import { fontSize } from "../../../../theme"
 
 interface Props {
   isOpen?: boolean,
@@ -51,7 +52,7 @@ export const NewFolderModal = observer((props: Props) => {
             preset="header"
             text={translate('folder.create_folder')}
             style={{
-              fontSize: 18
+              fontSize: fontSize.h4
             }}
           />
         </Modal.Header>

@@ -5,6 +5,7 @@ import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { AutoImage as Image } from "../auto-image/auto-image"
 import { flatten } from "ramda"
+import { fontSize } from "../../theme"
 
 
 const CONTAINER: ViewStyle = {
@@ -35,13 +36,13 @@ export const BrowseItemEmptyContent = observer(function BrowseItemEmptyContent(p
 
       <Text
         preset="semibold"
-        style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}
+        style={{ fontSize: fontSize.h4, marginBottom: 8, marginTop: 10 }}
         text={title}
       />
 
       <Text 
         text={desc}
-        style={{ textAlign: 'center', fontSize: 12 }}
+        style={{ textAlign: 'center', fontSize: fontSize.small }}
       />
 
       {

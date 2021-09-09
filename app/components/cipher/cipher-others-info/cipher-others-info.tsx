@@ -7,8 +7,8 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import find from 'lodash/find'
 import { useStores } from "../../../models"
 import { OwnershipAction } from "../cipher-action/ownership-action"
-import { color, commonStyles } from "../../../theme"
-import { FloatingInput } from "../../floating-input/floating-input"
+import { color, commonStyles, fontSize } from "../../../theme"
+import { FloatingInput } from "../../floating-input"
 import { translate } from "../../../i18n"
 
 
@@ -38,7 +38,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
       <View style={commonStyles.SECTION_PADDING}>
         <Text
           text={translate('common.others')}
-          style={{ fontSize: 10 }}
+          style={{ fontSize: fontSize.small }}
         />
       </View>
 
@@ -68,7 +68,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
             <View>
               <Text
                 text={translate('common.folder')}
-                style={{ fontSize: 10 }}
+                style={{ fontSize: fontSize.small }}
               />
               <Text
                 preset="black"
@@ -101,7 +101,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
             <View>
               <Text
                 text={translate('common.ownership')}
-                style={{ fontSize: 10 }}
+                style={{ fontSize: fontSize.small }}
               />
               <Text
                 preset="black"
@@ -122,7 +122,6 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
           hasNote && (
             <View style={{ flex: 1, marginTop: 20 }}>
               <FloatingInput
-                fixedLabel
                 textarea
                 label={translate('common.notes')}
                 value={note}

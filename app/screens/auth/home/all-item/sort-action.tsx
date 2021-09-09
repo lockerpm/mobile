@@ -1,7 +1,7 @@
 import React from "react"
 import { Actionsheet, Divider } from "native-base"
 import { Text, ActionItem } from "../../../../components"
-import { color } from "../../../../theme"
+import { color, fontSize } from "../../../../theme"
 import { translate } from "../../../../i18n"
 
 interface Props {
@@ -59,7 +59,7 @@ export const SortAction = (props: Props) => {
           preset="semibold"
           text={translate('common.sort')}
           style={{
-            fontSize: 18,
+            fontSize: fontSize.h4,
             marginBottom: 15
           }}
         />

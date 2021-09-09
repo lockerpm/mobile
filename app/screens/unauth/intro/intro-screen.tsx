@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View, TouchableOpacity } from "react-native"
 import { AutoImage as Image, Text, Layout, Button } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles } from "../../../theme"
+import { color, commonStyles, fontSize } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { translate } from "../../../i18n"
 
@@ -60,7 +60,7 @@ export const IntroScreen = observer(function IntroScreen() {
     <View style={{ alignItems: "flex-end" }}>
       <Button
         text={translate('common.skip').toUpperCase()}
-        textStyle={{ fontSize: 12 }}
+        textStyle={{ fontSize: fontSize.small }}
         preset="link"
         onPress={() => navigation.navigate("onBoarding")}
       >

@@ -3,7 +3,7 @@ import { Modal } from "native-base"
 import { Button } from "../../../../components/button/button"
 import { Text } from "../../../../components/text/text"
 import { AutoImage as Image } from "../../../../components/auto-image/auto-image"
-import { color } from "../../../../theme"
+import { color, fontSize } from "../../../../theme"
 import { translate } from "../../../../i18n"
 
 interface Props {
@@ -45,11 +45,11 @@ export const DeleteConfirmModal = (props: Props) => {
           <Text
             preset="black"
 						text={title || translate('trash.delete_item')}
-						style={{ fontSize: 18, marginBottom: 5, marginTop: 15 }}
+						style={{ fontSize: fontSize.h4, marginBottom: 5, marginTop: 15 }}
           />
 					<Text
 						text={desc || translate('trash.delete_desc')}
-						style={{ textAlign: 'center', fontSize: 12 }}
+						style={{ textAlign: 'center', fontSize: fontSize.small }}
 					/>
         </Modal.Body>
         {/* Body end */}

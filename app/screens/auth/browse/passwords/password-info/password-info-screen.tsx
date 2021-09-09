@@ -5,7 +5,7 @@ import {
   Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength, CipherInfoCommon
 } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
@@ -127,7 +127,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         {/* Password strength */}
         <Text
           text={translate('password.password_security')}
-          style={{ fontSize: 10 }}
+          style={{ fontSize: fontSize.small }}
         />
         <PasswordStrength preset="text" value={passwordStrength.score} />
 

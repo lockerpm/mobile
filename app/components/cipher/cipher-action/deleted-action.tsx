@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { ScrollView, View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, commonStyles } from "../../../theme"
+import { color, commonStyles, fontSize } from "../../../theme"
 import { Text } from "../../text/text"
 import { AutoImage as Image } from "../../auto-image/auto-image"
 import { useStores } from "../../../models"
@@ -124,7 +124,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
                   (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
                     <Text
                       text={selectedCipher.login.username}
-                      style={{ fontSize: 12 }}
+                      style={{ fontSize: fontSize.small }}
                     />
                   )
                 }

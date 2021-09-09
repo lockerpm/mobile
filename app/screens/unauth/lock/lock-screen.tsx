@@ -4,7 +4,7 @@ import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { color } from "../../../theme"
+import { color, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { RootParamList } from "../../../navigators/root-navigator"
 import { translate } from "../../../i18n"
@@ -96,7 +96,7 @@ export const LockScreen = observer(function LockScreen() {
     <View style={{ alignItems: "flex-end" }}>
       <Button
         text={translate('common.logout').toUpperCase()}
-        textStyle={{ fontSize: 12 }}
+        textStyle={{ fontSize: fontSize.small }}
         preset="link"
         onPress={handleLogout}
       >
@@ -157,7 +157,7 @@ export const LockScreen = observer(function LockScreen() {
           }
           <Text
             style={{
-              fontSize: 12,
+              fontSize: fontSize.small,
               color: color.title,
               marginHorizontal: 10
             }}

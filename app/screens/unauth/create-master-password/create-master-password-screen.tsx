@@ -4,7 +4,7 @@ import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput, PasswordStrength } from "../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { color } from "../../../theme"
+import { color, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { RootParamList } from "../../../navigators"
 import { translate } from "../../../i18n/translate"
@@ -70,7 +70,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         <View style={{ alignItems: "flex-end" }}>
           <Button
             text={translate('common.logout')}
-            textStyle={{ fontSize: 12 }}
+            textStyle={{ fontSize: fontSize.small }}
             preset="link"
             onPress={handleLogout}
           >
@@ -88,7 +88,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         />
 
         <Text
-          style={{ textAlign: 'center', fontSize: 12 }}
+          style={{ textAlign: 'center', fontSize: fontSize.small }}
           tx="create_master_pass.desc"
         />
 
@@ -119,7 +119,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
           }
           <Text
             style={{
-              fontSize: 12,
+              fontSize: fontSize.small,
               color: color.title,
               marginHorizontal: 10
             }}
@@ -183,7 +183,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         />
 
         <Text
-          style={{ textAlign: 'center', fontSize: 12 }}
+          style={{ textAlign: 'center', fontSize: fontSize.small }}
           tx="create_master_pass.note"
         />
       </View>
