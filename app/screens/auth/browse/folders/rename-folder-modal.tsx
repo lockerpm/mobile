@@ -9,6 +9,7 @@ import { FolderRequest } from "../../../../../core/models/request/folderRequest"
 import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { translate } from "../../../../i18n"
+import { fontSize } from "../../../../theme"
 
 interface Props {
   isOpen?: boolean,
@@ -62,7 +63,7 @@ export const RenameFolderModal = observer((props: Props) => {
             preset="header"
             text={translate('folder.rename_folder')}
             style={{
-              fontSize: 18
+              fontSize: fontSize.h4
             }}
           />
         </Modal.Header>

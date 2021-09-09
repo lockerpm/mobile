@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { TextStyle, View } from "react-native"
 import { Layout, Text, Header } from "../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../theme"
 import { Select, Switch } from "native-base"
 import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
@@ -13,7 +13,7 @@ import { translate, setLang } from "../../../../i18n"
 
 
 const SECTION_TITLE: TextStyle = {
-  fontSize: 10,
+  fontSize: fontSize.small,
   marginHorizontal: 20,
   marginBottom: 8,
 }

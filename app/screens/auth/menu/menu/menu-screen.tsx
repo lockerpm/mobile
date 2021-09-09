@@ -4,7 +4,7 @@ import { View, ScrollView, ViewStyle } from "react-native"
 import { Layout, Text, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
-import { color, commonStyles } from "../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import { translate } from "../../../../i18n"
@@ -102,7 +102,7 @@ export const MenuScreen = observer(function MenuScreen() {
               preset="black"
               text={user.email}
             />
-            <Text style={{ fontSize: 10 }}>
+            <Text style={{ fontSize: fontSize.small }}>
               {user.plan.name}
             </Text>
           </View>

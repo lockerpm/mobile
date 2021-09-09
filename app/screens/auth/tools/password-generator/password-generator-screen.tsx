@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Header, Text, Button, PasswordStrength } from "../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { Checkbox, Slider } from "native-base"
 import { useMixins } from "../../../../services/mixins"
@@ -123,7 +123,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
           <Text
             preset="black"
             text={password}
-            style={{ flex: 1, fontSize: 16 }}
+            style={{ flex: 1, fontSize: fontSize.h4 }}
           />
 
           <Button
@@ -148,7 +148,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
       <View style={commonStyles.SECTION_PADDING}>
         <Text
           text={translate('common.options').toUpperCase()}
-          style={{ fontSize: 10 }}
+          style={{ fontSize: fontSize.small }}
         />
       </View>
 
@@ -161,7 +161,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         <Text
           text={translate('common.length')}
           preset="black"
-          style={{ fontSize: 12 }}
+          style={{ fontSize: fontSize.small }}
         />
         <Slider
           colorScheme="csGreen"
@@ -189,7 +189,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
             }}>
               <Text
                 preset="black"
-                style={{ fontSize: 12, textAlign: 'center' }}
+                style={{ fontSize: fontSize.small, textAlign: 'center' }}
                 text={passwordLen.toString()}
               />
             </View>

@@ -1,5 +1,5 @@
 import { ViewStyle, TextStyle } from "react-native"
-import { color, spacing } from "../../theme"
+import { color, fontSize, spacing } from "../../theme"
 
 /**
  * All text will start off looking like this.
@@ -46,7 +46,7 @@ export const viewPresets: Record<string, ViewStyle> = {
 export const textPresets: Record<ButtonPresetNames, TextStyle> = {
   primary: { 
     ...BASE_TEXT, 
-    fontSize: 14, 
+    fontSize: fontSize.p, 
     color: color.palette.white 
   } as TextStyle,
   link: {

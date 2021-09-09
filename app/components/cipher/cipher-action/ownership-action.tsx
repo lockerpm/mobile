@@ -1,7 +1,7 @@
 import * as React from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color } from "../../../theme"
+import { color, fontSize } from "../../../theme"
 import { Actionsheet, Divider } from "native-base"
 import { ActionItem } from "./action-item"
 import { Button } from "../../button/button"
@@ -42,7 +42,7 @@ export const OwnershipAction = observer(function OwnershipAction(props: Ownershi
             preset="semibold"
             text="Ownership"
             style={{
-              fontSize: 18,
+              fontSize: fontSize.h4,
               marginBottom: 15
             }}
           />
@@ -64,7 +64,7 @@ export const OwnershipAction = observer(function OwnershipAction(props: Ownershi
                 />
                 <Text
                   text={item.desc}
-                  style={{ fontSize: 12 }}
+                  style={{ fontSize: fontSize.small }}
                 />
               </View>
             </ActionItem>

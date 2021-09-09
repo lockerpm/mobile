@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Text, Header, Button, AutoImage as Image } from "../../../../../components"
 import { useNavigation, useRoute } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../../theme"
 import { RouteProp } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -73,7 +73,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
               text={translate('common.save')}
               onPress={handleMove}
               textStyle={{
-                fontSize: 12
+                fontSize: fontSize.small
               }}
             />
           )}

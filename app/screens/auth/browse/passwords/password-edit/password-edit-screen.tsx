@@ -5,7 +5,7 @@ import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, PasswordStrength
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -117,7 +117,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
               text={translate('common.save')}
               onPress={handleSave}
               textStyle={{
-                fontSize: 12
+                fontSize: fontSize.small
               }}
             />
           )}
@@ -148,7 +148,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       <View style={commonStyles.SECTION_PADDING}>
         <Text
           text={translate('password.login_details').toUpperCase()}
-          style={{ fontSize: 10 }}
+          style={{ fontSize: fontSize.small }}
         />
       </View>
 
@@ -212,7 +212,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
               <Text
                 preset="green"
                 text={translate('common.generate')}
-                style={{ fontSize: 12, marginLeft: 7 }}
+                style={{ fontSize: fontSize.small, marginLeft: 7 }}
               />
             </View>
             <FontAwesomeIcon

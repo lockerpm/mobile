@@ -1,6 +1,6 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
-import { color } from "../../theme"
+import { color, fontSize } from "../../theme"
 import { Text } from "../text/text"
 import { Progress, Box } from "native-base"
 import { StyleProp, ViewStyle } from "react-native"
@@ -70,7 +70,7 @@ export const PasswordStrength = observer(function PasswordStrength(props: Passwo
             <Text
               text={config[value].text}
               style={{
-                fontSize: 8,
+                fontSize: fontSize.mini,
                 color: color.palette.white
               }}
             />
@@ -79,7 +79,7 @@ export const PasswordStrength = observer(function PasswordStrength(props: Passwo
           <Text
             style={{
               marginTop: 5,
-              fontSize: 12,
+              fontSize: fontSize.small,
               color: config[value].textColor || config[value].color
             }}
           >

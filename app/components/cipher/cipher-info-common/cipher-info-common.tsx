@@ -8,7 +8,7 @@ import find from 'lodash/find'
 import { CipherView } from "../../../../core/models/view"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
-import { commonStyles } from "../../../theme"
+import { commonStyles, fontSize } from "../../../theme"
 import { FOLDER_IMG } from "../../../common/mappings"
 import { translate } from "../../../i18n"
 
@@ -61,7 +61,7 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
       {/* Owned by */}
       <Text
         text={translate('common.owned_by')}
-        style={{ fontSize: 10, marginTop: 20, marginBottom: 5 }}
+        style={{ fontSize: fontSize.small, marginTop: 20, marginBottom: 5 }}
       />
       <Text
         preset="black"
@@ -71,7 +71,7 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
       {/* Folder */}
       <Text
         text={translate('common.folder')}
-        style={{ fontSize: 10, marginTop: 20, marginBottom: 10 }}
+        style={{ fontSize: fontSize.small, marginTop: 20, marginBottom: 10 }}
       />
       {
         cipher.organizationId ? (

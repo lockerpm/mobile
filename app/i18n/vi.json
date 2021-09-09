@@ -61,6 +61,7 @@
     "biometric_not_enable": "Mở khóa bằng sinh trắc học chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng sinh trắc học",
     "network_error": "Kết nối mạng không thành công",
+    "required_data": "Không được để trống thông tin này",
     "session_login_failed": "Đăng nhập phiên không thành công",
     "something_went_wrong": "Đã có lỗi xảy ra",
     "sync_failed": "Đồng bộ hóa không thành công",

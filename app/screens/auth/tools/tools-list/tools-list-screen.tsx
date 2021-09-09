@@ -4,7 +4,7 @@ import { View } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Text, Button, Layout, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color } from "../../../../theme"
+import { color, fontSize } from "../../../../theme"
 import { TOOLS_ITEMS } from "../../../../common/mappings"
 import { translate } from "../../../../i18n"
 
@@ -52,7 +52,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                 />
                 <Text
                   text={item.desc}
-                  style={{ fontSize: 10 }}
+                  style={{ fontSize: fontSize.small }}
                 />
               </View>
               <Icon name="angle-right" size={20} color={color.title} />

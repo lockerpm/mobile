@@ -61,6 +61,7 @@
     "biometric_not_enable": "Biometric unlocking is not enabled",
     "biometric_not_support": "Biometric unlocking is not supported",
     "network_error": "Network error",
+    "required_data": "This data is mandatory",
     "session_login_failed": "Session login failed",
     "something_went_wrong": "Something went wrong",
     "sync_failed": "Synchronize data failed",

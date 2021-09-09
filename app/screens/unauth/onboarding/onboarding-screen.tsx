@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { commonStyles } from "../../../theme"
+import { commonStyles, fontSize } from "../../../theme"
 
 export const OnboardingScreen = observer(function OnboardingScreen() {
   const navigation = useNavigation()
@@ -22,14 +22,12 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
         <Text
           tx="onBoarding.no_account"
           style={{
-            fontSize: 14,
             marginRight: 8,
           }}
         />
         <Button
           preset="link"
           tx="common.sign_up"
-          textStyle={{ fontSize: 14 }}
           onPress={() => navigation.navigate("signup")}
         />
       </View>
@@ -46,7 +44,7 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
         <Text
           preset="header"
           tx="onBoarding.title"
-          style={{ fontSize: 14, marginTop: 31 }}
+          style={{ fontSize: fontSize.p, marginTop: 31 }}
         />
       </View>
     </Layout>

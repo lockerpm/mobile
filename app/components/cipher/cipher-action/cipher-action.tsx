@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { ScrollView, View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, commonStyles } from "../../../theme"
+import { color, commonStyles, fontSize } from "../../../theme"
 import { useStores } from "../../../models"
 import { OwnershipAction } from "./ownership-action"
 import { Actionsheet, Divider } from "native-base"
@@ -127,7 +127,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
                     <Text
                       text={selectedCipher.login.username}
-                      style={{ fontSize: 12 }}
+                      style={{ fontSize: fontSize.small }}
                     />
                   )
                 }
