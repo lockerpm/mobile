@@ -77,7 +77,6 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
             }
           }
         }}
-        floatingPlaceholderColor={color.text}
         underlineColor={{ 
           focus: color.palette.green, 
           default: isInvalid ? color.error : color.disabled 
