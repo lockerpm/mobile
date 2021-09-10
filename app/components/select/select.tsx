@@ -44,7 +44,7 @@ export const Select = observer(function Select(props: SelectProps) {
       style={style}
       value={value}
       onChange={(item: Option) => onChange(item.value)}
-      renderPicker={(value: string | number | null) => {
+      renderPicker={floating ? undefined : (value: string | number | null) => {
         return renderSelected(options.find((item: Option) => item.value === value) || defaultOption)
       }}
       floatingPlaceholder={floating}

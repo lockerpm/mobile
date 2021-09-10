@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
+  AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { color, commonStyles, fontSize } from "../../../../../theme"
@@ -14,6 +14,7 @@ import { useMixins } from "../../../../../services/mixins"
 import { CardView, CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { translate } from "../../../../../i18n"
+import { CARD_BRANDS } from "../constants"
 
 
 type CardEditScreenProp = RouteProp<PrimaryParamList, 'cards__edit'>;
@@ -22,11 +23,13 @@ type InputItem = {
   value: string,
   setter: Function,
   isRequired?: boolean,
-  type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad',
+  inputType?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad',
   placeholder?: string,
   isPassword?: boolean,
   maskType?: TextInputMaskTypeProp,
-  maskOptions?: TextInputMaskOptionProp
+  maskOptions?: TextInputMaskOptionProp,
+  isSelect?: boolean,
+  options?: { label: string, value: string | number | null }[]
 }
 
 
@@ -119,13 +122,15 @@ export const CardEditScreen = observer(function CardEditScreen() {
     {
       label: translate('card.brand'),
       value: brand,
-      setter: setBrand
+      setter: setBrand,
+      isSelect: true,
+      options: CARD_BRANDS
     },
     {
       label: translate('card.card_number'),
       value: cardNumber,
       setter: setCardNumber,
-      type: 'numeric',
+      inputType: 'numeric',
       maskType: 'credit-card',
       placeholder: '0000 0000 0000 0000'
     },
@@ -133,7 +138,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
       label: translate('card.exp_date'),
       value: expDate,
       setter: setExpDate,
-      type: 'numeric',
+      inputType: 'numeric',
       maskType: 'datetime',
       maskOptions: {
         format: 'MM/YY'
@@ -147,7 +152,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
       maskOptions: {
         mask: '999'
       },
-      type: 'numeric',
+      inputType: 'numeric',
       placeholder: '000',
       isPassword: true
     }
@@ -220,17 +225,32 @@ export const CardEditScreen = observer(function CardEditScreen() {
         {
           cardDetails.map((item, index) => (
             <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
-              <FloatingInput
-                isRequired={item.isRequired}
-                isPassword={item.isPassword}
-                keyboardType={item.type || 'default'}
-                maskType={item.maskType}
-                maskOptions={item.maskOptions}
-                label={item.label}
-                value={item.value}
-                onChangeText={(text) => item.setter(text)}
-                placeholder={item.placeholder}
-              />
+              {
+                item.isSelect ? (
+                  <Select
+                    floating
+                    placeholder={item.label}
+                    value={item.value}
+                    options={item.options}
+                    onChange={val => item.setter(val)}
+                  />
+                ) : (
+                  <FloatingInput
+                    isRequired={item.isRequired}
+                    isPassword={item.isPassword}
+                    keyboardType={item.inputType || 'default'}
+                    maskType={item.maskType}
+                    maskOptions={item.maskOptions}
+                    label={item.label}
+                    value={item.value}
+                    onChangeText={(text) => {
+                      item.setter(text)
+                    }}
+                    placeholder={item.placeholder}
+                  />
+                )
+              }
+              
             </View>
           ))
         }
