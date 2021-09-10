@@ -73,7 +73,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
               text={translate('common.save')}
               onPress={handleMove}
               textStyle={{
-                fontSize: fontSize.small
+                fontSize: fontSize.p
               }}
             />
           )}

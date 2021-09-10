@@ -37,7 +37,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"
-                size={16}
+                size={18}
                 color={color.title}
               />
             </Button>

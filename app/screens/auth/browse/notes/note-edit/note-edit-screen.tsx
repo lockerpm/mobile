@@ -97,7 +97,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
               text={translate('common.save')}
               onPress={handleSave}
               textStyle={{
-                fontSize: fontSize.small
+                fontSize: fontSize.p
               }}
             />
           )}

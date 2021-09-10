@@ -33,7 +33,7 @@ export const ItemsHeader = (props: Props) => {
           >
             <FontAwesomeIcon
               name="sliders"
-              size={18}
+              size={20}
               color={color.title}
             />
           </Button>
@@ -44,7 +44,7 @@ export const ItemsHeader = (props: Props) => {
           >
             <EntypoIcon
               name="plus"
-              size={21}
+              size={23}
               color={color.title}
             />
           </Button>

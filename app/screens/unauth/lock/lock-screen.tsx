@@ -134,7 +134,7 @@ export const LockScreen = observer(function LockScreen() {
         <View
           style={{
             marginTop: 16,
-            marginBottom: 26,
+            marginBottom: 16,
             borderRadius: 20,
             backgroundColor: color.block,
             flexDirection: 'row',
@@ -181,7 +181,7 @@ export const LockScreen = observer(function LockScreen() {
         <Button
           isNativeBase
           isLoading={isUnlocking}
-          isDisabled={isUnlocking}
+          isDisabled={isUnlocking || !masterPassword}
           text={translate("common.unlock")}
           onPress={handleUnlock}
           style={{

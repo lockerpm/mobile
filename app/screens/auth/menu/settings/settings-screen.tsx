@@ -141,11 +141,14 @@ export const SettingsScreen = observer(function SettingsScreen() {
         style={SECTION_TITLE}
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
+        {/* Change master pass */}
         <SettingsItem
           name={translate('settings.change_master_pass')}
           action={() => navigation.navigate('changeMasterPassword')}
         />
+        {/* Change master pass end */}
 
+        {/* Language */}
         <SettingsItem
           name={translate('common.language')}
           noBorder
@@ -165,6 +168,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
             </Select>
           )}
         />
+        {/* Language end */}
       </View>
       {/* Account end */}
 

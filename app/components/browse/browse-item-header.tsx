@@ -55,7 +55,7 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
               >
                 <EntypoIcon
                   name="plus"
-                  size={21}
+                  size={23}
                   color={color.title}
                 />
               </Button>
