@@ -1,10 +1,9 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { TextStyle, View } from "react-native"
-import { Layout, Text, Header } from "../../../../components"
+import { TextStyle, View, Switch } from "react-native"
+import { Layout, Text, Header, Select } from "../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { color, commonStyles, fontSize } from "../../../../theme"
-import { Select, Switch } from "native-base"
 import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
@@ -149,23 +148,18 @@ export const SettingsScreen = observer(function SettingsScreen() {
         {/* Change master pass end */}
 
         {/* Language */}
-        <SettingsItem
-          name={translate('common.language')}
-          noBorder
-          noPadding
-          right={(
-            <Select
-              variant="unstyled"
-              selectedValue={settings.language.value}
-              onValueChange={settings.language.onChange}
-              minWidth={150}
-            >
-              {
-                settings.language.options.map(item => (
-                  <Select.Item key={item.value} label={item.label} value={item.value} />
-                ))
-              }
-            </Select>
+        <Select
+          value={settings.language.value}
+          onChange={settings.language.onChange}
+          options={settings.language.options}
+          renderSelected={({ label }) => (
+            <SettingsItem
+              style={{ width: '100%' }}
+              name={translate('common.language')}
+              right={(
+                <Text text={label} />
+              )}
+            />
           )}
         />
         {/* Language end */}
@@ -180,54 +174,54 @@ export const SettingsScreen = observer(function SettingsScreen() {
         }]}
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
+        {/* Biometric */}
         <SettingsItem
           name={translate('common.biometric_unlocking')}
           noCaret
           right={(
             <Switch
-              isChecked={settings.biometric.value}
-              onToggle={settings.biometric.onChage}
-              colorScheme="csGreen"
+              value={settings.biometric.value}
+              onValueChange={settings.biometric.onChage}
+              trackColor={{ false: color.disabled, true: color.palette.green }}
+              thumbColor={settings.biometric.value ? color.palette.green : "#f4f3f4"}
             />
           )}
         />
-        <SettingsItem
-          name={translate('settings.timeout')}
-          noPadding
-          right={(
-            <Select
-              variant="unstyled"
-              selectedValue={settings.timeout.value.toString()}
-              onValueChange={(val) => settings.timeout.onChange(parseInt(val))}
-              minWidth={170}
-            >
-              {
-                settings.timeout.options.map(item => (
-                  <Select.Item key={item.value} label={item.label} value={item.value.toString()} />
-                ))
-              }
-            </Select>
+        {/* Biometric end */}
+
+        {/* Timeout */}
+        <Select
+          value={settings.timeout.value}
+          onChange={settings.timeout.onChange}
+          options={settings.timeout.options}
+          renderSelected={({ label }) => (
+            <SettingsItem
+              style={{ width: '100%' }}
+              name={translate('settings.timeout')}
+              right={(
+                <Text text={label} />
+              )}
+            />
           )}
         />
-        <SettingsItem
-          name={translate('settings.timeout_action')}
-          noBorder
-          noPadding
-          right={(
-            <Select
-              variant="unstyled"
-              selectedValue={settings.timeoutAction.value}
-              onValueChange={settings.timeoutAction.onChange}
-              minWidth={150}
-            >
-              {
-                settings.timeoutAction.options.map(item => (
-                  <Select.Item key={item.value} label={item.label} value={item.value} />
-                ))
-              }
-            </Select>
+        {/* Timeout end */}
+
+        {/* Timeout action */}
+        <Select
+          value={settings.timeoutAction.value}
+          onChange={settings.timeoutAction.onChange}
+          options={settings.timeoutAction.options}
+          renderSelected={({ label }) => (
+            <SettingsItem
+              style={{ width: '100%' }}
+              name={translate('settings.timeout_action')}
+              right={(
+                <Text text={label} />
+              )}
+            />
           )}
         />
+        {/* Timeout action end */}
       </View>
       {/* Security end */}
 
