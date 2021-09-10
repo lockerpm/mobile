@@ -11,6 +11,7 @@ import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { translate } from "../../../../../i18n"
+import { CARD_BRANDS } from "../constants"
 
 
 export const CardInfoScreen = observer(function CardInfoScreen() {
@@ -104,7 +105,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           fixedLabel
           copyAble
           label={translate('card.brand')}
-          value={selectedCipher.card.brand}
+          value={(CARD_BRANDS.find(i => i.value === selectedCipher.card.brand) || { label: '' }).label}
           editable={false}
           style={{ marginVertical: 10 }}
         />

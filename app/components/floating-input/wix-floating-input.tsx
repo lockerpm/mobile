@@ -54,6 +54,14 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
     width: 30,
   }
 
+  const validateMask = (text: string) => {
+    if (maskType || maskOptions) {
+      const masked = MaskService.toMask(maskType || 'custom', text, maskOptions)
+      return masked
+    }
+    return text
+  }
+
   return (
     <View style={style}>
       <TextField
@@ -67,16 +75,8 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
         editable={editable && !disabled}
         disabled={disabled}
         secureTextEntry={isPassword && !showPassword}
-        onChangeText={(text: string) => {
-          if (onChangeText) {
-            if (maskType || maskOptions) {
-              const masked = MaskService.toMask(maskType, text, maskOptions)
-              onChangeText(masked)
-            } else {
-              onChangeText(text)
-            }
-          }
-        }}
+        transformer={validateMask}
+        onChangeText={onChangeText}
         underlineColor={{ 
           focus: color.palette.green, 
           default: isInvalid ? color.error : color.disabled 
