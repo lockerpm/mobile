@@ -1,20 +1,19 @@
 import React from "react"
 import { View } from "react-native"
-import { Button, Header } from "../../../../components"
+import { Button, Header, SearchBar } from "../../../../components"
 import { color, commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
-import { Input } from "native-base"
-import { translate } from "../../../../i18n"
 
 interface Props {
   openSort?: Function,
   openAdd?: Function,
-  onSearch?: Function
+  onSearch?: (text: string) => void
+  searchText?: string
 }
 
 export const ItemsHeader = (props: Props) => {
-  const { openAdd, openSort, onSearch } = props
+  const { openAdd, openSort, onSearch, searchText } = props
 
   return (
     <Header
@@ -51,30 +50,11 @@ export const ItemsHeader = (props: Props) => {
         </View>
       )}
     >
-      <View style={{ marginTop: 15 }}>
-        <Input
-          size="xs"
-          placeholder={translate('common.search')}
-          onChangeText={(text) => onSearch(text)}
-          style={{
-            backgroundColor: color.block,
-            paddingBottom: 5,
-            paddingTop: 5
-          }}
-          InputRightElement={
-            <Button
-              preset="link"
-              style={{ paddingRight: 15, backgroundColor: color.block, height: 38 }}
-            >
-              <FontAwesomeIcon
-                name="search"
-                size={14}
-                color={color.text}
-              />
-            </Button>
-          }
-        />
-      </View>
+      <SearchBar
+        style={{ marginTop: 15 }}
+        onSearch={onSearch}
+        value={searchText}
+      />
     </Header>
   )
 }
