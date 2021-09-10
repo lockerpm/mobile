@@ -44,12 +44,12 @@ export const Header = observer(function Header(props: HeaderProps) {
                   props.goBackText ? (
                     <Text
                       text={props.goBackText}
-                      style={{ fontSize: fontSize.small }}
+                      style={{ fontSize: fontSize.p }}
                     />
                   ) : (
                     <IoniconsIcon 
                       name="md-arrow-back"
-                      size={20} 
+                      size={22} 
                       color={color.title} 
                     />
                   )

@@ -48,7 +48,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"
-                size={16}
+                size={18}
                 color={color.title}
               />
             </Button>

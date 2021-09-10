@@ -242,7 +242,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
               text={translate('common.save')}
               onPress={handleSave}
               textStyle={{
-                fontSize: fontSize.small
+                fontSize: fontSize.p
               }}
             />
           )}

@@ -36,7 +36,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"
-                size={16}
+                size={18}
                 color={color.title}
               />
             </Button>

@@ -175,7 +175,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
               text={translate('common.save')}
               onPress={handleSave}
               textStyle={{
-                fontSize: fontSize.small
+                fontSize: fontSize.p
               }}
             />
           )}

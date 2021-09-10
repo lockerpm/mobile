@@ -108,7 +108,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"
-                size={16}
+                size={18}
                 color={color.title}
               />
             </Button>

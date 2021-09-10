@@ -1,5 +1,6 @@
 import { NativeFloatingInput, NativeFloatingInputProps } from './native-floating-input'
+import { WixFloatingInput, WixFloatingInputProps } from './wix-floating-input'
 
 
-export const FloatingInput = NativeFloatingInput
-export interface FloatingInputProps extends NativeFloatingInputProps {}
+export const FloatingInput = WixFloatingInput
+export interface FloatingInputProps extends WixFloatingInputProps {}
