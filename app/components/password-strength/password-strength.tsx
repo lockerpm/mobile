@@ -2,10 +2,10 @@ import * as React from "react"
 import { observer } from "mobx-react-lite"
 import { color, fontSize } from "../../theme"
 import { Text } from "../text/text"
-import { Progress, Box } from "native-base"
-import { StyleProp, ViewStyle } from "react-native"
+import { StyleProp, ViewStyle, View } from "react-native"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { translate } from "../../i18n"
+import ProgressBar from "react-native-ui-lib/progressBar"
 
 
 export interface PasswordStrengthProps {
@@ -27,45 +27,48 @@ export const PasswordStrength = observer(function PasswordStrength(props: Passwo
     },
     0: {
       text: translate('password_strength.very_weak'),
-      color: 'csError',
+      color: color.error,
       textColor: color.error,
       icon: 'shield-outline'
     },
     1: {
       text: translate('password_strength.weak'),
-      color: 'csError',
+      color: color.error,
       textColor: color.error,
       icon: 'shield-outline'
     },
     2: {
       text: translate('password_strength.medium'),
-      color: 'yellow',
+      color: 'orange',
+      textColor: 'orange',
       icon: 'shield'
     },
     3: {
       text: translate('password_strength.good'),
-      color: 'csGreen',
+      color: color.palette.green,
       textColor: color.palette.green,
       icon: 'shield-checkmark-outline'
     },
     4: {
       text: translate('password_strength.strong'),
-      color: 'csGreen',
+      color: color.palette.green,
       textColor: color.palette.green,
       icon: 'shield-checkmark'
     }
   }
 
   return (
-    <Box w="100%" style={style}>
+    <View style={[{ width: '100%' }, style]}>
       {
-        preset === 'progress' ? (
-          <Progress
-            size="lg"
-            colorScheme={config[value].color}
-            bg={color.block}
-            max={5}
-            value={value + 1}
+        preset === 'progress' && (
+          <ProgressBar
+            height={8}
+            containerStyle={{
+              borderRadius: 4
+            }}
+            progressBackgroundColor={color.block}
+            backgroundColor={config[value].color}
+            progress={(value + 1) / 5 * 100}
           >
             <Text
               text={config[value].text}
@@ -74,24 +77,24 @@ export const PasswordStrength = observer(function PasswordStrength(props: Passwo
                 color: color.palette.white
               }}
             />
-          </Progress>
-        ) : (
-          <Text
-            style={{
-              marginTop: 5,
-              fontSize: fontSize.small,
-              color: config[value].textColor || config[value].color
-            }}
-          >
-            <IoniconsIcon
-              name={config[value].icon}
-              size={14}
-              color={config[value].textColor || config[value].color}
-            />
-            {' ' + config[value].text}
-          </Text>
+          </ProgressBar>
         )
       }
-    </Box>
+
+      <Text
+        style={{
+          marginTop: 5,
+          fontSize: fontSize.small,
+          color: config[value].textColor || config[value].color
+        }}
+      >
+        <IoniconsIcon
+          name={config[value].icon}
+          size={14}
+          color={config[value].textColor || config[value].color}
+        />
+        {' ' + config[value].text}
+      </Text>
+    </View>
   )
 })

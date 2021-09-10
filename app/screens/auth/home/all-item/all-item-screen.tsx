@@ -28,6 +28,7 @@ export const AllItemScreen = observer(function AllItemScreen() {
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           onSearch={setSearchText}
+          searchText={searchText}
         />
       )}
       borderBottom

@@ -5,12 +5,12 @@ import { Layout, Header, Text, Button, PasswordStrength } from "../../../../comp
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { color, commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { Checkbox, Slider } from "native-base"
 import { useMixins } from "../../../../services/mixins"
 import { useCoreService } from "../../../../services/core-service"
 import { useStores } from "../../../../models"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
 import { translate } from "../../../../i18n"
+import { Slider, Checkbox } from "react-native-ui-lib"
 
 
 type ScreenProp = RouteProp<PrimaryParamList, 'passwordGenerator'>;
@@ -157,66 +157,45 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         }]}
       >
         <Text
-          text={translate('common.length')}
+          text={`${translate('common.length')}: ${passwordLen}`}
           preset="black"
           style={{ fontSize: fontSize.small }}
         />
         <Slider
-          colorScheme="csGreen"
-          defaultValue={16}
-          minValue={8}
-          maxValue={64}
-          accessibilityLabel="length"
+          thumbTintColor={color.palette.green}
+          minimumTrackTintColor={color.palette.green}
+          maximumTrackTintColor={color.line}
+          minimumValue={8}
+          maximumValue={64}
           step={1}
-          mb={7}
-          onChange={setPasswordLen}
-          onChangeEnd={len => setOptions({ ...options, length: len })}
-        >
-          <Slider.Track bg={color.block}>
-            <Slider.FilledTrack />
-          </Slider.Track>
-          <Slider.Thumb>
-            <View style={{
-              position: 'absolute',
-              top: 20,
-              left: -4,
-              width: 25,
-              borderColor: color.text,
-              borderWidth: 1,
-              borderRadius: 5
-            }}>
-              <Text
-                preset="black"
-                style={{ fontSize: fontSize.small, textAlign: 'center' }}
-                text={passwordLen.toString()}
-              />
-            </View>
-          </Slider.Thumb>
-        </Slider>
+          onValueChange={setPasswordLen}
+          onSeekEnd={() => setOptions({ ...options, length: passwordLen })}
+        />
 
-        <Checkbox.Group colorScheme="csGreen">
+        <View style={{ marginTop: 10 }}>
           {
             OPTIONS.map((item) => (
               <Checkbox
                 key={item.key}
-                value={item.key}
-                my={1}
+                value={options[item.key]}
                 accessibilityLabel={item.key}
-                onChange={checked => {
+                color={color.palette.green}
+                label={item.label}
+                onValueChange={checked => {
                   const newOptions = { ...options }
                   newOptions[item.key] = checked
                   setOptions(newOptions)
                 }}
-              >
-                <Text
-                  text={item.label}
-                  preset="black"
-                  style={{ marginLeft: 10 }}
-                />
-              </Checkbox>
+                style={{
+                  marginVertical: 5
+                }}
+                labelStyle={{
+                  color: color.textBlack
+                }}
+              />
             ))
           }
-        </Checkbox.Group>
+        </View>
       </View>
       {/* Options end */}
     </Layout>
