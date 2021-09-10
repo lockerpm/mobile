@@ -29,6 +29,7 @@ export const CardsScreen = observer(function CardsScreen() {
           openAdd={() => {
             navigation.navigate('cards__edit', { mode: 'add' })
           }}
+          searchText={searchText}
           onSearch={setSearchText}
           navigation={navigation}
         />

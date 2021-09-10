@@ -92,7 +92,6 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
       footer={(
         <View>
           <Button
-            isNativeBase
             text={translate('pass_generator.use_password')}
             onPress={() => {
               if (fromTools) {
@@ -104,8 +103,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
             }}
           />
           <Button
-            isNativeBase
-            variant="outline"
+            preset="outline"
             text={translate('common.regenerate')}
             onPress={regenerate}
             style={{ marginTop: 10 }}

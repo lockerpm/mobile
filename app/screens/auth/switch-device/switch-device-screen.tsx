@@ -39,7 +39,6 @@ export const SwitchDeviceScreen = observer(function SwitchDeviceScreen() {
         </Text>
 
         <Button
-          isNativeBase
           text="Switch to mobile"
           onPress={handleSwitchDevice}
           style={{
@@ -50,8 +49,7 @@ export const SwitchDeviceScreen = observer(function SwitchDeviceScreen() {
         />
 
         <Button
-          isNativeBase
-          variant="outline"
+          preset="outline"
           text="Go Premium for unlimited access"
           onPress={handleBuyPremium}
           style={{

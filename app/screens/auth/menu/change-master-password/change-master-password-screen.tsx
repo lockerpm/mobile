@@ -74,7 +74,6 @@ export const ChangeMasterPasswordScreen = observer(function ChangeMasterPassword
         />
 
         <Button
-          isNativeBase
           isLoading={isLoading}
           disabled={isLoading || !current || !newPass || !confirm || (newPass !== confirm)}
           onPress={handleChangePassword}

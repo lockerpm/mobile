@@ -37,7 +37,6 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
         />
 
         <Button
-          isNativeBase
           tx={"biometric_intro.use_btn"}
           onPress={handleUseBiometric}
           style={{
@@ -48,8 +47,7 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
         />
 
         <Button
-          isNativeBase
-          variant="ghost"
+          preset="ghost"
           tx={"biometric_intro.later_btn"}
           onPress={handleSkip}
           style={{

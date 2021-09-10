@@ -30,6 +30,7 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
             navigation.navigate('passwords__edit', { mode: 'add' })
           }}
           onSearch={setSearchText}
+          searchText={searchText}
           navigation={navigation}
         />
       )}

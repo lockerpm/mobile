@@ -29,6 +29,7 @@ export const SharesScreen = observer(function SharesScreen() {
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           onSearch={setSearchText}
+          searchText={searchText}
           navigation={navigation}
         />
       )}

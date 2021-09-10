@@ -57,8 +57,7 @@ export const DeleteConfirmModal = (props: Props) => {
         {/* Footer */}
         <Modal.Footer style={{ marginRight: 20, marginBottom: 16, paddingRight: 0 }}>
           <Button
-            isNativeBase
-						colorScheme="csError"
+						preset="error"
             disabled={isLoading}
             isLoading={isLoading}
             onPress={handleConfirm}

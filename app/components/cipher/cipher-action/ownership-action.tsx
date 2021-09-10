@@ -73,7 +73,6 @@ export const OwnershipAction = observer(function OwnershipAction(props: Ownershi
 
         <View style={{ width: '100%', paddingHorizontal: 20, marginTop: 30 }}>
           <Button
-            isNativeBase
             text="Save"
           />
         </View>

@@ -45,6 +45,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
+          searchText={searchText}
           onSearch={setSearchText}
         />
       )}

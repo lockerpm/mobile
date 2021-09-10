@@ -83,6 +83,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
+          searchText={searchText}
           onSearch={setSearchText}
         />
       )}

@@ -30,6 +30,7 @@ export const IdentitiesScreen = observer(function IdentitiesScreen() {
             navigation.navigate('identities__edit', { mode: 'add' })
           }}
           onSearch={setSearchText}
+          searchText={searchText}
           navigation={navigation}
         />
       )}

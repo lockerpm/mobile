@@ -85,7 +85,7 @@ export const LockScreen = observer(function LockScreen() {
     const res = await user.sendPasswordHint(user.email)
     setIsSendingHint(false)
     if (res.kind === 'ok') {
-      notify('success', translate('lock.hint_sent'))
+      notify('success', translate('lock.hint_sent'), 5000)
     } else {
       notify('error', translate('error.something_went_wrong'))
     }
@@ -179,7 +179,6 @@ export const LockScreen = observer(function LockScreen() {
         {/* Master pass input end */}
 
         <Button
-          isNativeBase
           isLoading={isUnlocking}
           isDisabled={isUnlocking || !masterPassword}
           text={translate("common.unlock")}
@@ -191,10 +190,9 @@ export const LockScreen = observer(function LockScreen() {
         />
 
         <Button
-          isNativeBase
           isLoading={isBioUnlocking}
           isDisabled={isBioUnlocking}
-          variant="outline"
+          preset="outline"
           tx="common.biometric_unlocking"
           onPress={handleUnlockBiometric}
           style={{
@@ -204,10 +202,9 @@ export const LockScreen = observer(function LockScreen() {
         />
 
         <Button
-          isNativeBase
           isLoading={isSendingHint}
           isDisabled={isSendingHint}
-          variant="ghost"
+          preset="ghost"
           tx="lock.get_hint"
           onPress={handleGetHint}
           style={{
