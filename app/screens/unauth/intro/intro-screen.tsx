@@ -72,7 +72,6 @@ export const IntroScreen = observer(function IntroScreen() {
   const footer = (
     <View>
       <Button
-        isNativeBase
         tx="common.continue"
         onPress={() => {
           if (index === routes.length - 1) {

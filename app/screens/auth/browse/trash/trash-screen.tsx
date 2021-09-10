@@ -26,6 +26,7 @@ export const TrashScreen = observer(function TrashScreen() {
           header={translate('common.trash')}
           openSort={() => setIsSortOpen(true)}
           onSearch={setSearchText}
+          searchText={searchText}
           navigation={navigation}
         />
       )}

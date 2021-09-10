@@ -30,6 +30,7 @@ export const NotesScreen = observer(function NotesScreen() {
             navigation.navigate('notes__edit', { mode: 'add' })
           }}
           onSearch={setSearchText}
+          searchText={searchText}
           navigation={navigation}
         />
       )}

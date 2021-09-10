@@ -171,7 +171,6 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         {/* Hint end */}
 
         <Button
-          isNativeBase
           isDisabled={isCreating || !isReady}
           isLoading={isCreating}
           text={translate('create_master_pass.btn')}

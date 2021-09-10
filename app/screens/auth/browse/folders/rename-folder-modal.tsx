@@ -76,7 +76,6 @@ export const RenameFolderModal = observer((props: Props) => {
         </Modal.Body>
         <Modal.Footer style={{ marginRight: 20, marginBottom: 16, paddingRight: 0 }}>
           <Button
-            isNativeBase
             text={translate('common.save')}
             disabled={isLoading || !name.trim()}
             isLoading={isLoading}

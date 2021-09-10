@@ -99,11 +99,10 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
               <Button
                 key={index}
                 testID={options.tabBarTestID}
-                isNativeBase
-                variant="ghost"
+                preset="ghost"
                 onPress={onPress}
                 onLongPress={onLongPress}
-                style={{ flex: 1, alignItems: 'center' }}
+                style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}
               >
                 <Icon
                   name={icon}

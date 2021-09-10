@@ -1,10 +1,9 @@
 import * as React from "react"
-import { TouchableOpacity } from "react-native"
+import { ActivityIndicator, TouchableOpacity } from "react-native"
 import { Text } from "../text/text"
 import { viewPresets, textPresets } from "./button.presets"
 import { ButtonProps } from "./button.props"
-import { Button as NativeBaseButton } from 'native-base'
-import { translate } from "../../i18n"
+import { color } from "../../theme"
 
 /**
  * For your text displaying needs.
@@ -20,15 +19,8 @@ export function Button(props: ButtonProps) {
     style: styleOverride,
     textStyle: textStyleOverride,
     children,
-
-    // Native base
-    isNativeBase = false,
-    colorScheme = 'csGreen',
-    variant,
     isDisabled,
     isLoading,
-    startIcon,
-    endIcon,
     ...rest
   } = props
 
@@ -37,31 +29,21 @@ export function Button(props: ButtonProps) {
   const textStyle = textPresets[preset] || textPresets.primary
   let textStyles = [textStyle, textStyleOverride]
 
-  const content = children || (
-    isNativeBase 
-      ? (tx ? translate(tx) : text) 
-      : <Text tx={tx} text={text} style={textStyles} />
-  )
+  const content = children || <Text tx={tx} text={text} style={textStyles} />
 
-  return isNativeBase ? (
-    <NativeBaseButton
-      _text={{
-        fontSize: 'sm',
-        fontWeight: 400
-      }}
-      colorScheme={colorScheme}
-      variant={variant}
-      isLoading={isLoading}
-      isDisabled={isDisabled}
-      startIcon={startIcon}
-      endIcon={endIcon}
-      style={styleOverride}
+  return (
+    <TouchableOpacity
+      disabled={isDisabled}
+      style={[viewStyles, {
+        opacity: isDisabled || isLoading ? 0.5 : 1
+      }]} 
       {...rest}
     >
-      {content}
-    </NativeBaseButton>
-  ) : (
-    <TouchableOpacity style={viewStyles} {...rest}>
+      {
+        isLoading && (
+          <ActivityIndicator size="small" color={textStyle.color} />
+        )
+      }
       {content}
     </TouchableOpacity>
   )
