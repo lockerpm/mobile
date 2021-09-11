@@ -1,14 +1,15 @@
 import React, { useState } from "react"
-import { Modal } from "native-base"
 import { Button } from "../../../../components/button/button"
 import { Text } from "../../../../components/text/text"
 import { AutoImage as Image } from "../../../../components/auto-image/auto-image"
 import { color, fontSize } from "../../../../theme"
 import { translate } from "../../../../i18n"
+import { Modal } from "../../../../components/modal/modal"
+import { View } from "react-native"
 
 interface Props {
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   onConfirm?: Function,
   title?: string,
   desc?: string,
@@ -33,46 +34,37 @@ export const DeleteConfirmModal = (props: Props) => {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <Modal.Content>
-        <Modal.CloseButton />
+      <View style={{ alignItems: 'center' }}>
+        <Image
+          source={require('./trash.png')}
+          style={{ height: 110 }}
+        />
+        <Text
+          preset="black"
+          text={title || translate('trash.delete_item')}
+          style={{ fontSize: fontSize.h4, marginBottom: 5, marginTop: 15 }}
+        />
+        <Text
+          text={desc || translate('trash.delete_desc')}
+          style={{ textAlign: 'center', fontSize: fontSize.small }}
+        />
+      </View>
 
-        {/* Body */}
-        <Modal.Body style={{ alignItems: 'center' }}>
-          <Image
-            source={require('./trash.png')}
-            style={{ height: 110 }}
-          />
-          <Text
-            preset="black"
-						text={title || translate('trash.delete_item')}
-						style={{ fontSize: fontSize.h4, marginBottom: 5, marginTop: 15 }}
-          />
-					<Text
-						text={desc || translate('trash.delete_desc')}
-						style={{ textAlign: 'center', fontSize: fontSize.small }}
-					/>
-        </Modal.Body>
-        {/* Body end */}
-
-        {/* Footer */}
-        <Modal.Footer style={{ marginRight: 20, marginBottom: 16, paddingRight: 0 }}>
-          <Button
-						preset="error"
-            disabled={isLoading}
-            isLoading={isLoading}
-            onPress={handleConfirm}
-            style={{
-              width: '100%'
-            }}
-          >
-						<Text
-							text={btnText || translate('common.delete')}
-							style={{ color: color.palette.white }}
-						/>
-					</Button>
-        </Modal.Footer>
-        {/* Footer end */}
-      </Modal.Content>
+      <Button
+        preset="error"
+        disabled={isLoading}
+        isLoading={isLoading}
+        onPress={handleConfirm}
+        style={{
+          width: '100%',
+          marginTop: 30
+        }}
+      >
+        <Text
+          text={btnText || translate('common.delete')}
+          style={{ color: color.palette.white }}
+        />
+      </Button>
     </Modal>
   )
 }
