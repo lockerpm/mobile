@@ -140,7 +140,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     // Delay loading
     setTimeout(() => {
       onLoadingChange && onLoadingChange(false)
-    }, 500)
+    }, 100)
 
     // Done
     setCiphers(res)

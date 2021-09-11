@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { Modal } from "native-base"
-import { FloatingInput, Button, Text } from "../../../../components"
+import { FloatingInput, Button, Text, Modal } from "../../../../components"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 import { FolderView } from "../../../../../core/models/view/folderView"
@@ -12,7 +11,7 @@ import { fontSize } from "../../../../theme"
 
 interface Props {
   isOpen?: boolean,
-  onClose?: Function
+  onClose?: () => void
 }
 
 export const NewFolderModal = observer((props: Props) => {
@@ -44,37 +43,24 @@ export const NewFolderModal = observer((props: Props) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
+      title={translate('folder.create_folder')}
     >
-      <Modal.Content>
-        <Modal.CloseButton />
-        <Modal.Header>
-          <Text
-            preset="header"
-            text={translate('folder.create_folder')}
-            style={{
-              fontSize: fontSize.h4
-            }}
-          />
-        </Modal.Header>
-        <Modal.Body>
-          <FloatingInput
-            label={translate('common.name')}
-            value={name}
-            onChangeText={txt => setName(txt)}
-          />
-        </Modal.Body>
-        <Modal.Footer style={{ marginRight: 20, marginBottom: 16, paddingRight: 0 }}>
-          <Button
-            text={translate('common.create')}
-            disabled={isLoading || !name.trim()}
-            isLoading={isLoading}
-            onPress={handleCreateFolder}
-            style={{
-              width: '100%'
-            }}
-          />
-        </Modal.Footer>
-      </Modal.Content>
+      <FloatingInput
+        label={translate('common.name')}
+        value={name}
+        onChangeText={txt => setName(txt)}
+      />
+
+      <Button
+        text={translate('common.create')}
+        disabled={isLoading || !name.trim()}
+        isLoading={isLoading}
+        onPress={handleCreateFolder}
+        style={{
+          width: '100%',
+          marginTop: 30
+        }}
+      />
     </Modal>
   )
 })
