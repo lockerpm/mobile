@@ -8,6 +8,7 @@ import { AddAction } from "../../../home/all-item/add-action"
 import { useStores } from "../../../../../models"
 import { FolderView } from "../../../../../../core/models/view/folderView"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
+import { useMixins } from "../../../../../services/mixins"
 
 type FolderCiphersScreenProp = RouteProp<PrimaryParamList, 'folders__ciphers'>;
 
@@ -17,6 +18,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
   const { folderId } = route.params
   const { folderStore } = useStores()
   const folders: FolderView[] = folderStore.folders
+  const { translate } = useMixins()
 
   // Params
   const [isLoading, setIsLoading] = useState(true)
@@ -40,18 +42,19 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header={folder.name || 'Unassigned'}
+          header={folder.name || translate('folder.unassigned')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
+          searchText={searchText}
           onSearch={setSearchText}
         />
       )}
       borderBottom
       noScroll
     >
-      <SortAction 
-        isOpen={isSortOpen} 
+      <SortAction
+        isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {
           setSortOption(value)
@@ -59,9 +62,9 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
         }}
         value={sortOption}
       />
-      
-      <AddAction 
-        isOpen={isAddOpen} 
+
+      <AddAction
+        isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
         defaultFolder={folder.id}
@@ -76,9 +79,9 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('../../../home/all-item/empty-img.png')}
-            title="Add your first item"
-            desc="Create your first item to start building your vault"
-            buttonText="Add Item"
+            title={translate('all_items.empty.title')}
+            desc={translate('all_items.empty.desc')}
+            buttonText={translate('all_items.empty.btn')}
             addItem={() => {
               setIsAddOpen(true)
             }}

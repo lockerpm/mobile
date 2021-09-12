@@ -1,5 +1,5 @@
 import { TextStyle } from "react-native"
-import { color, typography } from "../../theme"
+import { color, typography, fontSize } from "../../theme"
 
 /**
  * All text will start off looking like this.
@@ -7,7 +7,7 @@ import { color, typography } from "../../theme"
 const BASE: TextStyle = {
   fontFamily: typography.primary,
   color: color.text,
-  fontSize: 14,
+  fontSize: fontSize.p,
 }
 
 /**
@@ -38,12 +38,12 @@ export const presets = {
   /**
    * headers.
    */
-  header: { ...BASE, fontSize: 22, fontWeight: '600', color: color.title } as TextStyle,
+  header: { ...BASE, fontSize: fontSize.h2, fontWeight: '600', color: color.title } as TextStyle,
 
   /**
    * Large headers.
    */
-   largeHeader: { ...BASE, fontSize: 24, fontWeight: 'bold', color: color.title } as TextStyle
+   largeHeader: { ...BASE, fontSize: fontSize.h1, fontWeight: 'bold', color: color.title } as TextStyle
 }
 
 /**

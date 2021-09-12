@@ -3,31 +3,34 @@ import { observer } from "mobx-react-lite"
 import { View, TouchableOpacity } from "react-native"
 import { AutoImage as Image, Text, Layout, Button } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles } from "../../../theme"
+import { color, commonStyles, fontSize } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
+import { useMixins } from "../../../services/mixins"
 
 
 export const IntroScreen = observer(function IntroScreen() {
+  const { translate } = useMixins()
+  const navigation = useNavigation()
+
   const tabs = [
     {
       img: require("./intro.png"),
-      title: 'Trusted and secure',
-      desc: 'Your vault is protected with world-class security. It’s so secure, not even we can access your passwords.'
+      title: translate('intro.item_1.title'),
+      desc: translate('intro.item_1.desc')
     },
     {
       img: require("./intro.png"),
-      title: 'Trusted and secure',
-      desc: 'Your vault is protected with world-class security. It’s so secure, not even we can access your passwords.'
+      title: translate('intro.item_2.title'),
+      desc: translate('intro.item_2.desc')
     },
     {
       img: require("./intro.png"),
-      title: 'Trusted and secure',
-      desc: 'Your vault is protected with world-class security. It’s so secure, not even we can access your passwords.'
+      title: translate('intro.item_2.title'),
+      desc: translate('intro.item_2.desc')
     }
   ]
   const map = {}
 
-  const navigation = useNavigation()
   const [index, setIndex] = useState(0)
   const [routes] = useState(tabs.map((item, index) => ({
     key: index.toString()
@@ -58,8 +61,8 @@ export const IntroScreen = observer(function IntroScreen() {
   const header = (
     <View style={{ alignItems: "flex-end" }}>
       <Button
-        text="SKIP"
-        textStyle={{ fontSize: 12 }}
+        text={translate('common.skip').toUpperCase()}
+        textStyle={{ fontSize: fontSize.p }}
         preset="link"
         onPress={() => navigation.navigate("onBoarding")}
       >
@@ -71,8 +74,7 @@ export const IntroScreen = observer(function IntroScreen() {
   const footer = (
     <View>
       <Button
-        isNativeBase
-        tx="welcomeScreen.continue"
+        text={translate("common.continue")}
         onPress={() => {
           if (index === routes.length - 1) {
             navigation.navigate("onBoarding")

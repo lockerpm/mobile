@@ -1,10 +1,9 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, FlatList, Image } from "react-native"
-import { Button, Header, Layout, Text } from "../../../components"
+import { Button, Header, Layout, SearchBar, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../theme"
-import { Input } from "native-base"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import countries from '../../../common/countries.json'
 import flags from '../../../common/flags.json'
@@ -34,31 +33,11 @@ export const CountrySelectorScreen = observer(function CountrySelectorScreen() {
             <View style={{ width: 10 }} />
           )}
         >
-          <View style={{ marginTop: 15 }}>
-            <Input
-              size="xs"
-              placeholder="Search"
-              value={search}
-              onChangeText={setSearch}
-              style={{ 
-                backgroundColor: color.block, 
-                paddingBottom: 5,
-                paddingTop: 5 
-              }}
-              InputRightElement={
-                <Button
-                  preset="link"
-                  style={{ paddingRight: 15, backgroundColor: color.block, height: 38 }}
-                >
-                  <Icon 
-                    name="search"
-                    size={16} 
-                    color={color.text} 
-                  />
-                </Button>
-              }
-            />
-          </View>
+          <SearchBar
+            value={search}
+            onSearch={setSearch}
+            style={{ marginTop: 15 }}
+          />
         </Header>
       )}
     >

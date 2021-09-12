@@ -6,8 +6,8 @@ import { Button } from "../button/button"
 import { Text } from "../text/text"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
-import { Input } from "native-base"
 import { Header } from "../header/header"
+import { SearchBar } from "../search-bar/search-bar"
 
 
 export interface BrowseItemHeaderProps {
@@ -15,47 +15,48 @@ export interface BrowseItemHeaderProps {
   openAdd?: Function,
   navigation: any,
   header: string,
-  onSearch?: Function
+  onSearch?: (text: string) => void,
+  searchText?: string
 }
 
 /**
  * Describe your component here
  */
 export const BrowseItemHeader = observer(function BrowseItemHeader(props: BrowseItemHeaderProps) {
-  const { openAdd, openSort, navigation, header, onSearch } = props
+  const { openAdd, openSort, navigation, header, onSearch, searchText } = props
 
   return (
     <Header
       goBack={() => navigation.goBack()}
       right={(
-        <View 
+        <View
           style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
             justifyContent: 'space-between',
             maxWidth: 50
           }]}
         >
-          <Button 
+          <Button
             preset="link"
             style={{ marginRight: openAdd ? 20 : 0 }}
             onPress={() => openSort && openSort()}
           >
-            <FontAwesomeIcon 
+            <FontAwesomeIcon
               name="sliders"
-              size={18} 
+              size={18}
               color={color.title}
             />
           </Button>
-          
+
           {
             openAdd && (
-              <Button 
+              <Button
                 preset="link"
                 onPress={() => openAdd && openAdd()}
               >
-                <EntypoIcon 
+                <EntypoIcon
                   name="plus"
-                  size={21} 
-                  color={color.title} 
+                  size={23}
+                  color={color.title}
                 />
               </Button>
             )
@@ -64,34 +65,13 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
       )}
     >
       <View style={{ marginTop: 5 }}>
-				<Text 
+				<Text
 					preset="largeHeader"
 					text={header}
           style={{ marginBottom: 10 }}
 				/>
-				
-        <Input
-          size="xs"
-          placeholder="Search"
-          onChangeText={(txt) => onSearch && onSearch(txt)}
-          style={{ 
-            backgroundColor: color.block, 
-            paddingBottom: 5,
-            paddingTop: 5 
-          }}
-          InputRightElement={
-            <Button
-              preset="link"
-              style={{ paddingRight: 15, backgroundColor: color.block, height: 38 }}
-            >
-              <FontAwesomeIcon 
-                name="search"
-                size={14} 
-                color={color.text} 
-              />
-            </Button>
-          }
-        />
+
+        <SearchBar value={searchText} onSearch={onSearch} />
       </View>
     </Header>
   )

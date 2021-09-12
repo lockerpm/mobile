@@ -3,9 +3,9 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Text, Button, Header } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color, commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import { useMixins } from "../../../../services/mixins"
 
 
 type Item = {
@@ -15,16 +15,17 @@ type Item = {
 
 export const HelpScreen = observer(function HelpScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
 
   const items: Item[] = [
     {
-      name: 'Help Center'
+      name: translate('help.help_center')
     },
     {
-      name: 'Terms of Service'
+      name: translate('help.terms')
     },
     {
-      name: 'Privacy Policy'
+      name: translate('help.policy')
     }
   ]
 
@@ -33,7 +34,7 @@ export const HelpScreen = observer(function HelpScreen() {
       header={(
         <Header
           goBack={() => navigation.goBack()}
-          title="Help"
+          title={translate('common.help')}
           right={(<View style={{ width: 10 }} />)}
         />
       )}

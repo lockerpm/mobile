@@ -43,15 +43,15 @@ export type RootParamList = {
 const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = () => {
-  const { notify } = useMixins()
-  const { user } = useStores()
+  const { notify, translate } = useMixins()
+  const { uiStore } = useStores()
 
   useEffect(() => {
-    if (user.showNetworkError) {
-      notify('error', '', 'Network error')
-      user.setShowNetworkError(false)
+    if (uiStore.showNetworkError) {
+      notify('error', translate('error.network_error'))
+      uiStore.setShowNetworkError(false)
     }
-  }, [user.showNetworkError])
+  }, [uiStore.showNetworkError])
 
   return (
     <Stack.Navigator

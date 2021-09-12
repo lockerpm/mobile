@@ -1,10 +1,10 @@
 import * as React from "react"
-import { StyleProp, ViewStyle } from "react-native"
+import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color } from "../../../theme"
-import { Actionsheet } from "native-base"
+import { color, commonStyles } from "../../../theme"
 import { Text } from "../../text/text"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import { ActionSheetItem } from "../../action-sheet/action-sheet-item"
 
 
 export interface ActionItemProps {
@@ -28,32 +28,35 @@ export const ActionItem = observer(function ActionItem(props: ActionItemProps) {
   const { style, name, icon, textColor, action, children, iconColor, disabled } = props
 
   return (
-    <Actionsheet.Item
+    <ActionSheetItem
       disabled={disabled}
-      style={style}
+      style={[{
+        paddingVertical: 12
+      }, style]}
       onPress={() => action && action()}
-      endIcon={(
-        <FontAwesomeIcon 
-          name={icon}
-          size={16} 
-          color={iconColor || textColor || color.text}
-        />
-      )}
-      _stack={{
-        style: {
-          flex: 1,
-          justifyContent: 'space-between'
-        }
-      }}
     >
-      {
-        children || (
-        <Text
-          text={name}
-          style={{ color: textColor || color.textBlack }}
-        />
-        )
-      }
-    </Actionsheet.Item>
+      <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+        justifyContent: 'space-between',
+        width: '100%'
+      }]}>
+        {
+          children || (
+          <Text
+            text={name}
+            style={{ color: textColor || color.textBlack }}
+          />
+          )
+        }
+        {
+          !!icon && (
+            <FontAwesomeIcon 
+              name={icon}
+              size={16} 
+              color={iconColor || textColor || color.text}
+            />
+          )
+        }
+      </View>
+    </ActionSheetItem>
   )
 })

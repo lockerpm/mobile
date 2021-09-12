@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { WebView, WebViewNavigation  } from 'react-native-webview';
 import { Loading } from "../../../components";
+import { REGISTER_URL } from "../../../config/constants";
 
 export const SignupScreen = observer(function SignupScreen() {
   const { user } = useStores()
@@ -65,7 +66,7 @@ export const SignupScreen = observer(function SignupScreen() {
     <Loading />
   ) : (
     <WebView
-      source={{ uri: 'https://id.cystack.net/register?SERVICE_URL=%2F&SERVICE_SCOPE=pwdmanager' }}
+      source={{ uri: REGISTER_URL }}
       onNavigationStateChange={onWebViewNavigationStateChange}
     />
   )

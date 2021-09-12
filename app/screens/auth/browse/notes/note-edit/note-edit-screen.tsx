@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { 
+import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { useStores } from "../../../../../models"
@@ -23,7 +23,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
   const { mode } = route.params
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
-  const { newCipher, createCipher, updateCipher } = useMixins()
+  const { newCipher, createCipher, updateCipher, translate } = useMixins()
 
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
@@ -66,7 +66,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
-    
+
     setIsLoading(false)
     if (res.kind === 'ok') {
       navigation.goBack()
@@ -77,22 +77,26 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
   return (
     <Layout
       isContentOverlayLoading={isLoading}
-      containerStyle={{ 
+      containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0
       }}
       header={(
         <Header
-          title={mode !== 'edit' ? 'Add Secure Note' : 'Edit'}
+          title={
+            mode === 'add'
+              ? `${translate('common.add')} ${translate('common.note')}`
+              : translate('common.edit')
+          }
           goBack={() => navigation.goBack()}
-          goBackText="Cancel"
+          goBackText={translate('common.cancel')}
           right={(
             <Button
               preset="link"
-              text="Save"
+              text={translate('common.save')}
               onPress={handleSave}
               textStyle={{
-                fontSize: 12
+                fontSize: fontSize.p
               }}
             />
           )}
@@ -103,9 +107,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
       <View
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
       >
-        <View
-          style={[commonStyles.CENTER_HORIZONTAL_VIEW]}
-        >
+        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
             source={BROWSE_ITEMS.note.icon}
             style={{ height: 40, marginRight: 10 }}
@@ -113,7 +115,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label="Name"
+              label={translate('common.name')}
               value={name}
               onChangeText={setName}
             />
@@ -123,7 +125,10 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
       {/* Name end */}
 
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text="DETAILS" style={{ fontSize: 10 }} />
+        <Text
+          text={translate('common.details').toUpperCase()}
+          style={{ fontSize: fontSize.small }}
+        />
       </View>
 
       {/* Info */}
@@ -138,7 +143,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
           <FloatingInput
             fixedLabel
             textarea
-            label="Note"
+            label={translate('common.notes')}
             value={note}
             onChangeText={setNote}
           />

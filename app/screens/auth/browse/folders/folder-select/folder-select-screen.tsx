@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Text, Header, Button, AutoImage as Image } from "../../../../../components"
 import { useNavigation, useRoute } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../../theme"
 import { RouteProp } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -22,7 +22,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
   const route = useRoute<FolderSelectScreenProp>()
   const { mode, initialId, cipherIds = [] } = route.params
   const { folderStore, cipherStore } = useStores()
-  const { notify } = useMixins()
+  const { notify, translate } = useMixins()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -38,9 +38,9 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
         folderId: selectedFolder
       })
       if (res.kind === 'ok') {
-        notify('success', '', 'Moved to new folder')
+        notify('success', translate('folder.item_moved'))
       } else {
-        notify('error', '', 'Something went wrong')
+        notify('error', translate('error.something_went_wrong'))
       }
       setIsLoading(false)
     } else {
@@ -59,16 +59,20 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       }}
       header={(
         <Header
-          title={mode === 'add' ? 'Add to Folder' : 'Move to Folder'}
+          title={
+            mode === 'add'
+              ? translate('folder.add_to_folder')
+              : translate('folder.move_to_folder')
+          }
           goBack={() => navigation.goBack()}
-          goBackText={mode === 'move' ? "Cancel" : undefined}
+          goBackText={mode === 'move' ? translate('common.cancel') : undefined}
           right={(
             <Button
               preset="link"
-              text="Save"
+              text={translate('common.save')}
               onPress={handleMove}
               textStyle={{
-                fontSize: 12
+                fontSize: fontSize.p
               }}
             />
           )}
@@ -90,9 +94,11 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
         }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Text preset="black" style={{ flex: 1 }}>
-            No folder
-          </Text>
+          <Text
+            tx={"folder.no_folder"}
+            preset="black"
+            style={{ flex: 1 }}
+          />
 
           {
             !selectedFolder && (

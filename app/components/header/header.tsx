@@ -3,7 +3,7 @@ import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { color } from "../../theme"
+import { color, fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { AutoImage as Image } from "../auto-image/auto-image"
@@ -44,12 +44,12 @@ export const Header = observer(function Header(props: HeaderProps) {
                   props.goBackText ? (
                     <Text
                       text={props.goBackText}
-                      style={{ fontSize: 12 }}
+                      style={{ fontSize: fontSize.p }}
                     />
                   ) : (
                     <IoniconsIcon 
                       name="md-arrow-back"
-                      size={20} 
+                      size={22} 
                       color={color.title} 
                     />
                   )
@@ -61,7 +61,7 @@ export const Header = observer(function Header(props: HeaderProps) {
         }
         {
           props.title && (
-          <Text preset="semibold">
+          <Text preset="semibold" style={{ fontSize: fontSize.h5 }}>
             {props.title}
           </Text>
           )

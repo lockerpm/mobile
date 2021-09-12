@@ -4,11 +4,13 @@ import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "..
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { AddAction } from "../../home/all-item/add-action"
+import { useMixins } from "../../../../services/mixins"
 
 
 export const SharesScreen = observer(function SharesScreen() {
   const navigation = useNavigation()
-  
+  const { translate } = useMixins()
+
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -24,18 +26,19 @@ export const SharesScreen = observer(function SharesScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header="Share Items"
+          header={translate('shares.share_items')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           onSearch={setSearchText}
+          searchText={searchText}
           navigation={navigation}
         />
       )}
       borderBottom
       noScroll
     >
-      <SortAction 
-        isOpen={isSortOpen} 
+      <SortAction
+        isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {
           setSortOption(value)
@@ -44,12 +47,12 @@ export const SharesScreen = observer(function SharesScreen() {
         value={sortOption}
       />
 
-      <AddAction 
-        isOpen={isAddOpen} 
+      <AddAction
+        isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
       />
-      
+
       <CipherList
         navigation={navigation}
         onLoadingChange={setIsLoading}
@@ -59,8 +62,8 @@ export const SharesScreen = observer(function SharesScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
-            title="Securely share items"
-            desc="Any shared or received passwords, notes or credit cards will appear here"
+            title={translate('shares.empty.title')}
+            desc={translate('shares.empty.desc')}
           />
         )}
       />

@@ -1,13 +1,15 @@
 import React, { useState } from "react"
-import { Modal } from "native-base"
 import { Button } from "../../../../components/button/button"
 import { Text } from "../../../../components/text/text"
 import { AutoImage as Image } from "../../../../components/auto-image/auto-image"
-import { color } from "../../../../theme"
+import { color, fontSize } from "../../../../theme"
+import { Modal } from "../../../../components/modal/modal"
+import { View } from "react-native"
+import { useMixins } from "../../../../services/mixins"
 
 interface Props {
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   onConfirm?: Function,
   title?: string,
   desc?: string,
@@ -15,6 +17,7 @@ interface Props {
 }
 
 export const DeleteConfirmModal = (props: Props) => {
+  const { translate } = useMixins()
   const { isOpen, onClose, onConfirm, title, desc, btnText } = props
   const [isLoading, setIsLoading] = useState(false)
 
@@ -26,53 +29,43 @@ export const DeleteConfirmModal = (props: Props) => {
     setIsLoading(false)
     onClose()
   }
-  
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
     >
-      <Modal.Content>
-        <Modal.CloseButton />
+      <View style={{ alignItems: 'center' }}>
+        <Image
+          source={require('./trash.png')}
+          style={{ height: 110 }}
+        />
+        <Text
+          preset="black"
+          text={title || translate('trash.delete_item')}
+          style={{ fontSize: fontSize.h4, marginBottom: 5, marginTop: 15 }}
+        />
+        <Text
+          text={desc || translate('trash.delete_desc')}
+          style={{ textAlign: 'center', fontSize: fontSize.small }}
+        />
+      </View>
 
-        {/* Body */}
-        <Modal.Body style={{ alignItems: 'center' }}>
-          <Image
-            source={require('./trash.png')}
-            style={{ height: 110 }}
-          />
-          <Text
-            preset="black"
-						text={title || "Delete item?"}
-						style={{ fontSize: 18, marginBottom: 5, marginTop: 15 }}
-          />
-					<Text
-						text={desc || "This item will be lost and you will no longer be able to restore it."}
-						style={{ textAlign: 'center', fontSize: 12 }}
-					/>
-        </Modal.Body>
-        {/* Body end */}
-
-        {/* Footer */}
-        <Modal.Footer style={{ marginRight: 20, marginBottom: 16, paddingRight: 0 }}>
-          <Button
-            isNativeBase
-						colorScheme="csError"
-            disabled={isLoading}
-            isLoading={isLoading}
-            onPress={handleConfirm}
-            style={{
-              width: '100%'
-            }}
-          >
-						<Text
-							text={btnText || "Delete"}
-							style={{ color: color.palette.white }}
-						/>
-					</Button>
-        </Modal.Footer>
-        {/* Footer end */}
-      </Modal.Content>
+      <Button
+        preset="error"
+        disabled={isLoading}
+        isLoading={isLoading}
+        onPress={handleConfirm}
+        style={{
+          width: '100%',
+          marginTop: 30
+        }}
+      >
+        <Text
+          text={btnText || translate('common.delete')}
+          style={{ color: color.palette.white }}
+        />
+      </Button>
     </Modal>
   )
 }

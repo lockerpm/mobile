@@ -10,18 +10,21 @@ import { CardAction } from "../card-action"
 import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
+import { CARD_BRANDS } from "../constants"
+import { useMixins } from "../../../../../services/mixins"
 
 
 export const CardInfoScreen = observer(function CardInfoScreen() {
   const navigation = useNavigation()
   const { cipherStore } = useStores()
+  const { translate } = useMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
 
   const [showAction, setShowAction] = useState(false)
 
   return (
     <Layout
-      containerStyle={{ 
+      containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
         paddingTop: 0
@@ -36,7 +39,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"
-                size={16}
+                size={18}
                 color={color.title}
               />
             </Button>
@@ -50,13 +53,13 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           <DeletedAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         ) : (
           <CardAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         )
       }
@@ -91,7 +94,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
         <FloatingInput
           fixedLabel
           copyAble
-          label="Cardholder name"
+          label={translate('card.card_name')}
           value={selectedCipher.card.cardholderName}
           editable={false}
           style={{ marginBottom: 10 }}
@@ -102,8 +105,8 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
         <FloatingInput
           fixedLabel
           copyAble
-          label="Brand"
-          value={selectedCipher.card.brand}
+          label={translate('card.brand')}
+          value={(CARD_BRANDS.find(i => i.value === selectedCipher.card.brand) || { label: '' }).label}
           editable={false}
           style={{ marginVertical: 10 }}
         />
@@ -113,41 +116,30 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
         <FloatingInput
           fixedLabel
           copyAble
-          label="Card number"
+          label={translate('card.card_number')}
           value={selectedCipher.card.number}
           editable={false}
           style={{ marginVertical: 10 }}
         />
         {/* Number end */}
 
-        {/* Exp month */}
+        {/* Exp date */}
         <FloatingInput
           fixedLabel
           copyAble
-          label="Expiration month"
-          value={selectedCipher.card.expMonth}
+          label={translate('card.exp_date')}
+          value={`${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}`}
           editable={false}
           style={{ marginVertical: 10 }}
         />
-        {/* Exp month end */}
-
-        {/* Exp year */}
-        <FloatingInput
-          fixedLabel
-          copyAble
-          label="Expiration year"
-          value={selectedCipher.card.expYear}
-          editable={false}
-          style={{ marginVertical: 10 }}
-        />
-        {/* Exp year end */}
+        {/* Exp date end */}
 
         {/* CVV */}
         <FloatingInput
           fixedLabel
           copyAble
           isPassword
-          label="Security code (CVV)"
+          label={translate('card.cvv')}
           value={selectedCipher.card.code}
           editable={false}
           style={{ marginVertical: 10 }}
@@ -156,7 +148,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
 
         {/* Notes */}
         <FloatingInput
-          label="Notes"
+          label={translate('common.notes')}
           value={selectedCipher.notes}
           editable={false}
           textarea

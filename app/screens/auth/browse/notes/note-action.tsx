@@ -7,20 +7,20 @@ import { useMixins } from "../../../../services/mixins"
 
 type Props = {
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   navigation: any
 }
 
 
 export const NoteAction = (props: Props) => {
-  const { copyToClipboard } = useMixins()
+  const { copyToClipboard, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
   return (
     <CipherAction {...props}>
       <ActionItem
-        name="Copy Note"
+        name={translate('note.copy_note')}
         icon="copy"
         action={() => copyToClipboard(selectedCipher.notes)}
         disabled={!selectedCipher.notes}

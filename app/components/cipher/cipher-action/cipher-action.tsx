@@ -1,10 +1,9 @@
 import React, { useState } from "react"
-import { ScrollView, View } from "react-native"
+import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, commonStyles } from "../../../theme"
+import { color, commonStyles, fontSize } from "../../../theme"
 import { useStores } from "../../../models"
 import { OwnershipAction } from "./ownership-action"
-import { Actionsheet, Divider } from "native-base"
 import { BROWSE_ITEMS } from "../../../common/mappings"
 import { ActionItem } from "./action-item"
 import { CipherType } from "../../../../core/enums"
@@ -12,11 +11,14 @@ import { useMixins } from "../../../services/mixins"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
 import { Text } from "../../text/text"
 import { AutoImage as Image } from "../../auto-image/auto-image"
+import { ActionSheet } from "../../action-sheet/action-sheet"
+import { ActionSheetContent } from "../../action-sheet"
+import { Divider } from "../../divider/divider"
 
 export interface CipherActionProps {
   children?: React.ReactNode,
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   navigation: any
 }
 
@@ -29,7 +31,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
-  const { toTrashCiphers, getRouteName } = useMixins()
+  const { toTrashCiphers, getRouteName, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
@@ -51,8 +53,8 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         }
       case CipherType.Identity:
         return {
-          img: BROWSE_ITEMS.indentity.icon,
-          backup: BROWSE_ITEMS.indentity.icon,
+          img: BROWSE_ITEMS.identity.icon,
+          backup: BROWSE_ITEMS.identity.icon,
           path: 'identities'
         }
       case CipherType.SecureNote:
@@ -75,13 +77,13 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const handelDelete = async () => {
     const res = await toTrashCiphers([selectedCipher.id])
     if (res.kind === 'ok') {
-      let routeName = await getRouteName()
+      const routeName = await getRouteName()
       if (routeName.endsWith('__info')) {
         navigation.goBack()
       }
     }
   }
-  
+
   // Render
 
   return (
@@ -97,112 +99,110 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handelDelete}
-        title="Move to trash"
-        desc="This item will be moved to trash where you can restore or pernamently delete it."
-        btnText="Ok"
+        title={translate('trash.to_trash')}
+        desc={translate('trash.to_trash_desc')}
+        btnText="OK"
       />
 
       {/* Modals end */}
 
       {/* Actionsheet */}
-      <Actionsheet
+      <ActionSheet
         isOpen={isOpen}
         onClose={onClose}
       >
-        <Actionsheet.Content>
-          <View style={{ width: '100%', paddingHorizontal: 20 }}>
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              <Image
-                source={cipherMapper.img}
-                backupSource={cipherMapper.backup}
-                style={{ height: 40, width: 40, marginRight: 10 }}
+        <View style={{ width: '100%', paddingHorizontal: 20 }}>
+          <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+            <Image
+              source={cipherMapper.img}
+              backupSource={cipherMapper.backup}
+              style={{ height: 40, width: 40, marginRight: 10 }}
+            />
+            <View>
+              <Text
+                preset="semibold"
+                text={selectedCipher.name}
               />
-              <View>
-                <Text
-                  preset="semibold"
-                  text={selectedCipher.name}
-                />
-                {
-                  (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
-                    <Text
-                      text={selectedCipher.login.username}
-                      style={{ fontSize: 12 }}
-                    />
-                  )
-                }
-              </View>
+              {
+                (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
+                  <Text
+                    text={selectedCipher.login.username}
+                    style={{ fontSize: fontSize.small }}
+                  />
+                )
+              }
             </View>
           </View>
+        </View>
 
-          <Divider borderColor={color.line} marginBottom={1} marginTop={5} />
+        <Divider style={{ marginTop: 10 }} />
 
-          <ScrollView style={{ width: '100%' }}>
-            { children }
-            {
-              !!children && (
-                <Divider borderColor={color.line} marginY={1} />
-              )
-            }
-            
-            <ActionItem
-              name="Clone"
-              icon="clone"
-              action={() => {
-                onClose()
-                navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'clone' })
-              }}
-            />
+        <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
+          { children }
+          {
+            !!children && (
+              <Divider style={{ marginVertical: 5 }} />
+            )
+          }
 
-            <ActionItem
-              name="Move to Folder"
-              icon="folder-o"
-              action={() => {
-                onClose()
-                navigation.navigate('folders__select', {
-                  mode: 'move', 
-                  initialId: selectedCipher.folderId,
-                  cipherIds: [selectedCipher.id]
-                })
-              }}
-            />
+          <ActionItem
+            name={translate('common.clone')}
+            icon="clone"
+            action={() => {
+              onClose()
+              navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'clone' })
+            }}
+          />
 
-            <ActionItem
-              name="Change Ownership"
-              icon="user-o"
-              action={() => {
-                onClose()
-                setTimeout(() => setShowOwnershipAction(true), 100)
-              }}
-            />
+          <ActionItem
+            name={translate('folder.move_to_folder')}
+            icon="folder-o"
+            action={() => {
+              onClose()
+              navigation.navigate('folders__select', {
+                mode: 'move',
+                initialId: selectedCipher.folderId,
+                cipherIds: [selectedCipher.id]
+              })
+            }}
+          />
 
-            <Divider borderColor={color.line}  marginY={1} />
+          <ActionItem
+            name={translate('common.change_ownership')}
+            icon="user-o"
+            action={() => {
+              onClose()
+              setTimeout(() => setShowOwnershipAction(true), 100)
+            }}
+          />
 
-            <ActionItem
-              name="Edit"
-              icon="edit"
-              action={() => {
-                onClose()
-                navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'edit' })
-              }}
-            />
+          <Divider style={{ marginVertical: 5 }} />
 
-            <ActionItem
-              name="Share"
-              icon="share-square-o"
-            />
+          <ActionItem
+            name={translate('common.edit')}
+            icon="edit"
+            action={() => {
+              onClose()
+              navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'edit' })
+            }}
+          />
 
-            <ActionItem
-              name="Move to Trash"
-              icon="trash"
-              textColor={color.error}
-              action={() => {
-                onClose()
-                setTimeout(() => setShowConfirmModal(true), 100)
-              }}
-            />
-          </ScrollView>
-        </Actionsheet.Content>
-      </Actionsheet>
+          <ActionItem
+            name={translate('common.share')}
+            icon="share-square-o"
+          />
+
+          <ActionItem
+            name={translate('trash.to_trash')}
+            icon="trash"
+            textColor={color.error}
+            action={() => {
+              onClose()
+              setTimeout(() => setShowConfirmModal(true), 100)
+            }}
+          />
+        </ActionSheetContent>
+      </ActionSheet>
       {/* Actionsheet end */}
     </View>
   )

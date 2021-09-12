@@ -2,14 +2,14 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
-import { 
+import {
   Layout, BrowseItemHeader, BrowseItemEmptyContent, Text, Button,
   AutoImage as Image
 } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { SectionList, View } from "react-native"
-import { color, commonStyles } from "../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { NewFolderModal } from "./new-folder-modal"
 import { FolderAction } from "./folder-action"
@@ -22,7 +22,7 @@ import { useMixins } from "../../../../services/mixins"
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
-  const { getTeam, randomString } = useMixins()
+  const { getTeam, randomString, translate } = useMixins()
   const { folderStore, collectionStore, user } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
@@ -50,7 +50,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
     if (sortList) {
       const { orderField, order } = sortList
       return orderBy(
-        filtered, 
+        filtered,
         [f => orderField === 'name' ? (f.name && f.name.toLowerCase()) : f.revisionDate],
         [order]
       ) || []
@@ -61,7 +61,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
   const sections = [
     {
       id: randomString(),
-      title: 'Me',
+      title: translate('common.me'),
       data: getFilteredData(folders),
       shared: false
     },
@@ -78,10 +78,11 @@ export const FoldersScreen = observer(function FoldersScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header="Folders"
+          header={translate('common.folder')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
+          searchText={searchText}
           onSearch={setSearchText}
         />
       )}
@@ -90,15 +91,15 @@ export const FoldersScreen = observer(function FoldersScreen() {
     >
       {/* Modals / Actions */}
 
-      <FolderAction 
-        isOpen={isActionOpen} 
+      <FolderAction
+        isOpen={isActionOpen}
         onClose={() => setIsActionOpen(false)}
         folder={selectedFolder}
         onLoadingChange={setIsLoading}
       />
 
-      <SortAction 
-        isOpen={isSortOpen} 
+      <SortAction
+        isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {
           setSortOption(value)
@@ -107,7 +108,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
         value={sortOption}
       />
 
-      <NewFolderModal 
+      <NewFolderModal
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
       />
@@ -119,9 +120,9 @@ export const FoldersScreen = observer(function FoldersScreen() {
         !sections.length ? (
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
-            title="Organize items in Folder"
-            desc="Keep passwords and other items in groups"
-            buttonText="Add Folder"
+            title={translate('folder.empty.title')}
+            desc={translate('folder.empty.desc')}
+            buttonText={translate('folder.empty.btn')}
             addItem={() => {
               setIsAddOpen(true)
             }}
@@ -133,7 +134,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
             renderSectionHeader={({ section }) => (
               <Text
                 text={`${section.title} (${section.data.length})`}
-                style={{ fontSize: 10, paddingHorizontal: 20, marginTop: 20 }}
+                style={{ fontSize: fontSize.small, paddingHorizontal: 20, marginTop: 20 }}
               />
             )}
             renderItem={({ item }) => (
@@ -149,7 +150,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     paddingVertical: 15,
                   }}
                 >
-                  <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+                  <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
                     <Image
                       source={FOLDER_IMG[item.shared ? 'share' : 'normal'].img}
                       style={{
@@ -161,10 +162,10 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     <View style={{ flex: 1 }}>
                       <Text
                         preset="semibold"
-                        text={item.name || 'Unassigned'}
+                        text={item.name || translate('folder.unassigned')}
                       />
                     </View>
-                    
+
                     {
                       !!item.id && (
                         <Button

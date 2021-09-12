@@ -1,10 +1,9 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { TextStyle, View } from "react-native"
-import { Layout, Text, Header } from "../../../../components"
+import { TextStyle, View, Switch } from "react-native"
+import { Layout, Text, Header, Select } from "../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../theme"
-import { Select, Switch } from "native-base"
+import { color, commonStyles, fontSize } from "../../../../theme"
 import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
@@ -12,8 +11,8 @@ import { PrimaryParamList } from "../../../../navigators/main-navigator"
 
 
 const SECTION_TITLE: TextStyle = {
-  fontSize: 10, 
-  marginHorizontal: 20, 
+  fontSize: fontSize.small,
+  marginHorizontal: 20,
   marginBottom: 8,
 }
 
@@ -22,7 +21,7 @@ type ScreenProp = RouteProp<PrimaryParamList, 'settings'>;
 export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
   const { user } = useStores()
-  const { notify, isBiometricAvailable } = useMixins()
+  const { notify, isBiometricAvailable, translate } = useMixins()
   const route = useRoute<ScreenProp>()
   const { fromIntro } = route.params
 
@@ -35,13 +34,12 @@ export const SettingsScreen = observer(function SettingsScreen() {
     const available = await isBiometricAvailable()
 
     if (!available) {
-      notify('error', '', 'Biometric is not supported')
+      notify('error', translate('error.biometric_not_support'))
     } else {
       user.setBiometricUnlock(true)
-      console.log(user.isBiometricUnlock)
-      notify('success', '', 'Biometric unlock is enabled')
+      notify('success', translate('success.biometric_enabled'))
     }
-    
+
     setIsLoading(false)
   }
 
@@ -50,7 +48,9 @@ export const SettingsScreen = observer(function SettingsScreen() {
   const settings = {
     language: {
       value: user.language || 'en',
-      onChange: user.setLanguage,
+      onChange: (lang: string) => {
+        user.setLanguage(lang)
+      },
       options: [
         {
           label: 'Tiếng Việt',
@@ -77,23 +77,23 @@ export const SettingsScreen = observer(function SettingsScreen() {
       onChange: user.setAppTimeout,
       options: [
         {
-          label: '30 seconds',
+          label: `30 ${translate('common.seconds')}`,
           value: 30 * 1000
         },
         {
-          label: '1 minute',
+          label: `1 ${translate('common.minute')}`,
           value: 1 * 60 * 1000
         },
         {
-          label: '3 minutes',
+          label: `3 ${translate('common.minutes')}`,
           value: 3 * 60 * 1000
         },
         {
-          label: 'On screen off',
+          label: translate('settings.on_screen_off'),
           value: -1
         },
         {
-          label: 'On app close',
+          label: translate('settings.on_app_close'),
           value: 0
         }
       ]
@@ -103,11 +103,11 @@ export const SettingsScreen = observer(function SettingsScreen() {
       onChange: user.setAppTimeoutAction,
       options: [
         {
-          label: 'Lock',
+          label: translate('common.lock'),
           value: 'lock'
         },
         {
-          label: 'Log Out',
+          label: translate('common.logout'),
           value: 'logout'
         }
       ]
@@ -126,7 +126,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
               navigation.goBack()
             }
           }}
-          title="Settings"
+          title={translate('common.settings')}
           right={(<View style={{ width: 10 }} />)}
         />
       )}
@@ -134,116 +134,115 @@ export const SettingsScreen = observer(function SettingsScreen() {
     >
       {/* Account */}
       <Text
-        text="ACCOUNT"
-        style={[SECTION_TITLE]}
+        text={translate('common.account').toUpperCase()}
+        style={SECTION_TITLE}
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
+        {/* Change master pass */}
         <SettingsItem
-          name="Change Master Password"
+          name={translate('settings.change_master_pass')}
           action={() => navigation.navigate('changeMasterPassword')}
         />
+        {/* Change master pass end */}
 
-        <SettingsItem
-          name="Language"
-          noBorder
-          noPadding
-          right={(
-            <Select
-              variant="unstyled"
-              selectedValue={settings.language.value}
-              onValueChange={settings.language.onChange}
-              minWidth={150}
-            >
-              {
-                settings.language.options.map(item => (
-                  <Select.Item key={item.value} label={item.label} value={item.value} />
-                ))
-              }
-            </Select>
+        {/* Language */}
+        <Select
+          value={settings.language.value}
+          onChange={settings.language.onChange}
+          options={settings.language.options}
+          renderSelected={({ label }) => (
+            <SettingsItem
+              style={{ width: '100%' }}
+              name={translate('common.language')}
+              right={(
+                <Text text={label} />
+              )}
+            />
           )}
         />
+        {/* Language end */}
       </View>
       {/* Account end */}
 
       {/* Security */}
       <Text
-        text="SECURITY"
-        style={[SECTION_TITLE, { 
+        text={translate('common.security').toUpperCase()}
+        style={[SECTION_TITLE, {
           marginTop: 15,
         }]}
       />
-      <View style={[commonStyles.GRAY_SCREEN_SECTION]}>
+      <View style={commonStyles.GRAY_SCREEN_SECTION}>
+        {/* Biometric */}
         <SettingsItem
-          name="Biometric Unlock"
+          name={translate('common.biometric_unlocking')}
           noCaret
           right={(
             <Switch
-              isChecked={settings.biometric.value}
-              onToggle={settings.biometric.onChage}
-              colorScheme="csGreen"
+              value={settings.biometric.value}
+              onValueChange={settings.biometric.onChage}
+              trackColor={{ false: color.disabled, true: color.palette.green }}
+              thumbColor={settings.biometric.value ? color.palette.green : "#f4f3f4"}
             />
           )}
         />
-        <SettingsItem
-          name="Timeout"
-          noPadding
-          right={(
-            <Select
-              variant="unstyled"
-              selectedValue={settings.timeout.value.toString()}
-              onValueChange={(val) => settings.timeout.onChange(parseInt(val))}
-              minWidth={170}
-            >
-              {
-                settings.timeout.options.map(item => (
-                  <Select.Item key={item.value} label={item.label} value={item.value.toString()} />
-                ))
-              }
-            </Select>
+        {/* Biometric end */}
+
+        {/* Timeout */}
+        <Select
+          value={settings.timeout.value}
+          onChange={settings.timeout.onChange}
+          options={settings.timeout.options}
+          renderSelected={({ label }) => (
+            <SettingsItem
+              style={{ width: '100%' }}
+              name={translate('settings.timeout')}
+              right={(
+                <Text text={label} />
+              )}
+            />
           )}
         />
-        <SettingsItem
-          name="Timeout Action"
-          noBorder
-          noPadding
-          right={(
-            <Select
-              variant="unstyled"
-              selectedValue={settings.timeoutAction.value}
-              onValueChange={settings.timeoutAction.onChange}
-              minWidth={150}
-            >
-              {
-                settings.timeoutAction.options.map(item => (
-                  <Select.Item key={item.value} label={item.label} value={item.value} />
-                ))
-              }
-            </Select>
+        {/* Timeout end */}
+
+        {/* Timeout action */}
+        <Select
+          value={settings.timeoutAction.value}
+          onChange={settings.timeoutAction.onChange}
+          options={settings.timeoutAction.options}
+          renderSelected={({ label }) => (
+            <SettingsItem
+              style={{ width: '100%' }}
+              name={translate('settings.timeout_action')}
+              right={(
+                <Text text={label} />
+              )}
+            />
           )}
         />
+        {/* Timeout action end */}
       </View>
       {/* Security end */}
 
       {/* Danger zone */}
       <Text
-        text="DANGER ZONE"
-        style={[SECTION_TITLE, { 
+        text={translate('settings.danger_zone').toUpperCase()}
+        style={[SECTION_TITLE, {
           marginTop: 15
         }]}
       />
-      <View style={[commonStyles.GRAY_SCREEN_SECTION]}>
+      <View style={commonStyles.GRAY_SCREEN_SECTION}>
         <SettingsItem
-          name="Deauthorize sessions"
+          name={translate('settings.deauthorize_sessions')}
           noCaret
           color={color.error}
         />
         <SettingsItem
-          name="Delete all account items"
+          name={translate('settings.delete_all_items')}
           noCaret
           color={color.error}
         />
         <SettingsItem
-          name="Delete account"
+          name={translate('settings.delete_account')}
           noCaret
           noBorder
           color={color.error}

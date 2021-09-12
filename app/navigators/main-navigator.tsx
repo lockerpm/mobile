@@ -82,7 +82,7 @@ const Stack = createStackNavigator<PrimaryParamList>()
 export function MainNavigator() {
   const navigation = useNavigation()
   const { lock, getSyncData, getCipherById, loadFolders, loadCollections, logout } = useMixins()
-  const { user, cipherStore } = useStores()
+  const { uiStore, user, cipherStore } = useStores()
 
   // App screen lock trigger
   const _handleAppStateChange = async (nextAppState: string) => {
@@ -171,14 +171,14 @@ export function MainNavigator() {
     // Check network
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !(state.isConnected && state.isInternetReachable)
-      if (user.isOffline && !offline) {
+      if (uiStore.isOffline && !offline) {
         setSocket(generateSocket())
       }
       if (offline) {
         socket && socket.close()
         setSocket(null)
       }
-      user.setIsOffline(offline)
+      uiStore.setIsOffline(offline)
     })
 
     return () => {
