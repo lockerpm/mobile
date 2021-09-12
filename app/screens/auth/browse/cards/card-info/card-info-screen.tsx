@@ -10,13 +10,14 @@ import { CardAction } from "../card-action"
 import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
-import { translate } from "../../../../../i18n"
 import { CARD_BRANDS } from "../constants"
+import { useMixins } from "../../../../../services/mixins"
 
 
 export const CardInfoScreen = observer(function CardInfoScreen() {
   const navigation = useNavigation()
   const { cipherStore } = useStores()
+  const { translate } = useMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
 
   const [showAction, setShowAction] = useState(false)
@@ -52,13 +53,13 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           <DeletedAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         ) : (
           <CardAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         )
       }

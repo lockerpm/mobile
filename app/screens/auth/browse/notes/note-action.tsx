@@ -3,7 +3,6 @@ import { ActionItem } from "../../../../components/cipher/cipher-action/action-i
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
-import { translate } from "../../../../i18n"
 
 
 type Props = {
@@ -14,7 +13,7 @@ type Props = {
 
 
 export const NoteAction = (props: Props) => {
-  const { copyToClipboard } = useMixins()
+  const { copyToClipboard, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 

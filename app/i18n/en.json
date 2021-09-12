@@ -22,6 +22,7 @@
     "language": "Language",
     "length": "Length",
     "lock": "Lock",
+    "login": "Login",
     "logout": "Log Out",
     "master_pass": "Master Password",
     "minute": "minute",
@@ -254,12 +255,21 @@
   },
   "pass_generator": {
     "title": "Password Generator",
+    "desc": "Quickly generate new secure password",
     "use_upper": "Use uppercase letters (A-Z)",
     "use_lower": "Use lowercase letters (a-z)",
     "use_digits": "Use digits (0-9)",
     "use_symbol": "Use symbols (@!$%*)",
     "avoid_ambiguous": "Avoid ambiguous characters",
     "use_password": "Use Password"
+  },
+  "pass_health": {
+    "title": "Password Health",
+    "desc": "Identify passwords that can put you at risk"
+  },
+  "data_breach_scanner": {
+    "title": "Data Breach Scanner",
+    "desc": "Check if sensitive data is leaked online"
   },
   "settings": {
     "change_master_pass": "Change Master Password",

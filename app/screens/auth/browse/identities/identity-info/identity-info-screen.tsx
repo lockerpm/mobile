@@ -10,13 +10,14 @@ import { IdentityAction } from "../identity-action"
 import { CipherView } from "../../../../../../core/models/view"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
-import { translate } from "../../../../../i18n"
+import { useMixins } from "../../../../../services/mixins"
 
 
 export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
   const navigation = useNavigation()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const { translate } = useMixins()
 
   const [showAction, setShowAction] = useState(false)
 
@@ -123,13 +124,13 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
           <DeletedAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         ) : (
           <IdentityAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         )
       }

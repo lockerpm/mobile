@@ -9,7 +9,6 @@ import { useMixins } from "../../../../services/mixins"
 import { useCoreService } from "../../../../services/core-service"
 import { useStores } from "../../../../models"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
-import { translate } from "../../../../i18n"
 import { Slider, Checkbox } from "react-native-ui-lib"
 
 
@@ -17,7 +16,7 @@ type ScreenProp = RouteProp<PrimaryParamList, 'passwordGenerator'>;
 
 export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen() {
   const navigation = useNavigation()
-  const { getPasswordStrength, copyToClipboard } = useMixins()
+  const { getPasswordStrength, copyToClipboard, translate } = useMixins()
   const { passwordGenerationService } = useCoreService()
   const { cipherStore } = useStores()
   const route = useRoute<ScreenProp>()

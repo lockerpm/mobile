@@ -9,11 +9,12 @@ import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { NoteAction } from "../note-action"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
-import { translate } from "../../../../../i18n"
+import { useMixins } from "../../../../../services/mixins"
 
 
 export const NoteInfoScreen = observer(function NoteInfoScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
@@ -50,13 +51,13 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
           <DeletedAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         ) : (
           <NoteAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         )
       }

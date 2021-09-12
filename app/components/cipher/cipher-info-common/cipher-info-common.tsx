@@ -10,7 +10,6 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import { commonStyles, fontSize } from "../../../theme"
 import { FOLDER_IMG } from "../../../common/mappings"
-import { translate } from "../../../i18n"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
@@ -26,7 +25,7 @@ export interface CipherInfoCommonProps {
  */
 export const CipherInfoCommon = observer(function CipherInfoCommon(props: CipherInfoCommonProps) {
   const { style, cipher } = props
-  const { getTeam, getCollections } = useMixins()
+  const { getTeam, getCollections, translate } = useMixins()
   const { user, folderStore } = useStores()
 
   const [collections, setCollections] = React.useState([])

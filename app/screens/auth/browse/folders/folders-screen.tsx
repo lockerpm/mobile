@@ -18,12 +18,11 @@ import { useStores } from "../../../../models"
 import { FolderView } from "../../../../../core/models/view/folderView"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { useMixins } from "../../../../services/mixins"
-import { translate } from "../../../../i18n"
 
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
-  const { getTeam, randomString } = useMixins()
+  const { getTeam, randomString, translate } = useMixins()
   const { folderStore, collectionStore, user } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections

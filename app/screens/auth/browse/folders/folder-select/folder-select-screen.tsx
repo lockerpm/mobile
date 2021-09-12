@@ -12,7 +12,6 @@ import { NewFolderModal } from "../new-folder-modal"
 import { FOLDER_IMG } from "../../../../../common/mappings"
 import { useStores } from "../../../../../models"
 import { useMixins } from "../../../../../services/mixins"
-import { translate } from "../../../../../i18n"
 
 
 type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
@@ -23,7 +22,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
   const route = useRoute<FolderSelectScreenProp>()
   const { mode, initialId, cipherIds = [] } = route.params
   const { folderStore, cipherStore } = useStores()
-  const { notify } = useMixins()
+  const { notify, translate } = useMixins()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)

@@ -10,7 +10,6 @@ import { ActionItem } from "./action-item"
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
-import { translate } from "../../../i18n"
 import { ActionSheet, ActionSheetContent } from "../../action-sheet"
 import { Divider } from "../../divider/divider"
 
@@ -29,7 +28,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
-  const { deleteCiphers, getRouteName, restoreCiphers } = useMixins()
+  const { deleteCiphers, getRouteName, restoreCiphers, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 

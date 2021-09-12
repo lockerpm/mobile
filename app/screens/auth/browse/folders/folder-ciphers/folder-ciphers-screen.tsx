@@ -8,7 +8,7 @@ import { AddAction } from "../../../home/all-item/add-action"
 import { useStores } from "../../../../../models"
 import { FolderView } from "../../../../../../core/models/view/folderView"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
-import { translate } from "../../../../../i18n"
+import { useMixins } from "../../../../../services/mixins"
 
 type FolderCiphersScreenProp = RouteProp<PrimaryParamList, 'folders__ciphers'>;
 
@@ -18,6 +18,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
   const { folderId } = route.params
   const { folderStore } = useStores()
   const folders: FolderView[] = folderStore.folders
+  const { translate } = useMixins()
 
   // Params
   const [isLoading, setIsLoading] = useState(true)

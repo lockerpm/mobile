@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { color, fontSize } from "../../theme"
 import { flatten } from "ramda"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { translate } from "../../i18n"
+import { useMixins } from "../../services/mixins"
 
 const CONTAINER: ViewStyle = {
   flexDirection: "row", 
@@ -27,6 +27,7 @@ export interface SearchBarProps {
 export const SearchBar = observer(function SearchBar(props: SearchBarProps) {
   const { style, onSearch, value } = props
   const styles = flatten([CONTAINER, style])
+  const { translate } = useMixins()
 
   return (
     <View style={styles}>

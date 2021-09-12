@@ -25,6 +25,7 @@
     "clean": "react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
     "dev-android": "npx react-native run-android",
+    "prod-android": "npx react-native run-android --variant=release",
     "dev-ios": "npx react-native run-ios"
   },
   "dependencies": {
@@ -55,7 +56,6 @@
     "mobx-react-lite": "3.2.0",
     "mobx-state-tree": "5.0.1",
     "nanoid": "^3.1.23",
-    "native-base": "^3.0.7",
     "node-forge": "^0.10.0",
     "path-browserify": "0.0.0",
     "process": "0.11.0",

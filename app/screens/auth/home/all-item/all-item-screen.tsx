@@ -5,11 +5,13 @@ import { useNavigation } from "@react-navigation/native"
 import { ItemsHeader } from "./items-header"
 import { SortAction } from "./sort-action"
 import { AddAction } from "./add-action"
-import { translate } from "../../../../i18n"
+import { useMixins } from "../../../../services/mixins"
 
 
 export const AllItemScreen = observer(function AllItemScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
+
   const [isLoading, setIsLoading] = useState(true)
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)

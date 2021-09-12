@@ -4,11 +4,12 @@ import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "..
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { CipherType } from "../../../../../core/enums"
-import { translate } from "../../../../i18n"
+import { useMixins } from "../../../../services/mixins"
 
 
 export const CardsScreen = observer(function CardsScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')

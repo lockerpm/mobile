@@ -3,10 +3,9 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Text, Button, Header } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color, commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { translate } from "../../../../i18n"
+import { useMixins } from "../../../../services/mixins"
 
 
 type Item = {
@@ -16,6 +15,7 @@ type Item = {
 
 export const HelpScreen = observer(function HelpScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
 
   const items: Item[] = [
     {

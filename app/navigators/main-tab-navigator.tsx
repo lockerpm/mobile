@@ -9,30 +9,32 @@ import { color, fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import NetInfo from "@react-native-community/netinfo"
-import { translate } from "../i18n"
+import { useMixins } from "../services/mixins"
 
 const Tab = createBottomTabNavigator()
 
-const mappings = {
-  homeTab: {
-    label: translate('common.home'),
-    icon: 'home'
-  },
-  browseTab: {
-    label: translate('common.browse'),
-    icon: 'apps'
-  },
-  toolsTab: {
-    label: translate('common.tools'),
-    icon: 'build'
-  },
-  menuTab: {
-    label: translate('common.menu'),
-    icon: 'menu'
-  }
-}
-
 const TabBar = ({ state, descriptors, navigation, isOffline }) => {
+  const { translate } = useMixins()
+  
+  const mappings = {
+    homeTab: {
+      label: translate('common.home'),
+      icon: 'home'
+    },
+    browseTab: {
+      label: translate('common.browse'),
+      icon: 'apps'
+    },
+    toolsTab: {
+      label: translate('common.tools'),
+      icon: 'build'
+    },
+    menuTab: {
+      label: translate('common.menu'),
+      icon: 'menu'
+    }
+  }
+  
   return (
     <View>
       {/* Offline mode */}

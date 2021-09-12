@@ -13,12 +13,11 @@ import { PasswordAction } from "../password-action"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
-import { translate } from "../../../../../i18n"
 
 
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const navigation = useNavigation()
-  const { getWebsiteLogo, getPasswordStrength } = useMixins()
+  const { getWebsiteLogo, getPasswordStrength, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
@@ -62,13 +61,13 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           <DeletedAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         ) : (
           <PasswordAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         )
       }

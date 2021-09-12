@@ -1,9 +1,9 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
 import Picker from "react-native-ui-lib/picker"
-import { translate } from "../../i18n"
 import { color, fontSize } from "../../theme"
 import { StyleProp, ViewStyle } from "react-native"
+import { useMixins } from "../../services/mixins"
 
 
 type Option = {
@@ -28,6 +28,8 @@ export interface SelectProps {
  * Describe your component here
  */
 export const Select = observer(function Select(props: SelectProps) {
+  const { translate } = useMixins()
+  
   const { 
     style, value, onChange, options,
     floating, renderSelected, placeholder, 

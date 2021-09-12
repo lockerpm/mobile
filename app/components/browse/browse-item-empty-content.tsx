@@ -36,7 +36,7 @@ export const BrowseItemEmptyContent = observer(function BrowseItemEmptyContent(p
 
       <Text
         preset="semibold"
-        style={{ fontSize: fontSize.h4, marginBottom: 8, marginTop: 10 }}
+        style={{ fontSize: fontSize.h4, marginBottom: 8, marginTop: 10, textAlign: 'center' }}
         text={title}
       />
 
