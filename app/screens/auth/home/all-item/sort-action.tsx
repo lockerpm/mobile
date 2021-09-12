@@ -1,12 +1,12 @@
 import React from "react"
-import { Actionsheet, Divider } from "native-base"
-import { Text, ActionItem } from "../../../../components"
+import { Text, ActionItem, ActionSheet, Divider, ActionSheetContent } from "../../../../components"
 import { color, fontSize } from "../../../../theme"
 import { translate } from "../../../../i18n"
+import { View } from "react-native"
 
 interface Props {
   isOpen: boolean,
-  onClose: Function,
+  onClose: () => void,
   onSelect?: Function,
   value?: string
 }
@@ -50,22 +50,24 @@ export const SortAction = (props: Props) => {
   ]
 
   return (
-    <Actionsheet
+    <ActionSheet
       isOpen={isOpen}
       onClose={onClose}
     >
-      <Actionsheet.Content>
+      <View style={{ width: '100%', paddingHorizontal: 20 }}>
         <Text
           preset="semibold"
           text={translate('common.sort')}
           style={{
             fontSize: fontSize.h4,
-            marginBottom: 15
+            marginBottom: 10
           }}
         />
+      </View>
 
-        <Divider borderColor={color.line} />
+      <Divider />
 
+      <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
         {
           sortOptions.map((item, index) => (
             <ActionItem
@@ -80,7 +82,7 @@ export const SortAction = (props: Props) => {
             />
           ))
         }
-      </Actionsheet.Content>
-    </Actionsheet>
+      </ActionSheetContent>
+    </ActionSheet>
   )
 }
