@@ -1,10 +1,11 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
-import { color } from "../../theme"
+import { color, fontSize } from "../../theme"
 import { Text } from "../text/text"
-import { Progress, Box } from "native-base"
-import { StyleProp, ViewStyle } from "react-native"
+import { StyleProp, ViewStyle, View } from "react-native"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import ProgressBar from "react-native-ui-lib/progressBar"
+import { useMixins } from "../../services/mixins"
 
 
 export interface PasswordStrengthProps {
@@ -18,6 +19,7 @@ export interface PasswordStrengthProps {
  */
 export const PasswordStrength = observer(function PasswordStrength(props: PasswordStrengthProps) {
   const { value, style, preset = 'progress' } = props
+  const { translate } = useMixins()
 
   const config = {
     '-1': {
@@ -25,72 +27,75 @@ export const PasswordStrength = observer(function PasswordStrength(props: Passwo
       color: 'primary'
     },
     0: {
-      text: 'Very weak',
-      color: 'csError',
+      text: translate('password_strength.very_weak'),
+      color: color.error,
       textColor: color.error,
       icon: 'shield-outline'
     },
     1: {
-      text: 'Weak',
-      color: 'csError',
+      text: translate('password_strength.weak'),
+      color: color.error,
       textColor: color.error,
       icon: 'shield-outline'
     },
     2: {
-      text: 'Medium',
-      color: 'yellow',
+      text: translate('password_strength.medium'),
+      color: 'orange',
+      textColor: 'orange',
       icon: 'shield'
     },
     3: {
-      text: 'Good',
-      color: 'csGreen',
+      text: translate('password_strength.good'),
+      color: color.palette.green,
       textColor: color.palette.green,
       icon: 'shield-checkmark-outline'
     },
     4: {
-      text: 'Strong',
-      color: 'csGreen',
+      text: translate('password_strength.strong'),
+      color: color.palette.green,
       textColor: color.palette.green,
       icon: 'shield-checkmark'
     }
   }
 
   return (
-    <Box w="100%" style={style}>
+    <View style={[{ width: '100%' }, style]}>
       {
-        preset === 'progress' ? (
-          <Progress
-            size="lg"
-            colorScheme={config[value].color}
-            bg={color.block}
-            max={5}
-            value={value + 1}
+        preset === 'progress' && (
+          <ProgressBar
+            height={8}
+            containerStyle={{
+              borderRadius: 4
+            }}
+            progressBackgroundColor={color.block}
+            backgroundColor={config[value].color}
+            progress={(value + 1) / 5 * 100}
           >
             <Text
               text={config[value].text}
               style={{
-                fontSize: 8,
+                fontSize: fontSize.mini,
                 color: color.palette.white
               }}
             />
-          </Progress>
-        ) : (
-          <Text
-            style={{
-              marginTop: 5,
-              fontSize: 12,
-              color: config[value].textColor || config[value].color
-            }}
-          >
-            <IoniconsIcon
-              name={config[value].icon}
-              size={14}
-              color={config[value].textColor || config[value].color}
-            />
-            {' ' + config[value].text}
-          </Text>
+          </ProgressBar>
         )
       }
-    </Box>
+
+      <Text
+        style={{
+          marginTop: 5,
+          fontSize: fontSize.small,
+          color: config[value].textColor || config[value].color
+        }}
+      >
+        <IoniconsIcon
+          name={config[value].icon}
+          size={14}
+          color={config[value].textColor || config[value].color}
+        />
+        {' ' + config[value].text}
+      </Text>
+    </View>
   )
 })

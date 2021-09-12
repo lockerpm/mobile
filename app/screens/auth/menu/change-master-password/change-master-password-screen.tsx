@@ -9,7 +9,7 @@ import { useMixins } from "../../../../services/mixins"
 
 export const ChangeMasterPasswordScreen = observer(function ChangeMasterPasswordScreen() {
   const navigation = useNavigation()
-  const { getPasswordStrength, changeMasterPassword } = useMixins()
+  const { getPasswordStrength, changeMasterPassword, translate } = useMixins()
 
   const [isLoading, setIsLoading] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(-1)
@@ -31,7 +31,7 @@ export const ChangeMasterPasswordScreen = observer(function ChangeMasterPassword
       header={(
         <Header
           goBack={() => navigation.goBack()}
-          title="Change Master Password"
+          title={translate('change_master_pass.title')}
           right={(<View style={{ width: 10 }} />)}
         />
       )}
@@ -40,7 +40,7 @@ export const ChangeMasterPasswordScreen = observer(function ChangeMasterPassword
       <View style={[commonStyles.GRAY_SCREEN_SECTION, { paddingVertical: 16 }]}>
         <FloatingInput
           isPassword
-          label="Current Master Password"
+          label={translate('change_master_pass.current')}
           value={current}
           onChangeText={setCurrent}
           style={{ marginBottom: 20 }}
@@ -48,7 +48,7 @@ export const ChangeMasterPasswordScreen = observer(function ChangeMasterPassword
 
         <FloatingInput
           isPassword
-          label="New Master Password"
+          label={translate('change_master_pass.new')}
           value={newPass}
           onChangeText={(text) => {
             setNewPass(text)
@@ -66,18 +66,17 @@ export const ChangeMasterPasswordScreen = observer(function ChangeMasterPassword
         <FloatingInput
           isPassword
           isInvalid={newPass !== confirm}
-          label="Confirm Master Password"
+          label={translate('change_master_pass.confirm')}
           value={confirm}
           onChangeText={setConfirm}
           style={{ marginBottom: 30, marginTop: 20 }}
         />
 
         <Button
-          isNativeBase
           isLoading={isLoading}
           disabled={isLoading || !current || !newPass || !confirm || (newPass !== confirm)}
           onPress={handleChangePassword}
-          text="Save"
+          text={translate('common.save')}
         />
       </View>
     </Layout>

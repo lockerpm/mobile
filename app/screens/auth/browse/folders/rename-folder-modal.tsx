@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Modal } from "native-base"
-import { FloatingInput, Button, Text } from "../../../../components"
+import { FloatingInput, Button, Text, Modal } from "../../../../components"
 import { useStores } from "../../../../models"
 import { observer } from "mobx-react-lite"
 import { useCoreService } from "../../../../services/core-service"
@@ -11,7 +10,7 @@ import { CollectionView } from "../../../../../core/models/view/collectionView"
 
 interface Props {
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   folder: FolderView | CollectionView
 }
 
@@ -19,7 +18,7 @@ export const RenameFolderModal = observer((props: Props) => {
   const { isOpen, onClose, folder } = props
   const { folderStore } = useStores()
   const { folderService } = useCoreService()
-  const { notify } = useMixins()
+  const { notify, translate } = useMixins()
 
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -37,10 +36,10 @@ export const RenameFolderModal = observer((props: Props) => {
     }
 
     if (res.kind === 'ok') {
-      notify('success', '', 'Folder updated')
+      notify('success', translate('folder.folder_updated'))
       onClose()
     } else {
-      notify('error', '', 'Something went wrong')
+      notify('error', translate('error.something_went_wrong'))
     }
     setIsLoading(false)
   }
@@ -48,44 +47,29 @@ export const RenameFolderModal = observer((props: Props) => {
   useEffect(() => {
     setName(folder.name || '')
   }, [isOpen])
-  
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
+      title={translate('folder.rename_folder')}
     >
-      <Modal.Content>
-        <Modal.CloseButton />
-        <Modal.Header>
-          <Text
-            preset="header"
-            style={{
-              fontSize: 18
-            }}
-          >
-            Rename Folder
-          </Text>
-        </Modal.Header>
-        <Modal.Body>
-          <FloatingInput
-            label="Name"
-            value={name}
-            onChangeText={txt => setName(txt)}
-          />
-        </Modal.Body>
-        <Modal.Footer style={{ marginRight: 20, marginBottom: 16, paddingRight: 0 }}>
-          <Button
-            isNativeBase
-            text="Save"
-            disabled={isLoading || !name.trim()}
-            isLoading={isLoading}
-            onPress={renameFolder}
-            style={{
-              width: '100%'
-            }}
-          />
-        </Modal.Footer>
-      </Modal.Content>
+      <FloatingInput
+        label={translate('common.name')}
+        value={name}
+        onChangeText={txt => setName(txt)}
+      />
+
+      <Button
+        text={translate('common.save')}
+        disabled={isLoading || !name.trim()}
+        isLoading={isLoading}
+        onPress={renameFolder}
+        style={{
+          width: '100%',
+          marginTop: 30
+        }}
+      />
     </Modal>
   )
 })

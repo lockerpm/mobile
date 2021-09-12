@@ -1,15 +1,16 @@
 import { ViewStyle, TextStyle } from "react-native"
-import { color, spacing } from "../../theme"
+import { color, fontSize, spacing } from "../../theme"
 
 /**
  * All text will start off looking like this.
  */
 const BASE_VIEW: ViewStyle = {
-  paddingVertical: spacing[2],
+  paddingVertical: spacing[3],
   paddingHorizontal: spacing[2],
   borderRadius: 4,
   justifyContent: "center",
   alignItems: "center",
+  flexDirection: 'row'
 }
 
 const BASE_TEXT: TextStyle = {
@@ -27,9 +28,43 @@ export const viewPresets: Record<string, ViewStyle> = {
    */
   primary: {
     ...BASE_VIEW,
-    backgroundColor: color.palette.green,
-    paddingVertical: spacing[3],
-    borderRadius: 5
+    backgroundColor: color.palette.green
+  } as ViewStyle,
+
+  /**
+   * Error
+   */
+  error: {
+    ...BASE_VIEW,
+    backgroundColor: color.error
+  } as ViewStyle,
+
+  /**
+   * Outline
+   */
+   outline: {
+    ...BASE_VIEW,
+    backgroundColor: color.palette.white,
+    borderColor: color.palette.green,
+    borderWidth: 1
+  } as ViewStyle,
+
+  /**
+   * Outline error
+   */
+   outlineError: {
+    ...BASE_VIEW,
+    backgroundColor: color.palette.white,
+    borderColor: color.error,
+    borderWidth: 1
+  } as ViewStyle,
+
+  /**
+   * Ghost
+   */
+   ghost: {
+    ...BASE_VIEW,
+    backgroundColor: color.palette.white
   } as ViewStyle,
 
   /**
@@ -46,9 +81,34 @@ export const viewPresets: Record<string, ViewStyle> = {
 export const textPresets: Record<ButtonPresetNames, TextStyle> = {
   primary: { 
     ...BASE_TEXT, 
-    fontSize: 14, 
+    fontSize: fontSize.p, 
     color: color.palette.white 
   } as TextStyle,
+
+  error: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: color.palette.white 
+  } as TextStyle,
+
+  outline: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: color.palette.green 
+  } as TextStyle,
+
+  outlineError: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: color.error 
+  } as TextStyle,
+
+  ghost: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: color.palette.green 
+  } as TextStyle,
+  
   link: {
     ...BASE_TEXT,
     color: color.palette.green,

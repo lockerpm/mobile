@@ -1,21 +1,22 @@
 import React, { useState } from "react"
-import { ScrollView, View } from "react-native"
+import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, commonStyles } from "../../../theme"
+import { color, commonStyles, fontSize } from "../../../theme"
 import { Text } from "../../text/text"
 import { AutoImage as Image } from "../../auto-image/auto-image"
 import { useStores } from "../../../models"
-import { Actionsheet, Divider } from "native-base"
 import { BROWSE_ITEMS } from "../../../common/mappings"
 import { ActionItem } from "./action-item"
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
+import { ActionSheet, ActionSheetContent } from "../../action-sheet"
+import { Divider } from "../../divider/divider"
 
 export interface DeletedActionProps {
   children?: React.ReactNode,
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   navigation: any
 }
 
@@ -27,7 +28,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
-  const { deleteCiphers, getRouteName, restoreCiphers } = useMixins()
+  const { deleteCiphers, getRouteName, restoreCiphers, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
@@ -49,8 +50,8 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
         }
       case CipherType.Identity:
         return {
-          img: BROWSE_ITEMS.indentity.icon,
-          backup: BROWSE_ITEMS.indentity.icon,
+          img: BROWSE_ITEMS.identity.icon,
+          backup: BROWSE_ITEMS.identity.icon,
           path: 'identities'
         }
       case CipherType.SecureNote:
@@ -83,7 +84,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
       }
     }
   }
-  
+
   // Render
 
   return (
@@ -94,83 +95,81 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        title="Warning"
-        desc="Are you sure you want to permanently delete this item?"
-        btnText="Ok"
+        title={translate('trash.perma_delete')}
+        desc={translate('trash.perma_delete_desc')}
+        btnText="OK"
       />
 
       {/* Modals end */}
 
       {/* Actionsheet */}
-      <Actionsheet
+      <ActionSheet
         isOpen={isOpen}
         onClose={onClose}
       >
-        <Actionsheet.Content>
-          <View style={{ width: '100%', paddingHorizontal: 20 }}>
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              <Image
-                source={cipherMapper.img}
-                backupSource={cipherMapper.backup}
-                style={{ height: 40, width: 40, marginRight: 10 }}
+        <View style={{ width: '100%', paddingHorizontal: 20 }}>
+          <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+            <Image
+              source={cipherMapper.img}
+              backupSource={cipherMapper.backup}
+              style={{ height: 40, width: 40, marginRight: 10 }}
+            />
+            <View>
+              <Text
+                preset="semibold"
+                text={selectedCipher.name}
               />
-              <View>
-                <Text
-                  preset="semibold"
-                  text={selectedCipher.name}
-                />
-                {
-                  (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
-                    <Text
-                      text={selectedCipher.login.username}
-                      style={{ fontSize: 12 }}
-                    />
-                  )
-                }
-              </View>
+              {
+                (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
+                  <Text
+                    text={selectedCipher.login.username}
+                    style={{ fontSize: fontSize.small }}
+                  />
+                )
+              }
             </View>
           </View>
+        </View>
 
-          <Divider borderColor={color.line} marginBottom={1} marginTop={5} />
+        <Divider style={{ marginTop: 10 }} />
 
-          <ScrollView style={{ width: '100%' }}>
-            { children }
-            {
-              !!children && (
-                <Divider borderColor={color.line} marginY={1} />
-              )
-            }
+        <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
+          { children }
+          {
+            !!children && (
+              <Divider style={{ marginVertical: 5 }} />
+            )
+          }
 
-            <ActionItem
-              name="Edit"
-              icon="edit"
-              action={() => {
-                onClose()
-                navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'edit' })
-              }}
-            />
+          <ActionItem
+            name={translate('common.edit')}
+            icon="edit"
+            action={() => {
+              onClose()
+              navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'edit' })
+            }}
+          />
 
-            <ActionItem
-              name="Restore"
-              icon="repeat"
-              action={() => {
-                onClose()
-                handleRestore()
-              }}
-            />
+          <ActionItem
+            name={translate('common.restore')}
+            icon="repeat"
+            action={() => {
+              onClose()
+              handleRestore()
+            }}
+          />
 
-            <ActionItem
-              name="Permanently Delete"
-              icon="trash"
-              textColor={color.error}
-              action={() => {
-                onClose()
-                setTimeout(() => setShowConfirmModal(true), 100)
-              }}
-            />
-          </ScrollView>
-        </Actionsheet.Content>
-      </Actionsheet>
+          <ActionItem
+            name={translate('trash.perma_delete')}
+            icon="trash"
+            textColor={color.error}
+            action={() => {
+              onClose()
+              setTimeout(() => setShowConfirmModal(true), 100)
+            }}
+          />
+        </ActionSheetContent>
+      </ActionSheet>
       {/* Actionsheet end */}
     </View>
   )

@@ -5,40 +5,43 @@ import { MenuNavigator } from "./menu/menu-navigator"
 import { View } from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Button, Text } from "../components"
-import { color } from "../theme"
+import { color, fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import NetInfo from "@react-native-community/netinfo"
+import { useMixins } from "../services/mixins"
 
 const Tab = createBottomTabNavigator()
 
-const mappings = {
-  homeTab: {
-    label: 'Home',
-    icon: 'home'
-  },
-  browseTab: {
-    label: 'Browse',
-    icon: 'apps'
-  },
-  toolsTab: {
-    label: 'Tools',
-    icon: 'build'
-  },
-  menuTab: {
-    label: 'Menu',
-    icon: 'menu'
-  }
-}
-
 const TabBar = ({ state, descriptors, navigation, isOffline }) => {
+  const { translate } = useMixins()
+  
+  const mappings = {
+    homeTab: {
+      label: translate('common.home'),
+      icon: 'home'
+    },
+    browseTab: {
+      label: translate('common.browse'),
+      icon: 'apps'
+    },
+    toolsTab: {
+      label: translate('common.tools'),
+      icon: 'build'
+    },
+    menuTab: {
+      label: translate('common.menu'),
+      icon: 'menu'
+    }
+  }
+  
   return (
     <View>
       {/* Offline mode */}
       {
         isOffline && (
-          <View style={{ 
-            backgroundColor: '#161922', 
+          <View style={{
+            backgroundColor: '#161922',
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
@@ -51,11 +54,11 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
             />
             <Text
               style={{
-                fontSize: 10,
+                fontSize: fontSize.small,
                 color: color.palette.white,
                 marginLeft: 5
               }}
-              text="Locker is currently in offline mode."
+              text={translate('navigator.is_offline')}
             />
           </View>
         )
@@ -98,13 +101,12 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
               <Button
                 key={index}
                 testID={options.tabBarTestID}
-                isNativeBase
-                variant="ghost"
+                preset="ghost"
                 onPress={onPress}
                 onLongPress={onLongPress}
-                style={{ flex: 1, alignItems: 'center' }}
+                style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}
               >
-                <Icon 
+                <Icon
                   name={icon}
                   size={20}
                   color={isFocused ? color.palette.green : color.text}
@@ -115,7 +117,7 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
                 <Text
                   text={label}
                   style={{
-                    fontSize: 12,
+                    fontSize: fontSize.small,
                     color: isFocused ? color.palette.green : color.text
                   }}
                 />
@@ -126,7 +128,7 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
       </View>
       {/* Tab items end */}
     </View>
-  ); 
+  );
 }
 
 export function MainTabNavigator() {

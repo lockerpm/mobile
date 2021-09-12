@@ -8,34 +8,34 @@ import { ActionItem } from "../../../../components/cipher/cipher-action/action-i
 
 type Props = {
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   navigation: any
 }
 
 
 export const PasswordAction = (props: Props) => {
-  const { copyToClipboard } = useMixins()
+  const { copyToClipboard, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
   return (
     <CipherAction {...props}>
       <ActionItem
-        name="Launch Website"
+        name={translate('password.launch_website')}
         icon="external-link"
         action={() => Linking.openURL(selectedCipher.login.uri)}
         disabled={!selectedCipher.login.uri}
       />
 
       <ActionItem
-        name="Copy Email or Username"
+        name={translate('password.copy_username')}
         icon="copy"
         action={() => copyToClipboard(selectedCipher.login.username)}
         disabled={!selectedCipher.login.username}
       />
 
       <ActionItem
-        name="Copy Password"
+        name={translate('password.copy_password')}
         icon="copy"
         action={() => copyToClipboard(selectedCipher.login.password)}
         disabled={!selectedCipher.login.password}

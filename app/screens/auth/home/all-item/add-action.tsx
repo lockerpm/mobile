@@ -1,14 +1,13 @@
 import React from "react"
-import { Actionsheet } from "native-base"
-import { Text, AutoImage as Image } from "../../../../components"
+import { Text, AutoImage as Image, ActionSheet, ActionSheetItem, ActionSheetContent } from "../../../../components"
 import { color, commonStyles } from "../../../../theme"
 import { BROWSE_ITEMS } from "../../../../common/mappings"
-import { View, ScrollView } from "react-native"
+import { View } from "react-native"
 import { useStores } from "../../../../models"
 
 interface Props {
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   navigation?: any,
   defaultFolder?: string
 }
@@ -17,46 +16,40 @@ export const AddAction = (props: Props) => {
   const { cipherStore } = useStores()
 
   return (
-    <Actionsheet
+    <ActionSheet
       isOpen={props.isOpen}
       onClose={props.onClose}
     >
-      <Actionsheet.Content>
-        <ScrollView
-          style={{ width: '100%' }}
-        >
-          {
-            Object.values(BROWSE_ITEMS).filter(item => item.addable).map((item, index) => (
-              <Actionsheet.Item 
-                key={index}
-                onPress={() => {
-                  props.onClose()
-                  if (props.defaultFolder) {
-                    cipherStore.setSelectedFolder(props.defaultFolder)
-                  }
-                  props.navigation.navigate(`${item.routeName}__edit`, {
-                    mode: 'add'
-                  })
-                }}
-                style={{ borderBottomColor: color.line, borderBottomWidth: 1 }}
-              >
-                <View
-                  style={[commonStyles.CENTER_HORIZONTAL_VIEW]}
-                >
-                  <Image
-                    source={item.icon}
-                    style={{ height: 40, marginRight: 12 }}
-                  />
-                  <Text
-                    text={item.label}
-                    style={{ color: color.textBlack }}
-                  />
-                </View>
-              </Actionsheet.Item>
-            ))
-          }
-        </ScrollView>
-      </Actionsheet.Content>
-    </Actionsheet>
+      <ActionSheetContent>
+        {
+          Object.values(BROWSE_ITEMS).filter(item => item.addable).map((item, index) => (
+            <ActionSheetItem
+              key={index}
+              border
+              onPress={() => {
+                props.onClose()
+                if (props.defaultFolder) {
+                  cipherStore.setSelectedFolder(props.defaultFolder)
+                }
+                props.navigation.navigate(`${item.routeName}__edit`, {
+                  mode: 'add'
+                })
+              }}
+            >
+              <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+                <Image
+                  source={item.icon}
+                  style={{ height: 40, marginRight: 12 }}
+                />
+                <Text
+                  tx={item.label}
+                  style={{ color: color.textBlack }}
+                />
+              </View>
+            </ActionSheetItem>
+          ))
+        }
+      </ActionSheetContent>
+    </ActionSheet>
   )
 }

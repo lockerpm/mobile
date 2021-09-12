@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Linking, View } from "react-native"
-import { 
-  Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength, CipherInfoCommon 
+import {
+  Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength, CipherInfoCommon
 } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
@@ -17,7 +17,7 @@ import { DeletedAction } from "../../../../../components/cipher/cipher-action/de
 
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const navigation = useNavigation()
-  const { getWebsiteLogo, getPasswordStrength } = useMixins()
+  const { getWebsiteLogo, getPasswordStrength, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
@@ -32,7 +32,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
 
   return (
     <Layout
-      containerStyle={{ 
+      containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
         paddingTop: 0
@@ -47,7 +47,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"
-                size={16}
+                size={18}
                 color={color.title}
               />
             </Button>
@@ -61,13 +61,13 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           <DeletedAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         ) : (
           <PasswordAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         )
       }
@@ -83,7 +83,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         }]}>
           <Image
             source={
-              selectedCipher.login.uri 
+              selectedCipher.login.uri
                 ? getWebsiteLogo(selectedCipher.login.uri)
                 : BROWSE_ITEMS.password.icon
             }
@@ -107,7 +107,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         <FloatingInput
           fixedLabel
           copyAble
-          label="Email or Username"
+          label={translate('password.username')}
           value={selectedCipher.login.username}
           editable={false}
         />
@@ -117,7 +117,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           isPassword
           fixedLabel
           copyAble
-          label="Password"
+          label={translate('common.password')}
           value={selectedCipher.login.password}
           editable={false}
           style={{ marginVertical: 20 }}
@@ -125,15 +125,15 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
 
         {/* Password strength */}
         <Text
-          text="Password Security"
-          style={{ fontSize: 10 }}
+          text={translate('password.password_security')}
+          style={{ fontSize: fontSize.small }}
         />
         <PasswordStrength preset="text" value={passwordStrength.score} />
 
         {/* Website URL */}
         <FloatingInput
           fixedLabel
-          label="Website URL"
+          label={translate('password.website_url')}
           value={selectedCipher.login.uri}
           editable={false}
           style={{ marginVertical: 20 }}
@@ -145,10 +145,10 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
                 Linking.openURL(selectedCipher.login.uri)
               }}
             >
-              <FontAwesomeIcon 
+              <FontAwesomeIcon
                 name="external-link"
-                size={14} 
-                color={color.text} 
+                size={14}
+                color={color.text}
               />
             </Button>
           )}
@@ -156,7 +156,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
 
         {/* Notes */}
         <FloatingInput
-          label="Notes"
+          label={translate('common.notes')}
           value={selectedCipher.notes}
           editable={false}
           textarea

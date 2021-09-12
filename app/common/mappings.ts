@@ -1,65 +1,96 @@
-export const BROWSE_ITEMS = {
+import { ImageSourcePropType, ImageURISource } from "react-native"
+import { TxKeyPath } from "../i18n"
+
+type BrowseItem = {
+  label: TxKeyPath,
+  icon: ImageSourcePropType & ImageURISource,
+  routeName: string,
+  addable?: boolean
+}
+
+type BrowseItemContainer = {
+  folder: BrowseItem,
+  password: BrowseItem,
+  note: BrowseItem,
+  card: BrowseItem,
+  identity: BrowseItem,
+  shared: BrowseItem,
+  trash: BrowseItem,
+}
+
+
+export const BROWSE_ITEMS: BrowseItemContainer = {
   folder: {
-    label: 'Folders',
-    icon: require('./images/icons/folder.png'),
-    routeName: 'folders',
-    addable: false
+    label: 'common.folder',
+    icon: require('./images/vault/folder.png'),
+    routeName: 'folders'
   },
   password: {
-    label: 'Passwords',
-    icon: require('./images/icons/password.png'),
+    label: 'common.password',
+    icon: require('./images/vault/password.png'),
     routeName: 'passwords',
     addable: true
   },
   note: {
-    label: 'Secure Notes',
-    icon: require('./images/icons/note.png'),
+    label: 'common.note',
+    icon: require('./images/vault/note.png'),
     routeName: 'notes',
     addable: true
   },
   card: {
-    label: 'Cards',
-    icon: require('./images/icons/card.png'),
+    label: 'common.card',
+    icon: require('./images/vault/card.png'),
     routeName: 'cards',
     addable: true
   },
-  indentity: {
-    label: 'Personal Info',
-    icon: require('./images/icons/info.png'),
+  identity: {
+    label: 'common.identity',
+    icon: require('./images/vault/info.png'),
     routeName: 'identities',
     addable: true
   },
   shared: {
-    label: 'Shared Items',
-    icon: require('./images/icons/shared.png'),
-    routeName: 'shares',
-    addable: false
+    label: 'shares.share_items',
+    icon: require('./images/vault/shared.png'),
+    routeName: 'shares'
   },
   trash: {
-    label: 'Trash',
-    icon: require('./images/icons/trash.png'),
-    routeName: 'trash',
-    addable: false
+    label: 'common.trash',
+    icon: require('./images/vault/trash.png'),
+    routeName: 'trash'
   }
 }
 
-export const TOOLS_ITEMS = {
+type ToolsItem = {
+  label: TxKeyPath,
+  desc: TxKeyPath,
+  icon: ImageSourcePropType & ImageURISource,
+  routeName: string
+}
+
+type ToolsItemContainer = {
+  passwordGenerator: ToolsItem,
+  passwordHealth: ToolsItem,
+  dataBreachScanner: ToolsItem
+}
+
+export const TOOLS_ITEMS: ToolsItemContainer = {
   passwordGenerator: {
-    label: 'Password Generator',
-    desc: 'Quickly generate new secure password',
-    icon: require('./images/icons/password-generator.png'),
+    label: 'pass_generator.title',
+    desc: 'pass_generator.desc',
+    icon: require('./images/vault/password-generator.png'),
     routeName: 'passwordGenerator'
   },
   passwordHealth: {
-    label: 'Password Health',
-    desc: 'Identify passwords that can put you at risk',
-    icon: require('./images/icons/password-health.png'),
+    label: 'pass_health.title',
+    desc: 'pass_health.desc',
+    icon: require('./images/vault/password-health.png'),
     routeName: 'passwordHealth'
   },
   dataBreachScanner: {
-    label: 'Data Breach Scanner',
-    desc: 'Check if sensitive data is leaked online',
-    icon: require('./images/icons/data-breach-scanner.png'),
+    label: 'data_breach_scanner.title',
+    desc: 'data_breach_scanner.desc',
+    icon: require('./images/vault/data-breach-scanner.png'),
     routeName: 'dataBreachScanner'
   }
 }

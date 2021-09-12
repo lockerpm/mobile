@@ -27,18 +27,17 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
 
         <Text
           preset="header"
+          tx={"biometric_intro.title"}
           style={{ marginBottom: 10, marginTop: 30 }}
-        >
-          Unlock vault with biometric
-        </Text>
+        />
 
-        <Text style={{ textAlign: 'center', maxWidth: 250 }}>
-          Use face recognition or fingerprint to protect your passwords
-        </Text>
+        <Text
+          style={{ textAlign: 'center', maxWidth: 250 }}
+          tx={"biometric_intro.desc"}
+        />
 
         <Button
-          isNativeBase
-          text="Use Biometric"
+          tx={"biometric_intro.use_btn"}
           onPress={handleUseBiometric}
           style={{
             width: '100%',
@@ -48,9 +47,8 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
         />
 
         <Button
-          isNativeBase
-          variant="ghost"
-          text="I’ll do it later"
+          preset="ghost"
+          tx={"biometric_intro.later_btn"}
           onPress={handleSkip}
           style={{
             width: '100%'

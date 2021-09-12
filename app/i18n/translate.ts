@@ -9,3 +9,8 @@ import { TxKeyPath } from "./i18n"
 export function translate(key: TxKeyPath, options?: i18n.TranslateOptions) {
   return key ? i18n.t(key, options) : null
 }
+
+
+export function setLang(lang: string) {
+  i18n.locale = lang
+}

@@ -9,10 +9,12 @@ import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { NoteAction } from "../note-action"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
+import { useMixins } from "../../../../../services/mixins"
 
 
 export const NoteInfoScreen = observer(function NoteInfoScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
@@ -20,7 +22,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
 
   return (
     <Layout
-      containerStyle={{ 
+      containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
         paddingTop: 0
@@ -35,7 +37,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"
-                size={16}
+                size={18}
                 color={color.title}
               />
             </Button>
@@ -49,13 +51,13 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
           <DeletedAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         ) : (
           <NoteAction
             navigation={navigation}
             isOpen={showAction}
-            onClose={setShowAction}
+            onClose={() => setShowAction(false)}
           />
         )
       }
@@ -88,7 +90,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
       }]}>
         {/* Notes */}
         <FloatingInput
-          label="Notes"
+          label={translate('common.notes')}
           value={selectedCipher.notes}
           editable={false}
           textarea

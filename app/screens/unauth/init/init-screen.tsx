@@ -10,6 +10,8 @@ export const InitScreen = observer(function InitScreen() {
   const navigation = useNavigation()
 
   const mounted = async () => {
+    user.setLanguage(user.language)
+    
     if (user.isLoggedIn) {
       if (user.token) {
         user.saveToken(user.token)

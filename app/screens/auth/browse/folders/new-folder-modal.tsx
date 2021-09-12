@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { Modal } from "native-base"
-import { FloatingInput, Button, Text } from "../../../../components"
+import { FloatingInput, Button, Text, Modal } from "../../../../components"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 import { FolderView } from "../../../../../core/models/view/folderView"
@@ -10,14 +9,14 @@ import { useMixins } from "../../../../services/mixins"
 
 interface Props {
   isOpen?: boolean,
-  onClose?: Function
+  onClose?: () => void
 }
 
 export const NewFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
   const { folderStore } = useStores()
   const { folderService } = useCoreService()
-  const { notify } = useMixins()
+  const { notify, translate } = useMixins()
 
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -30,51 +29,36 @@ export const NewFolderModal = observer((props: Props) => {
     const payload = new FolderRequest(folderEnc)
     const res = await folderStore.createFolder(payload)
     if (res.kind === 'ok') {
-      notify('success', '', 'Folder created')
+      notify('success', translate('folder.folder_created'))
       onClose()
     } else {
-      notify('error', '', 'Something went wrong')
+      notify('error', translate('error.something_went_wrong'))
     }
     setIsLoading(false)
   }
-  
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
+      title={translate('folder.create_folder')}
     >
-      <Modal.Content>
-        <Modal.CloseButton />
-        <Modal.Header>
-          <Text
-            preset="header"
-            style={{
-              fontSize: 18
-            }}
-          >
-            Create New Folder
-          </Text>
-        </Modal.Header>
-        <Modal.Body>
-          <FloatingInput
-            label="Name"
-            value={name}
-            onChangeText={txt => setName(txt)}
-          />
-        </Modal.Body>
-        <Modal.Footer style={{ marginRight: 20, marginBottom: 16, paddingRight: 0 }}>
-          <Button
-            isNativeBase
-            text="Create"
-            disabled={isLoading || !name.trim()}
-            isLoading={isLoading}
-            onPress={handleCreateFolder}
-            style={{
-              width: '100%'
-            }}
-          />
-        </Modal.Footer>
-      </Modal.Content>
+      <FloatingInput
+        label={translate('common.name')}
+        value={name}
+        onChangeText={txt => setName(txt)}
+      />
+
+      <Button
+        text={translate('common.create')}
+        disabled={isLoading || !name.trim()}
+        isLoading={isLoading}
+        onPress={handleCreateFolder}
+        style={{
+          width: '100%',
+          marginTop: 30
+        }}
+      />
     </Modal>
   )
 })

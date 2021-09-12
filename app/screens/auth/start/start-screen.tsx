@@ -7,12 +7,12 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 
 export const StartScreen = observer(function StartScreen() {
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { getSyncData, loadFolders, loadCollections, isBiometricAvailable } = useMixins()
   const navigation = useNavigation()
 
   const mounted = async () => {
-    if (!user.isOffline) {
+    if (!uiStore.isOffline) {
       await Promise.all([
         getSyncData(),
         user.loadTeams(),

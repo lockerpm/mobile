@@ -5,10 +5,13 @@ import { useNavigation } from "@react-navigation/native"
 import { ItemsHeader } from "./items-header"
 import { SortAction } from "./sort-action"
 import { AddAction } from "./add-action"
+import { useMixins } from "../../../../services/mixins"
 
 
 export const AllItemScreen = observer(function AllItemScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
+
   const [isLoading, setIsLoading] = useState(true)
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -23,17 +26,18 @@ export const AllItemScreen = observer(function AllItemScreen() {
     <Layout
       isContentOverlayLoading={isLoading}
       header={(
-        <ItemsHeader 
+        <ItemsHeader
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           onSearch={setSearchText}
+          searchText={searchText}
         />
       )}
       borderBottom
       noScroll
     >
-      <SortAction 
-        isOpen={isSortOpen} 
+      <SortAction
+        isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {
           setSortOption(value)
@@ -41,9 +45,9 @@ export const AllItemScreen = observer(function AllItemScreen() {
         }}
         value={sortOption}
       />
-      
-      <AddAction 
-        isOpen={isAddOpen} 
+
+      <AddAction
+        isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
       />
@@ -56,9 +60,9 @@ export const AllItemScreen = observer(function AllItemScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
-            title="Add your first item"
-            desc="Create your first item to start building your vault"
-            buttonText="Add Item"
+            title={translate('all_items.empty.title')}
+            desc={translate('all_items.empty.desc')}
+            buttonText={translate('all_items.empty.btn')}
             addItem={() => {
               setIsAddOpen(true)
             }}

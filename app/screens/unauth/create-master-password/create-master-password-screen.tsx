@@ -4,7 +4,7 @@ import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput, PasswordStrength } from "../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { color } from "../../../theme"
+import { color, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { RootParamList } from "../../../navigators"
 
@@ -13,8 +13,8 @@ type ScreenProp = RouteProp<RootParamList, 'createMasterPassword'>;
 export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
   const navigation = useNavigation()
   const route = useRoute<ScreenProp>()
-  const { logout, register } = useMixins()
-  const { user } = useStores()
+  const { logout, register, translate } = useMixins()
+  const { user, uiStore } = useStores()
   const { getPasswordStrength } = useMixins()
 
   // Params
@@ -32,7 +32,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
   // Methods
   const mounted = async () => {
     if (!route.params || !route.params.skipCheck) {
-      if (!user.isOffline) {
+      if (!uiStore.isOffline) {
         await user.getUser()
       }
     }
@@ -68,8 +68,8 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
       header={(
         <View style={{ alignItems: "flex-end" }}>
           <Button
-            text="LOG OUT"
-            textStyle={{ fontSize: 12 }}
+            text={translate('common.logout')}
+            textStyle={{ fontSize: fontSize.small }}
             preset="link"
             onPress={handleLogout}
           >
@@ -83,13 +83,13 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         <Text
           preset="header"
           style={{ marginBottom: 10, marginTop: 25 }}
-        >
-          Tạo Master Password
-        </Text>
+          text={translate("create_master_pass.title")}
+        />
 
-        <Text style={{ textAlign: 'center', fontSize: 12 }}>
-          Master Password là mật khẩu mở khóa Locker của bạn. Đây là mật khẩu duy nhất bạn cần nhớ để truy cập tất cả các mật khẩu khác được lưu trữ trong Locker. Vui lòng không chia sẻ mật khẩu này với bất kỳ ai.
-        </Text>
+        <Text
+          style={{ textAlign: 'center', fontSize: fontSize.small }}
+          text={translate("create_master_pass.desc")}
+        />
 
         {/* Current user */}
         <View
@@ -105,20 +105,20 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         >
           {
             !!user.avatar && (
-              <Image 
-                source={{ uri: user.avatar }} 
-                style={{ 
-                  height: 28, 
+              <Image
+                source={{ uri: user.avatar }}
+                style={{
+                  height: 28,
                   width: 28,
                   borderRadius: 14,
                   backgroundColor: color.palette.white
-                }} 
+                }}
               />
             )
           }
-          <Text 
-            style={{ 
-              fontSize: 12,
+          <Text
+            style={{
+              fontSize: fontSize.small,
               color: color.title,
               marginHorizontal: 10
             }}
@@ -132,7 +132,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         <FloatingInput
           isPassword
           isInvalid={isError}
-          label="Master Password"
+          label={translate('common.master_pass')}
           onChangeText={(text) => {
             setMasterPassword(text)
             const strength = getPasswordStrength(text)
@@ -153,7 +153,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         <FloatingInput
           isPassword
           isInvalid={isError}
-          label="Confirm Master Password"
+          label={translate('create_master_pass.confirm_master_pass')}
           onChangeText={setConfirmPassword}
           value={confirmPassword}
           style={{ width: '100%', marginVertical: 20 }}
@@ -162,7 +162,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
 
         {/* Hint */}
         <FloatingInput
-          label="Hint (optional)"
+          label={translate('create_master_pass.hint')}
           onChangeText={setHint}
           value={hint}
           style={{ width: '100%', marginBottom: 20 }}
@@ -170,10 +170,9 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         {/* Hint end */}
 
         <Button
-          isNativeBase
           isDisabled={isCreating || !isReady}
           isLoading={isCreating}
-          text="Create Password"
+          text={translate('create_master_pass.btn')}
           onPress={handleCreate}
           style={{
             width: '100%',
@@ -181,9 +180,10 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
           }}
         />
 
-        <Text style={{ textAlign: 'center', fontSize: 12 }}>
-          Lưu ý: CyStack không thể xem, không thể lưu trữ, cũng như không thể cấp lại Master Password trong trường hợp bạn quên hoặc đánh mất.
-        </Text>
+        <Text
+          style={{ textAlign: 'center', fontSize: fontSize.small }}
+          text={translate("create_master_pass.note")}
+        />
       </View>
     </Layout>
   )

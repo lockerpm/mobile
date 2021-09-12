@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { WebView, WebViewNavigation  } from 'react-native-webview';
 import { Loading } from "../../../components";
+import { LOGIN_URL } from "../../../config/constants";
 
 export const LoginScreen = observer(function LoginScreen() {
   const { user } = useStores()
@@ -58,7 +59,7 @@ export const LoginScreen = observer(function LoginScreen() {
     <Loading />
   ) : (
     <WebView
-      source={{ uri: 'https://id.cystack.net/login?SERVICE_URL=%2F&SERVICE_SCOPE=pwdmanager' }}
+      source={{ uri: LOGIN_URL }}
       onNavigationStateChange={onWebViewNavigationStateChange}
     />
   )

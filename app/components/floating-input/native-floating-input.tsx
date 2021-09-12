@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { StyleProp, View, ViewStyle, TextInput, TextInputProps } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color } from "../../theme"
+import { color, fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -9,7 +9,7 @@ import { TextInputMask, TextInputMaskTypeProp, TextInputMaskOptionProp } from "r
 import { useMixins } from "../../services/mixins"
 
 
-export interface FloatingInputProps extends TextInputProps {
+export interface NativeFloatingInputProps extends TextInputProps {
   style?: StyleProp<ViewStyle>,
   inputStyle?: StyleProp<ViewStyle>,
   isRequired?: boolean,
@@ -29,8 +29,8 @@ export interface FloatingInputProps extends TextInputProps {
 /**
  * Describe your component here
  */
-export const FloatingInput = observer(function FloatingInput(props: FloatingInputProps) {
-  const { 
+export const NativeFloatingInput = observer(function NativeFloatingInput(props: NativeFloatingInputProps) {
+  const {
     style, inputStyle, isInvalid, isRequired, label, isPassword, value, placeholder,
     fixedLabel, editable = true, disabled, buttonRight, textarea, onChangeText,
     maskType, maskOptions, copyAble,
@@ -45,8 +45,8 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
     onFocus: () => setFocus(true),
     onBlur: () => setFocus(false),
     style: [{
-      fontSize: 12,
-      paddingTop: 18,
+      fontSize: fontSize.p,
+      paddingTop: 20,
       paddingBottom: 0,
       paddingRight: isPassword ? 25 : 0,
       color: disabled ? color.disabled : color.textBlack
@@ -68,7 +68,7 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
     flexDirection: 'row',
     alignItems: 'center'
   }
-  
+
   const BUTTON: ViewStyle = {
     alignItems: 'center',
     width: 30,
@@ -79,7 +79,7 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
       {
         borderBottomColor: isInvalid ? color.error : isFocused ? color.palette.green : color.line,
         borderBottomWidth: 1,
-        height: textarea ? 90 : 48
+        height: textarea ? 92 : 50
       }, style
     ]}>
       <View
@@ -90,10 +90,10 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
         }}
       >
         <Text
-          style={[{
-            fontSize: isFocused || !!value || fixedLabel ? 10 : 14,
+          style={{
+            fontSize: isFocused || !!value || fixedLabel ? fontSize.small : fontSize.p,
             marginTop: isRequired ? -5 : undefined
-          }]}
+          }}
         >
           {label}
           {
@@ -110,7 +110,7 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
       </View>
       {
         maskType || maskOptions ? (
-          <TextInputMask 
+          <TextInputMask
             type={maskType || 'custom'}
             options={maskOptions}
             {...textInputProps}
@@ -132,10 +132,10 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
               onPress={() => setShowPassword(!showPassword)}
               style={BUTTON}
             >
-              <Icon 
-                name={showPassword ? "eye-slash" : "eye"} 
-                size={16} 
-                color={color.text} 
+              <Icon
+                name={showPassword ? "eye-slash" : "eye"}
+                size={16}
+                color={color.text}
               />
             </Button>
           )
@@ -147,10 +147,10 @@ export const FloatingInput = observer(function FloatingInput(props: FloatingInpu
               onPress={() => copyToClipboard(value)}
               style={BUTTON}
             >
-              <Icon 
+              <Icon
                 name="copy"
-                size={15} 
-                color={color.text} 
+                size={15}
+                color={color.text}
               />
             </Button>
           )

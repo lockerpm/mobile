@@ -3,11 +3,13 @@ import { observer } from "mobx-react-lite"
 import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
+import { useMixins } from "../../../../services/mixins"
 
 
 export const TrashScreen = observer(function TrashScreen() {
   const navigation = useNavigation()
-  
+  const { translate } = useMixins()
+
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -22,17 +24,18 @@ export const TrashScreen = observer(function TrashScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header="Trash"
+          header={translate('common.trash')}
           openSort={() => setIsSortOpen(true)}
           onSearch={setSearchText}
+          searchText={searchText}
           navigation={navigation}
         />
       )}
       borderBottom
       noScroll
     >
-      <SortAction 
-        isOpen={isSortOpen} 
+      <SortAction
+        isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {
           setSortOption(value)
@@ -50,8 +53,8 @@ export const TrashScreen = observer(function TrashScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
-            title="Empty trash"
-            desc="All items moved to Trash can be restored until you delete them permanently"
+            title={translate('trash.empty.title')}
+            desc={translate('trash.empty.desc')}
           />
         )}
       />

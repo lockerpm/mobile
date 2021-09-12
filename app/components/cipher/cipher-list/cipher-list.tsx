@@ -15,7 +15,7 @@ import { PasswordAction } from "../../../screens/auth/browse/passwords/password-
 import { CardAction } from "../../../screens/auth/browse/cards/card-action"
 import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
 import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
-import { color, commonStyles } from "../../../theme"
+import { color, commonStyles, fontSize } from "../../../theme"
 import { DeletedAction } from "../cipher-action/deleted-action"
 
 
@@ -38,7 +38,7 @@ export interface CipherListProps {
  * Describe your component here
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
-  const { 
+  const {
     emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId, organizationId
   } = props
   const { getWebsiteLogo, getCiphers } = useMixins()
@@ -80,7 +80,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
     // Add image
     let res = searchRes.map((c: CipherView) => {
-      const data = { 
+      const data = {
         ...c,
         logo: null,
         imgLogo: null
@@ -93,22 +93,22 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
           data.logo = BROWSE_ITEMS.password.icon
           break
         }
-          
+
         case CipherType.SecureNote: {
           data.logo = BROWSE_ITEMS.note.icon
           break
         }
-          
+
         case CipherType.Card: {
           data.logo = BROWSE_ITEMS.card.icon
           break
         }
-          
+
         case CipherType.Identity: {
-          data.logo = BROWSE_ITEMS.indentity.icon
+          data.logo = BROWSE_ITEMS.identity.icon
           break
         }
-          
+
         default:
           data.logo = BROWSE_ITEMS.trash.icon
       }
@@ -131,7 +131,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     if (sortList) {
       const { orderField, order } = sortList
       res = orderBy(
-        res, 
+        res,
         [c => orderField === 'name' ? (c.name && c.name.toLowerCase()) : c.revisionDate],
         [order]
       ) || []
@@ -140,8 +140,8 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     // Delay loading
     setTimeout(() => {
       onLoadingChange && onLoadingChange(false)
-    }, 500)
-    
+    }, 100)
+
     // Done
     setCiphers(res)
     console.log(`Get ${res.length} items`)
@@ -189,9 +189,22 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       case CipherType.SecureNote:
         navigation.navigate('notes__info')
         break
-      default:
-        return
     }
+  }
+
+  // Get cipher description
+  const getDescription = (item: CipherView) => {
+    switch (item.type) {
+      case CipherType.Login:
+        return item.login.username
+      case CipherType.Card:
+        return (item.card.brand && item.card.number) 
+          ? `${item.card.brand}, *${item.card.number.slice(-4)}`
+          : ''
+      case CipherType.Identity:
+        return item.identity.fullName
+    }
+    return ''
   }
 
   // ------------------------ RENDER ----------------------------
@@ -233,7 +246,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
         onClose={() => setShowDeletedAction(false)}
         navigation={navigation}
       />
-      
+
       {/* Action menus end */}
 
       {/* Cipher list */}
@@ -251,7 +264,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
               paddingVertical: 15
             }}
           >
-            <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
               <Image
                 source={item.imgLogo || item.logo}
                 backupSource={item.logo}
@@ -266,6 +279,15 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                   preset="semibold"
                   text={item.name}
                 />
+
+                {
+                  !!getDescription(item) && (
+                    <Text
+                      text={getDescription(item)}
+                      style={{ fontSize: fontSize.small }}
+                    />
+                  )
+                }
               </View>
 
               <Button
