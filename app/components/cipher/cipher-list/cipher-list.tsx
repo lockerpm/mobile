@@ -15,7 +15,7 @@ import { PasswordAction } from "../../../screens/auth/browse/passwords/password-
 import { CardAction } from "../../../screens/auth/browse/cards/card-action"
 import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
 import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
-import { color, commonStyles } from "../../../theme"
+import { color, commonStyles, fontSize } from "../../../theme"
 import { DeletedAction } from "../cipher-action/deleted-action"
 
 
@@ -192,6 +192,21 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     }
   }
 
+  // Get cipher description
+  const getDescription = (item: CipherView) => {
+    switch (item.type) {
+      case CipherType.Login:
+        return item.login.username
+      case CipherType.Card:
+        return (item.card.brand && item.card.number) 
+          ? `${item.card.brand}, *${item.card.number.slice(-4)}`
+          : ''
+      case CipherType.Identity:
+        return item.identity.fullName
+    }
+    return ''
+  }
+
   // ------------------------ RENDER ----------------------------
 
   return !ciphers.length && emptyContent ? (
@@ -264,6 +279,15 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                   preset="semibold"
                   text={item.name}
                 />
+
+                {
+                  !!getDescription(item) && (
+                    <Text
+                      text={getDescription(item)}
+                      style={{ fontSize: fontSize.small }}
+                    />
+                  )
+                }
               </View>
 
               <Button
