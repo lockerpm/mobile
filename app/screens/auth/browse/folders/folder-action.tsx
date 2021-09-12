@@ -1,8 +1,7 @@
 import React, { useState } from "react"
-import { Actionsheet, Divider } from "native-base"
-import { Text, AutoImage as Image, ActionItem } from "../../../../components"
+import { Text, AutoImage as Image, ActionItem, ActionSheet, Divider, ActionSheetContent } from "../../../../components"
 import { color, commonStyles } from "../../../../theme"
-import { View, ScrollView } from "react-native"
+import { View } from "react-native"
 import { FOLDER_IMG } from "../../../../common/mappings"
 import { OwnershipAction } from "../../../../components/cipher/cipher-action/ownership-action"
 import { RenameFolderModal } from "./rename-folder-modal"
@@ -16,7 +15,7 @@ import { translate } from "../../../../i18n"
 
 type Props = {
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   folder: FolderView | CollectionView,
   onLoadingChange?: Function
 }
@@ -66,56 +65,52 @@ export const FolderAction = (props: Props) => {
 
       {/* Modals / Actions end */}
 
-      <Actionsheet
+      <ActionSheet
         isOpen={isOpen}
         onClose={onClose}
       >
-        <Actionsheet.Content>
-          <View style={{ width: '100%', paddingHorizontal: 20 }}>
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              <Image
-                source={folder instanceof CollectionView ? FOLDER_IMG.share.img : FOLDER_IMG.normal.img}
-                style={{ height: 30, marginRight: 10 }}
+        <View style={{ width: '100%', paddingHorizontal: 20 }}>
+          <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+            <Image
+              source={folder instanceof CollectionView ? FOLDER_IMG.share.img : FOLDER_IMG.normal.img}
+              style={{ height: 30, marginRight: 10 }}
+            />
+            <View>
+              <Text
+                preset="semibold"
+                text={folder.name}
               />
-              <View>
-                <Text
-                  preset="semibold"
-                  text={folder.name}
-                />
-              </View>
             </View>
           </View>
+        </View>
 
-          <Divider borderColor={color.line} marginBottom={1} marginTop={5} />
+        <Divider style={{ marginTop: 10 }} />
 
-          <ScrollView
-            style={{ width: '100%' }}
-          >
-            <ActionItem
-              name={translate('common.rename')}
-              icon="edit"
-              action={() => {
-                onClose()
-                setTimeout(() => {
-                  setIsRenameOpen(true)
-                }, 100)
-              }}
-            />
+        <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
+          <ActionItem
+            name={translate('common.rename')}
+            icon="edit"
+            action={() => {
+              onClose()
+              setTimeout(() => {
+                setIsRenameOpen(true)
+              }, 100)
+            }}
+          />
 
-            <ActionItem
-              name={translate('folder.delete_folder')}
-              icon="trash"
-              textColor={color.error}
-              action={() => {
-                onClose()
-                setTimeout(() => {
-                  setShowConfirmModal(true)
-                }, 100)
-              }}
-            />
-          </ScrollView>
-        </Actionsheet.Content>
-      </Actionsheet>
+          <ActionItem
+            name={translate('folder.delete_folder')}
+            icon="trash"
+            textColor={color.error}
+            action={() => {
+              onClose()
+              setTimeout(() => {
+                setShowConfirmModal(true)
+              }, 100)
+            }}
+          />
+        </ActionSheetContent>
+      </ActionSheet>
     </View>
   )
 }

@@ -8,7 +8,7 @@ import { translate } from "../../../../i18n"
 
 type Props = {
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   navigation: any
 }
 

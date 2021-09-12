@@ -2,14 +2,15 @@ import * as React from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, fontSize } from "../../../theme"
-import { Actionsheet, Divider } from "native-base"
 import { ActionItem } from "./action-item"
 import { Button } from "../../button/button"
 import { Text } from "../../text/text"
+import { ActionSheet, ActionSheetContent } from "../../action-sheet"
+import { Divider } from "../../divider/divider"
 
 export interface OwnershipActionProps {
   isOpen?: boolean,
-  onClose?: Function
+  onClose?: () => void
 }
 
 /**
@@ -32,24 +33,23 @@ export const OwnershipAction = observer(function OwnershipAction(props: Ownershi
   ]
 
   return (
-    <Actionsheet
+    <ActionSheet
       isOpen={isOpen}
       onClose={onClose}
     >
-      <Actionsheet.Content>
-        <View style={{ width: '100%', paddingHorizontal: 20 }}>
-          <Text
-            preset="semibold"
-            text="Ownership"
-            style={{
-              fontSize: fontSize.h4,
-              marginBottom: 15
-            }}
-          />
-        </View>
+      <View style={{ width: '100%', paddingHorizontal: 20 }}>
+        <Text
+          preset="semibold"
+          text="Ownership"
+          style={{
+            fontSize: fontSize.h4,
+            marginBottom: 15
+          }}
+        />
+      </View>
 
-        <Divider borderColor={color.line} style={{ marginBottom: 10 }} />
 
+      <ActionSheetContent>
         {
           owners.map((item, index) => (
             <ActionItem
@@ -70,13 +70,13 @@ export const OwnershipAction = observer(function OwnershipAction(props: Ownershi
             </ActionItem>
           ))
         }
+      </ActionSheetContent>
 
-        <View style={{ width: '100%', paddingHorizontal: 20, marginTop: 30 }}>
-          <Button
-            text="Save"
-          />
-        </View>
-      </Actionsheet.Content>
-    </Actionsheet>
+      <View style={{ width: '100%', paddingHorizontal: 20, marginVertical: 30 }}>
+        <Button
+          text="Save"
+        />
+      </View>
+    </ActionSheet>
   )
 })

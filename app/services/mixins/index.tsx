@@ -13,6 +13,7 @@ import { CipherRequest } from '../../../core/models/request/cipherRequest'
 import { load } from '../../utils/storage'
 import { delay } from '../../utils/delay'
 import { translate } from "../../i18n"
+import { GET_LOGO_URL } from '../../config/constants'
 
 const { createContext, useContext } = React
 
@@ -476,7 +477,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Get website logo
   const getWebsiteLogo = (uri: string) => {
-    const imgUri = `https://locker.io/logo/${uri.split('//')[1]}?size=40`
+    const imgUri = `${GET_LOGO_URL}/${uri.split('//')[1]}?size=40`
     return { uri: imgUri }
   }
 
