@@ -6,8 +6,6 @@ import { FolderView } from "../../../../../core/models/view/folderView"
 import { useCoreService } from "../../../../services/core-service"
 import { FolderRequest } from "../../../../../core/models/request/folderRequest"
 import { useMixins } from "../../../../services/mixins"
-import { translate } from "../../../../i18n"
-import { fontSize } from "../../../../theme"
 
 interface Props {
   isOpen?: boolean,
@@ -18,7 +16,7 @@ export const NewFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
   const { folderStore } = useStores()
   const { folderService } = useCoreService()
-  const { notify } = useMixins()
+  const { notify, translate } = useMixins()
 
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)

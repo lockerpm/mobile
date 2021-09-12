@@ -4,8 +4,8 @@ import { color, fontSize } from "../../theme"
 import { Text } from "../text/text"
 import { StyleProp, ViewStyle, View } from "react-native"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { translate } from "../../i18n"
 import ProgressBar from "react-native-ui-lib/progressBar"
+import { useMixins } from "../../services/mixins"
 
 
 export interface PasswordStrengthProps {
@@ -19,6 +19,7 @@ export interface PasswordStrengthProps {
  */
 export const PasswordStrength = observer(function PasswordStrength(props: PasswordStrengthProps) {
   const { value, style, preset = 'progress' } = props
+  const { translate } = useMixins()
 
   const config = {
     '-1': {

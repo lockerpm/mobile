@@ -3,9 +3,9 @@ import { Button } from "../../../../components/button/button"
 import { Text } from "../../../../components/text/text"
 import { AutoImage as Image } from "../../../../components/auto-image/auto-image"
 import { color, fontSize } from "../../../../theme"
-import { translate } from "../../../../i18n"
 import { Modal } from "../../../../components/modal/modal"
 import { View } from "react-native"
+import { useMixins } from "../../../../services/mixins"
 
 interface Props {
   isOpen?: boolean,
@@ -17,6 +17,7 @@ interface Props {
 }
 
 export const DeleteConfirmModal = (props: Props) => {
+  const { translate } = useMixins()
   const { isOpen, onClose, onConfirm, title, desc, btnText } = props
   const [isLoading, setIsLoading] = useState(false)
 

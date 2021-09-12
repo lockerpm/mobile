@@ -7,14 +7,13 @@ import { useStores } from "../../../models"
 import { color, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { RootParamList } from "../../../navigators/root-navigator"
-import { translate } from "../../../i18n"
 
 type ScreenProp = RouteProp<RootParamList, 'lock'>;
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
   const route = useRoute<ScreenProp>()
-  const { logout, sessionLogin, notify, biometricLogin } = useMixins()
+  const { logout, sessionLogin, notify, biometricLogin, translate } = useMixins()
   const { user, uiStore } = useStores()
 
   // Params
@@ -193,7 +192,7 @@ export const LockScreen = observer(function LockScreen() {
           isLoading={isBioUnlocking}
           isDisabled={isBioUnlocking}
           preset="outline"
-          tx="common.biometric_unlocking"
+          text={translate("common.biometric_unlocking")}
           onPress={handleUnlockBiometric}
           style={{
             width: '100%',
@@ -205,7 +204,7 @@ export const LockScreen = observer(function LockScreen() {
           isLoading={isSendingHint}
           isDisabled={isSendingHint}
           preset="ghost"
-          tx="lock.get_hint"
+          text={translate("lock.get_hint")}
           onPress={handleGetHint}
           style={{
             width: '100%'

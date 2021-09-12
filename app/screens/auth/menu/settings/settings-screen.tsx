@@ -8,7 +8,6 @@ import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
-import { translate, setLang } from "../../../../i18n"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -22,7 +21,7 @@ type ScreenProp = RouteProp<PrimaryParamList, 'settings'>;
 export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
   const { user } = useStores()
-  const { notify, isBiometricAvailable } = useMixins()
+  const { notify, isBiometricAvailable, translate } = useMixins()
   const route = useRoute<ScreenProp>()
   const { fromIntro } = route.params
 
@@ -51,7 +50,6 @@ export const SettingsScreen = observer(function SettingsScreen() {
       value: user.language || 'en',
       onChange: (lang: string) => {
         user.setLanguage(lang)
-        setLang(lang)
       },
       options: [
         {

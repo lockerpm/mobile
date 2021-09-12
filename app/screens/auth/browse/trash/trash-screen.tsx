@@ -3,11 +3,12 @@ import { observer } from "mobx-react-lite"
 import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
-import { translate } from "../../../../i18n"
+import { useMixins } from "../../../../services/mixins"
 
 
 export const TrashScreen = observer(function TrashScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')

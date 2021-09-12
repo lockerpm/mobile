@@ -4,11 +4,12 @@ import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "..
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { AddAction } from "../../home/all-item/add-action"
-import { translate } from "../../../../i18n"
+import { useMixins } from "../../../../services/mixins"
 
 
 export const SharesScreen = observer(function SharesScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)

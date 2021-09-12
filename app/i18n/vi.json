@@ -22,6 +22,7 @@
     "language": "Ngôn ngữ",
     "length": "Độ dài",
     "lock": "Khóa",
+    "login": "Đăng nhập",
     "logout": "Đăng xuất",
     "master_pass": "Mật khẩu chính",
     "minute": "phút",
@@ -254,12 +255,21 @@
   },
   "pass_generator": {
     "title": "Tạo mật khẩu mạnh",
+    "desc": "Tạo mật khẩu an toàn một cách nhanh chóng",
     "use_upper": "Sử dụng chữ in hoa (A-Z)",
     "use_lower": "Sử dụng chữ in thường (a-z)",
     "use_digits": "Sử dụng số (0-9)",
     "use_symbol": "Sử dụng ký tự đặc biệt (@!$%*)",
     "avoid_ambiguous": "Tránh các ký tự dễ nhầm lẫn",
     "use_password": "Sử dụng mật khẩu"
+  },
+  "pass_health": {
+    "title": "Sức khỏe mật khẩu",
+    "desc": "Xác định các mật khẩu yếu, trùng lặp có thể khiến bạn bị tấn công bởi tội phạm mạng"
+  },
+  "data_breach_scanner": {
+    "title": "Cảnh báo lỗ dữ liệu",
+    "desc": "Kiểm tra xem dữ liệu nhạy cảm của bạn có bị lộ trên internet hay không"
   },
   "settings": {
     "change_master_pass": "Thay đổi mật khẩu chính",

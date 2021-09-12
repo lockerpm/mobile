@@ -7,7 +7,6 @@ import { useStores } from "../../../../models"
 import { color, commonStyles, fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
-import { translate } from "../../../../i18n"
 
 
 const ITEM_CONTAINER: ViewStyle = {
@@ -20,7 +19,7 @@ const ITEM_CONTAINER: ViewStyle = {
 export const MenuScreen = observer(function MenuScreen() {
   const navigation = useNavigation()
   const { user } = useStores()
-  const { lock, logout } = useMixins()
+  const { lock, logout, translate } = useMixins()
 
   const [isLoading, setIsLoading] = useState(false)
 

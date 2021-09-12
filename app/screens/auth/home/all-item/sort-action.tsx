@@ -1,8 +1,8 @@
 import React from "react"
 import { Text, ActionItem, ActionSheet, Divider, ActionSheetContent } from "../../../../components"
 import { color, fontSize } from "../../../../theme"
-import { translate } from "../../../../i18n"
 import { View } from "react-native"
+import { useMixins } from "../../../../services/mixins"
 
 interface Props {
   isOpen: boolean,
@@ -12,6 +12,7 @@ interface Props {
 }
 
 export const SortAction = (props: Props) => {
+  const { translate } = useMixins()
   const { isOpen, onClose, onSelect, value } = props
 
   const sortOptions = [

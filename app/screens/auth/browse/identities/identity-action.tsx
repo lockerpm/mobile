@@ -4,18 +4,17 @@ import { ActionItem } from "../../../../components/cipher/cipher-action/action-i
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
-import { translate } from "../../../../i18n"
 
 
 type Props = {
   isOpen?: boolean,
-  onClose?: Function,
+  onClose?: () => void,
   navigation: any
 }
 
 
 export const IdentityAction = (props: Props) => {
-  const { copyToClipboard } = useMixins()
+  const { copyToClipboard, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 

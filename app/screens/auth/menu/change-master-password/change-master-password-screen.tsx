@@ -5,12 +5,11 @@ import { Layout, Button, Header, FloatingInput, PasswordStrength } from "../../.
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
-import { translate } from "../../../../i18n"
 
 
 export const ChangeMasterPasswordScreen = observer(function ChangeMasterPasswordScreen() {
   const navigation = useNavigation()
-  const { getPasswordStrength, changeMasterPassword } = useMixins()
+  const { getPasswordStrength, changeMasterPassword, translate } = useMixins()
 
   const [isLoading, setIsLoading] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(-1)

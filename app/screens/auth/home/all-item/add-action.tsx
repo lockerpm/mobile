@@ -42,7 +42,7 @@ export const AddAction = (props: Props) => {
                   style={{ height: 40, marginRight: 12 }}
                 />
                 <Text
-                  text={item.label}
+                  tx={item.label}
                   style={{ color: color.textBlack }}
                 />
               </View>

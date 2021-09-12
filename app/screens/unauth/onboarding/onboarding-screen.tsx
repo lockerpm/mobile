@@ -4,14 +4,16 @@ import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../theme"
+import { useMixins } from "../../../services/mixins"
 
 export const OnboardingScreen = observer(function OnboardingScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
 
   // Child components
   const footer = (
     <View>
-      <Button text="Login" onPress={() => navigation.navigate("login")} />
+      <Button text={translate("common.login")} onPress={() => navigation.navigate("login")} />
       <View
         style={{
           flexDirection: "row",
@@ -20,14 +22,14 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
         }}
       >
         <Text
-          tx="onBoarding.no_account"
+          text={translate("onBoarding.no_account")}
           style={{
             marginRight: 8,
           }}
         />
         <Button
           preset="link"
-          tx="common.sign_up"
+          text={translate("common.sign_up")}
           onPress={() => navigation.navigate("signup")}
         />
       </View>
@@ -43,7 +45,7 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
         <Image source={require("./logo.png")} />
         <Text
           preset="header"
-          tx="onBoarding.title"
+          text={translate("onBoarding.title")}
           style={{ fontSize: fontSize.p, marginTop: 31 }}
         />
       </View>

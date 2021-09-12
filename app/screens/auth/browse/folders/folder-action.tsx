@@ -10,7 +10,6 @@ import { DeleteConfirmModal } from "../trash/delete-confirm-modal"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
-import { translate } from "../../../../i18n"
 
 
 type Props = {
@@ -24,7 +23,7 @@ type Props = {
 export const FolderAction = (props: Props) => {
   const { isOpen, onClose, folder, onLoadingChange } = props
   const { folderStore } = useStores()
-  const { notify } = useMixins()
+  const { notify, translate } = useMixins()
 
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [isRenameOpen, setIsRenameOpen] = useState(false)

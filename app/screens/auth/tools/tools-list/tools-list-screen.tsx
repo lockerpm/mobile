@@ -6,10 +6,11 @@ import { Text, Button, Layout, AutoImage as Image } from "../../../../components
 import { useNavigation } from "@react-navigation/native"
 import { color, fontSize } from "../../../../theme"
 import { TOOLS_ITEMS } from "../../../../common/mappings"
-import { translate } from "../../../../i18n"
+import { useMixins } from "../../../../services/mixins"
 
 export const ToolsListScreen = observer(function ToolsListScreen() {
   const navigation = useNavigation()
+  const { translate } = useMixins()
 
   return (
     <Layout
@@ -47,11 +48,11 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                 style={{ flex: 1, paddingHorizontal: 10 }}
               >
                 <Text
-                  text={item.label}
+                  tx={item.label}
                   style={{ color: color.title }}
                 />
                 <Text
-                  text={item.desc}
+                  tx={item.desc}
                   style={{ fontSize: fontSize.small }}
                 />
               </View>

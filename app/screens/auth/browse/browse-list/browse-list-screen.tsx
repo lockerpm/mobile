@@ -6,16 +6,18 @@ import { Text, Button, Layout, AutoImage as Image } from "../../../../components
 import { useNavigation } from "@react-navigation/native"
 import { color } from "../../../../theme"
 import { BROWSE_ITEMS } from "../../../../common/mappings"
+import { useMixins } from "../../../../services/mixins"
 
 export const BrowseListScreen = observer(function BrowseListScreen() {
   const navigation = useNavigation()
-
+  const { translate } = useMixins()
+  
   return (
     <Layout
       style={{ backgroundColor: color.block }}
       containerStyle={{ backgroundColor: color.block, paddingTop: 0 }}
       header={(
-        <Text preset="largeHeader" tx="common.browse" />
+        <Text preset="largeHeader" text={translate('common.browse')} />
       )}
     >
       <View
@@ -43,7 +45,7 @@ export const BrowseListScreen = observer(function BrowseListScreen() {
             >
               <Image source={item.icon} style={{ height: 40 }} />
               <Text
-                text={item.label}
+                tx={item.label}
                 style={{ color: color.title, flex: 1, paddingHorizontal: 10 }}
               />
               <Icon name="angle-right" size={20} color={color.title} />

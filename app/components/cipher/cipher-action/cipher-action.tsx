@@ -11,7 +11,6 @@ import { useMixins } from "../../../services/mixins"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
 import { Text } from "../../text/text"
 import { AutoImage as Image } from "../../auto-image/auto-image"
-import { translate } from "../../../i18n"
 import { ActionSheet } from "../../action-sheet/action-sheet"
 import { ActionSheetContent } from "../../action-sheet"
 import { Divider } from "../../divider/divider"
@@ -32,7 +31,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
-  const { toTrashCiphers, getRouteName } = useMixins()
+  const { toTrashCiphers, getRouteName, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 

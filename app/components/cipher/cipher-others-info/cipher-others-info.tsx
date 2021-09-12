@@ -9,7 +9,7 @@ import { useStores } from "../../../models"
 import { OwnershipAction } from "../cipher-action/ownership-action"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { FloatingInput } from "../../floating-input"
-import { translate } from "../../../i18n"
+import { useMixins } from "../../../services/mixins"
 
 
 export interface CipherOthersInfoProps {
@@ -26,6 +26,7 @@ export interface CipherOthersInfoProps {
 export const CipherOthersInfo = observer(function CipherOthersInfo(props: CipherOthersInfoProps) {
   const { navigation, hasNote, note, onChangeNote, folderId = null } = props
   const { folderStore } = useStores()
+  const { translate } = useMixins()
 
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
 

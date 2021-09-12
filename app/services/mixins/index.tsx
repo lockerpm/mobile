@@ -12,7 +12,7 @@ import Clipboard from '@react-native-clipboard/clipboard'
 import { CipherRequest } from '../../../core/models/request/cipherRequest'
 import { load } from '../../utils/storage'
 import { delay } from '../../utils/delay'
-import { translate } from "../../i18n"
+import { translate as tl, TxKeyPath } from "../../i18n"
 import { GET_LOGO_URL } from '../../config/constants'
 
 const { createContext, useContext } = React
@@ -53,7 +53,8 @@ const defaultData = {
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   getRouteName: async () => { return '' },
-  isBiometricAvailable: async () => { return false }
+  isBiometricAvailable: async () => { return false },
+  translate: (tx: TxKeyPath) => { return '' }
 }
 
 
@@ -492,6 +493,12 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return available
   }
 
+  const translate = (tx: TxKeyPath) => {
+    // Dummy to force rerender
+    const abc = user.language
+    return tl(tx)
+  }
+
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
@@ -520,7 +527,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     toTrashCiphers,
     restoreCiphers,
     getRouteName,
-    isBiometricAvailable
+    isBiometricAvailable,
+    translate
   }
 
   return (

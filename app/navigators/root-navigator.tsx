@@ -14,7 +14,6 @@ import {
 import { color } from "../theme"
 import { useMixins } from "../services/mixins"
 import { useStores } from "../models"
-import { translate } from "../i18n"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -44,7 +43,7 @@ export type RootParamList = {
 const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = () => {
-  const { notify } = useMixins()
+  const { notify, translate } = useMixins()
   const { uiStore } = useStores()
 
   useEffect(() => {

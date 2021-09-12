@@ -7,8 +7,6 @@ import { FolderView } from "../../../../../core/models/view/folderView"
 import { FolderRequest } from "../../../../../core/models/request/folderRequest"
 import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
-import { translate } from "../../../../i18n"
-import { fontSize } from "../../../../theme"
 
 interface Props {
   isOpen?: boolean,
@@ -20,7 +18,7 @@ export const RenameFolderModal = observer((props: Props) => {
   const { isOpen, onClose, folder } = props
   const { folderStore } = useStores()
   const { folderService } = useCoreService()
-  const { notify } = useMixins()
+  const { notify, translate } = useMixins()
 
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)

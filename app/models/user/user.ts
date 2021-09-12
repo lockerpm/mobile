@@ -1,4 +1,5 @@
 import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
+import { setLang } from "../../i18n"
 import { ChangePasswordData, RegisterData, SessionLoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 import { withEnvironment } from "../extensions/with-environment"
@@ -94,6 +95,7 @@ export const UserModel = types
     // User
     setLanguage: (lang: string) => {
       self.language = lang
+      setLang(lang)
     },
     setBiometricUnlock: (isActive: boolean) => {
       self.isBiometricUnlock = isActive

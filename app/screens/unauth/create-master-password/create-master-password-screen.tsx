@@ -7,14 +7,13 @@ import { useStores } from "../../../models"
 import { color, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { RootParamList } from "../../../navigators"
-import { translate } from "../../../i18n/translate"
 
 type ScreenProp = RouteProp<RootParamList, 'createMasterPassword'>;
 
 export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
   const navigation = useNavigation()
   const route = useRoute<ScreenProp>()
-  const { logout, register } = useMixins()
+  const { logout, register, translate } = useMixins()
   const { user, uiStore } = useStores()
   const { getPasswordStrength } = useMixins()
 
@@ -84,12 +83,12 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         <Text
           preset="header"
           style={{ marginBottom: 10, marginTop: 25 }}
-          tx="create_master_pass.title"
+          text={translate("create_master_pass.title")}
         />
 
         <Text
           style={{ textAlign: 'center', fontSize: fontSize.small }}
-          tx="create_master_pass.desc"
+          text={translate("create_master_pass.desc")}
         />
 
         {/* Current user */}
@@ -183,7 +182,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
 
         <Text
           style={{ textAlign: 'center', fontSize: fontSize.small }}
-          tx="create_master_pass.note"
+          text={translate("create_master_pass.note")}
         />
       </View>
     </Layout>

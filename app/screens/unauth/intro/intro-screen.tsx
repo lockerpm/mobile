@@ -5,10 +5,13 @@ import { AutoImage as Image, Text, Layout, Button } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
-import { translate } from "../../../i18n"
+import { useMixins } from "../../../services/mixins"
 
 
 export const IntroScreen = observer(function IntroScreen() {
+  const { translate } = useMixins()
+  const navigation = useNavigation()
+
   const tabs = [
     {
       img: require("./intro.png"),
@@ -28,7 +31,6 @@ export const IntroScreen = observer(function IntroScreen() {
   ]
   const map = {}
 
-  const navigation = useNavigation()
   const [index, setIndex] = useState(0)
   const [routes] = useState(tabs.map((item, index) => ({
     key: index.toString()
@@ -60,7 +62,7 @@ export const IntroScreen = observer(function IntroScreen() {
     <View style={{ alignItems: "flex-end" }}>
       <Button
         text={translate('common.skip').toUpperCase()}
-        textStyle={{ fontSize: fontSize.small }}
+        textStyle={{ fontSize: fontSize.p }}
         preset="link"
         onPress={() => navigation.navigate("onBoarding")}
       >
@@ -72,7 +74,7 @@ export const IntroScreen = observer(function IntroScreen() {
   const footer = (
     <View>
       <Button
-        tx="common.continue"
+        text={translate("common.continue")}
         onPress={() => {
           if (index === routes.length - 1) {
             navigation.navigate("onBoarding")
