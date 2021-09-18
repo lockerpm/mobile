@@ -70,15 +70,7 @@ export const PasswordStrength = observer(function PasswordStrength(props: Passwo
             progressBackgroundColor={color.block}
             backgroundColor={config[value].color}
             progress={(value + 1) / 5 * 100}
-          >
-            <Text
-              text={config[value].text}
-              style={{
-                fontSize: fontSize.mini,
-                color: color.palette.white
-              }}
-            />
-          </ProgressBar>
+          />
         )
       }
 
