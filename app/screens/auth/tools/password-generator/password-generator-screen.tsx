@@ -158,9 +158,10 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         <Text
           text={`${translate('common.length')}: ${passwordLen}`}
           preset="black"
-          style={{ fontSize: fontSize.small }}
+          style={{ fontSize: fontSize.p }}
         />
         <Slider
+          value={passwordLen}
           thumbTintColor={color.palette.green}
           minimumTrackTintColor={color.palette.green}
           maximumTrackTintColor={color.line}
@@ -186,10 +187,11 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
                   setOptions(newOptions)
                 }}
                 style={{
-                  marginVertical: 5
+                  marginVertical: 7
                 }}
                 labelStyle={{
-                  color: color.textBlack
+                  color: color.textBlack,
+                  fontSize: fontSize.p
                 }}
               />
             ))
