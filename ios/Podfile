@@ -4,7 +4,7 @@ require_relative '../node_modules/react-native-unimodules/cocoapods.rb'
 
 platform :ios, '10.0'
 
-target 'HelloWorld' do
+target 'CyStackLocker' do
   use_unimodules!
   config = use_native_modules!
 
@@ -18,7 +18,7 @@ target 'HelloWorld' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  target 'HelloWorldTests' do
+  target 'CyStackLockerTests' do
     inherit! :complete
     # Pods for testing
   end
