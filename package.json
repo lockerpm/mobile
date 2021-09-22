@@ -173,14 +173,14 @@
     "test-runner": "jest",
     "configurations": {
       "ios.sim.debug": {
-        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/HelloWorld.app",
-        "build": "xcodebuild -workspace ios/HelloWorld.xcworkspace -scheme HelloWorld -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -destination 'name=iPhone 11'",
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/CyStackLocker.app",
+        "build": "xcodebuild -workspace ios/CyStackLocker.xcworkspace -scheme CyStackLocker -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -destination 'name=iPhone 11'",
         "type": "ios.simulator",
         "name": "iPhone 11"
       },
       "ios.sim.release": {
-        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/HelloWorld.app",
-        "build": "xcodebuild -workspace ios/HelloWorld.xcworkspace -scheme HelloWorld -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -destination 'name=iPhone 11'",
+        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/CyStackLocker.app",
+        "build": "xcodebuild -workspace ios/CyStackLocker.xcworkspace -scheme CyStackLocker -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -destination 'name=iPhone 11'",
         "type": "ios.simulator",
         "name": "iPhone 11"
       }
