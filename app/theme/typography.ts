@@ -31,12 +31,12 @@ export const typography = {
 }
 
 export const fontSize = {
-  h1: 24,
-  h2: 22,
-  h3: 20,
-  h4: 18,
-  h5: 16,
-  p: 14,
-  small: 12,
-  mini: 8
+  h1: 26,
+  h2: 24,
+  h3: 22,
+  h4: 20,
+  h5: 18,
+  p: 16,
+  small: 14,
+  mini: 10
 }
