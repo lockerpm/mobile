@@ -56,7 +56,7 @@ export const Header = observer(function Header(props: HeaderProps) {
                 }
               </Button>
             ) : props.showLogo && (
-              <Image source={require('./locker-logo.png')} style={{ height: 24 }} />
+              <Image source={require('./locker-logo.png')} style={{ height: 30, width: 97.5 }} />
             )
         }
         {

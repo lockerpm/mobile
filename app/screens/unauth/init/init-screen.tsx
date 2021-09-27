@@ -11,6 +11,11 @@ export const InitScreen = observer(function InitScreen() {
 
   const mounted = async () => {
     user.setLanguage(user.language)
+
+    if (__DEV__) {
+      navigation.navigate('intro')
+      return
+    }
     
     if (user.isLoggedIn) {
       if (user.token) {
