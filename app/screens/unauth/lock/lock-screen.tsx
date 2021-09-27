@@ -116,7 +116,7 @@ export const LockScreen = observer(function LockScreen() {
       header={header}
     >
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
-        <Image source={require("./locker.png")} style={{ height: 63, width: 63 }} />
+        <Image source={require("./locker.png")} style={{ height: 63 }} />
 
         <Text
           preset="header"

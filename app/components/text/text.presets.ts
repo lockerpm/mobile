@@ -7,7 +7,7 @@ import { color, typography, fontSize } from "../../theme"
 const BASE: TextStyle = {
   fontFamily: typography.primary,
   color: color.text,
-  fontSize: fontSize.p,
+  fontSize: fontSize.p
 }
 
 /**

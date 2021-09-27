@@ -19,6 +19,7 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
           flexDirection: "row",
           justifyContent: "center",
           marginTop: 12,
+          marginBottom: 24
         }}
       >
         <Text

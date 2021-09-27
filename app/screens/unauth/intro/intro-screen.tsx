@@ -51,7 +51,7 @@ export const IntroScreen = observer(function IntroScreen() {
           marginTop: 30,
           marginBottom: 10
         }} />
-        <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24 }} />
+        <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: 320 }} />
       </View>
     )
   })
@@ -82,6 +82,7 @@ export const IntroScreen = observer(function IntroScreen() {
             setIndex((index + 1) % routes.length)
           }
         }}
+        style={{ marginBottom: 24 }}
       >
       </Button>
     </View>

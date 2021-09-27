@@ -10,7 +10,8 @@ const BASE_VIEW: ViewStyle = {
   borderRadius: 4,
   justifyContent: "center",
   alignItems: "center",
-  flexDirection: 'row'
+  flexDirection: 'row',
+  minHeight: 48
 }
 
 const BASE_TEXT: TextStyle = {
@@ -75,6 +76,7 @@ export const viewPresets: Record<string, ViewStyle> = {
     paddingHorizontal: 0,
     paddingVertical: 0,
     alignItems: "flex-start",
+    minHeight: 0
   } as ViewStyle,
 }
 

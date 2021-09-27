@@ -78,7 +78,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
       )}
     >
       <View style={{ alignItems: 'center' }}>
-        <Image source={require("./locker.png")} style={{ height: 63, width: 63 }} />
+        <Image source={require("./locker.png")} style={{ height: 63 }} />
 
         <Text
           preset="header"
@@ -87,7 +87,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         />
 
         <Text
-          style={{ textAlign: 'center', fontSize: fontSize.small }}
+          style={{ textAlign: 'center', fontSize: fontSize.small, lineHeight: 21 }}
           text={translate("create_master_pass.desc")}
         />
 
@@ -181,7 +181,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         />
 
         <Text
-          style={{ textAlign: 'center', fontSize: fontSize.small }}
+          style={{ textAlign: 'center', fontSize: fontSize.small, lineHeight: 21 }}
           text={translate("create_master_pass.note")}
         />
       </View>
