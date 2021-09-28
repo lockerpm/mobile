@@ -5,6 +5,7 @@ import { AutoImage as Image, Button, Layout, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
+import { APP_ICON } from "../../../common/mappings"
 
 export const OnboardingScreen = observer(function OnboardingScreen() {
   const navigation = useNavigation()
@@ -15,12 +16,10 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
     <View>
       <Button text={translate("common.login")} onPress={() => navigation.navigate("login")} />
       <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
+        style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
           marginTop: 12,
           marginBottom: 24
-        }}
+        }]}
       >
         <Text
           text={translate("onBoarding.no_account")}
@@ -43,7 +42,7 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
       footer={footer}
     >
       <View style={commonStyles.CENTER_VIEW}>
-        <Image source={require("./logo.png")} />
+        <Image source={APP_ICON.textVertical} />
         <Text
           preset="header"
           text={translate("onBoarding.title")}

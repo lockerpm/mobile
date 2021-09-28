@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput, PasswordStrength } from "../../../components"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { color, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
-import { RootParamList } from "../../../navigators"
+import { APP_ICON } from "../../../common/mappings"
 
-type ScreenProp = RouteProp<RootParamList, 'createMasterPassword'>;
 
 export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
   const navigation = useNavigation()
-  const route = useRoute<ScreenProp>()
   const { logout, register, translate } = useMixins()
-  const { user, uiStore } = useStores()
+  const { user } = useStores()
   const { getPasswordStrength } = useMixins()
 
   // Params
@@ -30,14 +28,6 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
   const isReady = !isError && !!masterPassword && !!confirmPassword
 
   // Methods
-  const mounted = async () => {
-    if (!route.params || !route.params.skipCheck) {
-      if (!uiStore.isOffline) {
-        await user.getUser()
-      }
-    }
-    setIsScreenLoading(false)
-  }
 
   const handleLogout = async () => {
     setIsScreenLoading(true)
@@ -54,12 +44,6 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
       navigation.navigate('lock')
     }
   }
-
-  // Mounted
-  useEffect(() => {
-    // setTimeout(mounted, 100)
-    mounted()
-  }, [])
 
   // Render
   return (
@@ -78,7 +62,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
       )}
     >
       <View style={{ alignItems: 'center' }}>
-        <Image source={require("./locker.png")} style={{ height: 63 }} />
+        <Image source={APP_ICON.icon} style={{ height: 63 }} />
 
         <Text
           preset="header"

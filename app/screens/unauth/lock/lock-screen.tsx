@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { color, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
-import { RootParamList } from "../../../navigators/root-navigator"
+import { APP_ICON } from "../../../common/mappings"
 
-type ScreenProp = RouteProp<RootParamList, 'lock'>;
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
-  const route = useRoute<ScreenProp>()
   const { logout, sessionLogin, notify, biometricLogin, translate } = useMixins()
   const { user, uiStore } = useStores()
 
@@ -25,14 +23,6 @@ export const LockScreen = observer(function LockScreen() {
   const [isError, setIsError] = useState(false)
 
   // Methods
-  const mounted = async () => {
-    if (!route.params || !route.params.skipCheck) {
-      if (!uiStore.isOffline) {
-        await user.getUser()
-      }
-    }
-    setIsScreenLoading(false)
-  }
 
   const handleLogout = async () => {
     setIsScreenLoading(true)
@@ -103,12 +93,6 @@ export const LockScreen = observer(function LockScreen() {
     </View>
   )
 
-  // Mounted
-  useEffect(() => {
-    // setTimeout(mounted, 2000)
-    mounted()
-  }, [])
-
   // Render
   return (
     <Layout
@@ -116,7 +100,7 @@ export const LockScreen = observer(function LockScreen() {
       header={header}
     >
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
-        <Image source={require("./locker.png")} style={{ height: 63 }} />
+        <Image source={APP_ICON.icon} style={{ height: 63 }} />
 
         <Text
           preset="header"

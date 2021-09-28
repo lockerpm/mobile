@@ -15,8 +15,7 @@ import {
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen
 } from "../screens"
-import UserInactivity from 'react-native-user-inactivity'
-import NetInfo from "@react-native-community/netinfo"
+import UserInactivity from "react-native-user-inactivity"
 import { color } from "../theme"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
@@ -168,26 +167,23 @@ export function MainNavigator() {
     // Connect web socket
     setSocket(generateSocket())
 
-    // Check network
-    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
-      const offline = !(state.isConnected && state.isInternetReachable)
-      if (uiStore.isOffline && !offline) {
-        setSocket(generateSocket())
-      }
-      if (offline) {
-        socket && socket.close()
-        setSocket(null)
-      }
-      uiStore.setIsOffline(offline)
-    })
-
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
       socket && socket.close()
-      removeNetInfoSubscription()
     };
   }, []);
 
+  // Check network to connect socket
+  useEffect(() => {
+    if (uiStore.isOffline) {
+      socket && socket.close()
+      setSocket(null)
+    } else {
+      setSocket(generateSocket())
+    }
+  }, [uiStore.isOffline])
+
+  // Render
   return (
     <UserInactivity
       timeForInactivity={(user.appTimeout && (user.appTimeout > 0)) ? user.appTimeout : 1000}
