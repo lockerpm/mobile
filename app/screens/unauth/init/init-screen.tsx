@@ -6,35 +6,60 @@ import { useStores } from "../../../models"
 import { load, save, storageKeys } from "../../../utils/storage"
 
 export const InitScreen = observer(function InitScreen() {
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const navigation = useNavigation()
+
+  const goLockOrCreatePassword = () => {
+    if (user.is_pwd_manager) {
+      navigation.navigate('lock')
+    } else {
+      navigation.navigate('createMasterPassword')
+    }
+  }
 
   const mounted = async () => {
     user.setLanguage(user.language)
 
+    // Testing
     if (__DEV__) {
-      navigation.navigate('intro')
-      return
+      // navigation.navigate('intro')
+      // return
     }
-    
-    if (user.isLoggedIn) {
-      if (user.token) {
-        user.saveToken(user.token)
-      }
-      if (user.is_pwd_manager) {
-        navigation.navigate('lock')
+
+    // Logged in?
+    if (!user.isLoggedIn) {
+      const introShown = await load(storageKeys.APP_SHOW_INTRO)
+      if (!introShown) {
+        await save(storageKeys.APP_SHOW_INTRO, 1)
+        navigation.navigate('intro')
       } else {
-        navigation.navigate('createMasterPassword')
+        navigation.navigate('onBoarding')
       }
       return
     }
 
-    const introShown = await load(storageKeys.APP_SHOW_INTRO)
-    if (!introShown) {
-      await save(storageKeys.APP_SHOW_INTRO, 1)
-      navigation.navigate('intro')
+    // Network connected?
+    if (uiStore.isOffline) {
+      goLockOrCreatePassword()
+      return
+    }
+
+    // Session validated?
+    if (!user.token) {
+      navigation.navigate('login')
+      return
+    }
+    
+    user.saveToken(user.token)
+
+    const [userRes, userPwRes] = await Promise.all([
+      user.getUser(),
+      user.getUserPw()
+    ])
+    if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
+      goLockOrCreatePassword()
     } else {
-      navigation.navigate('onBoarding')
+      navigation.navigate('login')
     }
   }
 

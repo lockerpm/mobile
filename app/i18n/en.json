@@ -14,7 +14,9 @@
     "delete": "Delete",
     "details": "Details",
     "edit": "Edit",
+    "email": "Email",
     "folder": "Folder",
+    "fullname": "Full name",
     "generate": "Generate",
     "help": "Help",
     "home": "Home",
@@ -34,6 +36,7 @@
     "note": "Secure Note",
     "notes": "Notes",
     "options": "Options",
+    "organization": "Organization",
     "other": "Other",
     "others": "Others",
     "owned_by": "Owned by",
@@ -118,6 +121,17 @@
   "onBoarding": {
     "no_account": "Don't have an account?",
     "title": "Your daily needs"
+  },
+  "login": {
+    "email_or_username": "Email or Username",
+    "forgot_password": "Forgot password",
+    "no_account": "Don't have an account?"
+  },
+  "signup": {
+    "confirm_password": "Confirm Password",
+    "agree_with": "I agree with the",
+    "subscribe_desc": "Please keep me updated on news, events and offers",
+    "has_account": "Already have an account?"
   },
   "biometric_intro": {
     "title": "Unlock vault with biometric",

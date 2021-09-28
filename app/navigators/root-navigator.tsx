@@ -5,6 +5,7 @@
  * will use once logged in.
  */
 import React, { useEffect } from "react"
+import NetInfo from "@react-native-community/netinfo"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
@@ -29,14 +30,10 @@ export type RootParamList = {
   init: undefined,
   intro: undefined,
   onBoarding: undefined,
-  lock: {
-    skipCheck?: boolean
-  },
+  lock: undefined,
   login: undefined,
   signup: undefined,
-  createMasterPassword: {
-    skipCheck?: boolean
-  },
+  createMasterPassword: undefined,
   mainStack: undefined
 }
 
@@ -52,6 +49,16 @@ const RootStack = () => {
       uiStore.setShowNetworkError(false)
     }
   }, [uiStore.showNetworkError])
+
+  useEffect(() => {
+    // Check network
+    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+      const offline = !(state.isConnected && state.isInternetReachable)
+      uiStore.setIsOffline(offline)
+    })
+
+    return removeNetInfoSubscription
+  }, [])
 
   return (
     <Stack.Navigator

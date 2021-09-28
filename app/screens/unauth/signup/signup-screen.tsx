@@ -1,73 +1,125 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
+import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { WebView, WebViewNavigation  } from 'react-native-webview';
-import { Loading } from "../../../components";
-import { REGISTER_URL } from "../../../config/constants";
+import { Layout, AutoImage as Image, Text, FloatingInput, Button } from "../../../components";
+import { useMixins } from "../../../services/mixins"
+import { commonStyles } from "../../../theme"
+import { APP_ICON } from "../../../common/mappings"
 
 export const SignupScreen = observer(function SignupScreen() {
   const { user } = useStores()
   const navigation = useNavigation()
+  const { translate } = useMixins()
 
-  // Params
-  const [isLoading, setIsLoading] = useState(true)
-  const [isScreenReady, setIsScreenReady] = useState(false)
+  // ---------------- PARAMS ---------------------
 
-  // Helpers
-  const getParamFromUrl = (name : string, url: string) => {
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
+  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [fullname, setFullname] = useState('')
+  const [org, setOrg] = useState('')
+  const [country, setCountry] = useState('')
+  const [phone, setPhone] = useState('')
+  const [agreed, setAgreed] = useState(false)
+  const [subscribed, setSubscribed] = useState(false)
 
-  // Actions
-  const onWebViewNavigationStateChange = async (state: WebViewNavigation) => {
-    const token = getParamFromUrl('token', state.url)
-    if (token && !user.token) {
-      setIsLoading(true)
-      user.saveToken(token)
-      const [getUserRes, getUserPwRes] = await Promise.all([
-        user.getUser(),
-        user.getUserPw()
-      ])
-      if (getUserRes && getUserPwRes) {
-        if (user.is_pwd_manager) {
-          navigation.navigate('lock')
-        } else {
-          navigation.navigate('createMasterPassword')
-        }
-      } else {
-        navigation.navigate('onBoarding')
-      }
-    }
+  // ---------------- COMPUTED ---------------------
+
+  const formValidated = email && password && (password === confirmPassword) && fullname && agreed
+
+  // ---------------- METHODS ---------------------
+
+  const handleRegister = () => {
+
   }
 
-  // Mounted
-  useEffect(() => {
-    if (!isScreenReady) {
-      if (user.isLoggedIn) {
-        user.logout().then(() => {
-          setIsLoading(false)
-          setIsScreenReady(true)
-        })
-      } else {
-        user.clearToken()
-        setIsLoading(false)
-        setIsScreenReady(true)
-      }
-    }
-  }, [isScreenReady])
+  return (
+    <Layout
+      footer={(
+        <View
+          style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+            marginTop: 12,
+            marginBottom: 24
+          }]}
+        >
+          <Text
+            text={translate("signup.has_account")}
+            style={{
+              marginRight: 8,
+            }}
+          />
+          <Button
+            preset="link"
+            text={translate("common.login")}
+            onPress={() => navigation.navigate("login")}
+          />
+        </View>
+      )}
+    >
+      <View style={{ alignItems: 'center', paddingTop: '10%' }}>
+        <Image source={APP_ICON.icon} style={{ height: 63 }} />
 
-  return isLoading ? (
-    <Loading />
-  ) : (
-    <WebView
-      source={{ uri: REGISTER_URL }}
-      onNavigationStateChange={onWebViewNavigationStateChange}
-    />
+        {/* Username input */}
+        <FloatingInput
+          label={translate('common.email')}
+          onChangeText={setEmail}
+          value={email}
+          style={{ width: '100%' }}
+        />
+        {/* Username input end */}
+
+        {/* Password input */}
+        <FloatingInput
+          isPassword
+          label={translate('common.password')}
+          onChangeText={setPassword}
+          value={password}
+          style={{ width: '100%' }}
+        />
+        {/* Password input end */}
+
+        {/* Confirm Password input */}
+        <FloatingInput
+          isPassword
+          label={translate('signup.confirm_password')}
+          onChangeText={setConfirmPassword}
+          value={confirmPassword}
+          style={{ width: '100%' }}
+        />
+        {/* Confirm Password input end */}
+
+        {/* Full name input */}
+        <FloatingInput
+          label={translate('common.fullname')}
+          onChangeText={setFullname}
+          value={fullname}
+          style={{ width: '100%' }}
+        />
+        {/* Full name input end */}
+
+        {/* Org input */}
+        <FloatingInput
+          label={translate('common.organization')}
+          onChangeText={setOrg}
+          value={org}
+          style={{ width: '100%' }}
+        />
+        {/* Org input end */}
+
+        <Button
+          isLoading={isLoading}
+          isDisabled={isLoading || !formValidated}
+          text={translate("common.sign_up")}
+          onPress={handleRegister}
+          style={{
+            width: '100%',
+            marginTop: 20
+          }}
+        />
+      </View>
+    </Layout>
   )
 })
