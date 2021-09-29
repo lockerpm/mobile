@@ -18,7 +18,8 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
       <View
         style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
           marginTop: 12,
-          marginBottom: 24
+          marginBottom: 24,
+          justifyContent: 'center'
         }]}
       >
         <Text

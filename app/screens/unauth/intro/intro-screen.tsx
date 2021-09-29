@@ -20,12 +20,12 @@ export const IntroScreen = observer(function IntroScreen() {
     },
     {
       img: require("./intro.png"),
-      title: translate('intro.item_2.title'),
+      title: translate('intro.item_2.title') + ' 2',
       desc: translate('intro.item_2.desc')
     },
     {
       img: require("./intro.png"),
-      title: translate('intro.item_2.title'),
+      title: translate('intro.item_2.title') + ' 3',
       desc: translate('intro.item_2.desc')
     }
   ]
