@@ -2245,6 +2245,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-6.0.2.tgz#3b61757c46d0f387815d42b651bbee1eb998a385"
   integrity sha512-HbVIv6p+VAzSqALkfKKNbtSy0TneL7EILIqxiOjt/5weVdTuZ88NRyPNQAZBh6W8QYirXJo3f00ryMk9iLs7gQ==
 
+"@react-native-google-signin/google-signin@^7.0.0-alpha.3":
+  version "7.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-7.0.0-alpha.3.tgz#678f4bb0d69d1023e936ee2e9aadeda637c169fd"
+  integrity sha512-LhI4eycxYx5T5IBB0kinEoE71Who3Fk67Y3z13PyloVa0XpgVc/ikYZzeZpFXoVvJmsHexS/NYGpd7Nau1IYQg==
+
 "@react-native-picker/picker@^1.16.7":
   version "1.16.8"
   resolved "https://registry.yarnpkg.com/@react-native-picker/picker/-/picker-1.16.8.tgz#2126ca54d4a5a3e9ea5e3f39ad1e6643f8e4b3d4"
@@ -13916,11 +13921,6 @@ react-native-gesture-handler@^1.10.3:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
     prop-types "^15.7.2"
-
-react-native-google-signin@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-google-signin/-/react-native-google-signin-2.1.1.tgz#4281940eee88602b0181dd49affdf8c92980c85c"
-  integrity sha512-6l3fiLdX/bfhh0BoxGq+jGkagFsO+mrE/eRV4+3/0k8+FDxO90vdPpQdDiwlM5vWXRxWthTzMM09/jHw+4cvNw==
 
 react-native-iphone-x-helper@^1.3.0:
   version "1.3.1"

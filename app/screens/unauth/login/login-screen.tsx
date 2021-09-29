@@ -7,19 +7,24 @@ import { Layout, AutoImage as Image, Text, FloatingInput, Button } from "../../.
 import { useMixins } from "../../../services/mixins"
 import { commonStyles } from "../../../theme"
 import { APP_ICON } from "../../../common/mappings"
+import { LoginManager } from 'react-native-fbsdk-next'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+
 
 export const LoginScreen = observer(function LoginScreen() {
   const { user } = useStores()
   const navigation = useNavigation()
-  const { translate } = useMixins()
+  const { translate, notify } = useMixins()
 
-  // Params
+  // ------------------ Params -----------------------
+
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  // Methods
+  // ------------------ Methods ----------------------
+
   const handleLogin = () => {
 
   }
@@ -28,13 +33,42 @@ export const LoginScreen = observer(function LoginScreen() {
 
   }
 
+  const handleFBLogin = async () => {
+    try {
+      const res = await LoginManager.logInWithPermissions(['public_profile', 'email'])
+      console.log(res)
+      notify('success', 'ok')
+    } catch (e) {
+      console.log(e)
+      notify('error', 'error')
+    }
+  }
+
+  const handleGoogleLogin = async () => {
+    try {
+      GoogleSignin.configure({
+        webClientId: '31609893092-0etuuag1o662fpa0c6sap5v96lc44onb.apps.googleusercontent.com'
+      })
+      const res = await GoogleSignin.signIn();
+      console.log(res)
+      notify('success', 'ok')
+    } catch (e) {
+      console.log(e)
+      console.log(Object.keys(e))
+      console.log(e.message)
+      console.log(e.code)
+      notify('error', 'error')
+    }
+  }
+
   return (
     <Layout
       footer={(
         <View
           style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
             marginTop: 12,
-            marginBottom: 24
+            marginBottom: 24,
+            justifyContent: 'center'
           }]}
         >
           <Text
@@ -52,7 +86,10 @@ export const LoginScreen = observer(function LoginScreen() {
       )}
     >
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
-        <Image source={APP_ICON.icon} style={{ height: 63 }} />
+        <Image 
+          source={APP_ICON.icon} 
+          style={{ height: 63, marginBottom: 40, marginTop: 30 }}
+        />
 
         {/* Username input */}
         <FloatingInput
@@ -82,7 +119,25 @@ export const LoginScreen = observer(function LoginScreen() {
           onPress={handleLogin}
           style={{
             width: '100%',
-            marginTop: 20
+            marginTop: 40
+          }}
+        />
+
+        <Button
+          text={'test'}
+          onPress={handleFBLogin}
+          style={{
+            width: '100%',
+            marginVertical: 10
+          }}
+        />
+
+        <Button
+          text={'test 2'}
+          onPress={handleGoogleLogin}
+          style={{
+            width: '100%',
+            marginVertical: 10
           }}
         />
 
