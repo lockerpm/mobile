@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
-import { ChangePasswordData, RegisterData, SessionLoginData } from "../../services/api"
+import { ChangePasswordData, RegisterData, SessionLoginData, LoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -128,6 +128,17 @@ export const UserModel = types
       const res = await userApi.getUserPw()
       if (res.kind === "ok") {
         self.saveUserPw(res.user)
+      }
+      return res
+    },
+
+    login: async (payload: LoginData, isOtp?: boolean) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.login(payload, isOtp)
+      if (res.kind === "ok") {
+        if (res.data.token) {
+          self.saveToken(res.data.token)
+        }
       }
       return res
     },

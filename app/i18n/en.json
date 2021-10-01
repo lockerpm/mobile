@@ -69,6 +69,7 @@
     "network_error": "Network error",
     "required_data": "This data is mandatory",
     "session_login_failed": "Session login failed",
+    "login_failed": "Login failed",
     "something_went_wrong": "Something went wrong",
     "sync_failed": "Synchronize data failed",
     "token_expired": "Session token expired"

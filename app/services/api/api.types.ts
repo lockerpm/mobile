@@ -11,7 +11,16 @@ type SessionSnapshot = {
     private_key: string
 }
 
-// Response
+// ------------------ Response ------------------------
+
+export type LoginResult = { kind: "ok"; data: {
+    token?: string
+    is_factor2?: boolean
+    methods?: {
+        type: string
+        data: any
+    }[]
+} } | GeneralApiProblem
 export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
 export type EmptyResult = { kind: "ok" } | GeneralApiProblem
@@ -26,7 +35,16 @@ export type GetPlanResult = {
     }
 } | GeneralApiProblem
 
-// Request data
+// ---------------- Request data --------------------
+
+export type LoginData = {
+    username: string
+    password: string
+    method?: string
+    otp?: string
+    save_device?: boolean
+}
+
 export type SessionLoginData = {
     client_id: 'mobile'
     password: string

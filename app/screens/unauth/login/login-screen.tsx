@@ -25,8 +25,29 @@ export const LoginScreen = observer(function LoginScreen() {
 
   // ------------------ Methods ----------------------
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setIsLoading(true)
+    setIsError(false)
+    const payload = { username, password }
+    const res = await user.login(payload)
+    if (res.kind !== 'ok') {
+      setIsError(true)
+      notify('error', translate('error.login_failed'))
+    } else {
+      if (res.data.is_factor2) {
+
+      } else {
+        await Promise.all([
+          user.getUser(),
+          user.getUserPw()
+        ])
+        if (user.is_pwd_manager) {
+          navigation.navigate('lock')
+        } else {
+          navigation.navigate('createMasterPassword')
+        }
+      }
+    }
     setIsLoading(false)
   }
 
@@ -115,7 +136,7 @@ export const LoginScreen = observer(function LoginScreen() {
           label={translate('login.email_or_username')}
           onChangeText={setUsername}
           value={username}
-          style={{ width: '100%' }}
+          style={{ width: '100%', marginBottom: 10 }}
         />
         {/* Username input end */}
 
