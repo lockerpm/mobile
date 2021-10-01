@@ -69,6 +69,7 @@
     "network_error": "Kết nối mạng không thành công",
     "required_data": "Không được để trống thông tin này",
     "session_login_failed": "Đăng nhập phiên không thành công",
+    "login_failed": "Đăng nhập không thành công",
     "something_went_wrong": "Đã có lỗi xảy ra",
     "sync_failed": "Đồng bộ hóa không thành công",
     "token_expired": "Phiên của bạn đã hết hạn"
