@@ -14,6 +14,7 @@ import { load } from '../../utils/storage'
 import { delay } from '../../utils/delay'
 import { translate as tl, TxKeyPath } from "../../i18n"
 import { GET_LOGO_URL } from '../../config/constants'
+import i18n from "i18n-js"
 
 const { createContext, useContext } = React
 
@@ -54,7 +55,7 @@ const defaultData = {
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
-  translate: (tx: TxKeyPath) => { return '' }
+  translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' }
 }
 
 
@@ -493,10 +494,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return available
   }
 
-  const translate = (tx: TxKeyPath) => {
+  const translate = (tx: TxKeyPath, options?: i18n.TranslateOptions) => {
     // Dummy to force rerender
     const abc = user.language
-    return tl(tx)
+    return tl(tx, options)
   }
 
   // -------------------- REGISTER FUNCTIONS ------------------
