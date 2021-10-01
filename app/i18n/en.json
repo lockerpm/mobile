@@ -36,6 +36,7 @@
     "note": "Secure Note",
     "notes": "Notes",
     "options": "Options",
+    "or_login_with": "Or Log in with",
     "organization": "Organization",
     "other": "Other",
     "others": "Others",
@@ -124,7 +125,7 @@
   },
   "login": {
     "email_or_username": "Email or Username",
-    "forgot_password": "Forgot password",
+    "forgot_password": "Forgot password?",
     "no_account": "Don't have an account?"
   },
   "signup": {

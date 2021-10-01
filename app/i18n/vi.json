@@ -36,6 +36,7 @@
     "note": "Ghi chú",
     "notes": "Ghi chú",
     "options": "Tùy chọn",
+    "or_login_with": "Hoặc đăng nhập bằng",
     "organization": "Tổ chức",
     "other": "Khác",
     "others": "Khác",
@@ -124,7 +125,7 @@
   },
   "login": {
     "email_or_username": "Email hoặc tên đăng nhập",
-    "forgot_password": "Quên mật khẩu",
+    "forgot_password": "Quên mật khẩu?",
     "no_account": "Chưa có tài khoản?"
   },
   "signup": {

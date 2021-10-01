@@ -112,3 +112,10 @@ export const APP_ICON = {
   textVertical: require('./images/appIcon/textVertical.png'),
   textHorizontal: require('./images/appIcon/textHorizontal.png')
 }
+
+
+export const SOCIAL_LOGIN_ICON = {
+  google: require('./images/icons/google.png'),
+  facebook: require('./images/icons/facebook.png'),
+  github: require('./images/icons/github.png')
+}
