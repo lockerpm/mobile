@@ -15,6 +15,7 @@ export const LockScreen = observer(function LockScreen() {
   const { user, uiStore } = useStores()
 
   // Params
+  
   const [masterPassword, setMasterPassword] = useState('')
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)

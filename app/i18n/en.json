@@ -1,6 +1,8 @@
 {
   "common": {
     "account": "Account",
+    "authenticate": "Authenticate",
+    "authentication_app": "Authentication App",
     "add": "Add",
     "biometric_unlocking": "Biometric Unlocking",
     "browse": "Browse",
@@ -32,6 +34,7 @@
     "me": "Me",
     "menu": "Menu",
     "name": "Name",
+    "next": "Next",
     "none": "None",
     "note": "Secure Note",
     "notes": "Notes",
@@ -127,7 +130,13 @@
   "login": {
     "email_or_username": "Email or Username",
     "forgot_password": "Forgot password?",
-    "no_account": "Don't have an account?"
+    "no_account": "Don't have an account?",
+    "verify_your_identity": "Verify your identity",
+    "enter_code": "Enter code",
+    "enter_code_here": "Enter verification code here",
+    "from_authenticator": "Please use your authentication app (such as Duo or Google Authenticator) to get the code.",
+    "from_email": "An email has been sent to {{email}}. Check you inbox/spam to get verification code.",
+    "save_device": "Remember this device"
   },
   "signup": {
     "confirm_password": "Confirm Password",

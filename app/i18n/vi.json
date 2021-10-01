@@ -1,6 +1,8 @@
 {
   "common": {
     "account": "Tài khoản",
+    "authenticate": "Xác thực",
+    "authentication_app": "Ứng dụng xác thực",
     "add": "Thêm",
     "biometric_unlocking": "Mở khóa bằng sinh trắc học",
     "browse": "Kho",
@@ -32,6 +34,7 @@
     "me": "Cá nhân",
     "menu": "Tùy chọn",
     "name": "Tên",
+    "next": "Tiếp tục",
     "none": "Không xác định",
     "note": "Ghi chú",
     "notes": "Ghi chú",
@@ -127,7 +130,13 @@
   "login": {
     "email_or_username": "Email hoặc tên đăng nhập",
     "forgot_password": "Quên mật khẩu?",
-    "no_account": "Chưa có tài khoản?"
+    "no_account": "Chưa có tài khoản?",
+    "verify_your_identity": "Xác thực nhận dạng của bạn",
+    "enter_code": "Nhập mã",
+    "enter_code_here": "Nhập mã xác thực",
+    "from_authenticator": "Vui lòng mở ứng dụng xác thực (ví dụ Duo hoặc Google Authenticator) để lấy mã",
+    "from_email": "Email đã được gửi đến {{email}}. Kiểm tra hộp thư đến/hộp thư rác để nhận mã xác thực.",
+    "save_device": "Ghi nhớ thiết bị này"
   },
   "signup": {
     "confirm_password": "Xác nhận mật khẩu",
