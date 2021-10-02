@@ -123,6 +123,12 @@ export const UserModel = types
       return res
     },
 
+    sendOtpEmail: async (username: string, password: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.sendOtpEmail({ username, password })
+      return res
+    },
+
     getUserPw: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUserPw()

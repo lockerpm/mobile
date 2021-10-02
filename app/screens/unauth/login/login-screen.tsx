@@ -9,6 +9,7 @@ import { TabView, SceneMap } from 'react-native-tab-view'
 import { DefaultLogin } from "./default"
 import { MethodSelection } from "./method-selection"
 import { Otp } from "./otp"
+import { useStores } from "../../../models"
 
 
 const containerStyle: ViewStyle = {
@@ -23,28 +24,70 @@ const containerStyle: ViewStyle = {
 
 export const LoginScreen = observer(function LoginScreen() {
   const navigation = useNavigation()
+  const { user } = useStores()
   const { translate } = useMixins()
 
   // ------------------------------ PARAMS -------------------------------
 
+  const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [index, setIndex] = useState(0)
   const [routes] = useState([
     { key: 'default', title: 'default' },
     { key: 'methodSelection', title: 'methodSelection' },
     { key: 'otp', title: 'otp' },
   ])
+  const [credential, setCredential] = useState({
+    username: '',
+    password: '',
+    methods: []
+  })
+  const [method, setMethod] = useState('')
+  const [partialEmail, setPartialEamil] = useState('')
+
+  // ------------------------------ METHODS -------------------------------
+
+  const onLoggedIn = async () => {
+    setIsScreenLoading(true)
+    const [userRes, userPwRes] = await Promise.all([
+      user.getUser(),
+      user.getUserPw()
+    ])
+    setIsScreenLoading(false)
+    if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
+      if (user.is_pwd_manager) {
+        navigation.navigate('lock')
+      } else {
+        navigation.navigate('createMasterPassword')
+      }
+    }
+  }
+
+  // ------------------------------ RENDER -------------------------------
+
   const renderScene = SceneMap({
     default: () => (
       <ScrollView contentContainerStyle={containerStyle}>
-        <DefaultLogin navigation={navigation} />
+        <DefaultLogin
+          onLoggedIn={onLoggedIn}
+          nextStep={(username: string, password: string, methods: { type: string, data: any }[]) => {
+            setCredential({ username, password, methods })
+            setIndex(1)
+          }}
+        />
       </ScrollView>
     ),
     methodSelection: () => (
       <ScrollView contentContainerStyle={containerStyle}>
         <MethodSelection
           goBack={() => setIndex(0)}
-          methods={[{"type":"mail","data":"du***@cystack.net"},{"type":"smart_otp","data":{}}]}
-          onSelect={() => {}}
+          methods={credential.methods}
+          onSelect={(type: string, data: any) => {
+            setMethod(type)
+            setPartialEamil(data)
+            setIndex(2)
+          }}
+          username={credential.username}
+          password={credential.password}
         />
       </ScrollView>
     ),
@@ -52,19 +95,20 @@ export const LoginScreen = observer(function LoginScreen() {
       <ScrollView contentContainerStyle={containerStyle}>
         <Otp
           goBack={() => setIndex(1)}
-          method={'mail'}
-          email={'du***@cystack.net'}
-          onSubmit={async () => { return true }}
+          method={method}
+          email={partialEmail}
+          username={credential.username}
+          password={credential.password}
+          onLoggedIn={onLoggedIn}
         />
       </ScrollView>
     )
   })
 
-  // ------------------------------ RENDER -------------------------------
-
   return (
     <Layout
       noScroll
+      isOverlayLoading={isScreenLoading}
       footer={(
         <View
           style={[commonStyles.CENTER_HORIZONTAL_VIEW, {

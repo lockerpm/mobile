@@ -22,7 +22,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
 
   // UI
   const [passwordStrength, setPasswordStrength] = useState(-1)
-  const [isScreenLoading, setIsScreenLoading] = useState(true)
+  const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
   const isError = !!masterPassword && !!confirmPassword && (masterPassword !== confirmPassword)
   const isReady = !isError && !!masterPassword && !!confirmPassword

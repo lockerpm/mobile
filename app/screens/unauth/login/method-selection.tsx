@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import {Text, Button } from "../../../components"
@@ -6,6 +6,7 @@ import { useMixins } from "../../../services/mixins"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { color, commonStyles } from "../../../theme"
+import { useStores } from "../../../models"
 
 
 type Props = {
@@ -13,18 +14,34 @@ type Props = {
     type: string,
     data: any
   }[]
-  onSelect: (type: string) => void
+  onSelect: (type: string, data: any) => void
   goBack: () => void
+  username: string,
+  password: string
 }
 
 
 export const MethodSelection = observer(function MethodSelection(props: Props) {
-  const { translate } = useMixins()
-  const { methods, onSelect, goBack } = props
+  const { user } = useStores()
+  const { translate, notify } = useMixins()
+  const { methods, onSelect, goBack, username, password } = props
 
   // ------------------ Params -----------------------
 
+  const [sendingEmail, setIsSendingEmail] = useState(false)
+
   // ------------------ Methods ----------------------
+
+  const sendEmail = async (data: any) => {
+    setIsSendingEmail(true)
+    const res = await user.sendOtpEmail(username, password)
+    setIsSendingEmail(false)
+    if (res.kind === 'ok' && res.success) {
+      onSelect('mail', data)
+    } else {
+      notify('error', translate('error.something_went_wrong'))
+    }
+  }
 
   // ------------------------------ RENDER -------------------------------
 
@@ -55,7 +72,9 @@ export const MethodSelection = observer(function MethodSelection(props: Props) {
           <Button
             key={index}
             preset="outline"
-            onPress={() => onSelect(item.type)}
+            isDisabled={item.type === 'mail' && sendingEmail}
+            isLoading={item.type === 'mail' && sendingEmail}
+            onPress={() => item.type === 'mail' ? sendEmail(item.data) : onSelect(item.type, item.data)}
             style={{
               width: '100%',
               marginBottom: 15
@@ -63,7 +82,7 @@ export const MethodSelection = observer(function MethodSelection(props: Props) {
           >
             {
               item.type === 'mail' && (
-                <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+                <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginHorizontal: 5 }]}>
                   <FontAwesomeIcon
                     name="envelope-o"
                     size={18}

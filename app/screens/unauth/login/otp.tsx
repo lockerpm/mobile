@@ -6,19 +6,23 @@ import { useMixins } from "../../../services/mixins"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { color, commonStyles, fontSize } from "../../../theme"
 import { Checkbox } from "react-native-ui-lib"
+import { useStores } from "../../../models"
 
 
 type Props = {
-  onSubmit: (otp: string, saveDevice?: boolean) => Promise<boolean>
   goBack: () => void
   method: string
   email?: string
+  username: string
+  password: string
+  onLoggedIn: () => void
 }
 
 
 export const Otp = observer(function Otp(props: Props) {
-  const { translate } = useMixins()
-  const { onSubmit, goBack, method, email } = props
+  const { user } = useStores()
+  const { translate, notify } = useMixins()
+  const { goBack, method, email, username, password, onLoggedIn } = props
 
   // ------------------ Params -----------------------
 
@@ -32,9 +36,18 @@ export const Otp = observer(function Otp(props: Props) {
   const handleAuthenticate = async () => {
     setIsError(false)
     setIsLoading(true)
-    const isSuccess = await onSubmit(otp, saveDevice)
+    const res = await user.login({
+      username,
+      password,
+      method,
+      otp,
+      save_device: saveDevice
+    }, true)
     setIsLoading(false)
-    if (!isSuccess) {
+    if (res.kind === 'ok') {
+      onLoggedIn()
+    } else {
+      notify('error', translate('error.login_failed'))
       setIsError(true)
     }
   }
