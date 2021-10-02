@@ -10,7 +10,8 @@ import { NavigationContainer, NavigationContainerRef } from "@react-navigation/n
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
 import { 
-  IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, CreateMasterPasswordScreen 
+  IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, 
+  CreateMasterPasswordScreen, ForgotPasswordScreen
 } from "../screens"
 import { color } from "../theme"
 import { useMixins } from "../services/mixins"
@@ -32,6 +33,7 @@ export type RootParamList = {
   onBoarding: undefined,
   lock: undefined,
   login: undefined,
+  forgotPassword: undefined,
   signup: undefined,
   createMasterPassword: undefined,
   mainStack: undefined
@@ -73,6 +75,7 @@ const RootStack = () => {
       <Stack.Screen name="onBoarding" component={OnboardingScreen} />
       <Stack.Screen name="lock" component={LockScreen} />
       <Stack.Screen name="login" component={LoginScreen} />
+      <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />
       <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
       <Stack.Screen

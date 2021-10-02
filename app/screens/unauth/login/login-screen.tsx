@@ -68,6 +68,7 @@ export const LoginScreen = observer(function LoginScreen() {
     default: () => (
       <ScrollView contentContainerStyle={containerStyle}>
         <DefaultLogin
+          handleForgot={() => navigation.navigate('forgotPassword')}
           onLoggedIn={onLoggedIn}
           nextStep={(username: string, password: string, methods: { type: string, data: any }[]) => {
             setCredential({ username, password, methods })
