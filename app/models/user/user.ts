@@ -108,6 +108,8 @@ export const UserModel = types
     }
   }))
   .actions((self) => ({
+    // -------------------- ID ------------------------
+
     getUser: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser()
@@ -117,24 +119,27 @@ export const UserModel = types
       return res
     },
 
-    sendPasswordHint: async (email: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.sendMasterPasswordHint({ email })
-      return res
-    },
-
     sendOtpEmail: async (username: string, password: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.sendOtpEmail({ username, password })
       return res
     },
 
-    getUserPw: async () => {
+    recoverAccount: async (username: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getUserPw()
-      if (res.kind === "ok") {
-        self.saveUserPw(res.user)
-      }
+      const res = await userApi.recoverAccount({ username })
+      return res
+    },
+
+    resetPassword: async (username: string, method: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.resetPassword({ username, method })
+      return res
+    },
+
+    resetPasswordWithCode: async (username: string, code: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.resetPasswordWithCode({ username, code })
       return res
     },
 
@@ -145,6 +150,44 @@ export const UserModel = types
         if (res.data.token) {
           self.saveToken(res.data.token)
         }
+      }
+      return res
+    },
+
+    socialLogin: async (payload: { provider: string, access_token: string }) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.socialLogin(payload)
+      if (res.kind === "ok") {
+        if (res.data.token) {
+          self.saveToken(res.data.token)
+        }
+      }
+      return res
+    },
+
+    logout: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.logout()
+      if (res.kind === "ok") {
+        self.clearToken()
+        self.clearUser()
+      }
+      return res
+    },
+
+    // -------------------- LOCKER ------------------------
+
+    sendPasswordHint: async (email: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.sendMasterPasswordHint({ email })
+      return res
+    },
+
+    getUserPw: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getUserPw()
+      if (res.kind === "ok") {
+        self.saveUserPw(res.user)
       }
       return res
     },
@@ -172,16 +215,6 @@ export const UserModel = types
 
     lock: () => {
       self.setLoggedInPw(false)
-    },
-
-    logout: async () => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.logout()
-      if (res.kind === "ok") {
-        self.clearToken()
-        self.clearUser()
-      }
-      return res
     },
 
     loadTeams: async () => {

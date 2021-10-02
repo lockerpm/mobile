@@ -14,13 +14,14 @@ import { GOOGLE_CLIENT_ID } from "../../../config/constants"
 type Props = {
   nextStep: (username: string, password: string, methods: { type: string, data: any }[]) => void
   onLoggedIn: () => void
+  handleForgot: () => void
 }
 
 
 export const DefaultLogin = observer(function DefaultLogin(props: Props) {
   const { user } = useStores()
   const { translate, notify } = useMixins()
-  const { nextStep, onLoggedIn } = props
+  const { nextStep, onLoggedIn, handleForgot } = props
 
   // ------------------ Params -----------------------
 
@@ -49,10 +50,6 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
     setIsLoading(false)
   }
 
-  const handleForgot = () => {
-
-  }
-
   // ------------------------------ DATA -------------------------------
 
   const SOCIAL_LOGIN = {
@@ -63,11 +60,22 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
           GoogleSignin.configure({
             webClientId: GOOGLE_CLIENT_ID
           })
-          const res = await GoogleSignin.signIn();
-          console.log(res)
-          notify('success', 'ok')
+          await GoogleSignin.signIn()
+          const tokens = await GoogleSignin.getTokens()
+          setIsLoading(true)
+          const loginRes = await user.socialLogin({
+            provider: 'google',
+            access_token: tokens.accessToken
+          })
+          setIsLoading(false)
+          if (loginRes.kind !== 'ok') {
+            notify('error', translate('error.login_failed'))
+          } else {
+            onLoggedIn()
+          }
         } catch (e) {
-          notify('error', 'error')
+          console.log(e)
+          notify('error', translate('error.something_went_wrong'))
         }
       }
     },

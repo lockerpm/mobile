@@ -13,14 +13,30 @@ type SessionSnapshot = {
 
 // ------------------ Response ------------------------
 
-export type LoginResult = { kind: "ok"; data: {
-    token?: string
-    is_factor2?: boolean
-    methods?: {
+export type LoginResult = { 
+    kind: "ok"
+    data: {
+        token?: string
+        is_factor2?: boolean
+        methods?: {
+            type: string
+            data: any
+        }[]
+    }
+} | GeneralApiProblem
+export type SocialLoginResult = { 
+    kind: "ok"
+    data: {
+        token: string
+    }
+} | GeneralApiProblem
+export type AccountRecoveryResult = { 
+    kind: "ok"
+    data: {
         type: string
         data: any
-    }[]
-} } | GeneralApiProblem
+    }[] 
+} | GeneralApiProblem
 export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
 export type EmptyResult = { kind: "ok" } | GeneralApiProblem
@@ -28,13 +44,20 @@ export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
 export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
 export type GetPlanResult = {
-    kind: 'ok',
+    kind: 'ok'
     data: {
         name: string,
         alias: string
     }
 } | GeneralApiProblem
 export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
+export type ResetPasswordResult = { kind: "ok"; success: boolean } | GeneralApiProblem
+export type ResetPasswordWithCodeResult = {
+    kind: "ok" 
+    data: {
+        reset_password_url: string
+    } 
+} | GeneralApiProblem
 
 // ---------------- Request data --------------------
 

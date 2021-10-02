@@ -75,7 +75,9 @@
     "login_failed": "Đăng nhập không thành công",
     "something_went_wrong": "Đã có lỗi xảy ra",
     "sync_failed": "Đồng bộ hóa không thành công",
-    "token_expired": "Phiên của bạn đã hết hạn"
+    "token_expired": "Phiên của bạn đã hết hạn",
+    "no_associated_account": "Không có tài khoản nào sử dụng email hoặc username này. Vui lòng thử lại hoặc tạo tài khoản mới.",
+    "invalid_authorization_code": "Mã xác nhận không hợp lệ"
   },
   "success": {
     "master_password_updated": "Mật khẩu chính đã được cập nhật",
@@ -137,6 +139,13 @@
     "from_authenticator": "Vui lòng mở ứng dụng xác thực (ví dụ Duo hoặc Google Authenticator) để lấy mã",
     "from_email": "Email đã được gửi đến {{email}}. Kiểm tra hộp thư đến/hộp thư rác để nhận mã xác thực.",
     "save_device": "Ghi nhớ thiết bị này"
+  },
+  "forgot_password": {
+    "title": "Quên mật khẩu ?",
+    "username_or_email": "Nhập địa chỉ email hoặc username",
+    "request": "Khôi phục",
+    "enter_code": "Nhập mã",
+    "enter_code_here": "Nhập mã xác thực"
   },
   "signup": {
     "confirm_password": "Xác nhận mật khẩu",
