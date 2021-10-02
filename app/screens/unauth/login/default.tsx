@@ -2,23 +2,25 @@ import React, { useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
-import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components";
+import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import { commonStyles } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { LoginManager } from 'react-native-fbsdk-next'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { GOOGLE_CLIENT_ID } from "../../../config/constants"
 
 
 type Props = {
-  navigation: any
+  nextStep: (username: string, password: string, methods: { type: string, data: any }[]) => void
+  onLoggedIn: () => void
 }
 
 
 export const DefaultLogin = observer(function DefaultLogin(props: Props) {
   const { user } = useStores()
   const { translate, notify } = useMixins()
-  const { navigation } = props
+  const { nextStep, onLoggedIn } = props
 
   // ------------------ Params -----------------------
 
@@ -39,17 +41,9 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
       notify('error', translate('error.login_failed'))
     } else {
       if (res.data.is_factor2) {
-
+        nextStep(username, password, res.data.methods)
       } else {
-        await Promise.all([
-          user.getUser(),
-          user.getUserPw()
-        ])
-        if (user.is_pwd_manager) {
-          navigation.navigate('lock')
-        } else {
-          navigation.navigate('createMasterPassword')
-        }
+        onLoggedIn()
       }
     }
     setIsLoading(false)
@@ -67,7 +61,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
       handler: async () => {
         try {
           GoogleSignin.configure({
-            webClientId: '981402643553-rco2fb2lhbbpeihjt81p7pk86rs6tull.apps.googleusercontent.com'
+            webClientId: GOOGLE_CLIENT_ID
           })
           const res = await GoogleSignin.signIn();
           console.log(res)

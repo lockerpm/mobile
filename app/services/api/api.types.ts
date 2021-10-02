@@ -34,6 +34,7 @@ export type GetPlanResult = {
         alias: string
     }
 } | GeneralApiProblem
+export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
 
 // ---------------- Request data --------------------
 
@@ -77,6 +78,11 @@ export type ChangePasswordData = {
 
 export type PasswordHintRequestData = {
     email: string
+}
+
+export type EmailOtpRequestData = {
+    username: string
+    password: string
 }
 
 export type LoginUri = {
