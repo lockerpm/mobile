@@ -6,7 +6,6 @@ import { AutoImage as Image, Text, FloatingInput, Button } from "../../../compon
 import { useMixins } from "../../../services/mixins"
 import { commonStyles } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
-import { LoginManager } from 'react-native-fbsdk-next'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { GOOGLE_CLIENT_ID } from "../../../config/constants"
 
@@ -82,16 +81,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
 
     facebook: {
       icon: SOCIAL_LOGIN_ICON.facebook,
-      handler: async () => {
-        try {
-          const res = await LoginManager.logInWithPermissions(['public_profile', 'email'])
-          console.log(res)
-          notify('success', 'ok')
-        } catch (e) {
-          console.log(e)
-          notify('error', 'error')
-        }
-      }
+      handler: async () => {}
     },
 
     github: {

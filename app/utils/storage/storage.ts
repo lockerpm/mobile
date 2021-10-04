@@ -46,9 +46,12 @@ export async function load(key: string): Promise<any | null> {
     // if (__DEV__) {
     //   console.log(`Getting from ASYNC STORAGE key ${key}`)
     // }
+    console.log(key)
     const almostThere = await AsyncStorage.getItem(key)
+    console.log(key + ' ok')
     return JSON.parse(almostThere)
-  } catch {
+  } catch (e) {
+    console.log(e)
     return null
   }
 }

@@ -57,6 +57,7 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
     numberOfLines: textarea ? 4 : 1,
     value,
     placeholder: isFocused || fixedLabel ? placeholder : undefined,
+    autoCapitalize: 'none',
     ...rest
   }
 
