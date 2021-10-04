@@ -297,7 +297,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // Sync api
       const res = await cipherStore.syncData()
       if (res.kind !== 'ok') {
-        notify('error', translate('error.sync_failed'))
         messagingService.send('syncCompleted', { successfully: false })
         return res
       }
@@ -316,10 +315,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await syncService.syncPolicies(res.data.policies)
       await syncService.setLastSync(new Date())
       messagingService.send('syncCompleted', { successfully: true })
-      notify('success', translate('success.sync_success'))
       return { kind: 'ok' }
     } catch (e) {
-      notify('error', translate('error.sync_failed'))
       messagingService.send('syncCompleted', { successfully: false })
       return { kind: 'bad-data' }
     }

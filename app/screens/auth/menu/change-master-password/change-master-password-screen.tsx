@@ -21,6 +21,7 @@ export const ChangeMasterPasswordScreen = observer(function ChangeMasterPassword
     setIsLoading(true)
     const res = await changeMasterPassword(current, newPass)
     if (res.kind === 'ok') {
+      console.log('master pass change -> lock')
       navigation.navigate('lock')
     }
     setIsLoading(false)
@@ -74,7 +75,7 @@ export const ChangeMasterPasswordScreen = observer(function ChangeMasterPassword
 
         <Button
           isLoading={isLoading}
-          disabled={isLoading || !current || !newPass || !confirm || (newPass !== confirm)}
+          isDisabled={isLoading || !current || !newPass || !confirm || (newPass !== confirm)}
           onPress={handleChangePassword}
           text={translate('common.save')}
         />

@@ -20,12 +20,16 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Authentication</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>cystack-locker</string>
+				<string>com.googleusercontent.apps.981402643553-mahfnu4rr6qaf321f5r2hctfdve0nbcf</string>
 			</array>
 		</dict>
 	</array>

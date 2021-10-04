@@ -36,6 +36,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
     setIsError(false)
     const payload = { username, password }
     const res = await user.login(payload)
+    setIsLoading(false)
     if (res.kind !== 'ok') {
       setIsError(true)
       notify('error', translate('error.login_failed'))
@@ -46,7 +47,6 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
         onLoggedIn()
       }
     }
-    setIsLoading(false)
   }
 
   // ------------------------------ DATA -------------------------------

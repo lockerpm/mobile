@@ -39,7 +39,8 @@ export const Modal = observer(function Modal(props: ModalProps) {
       useSafeArea
       panDirection={null}
       visible={isOpen}
-      onDismiss={onClose}
+      // onDismiss={onClose}
+      onDialogDismissed={onClose}
     >
       <View 
         style={[commonStyles.CENTER_HORIZONTAL_VIEW, {

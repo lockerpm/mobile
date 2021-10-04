@@ -8,16 +8,22 @@ import { useStores } from "../../../models"
 
 export const StartScreen = observer(function StartScreen() {
   const { user, uiStore } = useStores()
-  const { getSyncData, loadFolders, loadCollections, isBiometricAvailable } = useMixins()
+  const { getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate } = useMixins()
   const navigation = useNavigation()
 
   const mounted = async () => {
     if (!uiStore.isOffline) {
-      await Promise.all([
+      const [syncRes] = await Promise.all([
         getSyncData(),
         user.loadTeams(),
         user.loadPlan()
       ])
+
+      if (syncRes.kind === 'ok') {
+        notify('success', translate('success.sync_success'))
+      } else {
+        notify('error', translate('error.sync_failed'))
+      }
     }
     
     await Promise.all([

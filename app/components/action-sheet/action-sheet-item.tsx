@@ -35,7 +35,7 @@ export const ActionSheetItem = observer(function ActionSheetItem(props: ActionSh
   return (
     <Button
       preset="link"
-      disabled={disabled}
+      isDisabled={disabled}
       onPress={onPress}
       style={styles}
     >

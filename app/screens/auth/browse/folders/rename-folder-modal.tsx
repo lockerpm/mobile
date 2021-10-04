@@ -62,7 +62,7 @@ export const RenameFolderModal = observer((props: Props) => {
 
       <Button
         text={translate('common.save')}
-        disabled={isLoading || !name.trim()}
+        isDisabled={isLoading || !name.trim()}
         isLoading={isLoading}
         onPress={renameFolder}
         style={{
