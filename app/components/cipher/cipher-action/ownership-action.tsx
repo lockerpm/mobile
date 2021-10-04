@@ -6,7 +6,6 @@ import { ActionItem } from "./action-item"
 import { Button } from "../../button/button"
 import { Text } from "../../text/text"
 import { ActionSheet, ActionSheetContent } from "../../action-sheet"
-import { Divider } from "../../divider/divider"
 
 export interface OwnershipActionProps {
   isOpen?: boolean,

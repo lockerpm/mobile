@@ -65,7 +65,7 @@ export const InitScreen = observer(function InitScreen() {
 
   // Life cycle
   useEffect(() => {
-    setTimeout(mounted, 1000)
+    setTimeout(mounted, 1500)
     // mounted()
   }, [])
 

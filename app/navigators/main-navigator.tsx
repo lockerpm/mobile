@@ -83,14 +83,26 @@ export function MainNavigator() {
   const { lock, getSyncData, getCipherById, loadFolders, loadCollections, logout } = useMixins()
   const { uiStore, user, cipherStore } = useStores()
 
+  const [socket, setSocket] = useState(null)
+  const [appIsActive, setAppIsActive] = useState(true) 
+
   // App screen lock trigger
   const _handleAppStateChange = async (nextAppState: string) => {
-    if (nextAppState === "active" && user.appTimeout && user.appTimeout === -1) {
+    // Ohter state (background/inactive)
+    if (nextAppState !== 'active') {
+      setAppIsActive(false)
+      return
+    }
+
+    // Active
+    if (!appIsActive && user.appTimeout && user.appTimeout === -1) {
+      setAppIsActive(true)
       if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
         await logout()
         navigation.navigate('onBoarding')
       } else {
         await lock()
+        console.log('app state change -> lock')
         navigation.navigate('lock')
       }
     }
@@ -104,6 +116,7 @@ export function MainNavigator() {
         navigation.navigate('onBoarding')
       } else {
         await lock()
+        console.log('inactive -> lock')
         navigation.navigate('lock')
       }
     }
@@ -156,8 +169,6 @@ export function MainNavigator() {
 
     return ws
   }
-
-  const [socket, setSocket] = useState(null)
 
   // Life cycle
   useEffect(() => {

@@ -105,7 +105,7 @@ export const FolderAction = (props: Props) => {
               onClose()
               setTimeout(() => {
                 setShowConfirmModal(true)
-              }, 100)
+              }, 1000)
             }}
           />
         </ActionSheetContent>
