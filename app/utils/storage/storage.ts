@@ -41,19 +41,19 @@ export async function saveString(key: string, value: string): Promise<boolean> {
  *
  * @param key The key to fetch.
  */
-export async function load(key: string): Promise<any | null> {
-  try {
-    // if (__DEV__) {
-    //   console.log(`Getting from ASYNC STORAGE key ${key}`)
-    // }
-    console.log(key)
-    const almostThere = await AsyncStorage.getItem(key)
-    console.log(key + ' ok')
-    return JSON.parse(almostThere)
-  } catch (e) {
-    console.log(e)
-    return null
-  }
+export function load(key: string): Promise<any | null> {
+  return new Promise((resolve, reject) => {
+    AsyncStorage.getItem(key, (err, res) => {
+      if (err) {
+        if (__DEV__) {
+          console.log(err)
+        }
+        resolve(err)
+      } else {
+        resolve(JSON.parse(res))
+      }
+    })
+  })
 }
 
 /**
