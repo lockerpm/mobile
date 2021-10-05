@@ -10,35 +10,35 @@ import { useStores } from "../../../models"
 
 type Props = {
   goBack: () => void
-  nextStep: (token: string) => void
-  username: string
+  nextStep: () => void
+  token: string
 }
 
 
-export const Step3 = observer(function Step3(props: Props) {
+export const Step4 = observer(function Step4(props: Props) {
   const { user } = useStores()
   const { translate, notify } = useMixins()
-  const { goBack, nextStep, username } = props
+  const { goBack, nextStep, token } = props
 
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [code, setCode] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   // ------------------ Methods ----------------------
 
-  const handleRequest = async () => {
+  const handleSubmitNewPassword = async () => {
     setIsError(false)
     setIsLoading(true)
-    const res = await user.resetPasswordWithCode(username, code)
+    const res = await user.setNewPassword(password, token)
     setIsLoading(false)
     if (res.kind !== 'ok') {
-      setIsError(true)
-      notify('error', translate('error.invalid_authorization_code'))
+      notify('error', translate('error.something_went_wrong'))
     } else {
-      const urlArray = res.data.reset_password_url.split('/')
-      nextStep(urlArray[urlArray.length - 1])
+      notify('success', translate('forgot_password.password_updated'))
+      nextStep()
     }
   }
 
@@ -60,23 +60,31 @@ export const Step3 = observer(function Step3(props: Props) {
         </Button>
         <Text
           preset="header"
-          text={translate('forgot_password.enter_code')}
+          text={translate('forgot_password.set_new_password')}
         />
       </View>
 
       <FloatingInput
         isInvalid={isError}
-        label={translate('forgot_password.enter_code_here')}
-        value={code}
-        onChangeText={setCode}
+        label={translate('forgot_password.new_password')}
+        value={password}
+        onChangeText={setPassword}
+        style={{ marginTop: 10 }}
+      />
+
+      <FloatingInput
+        isInvalid={isError || (password && confirmPassword && (password !== confirmPassword))}
+        label={translate('forgot_password.confirm_new_password')}
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
         style={{ marginTop: 10 }}
       />
 
       <Button
         isLoading={isLoading}
-        isDisabled={isLoading || !code}
-        text={translate("common.authenticate")}
-        onPress={handleRequest}
+        isDisabled={isLoading || !(password && confirmPassword === password)}
+        text={translate("common.submit")}
+        onPress={handleSubmitNewPassword}
         style={{
           width: '100%',
           marginTop: 30

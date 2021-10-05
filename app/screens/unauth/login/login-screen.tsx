@@ -133,7 +133,6 @@ export const LoginScreen = observer(function LoginScreen() {
     >
       <View style={{ height: '100%' }}>
         <TabView
-          lazy
           swipeEnabled={false}
           renderTabBar={() => null}
           navigationState={{ index, routes }}

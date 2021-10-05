@@ -4,6 +4,7 @@
     "authenticate": "Xác thực",
     "authentication_app": "Ứng dụng xác thực",
     "add": "Thêm",
+    "and": "và",
     "biometric_unlocking": "Mở khóa bằng Face ID/Touch ID",
     "browse": "Kho",
     "cancel": "Hủy",
@@ -12,6 +13,7 @@
     "clone": "Tạo bản sao",
     "continue": "Tiếp tục",
     "copied_to_clipboard": "Đã sao chép",
+    "country": "Quốc gia",
     "create": "Tạo",
     "delete": "Xóa",
     "details": "Chi tiết",
@@ -59,6 +61,7 @@
     "sign_up": "Đăng ký",
     "skip": "Bỏ qua",
     "sort": "Sắp xếp",
+    "submit": "Gửi",
     "trash": "Thùng rác",
     "tools": "Công cụ",
     "unlock": "Mở khóa"
@@ -77,7 +80,8 @@
     "sync_failed": "Đồng bộ hóa không thành công",
     "token_expired": "Phiên của bạn đã hết hạn",
     "no_associated_account": "Không có tài khoản nào sử dụng email hoặc username này. Vui lòng thử lại hoặc tạo tài khoản mới.",
-    "invalid_authorization_code": "Mã xác nhận không hợp lệ"
+    "invalid_authorization_code": "Mã xác nhận không hợp lệ",
+    "invalid_data": "Dữ liệu không hợp lệ"
   },
   "success": {
     "master_password_updated": "Mật khẩu chính đã được cập nhật",
@@ -130,6 +134,7 @@
     "title": "Your daily needs"
   },
   "login": {
+    "title": "Đăng nhập tài khoản",
     "email_or_username": "Email hoặc tên đăng nhập",
     "forgot_password": "Quên mật khẩu?",
     "no_account": "Chưa có tài khoản?",
@@ -145,13 +150,21 @@
     "username_or_email": "Nhập địa chỉ email hoặc username",
     "request": "Khôi phục",
     "enter_code": "Nhập mã",
-    "enter_code_here": "Nhập mã xác thực"
+    "enter_code_here": "Nhập mã xác thực",
+    "set_new_password": "Khôi phục mật khẩu",
+    "new_password": "Mật khẩu mới",
+    "confirm_new_password": "Xác nhận mật khẩu mới",
+    "password_updated": "Mật khẩu của bạn đã được cập nhật. Vui lòng đăng nhập bằng mật khẩu mới."
   },
   "signup": {
+    "title": "Đăng ký tài khoản",
     "confirm_password": "Xác nhận mật khẩu",
     "agree_with": "Tôi đồng ý với",
     "subscribe_desc": "Cập nhật cho tôi về tin tức, sự kiện và ưu đãi",
-    "has_account": "Đã có tài khoản?"
+    "has_account": "Đã có tài khoản?",
+    "terms": "điều khoản dịch vụ",
+    "conditions": "chính sách bảo mật",
+    "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn."
   },
   "biometric_intro": {
     "title": "Mở khóa Locker bằng Face ID/Touch ID",

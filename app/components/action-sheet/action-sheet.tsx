@@ -33,7 +33,6 @@ export const ActionSheet = observer(function ActionSheet(props: ActionSheetProps
       bottom
       width="100%"
       visible={isOpen}
-      // onDismiss={onClose}
       onDialogDismissed={onClose}
       renderPannableHeader={() => (
         <View style={{ height: 40 }}>

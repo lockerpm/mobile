@@ -1,30 +1,76 @@
-import React, { useState } from "react"
-import { View } from "react-native"
+import React, { useState, useEffect } from "react"
+import { Linking, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { Layout, AutoImage as Image, Text, FloatingInput, Button } from "../../../components";
 import { useMixins } from "../../../services/mixins"
-import { commonStyles } from "../../../theme"
-import { APP_ICON } from "../../../common/mappings"
+import { color, commonStyles, fontSize } from "../../../theme"
+import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
+import { GoogleSignin } from "@react-native-google-signin/google-signin"
+import { GOOGLE_CLIENT_ID, PRIVACY_POLICY_URL, TERMS_URL } from "../../../config/constants"
+import { Checkbox } from "react-native-ui-lib"
+import countries from '../../../common/countries.json'
+
 
 export const SignupScreen = observer(function SignupScreen() {
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const navigation = useNavigation()
-  const { translate } = useMixins()
+  const { translate, notify } = useMixins()
 
   // ---------------- PARAMS ---------------------
 
+  const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [fullname, setFullname] = useState('')
-  const [org, setOrg] = useState('')
-  const [country, setCountry] = useState('')
+  const [country, setCountry] = useState('VN')
   const [phone, setPhone] = useState('')
+  const [phonePrefix, setPhonePrefix] = useState('+84')
   const [agreed, setAgreed] = useState(false)
-  const [subscribed, setSubscribed] = useState(false)
+
+  // ------------------------------ DATA -------------------------------
+
+  const SOCIAL_LOGIN = {
+    google: {
+      icon: SOCIAL_LOGIN_ICON.google,
+      handler: async () => {
+        try {
+          GoogleSignin.configure({
+            webClientId: GOOGLE_CLIENT_ID
+          })
+          await GoogleSignin.signIn()
+          const tokens = await GoogleSignin.getTokens()
+          setIsLoading(true)
+          const loginRes = await user.socialLogin({
+            provider: 'google',
+            access_token: tokens.accessToken
+          })
+          setIsLoading(false)
+          if (loginRes.kind !== 'ok') {
+            notify('error', translate('error.login_failed'))
+          } else {
+            onLoggedIn()
+          }
+        } catch (e) {
+          console.log(e)
+          notify('error', translate('error.something_went_wrong'))
+        }
+      }
+    },
+
+    facebook: {
+      icon: SOCIAL_LOGIN_ICON.facebook,
+      handler: async () => {}
+    },
+
+    github: {
+      icon: SOCIAL_LOGIN_ICON.github,
+      handler: () => {}
+    }
+  }
 
   // ---------------- COMPUTED ---------------------
 
@@ -32,16 +78,68 @@ export const SignupScreen = observer(function SignupScreen() {
 
   // ---------------- METHODS ---------------------
 
-  const handleRegister = () => {
-
+  const handleRegister = async () => {
+    setIsLoading(true)
+    const res = await user.register({
+      email,
+      password,
+      country,
+      confirm_password: confirmPassword,
+      full_name: fullname,
+      phone: phone ? phonePrefix + ' ' + phone : undefined
+    })
+    setIsLoading(false)
+    if (res.kind === 'ok') {
+      notify('success', translate('signup.signup_successful'), 5000)
+      navigation.navigate('login')
+    } else {
+      notify('error', translate('error.invalid_data'))
+    }
   }
+
+  const onLoggedIn = async () => {
+    setIsScreenLoading(true)
+    const [userRes, userPwRes] = await Promise.all([
+      user.getUser(),
+      user.getUserPw()
+    ])
+    setIsScreenLoading(false)
+    if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
+      if (user.is_pwd_manager) {
+        navigation.navigate('lock')
+      } else {
+        navigation.navigate('createMasterPassword')
+      }
+    }
+  }
+
+  // ---------------- WATCHERS --------------------
+  
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (uiStore.selectedCountry) {
+        const item = countries[uiStore.selectedCountry]
+        if (item) {
+          setCountry(uiStore.selectedCountry)
+          setPhonePrefix(item.country_phone_code)
+        }
+        uiStore.setSelectedCountry(null)
+      }
+    });
+
+    return unsubscribe
+  }, [navigation])
+
+  // ---------------- RENDER ---------------------
 
   return (
     <Layout
+      isOverlayLoading={isScreenLoading}
       footer={(
         <View
           style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
             marginTop: 12,
+            justifyContent: 'center'
           }]}
         >
           <Text
@@ -59,14 +157,23 @@ export const SignupScreen = observer(function SignupScreen() {
       )}
     >
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
-        <Image source={APP_ICON.iconDark} style={{ height: 63, width: 63 }} />
+      <Image 
+        source={APP_ICON.iconDark} 
+        style={{ height: 63, width: 63, marginBottom: 10, marginTop: 30 }}
+      />
+
+      <Text
+        preset="header"
+        text={translate('signup.title')}
+        style={{ marginBottom: 20 }}
+      />
 
         {/* Username input */}
         <FloatingInput
           label={translate('common.email')}
           onChangeText={setEmail}
           value={email}
-          style={{ width: '100%' }}
+          style={{ width: '100%', marginBottom: 10 }}
         />
         {/* Username input end */}
 
@@ -76,7 +183,7 @@ export const SignupScreen = observer(function SignupScreen() {
           label={translate('common.password')}
           onChangeText={setPassword}
           value={password}
-          style={{ width: '100%' }}
+          style={{ width: '100%', marginBottom: 10 }}
         />
         {/* Password input end */}
 
@@ -86,7 +193,7 @@ export const SignupScreen = observer(function SignupScreen() {
           label={translate('signup.confirm_password')}
           onChangeText={setConfirmPassword}
           value={confirmPassword}
-          style={{ width: '100%' }}
+          style={{ width: '100%', marginBottom: 10 }}
         />
         {/* Confirm Password input end */}
 
@@ -95,18 +202,73 @@ export const SignupScreen = observer(function SignupScreen() {
           label={translate('common.fullname')}
           onChangeText={setFullname}
           value={fullname}
-          style={{ width: '100%' }}
+          style={{ width: '100%', marginBottom: 10 }}
         />
         {/* Full name input end */}
 
-        {/* Org input */}
-        <FloatingInput
-          label={translate('common.organization')}
-          onChangeText={setOrg}
-          value={org}
-          style={{ width: '100%' }}
-        />
-        {/* Org input end */}
+        {/* Country input */}
+        <Button
+          preset="link"
+          onPress={() => {
+            navigation.navigate('countrySelector', { initialId: country })
+          }}
+        >
+          <FloatingInput
+            editable={false}
+            label={translate('common.country')}
+            value={countries[country] ? countries[country].country_name : ''}
+            style={{ width: '100%', marginBottom: 10 }}
+          />
+        </Button>
+        {/* Country input end */}
+
+        {/* Aggreed */}
+        <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+          width: '100%',
+          justifyContent: 'flex-start',
+          marginTop: 10
+        }]}>
+          <Checkbox
+            value={agreed}
+            color={color.palette.green}
+            onValueChange={setAgreed}
+            style={{
+              marginVertical: 7
+            }}
+            labelStyle={{
+              color: color.text,
+              fontSize: fontSize.p
+            }}
+          />
+          <Button
+            preset="link"
+            onPress={() => setAgreed(!agreed)}
+            style={{ flex: 1 }}
+          >
+            <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+              paddingLeft: 15,
+              flexWrap: 'wrap'
+            }]}>
+              <Text
+                text={translate('signup.agree_with') + ' '}
+              />
+              <Button
+                preset="link"
+                text={translate('signup.terms')}
+                onPress={() => Linking.openURL(TERMS_URL)}
+              />
+              <Text
+                text={' ' + translate('common.and') + ' '}
+              />
+              <Button
+                preset="link"
+                text={translate('signup.conditions')}
+                onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}
+              />
+            </View>
+          </Button>
+        </View>
+        {/* Aggreed end */}
 
         <Button
           isLoading={isLoading}
@@ -115,9 +277,35 @@ export const SignupScreen = observer(function SignupScreen() {
           onPress={handleRegister}
           style={{
             width: '100%',
-            marginTop: 20
+            marginTop: 30,
+            marginBottom: 20
           }}
         />
+
+        <View style={commonStyles.CENTER_VIEW}>
+          <Text
+            text={translate("common.or_login_with")}
+            style={{ marginBottom: 5 }}
+          />
+
+          <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+            {
+              Object.values(SOCIAL_LOGIN).map((item, index) => (
+                <Button
+                  key={index}
+                  preset="ghost"
+                  onPress={item.handler}
+                  style={{ marginHorizontal: 10 }}
+                >
+                  <Image
+                    source={item.icon}
+                    style={{ height: 30, width: 30 }}
+                  />
+                </Button>
+              ))
+            }
+          </View>
+        </View>
       </View>
     </Layout>
   )

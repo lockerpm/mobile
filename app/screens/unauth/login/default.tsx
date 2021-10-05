@@ -96,7 +96,13 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
     <View style={{ alignItems: 'center', paddingTop: '10%' }}>
       <Image 
         source={APP_ICON.iconDark} 
-        style={{ height: 63, width: 63, marginBottom: 40, marginTop: 30 }}
+        style={{ height: 63, width: 63, marginBottom: 10, marginTop: 30 }}
+      />
+
+      <Text
+        preset="header"
+        text={translate('login.title')}
+        style={{ marginBottom: 20 }}
       />
 
       {/* Username input */}

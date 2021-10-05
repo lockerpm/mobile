@@ -69,6 +69,16 @@ export type LoginData = {
     save_device?: boolean
 }
 
+export type RegisterData = {
+    email: string
+    password: string
+    confirm_password: string
+    full_name: string
+    country: string
+    phone?: string
+    keep_me_updated?: boolean
+}
+
 export type SessionLoginData = {
     client_id: 'mobile'
     password: string
@@ -77,7 +87,7 @@ export type SessionLoginData = {
     device_identifier: string
 }
 
-export type RegisterData = {
+export type RegisterLockerData = {
     name: string,
     email: string,
     master_password_hash: string,

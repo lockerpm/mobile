@@ -11,7 +11,7 @@ import { APP_ICON } from "../../../common/mappings"
 
 export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
   const navigation = useNavigation()
-  const { logout, register, translate } = useMixins()
+  const { logout, registerLocker, translate } = useMixins()
   const { user } = useStores()
   const { getPasswordStrength } = useMixins()
 
@@ -38,10 +38,9 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
 
   const handleCreate = async () => {
     setIsCreating(true)
-    const res = await register(masterPassword, hint, passwordStrength)
+    const res = await registerLocker(masterPassword, hint, passwordStrength)
     setIsCreating(false)
     if (res.kind === 'ok') {
-      console.log('set master pass -> lock')
       navigation.navigate('lock')
     }
   }
@@ -54,7 +53,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         <View style={{ alignItems: "flex-end" }}>
           <Button
             text={translate('common.logout')}
-            textStyle={{ fontSize: fontSize.small }}
+            textStyle={{ fontSize: fontSize.p }}
             preset="link"
             onPress={handleLogout}
           >

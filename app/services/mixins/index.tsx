@@ -15,6 +15,7 @@ import { delay } from '../../utils/delay'
 import { translate as tl, TxKeyPath } from "../../i18n"
 import { GET_LOGO_URL } from '../../config/constants'
 import i18n from "i18n-js"
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 
 const { createContext, useContext } = React
 
@@ -37,7 +38,7 @@ const defaultData = {
   notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
   randomString: () => '',
   newCipher: (type: CipherType) => { return new CipherView() },
-  register: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
+  registerLocker: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   changeMasterPassword: async (oldPassword: string, newPassword: string) => { return { kind: 'unknown' } },
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getTeam: (teams: object[], orgId: string) => ({ name: '' }),
@@ -181,7 +182,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   }
 
   // Set master password
-  const register = async (masterPassword: string, hint: string, passwordStrength: number) => {
+  const registerLocker = async (masterPassword: string, hint: string, passwordStrength: number) => {
     try {
       await delay(200)
       const kdf = KdfType.PBKDF2_SHA256
@@ -197,7 +198,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await cryptoService.setEncKey(encKey[1].encryptedString)
       await cryptoService.setEncPrivateKey(keys[1].encryptedString)
 
-      const res = await user.register({
+      const res = await user.registerLocker({
         name: user.full_name,
         email: user.email,
         master_password_hash: hashedPassword,
@@ -276,6 +277,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       cryptoService.clearKeys(),
       userService.clear()
     ])
+    const isSignedIn = await GoogleSignin.isSignedIn()
+    if (isSignedIn) {
+      await GoogleSignin.signOut()
+    }
   }
 
   // Lock screen
@@ -508,7 +513,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     randomString,
     getSyncData,
     newCipher,
-    register,
+    registerLocker,
     changeMasterPassword,
     getWebsiteLogo,
     getTeam,

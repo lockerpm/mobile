@@ -1,15 +1,18 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { View } from "react-native"
+import { Linking, View } from "react-native"
 import { Layout, Text, Button, Header } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
+import { PRIVACY_POLICY_URL, TERMS_URL } from "../../../../config/constants"
 
 
 type Item = {
   name: string
+  disabled?: boolean
+  action?: () => void
 }
 
 
@@ -19,13 +22,20 @@ export const HelpScreen = observer(function HelpScreen() {
 
   const items: Item[] = [
     {
-      name: translate('help.help_center')
+      name: translate('help.help_center'),
+      disabled: true
     },
     {
-      name: translate('help.terms')
+      name: translate('help.terms'),
+      action: () => {
+        Linking.openURL(TERMS_URL)
+      }
     },
     {
-      name: translate('help.policy')
+      name: translate('help.policy'),
+      action: () => {
+        Linking.openURL(PRIVACY_POLICY_URL)
+      }
     }
   ]
 
@@ -46,6 +56,8 @@ export const HelpScreen = observer(function HelpScreen() {
             <Button
               key={index}
               preset="link"
+              isDisabled={item.disabled}
+              onPress={item.action}
               style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
                 borderBottomColor: color.line,
                 borderBottomWidth: 1,
