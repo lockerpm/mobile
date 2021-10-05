@@ -12,7 +12,10 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const preset = presets.fixed
   const style = props.style || {}
   const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : {}
-  const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
+  const insetStyle = { 
+    paddingTop: props.unsafe ? 0 : insets.top, 
+    paddingBottom: props.unsafe || !props.hasFooter ? 0 : insets.bottom
+  }
 
   return (
     <KeyboardAvoidingView
@@ -40,7 +43,10 @@ function ScreenWithScrolling(props: ScreenProps) {
   const preset = presets.scroll
   const style = props.style || {}
   const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : {}
-  const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
+  const insetStyle = { 
+    paddingTop: props.unsafe ? 0 : insets.top, 
+    paddingBottom: props.unsafe || !props.hasFooter ? 0 : insets.bottom
+  }
 
   return (
     <KeyboardAvoidingView

@@ -30,6 +30,7 @@ export const Layout = observer(function Layout(props: LayoutProps) {
       isLoading={props.isScreenLoading} 
       isOverlayLoading={props.isOverlayLoading}
       style={props.style}
+      hasFooter={!!props.footer}
     >
       {
         props.header && (

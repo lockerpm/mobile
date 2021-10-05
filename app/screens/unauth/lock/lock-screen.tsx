@@ -4,9 +4,10 @@ import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { color, fontSize } from "../../../theme"
+import { color, commonStyles, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
+import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 
 export const LockScreen = observer(function LockScreen() {
@@ -82,6 +83,7 @@ export const LockScreen = observer(function LockScreen() {
   }
 
   // Components
+
   const header = (
     <View style={{ alignItems: "flex-end" }}>
       <Button
@@ -94,14 +96,28 @@ export const LockScreen = observer(function LockScreen() {
     </View>
   )
 
+  const footer = (
+    <Button
+      isLoading={isSendingHint}
+      isDisabled={isSendingHint}
+      preset="link"
+      text={translate("lock.get_hint")}
+      onPress={handleGetHint}
+      style={{
+        width: '100%'
+      }}
+    />
+  )
+
   // Render
   return (
     <Layout
       isOverlayLoading={isScreenLoading}
       header={header}
+      footer={footer}
     >
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
-        <Image source={APP_ICON.icon} style={{ height: 63 }} />
+        <Image source={APP_ICON.iconDark} style={{ height: 63, width: 63 }} />
 
         <Text
           preset="header"
@@ -159,6 +175,7 @@ export const LockScreen = observer(function LockScreen() {
           onChangeText={setMasterPassword}
           value={masterPassword}
           style={{ width: '100%' }}
+          onSubmitEditing={handleUnlock}
         />
         {/* Master pass input end */}
 
@@ -173,28 +190,33 @@ export const LockScreen = observer(function LockScreen() {
           }}
         />
 
-        <Button
-          isLoading={isBioUnlocking}
-          isDisabled={isBioUnlocking}
-          preset="outline"
-          text={translate("common.biometric_unlocking")}
-          onPress={handleUnlockBiometric}
-          style={{
-            width: '100%',
-            marginVertical: 10
-          }}
-        />
-
-        <Button
-          isLoading={isSendingHint}
-          isDisabled={isSendingHint}
-          preset="ghost"
-          text={translate("lock.get_hint")}
-          onPress={handleGetHint}
-          style={{
-            width: '100%'
-          }}
-        />
+        {
+          user.isBiometricUnlock && (
+            <Button
+              isLoading={isBioUnlocking}
+              isDisabled={isBioUnlocking}
+              preset="ghost"
+              onPress={handleUnlockBiometric}
+              style={{
+                width: '100%',
+                marginVertical: 10
+              }}
+            >
+              <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginHorizontal: 5 }]}>
+                <MaterialCommunityIconsIcon
+                  name="face-recognition"
+                  size={20}
+                  color={color.textBlack}
+                />
+                <Text
+                  preset="black"
+                  text={translate("common.biometric_unlocking")}
+                  style={{ marginLeft: 7 }}
+                />
+              </View>
+            </Button>
+          )
+        }
       </View>
     </Layout>
   )

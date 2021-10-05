@@ -63,7 +63,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
       )}
     >
       <View style={{ alignItems: 'center' }}>
-        <Image source={APP_ICON.icon} style={{ height: 63 }} />
+        <Image source={APP_ICON.iconDark} style={{ height: 63, width: 63 }} />
 
         <Text
           preset="header"

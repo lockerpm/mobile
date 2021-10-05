@@ -4,7 +4,7 @@
     "authenticate": "Authenticate",
     "authentication_app": "Authentication App",
     "add": "Add",
-    "biometric_unlocking": "Biometric Unlocking",
+    "biometric_unlocking": "Unlock with Face ID/Touch ID",
     "browse": "Browse",
     "cancel": "Cancel",
     "card": "Card",
@@ -67,8 +67,8 @@
     "is_offline": "Locker is currently in offline mode."
   },
   "error": {
-    "biometric_not_enable": "Biometric unlocking is not enabled",
-    "biometric_not_support": "Biometric unlocking is not supported",
+    "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
+    "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
     "network_error": "Network error",
     "required_data": "This data is mandatory",
     "session_login_failed": "Session login failed",
@@ -81,7 +81,7 @@
   },
   "success": {
     "master_password_updated": "Master password updated",
-    "biometric_enabled": "Biometric unlocking is enabled",
+    "biometric_enabled": "Face ID/Touch ID unlocking is enabled",
     "cipher_created": "New item created",
     "cipher_deleted": "Item deleted",
     "cipher_restored": "Item restored",
@@ -154,9 +154,9 @@
     "has_account": "Already have an account?"
   },
   "biometric_intro": {
-    "title": "Unlock vault with biometric",
+    "title": "Unlock your vault with Face ID/Touch ID",
     "desc": "Use face recognition or fingerprint to protect your passwords",
-    "use_btn": "Use Biometric",
+    "use_btn": "Use Face ID/Touch ID",
     "later_btn": "I’ll do it later"
   },
   "card": {

@@ -4,7 +4,7 @@
     "authenticate": "Xác thực",
     "authentication_app": "Ứng dụng xác thực",
     "add": "Thêm",
-    "biometric_unlocking": "Mở khóa bằng sinh trắc học",
+    "biometric_unlocking": "Mở khóa bằng Face ID/Touch ID",
     "browse": "Kho",
     "cancel": "Hủy",
     "card": "Thẻ tín dụng",
@@ -67,8 +67,8 @@
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
   },
   "error": {
-    "biometric_not_enable": "Mở khóa bằng sinh trắc học chưa được kích hoạt",
-    "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng sinh trắc học",
+    "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
+    "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
     "network_error": "Kết nối mạng không thành công",
     "required_data": "Không được để trống thông tin này",
     "session_login_failed": "Đăng nhập phiên không thành công",
@@ -81,7 +81,7 @@
   },
   "success": {
     "master_password_updated": "Mật khẩu chính đã được cập nhật",
-    "biometric_enabled": "Mở khóa bằng sinh trắc học đã được kích hoạt",
+    "biometric_enabled": "Mở khóa bằng Face ID/Touch ID đã được kích hoạt",
     "cipher_created": "Thêm mới thành công",
     "cipher_deleted": "Xóa thành công",
     "cipher_restored": "Khôi phục thành công",
@@ -154,9 +154,9 @@
     "has_account": "Đã có tài khoản?"
   },
   "biometric_intro": {
-    "title": "Mở khóa Locker bằng sinh trắc học",
+    "title": "Mở khóa Locker bằng Face ID/Touch ID",
     "desc": "Sử dụng nhận dạng khuôn mặt hoặc vân tay để bảo vệ mật khẩu của bạn",
-    "use_btn": "Sử dụng sinh trắc học",
+    "use_btn": "Sử dụng Face ID/Touch ID",
     "later_btn": "Để sau"
   },
   "card": {
