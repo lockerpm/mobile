@@ -41,7 +41,8 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
     switch (selectedCipher.type) {
       case CipherType.Login:
         return {
-          img: { uri: selectedCipher.login.uri },
+          // img: { uri: selectedCipher.login.uri },
+          img: BROWSE_ITEMS.password.icon,
           backup: BROWSE_ITEMS.password.icon,
           path: 'passwords'
         }

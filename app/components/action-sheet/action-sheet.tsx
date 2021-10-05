@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
 import Dialog from "react-native-ui-lib/dialog"
 import { color, commonStyles } from "../../theme"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 
 const CONTAINER: ViewStyle = {
@@ -25,7 +26,8 @@ export interface ActionSheetProps {
  */
 export const ActionSheet = observer(function ActionSheet(props: ActionSheetProps) {
   const { style, children, isOpen, onClose } = props
-  const styles = flatten([CONTAINER, style])
+  const insets = useSafeAreaInsets()
+  const styles = flatten([CONTAINER, { paddingBottom: insets.bottom }, style])
 
   return (
     <Dialog
