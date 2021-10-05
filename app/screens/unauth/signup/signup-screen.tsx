@@ -42,7 +42,6 @@ export const SignupScreen = observer(function SignupScreen() {
         <View
           style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
             marginTop: 12,
-            marginBottom: 24
           }]}
         >
           <Text
@@ -60,7 +59,7 @@ export const SignupScreen = observer(function SignupScreen() {
       )}
     >
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
-        <Image source={APP_ICON.icon} style={{ height: 63 }} />
+        <Image source={APP_ICON.iconDark} style={{ height: 63, width: 63 }} />
 
         {/* Username input */}
         <FloatingInput

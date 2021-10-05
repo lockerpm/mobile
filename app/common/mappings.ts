@@ -109,6 +109,7 @@ export const FOLDER_IMG = {
 
 export const APP_ICON = {
   icon: require('./images/appIcon/locker.png'),
+  iconDark: require('./images/appIcon/locker-dark.png'),
   textVertical: require('./images/appIcon/textVertical.png'),
   textHorizontal: require('./images/appIcon/textHorizontal.png')
 }

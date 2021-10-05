@@ -114,7 +114,6 @@ export const LoginScreen = observer(function LoginScreen() {
         <View
           style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
             marginTop: 12,
-            marginBottom: 24,
             justifyContent: 'center'
           }]}
         >

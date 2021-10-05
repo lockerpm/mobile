@@ -82,7 +82,6 @@ export const IntroScreen = observer(function IntroScreen() {
             setIndex((index + 1) % routes.length)
           }
         }}
-        style={{ marginBottom: 24 }}
       >
       </Button>
     </View>

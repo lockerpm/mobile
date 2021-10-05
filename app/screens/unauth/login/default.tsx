@@ -95,8 +95,8 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
   return (
     <View style={{ alignItems: 'center', paddingTop: '10%' }}>
       <Image 
-        source={APP_ICON.icon} 
-        style={{ height: 63, marginBottom: 40, marginTop: 30 }}
+        source={APP_ICON.iconDark} 
+        style={{ height: 63, width: 63, marginBottom: 40, marginTop: 30 }}
       />
 
       {/* Username input */}
