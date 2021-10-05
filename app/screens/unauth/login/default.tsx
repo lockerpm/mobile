@@ -123,6 +123,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
         onChangeText={setPassword}
         value={password}
         style={{ width: '100%' }}
+        onSubmitEditing={handleLogin}
       />
       {/* Password input end */}
 

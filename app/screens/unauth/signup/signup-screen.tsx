@@ -247,7 +247,8 @@ export const SignupScreen = observer(function SignupScreen() {
           >
             <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
               paddingLeft: 15,
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
+              width: '100%'
             }]}>
               <Text
                 text={translate('signup.agree_with') + ' '}

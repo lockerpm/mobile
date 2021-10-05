@@ -41,7 +41,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
     const res = await registerLocker(masterPassword, hint, passwordStrength)
     setIsCreating(false)
     if (res.kind === 'ok') {
-      navigation.navigate('lock')
+      navigation.navigate('mainStack')
     }
   }
 
