@@ -4,6 +4,7 @@
     "authenticate": "Authenticate",
     "authentication_app": "Authentication App",
     "add": "Add",
+    "and": "and",
     "biometric_unlocking": "Unlock with Face ID/Touch ID",
     "browse": "Browse",
     "cancel": "Cancel",
@@ -12,6 +13,7 @@
     "clone": "Clone",
     "continue": "Continue",
     "copied_to_clipboard": "Copied to clipboard",
+    "country": "Country",
     "create": "Create",
     "delete": "Delete",
     "details": "Details",
@@ -59,6 +61,7 @@
     "sign_up": "Sign up",
     "skip": "Skip",
     "sort": "Sort",
+    "submit": "Submit",
     "trash": "Trash",
     "tools": "Tools",
     "unlock": "Unlock"
@@ -77,7 +80,8 @@
     "sync_failed": "Synchronize data failed",
     "token_expired": "Session token expired",
     "no_associated_account": "There’s no account associated with this email or username. Try another or create a new account.",
-    "invalid_authorization_code": "The authorization code is not valid"
+    "invalid_authorization_code": "The authorization code is not valid",
+    "invalid_data": "Invalid data"
   },
   "success": {
     "master_password_updated": "Master password updated",
@@ -130,6 +134,7 @@
     "title": "Your daily needs"
   },
   "login": {
+    "title": "Sign in to your account",
     "email_or_username": "Email or Username",
     "forgot_password": "Forgot password?",
     "no_account": "Don't have an account?",
@@ -145,13 +150,21 @@
     "request": "Request",
     "username_or_email": "Enter your username or email address",
     "enter_code": "Enter code",
-    "enter_code_here": "Enter verification code here"
+    "enter_code_here": "Enter verification code here",
+    "set_new_password": "Set new password",
+    "new_password": "New password",
+    "confirm_new_password": "Confirm new password",
+    "password_updated": "Your password has been updated. Please login using the new password."
   },
   "signup": {
+    "title": "Sign up for a free account",
     "confirm_password": "Confirm Password",
     "agree_with": "I agree with the",
     "subscribe_desc": "Please keep me updated on news, events and offers",
-    "has_account": "Already have an account?"
+    "has_account": "Already have an account?",
+    "terms": "terms",
+    "conditions": "conditions",
+    "signup_successful": "A confirmation email has been sent to your address."
   },
   "biometric_intro": {
     "title": "Unlock your vault with Face ID/Touch ID",

@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
-import { ChangePasswordData, RegisterData, SessionLoginData, LoginData } from "../../services/api"
+import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -145,6 +145,12 @@ export const UserModel = types
       return res
     },
 
+    setNewPassword: async (new_password: string, token: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.setNewPassword({ new_password, token })
+      return res
+    },
+
     login: async (payload: LoginData, isOtp?: boolean) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.login(payload, isOtp)
@@ -164,6 +170,12 @@ export const UserModel = types
           self.saveToken(res.data.token)
         }
       }
+      return res
+    },
+
+    register: async (payload: RegisterData) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.register(payload)
       return res
     },
 
@@ -203,9 +215,9 @@ export const UserModel = types
       return res
     },
 
-    register: async (payload: RegisterData) => {
+    registerLocker: async (payload: RegisterLockerData) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.register(payload)
+      const res = await userApi.registerLocker(payload)
       return res
     },
 

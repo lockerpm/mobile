@@ -88,7 +88,7 @@ export const LockScreen = observer(function LockScreen() {
     <View style={{ alignItems: "flex-end" }}>
       <Button
         text={translate('common.logout').toUpperCase()}
-        textStyle={{ fontSize: fontSize.small }}
+        textStyle={{ fontSize: fontSize.p }}
         preset="link"
         onPress={handleLogout}
       >

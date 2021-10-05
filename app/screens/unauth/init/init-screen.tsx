@@ -21,10 +21,10 @@ export const InitScreen = observer(function InitScreen() {
     user.setLanguage(user.language)
 
     // Testing
-    if (__DEV__) {
-      // navigation.navigate('intro')
-      // return
-    }
+    // if (__DEV__) {
+    //   navigation.navigate('createMasterPassword')
+    //   return
+    // }
 
     // Logged in?
     if (!user.isLoggedIn) {

@@ -11,7 +11,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
 import { 
   IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, 
-  CreateMasterPasswordScreen, ForgotPasswordScreen
+  CreateMasterPasswordScreen, ForgotPasswordScreen, CountrySelectorScreen
 } from "../screens"
 import { color } from "../theme"
 import { useMixins } from "../services/mixins"
@@ -36,7 +36,10 @@ export type RootParamList = {
   forgotPassword: undefined,
   signup: undefined,
   createMasterPassword: undefined,
-  mainStack: undefined
+  mainStack: undefined,
+  countrySelector: {
+    initialId?: string,
+  }
 }
 
 const Stack = createStackNavigator<RootParamList>()
@@ -78,6 +81,7 @@ const RootStack = () => {
       <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />
       <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
+      <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
       <Stack.Screen
         name="mainStack"
         component={MainNavigator}

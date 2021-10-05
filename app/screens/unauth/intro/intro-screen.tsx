@@ -97,7 +97,6 @@ export const IntroScreen = observer(function IntroScreen() {
         {/* Tabs */}
         <View style={{ flex: 3, minHeight: 300, maxHeight: 500 }}>
           <TabView
-            lazy
             renderTabBar={() => null}
             navigationState={{ index, routes }}
             renderScene={renderScene}
