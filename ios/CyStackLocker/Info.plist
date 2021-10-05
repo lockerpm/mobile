@@ -20,8 +20,6 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Authentication</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -29,7 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.981402643553-mahfnu4rr6qaf321f5r2hctfdve0nbcf</string>
+				<string>com.googleusercontent.apps.31609893092-dum60tipehdc9q9l3i9jd2orj5n5ol2k</string>
 			</array>
 		</dict>
 	</array>
