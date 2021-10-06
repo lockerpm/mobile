@@ -13,9 +13,10 @@ import {
   IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, 
   CreateMasterPasswordScreen, ForgotPasswordScreen, CountrySelectorScreen
 } from "../screens"
-import { color } from "../theme"
+import { color, fontSize } from "../theme"
 import { useMixins } from "../services/mixins"
 import { useStores } from "../models"
+import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -97,9 +98,37 @@ export const RootNavigator = React.forwardRef<
   NavigationContainerRef,
   Partial<React.ComponentProps<typeof NavigationContainer>>
 >((props, ref) => {
+
+  // Toast
+  const toastConfig = {
+    success: (props: BaseToastProps) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: color.palette.green }}
+        text2Style={{
+          color: color.palette.green,
+          fontSize: fontSize.small
+        }}
+        leadingIcon={require('../common/images/icons/success.png')}
+      />
+    ),
+    error: (props: BaseToastProps) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: color.error }}
+        text2Style={{
+          color: color.error,
+          fontSize: fontSize.small
+        }}
+        leadingIcon={require('../common/images/icons/error.png')}
+      />
+    )
+  }
+
   return (
     <NavigationContainer {...props} ref={ref}>
       <RootStack />
+      <Toast ref={(ref) => Toast.setRef(ref)} config={toastConfig} />
     </NavigationContainer>
   )
 })
