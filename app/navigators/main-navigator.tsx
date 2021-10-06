@@ -15,8 +15,7 @@ import {
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen
 } from "../screens"
-import UserInactivity from 'react-native-user-inactivity'
-import NetInfo from "@react-native-community/netinfo"
+import UserInactivity from "react-native-user-inactivity"
 import { color } from "../theme"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
@@ -84,14 +83,26 @@ export function MainNavigator() {
   const { lock, getSyncData, getCipherById, loadFolders, loadCollections, logout } = useMixins()
   const { uiStore, user, cipherStore } = useStores()
 
+  const [socket, setSocket] = useState(null)
+  const [appIsActive, setAppIsActive] = useState(true) 
+
   // App screen lock trigger
   const _handleAppStateChange = async (nextAppState: string) => {
-    if (nextAppState === "active" && user.appTimeout && user.appTimeout === -1) {
+    // Ohter state (background/inactive)
+    if (nextAppState !== 'active') {
+      setAppIsActive(false)
+      return
+    }
+
+    // Active
+    if (!appIsActive && user.appTimeout && user.appTimeout === -1) {
+      setAppIsActive(true)
       if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
         await logout()
         navigation.navigate('onBoarding')
       } else {
         await lock()
+        console.log('app state change -> lock')
         navigation.navigate('lock')
       }
     }
@@ -105,6 +116,7 @@ export function MainNavigator() {
         navigation.navigate('onBoarding')
       } else {
         await lock()
+        console.log('inactive -> lock')
         navigation.navigate('lock')
       }
     }
@@ -158,8 +170,6 @@ export function MainNavigator() {
     return ws
   }
 
-  const [socket, setSocket] = useState(null)
-
   // Life cycle
   useEffect(() => {
     // Check device screen on/off
@@ -168,26 +178,23 @@ export function MainNavigator() {
     // Connect web socket
     setSocket(generateSocket())
 
-    // Check network
-    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
-      const offline = !(state.isConnected && state.isInternetReachable)
-      if (uiStore.isOffline && !offline) {
-        setSocket(generateSocket())
-      }
-      if (offline) {
-        socket && socket.close()
-        setSocket(null)
-      }
-      uiStore.setIsOffline(offline)
-    })
-
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
       socket && socket.close()
-      removeNetInfoSubscription()
     };
   }, []);
 
+  // Check network to connect socket
+  useEffect(() => {
+    if (uiStore.isOffline) {
+      socket && socket.close()
+      setSocket(null)
+    } else {
+      setSocket(generateSocket())
+    }
+  }, [uiStore.isOffline])
+
+  // Render
   return (
     <UserInactivity
       timeForInactivity={(user.appTimeout && (user.appTimeout > 0)) ? user.appTimeout : 1000}

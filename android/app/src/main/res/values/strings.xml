@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">CyStack Locker</string>
+    <string name="app_name">Locker</string>
+    <string name="facebook_app_id">2100131290023614</string>
+    <string name="facebook_client_token">6b60b7619234d25cf74582f153aee83c</string>
 </resources>

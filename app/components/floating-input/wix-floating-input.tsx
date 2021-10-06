@@ -65,6 +65,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
   return (
     <View style={style}>
       <TextField
+        autoCapitalize="none"
         enableErrors={false}
         floatingPlaceholder
         multiline={textarea}

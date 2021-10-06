@@ -1,38 +1,30 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { color, fontSize } from "../../../theme"
+import { color, commonStyles, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
-import { RootParamList } from "../../../navigators/root-navigator"
+import { APP_ICON } from "../../../common/mappings"
+import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-type ScreenProp = RouteProp<RootParamList, 'lock'>;
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
-  const route = useRoute<ScreenProp>()
   const { logout, sessionLogin, notify, biometricLogin, translate } = useMixins()
   const { user, uiStore } = useStores()
 
   // Params
+  
   const [masterPassword, setMasterPassword] = useState('')
-  const [isScreenLoading, setIsScreenLoading] = useState(true)
+  const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isBioUnlocking, setIsBioUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
 
   // Methods
-  const mounted = async () => {
-    if (!route.params || !route.params.skipCheck) {
-      if (!uiStore.isOffline) {
-        await user.getUser()
-      }
-    }
-    setIsScreenLoading(false)
-  }
 
   const handleLogout = async () => {
     setIsScreenLoading(true)
@@ -91,11 +83,12 @@ export const LockScreen = observer(function LockScreen() {
   }
 
   // Components
+
   const header = (
     <View style={{ alignItems: "flex-end" }}>
       <Button
         text={translate('common.logout').toUpperCase()}
-        textStyle={{ fontSize: fontSize.small }}
+        textStyle={{ fontSize: fontSize.p }}
         preset="link"
         onPress={handleLogout}
       >
@@ -103,20 +96,28 @@ export const LockScreen = observer(function LockScreen() {
     </View>
   )
 
-  // Mounted
-  useEffect(() => {
-    // setTimeout(mounted, 2000)
-    mounted()
-  }, [])
+  const footer = (
+    <Button
+      isLoading={isSendingHint}
+      isDisabled={isSendingHint}
+      preset="link"
+      text={translate("lock.get_hint")}
+      onPress={handleGetHint}
+      style={{
+        width: '100%'
+      }}
+    />
+  )
 
   // Render
   return (
     <Layout
       isOverlayLoading={isScreenLoading}
       header={header}
+      footer={footer}
     >
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
-        <Image source={require("./locker.png")} style={{ height: 63, width: 63 }} />
+        <Image source={APP_ICON.iconDark} style={{ height: 63, width: 63 }} />
 
         <Text
           preset="header"
@@ -174,6 +175,7 @@ export const LockScreen = observer(function LockScreen() {
           onChangeText={setMasterPassword}
           value={masterPassword}
           style={{ width: '100%' }}
+          onSubmitEditing={handleUnlock}
         />
         {/* Master pass input end */}
 
@@ -188,28 +190,33 @@ export const LockScreen = observer(function LockScreen() {
           }}
         />
 
-        <Button
-          isLoading={isBioUnlocking}
-          isDisabled={isBioUnlocking}
-          preset="outline"
-          text={translate("common.biometric_unlocking")}
-          onPress={handleUnlockBiometric}
-          style={{
-            width: '100%',
-            marginVertical: 10
-          }}
-        />
-
-        <Button
-          isLoading={isSendingHint}
-          isDisabled={isSendingHint}
-          preset="ghost"
-          text={translate("lock.get_hint")}
-          onPress={handleGetHint}
-          style={{
-            width: '100%'
-          }}
-        />
+        {
+          user.isBiometricUnlock && (
+            <Button
+              isLoading={isBioUnlocking}
+              isDisabled={isBioUnlocking}
+              preset="ghost"
+              onPress={handleUnlockBiometric}
+              style={{
+                width: '100%',
+                marginVertical: 10
+              }}
+            >
+              <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginHorizontal: 5 }]}>
+                <MaterialCommunityIconsIcon
+                  name="face-recognition"
+                  size={20}
+                  color={color.textBlack}
+                />
+                <Text
+                  preset="black"
+                  text={translate("common.biometric_unlocking")}
+                  style={{ marginLeft: 7 }}
+                />
+              </View>
+            </Button>
+          )
+        }
       </View>
     </Layout>
   )

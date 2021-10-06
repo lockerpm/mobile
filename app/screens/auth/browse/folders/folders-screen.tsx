@@ -134,7 +134,12 @@ export const FoldersScreen = observer(function FoldersScreen() {
             renderSectionHeader={({ section }) => (
               <Text
                 text={`${section.title} (${section.data.length})`}
-                style={{ fontSize: fontSize.small, paddingHorizontal: 20, marginTop: 20 }}
+                style={{ 
+                  fontSize: fontSize.small, 
+                  paddingHorizontal: 20, 
+                  paddingTop: 20, 
+                  backgroundColor: color.palette.white 
+                }}
               />
             )}
             renderItem={({ item }) => (

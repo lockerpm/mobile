@@ -41,7 +41,8 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
     switch (selectedCipher.type) {
       case CipherType.Login:
         return {
-          img: { uri: selectedCipher.login.uri },
+          // img: { uri: selectedCipher.login.uri },
+          img: BROWSE_ITEMS.password.icon,
           backup: BROWSE_ITEMS.password.icon,
           path: 'passwords'
         }
@@ -168,11 +169,12 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
           />
 
           <ActionItem
+            disabled={true}
             name={translate('common.change_ownership')}
             icon="user-o"
             action={() => {
               onClose()
-              setTimeout(() => setShowOwnershipAction(true), 100)
+              setTimeout(() => setShowOwnershipAction(true), 1000)
             }}
           />
 
@@ -188,6 +190,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
           />
 
           <ActionItem
+            disabled={true}
             name={translate('common.share')}
             icon="share-square-o"
           />
@@ -198,7 +201,9 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
             textColor={color.error}
             action={() => {
               onClose()
-              setTimeout(() => setShowConfirmModal(true), 100)
+              setTimeout(() => {
+                setShowConfirmModal(true)
+              }, 1000)
             }}
           />
         </ActionSheetContent>

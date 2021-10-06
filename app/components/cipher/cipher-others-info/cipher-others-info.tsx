@@ -87,6 +87,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
 
         {/* Ownership */}
         <Button
+          isDisabled={true}
           preset="link"
           onPress={() => setShowOwnershipAction(true)}
           style={{

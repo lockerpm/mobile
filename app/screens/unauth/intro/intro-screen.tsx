@@ -20,12 +20,12 @@ export const IntroScreen = observer(function IntroScreen() {
     },
     {
       img: require("./intro.png"),
-      title: translate('intro.item_2.title'),
+      title: translate('intro.item_2.title') + ' 2',
       desc: translate('intro.item_2.desc')
     },
     {
       img: require("./intro.png"),
-      title: translate('intro.item_2.title'),
+      title: translate('intro.item_2.title') + ' 3',
       desc: translate('intro.item_2.desc')
     }
   ]
@@ -51,7 +51,7 @@ export const IntroScreen = observer(function IntroScreen() {
           marginTop: 30,
           marginBottom: 10
         }} />
-        <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24 }} />
+        <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: 320 }} />
       </View>
     )
   })
@@ -97,7 +97,6 @@ export const IntroScreen = observer(function IntroScreen() {
         {/* Tabs */}
         <View style={{ flex: 3, minHeight: 300, maxHeight: 500 }}>
           <TabView
-            lazy
             renderTabBar={() => null}
             navigationState={{ index, routes }}
             renderScene={renderScene}

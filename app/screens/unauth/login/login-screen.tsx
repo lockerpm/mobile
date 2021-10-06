@@ -1,66 +1,145 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
+import { View, ViewStyle, ScrollView } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
+import { Layout, Text, Button } from "../../../components"
+import { useMixins } from "../../../services/mixins"
+import { commonStyles } from "../../../theme"
+import { TabView, SceneMap } from 'react-native-tab-view'
+import { DefaultLogin } from "./default"
+import { MethodSelection } from "./method-selection"
+import { Otp } from "./otp"
 import { useStores } from "../../../models"
-import { WebView, WebViewNavigation  } from 'react-native-webview';
-import { Loading } from "../../../components";
-import { LOGIN_URL } from "../../../config/constants";
 
-export const LoginScreen = observer(function LoginScreen() {
-  const { user } = useStores()
-  const navigation = useNavigation()
 
-  // Params
-  const [isLoading, setIsLoading] = useState(true)
-  const [isScreenReady, setIsScreenReady] = useState(false)
-
-  // Helpers
-  const getParamFromUrl = (name : string, url: string) => {
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+const containerStyle: ViewStyle = {
+  justifyContent: "flex-start",
+  alignItems: "stretch",
+  paddingTop: 16,
+  paddingBottom: 32,
+  paddingHorizontal: 20,
+  minHeight: '100%'
 }
 
-  // Actions
-  const onWebViewNavigationStateChange = async (state: WebViewNavigation) => {
-    const token = getParamFromUrl('token', state.url)
-    if (token && !user.token) {
-      setIsLoading(true)
-      user.saveToken(token)
-      const [userRes, userPwRes] = await Promise.all([
-        user.getUser(),
-        user.getUserPw()
-      ])
-      if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
-        if (user.is_pwd_manager) {
-          navigation.navigate('lock', { skipCheck: true })
-        } else {
-          navigation.navigate('createMasterPassword', { skipCheck: true })
-        }
+
+export const LoginScreen = observer(function LoginScreen() {
+  const navigation = useNavigation()
+  const { user } = useStores()
+  const { translate } = useMixins()
+
+  // ------------------------------ PARAMS -------------------------------
+
+  const [isScreenLoading, setIsScreenLoading] = useState(false)
+  const [index, setIndex] = useState(0)
+  const [routes] = useState([
+    { key: 'default', title: 'default' },
+    { key: 'methodSelection', title: 'methodSelection' },
+    { key: 'otp', title: 'otp' },
+  ])
+  const [credential, setCredential] = useState({
+    username: '',
+    password: '',
+    methods: []
+  })
+  const [method, setMethod] = useState('')
+  const [partialEmail, setPartialEamil] = useState('')
+
+  // ------------------------------ METHODS -------------------------------
+
+  const onLoggedIn = async () => {
+    setIsScreenLoading(true)
+    const [userRes, userPwRes] = await Promise.all([
+      user.getUser(),
+      user.getUserPw()
+    ])
+    setIsScreenLoading(false)
+    if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
+      if (user.is_pwd_manager) {
+        navigation.navigate('lock')
       } else {
-        navigation.navigate('onBoarding')
+        navigation.navigate('createMasterPassword')
       }
     }
   }
 
-  // Mounted
-  useEffect(() => {
-    if (!isScreenReady) {
-      user.clearToken()
-      setIsLoading(false)
-      setIsScreenReady(true)
-    }
-  }, [isScreenReady])
+  // ------------------------------ RENDER -------------------------------
 
-  return isLoading ? (
-    <Loading />
-  ) : (
-    <WebView
-      source={{ uri: LOGIN_URL }}
-      onNavigationStateChange={onWebViewNavigationStateChange}
-    />
+  const renderScene = SceneMap({
+    default: () => (
+      <ScrollView contentContainerStyle={containerStyle}>
+        <DefaultLogin
+          handleForgot={() => navigation.navigate('forgotPassword')}
+          onLoggedIn={onLoggedIn}
+          nextStep={(username: string, password: string, methods: { type: string, data: any }[]) => {
+            setCredential({ username, password, methods })
+            setIndex(1)
+          }}
+        />
+      </ScrollView>
+    ),
+    methodSelection: () => (
+      <ScrollView contentContainerStyle={containerStyle}>
+        <MethodSelection
+          goBack={() => setIndex(0)}
+          methods={credential.methods}
+          onSelect={(type: string, data: any) => {
+            setMethod(type)
+            setPartialEamil(data)
+            setIndex(2)
+          }}
+          username={credential.username}
+          password={credential.password}
+        />
+      </ScrollView>
+    ),
+    otp: () => (
+      <ScrollView contentContainerStyle={containerStyle}>
+        <Otp
+          goBack={() => setIndex(1)}
+          method={method}
+          email={partialEmail}
+          username={credential.username}
+          password={credential.password}
+          onLoggedIn={onLoggedIn}
+        />
+      </ScrollView>
+    )
+  })
+
+  return (
+    <Layout
+      noScroll
+      isOverlayLoading={isScreenLoading}
+      footer={(
+        <View
+          style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+            marginTop: 12,
+            justifyContent: 'center'
+          }]}
+        >
+          <Text
+            text={translate("login.no_account")}
+            style={{
+              marginRight: 8,
+            }}
+          />
+          <Button
+            preset="link"
+            text={translate("common.sign_up")}
+            onPress={() => navigation.navigate("signup")}
+          />
+        </View>
+      )}
+    >
+      <View style={{ height: '100%' }}>
+        <TabView
+          swipeEnabled={false}
+          renderTabBar={() => null}
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+        />
+      </View>
+    </Layout>
   )
 })

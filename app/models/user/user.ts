@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
-import { ChangePasswordData, RegisterData, SessionLoginData } from "../../services/api"
+import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -53,12 +53,14 @@ export const UserModel = types
 
     // Info
     saveUser: (userSnapshot: UserSnapshot) => {
+      self.isLoggedIn = true
       self.email = userSnapshot.email
       self.username = userSnapshot.username
       self.full_name = userSnapshot.full_name
       self.avatar = userSnapshot.avatar
     },
     saveUserPw: (userSnapshot: UserSnapshot) => {
+      self.isLoggedInPw = true
       self.pwd_user_id = userSnapshot.pwd_user_id
       self.is_pwd_manager = userSnapshot.is_pwd_manager
       self.default_team_id = userSnapshot.default_team_id
@@ -108,6 +110,8 @@ export const UserModel = types
     }
   }))
   .actions((self) => ({
+    // -------------------- ID ------------------------
+
     getUser: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser()
@@ -116,6 +120,76 @@ export const UserModel = types
       }
       return res
     },
+
+    sendOtpEmail: async (username: string, password: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.sendOtpEmail({ username, password })
+      return res
+    },
+
+    recoverAccount: async (username: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.recoverAccount({ username })
+      return res
+    },
+
+    resetPassword: async (username: string, method: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.resetPassword({ username, method })
+      return res
+    },
+
+    resetPasswordWithCode: async (username: string, code: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.resetPasswordWithCode({ username, code })
+      return res
+    },
+
+    setNewPassword: async (new_password: string, token: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.setNewPassword({ new_password, token })
+      return res
+    },
+
+    login: async (payload: LoginData, isOtp?: boolean) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.login(payload, isOtp)
+      if (res.kind === "ok") {
+        if (res.data.token) {
+          self.saveToken(res.data.token)
+        }
+      }
+      return res
+    },
+
+    socialLogin: async (payload: { provider: string, access_token: string }) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.socialLogin(payload)
+      if (res.kind === "ok") {
+        if (res.data.token) {
+          self.saveToken(res.data.token)
+        }
+      }
+      return res
+    },
+
+    register: async (payload: RegisterData) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.register(payload)
+      return res
+    },
+
+    logout: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.logout()
+      if (res.kind === "ok") {
+        self.clearToken()
+        self.clearUser()
+      }
+      return res
+    },
+
+    // -------------------- LOCKER ------------------------
 
     sendPasswordHint: async (email: string) => {
       const userApi = new UserApi(self.environment.api)
@@ -141,9 +215,9 @@ export const UserModel = types
       return res
     },
 
-    register: async (payload: RegisterData) => {
+    registerLocker: async (payload: RegisterLockerData) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.register(payload)
+      const res = await userApi.registerLocker(payload)
       return res
     },
 
@@ -155,16 +229,6 @@ export const UserModel = types
 
     lock: () => {
       self.setLoggedInPw(false)
-    },
-
-    logout: async () => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.logout()
-      if (res.kind === "ok") {
-        self.clearToken()
-        self.clearUser()
-      }
-      return res
     },
 
     loadTeams: async () => {
