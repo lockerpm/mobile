@@ -139,7 +139,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           style={{ marginVertical: 20 }}
           buttonRight={(
             <Button
-              disabled={!selectedCipher.login.uri}
+              isDisabled={!selectedCipher.login.uri}
               preset="link"
               onPress={() => {
                 Linking.openURL(selectedCipher.login.uri)

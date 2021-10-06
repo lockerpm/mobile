@@ -11,7 +11,32 @@ type SessionSnapshot = {
     private_key: string
 }
 
-// Response
+// ------------------ Response ------------------------
+
+export type LoginResult = { 
+    kind: "ok"
+    data: {
+        token?: string
+        is_factor2?: boolean
+        methods?: {
+            type: string
+            data: any
+        }[]
+    }
+} | GeneralApiProblem
+export type SocialLoginResult = { 
+    kind: "ok"
+    data: {
+        token: string
+    }
+} | GeneralApiProblem
+export type AccountRecoveryResult = { 
+    kind: "ok"
+    data: {
+        type: string
+        data: any
+    }[] 
+} | GeneralApiProblem
 export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
 export type EmptyResult = { kind: "ok" } | GeneralApiProblem
@@ -19,14 +44,41 @@ export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
 export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
 export type GetPlanResult = {
-    kind: 'ok',
+    kind: 'ok'
     data: {
         name: string,
         alias: string
     }
 } | GeneralApiProblem
+export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
+export type ResetPasswordResult = { kind: "ok"; success: boolean } | GeneralApiProblem
+export type ResetPasswordWithCodeResult = {
+    kind: "ok" 
+    data: {
+        reset_password_url: string
+    } 
+} | GeneralApiProblem
 
-// Request data
+// ---------------- Request data --------------------
+
+export type LoginData = {
+    username: string
+    password: string
+    method?: string
+    otp?: string
+    save_device?: boolean
+}
+
+export type RegisterData = {
+    email: string
+    password: string
+    confirm_password: string
+    full_name: string
+    country: string
+    phone?: string
+    keep_me_updated?: boolean
+}
+
 export type SessionLoginData = {
     client_id: 'mobile'
     password: string
@@ -35,7 +87,7 @@ export type SessionLoginData = {
     device_identifier: string
 }
 
-export type RegisterData = {
+export type RegisterLockerData = {
     name: string,
     email: string,
     master_password_hash: string,
@@ -59,6 +111,11 @@ export type ChangePasswordData = {
 
 export type PasswordHintRequestData = {
     email: string
+}
+
+export type EmailOtpRequestData = {
+    username: string
+    password: string
 }
 
 export type LoginUri = {

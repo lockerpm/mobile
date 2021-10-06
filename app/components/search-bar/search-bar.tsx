@@ -38,7 +38,7 @@ export const SearchBar = observer(function SearchBar(props: SearchBarProps) {
         clearButtonMode="while-editing"
         style={{
           flex: 1,
-          paddingVertical: 5,
+          paddingVertical: 10,
           paddingHorizontal: 10,
           fontSize: fontSize.p,
           color: color.textBlack

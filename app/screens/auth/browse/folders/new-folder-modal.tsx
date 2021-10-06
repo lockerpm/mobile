@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { FloatingInput, Button, Text, Modal } from "../../../../components"
+import { FloatingInput, Button, Modal } from "../../../../components"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 import { FolderView } from "../../../../../core/models/view/folderView"
@@ -30,6 +30,7 @@ export const NewFolderModal = observer((props: Props) => {
     const res = await folderStore.createFolder(payload)
     if (res.kind === 'ok') {
       notify('success', translate('folder.folder_created'))
+      setName('')
       onClose()
     } else {
       notify('error', translate('error.something_went_wrong'))
@@ -51,7 +52,7 @@ export const NewFolderModal = observer((props: Props) => {
 
       <Button
         text={translate('common.create')}
-        disabled={isLoading || !name.trim()}
+        isDisabled={isLoading || !name.trim()}
         isLoading={isLoading}
         onPress={handleCreateFolder}
         style={{

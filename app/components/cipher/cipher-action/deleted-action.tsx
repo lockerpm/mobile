@@ -165,7 +165,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
             textColor={color.error}
             action={() => {
               onClose()
-              setTimeout(() => setShowConfirmModal(true), 100)
+              setTimeout(() => setShowConfirmModal(true), 1000)
             }}
           />
         </ActionSheetContent>

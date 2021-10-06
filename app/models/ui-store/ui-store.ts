@@ -6,9 +6,13 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 export const UiStoreModel = types
   .model("UiStore")
   .props({
+    // Data
     isOffline: types.maybeNull(types.boolean),
     showNetworkError: types.maybeNull(types.boolean),
-    passwordChanged: types.maybeNull(types.boolean)
+    passwordChanged: types.maybeNull(types.boolean),
+
+    // Cache
+    selectedCountry: types.maybeNull(types.string)
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -20,6 +24,10 @@ export const UiStoreModel = types
     },
     setPasswordChanged: (value: boolean) => {
       self.passwordChanged = value
+    },
+
+    setSelectedCountry(country_code: string) {
+      self.selectedCountry = country_code
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

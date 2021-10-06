@@ -10,11 +10,13 @@ import { AllItemScreen, ToolsListScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import NetInfo from "@react-native-community/netinfo"
 import { useMixins } from "../services/mixins"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const Tab = createBottomTabNavigator()
 
 const TabBar = ({ state, descriptors, navigation, isOffline }) => {
   const { translate } = useMixins()
+  const insets = useSafeAreaInsets()
   
   const mappings = {
     homeTab: {
@@ -36,7 +38,7 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
   }
   
   return (
-    <View>
+    <View style={{ paddingBottom: insets.bottom }}>
       {/* Offline mode */}
       {
         isOffline && (
@@ -118,7 +120,8 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
                   text={label}
                   style={{
                     fontSize: fontSize.small,
-                    color: isFocused ? color.palette.green : color.text
+                    color: isFocused ? color.palette.green : color.text,
+                    marginTop: 3
                   }}
                 />
               </Button>

@@ -53,6 +53,7 @@ export const MenuScreen = observer(function MenuScreen() {
         setIsLoading(true)
         await lock()
         setIsLoading(false)
+        console.log('user lock -> lock')
         navigation.navigate('lock')
       }
     },
@@ -74,14 +75,13 @@ export const MenuScreen = observer(function MenuScreen() {
   return (
     <Layout
       borderBottom
+      style={{ backgroundColor: color.block }}
       isContentOverlayLoading={isLoading}
       containerStyle={{ backgroundColor: color.block }}
+      header={(
+        <Text preset="largeHeader" text={translate('common.menu')} />
+      )}
     >
-      <Text
-        preset="largeHeader"
-        text={translate('common.menu')}
-        style={{ marginBottom: 16}}
-      />
       <ScrollView>
         <View style={[
           ITEM_CONTAINER,
@@ -102,7 +102,7 @@ export const MenuScreen = observer(function MenuScreen() {
               text={user.email}
             />
             <Text style={{ fontSize: fontSize.small }}>
-              {user.plan.name}
+              {user.plan && user.plan.name}
             </Text>
           </View>
         </View>

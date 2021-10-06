@@ -1,8 +1,11 @@
 {
   "common": {
     "account": "Tài khoản",
+    "authenticate": "Xác thực",
+    "authentication_app": "Ứng dụng xác thực",
     "add": "Thêm",
-    "biometric_unlocking": "Mở khóa bằng sinh trắc học",
+    "and": "và",
+    "biometric_unlocking": "Mở khóa bằng Face ID/Touch ID",
     "browse": "Kho",
     "cancel": "Hủy",
     "card": "Thẻ tín dụng",
@@ -10,11 +13,14 @@
     "clone": "Tạo bản sao",
     "continue": "Tiếp tục",
     "copied_to_clipboard": "Đã sao chép",
+    "country": "Quốc gia",
     "create": "Tạo",
     "delete": "Xóa",
     "details": "Chi tiết",
     "edit": "Sửa",
+    "email": "Email",
     "folder": "Thư mục",
+    "fullname": "Họ và tên",
     "generate": "Tạo mới",
     "help": "Trợ giúp",
     "home": "Tất cả",
@@ -30,10 +36,13 @@
     "me": "Cá nhân",
     "menu": "Tùy chọn",
     "name": "Tên",
+    "next": "Tiếp tục",
     "none": "Không xác định",
     "note": "Ghi chú",
     "notes": "Ghi chú",
     "options": "Tùy chọn",
+    "or_login_with": "Hoặc đăng nhập bằng",
+    "organization": "Tổ chức",
     "other": "Khác",
     "others": "Khác",
     "owned_by": "Sở hữu bởi",
@@ -52,6 +61,7 @@
     "sign_up": "Đăng ký",
     "skip": "Bỏ qua",
     "sort": "Sắp xếp",
+    "submit": "Gửi",
     "trash": "Thùng rác",
     "tools": "Công cụ",
     "unlock": "Mở khóa"
@@ -60,18 +70,22 @@
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
   },
   "error": {
-    "biometric_not_enable": "Mở khóa bằng sinh trắc học chưa được kích hoạt",
-    "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng sinh trắc học",
+    "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
+    "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
     "network_error": "Kết nối mạng không thành công",
     "required_data": "Không được để trống thông tin này",
     "session_login_failed": "Đăng nhập phiên không thành công",
+    "login_failed": "Đăng nhập không thành công",
     "something_went_wrong": "Đã có lỗi xảy ra",
     "sync_failed": "Đồng bộ hóa không thành công",
-    "token_expired": "Phiên của bạn đã hết hạn"
+    "token_expired": "Phiên của bạn đã hết hạn",
+    "no_associated_account": "Không có tài khoản nào sử dụng email hoặc username này. Vui lòng thử lại hoặc tạo tài khoản mới.",
+    "invalid_authorization_code": "Mã xác nhận không hợp lệ",
+    "invalid_data": "Dữ liệu không hợp lệ"
   },
   "success": {
     "master_password_updated": "Mật khẩu chính đã được cập nhật",
-    "biometric_enabled": "Mở khóa bằng sinh trắc học đã được kích hoạt",
+    "biometric_enabled": "Mở khóa bằng Face ID/Touch ID đã được kích hoạt",
     "cipher_created": "Thêm mới thành công",
     "cipher_deleted": "Xóa thành công",
     "cipher_restored": "Khôi phục thành công",
@@ -119,10 +133,43 @@
     "no_account": "Chưa có tài khoản?",
     "title": "Your daily needs"
   },
+  "login": {
+    "title": "Đăng nhập tài khoản",
+    "email_or_username": "Email hoặc tên đăng nhập",
+    "forgot_password": "Quên mật khẩu?",
+    "no_account": "Chưa có tài khoản?",
+    "verify_your_identity": "Xác thực nhận dạng của bạn",
+    "enter_code": "Nhập mã",
+    "enter_code_here": "Nhập mã xác thực",
+    "from_authenticator": "Vui lòng mở ứng dụng xác thực (ví dụ Duo hoặc Google Authenticator) để lấy mã",
+    "from_email": "Email đã được gửi đến {{email}}. Kiểm tra hộp thư đến/hộp thư rác để nhận mã xác thực.",
+    "save_device": "Ghi nhớ thiết bị này"
+  },
+  "forgot_password": {
+    "title": "Quên mật khẩu ?",
+    "username_or_email": "Nhập địa chỉ email hoặc username",
+    "request": "Khôi phục",
+    "enter_code": "Nhập mã",
+    "enter_code_here": "Nhập mã xác thực",
+    "set_new_password": "Khôi phục mật khẩu",
+    "new_password": "Mật khẩu mới",
+    "confirm_new_password": "Xác nhận mật khẩu mới",
+    "password_updated": "Mật khẩu của bạn đã được cập nhật. Vui lòng đăng nhập bằng mật khẩu mới."
+  },
+  "signup": {
+    "title": "Đăng ký tài khoản",
+    "confirm_password": "Xác nhận mật khẩu",
+    "agree_with": "Tôi đồng ý với",
+    "subscribe_desc": "Cập nhật cho tôi về tin tức, sự kiện và ưu đãi",
+    "has_account": "Đã có tài khoản?",
+    "terms": "điều khoản dịch vụ",
+    "conditions": "chính sách bảo mật",
+    "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn."
+  },
   "biometric_intro": {
-    "title": "Mở khóa Locker bằng sinh trắc học",
+    "title": "Mở khóa Locker bằng Face ID/Touch ID",
     "desc": "Sử dụng nhận dạng khuôn mặt hoặc vân tay để bảo vệ mật khẩu của bạn",
-    "use_btn": "Sử dụng sinh trắc học",
+    "use_btn": "Sử dụng Face ID/Touch ID",
     "later_btn": "Để sau"
   },
   "card": {

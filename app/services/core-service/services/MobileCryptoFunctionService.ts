@@ -194,7 +194,6 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
           reject(error);
           return;
         }
-
         const publicKeyAsn1 = (forge.pki as any).publicKeyToAsn1(keyPair.publicKey);
         const publicKeyByteString = forge.asn1.toDer(publicKeyAsn1).getBytes();
         const publicKey = Utils.fromByteStringToArray(publicKeyByteString);
@@ -203,7 +202,6 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
         const privateKeyPkcs8 = (forge.pki as any).wrapRsaPrivateKey(privateKeyAsn1);
         const privateKeyByteString = forge.asn1.toDer(privateKeyPkcs8).getBytes();
         const privateKey = Utils.fromByteStringToArray(privateKeyByteString);
-
         resolve([publicKey.buffer, privateKey.buffer]);
       });
     });

@@ -181,7 +181,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
               value={settings.biometric.value}
               onValueChange={settings.biometric.onChage}
               trackColor={{ false: color.disabled, true: color.palette.green }}
-              thumbColor={settings.biometric.value ? color.palette.green : "#f4f3f4"}
+              thumbColor={color.palette.white}
             />
           )}
         />

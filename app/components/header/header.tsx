@@ -7,6 +7,7 @@ import { color, fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { AutoImage as Image } from "../auto-image/auto-image"
+import { APP_ICON } from "../../common/mappings"
 
 const CONTAINER: ViewStyle = {
   flexDirection: 'row',
@@ -56,7 +57,7 @@ export const Header = observer(function Header(props: HeaderProps) {
                 }
               </Button>
             ) : props.showLogo && (
-              <Image source={require('./locker-logo.png')} style={{ height: 24 }} />
+              <Image source={APP_ICON.textHorizontal} style={{ height: 30, width: 97.5 }} />
             )
         }
         {

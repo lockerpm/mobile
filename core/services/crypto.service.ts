@@ -62,20 +62,22 @@ export class CryptoService implements CryptoServiceAbstraction {
 
     async setEncKey(encKey: string): Promise<{}> {
         if (encKey == null) {
-            return;
+            return {}
         }
 
         await this.storageService.save(Keys.encKey, encKey);
         this.encKey = null;
+        return {}
     }
 
     async setEncPrivateKey(encPrivateKey: string): Promise<{}> {
         if (encPrivateKey == null) {
-            return;
+            return {}
         }
 
         await this.storageService.save(Keys.encPrivateKey, encPrivateKey);
         this.privateKey = null;
+        return {}
     }
 
     setOrgKeys(orgs: ProfileOrganizationResponse[]): Promise<{}> {

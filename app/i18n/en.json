@@ -1,8 +1,11 @@
 {
   "common": {
     "account": "Account",
+    "authenticate": "Authenticate",
+    "authentication_app": "Authentication App",
     "add": "Add",
-    "biometric_unlocking": "Biometric Unlocking",
+    "and": "and",
+    "biometric_unlocking": "Unlock with Face ID/Touch ID",
     "browse": "Browse",
     "cancel": "Cancel",
     "card": "Card",
@@ -10,11 +13,14 @@
     "clone": "Clone",
     "continue": "Continue",
     "copied_to_clipboard": "Copied to clipboard",
+    "country": "Country",
     "create": "Create",
     "delete": "Delete",
     "details": "Details",
     "edit": "Edit",
+    "email": "Email",
     "folder": "Folder",
+    "fullname": "Full name",
     "generate": "Generate",
     "help": "Help",
     "home": "Home",
@@ -30,10 +36,13 @@
     "me": "Me",
     "menu": "Menu",
     "name": "Name",
+    "next": "Next",
     "none": "None",
     "note": "Secure Note",
     "notes": "Notes",
     "options": "Options",
+    "or_login_with": "Or Log in with",
+    "organization": "Organization",
     "other": "Other",
     "others": "Others",
     "owned_by": "Owned by",
@@ -52,6 +61,7 @@
     "sign_up": "Sign up",
     "skip": "Skip",
     "sort": "Sort",
+    "submit": "Submit",
     "trash": "Trash",
     "tools": "Tools",
     "unlock": "Unlock"
@@ -60,18 +70,22 @@
     "is_offline": "Locker is currently in offline mode."
   },
   "error": {
-    "biometric_not_enable": "Biometric unlocking is not enabled",
-    "biometric_not_support": "Biometric unlocking is not supported",
+    "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
+    "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
     "network_error": "Network error",
     "required_data": "This data is mandatory",
     "session_login_failed": "Session login failed",
+    "login_failed": "Login failed",
     "something_went_wrong": "Something went wrong",
     "sync_failed": "Synchronize data failed",
-    "token_expired": "Session token expired"
+    "token_expired": "Session token expired",
+    "no_associated_account": "There’s no account associated with this email or username. Try another or create a new account.",
+    "invalid_authorization_code": "The authorization code is not valid",
+    "invalid_data": "Invalid data"
   },
   "success": {
     "master_password_updated": "Master password updated",
-    "biometric_enabled": "Biometric unlocking is enabled",
+    "biometric_enabled": "Face ID/Touch ID unlocking is enabled",
     "cipher_created": "New item created",
     "cipher_deleted": "Item deleted",
     "cipher_restored": "Item restored",
@@ -119,10 +133,43 @@
     "no_account": "Don't have an account?",
     "title": "Your daily needs"
   },
+  "login": {
+    "title": "Sign in to your account",
+    "email_or_username": "Email or Username",
+    "forgot_password": "Forgot password?",
+    "no_account": "Don't have an account?",
+    "verify_your_identity": "Verify your identity",
+    "enter_code": "Enter code",
+    "enter_code_here": "Enter verification code here",
+    "from_authenticator": "Please use your authentication app (such as Duo or Google Authenticator) to get the code.",
+    "from_email": "An email has been sent to {{email}}. Check you inbox/spam to get verification code.",
+    "save_device": "Remember this device"
+  },
+  "forgot_password": {
+    "title": "Forgot Password ?",
+    "request": "Request",
+    "username_or_email": "Enter your username or email address",
+    "enter_code": "Enter code",
+    "enter_code_here": "Enter verification code here",
+    "set_new_password": "Set new password",
+    "new_password": "New password",
+    "confirm_new_password": "Confirm new password",
+    "password_updated": "Your password has been updated. Please login using the new password."
+  },
+  "signup": {
+    "title": "Sign up for a free account",
+    "confirm_password": "Confirm Password",
+    "agree_with": "I agree with the",
+    "subscribe_desc": "Please keep me updated on news, events and offers",
+    "has_account": "Already have an account?",
+    "terms": "terms",
+    "conditions": "conditions",
+    "signup_successful": "A confirmation email has been sent to your address."
+  },
   "biometric_intro": {
-    "title": "Unlock vault with biometric",
+    "title": "Unlock your vault with Face ID/Touch ID",
     "desc": "Use face recognition or fingerprint to protect your passwords",
-    "use_btn": "Use Biometric",
+    "use_btn": "Use Face ID/Touch ID",
     "later_btn": "I’ll do it later"
   },
   "card": {

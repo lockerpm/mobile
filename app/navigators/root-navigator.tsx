@@ -5,11 +5,13 @@
  * will use once logged in.
  */
 import React, { useEffect } from "react"
+import NetInfo from "@react-native-community/netinfo"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
 import { 
-  IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, CreateMasterPasswordScreen 
+  IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, 
+  CreateMasterPasswordScreen, ForgotPasswordScreen, CountrySelectorScreen
 } from "../screens"
 import { color } from "../theme"
 import { useMixins } from "../services/mixins"
@@ -29,15 +31,15 @@ export type RootParamList = {
   init: undefined,
   intro: undefined,
   onBoarding: undefined,
-  lock: {
-    skipCheck?: boolean
-  },
+  lock: undefined,
   login: undefined,
+  forgotPassword: undefined,
   signup: undefined,
-  createMasterPassword: {
-    skipCheck?: boolean
-  },
-  mainStack: undefined
+  createMasterPassword: undefined,
+  mainStack: undefined,
+  countrySelector: {
+    initialId?: string,
+  }
 }
 
 const Stack = createStackNavigator<RootParamList>()
@@ -53,6 +55,16 @@ const RootStack = () => {
     }
   }, [uiStore.showNetworkError])
 
+  useEffect(() => {
+    // Check network
+    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+      const offline = !(state.isConnected && state.isInternetReachable)
+      uiStore.setIsOffline(offline)
+    })
+
+    return removeNetInfoSubscription
+  }, [])
+
   return (
     <Stack.Navigator
       initialRouteName="init"
@@ -66,8 +78,10 @@ const RootStack = () => {
       <Stack.Screen name="onBoarding" component={OnboardingScreen} />
       <Stack.Screen name="lock" component={LockScreen} />
       <Stack.Screen name="login" component={LoginScreen} />
+      <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />
       <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
+      <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
       <Stack.Screen
         name="mainStack"
         component={MainNavigator}

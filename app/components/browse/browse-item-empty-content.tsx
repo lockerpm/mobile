@@ -42,7 +42,7 @@ export const BrowseItemEmptyContent = observer(function BrowseItemEmptyContent(p
 
       <Text 
         text={desc}
-        style={{ textAlign: 'center', fontSize: fontSize.small }}
+        style={{ textAlign: 'center', fontSize: fontSize.small, lineHeight: 21 }}
       />
 
       {
