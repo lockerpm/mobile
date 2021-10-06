@@ -83,7 +83,7 @@ export const Otp = observer(function Otp(props: Props) {
         preset="black"
         style={{
           marginBottom: 10,
-          marginTop: 10
+          marginTop: 30
         }}
       />
 
@@ -92,6 +92,7 @@ export const Otp = observer(function Otp(props: Props) {
         label={translate('login.enter_code_here')}
         value={otp}
         onChangeText={setOtp}
+        onSubmitEditing={handleAuthenticate}
       />
 
       <Checkbox

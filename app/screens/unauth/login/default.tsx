@@ -64,7 +64,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
           setIsLoading(true)
           const loginRes = await user.socialLogin({
             provider: 'google',
-            access_token: tokens.accessToken
+            access_token: tokens.accessToken 
           })
           setIsLoading(false)
           if (loginRes.kind !== 'ok') {
@@ -73,8 +73,9 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
             onLoggedIn()
           }
         } catch (e) {
-          console.log(e)
-          notify('error', translate('error.something_went_wrong'))
+          __DEV__ && console.log(e)
+          // notify('error', translate('error.something_went_wrong'))
+          notify('error', e.toString())
         }
       }
     },

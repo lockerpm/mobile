@@ -46,7 +46,7 @@ export const Step2 = observer(function Step2(props: Props) {
   return (
     <View>
       <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-        marginBottom: 20
+        marginBottom: 30
       }]}>
         <Button
           preset="link"

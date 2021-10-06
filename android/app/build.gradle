@@ -136,14 +136,14 @@ android {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "1.2"
+        versionCode 4004
+        versionName "1.3"
     }
     splits {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk false  // If true, also generate a universal APK
+            universalApk true  // If true, also generate a universal APK
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }

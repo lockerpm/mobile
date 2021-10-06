@@ -66,7 +66,8 @@ export const Step1 = observer(function Step1(props: Props) {
         label={translate('forgot_password.username_or_email')}
         value={username}
         onChangeText={setUsername}
-        style={{ marginTop: 10 }}
+        onSubmitEditing={handleRequest}
+        style={{ marginTop: 20 }}
       />
 
       <Button

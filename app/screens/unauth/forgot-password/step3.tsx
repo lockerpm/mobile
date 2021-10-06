@@ -69,7 +69,8 @@ export const Step3 = observer(function Step3(props: Props) {
         label={translate('forgot_password.enter_code_here')}
         value={code}
         onChangeText={setCode}
-        style={{ marginTop: 10 }}
+        onSubmitEditing={handleRequest}
+        style={{ marginTop: 20 }}
       />
 
       <Button
