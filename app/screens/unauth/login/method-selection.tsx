@@ -48,7 +48,7 @@ export const MethodSelection = observer(function MethodSelection(props: Props) {
   return (
     <View>
       <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-        marginBottom: 20
+        marginBottom: 30
       }]}>
         <Button
           preset="link"

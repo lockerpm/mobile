@@ -65,14 +65,16 @@ export const Step4 = observer(function Step4(props: Props) {
       </View>
 
       <FloatingInput
+        isPassword
         isInvalid={isError}
         label={translate('forgot_password.new_password')}
         value={password}
         onChangeText={setPassword}
-        style={{ marginTop: 10 }}
+        style={{ marginTop: 20 }}
       />
 
       <FloatingInput
+        isPassword
         isInvalid={isError || (password && confirmPassword && (password !== confirmPassword))}
         label={translate('forgot_password.confirm_new_password')}
         value={confirmPassword}
@@ -87,7 +89,7 @@ export const Step4 = observer(function Step4(props: Props) {
         onPress={handleSubmitNewPassword}
         style={{
           width: '100%',
-          marginTop: 30
+          marginTop: 40
         }}
       />
     </View>

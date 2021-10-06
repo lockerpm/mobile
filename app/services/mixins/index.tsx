@@ -16,6 +16,7 @@ import { translate as tl, TxKeyPath } from "../../i18n"
 import { GET_LOGO_URL } from '../../config/constants'
 import i18n from "i18n-js"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const { createContext, useContext } = React
 
@@ -78,6 +79,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     syncService,
     passwordGenerationService
   } = useCoreService()
+  const insets = useSafeAreaInsets()
 
   // -------------------- AUTHENTICATION --------------------
 
@@ -222,6 +224,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
       // Success
       notify('success', translate('success.master_password_updated'))
+
+      await delay(2000)
+
       return { kind: 'ok' }
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
@@ -467,7 +472,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       text2: text,
       position: 'top',
       autoHide: true,
-      visibilityTime: duration
+      visibilityTime: duration ? duration : type === 'error' ? 5000 : 2000,
+      topOffset: insets.top + 10
     })
   }
 
