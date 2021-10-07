@@ -182,10 +182,8 @@ export const UserModel = types
     logout: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.logout()
-      if (res.kind === "ok") {
-        self.clearToken()
-        self.clearUser()
-      }
+      self.clearToken()
+      self.clearUser()
       return res
     },
 

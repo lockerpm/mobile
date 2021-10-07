@@ -167,7 +167,10 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     <View style={{ flex: 1 }}>
                       <Text
                         preset="semibold"
-                        text={item.name || translate('folder.unassigned')}
+                        text={
+                          (item.name || translate('folder.unassigned')) 
+                          + (item.cipherCount !== undefined ? ` (${item.cipherCount})` : '')
+                        }
                       />
                     </View>
 

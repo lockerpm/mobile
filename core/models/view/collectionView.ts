@@ -12,6 +12,7 @@ export class CollectionView implements View, ITreeNodeObject {
     externalId: string = null;
     readOnly: boolean = null;
     hidePasswords: boolean = null;
+    cipherCount: any = 0;
 
     constructor(c?: Collection | CollectionGroupDetailsResponse) {
         if (!c) {

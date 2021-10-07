@@ -174,7 +174,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
             icon="user-o"
             action={() => {
               onClose()
-              setTimeout(() => setShowOwnershipAction(true), 1000)
+              setTimeout(() => setShowOwnershipAction(true), 1500)
             }}
           />
 
@@ -203,7 +203,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
               onClose()
               setTimeout(() => {
                 setShowConfirmModal(true)
-              }, 1000)
+              }, 1500)
             }}
           />
         </ActionSheetContent>

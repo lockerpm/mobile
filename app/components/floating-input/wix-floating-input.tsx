@@ -3,6 +3,7 @@ import { StyleProp, View, ViewStyle, TextInputProps } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, fontSize } from "../../theme"
 import { Button } from "../button/button"
+import { Text } from "../text/text"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../services/mixins"
 import TextField from 'react-native-ui-lib/textField'
@@ -14,6 +15,7 @@ export interface WixFloatingInputProps extends TextInputProps {
   inputStyle?: StyleProp<ViewStyle>,
   isRequired?: boolean,
   isInvalid?: boolean,
+  errorText?: string,
   label: string,
   isPassword?: boolean,
   fixedLabel?: boolean,
@@ -33,7 +35,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
   const {
     style, inputStyle, isInvalid, label, isPassword, value, placeholder,
     editable = true, disabled, buttonRight, onChangeText, copyAble, textarea,
-    maskType, maskOptions,
+    maskType, maskOptions, errorText,
     ...rest
   } = props
 
@@ -64,6 +66,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
 
   return (
     <View style={style}>
+      {/* Input */}
       <TextField
         autoCapitalize="none"
         enableErrors={false}
@@ -93,6 +96,24 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
         }}
         {...rest}
       />
+      {/* Input end */}
+
+      {/* Error message */}
+      {
+        (errorText && isInvalid) ? (
+          <Text
+            text={errorText}
+            style={{
+              fontSize: fontSize.small,
+              color: color.error,
+              marginVertical: 5
+            }}
+          />
+        ) : null
+      }
+      {/* Error message end */}
+
+      {/* Button right */}
       <View style={BUTTON_CONTAINER}>
         {
           isPassword && (
@@ -132,6 +153,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
           )
         }
       </View>
+      {/* Button right end */}
     </View>
   )
 })

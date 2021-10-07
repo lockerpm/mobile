@@ -28,7 +28,7 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
         <Text
           preset="header"
           tx={"biometric_intro.title"}
-          style={{ marginBottom: 10, marginTop: 30 }}
+          style={{ marginBottom: 10, marginTop: 30, textAlign: 'center' }}
         />
 
         <Text

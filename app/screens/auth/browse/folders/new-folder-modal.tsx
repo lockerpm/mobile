@@ -21,7 +21,13 @@ export const NewFolderModal = observer((props: Props) => {
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
+  const isExisted = !!name.trim() && folderStore.folders.some(f => f.name && f.name === name)
+
   const handleCreateFolder = async () => {
+    if (!name.trim() || isExisted) {
+      return
+    }
+
     setIsLoading(true)
     const data = new FolderView()
     data.name = name
@@ -45,14 +51,17 @@ export const NewFolderModal = observer((props: Props) => {
       title={translate('folder.create_folder')}
     >
       <FloatingInput
+        isInvalid={isExisted}
+        errorText={translate('folder.folder_existed')}
         label={translate('common.name')}
         value={name}
         onChangeText={txt => setName(txt)}
+        onSubmitEditing={handleCreateFolder}
       />
 
       <Button
         text={translate('common.create')}
-        isDisabled={isLoading || !name.trim()}
+        isDisabled={isLoading || !name.trim() || isExisted}
         isLoading={isLoading}
         onPress={handleCreateFolder}
         style={{
