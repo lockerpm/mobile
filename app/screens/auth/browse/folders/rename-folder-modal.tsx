@@ -31,6 +31,7 @@ export const RenameFolderModal = observer((props: Props) => {
     }
 
     setIsLoading(true)
+    
     const data = {...folder}
     data.name = name
     let res = { kind: 'unknown' }
@@ -42,13 +43,17 @@ export const RenameFolderModal = observer((props: Props) => {
       res = await folderStore.updateFolder(folder.id, payload)
     }
 
+    setIsLoading(false)
+
     if (res.kind === 'ok') {
       notify('success', translate('folder.folder_updated'))
       onClose()
     } else {
       notify('error', translate('error.something_went_wrong'))
+      if (res.kind === 'unauthorized') {
+        onClose()
+      }
     }
-    setIsLoading(false)
   }
 
   useEffect(() => {
