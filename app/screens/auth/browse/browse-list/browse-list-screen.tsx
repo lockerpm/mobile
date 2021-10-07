@@ -37,7 +37,7 @@ export const BrowseListScreen = observer(function BrowseListScreen() {
               }}
               style={{
                 borderBottomColor: color.line,
-                borderBottomWidth: 1,
+                borderBottomWidth: index === Object.keys(BROWSE_ITEMS).length - 1 ? 0 : 1,
                 flexDirection: 'row',
                 alignItems: 'center',
                 paddingVertical: 12

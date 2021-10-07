@@ -4,9 +4,11 @@ import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { load, save, storageKeys } from "../../../utils/storage"
+import NetInfo from '@react-native-community/netinfo'
+
 
 export const InitScreen = observer(function InitScreen() {
-  const { user, uiStore } = useStores()
+  const { user } = useStores()
   const navigation = useNavigation()
 
   const goLockOrCreatePassword = () => {
@@ -39,7 +41,8 @@ export const InitScreen = observer(function InitScreen() {
     }
 
     // Network connected?
-    if (uiStore.isOffline) {
+    const connectionState = await NetInfo.fetch()
+    if (!connectionState.isConnected) {
       goLockOrCreatePassword()
       return
     }

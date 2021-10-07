@@ -197,6 +197,7 @@
     "create_folder": "Tạo thư mục mới",
     "delete_folder": "Xóa thư mục",
     "rename_folder": "Sửa tên thư mục",
+    "folder_existed": "Thư mục này đã tồn tại",
     "delete_modal": {
       "title": "Xóa thư mục",
       "desc": "Sau khi xóa thư mục, tất cả các mục sẽ được chuyển vào thùng rác. Bạn có chắc chắn muốn xóa thư mục không?",

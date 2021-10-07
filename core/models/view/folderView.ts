@@ -7,6 +7,7 @@ export class FolderView implements View, ITreeNodeObject {
     id: string = null;
     name: string = null;
     revisionDate: Date = null;
+    cipherCount: any = 0;
 
     constructor(f?: Folder) {
         if (!f) {

@@ -37,7 +37,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
               }}
               style={{
                 borderBottomColor: color.line,
-                borderBottomWidth: 1,
+                borderBottomWidth: index === Object.keys(TOOLS_ITEMS).length - 1 ? 0 : 1,
                 flexDirection: 'row',
                 alignItems: 'center',
                 paddingVertical: 12

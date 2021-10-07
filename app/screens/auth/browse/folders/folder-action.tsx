@@ -93,7 +93,7 @@ export const FolderAction = (props: Props) => {
               onClose()
               setTimeout(() => {
                 setIsRenameOpen(true)
-              }, 100)
+              }, 1500)
             }}
           />
 
@@ -105,7 +105,7 @@ export const FolderAction = (props: Props) => {
               onClose()
               setTimeout(() => {
                 setShowConfirmModal(true)
-              }, 1000)
+              }, 1500)
             }}
           />
         </ActionSheetContent>

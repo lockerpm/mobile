@@ -197,6 +197,7 @@
     "create_folder": "Create New Folder",
     "delete_folder": "Delete Folder",
     "rename_folder": "Rename Folder",
+    "folder_existed": "A folder with this name has already existed",
     "delete_modal": {
       "title": "Delete Folder",
       "desc": "After folder deleted, all items will be moved to trash. Are you sure you want to delete the folder?",
