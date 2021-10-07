@@ -14,6 +14,7 @@ export const StartScreen = observer(function StartScreen() {
 
   const mounted = async () => {
     if (!uiStore.isOffline) {
+      await delay(1500)
       const [syncRes] = await Promise.all([
         getSyncData(),
         user.loadTeams(),
@@ -25,7 +26,7 @@ export const StartScreen = observer(function StartScreen() {
       } else {
         notify('error', translate('error.sync_failed'))
       }
-      await delay(2000)
+      await delay(1500)
     }
     
     await Promise.all([

@@ -29,19 +29,25 @@ export const NewFolderModal = observer((props: Props) => {
     }
 
     setIsLoading(true)
+    
     const data = new FolderView()
     data.name = name
     const folderEnc = await folderService.encrypt(data)
     const payload = new FolderRequest(folderEnc)
     const res = await folderStore.createFolder(payload)
+
+    setIsLoading(false)
+
     if (res.kind === 'ok') {
       notify('success', translate('folder.folder_created'))
       setName('')
       onClose()
     } else {
       notify('error', translate('error.something_went_wrong'))
+      if (res.kind === 'unauthorized') {
+        onClose()
+      }
     }
-    setIsLoading(false)
   }
 
   return (
