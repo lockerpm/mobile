@@ -3,8 +3,10 @@ import { StyleProp, TextInput, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, fontSize } from "../../theme"
 import { flatten } from "ramda"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../services/mixins"
+// @ts-ignore
+import SearchIcon from './search.svg'
+
 
 const CONTAINER: ViewStyle = {
   flexDirection: "row", 
@@ -44,14 +46,9 @@ export const SearchBar = observer(function SearchBar(props: SearchBarProps) {
           color: color.textBlack
         }}
       />
-      <FontAwesomeIcon
-        name="search"
-        size={14}
-        color={color.text}
-        style={{
-          paddingHorizontal: 10
-        }}
-      />
+      <View style={{ paddingHorizontal: 10 }}>
+        <SearchIcon height={16} />
+      </View>
     </View>
   )
 })

@@ -42,7 +42,7 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
       footer={footer}
     >
       <View style={commonStyles.CENTER_VIEW}>
-        <Image source={APP_ICON.textVertical} />
+        <Image source={APP_ICON.textVertical} style={{ height: 112, width: 128 }} />
         <Text
           preset="header"
           text={translate("onBoarding.title")}

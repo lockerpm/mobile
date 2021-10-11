@@ -1,13 +1,16 @@
 import * as React from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, commonStyles } from "../../theme"
+import { commonStyles } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import EntypoIcon from 'react-native-vector-icons/Entypo'
 import { Header } from "../header/header"
 import { SearchBar } from "../search-bar/search-bar"
+
+// @ts-ignore
+import ConfigIcon from './config.svg'
+// @ts-ignore
+import PlusIcon from './plus.svg'
 
 
 export interface BrowseItemHeaderProps {
@@ -31,8 +34,7 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
       right={(
         <View
           style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-            justifyContent: 'space-between',
-            maxWidth: 50
+            justifyContent: 'space-between'
           }]}
         >
           <Button
@@ -40,11 +42,7 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
             style={{ marginRight: openAdd ? 20 : 0 }}
             onPress={() => openSort && openSort()}
           >
-            <FontAwesomeIcon
-              name="sliders"
-              size={18}
-              color={color.title}
-            />
+            <ConfigIcon height={17} />
           </Button>
 
           {
@@ -53,11 +51,7 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
                 preset="link"
                 onPress={() => openAdd && openAdd()}
               >
-                <EntypoIcon
-                  name="plus"
-                  size={23}
-                  color={color.title}
-                />
+                <PlusIcon height={18} />
               </Button>
             )
           }
