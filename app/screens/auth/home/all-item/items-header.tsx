@@ -1,9 +1,13 @@
 import React from "react"
 import { View } from "react-native"
 import { Button, Header, SearchBar } from "../../../../components"
-import { color, commonStyles } from "../../../../theme"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import EntypoIcon from 'react-native-vector-icons/Entypo'
+import { commonStyles } from "../../../../theme"
+
+// @ts-ignore
+import ConfigIcon from './config.svg'
+// @ts-ignore
+import PlusIcon from './plus.svg'
+
 
 interface Props {
   openSort?: Function,
@@ -21,8 +25,7 @@ export const ItemsHeader = (props: Props) => {
       right={(
         <View
           style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-            justifyContent: 'space-between',
-            maxWidth: 50
+            justifyContent: 'space-between'
           }]}
         >
           <Button
@@ -30,22 +33,14 @@ export const ItemsHeader = (props: Props) => {
             style={{ marginRight: 20 }}
             onPress={() => openSort && openSort()}
           >
-            <FontAwesomeIcon
-              name="sliders"
-              size={20}
-              color={color.title}
-            />
+            <ConfigIcon height={17} />
           </Button>
 
           <Button
             preset="link"
             onPress={() => openAdd && openAdd()}
           >
-            <EntypoIcon
-              name="plus"
-              size={23}
-              color={color.title}
-            />
+            <PlusIcon height={18} />
           </Button>
         </View>
       )}

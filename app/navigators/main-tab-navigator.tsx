@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
 import { View } from "react-native"
-import Icon from 'react-native-vector-icons/Ionicons'
 import { Button, Text } from "../components"
 import { color, fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen } from "../screens"
@@ -11,6 +10,16 @@ import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import NetInfo from "@react-native-community/netinfo"
 import { useMixins } from "../services/mixins"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+
+// @ts-ignore
+import HomeIcon from './icons/home.svg'
+// @ts-ignore
+import BrowseIcon from './icons/menu.svg'
+// @ts-ignore
+import ToolsIcon from './icons/settings.svg'
+// @ts-ignore
+import MenuIcon from './icons/menu-2.svg'
+
 
 const Tab = createBottomTabNavigator()
 
@@ -21,19 +30,19 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
   const mappings = {
     homeTab: {
       label: translate('common.home'),
-      icon: 'home'
+      icon: HomeIcon
     },
     browseTab: {
       label: translate('common.browse'),
-      icon: 'apps'
+      icon: BrowseIcon
     },
     toolsTab: {
       label: translate('common.tools'),
-      icon: 'build'
+      icon: ToolsIcon
     },
     menuTab: {
       label: translate('common.menu'),
-      icon: 'menu'
+      icon: MenuIcon
     }
   }
   
@@ -75,7 +84,7 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
 
             const targetMapping = mappings[route.name]
             const label = targetMapping ? targetMapping.label : route.name
-            const icon = targetMapping ? targetMapping.icon : 'alert'
+            const Icon = targetMapping ? targetMapping.icon : () => null
 
             const isFocused = state.index === index;
 
@@ -108,18 +117,17 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
                 onLongPress={onLongPress}
                 style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}
               >
-                <Icon
-                  name={icon}
-                  size={20}
-                  color={isFocused ? color.palette.green : color.text}
-                  style={{
-                    textAlign: 'center'
-                  }}
-                />
+                {
+                  Icon && (
+                    <Icon height={20} style={{
+                      color: isFocused ? color.palette.green : color.text
+                    }} />
+                  )
+                }
                 <Text
                   text={label}
                   style={{
-                    fontSize: fontSize.small,
+                    fontSize: 12,
                     color: isFocused ? color.palette.green : color.text,
                     marginTop: 3
                   }}

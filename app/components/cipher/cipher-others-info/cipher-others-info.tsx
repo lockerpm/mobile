@@ -69,7 +69,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
             <View>
               <Text
                 text={translate('common.folder')}
-                style={{ fontSize: fontSize.small }}
+                style={{ fontSize: fontSize.small, marginBottom: 5 }}
               />
               <Text
                 preset="black"
@@ -103,7 +103,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
             <View>
               <Text
                 text={translate('common.ownership')}
-                style={{ fontSize: fontSize.small }}
+                style={{ fontSize: fontSize.small, marginBottom: 5 }}
               />
               <Text
                 preset="black"

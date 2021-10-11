@@ -56,13 +56,15 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         return {
           img: BROWSE_ITEMS.identity.icon,
           backup: BROWSE_ITEMS.identity.icon,
-          path: 'identities'
+          path: 'identities',
+          svg: BROWSE_ITEMS.identity.svgIcon
         }
       case CipherType.SecureNote:
         return {
           img: BROWSE_ITEMS.note.icon,
           backup: BROWSE_ITEMS.note.icon,
-          path: 'notes'
+          path: 'notes',
+          svg: BROWSE_ITEMS.note.svgIcon
         }
       default:
         return {
@@ -114,12 +116,18 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
       >
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-            <Image
-              source={cipherMapper.img}
-              backupSource={cipherMapper.backup}
-              style={{ height: 40, width: 40, marginRight: 10 }}
-            />
-            <View>
+            {
+              cipherMapper.svg ? (
+                <cipherMapper.svg height={40} width={40} />
+              ) : (
+                <Image
+                  source={cipherMapper.img}
+                  backupSource={cipherMapper.backup}
+                  style={{ height: 40, width: 40 }}
+                />
+              )
+            }
+            <View style={{ marginLeft: 10 }}>
               <Text
                 preset="semibold"
                 text={selectedCipher.name}
@@ -174,7 +182,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
             icon="user-o"
             action={() => {
               onClose()
-              setTimeout(() => setShowOwnershipAction(true), 1000)
+              setTimeout(() => setShowOwnershipAction(true), 1500)
             }}
           />
 
@@ -203,7 +211,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
               onClose()
               setTimeout(() => {
                 setShowConfirmModal(true)
-              }, 1000)
+              }, 1500)
             }}
           />
         </ActionSheetContent>

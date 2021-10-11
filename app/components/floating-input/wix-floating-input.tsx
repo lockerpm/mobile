@@ -3,6 +3,7 @@ import { StyleProp, View, ViewStyle, TextInputProps } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, fontSize } from "../../theme"
 import { Button } from "../button/button"
+import { Text } from "../text/text"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../services/mixins"
 import TextField from 'react-native-ui-lib/textField'
@@ -14,6 +15,7 @@ export interface WixFloatingInputProps extends TextInputProps {
   inputStyle?: StyleProp<ViewStyle>,
   isRequired?: boolean,
   isInvalid?: boolean,
+  errorText?: string,
   label: string,
   isPassword?: boolean,
   fixedLabel?: boolean,
@@ -33,7 +35,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
   const {
     style, inputStyle, isInvalid, label, isPassword, value, placeholder,
     editable = true, disabled, buttonRight, onChangeText, copyAble, textarea,
-    maskType, maskOptions,
+    maskType, maskOptions, errorText,
     ...rest
   } = props
 
@@ -43,7 +45,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
   const BUTTON_CONTAINER: ViewStyle = {
     position: 'absolute',
     zIndex: 100,
-    top: 30,
+    top: 20,
     right: 0,
     flexDirection: 'row',
     alignItems: 'center'
@@ -51,7 +53,8 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
 
   const BUTTON: ViewStyle = {
     alignItems: 'center',
-    width: 30,
+    width: 35,
+    height: 30
   }
 
   const validateMask = (text: string) => {
@@ -64,6 +67,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
 
   return (
     <View style={style}>
+      {/* Input */}
       <TextField
         autoCapitalize="none"
         enableErrors={false}
@@ -85,7 +89,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
         style={[{
           fontSize: fontSize.p,
           color: color.textBlack,
-          paddingRight: 30 * ((isPassword ? 1 : 0) + (copyAble ? 1 : 0) + (buttonRight ? 1 : 0))
+          paddingRight: 35 * ((isPassword ? 1 : 0) + (copyAble ? 1 : 0) + (buttonRight ? 1 : 0))
         }, inputStyle]}
         floatingPlaceholderStyle={{
           fontSize: fontSize.p,
@@ -93,6 +97,24 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
         }}
         {...rest}
       />
+      {/* Input end */}
+
+      {/* Error message */}
+      {
+        (errorText && isInvalid) ? (
+          <Text
+            text={errorText}
+            style={{
+              fontSize: fontSize.small,
+              color: color.error,
+              marginVertical: 5
+            }}
+          />
+        ) : null
+      }
+      {/* Error message end */}
+
+      {/* Button right */}
       <View style={BUTTON_CONTAINER}>
         {
           isPassword && (
@@ -132,6 +154,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
           )
         }
       </View>
+      {/* Button right end */}
     </View>
   )
 })

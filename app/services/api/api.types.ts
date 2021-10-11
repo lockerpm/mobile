@@ -3,6 +3,7 @@ import { UserSnapshot } from "../../models/user/user"
 import { DeviceType } from "../../../core/enums"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { FolderResponse } from "../../../core/models/response/folderResponse"
+import { string } from "mobx-state-tree/dist/internal"
 
 type SessionSnapshot = {
     access_token: string
@@ -57,6 +58,23 @@ export type ResetPasswordWithCodeResult = {
     data: {
         reset_password_url: string
     } 
+} | GeneralApiProblem
+
+export type GetMembersResult = {
+    kind: "ok"
+    data: {
+        access_time: number,
+        avatar: string,
+        collections: string[],
+        full_name: string,
+        id: number,
+        is_default: boolean,
+        is_primary: boolean,
+        pwd_user_id: string,
+        role: 'owner' | 'admin' | 'manager' | 'member',
+        status: 'confirmed' | 'invited',
+        username: string
+    }[]
 } | GeneralApiProblem
 
 // ---------------- Request data --------------------
@@ -185,4 +203,10 @@ export type CipherData = {
         title: string | null,
         username: string | null
     } | null
+}
+
+export type AddMemberData = {
+    username: string
+    role: 'admin' | 'manager' | 'member'
+    collections: string[]
 }
