@@ -45,7 +45,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
   const BUTTON_CONTAINER: ViewStyle = {
     position: 'absolute',
     zIndex: 100,
-    top: 30,
+    top: 20,
     right: 0,
     flexDirection: 'row',
     alignItems: 'center'
@@ -53,7 +53,8 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
 
   const BUTTON: ViewStyle = {
     alignItems: 'center',
-    width: 30,
+    width: 35,
+    height: 30
   }
 
   const validateMask = (text: string) => {
@@ -88,7 +89,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
         style={[{
           fontSize: fontSize.p,
           color: color.textBlack,
-          paddingRight: 30 * ((isPassword ? 1 : 0) + (copyAble ? 1 : 0) + (buttonRight ? 1 : 0))
+          paddingRight: 35 * ((isPassword ? 1 : 0) + (copyAble ? 1 : 0) + (buttonRight ? 1 : 0))
         }, inputStyle]}
         floatingPlaceholderStyle={{
           fontSize: fontSize.p,

@@ -55,7 +55,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
               >
                 <Text
                   tx={item.label}
-                  style={{ color: color.title }}
+                  style={{ color: color.title, marginVertical: 5 }}
                 />
                 <Text
                   tx={item.desc}
