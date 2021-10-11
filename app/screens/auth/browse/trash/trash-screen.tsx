@@ -53,6 +53,7 @@ export const TrashScreen = observer(function TrashScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
+            imgStyle={{ height: 55, width: 55 }}
             title={translate('trash.empty.title')}
             desc={translate('trash.empty.desc')}
           />

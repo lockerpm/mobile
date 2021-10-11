@@ -37,13 +37,19 @@ export const BrowseListScreen = observer(function BrowseListScreen() {
               }}
               style={{
                 borderBottomColor: color.line,
-                borderBottomWidth: 1,
+                borderBottomWidth: index === Object.keys(BROWSE_ITEMS).length - 1 ? 0 : 1,
                 flexDirection: 'row',
                 alignItems: 'center',
                 paddingVertical: 12
               }}
             >
-              <Image source={item.icon} style={{ height: 40 }} />
+              {
+                item.svgIcon ? (
+                  <item.svgIcon height={40} width={40} />
+                ) : (
+                  <Image source={item.icon} style={{ height: 40, width: 40 }} />
+                )
+              }
               <Text
                 tx={item.label}
                 style={{ color: color.title, flex: 1, paddingHorizontal: 10 }}

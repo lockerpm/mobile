@@ -338,12 +338,28 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // Load folders
   const loadFolders = async () => {
     const res = await folderService.getAllDecrypted() || []
+    for (let f of res) {
+      let ciphers = await getCiphers({
+        deleted: false,
+        searchText: '',
+        filters: [c => c.folderId === f.id]
+      })
+      f.cipherCount = ciphers ? ciphers.length : 0
+    }
     folderStore.setFolders(res)
   }
 
   // Load collections
   const loadCollections = async () => {
     const res = await collectionService.getAllDecrypted() || []
+    for (let f of res) {
+      let ciphers = await getCiphers({
+        deleted: false,
+        searchText: '',
+        filters: [c => c.collectionIds.includes(f.id)]
+      })
+      f.cipherCount = ciphers ? ciphers.length : 0
+    }
     collectionStore.setCollections(res)
   }
 

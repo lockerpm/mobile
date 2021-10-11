@@ -130,7 +130,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
             source={BROWSE_ITEMS.password.icon}
-            style={{ height: 40, marginRight: 10 }}
+            style={{ height: 40, width: 40, marginRight: 10 }}
           />
           <View style={{ flex: 1 }}>
             <FloatingInput

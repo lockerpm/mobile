@@ -57,6 +57,7 @@ export const NotesScreen = observer(function NotesScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
+            imgStyle={{ height: 55, width: 55 }}
             title={translate('note.empty.title')}
             desc={translate('note.empty.desc')}
             buttonText={translate('note.empty.btn')}

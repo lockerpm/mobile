@@ -23,25 +23,37 @@ export const RenameFolderModal = observer((props: Props) => {
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const renameFolder = async () => {
-    setIsLoading(true)
-    const data = {...folder}
-    let res = { kind: 'unknown' }
-    data.name = name
+  const isExisted = !!name.trim() && folderStore.folders.some(f => f.name && f.name === name)
 
-    if (data instanceof FolderView) {
+  const renameFolder = async () => {
+    if (!name.trim() || isExisted) {
+      return
+    }
+
+    setIsLoading(true)
+    
+    const data = {...folder}
+    data.name = name
+    let res = { kind: 'unknown' }
+
+    if (folder instanceof FolderView) {
+      // @ts-ignore
       const folderEnc = await folderService.encrypt(data)
       const payload = new FolderRequest(folderEnc)
       res = await folderStore.updateFolder(folder.id, payload)
     }
+
+    setIsLoading(false)
 
     if (res.kind === 'ok') {
       notify('success', translate('folder.folder_updated'))
       onClose()
     } else {
       notify('error', translate('error.something_went_wrong'))
+      if (res.kind === 'unauthorized') {
+        onClose()
+      }
     }
-    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -55,14 +67,17 @@ export const RenameFolderModal = observer((props: Props) => {
       title={translate('folder.rename_folder')}
     >
       <FloatingInput
+        isInvalid={isExisted}
+        errorText={translate('folder.folder_existed')}
         label={translate('common.name')}
         value={name}
         onChangeText={txt => setName(txt)}
+        onSubmitEditing={renameFolder}
       />
 
       <Button
         text={translate('common.save')}
-        isDisabled={isLoading || !name.trim()}
+        isDisabled={isLoading || !name.trim() || isExisted}
         isLoading={isLoading}
         onPress={renameFolder}
         style={{

@@ -23,12 +23,12 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
   return (
     <Layout>
       <View style={{ alignItems: 'center', paddingTop: '15%' }}>
-        <Image source={require("./faceid.png")} />
+        <Image source={require("./faceid.png")} style={{ height: 216, width: 242 }} />
 
         <Text
           preset="header"
           tx={"biometric_intro.title"}
-          style={{ marginBottom: 10, marginTop: 30 }}
+          style={{ marginBottom: 10, marginTop: 30, textAlign: 'center' }}
         />
 
         <Text

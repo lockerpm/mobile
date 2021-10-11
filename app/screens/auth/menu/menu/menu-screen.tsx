@@ -1,12 +1,26 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ScrollView, ViewStyle } from "react-native"
+import { View, ScrollView, ViewStyle, Linking } from "react-native"
 import { Layout, Text, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
 import { color, commonStyles, fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { MANAGE_PLAN_URL } from "../../../../config/constants"
+
+
+// @ts-ignore
+import PlanIcon from './star.svg'
+// @ts-ignore
+import InviteIcon from './invite.svg'
+// @ts-ignore
+import SettingsIcon from './gear.svg'
+// @ts-ignore
+import HelpIcon from './question.svg'
+// @ts-ignore
+import LockIcon from './lock.svg'
 
 
 const ITEM_CONTAINER: ViewStyle = {
@@ -25,20 +39,24 @@ export const MenuScreen = observer(function MenuScreen() {
 
   const items: MenuItemProps[] = [
     {
-      icon: 'star-o',
+      icon: <PlanIcon height={22} />,
       name: translate('menu.plan'),
+      action: () => {
+        Linking.openURL(MANAGE_PLAN_URL)
+      }
     },
     {
-      icon: 'users',
+      icon: <InviteIcon height={22} />,
       name: translate('menu.invite'),
+      disabled: true
     },
     {
-      icon: 'gear',
+      icon: <SettingsIcon height={22} />,
       name: translate('common.settings'),
       action: () => navigation.navigate('settings')
     },
     {
-      icon: 'question-circle-o',
+      icon: <HelpIcon height={22} />,
       name: translate('common.help'),
       action: () => navigation.navigate('help'),
       noBorder: true
@@ -47,7 +65,7 @@ export const MenuScreen = observer(function MenuScreen() {
 
   const items2: MenuItemProps[] = [
     {
-      icon: 'lock',
+      icon: <LockIcon height={22} />,
       name: translate('common.lock'),
       action: async () => {
         setIsLoading(true)
@@ -58,7 +76,7 @@ export const MenuScreen = observer(function MenuScreen() {
       }
     },
     {
-      icon: 'sign-out',
+      icon: <Ionicons name={'log-out-outline'} color={color.textBlack} size={22} />,
       name: translate('common.logout'),
       action: async () => {
         setIsLoading(true)
@@ -101,7 +119,7 @@ export const MenuScreen = observer(function MenuScreen() {
               preset="black"
               text={user.email}
             />
-            <Text style={{ fontSize: fontSize.small }}>
+            <Text style={{ fontSize: fontSize.small, marginTop: 5 }}>
               {user.plan && user.plan.name}
             </Text>
           </View>

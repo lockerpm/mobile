@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleProp, View, ViewStyle } from "react-native"
+import { StyleProp, View, ViewStyle, ImageStyle, ImageSourcePropType } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
@@ -16,10 +16,11 @@ const CONTAINER: ViewStyle = {
 
 export interface BrowseItemEmptyContentProps {
   style?: StyleProp<ViewStyle>
-  img: any,
-  title: string,
-  desc: string,
-  buttonText?: string,
+  img: ImageSourcePropType
+  imgStyle?: ImageStyle
+  title: string
+  desc: string
+  buttonText?: string
   addItem?: Function
 }
 
@@ -27,12 +28,12 @@ export interface BrowseItemEmptyContentProps {
  * Describe your component here
  */
 export const BrowseItemEmptyContent = observer(function BrowseItemEmptyContent(props: BrowseItemEmptyContentProps) {
-  const { style, img, title, desc, buttonText, addItem } = props
+  const { style, img, title, desc, buttonText, addItem, imgStyle } = props
   const styles = flatten([CONTAINER, style])
 
   return (
     <View style={styles}>
-      <Image source={img} />
+      <Image source={img} style={imgStyle} />
 
       <Text
         preset="semibold"
