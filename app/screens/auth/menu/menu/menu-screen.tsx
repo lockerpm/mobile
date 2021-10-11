@@ -119,7 +119,7 @@ export const MenuScreen = observer(function MenuScreen() {
               preset="black"
               text={user.email}
             />
-            <Text style={{ fontSize: fontSize.small }}>
+            <Text style={{ fontSize: fontSize.small, marginTop: 5 }}>
               {user.plan && user.plan.name}
             </Text>
           </View>

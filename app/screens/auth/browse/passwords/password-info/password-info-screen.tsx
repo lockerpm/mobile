@@ -144,10 +144,15 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
               onPress={() => {
                 Linking.openURL(selectedCipher.login.uri)
               }}
+              style={{
+                alignItems: 'center',
+                width: 35,
+                height: 30
+              }}
             >
               <FontAwesomeIcon
                 name="external-link"
-                size={14}
+                size={16}
                 color={color.text}
               />
             </Button>
