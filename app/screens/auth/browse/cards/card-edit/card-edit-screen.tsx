@@ -193,9 +193,9 @@ export const CardEditScreen = observer(function CardEditScreen() {
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
             source={BROWSE_ITEMS.card.icon}
-            style={{ height: 40, marginRight: 10 }}
+            style={{ height: 40, width: 40 }}
           />
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
               label={translate('common.name')}

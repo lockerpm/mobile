@@ -38,7 +38,7 @@ export const DeleteConfirmModal = (props: Props) => {
       <View style={{ alignItems: 'center' }}>
         <Image
           source={require('./trash.png')}
-          style={{ height: 110 }}
+          style={{ height: 110, width: 100 }}
         />
         <Text
           preset="black"

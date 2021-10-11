@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { color, commonStyles, fontSize } from "../../../../../theme"
@@ -253,11 +253,8 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Image
-            source={BROWSE_ITEMS.identity.icon}
-            style={{ height: 40, marginRight: 10 }}
-          />
-          <View style={{ flex: 1 }}>
+          <BROWSE_ITEMS.identity.svgIcon height={40} width={40} />
+          <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
               label="Name"

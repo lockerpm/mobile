@@ -37,13 +37,19 @@ export const AddAction = (props: Props) => {
               }}
             >
               <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-                <Image
-                  source={item.icon}
-                  style={{ height: 40, marginRight: 12 }}
-                />
+                {
+                  item.svgIcon ? (
+                    <item.svgIcon height={40} width={40} />
+                  ) : (
+                    <Image
+                      source={item.icon}
+                      style={{ height: 40, width: 40 }}
+                    />
+                  )
+                }
                 <Text
                   tx={item.label}
-                  style={{ color: color.textBlack }}
+                  style={{ color: color.textBlack, marginLeft: 12 }}
                 />
               </View>
             </ActionSheetItem>

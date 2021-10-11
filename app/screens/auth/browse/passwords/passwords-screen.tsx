@@ -57,6 +57,7 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
+            imgStyle={{ height: 55, width: 120 }}
             title={translate('password.empty.title')}
             desc={translate('password.empty.desc')}
             buttonText={translate('password.empty.btn')}

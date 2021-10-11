@@ -3,7 +3,6 @@ import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
 import { Text } from "../../text/text"
-import { AutoImage as Image } from "../../auto-image/auto-image"
 import find from 'lodash/find'
 import { CipherView } from "../../../../core/models/view"
 import { useMixins } from "../../../services/mixins"
@@ -75,28 +74,26 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
       {
         cipher.organizationId ? (
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-            <Image
-              source={FOLDER_IMG[collection.id === 'unassigned' ? 'normal' : 'share'].img}
-              style={{
-                marginRight: 10
-              }}
-            />
+            {
+              collection.id === 'unassigned' ? (
+                <FOLDER_IMG.normal.svg height={30} />
+              ) : (
+                <FOLDER_IMG.share.svg height={30} />
+              )
+            }
             <Text
               preset="black"
               text={collection.name}
+              style={{ marginLeft: 10 }}
             />
           </View>
         ) : (
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-            <Image
-              source={FOLDER_IMG.normal.img}
-              style={{
-                marginRight: 10
-              }}
-            />
+            <FOLDER_IMG.normal.svg height={30} />
             <Text
               preset="black"
               text={folder.name || translate('folder.unassigned')}
+              style={{ marginLeft: 10 }}
             />
           </View>
         )

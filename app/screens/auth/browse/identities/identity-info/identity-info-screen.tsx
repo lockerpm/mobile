@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Header, Button, AutoImage as Image, Text, FloatingInput, CipherInfoCommon } from "../../../../../components"
+import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -144,13 +144,11 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
           paddingBottom: 30,
           marginBottom: 10
         }]}>
-          <Image
-            source={BROWSE_ITEMS.identity.icon}
-            style={{ height: 55, width: 55, marginBottom: 5 }}
-          />
+          <BROWSE_ITEMS.identity.svgIcon height={55} width={55} />
           <Text
             preset="header"
             text={selectedCipher.name}
+            style={{ marginTop: 5 }}
           />
         </View>
       </View>

@@ -83,7 +83,8 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       const data = {
         ...c,
         logo: null,
-        imgLogo: null
+        imgLogo: null,
+        svg: null
       }
       switch (c.type) {
         case CipherType.Login: {
@@ -96,6 +97,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
         case CipherType.SecureNote: {
           data.logo = BROWSE_ITEMS.note.icon
+          data.svg = BROWSE_ITEMS.note.svgIcon
           break
         }
 
@@ -106,11 +108,13 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
         case CipherType.Identity: {
           data.logo = BROWSE_ITEMS.identity.icon
+          data.svg = BROWSE_ITEMS.identity.svgIcon
           break
         }
 
         default:
           data.logo = BROWSE_ITEMS.trash.icon
+          data.svg = BROWSE_ITEMS.trash.svgIcon
       }
       return data
     })
@@ -265,16 +269,22 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
             }}
           >
             <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              <Image
-                source={item.imgLogo || item.logo}
-                backupSource={item.logo}
-                style={{
-                  height: 40,
-                  marginRight: 12
-                }}
-              />
+              {
+                item.svg ? (
+                  <item.svg height={40} width={40} />
+                ) : (
+                  <Image
+                    source={item.imgLogo || item.logo}
+                    backupSource={item.logo}
+                    style={{
+                      height: 40,
+                      width: 40
+                    }}
+                  />
+                )
+              }
 
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, marginLeft: 12 }}>
                 <Text
                   preset="semibold"
                   text={item.name}

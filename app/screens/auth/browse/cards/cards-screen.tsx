@@ -57,6 +57,7 @@ export const CardsScreen = observer(function CardsScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
+            imgStyle={{ height: 55, width: 120 }}
             title={translate('card.empty.title')}
             desc={translate('card.empty.desc')}
             buttonText={translate('card.empty.btn')}
