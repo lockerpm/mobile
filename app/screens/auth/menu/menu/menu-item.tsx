@@ -1,36 +1,34 @@
 import React from "react"
+import { View } from "react-native"
 import { Button, Text } from "../../../../components"
 import { commonStyles, color } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { observer } from "mobx-react-lite"
 
 export type MenuItemProps = {
-  icon: string,
+  icon: React.ReactNode,
   name: string,
   noCaret?: boolean,
   noBorder?: boolean,
   action?: Function
+  disabled?: boolean
 }
 
 export const MenuItem = observer((props: MenuItemProps) => {
   return (
     <Button
+      isDisabled={props.disabled}
       preset="link"
       onPress={() => props.action && props.action()}
       style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
         paddingVertical: 16,
         borderBottomColor: color.line,
-        borderBottomWidth: props.noBorder? 0 : 1
+        borderBottomWidth: props.noBorder? 0 : 1,
       }]}
     >
-      <FontAwesomeIcon
-        name={props.icon}
-        size={18}
-        color={color.textBlack}
-        style={{
-          width: 20
-        }}
-      />
+      <View style={{ width: 25 }}>
+        {props.icon}
+      </View>
       <Text
         preset="black"
         text={props.name}

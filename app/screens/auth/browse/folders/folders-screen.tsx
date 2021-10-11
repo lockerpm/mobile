@@ -182,10 +182,11 @@ export const FoldersScreen = observer(function FoldersScreen() {
                             setSelectedFolder(item)
                             setIsActionOpen(true)
                           }}
+                          style={{ height: 30, alignItems: 'center'}}
                         >
                           <IoniconsIcon
                             name="ellipsis-horizontal"
-                            size={16}
+                            size={18}
                             color={color.textBlack}
                           />
                         </Button>

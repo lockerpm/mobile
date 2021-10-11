@@ -2,12 +2,14 @@ import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { color, fontSize } from "../../theme"
+import { fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { AutoImage as Image } from "../auto-image/auto-image"
 import { APP_ICON } from "../../common/mappings"
+
+// @ts-ignore
+import BackIcon from './arrow-left.svg'
 
 const CONTAINER: ViewStyle = {
   flexDirection: 'row',
@@ -40,7 +42,11 @@ export const Header = observer(function Header(props: HeaderProps) {
           props.left 
             ? props.left 
             : props.goBack ? (
-              <Button preset="link" onPress={() => props.goBack()}>
+              <Button 
+                preset="link" 
+                onPress={() => props.goBack()}
+                style={{ height: 30, alignItems: 'center'}}
+              >
                 {
                   props.goBackText ? (
                     <Text
@@ -48,11 +54,7 @@ export const Header = observer(function Header(props: HeaderProps) {
                       style={{ fontSize: fontSize.p }}
                     />
                   ) : (
-                    <IoniconsIcon 
-                      name="md-arrow-back"
-                      size={22} 
-                      color={color.title} 
-                    />
+                    <BackIcon height={12} />
                   )
                 }
               </Button>
