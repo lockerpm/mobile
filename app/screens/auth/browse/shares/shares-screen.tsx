@@ -62,6 +62,7 @@ export const SharesScreen = observer(function SharesScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
+            imgStyle={{ height: 55, width: 55 }}
             title={translate('shares.empty.title')}
             desc={translate('shares.empty.desc')}
           />

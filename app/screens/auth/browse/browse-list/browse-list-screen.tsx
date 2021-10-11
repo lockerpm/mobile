@@ -43,7 +43,13 @@ export const BrowseListScreen = observer(function BrowseListScreen() {
                 paddingVertical: 12
               }}
             >
-              <Image source={item.icon} style={{ height: 40 }} />
+              {
+                item.svgIcon ? (
+                  <item.svgIcon height={40} width={40} />
+                ) : (
+                  <Image source={item.icon} style={{ height: 40, width: 40 }} />
+                )
+              }
               <Text
                 tx={item.label}
                 style={{ color: color.title, flex: 1, paddingHorizontal: 10 }}

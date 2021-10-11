@@ -122,11 +122,8 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
         }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Image
-            source={FOLDER_IMG.add.img}
-            style={{ height: 30, marginRight: 10 }}
-          />
-          <Text preset="black" style={{ flex: 1 }}>
+          <FOLDER_IMG.add.svg height={30} />
+          <Text preset="black" style={{ flex: 1, marginLeft: 10 }}>
             New Folder
           </Text>
           <FontAwesomeIcon
@@ -150,11 +147,8 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
             }]}
           >
             <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              <Image
-                source={FOLDER_IMG.normal.img}
-                style={{ height: 30, marginRight: 10 }}
-              />
-              <Text preset="black" style={{ flex: 1 }}>
+              <FOLDER_IMG.normal.svg height={30} />
+              <Text preset="black" style={{ flex: 1, marginLeft: 10 }}>
                 {item.name}
               </Text>
 

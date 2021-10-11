@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Header, Button, AutoImage as Image, Text, FloatingInput, CipherInfoCommon } from "../../../../../components"
+import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -71,13 +71,11 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
           paddingBottom: 30,
           marginBottom: 10
         }]}>
-          <Image
-            source={BROWSE_ITEMS.note.icon}
-            style={{ height: 55, width: 55, marginBottom: 5 }}
-          />
+          <BROWSE_ITEMS.note.svgIcon height={55} width={55} />
           <Text
             preset="header"
             text={selectedCipher.name}
+            style={{ marginTop: 5 }}
           />
         </View>
       </View>

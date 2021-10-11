@@ -43,7 +43,13 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                 paddingVertical: 12
               }}
             >
-              <Image source={item.icon} style={{ height: 40 }} />
+              {
+                item.svgIcon ? (
+                  <item.svgIcon height={40} width={40} />
+                ) : (
+                  <Image source={item.icon} style={{ height: 40, width: 40 }} />
+                )
+              }
               <View
                 style={{ flex: 1, paddingHorizontal: 10 }}
               >

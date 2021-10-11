@@ -57,6 +57,7 @@ export const IdentitiesScreen = observer(function IdentitiesScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
+            imgStyle={{ height: 55, width: 55 }}
             title={translate('identity.empty.title')}
             desc={translate('identity.empty.desc')}
             buttonText={translate('identity.empty.btn')}

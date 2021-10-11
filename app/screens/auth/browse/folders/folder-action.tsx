@@ -70,14 +70,18 @@ export const FolderAction = (props: Props) => {
       >
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-            <Image
-              source={folder instanceof CollectionView ? FOLDER_IMG.share.img : FOLDER_IMG.normal.img}
-              style={{ height: 30, marginRight: 10 }}
-            />
+            {
+              folder instanceof CollectionView ? (
+                <FOLDER_IMG.share.svg height={30} />
+              ) : (
+                <FOLDER_IMG.normal.svg height={30} />
+              )
+            }
             <View>
               <Text
                 preset="semibold"
                 text={folder.name}
+                style={{ marginLeft: 10 }}
               />
             </View>
           </View>

@@ -3,8 +3,7 @@ import { observer } from "mobx-react-lite"
 import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
 import {
-  Layout, BrowseItemHeader, BrowseItemEmptyContent, Text, Button,
-  AutoImage as Image
+  Layout, BrowseItemHeader, BrowseItemEmptyContent, Text, Button
 } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
@@ -120,6 +119,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
         !sections.length ? (
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
+            imgStyle={{ height: 55, width: 55 }}
             title={translate('folder.empty.title')}
             desc={translate('folder.empty.desc')}
             buttonText={translate('folder.empty.btn')}
@@ -156,15 +156,15 @@ export const FoldersScreen = observer(function FoldersScreen() {
                   }}
                 >
                   <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-                    <Image
-                      source={FOLDER_IMG[item.shared ? 'share' : 'normal'].img}
-                      style={{
-                        height: 30,
-                        marginRight: 12
-                      }}
-                    />
+                    {
+                      item.shared ? (
+                        <FOLDER_IMG.share.svg height={30} />
+                      ) : (
+                        <FOLDER_IMG.normal.svg height={30} />
+                      )
+                    }
 
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, marginLeft: 12 }}>
                       <Text
                         preset="semibold"
                         text={
