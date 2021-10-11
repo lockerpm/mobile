@@ -38,7 +38,8 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
     switch (selectedCipher.type) {
       case CipherType.Login:
         return {
-          img: { uri: selectedCipher.login.uri },
+          // img: { uri: selectedCipher.login.uri },
+          img: BROWSE_ITEMS.password.icon,
           backup: BROWSE_ITEMS.password.icon,
           path: 'passwords'
         }
