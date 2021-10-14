@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { load, save, storageKeys } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
+import * as Keychain from 'react-native-keychain'
 
 
 export const InitScreen = observer(function InitScreen() {
@@ -19,7 +20,19 @@ export const InitScreen = observer(function InitScreen() {
     }
   }
 
+  const test = async () => {
+    console.log('testing')
+    const res = await Keychain.setGenericPassword('789', '456', {
+      service: 'W7S57TNBH5.com.cystack.lockerapp',
+      accessGroup: 'group.com.cystack.lockerapp'
+    })
+    console.log(res)
+    const val = Keychain.getGenericPassword({ service: 'W7S57TNBH5.com.cystack.lockerapp' })
+    console.log(val)
+  }
+
   const mounted = async () => {
+    await test()
     user.setLanguage(user.language)
 
     // Testing
