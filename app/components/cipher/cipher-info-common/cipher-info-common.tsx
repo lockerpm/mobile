@@ -47,9 +47,6 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
         getCollections(),
       ])
       setCollections(collectionRes)
-      if (__DEV__) {
-        console.log(collections)
-      }
     }
     mounted()
   }, [])
