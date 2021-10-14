@@ -17,6 +17,7 @@ import { GET_LOGO_URL } from '../../config/constants'
 import i18n from "i18n-js"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { saveShared } from '../../utils/keychain'
 
 const { createContext, useContext } = React
 
@@ -285,10 +286,15 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       cryptoService.clearKeys(),
       userService.clear()
     ])
+
+    // Sign out of Google
     const isSignedIn = await GoogleSignin.isSignedIn()
     if (isSignedIn) {
       await GoogleSignin.signOut()
     }
+
+    // Reset shared data
+    await saveShared('autofill', '[]')
   }
 
   // Lock screen
@@ -328,6 +334,23 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await syncService.syncPolicies(res.data.policies)
       await syncService.setLastSync(new Date())
       messagingService.send('syncCompleted', { successfully: true })
+
+      // Save to shared keychain for autofill service
+      const passwordRes = await getCiphers({
+        filters: [
+          (c : CipherView) => c.type === CipherType.Login && c.login.uri
+        ],
+        searchText: '',
+        deleted: false
+      })
+      const sharedData = passwordRes.map((c: CipherView) => ({
+        uri: c.login.uri,
+        username: c.login.username,
+        password: c.login.password
+      }))
+      console.log('shared ' + JSON.stringify(sharedData))
+      await saveShared('autofill', JSON.stringify(sharedData))
+
       return { kind: 'ok' }
     } catch (e) {
       messagingService.send('syncCompleted', { successfully: false })
@@ -523,6 +546,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   const translate = (tx: TxKeyPath, options?: i18n.TranslateOptions) => {
     // Dummy to force rerender
+    // @ts-ignore
     const abc = user.language
     return tl(tx, options)
   }

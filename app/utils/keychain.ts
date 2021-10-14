@@ -1,4 +1,5 @@
 import * as ReactNativeKeychain from "react-native-keychain"
+import { SHARED_KEYCHAIN_ACCESS_GROUP, SHARED_KEYCHAIN_SERVICE } from "../config/constants"
 
 /**
  * Saves some credentials securely.
@@ -13,6 +14,26 @@ export async function save(username: string, password: string, server?: string) 
     return true
   } else {
     return ReactNativeKeychain.setGenericPassword(username, password)
+  }
+}
+
+/**
+ * Saves some credentials securely in shared keychain
+ *
+ * @param username The username
+ * @param password The password
+ * @param server The server these creds are for.
+ */
+ export async function saveShared(username: string, password: string) {
+  try {
+    await ReactNativeKeychain.setGenericPassword(username, password, {
+      service: SHARED_KEYCHAIN_SERVICE,
+      accessGroup: SHARED_KEYCHAIN_ACCESS_GROUP
+    })
+    return true
+  } catch (e) {
+    __DEV__ && console.log(e)
+    return false
   }
 }
 

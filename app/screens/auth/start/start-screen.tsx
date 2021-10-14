@@ -9,12 +9,14 @@ import { delay } from "../../../utils/delay"
 
 export const StartScreen = observer(function StartScreen() {
   const { user, uiStore } = useStores()
-  const { getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate } = useMixins()
+  const { 
+    getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate
+  } = useMixins()
   const navigation = useNavigation()
 
   const mounted = async () => {
     if (!uiStore.isOffline) {
-      await delay(1500)
+      await delay(1000)
       const [syncRes] = await Promise.all([
         getSyncData(),
         user.loadTeams(),
@@ -26,7 +28,7 @@ export const StartScreen = observer(function StartScreen() {
       } else {
         notify('error', translate('error.sync_failed'))
       }
-      await delay(1500)
+      await delay(1000)
     }
     
     await Promise.all([
