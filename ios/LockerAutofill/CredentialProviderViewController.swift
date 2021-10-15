@@ -8,6 +8,19 @@
 import AuthenticationServices
 import KeychainAccess
 
+
+func toArray(text: String) -> [Any]? {
+    if let data = text.data(using: .utf8) {
+        do {
+            return try JSONSerialization.jsonObject(with: data, options: []) as? [Any]
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    return []
+}
+
+
 class CredentialProviderViewController: ASCredentialProviderViewController {
 
     /*
@@ -17,24 +30,14 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     */
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
       let keychain = Keychain(service: "W7S57TNBH5.com.cystack.lockerapp", accessGroup: "group.com.cystack.lockerapp")
-      print("\(keychain)")
-      let keys = keychain.allKeys()
-      for key in keys {
-        print("key: \(key)")
-      }
-      
-      let token = try? keychain.get("test")
-      
-      if token != nil {
-        print("ok")
+      let autofillData = try? keychain.get("autofill")
+      if autofillData != nil {
+        let data = toArray(text: autofillData ?? "[]")
+        for item in data ?? [] {
+          print(item)
+        }
       } else {
-        do {
-          try keychain.set("123", key: "test")
-          print("set")
-        }
-        catch let error {
-          print(error)
-        }
+        print("no data")
       }
     }
 
