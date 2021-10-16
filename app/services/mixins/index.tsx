@@ -94,15 +94,17 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
 
       // Offline compare
-      const storedKeyHash = await cryptoService.getKeyHash()
-      if (storedKeyHash && !uiStore.passwordChanged) {
-        const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
-        if (passwordValid) {
-          messagingService.send('loggedIn')
-
-          // Fake set key
-          await cryptoService.setKey(key)
-          return { kind: 'ok' }
+      if (uiStore.isOffline) {
+        const storedKeyHash = await cryptoService.getKeyHash()
+        if (storedKeyHash && !uiStore.passwordChanged) {
+          const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
+          if (passwordValid) {
+            messagingService.send('loggedIn')
+  
+            // Fake set key
+            await cryptoService.setKey(key)
+            return { kind: 'ok' }
+          }
         }
       }
 

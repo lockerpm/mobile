@@ -51,7 +51,7 @@ export const StartScreen = observer(function StartScreen() {
       }
     }
 
-    navigation.navigate('mainTab')
+    navigation.navigate('mainTab', { screen: 'homeTab' })
   }
 
   // Life cycle

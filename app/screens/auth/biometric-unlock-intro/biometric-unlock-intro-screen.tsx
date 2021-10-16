@@ -17,7 +17,7 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
 
   const handleSkip = async () => {
     await save(storageKeys.APP_SHOW_BIOMETRIC_INTRO, 1)
-    navigation.navigate('mainTab')
+    navigation.navigate('mainTab', { screen: 'homeTab' })
   }
 
   return (

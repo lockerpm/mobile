@@ -41,7 +41,7 @@ export const LockScreen = observer(function LockScreen() {
       setIsUnlocking(false)
       if (res.kind === 'ok') {
         setMasterPassword('')
-        navigation.navigate('mainStack')
+        navigation.navigate('mainStack', { screen: 'start' })
       } else if (res.kind === 'unauthorized') {
         navigation.navigate('login')
       } else {
@@ -67,7 +67,7 @@ export const LockScreen = observer(function LockScreen() {
     setIsBioUnlocking(false)
     if (res.kind === 'ok') {
       setMasterPassword('')
-      navigation.navigate('mainStack')
+      navigation.navigate('mainStack', { screen: 'start' })
     }
   }
 
