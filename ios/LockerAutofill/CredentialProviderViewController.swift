@@ -57,7 +57,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     var uri = ""
     if serviceIdentifiers.count > 0 {
       uri = serviceIdentifiers[0].identifier
-      print(uri)
     }
     
     // Clear view
@@ -73,8 +72,8 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
       if (self.passwords.count > 0) {
         var hasItem = false
         let label = UILabel()
-        label.text = "Log in as"
-        label.font = label.font?.withSize(24)
+        label.text = "Log in \(uri)\n"
+        label.font = label.font?.withSize(22)
         label.textColor = .label
         label.textAlignment = .center
         self.stackView.addArrangedSubview(label)
@@ -94,7 +93,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     
     // No password available
     let label = UILabel()
-    label.text = "There's no password for this uri, add a password to start using autofill feature."
+    label.text = "There's no password for \(uri), add a password to Locker to start using autofill feature."
     label.textColor = .label
     label.textAlignment = .center
     label.numberOfLines = 0
@@ -131,7 +130,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
   */
 
   @IBAction func cancel(_ sender: AnyObject?) {
-      self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
+    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
   }
-
 }
