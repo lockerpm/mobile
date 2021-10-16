@@ -121,7 +121,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
         <Header
           goBack={() => {
             if (fromIntro) {
-              navigation.navigate('mainTab')
+              navigation.navigate('mainTab', { screen: 'homeTab' })
             } else {
               navigation.goBack()
             }

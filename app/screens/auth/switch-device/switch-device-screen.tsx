@@ -9,7 +9,7 @@ export const SwitchDeviceScreen = observer(function SwitchDeviceScreen() {
 
   // Methods
   const handleSwitchDevice = () => {
-    navigation.navigate('mainTab')
+    navigation.navigate('mainTab', { screen: 'homeTab' })
   }
 
   const handleBuyPremium = () => {}

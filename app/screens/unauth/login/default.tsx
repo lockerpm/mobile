@@ -41,6 +41,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
       setIsError(true)
       notify('error', translate('error.login_failed'))
     } else {
+      setPassword('')
       if (res.data.is_factor2) {
         nextStep(username, password, res.data.methods)
       } else {
