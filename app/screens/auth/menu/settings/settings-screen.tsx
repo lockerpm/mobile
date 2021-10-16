@@ -172,6 +172,13 @@ export const SettingsScreen = observer(function SettingsScreen() {
         }]}
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
+        {/* Autofill */}
+        <SettingsItem
+          name={translate('settings.autofill_service')}
+          action={() => navigation.navigate('autofillService')}
+        />
+        {/* Autofill */}
+
         {/* Biometric */}
         <SettingsItem
           name={translate('common.biometric_unlocking')}

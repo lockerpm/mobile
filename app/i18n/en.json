@@ -320,6 +320,7 @@
     "desc": "Check if sensitive data is leaked online"
   },
   "settings": {
+    "autofill_service": "AutoFill service",
     "change_master_pass": "Change Master Password",
     "danger_zone": "Danger Zone",
     "deauthorize_sessions": "Deauthorize sessions",
@@ -329,5 +330,15 @@
     "on_screen_off": "On screen off",
     "timeout": "Timeout",
     "timeout_action": "Timeout Action"
+  },
+  "autofill_service": {
+    "ios": {
+      "desc": "To enable password autofill on your device, follow these instructions:",
+      "step_1": "1. Go to the iOS \"Settings\" app",
+      "step_2": "2. Tap \"Passwords\"",
+      "step_3": "3. Tap \"AutoFill Passwords\"",
+      "step_4": "4. Turn on AutoFill",
+      "step_5": "5. Select \"Locker\""
+    }
   }
 }
