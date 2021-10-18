@@ -238,6 +238,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
           right={(
             <Button
               preset="link"
+              isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
               textStyle={{

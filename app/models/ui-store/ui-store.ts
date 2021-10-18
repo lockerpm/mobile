@@ -8,8 +8,6 @@ export const UiStoreModel = types
   .props({
     // Data
     isOffline: types.maybeNull(types.boolean),
-    showNetworkError: types.maybeNull(types.boolean),
-    passwordChanged: types.maybeNull(types.boolean),
 
     // Cache
     selectedCountry: types.maybeNull(types.string)
@@ -18,12 +16,6 @@ export const UiStoreModel = types
   .actions((self) => ({
     setIsOffline: (isOffline: boolean) => {
       self.isOffline = isOffline
-    },
-    setShowNetworkError: (value: boolean) => {
-      self.showNetworkError = value
-    },
-    setPasswordChanged: (value: boolean) => {
-      self.passwordChanged = value
     },
 
     setSelectedCountry(country_code: string) {

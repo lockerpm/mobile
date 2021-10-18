@@ -24,35 +24,19 @@ export interface CipherInfoCommonProps {
  */
 export const CipherInfoCommon = observer(function CipherInfoCommon(props: CipherInfoCommonProps) {
   const { style, cipher } = props
-  const { getTeam, getCollections, translate } = useMixins()
-  const { user, folderStore } = useStores()
-
-  const [collections, setCollections] = React.useState([])
+  const { getTeam, translate } = useMixins()
+  const { user, folderStore, collectionStore } = useStores()
 
   const styles = flatten([CONTAINER, style])
 
   // Computed
   const collection = (() => {
-    return { name: translate('folder.unassigned'), id: 'unassigned' }
+    return find(collectionStore.collections, e => cipher.collectionIds.includes(e.id)) || {}
   })()
 
   const folder = (() => {
     return find(folderStore.folders, e => e.id === cipher.folderId) || {}
   })()
-
-  // Mounted
-  React.useEffect(() => {
-    const mounted = async () => {
-      const [collectionRes] = await Promise.all([
-        getCollections(),
-      ])
-      setCollections(collectionRes)
-      if (__DEV__) {
-        console.log(collections)
-      }
-    }
-    mounted()
-  }, [])
 
   return (
     <View style={styles}>
@@ -63,7 +47,7 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
       />
       <Text
         preset="black"
-        text={getTeam(user.teams, cipher.organizationId).name || 'Me'}
+        text={getTeam(user.teams, cipher.organizationId).name || translate('common.me')}
       />
 
       {/* Folder */}
@@ -74,16 +58,10 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
       {
         cipher.organizationId ? (
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-            {
-              collection.id === 'unassigned' ? (
-                <FOLDER_IMG.normal.svg height={30} />
-              ) : (
-                <FOLDER_IMG.share.svg height={30} />
-              )
-            }
+            <FOLDER_IMG.share.svg height={30} />
             <Text
               preset="black"
-              text={collection.name}
+              text={collection.name || translate('folder.unassigned')}
               style={{ marginLeft: 10 }}
             />
           </View>

@@ -14,7 +14,6 @@ import {
   CreateMasterPasswordScreen, ForgotPasswordScreen, CountrySelectorScreen
 } from "../screens"
 import { color, fontSize } from "../theme"
-import { useMixins } from "../services/mixins"
 import { useStores } from "../models"
 import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message'
 
@@ -46,15 +45,7 @@ export type RootParamList = {
 const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = () => {
-  const { notify, translate } = useMixins()
   const { uiStore } = useStores()
-
-  useEffect(() => {
-    if (uiStore.showNetworkError) {
-      notify('error', translate('error.network_error'))
-      uiStore.setShowNetworkError(false)
-    }
-  }, [uiStore.showNetworkError])
 
   useEffect(() => {
     // Check network

@@ -1,5 +1,6 @@
 {
   "common": {
+    "accept": "Accept",
     "account": "Account",
     "authenticate": "Authenticate",
     "authentication_app": "Authentication App",
@@ -49,6 +50,7 @@
     "ownership": "Ownership",
     "password": "Password",
     "regenerate": "Regenerate",
+    "reject": "reject",
     "rename": "Rename",
     "restore": "Restore",
     "save": "Save",
@@ -81,9 +83,14 @@
     "token_expired": "Session token expired",
     "no_associated_account": "There’s no account associated with this email or username. Try another or create a new account.",
     "invalid_authorization_code": "The authorization code is not valid",
-    "invalid_data": "Invalid data"
+    "invalid_data": "Invalid data",
+    "no_results_found": "No results found for",
+    "forbidden": "Your account doesn't have permission to perform this action",
+    "not_found": "Resource not found"
   },
   "success": {
+    "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation.",
+    "invitation_rejected": "Invitation rejected",
     "master_password_updated": "Master password updated",
     "biometric_enabled": "Face ID/Touch ID unlocking is enabled",
     "cipher_created": "New item created",
@@ -191,6 +198,7 @@
     "add_to_folder": "Add to Folder",
     "move_to_folder": "Move to Folder",
     "no_folder": "No folder",
+    "new_folder": "New Folder",
     "folder_deleted": "Folder deleted",
     "folder_created": "Folder created",
     "folder_updated": "Folder updated",
@@ -299,7 +307,9 @@
   },
   "menu": {
     "plan": "Manage Plan",
-    "invite": "Invite Friends"
+    "invite": "Invite Friends",
+    "invitation_to_join": "Invitation to join ",
+    "invitation_desc": "You’ve been invited to the {{org}} organization! Join now and start collaborating with your teammates."
   },
   "pass_generator": {
     "title": "Password Generator",
@@ -320,6 +330,7 @@
     "desc": "Check if sensitive data is leaked online"
   },
   "settings": {
+    "autofill_service": "AutoFill service",
     "change_master_pass": "Change Master Password",
     "danger_zone": "Danger Zone",
     "deauthorize_sessions": "Deauthorize sessions",
@@ -329,5 +340,15 @@
     "on_screen_off": "On screen off",
     "timeout": "Timeout",
     "timeout_action": "Timeout Action"
+  },
+  "autofill_service": {
+    "ios": {
+      "desc": "To enable password autofill on your device, follow these instructions:",
+      "step_1": "1. Go to the iOS \"Settings\" app",
+      "step_2": "2. Tap \"Passwords\"",
+      "step_3": "3. Tap \"AutoFill Passwords\"",
+      "step_4": "4. Turn on AutoFill",
+      "step_5": "5. Select \"Locker\""
+    }
   }
 }

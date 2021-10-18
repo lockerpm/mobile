@@ -13,11 +13,13 @@ export type SettingsItemProps = {
   color?: string
   action?: Function
   noBorder?: boolean
+  disabled?: boolean
 }
 
 export const SettingsItem = observer((props: SettingsItemProps) => {
   return props.action ? (
     <Button
+      isDisabled={props.disabled}
       preset="link"
       onPress={() => props.action()}
       style={[commonStyles.CENTER_HORIZONTAL_VIEW, {

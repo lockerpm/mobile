@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { load, save, storageKeys } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
+import DeviceInfo from 'react-native-device-info'
 
 
 export const InitScreen = observer(function InitScreen() {
@@ -21,6 +22,7 @@ export const InitScreen = observer(function InitScreen() {
 
   const mounted = async () => {
     user.setLanguage(user.language)
+    user.setDeviceID(DeviceInfo.getUniqueId())
 
     // Testing
     // if (__DEV__) {

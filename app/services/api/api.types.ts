@@ -3,7 +3,6 @@ import { UserSnapshot } from "../../models/user/user"
 import { DeviceType } from "../../../core/enums"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { FolderResponse } from "../../../core/models/response/folderResponse"
-import { string } from "mobx-state-tree/dist/internal"
 
 type SessionSnapshot = {
     access_token: string
@@ -59,7 +58,6 @@ export type ResetPasswordWithCodeResult = {
         reset_password_url: string
     } 
 } | GeneralApiProblem
-
 export type GetMembersResult = {
     kind: "ok"
     data: {
@@ -74,6 +72,20 @@ export type GetMembersResult = {
         role: 'owner' | 'admin' | 'manager' | 'member',
         status: 'confirmed' | 'invited',
         username: string
+    }[]
+} | GeneralApiProblem
+export type GetInvitationsResult = {
+    kind: "ok"
+    data: {
+        access_time: number
+        id: string
+        role: 'admin' | 'manager' | 'member'
+        status: 'confirmed' | 'invited'
+        team: {
+            id: string
+            name: string
+            organization_id: string
+        }
     }[]
 } | GeneralApiProblem
 

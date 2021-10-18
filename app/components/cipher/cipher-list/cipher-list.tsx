@@ -31,7 +31,9 @@ export interface CipherListProps {
     order: string
   },
   folderId?: string,
-  organizationId?: string
+  collectionId?: string,
+  organizationId?: string,
+  isPersonal?: boolean
 }
 
 /**
@@ -39,9 +41,10 @@ export interface CipherListProps {
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
   const {
-    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId, organizationId
+    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId,
+    collectionId, organizationId, isPersonal
   } = props
-  const { getWebsiteLogo, getCiphers } = useMixins()
+  const { getWebsiteLogo, getCiphers, translate } = useMixins()
   const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -63,7 +66,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // Get ciphers list
   const loadData = async () => {
-    onLoadingChange && onLoadingChange(true)
+    // onLoadingChange && onLoadingChange(true)
 
     // Filter
     const filters = []
@@ -122,6 +125,12 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     // Filter
     if (folderId !== undefined) {
       res = res.filter(i => i.folderId === folderId)
+    }
+    if (collectionId !== undefined) {
+      res = res.filter(i => i.collectionIds.includes(collectionId))
+    }
+    if (isPersonal) {
+      res = res.filter(i => !i.collectionIds.length)
     }
     if (organizationId !== undefined) {
       if (organizationId === null) {
@@ -213,11 +222,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // ------------------------ RENDER ----------------------------
 
-  return !ciphers.length && emptyContent ? (
-    <View style={{ paddingHorizontal: 20 }}>
-      {emptyContent}
-    </View>
-  ) : (
+  return ciphers.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
@@ -317,5 +322,20 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       />
       {/* Cipher list end */}
     </View>
+  ) : (
+    emptyContent && !searchText.trim() ? (
+      <View style={{ paddingHorizontal: 20 }}>
+        {emptyContent}
+      </View>
+    ) : (
+      <View style={{ paddingHorizontal: 20 }}>
+        <Text
+          text={translate('error.no_results_found') + ` '${searchText}'`}
+          style={{
+            textAlign: 'center'
+          }}
+        />
+      </View>
+    )
   )
 })

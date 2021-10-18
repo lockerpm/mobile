@@ -17,6 +17,8 @@ import { GET_LOGO_URL } from '../../config/constants'
 import i18n from "i18n-js"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { saveShared } from '../../utils/keychain'
+import { GeneralApiProblem } from '../api/api-problem'
 
 const { createContext, useContext } = React
 
@@ -42,7 +44,7 @@ const defaultData = {
   registerLocker: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   changeMasterPassword: async (oldPassword: string, newPassword: string) => { return { kind: 'unknown' } },
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
-  getTeam: (teams: object[], orgId: string) => ({ name: '' }),
+  getTeam: (teams: object[], orgId: string) => ({ name: '', role: '' }),
   getCiphers: async (params: GetCiphersParams) => { return [] },
   getCipherById: async (id: string) => new CipherView(),
   getCollections: async () => { return [] },
@@ -57,7 +59,8 @@ const defaultData = {
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
-  translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' }
+  translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
+  notifyApiError: (problem: GeneralApiProblem) => {}
 }
 
 
@@ -93,15 +96,17 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
 
       // Offline compare
-      const storedKeyHash = await cryptoService.getKeyHash()
-      if (storedKeyHash && !uiStore.passwordChanged) {
-        const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
-        if (passwordValid) {
-          messagingService.send('loggedIn')
-
-          // Fake set key
-          await cryptoService.setKey(key)
-          return { kind: 'ok' }
+      if (uiStore.isOffline) {
+        const storedKeyHash = await cryptoService.getKeyHash()
+        if (storedKeyHash) {
+          const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
+          if (passwordValid) {
+            messagingService.send('loggedIn')
+  
+            // Fake set key
+            await cryptoService.setKey(key)
+            return { kind: 'ok' }
+          }
         }
       }
 
@@ -136,9 +141,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await cryptoService.setEncKey(res.data.key)
       await cryptoService.setEncPrivateKey(res.data.private_key)
 
-      if (uiStore.passwordChanged) {
-        uiStore.setPasswordChanged(false)
-      }
       return { kind: 'ok' }
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
@@ -218,7 +220,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
       // API failed
       if (res.kind !== 'ok') {
-        notify('error', translate('error.something_went_wrong'))
+        notifyApiError(res)
         return { kind: 'bad-data' }
       }
 
@@ -259,15 +261,14 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         master_password_hash: oldKeyHash
       })
       if (res.kind !== 'ok') {
-        notify('error', translate('error.something_went_wrong'))
+        notifyApiError(res)
         return { kind: 'bad-data' }
       }
 
       // Setup service
       notify('success', translate('success.master_password_updated'))
-      uiStore.setPasswordChanged(true)
-      await lock()
       await cryptoService.clearKeys()
+      await logout()
       return { kind: 'ok' }
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
@@ -285,10 +286,15 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       cryptoService.clearKeys(),
       userService.clear()
     ])
+
+    // Sign out of Google
     const isSignedIn = await GoogleSignin.isSignedIn()
     if (isSignedIn) {
       await GoogleSignin.signOut()
     }
+
+    // Reset shared data
+    await saveShared('autofill', '[]')
   }
 
   // Lock screen
@@ -317,9 +323,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // Sync service
       const userId = await userService.getUserId()
 
-      // TODO: this one got error
-      // await syncService.syncProfile(res.data.profile)
-
+      await syncService.syncProfile(res.data.profile)
       await syncService.syncFolders(userId, res.data.folders)
       await syncService.syncCollections(res.data.collections)
       await syncService.syncCiphers(userId, res.data.ciphers)
@@ -328,6 +332,22 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await syncService.syncPolicies(res.data.policies)
       await syncService.setLastSync(new Date())
       messagingService.send('syncCompleted', { successfully: true })
+
+      // Save to shared keychain for autofill service
+      const passwordRes = await getCiphers({
+        filters: [
+          (c : CipherView) => c.type === CipherType.Login
+        ],
+        searchText: '',
+        deleted: false
+      })
+      const sharedData = passwordRes.map((c: CipherView) => ({
+        uri: c.login.uri,
+        username: c.login.username,
+        password: c.login.password
+      }))
+      await saveShared('autofill', JSON.stringify(sharedData))
+
       return { kind: 'ok' }
     } catch (e) {
       messagingService.send('syncCompleted', { successfully: false })
@@ -342,7 +362,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       let ciphers = await getCiphers({
         deleted: false,
         searchText: '',
-        filters: [c => c.folderId === f.id]
+        filters: [c => c.folderId === f.id && !c.collectionIds.length]
       })
       f.cipherCount = ciphers ? ciphers.length : 0
     }
@@ -397,7 +417,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     if (res.kind === 'ok') {
       notify('success', translate('success.cipher_created'))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
     return res
   }
@@ -409,7 +429,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     if (res.kind === 'ok') {
       notify('success', translate('success.cipher_updated'))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
     return res
   }
@@ -419,7 +439,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     if (res.kind === 'ok') {
       notify('success', translate('success.cipher_deleted'))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
     return res
   }
@@ -429,7 +449,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     if (res.kind === 'ok') {
       notify('success', translate('success.cipher_trashed'))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
     return res
   }
@@ -439,7 +459,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     if (res.kind === 'ok') {
       notify('success', translate('success.cipher_restored'))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
     return res
   }
@@ -512,7 +532,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Get team
   const getTeam = (teams: object[], orgId: string) => {
-    return find(teams, e => e.id === orgId) || { name: '' }
+    return find(teams, e => e.id === orgId) || { name: '', role: '' }
   }
 
   // Check if biometric is viable
@@ -521,10 +541,36 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return available
   }
 
+  // Custom translate to force re render
   const translate = (tx: TxKeyPath, options?: i18n.TranslateOptions) => {
     // Dummy to force rerender
+    // @ts-ignore
     const abc = user.language
     return tl(tx, options)
+  }
+
+  // Notify based on api error
+  const notifyApiError = (problem: GeneralApiProblem) => {
+    switch (problem.kind) {
+      case 'cannot-connect':
+        notify('error', translate('error.network_error'))
+        break
+      case 'bad-data':
+      case 'rejected':
+        notify('error', translate('error.invalid_data'))
+        break
+      case 'forbidden':
+        notify('error', translate('error.forbidden'))
+        break
+      case 'not-found':
+        notify('error', translate('error.not_found'))
+        break
+      case 'unauthorized':
+        notify('error', translate('error.token_expired'))
+        break
+      default:
+        notify('error', translate('error.something_went_wrong'))
+    }
   }
 
   // -------------------- REGISTER FUNCTIONS ------------------
@@ -556,7 +602,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     restoreCiphers,
     getRouteName,
     isBiometricAvailable,
-    translate
+    translate,
+    notifyApiError
   }
 
   return (

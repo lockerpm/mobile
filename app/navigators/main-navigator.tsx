@@ -13,7 +13,7 @@ import {
   PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen, PasswordHealthScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
-  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen
+  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, AutofillServiceScreen
 } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
 import { color } from "../theme"
@@ -67,12 +67,14 @@ export type PrimaryParamList = {
   },
   folders__ciphers: {
     folderId?: string | null
+    collectionId?: string | null
   },
   settings: {
     fromIntro?: boolean
   },
   changeMasterPassword: undefined,
-  help: undefined
+  help: undefined,
+  autofillService: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -134,6 +136,7 @@ export function MainNavigator() {
 
     ws.onmessage = async (e) => {
       const data = JSON.parse(e.data)
+      console.log('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
         case 'sync':
           await getSyncData()
@@ -148,7 +151,10 @@ export function MainNavigator() {
           }
           break
         case 'members':
-          // getInvitations()
+          const invitationsRes = await user.getInvitations()
+          if (invitationsRes.kind === 'ok') {
+            user.setInvitations(invitationsRes.data)
+          }
           break
         default:
           break
@@ -233,6 +239,7 @@ export function MainNavigator() {
         <Stack.Screen name="settings" component={SettingsScreen} initialParams={{ fromIntro: false }} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />
+        <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
       </Stack.Navigator>
     </UserInactivity>
   )

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Xki-Si-B7m">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Credential Provider View Controller-->
+        <scene sceneID="Uma-9u-xWV">
+            <objects>
+                <viewController id="Xki-Si-B7m" customClass="CredentialProviderViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="BuU-Ak-iZz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3wq-kG-lGu">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="cbj-pk-SYj">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="bEZ-MG-jDy">
+                                            <connections>
+                                                <action selector="cancel:" destination="Xki-Si-B7m" id="6ap-3Q-iEX"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Kr-ue-cQ2">
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hvO-jf-wXK">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="77"/>
+                                        <subviews>
+                                            <activityIndicatorView opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="Kpv-9S-htl">
+                                                <rect key="frame" x="0.0" y="20" width="375" height="37"/>
+                                            </activityIndicatorView>
+                                        </subviews>
+                                        <directionalEdgeInsets key="directionalLayoutMargins" top="20" leading="0.0" bottom="20" trailing="0.0"/>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="hvO-jf-wXK" firstAttribute="width" secondItem="rSV-Xx-1Ff" secondAttribute="width" id="24O-hP-fTs"/>
+                                    <constraint firstItem="hvO-jf-wXK" firstAttribute="bottom" secondItem="oF1-k9-1ba" secondAttribute="bottom" id="EfS-DR-AEN"/>
+                                    <constraint firstItem="hvO-jf-wXK" firstAttribute="top" secondItem="oF1-k9-1ba" secondAttribute="top" id="SHa-VL-pI2"/>
+                                    <constraint firstItem="hvO-jf-wXK" firstAttribute="leading" secondItem="oF1-k9-1ba" secondAttribute="leading" id="ZXA-Ei-ICa"/>
+                                    <constraint firstItem="hvO-jf-wXK" firstAttribute="trailing" secondItem="oF1-k9-1ba" secondAttribute="trailing" id="w1D-Uy-5zD"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="oF1-k9-1ba"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="rSV-Xx-1Ff"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Ky8-vK-JVj"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="9Kr-ue-cQ2" firstAttribute="bottom" secondItem="Ky8-vK-JVj" secondAttribute="bottom" id="8CM-jY-839"/>
+                            <constraint firstItem="Ky8-vK-JVj" firstAttribute="top" secondItem="3wq-kG-lGu" secondAttribute="top" id="BIN-jb-uNd"/>
+                            <constraint firstItem="9Kr-ue-cQ2" firstAttribute="trailing" secondItem="Ky8-vK-JVj" secondAttribute="trailing" id="JnV-lO-ebm"/>
+                            <constraint firstItem="3wq-kG-lGu" firstAttribute="width" secondItem="BuU-Ak-iZz" secondAttribute="width" id="UkD-v4-BcH"/>
+                            <constraint firstItem="9Kr-ue-cQ2" firstAttribute="leading" secondItem="Ky8-vK-JVj" secondAttribute="leading" id="f9W-Vd-GFP"/>
+                            <constraint firstItem="3wq-kG-lGu" firstAttribute="centerX" secondItem="BuU-Ak-iZz" secondAttribute="centerX" id="rtV-5c-0bl"/>
+                            <constraint firstItem="9Kr-ue-cQ2" firstAttribute="top" secondItem="3wq-kG-lGu" secondAttribute="bottom" id="u9c-fS-cKG"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="loading" destination="Kpv-9S-htl" id="e2C-mP-mE9"/>
+                        <outlet property="stackView" destination="hvO-jf-wXK" id="DQl-tE-3Cb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RwB-HB-TSk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="133.59999999999999" y="82.3088455772114"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

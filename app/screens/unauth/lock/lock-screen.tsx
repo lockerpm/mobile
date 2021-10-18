@@ -12,8 +12,8 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
-  const { logout, sessionLogin, notify, biometricLogin, translate } = useMixins()
-  const { user, uiStore } = useStores()
+  const { logout, sessionLogin, notify, biometricLogin, translate, notifyApiError } = useMixins()
+  const { user } = useStores()
 
   // Params
   
@@ -41,7 +41,7 @@ export const LockScreen = observer(function LockScreen() {
       setIsUnlocking(false)
       if (res.kind === 'ok') {
         setMasterPassword('')
-        navigation.navigate('mainStack')
+        navigation.navigate('mainStack', { screen: 'start' })
       } else if (res.kind === 'unauthorized') {
         navigation.navigate('login')
       } else {
@@ -57,17 +57,13 @@ export const LockScreen = observer(function LockScreen() {
       notify('error', translate('error.biometric_not_enable'))
       return
     }
-    if (uiStore.passwordChanged) {
-      notify('error', translate('lock.master_pass_changed'))
-      return
-    }
 
     setIsBioUnlocking(true)
     const res = await biometricLogin()
     setIsBioUnlocking(false)
     if (res.kind === 'ok') {
       setMasterPassword('')
-      navigation.navigate('mainStack')
+      navigation.navigate('mainStack', { screen: 'start' })
     }
   }
 
@@ -78,7 +74,7 @@ export const LockScreen = observer(function LockScreen() {
     if (res.kind === 'ok') {
       notify('success', translate('lock.hint_sent'), 5000)
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
   }
 
