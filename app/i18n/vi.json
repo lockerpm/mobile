@@ -1,5 +1,6 @@
 {
   "common": {
+    "accept": "Đồng ý",
     "account": "Tài khoản",
     "authenticate": "Xác thực",
     "authentication_app": "Ứng dụng xác thực",
@@ -49,6 +50,7 @@
     "ownership": "Quyền sở hữu",
     "password": "Mật khẩu",
     "regenerate": "Tạo lại",
+    "reject": "Từ chối",
     "rename": "Đổi tên",
     "restore": "Khôi phục",
     "save": "Lưu",
@@ -85,6 +87,8 @@
     "no_results_found": "Không tìm thấy kết quả cho"
   },
   "success": {
+    "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
+    "invitation_rejected": "Đã từ chối lời mời",
     "master_password_updated": "Mật khẩu chính đã được cập nhật",
     "biometric_enabled": "Mở khóa bằng Face ID/Touch ID đã được kích hoạt",
     "cipher_created": "Thêm mới thành công",
@@ -300,7 +304,9 @@
   },
   "menu": {
     "plan": "Quản lý gói cước",
-    "invite": "Mời bạn bè"
+    "invite": "Mời bạn bè",
+    "invitation_to_join": "Lời mời tham gia ",
+    "invitation_desc": "Bạn đã được mời tham gia {{org}}! Tham gia ngay bây giờ và bắt đầu cộng tác với nhóm của bạn."
   },
   "pass_generator": {
     "title": "Tạo mật khẩu mạnh",

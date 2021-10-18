@@ -340,7 +340,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // Save to shared keychain for autofill service
       const passwordRes = await getCiphers({
         filters: [
-          (c : CipherView) => c.type === CipherType.Login && c.login.uri
+          (c : CipherView) => c.type === CipherType.Login
         ],
         searchText: '',
         deleted: false
@@ -350,7 +350,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         username: c.login.username,
         password: c.login.password
       }))
-      console.log('shared ' + JSON.stringify(sharedData))
       await saveShared('autofill', JSON.stringify(sharedData))
 
       return { kind: 'ok' }
