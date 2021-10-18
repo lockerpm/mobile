@@ -189,7 +189,6 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   // Go to detail
   const goToDetail = (item: CipherView) => {
     cipherStore.setSelectedCipher(item)
-    console.log(item)
     switch (item.type) {
       case CipherType.Login:
         navigation.navigate('passwords__info')

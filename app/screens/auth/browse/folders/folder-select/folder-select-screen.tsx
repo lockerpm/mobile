@@ -123,9 +123,11 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <FOLDER_IMG.add.svg height={30} />
-          <Text preset="black" style={{ flex: 1, marginLeft: 10 }}>
-            New Folder
-          </Text>
+          <Text 
+            preset="black"
+            text={translate('folder.new_folder')}
+            style={{ flex: 1, marginLeft: 10 }}
+          />
           <FontAwesomeIcon
             name="angle-right"
             size={20}

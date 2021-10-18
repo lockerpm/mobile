@@ -198,6 +198,7 @@
     "add_to_folder": "Add to Folder",
     "move_to_folder": "Move to Folder",
     "no_folder": "No folder",
+    "new_folder": "New Folder",
     "folder_deleted": "Folder deleted",
     "folder_created": "Folder created",
     "folder_updated": "Folder updated",

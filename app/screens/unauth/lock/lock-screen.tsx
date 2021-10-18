@@ -13,7 +13,7 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
   const { logout, sessionLogin, notify, biometricLogin, translate, notifyApiError } = useMixins()
-  const { user, uiStore } = useStores()
+  const { user } = useStores()
 
   // Params
   
