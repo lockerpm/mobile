@@ -31,11 +31,14 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
-  const { toTrashCiphers, getRouteName, translate } = useMixins()
-  const { cipherStore } = useStores()
+  const { toTrashCiphers, getRouteName, translate, getTeam } = useMixins()
+  const { cipherStore, user } = useStores()
   const selectedCipher = cipherStore.cipherView
 
   // Computed
+
+  const teamUser = getTeam(user.teams, selectedCipher.organizationId)
+  const editable = !selectedCipher.organizationId || teamUser.role !== 'member'
 
   const cipherMapper = (() => {
     switch (selectedCipher.type) {
@@ -149,71 +152,77 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
           { children }
           {
-            !!children && (
+            !!children && editable && (
               <Divider style={{ marginVertical: 5 }} />
             )
           }
 
-          <ActionItem
-            name={translate('common.clone')}
-            icon="clone"
-            action={() => {
-              onClose()
-              navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'clone' })
-            }}
-          />
+          {
+            editable && (
+              <View>
+                <ActionItem
+                  name={translate('common.clone')}
+                  icon="clone"
+                  action={() => {
+                    onClose()
+                    navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'clone' })
+                  }}
+                />
 
-          <ActionItem
-            name={translate('folder.move_to_folder')}
-            icon="folder-o"
-            action={() => {
-              onClose()
-              navigation.navigate('folders__select', {
-                mode: 'move',
-                initialId: selectedCipher.folderId,
-                cipherIds: [selectedCipher.id]
-              })
-            }}
-          />
+                <ActionItem
+                  name={translate('folder.move_to_folder')}
+                  icon="folder-o"
+                  action={() => {
+                    onClose()
+                    navigation.navigate('folders__select', {
+                      mode: 'move',
+                      initialId: selectedCipher.folderId,
+                      cipherIds: [selectedCipher.id]
+                    })
+                  }}
+                />
 
-          <ActionItem
-            disabled={true}
-            name={translate('common.change_ownership')}
-            icon="user-o"
-            action={() => {
-              onClose()
-              setTimeout(() => setShowOwnershipAction(true), 1500)
-            }}
-          />
+                <ActionItem
+                  disabled={true}
+                  name={translate('common.change_ownership')}
+                  icon="user-o"
+                  action={() => {
+                    onClose()
+                    setTimeout(() => setShowOwnershipAction(true), 1500)
+                  }}
+                />
 
-          <Divider style={{ marginVertical: 5 }} />
+                <Divider style={{ marginVertical: 5 }} />
 
-          <ActionItem
-            name={translate('common.edit')}
-            icon="edit"
-            action={() => {
-              onClose()
-              navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'edit' })
-            }}
-          />
+                <ActionItem
+                  name={translate('common.edit')}
+                  icon="edit"
+                  action={() => {
+                    onClose()
+                    navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'edit' })
+                  }}
+                />
 
-          <ActionItem
-            disabled={true}
-            name={translate('common.share')}
-            icon="share-square-o"
-          />
+                <ActionItem
+                  disabled={true}
+                  name={translate('common.share')}
+                  icon="share-square-o"
+                />
 
-          <ActionItem
-            name={translate('trash.to_trash')}
-            icon="trash"
-            textColor={color.error}
-            action={() => {
-              onClose()
-              setTimeout(() => {
-                setShowConfirmModal(true)
-              }, 1500)
-            }}
-          />
+                <ActionItem
+                  name={translate('trash.to_trash')}
+                  icon="trash"
+                  textColor={color.error}
+                  action={() => {
+                    onClose()
+                    setTimeout(() => {
+                      setShowConfirmModal(true)
+                    }, 1500)
+                  }}
+                />
+              </View>
+            )
+          }
         </ActionSheetContent>
       </ActionSheet>
       {/* Actionsheet end */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { FloatingInput, Button, Text, Modal } from "../../../../components"
+import { FloatingInput, Button, Modal } from "../../../../components"
 import { useStores } from "../../../../models"
 import { observer } from "mobx-react-lite"
 import { useCoreService } from "../../../../services/core-service"
@@ -7,6 +7,7 @@ import { FolderView } from "../../../../../core/models/view/folderView"
 import { FolderRequest } from "../../../../../core/models/request/folderRequest"
 import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
+import { CollectionRequest } from "../../../../../core/models/request/collectionRequest"
 
 interface Props {
   isOpen?: boolean,
@@ -17,7 +18,7 @@ interface Props {
 export const RenameFolderModal = observer((props: Props) => {
   const { isOpen, onClose, folder } = props
   const { folderStore } = useStores()
-  const { folderService } = useCoreService()
+  const { folderService, collectionService } = useCoreService()
   const { notify, translate } = useMixins()
 
   const [name, setName] = useState('')
@@ -40,6 +41,11 @@ export const RenameFolderModal = observer((props: Props) => {
       // @ts-ignore
       const folderEnc = await folderService.encrypt(data)
       const payload = new FolderRequest(folderEnc)
+      res = await folderStore.updateFolder(folder.id, payload)
+    } else {
+      // @ts-ignore
+      const collectionEnc = await collectionService.encrypt(data)
+      const payload = new CollectionRequest(collectionEnc)
       res = await folderStore.updateFolder(folder.id, payload)
     }
 

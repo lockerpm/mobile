@@ -31,7 +31,9 @@ export interface CipherListProps {
     order: string
   },
   folderId?: string,
-  organizationId?: string
+  collectionId?: string,
+  organizationId?: string,
+  isPersonal?: boolean
 }
 
 /**
@@ -39,7 +41,8 @@ export interface CipherListProps {
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
   const {
-    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId, organizationId
+    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId,
+    collectionId, organizationId, isPersonal
   } = props
   const { getWebsiteLogo, getCiphers, translate } = useMixins()
   const { cipherStore } = useStores()
@@ -123,6 +126,12 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     if (folderId !== undefined) {
       res = res.filter(i => i.folderId === folderId)
     }
+    if (collectionId !== undefined) {
+      res = res.filter(i => i.collectionIds.includes(collectionId))
+    }
+    if (isPersonal) {
+      res = res.filter(i => !i.collectionIds.length)
+    }
     if (organizationId !== undefined) {
       if (organizationId === null) {
         res = res.filter(i => !!i.organizationId)
@@ -180,6 +189,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   // Go to detail
   const goToDetail = (item: CipherView) => {
     cipherStore.setSelectedCipher(item)
+    console.log(item)
     switch (item.type) {
       case CipherType.Login:
         navigation.navigate('passwords__info')

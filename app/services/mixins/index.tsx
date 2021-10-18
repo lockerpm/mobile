@@ -43,7 +43,7 @@ const defaultData = {
   registerLocker: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   changeMasterPassword: async (oldPassword: string, newPassword: string) => { return { kind: 'unknown' } },
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
-  getTeam: (teams: object[], orgId: string) => ({ name: '' }),
+  getTeam: (teams: object[], orgId: string) => ({ name: '', role: '' }),
   getCiphers: async (params: GetCiphersParams) => { return [] },
   getCipherById: async (id: string) => new CipherView(),
   getCollections: async () => { return [] },
@@ -325,9 +325,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // Sync service
       const userId = await userService.getUserId()
 
-      // TODO: this one got error
-      // await syncService.syncProfile(res.data.profile)
-
+      await syncService.syncProfile(res.data.profile)
       await syncService.syncFolders(userId, res.data.folders)
       await syncService.syncCollections(res.data.collections)
       await syncService.syncCiphers(userId, res.data.ciphers)
@@ -366,7 +364,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       let ciphers = await getCiphers({
         deleted: false,
         searchText: '',
-        filters: [c => c.folderId === f.id]
+        filters: [c => c.folderId === f.id && !c.collectionIds.length]
       })
       f.cipherCount = ciphers ? ciphers.length : 0
     }
@@ -536,7 +534,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Get team
   const getTeam = (teams: object[], orgId: string) => {
-    return find(teams, e => e.id === orgId) || { name: '' }
+    return find(teams, e => e.id === orgId) || { name: '', role: '' }
   }
 
   // Check if biometric is viable
