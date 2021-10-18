@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../services/mixins"
 import TextField from 'react-native-ui-lib/textField'
 import { MaskService, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
+import { translate } from "../../i18n"
 
 
 export interface WixFloatingInputProps extends TextInputProps {
@@ -33,14 +34,19 @@ export interface WixFloatingInputProps extends TextInputProps {
  */
 export const WixFloatingInput = observer(function WixFloatingInput(props: WixFloatingInputProps) {
   const {
-    style, inputStyle, isInvalid, label, isPassword, value, placeholder,
+    style, inputStyle, label, isPassword, value, placeholder,
     editable = true, disabled, buttonRight, onChangeText, copyAble, textarea,
-    maskType, maskOptions, errorText,
+    maskType, maskOptions, isRequired,
     ...rest
   } = props
 
   const { copyToClipboard } = useMixins()
   const [showPassword, setShowPassword] = useState(false)
+  const [firstFocused, setFirstFocused] = useState(false)
+  const [isFocus, setIsFocus] = useState(false)
+
+  const isInvalid = props.isInvalid || (isRequired && firstFocused && !value.trim())
+  const errorText = props.errorText || ((isRequired && firstFocused && !value.trim()) ? translate('error.required_data') : '')
 
   const BUTTON_CONTAINER: ViewStyle = {
     position: 'absolute',
@@ -74,7 +80,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
         floatingPlaceholder
         multiline={textarea}
         floatOnFocus
-        placeholder={label}
+        placeholder={label + (isRequired ? ' (*)' : '')}
         helperText={placeholder}
         value={value}
         editable={editable && !disabled}
@@ -95,13 +101,20 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
           fontSize: fontSize.p,
           color: color.text
         }}
+        onFocus={() => {
+          setFirstFocused(true)
+          setIsFocus(true)
+        }}
+        onBlur={() => {
+          setIsFocus(false)
+        }}
         {...rest}
       />
       {/* Input end */}
 
       {/* Error message */}
       {
-        (errorText && isInvalid) ? (
+        (errorText && isInvalid && !isFocus) ? (
           <Text
             text={errorText}
             style={{

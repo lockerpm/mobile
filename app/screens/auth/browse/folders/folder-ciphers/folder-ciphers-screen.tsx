@@ -9,15 +9,17 @@ import { useStores } from "../../../../../models"
 import { FolderView } from "../../../../../../core/models/view/folderView"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { useMixins } from "../../../../../services/mixins"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 type FolderCiphersScreenProp = RouteProp<PrimaryParamList, 'folders__ciphers'>;
 
 export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
   const navigation = useNavigation()
   const route = useRoute<FolderCiphersScreenProp>()
-  const { folderId } = route.params
-  const { folderStore } = useStores()
+  const { folderId, collectionId } = route.params
+  const { folderStore, collectionStore } = useStores()
   const folders: FolderView[] = folderStore.folders
+  const collections: CollectionView[] = collectionStore.collections
   const { translate } = useMixins()
 
   // Params
@@ -33,7 +35,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
 
   // Computed
   const folder = (() => {
-    return find(folders, e => e.id === folderId) || {}
+    return find(folders, e => e.id === folderId) || find(collections, e => e.id === collectionId)
   })()
 
 
@@ -76,9 +78,15 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
         searchText={searchText}
         sortList={sortList}
         folderId={folderId}
+        collectionId={collectionId}
+        isPersonal={!collectionId}
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('../../../home/all-item/empty-img.png')}
+            imgStyle={{
+              height: 55,
+              width: 120
+            }}
             title={translate('all_items.empty.title')}
             desc={translate('all_items.empty.desc')}
             buttonText={translate('all_items.empty.btn')}

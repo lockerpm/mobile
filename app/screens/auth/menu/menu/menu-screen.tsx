@@ -9,6 +9,7 @@ import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { MANAGE_PLAN_URL } from "../../../../config/constants"
+import { Invitation, InvitationData } from "./invitation"
 
 
 // @ts-ignore
@@ -88,7 +89,7 @@ export const MenuScreen = observer(function MenuScreen() {
     }
   ]
 
-
+  // -------------- RENDER --------------------
 
   return (
     <Layout
@@ -124,6 +125,14 @@ export const MenuScreen = observer(function MenuScreen() {
             </Text>
           </View>
         </View>
+
+        {/* Invitations */}
+        {
+          user.invitations.map((item: InvitationData) => (
+            <Invitation key={item.id} {...item} />
+          ))
+        }
+        {/* Invitations end */}
 
         <View style={[ITEM_CONTAINER, { marginBottom: 15 }]}>
           {

@@ -1,5 +1,6 @@
 {
   "common": {
+    "accept": "Đồng ý",
     "account": "Tài khoản",
     "authenticate": "Xác thực",
     "authentication_app": "Ứng dụng xác thực",
@@ -49,6 +50,7 @@
     "ownership": "Quyền sở hữu",
     "password": "Mật khẩu",
     "regenerate": "Tạo lại",
+    "reject": "Từ chối",
     "rename": "Đổi tên",
     "restore": "Khôi phục",
     "save": "Lưu",
@@ -81,9 +83,14 @@
     "token_expired": "Phiên của bạn đã hết hạn",
     "no_associated_account": "Không có tài khoản nào sử dụng email hoặc username này. Vui lòng thử lại hoặc tạo tài khoản mới.",
     "invalid_authorization_code": "Mã xác nhận không hợp lệ",
-    "invalid_data": "Dữ liệu không hợp lệ"
+    "invalid_data": "Dữ liệu không hợp lệ",
+    "no_results_found": "Không tìm thấy kết quả cho",
+    "forbidden": "Tài khoản của bạn không đủ quyền để thực hiện hành động này",
+    "not_found": "Đối tượng không tồn tại"
   },
   "success": {
+    "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
+    "invitation_rejected": "Đã từ chối lời mời",
     "master_password_updated": "Mật khẩu chính đã được cập nhật",
     "biometric_enabled": "Mở khóa bằng Face ID/Touch ID đã được kích hoạt",
     "cipher_created": "Thêm mới thành công",
@@ -191,6 +198,7 @@
     "add_to_folder": "Thêm vào thư mục",
     "move_to_folder": "Di chuyển đến thư mục",
     "no_folder": "Không xác định",
+    "new_folder": "Thư mục mới",
     "folder_deleted": "Xóa thư mục thành công",
     "folder_created": "Tạo thư mục thành công",
     "folder_updated": "Cập nhật thư mục thành công",
@@ -299,7 +307,9 @@
   },
   "menu": {
     "plan": "Quản lý gói cước",
-    "invite": "Mời bạn bè"
+    "invite": "Mời bạn bè",
+    "invitation_to_join": "Lời mời tham gia ",
+    "invitation_desc": "Bạn đã được mời tham gia {{org}}! Tham gia ngay bây giờ và bắt đầu cộng tác với nhóm của bạn."
   },
   "pass_generator": {
     "title": "Tạo mật khẩu mạnh",
@@ -320,6 +330,7 @@
     "desc": "Kiểm tra xem dữ liệu nhạy cảm của bạn có bị lộ trên internet hay không"
   },
   "settings": {
+    "autofill_service": "Tự động điền (AutoFill)",
     "change_master_pass": "Thay đổi mật khẩu chính",
     "danger_zone": "Khu vực nguy hiểm",
     "deauthorize_sessions": "Vô hiệu hóa tất cả các phiên",
@@ -329,5 +340,15 @@
     "on_screen_off": "Khi tắt màn hình",
     "timeout": "Hẹn giờ",
     "timeout_action": "Hành động khi hết giờ"
+  },
+  "autofill_service": {
+    "ios": {
+      "desc": "Để bật tính năng tự động điền mật khẩu trên thiết bị của bạn, hãy làm theo các hướng dẫn sau:",
+      "step_1": "1. Mở \"Cài đặt\"",
+      "step_2": "2. Chọn \"Mật khẩu\"",
+      "step_3": "3. Chọn \"Tự động điền mật khẩu\"",
+      "step_4": "4. Bật \"Tự động điền mật khẩu\"",
+      "step_5": "5. Chọn \"Locker\""
+    }
   }
 }

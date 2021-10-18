@@ -42,17 +42,21 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   // Computed
 
-  const getFilteredData = (items: any[]) => {
+  const getFilteredData = (items: any[], shared: boolean, editable: boolean) => {
     const filtered = items.filter((item: FolderView | CollectionView) => {
-      return item.name.toLowerCase().includes(searchText.toLowerCase())
+      if (searchText) {
+        return item.name && item.name.toLowerCase().includes(searchText.toLowerCase())
+      }
+      return true
     })
     if (sortList) {
       const { orderField, order } = sortList
-      return orderBy(
+      const result = orderBy(
         filtered,
         [f => orderField === 'name' ? (f.name && f.name.toLowerCase()) : f.revisionDate],
         [order]
-      ) || []
+      ).map(i => ({ ...i, shared, editable })) || []
+      return result
     }
     return filtered
   }
@@ -61,14 +65,12 @@ export const FoldersScreen = observer(function FoldersScreen() {
     {
       id: randomString(),
       title: translate('common.me'),
-      data: getFilteredData(folders),
-      shared: false
+      data: getFilteredData(folders, false, true),
     },
     ...Object.keys(filteredCollection).map((id) => ({
       id: randomString(),
       title: getTeam(user.teams, id).name,
-      data: getFilteredData(filteredCollection[id]),
-      shared: true
+      data: getFilteredData(filteredCollection[id], true, getTeam(user.teams, id).role !== 'member')
     }))
   ]
 
@@ -147,7 +149,11 @@ export const FoldersScreen = observer(function FoldersScreen() {
                 <Button
                   preset="link"
                   onPress={() => {
-                    navigation.navigate('folders__ciphers', { folderId: item.id })
+                    if (item.shared) {
+                      navigation.navigate('folders__ciphers', { collectionId: item.id })
+                    } else {
+                      navigation.navigate('folders__ciphers', { folderId: item.id })
+                    }
                   }}
                   style={{
                     borderBottomColor: color.line,
@@ -175,7 +181,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     </View>
 
                     {
-                      !!item.id && (
+                      (!!item.id && item.editable) && (
                         <Button
                           preset="link"
                           onPress={() => {

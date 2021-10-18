@@ -10,6 +10,7 @@ import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import NetInfo from "@react-native-community/netinfo"
 import { useMixins } from "../services/mixins"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useStores } from "../models"
 
 // @ts-ignore
 import HomeIcon from './icons/home.svg'
@@ -25,24 +26,29 @@ const Tab = createBottomTabNavigator()
 
 const TabBar = ({ state, descriptors, navigation, isOffline }) => {
   const { translate } = useMixins()
+  const { user } = useStores()
   const insets = useSafeAreaInsets()
   
   const mappings = {
     homeTab: {
       label: translate('common.home'),
-      icon: HomeIcon
+      icon: HomeIcon,
+      notiCount: 0
     },
     browseTab: {
       label: translate('common.browse'),
-      icon: BrowseIcon
+      icon: BrowseIcon,
+      notiCount: 0
     },
     toolsTab: {
       label: translate('common.tools'),
-      icon: ToolsIcon
+      icon: ToolsIcon,
+      notiCount: 0
     },
     menuTab: {
       label: translate('common.menu'),
-      icon: MenuIcon
+      icon: MenuIcon,
+      notiCount: user.invitations.length
     }
   }
   
@@ -85,6 +91,7 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
             const targetMapping = mappings[route.name]
             const label = targetMapping ? targetMapping.label : route.name
             const Icon = targetMapping ? targetMapping.icon : () => null
+            const notiCount = targetMapping ? targetMapping.notiCount : 0
 
             const isFocused = state.index === index;
 
@@ -122,6 +129,31 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
                     <Icon height={20} style={{
                       color: isFocused ? color.palette.green : color.text
                     }} />
+                  )
+                }
+                {
+                  (notiCount > 0) && (
+                    <View
+                      style={{
+                        backgroundColor: color.palette.danger,
+                        borderRadius: 20,
+                        minWidth: 20,
+                        height: 20,
+                        position: 'absolute',
+                        top: 3,
+                        right: 24
+                      }}
+                    >
+                      <Text
+                        text={notiCount.toString()}
+                        style={{
+                          fontSize: 12,
+                          textAlign: 'center',
+                          color: color.palette.white,
+                          lineHeight: 20
+                        }}
+                      />
+                    </View>
                   )
                 }
                 <Text

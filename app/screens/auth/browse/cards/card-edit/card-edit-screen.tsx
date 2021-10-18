@@ -176,6 +176,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
           right={(
             <Button
               preset="link"
+              isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
               textStyle={{

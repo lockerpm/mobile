@@ -21,7 +21,7 @@ type Props = {
 
 export const Step2 = observer(function Step2(props: Props) {
   const { user } = useStores()
-  const { translate, notify } = useMixins()
+  const { translate, notifyApiError } = useMixins()
   const { methods, onSelect, goBack } = props
 
   // ------------------ Params -----------------------
@@ -34,10 +34,10 @@ export const Step2 = observer(function Step2(props: Props) {
     setIsSendingEmail(true)
     const res = await user.resetPassword(data[0], 'mail')
     setIsSendingEmail(false)
-    if (res.kind === 'ok' && res.success) {
+    if (res.kind === 'ok') {
       onSelect('mail', data)
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
   }
 

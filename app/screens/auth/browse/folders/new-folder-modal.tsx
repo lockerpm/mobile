@@ -16,7 +16,7 @@ export const NewFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
   const { folderStore } = useStores()
   const { folderService } = useCoreService()
-  const { notify, translate } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
 
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -43,7 +43,7 @@ export const NewFolderModal = observer((props: Props) => {
       setName('')
       onClose()
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
       if (res.kind === 'unauthorized') {
         onClose()
       }

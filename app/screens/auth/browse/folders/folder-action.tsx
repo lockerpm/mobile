@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Text, AutoImage as Image, ActionItem, ActionSheet, Divider, ActionSheetContent } from "../../../../components"
+import { Text, ActionItem, ActionSheet, Divider, ActionSheetContent } from "../../../../components"
 import { color, commonStyles } from "../../../../theme"
 import { View } from "react-native"
 import { FOLDER_IMG } from "../../../../common/mappings"
@@ -23,7 +23,7 @@ type Props = {
 export const FolderAction = (props: Props) => {
   const { isOpen, onClose, folder, onLoadingChange } = props
   const { folderStore } = useStores()
-  const { notify, translate } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
 
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [isRenameOpen, setIsRenameOpen] = useState(false)
@@ -53,7 +53,7 @@ export const FolderAction = (props: Props) => {
           if (res.kind === 'ok') {
             notify('success', translate('folder.folder_deleted'))
           } else {
-            notify('error', translate('error.something_went_wrong'))
+            notifyApiError(res)
           }
           onLoadingChange && onLoadingChange(false)
         }}

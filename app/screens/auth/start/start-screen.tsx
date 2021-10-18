@@ -9,24 +9,34 @@ import { delay } from "../../../utils/delay"
 
 export const StartScreen = observer(function StartScreen() {
   const { user, uiStore } = useStores()
-  const { getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate } = useMixins()
+  const { 
+    getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate
+  } = useMixins()
   const navigation = useNavigation()
 
   const mounted = async () => {
     if (!uiStore.isOffline) {
-      await delay(1500)
-      const [syncRes] = await Promise.all([
+      await delay(1000)
+      const [syncRes, invitationsRes] = await Promise.all([
         getSyncData(),
+        user.getInvitations(),
         user.loadTeams(),
-        user.loadPlan()
+        user.loadPlan(),
       ])
 
+      // Sync handler
       if (syncRes.kind === 'ok') {
         notify('success', translate('success.sync_success'))
       } else {
         notify('error', translate('error.sync_failed'))
       }
-      await delay(1500)
+
+      // Invitations handler
+      if (invitationsRes.kind == 'ok') {
+        user.setInvitations(invitationsRes.data)
+      }
+
+      await delay(1000)
     }
     
     await Promise.all([
@@ -49,7 +59,7 @@ export const StartScreen = observer(function StartScreen() {
       }
     }
 
-    navigation.navigate('mainTab')
+    navigation.navigate('mainTab', { screen: 'homeTab' })
   }
 
   // Life cycle

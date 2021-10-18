@@ -55,8 +55,7 @@ export const SignupScreen = observer(function SignupScreen() {
             onLoggedIn()
           }
         } catch (e) {
-          console.log(e)
-          notify('error', translate('error.something_went_wrong'))
+          notify('error', e)
         }
       }
     },

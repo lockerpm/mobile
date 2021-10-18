@@ -121,7 +121,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
         <Header
           goBack={() => {
             if (fromIntro) {
-              navigation.navigate('mainTab')
+              navigation.navigate('mainTab', { screen: 'homeTab' })
             } else {
               navigation.goBack()
             }
@@ -172,6 +172,13 @@ export const SettingsScreen = observer(function SettingsScreen() {
         }]}
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
+        {/* Autofill */}
+        <SettingsItem
+          name={translate('settings.autofill_service')}
+          action={() => navigation.navigate('autofillService')}
+        />
+        {/* Autofill */}
+
         {/* Biometric */}
         <SettingsItem
           name={translate('common.biometric_unlocking')}
@@ -232,20 +239,26 @@ export const SettingsScreen = observer(function SettingsScreen() {
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
         <SettingsItem
+          disabled
           name={translate('settings.deauthorize_sessions')}
           noCaret
           color={color.error}
+          action={() => {}}
         />
         <SettingsItem
+          disabled
           name={translate('settings.delete_all_items')}
           noCaret
           color={color.error}
+          action={() => {}}
         />
         <SettingsItem
+          disabled
           name={translate('settings.delete_account')}
           noCaret
           noBorder
           color={color.error}
+          action={() => {}}
         />
       </View>
       {/* Danger zone end */}

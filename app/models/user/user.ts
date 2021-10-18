@@ -2,6 +2,7 @@ import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
 import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
+import { saveSecure, removeSecure } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 
 
@@ -29,6 +30,7 @@ export const UserModel = types
     // Others data
     teams: types.maybeNull(types.array(types.frozen())),
     plan: types.maybeNull(types.frozen()),
+    invitations: types.maybeNull(types.array(types.frozen())),
 
     // User
     language: types.optional(types.string, 'en'),
@@ -44,11 +46,13 @@ export const UserModel = types
       self.token = token
       self.isLoggedIn = true
       self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      saveSecure('API_TOKEN', token)
     },
     clearToken: () => {
       self.token = ''
       self.isLoggedIn = false
       self.environment.api.apisauce.deleteHeader('Authorization')
+      removeSecure('API_TOKEN')
     },
 
     // Info
@@ -93,8 +97,14 @@ export const UserModel = types
     setPlan: (plan: object) => {
       self.plan = cast(plan)
     },
+    setInvitations: (invitations: object[]) => {
+      self.invitations = cast(invitations)
+    },
 
     // User
+    setDeviceID: (id: string) => {
+      self.environment.api.apisauce.setHeader('device-id', id)
+    },
     setLanguage: (lang: string) => {
       self.language = lang
       setLang(lang)
@@ -192,6 +202,18 @@ export const UserModel = types
     sendPasswordHint: async (email: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.sendMasterPasswordHint({ email })
+      return res
+    },
+
+    getInvitations: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getInvitations()
+      return res
+    },
+
+    invitationRespond: async (id: string, status: 'accept' | 'reject') => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.invitationRespond(id, status)
       return res
     },
 

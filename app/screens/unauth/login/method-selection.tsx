@@ -23,7 +23,7 @@ type Props = {
 
 export const MethodSelection = observer(function MethodSelection(props: Props) {
   const { user } = useStores()
-  const { translate, notify } = useMixins()
+  const { translate, notifyApiError } = useMixins()
   const { methods, onSelect, goBack, username, password } = props
 
   // ------------------ Params -----------------------
@@ -36,10 +36,10 @@ export const MethodSelection = observer(function MethodSelection(props: Props) {
     setIsSendingEmail(true)
     const res = await user.sendOtpEmail(username, password)
     setIsSendingEmail(false)
-    if (res.kind === 'ok' && res.success) {
+    if (res.kind === 'ok') {
       onSelect('mail', data)
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
   }
 
