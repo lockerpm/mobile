@@ -84,7 +84,9 @@
     "no_associated_account": "Không có tài khoản nào sử dụng email hoặc username này. Vui lòng thử lại hoặc tạo tài khoản mới.",
     "invalid_authorization_code": "Mã xác nhận không hợp lệ",
     "invalid_data": "Dữ liệu không hợp lệ",
-    "no_results_found": "Không tìm thấy kết quả cho"
+    "no_results_found": "Không tìm thấy kết quả cho",
+    "forbidden": "Tài khoản của bạn không đủ quyền để thực hiện hành động này",
+    "not_found": "Đối tượng không tồn tại"
   },
   "success": {
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",

@@ -18,6 +18,7 @@ import i18n from "i18n-js"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { saveShared } from '../../utils/keychain'
+import { GeneralApiProblem } from '../api/api-problem'
 
 const { createContext, useContext } = React
 
@@ -58,7 +59,8 @@ const defaultData = {
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
-  translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' }
+  translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
+  notifyApiError: (problem: GeneralApiProblem) => {}
 }
 
 
@@ -221,7 +223,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
       // API failed
       if (res.kind !== 'ok') {
-        notify('error', translate('error.something_went_wrong'))
+        notifyApiError(res)
         return { kind: 'bad-data' }
       }
 
@@ -262,7 +264,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         master_password_hash: oldKeyHash
       })
       if (res.kind !== 'ok') {
-        notify('error', translate('error.something_went_wrong'))
+        notifyApiError(res)
         return { kind: 'bad-data' }
       }
 
@@ -419,7 +421,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     if (res.kind === 'ok') {
       notify('success', translate('success.cipher_created'))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
     return res
   }
@@ -431,7 +433,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     if (res.kind === 'ok') {
       notify('success', translate('success.cipher_updated'))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
     return res
   }
@@ -441,7 +443,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     if (res.kind === 'ok') {
       notify('success', translate('success.cipher_deleted'))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
     return res
   }
@@ -451,7 +453,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     if (res.kind === 'ok') {
       notify('success', translate('success.cipher_trashed'))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
     return res
   }
@@ -461,7 +463,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     if (res.kind === 'ok') {
       notify('success', translate('success.cipher_restored'))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
     return res
   }
@@ -543,11 +545,36 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return available
   }
 
+  // Custom translate to force re render
   const translate = (tx: TxKeyPath, options?: i18n.TranslateOptions) => {
     // Dummy to force rerender
     // @ts-ignore
     const abc = user.language
     return tl(tx, options)
+  }
+
+  // Notify based on api error
+  const notifyApiError = (problem: GeneralApiProblem) => {
+    switch (problem.kind) {
+      case 'cannot-connect':
+        notify('error', translate('error.network_error'))
+        break
+      case 'bad-data':
+      case 'rejected':
+        notify('error', translate('error.invalid_data'))
+        break
+      case 'forbidden':
+        notify('error', translate('error.forbidden'))
+        break
+      case 'not-found':
+        notify('error', translate('error.not_found'))
+        break
+      case 'unauthorized':
+        notify('error', translate('error.token_expired'))
+        break
+      default:
+        notify('error', translate('error.something_went_wrong'))
+    }
   }
 
   // -------------------- REGISTER FUNCTIONS ------------------
@@ -579,7 +606,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     restoreCiphers,
     getRouteName,
     isBiometricAvailable,
-    translate
+    translate,
+    notifyApiError
   }
 
   return (

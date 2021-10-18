@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Text, Header, Button, AutoImage as Image } from "../../../../../components"
+import { Layout, Text, Header, Button } from "../../../../../components"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { color, commonStyles, fontSize } from "../../../../../theme"
 import { RouteProp } from "@react-navigation/native"
@@ -22,7 +22,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
   const route = useRoute<FolderSelectScreenProp>()
   const { mode, initialId, cipherIds = [] } = route.params
   const { folderStore, cipherStore } = useStores()
-  const { notify, translate } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -40,7 +40,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       if (res.kind === 'ok') {
         notify('success', translate('folder.item_moved'))
       } else {
-        notify('error', translate('error.something_went_wrong'))
+        notifyApiError(res)
       }
       setIsLoading(false)
     } else {

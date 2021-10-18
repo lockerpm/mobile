@@ -17,7 +17,7 @@ type Props = {
 
 export const Step4 = observer(function Step4(props: Props) {
   const { user } = useStores()
-  const { translate, notify } = useMixins()
+  const { translate, notify, notifyApiError } = useMixins()
   const { goBack, nextStep, token } = props
 
   // ------------------ Params -----------------------
@@ -35,7 +35,7 @@ export const Step4 = observer(function Step4(props: Props) {
     const res = await user.setNewPassword(password, token)
     setIsLoading(false)
     if (res.kind !== 'ok') {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     } else {
       notify('success', translate('forgot_password.password_updated'))
       nextStep()
