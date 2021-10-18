@@ -239,20 +239,26 @@ export const SettingsScreen = observer(function SettingsScreen() {
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
         <SettingsItem
+          disabled
           name={translate('settings.deauthorize_sessions')}
           noCaret
           color={color.error}
+          action={() => {}}
         />
         <SettingsItem
+          disabled
           name={translate('settings.delete_all_items')}
           noCaret
           color={color.error}
+          action={() => {}}
         />
         <SettingsItem
+          disabled
           name={translate('settings.delete_account')}
           noCaret
           noBorder
           color={color.error}
+          action={() => {}}
         />
       </View>
       {/* Danger zone end */}

@@ -135,6 +135,7 @@ export function MainNavigator() {
 
     ws.onmessage = async (e) => {
       const data = JSON.parse(e.data)
+      console.log('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
         case 'sync':
           await getSyncData()
@@ -149,7 +150,10 @@ export function MainNavigator() {
           }
           break
         case 'members':
-          // getInvitations()
+          const invitationsRes = await user.getInvitations()
+          if (invitationsRes.kind === 'ok') {
+            user.setInvitations(invitationsRes.data)
+          }
           break
         default:
           break

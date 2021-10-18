@@ -1,5 +1,6 @@
 {
   "common": {
+    "accept": "Accept",
     "account": "Account",
     "authenticate": "Authenticate",
     "authentication_app": "Authentication App",
@@ -49,6 +50,7 @@
     "ownership": "Ownership",
     "password": "Password",
     "regenerate": "Regenerate",
+    "reject": "reject",
     "rename": "Rename",
     "restore": "Restore",
     "save": "Save",
@@ -85,6 +87,8 @@
     "no_results_found": "No results found for"
   },
   "success": {
+    "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation.",
+    "invitation_rejected": "Invitation rejected",
     "master_password_updated": "Master password updated",
     "biometric_enabled": "Face ID/Touch ID unlocking is enabled",
     "cipher_created": "New item created",
@@ -300,7 +304,9 @@
   },
   "menu": {
     "plan": "Manage Plan",
-    "invite": "Invite Friends"
+    "invite": "Invite Friends",
+    "invitation_to_join": "Invitation to join ",
+    "invitation_desc": "You’ve been invited to the {{org}} organization! Join now and start collaborating with your teammates."
   },
   "pass_generator": {
     "title": "Password Generator",

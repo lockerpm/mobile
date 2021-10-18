@@ -17,17 +17,25 @@ export const StartScreen = observer(function StartScreen() {
   const mounted = async () => {
     if (!uiStore.isOffline) {
       await delay(1000)
-      const [syncRes] = await Promise.all([
+      const [syncRes, invitationsRes] = await Promise.all([
         getSyncData(),
+        user.getInvitations(),
         user.loadTeams(),
-        user.loadPlan()
+        user.loadPlan(),
       ])
 
+      // Sync handler
       if (syncRes.kind === 'ok') {
         notify('success', translate('success.sync_success'))
       } else {
         notify('error', translate('error.sync_failed'))
       }
+
+      // Invitations handler
+      if (invitationsRes.kind == 'ok') {
+        user.setInvitations(invitationsRes.data)
+      }
+
       await delay(1000)
     }
     
