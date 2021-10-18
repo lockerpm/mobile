@@ -60,6 +60,7 @@ export const AllItemScreen = observer(function AllItemScreen() {
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
+            imgStyle={{ height: 55, width: 120 }}
             title={translate('all_items.empty.title')}
             desc={translate('all_items.empty.desc')}
             buttonText={translate('all_items.empty.btn')}

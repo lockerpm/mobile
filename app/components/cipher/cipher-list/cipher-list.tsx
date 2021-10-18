@@ -41,7 +41,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   const {
     emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId, organizationId
   } = props
-  const { getWebsiteLogo, getCiphers } = useMixins()
+  const { getWebsiteLogo, getCiphers, translate } = useMixins()
   const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -63,7 +63,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // Get ciphers list
   const loadData = async () => {
-    onLoadingChange && onLoadingChange(true)
+    // onLoadingChange && onLoadingChange(true)
 
     // Filter
     const filters = []
@@ -213,11 +213,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // ------------------------ RENDER ----------------------------
 
-  return !ciphers.length && emptyContent ? (
-    <View style={{ paddingHorizontal: 20 }}>
-      {emptyContent}
-    </View>
-  ) : (
+  return ciphers.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
@@ -317,5 +313,20 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       />
       {/* Cipher list end */}
     </View>
+  ) : (
+    emptyContent && !searchText.trim() ? (
+      <View style={{ paddingHorizontal: 20 }}>
+        {emptyContent}
+      </View>
+    ) : (
+      <View style={{ paddingHorizontal: 20 }}>
+        <Text
+          text={translate('error.no_results_found') + ` '${searchText}'`}
+          style={{
+            textAlign: 'center'
+          }}
+        />
+      </View>
+    )
   )
 })
