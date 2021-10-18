@@ -19,7 +19,7 @@ export const RenameFolderModal = observer((props: Props) => {
   const { isOpen, onClose, folder } = props
   const { folderStore } = useStores()
   const { folderService, collectionService } = useCoreService()
-  const { notify, translate } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
 
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -55,7 +55,8 @@ export const RenameFolderModal = observer((props: Props) => {
       notify('success', translate('folder.folder_updated'))
       onClose()
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      // @ts-ignore
+      notifyApiError(res)
       if (res.kind === 'unauthorized') {
         onClose()
       }

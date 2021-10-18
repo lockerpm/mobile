@@ -75,7 +75,6 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
           }
         } catch (e) {
           __DEV__ && console.log(e)
-          // notify('error', translate('error.something_went_wrong'))
           notify('error', e.toString())
         }
       }

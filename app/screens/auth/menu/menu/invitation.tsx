@@ -20,7 +20,7 @@ export type InvitationData = {
 
 export const Invitation = observer((props: InvitationData) => {
   const { user } = useStores()
-  const { notify, translate } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
   const [isLoading, setIsLoading] = useState('')
 
   const handleInvitation = async (status: 'accept' | 'reject') => {
@@ -34,7 +34,7 @@ export const Invitation = observer((props: InvitationData) => {
       )
       user.setInvitations(user.invitations.filter(item => item.id !== props.id))
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
   }
 

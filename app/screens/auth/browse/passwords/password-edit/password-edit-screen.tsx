@@ -112,6 +112,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
           goBackText={translate('common.cancel')}
           right={(
             <Button
+              isDisabled={isLoading || !name.trim()}
               preset="link"
               text={translate('common.save')}
               onPress={handleSave}

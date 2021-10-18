@@ -12,7 +12,7 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
-  const { logout, sessionLogin, notify, biometricLogin, translate } = useMixins()
+  const { logout, sessionLogin, notify, biometricLogin, translate, notifyApiError } = useMixins()
   const { user, uiStore } = useStores()
 
   // Params
@@ -78,7 +78,7 @@ export const LockScreen = observer(function LockScreen() {
     if (res.kind === 'ok') {
       notify('success', translate('lock.hint_sent'), 5000)
     } else {
-      notify('error', translate('error.something_went_wrong'))
+      notifyApiError(res)
     }
   }
 

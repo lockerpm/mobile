@@ -93,6 +93,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
           right={(
             <Button
               preset="link"
+              isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
               textStyle={{
