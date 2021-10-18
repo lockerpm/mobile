@@ -57,10 +57,6 @@ export const LockScreen = observer(function LockScreen() {
       notify('error', translate('error.biometric_not_enable'))
       return
     }
-    if (uiStore.passwordChanged) {
-      notify('error', translate('lock.master_pass_changed'))
-      return
-    }
 
     setIsBioUnlocking(true)
     const res = await biometricLogin()
