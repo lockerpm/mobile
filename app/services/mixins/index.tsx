@@ -98,7 +98,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // Offline compare
       if (uiStore.isOffline) {
         const storedKeyHash = await cryptoService.getKeyHash()
-        if (storedKeyHash && !uiStore.passwordChanged) {
+        if (storedKeyHash) {
           const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
           if (passwordValid) {
             messagingService.send('loggedIn')
@@ -141,9 +141,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await cryptoService.setEncKey(res.data.key)
       await cryptoService.setEncPrivateKey(res.data.private_key)
 
-      if (uiStore.passwordChanged) {
-        uiStore.setPasswordChanged(false)
-      }
       return { kind: 'ok' }
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
@@ -270,9 +267,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
       // Setup service
       notify('success', translate('success.master_password_updated'))
-      uiStore.setPasswordChanged(true)
-      await lock()
       await cryptoService.clearKeys()
+      await logout()
       return { kind: 'ok' }
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
