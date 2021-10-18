@@ -81,7 +81,8 @@
     "token_expired": "Session token expired",
     "no_associated_account": "There’s no account associated with this email or username. Try another or create a new account.",
     "invalid_authorization_code": "The authorization code is not valid",
-    "invalid_data": "Invalid data"
+    "invalid_data": "Invalid data",
+    "no_results_found": "No results found for"
   },
   "success": {
     "master_password_updated": "Master password updated",

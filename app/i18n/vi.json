@@ -81,7 +81,8 @@
     "token_expired": "Phiên của bạn đã hết hạn",
     "no_associated_account": "Không có tài khoản nào sử dụng email hoặc username này. Vui lòng thử lại hoặc tạo tài khoản mới.",
     "invalid_authorization_code": "Mã xác nhận không hợp lệ",
-    "invalid_data": "Dữ liệu không hợp lệ"
+    "invalid_data": "Dữ liệu không hợp lệ",
+    "no_results_found": "Không tìm thấy kết quả cho"
   },
   "success": {
     "master_password_updated": "Mật khẩu chính đã được cập nhật",
