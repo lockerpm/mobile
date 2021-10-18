@@ -98,6 +98,9 @@ export const UserModel = types
     },
 
     // User
+    setDeviceID: (id: string) => {
+      self.environment.api.apisauce.setHeader('device-id', id)
+    },
     setLanguage: (lang: string) => {
       self.language = lang
       setLang(lang)
