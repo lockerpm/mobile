@@ -163,7 +163,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         promptMessage: 'Unlock Locker'
       })
       if (!success) {
-        notify('error', translate('error.session_login_failed'))
+        notify('error', translate('error.biometric_unlock_failed'))
         return { kind: 'bad-data' }
       }
 
