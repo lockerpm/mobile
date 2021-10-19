@@ -74,6 +74,7 @@
   "error": {
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
+    "biometric_unlock_failed": "Xác thực bằng Face ID/Touch ID không thành công",
     "network_error": "Kết nối mạng không thành công",
     "required_data": "Không được để trống thông tin này",
     "session_login_failed": "Đăng nhập phiên không thành công",

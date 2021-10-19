@@ -8,6 +8,7 @@ import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
+import ReactNativeBiometrics from "react-native-biometrics"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -32,15 +33,24 @@ export const SettingsScreen = observer(function SettingsScreen() {
   const enableBiometric = async () => {
     setIsLoading(true)
     const available = await isBiometricAvailable()
+    setIsLoading(false)
 
     if (!available) {
       notify('error', translate('error.biometric_not_support'))
-    } else {
-      user.setBiometricUnlock(true)
-      notify('success', translate('success.biometric_enabled'))
+      return
     }
 
-    setIsLoading(false)
+    const { success } = await ReactNativeBiometrics.simplePrompt({
+      promptMessage: 'Verify FaceID/TouchID'
+    })
+
+    if (!success) {
+      notify('error', translate('error.biometric_unlock_failed'))
+      return
+    }
+
+    user.setBiometricUnlock(true)
+    notify('success', translate('success.biometric_enabled'))
   }
 
   // RENDER

@@ -74,6 +74,7 @@
   "error": {
     "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
     "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
+    "biometric_unlock_failed": "Face ID/Touch ID verification failed",
     "network_error": "Network error",
     "required_data": "This data is mandatory",
     "session_login_failed": "Session login failed",
