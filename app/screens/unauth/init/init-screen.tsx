@@ -28,7 +28,7 @@ export const InitScreen = observer(function InitScreen() {
 
     // Testing
     // if (__DEV__) {
-    //   navigation.navigate('createMasterPassword')
+    //   navigation.navigate('login')
     //   return
     // }
 

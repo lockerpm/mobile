@@ -82,6 +82,8 @@ export const UserModel = types
       self.default_team_id = ''
       self.teams = null
       self.plan = null
+    },
+    clearSettings: () => {
       self.isBiometricUnlock = false
       self.appTimeout = -1
       self.appTimeoutAction = 'lock'
@@ -126,6 +128,9 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser()
       if (res.kind === "ok") {
+        if (self.email && res.user.email !== self.email) {
+          self.clearSettings()
+        }
         self.saveUser(res.user)
       }
       return res
@@ -194,6 +199,7 @@ export const UserModel = types
       const res = await userApi.logout()
       self.clearToken()
       self.clearUser()
+      self.clearSettings()
       return res
     },
 
