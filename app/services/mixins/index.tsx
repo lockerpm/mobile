@@ -333,6 +333,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await syncService.setLastSync(new Date())
       messagingService.send('syncCompleted', { successfully: true })
 
+      // Save fingerprint
+      const fingerprint = await cryptoService.getFingerprint(userId)
+      user.setFingerprint(fingerprint.join('-'))
+
       // Save to shared keychain for autofill service
       const passwordRes = await getCiphers({
         filters: [

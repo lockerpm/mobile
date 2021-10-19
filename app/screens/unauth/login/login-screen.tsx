@@ -48,17 +48,14 @@ export const LoginScreen = observer(function LoginScreen() {
 
   // -------------- EFFECT ------------------
 
-  let isBacking = false
   useEffect(() => {
     const handleBack = (e) => {
-      if (isBacking) {
-        isBacking = false
+      if (e.data.action.type !== 'POP') {
         navigation.dispatch(e.data.action)
         return
       }
 
       e.preventDefault()
-      isBacking = true
       navigation.navigate('onBoarding')
     }
 

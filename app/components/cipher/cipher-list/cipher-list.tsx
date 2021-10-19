@@ -6,6 +6,7 @@ import { Button } from "../../button/button"
 import { Text } from "../../text/text"
 import { AutoImage as Image } from "../../auto-image/auto-image"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
@@ -289,10 +290,24 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
               }
 
               <View style={{ flex: 1, marginLeft: 12 }}>
-                <Text
-                  preset="semibold"
-                  text={item.name}
-                />
+                <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
+                  <Text
+                    preset="semibold"
+                    text={item.name}
+                  />
+
+                  {
+                    item.organizationId && (
+                      <View style={{ marginLeft: 10 }}>
+                        <MaterialCommunityIconsIcon
+                          name="account-group-outline"
+                          size={24}
+                          color={color.textBlack}
+                        />
+                      </View>
+                    )
+                  }
+                </View>
 
                 {
                   !!getDescription(item) && (

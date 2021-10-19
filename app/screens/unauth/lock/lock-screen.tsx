@@ -107,11 +107,9 @@ export const LockScreen = observer(function LockScreen() {
 
   // -------------- EFFECT ------------------
 
-  let isBacking = false
   useEffect(() => {
     const handleBack = (e) => {
-      if (isBacking) {
-        isBacking = false
+      if (e.data.action.type !== 'POP') {
         navigation.dispatch(e.data.action)
         return
       }
@@ -125,16 +123,13 @@ export const LockScreen = observer(function LockScreen() {
           { 
             text: translate('common.cancel'), 
             style: 'cancel', 
-            onPress: () => {
-              isBacking = false
-            }
+            onPress: () => {}
           },
           {
             text: translate('common.logout'),
             style: 'destructive',
             onPress: async () => {
               await logout()
-              isBacking = true
               navigation.navigate('onBoarding')
             }
           },

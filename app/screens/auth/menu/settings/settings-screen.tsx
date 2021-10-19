@@ -9,6 +9,7 @@ import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
 import ReactNativeBiometrics from "react-native-biometrics"
+import { DeauthorizeSessionsModal } from "./deauthorize-sessions-modal"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -26,7 +27,10 @@ export const SettingsScreen = observer(function SettingsScreen() {
   const route = useRoute<ScreenProp>()
   const { fromIntro } = route.params
 
+  // PARAMS
+
   const [isLoading, setIsLoading] = useState(false)
+  const [showDeauthSessionsModal, setShowDeauthSessionsModal] = useState(false)
 
   // METHODS
 
@@ -58,6 +62,11 @@ export const SettingsScreen = observer(function SettingsScreen() {
   let isBacking = false
   useEffect(() => {
     const handleBack = (e) => {
+      if (e.data.action.type !== 'POP') {
+        navigation.dispatch(e.data.action)
+        return
+      }
+      
       if (isBacking) {
         isBacking = false
         navigation.dispatch(e.data.action)
@@ -273,11 +282,12 @@ export const SettingsScreen = observer(function SettingsScreen() {
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
         <SettingsItem
-          disabled
           name={translate('settings.deauthorize_sessions')}
           noCaret
           color={color.error}
-          action={() => {}}
+          action={() => {
+            setShowDeauthSessionsModal(true)
+          }}
         />
         <SettingsItem
           disabled
@@ -296,6 +306,13 @@ export const SettingsScreen = observer(function SettingsScreen() {
         />
       </View>
       {/* Danger zone end */}
+
+      {/* Modals */}
+      <DeauthorizeSessionsModal
+        navigation={navigation}
+        isOpen={showDeauthSessionsModal}
+        onClose={() => setShowDeauthSessionsModal(false)}
+      />
     </Layout>
   )
 })

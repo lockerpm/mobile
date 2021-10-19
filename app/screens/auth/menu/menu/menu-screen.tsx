@@ -102,6 +102,7 @@ export const MenuScreen = observer(function MenuScreen() {
       )}
     >
       <ScrollView>
+        {/* User info */}
         <View style={[
           ITEM_CONTAINER,
           commonStyles.CENTER_HORIZONTAL_VIEW,
@@ -125,6 +126,26 @@ export const MenuScreen = observer(function MenuScreen() {
             </Text>
           </View>
         </View>
+        {/* User info end */}
+
+        {/* Fingerprint */}
+        <View style={[ITEM_CONTAINER, {
+          marginBottom: 15,
+          paddingVertical: 14
+        }]}>
+          <Text
+            preset="black"
+            text={translate('menu.fingerprint')}
+          />
+          <Text
+            style={{
+              color: color.error,
+              marginTop: 5
+            }}
+            text={user.fingerprint}
+          />
+        </View>
+        {/* Fingerprint end */}
 
         {/* Invitations */}
         {
