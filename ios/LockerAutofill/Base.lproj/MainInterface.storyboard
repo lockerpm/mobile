@@ -35,10 +35,10 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="77"/>
                                         <subviews>
                                             <activityIndicatorView opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="Kpv-9S-htl">
-                                                <rect key="frame" x="0.0" y="20" width="375" height="37"/>
+                                                <rect key="frame" x="20" y="20" width="335" height="37"/>
                                             </activityIndicatorView>
                                         </subviews>
-                                        <directionalEdgeInsets key="directionalLayoutMargins" top="20" leading="0.0" bottom="20" trailing="0.0"/>
+                                        <directionalEdgeInsets key="directionalLayoutMargins" top="20" leading="20" bottom="20" trailing="20"/>
                                     </stackView>
                                 </subviews>
                                 <constraints>

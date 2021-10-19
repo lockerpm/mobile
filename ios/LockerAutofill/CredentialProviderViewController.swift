@@ -10,14 +10,14 @@ import KeychainAccess
 
 
 func toArray(text: String) -> [[String: String]]? {
-    if let data = text.data(using: .utf8) {
-        do {
-            return try JSONSerialization.jsonObject(with: data, options: []) as? [[String: String]]
-        } catch {
-            print(error.localizedDescription)
-        }
+  if let data = text.data(using: .utf8) {
+    do {
+      return try JSONSerialization.jsonObject(with: data, options: []) as? [[String:String]]
+    } catch {
+      print(error.localizedDescription)
     }
-    return []
+  }
+  return []
 }
 
 
@@ -39,7 +39,14 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     button.addTarget(self, action: #selector(pressed), for: .touchUpInside)
     return button
   }
-
+  
+  func makeLabel(text: String, size: Int, color: UIColor? = .label) -> UILabel {
+    let label = UILabel()
+    label.text = text
+    label.font = label.font?.withSize(CGFloat(size))
+    label.textColor = color
+    return label
+  }
 
   @objc func pressed(sender: UIButton) {
     let target = self.passwords[sender.tag]
@@ -71,14 +78,17 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
       self.passwords = toArray(text: autofillData ?? "[]") ?? []
       if (self.passwords.count > 0) {
         var hasItem = false
-        let label = UILabel()
-        label.text = "Log in \(uri)\n"
-        label.font = label.font?.withSize(22)
-        label.textColor = .label
+        
+        // Label
+        let label = makeLabel(text: "Credentials for \(uri)\n", size: 20)
         label.textAlignment = .center
         self.stackView.addArrangedSubview(label)
+        self.stackView.setCustomSpacing(CGFloat(15), after: label)
+        
+        // Buttons
         for (index, item) in self.passwords.enumerated() {
-          if uri.isEmpty || uri.contains(item["uri"] ?? "") {
+          let cipherUri = item["uri"] ?? ""
+          if uri.isEmpty || uri.contains(cipherUri) {
             hasItem = true
             let btn = self.makeButton(title: item["username"] ?? "", index: index)
             self.stackView.addArrangedSubview(btn)
@@ -92,10 +102,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     }
     
     // No password available
-    let label = UILabel()
-    label.text = "There's no password for \(uri), add a password to Locker to start using autofill feature."
-    label.textColor = .label
-    label.textAlignment = .center
+    let label = makeLabel(text: "There are no passwords available for this uri. Add a password to Locker to start using autofill feature.", size: 16)
     label.numberOfLines = 0
     self.stackView.addArrangedSubview(label)
   }
