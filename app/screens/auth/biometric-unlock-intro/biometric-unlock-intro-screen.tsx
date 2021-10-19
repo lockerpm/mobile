@@ -8,7 +8,6 @@ import { save, storageKeys } from "../../../utils/storage"
 
 export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntroScreen() {
   const navigation = useNavigation()
-  let isBacking = false
 
   // Methods
   const handleUseBiometric = async () => {
@@ -21,6 +20,7 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
     navigation.navigate('mainTab', { screen: 'homeTab' })
   }
 
+  let isBacking = false
   useEffect(() => {
     const handleBack = (e) => {
       if (isBacking) {

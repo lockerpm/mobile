@@ -15,7 +15,6 @@ export const AllItemScreen = observer(function AllItemScreen() {
 
   // -------------- PARAMS ------------------
 
-  let isLocking = false
   const [isLoading, setIsLoading] = useState(true)
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -30,8 +29,7 @@ export const AllItemScreen = observer(function AllItemScreen() {
 
   useEffect(() => {
     const handleBack = (e) => {
-      if (isLocking) {
-        isLocking = false
+      if (e.data.action.type !== 'POP') {
         navigation.dispatch(e.data.action)
         return
       }
@@ -45,16 +43,13 @@ export const AllItemScreen = observer(function AllItemScreen() {
           { 
             text: translate('common.cancel'), 
             style: 'cancel', 
-            onPress: () => {
-              isLocking = false
-            }
+            onPress: () => {}
           },
           {
             text: translate('common.lock'),
             style: 'destructive',
             onPress: async () => {
               await lock()
-              isLocking = true
               navigation.navigate('lock')
             }
           },
