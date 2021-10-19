@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View, Switch } from "react-native"
 import { Layout, Text, Header, Select } from "../../../../components"
@@ -52,6 +52,34 @@ export const SettingsScreen = observer(function SettingsScreen() {
     user.setBiometricUnlock(true)
     notify('success', translate('success.biometric_enabled'))
   }
+
+  // EFFECT
+
+  let isBacking = false
+  useEffect(() => {
+    const handleBack = (e) => {
+      if (isBacking) {
+        isBacking = false
+        navigation.dispatch(e.data.action)
+        return
+      }
+
+      e.preventDefault()
+      isBacking = true
+
+      if (fromIntro) {
+        navigation.navigate('mainTab', { screen: 'homeTab' })
+      } else {
+        navigation.goBack()
+      }
+    }
+
+    navigation.addListener('beforeRemove', handleBack)
+
+    return () => {
+      navigation.removeListener('beforeRemove', handleBack)
+    }
+  }, [navigation])
 
   // RENDER
 
@@ -130,11 +158,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
       header={(
         <Header
           goBack={() => {
-            if (fromIntro) {
-              navigation.navigate('mainTab', { screen: 'homeTab' })
-            } else {
-              navigation.goBack()
-            }
+            navigation.goBack()
           }}
           title={translate('common.settings')}
           right={(<View style={{ width: 10 }} />)}

@@ -71,6 +71,10 @@
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
   },
+  "alert": {
+    "lock_app": "Khoá Locker?",
+    "logout": "Đăng xuất khỏi "
+  },
   "error": {
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
