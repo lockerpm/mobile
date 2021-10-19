@@ -336,15 +336,15 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // Save to shared keychain for autofill service
       const passwordRes = await getCiphers({
         filters: [
-          (c : CipherView) => c.type === CipherType.Login
+          (c : CipherView) => c.type === CipherType.Login && c.login.uri
         ],
         searchText: '',
         deleted: false
       })
       const sharedData = passwordRes.map((c: CipherView) => ({
-        uri: c.login.uri,
-        username: c.login.username,
-        password: c.login.password
+        uri: c.login.uri || '',
+        username: c.login.username || '',
+        password: c.login.password || ''
       }))
       await saveShared('autofill', JSON.stringify(sharedData))
 

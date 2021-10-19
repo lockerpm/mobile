@@ -157,7 +157,6 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
     // Done
     setCiphers(res)
-    __DEV__ && console.log(`Get ${res.length} items`)
   }
 
   // Handle action menu open
