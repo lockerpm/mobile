@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View } from "react-native"
+import { Alert, View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput, PasswordStrength } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
@@ -51,6 +51,50 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
       setIsCreating(false)
     }
   }
+
+  // -------------- EFFECT ------------------
+
+  let isBacking = false
+  useEffect(() => {
+    const handleBack = (e) => {
+      if (isBacking) {
+        isBacking = false
+        navigation.dispatch(e.data.action)
+        return
+      }
+
+      e.preventDefault()
+
+      Alert.alert(
+        translate('alert.logout') + user.email + '?',
+        '',
+        [
+          { 
+            text: translate('common.cancel'), 
+            style: 'cancel', 
+            onPress: () => {
+              isBacking = false
+            }
+          },
+          {
+            text: translate('common.logout'),
+            style: 'destructive',
+            onPress: async () => {
+              await logout()
+              isBacking = true
+              navigation.navigate('onBoarding')
+            }
+          },
+        ]
+      )
+    }
+
+    navigation.addListener('beforeRemove', handleBack)
+
+    return () => {
+      navigation.removeListener('beforeRemove', handleBack)
+    }
+  }, [navigation])
 
   // Render
   return (
