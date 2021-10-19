@@ -71,6 +71,10 @@
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
   },
+  "alert": {
+    "lock_app": "Lock the application?",
+    "logout": "Log out from "
+  },
   "error": {
     "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
     "biometric_not_support": "Face ID/Touch ID unlocking is not supported",

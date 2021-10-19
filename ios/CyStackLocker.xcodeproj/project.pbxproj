@@ -22,7 +22,7 @@
 		CA53479327181AB400BA4901 /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA53479227181AB400BA4901 /* CredentialProviderViewController.swift */; };
 		CA53479627181AB400BA4901 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA53479427181AB400BA4901 /* MainInterface.storyboard */; };
 		CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CA53478F27181AB400BA4901 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CA9F41E927183FC300B0C0A5 /* KeychainAccess */; };
+		CA9F41EA27183FC300B0C0A5 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = CA9F41E927183FC300B0C0A5 /* SwiftPackageProductDependency */; };
 		CAEC5C60270B188F00BC5B55 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CAEC5C5F270B188F00BC5B55 /* GoogleService-Info.plist */; };
 		CAFA4CF8270AF9A20003FFA5 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFA4CF7270AF9A20003FFA5 /* File.swift */; };
 		E0E402AF856107EC82190244 /* libPods-CyStackLocker-CyStackLockerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BE758935A381A571F5B21 /* libPods-CyStackLocker-CyStackLockerTests.a */; };
@@ -152,7 +152,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */,
+				CA9F41EA27183FC300B0C0A5 /* BuildFile in Frameworks */,
 				CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,7 +387,7 @@
 			);
 			name = LockerAutofill;
 			packageProductDependencies = (
-				CA9F41E927183FC300B0C0A5 /* KeychainAccess */,
+				CA9F41E927183FC300B0C0A5 /* SwiftPackageProductDependency */,
 			);
 			productName = LockerAutofill;
 			productReference = CA53478F27181AB400BA4901 /* LockerAutofill.appex */;
@@ -436,7 +436,7 @@
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
-				CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				CA9F41E827183FC300B0C0A5 /* RemoteSwiftPackageReference */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -1323,7 +1323,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+		CA9F41E827183FC300B0C0A5 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
 			requirement = {
@@ -1334,9 +1334,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CA9F41E927183FC300B0C0A5 /* KeychainAccess */ = {
+		CA9F41E927183FC300B0C0A5 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			package = CA9F41E827183FC300B0C0A5 /* RemoteSwiftPackageReference */;
 			productName = KeychainAccess;
 		};
 /* End XCSwiftPackageProductDependency section */

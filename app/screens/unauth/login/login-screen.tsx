@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
@@ -45,6 +45,29 @@ export const LoginScreen = observer(function LoginScreen() {
       }
     }
   }
+
+  // -------------- EFFECT ------------------
+
+  let isBacking = false
+  useEffect(() => {
+    const handleBack = (e) => {
+      if (isBacking) {
+        isBacking = false
+        navigation.dispatch(e.data.action)
+        return
+      }
+
+      e.preventDefault()
+      isBacking = true
+      navigation.navigate('onBoarding')
+    }
+
+    navigation.addListener('beforeRemove', handleBack)
+
+    return () => {
+      navigation.removeListener('beforeRemove', handleBack)
+    }
+  }, [navigation])
 
   // ------------------------------ RENDER -------------------------------
 

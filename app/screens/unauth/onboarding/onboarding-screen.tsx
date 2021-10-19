@@ -1,11 +1,12 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { View } from "react-native"
+import { BackHandler, View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
+import { IS_IOS } from "../../../config/constants"
 
 export const OnboardingScreen = observer(function OnboardingScreen() {
   const navigation = useNavigation()
@@ -35,6 +36,23 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
       </View>
     </View>
   )
+
+  // -------------- EFFECT ------------------
+
+  useEffect(() => {
+    const handleBack = (e) => {
+      e.preventDefault()
+      if (!IS_IOS) {
+        BackHandler.exitApp()
+      }
+    }
+
+    navigation.addListener('beforeRemove', handleBack)
+
+    return () => {
+      navigation.removeListener('beforeRemove', handleBack)
+    }
+  }, [navigation])
 
   return (
     <Layout
