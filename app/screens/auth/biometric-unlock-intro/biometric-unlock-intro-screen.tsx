@@ -20,17 +20,14 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
     navigation.navigate('mainTab', { screen: 'homeTab' })
   }
 
-  let isBacking = false
   useEffect(() => {
     const handleBack = (e) => {
-      if (isBacking) {
-        isBacking = false
+      if (e.data.action.type !== 'POP') {
         navigation.dispatch(e.data.action)
         return
       }
 
       e.preventDefault()
-      isBacking = true
       navigation.navigate('mainTab', { screen: 'homeTab' })
     }
 
