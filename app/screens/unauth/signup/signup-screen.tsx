@@ -67,6 +67,9 @@ export const SignupScreen = observer(function SignupScreen() {
       icon: SOCIAL_LOGIN_ICON.facebook,
       handler: async () => {
         try {
+          if (await AccessToken.getCurrentAccessToken()) {
+            LoginManager.logOut()
+          }
           await LoginManager.logInWithPermissions(['public_profile', 'email'])
           const res = await AccessToken.getCurrentAccessToken()
           setIsLoading(true)
