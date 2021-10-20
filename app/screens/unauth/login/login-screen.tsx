@@ -50,7 +50,7 @@ export const LoginScreen = observer(function LoginScreen() {
 
   useEffect(() => {
     const handleBack = (e) => {
-      if (e.data.action.type !== 'POP') {
+      if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
         navigation.dispatch(e.data.action)
         return
       }
