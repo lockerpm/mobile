@@ -11,6 +11,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin"
 import { GOOGLE_CLIENT_ID, PRIVACY_POLICY_URL, TERMS_URL } from "../../../config/constants"
 import { Checkbox } from "react-native-ui-lib"
 import countries from '../../../common/countries.json'
+import { AccessToken, LoginManager } from "react-native-fbsdk-next"
 
 
 export const SignupScreen = observer(function SignupScreen() {
@@ -55,14 +56,34 @@ export const SignupScreen = observer(function SignupScreen() {
             onLoggedIn()
           }
         } catch (e) {
-          notify('error', e)
+          __DEV__ && console.log(e)
+          notify('error', e.toString())
         }
       }
     },
 
     facebook: {
       icon: SOCIAL_LOGIN_ICON.facebook,
-      handler: async () => {}
+      handler: async () => {
+        try {
+          await LoginManager.logInWithPermissions(['public_profile', 'email'])
+          const res = await AccessToken.getCurrentAccessToken()
+          setIsLoading(true)
+          const loginRes = await user.socialLogin({
+            provider: 'facebook',
+            access_token: res.accessToken 
+          })
+          setIsLoading(false)
+          if (loginRes.kind !== 'ok') {
+            notify('error', translate('error.login_failed'))
+          } else {
+            onLoggedIn()
+          }
+        } catch (e) {
+          __DEV__ && console.log(e)
+          notify('error', e.toString())
+        }
+      }
     },
 
     github: {
