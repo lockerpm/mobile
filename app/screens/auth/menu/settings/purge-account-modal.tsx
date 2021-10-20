@@ -73,9 +73,13 @@ export const PurgeAccountModal = observer((props: Props) => {
     >
       <View style={{
         borderRadius: 5,
-        borderWidth: 1,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderRightWidth: 1,
         borderLeftWidth: 4,
-        borderColor: color.block,
+        borderTopColor: color.line,
+        borderBottomColor: color.line,
+        borderRightColor: color.line,
         borderLeftColor: color.error,
         marginTop: 20,
         marginBottom: 20,
