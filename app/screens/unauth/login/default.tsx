@@ -75,6 +75,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
             onLoggedIn()
           }
         } catch (e) {
+          setIsLoading(false)
           __DEV__ && console.log(e)
           notify('error', e.toString())
         }
@@ -99,6 +100,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
             onLoggedIn()
           }
         } catch (e) {
+          setIsLoading(false)
           __DEV__ && console.log(e)
           notify('error', e.toString())
         }

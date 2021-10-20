@@ -56,6 +56,7 @@ export const SignupScreen = observer(function SignupScreen() {
             onLoggedIn()
           }
         } catch (e) {
+          setIsLoading(false)
           __DEV__ && console.log(e)
           notify('error', e.toString())
         }
@@ -80,6 +81,7 @@ export const SignupScreen = observer(function SignupScreen() {
             onLoggedIn()
           }
         } catch (e) {
+          setIsLoading(false)
           __DEV__ && console.log(e)
           notify('error', e.toString())
         }
