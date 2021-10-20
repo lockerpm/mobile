@@ -214,6 +214,18 @@ export const UserModel = types
       return res
     },
 
+    purgeAccount: async (hashedPassword: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.purgeAccount(hashedPassword)
+      return res
+    },
+
+    deleteAccount: async (hashedPassword: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.deleteAccount(hashedPassword)
+      return res
+    },
+
     // -------------------- LOCKER ------------------------
 
     sendPasswordHint: async (email: string) => {

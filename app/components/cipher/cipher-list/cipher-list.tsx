@@ -301,7 +301,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                       <View style={{ marginLeft: 10 }}>
                         <MaterialCommunityIconsIcon
                           name="account-group-outline"
-                          size={24}
+                          size={22}
                           color={color.textBlack}
                         />
                       </View>
