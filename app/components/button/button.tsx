@@ -3,7 +3,6 @@ import { ActivityIndicator, TouchableOpacity } from "react-native"
 import { Text } from "../text/text"
 import { viewPresets, textPresets } from "./button.presets"
 import { ButtonProps } from "./button.props"
-import { color } from "../../theme"
 
 /**
  * For your text displaying needs.

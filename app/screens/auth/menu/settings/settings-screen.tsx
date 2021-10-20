@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View, Switch } from "react-native"
 import { Layout, Text, Header, Select } from "../../../../components"
@@ -8,6 +8,10 @@ import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
+import ReactNativeBiometrics from "react-native-biometrics"
+import { DeauthorizeSessionsModal } from "./deauthorize-sessions-modal"
+import { PurgeAccountModal } from "./purge-account-modal"
+import { DeleteAccountModal } from "./delete-account-modal"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -25,23 +29,70 @@ export const SettingsScreen = observer(function SettingsScreen() {
   const route = useRoute<ScreenProp>()
   const { fromIntro } = route.params
 
+  // PARAMS
+
   const [isLoading, setIsLoading] = useState(false)
+  const [showDeauthSessionsModal, setShowDeauthSessionsModal] = useState(false)
+  const [showPurgeAccountModal, setShowPurgeAccountModal] = useState(false)
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false)
 
   // METHODS
 
   const enableBiometric = async () => {
     setIsLoading(true)
     const available = await isBiometricAvailable()
+    setIsLoading(false)
 
     if (!available) {
       notify('error', translate('error.biometric_not_support'))
-    } else {
-      user.setBiometricUnlock(true)
-      notify('success', translate('success.biometric_enabled'))
+      return
     }
 
-    setIsLoading(false)
+    const { success } = await ReactNativeBiometrics.simplePrompt({
+      promptMessage: 'Verify FaceID/TouchID'
+    })
+
+    if (!success) {
+      notify('error', translate('error.biometric_unlock_failed'))
+      return
+    }
+
+    user.setBiometricUnlock(true)
+    notify('success', translate('success.biometric_enabled'))
   }
+
+  // EFFECT
+
+  let isBacking = false
+  useEffect(() => {
+    const handleBack = (e) => {
+      if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
+        navigation.dispatch(e.data.action)
+        return
+      }
+      
+      if (isBacking) {
+        isBacking = false
+        navigation.dispatch(e.data.action)
+        return
+      }
+
+      e.preventDefault()
+      isBacking = true
+
+      if (fromIntro) {
+        navigation.navigate('mainTab', { screen: 'homeTab' })
+      } else {
+        navigation.goBack()
+      }
+    }
+
+    navigation.addListener('beforeRemove', handleBack)
+
+    return () => {
+      navigation.removeListener('beforeRemove', handleBack)
+    }
+  }, [navigation])
 
   // RENDER
 
@@ -120,11 +171,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
       header={(
         <Header
           goBack={() => {
-            if (fromIntro) {
-              navigation.navigate('mainTab', { screen: 'homeTab' })
-            } else {
-              navigation.goBack()
-            }
+            navigation.goBack()
           }}
           title={translate('common.settings')}
           right={(<View style={{ width: 10 }} />)}
@@ -239,29 +286,52 @@ export const SettingsScreen = observer(function SettingsScreen() {
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
         <SettingsItem
-          disabled
           name={translate('settings.deauthorize_sessions')}
           noCaret
           color={color.error}
-          action={() => {}}
+          action={() => {
+            setShowDeauthSessionsModal(true)
+          }}
         />
         <SettingsItem
-          disabled
           name={translate('settings.delete_all_items')}
           noCaret
           color={color.error}
-          action={() => {}}
+          action={() => {
+            setShowPurgeAccountModal(true)
+          }}
         />
         <SettingsItem
-          disabled
           name={translate('settings.delete_account')}
           noCaret
           noBorder
           color={color.error}
-          action={() => {}}
+          action={() => {
+            setShowDeleteAccountModal(true)
+          }}
         />
       </View>
       {/* Danger zone end */}
+
+      {/* Modals */}
+      <DeauthorizeSessionsModal
+        navigation={navigation}
+        isOpen={showDeauthSessionsModal}
+        onClose={() => setShowDeauthSessionsModal(false)}
+      />
+
+      <PurgeAccountModal
+        navigation={navigation}
+        isOpen={showPurgeAccountModal}
+        onClose={() => setShowPurgeAccountModal(false)}
+      />
+
+      <DeleteAccountModal
+        navigation={navigation}
+        isOpen={showDeleteAccountModal}
+        onClose={() => setShowDeleteAccountModal(false)}
+      />
+      {/* Modals end */}
     </Layout>
   )
 })

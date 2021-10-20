@@ -19,6 +19,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { saveShared } from '../../utils/keychain'
 import { GeneralApiProblem } from '../api/api-problem'
+import { LoginManager } from 'react-native-fbsdk-next'
 
 const { createContext, useContext } = React
 
@@ -163,7 +164,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         promptMessage: 'Unlock Locker'
       })
       if (!success) {
-        notify('error', translate('error.session_login_failed'))
+        notify('error', translate('error.biometric_unlock_failed'))
         return { kind: 'bad-data' }
       }
 
@@ -293,6 +294,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await GoogleSignin.signOut()
     }
 
+    // Sign out of Facebook
+    LoginManager.logOut()
+
     // Reset shared data
     await saveShared('autofill', '[]')
   }
@@ -333,18 +337,22 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await syncService.setLastSync(new Date())
       messagingService.send('syncCompleted', { successfully: true })
 
+      // Save fingerprint
+      const fingerprint = await cryptoService.getFingerprint(userId)
+      user.setFingerprint(fingerprint.join('-'))
+
       // Save to shared keychain for autofill service
       const passwordRes = await getCiphers({
         filters: [
-          (c : CipherView) => c.type === CipherType.Login
+          (c : CipherView) => c.type === CipherType.Login && c.login.uri
         ],
         searchText: '',
         deleted: false
       })
       const sharedData = passwordRes.map((c: CipherView) => ({
-        uri: c.login.uri,
-        username: c.login.username,
-        password: c.login.password
+        uri: c.login.uri || '',
+        username: c.login.username || '',
+        password: c.login.password || ''
       }))
       await saveShared('autofill', JSON.stringify(sharedData))
 

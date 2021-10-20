@@ -12,6 +12,7 @@
     "card": "Thẻ tín dụng",
     "change_ownership": "Thay đổi quyền sở hữu",
     "clone": "Tạo bản sao",
+    "confirm": "Xác nhận",
     "continue": "Tiếp tục",
     "copied_to_clipboard": "Đã sao chép",
     "country": "Quốc gia",
@@ -71,9 +72,14 @@
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
   },
+  "alert": {
+    "lock_app": "Khoá Locker?",
+    "logout": "Đăng xuất khỏi "
+  },
   "error": {
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
+    "biometric_unlock_failed": "Xác thực bằng Face ID/Touch ID không thành công",
     "network_error": "Kết nối mạng không thành công",
     "required_data": "Không được để trống thông tin này",
     "session_login_failed": "Đăng nhập phiên không thành công",
@@ -84,9 +90,11 @@
     "no_associated_account": "Không có tài khoản nào sử dụng email hoặc username này. Vui lòng thử lại hoặc tạo tài khoản mới.",
     "invalid_authorization_code": "Mã xác nhận không hợp lệ",
     "invalid_data": "Dữ liệu không hợp lệ",
+    "invalid_password": "Mật khẩu không hợp lệ",
     "no_results_found": "Không tìm thấy kết quả cho",
     "forbidden": "Tài khoản của bạn không đủ quyền để thực hiện hành động này",
-    "not_found": "Đối tượng không tồn tại"
+    "not_found": "Đối tượng không tồn tại",
+    "too_many_failed_attempts": "Quá nhiều lần thử không thành công"
   },
   "success": {
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
@@ -306,6 +314,7 @@
     "policy": "Chính sách bảo mật"
   },
   "menu": {
+    "fingerprint": "Định danh",
     "plan": "Quản lý gói cước",
     "invite": "Mời bạn bè",
     "invitation_to_join": "Lời mời tham gia ",
@@ -334,8 +343,15 @@
     "change_master_pass": "Thay đổi mật khẩu chính",
     "danger_zone": "Khu vực nguy hiểm",
     "deauthorize_sessions": "Vô hiệu hóa tất cả các phiên",
+    "deauthorize_sessions_desc": "Bạn lo lắng rằng tài khoản của mình đang được đăng nhập trên một thiết bị khác? Xác nhận để vô hiệu hoá tất cả các máy tính hoặc thiết bị mà bạn đã sử dụng trước đó. Bước bảo mật này được khuyến nghị nếu trước đây bạn đã sử dụng máy tính công cộng hoặc vô tình lưu mật khẩu trên thiết bị không phải của bạn.",
+    "deauthorize_sessions_warning": "Thực hiện hành động này sẽ đăng xuất bạn khỏi phiên hiện tại và yêu cầu bạn đăng nhập lại.",
+    "deauthorize_sessions_success": "Vô hiệu hoá phiên thành công!",
     "delete_account": "Xóa tài khoản",
+    "delete_account_warning": "Mục này để xóa tài khoản và toàn bộ dữ liệu tài khoản.",
+    "delete_account_success": "Xoá tài khoản thành công!",
     "delete_all_items": "Xóa tất cả dữ liệu",
+    "delete_all_items_warning": "Mục này để xóa tất cả dữ liệu trong không gian Locker của bạn. Dữ liệu tổ chức, nếu có, sẽ không được xóa.",
+    "delete_all_items_success": "Xoá dữ liệu thành công!",
     "on_app_close": "Khi tắt ứng dụng",
     "on_screen_off": "Khi tắt màn hình",
     "timeout": "Hẹn giờ",
