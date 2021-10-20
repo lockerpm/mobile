@@ -47,14 +47,14 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>2100131290023614</string>
 	<key>FacebookClientToken</key>
 	<string>6b60b7619234d25cf74582f153aee83c</string>
 	<key>FacebookDisplayName</key>
 	<string>Locker</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
