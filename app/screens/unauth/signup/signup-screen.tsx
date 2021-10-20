@@ -169,6 +169,7 @@ export const SignupScreen = observer(function SignupScreen() {
 
         {/* Username input */}
         <FloatingInput
+          isRequired
           label={translate('common.email')}
           onChangeText={setEmail}
           value={email}
@@ -179,6 +180,7 @@ export const SignupScreen = observer(function SignupScreen() {
         {/* Password input */}
         <FloatingInput
           isPassword
+          isRequired
           label={translate('common.password')}
           onChangeText={setPassword}
           value={password}
@@ -189,6 +191,7 @@ export const SignupScreen = observer(function SignupScreen() {
         {/* Confirm Password input */}
         <FloatingInput
           isPassword
+          isRequired
           label={translate('signup.confirm_password')}
           onChangeText={setConfirmPassword}
           value={confirmPassword}
@@ -198,6 +201,7 @@ export const SignupScreen = observer(function SignupScreen() {
 
         {/* Full name input */}
         <FloatingInput
+          isRequired
           label={translate('common.fullname')}
           onChangeText={setFullname}
           value={fullname}
@@ -213,6 +217,7 @@ export const SignupScreen = observer(function SignupScreen() {
           }}
         >
           <FloatingInput
+            isRequired
             editable={false}
             label={translate('common.country')}
             value={countries[country] ? countries[country].country_name : ''}
