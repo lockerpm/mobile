@@ -6,6 +6,8 @@ import { useStores } from "../../../models"
 import { load, save, storageKeys } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
+import { IS_IOS } from "../../../config/constants"
+import { BackHandler } from "react-native"
 
 
 export const InitScreen = observer(function InitScreen() {
@@ -26,7 +28,7 @@ export const InitScreen = observer(function InitScreen() {
 
     // Testing
     // if (__DEV__) {
-    //   navigation.navigate('createMasterPassword')
+    //   navigation.navigate('login')
     //   return
     // }
 
@@ -73,6 +75,22 @@ export const InitScreen = observer(function InitScreen() {
     setTimeout(mounted, 1500)
     // mounted()
   }, [])
+
+  // No back here
+  useEffect(() => {
+    const handleBack = (e) => {
+      e.preventDefault()
+      if (!IS_IOS) {
+        BackHandler.exitApp()
+      }
+    }
+
+    navigation.addListener('beforeRemove', handleBack)
+
+    return () => {
+      navigation.removeListener('beforeRemove', handleBack)
+    }
+  }, [navigation])
 
   return (
     <Loading />

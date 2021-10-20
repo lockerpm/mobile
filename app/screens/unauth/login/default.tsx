@@ -8,6 +8,7 @@ import { commonStyles } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { GOOGLE_CLIENT_ID } from "../../../config/constants"
+import { LoginManager, AccessToken } from "react-native-fbsdk-next"
 
 
 type Props = {
@@ -26,7 +27,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState(user.email || '')
   const [password, setPassword] = useState('')
 
   // ------------------ Methods ----------------------
@@ -74,6 +75,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
             onLoggedIn()
           }
         } catch (e) {
+          setIsLoading(false)
           __DEV__ && console.log(e)
           notify('error', e.toString())
         }
@@ -82,7 +84,30 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
 
     facebook: {
       icon: SOCIAL_LOGIN_ICON.facebook,
-      handler: async () => {}
+      handler: async () => {
+        try {
+          if (await AccessToken.getCurrentAccessToken()) {
+            LoginManager.logOut()
+          }
+          await LoginManager.logInWithPermissions(['public_profile', 'email'])
+          const res = await AccessToken.getCurrentAccessToken()
+          setIsLoading(true)
+          const loginRes = await user.socialLogin({
+            provider: 'facebook',
+            access_token: res.accessToken 
+          })
+          setIsLoading(false)
+          if (loginRes.kind !== 'ok') {
+            notify('error', translate('error.login_failed'))
+          } else {
+            onLoggedIn()
+          }
+        } catch (e) {
+          setIsLoading(false)
+          __DEV__ && console.log(e)
+          notify('error', e.toString())
+        }
+      }
     },
 
     github: {

@@ -106,16 +106,16 @@ static void InitializeFlipper(UIApplication *application) {
 
 // ------------ Prevent preview background
 - (void)applicationWillResignActive:(UIApplication *)application {
-    // fill screen with our own colour
-    UIView *colourView = [[UIView alloc]initWithFrame:self.window.frame];
-    colourView.backgroundColor = [UIColor whiteColor];
-    colourView.tag = 1234;
-    colourView.alpha = 0;
-    [self.window addSubview:colourView];
-    [self.window bringSubviewToFront:colourView];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.window.bounds];
+    imageView.tag = 1234;
+    imageView.backgroundColor = [UIColor whiteColor];
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    [imageView setImage:[UIImage imageNamed:@"LaunchScreen.png"]];
+    [self.window addSubview:imageView];
+    [self.window bringSubviewToFront:imageView];
     // fade in the view
-    [UIView animateWithDuration:0.5 animations:^{
-        colourView.alpha = 1;
+    [UIImageView animateWithDuration:0.5 animations:^{
+      imageView.alpha = 1;
     }];
 }
 

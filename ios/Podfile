@@ -33,6 +33,10 @@ target 'CyStackLocker' do
   post_install do |installer|
     flipper_post_install(installer)
     react_native_post_install(installer)
+
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+    end
     
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|

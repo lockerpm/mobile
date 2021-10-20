@@ -14,6 +14,7 @@ import { AutoImage as Image } from "../../auto-image/auto-image"
 import { ActionSheet } from "../../action-sheet/action-sheet"
 import { ActionSheetContent } from "../../action-sheet"
 import { Divider } from "../../divider/divider"
+import { CipherView } from "../../../../core/models/view"
 
 export interface CipherActionProps {
   children?: React.ReactNode,
@@ -33,7 +34,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
 
   const { toTrashCiphers, getRouteName, translate, getTeam } = useMixins()
   const { cipherStore, user } = useStores()
-  const selectedCipher = cipherStore.cipherView
+  const selectedCipher: CipherView = cipherStore.cipherView
 
   // Computed
 
@@ -182,15 +183,19 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   }}
                 />
 
-                <ActionItem
-                  disabled={true}
-                  name={translate('common.change_ownership')}
-                  icon="user-o"
-                  action={() => {
-                    onClose()
-                    setTimeout(() => setShowOwnershipAction(true), 1500)
-                  }}
-                />
+                {
+                  selectedCipher.organizationId && (
+                    <ActionItem
+                      disabled={true}
+                      name={translate('common.change_ownership')}
+                      icon="user-o"
+                      action={() => {
+                        onClose()
+                        setTimeout(() => setShowOwnershipAction(true), 1500)
+                      }}
+                    />
+                  )
+                }
 
                 <Divider style={{ marginVertical: 5 }} />
 
@@ -203,11 +208,15 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   }}
                 />
 
-                <ActionItem
-                  disabled={true}
-                  name={translate('common.share')}
-                  icon="share-square-o"
-                />
+                {
+                  !selectedCipher.organizationId && (
+                    <ActionItem
+                      disabled={true}
+                      name={translate('common.share')}
+                      icon="share-square-o"
+                    />
+                  )
+                }
 
                 <ActionItem
                   name={translate('trash.to_trash')}

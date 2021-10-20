@@ -26,6 +26,7 @@ export const UserModel = types
     pwd_user_id: types.maybeNull(types.string),
     is_pwd_manager: types.maybeNull(types.boolean),
     default_team_id: types.maybeNull(types.string),
+    fingerprint: types.maybeNull(types.string),
 
     // Others data
     teams: types.maybeNull(types.array(types.frozen())),
@@ -82,12 +83,18 @@ export const UserModel = types
       self.default_team_id = ''
       self.teams = null
       self.plan = null
+      self.fingerprint = ''
+    },
+    clearSettings: () => {
       self.isBiometricUnlock = false
       self.appTimeout = -1
       self.appTimeoutAction = 'lock'
     },
     setLoggedInPw: (isLoggedInPw: boolean) => {
       self.isLoggedInPw = isLoggedInPw
+    },
+    setFingerprint: (fingerprint: string) => {
+      self.fingerprint = fingerprint
     },
 
     // Others data
@@ -126,6 +133,9 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser()
       if (res.kind === "ok") {
+        if (self.email && res.user.email !== self.email) {
+          self.clearSettings()
+        }
         self.saveUser(res.user)
       }
       return res
@@ -194,6 +204,25 @@ export const UserModel = types
       const res = await userApi.logout()
       self.clearToken()
       self.clearUser()
+      self.clearSettings()
+      return res
+    },
+
+    deauthorizeSessions: async (hashedPassword: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.deauthorizeSessions(hashedPassword)
+      return res
+    },
+
+    purgeAccount: async (hashedPassword: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.purgeAccount(hashedPassword)
+      return res
+    },
+
+    deleteAccount: async (hashedPassword: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.deleteAccount(hashedPassword)
       return res
     },
 

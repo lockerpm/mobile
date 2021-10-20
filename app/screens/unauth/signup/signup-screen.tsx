@@ -11,6 +11,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin"
 import { GOOGLE_CLIENT_ID, PRIVACY_POLICY_URL, TERMS_URL } from "../../../config/constants"
 import { Checkbox } from "react-native-ui-lib"
 import countries from '../../../common/countries.json'
+import { AccessToken, LoginManager } from "react-native-fbsdk-next"
 
 
 export const SignupScreen = observer(function SignupScreen() {
@@ -55,14 +56,39 @@ export const SignupScreen = observer(function SignupScreen() {
             onLoggedIn()
           }
         } catch (e) {
-          notify('error', e)
+          setIsLoading(false)
+          __DEV__ && console.log(e)
+          notify('error', e.toString())
         }
       }
     },
 
     facebook: {
       icon: SOCIAL_LOGIN_ICON.facebook,
-      handler: async () => {}
+      handler: async () => {
+        try {
+          if (await AccessToken.getCurrentAccessToken()) {
+            LoginManager.logOut()
+          }
+          await LoginManager.logInWithPermissions(['public_profile', 'email'])
+          const res = await AccessToken.getCurrentAccessToken()
+          setIsLoading(true)
+          const loginRes = await user.socialLogin({
+            provider: 'facebook',
+            access_token: res.accessToken 
+          })
+          setIsLoading(false)
+          if (loginRes.kind !== 'ok') {
+            notify('error', translate('error.login_failed'))
+          } else {
+            onLoggedIn()
+          }
+        } catch (e) {
+          setIsLoading(false)
+          __DEV__ && console.log(e)
+          notify('error', e.toString())
+        }
+      }
     },
 
     github: {
@@ -169,6 +195,7 @@ export const SignupScreen = observer(function SignupScreen() {
 
         {/* Username input */}
         <FloatingInput
+          isRequired
           label={translate('common.email')}
           onChangeText={setEmail}
           value={email}
@@ -179,6 +206,7 @@ export const SignupScreen = observer(function SignupScreen() {
         {/* Password input */}
         <FloatingInput
           isPassword
+          isRequired
           label={translate('common.password')}
           onChangeText={setPassword}
           value={password}
@@ -189,6 +217,7 @@ export const SignupScreen = observer(function SignupScreen() {
         {/* Confirm Password input */}
         <FloatingInput
           isPassword
+          isRequired
           label={translate('signup.confirm_password')}
           onChangeText={setConfirmPassword}
           value={confirmPassword}
@@ -198,6 +227,7 @@ export const SignupScreen = observer(function SignupScreen() {
 
         {/* Full name input */}
         <FloatingInput
+          isRequired
           label={translate('common.fullname')}
           onChangeText={setFullname}
           value={fullname}
@@ -213,6 +243,7 @@ export const SignupScreen = observer(function SignupScreen() {
           }}
         >
           <FloatingInput
+            isRequired
             editable={false}
             label={translate('common.country')}
             value={countries[country] ? countries[country].country_name : ''}

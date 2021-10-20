@@ -12,6 +12,7 @@
     "card": "Card",
     "change_ownership": "Change Ownership",
     "clone": "Clone",
+    "confirm": "Confirm",
     "continue": "Continue",
     "copied_to_clipboard": "Copied to clipboard",
     "country": "Country",
@@ -71,9 +72,14 @@
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
   },
+  "alert": {
+    "lock_app": "Lock the application?",
+    "logout": "Log out from "
+  },
   "error": {
     "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
     "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
+    "biometric_unlock_failed": "Face ID/Touch ID verification failed",
     "network_error": "Network error",
     "required_data": "This data is mandatory",
     "session_login_failed": "Session login failed",
@@ -84,9 +90,11 @@
     "no_associated_account": "There’s no account associated with this email or username. Try another or create a new account.",
     "invalid_authorization_code": "The authorization code is not valid",
     "invalid_data": "Invalid data",
+    "invalid_password": "Invalid password",
     "no_results_found": "No results found for",
     "forbidden": "Your account doesn't have permission to perform this action",
-    "not_found": "Resource not found"
+    "not_found": "Resource not found",
+    "too_many_failed_attempts": "Too many failed attempts"
   },
   "success": {
     "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation.",
@@ -306,6 +314,7 @@
     "policy": "Privacy Policy"
   },
   "menu": {
+    "fingerprint": "Fingerprint",
     "plan": "Manage Plan",
     "invite": "Invite Friends",
     "invitation_to_join": "Invitation to join ",
@@ -334,8 +343,15 @@
     "change_master_pass": "Change Master Password",
     "danger_zone": "Danger Zone",
     "deauthorize_sessions": "Deauthorize sessions",
+    "deauthorize_sessions_desc": "Concerned your account is logged in on another device? Proceed below to deauthorize all computers or devices that you have previously used. This security step is recommended if you previously used a public computer or accidentally saved your password on a device that isn't yours.",
+    "deauthorize_sessions_warning": "Proceeding will also log you out of your current session, requiring you to log back in.",
+    "deauthorize_sessions_success": "All sessions are deauthorized!",
     "delete_account": "Delete account",
+    "delete_account_warning": "Proceed below to delete your account and all associated data.",
+    "delete_account_success": "Your Locker account has been deleted!",
     "delete_all_items": "Delete all account items",
+    "delete_all_items_warning": "Proceed below to delete all items and folders in your vault. Items that belong to an organization that you share with will not be deleted.",
+    "delete_all_items_success": "Your vault has been purged!",
     "on_app_close": "On app close",
     "on_screen_off": "On screen off",
     "timeout": "Timeout",

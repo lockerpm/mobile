@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { AutoImage as Image, Text, Button, Layout } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
@@ -19,6 +19,24 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
     await save(storageKeys.APP_SHOW_BIOMETRIC_INTRO, 1)
     navigation.navigate('mainTab', { screen: 'homeTab' })
   }
+
+  useEffect(() => {
+    const handleBack = (e) => {
+      if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
+        navigation.dispatch(e.data.action)
+        return
+      }
+
+      e.preventDefault()
+      navigation.navigate('mainTab', { screen: 'homeTab' })
+    }
+
+    navigation.addListener('beforeRemove', handleBack)
+
+    return () => {
+      navigation.removeListener('beforeRemove', handleBack)
+    }
+  }, [navigation])
 
   return (
     <Layout>
