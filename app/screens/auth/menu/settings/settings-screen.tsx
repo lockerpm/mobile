@@ -10,6 +10,8 @@ import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { DeauthorizeSessionsModal } from "./deauthorize-sessions-modal"
+import { PurgeAccountModal } from "./purge-account-modal"
+import { DeleteAccountModal } from "./delete-account-modal"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -31,6 +33,8 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
   const [isLoading, setIsLoading] = useState(false)
   const [showDeauthSessionsModal, setShowDeauthSessionsModal] = useState(false)
+  const [showPurgeAccountModal, setShowPurgeAccountModal] = useState(false)
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false)
 
   // METHODS
 
@@ -290,19 +294,21 @@ export const SettingsScreen = observer(function SettingsScreen() {
           }}
         />
         <SettingsItem
-          disabled
           name={translate('settings.delete_all_items')}
           noCaret
           color={color.error}
-          action={() => {}}
+          action={() => {
+            setShowPurgeAccountModal(true)
+          }}
         />
         <SettingsItem
-          disabled
           name={translate('settings.delete_account')}
           noCaret
           noBorder
           color={color.error}
-          action={() => {}}
+          action={() => {
+            setShowDeleteAccountModal(true)
+          }}
         />
       </View>
       {/* Danger zone end */}
@@ -313,6 +319,19 @@ export const SettingsScreen = observer(function SettingsScreen() {
         isOpen={showDeauthSessionsModal}
         onClose={() => setShowDeauthSessionsModal(false)}
       />
+
+      <PurgeAccountModal
+        navigation={navigation}
+        isOpen={showPurgeAccountModal}
+        onClose={() => setShowPurgeAccountModal(false)}
+      />
+
+      <DeleteAccountModal
+        navigation={navigation}
+        isOpen={showDeleteAccountModal}
+        onClose={() => setShowDeleteAccountModal(false)}
+      />
+      {/* Modals end */}
     </Layout>
   )
 })

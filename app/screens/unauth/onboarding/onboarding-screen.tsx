@@ -41,6 +41,11 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
 
   useEffect(() => {
     const handleBack = (e) => {
+      if (e.data.action.type !== 'POP') {
+        navigation.dispatch(e.data.action)
+        return
+      }
+      
       e.preventDefault()
       if (!IS_IOS) {
         BackHandler.exitApp()
