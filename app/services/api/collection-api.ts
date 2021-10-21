@@ -52,7 +52,7 @@ export class CollectionApi {
   async deleteCollection(id: string, teamId: string): Promise<EmptyResult> {
     try {
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.delete(`/cystack_platform/pm/teams/${teamId}/folders/${id}`)
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/teams/${teamId}/folders/${id}/delete`)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
