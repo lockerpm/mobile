@@ -94,8 +94,10 @@ export const FolderAction = (props: Props) => {
             name={translate('common.rename')}
             icon="edit"
             action={() => {
+              onLoadingChange && onLoadingChange(true)
               onClose()
               setTimeout(() => {
+                onLoadingChange && onLoadingChange(false)
                 setIsRenameOpen(true)
               }, 1500)
             }}
@@ -106,8 +108,10 @@ export const FolderAction = (props: Props) => {
             icon="trash"
             textColor={color.error}
             action={() => {
+              onLoadingChange && onLoadingChange(true)
               onClose()
               setTimeout(() => {
+                onLoadingChange && onLoadingChange(false)
                 setShowConfirmModal(true)
               }, 1500)
             }}

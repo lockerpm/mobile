@@ -1,13 +1,14 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ScrollView, ViewStyle, Linking } from "react-native"
-import { Layout, Text, AutoImage as Image } from "../../../../components"
+import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
 import { color, commonStyles, fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { MANAGE_PLAN_URL } from "../../../../config/constants"
 import { Invitation, InvitationData } from "./invitation"
 
@@ -37,6 +38,7 @@ export const MenuScreen = observer(function MenuScreen() {
   const { lock, logout, translate } = useMixins()
 
   const [isLoading, setIsLoading] = useState(false)
+  const [showFingerprint, setShowFingerprint] = useState(false)
 
   const items: MenuItemProps[] = [
     {
@@ -129,22 +131,40 @@ export const MenuScreen = observer(function MenuScreen() {
         {/* User info end */}
 
         {/* Fingerprint */}
-        <View style={[ITEM_CONTAINER, {
-          marginBottom: 15,
-          paddingVertical: 14
-        }]}>
-          <Text
-            preset="black"
-            text={translate('menu.fingerprint')}
+        <Button
+          preset="link"
+          onPress={() => setShowFingerprint(!showFingerprint)}
+          style={[ITEM_CONTAINER, {
+            marginBottom: 15,
+            paddingVertical: 14,
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }]}
+        >
+          <View>
+            <Text
+              preset="black"
+              text={translate('menu.fingerprint')}
+            />
+            {
+              showFingerprint && (
+                <Text
+                  style={{
+                    color: color.error,
+                    marginTop: 5
+                  }}
+                  text={user.fingerprint}
+                />
+              )
+            }
+          </View>
+
+          <FontAwesome
+            name={showFingerprint ? "eye-slash" : "eye"}
+            size={18}
+            color={color.text}
           />
-          <Text
-            style={{
-              color: color.error,
-              marginTop: 5
-            }}
-            text={user.fingerprint}
-          />
-        </View>
+        </Button>
         {/* Fingerprint end */}
 
         {/* Invitations */}

@@ -4,8 +4,9 @@ import { CipherAction } from "../../../../components/cipher/cipher-action/cipher
 
 type Props = {
   isOpen?: boolean,
-  onClose?: Function,
-  navigation: any
+  onClose?: () => void,
+  navigation: any,
+  onLoadingChange?: Function,
 }
 
 

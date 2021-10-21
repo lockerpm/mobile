@@ -230,30 +230,35 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
         isOpen={showPasswordAction}
         onClose={() => setShowPasswordAction(false)}
         navigation={navigation}
+        onLoadingChange={onLoadingChange}
       />
 
       <CardAction
         isOpen={showCardAction}
         onClose={() => setShowCardAction(false)}
         navigation={navigation}
+        onLoadingChange={onLoadingChange}
       />
 
       <IdentityAction
         isOpen={showIdentityAction}
         onClose={() => setShowIdentityAction(false)}
         navigation={navigation}
+        onLoadingChange={onLoadingChange}
       />
 
       <NoteAction
         isOpen={showNoteAction}
         onClose={() => setShowNoteAction(false)}
         navigation={navigation}
+        onLoadingChange={onLoadingChange}
       />
 
       <DeletedAction
         isOpen={showDeletedAction}
         onClose={() => setShowDeletedAction(false)}
         navigation={navigation}
+        onLoadingChange={onLoadingChange}
       />
 
       {/* Action menus end */}

@@ -19,9 +19,11 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
   const selectedCipher = cipherStore.cipherView
 
   const [showAction, setShowAction] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
@@ -52,12 +54,14 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
             navigation={navigation}
             isOpen={showAction}
             onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
           />
         ) : (
           <NoteAction
             navigation={navigation}
             isOpen={showAction}
             onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
           />
         )
       }

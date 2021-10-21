@@ -31,7 +31,7 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
 
   // Computed
   const collection = (() => {
-    return find(collectionStore.collections, e => cipher.collectionIds.includes(e.id)) || {}
+    return find(collectionStore.collections, e => cipher.collectionIds && cipher.collectionIds.includes(e.id)) || {}
   })()
 
   const folder = (() => {
