@@ -21,10 +21,25 @@ export const RenameFolderModal = observer((props: Props) => {
   const { folderService, collectionService } = useCoreService()
   const { notify, translate, notifyApiError } = useMixins()
 
+  // --------------- PARAMS ----------------
+
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const isExisted = !!name.trim() && folderStore.folders.some(f => f.name && f.name === name)
+  // --------------- COMPUTED ----------------
+
+  const isExisted = (() => {
+    if (!name.trim()) {
+      return false
+    }
+    // @ts-ignore
+    if (!folder.organizationId) {
+      return folderStore.folders.some(f => f.name && f.name === name)
+    }
+    return collectionStore.collections.some(f => f.name && f.name === name)
+  })()
+
+  // --------------- METHODS ----------------
 
   const renameFolder = async () => {
     if (!name.trim() || isExisted) {
@@ -65,9 +80,13 @@ export const RenameFolderModal = observer((props: Props) => {
     }
   }
 
+  // --------------- EFFECT ----------------
+
   useEffect(() => {
     setName(folder.name || '')
   }, [isOpen])
+
+  // --------------- RENDER ----------------
 
   return (
     <Modal
@@ -76,6 +95,7 @@ export const RenameFolderModal = observer((props: Props) => {
       title={translate('folder.rename_folder')}
     >
       <FloatingInput
+        persistError
         isInvalid={isExisted}
         errorText={translate('folder.folder_existed')}
         label={translate('common.name')}
