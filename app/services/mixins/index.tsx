@@ -370,7 +370,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       let ciphers = await getCiphers({
         deleted: false,
         searchText: '',
-        filters: [c => c.folderId === f.id && !c.collectionIds.length]
+        filters: [c => c.folderId ? c.folderId === f.id : !c.collectionIds.length]
       })
       f.cipherCount = ciphers ? ciphers.length : 0
     }

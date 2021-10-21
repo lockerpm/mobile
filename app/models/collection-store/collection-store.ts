@@ -1,6 +1,8 @@
 import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
+import { CollectionRequest } from "../../../core/models/request/collectionRequest"
 import { CollectionView } from "../../../core/models/view/collectionView"
+import { CollectionApi } from "../../services/api/collection-api"
 import { withEnvironment } from "../extensions/with-environment"
 
 /**
@@ -18,7 +20,27 @@ export const CollectionStoreModel = types
 
     setCollections: (collections: CollectionView[]) => {
       self.collections = cast(collections)
-    }
+    },
+
+    // ----------------- CRUD -------------------
+
+    createCollection: async (teamId: string, data: CollectionRequest) => {
+      const collectionApi = new CollectionApi(self.environment.api)
+      const res = await collectionApi.postCollection(teamId, data)
+      return res
+    },
+
+    updateCollection: async (id: string, teamId: string, data: CollectionRequest) => {
+      const collectionApi = new CollectionApi(self.environment.api)
+      const res = await collectionApi.putCollection(id, teamId, data)
+      return res
+    },
+
+    deleteCollection: async (id: string, teamId: string) => {
+      const collectionApi = new CollectionApi(self.environment.api)
+      const res = await collectionApi.deleteCollection(id, teamId)
+      return res
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .postProcessSnapshot(omit(['collections']))
 
