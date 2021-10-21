@@ -22,6 +22,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const selectedCipher = cipherStore.cipherView
 
   const [showAction, setShowAction] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ COMPUTED --------------------
 
@@ -32,6 +33,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
 
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
@@ -62,12 +64,14 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
             navigation={navigation}
             isOpen={showAction}
             onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
           />
         ) : (
           <PasswordAction
             navigation={navigation}
             isOpen={showAction}
             onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
           />
         )
       }

@@ -228,7 +228,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // Success
       notify('success', translate('success.master_password_updated'))
 
-      await delay(2000)
+      await delay(500)
 
       return { kind: 'ok' }
     } catch (e) {

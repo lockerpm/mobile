@@ -43,7 +43,7 @@ export const DeleteConfirmModal = (props: Props) => {
         <Text
           preset="black"
           text={title || translate('trash.delete_item')}
-          style={{ fontSize: fontSize.h4, marginBottom: 5, marginTop: 15 }}
+          style={{ fontSize: fontSize.h4, marginBottom: 10, marginTop: 20 }}
         />
         <Text
           text={desc || translate('trash.delete_desc')}

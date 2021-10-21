@@ -20,14 +20,15 @@ export interface CipherActionProps {
   children?: React.ReactNode,
   isOpen?: boolean,
   onClose?: () => void,
-  navigation: any
+  navigation: any,
+  onLoadingChange?: Function
 }
 
 /**
  * Describe your component here
  */
 export const CipherAction = observer(function CipherAction(props: CipherActionProps) {
-  const { navigation, isOpen, onClose, children } = props
+  const { navigation, isOpen, onClose, children, onLoadingChange } = props
 
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
@@ -190,8 +191,12 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                       name={translate('common.change_ownership')}
                       icon="user-o"
                       action={() => {
+                        onLoadingChange && onLoadingChange(true)
                         onClose()
-                        setTimeout(() => setShowOwnershipAction(true), 1500)
+                        setTimeout(() => {
+                          setShowOwnershipAction(true)
+                          onLoadingChange && onLoadingChange(false)
+                        }, 1500)
                       }}
                     />
                   )
@@ -223,8 +228,10 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   icon="trash"
                   textColor={color.error}
                   action={() => {
+                    onLoadingChange && onLoadingChange(true)
                     onClose()
                     setTimeout(() => {
+                      onLoadingChange && onLoadingChange(false)
                       setShowConfirmModal(true)
                     }, 1500)
                   }}
