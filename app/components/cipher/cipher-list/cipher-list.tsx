@@ -34,7 +34,7 @@ export interface CipherListProps {
   folderId?: string,
   collectionId?: string,
   organizationId?: string,
-  isPersonal?: boolean
+  isPersonalUndefined?: boolean
 }
 
 /**
@@ -43,7 +43,7 @@ export interface CipherListProps {
 export const CipherList = observer(function CipherList(props: CipherListProps) {
   const {
     emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId,
-    collectionId, organizationId, isPersonal
+    collectionId, organizationId, isPersonalUndefined
   } = props
   const { getWebsiteLogo, getCiphers, translate } = useMixins()
   const { cipherStore } = useStores()
@@ -130,7 +130,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     if (collectionId !== undefined) {
       res = res.filter(i => i.collectionIds.includes(collectionId))
     }
-    if (isPersonal) {
+    if (isPersonalUndefined) {
       res = res.filter(i => !i.collectionIds.length)
     }
     if (organizationId !== undefined) {

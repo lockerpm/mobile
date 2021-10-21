@@ -79,7 +79,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
         sortList={sortList}
         folderId={folderId}
         collectionId={collectionId}
-        isPersonal={!collectionId}
+        isPersonalUndefined={!collectionId && !folderId}
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('../../../home/all-item/empty-img.png')}

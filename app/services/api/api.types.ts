@@ -3,6 +3,7 @@ import { UserSnapshot } from "../../models/user/user"
 import { DeviceType } from "../../../core/enums"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { FolderResponse } from "../../../core/models/response/folderResponse"
+import { CollectionResponse } from "../../../core/models/response/collectionResponse"
 
 type SessionSnapshot = {
     access_token: string
@@ -43,6 +44,7 @@ export type EmptyResult = { kind: "ok" } | GeneralApiProblem
 export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
 export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
+export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | GeneralApiProblem
 export type GetPlanResult = {
     kind: 'ok'
     data: {
