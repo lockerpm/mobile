@@ -86,12 +86,19 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
       icon: SOCIAL_LOGIN_ICON.facebook,
       handler: async () => {
         try {
-          if (await AccessToken.getCurrentAccessToken()) {
-            LoginManager.logOut()
+          let res = await AccessToken.getCurrentAccessToken()
+          if (!res) {
+            await LoginManager.logInWithPermissions(['public_profile', 'email'])
+            res = await AccessToken.getCurrentAccessToken()
+            if (!res) {
+              setIsLoading(false)
+              notify('error', translate('error.login_failed'))
+              return
+            }
           }
-          await LoginManager.logInWithPermissions(['public_profile', 'email'])
-          const res = await AccessToken.getCurrentAccessToken()
+          
           setIsLoading(true)
+
           const loginRes = await user.socialLogin({
             provider: 'facebook',
             access_token: res.accessToken 

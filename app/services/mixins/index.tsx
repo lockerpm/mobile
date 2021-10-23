@@ -19,7 +19,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { saveShared } from '../../utils/keychain'
 import { GeneralApiProblem } from '../api/api-problem'
-import { LoginManager } from 'react-native-fbsdk-next'
+import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
 
 const { createContext, useContext } = React
 
@@ -295,7 +295,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
 
     // Sign out of Facebook
-    LoginManager.logOut()
+    if (await AccessToken.getCurrentAccessToken()) {
+      LoginManager.logOut()
+    }
 
     // Reset shared data
     await saveShared('autofill', '[]')

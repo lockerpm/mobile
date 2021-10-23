@@ -33,7 +33,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb2100131290023614</string>
+				<string>fb1260309664112849</string>
 			</array>
 		</dict>
 		<dict>
@@ -50,9 +50,9 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
-	<string>2100131290023614</string>
+	<string>1260309664112849</string>
 	<key>FacebookClientToken</key>
-	<string>6b60b7619234d25cf74582f153aee83c</string>
+	<string>082ae6329b491d0314aa527e2f83179e</string>
 	<key>FacebookDisplayName</key>
 	<string>Locker</string>
 	<key>LSRequiresIPhoneOS</key>
