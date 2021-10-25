@@ -10,6 +10,7 @@ import { FolderView } from "../../../../../../core/models/view/folderView"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { useMixins } from "../../../../../services/mixins"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { TEAM_CIPHER_EDITOR } from "../../../../../config/constants"
 
 type FolderCiphersScreenProp = RouteProp<PrimaryParamList, 'folders__ciphers'>;
 
@@ -17,10 +18,10 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
   const navigation = useNavigation()
   const route = useRoute<FolderCiphersScreenProp>()
   const { folderId, collectionId } = route.params
-  const { folderStore, collectionStore } = useStores()
+  const { folderStore, collectionStore, user } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
-  const { translate } = useMixins()
+  const { translate, getTeam } = useMixins()
 
   // Params
   const [isLoading, setIsLoading] = useState(true)
@@ -38,7 +39,10 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
     return find(folders, e => e.id === folderId) || find(collections, e => e.id === collectionId)
   })()
 
+  const hasAddPermission = !collectionId || TEAM_CIPHER_EDITOR.includes(getTeam(user.teams, folder.organizationId).role)
 
+
+  // Render
   return (
     <Layout
       isContentOverlayLoading={isLoading}
@@ -46,7 +50,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
         <BrowseItemHeader
           header={folder.name || translate('folder.unassigned')}
           openSort={() => setIsSortOpen(true)}
-          openAdd={() => setIsAddOpen(true)}
+          openAdd={hasAddPermission ? () => setIsAddOpen(true) : undefined}
           navigation={navigation}
           searchText={searchText}
           onSearch={setSearchText}
@@ -90,9 +94,9 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
             title={translate('all_items.empty.title')}
             desc={translate('all_items.empty.desc')}
             buttonText={translate('all_items.empty.btn')}
-            addItem={() => {
+            addItem={hasAddPermission ? () => {
               setIsAddOpen(true)
-            }}
+            } : undefined}
           />
         )}
       />

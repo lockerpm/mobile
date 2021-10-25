@@ -52,6 +52,9 @@ export const DropdownPicker = observer(function DropdownPicker(props: DropdownPi
         color: color.text
       }}
       TickIconComponent={() => <IoniconsIcon name="checkmark" color={color.palette.green} size={20} />}
+      disabledItemLabelStyle={{
+        opacity: 0.4
+      }}
     />
   )
 })

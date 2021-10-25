@@ -47,7 +47,7 @@ export const BrowseItemEmptyContent = observer(function BrowseItemEmptyContent(p
       />
 
       {
-        (buttonText || addItem) && (
+        (buttonText && addItem) && (
           <Button
             text={buttonText}
             onPress={() => addItem && addItem()}
