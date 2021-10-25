@@ -10,6 +10,7 @@ import { fontSize } from "../../../../theme"
 import { GeneralApiProblem } from "../../../../services/api/api-problem"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { CollectionRequest } from "../../../../../core/models/request/collectionRequest"
+import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
 
 
 interface Props {
@@ -21,7 +22,7 @@ export const NewFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
   const { folderStore, user, collectionStore } = useStores()
   const { folderService, collectionService } = useCoreService()
-  const { notify, translate, notifyApiError } = useMixins()
+  const { notify, translate, notifyApiError, getTeam } = useMixins()
 
   // --------------- PARAMS ----------------
 
@@ -34,7 +35,8 @@ export const NewFolderModal = observer((props: Props) => {
     ...user.teams.map((team) => {
       return {
         label: team.name,
-        value: team.id
+        value: team.id,
+        disabled: !TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, team.id).role) ? 'disabled' : undefined
       }
     })
   ])

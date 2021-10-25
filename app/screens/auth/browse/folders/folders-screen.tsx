@@ -17,6 +17,7 @@ import { useStores } from "../../../../models"
 import { FolderView } from "../../../../../core/models/view/folderView"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { useMixins } from "../../../../services/mixins"
+import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
 
 
 export const FoldersScreen = observer(function FoldersScreen() {
@@ -70,7 +71,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
     ...Object.keys(filteredCollection).map((id) => ({
       id: randomString(),
       title: getTeam(user.teams, id).name,
-      data: getFilteredData(filteredCollection[id], true, getTeam(user.teams, id).role !== 'member')
+      data: getFilteredData(filteredCollection[id], true, TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role))
     }))
   ]
 
