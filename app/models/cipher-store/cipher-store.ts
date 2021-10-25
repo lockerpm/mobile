@@ -62,6 +62,12 @@ export const CipherStoreModel = types
       return res
     },
 
+    shareCipher: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.shareCipher(id, data, score, collectionIds)
+      return res
+    },
+
     toTrashCiphers: async (ids: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.toTrashCiphers(ids)

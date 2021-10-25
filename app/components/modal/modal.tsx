@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useEffect } from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
@@ -23,6 +23,7 @@ export interface ModalProps {
   isOpen?: boolean
   children?: React.ReactNode
   onClose?: () => void
+  onOpen?: () => void
   title?: string
 }
 
@@ -30,8 +31,14 @@ export interface ModalProps {
  * Describe your component here
  */
 export const Modal = observer(function Modal(props: ModalProps) {
-  const { style, isOpen, children, onClose, title } = props
+  const { style, isOpen, children, onClose, onOpen, title } = props
   const styles = flatten([CONTAINER, style])
+
+  useEffect(() => {
+    if (isOpen) {
+      onOpen && onOpen()
+    }
+  }, [isOpen])
 
   return (
     <Dialog

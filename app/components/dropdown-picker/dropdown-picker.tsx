@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { StyleProp, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, fontSize } from "../../theme"
+import { Text } from "../text/text"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import DropDownPicker from 'react-native-dropdown-picker'
 
@@ -17,15 +18,21 @@ export interface DropdownPickerProps {
   setValue: React.Dispatch<React.SetStateAction<any>>
   placeholder?: string
   loading?: boolean
+  emptyText?: string
+  multiple?: boolean
 }
 
 export const DropdownPicker = observer(function DropdownPicker(props: DropdownPickerProps) {
-  const { style, items, setItems, value, setValue, placeholder, loading } = props
+  const { style, items, setItems, value, setValue, placeholder, loading, emptyText, multiple } = props
 
   const [open, setOpen] = useState(false)
 
   return (
     <DropDownPicker
+      mode="BADGE"
+      badgeDotColors={color.palette.green}
+      badgeColors={color.block}
+      multiple={multiple}
       loading={loading}
       placeholder={placeholder}
       open={open}
@@ -55,6 +62,17 @@ export const DropdownPicker = observer(function DropdownPicker(props: DropdownPi
       disabledItemLabelStyle={{
         opacity: 0.4
       }}
+      ListEmptyComponent={emptyText ? () => (
+        <Text
+          text={emptyText}
+          style={{
+            fontSize: fontSize.small,
+            textAlign: 'center',
+            marginHorizontal: 15,
+            marginVertical: 10
+          }}
+        />
+      ) : undefined}
     />
   )
 })
