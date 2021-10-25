@@ -68,7 +68,6 @@ export const ShareModal = observer((props: Props) => {
       notify('success', translate('success.cipher_shared'))
       onClose()
     } else {
-      // @ts-ignore
       notifyApiError(res)
       if (res.kind === 'unauthorized') {
         onClose()
