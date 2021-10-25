@@ -3,7 +3,6 @@ import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { useStores } from "../../../models"
-import { OwnershipAction } from "./ownership-action"
 import { BROWSE_ITEMS } from "../../../common/mappings"
 import { ActionItem } from "./action-item"
 import { CipherType } from "../../../../core/enums"
@@ -16,6 +15,7 @@ import { ActionSheetContent } from "../../action-sheet"
 import { Divider } from "../../divider/divider"
 import { CipherView } from "../../../../core/models/view"
 import { ShareModal } from "./share-modal"
+import { ChangeTeamFolderModal } from "./change-team-folder-modal"
 
 export interface CipherActionProps {
   children?: React.ReactNode,
@@ -31,9 +31,9 @@ export interface CipherActionProps {
 export const CipherAction = observer(function CipherAction(props: CipherActionProps) {
   const { navigation, isOpen, onClose, children, onLoadingChange } = props
 
-  const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
+  const [showChangeTeamFolderModal, setShowChangeTeamFolderModal] = useState(false)
 
   const { toTrashCiphers, getRouteName, translate, getTeam } = useMixins()
   const { cipherStore, user } = useStores()
@@ -48,8 +48,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
     switch (selectedCipher.type) {
       case CipherType.Login:
         return {
-          // img: { uri: selectedCipher.login.uri },
-          img: BROWSE_ITEMS.password.icon,
+          img: { uri: selectedCipher.login.uri },
           backup: BROWSE_ITEMS.password.icon,
           path: 'passwords'
         }
@@ -100,11 +99,6 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
     <View>
       {/* Modals */}
 
-      <OwnershipAction
-        isOpen={showOwnershipAction}
-        onClose={() => setShowOwnershipAction(false)}
-      />
-
       <DeleteConfirmModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
@@ -117,6 +111,11 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
       <ShareModal
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
+      />
+
+      <ChangeTeamFolderModal
+        isOpen={showChangeTeamFolderModal}
+        onClose={() => setShowChangeTeamFolderModal(false)}
       />
 
       {/* Modals end */}
@@ -194,14 +193,13 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 {
                   selectedCipher.organizationId && (
                     <ActionItem
-                      disabled={true}
-                      name={translate('common.change_ownership')}
+                      name={translate('common.team_folders')}
                       icon="user-o"
                       action={() => {
                         onLoadingChange && onLoadingChange(true)
                         onClose()
                         setTimeout(() => {
-                          setShowOwnershipAction(true)
+                          setShowChangeTeamFolderModal(true)
                           onLoadingChange && onLoadingChange(false)
                         }, 1500)
                       }}
