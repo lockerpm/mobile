@@ -15,6 +15,7 @@ import { ActionSheet } from "../../action-sheet/action-sheet"
 import { ActionSheetContent } from "../../action-sheet"
 import { Divider } from "../../divider/divider"
 import { CipherView } from "../../../../core/models/view"
+import { ShareModal } from "./share-modal"
 
 export interface CipherActionProps {
   children?: React.ReactNode,
@@ -32,6 +33,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
 
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
 
   const { toTrashCiphers, getRouteName, translate, getTeam } = useMixins()
   const { cipherStore, user } = useStores()
@@ -110,6 +112,11 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         title={translate('trash.to_trash')}
         desc={translate('trash.to_trash_desc')}
         btnText="OK"
+      />
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
       />
 
       {/* Modals end */}
@@ -216,9 +223,16 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 {
                   !selectedCipher.organizationId && (
                     <ActionItem
-                      disabled={true}
                       name={translate('common.share')}
                       icon="share-square-o"
+                      action={() => {
+                        onLoadingChange && onLoadingChange(true)
+                        onClose()
+                        setTimeout(() => {
+                          setShowShareModal(true)
+                          onLoadingChange && onLoadingChange(false)
+                        }, 1500)
+                      }}
                     />
                   )
                 }

@@ -143,7 +143,9 @@ export function MainNavigator() {
           cipherStore.setLastSync(new Date().getTime())
           await Promise.all([
             loadFolders(),
-            loadCollections()
+            loadCollections(),
+            user.loadTeams(),
+            user.loadPlan()
           ])
           if (cipherStore.selectedCipher) {
             const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)

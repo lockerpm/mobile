@@ -22,7 +22,7 @@ export const NewFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
   const { folderStore, user, collectionStore } = useStores()
   const { folderService, collectionService } = useCoreService()
-  const { notify, translate, notifyApiError, getTeam } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
 
   // --------------- PARAMS ----------------
 
@@ -32,11 +32,12 @@ export const NewFolderModal = observer((props: Props) => {
   const [owner, setOwner] = useState('me');
   const [owners, setOwners] = useState([
     { label: translate('common.me'), value: 'me' },
-    ...user.teams.map((team) => {
+    ...user.teams.filter((team) => {
+      return TEAM_COLLECTION_EDITOR.includes(team.role)
+    }).map((team) => {
       return {
         label: team.name,
-        value: team.id,
-        disabled: !TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, team.id).role) ? 'disabled' : undefined
+        value: team.id
       }
     })
   ])
