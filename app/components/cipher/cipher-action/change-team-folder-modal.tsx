@@ -106,7 +106,7 @@ export const ChangeTeamFolderModal = observer((props: Props) => {
 
       <Button
         text={translate('common.save')}
-        isDisabled={isLoading || !collectionIds.length || isEqual(collectionIds, selectedCipher.collectionIds)}
+        isDisabled={isLoading || (collectionIds && !collectionIds.length) || isEqual(collectionIds, selectedCipher.collectionIds)}
         isLoading={isLoading}
         onPress={handleShare}
         style={{

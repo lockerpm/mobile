@@ -165,13 +165,13 @@ export function MainNavigator() {
 
     ws.onerror = (e) => {
       if (__DEV__) {
-        console.log(`SOCKET ERROR: ${e}`)
+        console.log(`SOCKET ERROR: ${JSON.stringify(e)}`)
       }
     }
 
     ws.onclose = (e) => {
       if (__DEV__) {
-        console.log(`SOCKET CLOSE: ${e}`);
+        console.log(`SOCKET CLOSE: ${JSON.stringify(e)}`);
       }
     }
 
