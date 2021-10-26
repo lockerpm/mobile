@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
@@ -7,7 +7,6 @@ import { Button, Text } from "../components"
 import { color, fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
-import NetInfo from "@react-native-community/netinfo"
 import { useMixins } from "../services/mixins"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useStores } from "../models"
@@ -20,13 +19,15 @@ import BrowseIcon from './icons/menu.svg'
 import ToolsIcon from './icons/settings.svg'
 // @ts-ignore
 import MenuIcon from './icons/menu-2.svg'
+import { observer } from "mobx-react-lite"
 
 
 const Tab = createBottomTabNavigator()
 
-const TabBar = ({ state, descriptors, navigation, isOffline }) => {
+// @ts-ignore
+const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
   const { translate } = useMixins()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const insets = useSafeAreaInsets()
   
   const mappings = {
@@ -51,12 +52,12 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
       notiCount: user.invitations.length
     }
   }
-  
+
   return (
     <View style={{ paddingBottom: insets.bottom }}>
       {/* Offline mode */}
       {
-        isOffline && (
+        uiStore.isOffline && (
           <View style={{
             backgroundColor: '#161922',
             flexDirection: 'row',
@@ -172,25 +173,13 @@ const TabBar = ({ state, descriptors, navigation, isOffline }) => {
       {/* Tab items end */}
     </View>
   );
-}
+})
 
 export function MainTabNavigator() {
-  const [isOffline, setIsOffline] = useState(false)
-  useEffect(() => {
-    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
-      const offline = !state.isInternetReachable
-      setIsOffline(offline)
-    })
-
-    return () => {
-      removeNetInfoSubscription()
-    };
-  }, []);
-
   return (
     <Tab.Navigator
       initialRouteName="homeTab"
-      tabBar={props => <TabBar {...props} isOffline={isOffline} />}
+      tabBar={props => <TabBar {...props} />}
     >
       <Tab.Screen name="homeTab" component={AllItemScreen} />
       <Tab.Screen name="browseTab" component={BrowseNavigator} />
