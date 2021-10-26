@@ -42,6 +42,12 @@ export const CipherStoreModel = types
       self.lastSync = ts
     },
 
+    clearStore: () => {
+      self.generatedPassword = null
+      self.selectedCipher = null
+      self.selectedFolder = null
+    },
+
     // ----------------- CRUD -------------------
 
     syncData: async () => {

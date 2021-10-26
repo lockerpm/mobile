@@ -22,6 +22,10 @@ export const CollectionStoreModel = types
       self.collections = cast(collections)
     },
 
+    clearStore: () => {
+      self.collections = cast([])
+    },
+
     // ----------------- CRUD -------------------
 
     createCollection: async (teamId: string, data: CollectionRequest) => {
