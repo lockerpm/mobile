@@ -7,8 +7,9 @@ import { useMixins } from "../../../services/mixins"
 import { commonStyles } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
-import { GOOGLE_CLIENT_ID } from "../../../config/constants"
+import { GITHUB_CONFIG, GOOGLE_CLIENT_ID } from "../../../config/constants"
 import { LoginManager, AccessToken } from "react-native-fbsdk-next"
+import { authorize } from 'react-native-app-auth'
 
 
 type Props = {
@@ -92,7 +93,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
             res = await AccessToken.getCurrentAccessToken()
             if (!res) {
               setIsLoading(false)
-              notify('error', translate('error.login_failed'))
+              notify('error', translate('error.something_went_wrong'))
               return
             }
           }
@@ -119,7 +120,32 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
 
     github: {
       icon: SOCIAL_LOGIN_ICON.github,
-      handler: () => {}
+      handler: async () => {
+        try {
+          const res = await authorize(GITHUB_CONFIG)
+          if (!res) {
+            setIsLoading(false)
+            notify('error', translate('error.something_went_wrong'))
+            return
+          }
+          setIsLoading(true)
+
+          const loginRes = await user.socialLogin({
+            provider: 'github',
+            access_token: res.accessToken 
+          })
+          setIsLoading(false)
+          if (loginRes.kind !== 'ok') {
+            notify('error', translate('error.login_failed'))
+          } else {
+            onLoggedIn()
+          }
+        } catch (e) {
+          setIsLoading(false)
+          __DEV__ && console.log(e)
+          notify('error', e.toString())
+        }
+      }
     }
   }
 

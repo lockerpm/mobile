@@ -40,10 +40,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>locker</string>
+			<string>com.cystack.lockerapp</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>locker</string>
+				<string>com.cystack.locker</string>
 			</array>
 		</dict>
 	</array>

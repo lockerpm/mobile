@@ -63,6 +63,7 @@
     "querystring-es3": "~0.2.0",
     "react": "17.0.1",
     "react-native": "0.64.2",
+    "react-native-app-auth": "^6.4.0",
     "react-native-biometrics": "^2.1.4",
     "react-native-crypto": "^2.2.0",
     "react-native-device-info": "^8.1.3",

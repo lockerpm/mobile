@@ -8,10 +8,11 @@ import { useMixins } from "../../../services/mixins"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
-import { GOOGLE_CLIENT_ID, PRIVACY_POLICY_URL, TERMS_URL } from "../../../config/constants"
+import { GITHUB_CONFIG, GOOGLE_CLIENT_ID, PRIVACY_POLICY_URL, TERMS_URL } from "../../../config/constants"
 import { Checkbox } from "react-native-ui-lib"
 import countries from '../../../common/countries.json'
 import { AccessToken, LoginManager } from "react-native-fbsdk-next"
+import { authorize } from "react-native-app-auth"
 
 
 export const SignupScreen = observer(function SignupScreen() {
@@ -73,7 +74,7 @@ export const SignupScreen = observer(function SignupScreen() {
             res = await AccessToken.getCurrentAccessToken()
             if (!res) {
               setIsLoading(false)
-              notify('error', translate('error.login_failed'))
+              notify('error', translate('error.something_went_wrong'))
               return
             }
           }
@@ -100,7 +101,32 @@ export const SignupScreen = observer(function SignupScreen() {
 
     github: {
       icon: SOCIAL_LOGIN_ICON.github,
-      handler: () => {}
+      handler: async () => {
+        try {
+          const res = await authorize(GITHUB_CONFIG)
+          if (!res) {
+            setIsLoading(false)
+            notify('error', translate('error.something_went_wrong'))
+            return
+          }
+          setIsLoading(true)
+
+          const loginRes = await user.socialLogin({
+            provider: 'github',
+            access_token: res.accessToken 
+          })
+          setIsLoading(false)
+          if (loginRes.kind !== 'ok') {
+            notify('error', translate('error.login_failed'))
+          } else {
+            onLoggedIn()
+          }
+        } catch (e) {
+          setIsLoading(false)
+          __DEV__ && console.log(e)
+          notify('error', e.toString())
+        }
+      }
     }
   }
 
