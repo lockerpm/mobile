@@ -138,6 +138,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 4007
         versionName "1.6"
+        manifestPlaceholders = [
+            appAuthRedirectScheme: 'com.cystack.locker'
+        ]
     }
     splits {
         abi {
