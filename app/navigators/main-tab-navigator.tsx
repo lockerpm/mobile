@@ -178,7 +178,7 @@ export function MainTabNavigator() {
   const [isOffline, setIsOffline] = useState(false)
   useEffect(() => {
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
-      const offline = !(state.isConnected && state.isInternetReachable)
+      const offline = !state.isInternetReachable
       setIsOffline(offline)
     })
 
