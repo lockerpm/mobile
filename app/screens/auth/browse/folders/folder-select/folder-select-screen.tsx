@@ -87,7 +87,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
       {/* None */}
       <Button
         preset="link"
-        onPress={() => setSelectedFolder(null)}
+        onPress={() => setSelectedFolder('unassigned')}
         style={[commonStyles.SECTION_PADDING, {
           backgroundColor: color.palette.white,
           marginBottom: 10
