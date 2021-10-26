@@ -281,6 +281,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   const logout = async () => {
     await Promise.all([
       user.logout(),
+      cipherStore.clearStore(),
+      collectionStore.clearStore(),
+      folderStore.clearStore(),
       folderService.clearCache(),
       cipherService.clearCache(),
       collectionService.clearCache(),
