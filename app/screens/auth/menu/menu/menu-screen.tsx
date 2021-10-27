@@ -48,11 +48,11 @@ export const MenuScreen = observer(function MenuScreen() {
         Linking.openURL(MANAGE_PLAN_URL)
       }
     },
-    {
-      icon: <InviteIcon height={22} />,
-      name: translate('menu.invite'),
-      disabled: true
-    },
+    // {
+    //   icon: <InviteIcon height={22} />,
+    //   name: translate('menu.invite'),
+    //   disabled: true
+    // },
     {
       icon: <SettingsIcon height={22} />,
       name: translate('common.settings'),
