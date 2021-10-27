@@ -99,6 +99,7 @@ type ToolsItem = {
   icon: ImageSourcePropType & ImageURISource,
   routeName: string
   svgIcon?: any
+  premium?: boolean
 }
 
 type ToolsItemContainer = {
@@ -120,14 +121,16 @@ export const TOOLS_ITEMS: ToolsItemContainer = {
     desc: 'pass_health.desc',
     icon: require('./images/vault/password-health.png'),
     routeName: 'passwordHealth',
-    svgIcon: PasswordHealthIcon
+    svgIcon: PasswordHealthIcon,
+    premium: true
   },
   dataBreachScanner: {
     label: 'data_breach_scanner.title',
     desc: 'data_breach_scanner.desc',
     icon: require('./images/vault/data-breach-scanner.png'),
     routeName: 'dataBreachScanner',
-    svgIcon: DataBreachScannerIcon
+    svgIcon: DataBreachScannerIcon,
+    premium: true
   }
 }
 

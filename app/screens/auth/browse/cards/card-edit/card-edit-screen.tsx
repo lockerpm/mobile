@@ -38,7 +38,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
   const { mode } = route.params
   const { newCipher, createCipher, updateCipher, translate } = useMixins()
   const { cipherStore } = useStores()
-  const selectedCipher = cipherStore.cipherView
+  const selectedCipher: CipherView = cipherStore.cipherView
 
   // Params
 
@@ -54,13 +54,19 @@ export const CardEditScreen = observer(function CardEditScreen() {
   const [securityCode, setSecurityCode] = useState(mode !== 'add' ? selectedCipher.card.code : '')
   const [note, setNote] = useState(mode !== 'add' ? selectedCipher.name : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
+  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
+  const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
   // Watchers
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (cipherStore.selectedFolder) {
-        setFolder(cipherStore.selectedFolder)
+        if (cipherStore.selectedFolder === 'unassigned') {
+          setFolder(null)
+        } else {
+          setFolder(cipherStore.selectedFolder)
+        }
         cipherStore.setSelectedFolder(null)
       }
     });
@@ -76,6 +82,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
     if (mode === 'add') {
       payload = newCipher(CipherType.Card)
     } else {
+      // @ts-ignore
       payload = {...selectedCipher}
     }
 
@@ -94,7 +101,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
     payload.notes = note
     payload.folderId = folder
     payload.card = data
-    const collectionIds = payload.collectionIds
+    payload.organizationId = organizationId
 
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
@@ -264,6 +271,10 @@ export const CardEditScreen = observer(function CardEditScreen() {
         note={note}
         onChangeNote={setNote}
         folderId={folder}
+        organizationId={organizationId}
+        setOrganizationId={setOrganizationId}
+        collectionIds={collectionIds}
+        setCollectionIds={setCollectionIds}
       />
       {/* Others end */}
     </Layout>

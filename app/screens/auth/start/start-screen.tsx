@@ -16,7 +16,7 @@ export const StartScreen = observer(function StartScreen() {
 
   const mounted = async () => {
     if (!uiStore.isOffline) {
-      await delay(1000)
+      await delay(500)
       const [syncRes, invitationsRes] = await Promise.all([
         getSyncData(),
         user.getInvitations(),
@@ -36,7 +36,7 @@ export const StartScreen = observer(function StartScreen() {
         user.setInvitations(invitationsRes.data)
       }
 
-      await delay(1000)
+      await delay(500)
     }
     
     await Promise.all([

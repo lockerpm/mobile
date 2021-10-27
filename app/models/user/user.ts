@@ -81,7 +81,8 @@ export const UserModel = types
       self.pwd_user_id = ''
       self.is_pwd_manager = false
       self.default_team_id = ''
-      self.teams = null
+      self.teams = cast([])
+      self.invitations = cast([])
       self.plan = null
       self.fingerprint = ''
     },

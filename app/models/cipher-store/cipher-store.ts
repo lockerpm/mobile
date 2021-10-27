@@ -42,6 +42,12 @@ export const CipherStoreModel = types
       self.lastSync = ts
     },
 
+    clearStore: () => {
+      self.generatedPassword = null
+      self.selectedCipher = null
+      self.selectedFolder = null
+    },
+
     // ----------------- CRUD -------------------
 
     syncData: async () => {
@@ -59,6 +65,12 @@ export const CipherStoreModel = types
     updateCipher: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.putCipher(id, data, score, collectionIds)
+      return res
+    },
+
+    shareCipher: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.shareCipher(id, data, score, collectionIds)
       return res
     },
 

@@ -10,6 +10,7 @@ import { DeleteConfirmModal } from "../trash/delete-confirm-modal"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
+import { GeneralApiProblem } from "../../../../services/api/api-problem"
 
 
 type Props = {
@@ -22,12 +23,33 @@ type Props = {
 
 export const FolderAction = (props: Props) => {
   const { isOpen, onClose, folder, onLoadingChange } = props
-  const { folderStore } = useStores()
+  const { folderStore, collectionStore } = useStores()
   const { notify, translate, notifyApiError } = useMixins()
 
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [isRenameOpen, setIsRenameOpen] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+
+  const handleDelete = async () => {
+    onLoadingChange && onLoadingChange(true)
+    let res: { kind: string } | GeneralApiProblem
+
+    // @ts-ignore
+    if (!folder.organizationId) {
+      res = await folderStore.deleteFolder(folder.id)
+    } else {
+      // @ts-ignore
+      res = await collectionStore.deleteCollection(folder.id, folder.organizationId)
+    }
+
+    if (res.kind === 'ok') {
+      notify('success', translate('folder.folder_deleted'))
+    } else {
+      // @ts-ignore
+      notifyApiError(res)
+    }
+    onLoadingChange && onLoadingChange(false)
+  }
 
   return (
     <View>
@@ -47,16 +69,7 @@ export const FolderAction = (props: Props) => {
       <DeleteConfirmModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
-        onConfirm={async () => {
-          onLoadingChange && onLoadingChange(true)
-          const res = await folderStore.deleteFolder(folder.id)
-          if (res.kind === 'ok') {
-            notify('success', translate('folder.folder_deleted'))
-          } else {
-            notifyApiError(res)
-          }
-          onLoadingChange && onLoadingChange(false)
-        }}
+        onConfirm={handleDelete}
         title={translate('folder.delete_modal.title')}
         desc={translate('folder.delete_modal.desc')}
         btnText={translate('folder.delete_modal.btn')}
@@ -94,8 +107,10 @@ export const FolderAction = (props: Props) => {
             name={translate('common.rename')}
             icon="edit"
             action={() => {
+              onLoadingChange && onLoadingChange(true)
               onClose()
               setTimeout(() => {
+                onLoadingChange && onLoadingChange(false)
                 setIsRenameOpen(true)
               }, 1500)
             }}
@@ -106,8 +121,10 @@ export const FolderAction = (props: Props) => {
             icon="trash"
             textColor={color.error}
             action={() => {
+              onLoadingChange && onLoadingChange(true)
               onClose()
               setTimeout(() => {
+                onLoadingChange && onLoadingChange(false)
                 setShowConfirmModal(true)
               }, 1500)
             }}

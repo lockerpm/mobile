@@ -17,14 +17,15 @@ export interface DeletedActionProps {
   children?: React.ReactNode,
   isOpen?: boolean,
   onClose?: () => void,
-  navigation: any
+  navigation: any,
+  onLoadingChange?: Function,
 }
 
 /**
  * Describe your component here
  */
 export const DeletedAction = observer(function DeletedAction(props: DeletedActionProps) {
-  const { navigation, isOpen, onClose, children } = props
+  const { navigation, isOpen, onClose, children, onLoadingChange } = props
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
@@ -173,8 +174,12 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
             icon="trash"
             textColor={color.error}
             action={() => {
+              onLoadingChange && onLoadingChange(true)
               onClose()
-              setTimeout(() => setShowConfirmModal(true), 1500)
+              setTimeout(() => {
+                setShowConfirmModal(true)
+                onLoadingChange && onLoadingChange(false)
+              }, 1500)
             }}
           />
         </ActionSheetContent>

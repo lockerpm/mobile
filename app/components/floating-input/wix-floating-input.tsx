@@ -26,7 +26,8 @@ export interface WixFloatingInputProps extends TextInputProps {
   textarea?: boolean,
   maskType?: TextInputMaskTypeProp,
   maskOptions?: TextInputMaskOptionProp,
-  copyAble?: boolean
+  copyAble?: boolean,
+  persistError?: boolean
 }
 
 /**
@@ -36,7 +37,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
   const {
     style, inputStyle, label, isPassword, value, placeholder,
     editable = true, disabled, buttonRight, onChangeText, copyAble, textarea,
-    maskType, maskOptions, isRequired,
+    maskType, maskOptions, isRequired, persistError,
     ...rest
   } = props
 
@@ -89,7 +90,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
         transformer={validateMask}
         onChangeText={onChangeText}
         underlineColor={{ 
-          focus: color.palette.green, 
+          focus: persistError && isInvalid ? color.error : color.palette.green, 
           default: isInvalid ? color.error : color.disabled 
         }}
         style={[{
@@ -114,7 +115,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
 
       {/* Error message */}
       {
-        (errorText && isInvalid && !isFocus) ? (
+        (errorText && isInvalid && !(isFocus && !persistError)) ? (
           <Text
             text={errorText}
             style={{

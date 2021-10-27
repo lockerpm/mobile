@@ -3,12 +3,14 @@ import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
 import { Text } from "../../text/text"
+import filter from 'lodash/filter'
 import find from 'lodash/find'
 import { CipherView } from "../../../../core/models/view"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import { commonStyles, fontSize } from "../../../theme"
 import { FOLDER_IMG } from "../../../common/mappings"
+import { CollectionView } from "../../../../core/models/view/collectionView"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
@@ -30,8 +32,8 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
   const styles = flatten([CONTAINER, style])
 
   // Computed
-  const collection = (() => {
-    return find(collectionStore.collections, e => cipher.collectionIds.includes(e.id)) || {}
+  const collections = (() => {
+    return filter(collectionStore.collections, e => cipher.collectionIds && cipher.collectionIds.includes(e.id)) || []
   })()
 
   const folder = (() => {
@@ -56,16 +58,26 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
         style={{ fontSize: fontSize.small, marginTop: 20, marginBottom: 10 }}
       />
       {
-        cipher.organizationId ? (
-          <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-            <FOLDER_IMG.share.svg height={30} />
-            <Text
-              preset="black"
-              text={collection.name || translate('folder.unassigned')}
-              style={{ marginLeft: 10 }}
-            />
-          </View>
-        ) : (
+        collections.map((c: CollectionView) => (
+          (
+            <View
+              key={c.id}
+              style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+                marginBottom: 10
+              }]}
+            >
+              <FOLDER_IMG.share.svg height={30} />
+              <Text
+                preset="black"
+                text={c.name || translate('folder.unassigned')}
+                style={{ marginLeft: 10 }}
+              />
+            </View>
+          )
+        ))
+      }
+      {
+        (!cipher.organizationId || !!folder.name) && (
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             <FOLDER_IMG.normal.svg height={30} />
             <Text

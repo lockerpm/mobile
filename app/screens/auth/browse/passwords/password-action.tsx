@@ -9,7 +9,8 @@ import { ActionItem } from "../../../../components/cipher/cipher-action/action-i
 type Props = {
   isOpen?: boolean,
   onClose?: () => void,
-  navigation: any
+  navigation: any,
+  onLoadingChange?: Function
 }
 
 

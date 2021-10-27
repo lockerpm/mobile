@@ -9,9 +9,9 @@ import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
 import ReactNativeBiometrics from "react-native-biometrics"
-import { DeauthorizeSessionsModal } from "./deauthorize-sessions-modal"
-import { PurgeAccountModal } from "./purge-account-modal"
-import { DeleteAccountModal } from "./delete-account-modal"
+// import { DeauthorizeSessionsModal } from "./deauthorize-sessions-modal"
+// import { PurgeAccountModal } from "./purge-account-modal"
+// import { DeleteAccountModal } from "./delete-account-modal"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -32,9 +32,9 @@ export const SettingsScreen = observer(function SettingsScreen() {
   // PARAMS
 
   const [isLoading, setIsLoading] = useState(false)
-  const [showDeauthSessionsModal, setShowDeauthSessionsModal] = useState(false)
-  const [showPurgeAccountModal, setShowPurgeAccountModal] = useState(false)
-  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false)
+  // const [showDeauthSessionsModal, setShowDeauthSessionsModal] = useState(false)
+  // const [showPurgeAccountModal, setShowPurgeAccountModal] = useState(false)
+  // const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false)
 
   // METHODS
 
@@ -278,7 +278,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
       {/* Security end */}
 
       {/* Danger zone */}
-      <Text
+      {/* <Text
         text={translate('settings.danger_zone').toUpperCase()}
         style={[SECTION_TITLE, {
           marginTop: 15
@@ -310,11 +310,11 @@ export const SettingsScreen = observer(function SettingsScreen() {
             setShowDeleteAccountModal(true)
           }}
         />
-      </View>
+      </View> */}
       {/* Danger zone end */}
 
       {/* Modals */}
-      <DeauthorizeSessionsModal
+      {/* <DeauthorizeSessionsModal
         navigation={navigation}
         isOpen={showDeauthSessionsModal}
         onClose={() => setShowDeauthSessionsModal(false)}
@@ -330,7 +330,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
         navigation={navigation}
         isOpen={showDeleteAccountModal}
         onClose={() => setShowDeleteAccountModal(false)}
-      />
+      /> */}
       {/* Modals end */}
     </Layout>
   )
