@@ -34,7 +34,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
             <Button
               key={index}
               preset="link"
-              isDisabled={item.premium && user.plan.alias === 'pm_free'}
+              isDisabled={item.premium && (user.plan && user.plan.alias === 'pm_free')}
               onPress={() => {
                 navigation.navigate(item.routeName, { fromTools: true })
               }}
