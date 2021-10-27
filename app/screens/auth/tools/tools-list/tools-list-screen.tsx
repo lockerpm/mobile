@@ -4,12 +4,14 @@ import { View } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Text, Button, Layout, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, fontSize } from "../../../../theme"
+import { color, commonStyles, fontSize } from "../../../../theme"
 import { TOOLS_ITEMS } from "../../../../common/mappings"
 import { useMixins } from "../../../../services/mixins"
+import { useStores } from "../../../../models"
 
 export const ToolsListScreen = observer(function ToolsListScreen() {
   const navigation = useNavigation()
+  const { user } = useStores()
   const { translate } = useMixins()
 
   return (
@@ -32,6 +34,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
             <Button
               key={index}
               preset="link"
+              isDisabled={item.premium && user.plan.alias === 'pm_free'}
               onPress={() => {
                 navigation.navigate(item.routeName, { fromTools: true })
               }}
@@ -53,10 +56,36 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
               <View
                 style={{ flex: 1, paddingHorizontal: 10 }}
               >
-                <Text
-                  tx={item.label}
-                  style={{ color: color.title, marginVertical: 5 }}
-                />
+                <View
+                  style={commonStyles.CENTER_HORIZONTAL_VIEW}
+                >
+                  <Text
+                    tx={item.label}
+                    style={{ color: color.title, marginVertical: 5 }}
+                  />
+
+                  {
+                    item.premium && (
+                      <View style={{
+                        paddingHorizontal: 10,
+                        paddingVertical: 2,
+                        backgroundColor: color.textBlack,
+                        marginLeft: 7,
+                        borderRadius: 3
+                      }}>
+                        <Text
+                          text="PREMIUM"
+                          style={{
+                            fontWeight: 'bold',
+                            color: color.palette.white,
+                            fontSize: fontSize.small
+                          }}
+                        />
+                      </View>
+                    )
+                  }
+                </View>
+                
                 <Text
                   tx={item.desc}
                   style={{ fontSize: fontSize.small }}
