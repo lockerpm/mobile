@@ -9,7 +9,8 @@ import { useMixins } from "../../../../services/mixins"
 type Props = {
   isOpen?: boolean,
   onClose?: () => void,
-  navigation: any
+  navigation: any,
+  onLoadingChange?: Function,
 }
 
 

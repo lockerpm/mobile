@@ -22,13 +22,15 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
   const route = useRoute<NoteEditScreenProp>()
   const { mode } = route.params
   const { cipherStore } = useStores()
-  const selectedCipher = cipherStore.cipherView
+  const selectedCipher: CipherView = cipherStore.cipherView
   const { newCipher, createCipher, updateCipher, translate } = useMixins()
 
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
   const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
+  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
+  const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
   // Params
   const [isLoading, setIsLoading] = useState(false)
@@ -37,7 +39,11 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (cipherStore.selectedFolder) {
-        setFolder(cipherStore.selectedFolder)
+        if (cipherStore.selectedFolder === 'unassigned') {
+          setFolder(null)
+        } else {
+          setFolder(cipherStore.selectedFolder)
+        }
         cipherStore.setSelectedFolder(null)
       }
     });
@@ -52,13 +58,14 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
     if (mode === 'add') {
       payload = newCipher(CipherType.SecureNote)
     } else {
+      // @ts-ignore
       payload = {...selectedCipher}
     }
 
     payload.name = name
     payload.notes = note
     payload.folderId = folder
-    const collectionIds = payload.collectionIds
+    payload.organizationId = organizationId
 
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
@@ -154,6 +161,10 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
       <CipherOthersInfo
         navigation={navigation}
         folderId={folder}
+        organizationId={organizationId}
+        setOrganizationId={setOrganizationId}
+        collectionIds={collectionIds}
+        setCollectionIds={setCollectionIds}
       />
       {/* Others end */}
     </Layout>

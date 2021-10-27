@@ -21,9 +21,11 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
   const selectedCipher: CipherView = cipherStore.cipherView
 
   const [showAction, setShowAction] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
@@ -54,12 +56,14 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
             navigation={navigation}
             isOpen={showAction}
             onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
           />
         ) : (
           <CardAction
             navigation={navigation}
             isOpen={showAction}
             onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
           />
         )
       }

@@ -20,6 +20,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
   const { translate } = useMixins()
 
   const [showAction, setShowAction] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const textFields = [
     {
@@ -94,6 +95,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
 
   return (
     <Layout
+      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
@@ -125,12 +127,14 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
             navigation={navigation}
             isOpen={showAction}
             onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
           />
         ) : (
           <IdentityAction
             navigation={navigation}
             isOpen={showAction}
             onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
           />
         )
       }

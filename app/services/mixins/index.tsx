@@ -13,13 +13,13 @@ import { CipherRequest } from '../../../core/models/request/cipherRequest'
 import { load } from '../../utils/storage'
 import { delay } from '../../utils/delay'
 import { translate as tl, TxKeyPath } from "../../i18n"
-import { GET_LOGO_URL } from '../../config/constants'
+import { GET_LOGO_URL, GOOGLE_CLIENT_ID } from '../../config/constants'
 import i18n from "i18n-js"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { saveShared } from '../../utils/keychain'
 import { GeneralApiProblem } from '../api/api-problem'
-import { LoginManager } from 'react-native-fbsdk-next'
+import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
 
 const { createContext, useContext } = React
 
@@ -228,7 +228,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       // Success
       notify('success', translate('success.master_password_updated'))
 
-      await delay(2000)
+      await delay(500)
 
       return { kind: 'ok' }
     } catch (e) {
@@ -281,6 +281,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   const logout = async () => {
     await Promise.all([
       user.logout(),
+      cipherStore.clearStore(),
+      collectionStore.clearStore(),
+      folderStore.clearStore(),
       folderService.clearCache(),
       cipherService.clearCache(),
       collectionService.clearCache(),
@@ -289,13 +292,18 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     ])
 
     // Sign out of Google
+    GoogleSignin.configure({
+      webClientId: GOOGLE_CLIENT_ID
+    })
     const isSignedIn = await GoogleSignin.isSignedIn()
     if (isSignedIn) {
       await GoogleSignin.signOut()
     }
 
     // Sign out of Facebook
-    LoginManager.logOut()
+    if (await AccessToken.getCurrentAccessToken()) {
+      LoginManager.logOut()
+    }
 
     // Reset shared data
     await saveShared('autofill', '[]')
@@ -370,7 +378,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       let ciphers = await getCiphers({
         deleted: false,
         searchText: '',
-        filters: [c => c.folderId === f.id && !c.collectionIds.length]
+        filters: [c => c.folderId ? c.folderId === f.id : !c.collectionIds.length]
       })
       f.cipherCount = ciphers ? ciphers.length : 0
     }

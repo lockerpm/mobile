@@ -24,7 +24,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
   const { mode } = route.params
   const { getPasswordStrength, newCipher, createCipher, updateCipher, translate } = useMixins()
   const { cipherStore } = useStores()
-  const selectedCipher = cipherStore.cipherView
+  const selectedCipher: CipherView = cipherStore.cipherView
 
   // Params
   const [isLoading, setIsLoading] = useState(false)
@@ -36,6 +36,8 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
   const [url, setUrl] = useState(mode !== 'add' ? selectedCipher.login.uri : '')
   const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
+  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
+  const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
   // Watchers
   useEffect(() => {
@@ -46,7 +48,11 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       }
 
       if (cipherStore.selectedFolder) {
-        setFolder(cipherStore.selectedFolder)
+        if (cipherStore.selectedFolder === 'unassigned') {
+          setFolder(null)
+        } else {
+          setFolder(cipherStore.selectedFolder)
+        }
         cipherStore.setSelectedFolder(null)
       }
     });
@@ -61,6 +67,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
     if (mode === 'add') {
       payload = newCipher(CipherType.Login)
     } else {
+      // @ts-ignore
       payload = {...selectedCipher}
     }
 
@@ -77,8 +84,8 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
     payload.notes = note
     payload.folderId = folder
     payload.login = data
+    payload.organizationId = organizationId
     const passwordStrength = getPasswordStrength(password).score
-    const collectionIds = payload.collectionIds
 
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
@@ -243,6 +250,10 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
         note={note}
         onChangeNote={setNote}
         folderId={folder}
+        organizationId={organizationId}
+        setOrganizationId={setOrganizationId}
+        collectionIds={collectionIds}
+        setCollectionIds={setCollectionIds}
       />
       {/* Others end */}
     </Layout>

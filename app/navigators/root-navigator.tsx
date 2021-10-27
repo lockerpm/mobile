@@ -50,7 +50,7 @@ const RootStack = () => {
   useEffect(() => {
     // Check network
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
-      const offline = !(state.isConnected && state.isInternetReachable)
+      const offline = !state.isInternetReachable
       uiStore.setIsOffline(offline)
     })
 

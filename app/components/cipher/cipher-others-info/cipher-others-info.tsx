@@ -6,10 +6,10 @@ import { Text } from "../../text/text"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import find from 'lodash/find'
 import { useStores } from "../../../models"
-import { OwnershipAction } from "../cipher-action/ownership-action"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { FloatingInput } from "../../floating-input"
 import { useMixins } from "../../../services/mixins"
+import { OwnershipSelectionModal } from "../cipher-action/ownership-selection-modal"
 
 
 export interface CipherOthersInfoProps {
@@ -17,18 +17,25 @@ export interface CipherOthersInfoProps {
   hasNote?: boolean,
   note?: string,
   onChangeNote?: Function,
-  folderId?: string
+  folderId?: string,
+  organizationId: string,
+  setOrganizationId: Function,
+  collectionIds: string[],
+  setCollectionIds: Function
 }
 
 /**
  * Describe your component here
  */
 export const CipherOthersInfo = observer(function CipherOthersInfo(props: CipherOthersInfoProps) {
-  const { navigation, hasNote, note, onChangeNote, folderId = null } = props
-  const { folderStore } = useStores()
-  const { translate } = useMixins()
+  const { 
+    navigation, hasNote, note, onChangeNote, folderId = null, 
+    organizationId, collectionIds, setOrganizationId, setCollectionIds
+  } = props
+  const { folderStore, user } = useStores()
+  const { translate, getTeam } = useMixins()
 
-  const [showOwnershipAction, setShowOwnershipAction] = useState(false)
+  const [showOwnershipSelectionModal, setShowOwnershipSelectionModal] = useState(false)
 
   const folder = (() => {
     return folderId ? find(folderStore.folders, e => e.id === folderId) || {} : {}
@@ -87,9 +94,10 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
 
         {/* Ownership */}
         <Button
-          isDisabled={true}
           preset="link"
-          onPress={() => setShowOwnershipAction(true)}
+          onPress={() => {
+            setShowOwnershipSelectionModal(true)
+          }}
           style={{
             marginTop: 20
           }}
@@ -107,7 +115,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
               />
               <Text
                 preset="black"
-                text={translate('common.none')}
+                text={getTeam(user.teams, organizationId).name || translate('common.me')}
               />
             </View>
             <FontAwesomeIcon
@@ -136,9 +144,13 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
       </View>
       {/* Others end */}
 
-      <OwnershipAction
-        isOpen={showOwnershipAction}
-        onClose={() => setShowOwnershipAction(false)}
+      <OwnershipSelectionModal
+        isOpen={showOwnershipSelectionModal}
+        onClose={() => setShowOwnershipSelectionModal(false)}
+        organizationId={organizationId}
+        setOrganizationId={setOrganizationId}
+        collectionIds={collectionIds}
+        setCollectionIds={setCollectionIds}
       />
     </View>
   )

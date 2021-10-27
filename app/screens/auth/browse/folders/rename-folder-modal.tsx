@@ -12,19 +12,34 @@ import { CollectionRequest } from "../../../../../core/models/request/collection
 interface Props {
   isOpen?: boolean,
   onClose?: () => void,
-  folder: FolderView | CollectionView
+  folder: FolderView | CollectionView,
 }
 
 export const RenameFolderModal = observer((props: Props) => {
   const { isOpen, onClose, folder } = props
-  const { folderStore } = useStores()
+  const { folderStore, collectionStore } = useStores()
   const { folderService, collectionService } = useCoreService()
   const { notify, translate, notifyApiError } = useMixins()
+
+  // --------------- PARAMS ----------------
 
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const isExisted = !!name.trim() && folderStore.folders.some(f => f.name && f.name === name)
+  // --------------- COMPUTED ----------------
+
+  const isExisted = (() => {
+    if (!name.trim()) {
+      return false
+    }
+    // @ts-ignore
+    if (!folder.organizationId) {
+      return folderStore.folders.some(f => f.name && f.name === name)
+    }
+    return collectionStore.collections.some(f => f.name && f.name === name)
+  })()
+
+  // --------------- METHODS ----------------
 
   const renameFolder = async () => {
     if (!name.trim() || isExisted) {
@@ -37,7 +52,8 @@ export const RenameFolderModal = observer((props: Props) => {
     data.name = name
     let res = { kind: 'unknown' }
 
-    if (folder instanceof FolderView) {
+    // @ts-ignore
+    if (!data.organizationId) {
       // @ts-ignore
       const folderEnc = await folderService.encrypt(data)
       const payload = new FolderRequest(folderEnc)
@@ -46,7 +62,8 @@ export const RenameFolderModal = observer((props: Props) => {
       // @ts-ignore
       const collectionEnc = await collectionService.encrypt(data)
       const payload = new CollectionRequest(collectionEnc)
-      res = await folderStore.updateFolder(folder.id, payload)
+      // @ts-ignore
+      res = await collectionStore.updateCollection(folder.id, data.organizationId, payload)
     }
 
     setIsLoading(false)
@@ -63,9 +80,13 @@ export const RenameFolderModal = observer((props: Props) => {
     }
   }
 
+  // --------------- EFFECT ----------------
+
   useEffect(() => {
     setName(folder.name || '')
   }, [isOpen])
+
+  // --------------- RENDER ----------------
 
   return (
     <Modal
@@ -74,6 +95,7 @@ export const RenameFolderModal = observer((props: Props) => {
       title={translate('folder.rename_folder')}
     >
       <FloatingInput
+        persistError
         isInvalid={isExisted}
         errorText={translate('folder.folder_existed')}
         label={translate('common.name')}

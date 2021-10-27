@@ -58,6 +58,7 @@
     "search": "Search",
     "second": "second",
     "seconds": "seconds",
+    "select": "Select",
     "settings": "Settings",
     "security": "Security",
     "share": "Share",
@@ -65,6 +66,7 @@
     "skip": "Skip",
     "sort": "Sort",
     "submit": "Submit",
+    "team_folders": "Team folders",
     "trash": "Trash",
     "tools": "Tools",
     "unlock": "Unlock"
@@ -94,7 +96,9 @@
     "no_results_found": "No results found for",
     "forbidden": "Your account doesn't have permission to perform this action",
     "not_found": "Resource not found",
-    "too_many_failed_attempts": "Too many failed attempts"
+    "too_many_failed_attempts": "Too many failed attempts",
+    "no_team_available": "Nothing here. Join a team with the role Manager to start sharing items.",
+    "no_collection_available": "You don't have access to any team folder."
   },
   "success": {
     "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation.",
@@ -106,6 +110,7 @@
     "cipher_restored": "Item restored",
     "cipher_trashed": "Item moved to trash",
     "cipher_updated": "Item updated",
+    "cipher_shared": "Item shared",
     "sync_success": "Data synchronized"
   },
   "password_strength": {

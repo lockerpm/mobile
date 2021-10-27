@@ -14061,6 +14061,19 @@ react-native-animatable@1.3.3, react-native-animatable@^1.1.0:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-app-auth@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-app-auth/-/react-native-app-auth-6.4.0.tgz#a392a9370983954a49c079515e3116e6699ab868"
+  integrity sha512-m9DOM/Bgplrk6gD+sqshsbdG9XB4eSaA4rZXuPnwTXYTcHxCy0KvJ3jRDLKDY1im78lXNnifGeHicv7chGAwQw==
+  dependencies:
+    invariant "2.2.4"
+    react-native-base64 "0.0.2"
+
+react-native-base64@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-base64/-/react-native-base64-0.0.2.tgz#c28463c2c6779ac3ec5fdd12979ebc8c5f9b410a"
+  integrity sha512-Fu/J1a2y0X22EJDWqJR2oEa1fpP4gTFjYxk8ElJdt1Yak3HOXmFJ7EohLVHU2DaQkgmKfw8qb7u/48gpzveRbg==
+
 react-native-biometrics@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/react-native-biometrics/-/react-native-biometrics-2.1.4.tgz#e201e9f18baeb560eeaba8d41fbd4f90d04152fe"
@@ -14109,6 +14122,11 @@ react-native-device-info@^8.1.3:
   version "8.4.0"
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.4.0.tgz#c434af5c928c7f8e2c3b1a1ca07061b83d50ccd4"
   integrity sha512-/ZHDJajkEmjNmjvm52o7pqIpR2uKocD66iH00GMe5QpUdM9u9vDxS2hgcRbgrVaKEfA5IRIBctpalYMrrbQU+Q==
+
+react-native-dropdown-picker@^5.1.28:
+  version "5.1.28"
+  resolved "https://registry.yarnpkg.com/react-native-dropdown-picker/-/react-native-dropdown-picker-5.1.28.tgz#c49a898ecff5baaf98770b35645d3fcef6049780"
+  integrity sha512-REF1QMuuJhVrNh71IvgCY594wT6+l4KQG8TRgwPUfvnWPukzbNHClGkqf6E7Y7xZS5eK6NeE1uAzoZZJntdwWA==
 
 react-native-fbsdk-next@^4.6.0:
   version "4.6.0"

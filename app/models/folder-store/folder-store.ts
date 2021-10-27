@@ -22,6 +22,10 @@ export const FolderStoreModel = types
       self.folders = cast(folders)
     },
 
+    clearStore: () => {
+      self.folders = cast([])
+    },
+
     // ----------------- CRUD -------------------
 
     createFolder: async (data: FolderRequest) => {

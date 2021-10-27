@@ -20,6 +20,7 @@ import { color } from "../theme"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../models"
+import { observer } from "mobx-react-lite"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -80,13 +81,40 @@ export type PrimaryParamList = {
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createStackNavigator<PrimaryParamList>()
 
-export function MainNavigator() {
+export const MainNavigator = observer(function MainNavigator() {
   const navigation = useNavigation()
   const { lock, getSyncData, getCipherById, loadFolders, loadCollections, logout } = useMixins()
   const { uiStore, user, cipherStore } = useStores()
 
   const [socket, setSocket] = useState(null)
   const [appIsActive, setAppIsActive] = useState(true) 
+  const [appIsReady, setAppIsReady] = useState(false)
+
+  // ------------------ METHODS --------------------
+
+  // Sync
+  const handleSync = async () => {
+    await getSyncData()
+    cipherStore.setLastSync(new Date().getTime())
+    await Promise.all([
+      loadFolders(),
+      loadCollections(),
+      user.loadTeams(),
+      user.loadPlan()
+    ])
+    if (cipherStore.selectedCipher) {
+      const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
+      cipherStore.setSelectedCipher(updatedCipher)
+    }
+  }
+
+  // Check invitation
+  const handleInvitationSync = async () => {
+    const invitationsRes = await user.getInvitations()
+    if (invitationsRes.kind === 'ok') {
+      user.setInvitations(invitationsRes.data)
+    }
+  }
 
   // App screen lock trigger
   const _handleAppStateChange = async (nextAppState: string) => {
@@ -136,25 +164,13 @@ export function MainNavigator() {
 
     ws.onmessage = async (e) => {
       const data = JSON.parse(e.data)
-      console.log('WEBSOCKET EVENT: ' + data.event)
+      __DEV__ && console.log('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
         case 'sync':
-          await getSyncData()
-          cipherStore.setLastSync(new Date().getTime())
-          await Promise.all([
-            loadFolders(),
-            loadCollections()
-          ])
-          if (cipherStore.selectedCipher) {
-            const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
-            cipherStore.setSelectedCipher(updatedCipher)
-          }
+          await handleSync()
           break
         case 'members':
-          const invitationsRes = await user.getInvitations()
-          if (invitationsRes.kind === 'ok') {
-            user.setInvitations(invitationsRes.data)
-          }
+          await handleInvitationSync()
           break
         default:
           break
@@ -163,18 +179,20 @@ export function MainNavigator() {
 
     ws.onerror = (e) => {
       if (__DEV__) {
-        console.log(`SOCKET ERROR: ${e}`)
+        console.log(`SOCKET ERROR: ${JSON.stringify(e)}`)
       }
     }
 
     ws.onclose = (e) => {
       if (__DEV__) {
-        console.log(`SOCKET CLOSE: ${e}`);
+        console.log(`SOCKET CLOSE: ${JSON.stringify(e)}`);
       }
     }
 
     return ws
   }
+
+  // ------------------ EFFECT --------------------
 
   // Life cycle
   useEffect(() => {
@@ -182,7 +200,9 @@ export function MainNavigator() {
     AppState.addEventListener("change", _handleAppStateChange)
 
     // Connect web socket
-    setSocket(generateSocket())
+    !appIsReady && setSocket(generateSocket())
+
+    setAppIsReady(true)
 
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
@@ -196,11 +216,16 @@ export function MainNavigator() {
       socket && socket.close()
       setSocket(null)
     } else {
-      setSocket(generateSocket())
+      if (appIsReady) {
+        setSocket(generateSocket())
+        handleSync()
+        handleInvitationSync()
+      }
     }
   }, [uiStore.isOffline])
 
-  // Render
+  // ------------------ RENDER --------------------
+  
   return (
     <UserInactivity
       timeForInactivity={(user.appTimeout && (user.appTimeout > 0)) ? user.appTimeout : 1000}
@@ -243,7 +268,7 @@ export function MainNavigator() {
       </Stack.Navigator>
     </UserInactivity>
   )
-}
+})
 
 /**
  * A list of routes from which we're allowed to leave the app when

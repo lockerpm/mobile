@@ -30,7 +30,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const { mode } = route.params
   const { newCipher, createCipher, updateCipher, translate } = useMixins()
   const { cipherStore } = useStores()
-  const selectedCipher = cipherStore.cipherView
+  const selectedCipher: CipherView = cipherStore.cipherView
 
   // Params
 
@@ -57,13 +57,19 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const [country, setCountry] = useState(mode !== 'add' ? selectedCipher.identity.country : '')
   const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
+  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
+  const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
   // Watchers
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (cipherStore.selectedFolder) {
-        setFolder(cipherStore.selectedFolder)
+        if (cipherStore.selectedFolder === 'unassigned') {
+          setFolder(null)
+        } else {
+          setFolder(cipherStore.selectedFolder)
+        }
         cipherStore.setSelectedFolder(null)
       }
     });
@@ -79,6 +85,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
     if (mode === 'add') {
       payload = newCipher(CipherType.Identity)
     } else {
+      // @ts-ignore
       payload = {...selectedCipher}
     }
 
@@ -105,7 +112,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
     payload.notes = note
     payload.folderId = folder
     payload.identity = data
-    const collectionIds = payload.collectionIds
+    payload.organizationId = organizationId
 
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
@@ -337,6 +344,11 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
         hasNote
         note={note}
         onChangeNote={setNote}
+        folderId={folder}
+        organizationId={organizationId}
+        setOrganizationId={setOrganizationId}
+        collectionIds={collectionIds}
+        setCollectionIds={setCollectionIds}
       />
       {/* Others end */}
     </Layout>
