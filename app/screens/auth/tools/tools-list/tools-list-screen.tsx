@@ -61,7 +61,11 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                 >
                   <Text
                     tx={item.label}
-                    style={{ color: color.title, marginVertical: 5 }}
+                    style={{ 
+                      color: color.title, 
+                      marginVertical: 5,
+                      marginRight: item.premium ? 7 : 0
+                    }}
                   />
 
                   {
@@ -70,7 +74,6 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                         paddingHorizontal: 10,
                         paddingVertical: 2,
                         backgroundColor: color.textBlack,
-                        marginLeft: 7,
                         borderRadius: 3
                       }}>
                         <Text

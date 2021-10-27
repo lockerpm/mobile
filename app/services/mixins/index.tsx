@@ -13,7 +13,7 @@ import { CipherRequest } from '../../../core/models/request/cipherRequest'
 import { load } from '../../utils/storage'
 import { delay } from '../../utils/delay'
 import { translate as tl, TxKeyPath } from "../../i18n"
-import { GET_LOGO_URL } from '../../config/constants'
+import { GET_LOGO_URL, GOOGLE_CLIENT_ID } from '../../config/constants'
 import i18n from "i18n-js"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -292,6 +292,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     ])
 
     // Sign out of Google
+    GoogleSignin.configure({
+      webClientId: GOOGLE_CLIENT_ID
+    })
     const isSignedIn = await GoogleSignin.isSignedIn()
     if (isSignedIn) {
       await GoogleSignin.signOut()
