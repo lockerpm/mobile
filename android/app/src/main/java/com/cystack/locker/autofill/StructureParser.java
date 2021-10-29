@@ -19,7 +19,7 @@ import java.util.List;
  */
 @RequiresApi(api = Build.VERSION_CODES.O)
 class StructureParser {
-    static private final String TAG = StructureParser.class.getName();
+    static private final String TAG = "LockerAutoFillService";
 
     final private AssistStructure structure;
     private Result result;
@@ -51,12 +51,15 @@ class StructureParser {
         }
 
         if (hints != null && hints.length > 0) {
-            if (Arrays.stream(hints).anyMatch(View.AUTOFILL_HINT_USERNAME::equals))
+            if (Arrays.stream(hints).anyMatch(View.AUTOFILL_HINT_USERNAME::equals)) {
                 result.username.add(node.getAutofillId());
-            else if (Arrays.stream(hints).anyMatch(View.AUTOFILL_HINT_EMAIL_ADDRESS::equals))
+            }
+            else if (Arrays.stream(hints).anyMatch(View.AUTOFILL_HINT_EMAIL_ADDRESS::equals)) {
                 result.email.add(node.getAutofillId());
-            else if (Arrays.stream(hints).anyMatch(View.AUTOFILL_HINT_PASSWORD::equals))
+            }
+            else if (Arrays.stream(hints).anyMatch(View.AUTOFILL_HINT_PASSWORD::equals)) {
                 result.password.add(node.getAutofillId());
+            }
         } else if (node.getAutofillType() == View.AUTOFILL_TYPE_TEXT) {
             // Attempt to match based on Field Type
             int inputType = node.getInputType();
@@ -82,7 +85,6 @@ class StructureParser {
         for (int i=0; i<node.getChildCount(); ++i) {
             parseViewNode(node.getChildAt(i));
         }
-
     }
 
     // Attempt to infer the AutoFill type from a string
