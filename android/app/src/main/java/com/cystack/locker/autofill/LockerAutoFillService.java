@@ -21,7 +21,8 @@ import android.widget.RemoteViews;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.view.View.GONE;
+import com.facebook.react.bridge.ReactApplicationContext;
+
 
 @TargetApi(Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
@@ -41,7 +42,8 @@ public class LockerAutoFillService extends AutofillService {
     ) {
         Log.d(TAG, "onFillRequest");
 
-        AutoFillHelpers autoFillHelper = new AutoFillHelpers();
+        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
+        AutoFillHelpers autoFillHelper = new AutoFillHelpers(reactContext);
 
         // Get the structure from the request
         List<FillContext> context = request.getFillContexts();
@@ -55,13 +57,14 @@ public class LockerAutoFillService extends AutofillService {
 
         try {
             for (String domain: parseResult.webDomain) {
+                Log.d(TAG, domain);
                 // Search Buttercup Entries that match this domain name
                 ArrayList<AutoFillEntry> matchedEntries = autoFillHelper.getAutoFillEntriesForDomain(domain);
+
                 for (AutoFillEntry entry: matchedEntries) {
                     // Build the presentation of the datasets
                     RemoteViews remoteView = new RemoteViews(getPackageName(), android.R.layout.simple_list_item_1);
                     remoteView.setTextViewText(android.R.id.text1, entry.getUsername());
-                    remoteView.setTextViewText(android.R.id.text2, entry.getEntryPath());
                     Dataset.Builder builder = new Dataset.Builder(remoteView);
 
                     // Assign the username/password to any found view IDs
@@ -84,7 +87,7 @@ public class LockerAutoFillService extends AutofillService {
     @Override
     public void onSaveRequest(@NonNull SaveRequest request, @NonNull SaveCallback callback) {
         Log.d(TAG, "onSaveRequest");
-        callback.onFailure("Unfortunately Buttercup does not support saving credentials yet.");
+        callback.onFailure("Unfortunately Locker does not support saving credentials yet.");
     }
 
     @Override
