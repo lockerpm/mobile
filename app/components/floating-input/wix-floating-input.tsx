@@ -12,6 +12,7 @@ import { translate } from "../../i18n"
 
 
 export interface WixFloatingInputProps extends TextInputProps {
+  outerRef?: any,
   style?: StyleProp<ViewStyle>,
   inputStyle?: StyleProp<ViewStyle>,
   isRequired?: boolean,
@@ -35,7 +36,7 @@ export interface WixFloatingInputProps extends TextInputProps {
  */
 export const WixFloatingInput = observer(function WixFloatingInput(props: WixFloatingInputProps) {
   const {
-    style, inputStyle, label, isPassword, value, placeholder,
+    outerRef, style, inputStyle, label, isPassword, value, placeholder,
     editable = true, disabled, buttonRight, onChangeText, copyAble, textarea,
     maskType, maskOptions, isRequired, persistError,
     ...rest
@@ -76,6 +77,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
     <View style={style}>
       {/* Input */}
       <TextField
+        ref={outerRef}
         autoCapitalize="none"
         enableErrors={false}
         floatingPlaceholder

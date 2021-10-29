@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
@@ -30,6 +30,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
   const [isError, setIsError] = useState(false)
   const [username, setUsername] = useState(user.email || '')
   const [password, setPassword] = useState('')
+  const passwordRef = useRef(null)
 
   // ------------------ Methods ----------------------
 
@@ -171,11 +172,13 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
         onChangeText={setUsername}
         value={username}
         style={{ width: '100%', marginBottom: 10 }}
+        onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
       />
       {/* Username input end */}
 
       {/* Password input */}
       <FloatingInput
+        outerRef={passwordRef}
         isPassword
         isInvalid={isError}
         label={translate('common.password')}

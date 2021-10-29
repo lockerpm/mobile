@@ -344,7 +344,7 @@
     "desc": "Check if sensitive data is leaked online"
   },
   "settings": {
-    "autofill_service": "AutoFill service",
+    "autofill_service": "AutoFill Service",
     "change_master_pass": "Change Master Password",
     "danger_zone": "Danger Zone",
     "deauthorize_sessions": "Deauthorize sessions",

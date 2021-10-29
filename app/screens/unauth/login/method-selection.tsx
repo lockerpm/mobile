@@ -45,6 +45,22 @@ export const MethodSelection = observer(function MethodSelection(props: Props) {
 
   // ------------------------------ RENDER -------------------------------
 
+  const renderOptionContent = (title: string, icon: string, iconSize: number) => (
+    <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+      <FontAwesomeIcon
+        name={icon}
+        size={iconSize}
+        color={color.textBlack}
+      />
+      <Text style={{
+        color: color.textBlack,
+        marginLeft: 10
+      }}>
+        {title}
+      </Text>
+    </View>
+  )
+
   return (
     <View>
       <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -71,7 +87,7 @@ export const MethodSelection = observer(function MethodSelection(props: Props) {
         methods.map((item, index) => (
           <Button
             key={index}
-            preset="outline"
+            preset="outlinePlain"
             isDisabled={item.type === 'mail' && sendingEmail}
             isLoading={item.type === 'mail' && sendingEmail}
             onPress={() => item.type === 'mail' ? sendEmail(item.data) : onSelect(item.type, item.data)}
@@ -81,38 +97,10 @@ export const MethodSelection = observer(function MethodSelection(props: Props) {
             }}
           >
             {
-              item.type === 'mail' && (
-                <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginHorizontal: 5 }]}>
-                  <FontAwesomeIcon
-                    name="envelope-o"
-                    size={18}
-                    color={color.palette.green}
-                  />
-                  <Text style={{
-                    color: color.palette.green,
-                    marginLeft: 10
-                  }}>
-                    Email {item.data}
-                  </Text>
-                </View>
-              )
+              item.type === 'mail' && renderOptionContent(`Email ${item.data}`, 'envelope-o', 18)
             }
             {
-              item.type === 'smart_otp' && (
-                <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-                  <FontAwesomeIcon
-                    name="mobile-phone"
-                    size={24}
-                    color={color.palette.green}
-                  />
-                  <Text style={{
-                    color: color.palette.green,
-                    marginLeft: 10
-                  }}>
-                    {translate('common.authentication_app')}
-                  </Text>
-                </View>
-              )
+              item.type === 'smart_otp' && renderOptionContent(translate('common.authentication_app'), 'mobile-phone', 24)
             }
           </Button>
         ))
