@@ -63,7 +63,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                     tx={item.label}
                     style={{ 
                       color: color.title, 
-                      marginVertical: 5,
+                      marginBottom: 3,
                       marginRight: item.premium ? 7 : 0
                     }}
                   />
@@ -81,7 +81,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                           style={{
                             fontWeight: 'bold',
                             color: color.palette.white,
-                            fontSize: fontSize.small
+                            fontSize: fontSize.mini
                           }}
                         />
                       </View>
