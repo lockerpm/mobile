@@ -79,6 +79,7 @@
     "logout": "Đăng xuất khỏi "
   },
   "error": {
+    "not_supported": "Không hỗ trợ",
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
     "biometric_unlock_failed": "Xác thực bằng Face ID/Touch ID không thành công",
@@ -344,7 +345,7 @@
     "desc": "Kiểm tra xem dữ liệu nhạy cảm của bạn có bị lộ trên internet hay không"
   },
   "settings": {
-    "autofill_service": "Tự động điền (AutoFill)",
+    "autofill_service": "Tự động điền (Auto-fill)",
     "change_master_pass": "Thay đổi mật khẩu chính",
     "danger_zone": "Khu vực nguy hiểm",
     "deauthorize_sessions": "Vô hiệu hóa tất cả các phiên",
@@ -370,6 +371,12 @@
       "step_3": "3. Chọn \"Tự động điền mật khẩu\"",
       "step_4": "4. Bật \"Tự động điền mật khẩu\"",
       "step_5": "5. Chọn \"Locker\""
+    },
+    "android": {
+      "android_autofill": {
+        "name": "Android Auto-fill",
+        "desc": "Dịch vụ tự động điền của Locker sử dụng AutoFill Framework của Android để hỗ trợ điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn"
+      }
     }
   }
 }

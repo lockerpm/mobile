@@ -79,6 +79,7 @@
     "logout": "Log out from "
   },
   "error": {
+    "not_supported": "Not supported",
     "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
     "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
     "biometric_unlock_failed": "Face ID/Touch ID verification failed",
@@ -344,7 +345,7 @@
     "desc": "Check if sensitive data is leaked online"
   },
   "settings": {
-    "autofill_service": "AutoFill Service",
+    "autofill_service": "Auto-fill Service",
     "change_master_pass": "Change Master Password",
     "danger_zone": "Danger Zone",
     "deauthorize_sessions": "Deauthorize sessions",
@@ -370,6 +371,12 @@
       "step_3": "3. Tap \"AutoFill Passwords\"",
       "step_4": "4. Turn on AutoFill",
       "step_5": "5. Select \"Locker\""
+    },
+    "android": {
+      "android_autofill": {
+        "name": "Android Auto-fill",
+        "desc": "The Locker auto-fill service uses the Android Autofill Framework to assist in filling logins into other apps on your device"
+      }
     }
   }
 }
