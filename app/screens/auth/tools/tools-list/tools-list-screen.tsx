@@ -57,7 +57,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                 style={{ flex: 1, paddingHorizontal: 10 }}
               >
                 <View
-                  style={commonStyles.CENTER_HORIZONTAL_VIEW}
+                  style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}
                 >
                   <Text
                     tx={item.label}

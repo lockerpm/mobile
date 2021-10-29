@@ -10,8 +10,7 @@ const CENTER_VIEW: ViewStyle = {
 const CENTER_HORIZONTAL_VIEW: ViewStyle = {
   // flex: 1,
   flexDirection: "row", 
-  alignItems: "center",
-  flexWrap: 'wrap'
+  alignItems: "center"
 }
 
 const SECTION_PADDING: ViewStyle = {
