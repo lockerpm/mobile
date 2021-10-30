@@ -59,8 +59,9 @@ const RootStack = () => {
       uiStore.setDeepLinkAction('add', domain)
       return
     }
-    if (path === 'save') {
-      uiStore.setDeepLinkAction('save')
+    if (path === 'save?domain=') {
+      const domain = path.split('domain=')[1]
+      uiStore.setDeepLinkAction('save', domain)
       return
     }
   }

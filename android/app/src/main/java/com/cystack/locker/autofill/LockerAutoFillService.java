@@ -64,7 +64,7 @@ public class LockerAutoFillService extends AutofillService {
         try {
             for (String domain: parseResult.webDomain) {
                 Log.d(TAG, domain);
-                // Search Buttercup Entries that match this domain name
+                // Search Locker Entries that match this domain name
                 ArrayList<AutoFillEntry> matchedEntries = autoFillHelper.getAutoFillEntriesForDomain(domain);
 
                 for (AutoFillEntry entry: matchedEntries) {
@@ -103,7 +103,7 @@ public class LockerAutoFillService extends AutofillService {
                     PendingIntent.FLAG_CANCEL_CURRENT
             ).getIntentSender();
 
-            // Finally build the Login with Buttercup dataset and add it to the list
+            // Finally build the Login with Locker dataset and add it to the list
             Dataset.Builder builder = new Dataset.Builder(remoteView);
             builder.setAuthentication(intentSender);
 
