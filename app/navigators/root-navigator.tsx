@@ -16,6 +16,7 @@ import {
 import { color, fontSize } from "../theme"
 import { useStores } from "../models"
 import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message'
+import { Linking } from "react-native"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -46,6 +47,23 @@ const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = () => {
   const { uiStore } = useStores()
+  const handleDeepLinking = (url: string | null) => {
+    __DEV__ && console.log(`Deep link ${url}`)
+    if (!url) {
+      return
+    }
+
+    const path = url.split('://')[1]
+    if (path.startsWith('add?domain=')) {
+      const domain = path.split('domain=')[1]
+      uiStore.setDeepLinkAction('add', domain)
+      return
+    }
+    if (path === 'save') {
+      uiStore.setDeepLinkAction('save')
+      return
+    }
+  }
 
   useEffect(() => {
     // Check network
@@ -54,7 +72,17 @@ const RootStack = () => {
       uiStore.setIsOffline(offline)
     })
 
-    return removeNetInfoSubscription
+    // Check deep linking
+    Linking.getInitialURL().then(handleDeepLinking)
+    const checkDeepLinking = ({ url }) => {
+      handleDeepLinking(url)
+    }
+    Linking.addEventListener('url', checkDeepLinking)
+
+    return () => {
+      removeNetInfoSubscription()
+      Linking.removeEventListener('url', checkDeepLinking)
+    }
   }, [])
 
   return (

@@ -13,8 +13,10 @@ import {
   PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen, PasswordHealthScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
-  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, AutofillServiceScreen
+  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen
 } from "../screens"
+// @ts-ignore
+import { AutofillServiceScreen } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
 import { color } from "../theme"
 import { useMixins } from "../services/mixins"
@@ -121,6 +123,7 @@ export const MainNavigator = observer(function MainNavigator() {
     // Ohter state (background/inactive)
     if (nextAppState !== 'active') {
       setAppIsActive(false)
+      uiStore.clearDeepLink()
       return
     }
 
@@ -132,7 +135,6 @@ export const MainNavigator = observer(function MainNavigator() {
         navigation.navigate('onBoarding')
       } else {
         await lock()
-        console.log('app state change -> lock')
         navigation.navigate('lock')
       }
     }
@@ -146,7 +148,6 @@ export const MainNavigator = observer(function MainNavigator() {
         navigation.navigate('onBoarding')
       } else {
         await lock()
-        console.log('inactive -> lock')
         navigation.navigate('lock')
       }
     }
@@ -223,6 +224,16 @@ export const MainNavigator = observer(function MainNavigator() {
       }
     }
   }, [uiStore.isOffline])
+
+  // Listen to deep linking
+  useEffect(() => {
+    if (!appIsReady) {
+      return
+    }
+    if (['add', 'save'].includes(uiStore.deepLinkAction)) {
+      navigation.navigate('passwords__edit', { mode: 'add' })
+    }
+  }, [uiStore.deepLinkAction])
 
   // ------------------ RENDER --------------------
   
