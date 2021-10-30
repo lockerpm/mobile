@@ -7,10 +7,12 @@ import { SortAction } from "./sort-action"
 import { AddAction } from "./add-action"
 import { useMixins } from "../../../../services/mixins"
 import { Alert } from "react-native"
+import { useStores } from "../../../../models"
 
 
 export const AllItemScreen = observer(function AllItemScreen() {
   const navigation = useNavigation()
+  const { uiStore } = useStores()
   const { translate, lock } = useMixins()
 
   // -------------- PARAMS ------------------
@@ -63,6 +65,14 @@ export const AllItemScreen = observer(function AllItemScreen() {
       navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
+
+  useEffect(() => {
+    if (uiStore.deepLinkAction === 'add') {
+      if (['add', 'save'].includes(uiStore.deepLinkAction)) {
+        navigation.navigate('passwords__edit', { mode: 'add' })
+      }
+    }
+  }, [])
 
   // -------------- RENDER ------------------
 

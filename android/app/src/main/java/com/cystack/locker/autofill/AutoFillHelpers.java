@@ -56,8 +56,6 @@ public class AutoFillHelpers {
                     }
                 }
             }
-
-            entries.add(new AutoFillEntry("user 2", "pass 2", "entry 2"));
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
             return entries;

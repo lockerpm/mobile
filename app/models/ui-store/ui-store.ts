@@ -10,7 +10,9 @@ export const UiStoreModel = types
     isOffline: types.maybeNull(types.boolean),
 
     // Cache
-    selectedCountry: types.maybeNull(types.string)
+    selectedCountry: types.maybeNull(types.string),
+    deepLinkAction: types.maybeNull(types.string),
+    deepLinkAddDomain: types.maybeNull(types.string)
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -20,6 +22,18 @@ export const UiStoreModel = types
 
     setSelectedCountry(country_code: string) {
       self.selectedCountry = country_code
+    },
+
+    setDeepLinkAction(action: 'save' | 'add', data?: string) {
+      self.deepLinkAction = action
+      if (action === 'add') {
+        self.deepLinkAddDomain = data || ''
+      }
+    },
+
+    clearDeepLink() {
+      self.deepLinkAction = null
+      self.deepLinkAddDomain = null
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

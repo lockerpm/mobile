@@ -23,23 +23,41 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
   const route = useRoute<PasswordEditScreenProp>()
   const { mode } = route.params
   const { getPasswordStrength, newCipher, createCipher, updateCipher, translate } = useMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 
-  // Params
+  // ----------------- PARAMS ------------------
+
   const [isLoading, setIsLoading] = useState(false)
 
   // Forms
-  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  const [username, setUsername] = useState(mode !== 'add' ? selectedCipher.login.username : '')
-  const [password, setPassword] = useState(mode !== 'add' ? selectedCipher.login.password : '')
-  const [url, setUrl] = useState(mode !== 'add' ? selectedCipher.login.uri : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
-  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
-  const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
+  const [name, setName] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [url, setUrl] = useState('')
+  const [note, setNote] = useState('')
+  const [folder, setFolder] = useState(null)
+  const [organizationId, setOrganizationId] = useState(null)
+  const [collectionIds, setCollectionIds] = useState([])
 
-  // Watchers
+  // ----------------- EFFECTS ------------------
+
+  useEffect(() => {
+    if (mode !== 'add') {
+      setName(selectedCipher.name)
+      setUsername(selectedCipher.login.username)
+      setPassword(selectedCipher.login.password)
+      setUrl(selectedCipher.login.uri)
+      setNote(selectedCipher.notes)
+      setFolder(selectedCipher.folderId)
+      setOrganizationId(selectedCipher.organizationId)
+      setCollectionIds(selectedCipher.collectionIds)
+    }
+    if (uiStore.deepLinkAction === 'add') {
+      setUrl(uiStore.deepLinkAddDomain)
+    }
+  }, [])
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (cipherStore.generatedPassword) {
@@ -60,7 +78,8 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
     return unsubscribe
   }, [navigation])
 
-  // Methods
+  // ----------------- METHODS ------------------
+
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
@@ -96,11 +115,13 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
 
     setIsLoading(false)
     if (res.kind === 'ok') {
+      uiStore.clearDeepLink()
       navigation.goBack()
     }
   }
 
-  // Render
+  // ----------------- RENDER ------------------
+
   return (
     <Layout
       isContentOverlayLoading={isLoading}
@@ -115,7 +136,10 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
               ? `${translate('common.add')} ${translate('common.password')}`
               : translate('common.edit')
           }
-          goBack={() => navigation.goBack()}
+          goBack={() => {
+            uiStore.clearDeepLink()
+            navigation.goBack()
+          }}
           goBackText={translate('common.cancel')}
           right={(
             <Button
