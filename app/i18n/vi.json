@@ -69,7 +69,8 @@
     "team_folders": "Thư mục chung",
     "trash": "Thùng rác",
     "tools": "Công cụ",
-    "unlock": "Mở khóa"
+    "unlock": "Mở khóa",
+    "website": "Website"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
@@ -341,8 +342,19 @@
     "desc": "Xác định các mật khẩu yếu, trùng lặp có thể khiến bạn bị tấn công bởi tội phạm mạng"
   },
   "data_breach_scanner": {
-    "title": "Cảnh báo lỗ dữ liệu",
-    "desc": "Kiểm tra xem dữ liệu nhạy cảm của bạn có bị lộ trên internet hay không"
+    "title": "Cảnh báo rò rỉ dữ liệu",
+    "desc": "Kiểm tra xem dữ liệu nhạy cảm của bạn có bị lộ trên internet hay không",
+    "breach_desc": "\"Rò rỉ dữ liệu\" là một sự cố trong đó dữ liệu của trang web đã bị tin tặc truy cập bất hợp pháp và sau đó phát tán công khai. Kiểm tra các loại dữ liệu đã bị xâm phạm (địa chỉ email, mật khẩu, thẻ tín dụng, v.v.) và thực hiện hành động thích hợp, chẳng hạn như thay đổi mật khẩu.",
+    "check_email": "Kiểm tra email mà bạn sử dụng",
+    "check": "Kiểm tra",
+    "good_news": "An toàn",
+    "bad_news": "Rò rỉ dữ liệu",
+    "no_breaches_found": " không được tìm thấy trong bất kỳ sự cố rò rỉ dữ liệu đã biết nào.",
+    "breaches_found": " được tìm thấy trong {{count}} sự cố rò rỉ dữ liệu đã biết.",
+    "pwn_count": "Người dùng bị ảnh hưởng",
+    "breach_date": "Ngày xảy ra sự cố",
+    "added_date": "Ngày báo cáo",
+    "data_classes": "Dữ liệu rò rỉ"
   },
   "settings": {
     "autofill_service": "Tự động điền (Auto-fill)",

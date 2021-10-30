@@ -25,12 +25,14 @@ export type LoginResult = {
         }[]
     }
 } | GeneralApiProblem
+
 export type SocialLoginResult = { 
     kind: "ok"
     data: {
         token: string
     }
 } | GeneralApiProblem
+
 export type AccountRecoveryResult = { 
     kind: "ok"
     data: {
@@ -38,6 +40,7 @@ export type AccountRecoveryResult = {
         data: any
     }[] 
 } | GeneralApiProblem
+
 export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
 export type EmptyResult = { kind: "ok" } | GeneralApiProblem
@@ -45,6 +48,7 @@ export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
 export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
 export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | GeneralApiProblem
+
 export type GetPlanResult = {
     kind: 'ok'
     data: {
@@ -52,14 +56,17 @@ export type GetPlanResult = {
         alias: string
     }
 } | GeneralApiProblem
+
 export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
 export type ResetPasswordResult = { kind: "ok"; success: boolean } | GeneralApiProblem
+
 export type ResetPasswordWithCodeResult = {
     kind: "ok" 
     data: {
         reset_password_url: string
     } 
 } | GeneralApiProblem
+
 export type GetMembersResult = {
     kind: "ok"
     data: {
@@ -76,6 +83,7 @@ export type GetMembersResult = {
         username: string
     }[]
 } | GeneralApiProblem
+
 export type GetInvitationsResult = {
     kind: "ok"
     data: {
@@ -88,6 +96,27 @@ export type GetInvitationsResult = {
             name: string
             organization_id: string
         }
+    }[]
+} | GeneralApiProblem
+
+export type CheckBreachResult = {
+    kind: "ok"
+    data: {
+        added_date: string
+        breach_date: string
+        data_clases: string[]
+        description: string
+        domain: string
+        is_fabricated: boolean
+        is_retired: boolean
+        is_sensitive: boolean
+        is_spam_list: boolean
+        is_verified: boolean
+        logo_path: string
+        modified_date: string
+        name: string
+        pwn_count: number
+        title: string
     }[]
 } | GeneralApiProblem
 
