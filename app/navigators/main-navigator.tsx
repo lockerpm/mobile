@@ -13,7 +13,8 @@ import {
   PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen, PasswordHealthScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
-  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen
+  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
+  DataBreachListScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -46,6 +47,8 @@ export type PrimaryParamList = {
   },
   passwordHealth: undefined,
   dataBreachScanner: undefined,
+  dataBreachList: undefined,
+  dataBreachDetail: undefined,
   countrySelector: undefined,
   passwords__info: undefined,
   passwords__edit: {
@@ -259,7 +262,10 @@ export const MainNavigator = observer(function MainNavigator() {
 
         <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} initialParams={{ fromTools: false }} />
         <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
+
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
+        <Stack.Screen name="dataBreachList" component={DataBreachListScreen} />
+        <Stack.Screen name="dataBreachDetail" component={DataBreachDetailScreen} />
 
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
         <Stack.Screen name="passwords__edit" component={PasswordEditScreen} initialParams={{ mode: 'add' }} />

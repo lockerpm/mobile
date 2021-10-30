@@ -69,7 +69,8 @@
     "team_folders": "Team folders",
     "trash": "Trash",
     "tools": "Tools",
-    "unlock": "Unlock"
+    "unlock": "Unlock",
+    "website": "Website"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
@@ -342,7 +343,18 @@
   },
   "data_breach_scanner": {
     "title": "Data Breach Scanner",
-    "desc": "Check if sensitive data is leaked online"
+    "desc": "Check if sensitive data is leaked online",
+    "breach_desc": "A \"breach\" is an incident where a site's data has been illegally accessed by hackers and then released publicly. Review the types of data that were compromised (email addresses, passwords, credit cards etc.) and take appropriate action, such as changing passwords.",
+    "check_email": "Check any email addresses that you use",
+    "check": "Check Breaches",
+    "good_news": "Good news",
+    "bad_news": "Breaches found",
+    "no_breaches_found": " was not found in any known data breaches.",
+    "breaches_found": " was found in {{count}} data breaches.",
+    "pwn_count": "Affected Users",
+    "breach_date": "Breach Occurred",
+    "added_date": "Breach Reported",
+    "data_classes": "Compromised data"
   },
   "settings": {
     "autofill_service": "Auto-fill Service",
