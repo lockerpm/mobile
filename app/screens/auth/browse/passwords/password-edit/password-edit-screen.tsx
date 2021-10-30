@@ -56,6 +56,9 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
     if (uiStore.deepLinkAction === 'add') {
       setUrl(uiStore.deepLinkAddDomain)
     }
+    if (uiStore.deepLinkAction === 'save') {
+      setUrl(uiStore.deepLinkAddDomain)
+    }
   }, [])
 
   useEffect(() => {
