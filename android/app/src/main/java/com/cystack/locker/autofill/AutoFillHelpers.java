@@ -39,17 +39,24 @@ public class AutoFillHelpers {
      */
     public ArrayList<AutoFillEntry> getAutoFillEntriesForDomain(String domain) {
         ArrayList<AutoFillEntry> entries = new ArrayList<>();
-        
+
         try {
             String itemString = getAutoFillItems();
-            Log.d(TAG, itemString);
             JSONArray jsonArray = new JSONArray(itemString);
             List<Object> itemList = toList(jsonArray);
             for (Object item: itemList) {
-                Log.d(TAG, item.getClass().getField("username").toString());
+                if (item instanceof HashMap) {
+                    HashMap map = (HashMap) item;
+                    String username = (String) map.get("username");
+                    String password = (String) map.get("password");
+                    String uri = (String) map.get("uri");
+
+                    if (domain.contains(uri)) {
+                        entries.add(new AutoFillEntry(username, password, uri));
+                    }
+                }
             }
 
-            entries.add(new AutoFillEntry("user", "pass", "entry"));
             entries.add(new AutoFillEntry("user 2", "pass 2", "entry 2"));
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
