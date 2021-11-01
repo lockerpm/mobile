@@ -498,7 +498,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     ))
 
     toolStore.setWeakPasswords(weakPasswordCiphers)
+    toolStore.setPasswordStrengthMap(passwordStrengthMap)
     toolStore.setReusedPasswords(reusedPasswordCiphers)
+    toolStore.setPasswordUseMap(passwordUseMap)
   }
 
   // ------------------------ CIPHERS ---------------------------

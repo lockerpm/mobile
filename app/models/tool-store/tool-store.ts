@@ -16,6 +16,8 @@ export const ToolStoreModel = types
     // Password health
     weakPasswords: types.array(types.frozen()),
     reusedPasswords: types.array(types.frozen()),
+    passwordStrengthMap: types.maybeNull(types.frozen()),
+    passwordUseMap: types.maybeNull(types.frozen()),
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -42,12 +44,22 @@ export const ToolStoreModel = types
       self.reusedPasswords = cast(data)
     },
 
+    setPasswordStrengthMap: (data: Object) => {
+      self.passwordStrengthMap = cast(data)
+    },
+
+    setPasswordUseMap: (data: Object) => {
+      self.passwordUseMap = cast(data)
+    },
+
     clearStore: () => {
       self.breachedEmail = null
       self.breaches = cast([])
       self.selectedBreach = null
       self.weakPasswords = cast([])
       self.reusedPasswords = cast([])
+      self.passwordStrengthMap = null
+      self.passwordUseMap = null
     },
 
     // ----------------- API -------------------
