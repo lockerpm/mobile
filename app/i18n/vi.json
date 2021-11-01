@@ -339,7 +339,19 @@
   },
   "pass_health": {
     "title": "Sức khỏe mật khẩu",
-    "desc": "Xác định các mật khẩu yếu, trùng lặp có thể khiến bạn bị tấn công bởi tội phạm mạng"
+    "desc": "Xác định các mật khẩu yếu, trùng lặp có thể khiến bạn bị tấn công bởi tội phạm mạng",
+    "weak_passwords": {
+      "name": "Mật khẩu yếu",
+      "desc": "Quá ngắn hoặc quá dễ đoán"
+    },
+    "reused_passwords": {
+      "name": "Mật khẩu trùng lặp",
+      "desc": "Sử dụng chung mật khẩu cho nhiều tài khoản khác nhau"
+    },
+    "exposed_passwords": {
+      "name": "Mật khẩu bị lộ",
+      "desc": "Xuất hiện trong các sự cố rò rỉ dữ liệu"
+    }
   },
   "data_breach_scanner": {
     "title": "Cảnh báo rò rỉ dữ liệu",

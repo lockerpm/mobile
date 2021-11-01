@@ -9,14 +9,40 @@ import { color, commonStyles, fontSize } from "../../../../theme"
 
 // @ts-ignore
 import DataBreachScannerIcon from './data-breach-scanner.svg'
+import { useStores } from "../../../../models"
 
 
 export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
   const { translate } = useMixins()
   const navigation = useNavigation()
+  const { toolStore } = useStores()
 
   // -------------------- RENDER ----------------------
 
+  // Render warning counter
+  const renderWarningCounter = (count: number) => (
+    <View
+      style={{
+        height: 40,
+        width: 40,
+        backgroundColor: count > 0 ? color.error : color.palette.green,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
+      <Text
+        preset="bold"
+        text={count.toString()}
+        style={{
+          fontSize: fontSize.p,
+          color: color.palette.white
+        }}
+      />
+    </View>
+  )
+
+  // Render an option
   const renderOption = (title: string, desc: string, left: React.ReactNode, bordered?: boolean) => (
     <Button
       preset="link"
@@ -58,6 +84,7 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
     </Button>
   )
 
+  // Render screen
   return (
     <Layout
       containerStyle={{
@@ -77,8 +104,24 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
         {
           renderOption(
-            'Exposed Passwords',
-            'Passwords that have been uncovered in known data breaches',
+            translate('pass_health.weak_passwords.name'),
+            translate('pass_health.weak_passwords.desc'),
+            renderWarningCounter(toolStore.weakPasswords.length),
+            true
+          )
+        }
+        {
+          renderOption(
+            translate('pass_health.reused_passwords.name'),
+            translate('pass_health.reused_passwords.desc'),
+            renderWarningCounter(toolStore.reusedPasswords.length),
+            true
+          )
+        }
+        {
+          renderOption(
+            translate('pass_health.exposed_passwords.name'),
+            translate('pass_health.exposed_passwords.desc'),
             (
               <DataBreachScannerIcon height={40} width={40} />
             )

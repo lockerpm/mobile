@@ -88,7 +88,7 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export const MainNavigator = observer(function MainNavigator() {
   const navigation = useNavigation()
-  const { lock, getSyncData, getCipherById, loadFolders, loadCollections, logout } = useMixins()
+  const { lock, getSyncData, getCipherById, loadFolders, loadCollections, logout, loadPasswordsHealth } = useMixins()
   const { uiStore, user, cipherStore } = useStores()
 
   const [socket, setSocket] = useState(null)
@@ -100,17 +100,17 @@ export const MainNavigator = observer(function MainNavigator() {
   // Sync
   const handleSync = async () => {
     await getSyncData()
-    cipherStore.setLastSync(new Date().getTime())
     await Promise.all([
       loadFolders(),
-      loadCollections(),
-      user.loadTeams(),
-      user.loadPlan()
+      loadCollections()
     ])
     if (cipherStore.selectedCipher) {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
+    user.loadTeams(),
+    user.loadPlan()
+    loadPasswordsHealth()
   }
 
   // Check invitation
