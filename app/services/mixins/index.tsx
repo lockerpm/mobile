@@ -82,7 +82,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     messagingService,
     tokenService,
     syncService,
-    passwordGenerationService
+    passwordGenerationService,
+    auditService
   } = useCoreService()
   const insets = useSafeAreaInsets()
 
@@ -438,6 +439,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     const passwordStrengthCache = new Map()
     const passwordStrengthMap = new Map()
     const passwordUseMap = new Map()
+    const exposedPasswordMap = new Map()
+
+    const exposedPasswordCiphers = []
+    const promises = []
 
     const allCiphers = await getCiphers({
       deleted: false,
@@ -487,7 +492,18 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         passwordStrengthMap.set(c.id, score)
         weakPasswordCiphers.push(c)
       }
+
+      // Check exposed password
+      const promise = auditService.passwordLeaked(c.login.password).then(exposedCount => {
+        if (exposedCount > 0) {
+          exposedPasswordCiphers.push(c)
+          exposedPasswordMap.set(c.id, exposedCount)
+        }
+      })
+      promises.push(promise)
     })
+
+    await Promise.all(promises)
 
     // Result
     weakPasswordCiphers.sort((a, b) => {
@@ -501,6 +517,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     toolStore.setPasswordStrengthMap(passwordStrengthMap)
     toolStore.setReusedPasswords(reusedPasswordCiphers)
     toolStore.setPasswordUseMap(passwordUseMap)
+    toolStore.setExposedPasswords(exposedPasswordCiphers)
+    toolStore.setExposedPasswordMap(exposedPasswordMap)
   }
 
   // ------------------------ CIPHERS ---------------------------

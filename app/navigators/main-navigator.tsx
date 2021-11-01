@@ -14,7 +14,7 @@ import {
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
-  DataBreachListScreen, WeakPasswordList, ReusePasswordList
+  DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -48,6 +48,7 @@ export type PrimaryParamList = {
   passwordHealth: undefined,
   weakPasswordList: undefined,
   reusePasswordList: undefined,
+  exposedPasswordList: undefined,
   dataBreachScanner: undefined,
   dataBreachList: undefined,
   dataBreachDetail: undefined,
@@ -267,6 +268,7 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
         <Stack.Screen name="weakPasswordList" component={WeakPasswordList} />
         <Stack.Screen name="reusePasswordList" component={ReusePasswordList} />
+        <Stack.Screen name="exposedPasswordList" component={ExposedPasswordList} />
 
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
         <Stack.Screen name="dataBreachList" component={DataBreachListScreen} />

@@ -125,7 +125,7 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
             (
               <DataBreachScannerIcon height={40} width={40} />
             ),
-            () => {}
+            () => navigation.navigate('exposedPasswordList'),
           )
         }
       </View>

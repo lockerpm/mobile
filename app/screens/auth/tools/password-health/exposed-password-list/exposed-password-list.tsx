@@ -11,22 +11,22 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 
 
-export const ReusePasswordList = observer(function ReusePasswordList() {
+export const ExposedPasswordList = observer(function ExposedPasswordList() {
   const navigation = useNavigation()
   const { toolStore, cipherStore } = useStores()
   const { translate, getWebsiteLogo } = useMixins()
 
   // -------------- COMPUTED ------------------
 
-  const listData = toolStore.reusedPasswords.map((c: CipherView) => {
+  const listData = toolStore.exposedPasswords.map((c: CipherView) => {
+    console.log(toolStore.exposedPasswordMap)
     return {
       ...c,
       logo: BROWSE_ITEMS.password.icon,
       imgLogo: c.login.uri ? getWebsiteLogo(c.login.uri) : null,
-      count: toolStore.passwordUseMap && toolStore.passwordUseMap.get(c.login.password)
+      count: toolStore.exposedPasswordMap && toolStore.exposedPasswordMap.get(c.id)
     }
   })
-
 
   // -------------- METHODS ------------------
 
@@ -47,7 +47,7 @@ export const ReusePasswordList = observer(function ReusePasswordList() {
     <Layout
       header={(
         <Header
-          title={translate('pass_health.reused_passwords.name')}
+          title={translate('pass_health.exposed_passwords.name')}
           goBack={() => navigation.goBack()}
           right={(
             <View style={{ width: 10 }} />

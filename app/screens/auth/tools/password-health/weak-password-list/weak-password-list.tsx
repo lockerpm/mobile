@@ -62,6 +62,15 @@ export const WeakPasswordList = observer(function WeakPasswordList() {
           style={{ paddingHorizontal: 20 }}
           data={listData}
           keyExtractor={item => item.id.toString()}
+          ListEmptyComponent={(
+            <Text
+              text={translate('common.nothing_here')}
+              style={{
+                textAlign: 'center',
+                marginTop: 20
+              }}
+            />
+          )}
           renderItem={({ item }) => (
             <Button
               preset="link"
