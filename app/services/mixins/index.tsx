@@ -61,14 +61,15 @@ const defaultData = {
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
-  notifyApiError: (problem: GeneralApiProblem) => {}
+  notifyApiError: (problem: GeneralApiProblem) => {},
+  loadPasswordsHealth: async () => {}
 }
 
 
 const MixinsContext = createContext(defaultData)
 
 export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
-  const { uiStore, user, cipherStore, folderStore, collectionStore } = useStores()
+  const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore } = useStores()
   const {
     cryptoService,
     userService,
@@ -281,15 +282,17 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   const logout = async () => {
     await Promise.all([
       user.logout(),
-      cipherStore.clearStore(),
-      collectionStore.clearStore(),
-      folderStore.clearStore(),
       folderService.clearCache(),
       cipherService.clearCache(),
       collectionService.clearCache(),
       cryptoService.clearKeys(),
       userService.clear()
     ])
+
+    cipherStore.clearStore()
+    collectionStore.clearStore()
+    folderStore.clearStore()
+    toolStore.clearStore()
 
     // Sign out of Google
     GoogleSignin.configure({
@@ -343,6 +346,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await syncService.syncSettings(userId, res.data.domains)
       await syncService.syncPolicies(res.data.policies)
       await syncService.setLastSync(new Date())
+      
+      cipherStore.setLastSync(new Date().getTime())
       messagingService.send('syncCompleted', { successfully: true })
 
       // Save fingerprint
@@ -422,6 +427,78 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     let res = await collectionService.getAllDecrypted() || []
     res = res.filter(item => item.id)
     return res
+  }
+
+  // Load weak passwords
+  const loadPasswordsHealth = async () => {
+    if (!user.plan || user.plan.alias === 'pm_free') {
+      return
+    }
+
+    const passwordStrengthCache = new Map()
+    const passwordStrengthMap = new Map()
+    const passwordUseMap = new Map()
+
+    const allCiphers = await getCiphers({
+      deleted: false,
+      searchText: '',
+      filters: [(c: CipherView) => c.type === CipherType.Login && c.login.password]
+    })
+    const weakPasswordCiphers = []
+    const isUserNameNotEmpty = (c: CipherView) => {
+      return c.login.username != null && c.login.username.trim() !== ''
+    }
+    const getCacheKey = (c: CipherView) => {
+      return c.login.password + '_____' + (isUserNameNotEmpty(c) ? c.login.username : '')
+    }
+
+    allCiphers.forEach((c: CipherView) => {
+      const hasUserName = isUserNameNotEmpty(c)
+      const cacheKey = getCacheKey(c)
+
+      // Check password used
+      if (passwordUseMap.has(c.login.password)) {
+        passwordUseMap.set(c.login.password, passwordUseMap.get(c.login.password) + 1)
+      } else {
+        passwordUseMap.set(c.login.password, 1)
+      }
+
+      // Check password strength
+      if (!passwordStrengthCache.has(cacheKey)) {
+        let userInput = []
+        if (hasUserName) {
+          const atPosition = c.login.username.indexOf('@')
+          if (atPosition > -1) {
+            userInput = userInput.concat(
+              c.login.username.substr(0, atPosition).trim().toLowerCase().split(/[^A-Za-z0-9]/)
+            ).filter(i => i.length >= 3)
+          } else {
+            userInput = c.login.username.trim().toLowerCase().split(/[^A-Za-z0-9]/).filter(i => i.length >= 3)
+          }
+        }
+        const result = passwordGenerationService.passwordStrength(
+          c.login.password, 
+          userInput.length > 0 ? userInput : null
+        )
+        passwordStrengthCache.set(cacheKey, result.score)
+      }
+      const score = passwordStrengthCache.get(cacheKey)
+      if (score != null && score <= 2) {
+        passwordStrengthMap.set(c.id, score)
+        weakPasswordCiphers.push(c)
+      }
+    })
+
+    // Result
+    weakPasswordCiphers.sort((a, b) => {
+      return passwordStrengthCache.get(getCacheKey(a)) - passwordStrengthCache.get(getCacheKey(b))
+    })
+    const reusedPasswordCiphers = allCiphers.filter((c: CipherView) => (
+      passwordUseMap.has(c.login.password) && passwordUseMap.get(c.login.password) > 1
+    ))
+
+    toolStore.setWeakPasswords(weakPasswordCiphers)
+    toolStore.setReusedPasswords(reusedPasswordCiphers)
   }
 
   // ------------------------ CIPHERS ---------------------------
@@ -619,7 +696,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     getRouteName,
     isBiometricAvailable,
     translate,
-    notifyApiError
+    notifyApiError,
+    loadPasswordsHealth
   }
 
   return (

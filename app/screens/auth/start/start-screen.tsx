@@ -10,7 +10,7 @@ import { delay } from "../../../utils/delay"
 export const StartScreen = observer(function StartScreen() {
   const { user, uiStore } = useStores()
   const { 
-    getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate
+    getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate, loadPasswordsHealth
   } = useMixins()
   const navigation = useNavigation()
 
@@ -43,6 +43,7 @@ export const StartScreen = observer(function StartScreen() {
       loadFolders(),
       loadCollections()
     ])
+    loadPasswordsHealth()
 
     // TODO
     const isDeviceLimitReached = false

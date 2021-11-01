@@ -339,7 +339,19 @@
   },
   "pass_health": {
     "title": "Password Health",
-    "desc": "Identify passwords that can put you at risk"
+    "desc": "Identify passwords that can put you at risk",
+    "weak_passwords": {
+      "name": "Weak Passwords",
+      "desc": "Easy to guess"
+    },
+    "reused_passwords": {
+      "name": "Reused Passwords",
+      "desc": "Used for multiple accounts"
+    },
+    "exposed_passwords": {
+      "name": "Exposed Passwords",
+      "desc": "Passwords that have been uncovered in known data breaches"
+    }
   },
   "data_breach_scanner": {
     "title": "Data Breach Scanner",

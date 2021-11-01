@@ -8,9 +8,14 @@ import { withEnvironment } from "../extensions/with-environment"
 export const ToolStoreModel = types
   .model("ToolStore")
   .props({
+    // Data breach scanner
     breachedEmail: types.maybeNull(types.string),
     breaches: types.array(types.frozen()),
-    selectedBreach: types.maybeNull(types.frozen())
+    selectedBreach: types.maybeNull(types.frozen()),
+
+    // Password health
+    weakPasswords: types.array(types.frozen()),
+    reusedPasswords: types.array(types.frozen()),
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -27,6 +32,22 @@ export const ToolStoreModel = types
 
     setSelectedBreach: (data: Object) => {
       self.selectedBreach = cast(data)
+    },
+
+    setWeakPasswords: (data: Object[]) => {
+      self.weakPasswords = cast(data)
+    },
+
+    setReusedPasswords: (data: Object[]) => {
+      self.reusedPasswords = cast(data)
+    },
+
+    clearStore: () => {
+      self.breachedEmail = null
+      self.breaches = cast([])
+      self.selectedBreach = null
+      self.weakPasswords = cast([])
+      self.reusedPasswords = cast([])
     },
 
     // ----------------- API -------------------
