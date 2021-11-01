@@ -28,6 +28,7 @@ export const color = {
   textBlack: palette.lightBlack,
   title: palette.black,
   error: palette.danger,
+  warning: palette.warning,
 
   /**
    * Storybook background for Text stories, or any stories where

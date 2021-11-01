@@ -43,12 +43,10 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
   )
 
   // Render an option
-  const renderOption = (title: string, desc: string, left: React.ReactNode, bordered?: boolean) => (
+  const renderOption = (title: string, desc: string, left: React.ReactNode, action: () => void, bordered?: boolean) => (
     <Button
       preset="link"
-      onPress={() => {
-        
-      }}
+      onPress={action}
       style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
         borderBottomColor: color.line,
         borderBottomWidth: bordered ? 1 : 0,
@@ -107,6 +105,7 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
             translate('pass_health.weak_passwords.name'),
             translate('pass_health.weak_passwords.desc'),
             renderWarningCounter(toolStore.weakPasswords.length),
+            () => navigation.navigate('weakPasswordList'),
             true
           )
         }
@@ -115,6 +114,7 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
             translate('pass_health.reused_passwords.name'),
             translate('pass_health.reused_passwords.desc'),
             renderWarningCounter(toolStore.reusedPasswords.length),
+            () => navigation.navigate('reusePasswordList'),
             true
           )
         }
@@ -124,7 +124,8 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
             translate('pass_health.exposed_passwords.desc'),
             (
               <DataBreachScannerIcon height={40} width={40} />
-            )
+            ),
+            () => {}
           )
         }
       </View>

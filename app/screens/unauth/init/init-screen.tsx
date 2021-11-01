@@ -27,10 +27,10 @@ export const InitScreen = observer(function InitScreen() {
     user.setDeviceID(DeviceInfo.getUniqueId())
 
     // Testing
-    if (__DEV__) {
-      navigation.navigate('lock')
-      return
-    }
+    // if (__DEV__) {
+    //   navigation.navigate('lock')
+    //   return
+    // }
 
     // Logged in?
     if (!user.isLoggedIn) {
