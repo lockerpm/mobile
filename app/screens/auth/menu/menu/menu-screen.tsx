@@ -34,7 +34,7 @@ const ITEM_CONTAINER: ViewStyle = {
 
 export const MenuScreen = observer(function MenuScreen() {
   const navigation = useNavigation()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { lock, logout, translate } = useMixins()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -67,6 +67,13 @@ export const MenuScreen = observer(function MenuScreen() {
   ]
 
   const items2: MenuItemProps[] = [
+    {
+      icon: <LockIcon height={22} />,
+      name: '(DEBUG) ' + (uiStore.isOffline ? 'Go online' : 'Go offline'),
+      action: () => {
+        uiStore.setIsOffline(!uiStore.isOffline)
+      }
+    },
     {
       icon: <LockIcon height={22} />,
       name: translate('common.lock'),

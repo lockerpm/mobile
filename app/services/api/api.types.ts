@@ -4,6 +4,8 @@ import { DeviceType } from "../../../core/enums"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { FolderResponse } from "../../../core/models/response/folderResponse"
 import { CollectionResponse } from "../../../core/models/response/collectionResponse"
+import { CipherRequest } from "../../../core/models/request/cipherRequest"
+import { FolderRequest } from "../../../core/models/request/folderRequest"
 
 type SessionSnapshot = {
     access_token: string
@@ -252,4 +254,13 @@ export type AddMemberData = {
     username: string
     role: 'admin' | 'manager' | 'member'
     collections: string[]
+}
+
+export type ImportCipherData = {
+    ciphers: CipherRequest[]
+    folders: FolderRequest[]
+    folderRelationships: {
+        key: number
+        value: number
+    }[]
 }
