@@ -115,7 +115,8 @@
     "cipher_trashed": "Đã chuyển vào thùng rác",
     "cipher_updated": "Cập nhật thành công",
     "cipher_shared": "Chia sẻ thành công",
-    "sync_success": "Đồng bộ hóa hoàn tất"
+    "sync_success": "Đồng bộ hóa hoàn tất",
+    "will_sync_when_online": "Dữ liệu của bạn sẽ được đồng bộ khi có kết nối internet."
   },
   "password_strength": {
     "very_weak": "Rất yếu",

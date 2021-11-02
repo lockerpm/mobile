@@ -109,13 +109,14 @@
     "invitation_rejected": "Invitation rejected",
     "master_password_updated": "Master password updated",
     "biometric_enabled": "Face ID/Touch ID unlocking is enabled",
-    "cipher_created": "New item created",
-    "cipher_deleted": "Item deleted",
-    "cipher_restored": "Item restored",
-    "cipher_trashed": "Item moved to trash",
-    "cipher_updated": "Item updated",
-    "cipher_shared": "Item shared",
-    "sync_success": "Data synchronized"
+    "cipher_created": "New item created!",
+    "cipher_deleted": "Item deleted!",
+    "cipher_restored": "Item restored!",
+    "cipher_trashed": "Item moved to trash!",
+    "cipher_updated": "Item updated!",
+    "cipher_shared": "Item shared!",
+    "sync_success": "Data synchronized!",
+    "will_sync_when_online": "Your data will be synced when there is an internet connection."
   },
   "password_strength": {
     "very_weak": "Very weak",

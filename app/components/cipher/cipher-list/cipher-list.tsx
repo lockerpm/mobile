@@ -61,7 +61,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   useEffect(() => {
     loadData()
-  }, [searchText, cipherStore.lastSync, sortList])
+  }, [searchText, cipherStore.lastSync, cipherStore.lastOfflineSync, sortList])
 
   // ------------------------ METHODS ----------------------------
 
@@ -89,7 +89,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
         logo: null,
         imgLogo: null,
         svg: null,
-        notSync: c.id.startsWith('tmp--')
+        notSync: c.id.startsWith('tmp__')
       }
       switch (c.type) {
         case CipherType.Login: {

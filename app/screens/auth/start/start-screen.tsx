@@ -10,7 +10,8 @@ import { delay } from "../../../utils/delay"
 export const StartScreen = observer(function StartScreen() {
   const { user, uiStore } = useStores()
   const { 
-    getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate, loadPasswordsHealth
+    getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate, 
+    loadPasswordsHealth
   } = useMixins()
   const navigation = useNavigation()
 
@@ -28,7 +29,9 @@ export const StartScreen = observer(function StartScreen() {
       if (syncRes.kind === 'ok') {
         notify('success', translate('success.sync_success'))
       } else {
-        notify('error', translate('error.sync_failed'))
+        if (syncRes.kind !== 'synching') {
+          notify('error', translate('error.sync_failed'))
+        }
       }
 
       // Invitations handler

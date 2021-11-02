@@ -63,7 +63,6 @@ const defaultData = {
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
   notifyApiError: (problem: GeneralApiProblem) => {},
   loadPasswordsHealth: async () => {},
-  offlineCreateCipher: async (cipher: CipherView, score: number, collectionIds: string[]) => {},
 }
 
 
@@ -282,36 +281,41 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Logout
   const logout = async () => {
-    await Promise.all([
-      user.logout(),
-      folderService.clearCache(),
-      cipherService.clearCache(),
-      collectionService.clearCache(),
-      cryptoService.clearKeys(),
-      userService.clear()
-    ])
-
-    cipherStore.clearStore()
-    collectionStore.clearStore()
-    folderStore.clearStore()
-    toolStore.clearStore()
-
-    // Sign out of Google
-    GoogleSignin.configure({
-      webClientId: GOOGLE_CLIENT_ID
-    })
-    const isSignedIn = await GoogleSignin.isSignedIn()
-    if (isSignedIn) {
-      await GoogleSignin.signOut()
+    try {
+      await Promise.all([
+        user.logout(),
+        folderService.clearCache(),
+        cipherService.clearCache(),
+        collectionService.clearCache(),
+        cryptoService.clearKeys(),
+        userService.clear()
+      ])
+  
+      cipherStore.clearStore()
+      collectionStore.clearStore()
+      folderStore.clearStore()
+      toolStore.clearStore()
+  
+      // Sign out of Google
+      GoogleSignin.configure({
+        webClientId: GOOGLE_CLIENT_ID
+      })
+      const isSignedIn = await GoogleSignin.isSignedIn()
+      if (isSignedIn) {
+        await GoogleSignin.signOut()
+      }
+  
+      // Sign out of Facebook
+      if (await AccessToken.getCurrentAccessToken()) {
+        LoginManager.logOut()
+      }
+  
+      // Reset shared data
+      await saveShared('autofill', '[]')
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
     }
-
-    // Sign out of Facebook
-    if (await AccessToken.getCurrentAccessToken()) {
-      LoginManager.logOut()
-    }
-
-    // Reset shared data
-    await saveShared('autofill', '[]')
   }
 
   // Lock screen
@@ -328,12 +332,21 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // Sync
   const getSyncData = async () => {
     try {
+      if (cipherStore.isSynching) {
+        return { kind: 'synching' }
+      }
+
+      cipherStore.setIsSynching(true)
       messagingService.send('syncStarted')
+
+      // Sync offline data first
+      await _syncOfflineData()
 
       // Sync api
       const res = await cipherStore.syncData()
       if (res.kind !== 'ok') {
         messagingService.send('syncCompleted', { successfully: false })
+        cipherStore.setIsSynching(false)
         return res
       }
 
@@ -371,47 +384,88 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       }))
       await saveShared('autofill', JSON.stringify(sharedData))
 
+      cipherStore.setIsSynching(false)
       return { kind: 'ok' }
     } catch (e) {
+      cipherStore.setIsSynching(false)
       messagingService.send('syncCompleted', { successfully: false })
       return { kind: 'bad-data' }
     }
   }
 
+  // Sync offline data
+  const _syncOfflineData = async () => {
+    const notCreatedCiphers = await getCiphers({
+      deleted: false,
+      searchText: '',
+      filters: [(c: CipherView) => c.id.startsWith('tmp__create__')]
+    })
+    if (notCreatedCiphers.length > 0) {
+      const promises = []
+      const ciphers = []
+      notCreatedCiphers.forEach((c: CipherView) => {
+        promises.push(
+          cipherService.encrypt(c).then(enc => ciphers.push(new CipherRequest(enc)))
+        )
+      })
+      await Promise.all(promises)
+      await cipherStore.importCipher({
+        ciphers,
+        folders: [],
+        folderRelationships: []
+      })
+    }
+  }
+
   // Load folders
   const loadFolders = async () => {
-    const res = await folderService.getAllDecrypted() || []
-    for (let f of res) {
-      let ciphers = await getCiphers({
-        deleted: false,
-        searchText: '',
-        filters: [c => c.folderId ? c.folderId === f.id : !c.collectionIds.length]
-      })
-      f.cipherCount = ciphers ? ciphers.length : 0
+    try {
+      const res = await folderService.getAllDecrypted() || []
+      for (let f of res) {
+        let ciphers = await getCiphers({
+          deleted: false,
+          searchText: '',
+          filters: [c => c.folderId ? c.folderId === f.id : !c.collectionIds.length]
+        })
+        f.cipherCount = ciphers ? ciphers.length : 0
+      }
+      folderStore.setFolders(res)
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
     }
-    folderStore.setFolders(res)
   }
 
   // Load collections
   const loadCollections = async () => {
-    const res = await collectionService.getAllDecrypted() || []
-    for (let f of res) {
-      let ciphers = await getCiphers({
-        deleted: false,
-        searchText: '',
-        filters: [c => c.collectionIds.includes(f.id)]
-      })
-      f.cipherCount = ciphers ? ciphers.length : 0
+    try {
+      const res = await collectionService.getAllDecrypted() || []
+      for (let f of res) {
+        let ciphers = await getCiphers({
+          deleted: false,
+          searchText: '',
+          filters: [c => c.collectionIds.includes(f.id)]
+        })
+        f.cipherCount = ciphers ? ciphers.length : 0
+      }
+      collectionStore.setCollections(res)
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
     }
-    collectionStore.setCollections(res)
   }
 
   // Get ciphers
   const getCiphers = async (params: GetCiphersParams) => {
-    // Filter
-    const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
-    const filters = [deletedFilter, ...params.filters]
-    return await searchService.searchCiphers(params.searchText || '', filters, null) || []
+    try {
+      const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
+      const filters = [deletedFilter, ...params.filters]
+      return await searchService.searchCiphers(params.searchText || '', filters, null) || []
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return []
+    }
   }
 
   // Get cipher by id
@@ -426,176 +480,228 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Get collections
   const getCollections = async () => {
-    let res = await collectionService.getAllDecrypted() || []
-    res = res.filter(item => item.id)
-    return res
+    try {
+      let res = await collectionService.getAllDecrypted() || []
+      res = res.filter(item => item.id)
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return []
+    }
   }
 
   // Load weak passwords
   const loadPasswordsHealth = async () => {
-    if (!user.plan || user.plan.alias === 'pm_free') {
-      return
-    }
-
-    const passwordStrengthCache = new Map()
-    const passwordStrengthMap = new Map()
-    const passwordUseMap = new Map()
-    const exposedPasswordMap = new Map()
-
-    const exposedPasswordCiphers = []
-    const promises = []
-
-    const allCiphers = await getCiphers({
-      deleted: false,
-      searchText: '',
-      filters: [(c: CipherView) => c.type === CipherType.Login && c.login.password]
-    })
-    const weakPasswordCiphers = []
-    const isUserNameNotEmpty = (c: CipherView) => {
-      return c.login.username != null && c.login.username.trim() !== ''
-    }
-    const getCacheKey = (c: CipherView) => {
-      return c.login.password + '_____' + (isUserNameNotEmpty(c) ? c.login.username : '')
-    }
-
-    allCiphers.forEach((c: CipherView) => {
-      const hasUserName = isUserNameNotEmpty(c)
-      const cacheKey = getCacheKey(c)
-
-      // Check password used
-      if (passwordUseMap.has(c.login.password)) {
-        passwordUseMap.set(c.login.password, passwordUseMap.get(c.login.password) + 1)
-      } else {
-        passwordUseMap.set(c.login.password, 1)
+    try {
+      if (!user.plan || user.plan.alias === 'pm_free') {
+        return
       }
-
-      // Check password strength
-      if (!passwordStrengthCache.has(cacheKey)) {
-        let userInput = []
-        if (hasUserName) {
-          const atPosition = c.login.username.indexOf('@')
-          if (atPosition > -1) {
-            userInput = userInput.concat(
-              c.login.username.substr(0, atPosition).trim().toLowerCase().split(/[^A-Za-z0-9]/)
-            ).filter(i => i.length >= 3)
-          } else {
-            userInput = c.login.username.trim().toLowerCase().split(/[^A-Za-z0-9]/).filter(i => i.length >= 3)
-          }
-        }
-        const result = passwordGenerationService.passwordStrength(
-          c.login.password, 
-          userInput.length > 0 ? userInput : null
-        )
-        passwordStrengthCache.set(cacheKey, result.score)
-      }
-      const score = passwordStrengthCache.get(cacheKey)
-      if (score != null && score <= 2) {
-        passwordStrengthMap.set(c.id, score)
-        weakPasswordCiphers.push(c)
-      }
-
-      // Check exposed password
-      const promise = auditService.passwordLeaked(c.login.password).then(exposedCount => {
-        if (exposedCount > 0) {
-          exposedPasswordCiphers.push(c)
-          exposedPasswordMap.set(c.id, exposedCount)
-        }
+  
+      const passwordStrengthCache = new Map()
+      const passwordStrengthMap = new Map()
+      const passwordUseMap = new Map()
+      const exposedPasswordMap = new Map()
+  
+      const exposedPasswordCiphers = []
+      const promises = []
+  
+      const allCiphers = await getCiphers({
+        deleted: false,
+        searchText: '',
+        filters: [(c: CipherView) => c.type === CipherType.Login && c.login.password]
       })
-      promises.push(promise)
-    })
-
-    await Promise.all(promises)
-
-    // Result
-    weakPasswordCiphers.sort((a, b) => {
-      return passwordStrengthCache.get(getCacheKey(a)) - passwordStrengthCache.get(getCacheKey(b))
-    })
-    const reusedPasswordCiphers = allCiphers.filter((c: CipherView) => (
-      passwordUseMap.has(c.login.password) && passwordUseMap.get(c.login.password) > 1
-    ))
-
-    toolStore.setWeakPasswords(weakPasswordCiphers)
-    toolStore.setPasswordStrengthMap(passwordStrengthMap)
-    toolStore.setReusedPasswords(reusedPasswordCiphers)
-    toolStore.setPasswordUseMap(passwordUseMap)
-    toolStore.setExposedPasswords(exposedPasswordCiphers)
-    toolStore.setExposedPasswordMap(exposedPasswordMap)
+      const weakPasswordCiphers = []
+      const isUserNameNotEmpty = (c: CipherView) => {
+        return c.login.username != null && c.login.username.trim() !== ''
+      }
+      const getCacheKey = (c: CipherView) => {
+        return c.login.password + '_____' + (isUserNameNotEmpty(c) ? c.login.username : '')
+      }
+  
+      allCiphers.forEach((c: CipherView) => {
+        const hasUserName = isUserNameNotEmpty(c)
+        const cacheKey = getCacheKey(c)
+  
+        // Check password used
+        if (passwordUseMap.has(c.login.password)) {
+          passwordUseMap.set(c.login.password, passwordUseMap.get(c.login.password) + 1)
+        } else {
+          passwordUseMap.set(c.login.password, 1)
+        }
+  
+        // Check password strength
+        if (!passwordStrengthCache.has(cacheKey)) {
+          let userInput = []
+          if (hasUserName) {
+            const atPosition = c.login.username.indexOf('@')
+            if (atPosition > -1) {
+              userInput = userInput.concat(
+                c.login.username.substr(0, atPosition).trim().toLowerCase().split(/[^A-Za-z0-9]/)
+              ).filter(i => i.length >= 3)
+            } else {
+              userInput = c.login.username.trim().toLowerCase().split(/[^A-Za-z0-9]/).filter(i => i.length >= 3)
+            }
+          }
+          const result = passwordGenerationService.passwordStrength(
+            c.login.password, 
+            userInput.length > 0 ? userInput : null
+          )
+          passwordStrengthCache.set(cacheKey, result.score)
+        }
+        const score = passwordStrengthCache.get(cacheKey)
+        if (score != null && score <= 2) {
+          passwordStrengthMap.set(c.id, score)
+          weakPasswordCiphers.push(c)
+        }
+  
+        // Check exposed password
+        const promise = auditService.passwordLeaked(c.login.password).then(exposedCount => {
+          if (exposedCount > 0) {
+            exposedPasswordCiphers.push(c)
+            exposedPasswordMap.set(c.id, exposedCount)
+          }
+        })
+        promises.push(promise)
+      })
+  
+      await Promise.all(promises)
+  
+      // Result
+      weakPasswordCiphers.sort((a, b) => {
+        return passwordStrengthCache.get(getCacheKey(a)) - passwordStrengthCache.get(getCacheKey(b))
+      })
+      const reusedPasswordCiphers = allCiphers.filter((c: CipherView) => (
+        passwordUseMap.has(c.login.password) && passwordUseMap.get(c.login.password) > 1
+      ))
+  
+      toolStore.setWeakPasswords(weakPasswordCiphers)
+      toolStore.setPasswordStrengthMap(passwordStrengthMap)
+      toolStore.setReusedPasswords(reusedPasswordCiphers)
+      toolStore.setPasswordUseMap(passwordUseMap)
+      toolStore.setExposedPasswords(exposedPasswordCiphers)
+      toolStore.setExposedPasswordMap(exposedPasswordMap)
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+    }
   }
 
   // ------------------------ CIPHERS ---------------------------
 
+  // Create
   const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
-    const cipherEnc = await cipherService.encrypt(cipher)
-    const data = new CipherRequest(cipherEnc)
-    const res = await cipherStore.createCipher(data, score, collectionIds)
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_created'))
-    } else {
-      notifyApiError(res)
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineCreateCipher(cipher, collectionIds)
+        notify('success', `${translate('success.cipher_created')} ${translate('success.will_sync_when_online')}`)
+        return { kind: 'ok' }
+      } 
+
+      // Online
+      const cipherEnc = await cipherService.encrypt(cipher)
+      const data = new CipherRequest(cipherEnc)
+      const res = await cipherStore.createCipher(data, score, collectionIds)
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_created'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
     }
-    return res
   }
 
-  const offlineCreateCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
+  // Offline create
+  const _offlineCreateCipher = async (cipher: CipherView, collectionIds: string[]) => {
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
     const res = await storageService.get(key)
 
     const cipherEnc = await cipherService.encrypt(cipher)
-    const tempId = 'tmp--' + randomString()
+    const data = new CipherRequest(cipherEnc)
+    const tempId = 'tmp__create__' + randomString()
 
     res[tempId] = {
-      ...cipherEnc,
+      ...data,
       userId,
       id: tempId,
-      collectionIds,
-      name: cipherEnc.name.encryptedString,
-      notes: cipherEnc.notes.encryptedString
+      collectionIds
     }
     await storageService.save(key, res)
     await cipherService.clearCache()
+    cipherStore.setLastOfflineSync(new Date().getTime())
   }
 
+  // Update
   const updateCipher = async (id: string, cipher: CipherView, score: number, collectionIds: string[]) => {
-    const cipherEnc = await cipherService.encrypt(cipher)
-    const data = new CipherRequest(cipherEnc)
-    const res = await cipherStore.updateCipher(id, data, score, collectionIds)
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_updated'))
-    } else {
-      notifyApiError(res)
+    try {
+      const cipherEnc = await cipherService.encrypt(cipher)
+      const data = new CipherRequest(cipherEnc)
+      const res = await cipherStore.updateCipher(id, data, score, collectionIds)
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_updated'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
     }
-    return res
   }
 
   const deleteCiphers = async (ids: string[]) => {
-    const res = await cipherStore.deleteCiphers(ids)
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_deleted'))
-    } else {
-      notifyApiError(res)
+    try {
+      const res = await cipherStore.deleteCiphers(ids)
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_deleted'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
     }
-    return res
   }
 
   const toTrashCiphers = async (ids: string[]) => {
-    const res = await cipherStore.toTrashCiphers(ids)
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_trashed'))
-    } else {
-      notifyApiError(res)
+    try {
+      const res = await cipherStore.toTrashCiphers(ids)
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_trashed'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
     }
-    return res
   }
 
   const restoreCiphers = async (ids: string[]) => {
-    const res = await cipherStore.restoreCiphers(ids)
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_restored'))
-    } else {
-      notifyApiError(res)
+    try {
+      const res = await cipherStore.restoreCiphers(ids)
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_restored'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
     }
-    return res
   }
 
 
@@ -671,8 +777,14 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Check if biometric is viable
   const isBiometricAvailable = async () => {
-    const { available } = await ReactNativeBiometrics.isSensorAvailable()
-    return available
+    try {
+      const { available } = await ReactNativeBiometrics.isSensorAvailable()
+      return available
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return false
+    }
   }
 
   // Custom translate to force re render
@@ -739,7 +851,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     translate,
     notifyApiError,
     loadPasswordsHealth,
-    offlineCreateCipher
   }
 
   return (
