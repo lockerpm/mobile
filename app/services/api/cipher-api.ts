@@ -69,6 +69,23 @@ export class CipherApi {
     }
   }
 
+  // Offline sync cipher
+  async offlineSyncCipher(data: ImportCipherData): Promise<EmptyResult> {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/ciphers/sync/offline', data)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      __DEV__ && console.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
   // Update cipher
   async putCipher(id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
     try {
