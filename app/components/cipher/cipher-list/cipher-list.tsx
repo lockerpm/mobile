@@ -89,7 +89,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
         logo: null,
         imgLogo: null,
         svg: null,
-        notSync: c.id.startsWith('tmp__')
+        notSync: cipherStore.notSynchedCiphers.includes(c.id)
       }
       switch (c.type) {
         case CipherType.Login: {

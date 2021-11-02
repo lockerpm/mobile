@@ -395,26 +395,46 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Sync offline data
   const _syncOfflineData = async () => {
-    const notCreatedCiphers = await getCiphers({
+    if (cipherStore.notSynchedCiphers.length === 0) {
+      return
+    }
+    const notSynchedCiphers = await getCiphers({
       deleted: false,
       searchText: '',
-      filters: [(c: CipherView) => c.id.startsWith('tmp__create__')]
+      filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)]
     })
-    if (notCreatedCiphers.length > 0) {
-      const promises = []
-      const ciphers = []
-      notCreatedCiphers.forEach((c: CipherView) => {
-        promises.push(
-          cipherService.encrypt(c).then(enc => ciphers.push(new CipherRequest(enc)))
-        )
-      })
-      await Promise.all(promises)
-      await cipherStore.importCipher({
-        ciphers,
-        folders: [],
-        folderRelationships: []
-      })
-    }
+    const notSynchedCiphersDeleted = await getCiphers({
+      deleted: true,
+      searchText: '',
+      filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)]
+    })
+    notSynchedCiphers.push(...notSynchedCiphersDeleted)
+
+    const promises = []
+    const ciphers = []
+    notSynchedCiphers.forEach((c: CipherView) => {
+      promises.push(
+        cipherService.encrypt(c).then(enc => {
+          const cipherReq = new CipherRequest(enc)
+          if (!c.id.startsWith('tmp__')) {
+            // @ts-ignore
+            cipherReq.id = c.id
+          }
+          if (c.isDeleted) {
+            // @ts-ignore
+            cipherReq.deletedDate = new Date(c.deletedDate).getTime() / 1000
+          }
+          ciphers.push(cipherReq)
+        })
+      )
+    })
+    await Promise.all(promises)
+    await cipherStore.offlineSyncCipher({
+      ciphers,
+      folders: [],
+      folderRelationships: []
+    })
+    cipherStore.clearNotSync()
   }
 
   // Load folders
@@ -624,7 +644,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
     const cipherEnc = await cipherService.encrypt(cipher)
     const data = new CipherRequest(cipherEnc)
-    const tempId = 'tmp__create__' + randomString()
+    const tempId = 'tmp__' + randomString()
 
     res[tempId] = {
       ...data,
@@ -634,12 +654,21 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
     await storageService.save(key, res)
     await cipherService.clearCache()
+    cipherStore.addNotSync(tempId)
     cipherStore.setLastOfflineSync(new Date().getTime())
   }
 
   // Update
   const updateCipher = async (id: string, cipher: CipherView, score: number, collectionIds: string[]) => {
     try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineUpdateCipher(cipher, collectionIds)
+        notify('success', `${translate('success.cipher_updated')} ${translate('success.will_sync_when_online')}`)
+        return { kind: 'ok' }
+      } 
+
+      // Online
       const cipherEnc = await cipherService.encrypt(cipher)
       const data = new CipherRequest(cipherEnc)
       const res = await cipherStore.updateCipher(id, data, score, collectionIds)
@@ -656,8 +685,38 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
   }
 
+  // Offline update
+  const _offlineUpdateCipher = async (cipher: CipherView, collectionIds: string[]) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
+    const cipherEnc = await cipherService.encrypt(cipher)
+    const data = new CipherRequest(cipherEnc)
+    
+    res[cipher.id] = {
+      ...res[cipher.id],
+      ...data,
+      collectionIds,
+      revisionDate: new Date().toISOString()
+    }
+    await storageService.save(key, res)
+    await cipherService.clearCache()
+    cipherStore.addNotSync(cipher.id)
+    cipherStore.setLastOfflineSync(new Date().getTime())
+  }
+
+  // Delete
   const deleteCiphers = async (ids: string[]) => {
     try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineDeleteCiphers(ids)
+        notify('success', `${translate('success.cipher_deleted')}`)
+        return { kind: 'ok' }
+      } 
+
+      // Online
       const res = await cipherStore.deleteCiphers(ids)
       if (res.kind === 'ok') {
         notify('success', translate('success.cipher_deleted'))
@@ -672,8 +731,32 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
   }
 
+  // Offline delete
+  const _offlineDeleteCiphers = async (ids: string[]) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
+    ids.filter(id => id.startsWith('tmp__')).forEach(id => {
+      delete res[id]
+      cipherStore.removeNotSync(id)
+    })
+    await storageService.save(key, res)
+    await cipherService.clearCache()
+    cipherStore.setLastOfflineSync(new Date().getTime())
+  }
+
+  // To trash
   const toTrashCiphers = async (ids: string[]) => {
     try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineToTrashCiphers(ids)
+        notify('success', `${translate('success.cipher_trashed')} ${translate('success.will_sync_when_online')}`)
+        return { kind: 'ok' }
+      } 
+
+      // Online
       const res = await cipherStore.toTrashCiphers(ids)
       if (res.kind === 'ok') {
         notify('success', translate('success.cipher_trashed'))
@@ -688,7 +771,31 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
   }
 
+  // Offline to trash
+  const _offlineToTrashCiphers = async (ids: string[]) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
+    ids.forEach(id => {
+      res[id].deletedDate = new Date().toISOString()
+      cipherStore.addNotSync(id)
+    })
+    await storageService.save(key, res)
+    await cipherService.clearCache()
+    cipherStore.setLastOfflineSync(new Date().getTime())
+  }
+
+  // Restore
   const restoreCiphers = async (ids: string[]) => {
+    // Offline
+    if (uiStore.isOffline) {
+      await _offlineRestoreCiphers(ids)
+      notify('success', `${translate('success.cipher_restored')} ${translate('success.will_sync_when_online')}`)
+      return { kind: 'ok' }
+    } 
+
+    // Online
     try {
       const res = await cipherStore.restoreCiphers(ids)
       if (res.kind === 'ok') {
@@ -702,6 +809,21 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       __DEV__ && console.log(e)
       return { kind: 'unknown' }
     }
+  }
+
+  // Offline restore
+  const _offlineRestoreCiphers = async (ids: string[]) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
+    ids.forEach(id => {
+      res[id].deletedDate = null
+      cipherStore.addNotSync(id)
+    })
+    await storageService.save(key, res)
+    await cipherService.clearCache()
+    cipherStore.setLastOfflineSync(new Date().getTime())
   }
 
 

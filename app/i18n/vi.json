@@ -102,7 +102,8 @@
     "not_found": "Đối tượng không tồn tại",
     "too_many_failed_attempts": "Quá nhiều lần thử không thành công",
     "no_team_available": "Không có dữ liệu. Tham gia nhóm với vai trò Quản lý để sử dụng tính năng chia sẻ.",
-    "no_collection_available": "Bạn không có quyền truy cập vào bất kỳ thư mục chung nào."
+    "no_collection_available": "Bạn không có quyền truy cập vào bất kỳ thư mục chung nào.",
+    "not_available_offlie": "Không thể thực hiện hành động này trong chế độ ngoại tuyến"
   },
   "success": {
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
