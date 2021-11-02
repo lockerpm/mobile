@@ -1,6 +1,7 @@
 import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { ToolApi } from "../../services/api/tool-api"
 import { withEnvironment } from "../extensions/with-environment"
+import { omit } from "ramda"
 
 /**
  * Model description here for TypeScript hints.
@@ -81,6 +82,7 @@ export const ToolStoreModel = types
       return res
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .postProcessSnapshot(omit(['weakPasswords', 'reusedPasswords', 'passwordUseMap', 'exposedPasswordMap']))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

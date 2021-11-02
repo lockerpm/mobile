@@ -15,7 +15,7 @@ export const LockScreen = observer(function LockScreen() {
   const { logout, sessionLogin, notify, biometricLogin, translate, notifyApiError } = useMixins()
   const { user } = useStores()
 
-  // Params
+  // ---------------------- PARAMS -------------------------
   
   const [masterPassword, setMasterPassword] = useState('')
   const [isScreenLoading, setIsScreenLoading] = useState(false)
@@ -24,7 +24,7 @@ export const LockScreen = observer(function LockScreen() {
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  // Methods
+  // ---------------------- METHODS -------------------------
 
   const handleLogout = async () => {
     setIsScreenLoading(true)
@@ -78,7 +78,7 @@ export const LockScreen = observer(function LockScreen() {
     }
   }
 
-  // Components
+  // ---------------------- COMPONENTS -------------------------
 
   const header = (
     <View style={{ alignItems: "flex-end" }}>
@@ -144,7 +144,7 @@ export const LockScreen = observer(function LockScreen() {
     }
   }, [navigation])
 
-  // Render
+  // ---------------------- RENDER -------------------------
 
   return (
     <Layout
