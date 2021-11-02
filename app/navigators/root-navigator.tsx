@@ -71,6 +71,7 @@ const RootStack = () => {
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isInternetReachable
       uiStore.setIsOffline(offline)
+      __DEV__ && console.log(offline ? 'OFFLINE' : 'ONLINE')
     })
 
     // Check deep linking

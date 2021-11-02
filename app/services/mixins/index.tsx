@@ -62,7 +62,8 @@ const defaultData = {
   isBiometricAvailable: async () => { return false },
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
   notifyApiError: (problem: GeneralApiProblem) => {},
-  loadPasswordsHealth: async () => {}
+  loadPasswordsHealth: async () => {},
+  offlineCreateCipher: async (cipher: CipherView, score: number, collectionIds: string[]) => {},
 }
 
 
@@ -535,6 +536,26 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return res
   }
 
+  const offlineCreateCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
+    const cipherEnc = await cipherService.encrypt(cipher)
+    const tempId = 'tmp--' + randomString()
+
+    res[tempId] = {
+      ...cipherEnc,
+      userId,
+      id: tempId,
+      collectionIds,
+      name: cipherEnc.name.encryptedString,
+      notes: cipherEnc.notes.encryptedString
+    }
+    await storageService.save(key, res)
+    await cipherService.clearCache()
+  }
+
   const updateCipher = async (id: string, cipher: CipherView, score: number, collectionIds: string[]) => {
     const cipherEnc = await cipherService.encrypt(cipher)
     const data = new CipherRequest(cipherEnc)
@@ -717,7 +738,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     isBiometricAvailable,
     translate,
     notifyApiError,
-    loadPasswordsHealth
+    loadPasswordsHealth,
+    offlineCreateCipher
   }
 
   return (
