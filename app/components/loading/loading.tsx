@@ -3,6 +3,8 @@ import { StyleProp, View, ViewStyle, ActivityIndicator } from "react-native"
 import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
 import { color } from "../../theme"
+import { Text } from "../text/text"
+
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
@@ -26,22 +28,30 @@ const OVERLAY_CONTAINER: ViewStyle = {
 
 
 export interface LoadingProps {
-  /**
-   * An optional style override useful for padding & margin.
-   */
   style?: StyleProp<ViewStyle>
+  message?: string
 }
 
 /**
  * Describe your component here
  */
 export const Loading = observer(function Loading(props: LoadingProps) {
-  const { style } = props
+  const { style, message } = props
   const styles = flatten([CONTAINER, style])
 
   return (
     <View style={styles}>
       <ActivityIndicator size="large" color={color.palette.green} />
+      {
+        !!message && (
+          <Text
+            text={message}
+            style={{
+              marginTop: 10
+            }}
+          />
+        )
+      }
     </View>
   )
 })

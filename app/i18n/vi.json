@@ -192,6 +192,10 @@
     "conditions": "chính sách bảo mật",
     "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn."
   },
+  "start": {
+    "synching": "Đồng bộ hoá dữ liệu...",
+    "decrypting": "Hoàn tất chuẩn bị dữ liệu..."
+  },
   "biometric_intro": {
     "title": "Mở khóa Locker bằng Face ID/Touch ID",
     "desc": "Sử dụng nhận dạng khuôn mặt hoặc vân tay để bảo vệ mật khẩu của bạn",
