@@ -11,6 +11,7 @@ import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { GeneralApiProblem } from "../../../../services/api/api-problem"
+import { useCoreService } from "../../../../services/core-service"
 
 
 type Props = {
@@ -23,12 +24,17 @@ type Props = {
 
 export const FolderAction = (props: Props) => {
   const { isOpen, onClose, folder, onLoadingChange } = props
-  const { folderStore, collectionStore } = useStores()
-  const { notify, translate, notifyApiError } = useMixins()
+  const { folderStore, collectionStore, uiStore, cipherStore } = useStores()
+  const { notify, translate, notifyApiError, reloadCache } = useMixins()
+  const { userService, storageService } = useCoreService()
+
+  // ---------------- PARAMS -----------------
 
   const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [isRenameOpen, setIsRenameOpen] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+
+  // ---------------- METHODS -----------------
 
   const handleDelete = async () => {
     onLoadingChange && onLoadingChange(true)
@@ -36,20 +42,55 @@ export const FolderAction = (props: Props) => {
 
     // @ts-ignore
     if (!folder.organizationId) {
-      res = await folderStore.deleteFolder(folder.id)
+      if (uiStore.isOffline) {
+        await _offlineDeletePersonalFolder(folder.id)
+        res = { kind: 'ok' }
+      } else {
+        res = await folderStore.deleteFolder(folder.id)
+      }
     } else {
       // @ts-ignore
       res = await collectionStore.deleteCollection(folder.id, folder.organizationId)
     }
 
     if (res.kind === 'ok') {
-      notify('success', translate('folder.folder_deleted'))
+      notify(
+        'success', translate('folder.folder_deleted') 
+        + (uiStore.isOffline ? ` ${translate('success.will_sync_when_online')}` : '')
+      )
     } else {
       // @ts-ignore
       notifyApiError(res)
     }
     onLoadingChange && onLoadingChange(false)
   }
+
+  const _offlineDeletePersonalFolder = async (id: string) => {
+    const userId = await userService.getUserId()
+
+    // Clear folder
+    let key = `folders_${userId}`
+    let res = await storageService.get(key)
+    delete res[id]
+    await storageService.save(key, res)
+    folderStore.removeNotSync(id)
+
+    // Update ciphers
+    key = `ciphers_${userId}`
+    res = await storageService.get(key)
+    Object.keys(res).forEach((cipherId) => {
+      if (res[cipherId].folderId === id) {
+        res[cipherId].folderId = null
+        res[cipherId].deletedDate = new Date().toISOString()
+        cipherStore.addNotSync(cipherId)
+      }
+    })
+    await storageService.save(key, res)
+    
+    await reloadCache()
+  }
+  
+  // ---------------- RENDER -----------------
 
   return (
     <View>

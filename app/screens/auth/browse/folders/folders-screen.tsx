@@ -10,6 +10,7 @@ import { SortAction } from "../../home/all-item/sort-action"
 import { SectionList, View } from "react-native"
 import { color, commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { NewFolderModal } from "./new-folder-modal"
 import { FolderAction } from "./folder-action"
 import { FOLDER_IMG } from "../../../../common/mappings"
@@ -177,7 +178,13 @@ export const FoldersScreen = observer(function FoldersScreen() {
                       )
                     }
 
-                    <View style={{ flex: 1, marginLeft: 12 }}>
+                    <View style={{ 
+                      flex: 1, 
+                      marginLeft: 12, 
+                      flexDirection: 'row', 
+                      alignItems: 'center', 
+                      flexWrap: 'wrap' 
+                    }}>
                       <Text
                         preset="semibold"
                         text={
@@ -185,6 +192,18 @@ export const FoldersScreen = observer(function FoldersScreen() {
                           + (item.cipherCount !== undefined ? ` (${item.cipherCount})` : '')
                         }
                       />
+
+                      {
+                        folderStore.notSynchedFolders.includes(item.id) && (
+                          <View style={{ marginLeft: 10 }}>
+                            <MaterialCommunityIconsIcon
+                              name="cloud-off-outline"
+                              size={22}
+                              color={color.textBlack}
+                            />
+                          </View>
+                        )
+                      }
                     </View>
 
                     {

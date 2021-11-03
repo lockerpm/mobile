@@ -20,6 +20,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { saveShared } from '../../utils/keychain'
 import { GeneralApiProblem } from '../api/api-problem'
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
+import { FolderView } from '../../../core/models/view/folderView'
+import { FolderRequest } from '../../../core/models/request/folderRequest'
 
 const { createContext, useContext } = React
 
@@ -63,6 +65,7 @@ const defaultData = {
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
   notifyApiError: (problem: GeneralApiProblem) => {},
   loadPasswordsHealth: async () => {},
+  reloadCache: async () => {},
 }
 
 
@@ -395,46 +398,96 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Sync offline data
   const _syncOfflineData = async () => {
-    if (cipherStore.notSynchedCiphers.length === 0) {
-      return
-    }
-    const notSynchedCiphers = await getCiphers({
-      deleted: false,
-      searchText: '',
-      filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)]
-    })
-    const notSynchedCiphersDeleted = await getCiphers({
-      deleted: true,
-      searchText: '',
-      filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)]
-    })
-    notSynchedCiphers.push(...notSynchedCiphersDeleted)
-
-    const promises = []
     const ciphers = []
-    notSynchedCiphers.forEach((c: CipherView) => {
-      promises.push(
-        cipherService.encrypt(c).then(enc => {
-          const cipherReq = new CipherRequest(enc)
-          if (!c.id.startsWith('tmp__')) {
+    const folders = []
+    const folderRelationships = []
+
+    // Prepare ciphers
+    if (cipherStore.notSynchedCiphers.length > 0) {
+      const notSynchedCiphers = await getCiphers({
+        deleted: false,
+        searchText: '',
+        filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)]
+      })
+      const notSynchedCiphersDeleted = await getCiphers({
+        deleted: true,
+        searchText: '',
+        filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)]
+      })
+      notSynchedCiphers.push(...notSynchedCiphersDeleted)
+  
+      const promises = []
+      notSynchedCiphers.forEach((c: CipherView) => {
+        promises.push(
+          cipherService.encrypt(c).then(enc => {
+            const cipherReq = new CipherRequest(enc)
+            if (!c.id.startsWith('tmp__')) {
+              // @ts-ignore
+              cipherReq.id = c.id
+            }
+            if (c.isDeleted) {
+              // @ts-ignore
+              cipherReq.deletedDate = new Date(c.deletedDate).getTime() / 1000
+            }
+            ciphers.push(cipherReq)
+          })
+        )
+      })
+      await Promise.all(promises)
+    }
+
+    // Prepare folders
+    if (folderStore.notSynchedFolders.length > 0) {
+      const promises = []
+      folderStore.folders.filter(f => folderStore.notSynchedFolders.includes(f.id)).forEach((f: FolderView) => {
+        promises.push(
+          folderService.encrypt(f).then(enc => {
+            const folderReq = new FolderRequest(enc)
             // @ts-ignore
-            cipherReq.id = c.id
+            folderReq.id = f.id
+            folders.push(folderReq)
+          })
+        )
+      })
+      await Promise.all(promises)
+    }
+
+    // Prepare relationship
+    folders.forEach((f, fIndex) => {
+      if (f.id.startsWith('tmp__')) {
+        ciphers.forEach((c, cIndex) => {
+          if (c.folderId === f.id) {
+            c.folderId = null
+            folderRelationships.push({
+              key: cIndex,
+              value: fIndex
+            })
           }
-          if (c.isDeleted) {
-            // @ts-ignore
-            cipherReq.deletedDate = new Date(c.deletedDate).getTime() / 1000
-          }
-          ciphers.push(cipherReq)
         })
-      )
+        delete f.id
+      }
     })
-    await Promise.all(promises)
+    
+    // Done
     await cipherStore.offlineSyncCipher({
       ciphers,
-      folders: [],
-      folderRelationships: []
+      folders,
+      folderRelationships
     })
     cipherStore.clearNotSync()
+    folderStore.clearNotSync()
+  }
+
+  // Reload offline cache
+  const reloadCache = async () => {
+    await cipherService.clearCache()
+    cipherStore.setLastOfflineSync(new Date().getTime())
+    folderService.clearCache()
+    await loadFolders()
+    if (cipherStore.selectedCipher) {
+      const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
+      cipherStore.setSelectedCipher(updatedCipher)
+    }
   }
 
   // Load folders
@@ -445,7 +498,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         let ciphers = await getCiphers({
           deleted: false,
           searchText: '',
-          filters: [c => c.folderId ? c.folderId === f.id : !c.collectionIds.length]
+          filters: [c => c.folderId ? c.folderId === f.id : (!c.collectionIds.length && !f.id)]
         })
         f.cipherCount = ciphers ? ciphers.length : 0
       }
@@ -653,9 +706,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       collectionIds
     }
     await storageService.save(key, res)
-    await cipherService.clearCache()
     cipherStore.addNotSync(tempId)
-    cipherStore.setLastOfflineSync(new Date().getTime())
+    await reloadCache()
   }
 
   // Update
@@ -701,13 +753,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       revisionDate: new Date().toISOString()
     }
     await storageService.save(key, res)
-    await cipherService.clearCache()
     cipherStore.addNotSync(cipher.id)
-    cipherStore.setLastOfflineSync(new Date().getTime())
-    if (cipherStore.selectedCipher) {
-      const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
-      cipherStore.setSelectedCipher(updatedCipher)
-    }
+    await reloadCache()
   }
 
   // Delete
@@ -746,8 +793,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       cipherStore.removeNotSync(id)
     })
     await storageService.save(key, res)
-    await cipherService.clearCache()
-    cipherStore.setLastOfflineSync(new Date().getTime())
+    await reloadCache()
   }
 
   // To trash
@@ -786,12 +832,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       cipherStore.addNotSync(id)
     })
     await storageService.save(key, res)
-    await cipherService.clearCache()
-    cipherStore.setLastOfflineSync(new Date().getTime())
-    if (cipherStore.selectedCipher) {
-      const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
-      cipherStore.setSelectedCipher(updatedCipher)
-    }
+    await reloadCache()
   }
 
   // Restore
@@ -830,12 +871,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       cipherStore.addNotSync(id)
     })
     await storageService.save(key, res)
-    await cipherService.clearCache()
-    cipherStore.setLastOfflineSync(new Date().getTime())
-    if (cipherStore.selectedCipher) {
-      const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
-      cipherStore.setSelectedCipher(updatedCipher)
-    }
+    await reloadCache()
   }
 
 
@@ -985,6 +1021,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     translate,
     notifyApiError,
     loadPasswordsHealth,
+    reloadCache
   }
 
   return (
