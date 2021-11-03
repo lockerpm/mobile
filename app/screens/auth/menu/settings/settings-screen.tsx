@@ -9,9 +9,6 @@ import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
 import ReactNativeBiometrics from "react-native-biometrics"
-// import { DeauthorizeSessionsModal } from "./deauthorize-sessions-modal"
-// import { PurgeAccountModal } from "./purge-account-modal"
-// import { DeleteAccountModal } from "./delete-account-modal"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -29,14 +26,11 @@ export const SettingsScreen = observer(function SettingsScreen() {
   const route = useRoute<ScreenProp>()
   const { fromIntro } = route.params
 
-  // PARAMS
+  // ----------------------- PARAMS -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
-  // const [showDeauthSessionsModal, setShowDeauthSessionsModal] = useState(false)
-  // const [showPurgeAccountModal, setShowPurgeAccountModal] = useState(false)
-  // const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false)
 
-  // METHODS
+  // ----------------------- METHODS -----------------------
 
   const enableBiometric = async () => {
     setIsLoading(true)
@@ -61,7 +55,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
     notify('success', translate('success.biometric_enabled'))
   }
 
-  // EFFECT
+  // ----------------------- EFFECT -------------------------
 
   let isBacking = false
   useEffect(() => {
@@ -94,7 +88,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
     }
   }, [navigation])
 
-  // RENDER
+  // ----------------------- RENDER -----------------------
 
   const settings = {
     language: {
@@ -277,61 +271,29 @@ export const SettingsScreen = observer(function SettingsScreen() {
       </View>
       {/* Security end */}
 
-      {/* Danger zone */}
-      {/* <Text
-        text={translate('settings.danger_zone').toUpperCase()}
+      {/* Import/Export */}
+      <Text
+        text={translate('settings.import_export').toUpperCase()}
         style={[SECTION_TITLE, {
-          marginTop: 15
+          marginTop: 15,
         }]}
       />
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
+        {/* Import */}
         <SettingsItem
-          name={translate('settings.deauthorize_sessions')}
-          noCaret
-          color={color.error}
-          action={() => {
-            setShowDeauthSessionsModal(true)
-          }}
+          name={translate('settings.import')}
+          action={() => navigation.navigate('import')}
         />
+        {/* Import end */}
+
+        {/* Export */}
         <SettingsItem
-          name={translate('settings.delete_all_items')}
-          noCaret
-          color={color.error}
-          action={() => {
-            setShowPurgeAccountModal(true)
-          }}
+          name={translate('settings.export')}
+          action={() => navigation.navigate('export')}
         />
-        <SettingsItem
-          name={translate('settings.delete_account')}
-          noCaret
-          noBorder
-          color={color.error}
-          action={() => {
-            setShowDeleteAccountModal(true)
-          }}
-        />
-      </View> */}
-      {/* Danger zone end */}
-
-      {/* Modals */}
-      {/* <DeauthorizeSessionsModal
-        navigation={navigation}
-        isOpen={showDeauthSessionsModal}
-        onClose={() => setShowDeauthSessionsModal(false)}
-      />
-
-      <PurgeAccountModal
-        navigation={navigation}
-        isOpen={showPurgeAccountModal}
-        onClose={() => setShowPurgeAccountModal(false)}
-      />
-
-      <DeleteAccountModal
-        navigation={navigation}
-        isOpen={showDeleteAccountModal}
-        onClose={() => setShowDeleteAccountModal(false)}
-      /> */}
-      {/* Modals end */}
+        {/* Export end */}
+      </View>
+      {/* Import/Export end */}
     </Layout>
   )
 })

@@ -14,7 +14,8 @@ import {
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
-  DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList
+  DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
+  ImportScreen, ExportScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -83,7 +84,9 @@ export type PrimaryParamList = {
   },
   changeMasterPassword: undefined,
   help: undefined,
-  autofillService: undefined
+  autofillService: undefined,
+  import: undefined,
+  export: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -289,6 +292,8 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />
         <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
+        <Stack.Screen name="import" component={ImportScreen} />
+        <Stack.Screen name="export" component={ExportScreen} />
       </Stack.Navigator>
     </UserInactivity>
   )
