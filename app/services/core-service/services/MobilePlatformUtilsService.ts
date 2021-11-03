@@ -4,7 +4,9 @@ import { Platform, Linking, Alert } from "react-native"
 import Clipboard from '@react-native-clipboard/clipboard'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import DeviceInfo from 'react-native-device-info'
-import Toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message'
+import RNFS from 'react-native-fs'
+
 
 export class MobilePlatformUtilsService implements PlatformUtilsService {
   identityClientId: string
@@ -115,9 +117,13 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
     return Promise.resolve(Clipboard.getString());
   }
 
-  // TODO
-  saveFile(win: Window, blobData: any, blobOptions: any, fileName: string): void {
-    throw new Error('Not implemented save file for now.');
+  saveFile(blobData: any, blobOptions: any, fileName: string): void {
+    const path = `${RNFS.DocumentDirectoryPath}/${fileName}`
+    try {
+      RNFS.writeFile(path, blobData, blobOptions)
+    } catch (e) {
+      __DEV__ && console.log(e)
+    }
   }
 
   showDialog(body: string, title: string | undefined, confirmText: string | undefined, cancelText: string | undefined, type: string | undefined, bodyIsHtml: boolean | undefined): Promise<boolean> {

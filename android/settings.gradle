@@ -1,8 +1,9 @@
 rootProject.name = 'CyStackLocker'
 include ':react-native-randombytes'
 project(':react-native-randombytes').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-randombytes/android')
+include ':react-native-fs'
+project(':react-native-fs').projectDir = new File(settingsDir, '../node_modules/react-native-fs/android')
 // Unimodules https://docs.expo.io/bare/installing-unimodules/#configuration-for-android
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'; includeUnimodulesProjects()
-
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'

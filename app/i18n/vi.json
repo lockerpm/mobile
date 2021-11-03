@@ -21,6 +21,7 @@
     "details": "Chi tiết",
     "edit": "Sửa",
     "email": "Email",
+    "enter_master_pass": "Nhập mật khẩu chính",
     "folder": "Thư mục",
     "fullname": "Họ và tên",
     "generate": "Tạo mới",
@@ -393,7 +394,10 @@
     "on_app_close": "Khi tắt ứng dụng",
     "on_screen_off": "Khi tắt màn hình",
     "timeout": "Hẹn giờ",
-    "timeout_action": "Hành động khi hết giờ"
+    "timeout_action": "Hành động khi hết giờ",
+    "import_export": "Nhập và xuất dữ liệu",
+    "import": "Nhập dữ liệu",
+    "export": "Xuất dữ liệu"
   },
   "autofill_service": {
     "ios": {
@@ -410,5 +414,8 @@
         "desc": "Dịch vụ tự động điền của Locker sử dụng AutoFill Framework của Android để hỗ trợ điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn"
       }
     }
+  },
+  "export": {
+    "success": "Dữ liệu đã được xuất. Hãy kiểm tra thư mục Tài liệu trên thiết bị của bạn."
   }
 }

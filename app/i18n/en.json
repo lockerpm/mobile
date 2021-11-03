@@ -21,6 +21,7 @@
     "details": "Details",
     "edit": "Edit",
     "email": "Email",
+    "enter_master_pass": "Enter master password",
     "folder": "Folder",
     "fullname": "Full name",
     "generate": "Generate",
@@ -393,7 +394,10 @@
     "on_app_close": "On app close",
     "on_screen_off": "On screen off",
     "timeout": "Timeout",
-    "timeout_action": "Timeout Action"
+    "timeout_action": "Timeout Action",
+    "import_export": "Import and Export",
+    "import": "Import data",
+    "export": "Export data"
   },
   "autofill_service": {
     "ios": {
@@ -410,5 +414,8 @@
         "desc": "The Locker auto-fill service uses the Android Autofill Framework to assist in filling logins into other apps on your device"
       }
     }
+  },
+  "export": {
+    "success": "Data exported. Please check the Documents folder on your device."
   }
 }
