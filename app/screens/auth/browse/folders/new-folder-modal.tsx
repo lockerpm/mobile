@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { FloatingInput, Button, Modal, Text, DropdownPicker } from "../../../../components"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
@@ -20,7 +20,7 @@ interface Props {
 
 export const NewFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
-  const { folderStore, user, collectionStore } = useStores()
+  const { folderStore, user, collectionStore, uiStore } = useStores()
   const { folderService, collectionService } = useCoreService()
   const { notify, translate, notifyApiError } = useMixins()
 
@@ -94,6 +94,14 @@ export const NewFolderModal = observer((props: Props) => {
     }
   }
 
+  // --------------- EFFECT ----------------
+
+  useEffect(() => {
+    if (uiStore.isOffline) {
+      setOwner('me')
+    }
+  }, [isOpen, uiStore.isOffline])
+
   // --------------- RENDER ----------------
 
   return (
@@ -112,6 +120,7 @@ export const NewFolderModal = observer((props: Props) => {
       />
 
       <DropdownPicker
+        isDisabled={uiStore.isOffline}
         placeholder={translate('common.select')}
         value={owner}
         items={owners}

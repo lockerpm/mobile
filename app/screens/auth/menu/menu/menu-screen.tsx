@@ -68,6 +68,7 @@ export const MenuScreen = observer(function MenuScreen() {
 
   const items2: MenuItemProps[] = [
     {
+      debug: true,
       icon: <LockIcon height={22} />,
       name: '(DEBUG) ' + (uiStore.isOffline ? 'Go online' : 'Go offline'),
       action: () => {

@@ -5,6 +5,7 @@ import { Layout, Header, Button, AutoImage as Image, Text, FloatingInput, Cipher
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { CardAction } from "../card-action"
 import { useStores } from "../../../../../models"
@@ -83,8 +84,21 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           />
           <Text
             preset="header"
-            text={selectedCipher.name}
-          />
+            style={{ marginTop: 5 }}
+          >
+            {selectedCipher.name}
+            {
+              cipherStore.notSynchedCiphers.includes(selectedCipher.id) && (
+                <View style={{ paddingLeft: 10 }}>
+                  <MaterialCommunityIconsIcon
+                    name="cloud-off-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+          </Text>
         </View>
       </View>
       {/* Intro end */}

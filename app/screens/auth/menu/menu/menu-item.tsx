@@ -12,10 +12,11 @@ export type MenuItemProps = {
   noBorder?: boolean,
   action?: Function
   disabled?: boolean
+  debug?: boolean
 }
 
 export const MenuItem = observer((props: MenuItemProps) => {
-  return (
+  return !props.debug || __DEV__ ? (
     <Button
       isDisabled={props.disabled}
       preset="link"
@@ -44,5 +45,5 @@ export const MenuItem = observer((props: MenuItemProps) => {
         )
       }
     </Button>
-  )
+  ) : null
 })
