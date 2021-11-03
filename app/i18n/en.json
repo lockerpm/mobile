@@ -192,6 +192,10 @@
     "conditions": "conditions",
     "signup_successful": "A confirmation email has been sent to your address."
   },
+  "start": {
+    "synching": "Synchronizing...",
+    "decrypting": "Preparing your data..."
+  },
   "biometric_intro": {
     "title": "Unlock your vault with Face ID/Touch ID",
     "desc": "Use face recognition or fingerprint to protect your passwords",
