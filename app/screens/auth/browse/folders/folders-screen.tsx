@@ -23,7 +23,7 @@ import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
   const { getTeam, randomString, translate } = useMixins()
-  const { folderStore, collectionStore, user } = useStores()
+  const { folderStore, collectionStore, user, uiStore } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
 
@@ -71,9 +71,15 @@ export const FoldersScreen = observer(function FoldersScreen() {
     ...Object.keys(filteredCollection).map((id) => ({
       id: randomString(),
       title: getTeam(user.teams, id).name,
-      data: getFilteredData(filteredCollection[id], true, TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role))
+      data: getFilteredData(
+        filteredCollection[id], 
+        true, 
+        TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role) && !uiStore.isOffline
+      )
     }))
   ]
+
+  // Render
 
   return (
     <Layout

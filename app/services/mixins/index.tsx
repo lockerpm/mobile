@@ -704,6 +704,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     await cipherService.clearCache()
     cipherStore.addNotSync(cipher.id)
     cipherStore.setLastOfflineSync(new Date().getTime())
+    if (cipherStore.selectedCipher) {
+      const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
+      cipherStore.setSelectedCipher(updatedCipher)
+    }
   }
 
   // Delete
@@ -737,7 +741,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     const key = `ciphers_${userId}`
     const res = await storageService.get(key)
 
-    ids.filter(id => id.startsWith('tmp__')).forEach(id => {
+    ids.forEach(id => {
       delete res[id]
       cipherStore.removeNotSync(id)
     })
@@ -784,6 +788,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     await storageService.save(key, res)
     await cipherService.clearCache()
     cipherStore.setLastOfflineSync(new Date().getTime())
+    if (cipherStore.selectedCipher) {
+      const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
+      cipherStore.setSelectedCipher(updatedCipher)
+    }
   }
 
   // Restore
@@ -824,6 +832,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     await storageService.save(key, res)
     await cipherService.clearCache()
     cipherStore.setLastOfflineSync(new Date().getTime())
+    if (cipherStore.selectedCipher) {
+      const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
+      cipherStore.setSelectedCipher(updatedCipher)
+    }
   }
 
 

@@ -36,7 +36,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const [showChangeTeamFolderModal, setShowChangeTeamFolderModal] = useState(false)
 
   const { toTrashCiphers, getRouteName, translate, getTeam } = useMixins()
-  const { cipherStore, user } = useStores()
+  const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 
   // Computed
@@ -178,6 +178,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 />
 
                 <ActionItem
+                  disabled={uiStore.isOffline && !!selectedCipher.organizationId}
                   name={translate('folder.move_to_folder')}
                   icon="folder-o"
                   action={() => {
@@ -193,6 +194,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 {
                   selectedCipher.organizationId && (
                     <ActionItem
+                      disabled={uiStore.isOffline}
                       name={translate('common.team_folders')}
                       icon="user-o"
                       action={() => {
@@ -210,6 +212,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 <Divider style={{ marginVertical: 5 }} />
 
                 <ActionItem
+                  disabled={uiStore.isOffline && !!selectedCipher.organizationId}
                   name={translate('common.edit')}
                   icon="edit"
                   action={() => {
@@ -221,6 +224,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 {
                   !selectedCipher.organizationId && (
                     <ActionItem
+                      disabled={uiStore.isOffline}
                       name={translate('common.share')}
                       icon="share-square-o"
                       action={() => {
@@ -236,6 +240,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 }
 
                 <ActionItem
+                  disabled={uiStore.isOffline && !!selectedCipher.organizationId}
                   name={translate('trash.to_trash')}
                   icon="trash"
                   textColor={color.error}
