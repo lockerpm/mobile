@@ -15,7 +15,7 @@ import {
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
-  ImportScreen, ExportScreen
+  ImportScreen, ExportScreen, AuthenticatorScreen, QRScannerScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -46,6 +46,8 @@ export type PrimaryParamList = {
   passwordGenerator: {
     fromTools?: boolean
   },
+  authenticator: undefined,
+  qrScanner: undefined,
   passwordHealth: undefined,
   weakPasswordList: undefined,
   reusePasswordList: undefined,
@@ -94,7 +96,10 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export const MainNavigator = observer(function MainNavigator() {
   const navigation = useNavigation()
-  const { lock, getSyncData, getCipherById, loadFolders, loadCollections, logout, loadPasswordsHealth } = useMixins()
+  const { 
+    lock, getSyncData, getCipherById, loadFolders, loadCollections, logout, 
+    loadPasswordsHealth
+  } = useMixins()
   const { uiStore, user, cipherStore } = useStores()
 
   const [socket, setSocket] = useState(null)
@@ -267,7 +272,8 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
         <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} initialParams={{ fromTools: false }} />
-
+        <Stack.Screen name="authenticator" component={AuthenticatorScreen} />
+        <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
         <Stack.Screen name="weakPasswordList" component={WeakPasswordList} />
         <Stack.Screen name="reusePasswordList" component={ReusePasswordList} />

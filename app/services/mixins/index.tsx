@@ -30,7 +30,8 @@ const { createContext, useContext } = React
 type GetCiphersParams = {
   deleted: boolean,
   searchText: string,
-  filters: Function[]
+  filters: Function[],
+  includeExtensions?: boolean
 }
 
 // Mixins data
@@ -66,6 +67,12 @@ const defaultData = {
   notifyApiError: (problem: GeneralApiProblem) => {},
   loadPasswordsHealth: async () => {},
   reloadCache: async () => {},
+  parseOTPUri: (uri: string) => ({
+    account: undefined,
+    secret: undefined,
+    algorithm: undefined,
+    period: undefined
+  })
 }
 
 
@@ -535,6 +542,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     try {
       const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
       const filters = [deletedFilter, ...params.filters]
+      if (!params.includeExtensions) {
+        filters.unshift((c : CipherView) => 1 <= c.type && c.type <= 4)
+      }
       return await searchService.searchCiphers(params.searchText || '', filters, null) || []
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
@@ -894,6 +904,45 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return cipher
   }
 
+  // Parse OTP from URI
+  const parseOTPUri = (uri: string) => {
+    const components = uri.split('/')
+    const data = components[components.length - 1].split('?')
+    const account = decodeURIComponent(data[0])
+    const query = parse_query_string(data[1])
+
+    const res = {
+      account,
+      secret: query.secret,
+      algorithm: query.algorithm,
+      period: query.period
+    }
+
+    return res
+  }
+  const parse_query_string = (query: string) => {
+    const vars = query.split("&")
+    const query_string = {
+      secret: undefined,
+      algorithm: undefined,
+      period: undefined
+    }
+    for (let i = 0; i < vars.length; i++) {
+      const pair = vars[i].split("=")
+      const key = decodeURIComponent(pair[0])
+      const value = decodeURIComponent(pair[1])
+      if (typeof query_string[key] === "undefined") {
+        query_string[key] = decodeURIComponent(value)
+      } else if (typeof query_string[key] === "string") {
+        const arr = [query_string[key], decodeURIComponent(value)]
+        query_string[key] = arr
+      } else {
+        query_string[key].push(decodeURIComponent(value))
+      }
+    }
+    return query_string
+  }
+
   // Password strength
   const getPasswordStrength = (password: string) => {
     return passwordGenerationService.passwordStrength(password, ['cystack']) || { score: 0 }
@@ -1023,7 +1072,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     translate,
     notifyApiError,
     loadPasswordsHealth,
-    reloadCache
+    reloadCache,
+    parseOTPUri
   }
 
   return (

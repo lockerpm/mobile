@@ -22,6 +22,9 @@ target 'CyStackLocker' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+
   target 'CyStackLockerTests' do
     inherit! :complete
     # Pods for testing

@@ -104,6 +104,7 @@ type ToolsItem = {
 
 type ToolsItemContainer = {
   passwordGenerator: ToolsItem,
+  authenticator: ToolsItem,
   passwordHealth: ToolsItem,
   dataBreachScanner: ToolsItem
 }
@@ -114,6 +115,13 @@ export const TOOLS_ITEMS: ToolsItemContainer = {
     desc: 'pass_generator.desc',
     icon: require('./images/vault/password-generator.png'),
     routeName: 'passwordGenerator',
+    svgIcon: PasswordGeneratorIcon
+  },
+  authenticator: {
+    label: 'authenticator.title',
+    desc: 'authenticator.desc',
+    icon: require('./images/vault/password-generator.png'),
+    routeName: 'authenticator',
     svgIcon: PasswordGeneratorIcon
   },
   passwordHealth: {

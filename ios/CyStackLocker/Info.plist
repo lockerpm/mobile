@@ -110,5 +110,7 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Scan QR code</string>
 </dict>
 </plist>

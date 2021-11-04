@@ -35,7 +35,9 @@ export const InitScreen = observer(function InitScreen() {
 
     // Logged in?
     if (!user.isLoggedIn) {
-      const introShown = await load(storageKeys.APP_SHOW_INTRO)
+      // Temporary disabled
+      // const introShown = await load(storageKeys.APP_SHOW_INTRO)
+      const introShown = true
       if (!introShown) {
         await save(storageKeys.APP_SHOW_INTRO, 1)
         navigation.navigate('intro')

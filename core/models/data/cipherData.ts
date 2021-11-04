@@ -62,6 +62,7 @@ export class CipherData {
                 this.login = new LoginData(response.login);
                 break;
             case CipherType.SecureNote:
+            case CipherType.TOTP:
                 this.secureNote = new SecureNoteData(response.secureNote);
                 break;
             case CipherType.Card:

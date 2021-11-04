@@ -346,6 +346,10 @@
     "avoid_ambiguous": "Tránh các ký tự dễ nhầm lẫn",
     "use_password": "Sử dụng mật khẩu"
   },
+  "authenticator": {
+    "title": "Authenticator",
+    "desc": "Tạo mã Xác minh 2 bước (2FA) trên điện thoại của bạn"
+  },
   "pass_health": {
     "title": "Sức khỏe mật khẩu",
     "desc": "Xác định các mật khẩu yếu, trùng lặp có thể khiến bạn bị tấn công bởi tội phạm mạng",

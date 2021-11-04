@@ -141,6 +141,7 @@ android {
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.cystack.locker'
         ]
+        missingDimensionStrategy 'react-native-camera', 'general'
     }
     splits {
         abi {
