@@ -346,6 +346,10 @@
     "avoid_ambiguous": "Avoid ambiguous characters",
     "use_password": "Use Password"
   },
+  "authenticator": {
+    "title": "Authenticator",
+    "desc": "Generate two-factor authentication (2FA) codes on your device"
+  },
   "pass_health": {
     "title": "Password Health",
     "desc": "Identify passwords that can put you at risk",
