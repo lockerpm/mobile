@@ -29,9 +29,9 @@ export const UserModel = types
     fingerprint: types.maybeNull(types.string),
 
     // Others data
-    teams: types.maybeNull(types.array(types.frozen())),
+    teams: types.array(types.frozen()),
     plan: types.maybeNull(types.frozen()),
-    invitations: types.maybeNull(types.array(types.frozen())),
+    invitations: types.array(types.frozen()),
 
     // User
     language: types.optional(types.string, 'en'),

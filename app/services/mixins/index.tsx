@@ -469,13 +469,15 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     })
     
     // Done
-    await cipherStore.offlineSyncCipher({
-      ciphers,
-      folders,
-      folderRelationships
-    })
-    cipherStore.clearNotSync()
-    folderStore.clearNotSync()
+    if (ciphers.length || folders.length) {
+      await cipherStore.offlineSyncCipher({
+        ciphers,
+        folders,
+        folderRelationships
+      })
+      cipherStore.clearNotSync()
+      folderStore.clearNotSync()
+    }
   }
 
   // Reload offline cache

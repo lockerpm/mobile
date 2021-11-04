@@ -416,6 +416,6 @@
     }
   },
   "export": {
-    "success": "Dữ liệu đã được xuất. Hãy kiểm tra thư mục Tài liệu trên thiết bị của bạn."
+    "success": "Dữ liệu đã được xuất!"
   }
 }

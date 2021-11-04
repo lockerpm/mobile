@@ -47,7 +47,7 @@ const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = () => {
   const { uiStore } = useStores()
-  const handleDeepLinking = (url: string | null) => {
+  const handleDeepLinking = async (url: string | null) => {
     __DEV__ && console.log(`Deep link ${url}`)
     if (!url) {
       return
@@ -66,13 +66,18 @@ const RootStack = () => {
     }
   }
 
+  // Prevent store from being called too soon and break the initialization
+  let removeNetInfoSubscription = () => {}
+
   useEffect(() => {
-    // Check network
-    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
-      const offline = !state.isInternetReachable
-      uiStore.setIsOffline(offline)
-      __DEV__ && console.log(offline ? 'OFFLINE' : 'ONLINE')
-    })
+    // Check network (delay to protect the store initialization)
+    setTimeout(() => {
+      removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+        const offline = !state.isInternetReachable
+        __DEV__ && console.log(offline ? 'OFFLINE' : 'ONLINE')
+        uiStore.setIsOffline(offline)
+      })
+    }, 2000)
 
     // Check deep linking
     Linking.getInitialURL().then(handleDeepLinking)
@@ -80,6 +85,7 @@ const RootStack = () => {
       handleDeepLinking(url)
     }
     Linking.addEventListener('url', checkDeepLinking)
+
 
     return () => {
       removeNetInfoSubscription()

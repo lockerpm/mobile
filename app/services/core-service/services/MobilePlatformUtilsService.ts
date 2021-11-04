@@ -1,6 +1,6 @@
 import { PlatformUtilsService } from "../../../../core/abstractions"
 import { DeviceType } from "../../../../core/enums"
-import { Platform, Linking, Alert } from "react-native"
+import { Platform, Linking, Alert, PermissionsAndroid } from "react-native"
 import Clipboard from '@react-native-clipboard/clipboard'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import DeviceInfo from 'react-native-device-info'
@@ -117,12 +117,26 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
     return Promise.resolve(Clipboard.getString());
   }
 
-  saveFile(blobData: any, blobOptions: any, fileName: string): void {
-    const path = `${RNFS.DocumentDirectoryPath}/${fileName}`
+  async saveFile(blobData: any, blobOptions: any, fileName: string): Promise<boolean> {
     try {
-      RNFS.writeFile(path, blobData, blobOptions)
+      let path: string
+    
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+        )
+        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+          return false
+        }
+        path = `${RNFS.ExternalStorageDirectoryPath}/${fileName}`
+      } else {
+        path = `${RNFS.DocumentDirectoryPath}/${fileName}`
+      }
+      await RNFS.writeFile(path, blobData, blobOptions)
+      return true
     } catch (e) {
       __DEV__ && console.log(e)
+      return false
     }
   }
 
