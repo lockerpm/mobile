@@ -28,7 +28,7 @@ export const InitScreen = observer(function InitScreen() {
 
     // Testing
     // if (__DEV__) {
-    //   navigation.navigate('lock')
+    //   navigation.navigate('onBoarding')
     //   return
     // }
 
@@ -56,9 +56,7 @@ export const InitScreen = observer(function InitScreen() {
       navigation.navigate('login')
       return
     }
-    
     user.saveToken(user.token)
-
     const [userRes, userPwRes] = await Promise.all([
       user.getUser(),
       user.getUserPw()

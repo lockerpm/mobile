@@ -28,15 +28,19 @@ export const ExportScreen = observer(function ExportScreen() {
     setIsLoading(true)
     // @ts-ignore
     const data = await exportService.getExport(format)
-    downloadFile(data)
-    notify('success', translate('export.success'))
+    const isSuccess = await downloadFile(data)
+    if (isSuccess) {
+      notify('success', translate('export.success'))
+    } else {
+      notify('error', translate('error.something_went_wrong'))
+    }
     setIsLoading(false)
     
   }
 
   const downloadFile = (csv) => {
     const fileName = createFileName(null)
-    platformUtilsService.saveFile(csv, 'utf8', fileName)
+    return platformUtilsService.saveFile(csv, 'utf8', fileName)
   }
 
   const createFileName = (prefix) => {

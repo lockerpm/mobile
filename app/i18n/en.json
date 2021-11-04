@@ -416,6 +416,6 @@
     }
   },
   "export": {
-    "success": "Data exported. Please check the Documents folder on your device."
+    "success": "Data exported!"
   }
 }
