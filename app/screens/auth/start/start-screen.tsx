@@ -6,9 +6,11 @@ import { storageKeys, load } from "../../../utils/storage"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import { delay } from "../../../utils/delay"
+import NetInfo from '@react-native-community/netinfo'
+
 
 export const StartScreen = observer(function StartScreen() {
-  const { user, uiStore } = useStores()
+  const { user } = useStores()
   const { 
     getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate, 
     loadPasswordsHealth
@@ -18,7 +20,8 @@ export const StartScreen = observer(function StartScreen() {
   const [msg, setMsg] = useState('')
 
   const mounted = async () => {
-    if (!uiStore.isOffline) {
+    const connectionState = await NetInfo.fetch()
+    if (connectionState.isInternetReachable) {
       setMsg(translate('start.synching'))
       await delay(500)
       const [syncRes, invitationsRes] = await Promise.all([

@@ -417,5 +417,13 @@
   },
   "export": {
     "success": "Dữ liệu đã được xuất!"
+  },
+  "import": {
+    "format": "Định dạng",
+    "file": "Tệp dữ liệu",
+    "no_data": "Không có dữ liệu",
+    "invalid_data_format": "Dữ liệu không đúng định dạng",
+    "success": "Nhập dữ liệu thành công",
+    "pls_select_right_format": "Yêu cầu phải là tệp {{format}}"
   }
 }

@@ -21,7 +21,7 @@ type ScreenProp = RouteProp<PrimaryParamList, 'settings'>;
 
 export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { notify, isBiometricAvailable, translate } = useMixins()
   const route = useRoute<ScreenProp>()
   const { fromIntro } = route.params
@@ -281,6 +281,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
       <View style={commonStyles.GRAY_SCREEN_SECTION}>
         {/* Import */}
         <SettingsItem
+          disabled={uiStore.isOffline}
           name={translate('settings.import')}
           action={() => navigation.navigate('import')}
         />
