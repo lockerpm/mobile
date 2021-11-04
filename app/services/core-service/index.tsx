@@ -10,6 +10,7 @@ import { FileUploadService } from "../../../core/services/fileUpload.service"
 import { SearchService } from "../../../core/services/search.service"
 import { SendService } from "../../../core/services/send.service"
 import { ExportService } from "../../../core/services/export.service"
+import { ImportService } from "../../../core/services/import.service"
 import { 
   MobileStorageService, SecureStorageService, MobileCryptoFunctionService, MobilePlatformUtilsService,
   MobileLogService, MobileMessagingService
@@ -161,6 +162,7 @@ const containerService = new ContainerService(cryptoService)
 containerService.attachToGlobal(global)
 const auditService = new AuditService(cryptoFunctionService, apiService)
 const exportService = new ExportService(folderService, cipherService, apiService, cryptoService)
+const importService = new ImportService(cipherService, folderService, apiService, i18nService, collectionService, platformUtilsService, cryptoService)
 
 // All services to be used
 const services = {
@@ -183,7 +185,8 @@ const services = {
   syncService,
   containerService,
   auditService,
-  exportService
+  exportService,
+  importService
 }
 
 const CoreContext = createContext(services)

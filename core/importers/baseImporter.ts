@@ -22,6 +22,9 @@ import { SecureNoteType } from '../enums/secureNoteType';
 
 import { ConsoleLogService } from '../services/consoleLog.service';
 
+// Mobile env
+const DOMParser = require('react-native-html-parser').DOMParser
+
 export abstract class BaseImporter {
     organizationId: string = null;
 

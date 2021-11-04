@@ -11,7 +11,7 @@ import { BackHandler } from "react-native"
 
 
 export const InitScreen = observer(function InitScreen() {
-  const { user } = useStores()
+  const { user, cipherStore } = useStores()
   const navigation = useNavigation()
 
   const goLockOrCreatePassword = () => {
@@ -25,6 +25,7 @@ export const InitScreen = observer(function InitScreen() {
   const mounted = async () => {
     user.setLanguage(user.language)
     user.setDeviceID(DeviceInfo.getUniqueId())
+    cipherStore.setIsSynching(false)
 
     // Testing
     // if (__DEV__) {
@@ -46,7 +47,7 @@ export const InitScreen = observer(function InitScreen() {
 
     // Network connected?
     const connectionState = await NetInfo.fetch()
-    if (!connectionState.isConnected) {
+    if (!connectionState.isInternetReachable) {
       goLockOrCreatePassword()
       return
     }
