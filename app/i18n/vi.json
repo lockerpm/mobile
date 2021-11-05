@@ -348,7 +348,18 @@
   },
   "authenticator": {
     "title": "Authenticator",
-    "desc": "Tạo mã Xác minh 2 bước (2FA) trên điện thoại của bạn"
+    "desc": "Tạo mã Xác minh 2 bước (2FA) trên điện thoại của bạn",
+    "copy_code": "Sao chép mã OTP",
+    "scan_a_qr": "Quét mã QR",
+    "invalid_qr": "Mã QR không hợp lệ",
+    "enter_key": "Nhập khoá bí mật",
+    "invalid_key": "Khóa không hợp lệ",
+    "empty": {
+      "title": "Bảo vệ tài khoản của bạn",
+      "desc": "Thêm một lớp bảo mật bổ sung mỗi khi đăng nhập",
+      "btn": "Bắt đầu"
+    },
+    "secret_key": "Mã khoá"
   },
   "pass_health": {
     "title": "Sức khỏe mật khẩu",

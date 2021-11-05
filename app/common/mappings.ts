@@ -20,6 +20,8 @@ import PasswordGeneratorIcon from './images/vault/password-generator.svg'
 // @ts-ignore
 import PasswordHealthIcon from './images/vault/password-health.svg'
 // @ts-ignore
+import AuthenticatorIcon from './images/vault/authenticator.svg'
+// @ts-ignore
 import FFolderIcon from './images/folder/folder.svg'
 // @ts-ignore
 import FFolderShareIcon from './images/folder/folder-share.svg'
@@ -120,9 +122,9 @@ export const TOOLS_ITEMS: ToolsItemContainer = {
   authenticator: {
     label: 'authenticator.title',
     desc: 'authenticator.desc',
-    icon: require('./images/vault/password-generator.png'),
+    icon: require('./images/vault/authenticator.png'),
     routeName: 'authenticator',
-    svgIcon: PasswordGeneratorIcon
+    svgIcon: AuthenticatorIcon
   },
   passwordHealth: {
     label: 'pass_health.title',
