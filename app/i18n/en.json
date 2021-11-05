@@ -348,7 +348,18 @@
   },
   "authenticator": {
     "title": "Authenticator",
-    "desc": "Generate two-factor authentication (2FA) codes on your device"
+    "desc": "Generate two-factor authentication (2FA) codes on your device",
+    "copy_code": "Copy OTP",
+    "scan_a_qr": "Scan a QR code",
+    "invalid_qr": "Invalid QR code",
+    "enter_key": "Enter a setup key",
+    "invalid_key": "Invalid key",
+    "empty": {
+      "title": "Secure your account",
+      "desc": "Add an additional layer of security when signing in",
+      "btn": "Get Started"
+    },
+    "secret_key": "Your key"
   },
   "pass_health": {
     "title": "Password Health",

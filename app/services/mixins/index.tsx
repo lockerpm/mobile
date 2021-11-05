@@ -414,12 +414,14 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const notSynchedCiphers = await getCiphers({
         deleted: false,
         searchText: '',
-        filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)]
+        filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)],
+        includeExtensions: true
       })
       const notSynchedCiphersDeleted = await getCiphers({
         deleted: true,
         searchText: '',
-        filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)]
+        filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)],
+        includeExtensions: true
       })
       notSynchedCiphers.push(...notSynchedCiphersDeleted)
   
@@ -906,17 +908,36 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Parse OTP from URI
   const parseOTPUri = (uri: string) => {
+    const res = {
+      account: undefined,
+      secret: undefined,
+      algorithm: undefined,
+      period: undefined
+    }
+
+    if (!uri) {
+      return res
+    }
+
     const components = uri.split('/')
+
+    if (!components.length) {
+      return res
+    }
+
     const data = components[components.length - 1].split('?')
+
+    if (!data.length) {
+      return res
+    }
+
     const account = decodeURIComponent(data[0])
     const query = parse_query_string(data[1])
 
-    const res = {
-      account,
-      secret: query.secret,
-      algorithm: query.algorithm,
-      period: query.period
-    }
+    res.account = account
+    res.secret = query.secret
+    res.algorithm = query.algorithm
+    res.period = query.period
 
     return res
   }
