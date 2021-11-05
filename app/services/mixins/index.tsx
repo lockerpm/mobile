@@ -293,7 +293,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   const logout = async () => {
     try {
       await Promise.all([
-        user.logout(),
         folderService.clearCache(),
         cipherService.clearCache(),
         collectionService.clearCache(),
@@ -305,6 +304,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       collectionStore.clearStore()
       folderStore.clearStore()
       toolStore.clearStore()
+      
+      await user.logout()
   
       // Sign out of Google
       GoogleSignin.configure({
