@@ -36,6 +36,7 @@ export const SearchBar = observer(function SearchBar(props: SearchBarProps) {
       <TextInput
         value={value}
         placeholder={translate('common.search')}
+        placeholderTextColor={color.text}
         onChangeText={(txt) => onSearch && onSearch(txt)}
         clearButtonMode="while-editing"
         style={{
