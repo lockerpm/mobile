@@ -9,7 +9,7 @@ import { color, commonStyles, fontSize } from "../../../../../theme"
 import { TOOLS_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
-import totp from 'totp-generator'
+import { getTOTP } from "../../../../../utils/totp"
 
 
 export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen() {
@@ -30,7 +30,7 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
 
   const handleSave = async () => {
     try {
-      const otp = totp(secretKey)
+      const otp = getTOTP({ secret: secretKey })
       if (!otp) {
         notify('error', translate('authenticator.invalid_key'))
         return

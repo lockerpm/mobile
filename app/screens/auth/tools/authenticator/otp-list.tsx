@@ -10,8 +10,8 @@ import { CipherType } from "../../../../../core/enums"
 import { AuthenticatorAction } from "./authenticator-action"
 import { Button, Text } from "../../../../components"
 import { color, commonStyles, fontSize } from "../../../../theme"
-import totp from 'totp-generator'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+import { parseOTPUri, getTOTP } from "../../../../utils/totp"
 
 
 interface Props {
@@ -31,7 +31,7 @@ export const OtpList = observer(function OtpList(props: Props) {
   const {
     emptyContent, onLoadingChange, searchText, sortList
   } = props
-  const { getCiphers, translate, parseOTPUri } = useMixins()
+  const { getCiphers, translate } = useMixins()
   const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -169,9 +169,7 @@ export const OtpList = observer(function OtpList(props: Props) {
                 </View>
 
                 <Text
-                  text={totp(item.otp.secret, {
-                    period: item.otp.period
-                  })}
+                  text={getTOTP(item.otp)}
                   style={{
                     color: color.palette.green,
                     fontSize: fontSize.h3,

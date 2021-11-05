@@ -7,19 +7,19 @@ import { color } from "../../../../../theme"
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
-import totp from 'totp-generator'
+import { parseOTPUri, getTOTP } from "../../../../../utils/totp"
 
 
 export const QRScannerScreen = observer(function QRScannerScreen() {
   const navigation = useNavigation()
-  const { newCipher, createCipher, parseOTPUri, translate, notify } = useMixins()
+  const { newCipher, createCipher, translate, notify } = useMixins()
 
   const [isLoading, setIsLoading] = useState(false)
 
   const onSuccess = async (e) => {
     const payload = parseOTPUri(e.data)
     try {
-      const otp = totp(payload.secret)
+      const otp = getTOTP(payload)
       if (otp) {
         await handleSave(payload.account, e.data)
       } else {

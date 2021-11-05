@@ -66,13 +66,7 @@ const defaultData = {
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
   notifyApiError: (problem: GeneralApiProblem) => {},
   loadPasswordsHealth: async () => {},
-  reloadCache: async () => {},
-  parseOTPUri: (uri: string) => ({
-    account: undefined,
-    secret: undefined,
-    algorithm: undefined,
-    period: undefined
-  })
+  reloadCache: async () => {}
 }
 
 
@@ -907,64 +901,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return cipher
   }
 
-  // Parse OTP from URI
-  const parseOTPUri = (uri: string) => {
-    const res = {
-      account: undefined,
-      secret: undefined,
-      algorithm: undefined,
-      period: undefined
-    }
-
-    if (!uri) {
-      return res
-    }
-
-    const components = uri.split('/')
-
-    if (!components.length) {
-      return res
-    }
-
-    const data = components[components.length - 1].split('?')
-
-    if (!data.length) {
-      return res
-    }
-
-    const account = decodeURIComponent(data[0])
-    const query = parse_query_string(data[1])
-
-    res.account = account
-    res.secret = query.secret
-    res.algorithm = query.algorithm
-    res.period = query.period
-
-    return res
-  }
-  const parse_query_string = (query: string) => {
-    const vars = query.split("&")
-    const query_string = {
-      secret: undefined,
-      algorithm: undefined,
-      period: undefined
-    }
-    for (let i = 0; i < vars.length; i++) {
-      const pair = vars[i].split("=")
-      const key = decodeURIComponent(pair[0])
-      const value = decodeURIComponent(pair[1])
-      if (typeof query_string[key] === "undefined") {
-        query_string[key] = decodeURIComponent(value)
-      } else if (typeof query_string[key] === "string") {
-        const arr = [query_string[key], decodeURIComponent(value)]
-        query_string[key] = arr
-      } else {
-        query_string[key].push(decodeURIComponent(value))
-      }
-    }
-    return query_string
-  }
-
   // Password strength
   const getPasswordStrength = (password: string) => {
     return passwordGenerationService.passwordStrength(password, ['cystack']) || { score: 0 }
@@ -1094,8 +1030,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     translate,
     notifyApiError,
     loadPasswordsHealth,
-    reloadCache,
-    parseOTPUri
+    reloadCache
   }
 
   return (

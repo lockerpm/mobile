@@ -6,7 +6,7 @@ import { TOOLS_ITEMS } from "../../../../common/mappings"
 import { useMixins } from "../../../../services/mixins"
 import { DeleteConfirmModal } from "../../browse/trash/delete-confirm-modal"
 import { CipherView } from "../../../../../core/models/view"
-import totp from 'totp-generator'
+import { parseOTPUri, getTOTP } from "../../../../utils/totp"
 
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
 
 export const AuthenticatorAction = (props: Props) => {
   const { isOpen, onClose, onLoadingChange, cipher } = props
-  const { translate, copyToClipboard, deleteCiphers, parseOTPUri } = useMixins()
+  const { translate, copyToClipboard, deleteCiphers } = useMixins()
 
   // ---------------- PARAMS -----------------
 
@@ -80,7 +80,9 @@ export const AuthenticatorAction = (props: Props) => {
           <ActionItem
             name={translate('authenticator.copy_code')}
             icon="copy"
-            action={() => copyToClipboard(totp(otp.secret))}
+            action={() => {
+              copyToClipboard(getTOTP(otp))
+            }}
           />
 
           <ActionItem
