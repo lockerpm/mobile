@@ -43,8 +43,6 @@ export const OtpList = observer(function OtpList(props: Props) {
 
   // ------------------------ WATCHERS ----------------------------
 
-  // (31 - Math.round(new Date().getTime() / 1000) % 30) * 1000
-
   useEffect(() => {
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastOfflineSync, sortList])
@@ -113,6 +111,12 @@ export const OtpList = observer(function OtpList(props: Props) {
       ...c,
       otp: parseOTPUri(c.notes)
     })))
+  }
+
+  // Calculate remaining time
+  const getRemainingTime = (period: number) => {
+    // Better late 1 sec than early
+    return (period + 1) - Math.round(new Date().getTime() / 1000) % period
   }
 
   // ------------------------ RENDER ----------------------------
@@ -186,7 +190,7 @@ export const OtpList = observer(function OtpList(props: Props) {
                 isPlaying
                 duration={30}
                 colors={color.palette.green}
-                initialRemainingTime={(31 - Math.round(new Date().getTime() / 1000) % 30)}
+                initialRemainingTime={getRemainingTime(item.otp.period)}
                 strokeWidth={4}
               />
             </View>
