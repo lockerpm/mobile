@@ -22,6 +22,8 @@ import { GeneralApiProblem } from '../api/api-problem'
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
 import { FolderView } from '../../../core/models/view/folderView'
 import { FolderRequest } from '../../../core/models/request/folderRequest'
+import { ImportCiphersRequest } from '../../../core/models/request/importCiphersRequest'
+import { KvpRequest } from '../../../core/models/request/kvpRequest'
 
 const { createContext, useContext } = React
 
@@ -66,7 +68,8 @@ const defaultData = {
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
   notifyApiError: (problem: GeneralApiProblem) => {},
   loadPasswordsHealth: async () => {},
-  reloadCache: async () => {}
+  reloadCache: async () => {},
+  importCiphers: async (importResult) => { return { kind: 'unknown' } }
 }
 
 
@@ -671,6 +674,101 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // ------------------------ CIPHERS ---------------------------
 
+  // Import
+  const importCiphers = async (importResult) => {
+    // Offline
+    if (uiStore.isOffline) {
+      return _offlineImportCiphers(importResult)
+    }
+
+    // Online
+    const request = new ImportCiphersRequest()
+    for (let i = 0; i < importResult.ciphers.length; i++) {
+      const c = await cipherService.encrypt(importResult.ciphers[i])
+      request.ciphers.push(new CipherRequest(c))
+    }
+    if (importResult.folders != null) {
+      for (let i = 0; i < importResult.folders.length; i++) {
+        const f = await folderService.encrypt(importResult.folders[i])
+        request.folders.push(new FolderRequest(f))
+      }
+    }
+    if (importResult.folderRelationships != null) {
+      importResult.folderRelationships.forEach(r =>
+        request.folderRelationships.push(new KvpRequest(r[0], r[1])))
+    }
+    const res = await cipherStore.importCipher(request)
+    if (res.kind === 'ok') {
+      notify('success', translate('import.success'))
+      return res
+    } else {
+      notifyApiError(res)
+      return res
+    }
+  }
+
+  const _offlineImportCiphers = async (importResult) => {
+    // Prepare data
+    const ciphers = []
+    const folders = []
+    for (let i = 0; i < importResult.ciphers.length; i++) {
+      const c = await cipherService.encrypt(importResult.ciphers[i])
+      const enc = new CipherRequest(c)
+      const tempId = 'tmp__' + randomString()
+      // @ts-ignore
+      enc.id = tempId
+      ciphers.push(enc)
+    }
+    if (importResult.folders != null) {
+      for (let i = 0; i < importResult.folders.length; i++) {
+        const f = await folderService.encrypt(importResult.folders[i])
+        const enc = new FolderRequest(f)
+        const tempId = 'tmp__' + randomString()
+        // @ts-ignore
+        enc.id = tempId
+        folders.push(enc)
+      }
+    }
+    if (importResult.folderRelationships != null) {
+      importResult.folderRelationships.forEach(r => {
+        ciphers[r[0]].folderId = folders[r[1]].id
+      })
+    }
+
+    // Update cipher storage
+    const userId = await userService.getUserId()
+    if (ciphers.length) {
+      const key = `ciphers_${userId}`
+      const res = await storageService.get(key)
+      ciphers.forEach(c => {
+        cipherStore.addNotSync(c.id)
+        res[c.id] = {
+          ...c,
+          userId
+        }
+      })
+      await storageService.save(key, res)
+    }
+
+    // Update folder storage
+    if (folders.length) {
+      const key = `folders_${userId}`
+      const res = await storageService.get(key)
+      ciphers.forEach(f => {
+        folderStore.addNotSync(f.id)
+        res[f.id] = {
+          ...f,
+          userId
+        }
+      })
+      await storageService.save(key, res)
+    }
+
+    await reloadCache()
+    notify('success', translate('import.success') + ' ' + translate('success.will_sync_when_online'))
+    return { kind: 'ok' }
+  }
+
   // Create
   const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
     try {
@@ -1030,7 +1128,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     translate,
     notifyApiError,
     loadPasswordsHealth,
-    reloadCache
+    reloadCache,
+    importCiphers
   }
 
   return (

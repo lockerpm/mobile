@@ -69,7 +69,26 @@ export const parseOTPUri = (uri: string) => {
   return res
 }
 
-export const decodeGoogleAuthenticatorImport = (buffer: string): OTPData[] => {
+export const decodeGoogleAuthenticatorImport = (uri: string): OTPData[] => {
+  if (!uri) {
+    return []
+  }
+
+  const components = uri.split('?')
+
+  if (!components.length) {
+    return []
+  }
+
+  const uriData = components[components.length - 1].split('?')
+
+  if (!uriData.length) {
+    return []
+  }
+
+  const query = _parseQueryString(uriData[1]) 
+  const buffer = query.data
+
   const payload = proto.MigrationPayload.deserializeBinary(buffer)
   const data = payload.toObject()
 
@@ -127,7 +146,8 @@ const _parseQueryString = (query: string) => {
     secret: undefined,
     algorithm: undefined,
     period: undefined,
-    digits: undefined
+    digits: undefined,
+    data: undefined
   }
   for (let i = 0; i < vars.length; i++) {
     const pair = vars[i].split("=")
