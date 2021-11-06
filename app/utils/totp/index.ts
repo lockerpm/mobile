@@ -1,5 +1,6 @@
 import totp from 'totp-generator'
-import protobuf from 'protobufjs'
+import proto from './migration-payload_pb'
+import base32 from 'hi-base32'
 
 
 export interface OTPData {
@@ -68,16 +69,53 @@ export const parseOTPUri = (uri: string) => {
   return res
 }
 
-export const decodeGoogleAuthenticatorImport = async (buffer) => {
-  const root = await protobuf.load("migration-payload.proto");
-  const payload = root.lookupType("MigrationPayload");
-  const err = payload.verify(buffer);
-  if (err) {
-      throw err;
-  }
-  const message = payload.decode(buffer);
-  const obj = payload.toObject(message);
-  return obj
+export const decodeGoogleAuthenticatorImport = (buffer: string): OTPData[] => {
+  const payload = proto.MigrationPayload.deserializeBinary(buffer)
+  const data = payload.toObject()
+
+  // Currently only accept TOTP
+  return data.otpParametersList.filter(item => item.type === 2).map(item => {
+    let algorithm: string
+    let digits: number
+
+    switch (item.algorithm) {
+      case 1:
+        algorithm = 'SHA-1'
+        break
+      case 2:
+        algorithm = 'SHA-256'
+        break
+      case 3:
+        algorithm = 'SHA-512'
+        break
+      case 4:
+        algorithm = 'MD5'
+        break
+      default:
+        algorithm = 'SHA-1'
+    }
+    switch (item.digits) {
+      case 1:
+        digits = 6
+        break
+      case 2:
+        digits = 8
+        break
+      default:
+        digits = 6
+    }
+    
+  
+    const otp: OTPData = {
+      algorithm,
+      digits,
+      account: item.name,
+      secret: base32.encode(Buffer.from(item.secret, "base64")),
+      period: 30
+    }
+
+    return otp
+  })
 }
 
 // ------------------ SUPPORT --------------------
