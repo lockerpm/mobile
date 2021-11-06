@@ -1,4 +1,5 @@
 import totp from 'totp-generator'
+import protobuf from 'protobufjs'
 
 
 export interface OTPData {
@@ -65,6 +66,18 @@ export const parseOTPUri = (uri: string) => {
   }
 
   return res
+}
+
+export const decodeGoogleAuthenticatorImport = async (buffer) => {
+  const root = await protobuf.load("migration-payload.proto");
+  const payload = root.lookupType("MigrationPayload");
+  const err = payload.verify(buffer);
+  if (err) {
+      throw err;
+  }
+  const message = payload.decode(buffer);
+  const obj = payload.toObject(message);
+  return obj
 }
 
 // ------------------ SUPPORT --------------------
