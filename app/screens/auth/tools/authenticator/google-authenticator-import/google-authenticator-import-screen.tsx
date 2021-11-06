@@ -53,7 +53,7 @@ export const GoogleAuthenticatorImportScreen = observer(function GoogleAuthentic
       }}
       header={(
         <Header
-          title={translate('authenticator.scan_a_qr')}
+          title={translate('authenticator.import_from_google_authenticator')}
           goBack={() => navigation.goBack()}
           right={(
             <View style={{ width: 10 }} />
