@@ -15,7 +15,8 @@ import {
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
-  ImportScreen, ExportScreen, AuthenticatorScreen, QRScannerScreen, AuthenticatorEditScreen
+  ImportScreen, ExportScreen, AuthenticatorScreen, QRScannerScreen, AuthenticatorEditScreen,
+  GoogleAuthenticatorImportScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -49,6 +50,7 @@ export type PrimaryParamList = {
   authenticator: undefined,
   authenticator__edit: undefined,
   qrScanner: undefined,
+  googleAuthenticatorImport: undefined,
   passwordHealth: undefined,
   weakPasswordList: undefined,
   reusePasswordList: undefined,
@@ -276,6 +278,7 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="authenticator" component={AuthenticatorScreen} />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} />
+        <Stack.Screen name="googleAuthenticatorImport" component={GoogleAuthenticatorImportScreen} />
 
         <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
         <Stack.Screen name="weakPasswordList" component={WeakPasswordList} />

@@ -33,6 +33,14 @@ export const AuthenticatorAddAction = (props: Props) => {
             props.navigation && props.navigation.navigate('authenticator__edit')
           }}
         />
+        <ActionItem
+          name={translate('authenticator.import_from_google_authenticator')}
+          icon="google"
+          action={() => {
+            props.onClose && props.onClose()
+            props.navigation && props.navigation.navigate('googleAuthenticatorImport')
+          }}
+        />
       </ActionSheetContent>
     </ActionSheet>
   )

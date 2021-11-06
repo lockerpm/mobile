@@ -350,6 +350,7 @@
     "title": "Authenticator",
     "desc": "Generate two-factor authentication (2FA) codes on your device",
     "copy_code": "Copy OTP",
+    "import_from_google_authenticator": "Import from Google Authenticator",
     "scan_a_qr": "Scan a QR code",
     "invalid_qr": "Invalid QR code",
     "enter_key": "Enter a setup key",
