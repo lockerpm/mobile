@@ -11,19 +11,13 @@ import DocumentPicker from 'react-native-document-picker'
 import RNFS from 'react-native-fs'
 import { CipherType } from "../../../../../core/enums"
 import { Utils } from "../../../../../core/misc/utils"
-import { ImportCiphersRequest } from "../../../../../core/models/request/importCiphersRequest"
-import { CipherRequest } from "../../../../../core/models/request/cipherRequest"
-import { FolderRequest } from "../../../../../core/models/request/folderRequest"
-import { KvpRequest } from "../../../../../core/models/request/kvpRequest"
-import { useStores } from "../../../../models"
 const DOMParser = require('react-native-html-parser').DOMParser
 
 
 export const ImportScreen = observer(function ImportScreen() {
   const navigation = useNavigation()
-  const { translate, notify, notifyApiError } = useMixins()
-  const { importService, cipherService, folderService } = useCoreService()
-  const { cipherStore } = useStores()
+  const { translate, notify, importCiphers } = useMixins()
+  const { importService } = useCoreService()
 
   // PARAMS
 
@@ -135,7 +129,7 @@ export const ImportScreen = observer(function ImportScreen() {
         }
 
         try {
-          await postImport(importResult)
+          await importCiphers(importResult)
           return
         } catch (error) {
           notify('error', translate('import.invalid_data_format'))
@@ -154,33 +148,6 @@ export const ImportScreen = observer(function ImportScreen() {
   const badData = (c) => {
     return (c.name == null || c.name === '--') &&
       (c.type === CipherType.Login && c.login != null && Utils.isNullOrWhitespace(c.login.password))
-  }
-
-  const postImport = async (importResult) => {
-    const request = new ImportCiphersRequest()
-    for (let i = 0; i < importResult.ciphers.length; i++) {
-      const c = await cipherService.encrypt(importResult.ciphers[i])
-      request.ciphers.push(new CipherRequest(c))
-    }
-    if (importResult.folders != null) {
-      for (let i = 0; i < importResult.folders.length; i++) {
-        const f = await folderService.encrypt(importResult.folders[i])
-        request.folders.push(new FolderRequest(f))
-      }
-    }
-    if (importResult.folderRelationships != null) {
-      importResult.folderRelationships.forEach(r =>
-        request.folderRelationships.push(new KvpRequest(r[0], r[1])))
-    }
-    const res = await cipherStore.importCipher(request)
-    setIsLoading(false)
-    if (res.kind === 'ok') {
-      notify('success', translate('import.success'))
-      setFile(fileData)
-      navigation.navigate('mainTab', { screen: 'homeTab' })
-    } else {
-      notifyApiError(res)
-    }
   }
 
   // EFFECT
