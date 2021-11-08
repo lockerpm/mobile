@@ -55,6 +55,7 @@ export class Cipher {
                 view.login = Login.toView(req.login);
                 break;
             case CipherType.SecureNote:
+            case CipherType.TOTP:
                 view.secureNote = SecureNote.toView(req.secureNote);
                 break;
             case CipherType.Card:
@@ -88,6 +89,7 @@ export class Cipher {
                 domain.login = Login.toDomain(req.login);
                 break;
             case CipherType.SecureNote:
+            case CipherType.TOTP:
                 domain.secureNote = SecureNote.toDomain(req.secureNote);
                 break;
             case CipherType.Card:
@@ -145,6 +147,7 @@ export class Cipher {
                 this.login = new Login(o.login);
                 break;
             case CipherType.SecureNote:
+            case CipherType.TOTP:
                 this.secureNote = new SecureNote(o.secureNote);
                 break;
             case CipherType.Card:

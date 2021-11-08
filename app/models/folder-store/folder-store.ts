@@ -11,7 +11,8 @@ import { withEnvironment } from "../extensions/with-environment"
 export const FolderStoreModel = types
   .model("FolderStore")
   .props({
-    folders: types.array(types.frozen())
+    folders: types.array(types.frozen()),
+    notSynchedFolders: types.array(types.string),
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -24,6 +25,23 @@ export const FolderStoreModel = types
 
     clearStore: () => {
       self.folders = cast([])
+      self.notSynchedFolders = cast([])
+    },
+
+    addNotSync: (id: string) => {
+      if (!self.notSynchedFolders.includes(id)) {
+        self.notSynchedFolders.push(id)
+      }
+    },
+
+    removeNotSync: (id: string) => {
+      if (!self.notSynchedFolders.includes(id)) {
+        self.notSynchedFolders = cast(self.notSynchedFolders.filter(i => i !== id))
+      }
+    },
+
+    clearNotSync: () => {
+      self.notSynchedFolders = cast([])
     },
 
     // ----------------- CRUD -------------------

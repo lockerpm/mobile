@@ -7,5 +7,6 @@ export const palette = {
   lightBlack: '#072245',
   black: '#031B4E',
   green: "#268334",
-  danger: '#F54F64'
+  danger: '#F54F64',
+  warning: '#FF9900'
 }

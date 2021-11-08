@@ -13,8 +13,13 @@ import {
   PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen, PasswordHealthScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
-  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, AutofillServiceScreen
+  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
+  DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
+  ImportScreen, ExportScreen, AuthenticatorScreen, QRScannerScreen, AuthenticatorEditScreen,
+  GoogleAuthenticatorImportScreen
 } from "../screens"
+// @ts-ignore
+import { AutofillServiceScreen } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
 import { color } from "../theme"
 import { useMixins } from "../services/mixins"
@@ -42,8 +47,17 @@ export type PrimaryParamList = {
   passwordGenerator: {
     fromTools?: boolean
   },
+  authenticator: undefined,
+  authenticator__edit: undefined,
+  qrScanner: undefined,
+  googleAuthenticatorImport: undefined,
   passwordHealth: undefined,
+  weakPasswordList: undefined,
+  reusePasswordList: undefined,
+  exposedPasswordList: undefined,
   dataBreachScanner: undefined,
+  dataBreachList: undefined,
+  dataBreachDetail: undefined,
   countrySelector: undefined,
   passwords__info: undefined,
   passwords__edit: {
@@ -75,7 +89,9 @@ export type PrimaryParamList = {
   },
   changeMasterPassword: undefined,
   help: undefined,
-  autofillService: undefined
+  autofillService: undefined,
+  import: undefined,
+  export: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -83,7 +99,10 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export const MainNavigator = observer(function MainNavigator() {
   const navigation = useNavigation()
-  const { lock, getSyncData, getCipherById, loadFolders, loadCollections, logout } = useMixins()
+  const { 
+    lock, getSyncData, getCipherById, loadFolders, loadCollections, logout, 
+    loadPasswordsHealth
+  } = useMixins()
   const { uiStore, user, cipherStore } = useStores()
 
   const [socket, setSocket] = useState(null)
@@ -95,17 +114,17 @@ export const MainNavigator = observer(function MainNavigator() {
   // Sync
   const handleSync = async () => {
     await getSyncData()
-    cipherStore.setLastSync(new Date().getTime())
     await Promise.all([
       loadFolders(),
-      loadCollections(),
-      user.loadTeams(),
-      user.loadPlan()
+      loadCollections()
     ])
     if (cipherStore.selectedCipher) {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
+    user.loadTeams(),
+    user.loadPlan()
+    loadPasswordsHealth()
   }
 
   // Check invitation
@@ -121,6 +140,7 @@ export const MainNavigator = observer(function MainNavigator() {
     // Ohter state (background/inactive)
     if (nextAppState !== 'active') {
       setAppIsActive(false)
+      uiStore.clearDeepLink()
       return
     }
 
@@ -132,7 +152,6 @@ export const MainNavigator = observer(function MainNavigator() {
         navigation.navigate('onBoarding')
       } else {
         await lock()
-        console.log('app state change -> lock')
         navigation.navigate('lock')
       }
     }
@@ -146,7 +165,6 @@ export const MainNavigator = observer(function MainNavigator() {
         navigation.navigate('onBoarding')
       } else {
         await lock()
-        console.log('inactive -> lock')
         navigation.navigate('lock')
       }
     }
@@ -224,6 +242,16 @@ export const MainNavigator = observer(function MainNavigator() {
     }
   }, [uiStore.isOffline])
 
+  // Listen to deep linking
+  useEffect(() => {
+    if (!appIsReady) {
+      return
+    }
+    if (['add', 'save'].includes(uiStore.deepLinkAction)) {
+      navigation.navigate('passwords__edit', { mode: 'add' })
+    }
+  }, [uiStore.deepLinkAction])
+
   // ------------------ RENDER --------------------
   
   return (
@@ -247,8 +275,19 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
         <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} initialParams={{ fromTools: false }} />
+        <Stack.Screen name="authenticator" component={AuthenticatorScreen} />
+        <Stack.Screen name="qrScanner" component={QRScannerScreen} />
+        <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} />
+        <Stack.Screen name="googleAuthenticatorImport" component={GoogleAuthenticatorImportScreen} />
+
         <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
+        <Stack.Screen name="weakPasswordList" component={WeakPasswordList} />
+        <Stack.Screen name="reusePasswordList" component={ReusePasswordList} />
+        <Stack.Screen name="exposedPasswordList" component={ExposedPasswordList} />
+
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
+        <Stack.Screen name="dataBreachList" component={DataBreachListScreen} />
+        <Stack.Screen name="dataBreachDetail" component={DataBreachDetailScreen} />
 
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
         <Stack.Screen name="passwords__edit" component={PasswordEditScreen} initialParams={{ mode: 'add' }} />
@@ -265,6 +304,8 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />
         <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
+        <Stack.Screen name="import" component={ImportScreen} />
+        <Stack.Screen name="export" component={ExportScreen} />
       </Stack.Navigator>
     </UserInactivity>
   )

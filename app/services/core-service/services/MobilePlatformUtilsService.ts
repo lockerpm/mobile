@@ -1,10 +1,12 @@
 import { PlatformUtilsService } from "../../../../core/abstractions"
 import { DeviceType } from "../../../../core/enums"
-import { Platform, Linking, Alert } from "react-native"
+import { Platform, Linking, Alert, PermissionsAndroid } from "react-native"
 import Clipboard from '@react-native-clipboard/clipboard'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import DeviceInfo from 'react-native-device-info'
-import Toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message'
+import RNFS from 'react-native-fs'
+
 
 export class MobilePlatformUtilsService implements PlatformUtilsService {
   identityClientId: string
@@ -115,9 +117,27 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
     return Promise.resolve(Clipboard.getString());
   }
 
-  // TODO
-  saveFile(win: Window, blobData: any, blobOptions: any, fileName: string): void {
-    throw new Error('Not implemented save file for now.');
+  async saveFile(blobData: any, blobOptions: any, fileName: string): Promise<boolean> {
+    try {
+      let path: string
+    
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+        )
+        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+          return false
+        }
+        path = `${RNFS.ExternalStorageDirectoryPath}/${fileName}`
+      } else {
+        path = `${RNFS.DocumentDirectoryPath}/${fileName}`
+      }
+      await RNFS.writeFile(path, blobData, blobOptions)
+      return true
+    } catch (e) {
+      __DEV__ && console.log(e)
+      return false
+    }
   }
 
   showDialog(body: string, title: string | undefined, confirmText: string | undefined, cancelText: string | undefined, type: string | undefined, bodyIsHtml: boolean | undefined): Promise<boolean> {

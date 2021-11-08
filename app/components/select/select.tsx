@@ -65,6 +65,7 @@ export const Select = observer(function Select(props: SelectProps) {
           value={option.value} 
           label={option.label} 
           disabled={option.disabled}
+          // @ts-ignore
           labelStyle={{
             fontSize: fontSize.p
           }}

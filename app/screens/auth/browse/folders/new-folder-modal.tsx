@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { FloatingInput, Button, Modal, Text, DropdownPicker } from "../../../../components"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
@@ -20,9 +20,9 @@ interface Props {
 
 export const NewFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
-  const { folderStore, user, collectionStore } = useStores()
-  const { folderService, collectionService } = useCoreService()
-  const { notify, translate, notifyApiError } = useMixins()
+  const { folderStore, user, collectionStore, uiStore } = useStores()
+  const { folderService, collectionService, userService, storageService } = useCoreService()
+  const { notify, translate, notifyApiError, randomString, reloadCache } = useMixins()
 
   // --------------- PARAMS ----------------
 
@@ -67,9 +67,19 @@ export const NewFolderModal = observer((props: Props) => {
     if (owner === 'me') {
       const data = new FolderView()
       data.name = name
-      const folderEnc = await folderService.encrypt(data)
-      const payload = new FolderRequest(folderEnc)
-      res = await folderStore.createFolder(payload)
+
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineCreatePersonalFolder(data)
+        res = { kind: 'ok' }
+      }
+
+      // Online
+      else {
+        const folderEnc = await folderService.encrypt(data)
+        const payload = new FolderRequest(folderEnc)
+        res = await folderStore.createFolder(payload)
+      }
     } else {
       const data = new CollectionView()
       data.name = name
@@ -82,7 +92,10 @@ export const NewFolderModal = observer((props: Props) => {
     setIsLoading(false)
 
     if (res.kind === 'ok') {
-      notify('success', translate('folder.folder_created'))
+      notify(
+        'success', translate('folder.folder_created') 
+        + (uiStore.isOffline ? ` ${translate('success.will_sync_when_online')}` : '')
+      )
       setName('')
       onClose()
     } else {
@@ -93,6 +106,33 @@ export const NewFolderModal = observer((props: Props) => {
       }
     }
   }
+
+  const _offlineCreatePersonalFolder = async (folder: FolderView) => {
+    const userId = await userService.getUserId()
+    const key = `folders_${userId}`
+    const res = await storageService.get(key)
+
+    const folderEnc = await folderService.encrypt(folder)
+    const data = new FolderRequest(folderEnc)
+    const tempId = 'tmp__' + randomString()
+
+    res[tempId] = {
+      ...data,
+      userId,
+      id: tempId
+    }
+    await storageService.save(key, res)
+    folderStore.addNotSync(tempId)
+    await reloadCache()
+  }
+
+  // --------------- EFFECT ----------------
+
+  useEffect(() => {
+    if (uiStore.isOffline) {
+      setOwner('me')
+    }
+  }, [isOpen, uiStore.isOffline])
 
   // --------------- RENDER ----------------
 
@@ -112,6 +152,7 @@ export const NewFolderModal = observer((props: Props) => {
       />
 
       <DropdownPicker
+        isDisabled={uiStore.isOffline}
         placeholder={translate('common.select')}
         value={owner}
         items={owners}

@@ -22,7 +22,6 @@ export async function save(username: string, password: string, server?: string) 
  *
  * @param username The username
  * @param password The password
- * @param server The server these creds are for.
  */
  export async function saveShared(username: string, password: string) {
   try {

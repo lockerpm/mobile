@@ -1,8 +1,8 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CipherView } from "../../../core/models/view"
-import { MoveFolderData } from "../../services/api"
+import { ImportCipherData, MoveFolderData } from "../../services/api"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -12,7 +12,10 @@ import { withEnvironment } from "../extensions/with-environment"
 export const CipherStoreModel = types
   .model("CipherStore")
   .props({
+    isSynching: types.maybeNull(types.boolean),
+    notSynchedCiphers: types.array(types.string),
     lastSync: types.maybeNull(types.number),
+    lastOfflineSync: types.maybeNull(types.number),
     generatedPassword: types.maybeNull(types.string),
     selectedCipher: types.maybeNull(types.frozen()),
     selectedFolder: types.maybeNull(types.string)
@@ -38,14 +41,39 @@ export const CipherStoreModel = types
       self.selectedFolder = folderId
     },
 
+    setIsSynching: (val: boolean) => {
+      self.isSynching = val
+    },
+
     setLastSync: (ts: number) => {
       self.lastSync = ts
+    },
+
+    setLastOfflineSync: (ts: number) => {
+      self.lastOfflineSync = ts
+    },
+
+    addNotSync: (id: string) => {
+      if (!self.notSynchedCiphers.includes(id)) {
+        self.notSynchedCiphers.push(id)
+      }
+    },
+
+    removeNotSync: (id: string) => {
+      if (!self.notSynchedCiphers.includes(id)) {
+        self.notSynchedCiphers = cast(self.notSynchedCiphers.filter(i => i !== id))
+      }
+    },
+
+    clearNotSync: () => {
+      self.notSynchedCiphers = cast([])
     },
 
     clearStore: () => {
       self.generatedPassword = null
       self.selectedCipher = null
       self.selectedFolder = null
+      self.notSynchedCiphers = cast([])
     },
 
     // ----------------- CRUD -------------------
@@ -59,6 +87,18 @@ export const CipherStoreModel = types
     createCipher: async (data: CipherRequest, score: number, collectionIds: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.postCipher(data, score, collectionIds)
+      return res
+    },
+
+    importCipher: async (data: ImportCipherData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.importCipher(data)
+      return res
+    },
+
+    offlineSyncCipher: async (data: ImportCipherData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.offlineSyncCipher(data)
       return res
     },
 
@@ -97,7 +137,7 @@ export const CipherStoreModel = types
       const res = await cipherApi.moveToFolder(data)
       return res
     }
-  })).postProcessSnapshot(omit(['generatedPassword', 'selectedCipher', 'lastSync']))
+  })).postProcessSnapshot(omit(['generatedPassword', 'selectedCipher', 'lastSync', 'lastOfflineSync']))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

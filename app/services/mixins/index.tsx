@@ -20,6 +20,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { saveShared } from '../../utils/keychain'
 import { GeneralApiProblem } from '../api/api-problem'
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
+import { FolderView } from '../../../core/models/view/folderView'
+import { FolderRequest } from '../../../core/models/request/folderRequest'
+import { ImportCiphersRequest } from '../../../core/models/request/importCiphersRequest'
+import { KvpRequest } from '../../../core/models/request/kvpRequest'
 
 const { createContext, useContext } = React
 
@@ -28,7 +32,8 @@ const { createContext, useContext } = React
 type GetCiphersParams = {
   deleted: boolean,
   searchText: string,
-  filters: Function[]
+  filters: Function[],
+  includeExtensions?: boolean
 }
 
 // Mixins data
@@ -61,14 +66,17 @@ const defaultData = {
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
-  notifyApiError: (problem: GeneralApiProblem) => {}
+  notifyApiError: (problem: GeneralApiProblem) => {},
+  loadPasswordsHealth: async () => {},
+  reloadCache: async () => {},
+  importCiphers: async (importResult) => { return { kind: 'unknown' } }
 }
 
 
 const MixinsContext = createContext(defaultData)
 
 export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
-  const { uiStore, user, cipherStore, folderStore, collectionStore } = useStores()
+  const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore } = useStores()
   const {
     cryptoService,
     userService,
@@ -81,7 +89,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     messagingService,
     tokenService,
     syncService,
-    passwordGenerationService
+    passwordGenerationService,
+    auditService
   } = useCoreService()
   const insets = useSafeAreaInsets()
 
@@ -279,34 +288,42 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Logout
   const logout = async () => {
-    await Promise.all([
-      user.logout(),
-      cipherStore.clearStore(),
-      collectionStore.clearStore(),
-      folderStore.clearStore(),
-      folderService.clearCache(),
-      cipherService.clearCache(),
-      collectionService.clearCache(),
-      cryptoService.clearKeys(),
-      userService.clear()
-    ])
-
-    // Sign out of Google
-    GoogleSignin.configure({
-      webClientId: GOOGLE_CLIENT_ID
-    })
-    const isSignedIn = await GoogleSignin.isSignedIn()
-    if (isSignedIn) {
-      await GoogleSignin.signOut()
+    try {
+      await Promise.all([
+        folderService.clearCache(),
+        cipherService.clearCache(),
+        collectionService.clearCache(),
+        cryptoService.clearKeys(),
+        userService.clear()
+      ])
+  
+      cipherStore.clearStore()
+      collectionStore.clearStore()
+      folderStore.clearStore()
+      toolStore.clearStore()
+      
+      await user.logout()
+  
+      // Sign out of Google
+      GoogleSignin.configure({
+        webClientId: GOOGLE_CLIENT_ID
+      })
+      const isSignedIn = await GoogleSignin.isSignedIn()
+      if (isSignedIn) {
+        await GoogleSignin.signOut()
+      }
+  
+      // Sign out of Facebook
+      if (await AccessToken.getCurrentAccessToken()) {
+        LoginManager.logOut()
+      }
+  
+      // Reset shared data
+      await saveShared('autofill', '[]')
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
     }
-
-    // Sign out of Facebook
-    if (await AccessToken.getCurrentAccessToken()) {
-      LoginManager.logOut()
-    }
-
-    // Reset shared data
-    await saveShared('autofill', '[]')
   }
 
   // Lock screen
@@ -323,12 +340,21 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // Sync
   const getSyncData = async () => {
     try {
+      if (cipherStore.isSynching) {
+        return { kind: 'synching' }
+      }
+
+      cipherStore.setIsSynching(true)
       messagingService.send('syncStarted')
+
+      // Sync offline data first
+      await _syncOfflineData()
 
       // Sync api
       const res = await cipherStore.syncData()
       if (res.kind !== 'ok') {
         messagingService.send('syncCompleted', { successfully: false })
+        cipherStore.setIsSynching(false)
         return res
       }
 
@@ -343,6 +369,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       await syncService.syncSettings(userId, res.data.domains)
       await syncService.syncPolicies(res.data.policies)
       await syncService.setLastSync(new Date())
+      
+      cipherStore.setLastSync(new Date().getTime())
       messagingService.send('syncCompleted', { successfully: true })
 
       // Save fingerprint
@@ -364,47 +392,165 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       }))
       await saveShared('autofill', JSON.stringify(sharedData))
 
+      cipherStore.setIsSynching(false)
       return { kind: 'ok' }
     } catch (e) {
+      cipherStore.setIsSynching(false)
       messagingService.send('syncCompleted', { successfully: false })
       return { kind: 'bad-data' }
     }
   }
 
-  // Load folders
-  const loadFolders = async () => {
-    const res = await folderService.getAllDecrypted() || []
-    for (let f of res) {
-      let ciphers = await getCiphers({
+  // Sync offline data
+  const _syncOfflineData = async () => {
+    const ciphers = []
+    const folders = []
+    const folderRelationships = []
+
+    // Prepare ciphers
+    if (cipherStore.notSynchedCiphers.length > 0) {
+      const notSynchedCiphers = await getCiphers({
         deleted: false,
         searchText: '',
-        filters: [c => c.folderId ? c.folderId === f.id : !c.collectionIds.length]
+        filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)],
+        includeExtensions: true
       })
-      f.cipherCount = ciphers ? ciphers.length : 0
+      const notSynchedCiphersDeleted = await getCiphers({
+        deleted: true,
+        searchText: '',
+        filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)],
+        includeExtensions: true
+      })
+      notSynchedCiphers.push(...notSynchedCiphersDeleted)
+  
+      const promises = []
+      notSynchedCiphers.forEach((c: CipherView) => {
+        promises.push(
+          cipherService.encrypt(c).then(enc => {
+            const cipherReq = new CipherRequest(enc)
+            if (!c.id.startsWith('tmp__')) {
+              // @ts-ignore
+              cipherReq.id = c.id
+            }
+            if (c.isDeleted) {
+              // @ts-ignore
+              cipherReq.deletedDate = new Date(c.deletedDate).getTime() / 1000
+            }
+            ciphers.push(cipherReq)
+          })
+        )
+      })
+      await Promise.all(promises)
     }
-    folderStore.setFolders(res)
+
+    // Prepare folders
+    if (folderStore.notSynchedFolders.length > 0) {
+      const promises = []
+      folderStore.folders.filter(f => folderStore.notSynchedFolders.includes(f.id)).forEach((f: FolderView) => {
+        promises.push(
+          folderService.encrypt(f).then(enc => {
+            const folderReq = new FolderRequest(enc)
+            // @ts-ignore
+            folderReq.id = f.id
+            folders.push(folderReq)
+          })
+        )
+      })
+      await Promise.all(promises)
+    }
+
+    // Prepare relationship
+    folders.forEach((f, fIndex) => {
+      if (f.id.startsWith('tmp__')) {
+        ciphers.forEach((c, cIndex) => {
+          if (c.folderId === f.id) {
+            c.folderId = null
+            folderRelationships.push({
+              key: cIndex,
+              value: fIndex
+            })
+          }
+        })
+        delete f.id
+      }
+    })
+    
+    // Done
+    if (ciphers.length || folders.length) {
+      await cipherStore.offlineSyncCipher({
+        ciphers,
+        folders,
+        folderRelationships
+      })
+      cipherStore.clearNotSync()
+      folderStore.clearNotSync()
+    }
+  }
+
+  // Reload offline cache
+  const reloadCache = async () => {
+    await cipherService.clearCache()
+    cipherStore.setLastOfflineSync(new Date().getTime())
+    folderService.clearCache()
+    await loadFolders()
+    if (cipherStore.selectedCipher) {
+      const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
+      cipherStore.setSelectedCipher(updatedCipher)
+    }
+  }
+
+  // Load folders
+  const loadFolders = async () => {
+    try {
+      const res = await folderService.getAllDecrypted() || []
+      for (let f of res) {
+        let ciphers = await getCiphers({
+          deleted: false,
+          searchText: '',
+          filters: [c => c.folderId ? c.folderId === f.id : (!c.collectionIds.length && !f.id)]
+        })
+        f.cipherCount = ciphers ? ciphers.length : 0
+      }
+      folderStore.setFolders(res)
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+    }
   }
 
   // Load collections
   const loadCollections = async () => {
-    const res = await collectionService.getAllDecrypted() || []
-    for (let f of res) {
-      let ciphers = await getCiphers({
-        deleted: false,
-        searchText: '',
-        filters: [c => c.collectionIds.includes(f.id)]
-      })
-      f.cipherCount = ciphers ? ciphers.length : 0
+    try {
+      const res = await collectionService.getAllDecrypted() || []
+      for (let f of res) {
+        let ciphers = await getCiphers({
+          deleted: false,
+          searchText: '',
+          filters: [c => c.collectionIds.includes(f.id)]
+        })
+        f.cipherCount = ciphers ? ciphers.length : 0
+      }
+      collectionStore.setCollections(res)
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
     }
-    collectionStore.setCollections(res)
   }
 
   // Get ciphers
   const getCiphers = async (params: GetCiphersParams) => {
-    // Filter
-    const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
-    const filters = [deletedFilter, ...params.filters]
-    return await searchService.searchCiphers(params.searchText || '', filters, null) || []
+    try {
+      const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
+      const filters = [deletedFilter, ...params.filters]
+      if (!params.includeExtensions) {
+        filters.unshift((c : CipherView) => 1 <= c.type && c.type <= 4)
+      }
+      return await searchService.searchCiphers(params.searchText || '', filters, null) || []
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return []
+    }
   }
 
   // Get cipher by id
@@ -419,65 +565,420 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Get collections
   const getCollections = async () => {
-    let res = await collectionService.getAllDecrypted() || []
-    res = res.filter(item => item.id)
-    return res
+    try {
+      let res = await collectionService.getAllDecrypted() || []
+      res = res.filter(item => item.id)
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return []
+    }
+  }
+
+  // Load weak passwords
+  const loadPasswordsHealth = async () => {
+    try {
+      if (!user.plan || user.plan.alias === 'pm_free') {
+        return
+      }
+  
+      const passwordStrengthCache = new Map()
+      const passwordStrengthMap = new Map()
+      const passwordUseMap = new Map()
+      const exposedPasswordMap = new Map()
+  
+      const exposedPasswordCiphers = []
+      const promises = []
+  
+      const allCiphers = await getCiphers({
+        deleted: false,
+        searchText: '',
+        filters: [(c: CipherView) => c.type === CipherType.Login && c.login.password]
+      })
+      const weakPasswordCiphers = []
+      const isUserNameNotEmpty = (c: CipherView) => {
+        return c.login.username != null && c.login.username.trim() !== ''
+      }
+      const getCacheKey = (c: CipherView) => {
+        return c.login.password + '_____' + (isUserNameNotEmpty(c) ? c.login.username : '')
+      }
+  
+      allCiphers.forEach((c: CipherView) => {
+        const hasUserName = isUserNameNotEmpty(c)
+        const cacheKey = getCacheKey(c)
+  
+        // Check password used
+        if (passwordUseMap.has(c.login.password)) {
+          passwordUseMap.set(c.login.password, passwordUseMap.get(c.login.password) + 1)
+        } else {
+          passwordUseMap.set(c.login.password, 1)
+        }
+  
+        // Check password strength
+        if (!passwordStrengthCache.has(cacheKey)) {
+          let userInput = []
+          if (hasUserName) {
+            const atPosition = c.login.username.indexOf('@')
+            if (atPosition > -1) {
+              userInput = userInput.concat(
+                c.login.username.substr(0, atPosition).trim().toLowerCase().split(/[^A-Za-z0-9]/)
+              ).filter(i => i.length >= 3)
+            } else {
+              userInput = c.login.username.trim().toLowerCase().split(/[^A-Za-z0-9]/).filter(i => i.length >= 3)
+            }
+          }
+          const result = passwordGenerationService.passwordStrength(
+            c.login.password, 
+            userInput.length > 0 ? userInput : null
+          )
+          passwordStrengthCache.set(cacheKey, result.score)
+        }
+        const score = passwordStrengthCache.get(cacheKey)
+        if (score != null && score <= 2) {
+          passwordStrengthMap.set(c.id, score)
+          weakPasswordCiphers.push(c)
+        }
+  
+        // Check exposed password
+        const promise = auditService.passwordLeaked(c.login.password).then(exposedCount => {
+          if (exposedCount > 0) {
+            exposedPasswordCiphers.push(c)
+            exposedPasswordMap.set(c.id, exposedCount)
+          }
+        })
+        promises.push(promise)
+      })
+  
+      await Promise.all(promises)
+  
+      // Result
+      weakPasswordCiphers.sort((a, b) => {
+        return passwordStrengthCache.get(getCacheKey(a)) - passwordStrengthCache.get(getCacheKey(b))
+      })
+      const reusedPasswordCiphers = allCiphers.filter((c: CipherView) => (
+        passwordUseMap.has(c.login.password) && passwordUseMap.get(c.login.password) > 1
+      ))
+  
+      toolStore.setWeakPasswords(weakPasswordCiphers)
+      toolStore.setPasswordStrengthMap(passwordStrengthMap)
+      toolStore.setReusedPasswords(reusedPasswordCiphers)
+      toolStore.setPasswordUseMap(passwordUseMap)
+      toolStore.setExposedPasswords(exposedPasswordCiphers)
+      toolStore.setExposedPasswordMap(exposedPasswordMap)
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+    }
   }
 
   // ------------------------ CIPHERS ---------------------------
 
+  // Import
+  const importCiphers = async (importResult) => {
+    // Offline
+    if (uiStore.isOffline) {
+      return _offlineImportCiphers(importResult)
+    }
+
+    // Online
+    const request = new ImportCiphersRequest()
+    for (let i = 0; i < importResult.ciphers.length; i++) {
+      const c = await cipherService.encrypt(importResult.ciphers[i])
+      request.ciphers.push(new CipherRequest(c))
+    }
+    if (importResult.folders != null) {
+      for (let i = 0; i < importResult.folders.length; i++) {
+        const f = await folderService.encrypt(importResult.folders[i])
+        request.folders.push(new FolderRequest(f))
+      }
+    }
+    if (importResult.folderRelationships != null) {
+      importResult.folderRelationships.forEach(r =>
+        request.folderRelationships.push(new KvpRequest(r[0], r[1])))
+    }
+    const res = await cipherStore.importCipher(request)
+    if (res.kind === 'ok') {
+      notify('success', translate('import.success'))
+      return res
+    } else {
+      notifyApiError(res)
+      return res
+    }
+  }
+
+  const _offlineImportCiphers = async (importResult) => {
+    // Prepare data
+    const ciphers = []
+    const folders = []
+    for (let i = 0; i < importResult.ciphers.length; i++) {
+      const c = await cipherService.encrypt(importResult.ciphers[i])
+      const enc = new CipherRequest(c)
+      const tempId = 'tmp__' + randomString()
+      // @ts-ignore
+      enc.id = tempId
+      ciphers.push(enc)
+    }
+    if (importResult.folders != null) {
+      for (let i = 0; i < importResult.folders.length; i++) {
+        const f = await folderService.encrypt(importResult.folders[i])
+        const enc = new FolderRequest(f)
+        const tempId = 'tmp__' + randomString()
+        // @ts-ignore
+        enc.id = tempId
+        folders.push(enc)
+      }
+    }
+    if (importResult.folderRelationships != null) {
+      importResult.folderRelationships.forEach(r => {
+        ciphers[r[0]].folderId = folders[r[1]].id
+      })
+    }
+
+    // Update cipher storage
+    const userId = await userService.getUserId()
+    if (ciphers.length) {
+      const key = `ciphers_${userId}`
+      const res = await storageService.get(key)
+      ciphers.forEach(c => {
+        cipherStore.addNotSync(c.id)
+        res[c.id] = {
+          ...c,
+          userId
+        }
+      })
+      await storageService.save(key, res)
+    }
+
+    // Update folder storage
+    if (folders.length) {
+      const key = `folders_${userId}`
+      const res = await storageService.get(key)
+      ciphers.forEach(f => {
+        folderStore.addNotSync(f.id)
+        res[f.id] = {
+          ...f,
+          userId
+        }
+      })
+      await storageService.save(key, res)
+    }
+
+    await reloadCache()
+    notify('success', translate('import.success') + ' ' + translate('success.will_sync_when_online'))
+    return { kind: 'ok' }
+  }
+
+  // Create
   const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
-    const cipherEnc = await cipherService.encrypt(cipher)
-    const data = new CipherRequest(cipherEnc)
-    const res = await cipherStore.createCipher(data, score, collectionIds)
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_created'))
-    } else {
-      notifyApiError(res)
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineCreateCipher(cipher, collectionIds)
+        notify('success', `${translate('success.cipher_created')} ${translate('success.will_sync_when_online')}`)
+        return { kind: 'ok' }
+      } 
+
+      // Online
+      const cipherEnc = await cipherService.encrypt(cipher)
+      const data = new CipherRequest(cipherEnc)
+      const res = await cipherStore.createCipher(data, score, collectionIds)
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_created'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
     }
-    return res
   }
 
+  // Offline create
+  const _offlineCreateCipher = async (cipher: CipherView, collectionIds: string[]) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
+    const cipherEnc = await cipherService.encrypt(cipher)
+    const data = new CipherRequest(cipherEnc)
+    const tempId = 'tmp__' + randomString()
+
+    res[tempId] = {
+      ...data,
+      userId,
+      id: tempId,
+      collectionIds
+    }
+    await storageService.save(key, res)
+    cipherStore.addNotSync(tempId)
+    await reloadCache()
+  }
+
+  // Update
   const updateCipher = async (id: string, cipher: CipherView, score: number, collectionIds: string[]) => {
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineUpdateCipher(cipher, collectionIds)
+        notify('success', `${translate('success.cipher_updated')} ${translate('success.will_sync_when_online')}`)
+        return { kind: 'ok' }
+      } 
+
+      // Online
+      const cipherEnc = await cipherService.encrypt(cipher)
+      const data = new CipherRequest(cipherEnc)
+      const res = await cipherStore.updateCipher(id, data, score, collectionIds)
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_updated'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
+    }
+  }
+
+  // Offline update
+  const _offlineUpdateCipher = async (cipher: CipherView, collectionIds: string[]) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
     const cipherEnc = await cipherService.encrypt(cipher)
     const data = new CipherRequest(cipherEnc)
-    const res = await cipherStore.updateCipher(id, data, score, collectionIds)
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_updated'))
-    } else {
-      notifyApiError(res)
+    
+    res[cipher.id] = {
+      ...res[cipher.id],
+      ...data,
+      collectionIds,
+      revisionDate: new Date().toISOString()
     }
-    return res
+    await storageService.save(key, res)
+    cipherStore.addNotSync(cipher.id)
+    await reloadCache()
   }
 
+  // Delete
   const deleteCiphers = async (ids: string[]) => {
-    const res = await cipherStore.deleteCiphers(ids)
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_deleted'))
-    } else {
-      notifyApiError(res)
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineDeleteCiphers(ids)
+        notify('success', `${translate('success.cipher_deleted')}`)
+        return { kind: 'ok' }
+      } 
+
+      // Online
+      const res = await cipherStore.deleteCiphers(ids)
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_deleted'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
     }
-    return res
   }
 
+  // Offline delete
+  const _offlineDeleteCiphers = async (ids: string[]) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
+    ids.forEach(id => {
+      delete res[id]
+      cipherStore.removeNotSync(id)
+    })
+    await storageService.save(key, res)
+    await reloadCache()
+  }
+
+  // To trash
   const toTrashCiphers = async (ids: string[]) => {
-    const res = await cipherStore.toTrashCiphers(ids)
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_trashed'))
-    } else {
-      notifyApiError(res)
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineToTrashCiphers(ids)
+        notify('success', `${translate('success.cipher_trashed')} ${translate('success.will_sync_when_online')}`)
+        return { kind: 'ok' }
+      } 
+
+      // Online
+      const res = await cipherStore.toTrashCiphers(ids)
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_trashed'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
     }
-    return res
   }
 
+  // Offline to trash
+  const _offlineToTrashCiphers = async (ids: string[]) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
+    ids.forEach(id => {
+      res[id].deletedDate = new Date().toISOString()
+      cipherStore.addNotSync(id)
+    })
+    await storageService.save(key, res)
+    await reloadCache()
+  }
+
+  // Restore
   const restoreCiphers = async (ids: string[]) => {
-    const res = await cipherStore.restoreCiphers(ids)
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_restored'))
-    } else {
-      notifyApiError(res)
+    // Offline
+    if (uiStore.isOffline) {
+      await _offlineRestoreCiphers(ids)
+      notify('success', `${translate('success.cipher_restored')} ${translate('success.will_sync_when_online')}`)
+      return { kind: 'ok' }
+    } 
+
+    // Online
+    try {
+      const res = await cipherStore.restoreCiphers(ids)
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_restored'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
     }
-    return res
+  }
+
+  // Offline restore
+  const _offlineRestoreCiphers = async (ids: string[]) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
+    ids.forEach(id => {
+      res[id].deletedDate = null
+      cipherStore.addNotSync(id)
+    })
+    await storageService.save(key, res)
+    await reloadCache()
   }
 
 
@@ -553,8 +1054,14 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Check if biometric is viable
   const isBiometricAvailable = async () => {
-    const { available } = await ReactNativeBiometrics.isSensorAvailable()
-    return available
+    try {
+      const { available } = await ReactNativeBiometrics.isSensorAvailable()
+      return available
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return false
+    }
   }
 
   // Custom translate to force re render
@@ -619,7 +1126,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     getRouteName,
     isBiometricAvailable,
     translate,
-    notifyApiError
+    notifyApiError,
+    loadPasswordsHealth,
+    reloadCache,
+    importCiphers
   }
 
   return (

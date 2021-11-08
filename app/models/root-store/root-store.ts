@@ -4,6 +4,7 @@ import { CipherStore, CipherStoreModel } from "../cipher-store/cipher-store"
 import { CollectionStore, CollectionStoreModel } from "../collection-store/collection-store"
 import { FolderStore, FolderStoreModel } from "../folder-store/folder-store"
 import { UserModel, User } from "../user/user"
+import { ToolStore, ToolStoreModel } from "../tool-store/tool-store"
 
 /**
  * A RootStore model.
@@ -14,7 +15,8 @@ export const RootStoreModel = types.model("RootStore").props({
   user: types.optional(UserModel, {} as User),
   cipherStore: types.optional(CipherStoreModel, {} as CipherStore),
   folderStore: types.optional(FolderStoreModel, {} as FolderStore),
-  collectionStore: types.optional(CollectionStoreModel, {} as CollectionStore)
+  collectionStore: types.optional(CollectionStoreModel, {} as CollectionStore),
+  toolStore: types.optional(ToolStoreModel, {} as ToolStore)
 })
 
 /**

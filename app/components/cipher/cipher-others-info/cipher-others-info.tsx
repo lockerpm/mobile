@@ -32,7 +32,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
     navigation, hasNote, note, onChangeNote, folderId = null, 
     organizationId, collectionIds, setOrganizationId, setCollectionIds
   } = props
-  const { folderStore, user } = useStores()
+  const { folderStore, user, uiStore } = useStores()
   const { translate, getTeam } = useMixins()
 
   const [showOwnershipSelectionModal, setShowOwnershipSelectionModal] = useState(false)
@@ -94,6 +94,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
 
         {/* Ownership */}
         <Button
+          isDisabled={uiStore.isOffline}
           preset="link"
           onPress={() => {
             setShowOwnershipSelectionModal(true)

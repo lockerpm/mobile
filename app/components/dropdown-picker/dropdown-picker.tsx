@@ -20,15 +20,20 @@ export interface DropdownPickerProps {
   loading?: boolean
   emptyText?: string
   multiple?: boolean
+  isDisabled?: boolean
 }
 
 export const DropdownPicker = observer(function DropdownPicker(props: DropdownPickerProps) {
-  const { style, items, setItems, value, setValue, placeholder, loading, emptyText, multiple } = props
+  const { style, items, setItems, value, setValue, placeholder, loading, emptyText, multiple, isDisabled } = props
 
   const [open, setOpen] = useState(false)
 
   return (
     <DropDownPicker
+      disabled={isDisabled}
+      disabledStyle={{
+        opacity: 0.4
+      }}
       mode="BADGE"
       badgeDotColors={color.palette.green}
       badgeColors={color.block}

@@ -21,6 +21,7 @@
     "details": "Chi tiết",
     "edit": "Sửa",
     "email": "Email",
+    "enter_master_pass": "Nhập mật khẩu chính",
     "folder": "Thư mục",
     "fullname": "Họ và tên",
     "generate": "Tạo mới",
@@ -42,6 +43,7 @@
     "none": "Không xác định",
     "note": "Ghi chú",
     "notes": "Ghi chú",
+    "nothing_here": "Không có dữ liệu",
     "options": "Tùy chọn",
     "or_login_with": "Hoặc đăng nhập bằng",
     "organization": "Tổ chức",
@@ -67,9 +69,11 @@
     "sort": "Sắp xếp",
     "submit": "Gửi",
     "team_folders": "Thư mục chung",
+    "times": "lần",
     "trash": "Thùng rác",
     "tools": "Công cụ",
-    "unlock": "Mở khóa"
+    "unlock": "Mở khóa",
+    "website": "Website"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
@@ -79,6 +83,7 @@
     "logout": "Đăng xuất khỏi "
   },
   "error": {
+    "not_supported": "Không hỗ trợ",
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
     "biometric_unlock_failed": "Xác thực bằng Face ID/Touch ID không thành công",
@@ -98,7 +103,8 @@
     "not_found": "Đối tượng không tồn tại",
     "too_many_failed_attempts": "Quá nhiều lần thử không thành công",
     "no_team_available": "Không có dữ liệu. Tham gia nhóm với vai trò Quản lý để sử dụng tính năng chia sẻ.",
-    "no_collection_available": "Bạn không có quyền truy cập vào bất kỳ thư mục chung nào."
+    "no_collection_available": "Bạn không có quyền truy cập vào bất kỳ thư mục chung nào.",
+    "not_available_offlie": "Không thể thực hiện hành động này trong chế độ ngoại tuyến"
   },
   "success": {
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
@@ -111,7 +117,8 @@
     "cipher_trashed": "Đã chuyển vào thùng rác",
     "cipher_updated": "Cập nhật thành công",
     "cipher_shared": "Chia sẻ thành công",
-    "sync_success": "Đồng bộ hóa hoàn tất"
+    "sync_success": "Đồng bộ hóa hoàn tất",
+    "will_sync_when_online": "Dữ liệu của bạn sẽ được đồng bộ khi có kết nối internet."
   },
   "password_strength": {
     "very_weak": "Rất yếu",
@@ -185,6 +192,10 @@
     "terms": "điều khoản dịch vụ",
     "conditions": "chính sách bảo mật",
     "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn."
+  },
+  "start": {
+    "synching": "Đồng bộ hoá dữ liệu...",
+    "decrypting": "Hoàn tất chuẩn bị dữ liệu..."
   },
   "biometric_intro": {
     "title": "Mở khóa Locker bằng Face ID/Touch ID",
@@ -335,16 +346,55 @@
     "avoid_ambiguous": "Tránh các ký tự dễ nhầm lẫn",
     "use_password": "Sử dụng mật khẩu"
   },
+  "authenticator": {
+    "title": "Authenticator",
+    "desc": "Tạo mã Xác minh 2 bước (2FA) trên điện thoại của bạn",
+    "copy_code": "Sao chép mã OTP",
+    "scan_a_qr": "Quét mã QR",
+    "import_from_google_authenticator": "Nhập từ Google Authenticator",
+    "invalid_qr": "Mã QR không hợp lệ",
+    "enter_key": "Nhập khoá bí mật",
+    "invalid_key": "Khóa không hợp lệ",
+    "empty": {
+      "title": "Bảo vệ tài khoản của bạn",
+      "desc": "Thêm một lớp bảo mật bổ sung mỗi khi đăng nhập",
+      "btn": "Bắt đầu"
+    },
+    "secret_key": "Mã khoá"
+  },
   "pass_health": {
     "title": "Sức khỏe mật khẩu",
-    "desc": "Xác định các mật khẩu yếu, trùng lặp có thể khiến bạn bị tấn công bởi tội phạm mạng"
+    "desc": "Xác định các mật khẩu yếu, trùng lặp có thể khiến bạn bị tấn công bởi tội phạm mạng",
+    "weak_passwords": {
+      "name": "Mật khẩu yếu",
+      "desc": "Quá ngắn hoặc quá dễ đoán"
+    },
+    "reused_passwords": {
+      "name": "Mật khẩu trùng lặp",
+      "desc": "Sử dụng chung mật khẩu cho nhiều tài khoản khác nhau"
+    },
+    "exposed_passwords": {
+      "name": "Mật khẩu bị lộ",
+      "desc": "Xuất hiện trong các sự cố rò rỉ dữ liệu"
+    }
   },
   "data_breach_scanner": {
-    "title": "Cảnh báo lỗ dữ liệu",
-    "desc": "Kiểm tra xem dữ liệu nhạy cảm của bạn có bị lộ trên internet hay không"
+    "title": "Cảnh báo rò rỉ dữ liệu",
+    "desc": "Kiểm tra xem dữ liệu nhạy cảm của bạn có bị lộ trên internet hay không",
+    "breach_desc": "\"Rò rỉ dữ liệu\" là một sự cố trong đó dữ liệu của trang web đã bị tin tặc truy cập bất hợp pháp và sau đó phát tán công khai. Kiểm tra các loại dữ liệu đã bị xâm phạm (địa chỉ email, mật khẩu, thẻ tín dụng, v.v.) và thực hiện hành động thích hợp, chẳng hạn như thay đổi mật khẩu.",
+    "check_email": "Kiểm tra email mà bạn sử dụng",
+    "check": "Kiểm tra",
+    "good_news": "An toàn",
+    "bad_news": "Rò rỉ dữ liệu",
+    "no_breaches_found": " không được tìm thấy trong bất kỳ sự cố rò rỉ dữ liệu đã biết nào.",
+    "breaches_found": " được tìm thấy trong {{count}} sự cố rò rỉ dữ liệu đã biết.",
+    "pwn_count": "Người dùng bị ảnh hưởng",
+    "breach_date": "Ngày xảy ra sự cố",
+    "added_date": "Ngày báo cáo",
+    "data_classes": "Dữ liệu rò rỉ"
   },
   "settings": {
-    "autofill_service": "Tự động điền (AutoFill)",
+    "autofill_service": "Tự động điền (Auto-fill)",
     "change_master_pass": "Thay đổi mật khẩu chính",
     "danger_zone": "Khu vực nguy hiểm",
     "deauthorize_sessions": "Vô hiệu hóa tất cả các phiên",
@@ -360,7 +410,10 @@
     "on_app_close": "Khi tắt ứng dụng",
     "on_screen_off": "Khi tắt màn hình",
     "timeout": "Hẹn giờ",
-    "timeout_action": "Hành động khi hết giờ"
+    "timeout_action": "Hành động khi hết giờ",
+    "import_export": "Nhập và xuất dữ liệu",
+    "import": "Nhập dữ liệu",
+    "export": "Xuất dữ liệu"
   },
   "autofill_service": {
     "ios": {
@@ -370,6 +423,23 @@
       "step_3": "3. Chọn \"Tự động điền mật khẩu\"",
       "step_4": "4. Bật \"Tự động điền mật khẩu\"",
       "step_5": "5. Chọn \"Locker\""
+    },
+    "android": {
+      "android_autofill": {
+        "name": "Android Auto-fill",
+        "desc": "Dịch vụ tự động điền của Locker sử dụng AutoFill Framework của Android để hỗ trợ điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn"
+      }
     }
+  },
+  "export": {
+    "success": "Dữ liệu đã được xuất!"
+  },
+  "import": {
+    "format": "Định dạng",
+    "file": "Tệp dữ liệu",
+    "no_data": "Không có dữ liệu",
+    "invalid_data_format": "Dữ liệu không đúng định dạng",
+    "success": "Nhập dữ liệu thành công",
+    "pls_select_right_format": "Yêu cầu phải là tệp {{format}}"
   }
 }

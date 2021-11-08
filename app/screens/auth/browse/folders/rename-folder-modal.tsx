@@ -17,9 +17,9 @@ interface Props {
 
 export const RenameFolderModal = observer((props: Props) => {
   const { isOpen, onClose, folder } = props
-  const { folderStore, collectionStore } = useStores()
-  const { folderService, collectionService } = useCoreService()
-  const { notify, translate, notifyApiError } = useMixins()
+  const { folderStore, collectionStore, uiStore } = useStores()
+  const { folderService, collectionService, userService, storageService } = useCoreService()
+  const { notify, translate, notifyApiError, reloadCache } = useMixins()
 
   // --------------- PARAMS ----------------
 
@@ -54,10 +54,17 @@ export const RenameFolderModal = observer((props: Props) => {
 
     // @ts-ignore
     if (!data.organizationId) {
-      // @ts-ignore
-      const folderEnc = await folderService.encrypt(data)
-      const payload = new FolderRequest(folderEnc)
-      res = await folderStore.updateFolder(folder.id, payload)
+      // Offline
+      if (uiStore.isOffline) {
+        // @ts-ignore
+        await _offlineUpdatePersonalFolder(data)
+        res = { kind: 'ok' }
+      } else {
+        // @ts-ignore
+        const folderEnc = await folderService.encrypt(data)
+        const payload = new FolderRequest(folderEnc)
+        res = await folderStore.updateFolder(folder.id, payload)
+      }
     } else {
       // @ts-ignore
       const collectionEnc = await collectionService.encrypt(data)
@@ -69,7 +76,10 @@ export const RenameFolderModal = observer((props: Props) => {
     setIsLoading(false)
 
     if (res.kind === 'ok') {
-      notify('success', translate('folder.folder_updated'))
+      notify(
+        'success', translate('folder.folder_updated') 
+        + (uiStore.isOffline ? ` ${translate('success.will_sync_when_online')}` : '')
+      )
       onClose()
     } else {
       // @ts-ignore
@@ -78,6 +88,23 @@ export const RenameFolderModal = observer((props: Props) => {
         onClose()
       }
     }
+  }
+
+  const _offlineUpdatePersonalFolder = async (folder: FolderView) => {
+    const userId = await userService.getUserId()
+    const key = `folders_${userId}`
+    const res = await storageService.get(key)
+
+    const folderEnc = await folderService.encrypt(folder)
+    const data = new FolderRequest(folderEnc)
+
+    res[folder.id] = {
+      ...res[folder.id],
+      ...data
+    }
+    await storageService.save(key, res)
+    folderStore.addNotSync(folder.id)
+    await reloadCache()
   }
 
   // --------------- EFFECT ----------------
