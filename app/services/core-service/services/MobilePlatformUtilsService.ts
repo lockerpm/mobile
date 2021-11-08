@@ -128,7 +128,7 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
         if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
           return false
         }
-        path = `${RNFS.ExternalStorageDirectoryPath}/${fileName}`
+        path = `${RNFS.ExternalStorageDirectoryPath}/Download/${fileName}`
       } else {
         path = `${RNFS.DocumentDirectoryPath}/${fileName}`
       }

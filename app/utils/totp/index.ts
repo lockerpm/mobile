@@ -80,13 +80,7 @@ export const decodeGoogleAuthenticatorImport = (uri: string): OTPData[] => {
     return []
   }
 
-  const uriData = components[components.length - 1].split('?')
-
-  if (!uriData.length) {
-    return []
-  }
-
-  const query = _parseQueryString(uriData[1]) 
+  const query = _parseQueryString(components[1]) 
   const buffer = query.data
 
   const payload = proto.MigrationPayload.deserializeBinary(buffer)
@@ -166,7 +160,7 @@ const _parseQueryString = (query: string) => {
 }
 
 const _parseAlgorithm = (algo: string) => {
-  switch (algo) {
+  switch (algo.toLowerCase()) {
     case 'sha1':
       return 'SHA-1'
     case 'sha256':

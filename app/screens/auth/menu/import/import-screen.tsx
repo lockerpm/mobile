@@ -57,6 +57,14 @@ export const ImportScreen = observer(function ImportScreen() {
 
   // METHODS
 
+  const getFileName = (file) => {
+    if (file.name) {
+      return file.name
+    }
+    const uriComponents = file.uri.split('/')
+    return uriComponents[uriComponents.length - 1]
+  }
+
   const pickFile = async () => {
     try {
       const targetFormat = formats.find(i => i.value === format)
@@ -66,7 +74,7 @@ export const ImportScreen = observer(function ImportScreen() {
         type: [DocumentPicker.types.allFiles],
       })
 
-      if (res.name.endsWith(`.${targetExtension}`)) {
+      if (getFileName(res).endsWith(`.${targetExtension}`)) {
         setFile(res)
       } else {
         notify('error', translate('import.pls_select_right_format', { format: targetExtension }))
@@ -114,6 +122,7 @@ export const ImportScreen = observer(function ImportScreen() {
       if (importResult.success) {
         if (importResult.folders.length === 0 && importResult.ciphers.length === 0) {
           notify('error', translate('import.no_data'))
+          setIsLoading(false)
           return
         } else if (importResult.ciphers.length > 0) {
           const halfway = Math.floor(importResult.ciphers.length / 2)
@@ -124,12 +133,14 @@ export const ImportScreen = observer(function ImportScreen() {
             badData(importResult.ciphers[last])
           ) {
             notify('error', translate('import.invalid_data_format'))
+            setIsLoading(false)
             return
           }
         }
 
         try {
           await importCiphers(importResult)
+          setIsLoading(false)
           return
         } catch (error) {
           notify('error', translate('import.invalid_data_format'))
@@ -193,7 +204,7 @@ export const ImportScreen = observer(function ImportScreen() {
             <Text
               numberOfLines={1}
               ellipsizeMode="middle"
-              text={file.name}
+              text={getFileName(file)}
               style={{
                 maxWidth: 150
               }}
