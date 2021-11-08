@@ -1052,6 +1052,7 @@ export class CipherService implements CipherServiceAbstraction {
                 }
                 return;
             case CipherType.SecureNote:
+            case CipherType.TOTP:
                 cipher.secureNote = new SecureNote();
                 cipher.secureNote.type = model.secureNote.type;
                 return;

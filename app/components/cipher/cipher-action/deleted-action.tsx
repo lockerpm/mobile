@@ -30,7 +30,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
   const { deleteCiphers, getRouteName, restoreCiphers, translate } = useMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
   // Computed
@@ -76,7 +76,13 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
   // Methods
 
   const handleRestore = async () => {
-    await restoreCiphers([selectedCipher.id])
+    const res = await restoreCiphers([selectedCipher.id])
+    if (res.kind === 'ok') {
+      let routeName = await getRouteName()
+      if (routeName.endsWith('__info')) {
+        navigation.goBack()
+      }
+    }
   }
 
   const handleDelete = async () => {
@@ -152,6 +158,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
           }
 
           <ActionItem
+            disabled={uiStore.isOffline && !!selectedCipher.organizationId}
             name={translate('common.edit')}
             icon="edit"
             action={() => {
@@ -161,6 +168,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
           />
 
           <ActionItem
+            disabled={uiStore.isOffline && !!selectedCipher.organizationId}
             name={translate('common.restore')}
             icon="repeat"
             action={() => {
@@ -170,6 +178,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
           />
 
           <ActionItem
+            disabled={uiStore.isOffline && !!selectedCipher.organizationId}
             name={translate('trash.perma_delete')}
             icon="trash"
             textColor={color.error}

@@ -7,6 +7,7 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { color, commonStyles, fontSize } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { PasswordAction } from "../password-action"
@@ -96,8 +97,21 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           />
           <Text
             preset="header"
-            text={selectedCipher.name}
-          />
+            style={{ marginTop: 5 }}
+          >
+            {selectedCipher.name}
+            {
+              cipherStore.notSynchedCiphers.includes(selectedCipher.id) && (
+                <View style={{ paddingLeft: 10 }}>
+                  <MaterialCommunityIconsIcon
+                    name="cloud-off-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+          </Text>
         </View>
       </View>
       {/* Intro end */}

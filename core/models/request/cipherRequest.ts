@@ -63,6 +63,7 @@ export class CipherRequest {
                 }
                 break;
             case CipherType.SecureNote:
+            case CipherType.TOTP:
                 this.secureNote = new SecureNoteApi();
                 this.secureNote.type = cipher.secureNote.type;
                 break;

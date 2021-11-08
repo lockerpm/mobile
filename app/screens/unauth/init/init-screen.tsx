@@ -11,7 +11,7 @@ import { BackHandler } from "react-native"
 
 
 export const InitScreen = observer(function InitScreen() {
-  const { user } = useStores()
+  const { user, cipherStore } = useStores()
   const navigation = useNavigation()
 
   const goLockOrCreatePassword = () => {
@@ -25,16 +25,19 @@ export const InitScreen = observer(function InitScreen() {
   const mounted = async () => {
     user.setLanguage(user.language)
     user.setDeviceID(DeviceInfo.getUniqueId())
+    cipherStore.setIsSynching(false)
 
     // Testing
     // if (__DEV__) {
-    //   navigation.navigate('login')
+    //   navigation.navigate('onBoarding')
     //   return
     // }
 
     // Logged in?
     if (!user.isLoggedIn) {
-      const introShown = await load(storageKeys.APP_SHOW_INTRO)
+      // Temporary disabled
+      // const introShown = await load(storageKeys.APP_SHOW_INTRO)
+      const introShown = true
       if (!introShown) {
         await save(storageKeys.APP_SHOW_INTRO, 1)
         navigation.navigate('intro')
@@ -46,7 +49,7 @@ export const InitScreen = observer(function InitScreen() {
 
     // Network connected?
     const connectionState = await NetInfo.fetch()
-    if (!connectionState.isConnected) {
+    if (!connectionState.isInternetReachable) {
       goLockOrCreatePassword()
       return
     }
@@ -56,9 +59,7 @@ export const InitScreen = observer(function InitScreen() {
       navigation.navigate('login')
       return
     }
-    
     user.saveToken(user.token)
-
     const [userRes, userPwRes] = await Promise.all([
       user.getUser(),
       user.getUserPw()

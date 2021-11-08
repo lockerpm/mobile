@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { EmptyResult, MoveFolderData, SyncResult } from "."
+import { EmptyResult, ImportCipherData, MoveFolderData, SyncResult } from "."
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { Api } from "./api"
@@ -40,6 +40,40 @@ export class CipherApi {
         score,
         collectionIds
       })
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      __DEV__ && console.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Import cipher
+  async importCipher(data: ImportCipherData): Promise<EmptyResult> {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/ciphers/import', data)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      __DEV__ && console.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Offline sync cipher
+  async offlineSyncCipher(data: ImportCipherData): Promise<EmptyResult> {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/ciphers/sync/offline', data)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)

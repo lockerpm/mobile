@@ -34,7 +34,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
             <Button
               key={index}
               preset="link"
-              isDisabled={item.premium && user.plan.alias === 'pm_free'}
+              isDisabled={item.premium && (user.plan && user.plan.alias === 'pm_free')}
               onPress={() => {
                 navigation.navigate(item.routeName, { fromTools: true })
               }}
@@ -57,13 +57,13 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                 style={{ flex: 1, paddingHorizontal: 10 }}
               >
                 <View
-                  style={commonStyles.CENTER_HORIZONTAL_VIEW}
+                  style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}
                 >
                   <Text
                     tx={item.label}
                     style={{ 
                       color: color.title, 
-                      marginVertical: 5,
+                      marginBottom: 3,
                       marginRight: item.premium ? 7 : 0
                     }}
                   />
@@ -81,7 +81,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                           style={{
                             fontWeight: 'bold',
                             color: color.palette.white,
-                            fontSize: fontSize.small
+                            fontSize: fontSize.mini
                           }}
                         />
                       </View>

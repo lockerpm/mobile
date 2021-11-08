@@ -43,7 +43,7 @@ export const viewPresets: Record<string, ViewStyle> = {
   /**
    * Outline
    */
-   outline: {
+  outline: {
     ...BASE_VIEW,
     backgroundColor: color.palette.white,
     borderColor: color.palette.green,
@@ -53,7 +53,7 @@ export const viewPresets: Record<string, ViewStyle> = {
   /**
    * Outline error
    */
-   outlineError: {
+  outlineError: {
     ...BASE_VIEW,
     backgroundColor: color.palette.white,
     borderColor: color.error,
@@ -61,9 +61,19 @@ export const viewPresets: Record<string, ViewStyle> = {
   } as ViewStyle,
 
   /**
+   * Outline error
+   */
+  outlinePlain: {
+    ...BASE_VIEW,
+    backgroundColor: color.palette.white,
+    borderColor: color.textBlack,
+    borderWidth: 1
+  } as ViewStyle,
+
+  /**
    * Ghost
    */
-   ghost: {
+  ghost: {
     ...BASE_VIEW,
     backgroundColor: color.palette.white
   } as ViewStyle,
@@ -103,6 +113,12 @@ export const textPresets: Record<ButtonPresetNames, TextStyle> = {
     ...BASE_TEXT, 
     fontSize: fontSize.p, 
     color: color.error 
+  } as TextStyle,
+
+  outlinePlain: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: color.textBlack 
   } as TextStyle,
 
   ghost: { 

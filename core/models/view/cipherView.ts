@@ -62,6 +62,7 @@ export class CipherView implements View {
             case CipherType.Login:
                 return this.login.subTitle;
             case CipherType.SecureNote:
+            case CipherType.TOTP:
                 return this.secureNote.subTitle;
             case CipherType.Card:
                 return this.card.subTitle;
