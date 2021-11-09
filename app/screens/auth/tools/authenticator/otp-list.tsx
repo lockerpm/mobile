@@ -44,6 +44,7 @@ export const OtpList = observer(function OtpList(props: Props) {
   // ------------------------ WATCHERS ----------------------------
 
   useEffect(() => {
+    setOtps([])
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastOfflineSync, sortList])
 
@@ -116,7 +117,7 @@ export const OtpList = observer(function OtpList(props: Props) {
   // Calculate remaining time
   const getRemainingTime = (period: number) => {
     // Better late 1 sec than early
-    return (period + 1) - Math.round(new Date().getTime() / 1000) % period
+    return (period + 1) - Math.floor(new Date().getTime() / 1000) % period
   }
 
   // ------------------------ RENDER ----------------------------

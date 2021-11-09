@@ -26,7 +26,7 @@ export const GoogleAuthenticatorImportScreen = observer(function GoogleAuthentic
         payload.notes = `otpauth://totp/${encodeURIComponent(otp.account)}`
           + `?secret=${otp.secret}` 
           + `&issuer=${encodeURIComponent(otp.account)}`
-          + `&algorithm=${otp.algorithm.toLowerCase().split('-').join()}`
+          + `&algorithm=${otp.algorithm.toLowerCase().split('-').join('')}`
           + `&digits=${otp.digits}&period=${otp.period}`
         return payload
       })
