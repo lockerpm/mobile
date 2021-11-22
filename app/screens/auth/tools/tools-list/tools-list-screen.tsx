@@ -4,15 +4,16 @@ import { View } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Text, Button, Layout, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles, fontSize } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
 import { TOOLS_ITEMS } from "../../../../common/mappings"
 import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
 
 export const ToolsListScreen = observer(function ToolsListScreen() {
   const navigation = useNavigation()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { translate } = useMixins()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   return (
     <Layout
@@ -24,9 +25,10 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
     >
       <View
         style={{
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           borderRadius: 10,
-          paddingHorizontal: 14
+          paddingHorizontal: 14,
+          marginTop: 20
         }}
       >
         {
@@ -80,7 +82,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                           text="PREMIUM"
                           style={{
                             fontWeight: 'bold',
-                            color: color.palette.white,
+                            color: color.background,
                             fontSize: fontSize.mini
                           }}
                         />

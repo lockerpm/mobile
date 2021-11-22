@@ -4,7 +4,7 @@ import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
 import { View } from "react-native"
 import { Button, Text } from "../components"
-import { color, fontSize } from "../theme"
+import { color as colorLight, colorDark, fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import { useMixins } from "../services/mixins"
@@ -29,6 +29,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
   const { translate } = useMixins()
   const { user, uiStore } = useStores()
   const insets = useSafeAreaInsets()
+  const color = uiStore.isDark ? colorDark : colorLight
   
   const mappings = {
     homeTab: {
@@ -84,7 +85,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
       {/* Offline mode end */}
 
       {/* Tab items */}
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', backgroundColor: color.background }}>
         {
           state.routes.map((route, index) => {
             const { options } = descriptors[route.key];
@@ -123,7 +124,11 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                 preset="ghost"
                 onPress={onPress}
                 onLongPress={onLongPress}
-                style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}
+                style={{ 
+                  flex: 1, 
+                  alignItems: 'center', 
+                  flexDirection: 'column'
+                }}
               >
                 {
                   Icon && (

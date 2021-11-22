@@ -3,20 +3,12 @@ import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
 import Dialog from "react-native-ui-lib/dialog"
-import { commonStyles, fontSize, color } from "../../theme"
+import { commonStyles, fontSize, color as colorLight, colorDark } from "../../theme"
 import { Text } from "../text/text"
 import { Button } from "../button/button"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import { useStores } from "../../models"
 
-
-const CONTAINER: ViewStyle = {
-  justifyContent: "center",
-  backgroundColor: color.palette.white,
-  paddingHorizontal: 20,
-  paddingTop: 20,
-  paddingBottom: 30,
-  borderRadius: 5
-}
 
 export interface ModalProps {
   style?: StyleProp<ViewStyle>
@@ -32,6 +24,17 @@ export interface ModalProps {
  */
 export const Modal = observer(function Modal(props: ModalProps) {
   const { style, isOpen, children, onClose, onOpen, title } = props
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
+  const CONTAINER: ViewStyle = {
+    justifyContent: "center",
+    backgroundColor: color.background,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 30,
+    borderRadius: 5
+  }
   const styles = flatten([CONTAINER, style])
 
   useEffect(() => {

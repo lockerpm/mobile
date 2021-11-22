@@ -16,7 +16,7 @@ import { PasswordAction } from "../../../screens/auth/browse/passwords/password-
 import { CardAction } from "../../../screens/auth/browse/cards/card-action"
 import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
 import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
-import { color, commonStyles, fontSize } from "../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../theme"
 import { DeletedAction } from "../cipher-action/deleted-action"
 
 
@@ -46,7 +46,8 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     collectionId, organizationId, isPersonalUndefined
   } = props
   const { getWebsiteLogo, getCiphers, translate } = useMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // ------------------------ PARAMS ----------------------------
 

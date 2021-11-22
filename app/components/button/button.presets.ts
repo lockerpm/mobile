@@ -1,5 +1,5 @@
 import { ViewStyle, TextStyle } from "react-native"
-import { color, fontSize, spacing } from "../../theme"
+import { color, colorDark, fontSize, spacing } from "../../theme"
 
 /**
  * All text will start off looking like this.
@@ -29,7 +29,7 @@ export const viewPresets: Record<string, ViewStyle> = {
    */
   primary: {
     ...BASE_VIEW,
-    backgroundColor: color.palette.green
+    backgroundColor: color.primary
   } as ViewStyle,
 
   /**
@@ -46,7 +46,7 @@ export const viewPresets: Record<string, ViewStyle> = {
   outline: {
     ...BASE_VIEW,
     backgroundColor: color.palette.white,
-    borderColor: color.palette.green,
+    borderColor: color.primary,
     borderWidth: 1
   } as ViewStyle,
 
@@ -106,7 +106,7 @@ export const textPresets: Record<ButtonPresetNames, TextStyle> = {
   outline: { 
     ...BASE_TEXT, 
     fontSize: fontSize.p, 
-    color: color.palette.green 
+    color: color.primary 
   } as TextStyle,
 
   outlineError: { 
@@ -124,12 +124,124 @@ export const textPresets: Record<ButtonPresetNames, TextStyle> = {
   ghost: { 
     ...BASE_TEXT, 
     fontSize: fontSize.p, 
-    color: color.palette.green 
+    color: color.primary 
   } as TextStyle,
   
   link: {
     ...BASE_TEXT,
-    color: color.palette.green,
+    color: color.primary,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+  } as TextStyle,
+}
+
+export const viewPresetsDark: Record<string, ViewStyle> = {
+  /**
+   * A smaller piece of secondard information.
+   */
+  primary: {
+    ...BASE_VIEW,
+    backgroundColor: colorDark.primary
+  } as ViewStyle,
+
+  /**
+   * Error
+   */
+  error: {
+    ...BASE_VIEW,
+    backgroundColor: colorDark.error
+  } as ViewStyle,
+
+  /**
+   * Outline
+   */
+  outline: {
+    ...BASE_VIEW,
+    backgroundColor: colorDark.palette.pureBlack,
+    borderColor: colorDark.primary,
+    borderWidth: 1
+  } as ViewStyle,
+
+  /**
+   * Outline error
+   */
+  outlineError: {
+    ...BASE_VIEW,
+    backgroundColor: colorDark.palette.pureBlack,
+    borderColor: colorDark.error,
+    borderWidth: 1
+  } as ViewStyle,
+
+  /**
+   * Outline error
+   */
+  outlinePlain: {
+    ...BASE_VIEW,
+    backgroundColor: colorDark.palette.pureBlack,
+    borderColor: colorDark.textBlack,
+    borderWidth: 1
+  } as ViewStyle,
+
+  /**
+   * Ghost
+   */
+  ghost: {
+    ...BASE_VIEW,
+    backgroundColor: colorDark.palette.pureBlack
+  } as ViewStyle,
+
+  /**
+   * A button without extras.
+   */
+  link: {
+    ...BASE_VIEW,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    alignItems: "flex-start",
+    minHeight: 0
+  } as ViewStyle,
+}
+
+export const textPresetsDark: Record<ButtonPresetNames, TextStyle> = {
+  primary: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: colorDark.palette.white 
+  } as TextStyle,
+
+  error: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: colorDark.palette.white 
+  } as TextStyle,
+
+  outline: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: colorDark.primary 
+  } as TextStyle,
+
+  outlineError: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: colorDark.error 
+  } as TextStyle,
+
+  outlinePlain: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: colorDark.textBlack 
+  } as TextStyle,
+
+  ghost: { 
+    ...BASE_TEXT, 
+    fontSize: fontSize.p, 
+    color: colorDark.primary 
+  } as TextStyle,
+  
+  link: {
+    ...BASE_TEXT,
+    color: colorDark.primary,
     paddingHorizontal: 0,
     paddingVertical: 0,
   } as TextStyle,

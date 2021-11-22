@@ -7,9 +7,12 @@ import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { AutoImage as Image } from "../auto-image/auto-image"
 import { APP_ICON } from "../../common/mappings"
+import { useStores } from "../../models"
 
 // @ts-ignore
 import BackIcon from './arrow-left.svg'
+// @ts-ignore
+import BackIconLight from './arrow-left-light.svg'
 
 const CONTAINER: ViewStyle = {
   flexDirection: 'row',
@@ -33,6 +36,7 @@ export interface HeaderProps {
  */
 export const Header = observer(function Header(props: HeaderProps) {
   const { style } = props
+  const { uiStore } = useStores()
   const styles = flatten([CONTAINER, style])
 
   return (
@@ -54,12 +58,19 @@ export const Header = observer(function Header(props: HeaderProps) {
                       style={{ fontSize: fontSize.p }}
                     />
                   ) : (
-                    <BackIcon height={12} />
+                    uiStore.isDark ? (
+                      <BackIconLight height={12} />
+                    ) : (
+                      <BackIcon height={12} />
+                    )
                   )
                 }
               </Button>
             ) : props.showLogo && (
-              <Image source={APP_ICON.textHorizontal} style={{ height: 30, width: 97.5 }} />
+              <Image 
+                source={uiStore.isDark ? APP_ICON.textHorizontalLight : APP_ICON.textHorizontal} 
+                style={{ height: 30, width: 97.5 }} 
+              />
             )
         }
         {

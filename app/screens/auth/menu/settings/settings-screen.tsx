@@ -114,12 +114,12 @@ export const SettingsScreen = observer(function SettingsScreen() {
       },
       options: [
         {
-          label: 'Tiếng Việt',
-          value: 'vi'
+          label: translate('settings.light_theme'),
+          value: 'light'
         },
         {
-          label: 'English',
-          value: 'en'
+          label: translate('settings.dark_theme'),
+          value: 'dark'
         }
       ]
     },
@@ -221,13 +221,13 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
         {/* Theme */}
         <Select
-          value={settings.language.value}
-          onChange={settings.language.onChange}
-          options={settings.language.options}
+          value={settings.theme.value}
+          onChange={settings.theme.onChange}
+          options={settings.theme.options}
           renderSelected={({ label }) => (
             <SettingsItem
               style={{ width: '100%' }}
-              name={translate('common.language')}
+              name={translate('settings.theme')}
               right={(
                 <Text text={label} />
               )}

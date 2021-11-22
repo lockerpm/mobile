@@ -5,7 +5,7 @@ import {
   Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength, CipherInfoCommon
 } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles, fontSize } from "../../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -19,8 +19,9 @@ import { DeletedAction } from "../../../../../components/cipher/cipher-action/de
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const navigation = useNavigation()
   const { getWebsiteLogo, getPasswordStrength, translate } = useMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const selectedCipher = cipherStore.cipherView
+  const color = uiStore.isDark ? colorDark : colorLight
 
   const [showAction, setShowAction] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -81,7 +82,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
       {/* Intro */}
       <View>
         <View style={[commonStyles.CENTER_VIEW, {
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           paddingTop: 20,
           paddingBottom: 30,
           marginBottom: 10
@@ -118,7 +119,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
 
       {/* Info */}
       <View style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           paddingVertical: 22
       }]}>
         {/* Username */}

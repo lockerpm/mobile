@@ -56,7 +56,6 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
           onSearch={setSearchText}
         />
       )}
-      borderBottom
       noScroll
     >
       <SortAction

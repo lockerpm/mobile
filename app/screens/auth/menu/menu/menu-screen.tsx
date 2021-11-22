@@ -4,7 +4,7 @@ import { View, ScrollView, ViewStyle, Linking } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
-import { color, commonStyles, fontSize } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -25,17 +25,11 @@ import HelpIcon from './question.svg'
 import LockIcon from './lock.svg'
 
 
-const ITEM_CONTAINER: ViewStyle = {
-  backgroundColor: color.palette.white,
-  borderRadius: 10,
-  paddingHorizontal: 14,
-}
-
-
 export const MenuScreen = observer(function MenuScreen() {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
   const { lock, logout, translate } = useMixins()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
@@ -100,6 +94,12 @@ export const MenuScreen = observer(function MenuScreen() {
   ]
 
   // -------------- RENDER --------------------
+
+  const ITEM_CONTAINER: ViewStyle = {
+    backgroundColor: color.background,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+  }
 
   return (
     <Layout
