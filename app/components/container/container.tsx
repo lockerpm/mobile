@@ -2,11 +2,16 @@ import * as React from "react"
 import { ScrollView, View } from "react-native"
 import { ContainerProps } from "./container.props"
 import { OverlayLoading, Loading } from "../loading/loading"
-import { color } from "../../theme"
+import { color as colorLight, colorDark } from "../../theme"
 import { ViewStyle } from "react-native"
+import { observer } from "mobx-react-lite"
+import { useStores } from "../../models"
 
 
-export function Container(props: ContainerProps) {
+export const Container = observer(function Container(props: ContainerProps) {
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
   const preset = {
     outer: {
       backgroundColor: color.background,
@@ -56,4 +61,4 @@ export function Container(props: ContainerProps) {
       }
     </View>
   )
-}
+})

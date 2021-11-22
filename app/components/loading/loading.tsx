@@ -2,8 +2,9 @@ import * as React from "react"
 import { StyleProp, View, ViewStyle, ActivityIndicator } from "react-native"
 import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
-import { color } from "../../theme"
+import { color as colorLight, colorDark } from "../../theme"
 import { Text } from "../text/text"
+import { useStores } from "../../models"
 
 
 const CONTAINER: ViewStyle = {
@@ -20,7 +21,6 @@ const OVERLAY_CONTAINER: ViewStyle = {
   top: 0,
   left: 0,
   zIndex: 1000,
-  backgroundColor: 'white',
   opacity: 0.8,
   justifyContent: "center",
   alignItems: "center"
@@ -37,11 +37,16 @@ export interface LoadingProps {
  */
 export const Loading = observer(function Loading(props: LoadingProps) {
   const { style, message } = props
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
   const styles = flatten([CONTAINER, style])
 
   return (
-    <View style={styles}>
-      <ActivityIndicator size="large" color={color.palette.green} />
+    <View style={[styles, {
+      backgroundColor: color.background
+    }]}>
+      <ActivityIndicator size="large" color={color.primary} />
       {
         !!message && (
           <Text
@@ -58,11 +63,15 @@ export const Loading = observer(function Loading(props: LoadingProps) {
 
 export const OverlayLoading = observer(function OverlayLoading(props: LoadingProps) {
   const { style } = props
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
   const styles = flatten([OVERLAY_CONTAINER, style])
 
   return (
-    <View style={styles}>
-      <ActivityIndicator size="large" color={color.palette.green} />
+    <View style={[styles, {
+      backgroundColor: color.background
+    }]}>
+      <ActivityIndicator size="large" color={color.primary} />
     </View>
   )
 })

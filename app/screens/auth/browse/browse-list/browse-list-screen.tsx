@@ -4,13 +4,16 @@ import { View } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Text, Button, Layout, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color } from "../../../../theme"
+import { color as colorLight, colorDark } from "../../../../theme"
 import { BROWSE_ITEMS } from "../../../../common/mappings"
 import { useMixins } from "../../../../services/mixins"
+import { useStores } from "../../../../models"
 
 export const BrowseListScreen = observer(function BrowseListScreen() {
   const navigation = useNavigation()
   const { translate } = useMixins()
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
   
   return (
     <Layout
@@ -22,9 +25,10 @@ export const BrowseListScreen = observer(function BrowseListScreen() {
     >
       <View
         style={{
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           borderRadius: 10,
-          paddingHorizontal: 14
+          paddingHorizontal: 14,
+          marginTop: 20
         }}
       >
         {

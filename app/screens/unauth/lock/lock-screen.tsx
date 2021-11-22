@@ -4,7 +4,7 @@ import { Alert, View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { color, commonStyles, fontSize } from "../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -13,7 +13,8 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
   const { logout, sessionLogin, notify, biometricLogin, translate, notifyApiError } = useMixins()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // ---------------------- PARAMS -------------------------
   

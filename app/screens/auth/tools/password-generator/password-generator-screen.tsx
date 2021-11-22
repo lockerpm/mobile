@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Header, Text, Button, PasswordStrength } from "../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { color, commonStyles, fontSize } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { useMixins } from "../../../../services/mixins"
 import { useCoreService } from "../../../../services/core-service"
@@ -18,9 +18,10 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
   const navigation = useNavigation()
   const { getPasswordStrength, copyToClipboard, translate } = useMixins()
   const { passwordGenerationService } = useCoreService()
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const route = useRoute<ScreenProp>()
   const { fromTools } = route.params
+  const color = uiStore.isDark ? colorDark : colorLight
 
   const [password, setPassword] = useState('')
   const [passwordLen, setPasswordLen] = useState(16)
@@ -113,7 +114,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
       {/* Password */}
       <View
         style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white
+          backgroundColor: color.background
         }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -152,7 +153,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
       {/* Options */}
       <View
         style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white
+          backgroundColor: color.background
         }]}
       >
         {/* Password length */}

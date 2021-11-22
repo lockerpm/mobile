@@ -5,7 +5,7 @@ import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { color, commonStyles, fontSize } from "../../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { TextInputMaskOptionProp, TextInputMaskTypeProp } from "react-native-masked-text"
@@ -37,8 +37,9 @@ export const CardEditScreen = observer(function CardEditScreen() {
   const route = useRoute<CardEditScreenProp>()
   const { mode } = route.params
   const { newCipher, createCipher, updateCipher, translate } = useMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // Params
 
@@ -196,7 +197,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
     >
       {/* Title */}
       <View
-        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
+        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
@@ -225,7 +226,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
       {/* Info */}
       <View
         style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           paddingBottom: 32
         }]}
       >

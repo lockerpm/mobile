@@ -1,7 +1,9 @@
+import { observer } from "mobx-react-lite"
 import * as React from "react"
 import { ActivityIndicator, TouchableOpacity } from "react-native"
+import { useStores } from "../../models"
 import { Text } from "../text/text"
-import { viewPresets, textPresets } from "./button.presets"
+import { viewPresets, textPresets, viewPresetsDark, textPresetsDark } from "./button.presets"
 import { ButtonProps } from "./button.props"
 
 /**
@@ -9,7 +11,7 @@ import { ButtonProps } from "./button.props"
  *
  * This component is a HOC over the built-in React Native one.
  */
-export function Button(props: ButtonProps) {
+export const Button = observer(function Button(props: ButtonProps) {
   // grab the props
   const {
     preset = "primary",
@@ -23,9 +25,19 @@ export function Button(props: ButtonProps) {
     ...rest
   } = props
 
-  const viewStyle = viewPresets[preset] || viewPresets.primary
+  const { uiStore } = useStores()
+
+  const viewStyle = uiStore.isDark ? (
+    viewPresetsDark[preset] || viewPresetsDark.primary
+  ) : (
+    viewPresets[preset] || viewPresets.primary
+  )
   const viewStyles = [viewStyle, styleOverride]
-  const textStyle = textPresets[preset] || textPresets.primary
+  const textStyle = uiStore.isDark ? (
+    textPresetsDark[preset] || textPresetsDark.primary
+  ) : (
+    textPresets[preset] || textPresets.primary
+  )
   let textStyles = [textStyle, textStyleOverride]
 
   const content = children || <Text tx={tx} text={text} style={textStyles} />
@@ -46,4 +58,4 @@ export function Button(props: ButtonProps) {
       {content}
     </TouchableOpacity>
   )
-}
+})
