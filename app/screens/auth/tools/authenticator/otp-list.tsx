@@ -44,7 +44,7 @@ export const OtpList = observer(function OtpList(props: Props) {
   // ------------------------ WATCHERS ----------------------------
 
   useEffect(() => {
-    setOtps([])
+    // setOtps([])
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastOfflineSync, sortList])
 

@@ -413,7 +413,10 @@
     "timeout_action": "Hành động khi hết giờ",
     "import_export": "Nhập và xuất dữ liệu",
     "import": "Nhập dữ liệu",
-    "export": "Xuất dữ liệu"
+    "export": "Xuất dữ liệu",
+    "theme": "Chủ đề",
+    "dark_theme": "Tối",
+    "light_theme": "Sáng"
   },
   "autofill_service": {
     "ios": {

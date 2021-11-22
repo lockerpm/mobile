@@ -21,7 +21,7 @@ type ScreenProp = RouteProp<PrimaryParamList, 'settings'>;
 
 export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { notify, isBiometricAvailable, translate } = useMixins()
   const route = useRoute<ScreenProp>()
   const { fromIntro } = route.params
@@ -95,6 +95,22 @@ export const SettingsScreen = observer(function SettingsScreen() {
       value: user.language || 'en',
       onChange: (lang: string) => {
         user.setLanguage(lang)
+      },
+      options: [
+        {
+          label: 'Tiếng Việt',
+          value: 'vi'
+        },
+        {
+          label: 'English',
+          value: 'en'
+        }
+      ]
+    },
+    theme: {
+      value: uiStore.isDark ? 'dark' : 'light',
+      onChange: (theme: string) => {
+        uiStore.setIsDark(theme === 'dark')
       },
       options: [
         {
@@ -202,6 +218,23 @@ export const SettingsScreen = observer(function SettingsScreen() {
           )}
         />
         {/* Language end */}
+
+        {/* Theme */}
+        <Select
+          value={settings.language.value}
+          onChange={settings.language.onChange}
+          options={settings.language.options}
+          renderSelected={({ label }) => (
+            <SettingsItem
+              style={{ width: '100%' }}
+              name={translate('common.language')}
+              right={(
+                <Text text={label} />
+              )}
+            />
+          )}
+        />
+        {/* Theme end */}
       </View>
       {/* Account end */}
 
