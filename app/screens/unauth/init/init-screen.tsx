@@ -7,12 +7,13 @@ import { load, save, storageKeys } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
-import { BackHandler } from "react-native"
+import { BackHandler, useColorScheme } from "react-native"
 
 
 export const InitScreen = observer(function InitScreen() {
-  const { user, cipherStore } = useStores()
+  const { user, cipherStore, uiStore } = useStores()
   const navigation = useNavigation()
+  const theme = useColorScheme()
 
   const goLockOrCreatePassword = () => {
     if (user.is_pwd_manager) {
@@ -26,6 +27,10 @@ export const InitScreen = observer(function InitScreen() {
     user.setLanguage(user.language)
     user.setDeviceID(DeviceInfo.getUniqueId())
     cipherStore.setIsSynching(false)
+
+    if (uiStore.isDark === null) {
+      uiStore.setIsDark(theme === 'dark')
+    }
 
     // Testing
     // if (__DEV__) {

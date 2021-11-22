@@ -85,6 +85,19 @@ export const AuthenticatorAction = (props: Props) => {
             }}
           />
 
+          {
+            __DEV__ && (
+              <ActionItem
+                name={'(DEBUG) Log note'}
+                icon="copy"
+                action={() => {
+                  console.log(otp)
+                  console.log(cipher.notes)
+                }}
+              />
+            )
+          }
+
           <ActionItem
             name={translate('common.delete')}
             icon="trash"

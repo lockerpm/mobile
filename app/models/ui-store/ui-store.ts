@@ -8,6 +8,7 @@ export const UiStoreModel = types
   .props({
     // Data
     isOffline: types.maybeNull(types.boolean),
+    isDark: types.maybeNull(types.boolean),
 
     // Cache
     selectedCountry: types.maybeNull(types.string),
@@ -18,6 +19,10 @@ export const UiStoreModel = types
   .actions((self) => ({
     setIsOffline: (isOffline: boolean) => {
       self.isOffline = isOffline
+    },
+
+    setIsDark: (isDark: boolean) => {
+      self.isDark = isDark
     },
 
     setSelectedCountry(country_code: string) {

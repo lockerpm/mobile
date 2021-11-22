@@ -413,7 +413,10 @@
     "timeout_action": "Timeout Action",
     "import_export": "Import and Export",
     "import": "Import data",
-    "export": "Export data"
+    "export": "Export data",
+    "theme": "Theme",
+    "dark_theme": "Dark",
+    "light_theme": "Light"
   },
   "autofill_service": {
     "ios": {
