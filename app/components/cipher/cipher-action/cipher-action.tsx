@@ -35,7 +35,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const [showShareModal, setShowShareModal] = useState(false)
   const [showChangeTeamFolderModal, setShowChangeTeamFolderModal] = useState(false)
 
-  const { toTrashCiphers, getRouteName, translate, getTeam } = useMixins()
+  const { toTrashCiphers, getRouteName, translate, getTeam, getWebsiteLogo } = useMixins()
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
   const color = uiStore.isDark ? colorDark : colorLight
@@ -49,7 +49,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
     switch (selectedCipher.type) {
       case CipherType.Login:
         return {
-          img: { uri: selectedCipher.login.uri },
+          img: getWebsiteLogo(selectedCipher.login.uri),
           backup: BROWSE_ITEMS.password.icon,
           path: 'passwords'
         }

@@ -75,7 +75,7 @@ export const SortAction = (props: Props) => {
               key={index}
               name={item.label}
               icon={value === item.value ? "check" : undefined}
-              iconColor={color.palette.green}
+              iconColor={color.primary}
               action={() => {
                 onClose()
                 onSelect && onSelect(item.value, item.sort)

@@ -29,7 +29,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
-  const { deleteCiphers, getRouteName, restoreCiphers, translate } = useMixins()
+  const { deleteCiphers, getRouteName, restoreCiphers, translate, getWebsiteLogo } = useMixins()
   const { cipherStore, uiStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
@@ -39,8 +39,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
     switch (selectedCipher.type) {
       case CipherType.Login:
         return {
-          // img: { uri: selectedCipher.login.uri },
-          img: BROWSE_ITEMS.password.icon,
+          img: getWebsiteLogo(selectedCipher.login.uri),
           backup: BROWSE_ITEMS.password.icon,
           path: 'passwords'
         }

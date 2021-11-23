@@ -55,7 +55,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
   }
 
   return (
-    <View style={{ paddingBottom: insets.bottom }}>
+    <View style={{ paddingBottom: insets.bottom, backgroundColor: color.background }}>
       {/* Offline mode */}
       {
         uiStore.isOffline && (
@@ -64,7 +64,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            paddingVertical: 2
+            paddingVertical: 4
           }}>
             <MaterialIconsIcon
               name="wifi-off"
@@ -85,7 +85,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
       {/* Offline mode end */}
 
       {/* Tab items */}
-      <View style={{ flexDirection: 'row', backgroundColor: color.background }}>
+      <View style={{ flexDirection: 'row' }}>
         {
           state.routes.map((route, index) => {
             const { options } = descriptors[route.key];
@@ -133,7 +133,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                 {
                   Icon && (
                     <Icon height={20} style={{
-                      color: isFocused ? color.palette.green : color.text
+                      color: isFocused ? color.primary : color.text
                     }} />
                   )
                 }
@@ -166,7 +166,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                   text={label}
                   style={{
                     fontSize: 12,
-                    color: isFocused ? color.palette.green : color.text,
+                    color: isFocused ? color.primary : color.text,
                     marginTop: 3
                   }}
                 />
