@@ -60,10 +60,16 @@ export const parseOTPUri = (uri: string) => {
   } catch(e) {
     // Do nothing
   }
+  if (!res.period) {
+    res.period = 30
+  }
   try {
     res.digits = parseInt(query.digits)
   } catch(e) {
     // Do nothing
+  }
+  if (!res.digits) {
+    res.digits = 6
   }
 
   return res
@@ -160,6 +166,10 @@ const _parseQueryString = (query: string) => {
 }
 
 const _parseAlgorithm = (algo: string) => {
+  if (!algo) {
+    return 'SHA-1'
+  }
+
   switch (algo.toLowerCase()) {
     case 'sha1':
       return 'SHA-1'
@@ -170,5 +180,5 @@ const _parseAlgorithm = (algo: string) => {
     case 'md5':
       return 'MD5'
   }
-  return algo
+  return 'SHA-1'
 }

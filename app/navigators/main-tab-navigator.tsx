@@ -4,7 +4,7 @@ import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
 import { View } from "react-native"
 import { Button, Text } from "../components"
-import { color, fontSize } from "../theme"
+import { color as colorLight, colorDark, fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import { useMixins } from "../services/mixins"
@@ -29,6 +29,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
   const { translate } = useMixins()
   const { user, uiStore } = useStores()
   const insets = useSafeAreaInsets()
+  const color = uiStore.isDark ? colorDark : colorLight
   
   const mappings = {
     homeTab: {
@@ -54,7 +55,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
   }
 
   return (
-    <View style={{ paddingBottom: insets.bottom }}>
+    <View style={{ paddingBottom: insets.bottom, backgroundColor: color.background }}>
       {/* Offline mode */}
       {
         uiStore.isOffline && (
@@ -63,7 +64,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            paddingVertical: 2
+            paddingVertical: 4
           }}>
             <MaterialIconsIcon
               name="wifi-off"
@@ -123,12 +124,16 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                 preset="ghost"
                 onPress={onPress}
                 onLongPress={onLongPress}
-                style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}
+                style={{ 
+                  flex: 1, 
+                  alignItems: 'center', 
+                  flexDirection: 'column'
+                }}
               >
                 {
                   Icon && (
                     <Icon height={20} style={{
-                      color: isFocused ? color.palette.green : color.text
+                      color: isFocused ? color.primary : color.text
                     }} />
                   )
                 }
@@ -161,7 +166,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                   text={label}
                   style={{
                     fontSize: 12,
-                    color: isFocused ? color.palette.green : color.text,
+                    color: isFocused ? color.primary : color.text,
                     marginTop: 3
                   }}
                 />

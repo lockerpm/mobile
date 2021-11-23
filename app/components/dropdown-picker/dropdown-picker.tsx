@@ -1,10 +1,11 @@
 import React, { useState } from "react"
 import { StyleProp, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, fontSize } from "../../theme"
+import { color as colorLight, colorDark, fontSize } from "../../theme"
 import { Text } from "../text/text"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import DropDownPicker from 'react-native-dropdown-picker'
+import { useStores } from "../../models"
 
 
 export interface DropdownPickerProps {
@@ -25,7 +26,9 @@ export interface DropdownPickerProps {
 
 export const DropdownPicker = observer(function DropdownPicker(props: DropdownPickerProps) {
   const { style, items, setItems, value, setValue, placeholder, loading, emptyText, multiple, isDisabled } = props
-
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+  
   const [open, setOpen] = useState(false)
 
   return (
@@ -35,7 +38,7 @@ export const DropdownPicker = observer(function DropdownPicker(props: DropdownPi
         opacity: 0.4
       }}
       mode="BADGE"
-      badgeDotColors={color.palette.green}
+      badgeDotColors={color.primary}
       badgeColors={color.block}
       multiple={multiple}
       loading={loading}
@@ -47,7 +50,8 @@ export const DropdownPicker = observer(function DropdownPicker(props: DropdownPi
       setValue={setValue}
       setItems={setItems}
       style={[{
-        borderColor: color.line
+        borderColor: color.line,
+        backgroundColor: color.background
       }, style]}
       labelStyle={{
         color: color.textBlack,
@@ -58,12 +62,13 @@ export const DropdownPicker = observer(function DropdownPicker(props: DropdownPi
         fontSize: fontSize.p
       }}
       dropDownContainerStyle={{
-        borderColor: color.line
+        borderColor: color.line,
+        backgroundColor: color.background
       }}
       placeholderStyle={{
         color: color.text
       }}
-      TickIconComponent={() => <IoniconsIcon name="checkmark" color={color.palette.green} size={20} />}
+      TickIconComponent={() => <IoniconsIcon name="checkmark" color={color.primary} size={20} />}
       disabledItemLabelStyle={{
         opacity: 0.4
       }}

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { StyleProp, View, ViewStyle, TextInputProps } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, fontSize } from "../../theme"
+import { color as colorLight, colorDark, fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -9,6 +9,7 @@ import { useMixins } from "../../services/mixins"
 import TextField from 'react-native-ui-lib/textField'
 import { MaskService, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
 import { translate } from "../../i18n"
+import { useStores } from "../../models"
 
 
 export interface WixFloatingInputProps extends TextInputProps {
@@ -43,6 +44,8 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
   } = props
 
   const { copyToClipboard } = useMixins()
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
   const [showPassword, setShowPassword] = useState(false)
   const [firstFocused, setFirstFocused] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
@@ -92,7 +95,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
         transformer={validateMask}
         onChangeText={onChangeText}
         underlineColor={{ 
-          focus: persistError && isInvalid ? color.error : color.palette.green, 
+          focus: persistError && isInvalid ? color.error : color.primary, 
           default: isInvalid ? color.error : color.disabled 
         }}
         style={[{

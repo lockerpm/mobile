@@ -4,7 +4,7 @@ import { View, ScrollView, ViewStyle, Linking } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
-import { color, commonStyles, fontSize } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -23,43 +23,47 @@ import SettingsIcon from './gear.svg'
 import HelpIcon from './question.svg'
 // @ts-ignore
 import LockIcon from './lock.svg'
-
-
-const ITEM_CONTAINER: ViewStyle = {
-  backgroundColor: color.palette.white,
-  borderRadius: 10,
-  paddingHorizontal: 14,
-}
+// @ts-ignore
+import PlanIconLight from './star-light.svg'
+// @ts-ignore
+import InviteIconLight from './invite-light.svg'
+// @ts-ignore
+import SettingsIconLight from './gear-light.svg'
+// @ts-ignore
+import HelpIconLight from './question-light.svg'
+// @ts-ignore
+import LockIconLight from './lock-light.svg'
 
 
 export const MenuScreen = observer(function MenuScreen() {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
   const { lock, logout, translate } = useMixins()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
 
   const items: MenuItemProps[] = [
     {
-      icon: <PlanIcon height={22} />,
+      icon: uiStore.isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
       action: () => {
         Linking.openURL(MANAGE_PLAN_URL)
       }
     },
     // {
-    //   icon: <InviteIcon height={22} />,
+    //   icon: uiStore.isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
     //   name: translate('menu.invite'),
     //   disabled: true
     // },
     {
-      icon: <SettingsIcon height={22} />,
+      icon: uiStore.isDark ? <SettingsIconLight height={22} /> : <SettingsIcon height={22} />,
       name: translate('common.settings'),
       action: () => navigation.navigate('settings')
     },
     {
-      icon: <HelpIcon height={22} />,
+      icon: uiStore.isDark ? <HelpIconLight height={22} /> : <HelpIcon height={22} />,
       name: translate('common.help'),
       action: () => navigation.navigate('help'),
       noBorder: true
@@ -69,14 +73,14 @@ export const MenuScreen = observer(function MenuScreen() {
   const items2: MenuItemProps[] = [
     {
       debug: true,
-      icon: <LockIcon height={22} />,
+      icon: uiStore.isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: '(DEBUG) ' + (uiStore.isOffline ? 'Go online' : 'Go offline'),
       action: () => {
         uiStore.setIsOffline(!uiStore.isOffline)
       }
     },
     {
-      icon: <LockIcon height={22} />,
+      icon: uiStore.isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: translate('common.lock'),
       action: async () => {
         setIsLoading(true)
@@ -101,10 +105,15 @@ export const MenuScreen = observer(function MenuScreen() {
 
   // -------------- RENDER --------------------
 
+  const ITEM_CONTAINER: ViewStyle = {
+    backgroundColor: color.background,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+  }
+
   return (
     <Layout
       borderBottom
-      style={{ backgroundColor: color.block }}
       isContentOverlayLoading={isLoading}
       containerStyle={{ backgroundColor: color.block }}
       header={(

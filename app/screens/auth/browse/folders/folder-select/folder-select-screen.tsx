@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Text, Header, Button } from "../../../../../components"
 import { useNavigation, useRoute } from "@react-navigation/native"
-import { color, commonStyles, fontSize } from "../../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
 import { RouteProp } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -21,8 +21,9 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
   const navigation = useNavigation()
   const route = useRoute<FolderSelectScreenProp>()
   const { mode, initialId, cipherIds = [] } = route.params
-  const { folderStore, cipherStore } = useStores()
+  const { folderStore, cipherStore, uiStore } = useStores()
   const { notify, translate, notifyApiError } = useMixins()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -89,7 +90,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
         preset="link"
         onPress={() => setSelectedFolder('unassigned')}
         style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           marginBottom: 10
         }]}
       >
@@ -105,7 +106,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
               <IoniconsIcon
                 name="checkmark"
                 size={18}
-                color={color.palette.green}
+                color={color.primary}
               />
             )
           }
@@ -118,7 +119,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
         preset="link"
         onPress={() => setShowNewFolderModal(true)}
         style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white
+          backgroundColor: color.background
         }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -145,7 +146,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
             preset="link"
             onPress={() => setSelectedFolder(item.id)}
             style={[commonStyles.SECTION_PADDING, {
-              backgroundColor: color.palette.white
+              backgroundColor: color.background
             }]}
           >
             <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -159,7 +160,7 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
                   <IoniconsIcon
                     name="checkmark"
                     size={18}
-                    color={color.palette.green}
+                    color={color.primary}
                   />
                 )
               }

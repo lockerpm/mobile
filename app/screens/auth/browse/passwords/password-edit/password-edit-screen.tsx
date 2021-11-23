@@ -5,7 +5,7 @@ import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, PasswordStrength
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { color, commonStyles, fontSize } from "../../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -25,6 +25,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
   const { getPasswordStrength, newCipher, createCipher, updateCipher, translate } = useMixins()
   const { cipherStore, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // ----------------- PARAMS ------------------
 
@@ -160,7 +161,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
     >
       {/* Name */}
       <View
-        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
+        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
@@ -189,7 +190,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       {/* Info */}
       <View
         style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           paddingBottom: 32
         }]}
       >
@@ -241,7 +242,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
               <FontAwesomeIcon
                 name="repeat"
                 size={18}
-                color={color.palette.green}
+                color={color.primary}
               />
               <Text
                 preset="green"

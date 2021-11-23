@@ -163,12 +163,15 @@ export const APP_ICON = {
   icon: require('./images/appIcon/locker.png'),
   iconDark: require('./images/appIcon/locker-dark.png'),
   textVertical: require('./images/appIcon/textVertical.png'),
-  textHorizontal: require('./images/appIcon/textHorizontal.png')
+  textHorizontal: require('./images/appIcon/textHorizontal.png'),
+  textVerticalLight: require('./images/appIcon/textVertical-light.png'),
+  textHorizontalLight: require('./images/appIcon/textHorizontal-light.png')
 }
 
 
 export const SOCIAL_LOGIN_ICON = {
   google: require('./images/icons/google.png'),
   facebook: require('./images/icons/facebook.png'),
-  github: require('./images/icons/github.png')
+  github: require('./images/icons/github.png'),
+  githubLight: require('./images/icons/github-light.png')
 }

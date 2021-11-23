@@ -3,7 +3,6 @@ import { Text, ActionItem, ActionSheet, Divider, ActionSheetContent } from "../.
 import { color, commonStyles } from "../../../../theme"
 import { View } from "react-native"
 import { FOLDER_IMG } from "../../../../common/mappings"
-import { OwnershipAction } from "../../../../components/cipher/cipher-action/ownership-action"
 import { RenameFolderModal } from "./rename-folder-modal"
 import { FolderView } from "../../../../../core/models/view/folderView"
 import { DeleteConfirmModal } from "../trash/delete-confirm-modal"
@@ -30,7 +29,6 @@ export const FolderAction = (props: Props) => {
 
   // ---------------- PARAMS -----------------
 
-  const [showOwnershipAction, setShowOwnershipAction] = useState(false)
   const [isRenameOpen, setIsRenameOpen] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
@@ -95,11 +93,6 @@ export const FolderAction = (props: Props) => {
   return (
     <View>
       {/* Modals / Actions */}
-
-      <OwnershipAction
-        isOpen={showOwnershipAction}
-        onClose={() => setShowOwnershipAction(false)}
-      />
 
       <RenameFolderModal
         isOpen={isRenameOpen}

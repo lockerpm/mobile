@@ -1,10 +1,11 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, commonStyles } from "../../../theme"
+import { color as colorLight, colorDark, commonStyles } from "../../../theme"
 import { Text } from "../../text/text"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { ActionSheetItem } from "../../action-sheet/action-sheet-item"
+import { useStores } from "../../../models"
 
 
 export interface ActionItemProps {
@@ -26,6 +27,8 @@ export interface ActionItemProps {
  */
 export const ActionItem = observer(function ActionItem(props: ActionItemProps) {
   const { style, name, icon, textColor, action, children, iconColor, disabled } = props
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   return (
     <ActionSheetItem

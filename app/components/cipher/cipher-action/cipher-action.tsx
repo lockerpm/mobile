@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, commonStyles, fontSize } from "../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../theme"
 import { useStores } from "../../../models"
 import { BROWSE_ITEMS } from "../../../common/mappings"
 import { ActionItem } from "./action-item"
@@ -35,9 +35,10 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const [showShareModal, setShowShareModal] = useState(false)
   const [showChangeTeamFolderModal, setShowChangeTeamFolderModal] = useState(false)
 
-  const { toTrashCiphers, getRouteName, translate, getTeam } = useMixins()
+  const { toTrashCiphers, getRouteName, translate, getTeam, getWebsiteLogo } = useMixins()
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // Computed
 
@@ -48,7 +49,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
     switch (selectedCipher.type) {
       case CipherType.Login:
         return {
-          img: { uri: selectedCipher.login.uri },
+          img: getWebsiteLogo(selectedCipher.login.uri),
           backup: BROWSE_ITEMS.password.icon,
           path: 'passwords'
         }

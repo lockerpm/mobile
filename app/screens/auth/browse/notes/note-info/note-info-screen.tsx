@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../../theme"
+import { color as colorLight, colorDark, commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
@@ -16,8 +16,9 @@ import { useMixins } from "../../../../../services/mixins"
 export const NoteInfoScreen = observer(function NoteInfoScreen() {
   const navigation = useNavigation()
   const { translate } = useMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const selectedCipher = cipherStore.cipherView
+  const color = uiStore.isDark ? colorDark : colorLight
 
   const [showAction, setShowAction] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -71,7 +72,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
       {/* Intro */}
       <View>
         <View style={[commonStyles.CENTER_VIEW, {
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           paddingTop: 20,
           paddingBottom: 30,
           marginBottom: 10
@@ -100,7 +101,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
 
       {/* Info */}
       <View style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           paddingVertical: 22
       }]}>
         {/* Notes */}

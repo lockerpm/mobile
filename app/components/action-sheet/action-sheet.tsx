@@ -3,16 +3,10 @@ import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
 import Dialog from "react-native-ui-lib/dialog"
-import { color, commonStyles } from "../../theme"
+import { color as colorLight, colorDark, commonStyles } from "../../theme"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useStores } from "../../models"
 
-
-const CONTAINER: ViewStyle = {
-  justifyContent: "center",
-  backgroundColor: color.palette.white,
-  borderTopLeftRadius: 10,
-  borderTopRightRadius: 10
-}
 
 export interface ActionSheetProps {
   style?: StyleProp<ViewStyle>
@@ -27,6 +21,15 @@ export interface ActionSheetProps {
 export const ActionSheet = observer(function ActionSheet(props: ActionSheetProps) {
   const { style, children, isOpen, onClose } = props
   const insets = useSafeAreaInsets()
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
+  const CONTAINER: ViewStyle = {
+    justifyContent: "center",
+    backgroundColor: uiStore.isDark ? color.palette.pureBlack : color.palette.white,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10
+  }
   const styles = flatten([CONTAINER, { paddingBottom: insets.bottom }, style])
 
   return (

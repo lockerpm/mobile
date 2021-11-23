@@ -1,9 +1,10 @@
 import React from "react"
 import { View } from "react-native"
 import { Button, Text } from "../../../../components"
-import { commonStyles, color } from "../../../../theme"
+import { commonStyles, color as colorLight, colorDark } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { observer } from "mobx-react-lite"
+import { useStores } from "../../../../models"
 
 export type MenuItemProps = {
   icon: React.ReactNode,
@@ -16,6 +17,9 @@ export type MenuItemProps = {
 }
 
 export const MenuItem = observer((props: MenuItemProps) => {
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+  
   return !props.debug || __DEV__ ? (
     <Button
       isDisabled={props.disabled}
