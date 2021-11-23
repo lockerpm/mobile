@@ -105,8 +105,8 @@ export const MainNavigator = observer(function MainNavigator() {
   } = useMixins()
   const { uiStore, user, cipherStore } = useStores()
 
+  let appIsActive = true
   const [socket, setSocket] = useState(null)
-  const [appIsActive, setAppIsActive] = useState(true) 
   const [appIsReady, setAppIsReady] = useState(false)
 
   // ------------------ METHODS --------------------
@@ -139,14 +139,14 @@ export const MainNavigator = observer(function MainNavigator() {
   const _handleAppStateChange = async (nextAppState: string) => {
     // Ohter state (background/inactive)
     if (nextAppState !== 'active') {
-      setAppIsActive(false)
+      appIsActive = false
       uiStore.clearDeepLink()
       return
     }
 
     // Active
     if (!appIsActive && user.appTimeout && user.appTimeout === -1) {
-      setAppIsActive(true)
+      appIsActive = true
       if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
         await logout()
         navigation.navigate('onBoarding')
