@@ -100,7 +100,7 @@ export const SignupScreen = observer(function SignupScreen() {
     },
 
     github: {
-      icon: SOCIAL_LOGIN_ICON.github,
+      icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.githubLight : SOCIAL_LOGIN_ICON.github,
       handler: async () => {
         try {
           const res = await authorize(GITHUB_CONFIG)
@@ -293,7 +293,7 @@ export const SignupScreen = observer(function SignupScreen() {
         }]}>
           <Checkbox
             value={agreed}
-            color={color.palette.green}
+            color={color.primary}
             onValueChange={setAgreed}
             style={{
               marginVertical: 7

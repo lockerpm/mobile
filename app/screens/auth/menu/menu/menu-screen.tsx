@@ -23,6 +23,16 @@ import SettingsIcon from './gear.svg'
 import HelpIcon from './question.svg'
 // @ts-ignore
 import LockIcon from './lock.svg'
+// @ts-ignore
+import PlanIconLight from './star-light.svg'
+// @ts-ignore
+import InviteIconLight from './invite-light.svg'
+// @ts-ignore
+import SettingsIconLight from './gear-light.svg'
+// @ts-ignore
+import HelpIconLight from './question-light.svg'
+// @ts-ignore
+import LockIconLight from './lock-light.svg'
 
 
 export const MenuScreen = observer(function MenuScreen() {
@@ -36,24 +46,24 @@ export const MenuScreen = observer(function MenuScreen() {
 
   const items: MenuItemProps[] = [
     {
-      icon: <PlanIcon height={22} />,
+      icon: uiStore.isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
       action: () => {
         Linking.openURL(MANAGE_PLAN_URL)
       }
     },
     // {
-    //   icon: <InviteIcon height={22} />,
+    //   icon: uiStore.isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
     //   name: translate('menu.invite'),
     //   disabled: true
     // },
     {
-      icon: <SettingsIcon height={22} />,
+      icon: uiStore.isDark ? <SettingsIconLight height={22} /> : <SettingsIcon height={22} />,
       name: translate('common.settings'),
       action: () => navigation.navigate('settings')
     },
     {
-      icon: <HelpIcon height={22} />,
+      icon: uiStore.isDark ? <HelpIconLight height={22} /> : <HelpIcon height={22} />,
       name: translate('common.help'),
       action: () => navigation.navigate('help'),
       noBorder: true
@@ -63,14 +73,14 @@ export const MenuScreen = observer(function MenuScreen() {
   const items2: MenuItemProps[] = [
     {
       debug: true,
-      icon: <LockIcon height={22} />,
+      icon: uiStore.isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: '(DEBUG) ' + (uiStore.isOffline ? 'Go online' : 'Go offline'),
       action: () => {
         uiStore.setIsOffline(!uiStore.isOffline)
       }
     },
     {
-      icon: <LockIcon height={22} />,
+      icon: uiStore.isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: translate('common.lock'),
       action: async () => {
         setIsLoading(true)
@@ -104,7 +114,6 @@ export const MenuScreen = observer(function MenuScreen() {
   return (
     <Layout
       borderBottom
-      style={{ backgroundColor: color.block }}
       isContentOverlayLoading={isLoading}
       containerStyle={{ backgroundColor: color.block }}
       header={(

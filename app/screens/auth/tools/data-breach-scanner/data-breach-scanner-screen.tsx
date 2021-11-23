@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Header, Layout, Text, FloatingInput, Button } from "../../../../components"
-import { color } from "../../../../theme"
+import { color as colorLight, colorDark } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { useNavigation } from "@react-navigation/core"
 import { useStores } from "../../../../models"
@@ -11,7 +11,8 @@ import { useStores } from "../../../../models"
 export const DataBreachScannerScreen = observer(function DataBreachScannerScreen() {
   const { translate, notifyApiError } = useMixins()
   const navigation = useNavigation()
-  const { toolStore } = useStores()
+  const { toolStore, uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -52,7 +53,7 @@ export const DataBreachScannerScreen = observer(function DataBreachScannerScreen
     >
       <View
         style={{
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           paddingHorizontal: 20,
           paddingVertical: 16
         }}

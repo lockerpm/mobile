@@ -242,7 +242,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
               <FontAwesomeIcon
                 name="repeat"
                 size={18}
-                color={color.palette.green}
+                color={color.primary}
               />
               <Text
                 preset="green"

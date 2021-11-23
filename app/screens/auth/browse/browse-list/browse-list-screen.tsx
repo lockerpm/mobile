@@ -17,7 +17,6 @@ export const BrowseListScreen = observer(function BrowseListScreen() {
   
   return (
     <Layout
-      style={{ backgroundColor: color.block }}
       containerStyle={{ backgroundColor: color.block, paddingTop: 0 }}
       header={(
         <Text preset="largeHeader" text={translate('common.browse')} />

@@ -30,21 +30,17 @@ export const InitScreen = observer(function InitScreen() {
 
     if (uiStore.isDark === null) {
       uiStore.setIsDark(theme === 'dark')
-    } else {
-      uiStore.setIsDark(uiStore.isDark)
     }
 
     // Testing
     // if (__DEV__) {
-    //   navigation.navigate('onBoarding')
+    //   navigation.navigate('createMasterPassword')
     //   return
     // }
 
     // Logged in?
     if (!user.isLoggedIn) {
-      // Temporary disabled
-      // const introShown = await load(storageKeys.APP_SHOW_INTRO)
-      const introShown = true
+      const introShown = await load(storageKeys.APP_SHOW_INTRO)
       if (!introShown) {
         await save(storageKeys.APP_SHOW_INTRO, 1)
         navigation.navigate('intro')

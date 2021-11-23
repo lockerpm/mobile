@@ -13,10 +13,11 @@ import {
   IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, 
   CreateMasterPasswordScreen, ForgotPasswordScreen, CountrySelectorScreen
 } from "../screens"
-import { color, fontSize } from "../theme"
+import { color as colorLight, colorDark, fontSize } from "../theme"
 import { useStores } from "../models"
 import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message'
 import { Linking } from "react-native"
+import { observer } from "mobx-react-lite"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -45,8 +46,10 @@ export type RootParamList = {
 
 const Stack = createStackNavigator<RootParamList>()
 
-const RootStack = () => {
+const RootStack = observer(() => {
   const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
   const handleDeepLinking = async (url: string | null) => {
     __DEV__ && console.log(`Deep link ${url}`)
     if (!url) {
@@ -97,7 +100,7 @@ const RootStack = () => {
     <Stack.Navigator
       initialRouteName="init"
       screenOptions={{
-        cardStyle: { backgroundColor: color.palette.white },
+        cardStyle: { backgroundColor: color.background },
         headerShown: false,
       }}
     >
@@ -119,36 +122,59 @@ const RootStack = () => {
       />
     </Stack.Navigator>
   )
-}
+})
+
+const SuccessToast = observer((props: BaseToastProps) => {
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
+  return (
+    <BaseToast
+      {...props}
+      style={{ 
+        borderLeftColor: color.primary,
+        backgroundColor: uiStore.isDark ? color.block : color.background
+      }}
+      text2Style={{
+        color: color.primary,
+        fontSize: fontSize.small
+      }}
+      leadingIcon={require('../common/images/icons/success.png')}
+    />
+  )
+})
+
+const ErrorToast = observer((props: BaseToastProps) => {
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
+  return (
+    <BaseToast
+      {...props}
+      style={{ 
+        borderLeftColor: color.error,
+        backgroundColor: uiStore.isDark ? color.block : color.background
+      }}
+      text2Style={{
+        color: color.error,
+        fontSize: fontSize.small
+      }}
+      leadingIcon={require('../common/images/icons/error.png')}
+    />
+  )
+})
 
 export const RootNavigator = React.forwardRef<
   NavigationContainerRef,
   Partial<React.ComponentProps<typeof NavigationContainer>>
 >((props, ref) => {
-
   // Toast
   const toastConfig = {
     success: (props: BaseToastProps) => (
-      <BaseToast
-        {...props}
-        style={{ borderLeftColor: color.palette.green }}
-        text2Style={{
-          color: color.palette.green,
-          fontSize: fontSize.small
-        }}
-        leadingIcon={require('../common/images/icons/success.png')}
-      />
+      <SuccessToast {...props} />
     ),
     error: (props: BaseToastProps) => (
-      <BaseToast
-        {...props}
-        style={{ borderLeftColor: color.error }}
-        text2Style={{
-          color: color.error,
-          fontSize: fontSize.small
-        }}
-        leadingIcon={require('../common/images/icons/error.png')}
-      />
+      <ErrorToast {...props} />
     )
   }
 

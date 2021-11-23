@@ -5,14 +5,15 @@ import { useNavigation } from "@react-navigation/core"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { Button, Header, Layout, Text, AutoImage as Image } from "../../../../../components"
-import { color, commonStyles, fontSize } from "../../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
 
 export const DataBreachListScreen = observer(function DataBreachListScreen() {
   const { translate } = useMixins()
   const navigation = useNavigation()
-  const { toolStore } = useStores()
+  const { toolStore, uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   return (
     <Layout
@@ -33,14 +34,15 @@ export const DataBreachListScreen = observer(function DataBreachListScreen() {
       {
         toolStore.breaches.length === 0 ? (
           <View style={[commonStyles.GRAY_SCREEN_SECTION, {
-            paddingVertical: 16
+            paddingVertical: 16,
+            backgroundColor: color.background
           }]}>
             <Text
               preset="bold"
               text={translate('data_breach_scanner.good_news').toUpperCase()}
               style={{
                 marginBottom: 7,
-                color: color.palette.green
+                color: color.primary
               }}
             />
             <Text
@@ -52,7 +54,8 @@ export const DataBreachListScreen = observer(function DataBreachListScreen() {
           <View>
             <View style={[commonStyles.GRAY_SCREEN_SECTION, {
               paddingVertical: 16,
-              marginBottom: 20
+              marginBottom: 20,
+              backgroundColor: color.background
             }]}>
               <Text
                 preset="bold"
@@ -68,7 +71,9 @@ export const DataBreachListScreen = observer(function DataBreachListScreen() {
               />
             </View>
 
-            <View style={commonStyles.GRAY_SCREEN_SECTION}>
+            <View style={[commonStyles.GRAY_SCREEN_SECTION, {
+              backgroundColor: color.background
+            }]}>
               {
                 toolStore.breaches.map((item, index) => (
                   <Button

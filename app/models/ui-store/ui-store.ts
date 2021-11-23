@@ -23,7 +23,6 @@ export const UiStoreModel = types
 
     setIsDark: (isDark: boolean) => {
       self.isDark = isDark
-      global.dark = true
     },
 
     setSelectedCountry(country_code: string) {

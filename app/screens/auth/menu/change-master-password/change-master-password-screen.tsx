@@ -3,13 +3,16 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Button, Header, FloatingInput, PasswordStrength } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
+import { useStores } from "../../../../models"
 
 
 export const ChangeMasterPasswordScreen = observer(function ChangeMasterPasswordScreen() {
   const navigation = useNavigation()
   const { getPasswordStrength, changeMasterPassword, translate } = useMixins()
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   const [isLoading, setIsLoading] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(-1)
@@ -37,7 +40,10 @@ export const ChangeMasterPasswordScreen = observer(function ChangeMasterPassword
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
-      <View style={[commonStyles.GRAY_SCREEN_SECTION, { paddingVertical: 16 }]}>
+      <View style={[commonStyles.GRAY_SCREEN_SECTION, { 
+        paddingVertical: 16,
+        backgroundColor: color.background
+      }]}>
         <FloatingInput
           isPassword
           label={translate('change_master_pass.current')}

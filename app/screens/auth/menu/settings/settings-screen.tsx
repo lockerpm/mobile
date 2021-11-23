@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { TextStyle, View, Switch } from "react-native"
 import { Layout, Text, Header, Select } from "../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { color, commonStyles, fontSize } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
 import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
@@ -25,6 +25,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
   const { notify, isBiometricAvailable, translate } = useMixins()
   const route = useRoute<ScreenProp>()
   const { fromIntro } = route.params
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // ----------------------- PARAMS -----------------------
 
@@ -194,7 +195,9 @@ export const SettingsScreen = observer(function SettingsScreen() {
         text={translate('common.account').toUpperCase()}
         style={SECTION_TITLE}
       />
-      <View style={commonStyles.GRAY_SCREEN_SECTION}>
+      <View style={[commonStyles.GRAY_SCREEN_SECTION, {
+        backgroundColor: color.background
+      }]}>
         {/* Change master pass */}
         <SettingsItem
           name={translate('settings.change_master_pass')}
@@ -226,6 +229,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
           options={settings.theme.options}
           renderSelected={({ label }) => (
             <SettingsItem
+              noBorder
               style={{ width: '100%' }}
               name={translate('settings.theme')}
               right={(
@@ -245,7 +249,9 @@ export const SettingsScreen = observer(function SettingsScreen() {
           marginTop: 15,
         }]}
       />
-      <View style={commonStyles.GRAY_SCREEN_SECTION}>
+      <View style={[commonStyles.GRAY_SCREEN_SECTION, {
+        backgroundColor: color.background
+      }]}>
         {/* Autofill */}
         <SettingsItem
           name={translate('settings.autofill_service')}
@@ -261,7 +267,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
             <Switch
               value={settings.biometric.value}
               onValueChange={settings.biometric.onChage}
-              trackColor={{ false: color.disabled, true: color.palette.green }}
+              trackColor={{ false: color.disabled, true: color.primary }}
               thumbColor={color.palette.white}
             />
           )}
@@ -292,6 +298,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
           options={settings.timeoutAction.options}
           renderSelected={({ label }) => (
             <SettingsItem
+              noBorder
               style={{ width: '100%' }}
               name={translate('settings.timeout_action')}
               right={(
@@ -311,7 +318,9 @@ export const SettingsScreen = observer(function SettingsScreen() {
           marginTop: 15,
         }]}
       />
-      <View style={commonStyles.GRAY_SCREEN_SECTION}>
+      <View style={[commonStyles.GRAY_SCREEN_SECTION, {
+        backgroundColor: color.background
+      }]}>
         {/* Import */}
         <SettingsItem
           name={translate('settings.import')}
@@ -321,6 +330,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
         {/* Export */}
         <SettingsItem
+          noBorder
           name={translate('settings.export')}
           action={() => navigation.navigate('export')}
         />

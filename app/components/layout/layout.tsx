@@ -33,8 +33,11 @@ export const Layout = observer(function Layout(props: LayoutProps) {
       preset="fixed" 
       isLoading={props.isScreenLoading} 
       isOverlayLoading={props.isOverlayLoading}
-      style={props.style}
+      style={[{
+        backgroundColor: color.background
+      }, props.style]}
       hasFooter={!!props.footer}
+      statusBar={uiStore.isDark ? "light-content" : "dark-content"}
     >
       {
         props.header && (

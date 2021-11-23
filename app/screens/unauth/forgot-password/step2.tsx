@@ -5,7 +5,7 @@ import {Text, Button } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { color, commonStyles } from "../../../theme"
+import { color as colorLight, colorDark, commonStyles } from "../../../theme"
 import { useStores } from "../../../models"
 
 
@@ -20,9 +20,10 @@ type Props = {
 
 
 export const Step2 = observer(function Step2(props: Props) {
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { translate, notifyApiError } = useMixins()
   const { methods, onSelect, goBack } = props
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // ------------------ Params -----------------------
 
@@ -84,10 +85,10 @@ export const Step2 = observer(function Step2(props: Props) {
                   <FontAwesomeIcon
                     name="envelope-o"
                     size={18}
-                    color={color.palette.green}
+                    color={color.primary}
                   />
                   <Text style={{
-                    color: color.palette.green,
+                    color: color.primary,
                     marginLeft: 10
                   }}>
                     Email {item.data[0]}
@@ -101,10 +102,10 @@ export const Step2 = observer(function Step2(props: Props) {
                   <FontAwesomeIcon
                     name="mobile-phone"
                     size={24}
-                    color={color.palette.green}
+                    color={color.primary}
                   />
                   <Text style={{
-                    color: color.palette.green,
+                    color: color.primary,
                     marginLeft: 10
                   }}>
                     {translate('common.authentication_app')}

@@ -95,7 +95,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
         transformer={validateMask}
         onChangeText={onChangeText}
         underlineColor={{ 
-          focus: persistError && isInvalid ? color.error : color.palette.green, 
+          focus: persistError && isInvalid ? color.error : color.primary, 
           default: isInvalid ? color.error : color.disabled 
         }}
         style={[{
