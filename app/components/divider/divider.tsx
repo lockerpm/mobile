@@ -1,14 +1,10 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color } from "../../theme"
+import { color as colorLight, colorDark } from "../../theme"
 import { flatten } from "ramda"
+import { useStores } from "../../models"
 
-const CONTAINER: ViewStyle = {
-  width: '100%',
-  borderColor: color.line,
-  borderBottomWidth: 1
-}
 
 export interface DividerProps {
   style?: StyleProp<ViewStyle>
@@ -19,6 +15,14 @@ export interface DividerProps {
  */
 export const Divider = observer(function Divider(props: DividerProps) {
   const { style } = props
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
+  const CONTAINER: ViewStyle = {
+    width: '100%',
+    borderColor: color.line,
+    borderBottomWidth: 1
+  }
   const styles = flatten([CONTAINER, style])
 
   return (

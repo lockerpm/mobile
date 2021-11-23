@@ -1,21 +1,15 @@
 import * as React from "react"
 import { StyleProp, TextInput, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, fontSize } from "../../theme"
+import { color as colorLight, colorDark, fontSize } from "../../theme"
 import { flatten } from "ramda"
 import { useMixins } from "../../services/mixins"
+import { useStores } from "../../models"
+
 // @ts-ignore
 import SearchIcon from './search.svg'
-
-
-const CONTAINER: ViewStyle = {
-  flexDirection: "row", 
-  alignItems: "center",
-  backgroundColor: color.block,
-  borderRadius: 5,
-  borderWidth: 1,
-  borderColor: color.line
-}
+// @ts-ignore
+import SearchIconLight from './search-light.svg'
 
 export interface SearchBarProps {
   style?: StyleProp<ViewStyle>
@@ -28,8 +22,17 @@ export interface SearchBarProps {
  */
 export const SearchBar = observer(function SearchBar(props: SearchBarProps) {
   const { style, onSearch, value } = props
-  const styles = flatten([CONTAINER, style])
   const { translate } = useMixins()
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
+  const CONTAINER: ViewStyle = {
+    flexDirection: "row", 
+    alignItems: "center",
+    backgroundColor: color.block,
+    borderRadius: 5,
+  }
+  const styles = flatten([CONTAINER, style])
 
   return (
     <View style={styles}>
@@ -48,7 +51,13 @@ export const SearchBar = observer(function SearchBar(props: SearchBarProps) {
         }}
       />
       <View style={{ paddingHorizontal: 10 }}>
-        <SearchIcon height={16} />
+        {
+          uiStore.isDark ? (
+            <SearchIconLight height={16} />
+          ) : (
+            <SearchIcon height={16} />
+          )
+        }
       </View>
     </View>
   )

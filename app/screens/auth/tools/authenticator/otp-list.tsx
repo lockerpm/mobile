@@ -44,7 +44,7 @@ export const OtpList = observer(function OtpList(props: Props) {
   // ------------------------ WATCHERS ----------------------------
 
   useEffect(() => {
-    setOtps([])
+    // setOtps([])
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastOfflineSync, sortList])
 
@@ -176,7 +176,7 @@ export const OtpList = observer(function OtpList(props: Props) {
                 <Text
                   text={getTOTP(item.otp)}
                   style={{
-                    color: color.palette.green,
+                    color: color.primary,
                     fontSize: fontSize.h3,
                   }}
                 />
@@ -190,7 +190,7 @@ export const OtpList = observer(function OtpList(props: Props) {
                 size={25}
                 isPlaying
                 duration={30}
-                colors={color.palette.green}
+                colors={color.primary}
                 initialRemainingTime={getRemainingTime(item.otp.period)}
                 strokeWidth={4}
               />

@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/core"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { Header, Layout, Text, AutoImage as Image } from "../../../../../components"
-import { color, commonStyles, fontSize } from "../../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
 import moment from 'moment'
 import numeral from 'numeral'
 import RenderHtml from 'react-native-render-html'
@@ -14,7 +14,8 @@ import RenderHtml from 'react-native-render-html'
 export const DataBreachDetailScreen = observer(function DataBreachDetailScreen() {
   const { translate } = useMixins()
   const navigation = useNavigation()
-  const { toolStore } = useStores()
+  const { toolStore, uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   const { width } = useWindowDimensions();
   const data = toolStore.selectedBreach
@@ -135,7 +136,7 @@ export const DataBreachDetailScreen = observer(function DataBreachDetailScreen()
                   color: color.text
                 },
                 a: {
-                  color: color.palette.green,
+                  color: color.primary,
                   textDecorationLine: 'none'
                 }
               }}

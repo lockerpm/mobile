@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/core"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
 import { Button, Header, Layout, Text } from "../../../../components"
-import { color, commonStyles, fontSize } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
 
 // @ts-ignore
 import DataBreachScannerIcon from './data-breach-scanner.svg'
@@ -15,7 +15,8 @@ import { useStores } from "../../../../models"
 export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
   const { translate } = useMixins()
   const navigation = useNavigation()
-  const { toolStore } = useStores()
+  const { toolStore, uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // -------------------- RENDER ----------------------
 
@@ -25,7 +26,7 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
       style={{
         height: 40,
         width: 40,
-        backgroundColor: count > 0 ? color.error : color.palette.green,
+        backgroundColor: count > 0 ? color.error : color.primary,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center'
@@ -99,7 +100,9 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
         />
       )}
     >
-      <View style={commonStyles.GRAY_SCREEN_SECTION}>
+      <View style={[commonStyles.GRAY_SCREEN_SECTION, {
+        backgroundColor: color.background
+      }]}>
         {
           renderOption(
             translate('pass_health.weak_passwords.name'),

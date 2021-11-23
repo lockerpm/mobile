@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import {Text, Button, FloatingInput } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { color, commonStyles } from "../../../theme"
+import { color as colorLight, colorDark, commonStyles } from "../../../theme"
 import { useStores } from "../../../models"
 
 
@@ -15,9 +15,10 @@ type Props = {
 
 
 export const Step1 = observer(function Step1(props: Props) {
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { translate, notify } = useMixins()
   const { goBack, nextStep } = props
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // ------------------ Params -----------------------
 

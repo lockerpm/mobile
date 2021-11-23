@@ -3,17 +3,20 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { useNavigation } from "@react-navigation/core"
 import { Header, Layout } from "../../../../../components"
-import { color } from "../../../../../theme"
+import { color as colorLight, colorDark } from "../../../../../theme"
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
 import { parseOTPUri, getTOTP } from "../../../../../utils/totp"
+import { useStores } from "../../../../../models"
 
 
 export const QRScannerScreen = observer(function QRScannerScreen() {
   const navigation = useNavigation()
   const { newCipher, createCipher, translate, notify } = useMixins()
-
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+  
   const [isLoading, setIsLoading] = useState(false)
 
   const onSuccess = async (e) => {

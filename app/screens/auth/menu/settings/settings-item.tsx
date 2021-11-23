@@ -3,7 +3,8 @@ import React from 'react'
 import { StyleProp, ViewStyle, View } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { Button, Text } from '../../../../components'
-import { commonStyles, color } from '../../../../theme'
+import { useStores } from '../../../../models'
+import { commonStyles, color as colorLight, colorDark } from '../../../../theme'
 
 export type SettingsItemProps = {
   style?: StyleProp<ViewStyle>
@@ -17,6 +18,9 @@ export type SettingsItemProps = {
 }
 
 export const SettingsItem = observer((props: SettingsItemProps) => {
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
   return props.action ? (
     <Button
       isDisabled={props.disabled}

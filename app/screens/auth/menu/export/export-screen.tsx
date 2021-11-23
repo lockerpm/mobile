@@ -3,18 +3,21 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Header } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { SettingsItem } from "../settings/settings-item"
 import { ConfirmPassModal } from "./confirm-pass-modal"
 import { useCoreService } from "../../../../services/core-service"
+import { useStores } from "../../../../models"
 
 
 export const ExportScreen = observer(function ExportScreen() {
   const navigation = useNavigation()
   const { translate, notify } = useMixins()
   const { platformUtilsService, exportService } = useCoreService()
-
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+  
   // ----------------------- PARAMS -----------------------
 
   const formats = ['csv', 'json', 'encrypted_json']
@@ -104,7 +107,9 @@ export const ExportScreen = observer(function ExportScreen() {
         onConfirm={handleExport}
       />
       
-      <View style={commonStyles.GRAY_SCREEN_SECTION}>
+      <View style={[commonStyles.GRAY_SCREEN_SECTION, {
+        backgroundColor: color.background
+      }]}>
         {
           formats.map((f, index) => (
             <SettingsItem

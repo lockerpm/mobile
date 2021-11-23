@@ -10,7 +10,12 @@ import { SearchBar } from "../search-bar/search-bar"
 // @ts-ignore
 import ConfigIcon from './config.svg'
 // @ts-ignore
+import ConfigIconLight from './config-light.svg'
+// @ts-ignore
 import PlusIcon from './plus.svg'
+// @ts-ignore
+import PlusIconLight from './plus-light.svg'
+import { useStores } from "../../models"
 
 
 export interface BrowseItemHeaderProps {
@@ -27,6 +32,7 @@ export interface BrowseItemHeaderProps {
  */
 export const BrowseItemHeader = observer(function BrowseItemHeader(props: BrowseItemHeaderProps) {
   const { openAdd, openSort, navigation, header, onSearch, searchText } = props
+  const { uiStore } = useStores()
 
   return (
     <Header
@@ -42,7 +48,13 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
             style={{ marginRight: openAdd ? 20 : 0 }}
             onPress={() => openSort && openSort()}
           >
-            <ConfigIcon height={17} />
+            {
+              uiStore.isDark ? (
+                <ConfigIconLight height={17} />
+              ) : (
+                <ConfigIcon height={17} />
+              )
+            }
           </Button>
 
           {
@@ -51,7 +63,13 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
                 preset="link"
                 onPress={() => openAdd && openAdd()}
               >
-                <PlusIcon height={18} />
+                {
+                  uiStore.isDark ? (
+                    <PlusIconLight height={18} />
+                  ) : (
+                    <PlusIcon height={18} />
+                  )
+                }
               </Button>
             )
           }

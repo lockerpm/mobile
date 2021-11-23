@@ -1025,7 +1025,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       text2: text,
       position: 'top',
       autoHide: true,
-      visibilityTime: duration ? duration : type === 'error' ? 5000 : 2000,
+      visibilityTime: duration ? duration : type === 'error' ? 3000 : 1500,
       topOffset: insets.top + 10
     })
   }

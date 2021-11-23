@@ -6,15 +6,16 @@ import { useMixins } from "../../../../../services/mixins"
 import { Button, Header, Layout, AutoImage as Image, Text } from "../../../../../components"
 import { FlatList, View } from "react-native"
 import { CipherView } from "../../../../../../core/models/view"
-import { color, commonStyles, fontSize } from "../../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 
 
 export const ExposedPasswordList = observer(function ExposedPasswordList() {
   const navigation = useNavigation()
-  const { toolStore, cipherStore } = useStores()
+  const { toolStore, cipherStore, uiStore } = useStores()
   const { translate, getWebsiteLogo } = useMixins()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // -------------- COMPUTED ------------------
 

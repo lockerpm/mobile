@@ -7,10 +7,12 @@ import { commonStyles, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
 import { IS_IOS } from "../../../config/constants"
+import { useStores } from "../../../models"
 
 export const OnboardingScreen = observer(function OnboardingScreen() {
   const navigation = useNavigation()
   const { translate } = useMixins()
+  const { uiStore } = useStores()
 
   // Child components
   const footer = (
@@ -65,7 +67,10 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
       footer={footer}
     >
       <View style={commonStyles.CENTER_VIEW}>
-        <Image source={APP_ICON.textVertical} style={{ height: 112, width: 128 }} />
+        <Image 
+          source={uiStore.isDark ? APP_ICON.textVerticalLight : APP_ICON.textVertical} 
+          style={{ height: 112, width: 128 }} 
+        />
         <Text
           preset="header"
           text={translate("onBoarding.title")}

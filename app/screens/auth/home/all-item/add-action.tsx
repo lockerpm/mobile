@@ -1,9 +1,10 @@
 import React from "react"
 import { Text, AutoImage as Image, ActionSheet, ActionSheetItem, ActionSheetContent } from "../../../../components"
-import { color, commonStyles } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
 import { BROWSE_ITEMS } from "../../../../common/mappings"
 import { View } from "react-native"
 import { useStores } from "../../../../models"
+import { observer } from "mobx-react-lite"
 
 interface Props {
   isOpen?: boolean,
@@ -12,8 +13,9 @@ interface Props {
   defaultFolder?: string
 }
 
-export const AddAction = (props: Props) => {
-  const { cipherStore } = useStores()
+export const AddAction = observer((props: Props) => {
+  const { cipherStore, uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   return (
     <ActionSheet
@@ -58,4 +60,4 @@ export const AddAction = (props: Props) => {
       </ActionSheetContent>
     </ActionSheet>
   )
-}
+})

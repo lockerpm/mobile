@@ -3,7 +3,8 @@ import { observer } from "mobx-react-lite"
 import { Screen } from "../screen/screen"
 import { Container } from "../container/container"
 import { StyleProp, View, ViewStyle } from "react-native"
-import { commonStyles } from "../../theme"
+import { commonStyles, color as colorLight, colorDark } from "../../theme"
+import { useStores } from "../../models"
 
 export interface LayoutProps {
   children?: React.ReactNode,
@@ -24,17 +25,25 @@ export interface LayoutProps {
  * Describe your component here
  */
 export const Layout = observer(function Layout(props: LayoutProps) {
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
   return (
     <Screen 
       preset="fixed" 
       isLoading={props.isScreenLoading} 
       isOverlayLoading={props.isOverlayLoading}
-      style={props.style}
+      style={[{
+        backgroundColor: color.background
+      }, props.style]}
       hasFooter={!!props.footer}
+      statusBar={uiStore.isDark ? "light-content" : "dark-content"}
     >
       {
         props.header && (
-          <View style={commonStyles.SECTION_PADDING}>
+          <View style={[commonStyles.SECTION_PADDING, {
+            backgroundColor: color.background
+          }]}>
             {props.header}
           </View>
         )
@@ -51,7 +60,9 @@ export const Layout = observer(function Layout(props: LayoutProps) {
       </Container>
       {
         props.footer && (
-          <View style={commonStyles.SECTION_PADDING}>
+          <View style={[commonStyles.SECTION_PADDING, {
+            backgroundColor: color.background
+          }]}>
             {props.footer}
           </View>
         )

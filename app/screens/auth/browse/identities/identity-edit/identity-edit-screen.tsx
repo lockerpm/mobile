@@ -5,7 +5,7 @@ import {
   Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { color, commonStyles, fontSize } from "../../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
@@ -29,8 +29,9 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
   const { newCipher, createCipher, updateCipher, translate } = useMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // Params
 
@@ -258,7 +259,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
     >
       {/* Name */}
       <View
-        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
+        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <BROWSE_ITEMS.identity.svgIcon height={40} width={40} />
@@ -284,7 +285,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
       {/* Info */}
       <View
         style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           paddingBottom: 32
         }]}
       >
@@ -316,7 +317,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
       {/* Address */}
       <View
         style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           paddingBottom: 32
         }]}
       >

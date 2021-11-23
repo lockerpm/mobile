@@ -3,10 +3,11 @@ import { observer } from "mobx-react-lite"
 import { Linking, View } from "react-native"
 import { Layout, Text, Button, Header } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
 import { PRIVACY_POLICY_URL, TERMS_URL } from "../../../../config/constants"
+import { useStores } from "../../../../models"
 
 
 type Item = {
@@ -19,7 +20,9 @@ type Item = {
 export const HelpScreen = observer(function HelpScreen() {
   const navigation = useNavigation()
   const { translate } = useMixins()
-
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+  
   const items: Item[] = [
     {
       name: translate('help.help_center'),
@@ -50,7 +53,9 @@ export const HelpScreen = observer(function HelpScreen() {
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
-      <View style={commonStyles.GRAY_SCREEN_SECTION}>
+      <View style={[commonStyles.GRAY_SCREEN_SECTION, {
+        backgroundColor: color.background
+      }]}>
         {
           items.map((item, index) => (
             <Button
@@ -60,7 +65,7 @@ export const HelpScreen = observer(function HelpScreen() {
               onPress={item.action}
               style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
                 borderBottomColor: color.line,
-                borderBottomWidth: 1,
+                borderBottomWidth: index !== items.length - 1 ? 1 : 0,
                 justifyContent: 'space-between',
                 paddingVertical: 16
               }]}

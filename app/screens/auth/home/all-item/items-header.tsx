@@ -2,11 +2,17 @@ import React from "react"
 import { View } from "react-native"
 import { Button, Header, SearchBar } from "../../../../components"
 import { commonStyles } from "../../../../theme"
+import { useStores } from "../../../../models"
+import { observer } from "mobx-react-lite"
 
 // @ts-ignore
 import ConfigIcon from './config.svg'
 // @ts-ignore
+import ConfigIconLight from './config-light.svg'
+// @ts-ignore
 import PlusIcon from './plus.svg'
+// @ts-ignore
+import PlusIconLight from './plus-light.svg'
 
 
 interface Props {
@@ -16,8 +22,9 @@ interface Props {
   searchText?: string
 }
 
-export const ItemsHeader = (props: Props) => {
+export const ItemsHeader = observer((props: Props) => {
   const { openAdd, openSort, onSearch, searchText } = props
+  const { uiStore } = useStores()
 
   return (
     <Header
@@ -33,14 +40,26 @@ export const ItemsHeader = (props: Props) => {
             style={{ marginRight: 20 }}
             onPress={() => openSort && openSort()}
           >
-            <ConfigIcon height={17} />
+            {
+              uiStore.isDark ? (
+                <ConfigIconLight height={17} />
+              ) : (
+                <ConfigIcon height={17} />
+              )
+            }
           </Button>
 
           <Button
             preset="link"
             onPress={() => openAdd && openAdd()}
           >
-            <PlusIcon height={18} />
+            {
+              uiStore.isDark ? (
+                <PlusIconLight height={18} />
+              ) : (
+                <PlusIcon height={18} />
+              )
+            }
           </Button>
         </View>
       )}
@@ -52,4 +71,4 @@ export const ItemsHeader = (props: Props) => {
       />
     </Header>
   )
-}
+})

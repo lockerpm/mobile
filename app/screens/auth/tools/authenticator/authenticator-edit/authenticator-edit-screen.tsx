@@ -5,16 +5,19 @@ import {
   AutoImage as Image, Layout, Button, Header, FloatingInput
 } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color, commonStyles, fontSize } from "../../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
 import { TOOLS_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
 import { getTOTP } from "../../../../../utils/totp"
+import { useStores } from "../../../../../models"
 
 
 export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen() {
   const navigation = useNavigation()
   const { newCipher, createCipher, translate, notify } = useMixins()
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // ----------------- PARAMS ------------------
 
@@ -86,7 +89,7 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
     >
       {/* Name */}
       <View
-        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.palette.white }]}
+        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
@@ -108,7 +111,7 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
       {/* Info */}
       <View
         style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.palette.white,
+          backgroundColor: color.background,
           paddingBottom: 32
         }]}
       >
