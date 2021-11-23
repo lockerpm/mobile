@@ -20,7 +20,7 @@ type Props = {
 
 
 export const DefaultLogin = observer(function DefaultLogin(props: Props) {
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { translate, notify } = useMixins()
   const { nextStep, onLoggedIn, handleForgot } = props
 
@@ -120,7 +120,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
     },
 
     github: {
-      icon: SOCIAL_LOGIN_ICON.github,
+      icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.githubLight : SOCIAL_LOGIN_ICON.github,
       handler: async () => {
         try {
           const res = await authorize(GITHUB_CONFIG)
