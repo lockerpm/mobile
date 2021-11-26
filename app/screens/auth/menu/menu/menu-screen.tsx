@@ -106,7 +106,7 @@ export const MenuScreen = observer(function MenuScreen() {
   // -------------- RENDER --------------------
 
   const ITEM_CONTAINER: ViewStyle = {
-    backgroundColor: color.background,
+    backgroundColor: uiStore.isDark ? color.block : color.background,
     borderRadius: 10,
     paddingHorizontal: 14,
   }
@@ -115,7 +115,7 @@ export const MenuScreen = observer(function MenuScreen() {
     <Layout
       borderBottom
       isContentOverlayLoading={isLoading}
-      containerStyle={{ backgroundColor: color.block }}
+      containerStyle={{ backgroundColor: uiStore.isDark ? color.background : color.block }}
       header={(
         <Text preset="largeHeader" text={translate('common.menu')} />
       )}

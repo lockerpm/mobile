@@ -21,7 +21,7 @@ export const Divider = observer(function Divider(props: DividerProps) {
   const CONTAINER: ViewStyle = {
     width: '100%',
     borderColor: color.line,
-    borderBottomWidth: 1
+    borderBottomWidth: 0.5
   }
   const styles = flatten([CONTAINER, style])
 

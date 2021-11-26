@@ -25,7 +25,7 @@ const HEADER: ViewStyle = {
   paddingBottom: 10,
   paddingHorizontal: 10,
   borderBottomColor: "#e6e6e6",
-  borderBottomWidth: 1,
+  borderBottomWidth: 0.5,
 }
 const COMPONENT: ViewStyle = { backgroundColor: "#fff" }
 

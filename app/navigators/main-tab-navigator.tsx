@@ -69,12 +69,12 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
             <MaterialIconsIcon
               name="wifi-off"
               size={16}
-              color={color.palette.white}
+              color={color.white}
             />
             <Text
               style={{
                 fontSize: fontSize.small,
-                color: color.palette.white,
+                color: color.white,
                 marginLeft: 5
               }}
               text={translate('navigator.is_offline')}
@@ -141,7 +141,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                   (notiCount > 0) && (
                     <View
                       style={{
-                        backgroundColor: color.palette.danger,
+                        backgroundColor: color.error,
                         borderRadius: 20,
                         minWidth: 20,
                         height: 20,
@@ -155,7 +155,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                         style={{
                           fontSize: 12,
                           textAlign: 'center',
-                          color: color.palette.white,
+                          color: color.white,
                           lineHeight: 20
                         }}
                       />

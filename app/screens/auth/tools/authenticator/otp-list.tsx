@@ -9,7 +9,7 @@ import { CipherView } from "../../../../../core/models/view"
 import { CipherType } from "../../../../../core/enums"
 import { AuthenticatorAction } from "./authenticator-action"
 import { Button, Text } from "../../../../components"
-import { color, commonStyles, fontSize } from "../../../../theme"
+import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { parseOTPUri, getTOTP } from "../../../../utils/totp"
 
@@ -32,7 +32,8 @@ export const OtpList = observer(function OtpList(props: Props) {
     emptyContent, onLoadingChange, searchText, sortList
   } = props
   const { getCiphers, translate } = useMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   // ------------------------ PARAMS ----------------------------
 
@@ -146,7 +147,7 @@ export const OtpList = observer(function OtpList(props: Props) {
             onPress={() => openActionMenu(item)}
             style={{
               borderBottomColor: color.line,
-              borderBottomWidth: 1,
+              borderBottomWidth: 0.5,
               paddingVertical: 15
             }}
           >

@@ -142,7 +142,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
                   height: 28,
                   width: 28,
                   borderRadius: 14,
-                  backgroundColor: color.palette.white
+                  backgroundColor: color.white
                 }}
               />
             )

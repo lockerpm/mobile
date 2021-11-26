@@ -166,7 +166,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                   }}
                   style={{
                     borderBottomColor: color.line,
-                    borderBottomWidth: 1,
+                    borderBottomWidth: 0.5,
                     paddingVertical: 15,
                   }}
                 >
