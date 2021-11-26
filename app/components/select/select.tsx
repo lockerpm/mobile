@@ -5,6 +5,7 @@ import { color as colorLight, colorDark, fontSize } from "../../theme"
 import { StyleProp, ViewStyle } from "react-native"
 import { useMixins } from "../../services/mixins"
 import { useStores } from "../../models"
+import { SearchBar } from "../search-bar/search-bar"
 
 
 type Option = {
@@ -23,6 +24,7 @@ export interface SelectProps {
   placeholder?: string
   showSearch?: boolean
   searchPlaceholder?: string
+  title?: string
 }
 
 /**
@@ -35,7 +37,7 @@ export const Select = observer(function Select(props: SelectProps) {
   
   const { 
     style, value, onChange, options,
-    floating, renderSelected, placeholder, 
+    floating, renderSelected, placeholder, title,
     showSearch, searchPlaceholder = translate('common.search')
   } = props
 
@@ -61,6 +63,48 @@ export const Select = observer(function Select(props: SelectProps) {
         color: color.text
       }}
       enableErrors={false}
+      topBarProps={{
+        title,
+        titleStyle: {
+          color: color.title,
+          fontSize: fontSize.h5
+        },
+        containerStyle: {
+          backgroundColor: color.background,
+          paddingVertical: 5
+        },
+        cancelLabel: translate('common.cancel'),
+        cancelButtonProps: {
+          labelStyle: {
+            fontSize: fontSize.p,
+            color: color.text
+          }
+        },
+        cancelIcon: null,
+        doneLabel: translate('common.save'),
+        doneButtonProps: {
+          labelStyle: {
+            fontSize: fontSize.p,
+            color: color.primary
+          }
+        },
+        doneIcon: null
+      }}
+      listProps={{
+        style: {
+          backgroundColor: color.background
+        }
+      }}
+      renderCustomSearch={({ onSearchChange }) => (
+        <SearchBar 
+          onSearch={onSearchChange}
+          style={{
+            borderRadius: 0,
+            paddingHorizontal: 13,
+            paddingVertical: 5
+          }}
+        />
+      )}
     >
       {options.map((option) => (
         <Picker.Item 
@@ -70,7 +114,8 @@ export const Select = observer(function Select(props: SelectProps) {
           disabled={option.disabled}
           // @ts-ignore
           labelStyle={{
-            fontSize: fontSize.p
+            fontSize: fontSize.p,
+            color: color.textBlack
           }}
           selectedIconColor={color.primary}
         />

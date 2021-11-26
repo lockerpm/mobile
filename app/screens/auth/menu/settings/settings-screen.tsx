@@ -210,6 +210,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
           value={settings.language.value}
           onChange={settings.language.onChange}
           options={settings.language.options}
+          title={translate('common.language')}
           renderSelected={({ label }) => (
             <SettingsItem
               style={{ width: '100%' }}
@@ -227,6 +228,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
           value={settings.theme.value}
           onChange={settings.theme.onChange}
           options={settings.theme.options}
+          title={translate('settings.theme')}
           renderSelected={({ label }) => (
             <SettingsItem
               noBorder
