@@ -1026,7 +1026,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       position: 'top',
       autoHide: true,
       visibilityTime: duration ? duration : type === 'error' ? 3000 : 1500,
-      topOffset: insets.top + 10
+      topOffset: insets.top + 10,
+      onPress: () => {
+        Toast.hide()
+      }
     })
   }
 

@@ -16,7 +16,8 @@ import {
 import { color as colorLight, colorDark, fontSize } from "../theme"
 import { useStores } from "../models"
 import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message'
-import { Linking } from "react-native"
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { Linking, View } from "react-native"
 import { observer } from "mobx-react-lite"
 
 /**
@@ -139,7 +140,22 @@ const SuccessToast = observer((props: BaseToastProps) => {
         color: color.primary,
         fontSize: fontSize.small
       }}
-      leadingIcon={require('../common/images/icons/success.png')}
+      contentContainerStyle={{
+        paddingLeft: 10
+      }}
+      renderLeadingIcon={() => (
+        <View style={{
+          height: '100%',
+          justifyContent: 'center',
+          marginLeft: 15
+        }}>
+          <Ionicons
+            name="checkmark-circle-outline"
+            size={22}
+            color={color.primary}
+          />
+        </View>
+      )}
     />
   )
 })
@@ -159,7 +175,22 @@ const ErrorToast = observer((props: BaseToastProps) => {
         color: color.error,
         fontSize: fontSize.small
       }}
-      leadingIcon={require('../common/images/icons/error.png')}
+      contentContainerStyle={{
+        paddingLeft: 10
+      }}
+      renderLeadingIcon={() => (
+        <View style={{
+          height: '100%',
+          justifyContent: 'center',
+          marginLeft: 15
+        }}>
+          <Ionicons
+            name="close-circle-outline"
+            size={22}
+            color={color.error}
+          />
+        </View>
+      )}
     />
   )
 })
@@ -181,7 +212,7 @@ export const RootNavigator = React.forwardRef<
   return (
     <NavigationContainer {...props} ref={ref}>
       <RootStack />
-      <Toast ref={(ref) => Toast.setRef(ref)} config={toastConfig} />
+      <Toast config={toastConfig} />
     </NavigationContainer>
   )
 })
