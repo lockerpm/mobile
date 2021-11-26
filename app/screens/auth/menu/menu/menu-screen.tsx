@@ -38,7 +38,7 @@ import LockIconLight from './lock-light.svg'
 export const MenuScreen = observer(function MenuScreen() {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { lock, logout, translate } = useMixins()
+  const { lock, logout, translate, notify } = useMixins()
   const color = uiStore.isDark ? colorDark : colorLight
 
   const [isLoading, setIsLoading] = useState(false)
@@ -77,6 +77,14 @@ export const MenuScreen = observer(function MenuScreen() {
       name: '(DEBUG) ' + (uiStore.isOffline ? 'Go online' : 'Go offline'),
       action: () => {
         uiStore.setIsOffline(!uiStore.isOffline)
+      }
+    },
+    {
+      debug: true,
+      icon: uiStore.isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Show toast',
+      action: () => {
+        notify('error', 'test')
       }
     },
     {
