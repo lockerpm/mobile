@@ -31,14 +31,14 @@ export const Container = observer(function Container(props: ContainerProps) {
   let borderStyle = {}
   if (props.borderTop) {
     borderStyle = {
-      borderTopWidth: 1,
+      borderTopWidth: 0.5,
       borderTopColor: color.line
     }
   }
   if (props.borderBottom) {
     borderStyle = {
       ...borderStyle,
-      borderBottomWidth: 1,
+      borderBottomWidth: 0.5,
       borderBottomColor: color.line
     }
   }

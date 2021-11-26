@@ -267,7 +267,9 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
       {/* Cipher list */}
       <FlatList
-        style={{ paddingHorizontal: 20 }}
+        style={{ 
+          paddingHorizontal: 20, 
+        }}
         data={ciphers}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
@@ -276,7 +278,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
             onPress={() => goToDetail(item)}
             style={{
               borderBottomColor: color.line,
-              borderBottomWidth: 1,
+              borderBottomWidth: 0.5,
               paddingVertical: 15
             }}
           >

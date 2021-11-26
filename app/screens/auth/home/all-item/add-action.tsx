@@ -27,7 +27,7 @@ export const AddAction = observer((props: Props) => {
           Object.values(BROWSE_ITEMS).filter(item => item.addable).map((item, index) => (
             <ActionSheetItem
               key={index}
-              border
+              border={index !== Object.values(BROWSE_ITEMS).filter(item => item.addable).length - 1}
               onPress={() => {
                 props.onClose()
                 if (props.defaultFolder) {

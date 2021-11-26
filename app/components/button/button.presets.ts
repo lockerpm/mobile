@@ -45,7 +45,7 @@ export const viewPresets: Record<string, ViewStyle> = {
    */
   outline: {
     ...BASE_VIEW,
-    backgroundColor: color.palette.white,
+    backgroundColor: color.white,
     borderColor: color.primary,
     borderWidth: 1
   } as ViewStyle,
@@ -55,7 +55,7 @@ export const viewPresets: Record<string, ViewStyle> = {
    */
   outlineError: {
     ...BASE_VIEW,
-    backgroundColor: color.palette.white,
+    backgroundColor: color.white,
     borderColor: color.error,
     borderWidth: 1
   } as ViewStyle,
@@ -65,7 +65,7 @@ export const viewPresets: Record<string, ViewStyle> = {
    */
   outlinePlain: {
     ...BASE_VIEW,
-    backgroundColor: color.palette.white,
+    backgroundColor: color.white,
     borderColor: color.textBlack,
     borderWidth: 1
   } as ViewStyle,
@@ -75,7 +75,7 @@ export const viewPresets: Record<string, ViewStyle> = {
    */
   ghost: {
     ...BASE_VIEW,
-    backgroundColor: color.palette.white
+    backgroundColor: color.white
   } as ViewStyle,
 
   /**
@@ -94,13 +94,13 @@ export const textPresets: Record<ButtonPresetNames, TextStyle> = {
   primary: { 
     ...BASE_TEXT, 
     fontSize: fontSize.p, 
-    color: color.palette.white 
+    color: color.white 
   } as TextStyle,
 
   error: { 
     ...BASE_TEXT, 
     fontSize: fontSize.p, 
-    color: color.palette.white 
+    color: color.white 
   } as TextStyle,
 
   outline: { 
@@ -157,7 +157,7 @@ export const viewPresetsDark: Record<string, ViewStyle> = {
    */
   outline: {
     ...BASE_VIEW,
-    backgroundColor: colorDark.palette.pureBlack,
+    backgroundColor: colorDark.background,
     borderColor: colorDark.primary,
     borderWidth: 1
   } as ViewStyle,
@@ -167,7 +167,7 @@ export const viewPresetsDark: Record<string, ViewStyle> = {
    */
   outlineError: {
     ...BASE_VIEW,
-    backgroundColor: colorDark.palette.pureBlack,
+    backgroundColor: colorDark.background,
     borderColor: colorDark.error,
     borderWidth: 1
   } as ViewStyle,
@@ -177,8 +177,8 @@ export const viewPresetsDark: Record<string, ViewStyle> = {
    */
   outlinePlain: {
     ...BASE_VIEW,
-    backgroundColor: colorDark.palette.pureBlack,
-    borderColor: colorDark.textBlack,
+    backgroundColor: colorDark.background,
+    borderColor: colorDark.white,
     borderWidth: 1
   } as ViewStyle,
 
@@ -187,7 +187,7 @@ export const viewPresetsDark: Record<string, ViewStyle> = {
    */
   ghost: {
     ...BASE_VIEW,
-    backgroundColor: colorDark.palette.pureBlack
+    backgroundColor: colorDark.background
   } as ViewStyle,
 
   /**
@@ -206,13 +206,13 @@ export const textPresetsDark: Record<ButtonPresetNames, TextStyle> = {
   primary: { 
     ...BASE_TEXT, 
     fontSize: fontSize.p, 
-    color: colorDark.palette.white 
+    color: colorDark.white
   } as TextStyle,
 
   error: { 
     ...BASE_TEXT, 
     fontSize: fontSize.p, 
-    color: colorDark.palette.white 
+    color: colorDark.white
   } as TextStyle,
 
   outline: { 
@@ -230,7 +230,7 @@ export const textPresetsDark: Record<ButtonPresetNames, TextStyle> = {
   outlinePlain: { 
     ...BASE_TEXT, 
     fontSize: fontSize.p, 
-    color: colorDark.textBlack 
+    color: colorDark.white 
   } as TextStyle,
 
   ghost: { 

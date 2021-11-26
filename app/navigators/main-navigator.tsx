@@ -21,7 +21,6 @@ import {
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
-import { color } from "../theme"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../models"
@@ -262,7 +261,6 @@ export const MainNavigator = observer(function MainNavigator() {
       <Stack.Navigator
         initialRouteName="start"
         screenOptions={{
-          cardStyle: { backgroundColor: color.palette.white },
           headerShown: false
         }}
       >

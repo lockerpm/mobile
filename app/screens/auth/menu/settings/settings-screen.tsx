@@ -14,7 +14,7 @@ import ReactNativeBiometrics from "react-native-biometrics"
 const SECTION_TITLE: TextStyle = {
   fontSize: fontSize.small,
   marginHorizontal: 20,
-  marginBottom: 8,
+  marginBottom: 12,
 }
 
 type ScreenProp = RouteProp<PrimaryParamList, 'settings'>;
@@ -268,7 +268,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
               value={settings.biometric.value}
               onValueChange={settings.biometric.onChage}
               trackColor={{ false: color.disabled, true: color.primary }}
-              thumbColor={color.palette.white}
+              thumbColor={color.white}
             />
           )}
         />

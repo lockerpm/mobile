@@ -63,7 +63,7 @@ export const DeleteConfirmModal = (props: Props) => {
       >
         <Text
           text={btnText || translate('common.delete')}
-          style={{ color: color.palette.white }}
+          style={{ color: color.white }}
         />
       </Button>
     </Modal>

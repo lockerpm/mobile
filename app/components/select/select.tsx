@@ -1,9 +1,10 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
 import Picker from "react-native-ui-lib/picker"
-import { color, fontSize } from "../../theme"
+import { color as colorLight, colorDark, fontSize } from "../../theme"
 import { StyleProp, ViewStyle } from "react-native"
 import { useMixins } from "../../services/mixins"
+import { useStores } from "../../models"
 
 
 type Option = {
@@ -29,6 +30,8 @@ export interface SelectProps {
  */
 export const Select = observer(function Select(props: SelectProps) {
   const { translate } = useMixins()
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
   
   const { 
     style, value, onChange, options,
@@ -69,7 +72,7 @@ export const Select = observer(function Select(props: SelectProps) {
           labelStyle={{
             fontSize: fontSize.p
           }}
-          selectedIconColor={color.palette.green}
+          selectedIconColor={color.primary}
         />
       ))}
     </Picker>

@@ -26,7 +26,7 @@ export const ActionSheet = observer(function ActionSheet(props: ActionSheetProps
 
   const CONTAINER: ViewStyle = {
     justifyContent: "center",
-    backgroundColor: uiStore.isDark ? color.palette.pureBlack : color.palette.white,
+    backgroundColor: color.background,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10
   }
