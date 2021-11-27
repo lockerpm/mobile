@@ -14,13 +14,14 @@ import { PasswordAction } from "../password-action"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
+import { CipherView } from "../../../../../../core/models/view"
 
 
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const navigation = useNavigation()
   const { getWebsiteLogo, getPasswordStrength, translate } = useMixins()
   const { cipherStore, uiStore } = useStores()
-  const selectedCipher = cipherStore.cipherView
+  const selectedCipher: CipherView = cipherStore.cipherView
   const color = uiStore.isDark ? colorDark : colorLight
 
   const [showAction, setShowAction] = useState(false)
@@ -135,7 +136,8 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         <FloatingInput
           isPassword
           fixedLabel
-          copyAble
+          copyAble={selectedCipher.viewPassword}
+          hidePassword={!selectedCipher.viewPassword}
           label={translate('common.password')}
           value={selectedCipher.login.password}
           editable={false}
