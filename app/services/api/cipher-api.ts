@@ -108,13 +108,14 @@ export class CipherApi {
   }
 
   // Share cipher
-  async shareCipher(id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
+  async shareCipher(id: string, data: CipherRequest, score: number, collectionIds: string[], showPassword: boolean = true): Promise<EmptyResult> {
     try {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/ciphers/${id}/share`, {
         ...data,
         score,
-        collectionIds
+        collectionIds,
+        view_password: showPassword
       })
       // the typical ways to die when calling an api
       if (!response.ok) {

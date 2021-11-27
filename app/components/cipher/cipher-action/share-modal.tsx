@@ -7,11 +7,12 @@ import { Modal } from "../../modal/modal"
 import { DropdownPicker } from "../../dropdown-picker/dropdown-picker"
 import { Button } from "../../button/button"
 import { Text } from "../../text/text"
-import { fontSize } from "../../../theme"
+import { color as colorLight, colorDark, fontSize } from "../../../theme"
 import { CipherView } from "../../../../core/models/view"
-import { View } from "react-native"
 import { useCoreService } from "../../../services/core-service"
 import { CipherRequest } from "../../../../core/models/request/cipherRequest"
+import { Checkbox } from "react-native-ui-lib"
+import { CipherType } from "../../../../core/enums"
 
 
 interface Props {
@@ -21,9 +22,10 @@ interface Props {
 
 export const ShareModal = observer((props: Props) => {
   const { isOpen, onClose } = props
-  const { user, cipherStore, collectionStore } = useStores()
+  const { user, cipherStore, collectionStore, uiStore } = useStores()
   const { notify, translate, notifyApiError, getPasswordStrength } = useMixins()
   const { cipherService } = useCoreService()
+  const color = uiStore.isDark ? colorDark : colorLight
 
   const selectedCipher: CipherView = cipherStore.cipherView
   const teams = user.teams.filter((team) => {
@@ -43,6 +45,7 @@ export const ShareModal = observer((props: Props) => {
   const [owners, setOwners] = useState(teams)
   const [collectionIds, setCollectionIds] = useState([])
   const [writeableCollections, setWriteableCollections] = useState([])
+  const [showPassword, setShowPassword] = useState(true)
 
   // --------------- COMPUTED ----------------
 
@@ -60,7 +63,14 @@ export const ShareModal = observer((props: Props) => {
 
     const cipherEnc = await cipherService.encrypt(selectedCipher)
     const data = new CipherRequest(cipherEnc)
-    const res = await cipherStore.shareCipher(selectedCipher.id, data, passwordStrength.score, collectionIds)
+    console.log(data)
+    const res = await cipherStore.shareCipher(
+      selectedCipher.id, 
+      data, 
+      passwordStrength.score, 
+      collectionIds,
+      showPassword
+    )
 
     setIsLoading(false)
 
@@ -114,6 +124,8 @@ export const ShareModal = observer((props: Props) => {
       />
 
       <DropdownPicker
+        zIndex={2000}
+        zIndexInverse={1000}
         placeholder={translate('common.select')}
         emptyText={translate('error.no_team_available')}
         value={owner}
@@ -127,9 +139,7 @@ export const ShareModal = observer((props: Props) => {
 
       {
         owner && (
-          <View style={{
-            zIndex: 100
-          }}>
+          <>
             <Text
               text={translate('common.team_folders')}
               style={{
@@ -140,14 +150,36 @@ export const ShareModal = observer((props: Props) => {
 
             <DropdownPicker
               multiple
+              zIndex={1000}
+              zIndexInverse={2000}
               emptyText={translate('error.no_collection_available')}
               placeholder={translate('common.select')}
               value={collectionIds}
               items={writeableCollections}
               setValue={setCollectionIds}
               setItems={setWriteableCollections}
+              style={{
+                marginBottom: 20
+              }}
             />
-          </View>
+
+            {
+              selectedCipher.type === CipherType.Login && (
+                <Checkbox
+                  value={showPassword}
+                  color={color.primary}
+                  label={translate('common.show_password')}
+                  onValueChange={checked => {
+                    setShowPassword(checked)
+                  }}
+                  labelStyle={{
+                    color: color.textBlack,
+                    fontSize: fontSize.p
+                  }}
+                />
+              )
+            }
+          </>
         )
       }
 
