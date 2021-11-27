@@ -49,7 +49,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
     switch (selectedCipher.type) {
       case CipherType.Login:
         return {
-          img: getWebsiteLogo(selectedCipher.login.uri),
+          img: selectedCipher.login.uri ? getWebsiteLogo(selectedCipher.login.uri) : BROWSE_ITEMS.password.icon,
           backup: BROWSE_ITEMS.password.icon,
           path: 'passwords'
         }
