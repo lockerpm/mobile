@@ -93,7 +93,13 @@ export const FoldersScreen = observer(function FoldersScreen() {
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
           searchText={searchText}
-          onSearch={setSearchText}
+          onSearch={setSearchText} 
+          isSelecting={false} 
+          setIsSelecting={() => {}} 
+          selectedItems={[]} 
+          setSelectedItems={() => {}} 
+          toggleSelectAll={() => {}} 
+          setIsLoading={() => {}}        
         />
       )}
       borderBottom
@@ -109,6 +115,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
       />
 
       <SortAction
+        byNameOnly
         isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {

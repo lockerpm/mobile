@@ -166,6 +166,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
         setOrganizationId={setOrganizationId}
         collectionIds={collectionIds}
         setCollectionIds={setCollectionIds}
+        isDeleted={selectedCipher.isDeleted}
       />
       {/* Others end */}
     </Layout>

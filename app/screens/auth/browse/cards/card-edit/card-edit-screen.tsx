@@ -276,6 +276,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
         setOrganizationId={setOrganizationId}
         collectionIds={collectionIds}
         setCollectionIds={setCollectionIds}
+        isDeleted={selectedCipher.isDeleted}
       />
       {/* Others end */}
     </Layout>
