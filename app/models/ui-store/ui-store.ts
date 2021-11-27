@@ -9,6 +9,7 @@ export const UiStoreModel = types
     // Data
     isOffline: types.maybeNull(types.boolean),
     isDark: types.maybeNull(types.boolean),
+    isSelecting: types.maybeNull(types.boolean),
 
     // Cache
     selectedCountry: types.maybeNull(types.string),
@@ -23,6 +24,10 @@ export const UiStoreModel = types
 
     setIsDark: (isDark: boolean) => {
       self.isDark = isDark
+    },
+
+    setIsSelecting: (isSelecting: boolean) => {
+      self.isSelecting = isSelecting
     },
 
     setSelectedCountry(country_code: string) {

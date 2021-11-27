@@ -10,6 +10,7 @@ import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import { useMixins } from "../services/mixins"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useStores } from "../models"
+import { observer } from "mobx-react-lite"
 
 // @ts-ignore
 import HomeIcon from './icons/home.svg'
@@ -19,7 +20,6 @@ import BrowseIcon from './icons/menu.svg'
 import ToolsIcon from './icons/settings.svg'
 // @ts-ignore
 import MenuIcon from './icons/menu-2.svg'
-import { observer } from "mobx-react-lite"
 
 
 const Tab = createBottomTabNavigator()
@@ -54,7 +54,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
     }
   }
 
-  return (
+  return uiStore.isSelecting ? null : (
     <View style={{ paddingBottom: insets.bottom, backgroundColor: color.background }}>
       {/* Offline mode */}
       {
@@ -177,7 +177,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
       </View>
       {/* Tab items end */}
     </View>
-  );
+  )
 })
 
 export function MainTabNavigator() {

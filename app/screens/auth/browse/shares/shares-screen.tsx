@@ -1,15 +1,18 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { AddAction } from "../../home/all-item/add-action"
 import { useMixins } from "../../../../services/mixins"
+import { BackHandler } from "react-native"
+import { useStores } from "../../../../models"
 
 
 export const SharesScreen = observer(function SharesScreen() {
   const navigation = useNavigation()
   const { translate } = useMixins()
+  const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -20,6 +23,26 @@ export const SharesScreen = observer(function SharesScreen() {
     order: 'asc'
   })
   const [sortOption, setSortOption] = useState('az')
+  const [selectedItems, setSelectedItems] = useState([])
+  const [isSelecting, setIsSelecting] = useState(false)
+  const [allItems, setAllItems] = useState([])
+
+  // Close select before leave
+  useEffect(() => {
+    uiStore.setIsSelecting(isSelecting)
+    const checkSelectBeforeLeaving = () => {
+      if (isSelecting) {
+        setIsSelecting(false)
+        setSelectedItems([])
+        return true
+      }
+      return false
+    }
+    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    }
+  }, [isSelecting])
 
   return (
     <Layout
@@ -32,6 +55,18 @@ export const SharesScreen = observer(function SharesScreen() {
           onSearch={setSearchText}
           searchText={searchText}
           navigation={navigation}
+          isSelecting={isSelecting}
+          setIsSelecting={setIsSelecting}
+          selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
+          setIsLoading={setIsLoading}
+          toggleSelectAll={() => {
+            if (selectedItems.length < allItems.length) {
+              setSelectedItems(allItems)
+            } else {
+              setSelectedItems([])
+            }
+          }}
         />
       )}
       borderBottom
@@ -59,6 +94,11 @@ export const SharesScreen = observer(function SharesScreen() {
         searchText={searchText}
         sortList={sortList}
         organizationId={null}
+        isSelecting={isSelecting}
+        setIsSelecting={setIsSelecting}
+        selectedItems={selectedItems}
+        setSelectedItems={setSelectedItems}
+        setAllItems={setAllItems}
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}

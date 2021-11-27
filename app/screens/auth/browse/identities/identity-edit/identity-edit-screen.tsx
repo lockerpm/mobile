@@ -350,6 +350,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
         setOrganizationId={setOrganizationId}
         collectionIds={collectionIds}
         setCollectionIds={setCollectionIds}
+        isDeleted={selectedCipher.isDeleted}
       />
       {/* Others end */}
     </Layout>
