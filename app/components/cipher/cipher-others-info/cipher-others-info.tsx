@@ -13,15 +13,16 @@ import { OwnershipSelectionModal } from "../cipher-action/ownership-selection-mo
 
 
 export interface CipherOthersInfoProps {
-  navigation: any,
-  hasNote?: boolean,
-  note?: string,
-  onChangeNote?: Function,
-  folderId?: string,
-  organizationId: string,
-  setOrganizationId: Function,
-  collectionIds: string[],
+  navigation: any
+  hasNote?: boolean
+  note?: string
+  onChangeNote?: Function
+  folderId?: string
+  organizationId: string
+  setOrganizationId: Function
+  collectionIds: string[]
   setCollectionIds: Function
+  isDeleted?: boolean
 }
 
 /**
@@ -29,7 +30,7 @@ export interface CipherOthersInfoProps {
  */
 export const CipherOthersInfo = observer(function CipherOthersInfo(props: CipherOthersInfoProps) {
   const { 
-    navigation, hasNote, note, onChangeNote, folderId = null, 
+    navigation, hasNote, note, onChangeNote, folderId = null, isDeleted,
     organizationId, collectionIds, setOrganizationId, setCollectionIds
   } = props
   const { folderStore, user, uiStore } = useStores()
@@ -61,6 +62,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
         {/* Folder */}
         <Button
           preset="link"
+          isDisabled={isDeleted}
           onPress={() => {
             navigation.navigate('folders__select', {
               mode: 'add',
@@ -95,7 +97,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
 
         {/* Ownership */}
         <Button
-          isDisabled={uiStore.isOffline}
+          isDisabled={uiStore.isOffline || isDeleted}
           preset="link"
           onPress={() => {
             setShowOwnershipSelectionModal(true)

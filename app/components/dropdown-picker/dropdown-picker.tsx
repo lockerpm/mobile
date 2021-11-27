@@ -22,10 +22,15 @@ export interface DropdownPickerProps {
   emptyText?: string
   multiple?: boolean
   isDisabled?: boolean
+  zIndex?: number
+  zIndexInverse?: number
 }
 
 export const DropdownPicker = observer(function DropdownPicker(props: DropdownPickerProps) {
-  const { style, items, setItems, value, setValue, placeholder, loading, emptyText, multiple, isDisabled } = props
+  const { 
+    style, items, setItems, value, setValue, placeholder, loading, emptyText, 
+    multiple, isDisabled, zIndex, zIndexInverse
+  } = props
   const { uiStore } = useStores()
   const color = uiStore.isDark ? colorDark : colorLight
   
@@ -33,6 +38,8 @@ export const DropdownPicker = observer(function DropdownPicker(props: DropdownPi
 
   return (
     <DropDownPicker
+      zIndex={zIndex}
+      zIndexInverse={zIndexInverse}
       disabled={isDisabled}
       disabledStyle={{
         opacity: 0.4

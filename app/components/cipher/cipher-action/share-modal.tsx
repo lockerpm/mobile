@@ -9,7 +9,6 @@ import { Button } from "../../button/button"
 import { Text } from "../../text/text"
 import { fontSize } from "../../../theme"
 import { CipherView } from "../../../../core/models/view"
-import { View } from "react-native"
 import { useCoreService } from "../../../services/core-service"
 import { CipherRequest } from "../../../../core/models/request/cipherRequest"
 
@@ -58,9 +57,17 @@ export const ShareModal = observer((props: Props) => {
   const handleShare = async () => {
     setIsLoading(true)
 
-    const cipherEnc = await cipherService.encrypt(selectedCipher)
+    const payload = {...selectedCipher}
+    payload.organizationId = owner
+
+    const cipherEnc = await cipherService.encrypt(payload)
     const data = new CipherRequest(cipherEnc)
-    const res = await cipherStore.shareCipher(selectedCipher.id, data, passwordStrength.score, collectionIds)
+    const res = await cipherStore.shareCipher(
+      selectedCipher.id, 
+      data, 
+      passwordStrength.score, 
+      collectionIds
+    )
 
     setIsLoading(false)
 
@@ -114,6 +121,8 @@ export const ShareModal = observer((props: Props) => {
       />
 
       <DropdownPicker
+        zIndex={2000}
+        zIndexInverse={1000}
         placeholder={translate('common.select')}
         emptyText={translate('error.no_team_available')}
         value={owner}
@@ -127,9 +136,7 @@ export const ShareModal = observer((props: Props) => {
 
       {
         owner && (
-          <View style={{
-            zIndex: 100
-          }}>
+          <>
             <Text
               text={translate('common.team_folders')}
               style={{
@@ -140,14 +147,19 @@ export const ShareModal = observer((props: Props) => {
 
             <DropdownPicker
               multiple
+              zIndex={1000}
+              zIndexInverse={2000}
               emptyText={translate('error.no_collection_available')}
               placeholder={translate('common.select')}
               value={collectionIds}
               items={writeableCollections}
               setValue={setCollectionIds}
               setItems={setWriteableCollections}
+              style={{
+                marginBottom: 20
+              }}
             />
-          </View>
+          </>
         )
       }
 

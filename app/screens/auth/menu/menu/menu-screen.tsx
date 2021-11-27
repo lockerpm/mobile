@@ -38,7 +38,7 @@ import LockIconLight from './lock-light.svg'
 export const MenuScreen = observer(function MenuScreen() {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { lock, logout, translate } = useMixins()
+  const { lock, logout, translate, notify } = useMixins()
   const color = uiStore.isDark ? colorDark : colorLight
 
   const [isLoading, setIsLoading] = useState(false)
@@ -80,6 +80,14 @@ export const MenuScreen = observer(function MenuScreen() {
       }
     },
     {
+      debug: true,
+      icon: uiStore.isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Show toast',
+      action: () => {
+        notify('error', 'test')
+      }
+    },
+    {
       icon: uiStore.isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: translate('common.lock'),
       action: async () => {
@@ -106,7 +114,7 @@ export const MenuScreen = observer(function MenuScreen() {
   // -------------- RENDER --------------------
 
   const ITEM_CONTAINER: ViewStyle = {
-    backgroundColor: color.background,
+    backgroundColor: uiStore.isDark ? color.block : color.background,
     borderRadius: 10,
     paddingHorizontal: 14,
   }
@@ -115,7 +123,7 @@ export const MenuScreen = observer(function MenuScreen() {
     <Layout
       borderBottom
       isContentOverlayLoading={isLoading}
-      containerStyle={{ backgroundColor: color.block }}
+      containerStyle={{ backgroundColor: uiStore.isDark ? color.background : color.block }}
       header={(
         <Text preset="largeHeader" text={translate('common.menu')} />
       )}

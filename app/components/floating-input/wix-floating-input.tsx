@@ -29,7 +29,8 @@ export interface WixFloatingInputProps extends TextInputProps {
   maskType?: TextInputMaskTypeProp,
   maskOptions?: TextInputMaskOptionProp,
   copyAble?: boolean,
-  persistError?: boolean
+  persistError?: boolean,
+  hidePassword?: boolean
 }
 
 /**
@@ -39,7 +40,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
   const {
     outerRef, style, inputStyle, label, isPassword, value, placeholder,
     editable = true, disabled, buttonRight, onChangeText, copyAble, textarea,
-    maskType, maskOptions, isRequired, persistError,
+    maskType, maskOptions, isRequired, persistError, hidePassword,
     ...rest
   } = props
 
@@ -136,7 +137,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
       {/* Button right */}
       <View style={BUTTON_CONTAINER}>
         {
-          isPassword && (
+          (isPassword && !hidePassword) && (
             <Button
               preset="link"
               onPress={() => setShowPassword(!showPassword)}

@@ -78,7 +78,7 @@ export const ExposedPasswordList = observer(function ExposedPasswordList() {
               onPress={() => goToDetail(item)}
               style={{
                 borderBottomColor: color.line,
-                borderBottomWidth: 1,
+                borderBottomWidth: 0.5,
                 paddingVertical: 15
               }}
             >
@@ -122,7 +122,7 @@ export const ExposedPasswordList = observer(function ExposedPasswordList() {
                           text={`${item.count} ${translate('common.times')}`}
                           style={{
                             fontWeight: 'bold',
-                            color: color.palette.white,
+                            color: color.white,
                             fontSize: fontSize.mini
                           }}
                         />

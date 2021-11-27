@@ -1026,7 +1026,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       position: 'top',
       autoHide: true,
       visibilityTime: duration ? duration : type === 'error' ? 3000 : 1500,
-      topOffset: insets.top + 10
+      topOffset: insets.top + 10,
+      onPress: () => {
+        Toast.hide()
+      }
     })
   }
 
@@ -1043,6 +1046,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Get website logo
   const getWebsiteLogo = (uri: string) => {
+    if (!uri) {
+      return { uri: null }
+    }
     const imgUri = `${GET_LOGO_URL}/${uri.split('//')[1]}?size=40`
     return { uri: imgUri }
   }

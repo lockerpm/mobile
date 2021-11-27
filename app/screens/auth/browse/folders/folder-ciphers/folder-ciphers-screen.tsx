@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import find from 'lodash/find'
 import { CipherList, Layout, BrowseItemEmptyContent, BrowseItemHeader } from "../../../../../components"
@@ -11,6 +11,7 @@ import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { useMixins } from "../../../../../services/mixins"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { TEAM_CIPHER_EDITOR } from "../../../../../config/constants"
+import { BackHandler } from "react-native"
 
 type FolderCiphersScreenProp = RouteProp<PrimaryParamList, 'folders__ciphers'>;
 
@@ -18,7 +19,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
   const navigation = useNavigation()
   const route = useRoute<FolderCiphersScreenProp>()
   const { folderId, collectionId } = route.params
-  const { folderStore, collectionStore, user } = useStores()
+  const { folderStore, collectionStore, user, uiStore } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
   const { translate, getTeam } = useMixins()
@@ -33,6 +34,9 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
     order: 'asc'
   })
   const [sortOption, setSortOption] = useState('az')
+  const [selectedItems, setSelectedItems] = useState([])
+  const [isSelecting, setIsSelecting] = useState(false)
+  const [allItems, setAllItems] = useState([])
 
   // Computed
   const folder = (() => {
@@ -41,6 +45,22 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
 
   const hasAddPermission = !collectionId || TEAM_CIPHER_EDITOR.includes(getTeam(user.teams, folder.organizationId).role)
 
+  // Close select before leave
+  useEffect(() => {
+    uiStore.setIsSelecting(isSelecting)
+    const checkSelectBeforeLeaving = () => {
+      if (isSelecting) {
+        setIsSelecting(false)
+        setSelectedItems([])
+        return true
+      }
+      return false
+    }
+    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    }
+  }, [isSelecting])
 
   // Render
   return (
@@ -54,6 +74,18 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
           navigation={navigation}
           searchText={searchText}
           onSearch={setSearchText}
+          isSelecting={isSelecting}
+          setIsSelecting={setIsSelecting}
+          selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
+          setIsLoading={setIsLoading}
+          toggleSelectAll={() => {
+            if (selectedItems.length < allItems.length) {
+              setSelectedItems(allItems)
+            } else {
+              setSelectedItems([])
+            }
+          }}
         />
       )}
       noScroll
@@ -83,6 +115,11 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
         folderId={folderId}
         collectionId={collectionId}
         isPersonalUndefined={!collectionId && !folderId}
+        isSelecting={isSelecting}
+        setIsSelecting={setIsSelecting}
+        selectedItems={selectedItems}
+        setSelectedItems={setSelectedItems}
+        setAllItems={setAllItems}
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('../../../home/all-item/empty-img.png')}

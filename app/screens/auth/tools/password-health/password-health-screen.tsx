@@ -37,7 +37,7 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
         text={count.toString()}
         style={{
           fontSize: fontSize.p,
-          color: color.palette.white
+          color: color.white
         }}
       />
     </View>

@@ -79,7 +79,6 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         backgroundColor: color.block,
         paddingHorizontal: 0
       }}
-      borderBottom
       header={(
         <Header
           title={translate('pass_generator.title')}
@@ -164,8 +163,8 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         />
         <Slider
           // value={passwordLen}
-          thumbTintColor={color.palette.green}
-          minimumTrackTintColor={color.palette.green}
+          thumbTintColor={color.primary}
+          minimumTrackTintColor={color.primary}
           maximumTrackTintColor={color.line}
           minimumValue={8}
           maximumValue={64}
@@ -182,7 +181,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
                 key={item.key}
                 value={options[item.key]}
                 accessibilityLabel={item.key}
-                color={color.palette.green}
+                color={color.primary}
                 label={item.label}
                 onValueChange={checked => {
                   const newOptions = { ...options }

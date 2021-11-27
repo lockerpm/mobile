@@ -1,12 +1,13 @@
 import React, { useState } from "react"
 import { StyleProp, View, ViewStyle, TextInput, TextInputProps } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, fontSize } from "../../theme"
+import { color as colorLight, colorDark, fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { TextInputMask, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
 import { useMixins } from "../../services/mixins"
+import { useStores } from "../../models"
 
 
 export interface NativeFloatingInputProps extends TextInputProps {
@@ -38,6 +39,9 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
   } = props
 
   const { copyToClipboard } = useMixins()
+  const { uiStore } = useStores()
+  const color = uiStore.isDark ? colorDark : colorLight
+
   const [isFocused, setFocus] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -78,8 +82,8 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
   return (
     <View style={[
       {
-        borderBottomColor: isInvalid ? color.error : isFocused ? color.palette.green : color.line,
-        borderBottomWidth: 1,
+        borderBottomColor: isInvalid ? color.error : isFocused ? color.primary : color.line,
+        borderBottomWidth: 0.5,
         height: textarea ? 92 : 50
       }, style
     ]}>
@@ -111,6 +115,7 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
       </View>
       {
         maskType || maskOptions ? (
+          // @ts-ignore
           <TextInputMask
             type={maskType || 'custom'}
             options={maskOptions}
@@ -118,6 +123,7 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
             onChangeText={(text) => onChangeText && onChangeText(text)}
           />
         ) : (
+          // @ts-ignore
           <TextInput
             {...textInputProps}
             onChangeText={(text) => onChangeText && onChangeText(text)}

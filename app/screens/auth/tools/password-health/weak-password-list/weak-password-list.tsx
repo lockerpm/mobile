@@ -78,7 +78,7 @@ export const WeakPasswordList = observer(function WeakPasswordList() {
               onPress={() => goToDetail(item)}
               style={{
                 borderBottomColor: color.line,
-                borderBottomWidth: 1,
+                borderBottomWidth: 0.5,
                 paddingVertical: 15
               }}
             >

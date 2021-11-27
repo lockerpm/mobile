@@ -17,14 +17,18 @@ export const BrowseListScreen = observer(function BrowseListScreen() {
   
   return (
     <Layout
-      containerStyle={{ backgroundColor: color.block, paddingTop: 0 }}
+      borderBottom
+      containerStyle={{ 
+        backgroundColor: uiStore.isDark ? color.background : color.block, 
+        paddingTop: 0 
+      }}
       header={(
         <Text preset="largeHeader" text={translate('common.browse')} />
       )}
     >
       <View
         style={{
-          backgroundColor: color.background,
+          backgroundColor: uiStore.isDark ? color.block : color.background,
           borderRadius: 10,
           paddingHorizontal: 14,
           marginTop: 20

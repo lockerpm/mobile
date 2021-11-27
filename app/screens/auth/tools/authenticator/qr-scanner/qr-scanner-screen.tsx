@@ -7,7 +7,7 @@ import { color as colorLight, colorDark } from "../../../../../theme"
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
-import { parseOTPUri, getTOTP } from "../../../../../utils/totp"
+import { parseOTPUri, getTOTP, beautifyName } from "../../../../../utils/totp"
 import { useStores } from "../../../../../models"
 
 
@@ -37,7 +37,7 @@ export const QRScannerScreen = observer(function QRScannerScreen() {
   const handleSave = async (name: string, note: string) => {
     setIsLoading(true)
     const payload = newCipher(CipherType.TOTP)
-    payload.name = name
+    payload.name = beautifyName(name)
     payload.notes = note
 
     const res = await createCipher(payload, 0, [])
