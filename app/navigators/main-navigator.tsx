@@ -21,7 +21,6 @@ import {
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
-import { color } from "../theme"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../models"
@@ -101,7 +100,7 @@ export const MainNavigator = observer(function MainNavigator() {
   const navigation = useNavigation()
   const { 
     lock, getSyncData, getCipherById, loadFolders, loadCollections, logout, 
-    loadPasswordsHealth
+    loadPasswordsHealth, notify, translate
   } = useMixins()
   const { uiStore, user, cipherStore } = useStores()
 
@@ -113,7 +112,15 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // Sync
   const handleSync = async () => {
-    await getSyncData()
+    const syncRes = await getSyncData()
+    if (syncRes.kind === 'ok') {
+      notify('success', translate('success.sync_success'))
+    } else {
+      if (syncRes.kind !== 'synching') {
+        notify('error', translate('error.sync_failed'))
+      }
+    }
+
     await Promise.all([
       loadFolders(),
       loadCollections()
@@ -262,7 +269,6 @@ export const MainNavigator = observer(function MainNavigator() {
       <Stack.Navigator
         initialRouteName="start"
         screenOptions={{
-          cardStyle: { backgroundColor: color.palette.white },
           headerShown: false
         }}
       >

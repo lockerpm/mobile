@@ -8,7 +8,6 @@ import { DropdownPicker } from "../../dropdown-picker/dropdown-picker"
 import { Button } from "../../button/button"
 import { Text } from "../../text/text"
 import { fontSize } from "../../../theme"
-import { View } from "react-native"
 
 
 interface Props {
@@ -21,7 +20,9 @@ interface Props {
 }
 
 export const OwnershipSelectionModal = observer((props: Props) => {
-  const { isOpen, onClose, organizationId, setOrganizationId, collectionIds, setCollectionIds } = props
+  const {
+    isOpen, onClose, organizationId, setOrganizationId, collectionIds, setCollectionIds
+  } = props
   const { user, collectionStore } = useStores()
   const { translate } = useMixins()
 
@@ -78,6 +79,8 @@ export const OwnershipSelectionModal = observer((props: Props) => {
       />
 
       <DropdownPicker
+        zIndex={2000}
+        zIndexInverse={1000}
         placeholder={translate('common.me')}
         value={organizationId}
         items={owners}
@@ -90,9 +93,7 @@ export const OwnershipSelectionModal = observer((props: Props) => {
 
       {
         organizationId && (
-          <View style={{
-            zIndex: 100
-          }}>
+          <>
             <Text
               text={translate('common.team_folders')}
               style={{
@@ -103,6 +104,8 @@ export const OwnershipSelectionModal = observer((props: Props) => {
 
             <DropdownPicker
               multiple
+              zIndex={1000}
+              zIndexInverse={2000}
               emptyText={translate('error.no_collection_available')}
               placeholder={translate('common.select')}
               value={collectionIds}
@@ -110,7 +113,7 @@ export const OwnershipSelectionModal = observer((props: Props) => {
               setValue={val => setCollectionIds(val)}
               setItems={setWriteableCollections}
             />
-          </View>
+          </>
         )
       }
 

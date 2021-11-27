@@ -49,7 +49,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
     switch (selectedCipher.type) {
       case CipherType.Login:
         return {
-          img: getWebsiteLogo(selectedCipher.login.uri),
+          img: selectedCipher.login.uri ? getWebsiteLogo(selectedCipher.login.uri) : BROWSE_ITEMS.password.icon,
           backup: BROWSE_ITEMS.password.icon,
           path: 'passwords'
         }
@@ -84,7 +84,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
 
   // Methods
 
-  const handelDelete = async () => {
+  const handleDelete = async () => {
     const res = await toTrashCiphers([selectedCipher.id])
     if (res.kind === 'ok') {
       const routeName = await getRouteName()
@@ -103,7 +103,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
       <DeleteConfirmModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
-        onConfirm={handelDelete}
+        onConfirm={handleDelete}
         title={translate('trash.to_trash')}
         desc={translate('trash.to_trash_desc')}
         btnText="OK"

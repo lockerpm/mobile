@@ -28,7 +28,7 @@ export const presets = {
 
   // Colored
   black: { ...BASE, color: color.textBlack } as TextStyle,
-  green: { ...BASE, color: color.palette.green } as TextStyle,
+  green: { ...BASE, color: color.primary } as TextStyle,
 
   /**
    * A bold version of the default text.
@@ -59,7 +59,7 @@ export const presetsDark = {
 
   // Colored
   black: { ...BASE_DARK, color: colorDark.textBlack } as TextStyle,
-  green: { ...BASE_DARK, color: colorDark.palette.green } as TextStyle,
+  green: { ...BASE_DARK, color: colorDark.primary } as TextStyle,
 
   /**
    * A bold version of the default text.

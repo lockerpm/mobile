@@ -187,7 +187,7 @@ export const LockScreen = observer(function LockScreen() {
                   height: 28,
                   width: 28,
                   borderRadius: 14,
-                  backgroundColor: color.palette.white
+                  backgroundColor: color.white
                 }}
               />
             )

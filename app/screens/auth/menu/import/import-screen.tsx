@@ -183,13 +183,15 @@ export const ImportScreen = observer(function ImportScreen() {
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
-        backgroundColor: color.background
+        backgroundColor: color.background,
+        paddingVertical: 20
       }]}>
         <Select
           showSearch
           value={format}
           onChange={(val: string) => setFormat(val)}
           options={formats}
+          title={translate('import.format')}
           renderSelected={({ label }) => (
             <SettingsItem
               style={{ width: '100%' }}
@@ -222,8 +224,8 @@ export const ImportScreen = observer(function ImportScreen() {
           text={translate('settings.import')}
           onPress={handleImport}
           style={{
-            marginBottom: 30,
-            marginTop: 30
+            marginTop: 30,
+            marginBottom: 10
           }}
         />
       </View> 

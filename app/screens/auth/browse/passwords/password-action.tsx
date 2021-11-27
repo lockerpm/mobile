@@ -4,6 +4,7 @@ import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { ActionItem } from "../../../../components/cipher/cipher-action/action-item"
+import { CipherView } from "../../../../../core/models/view"
 
 
 type Props = {
@@ -17,7 +18,7 @@ type Props = {
 export const PasswordAction = (props: Props) => {
   const { copyToClipboard, translate } = useMixins()
   const { cipherStore } = useStores()
-  const selectedCipher = cipherStore.cipherView
+  const selectedCipher: CipherView = cipherStore.cipherView
 
   return (
     <CipherAction {...props}>
@@ -39,7 +40,7 @@ export const PasswordAction = (props: Props) => {
         name={translate('password.copy_password')}
         icon="copy"
         action={() => copyToClipboard(selectedCipher.login.password)}
-        disabled={!selectedCipher.login.password}
+        disabled={!selectedCipher.login.password || !selectedCipher.viewPassword}
       />
     </CipherAction>
   )
