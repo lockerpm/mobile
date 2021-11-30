@@ -60,11 +60,15 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
    prioritize the most relevant credentials in the list.
   */
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    print("Debug")
     // Get uri
     var uri = ""
+    print(serviceIdentifiers.count)
+    print(serviceIdentifiers[0])
     if serviceIdentifiers.count > 0 {
       uri = serviceIdentifiers[0].identifier
     }
+    print(uri)
     
     // Clear view
     self.stackView.subviews.forEach({ $0.removeFromSuperview() })
@@ -72,10 +76,12 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     // Get data from shared keychain
     let keychain = Keychain(service: "W7S57TNBH5.com.cystack.lockerapp", accessGroup: "group.com.cystack.lockerapp")
     let autofillData = try? keychain.get("autofill")
+    print(autofillData!)
     
     // Has passwords
     if autofillData != nil {
       self.passwords = toArray(text: autofillData ?? "[]") ?? []
+      print(self.passwords)
       if (self.passwords.count > 0) {
         var hasItem = false
         
@@ -88,6 +94,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
         // Buttons
         for (index, item) in self.passwords.enumerated() {
           let cipherUri = item["uri"] ?? ""
+          print(cipherUri)
           if uri.isEmpty || uri.contains(cipherUri) {
             hasItem = true
             let btn = self.makeButton(title: item["username"] ?? "", index: index)
@@ -107,24 +114,22 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     self.stackView.addArrangedSubview(label)
   }
 
-  /*
-   Implement this method if your extension supports showing credentials in the QuickType bar.
-   When the user selects a credential from your app, this method will be called with the
-   ASPasswordCredentialIdentity your app has previously saved to the ASCredentialIdentityStore.
-   Provide the password by completing the extension request with the associated ASPasswordCredential.
-   If using the credential would require showing custom UI for authenticating the user, cancel
-   the request with error code ASExtensionError.userInteractionRequired.
-
-  override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-      let databaseIsUnlocked = true
-      if (databaseIsUnlocked) {
-          let passwordCredential = ASPasswordCredential(user: "j_appleseed", password: "apple1234")
-          self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
-      } else {
-          self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
-      }
-  }
-  */
+//
+//   Implement this method if your extension supports showing credentials in the QuickType bar.
+//   When the user selects a credential from your app, this method will be called with the
+//   ASPasswordCredentialIdentity your app has previously saved to the ASCredentialIdentityStore.
+//   Provide the password by completing the extension request with the associated ASPasswordCredential.
+//   If using the credential would require showing custom UI for authenticating the user, cancel
+//   the request with error code ASExtensionError.userInteractionRequired.
+//
+//  override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
+//    
+//     
+//      let passwordCredential = ASPasswordCredential(user: "j_appleseed", password: "apple1234")
+//      self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+//      
+//  }
+//  
 
   /*
    Implement this method if provideCredentialWithoutUserInteraction(for:) can fail with
@@ -139,4 +144,17 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
   @IBAction func cancel(_ sender: AnyObject?) {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
   }
+  
+  // move to Add pass screen
+  @IBAction func add() {
+    print("add")
+    let addPassView = storyboard?.instantiateViewController(withIdentifier: "AddNewPasswordView") as! NewPasswordViewController
+    addPassView.completionHandler = {text1, text2 in
+      print(text1, text2)
+    }
+    present(addPassView, animated: true)
+  }
+//  @IBAction func addNewPassword(_ sender: Any) {
+//    add()
+//  }
 }
