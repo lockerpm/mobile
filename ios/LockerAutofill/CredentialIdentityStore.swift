@@ -9,13 +9,13 @@ import Foundation
 import KeychainAccess
 
 struct PasswordCredential {
-  var username: String
-  var password: String
-  init(_ username: String, _ password: String) {
-    self.username = username
-    self.password = password
-  }
+  var uri: String!
+  var name: String!
+  var username: String!
+  var password: String!
 }
+
+var newPassword = PasswordCredential()
 
 class CredentialIdentityStore {
   private let KEYCHAIN_SERVICE: String = "W7S57TNBH5.com.cystack.lockerapp"
@@ -27,6 +27,7 @@ class CredentialIdentityStore {
   
   
   var credentials: [[String: String]] = []
+  var otherCredentials: [[String: String]] = []
   let URI: String
   
   
@@ -37,7 +38,7 @@ class CredentialIdentityStore {
     // Get data from shared keychain
     self.keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
     self.autofillData = try! keychain.get(KEYCHAIN_PROPS) ?? "[]"
-    print("Autofill data", self.autofillData)
+    
     passwords = self.toArray(text: self.autofillData) ?? []
     
     // Buttons
@@ -46,6 +47,9 @@ class CredentialIdentityStore {
       
       if uri.isEmpty || uri.contains(cipherUri.lowercased()) {
         self.credentials.append(item)
+        self.otherCredentials.append(item)
+      } else {
+        self.otherCredentials.append(item)
       }
     }
     print(self.credentials)
