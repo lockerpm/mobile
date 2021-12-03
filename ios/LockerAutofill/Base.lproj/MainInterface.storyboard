@@ -60,6 +60,9 @@
                                                     <buttonConfiguration key="configuration" style="plain" image="pen" title="" imagePadding="0.0">
                                                         <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="large"/>
                                                     </buttonConfiguration>
+                                                    <connections>
+                                                        <segue destination="HiT-rB-bYB" kind="show" id="DJT-dc-NV7"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zdC-rG-Xmh">
                                                     <rect key="frame" x="58" y="29" width="219" height="14.5"/>
@@ -176,11 +179,14 @@
                                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="q0n-nQ-y6n">
                                             <color key="tintColor" red="0.93531984089999998" green="0.93531984089999998" blue="0.93531984089999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <connections>
-                                                <action selector="cancel:" destination="weL-I6-gtR" id="ADP-AK-9z3"/>
+                                                <action selector="cancel1:" destination="weL-I6-gtR" id="omP-kA-dKo"/>
                                             </connections>
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Save" id="Yju-BI-Hm8">
                                             <color key="tintColor" red="0.93531984089999998" green="0.93531984089999998" blue="0.93531984089999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <connections>
+                                                <action selector="saveButtonDidPress:" destination="weL-I6-gtR" id="oCM-3H-fN6"/>
+                                            </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
@@ -192,7 +198,7 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="2xq-1V-T93"/>
                                 </constraints>
                                 <color key="textColor" red="0.23727124929999999" green="0.58758485319999998" blue="0.17723390459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RDk-Ws-5AK" customClass="CustomTextField" customModule="LockerAutofill" customModuleProvider="target">
@@ -202,7 +208,7 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="X1V-WW-Hql"/>
                                 </constraints>
                                 <color key="textColor" red="0.23727124929999999" green="0.58758485319999998" blue="0.17723390459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kfj-TE-lzc" customClass="CustomTextField" customModule="LockerAutofill" customModuleProvider="target">
@@ -212,7 +218,7 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="abH-v4-Xr4"/>
                                 </constraints>
                                 <color key="textColor" red="0.23727124929999999" green="0.58758485319999998" blue="0.17723390459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="email or username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YVa-CN-ubL" customClass="CustomTextField" customModule="LockerAutofill" customModuleProvider="target">
@@ -222,7 +228,7 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="MHc-0G-Mvd"/>
                                 </constraints>
                                 <color key="textColor" red="0.23727124929999999" green="0.58758485319999998" blue="0.17723390459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email or Username:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RWL-dI-Neb">
@@ -256,7 +262,7 @@
                                     <color key="baseForegroundColor" red="0.23727124929999999" green="0.58758485319999998" blue="0.17723390459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="donePress:" destination="weL-I6-gtR" eventType="touchUpInside" id="PAG-Fh-gSx"/>
+                                    <action selector="saveButtonDidPress:" destination="weL-I6-gtR" eventType="touchUpInside" id="qbo-un-2KZ"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -297,13 +303,40 @@
                     <connections>
                         <outlet property="nameField" destination="Bsp-2q-gg1" id="w4S-97-57X"/>
                         <outlet property="passwordField" destination="kfj-TE-lzc" id="DiR-4t-yGd"/>
+                        <outlet property="saveBottomButton" destination="1RI-a9-cNX" id="oGe-r4-CJY"/>
+                        <outlet property="saveNavBarButton" destination="Yju-BI-Hm8" id="dLI-9R-ySp"/>
                         <outlet property="uriField" destination="RDk-Ws-5AK" id="Qcp-I5-7Mq"/>
                         <outlet property="usernameField" destination="YVa-CN-ubL" id="p6n-ZO-RtJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nac-OJ-7ZD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="884" y="81.409295352323838"/>
+            <point key="canvasLocation" x="1180" y="626"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="FYZ-nk-jcP">
+            <objects>
+                <viewController id="HiT-rB-bYB" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KT3-fQ-e3Z">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v5C-v2-vtn">
+                                <rect key="frame" x="153" y="291" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ZgS-18-MKV"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="vJ1-90-vx5"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EYE-0l-Ytc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1180" y="-67"/>
         </scene>
     </scenes>
     <resources>

@@ -15,7 +15,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var uriNotification: UILabel!
   
-    var credentialIdStore: CredentialIdentityStore!
+    
     var filterCredentials:  [[String: String]] = []
     var filterOthers: [[String: String]] = []
    // var data:  [[String: String]] = []
@@ -34,15 +34,19 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     }
     
     // get audofill data from shared keychain suitable with uri
-    self.credentialIdStore = CredentialIdentityStore(uri)
+    credentialIdStore = CredentialIdentityStore(uri)
    
     //clear stackView
-    self.filterCredentials = self.credentialIdStore.credentials
-    self.filterOthers = self.credentialIdStore.otherCredentials
+    self.filterCredentials = credentialIdStore.credentials
+    self.filterOthers = credentialIdStore.otherCredentials
     tableView.reloadData()
     
     
-    newPassword.uri = self.credentialIdStore.URI
+    newPassword.uri = credentialIdStore.URI
+  }
+  func completeRequest(user: String, password: String){
+    let passwordCredential = ASPasswordCredential(user: user, password: password)
+    self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
   }
     
   @IBAction func cancel(_ sender: AnyObject?) {
@@ -116,7 +120,7 @@ extension CredentialProviderViewController: UITableViewDataSource, UITableViewDe
   }
   
   func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    return section == 0 ? "Passwords for \"\(self.credentialIdStore.URI)\" (\(self.credentialIdStore.credentials.count))" : "All passwords (\(self.credentialIdStore.otherCredentials.count))"
+    return section == 0 ? "Passwords for \"\(credentialIdStore.URI)\" (\(credentialIdStore.credentials.count))" : "All passwords (\(credentialIdStore.otherCredentials.count))"
   }
   func numberOfSections(in tableView: UITableView) -> Int {
     
@@ -128,8 +132,7 @@ extension CredentialProviderViewController: UITableViewDataSource, UITableViewDe
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
     let target = indexPath.section == 0 ? filterCredentials[indexPath.row] : filterOthers[indexPath.row]
-    let passwordCredential = ASPasswordCredential(user: target["username"] ?? "", password: target["password"] ?? "")
-    self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
-
+    completeRequest(user: target["username"] ?? "", password: target["password"] ?? "")
   }
+ 
 }
