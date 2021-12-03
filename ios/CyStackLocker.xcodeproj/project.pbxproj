@@ -18,6 +18,7 @@
 		7C0685F32758F1210003C996 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0685F22758F1210003C996 /* CustomTextField.swift */; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
+		7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */; };
 		7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */; };
 		7C84A5622755DD0400482CB5 /* CredentialIdentityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -104,6 +105,7 @@
 		7C0685F22758F1210003C996 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
+		7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPasaswordViewController.swift; sourceTree = "<group>"; };
 		7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
 		7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialIdentityStore.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CyStackLocker/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -249,6 +251,25 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		7C80ADBA2759F1C000AD45BF /* view */ = {
+			isa = PBXGroup;
+			children = (
+				7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */,
+				CA53479227181AB400BA4901 /* CredentialProviderViewController.swift */,
+				7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		7C80ADBD2759F29200AD45BF /* customUI */ = {
+			isa = PBXGroup;
+			children = (
+				7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */,
+				7C0685F22758F1210003C996 /* CustomTextField.swift */,
+			);
+			path = customUI;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,12 +311,10 @@
 		CA53479127181AB400BA4901 /* LockerAutofill */ = {
 			isa = PBXGroup;
 			children = (
-				CA53479227181AB400BA4901 /* CredentialProviderViewController.swift */,
+				7C80ADBD2759F29200AD45BF /* customUI */,
+				7C80ADBA2759F1C000AD45BF /* view */,
 				7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */,
-				7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */,
 				CA53479427181AB400BA4901 /* MainInterface.storyboard */,
-				7C0685F22758F1210003C996 /* CustomTextField.swift */,
-				7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */,
 				CA53479727181AB400BA4901 /* Info.plist */,
 				CA53479827181AB400BA4901 /* LockerAutofill.entitlements */,
 				7C70B7BD2758CD2B005D0D8E /* assets.xcassets */,
@@ -807,6 +826,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C84A5622755DD0400482CB5 /* CredentialIdentityStore.swift in Sources */,
+				7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */,
 				7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */,
 				7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */,
 				CA53479327181AB400BA4901 /* CredentialProviderViewController.swift in Sources */,

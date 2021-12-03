@@ -13,7 +13,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
   
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var uriNotification: UILabel!
   
     
     var filterCredentials:  [[String: String]] = []
@@ -62,9 +61,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     present(addPassView, animated: true)
   }
   
-  @IBAction func addNewPassword(_ sender: Any) {
-    add()
-  }
 }
 
 
@@ -112,12 +108,17 @@ extension CredentialProviderViewController: UITableViewDataSource, UITableViewDe
     
     let credential = indexPath.section == 0 ? self.filterCredentials[indexPath.row] : self.filterOthers[indexPath.row]
     let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! CredentialTableViewCell
-    
-    cell.username.text = credential["username"]
-    cell.uri.text = credential["uri"]
-    cell.setCredentialIconLabel(text: credential["username"]!)
+    cell.makeCell(credential: credential)
+    cell.editCredential.tag = Int(credential["id"]!)!
+    cell.editCredential.addTarget(self, action: #selector(connected(sender:)), for: .touchUpInside)
     return cell
   }
+  @objc func connected(sender: UIButton){
+    let editPassView = storyboard?.instantiateViewController(withIdentifier: "EditPasswordView") as! EditPasaswordViewController
+    editPassView.credential = credentialIdStore.passwords[sender.tag]
+    present(editPassView, animated: true)
+  }
+  
   
   func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
     return section == 0 ? "Passwords for \"\(credentialIdStore.URI)\" (\(credentialIdStore.credentials.count))" : "All passwords (\(credentialIdStore.otherCredentials.count))"
