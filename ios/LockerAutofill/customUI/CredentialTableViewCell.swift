@@ -10,6 +10,7 @@ import UIKit
 
 class CredentialTableViewCell: UITableViewCell {
   var IconbackgroundColor: [UIColor] = [.red, .green, .blue]
+  var credentialID : String?
   @IBOutlet weak var credentialIconLabel: UILabel!
   @IBOutlet weak var editCredential: UIButton!
   @IBOutlet weak var uri: UILabel!
@@ -18,12 +19,15 @@ class CredentialTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
+  
+  
+  func makeCell(credential: [String:String]){
+    self.credentialID = credential["id"]
+    self.username.text = credential["username"]
+    self.uri.text = credential["uri"]
+    self.setCredentialIconLabel(text: credential["username"]!)
+  }
+  
   func setCredentialIconLabel(text: String) {
     // take first letter
     let s = text.uppercased()

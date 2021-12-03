@@ -9,8 +9,8 @@ import Foundation
 import KeychainAccess
 
 struct PasswordCredential {
+  var id: String!
   var uri: String!
-  var name: String!
   var username: String!
   var password: String!
 //
@@ -75,14 +75,17 @@ class CredentialIdentityStore {
     passwords = self.toArray(text: self.autofillData) ?? []
     
     // Buttons
-    for (_, item) in passwords.enumerated() {
+    for (index, item) in passwords.enumerated() {
       let cipherUri = item["uri"] ?? ""
-      
+      var credential: [String:String] = item
+      credential["id"] = String(index)
+    
       if uri.isEmpty || uri.contains(cipherUri.lowercased()) {
-        self.credentials.append(item)
-        self.otherCredentials.append(item)
+        print(item)
+        self.credentials.append(credential)
+        self.otherCredentials.append(credential)
       } else {
-        self.otherCredentials.append(item)
+        self.otherCredentials.append(credential)
       }
     }
     print(self.credentials)
