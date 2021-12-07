@@ -9,35 +9,23 @@ import Foundation
 import KeychainAccess
 
 struct PasswordCredential {
+  var autofillID: String!
+  var name: String!
   var id: String!
   var uri: String!
   var username: String!
   var password: String!
-//
-//  var uri: String {
-//    get {
-//      return _uri
-//    }
-//    set (newVal) {
-//      _uri = newVal
-//    }
-//  }
-//  var username: String {
-//    get {
-//      return _username
-//    }
-//    set (newVal) {
-//      _username = newVal
-//    }
-//  }
-//  var password: String {
-//    get {
-//      return _password
-//    }
-//    set (newVal) {
-//      _password = newVal
-//    }
-//  }
+  var isOwner: Bool!
+  init(autofillID: String,name: String, id: String, uri: String, username: String,password: String, isOwner:Bool) {
+    self.autofillID = autofillID
+    self.id = id
+    self.uri = uri
+    self.username = username
+    self.password = password
+    self.isOwner = isOwner
+    self.name = name
+  }
+  init(){}
 }
 
 
@@ -55,12 +43,12 @@ class CredentialIdentityStore {
   
   private let KEYCHAIN_PROPS: String = "autofill"
   private var autofillData: String
-  var passwords: [[String: String]] = []    // convert autofilldata string to array
+  var passwords: [String: [[String: Any]]] = [:]    // convert autofilldata string to array
   private var keychain: Keychain
   
   
-  var credentials: [[String: String]] = []
-  var otherCredentials: [[String: String]] = []
+  var credentials: [PasswordCredential] = []
+  var otherCredentials: [PasswordCredential] = []
   let URI: String
   
   
@@ -71,47 +59,116 @@ class CredentialIdentityStore {
     // Get data from shared keychain
     self.keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
     self.autofillData = try! keychain.get(KEYCHAIN_PROPS) ?? "[]"
-    print(self.autofillData)
-    passwords = self.toArray(text: self.autofillData) ?? []
+
+    self.jsonToDict(text: self.autofillData)
+//    passwords = self.toArray(text: self.autofillData) ?? []
+    print(self.passwords)
     
-    // Buttons
-    for (index, item) in passwords.enumerated() {
-      let cipherUri = item["uri"] ?? ""
-      var credential: [String:String] = item
-      credential["id"] = String(index)
+    setAutofillData()
     
-      if uri.isEmpty || uri.contains(cipherUri.lowercased()) {
-        print(item)
+  }
+  
+  public func addNewCredential(credential: PasswordCredential) {
+    var newPassword: [String: Any] = [:]
+    //newPassword["autofillID"] = self.passwords["passwords"]?.count
+    newPassword["id"] = ""
+    newPassword["name"] = credential.name
+    newPassword["uri"] = credential.uri
+    newPassword["username"] = credential.username
+    newPassword["password"] = credential.password
+    newPassword["isOwner"] = credential.isOwner
+    self.passwords["passwords"]?.append(newPassword)
+    self.passwords["deleted"] = []
+    setKeychain(dictionary: self.passwords)
+  }
+//  public func editCredential(credential: PasswordCredential) {
+//
+//  }
+  public func removeCredential(credential: PasswordCredential) {
+    let passwords = self.passwords["passwords"]!
+    print(credential)
+    if credential.id == "" {
+      // remove session added item
+      for (index, item) in passwords.enumerated() {
+        if item["autofillID"] as? String == credential.autofillID {
+          self.passwords["passwords"]!.remove(at: index)
+          break
+        }
+      }
+    } else {
+      for (index, item) in passwords.enumerated() {
+        if item["id"] as? String == credential.id {
+          
+          self.passwords["deleted"]?.append(["id" : item["id"]!])
+          self.passwords["passwords"]!.remove(at: index)
+          break
+        }
+      }
+    }
+    
+    setKeychain(dictionary: self.passwords)
+    setAutofillData()
+  }
+//
+  private func setAutofillData(){
+    // reset data
+    self.credentials = []
+    self.otherCredentials = []
+    for (index, item) in self.passwords["passwords"]!.enumerated() {
+      let cipherUri = (item["uri"] as? String)!
+      // for autofill only
+      self.passwords["passwords"]![index]["autofillID"] = String(index)
+      
+      let credential = PasswordCredential(autofillID: String(index),name: (item["name"] as? String)!,  id: (item["id"] as? String)!, uri: (item["uri"] as? String)!, username: (item["username"] as? String)!, password: (item["password"] as? String)!, isOwner: (item["isOwner"] as? Bool)!)
+    
+     // print(credential)
+      if self.URI.isEmpty || self.URI.contains(cipherUri.lowercased()) {
         self.credentials.append(credential)
-        self.otherCredentials.append(credential)
       } else {
         self.otherCredentials.append(credential)
       }
     }
-    print(self.credentials)
   }
-  
-  public func addNewCredential(credential: PasswordCredential) {
-    
-  }
-  public func editCredential(credential: PasswordCredential) {
-    
-  }
-  public func removeCredential(credential: PasswordCredential) {
-    
-  }
-  
-  
-  
-  private func toArray(text: String) -> [[String: String]]? {
-    if let data = text.data(using: .utf8) {
-      do {
-        return try JSONSerialization.jsonObject(with: data, options: []) as? [[String:String]]
-      } catch {
-        print(error.localizedDescription)
-      }
+  private func setKeychain(dictionary: [String: [[String: Any]]]) {
+    var data = dictionary
+    for index in 0...data["passwords"]!.count-1 {
+      data["passwords"]![index].removeValue(forKey: "autofillID")
     }
-    return []
+    let json = dictToJson(dictionary: data)
+    print(json)
+    do {
+        try keychain.set(json, key: KEYCHAIN_PROPS)
+    }
+    catch let error {
+        print(error)
+    }
+  }
+  private func dictToJson(dictionary: [String: [[String: Any]]]) -> String{
+    if let theJSONData = try? JSONSerialization.data(
+        withJSONObject: dictionary,
+        options: []) {
+        return String(data: theJSONData, encoding: .ascii)!
+    }
+    return ""
+  }
+  private func jsonToDict(text: String) {
+    let jsonData = Data(text.utf8)
+    do {
+      if let autofillData = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as? [String: Any] {
+        if let passwordList = autofillData["passwords"] as? [[String: Any]] {
+          self.passwords["passwords"] = passwordList
+        }
+        if let deleteList = autofillData["deleted"] as? [[String: Any]] {
+          self.passwords["deleted"] = deleteList
+        }
+      }
+      else {
+        print("JSONSerialization failed")
+      }
+    } catch {
+      print(error.localizedDescription)
+    }
+    
   }
 
 }

@@ -15,8 +15,8 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     @IBOutlet weak var tableView: UITableView!
   
     
-    var filterCredentials:  [[String: String]] = []
-    var filterOthers: [[String: String]] = []
+    var filterCredentials:  [PasswordCredential] = []
+    var filterOthers: [PasswordCredential] = []
    // var data:  [[String: String]] = []
     
 
@@ -25,7 +25,9 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     self.searchBar.delegate = self
     self.tableView.delegate = self
     self.tableView.dataSource = self
-      
+    
+    // get event from edit screen when user delete a password
+    NotificationCenter.default.addObserver(self, selector: #selector(didGetNotification), name: Notification.Name("deleted"), object: nil)
     // Get uri
     var uri = ""
     if serviceIdentifiers.count > 0 {
@@ -43,6 +45,18 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     
     newPassword.uri = credentialIdStore.URI
   }
+  
+  @objc func didGetNotification(_ notification: Notification){
+   
+    //clear stackView
+    self.filterCredentials = credentialIdStore.credentials
+    self.filterOthers = credentialIdStore.otherCredentials
+    tableView.reloadData()
+    self.tableView.reloadData()
+   
+    
+  }
+  
   func completeRequest(user: String, password: String){
     let passwordCredential = ASPasswordCredential(user: user, password: password)
     self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
@@ -76,14 +90,14 @@ extension CredentialProviderViewController: UISearchBarDelegate {
     }
     // get matches credentiral username
     for credential in credentialIdStore.credentials {
-      let username: String = credential["username"]!.lowercased()
+      let username: String = credential.username.lowercased()
       if username.contains(searchText.lowercased()) {
           filterCredentials.append(credential)
       }
     }
     // for ohters
     for credential in credentialIdStore.otherCredentials {
-      let username: String = credential["username"]!.lowercased()
+      let username: String = credential.username.lowercased()
       if username.contains(searchText.lowercased()) {
           filterOthers.append(credential)
       }
@@ -109,19 +123,30 @@ extension CredentialProviderViewController: UITableViewDataSource, UITableViewDe
     let credential = indexPath.section == 0 ? self.filterCredentials[indexPath.row] : self.filterOthers[indexPath.row]
     let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! CredentialTableViewCell
     cell.makeCell(credential: credential)
-    cell.editCredential.tag = Int(credential["id"]!)!
+    cell.editCredential.tag = Int(credential.autofillID)!
     cell.editCredential.addTarget(self, action: #selector(connected(sender:)), for: .touchUpInside)
     return cell
   }
   @objc func connected(sender: UIButton){
     let editPassView = storyboard?.instantiateViewController(withIdentifier: "EditPasswordView") as! EditPasaswordViewController
-    editPassView.credential = credentialIdStore.passwords[sender.tag]
+ 
+    
+    for item in credentialIdStore.credentials {
+      if item.autofillID == String(sender.tag) {
+        editPassView.credential = item
+      }
+    }
+    for item in credentialIdStore.otherCredentials {
+      if item.autofillID == String(sender.tag) {
+        editPassView.credential = item
+      }
+    }
     present(editPassView, animated: true)
   }
   
   
   func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    return section == 0 ? "Passwords for \"\(credentialIdStore.URI)\" (\(credentialIdStore.credentials.count))" : "All passwords (\(credentialIdStore.otherCredentials.count))"
+    return section == 0 ? "Passwords for \"\(credentialIdStore.URI)\" (\(self.filterCredentials.count))" : "All passwords (\(self.filterOthers.count))"
   }
   func numberOfSections(in tableView: UITableView) -> Int {
     
@@ -133,7 +158,7 @@ extension CredentialProviderViewController: UITableViewDataSource, UITableViewDe
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
     let target = indexPath.section == 0 ? filterCredentials[indexPath.row] : filterOthers[indexPath.row]
-    completeRequest(user: target["username"] ?? "", password: target["password"] ?? "")
+    completeRequest(user: target.username ?? "", password: target.password ?? "")
   }
  
 }

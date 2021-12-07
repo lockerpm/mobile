@@ -21,11 +21,11 @@ class CredentialTableViewCell: UITableViewCell {
     }
   
   
-  func makeCell(credential: [String:String]){
-    self.credentialID = credential["id"]
-    self.username.text = credential["username"]
-    self.uri.text = credential["uri"]
-    self.setCredentialIconLabel(text: credential["username"]!)
+  func makeCell(credential: PasswordCredential){
+    self.credentialID = credential.id
+    self.username.text = credential.username
+    self.uri.text = credential.uri
+    self.setCredentialIconLabel(text: credential.username)
   }
   
   func setCredentialIconLabel(text: String) {
