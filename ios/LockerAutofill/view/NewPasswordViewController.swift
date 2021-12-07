@@ -23,7 +23,7 @@ class NewPasswordViewController:  CredentialProviderViewController {
   
   override func viewDidLoad() {
         super.viewDidLoad()
-    self.uriField.isUserInteractionEnabled = false
+//    self.uriField.isUserInteractionEnabled = false
     self.uriField.text = newPassword.uri
     disableSaveButton()
     passwordField.addTarget(self, action: #selector(passwordFieldDidChange), for: .editingChanged)
@@ -61,6 +61,11 @@ class NewPasswordViewController:  CredentialProviderViewController {
     newPassword.password = passwordField.text!
     newPassword.username = usernameField.text!
     newPassword.uri = uriField.text!
+    newPassword.name = nameField.text!
+    newPassword.isOwner = true
+    
+    
+    credentialIdStore.addNewCredential(credential: newPassword)
     
     //dismiss(animated: true, completion: nil)
     completeRequest(user: newPassword.password, password: newPassword.username)

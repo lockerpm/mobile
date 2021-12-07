@@ -155,7 +155,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RwB-HB-TSk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="133.59999999999999" y="82.3088455772114"/>
+            <point key="canvasLocation" x="1072.8" y="82.3088455772114"/>
         </scene>
         <!--New Password View Controller-->
         <scene sceneID="JHE-Kh-CJZ">
@@ -312,7 +312,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nac-OJ-7ZD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1180" y="626"/>
+            <point key="canvasLocation" x="2119.1999999999998" y="625.63718140929541"/>
         </scene>
         <!--Edit Pasasword View Controller-->
         <scene sceneID="FYZ-nk-jcP">
@@ -391,6 +391,7 @@
                                     <color key="baseForegroundColor" systemColor="systemPinkColor"/>
                                 </buttonConfiguration>
                                 <connections>
+                                    <action selector="deleteCredential:" destination="HiT-rB-bYB" eventType="touchUpInside" id="64k-2J-uRk"/>
                                     <action selector="saveButtonDidPress:" destination="weL-I6-gtR" eventType="touchUpInside" id="xMa-TO-kEh"/>
                                 </connections>
                             </button>
@@ -457,9 +458,12 @@
                                             <constraint firstAttribute="width" constant="30" id="UFh-FY-MFo"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="eye" catalog="system">
+                                        <buttonConfiguration key="configuration" style="plain" image="eye.slash" catalog="system">
                                             <color key="baseForegroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="eyeIconDidPress:" destination="HiT-rB-bYB" eventType="touchUpInside" id="9ev-XS-aMu"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3fB-gl-Qzd">
                                         <rect key="frame" x="298" y="58" width="30" height="30"/>
@@ -471,6 +475,9 @@
                                         <buttonConfiguration key="configuration" style="plain" image="doc.on.doc" catalog="system">
                                             <color key="baseForegroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="usernameCopyDidPress:" destination="HiT-rB-bYB" eventType="touchUpInside" id="iYo-js-tCP"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KNm-CT-R4A">
                                         <rect key="frame" x="298" y="151" width="30" height="30"/>
@@ -482,6 +489,9 @@
                                         <buttonConfiguration key="configuration" style="plain" image="doc.on.doc" catalog="system">
                                             <color key="baseForegroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="passwordCopyDidPress:" destination="HiT-rB-bYB" eventType="touchUpInside" id="u8u-t9-AcX"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -506,16 +516,30 @@
                                     <constraint firstItem="hcG-PM-6hW" firstAttribute="leading" secondItem="gzk-kh-tQZ" secondAttribute="leading" constant="16" id="sGM-qM-vUS"/>
                                     <constraint firstAttribute="height" constant="210" id="txy-Bh-ngW"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Dx-QK-PVZ">
+                                <rect key="frame" x="16" y="503" width="343" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.23727124929999999" green="0.58758485319999998" blue="0.17723390459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ZgS-18-MKV"/>
                         <color key="backgroundColor" red="0.92158359290000003" green="0.92158359290000003" blue="0.92158359290000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="ZgS-18-MKV" firstAttribute="trailing" secondItem="6Dx-QK-PVZ" secondAttribute="trailing" constant="16" id="2a7-s6-LQC"/>
                             <constraint firstItem="ZgS-18-MKV" firstAttribute="trailing" secondItem="qT4-kH-DIQ" secondAttribute="trailing" constant="16" id="3No-19-44O"/>
                             <constraint firstItem="ZgS-18-MKV" firstAttribute="trailing" secondItem="gzk-kh-tQZ" secondAttribute="trailing" constant="16" id="4uS-Gz-XIt"/>
                             <constraint firstItem="WOI-jT-LSg" firstAttribute="leading" secondItem="ZgS-18-MKV" secondAttribute="leading" constant="16" id="4yZ-vr-Mwr"/>
                             <constraint firstItem="aBc-o4-7Ru" firstAttribute="trailing" secondItem="ZgS-18-MKV" secondAttribute="trailing" id="5fl-Fy-Mn1"/>
                             <constraint firstItem="gzk-kh-tQZ" firstAttribute="top" secondItem="vwZ-VA-0aI" secondAttribute="bottom" constant="17" id="DZ5-Uq-yXE"/>
+                            <constraint firstItem="6Dx-QK-PVZ" firstAttribute="leading" secondItem="ZgS-18-MKV" secondAttribute="leading" constant="16" id="Ech-t1-DiZ"/>
+                            <constraint firstItem="6Dx-QK-PVZ" firstAttribute="top" secondItem="gzk-kh-tQZ" secondAttribute="bottom" constant="16" id="F5a-5r-yRv"/>
                             <constraint firstItem="aBc-o4-7Ru" firstAttribute="top" secondItem="ZgS-18-MKV" secondAttribute="top" id="GW7-Gd-Ya1"/>
                             <constraint firstItem="ZgS-18-MKV" firstAttribute="trailing" secondItem="WOI-jT-LSg" secondAttribute="trailing" constant="16" id="Mtc-05-zZq"/>
                             <constraint firstItem="vwZ-VA-0aI" firstAttribute="top" secondItem="WOI-jT-LSg" secondAttribute="bottom" constant="35" id="QQ1-sU-rNO"/>
@@ -529,20 +553,24 @@
                     </view>
                     <navigationItem key="navigationItem" id="vJ1-90-vx5"/>
                     <connections>
+                        <outlet property="hidePasswordIconButton" destination="k5T-7a-coE" id="TEt-hN-pW8"/>
                         <outlet property="nameLabel" destination="3e0-5H-fCC" id="AWL-LU-BFK"/>
+                        <outlet property="notifyLabel" destination="6Dx-QK-PVZ" id="b6U-WE-sJQ"/>
+                        <outlet property="passCopyButton" destination="KNm-CT-R4A" id="3FT-Dz-KUH"/>
                         <outlet property="password" destination="hcG-PM-6hW" id="n1d-wy-ndL"/>
                         <outlet property="uriLabel" destination="yzM-dV-t56" id="ncy-Co-wLV"/>
                         <outlet property="username" destination="KWk-8O-Iw4" id="6os-sF-IIg"/>
+                        <outlet property="usernameCopyButton" destination="3fB-gl-Qzd" id="A1d-bQ-xIk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EYE-0l-Ytc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1180" y="-67.016491754122939"/>
+            <point key="canvasLocation" x="2119.1999999999998" y="-67.016491754122939"/>
         </scene>
     </scenes>
     <resources>
         <image name="doc.on.doc" catalog="system" width="116" height="128"/>
-        <image name="eye" catalog="system" width="128" height="81"/>
+        <image name="eye.slash" catalog="system" width="128" height="86"/>
         <image name="pen" width="14" height="14"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -385,11 +385,18 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         searchText: '',
         deleted: false
       })
-      const sharedData = passwordRes.map((c: CipherView) => ({
+      const passwordData = passwordRes.map((c: CipherView) => ({
+        id: c.id,
+        name: c.name,
         uri: c.login.uri || '',
         username: c.login.username || '',
-        password: c.login.password || ''
+        password: c.login.password || '',
+        isOwner: !c.organizationId
       }))
+      const sharedData = {
+        passwords: passwordData,
+        deleted: []
+      }
       await saveShared('autofill', JSON.stringify(sharedData))
 
       cipherStore.setIsSynching(false)
