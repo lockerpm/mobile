@@ -395,7 +395,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       }))
       const sharedData = {
         passwords: passwordData,
-        deleted: []
+        deleted: [],
+        
       }
       await saveShared('autofill', JSON.stringify(sharedData))
 

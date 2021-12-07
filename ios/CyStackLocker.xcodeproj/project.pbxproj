@@ -22,6 +22,7 @@
 		7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */; };
 		7C84A5622755DD0400482CB5 /* CredentialIdentityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */; };
 		7CD96CE9275F5299000979D9 /* firstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD96CE8275F5299000979D9 /* firstViewController.swift */; };
+		7CD96CEB275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD96CEA275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A4B148D367B119F99EC2C2E5 /* libPods-CyStackLocker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EADEA568884090C1B008E181 /* libPods-CyStackLocker.a */; };
 		CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
@@ -110,6 +111,7 @@
 		7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
 		7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialIdentityStore.swift; sourceTree = "<group>"; };
 		7CD96CE8275F5299000979D9 /* firstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = firstViewController.swift; sourceTree = "<group>"; };
+		7CD96CEA275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCredentialProviderViewController.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CyStackLocker/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		96D89FDC55DA47C5942CCE3B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 			children = (
 				7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */,
 				CA53479227181AB400BA4901 /* CredentialProviderViewController.swift */,
+				7CD96CEA275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift */,
 				7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */,
 				7CD96CE8275F5299000979D9 /* firstViewController.swift */,
 			);
@@ -832,6 +835,7 @@
 				7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */,
 				7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */,
 				7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */,
+				7CD96CEB275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift in Sources */,
 				CA53479327181AB400BA4901 /* CredentialProviderViewController.swift in Sources */,
 				7C0685F32758F1210003C996 /* CustomTextField.swift in Sources */,
 				7CD96CE9275F5299000979D9 /* firstViewController.swift in Sources */,
