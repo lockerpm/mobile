@@ -19,9 +19,16 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     var filterOthers: [PasswordCredential] = []
    // var data:  [[String: String]] = []
     
-
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    print("1")
+    
+    
+    //self.view.backgroundColor = .black
+  }
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     // for search
+    print("2")
     self.searchBar.delegate = self
     self.tableView.delegate = self
     self.tableView.dataSource = self
