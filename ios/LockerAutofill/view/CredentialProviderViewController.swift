@@ -22,36 +22,23 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     print("1")
-    
-    
-    //self.view.backgroundColor = .black
-  }
-  override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    // for search
-    print("2")
     self.searchBar.delegate = self
     self.tableView.delegate = self
     self.tableView.dataSource = self
-    
     // get event from edit screen when user delete a password
     NotificationCenter.default.addObserver(self, selector: #selector(didGetNotification), name: Notification.Name("deleted"), object: nil)
-    // Get uri
-    var uri = ""
-    if serviceIdentifiers.count > 0 {
-      uri = serviceIdentifiers[0].identifier
-    }
-    
-    // get audofill data from shared keychain suitable with uri
-    credentialIdStore = CredentialIdentityStore(uri)
    
     //clear stackView
     self.filterCredentials = credentialIdStore.credentials
     self.filterOthers = credentialIdStore.otherCredentials
-    tableView.reloadData()
+    //tableView.reloadData()
     
     
     newPassword.uri = credentialIdStore.URI
+
+    //self.view.backgroundColor = .black
   }
+  
   
   @objc func didGetNotification(_ notification: Notification){
    
@@ -60,7 +47,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     self.filterOthers = credentialIdStore.otherCredentials
     tableView.reloadData()
     self.tableView.reloadData()
-   
     
   }
   

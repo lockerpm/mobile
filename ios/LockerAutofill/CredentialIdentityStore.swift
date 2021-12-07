@@ -98,7 +98,6 @@ class CredentialIdentityStore {
     } else {
       for (index, item) in passwords.enumerated() {
         if item["id"] as? String == credential.id {
-          
           self.passwords["deleted"]?.append(["id" : item["id"]!])
           self.passwords["passwords"]!.remove(at: index)
           break

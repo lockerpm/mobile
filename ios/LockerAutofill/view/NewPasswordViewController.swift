@@ -6,9 +6,9 @@
 //
 
 import UIKit
+import AuthenticationServices
 
-
-class NewPasswordViewController:  CredentialProviderViewController {
+class NewPasswordViewController:  ASCredentialProviderViewController {
 
 
   
@@ -70,6 +70,11 @@ class NewPasswordViewController:  CredentialProviderViewController {
     //dismiss(animated: true, completion: nil)
     completeRequest(user: newPassword.password, password: newPassword.username)
   }
+  func completeRequest(user: String, password: String){
+    let passwordCredential = ASPasswordCredential(user: user, password: password)
+    self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+  }
+    
 }
 
 
