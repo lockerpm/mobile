@@ -53,9 +53,9 @@ class EditPasaswordViewController: UIViewController {
     password.isSecureTextEntry = !password.isSecureTextEntry
 
     if isHidePassword {
-      hidePasswordIconButton.setImage(UIImage(systemName: "eye"), for: .normal)
-    } else {
       hidePasswordIconButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+    } else {
+      hidePasswordIconButton.setImage(UIImage(systemName: "eye"), for: .normal)
     }
   }
   @IBAction func passwordCopyDidPress(_ sender: Any) {

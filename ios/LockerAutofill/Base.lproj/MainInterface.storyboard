@@ -148,6 +148,7 @@
                             <constraint firstItem="3wq-kG-lGu" firstAttribute="leading" secondItem="Ky8-vK-JVj" secondAttribute="leading" id="qHk-yc-uas"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="djK-6Z-utw"/>
                     <connections>
                         <outlet property="searchBar" destination="2aL-Ft-xPm" id="rw1-4S-G9B"/>
                         <outlet property="tableView" destination="Tnx-2s-k97" id="XIc-2D-361"/>
