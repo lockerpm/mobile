@@ -19,7 +19,7 @@ export type MenuItemProps = {
 export const MenuItem = observer((props: MenuItemProps) => {
   const { uiStore } = useStores()
   const color = uiStore.isDark ? colorDark : colorLight
-  
+
   return !props.debug || __DEV__ ? (
     <Button
       isDisabled={props.disabled}
@@ -28,7 +28,7 @@ export const MenuItem = observer((props: MenuItemProps) => {
       style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
         paddingVertical: 16,
         borderBottomColor: color.line,
-        borderBottomWidth: props.noBorder? 0 : 1,
+        borderBottomWidth: props.noBorder ? 0 : 1,
       }]}
     >
       <View style={{ width: 25 }}>
