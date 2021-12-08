@@ -39,6 +39,7 @@ export const LockScreen = observer(function LockScreen() {
       setIsError(false)
       setIsUnlocking(true)
       const res = await sessionLogin(masterPassword)
+      console.log("1--------------", masterPassword)
       setIsUnlocking(false)
       if (res.kind === 'ok') {
         setMasterPassword('')

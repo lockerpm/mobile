@@ -102,6 +102,9 @@
                                 <buttonConfiguration key="configuration" style="plain">
                                     <imageReference key="image" image="faceid" catalog="system" symbolScale="default"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="biometricFaceIdDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="6bj-Tk-oud"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Khm-HA-POC"/>
