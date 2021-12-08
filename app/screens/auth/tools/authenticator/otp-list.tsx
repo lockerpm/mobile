@@ -15,11 +15,12 @@ import { parseOTPUri, getTOTP } from "../../../../utils/totp"
 
 
 interface Props {
-  emptyContent?: JSX.Element,
-  searchText?: string,
-  onLoadingChange?: Function,
+  navigation: any
+  emptyContent?: JSX.Element
+  searchText?: string
+  onLoadingChange?: Function
   sortList?: {
-    orderField: string,
+    orderField: string
     order: string
   }
 }
@@ -29,7 +30,7 @@ interface Props {
  */
 export const OtpList = observer(function OtpList(props: Props) {
   const {
-    emptyContent, onLoadingChange, searchText, sortList
+    navigation, emptyContent, onLoadingChange, searchText, sortList
   } = props
   const { getCiphers, translate } = useMixins()
   const { cipherStore, uiStore } = useStores()
@@ -128,6 +129,7 @@ export const OtpList = observer(function OtpList(props: Props) {
       {/* Action menus */}
 
       <AuthenticatorAction
+        navigation={navigation}
         isOpen={isActionOpen}
         onClose={() => setIsActionOpen(false)}
         onLoadingChange={onLoadingChange}

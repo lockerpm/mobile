@@ -62,6 +62,7 @@ export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
 
       {/* OTP list */}
       <OtpList
+        navigation={navigation}
         searchText={searchText}
         sortList={sortList}
         onLoadingChange={setIsLoading}
