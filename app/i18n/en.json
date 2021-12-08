@@ -362,7 +362,7 @@
       "desc": "Add an additional layer of security when signing in",
       "btn": "Get Started"
     },
-    "secret_key": "Your key"
+    "secret_key": "Secret key"
   },
   "pass_health": {
     "title": "Password Health",

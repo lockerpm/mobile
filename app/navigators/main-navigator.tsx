@@ -47,7 +47,9 @@ export type PrimaryParamList = {
     fromTools?: boolean
   },
   authenticator: undefined,
-  authenticator__edit: undefined,
+  authenticator__edit: {
+    mode: 'add' | 'edit'
+  },
   qrScanner: undefined,
   googleAuthenticatorImport: undefined,
   passwordHealth: undefined,
@@ -283,7 +285,7 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} initialParams={{ fromTools: false }} />
         <Stack.Screen name="authenticator" component={AuthenticatorScreen} />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
-        <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} />
+        <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="googleAuthenticatorImport" component={GoogleAuthenticatorImportScreen} />
 
         <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />

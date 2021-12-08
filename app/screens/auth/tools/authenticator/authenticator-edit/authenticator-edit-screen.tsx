@@ -4,28 +4,41 @@ import { View } from "react-native"
 import {
   AutoImage as Image, Layout, Button, Header, FloatingInput
 } from "../../../../../components"
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
 import { TOOLS_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
-import { getTOTP } from "../../../../../utils/totp"
+import { getTOTP, parseOTPUri } from "../../../../../utils/totp"
 import { useStores } from "../../../../../models"
+import { PrimaryParamList } from "../../../../../navigators/main-navigator"
+import { CipherView } from "../../../../../../core/models/view"
+
+
+type ScreenProp = RouteProp<PrimaryParamList, 'authenticator__edit'>;
 
 
 export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen() {
   const navigation = useNavigation()
-  const { newCipher, createCipher, translate, notify } = useMixins()
-  const { uiStore } = useStores()
+  const { newCipher, createCipher, updateCipher, translate, notify } = useMixins()
+  const { uiStore, cipherStore } = useStores()
+  const route = useRoute<ScreenProp>()
+
+  const { mode } = route.params
+  const selectedCipher: CipherView = cipherStore.cipherView
   const color = uiStore.isDark ? colorDark : colorLight
+  const defaultSecretKey = (() => {
+    const otp = parseOTPUri(selectedCipher.notes)
+    return otp ? otp.secret : ''
+  })()
 
   // ----------------- PARAMS ------------------
 
   const [isLoading, setIsLoading] = useState(false)
 
   // Forms
-  const [name, setName] = useState('')
-  const [secretKey, setSecretKey] = useState('')
+  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [secretKey, setSecretKey] = useState(mode !== 'add' ? defaultSecretKey : '')
 
   // ----------------- EFFECTS ------------------
 
@@ -44,12 +57,23 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
     }
 
     setIsLoading(true)
-    const payload = newCipher(CipherType.TOTP)
+    let payload: CipherView
+    if (mode === 'add') {
+      payload = newCipher(CipherType.TOTP)
+    } else {
+      // @ts-ignore
+      payload = {...selectedCipher}
+    }
 
     payload.name = name
     payload.notes = `otpauth://totp/${encodeURIComponent(name)}?secret=${secretKey}&issuer=${encodeURIComponent(name)}&algorithm=SHA1&digits=6&period=30`
 
-    const res = await createCipher(payload, 0, [])
+    let res = { kind: 'unknown' }
+    if (['add', 'clone'].includes(mode)) {
+      res = await createCipher(payload, 0, [])
+    } else {
+      res = await updateCipher(payload.id, payload, 0, [])
+    }
 
     setIsLoading(false)
     if (res.kind === 'ok') {
@@ -68,7 +92,11 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
       }}
       header={(
         <Header
-          title={translate('authenticator.enter_key')}
+          title={
+            mode === 'add'
+              ? translate('authenticator.enter_key')
+              : translate('common.edit')
+          }
           goBack={() => {
             navigation.goBack()
           }}
@@ -109,24 +137,28 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
       {/* Name end */}
 
       {/* Info */}
-      <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
-      >
-        {/* Secret key */}
-        <View style={{ flex: 1 }}>
-          <FloatingInput
-            isPassword
-            isRequired
-            label={translate('authenticator.secret_key')}
-            value={secretKey}
-            onChangeText={setSecretKey}
-          />
-        </View>
-        {/* Password end */}
-      </View>
+      {
+        mode === 'add' && (
+          <View
+            style={[commonStyles.SECTION_PADDING, {
+              backgroundColor: color.background,
+              paddingBottom: 32
+            }]}
+          >
+            {/* Secret key */}
+            <View style={{ flex: 1 }}>
+              <FloatingInput
+                isPassword
+                isRequired
+                label={translate('authenticator.secret_key')}
+                value={secretKey}
+                onChangeText={setSecretKey}
+              />
+            </View>
+            {/* Password end */}
+          </View>
+        )
+      }
       {/* Info end */}
     </Layout>
   )
