@@ -104,12 +104,15 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
+      console.log("1.5--------------", user.email)
+      console.log("2--------------", key)
 
       // Offline compare
       if (uiStore.isOffline) {
         const storedKeyHash = await cryptoService.getKeyHash()
         if (storedKeyHash) {
           const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
+          
           if (passwordValid) {
             messagingService.send('loggedIn')
   

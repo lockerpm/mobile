@@ -23,6 +23,7 @@ import { ConstantsService } from './constants.service';
 import { sequentialize } from '../misc/sequentialize';
 import { EEFLongWordList } from '../misc/wordlist';
 import { Utils } from "../misc/utils"
+import { ConsoleLogService } from './consoleLog.service';
 
 export const Keys = {
     key: 'key', // Master Key
@@ -137,18 +138,22 @@ export class CryptoService implements CryptoServiceAbstraction {
 
     async compareAndUpdateKeyHash(masterPassword: string, key: SymmetricCryptoKey): Promise<boolean> {
         const storedKeyHash = await this.getKeyHash();
+        console.log("3a--------------", storedKeyHash, storedKeyHash.length)
         if (masterPassword != null && storedKeyHash != null) {
             const localKeyHash = await this.hashPassword(masterPassword, key, HashPurpose.LocalAuthorization);
+            console.log("3--------------", localKeyHash)
             if (localKeyHash != null && storedKeyHash === localKeyHash) {
                 return true;
             }
 
             // TODO: remove serverKeyHash check in 1-2 releases after everyone's keyHash has been updated
             const serverKeyHash = await this.hashPassword(masterPassword, key, HashPurpose.ServerAuthorization);
+            console.log("4--------------", serverKeyHash)
             if (serverKeyHash != null && storedKeyHash === serverKeyHash) {
                 await this.setKeyHash(localKeyHash);
                 return true;
             }
+            console.log("5--------------", serverKeyHash)
         }
 
         return false;
@@ -362,6 +367,7 @@ export class CryptoService implements CryptoServiceAbstraction {
                 throw new Error('PBKDF2 iteration minimum is 5000.');
             }
             key = await this.cryptoFunctionService.pbkdf2(password, salt, 'sha256', kdfIterations);
+            console.log("0----------------", key)
         } else {
             throw new Error('Unknown Kdf.');
         }
@@ -416,7 +422,9 @@ export class CryptoService implements CryptoServiceAbstraction {
         }
 
         const iterations = hashPurpose === HashPurpose.LocalAuthorization ? 2 : 1;
+        console.log("interations = ", iterations)
         const hash = await this.cryptoFunctionService.pbkdf2(key.key, password, 'sha256', iterations);
+        console.log("3?----------------", hash.byteLength)
         return Utils.fromBufferToB64(hash);
     }
 
