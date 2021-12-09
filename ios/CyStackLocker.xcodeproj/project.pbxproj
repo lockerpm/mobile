@@ -16,6 +16,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* CyStackLockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CyStackLockerTests.m */; };
 		7C0685F32758F1210003C996 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0685F22758F1210003C996 /* CustomTextField.swift */; };
+		7C633CE02761ED1700140CAA /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 7C633CDF2761ED1700140CAA /* Toast */; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
 		7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */; };
@@ -168,6 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C633CE02761ED1700140CAA /* Toast in Frameworks */,
 				CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */,
 				CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */,
 			);
@@ -437,6 +439,7 @@
 			name = LockerAutofill;
 			packageProductDependencies = (
 				CA9F41E927183FC300B0C0A5 /* KeychainAccess */,
+				7C633CDF2761ED1700140CAA /* Toast */,
 			);
 			productName = LockerAutofill;
 			productReference = CA53478F27181AB400BA4901 /* LockerAutofill.appex */;
@@ -485,6 +488,7 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -1389,6 +1393,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -1400,6 +1412,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7C633CDF2761ED1700140CAA /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
+		};
 		CA9F41E927183FC300B0C0A5 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */;

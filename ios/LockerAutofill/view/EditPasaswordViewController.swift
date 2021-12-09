@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Toast
 
 class EditPasaswordViewController: UIViewController {
 
@@ -22,13 +23,13 @@ class EditPasaswordViewController: UIViewController {
   
   @IBOutlet weak var hidePasswordIconButton: UIButton!
   
-  @IBOutlet weak var notifyLabel: UILabel!
+
   var credential: PasswordCredential!
   let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
   override func viewDidLoad() {
       super.viewDidLoad()
 //    NotificationCenter.default.addObserver(self, selector: #selector(<#T##@objc method#>), name: Notification.Name("deleted"), object: nil)
-    
+
     self.nameLabel.text = credential.name
     self.username.text = credential.username
     self.uriLabel.text = credential.uri
@@ -38,8 +39,7 @@ class EditPasaswordViewController: UIViewController {
     self.username.isUserInteractionEnabled = false
     self.password.isUserInteractionEnabled = false
     
-    //hide notification
-    self.notifyLabel.isHidden = true
+    
     hidePasswordIconButton.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)
   }
   @IBAction func cancel1(_ sender: Any) {
@@ -61,22 +61,13 @@ class EditPasaswordViewController: UIViewController {
   }
   @IBAction func passwordCopyDidPress(_ sender: Any) {
     UIPasteboard.general.string = password.text
-    showCopyNoti("password copied")
+    self.view.makeToast("password copied", duration: 1.5, position: .top)
   }
   @IBAction func usernameCopyDidPress(_ sender: Any) {
     UIPasteboard.general.string = username.text
-    showCopyNoti("username copied")
+    self.view.makeToast("username copied", duration: 1.5, position: .top)
   }
   
-  func showCopyNoti(_ noti: String){
-    self.notifyLabel.isHidden = false
-    self.notifyLabel.text = noti
-    self.notifyLabel.alpha  = 1
-    UIView.animate(withDuration: 1.5, animations: { () -> Void in
-      self.notifyLabel.alpha  = 0
-    })
-    //self.notifyLabel.isHidden =  true
-  }
   
   @IBAction func deleteCredential(_ sender: Any) {
     let itemName: String = credential.name ?? ""
