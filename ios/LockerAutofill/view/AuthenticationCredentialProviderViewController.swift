@@ -7,7 +7,7 @@
 import CommonCrypto
 import LocalAuthentication
 import AuthenticationServices
-
+import Toast
 
 class AuthenticationCredentialProviderViewController: ASCredentialProviderViewController {
   var masterPassword: String = ""
@@ -22,8 +22,6 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
   override func viewDidLoad() {
     super.viewDidLoad()
     // basic usage
-    
-    
     faceIDButton.contentHorizontalAlignment = .fill
     faceIDButton.contentVerticalAlignment = .fill
     faceIDButton.imageView?.contentMode = .scaleAspectFill
@@ -51,7 +49,7 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
     let masterPass = self.masterPasswordTxt.text!
     let passwordAuthen = credentialIdStore.getPasswordAuthen()
     if passwordAuthen == [:] {
-      // failed
+      
       return
     }
     let hashMasterPass = cipherStore.makeKeyHash(masterPassword: masterPass, email: passwordAuthen["email"]!)
@@ -59,7 +57,11 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
     if hashMasterPass == passwordAuthen["hashPass"] {
         authenSuccess()
     } else {
-      // failed
+//      var style = ToastStyle()
+//      style.backgroundColor = .white
+//      style.messageColor = .red
+//      //style.imageSize = CGSize(width: 300, height: 100)
+//      self.view.makeToast("Incorrect Master Password", duration: 2.0, position: .top, style: style)
     }
     
   }
