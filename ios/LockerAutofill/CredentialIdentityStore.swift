@@ -45,6 +45,7 @@ class CredentialIdentityStore {
   private var autofillData: String
   var passwords: [String: [[String: Any]]] = [:]    // convert autofilldata string to array
   private var keychain: Keychain
+  private var passwordAuthen: [String: String] = [:]
   
   
   var credentials: [PasswordCredential] = []
@@ -67,7 +68,9 @@ class CredentialIdentityStore {
     setAutofillData()
     
   }
-  
+  public func getPasswordAuthen() -> [String: String]{
+    return self.passwordAuthen
+  }
   public func addNewCredential(credential: PasswordCredential) {
     var newPassword: [String: Any] = [:]
     //newPassword["autofillID"] = self.passwords["passwords"]?.count
@@ -162,6 +165,9 @@ class CredentialIdentityStore {
         }
         if let deleteList = autofillData["deleted"] as? [[String: Any]] {
           self.passwords["deleted"] = deleteList
+        }
+        if let authen = autofillData["authen"] as? [String: String] {
+          self.passwordAuthen = authen
         }
       }
       else {
