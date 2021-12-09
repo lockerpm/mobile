@@ -31,6 +31,7 @@ export const Keys = {
     encPrivateKey: 'encPrivateKey',
     encKey: 'encKey', // Generated Symmetric Key
     keyHash: 'keyHash',
+    autofillKeyHash: "autofillKeyHash"
 };
 
 export class CryptoService implements CryptoServiceAbstraction {
@@ -41,6 +42,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     private publicKey: ArrayBuffer;
     private privateKey: ArrayBuffer;
     private orgKeys: Map<string, SymmetricCryptoKey>;
+    private autofillKeyHash: string
 
     // eslint-disable-next-line no-useless-constructor
     constructor(
@@ -59,6 +61,10 @@ export class CryptoService implements CryptoServiceAbstraction {
     setKeyHash(keyHash: string): Promise<{}> {
         this.keyHash = keyHash;
         return this.storageService.save(Keys.keyHash, keyHash);
+    }
+    setAutofillKeyHash(autofillKeyHash: string): Promise<{}> {
+        this.autofillKeyHash = autofillKeyHash;
+        return this.storageService.save(Keys.autofillKeyHash, autofillKeyHash);
     }
 
     async setEncKey(encKey: string): Promise<{}> {
@@ -134,6 +140,18 @@ export class CryptoService implements CryptoServiceAbstraction {
         }
 
         return keyHash == null ? null : this.keyHash;
+    }
+    async getAutofillKeyHash(): Promise<string> {
+        if (this.autofillKeyHash != null) {
+            return this.autofillKeyHash;
+        }
+
+        const autofillKeyHash = await this.storageService.get<string>(Keys.autofillKeyHash);
+        if (autofillKeyHash != null) {
+            this.autofillKeyHash = autofillKeyHash;
+        }
+
+        return autofillKeyHash == null ? null : this.autofillKeyHash;
     }
 
     async compareAndUpdateKeyHash(masterPassword: string, key: SymmetricCryptoKey): Promise<boolean> {
@@ -312,6 +330,10 @@ export class CryptoService implements CryptoServiceAbstraction {
         this.keyHash = null;
         return this.storageService.remove(Keys.keyHash);
     }
+    clearAutofillKeyHash(): Promise<any> {
+        this.autofillKeyHash = null;
+        return this.storageService.remove(Keys.autofillKeyHash);
+    }
 
     clearEncKey(memoryOnly?: boolean): Promise<any> {
         this.encKey = null;
@@ -345,6 +367,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     async clearKeys(): Promise<any> {
         await this.clearKey();
         await this.clearKeyHash();
+        await this.clearAutofillKeyHash();
         await this.clearOrgKeys();
         await this.clearEncKey();
         await this.clearKeyPair();
@@ -425,6 +448,16 @@ export class CryptoService implements CryptoServiceAbstraction {
         console.log("interations = ", iterations)
         const hash = await this.cryptoFunctionService.pbkdf2(key.key, password, 'sha256', iterations);
         console.log("3?----------------", hash.byteLength)
+        return Utils.fromBufferToB64(hash);
+    }
+
+    async hashPasswordAutofill(password: string, key: string, hashPurpose?: HashPurpose): Promise<string> {
+        if (password == null || key == null) {
+            throw new Error('Invalid parameters.');
+        }
+
+        const iterations = 3 // for autofill :>
+        const hash = await this.cryptoFunctionService.pbkdf2(key, password, 'sha256', iterations);
         return Utils.fromBufferToB64(hash);
     }
 

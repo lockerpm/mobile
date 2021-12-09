@@ -104,6 +104,8 @@
 		643666B7E5804C808CAF1052 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		771E1616CFA147CD9E433C3F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		7C0685F22758F1210003C996 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		7C633CDB2761EA0D00140CAA /* Toast */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Toast; path = "Pods/Toast-Swift/Toast"; sourceTree = "<group>"; };
+		7C633CDC2761EA9B00140CAA /* libToast-Swift.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libToast-Swift.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
 		7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPasaswordViewController.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7C633CDC2761EA9B00140CAA /* libToast-Swift.a */,
 				CA53478927181A9C00BA4901 /* AuthenticationServices.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -253,6 +256,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		7C633CDA2761EA0D00140CAA /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				7C633CDB2761EA0D00140CAA /* Toast */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		7C80ADBA2759F1C000AD45BF /* view */ = {
 			isa = PBXGroup;
 			children = (
@@ -283,6 +294,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				7C633CDA2761EA0D00140CAA /* Packages */,
 				CAFA4CF7270AF9A20003FFA5 /* File.swift */,
 				13B07FAE1A68108700A75B9A /* CyStackLocker */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,

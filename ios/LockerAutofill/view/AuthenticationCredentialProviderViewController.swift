@@ -8,10 +8,12 @@ import CommonCrypto
 import LocalAuthentication
 import AuthenticationServices
 
+
 class AuthenticationCredentialProviderViewController: ASCredentialProviderViewController {
   var masterPassword: String = ""
-
   var isHidePassword: Bool = true
+  
+  let cipherStore = CoreAuthenticationCredentialProvider()
   
   @IBOutlet weak var eyeIconButton: UIButton!
   @IBOutlet weak var masterPasswordTxt: UITextField!
@@ -19,6 +21,9 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    // basic usage
+    
+    
     faceIDButton.contentHorizontalAlignment = .fill
     faceIDButton.contentVerticalAlignment = .fill
     faceIDButton.imageView?.contentMode = .scaleAspectFill
@@ -42,7 +47,21 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
   }
   @IBAction func unlockDidPress(_ sender: Any) {
     //?? update later
-    authenSuccess()
+    //authenSuccess()
+    let masterPass = self.masterPasswordTxt.text!
+    let passwordAuthen = credentialIdStore.getPasswordAuthen()
+    if passwordAuthen == [:] {
+      // failed
+      return
+    }
+    let hashMasterPass = cipherStore.makeKeyHash(masterPassword: masterPass, email: passwordAuthen["email"]!)
+    
+    if hashMasterPass == passwordAuthen["hashPass"] {
+        authenSuccess()
+    } else {
+      // failed
+    }
+    
   }
   @IBAction func biometricFaceIdDidPress(_ sender: Any) {
       biometricAuthentication()
@@ -101,7 +120,46 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
       eyeIconButton.setImage(UIImage(systemName: "eye.slash", withConfiguration: mediumConfig), for: .normal)
     }
   }
+}
+
+
+class CoreAuthenticationCredentialProvider {
   
+  let KEY_BYTE_COUNT = 32
+  let DEFAULT_ROUNDS  = 100000
+  let AUTOFILL_AUTHENTICATION_ROUNDS = 3
   
- 
+  func makeKeyHash(masterPassword: String, email: String) -> String{
+    let key =  pbkdf2SHA256(password: masterPassword, salt: email, keyByteCount: KEY_BYTE_COUNT, rounds: DEFAULT_ROUNDS) ?? ""
+    
+    let localKeyHashAutofill = pbkdf2SHA256(password: key, salt: masterPassword, keyByteCount: KEY_BYTE_COUNT, rounds: AUTOFILL_AUTHENTICATION_ROUNDS)
+    return localKeyHashAutofill ?? ""
+  }
+  
+  private func pbkdf2SHA256(password: String, salt: String, keyByteCount: Int, rounds: Int) -> String? {
+    return pbkdf2(hash:CCPBKDFAlgorithm(kCCPRFHmacAlgSHA256), password:password, salt:salt, keyByteCount:keyByteCount, rounds:rounds)
+  }
+  private func pbkdf2(hash: CCPBKDFAlgorithm, password: String, salt: String, keyByteCount: Int, rounds: Int) -> String? {
+      guard let passwordData = password.data(using: .utf8), let saltData = salt.data(using: .utf8) else { return nil }
+
+      var derivedKeyData = Data(repeating: 0, count: keyByteCount)
+      let derivedCount = derivedKeyData.count
+
+      let derivationStatus = derivedKeyData.withUnsafeMutableBytes { derivedKeyBytes in
+          saltData.withUnsafeBytes { saltBytes in
+              CCKeyDerivationPBKDF(
+                  CCPBKDFAlgorithm(kCCPBKDF2),
+                  password,
+                  passwordData.count,
+                  saltBytes,
+                  saltData.count,
+                  hash,
+                  UInt32(rounds),
+                  derivedKeyBytes,
+                  derivedCount)
+          }
+      }
+
+      return derivationStatus == kCCSuccess ? derivedKeyData.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0)) : nil
+  }
 }

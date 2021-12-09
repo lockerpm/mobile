@@ -18,6 +18,8 @@ target 'CyStackLocker' do
 
   pod 'FontAwesome.swift'
 
+  pod 'Toast-Swift', '~> 5.0.1'
+
   pod 'react-native-randombytes', :path => '../node_modules/react-native-randombytes'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
