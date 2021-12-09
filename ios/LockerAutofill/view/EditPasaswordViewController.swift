@@ -24,7 +24,7 @@ class EditPasaswordViewController: UIViewController {
   
   @IBOutlet weak var notifyLabel: UILabel!
   var credential: PasswordCredential!
-  
+  let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
   override func viewDidLoad() {
       super.viewDidLoad()
 //    NotificationCenter.default.addObserver(self, selector: #selector(<#T##@objc method#>), name: Notification.Name("deleted"), object: nil)
@@ -40,6 +40,7 @@ class EditPasaswordViewController: UIViewController {
     
     //hide notification
     self.notifyLabel.isHidden = true
+    hidePasswordIconButton.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)
   }
   @IBAction func cancel1(_ sender: Any) {
     dismiss(animated: true, completion: nil)
@@ -53,9 +54,9 @@ class EditPasaswordViewController: UIViewController {
     password.isSecureTextEntry = !password.isSecureTextEntry
 
     if isHidePassword {
-      hidePasswordIconButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+      hidePasswordIconButton.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)
     } else {
-      hidePasswordIconButton.setImage(UIImage(systemName: "eye"), for: .normal)
+      hidePasswordIconButton.setImage(UIImage(systemName: "eye.slash", withConfiguration: mediumConfig), for: .normal)
     }
   }
   @IBAction func passwordCopyDidPress(_ sender: Any) {
