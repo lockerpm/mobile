@@ -30,10 +30,12 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
       uri = serviceIdentifiers[0].identifier
     }
     
+    
     credentialIdStore = CredentialIdentityStore(uri)
     
     masterPasswordTxt.isSecureTextEntry = true
-    
+    let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
+    eyeIconButton.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)
     //faceIDButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
     biometricAuthentication()
     
@@ -91,36 +93,15 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
   @IBAction func eyeIconDidPress(_ sender: Any) {
     isHidePassword = !isHidePassword
     masterPasswordTxt.isSecureTextEntry = !masterPasswordTxt.isSecureTextEntry
-
+    
+    let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
     if isHidePassword {
-      eyeIconButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+      eyeIconButton.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)
     } else {
-      eyeIconButton.setImage(UIImage(systemName: "eye"), for: .normal)
+      eyeIconButton.setImage(UIImage(systemName: "eye.slash", withConfiguration: mediumConfig), for: .normal)
     }
   }
   
   
-  private func pbkdf2(password: String, saltData: Data, keyByteCount: Int, prf: CCPseudoRandomAlgorithm, rounds: Int) -> Data? {
-      guard let passwordData = password.data(using: .utf8) else { return nil }
-      var derivedKeyData = Data(repeating: 0, count: keyByteCount)
-      let derivedCount = derivedKeyData.count
-      let derivationStatus: Int32 = derivedKeyData.withUnsafeMutableBytes { derivedKeyBytes in
-          let keyBuffer: UnsafeMutablePointer<UInt8> =
-              derivedKeyBytes.baseAddress!.assumingMemoryBound(to: UInt8.self)
-          return saltData.withUnsafeBytes { saltBytes -> Int32 in
-              let saltBuffer: UnsafePointer<UInt8> = saltBytes.baseAddress!.assumingMemoryBound(to: UInt8.self)
-              return CCKeyDerivationPBKDF(
-                  CCPBKDFAlgorithm(kCCPBKDF2),
-                  password,
-                  passwordData.count,
-                  saltBuffer,
-                  saltData.count,
-                  prf,
-                  UInt32(rounds),
-                  keyBuffer,
-                  derivedCount)
-          }
-      }
-      return derivationStatus == kCCSuccess ? derivedKeyData : nil
-  }
+ 
 }
