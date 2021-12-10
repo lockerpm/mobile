@@ -36,6 +36,7 @@ export interface BrowseItemHeaderProps {
   toggleSelectAll: Function
   setIsLoading: Function
   isTrash?: boolean
+  isAuthenticator?: boolean
 }
 
 /**
@@ -43,7 +44,7 @@ export interface BrowseItemHeaderProps {
  */
 export const BrowseItemHeader = observer(function BrowseItemHeader(props: BrowseItemHeaderProps) {
   const { 
-    openAdd, openSort, navigation, header, onSearch, searchText, isTrash,
+    openAdd, openSort, navigation, header, onSearch, searchText, isTrash, isAuthenticator,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll, setIsLoading
   } = props
   const { uiStore } = useStores()
@@ -156,19 +157,23 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
         selectedItems.length > 0 && (
           <>
             {
-              isTrash ? (
+              isTrash || isAuthenticator ? (
                 <>
-                  <Button
-                    preset="link"
-                    onPress={handleRestore}
-                    style={{ marginLeft: 20 }}
-                  >
-                    <FontAwesomeIcon
-                      name="repeat"
-                      size={17}
-                      color={color.textBlack}
-                    />
-                  </Button>
+                  {
+                    isTrash && (
+                      <Button
+                        preset="link"
+                        onPress={handleRestore}
+                        style={{ marginLeft: 20 }}
+                      >
+                        <FontAwesomeIcon
+                          name="repeat"
+                          size={17}
+                          color={color.textBlack}
+                        />
+                      </Button>
+                    )
+                  }
 
                   <Button
                     preset="link"
@@ -266,9 +271,9 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
       <DeleteConfirmModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
-        onConfirm={isTrash ? handlePermaDelete : handleDelete}
-        title={isTrash ? translate('trash.perma_delete') : translate('trash.to_trash')}
-        desc={isTrash ? translate('trash.perma_delete_desc') : translate('trash.to_trash_desc')}
+        onConfirm={isTrash || isAuthenticator ? handlePermaDelete : handleDelete}
+        title={isTrash || isAuthenticator ? translate('trash.perma_delete') : translate('trash.to_trash')}
+        desc={isTrash || isAuthenticator ? translate('trash.perma_delete_desc') : translate('trash.to_trash_desc')}
         btnText="OK"
       />
     </Header>
