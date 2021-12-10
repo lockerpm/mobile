@@ -1,18 +1,14 @@
 import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Button, Header, FloatingInput, PasswordStrength } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
+import { commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
-import { useStores } from "../../../../models"
 
 
-export const ChangeMasterPasswordScreen = observer(function ChangeMasterPasswordScreen() {
+export const ChangeMasterPasswordScreen = function ChangeMasterPasswordScreen() {
   const navigation = useNavigation()
-  const { getPasswordStrength, changeMasterPassword, translate } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { getPasswordStrength, changeMasterPassword, translate, color } = useMixins()
 
   const [isLoading, setIsLoading] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(-1)
@@ -87,4 +83,4 @@ export const ChangeMasterPasswordScreen = observer(function ChangeMasterPassword
       </View>
     </Layout>
   )
-})
+}

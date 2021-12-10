@@ -6,7 +6,7 @@ import { Text } from "../../text/text"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import find from 'lodash/find'
 import { useStores } from "../../../models"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../theme"
+import { commonStyles, fontSize } from "../../../theme"
 import { FloatingInput } from "../../floating-input"
 import { useMixins } from "../../../services/mixins"
 import { OwnershipSelectionModal } from "../cipher-action/ownership-selection-modal"
@@ -34,8 +34,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
     organizationId, collectionIds, setOrganizationId, setCollectionIds
   } = props
   const { folderStore, user, uiStore } = useStores()
-  const { translate, getTeam } = useMixins()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, getTeam, color } = useMixins()
 
   const [showOwnershipSelectionModal, setShowOwnershipSelectionModal] = useState(false)
 

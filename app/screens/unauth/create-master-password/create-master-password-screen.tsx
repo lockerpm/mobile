@@ -4,7 +4,7 @@ import { Alert, View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput, PasswordStrength } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { color as colorLight, colorDark, fontSize } from "../../../theme"
+import { fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
 
@@ -12,9 +12,8 @@ import { APP_ICON } from "../../../common/mappings"
 export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
   const navigation = useNavigation()
   const { logout, registerLocker, translate, sessionLogin } = useMixins()
-  const { user, uiStore } = useStores()
-  const { getPasswordStrength } = useMixins()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { user } = useStores()
+  const { getPasswordStrength, color } = useMixins()
 
   // Params
   const [masterPassword, setMasterPassword] = useState('')

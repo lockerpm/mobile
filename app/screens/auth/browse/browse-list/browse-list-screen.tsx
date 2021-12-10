@@ -1,25 +1,21 @@
 import React from "react"
-import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Text, Button, Layout, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark } from "../../../../theme"
 import { BROWSE_ITEMS } from "../../../../common/mappings"
 import { useMixins } from "../../../../services/mixins"
-import { useStores } from "../../../../models"
 
-export const BrowseListScreen = observer(function BrowseListScreen() {
+
+export const BrowseListScreen = function BrowseListScreen() {
   const navigation = useNavigation()
-  const { translate } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, color, isDark } = useMixins()
   
   return (
     <Layout
       borderBottom
       containerStyle={{ 
-        backgroundColor: uiStore.isDark ? color.background : color.block, 
+        backgroundColor: isDark ? color.background : color.block, 
         paddingTop: 0 
       }}
       header={(
@@ -28,7 +24,7 @@ export const BrowseListScreen = observer(function BrowseListScreen() {
     >
       <View
         style={{
-          backgroundColor: uiStore.isDark ? color.block : color.background,
+          backgroundColor: isDark ? color.block : color.background,
           borderRadius: 10,
           paddingHorizontal: 14,
           marginTop: 20
@@ -68,4 +64,4 @@ export const BrowseListScreen = observer(function BrowseListScreen() {
       </View>
     </Layout>
   )
-})
+}

@@ -1,12 +1,10 @@
 import * as React from "react"
-import { observer } from "mobx-react-lite"
-import { color as colorLight, colorDark, fontSize } from "../../theme"
+import { fontSize } from "../../theme"
 import { Text } from "../text/text"
 import { StyleProp, ViewStyle, View } from "react-native"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import ProgressBar from "react-native-ui-lib/progressBar"
 import { useMixins } from "../../services/mixins"
-import { useStores } from "../../models"
 
 
 export interface PasswordStrengthProps {
@@ -18,11 +16,9 @@ export interface PasswordStrengthProps {
 /**
  * Describe your component here
  */
-export const PasswordStrength = observer(function PasswordStrength(props: PasswordStrengthProps) {
+export const PasswordStrength = function PasswordStrength(props: PasswordStrengthProps) {
   const { value, style, preset = 'progress' } = props
-  const { translate } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, color } = useMixins()
 
   const config = {
     '-1': {
@@ -94,4 +90,4 @@ export const PasswordStrength = observer(function PasswordStrength(props: Passwo
       </Text>
     </View>
   )
-})
+}

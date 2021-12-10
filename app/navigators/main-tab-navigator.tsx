@@ -4,7 +4,7 @@ import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
 import { View } from "react-native"
 import { Button, Text } from "../components"
-import { color as colorLight, colorDark, fontSize } from "../theme"
+import { fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import { useMixins } from "../services/mixins"
@@ -26,10 +26,9 @@ const Tab = createBottomTabNavigator()
 
 // @ts-ignore
 const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
-  const { translate } = useMixins()
+  const { translate, color } = useMixins()
   const { user, uiStore } = useStores()
   const insets = useSafeAreaInsets()
-  const color = uiStore.isDark ? colorDark : colorLight
   
   const mappings = {
     homeTab: {

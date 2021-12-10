@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import {Text, Button, FloatingInput } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../theme"
+import { commonStyles, fontSize } from "../../../theme"
 import { Checkbox } from "react-native-ui-lib"
 import { useStores } from "../../../models"
 
@@ -20,10 +20,9 @@ type Props = {
 
 
 export const Otp = observer(function Otp(props: Props) {
-  const { user, uiStore } = useStores()
-  const { translate, notify } = useMixins()
+  const { user } = useStores()
+  const { translate, notify, color } = useMixins()
   const { goBack, method, email, username, password, onLoggedIn } = props
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // ------------------ Params -----------------------
 

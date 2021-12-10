@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { TextStyle, View, Switch } from "react-native"
 import { Layout, Text, Header, Select } from "../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
@@ -22,10 +22,9 @@ type ScreenProp = RouteProp<PrimaryParamList, 'settings'>;
 export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { notify, isBiometricAvailable, translate } = useMixins()
+  const { notify, isBiometricAvailable, translate, color } = useMixins()
   const route = useRoute<ScreenProp>()
   const { fromIntro } = route.params
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // ----------------------- PARAMS -----------------------
 

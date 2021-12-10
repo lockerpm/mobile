@@ -1,9 +1,7 @@
 import React, { useState } from "react"
 import { View } from "react-native"
 import { Button, Header, SearchBar, Text } from "../../../../components"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
-import { useStores } from "../../../../models"
-import { observer } from "mobx-react-lite"
+import { commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
@@ -33,14 +31,12 @@ interface Props {
   navigation: any
 }
 
-export const ItemsHeader = observer((props: Props) => {
+export const ItemsHeader = (props: Props) => {
   const { 
     openAdd, openSort, onSearch, searchText, setIsLoading, navigation,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll
   } = props
-  const { uiStore } = useStores()
-  const { translate, toTrashCiphers } = useMixins()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, toTrashCiphers, color, isDark } = useMixins()
 
   // ----------------------- PARAMS ------------------------
 
@@ -60,7 +56,7 @@ export const ItemsHeader = observer((props: Props) => {
         onPress={() => openSort && openSort()}
       >
         {
-          uiStore.isDark ? (
+          isDark ? (
             <ConfigIconLight height={17} />
           ) : (
             <ConfigIcon height={17} />
@@ -73,7 +69,7 @@ export const ItemsHeader = observer((props: Props) => {
         onPress={() => openAdd && openAdd()}
       >
         {
-          uiStore.isDark ? (
+          isDark ? (
             <PlusIconLight height={18} />
           ) : (
             <PlusIcon height={18} />
@@ -201,4 +197,4 @@ export const ItemsHeader = observer((props: Props) => {
       />
     </Header>
   )
-})
+}

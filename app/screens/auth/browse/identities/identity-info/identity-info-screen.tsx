@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles } from "../../../../../theme"
+import { commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
@@ -16,10 +16,9 @@ import { useMixins } from "../../../../../services/mixins"
 
 export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
   const navigation = useNavigation()
-  const { cipherStore, uiStore } = useStores()
+  const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-  const { translate } = useMixins()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, color } = useMixins()
 
   const [showAction, setShowAction] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
