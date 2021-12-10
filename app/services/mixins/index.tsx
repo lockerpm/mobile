@@ -17,7 +17,7 @@ import { GET_LOGO_URL, GOOGLE_CLIENT_ID } from '../../config/constants'
 import i18n from "i18n-js"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { saveShared } from '../../utils/keychain'
+import { AutofillDataType, loadShared, saveShared } from '../../utils/keychain'
 import { GeneralApiProblem } from '../api/api-problem'
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
 import { FolderView } from '../../../core/models/view/folderView'
@@ -71,6 +71,7 @@ const defaultData = {
   importCiphers: async (importResult) => { return { kind: 'unknown' } },
   loadPasswordsHealth: async () => {},
   reloadCache: async () => {},
+  syncAutofillData: async () => {},
 
   // Supporting methods
   getRouteName: async () => { return '' },
@@ -361,8 +362,6 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
   // Sync
   const getSyncData = async () => {
     try {
-
-      
       if (cipherStore.isSynching) {
         return { kind: 'synching' }
       }
@@ -401,30 +400,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       user.setFingerprint(fingerprint.join('-'))
 
       // Save to shared keychain for autofill service
-      const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-      const passwordRes = await getCiphers({
-        filters: [
-          (c : CipherView) => c.type === CipherType.Login && c.login.uri
-        ],
-        searchText: '',
-        deleted: false
-      })
-      const passwordData = passwordRes.map((c: CipherView) => ({
-        id: c.id,
-        name: c.name,
-        uri: c.login.uri || '',
-        username: c.login.username || '',
-        password: c.login.password || '',
-        isOwner: !c.organizationId
-      }))
-
-      const sharedData = {
-        passwords: passwordData,
-        deleted: [],
-        authen: { email: user.email, hashPass: hashPasswordAutofill },
-        faceIdEnabled: user.isBiometricUnlock
-      }
-      await saveShared('autofill', JSON.stringify(sharedData))
+      await _updateAutofillData()
 
       cipherStore.setIsSynching(false)
       return { kind: 'ok' }
@@ -521,6 +497,78 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     }
   }
 
+  // Store password for autofill
+  const _updateAutofillData = async () => {
+    const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
+    const passwordRes = await getCiphers({
+      filters: [
+        (c : CipherView) => c.type === CipherType.Login && c.login.username && c.login.password
+      ],
+      searchText: '',
+      deleted: false
+    })
+    const passwordData = passwordRes.map((c: CipherView) => ({
+      id: c.id,
+      name: c.name,
+      uri: c.login.uri || '',
+      username: c.login.username || '',
+      password: c.login.password || '',
+      isOwner: !c.organizationId
+    }))
+
+    const sharedData: AutofillDataType = {
+      passwords: passwordData,
+      deleted: [],
+      authen: { email: user.email, hashPass: hashPasswordAutofill },
+      faceIdEnabled: user.isBiometricUnlock
+    }
+    await saveShared('autofill', JSON.stringify(sharedData))
+  }
+
+  // Sync autofill data
+  const syncAutofillData = async () => {
+    const credentials = await loadShared()
+    if (!credentials) {
+      return
+    }
+
+    let hasUpdate = false
+    const sharedData: AutofillDataType = JSON.parse(credentials.password)
+    
+    // Delete passwords
+    if (sharedData.deleted) {
+      await _offlineDeleteCiphers(sharedData.deleted.map(c => c.id))
+      hasUpdate = true
+    }
+
+    // Create passwords
+    if (sharedData.passwords) {
+      for (let cipher of sharedData.passwords) {
+        if (!cipher.id) {
+          const payload = newCipher(CipherType.Login)
+          const data = new LoginView()
+          data.username = cipher.username
+          data.password = cipher.password
+          if (cipher.uri) {
+            const uriView = new LoginUriView()
+            uriView.uri = cipher.uri
+            data.uris = [uriView]
+          }
+          payload.name = cipher.name
+          payload.login = data
+          await _offlineCreateCipher(payload, [])
+          hasUpdate = true
+        }
+      }
+    }
+
+    await _updateAutofillData()
+
+    if (hasUpdate && !uiStore.isOffline) {
+      await _syncOfflineData()
+    }
+  }
+
   // Reload offline cache
   const reloadCache = async () => {
     await cipherService.clearCache()
@@ -531,6 +579,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
+    await _updateAutofillData()
   }
 
   // Load folders
@@ -1172,7 +1221,8 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     notifyApiError,
     loadPasswordsHealth,
     reloadCache,
-    importCiphers
+    importCiphers,
+    syncAutofillData
   }
 
   return (

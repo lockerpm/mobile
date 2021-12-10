@@ -102,11 +102,12 @@ export const MainNavigator = observer(function MainNavigator() {
   const navigation = useNavigation()
   const { 
     lock, getSyncData, getCipherById, loadFolders, loadCollections, logout, 
-    loadPasswordsHealth, notify, translate
+    loadPasswordsHealth, notify, translate, syncAutofillData
   } = useMixins()
   const { uiStore, user, cipherStore } = useStores()
 
   let appIsActive = true
+  let isSynchingAutofill = false
   const [socket, setSocket] = useState(null)
   const [appIsReady, setAppIsReady] = useState(false)
 
@@ -153,9 +154,22 @@ export const MainNavigator = observer(function MainNavigator() {
       return
     }
 
+    // Sync autofill data
+    if (!appIsActive && !isSynchingAutofill) {
+      isSynchingAutofill = true
+      syncAutofillData().then(() => {
+        isSynchingAutofill = false
+      }).catch(e => {
+        __DEV__ && console.log(e)
+        isSynchingAutofill = false
+      })
+    }
+
     // Active
     if (!appIsActive && user.appTimeout && user.appTimeout === -1) {
       appIsActive = true
+
+      // Check user settings to lock
       if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
         await logout()
         navigation.navigate('onBoarding')
