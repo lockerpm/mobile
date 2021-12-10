@@ -1,11 +1,10 @@
 import React, { useState } from "react"
 import { StyleProp, ViewStyle } from "react-native"
-import { observer } from "mobx-react-lite"
-import { color as colorLight, colorDark, fontSize } from "../../theme"
+import { fontSize } from "../../theme"
 import { Text } from "../text/text"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import DropDownPicker from 'react-native-dropdown-picker'
-import { useStores } from "../../models"
+import { useMixins } from "../../services/mixins"
 
 
 export interface DropdownPickerProps {
@@ -26,13 +25,12 @@ export interface DropdownPickerProps {
   zIndexInverse?: number
 }
 
-export const DropdownPicker = observer(function DropdownPicker(props: DropdownPickerProps) {
+export const DropdownPicker = function DropdownPicker(props: DropdownPickerProps) {
   const { 
     style, items, setItems, value, setValue, placeholder, loading, emptyText, 
     multiple, isDisabled, zIndex, zIndexInverse
   } = props
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { color } = useMixins()
   
   const [open, setOpen] = useState(false)
 
@@ -92,4 +90,4 @@ export const DropdownPicker = observer(function DropdownPicker(props: DropdownPi
       ) : undefined}
     />
   )
-})
+}

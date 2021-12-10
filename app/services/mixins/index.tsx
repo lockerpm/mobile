@@ -24,6 +24,8 @@ import { FolderView } from '../../../core/models/view/folderView'
 import { FolderRequest } from '../../../core/models/request/folderRequest'
 import { ImportCiphersRequest } from '../../../core/models/request/importCiphersRequest'
 import { KvpRequest } from '../../../core/models/request/kvpRequest'
+import { observer } from 'mobx-react-lite'
+import { color, colorDark } from '../../theme'
 
 const { createContext, useContext } = React
 
@@ -39,14 +41,16 @@ type GetCiphersParams = {
 // Mixins data
 
 const defaultData = {
-  //makeAutofillHashPassword: async()
+  // Data
+  color,
+  isDark: false,
+
+  // Methods
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   biometricLogin: async () => { return { kind: 'unknown' } },
   logout: async () => {},
   lock: async () => {},
   getSyncData: async () => { return { kind: 'unknown' } },
-  notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
-  randomString: () => '',
   newCipher: (type: CipherType) => { return new CipherView() },
   registerLocker: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   changeMasterPassword: async (oldPassword: string, newPassword: string) => { return { kind: 'unknown' } },
@@ -64,19 +68,23 @@ const defaultData = {
   toTrashCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
+  importCiphers: async (importResult) => { return { kind: 'unknown' } },
+  loadPasswordsHealth: async () => {},
+  reloadCache: async () => {},
+
+  // Supporting methods
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
   notifyApiError: (problem: GeneralApiProblem) => {},
-  loadPasswordsHealth: async () => {},
-  reloadCache: async () => {},
-  importCiphers: async (importResult) => { return { kind: 'unknown' } }
+  notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
+  randomString: () => '',
 }
 
 
 const MixinsContext = createContext(defaultData)
 
-export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
+export const MixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore } = useStores()
   const {
     cryptoService,
@@ -94,6 +102,11 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     auditService
   } = useCoreService()
   const insets = useSafeAreaInsets()
+
+  // ------------------------ DATA -------------------------
+
+  const isDark = uiStore.isDark
+  const themeColor = isDark ? colorDark : color
 
   // -------------------- AUTHENTICATION --------------------
 
@@ -412,7 +425,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const sharedData = {
         passwords: passwordData,
         deleted: [],
-        authen: {email: user.email, hashPass: hashPasswordAutofill} 
+        authen: { email: user.email, hashPass: hashPasswordAutofill } 
       }
       await saveShared('autofill', JSON.stringify(sharedData))
 
@@ -1129,6 +1142,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
+    color: themeColor,
+    isDark,
+
     sessionLogin,
     biometricLogin,
     logout,
@@ -1167,6 +1183,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       {props.children}
     </MixinsContext.Provider>
   )
-}
+})
 
 export const useMixins = () => useContext(MixinsContext)

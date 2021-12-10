@@ -5,7 +5,7 @@ import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, PasswordStrength
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
+import { commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -22,10 +22,9 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<PasswordEditScreenProp>()
   const { mode } = route.params
-  const { getPasswordStrength, newCipher, createCipher, updateCipher, translate } = useMixins()
+  const { getPasswordStrength, newCipher, createCipher, updateCipher, translate, color } = useMixins()
   const { cipherStore, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // ----------------- PARAMS ------------------
 

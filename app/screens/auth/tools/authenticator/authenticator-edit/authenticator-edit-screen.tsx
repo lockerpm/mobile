@@ -5,7 +5,7 @@ import {
   AutoImage as Image, Layout, Button, Header, FloatingInput
 } from "../../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
+import { commonStyles, fontSize } from "../../../../../theme"
 import { TOOLS_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
@@ -20,13 +20,12 @@ type ScreenProp = RouteProp<PrimaryParamList, 'authenticator__edit'>;
 
 export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen() {
   const navigation = useNavigation()
-  const { newCipher, createCipher, updateCipher, translate, notify } = useMixins()
-  const { uiStore, cipherStore } = useStores()
+  const { newCipher, createCipher, updateCipher, translate, notify, color } = useMixins()
+  const { cipherStore } = useStores()
   const route = useRoute<ScreenProp>()
 
   const { mode } = route.params
   const selectedCipher: CipherView = cipherStore.cipherView
-  const color = uiStore.isDark ? colorDark : colorLight
   const defaultSecretKey = (() => {
     const otp = parseOTPUri(selectedCipher.notes)
     return otp ? otp.secret : ''

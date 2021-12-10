@@ -1,11 +1,10 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
-import { observer } from "mobx-react-lite"
-import { color as colorLight, colorDark, commonStyles } from "../../../theme"
+import { commonStyles } from "../../../theme"
 import { Text } from "../../text/text"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { ActionSheetItem } from "../../action-sheet/action-sheet-item"
-import { useStores } from "../../../models"
+import { useMixins } from "../../../services/mixins"
 
 
 export interface ActionItemProps {
@@ -25,10 +24,9 @@ export interface ActionItemProps {
 /**
  * Describe your component here
  */
-export const ActionItem = observer(function ActionItem(props: ActionItemProps) {
+export const ActionItem = function ActionItem(props: ActionItemProps) {
   const { style, name, icon, textColor, action, children, iconColor, disabled } = props
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { color } = useMixins()
 
   return (
     <ActionSheetItem
@@ -62,4 +60,4 @@ export const ActionItem = observer(function ActionItem(props: ActionItemProps) {
       </View>
     </ActionSheetItem>
   )
-})
+}

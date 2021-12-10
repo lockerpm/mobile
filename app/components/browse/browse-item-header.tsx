@@ -1,14 +1,12 @@
 import React, { useState } from "react"
 import { View } from "react-native"
-import { observer } from "mobx-react-lite"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../theme"
+import { commonStyles, fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import { Header } from "../header/header"
 import { SearchBar } from "../search-bar/search-bar"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { useStores } from "../../models"
 import { useMixins } from "../../services/mixins"
 import { DeleteConfirmModal } from "../../screens/auth/browse/trash/delete-confirm-modal"
 
@@ -42,14 +40,12 @@ export interface BrowseItemHeaderProps {
 /**
  * Describe your component here
  */
-export const BrowseItemHeader = observer(function BrowseItemHeader(props: BrowseItemHeaderProps) {
+export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeaderProps) {
   const { 
     openAdd, openSort, navigation, header, onSearch, searchText, isTrash, isAuthenticator,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll, setIsLoading
   } = props
-  const { uiStore } = useStores()
-  const { translate, toTrashCiphers, restoreCiphers, deleteCiphers } = useMixins()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, toTrashCiphers, restoreCiphers, deleteCiphers, color, isDark } = useMixins()
 
   // ----------------------- PARAMS ------------------------
 
@@ -109,7 +105,7 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
         onPress={() => openSort && openSort()}
       >
         {
-          uiStore.isDark ? (
+          isDark ? (
             <ConfigIconLight height={17} />
           ) : (
             <ConfigIcon height={17} />
@@ -124,7 +120,7 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
             onPress={() => openAdd && openAdd()}
           >
             {
-              uiStore.isDark ? (
+              isDark ? (
                 <PlusIconLight height={18} />
               ) : (
                 <PlusIcon height={18} />
@@ -278,4 +274,4 @@ export const BrowseItemHeader = observer(function BrowseItemHeader(props: Browse
       />
     </Header>
   )
-})
+}

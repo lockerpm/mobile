@@ -1,22 +1,18 @@
 import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Header } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
+import { commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { SettingsItem } from "../settings/settings-item"
 import { ConfirmPassModal } from "./confirm-pass-modal"
 import { useCoreService } from "../../../../services/core-service"
-import { useStores } from "../../../../models"
 
 
-export const ExportScreen = observer(function ExportScreen() {
+export const ExportScreen = function ExportScreen() {
   const navigation = useNavigation()
-  const { translate, notify } = useMixins()
+  const { translate, notify, color } = useMixins()
   const { platformUtilsService, exportService } = useCoreService()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
   
   // ----------------------- PARAMS -----------------------
 
@@ -126,4 +122,4 @@ export const ExportScreen = observer(function ExportScreen() {
       </View> 
     </Layout>
   )
-})
+}

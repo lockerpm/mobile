@@ -1,10 +1,9 @@
-import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { StyleProp, ViewStyle, View } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { Button, Text } from '../../../../components'
-import { useStores } from '../../../../models'
-import { commonStyles, color as colorLight, colorDark } from '../../../../theme'
+import { useMixins } from '../../../../services/mixins'
+import { commonStyles } from '../../../../theme'
 
 export type SettingsItemProps = {
   style?: StyleProp<ViewStyle>
@@ -17,9 +16,8 @@ export type SettingsItemProps = {
   disabled?: boolean
 }
 
-export const SettingsItem = observer((props: SettingsItemProps) => {
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+export const SettingsItem = (props: SettingsItemProps) => {
+  const { color } = useMixins()
 
   return props.action ? (
     <Button
@@ -73,4 +71,4 @@ export const SettingsItem = observer((props: SettingsItemProps) => {
       }
     </View>
   )
-})
+}
