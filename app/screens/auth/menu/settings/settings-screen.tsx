@@ -9,6 +9,7 @@ import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
 import ReactNativeBiometrics from "react-native-biometrics"
+import { loadShared, saveShared } from "../../../../utils/keychain"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -52,7 +53,20 @@ export const SettingsScreen = observer(function SettingsScreen() {
     }
 
     user.setBiometricUnlock(true)
+    
+    // Update autofill settings
+    await updateAutofillFaceIdSetting(true)
+
     notify('success', translate('success.biometric_enabled'))
+  }
+
+  const updateAutofillFaceIdSetting = async (enabled: boolean) => {
+    const credentials = await loadShared()
+    if (credentials) {
+      const sharedData = JSON.parse(credentials.password)
+      sharedData.faceIdEnabled = enabled
+      await saveShared('autofill', JSON.stringify(sharedData))
+    }
   }
 
   // ----------------------- EFFECT -------------------------
@@ -129,7 +143,8 @@ export const SettingsScreen = observer(function SettingsScreen() {
         if (isActive){
           enableBiometric()
         } else {
-          user.setBiometricUnlock(isActive)
+          user.setBiometricUnlock(false)
+          updateAutofillFaceIdSetting(false)
         }
       }
     },
