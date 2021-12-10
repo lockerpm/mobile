@@ -12,6 +12,7 @@ import { Button, Text } from "../../../../components"
 import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { parseOTPUri, getTOTP } from "../../../../utils/totp"
+import { Checkbox } from "react-native-ui-lib"
 
 
 interface Props {
@@ -23,6 +24,11 @@ interface Props {
     orderField: string
     order: string
   }
+  isSelecting: boolean
+  setIsSelecting: Function
+  selectedItems: string[]
+  setSelectedItems: Function
+  setAllItems: Function
 }
 
 /**
@@ -30,7 +36,8 @@ interface Props {
  */
 export const OtpList = observer(function OtpList(props: Props) {
   const {
-    navigation, emptyContent, onLoadingChange, searchText, sortList
+    navigation, emptyContent, onLoadingChange, searchText, sortList,
+    isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
   const { getCiphers, translate } = useMixins()
   const { cipherStore, uiStore } = useStores()
@@ -93,6 +100,7 @@ export const OtpList = observer(function OtpList(props: Props) {
 
     // Done
     setCiphers(res)
+    setAllItems(res.map(c => c.id))
     updateOtp(res)
   }
 
@@ -122,6 +130,20 @@ export const OtpList = observer(function OtpList(props: Props) {
     return (period + 1) - Math.floor(new Date().getTime() / 1000) % period
   }
 
+  // Toggle item selection
+  const toggleItemSelection = (item: CipherView) => {
+    if (!isSelecting) {
+      setIsSelecting(true)
+    }
+    let selected = [...selectedItems]
+    if (!selected.includes(item.id)) {
+      selected.push(item.id)
+    } else {
+      selected = selected.filter(id => id !== item.id)
+    }
+    setSelectedItems(selected)
+  }
+
   // ------------------------ RENDER ----------------------------
 
   return ciphers.length ? (
@@ -146,7 +168,14 @@ export const OtpList = observer(function OtpList(props: Props) {
         renderItem={({ item, index }) => (
           <Button
             preset="link"
-            onPress={() => openActionMenu(item)}
+            onPress={() => {
+              if (isSelecting) {
+                toggleItemSelection(item)
+              } else {
+                openActionMenu(item)
+              }
+            }}
+            onLongPress={() => toggleItemSelection(item)}
             style={{
               borderBottomColor: color.line,
               borderBottomWidth: 0.5,
@@ -185,18 +214,30 @@ export const OtpList = observer(function OtpList(props: Props) {
                 />
               </View>
 
-              <CountdownCircleTimer
-                onComplete={() => {
-                  index === 0 && updateOtp()
-                  return [true, 0]
-                }}
-                size={25}
-                isPlaying
-                duration={30}
-                colors={color.primary}
-                initialRemainingTime={getRemainingTime(item.otp.period)}
-                strokeWidth={4}
-              />
+              {
+                isSelecting ? (
+                  <Checkbox
+                    value={selectedItems.includes(item.id)}
+                    color={color.primary}
+                    onValueChange={() => {
+                      toggleItemSelection(item)
+                    }}
+                  />
+                ) : (
+                  <CountdownCircleTimer
+                    onComplete={() => {
+                      index === 0 && updateOtp()
+                      return [true, 0]
+                    }}
+                    size={25}
+                    isPlaying
+                    duration={30}
+                    colors={color.primary}
+                    initialRemainingTime={getRemainingTime(item.otp.period)}
+                    strokeWidth={4}
+                  />
+                )
+              }
             </View>
           </Button>
         )}

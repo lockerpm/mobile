@@ -1064,7 +1064,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Clipboard
   const copyToClipboard = (text: string) => {
-    notify('success', translate('common.copied_to_clipboard'), 500)
+    notify('success', translate('common.copied_to_clipboard'), 1000)
     Clipboard.setString(text)
   }
 
