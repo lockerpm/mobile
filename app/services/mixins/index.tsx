@@ -39,6 +39,7 @@ type GetCiphersParams = {
 // Mixins data
 
 const defaultData = {
+  //makeAutofillHashPassword: async()
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   biometricLogin: async () => { return { kind: 'unknown' } },
   logout: async () => {},
@@ -104,6 +105,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
+      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
+      
+      // setup service offline
+      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
 
       // Offline compare
       if (uiStore.isOffline) {
@@ -206,10 +211,12 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
       const encKey = await cryptoService.makeEncKey(key)
       const hashedPassword = await cryptoService.hashPassword(masterPassword, key)
+      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
       const keys = await cryptoService.makeKeyPair(encKey[0])
 
       await cryptoService.setKey(key)
       await cryptoService.setKeyHash(hashedPassword)
+      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
       await cryptoService.setEncKey(encKey[1].encryptedString)
       await cryptoService.setEncPrivateKey(keys[1].encryptedString)
 
@@ -320,7 +327,11 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       }
   
       // Reset shared data
-      await saveShared('autofill', '[]')
+      await saveShared('autofill', JSON.stringify({
+        passwords: [],
+        deleted: [],
+        authen: { email: null, hashPass: null } 
+      }))
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       __DEV__ && console.log(e)
@@ -341,6 +352,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // Sync
   const getSyncData = async () => {
     try {
+
+      
       if (cipherStore.isSynching) {
         return { kind: 'synching' }
       }
@@ -379,6 +392,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       user.setFingerprint(fingerprint.join('-'))
 
       // Save to shared keychain for autofill service
+      const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
       const passwordRes = await getCiphers({
         filters: [
           (c : CipherView) => c.type === CipherType.Login && c.login.uri
@@ -394,10 +408,11 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         password: c.login.password || '',
         isOwner: !c.organizationId
       }))
+
       const sharedData = {
         passwords: passwordData,
         deleted: [],
-        
+        authen: {email: user.email, hashPass: hashPasswordAutofill} 
       }
       await saveShared('autofill', JSON.stringify(sharedData))
 

@@ -45,6 +45,7 @@ class CredentialIdentityStore {
   private var autofillData: String
   var passwords: [String: [[String: Any]]] = [:]    // convert autofilldata string to array
   private var keychain: Keychain
+  private var passwordAuthen: [String: String] = [:]
   
   
   var credentials: [PasswordCredential] = []
@@ -67,7 +68,9 @@ class CredentialIdentityStore {
     setAutofillData()
     
   }
-  
+  public func getPasswordAuthen() -> [String: String]{
+    return self.passwordAuthen
+  }
   public func addNewCredential(credential: PasswordCredential) {
     var newPassword: [String: Any] = [:]
     //newPassword["autofillID"] = self.passwords["passwords"]?.count
@@ -113,20 +116,23 @@ class CredentialIdentityStore {
     // reset data
     self.credentials = []
     self.otherCredentials = []
-    for (index, item) in self.passwords["passwords"]!.enumerated() {
-      let cipherUri = (item["uri"] as? String)!
-      // for autofill only
-      self.passwords["passwords"]![index]["autofillID"] = String(index)
+    if self.passwords["passwords"] != nil {
+      for (index, item) in self.passwords["passwords"]!.enumerated() {
+        let cipherUri = (item["uri"] as? String)!
+        // for autofill only
+        self.passwords["passwords"]![index]["autofillID"] = String(index)
+        
+        let credential = PasswordCredential(autofillID: String(index),name: (item["name"] as? String)!,  id: (item["id"] as? String)!, uri: (item["uri"] as? String)!, username: (item["username"] as? String)!, password: (item["password"] as? String)!, isOwner: (item["isOwner"] as? Bool)!)
       
-      let credential = PasswordCredential(autofillID: String(index),name: (item["name"] as? String)!,  id: (item["id"] as? String)!, uri: (item["uri"] as? String)!, username: (item["username"] as? String)!, password: (item["password"] as? String)!, isOwner: (item["isOwner"] as? Bool)!)
-    
-     // print(credential)
-      if self.URI.isEmpty || self.URI.contains(cipherUri.lowercased()) {
-        self.credentials.append(credential)
-      } else {
-        self.otherCredentials.append(credential)
+       // print(credential)
+        if self.URI.isEmpty || self.URI.contains(cipherUri.lowercased()) {
+          self.credentials.append(credential)
+        } else {
+          self.otherCredentials.append(credential)
+        }
       }
     }
+    
   }
   private func setKeychain(dictionary: [String: [[String: Any]]]) {
     var data = dictionary
@@ -159,6 +165,9 @@ class CredentialIdentityStore {
         }
         if let deleteList = autofillData["deleted"] as? [[String: Any]] {
           self.passwords["deleted"] = deleteList
+        }
+        if let authen = autofillData["authen"] as? [String: String] {
+          self.passwordAuthen = authen
         }
       }
       else {
