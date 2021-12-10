@@ -340,11 +340,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       }
   
       // Reset shared data
-      await saveShared('autofill', JSON.stringify({
-        passwords: [],
-        deleted: [],
-        authen: { email: null, hashPass: null } 
-      }))
+      await saveShared('autofill', '')
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       __DEV__ && console.log(e)
@@ -425,7 +421,8 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       const sharedData = {
         passwords: passwordData,
         deleted: [],
-        authen: { email: user.email, hashPass: hashPasswordAutofill } 
+        authen: { email: user.email, hashPass: hashPasswordAutofill },
+        faceIdEnabled: user.isBiometricUnlock
       }
       await saveShared('autofill', JSON.stringify(sharedData))
 

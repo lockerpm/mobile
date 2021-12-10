@@ -226,33 +226,29 @@ export const LockScreen = observer(function LockScreen() {
           }}
         />
 
-        {
-          user.isBiometricUnlock && (
-            <Button
-              isLoading={isBioUnlocking}
-              isDisabled={isBioUnlocking}
-              preset="ghost"
-              onPress={handleUnlockBiometric}
-              style={{
-                width: '100%',
-                marginVertical: 10
-              }}
-            >
-              <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginHorizontal: 5 }]}>
-                <MaterialCommunityIconsIcon
-                  name="face-recognition"
-                  size={20}
-                  color={color.textBlack}
-                />
-                <Text
-                  preset="black"
-                  text={translate("common.biometric_unlocking")}
-                  style={{ marginLeft: 7 }}
-                />
-              </View>
-            </Button>
-          )
-        }
+        <Button
+          isLoading={isBioUnlocking}
+          isDisabled={isBioUnlocking}
+          preset="ghost"
+          onPress={handleUnlockBiometric}
+          style={{
+            width: '100%',
+            marginVertical: 10
+          }}
+        >
+          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginHorizontal: 5 }]}>
+            <MaterialCommunityIconsIcon
+              name="face-recognition"
+              size={20}
+              color={color.textBlack}
+            />
+            <Text
+              preset="black"
+              text={translate("common.biometric_unlocking")}
+              style={{ marginLeft: 7 }}
+            />
+          </View>
+        </Button>
       </View>
     </Layout>
   )
