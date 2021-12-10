@@ -16,6 +16,10 @@ target 'CyStackLocker' do
 
   pod 'GoogleSignIn', '~> 6.0.2'
 
+  pod 'FontAwesome.swift'
+
+  pod 'Toast-Swift', '~> 5.0.1'
+
   pod 'react-native-randombytes', :path => '../node_modules/react-native-randombytes'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
