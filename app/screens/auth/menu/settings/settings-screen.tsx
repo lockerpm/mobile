@@ -9,7 +9,7 @@ import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
 import ReactNativeBiometrics from "react-native-biometrics"
-import { loadShared, saveShared } from "../../../../utils/keychain"
+import { AutofillDataType, loadShared, saveShared } from "../../../../utils/keychain"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -63,7 +63,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
   const updateAutofillFaceIdSetting = async (enabled: boolean) => {
     const credentials = await loadShared()
     if (credentials) {
-      const sharedData = JSON.parse(credentials.password)
+      const sharedData: AutofillDataType = JSON.parse(credentials.password)
       sharedData.faceIdEnabled = enabled
       await saveShared('autofill', JSON.stringify(sharedData))
     }

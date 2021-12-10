@@ -1,6 +1,27 @@
 import * as ReactNativeKeychain from "react-native-keychain"
 import { SHARED_KEYCHAIN_ACCESS_GROUP, SHARED_KEYCHAIN_SERVICE } from "../config/constants"
 
+
+export type AutofillDataType = {
+  passwords: {
+    id: string
+    name: string
+    uri: string
+    username: string
+    password: string
+    isOwner: boolean
+  }[]
+  deleted: {
+    id: string
+  }[]
+  authen: {
+    email: string
+    hashPass: string
+  }
+  faceIdEnabled: boolean
+}
+
+
 /**
  * Saves some credentials securely.
  *
