@@ -140,6 +140,7 @@ const SuccessToast = (props: BaseToastProps) => {
         color: color.primary,
         fontSize: fontSize.small
       }}
+      text2NumberOfLines={0}
       contentContainerStyle={{
         paddingLeft: 10
       }}
@@ -174,6 +175,7 @@ const ErrorToast = (props: BaseToastProps) => {
         color: color.error,
         fontSize: fontSize.small
       }}
+      text2NumberOfLines={0}
       contentContainerStyle={{
         paddingLeft: 10
       }}

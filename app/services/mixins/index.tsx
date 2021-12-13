@@ -26,6 +26,8 @@ import { ImportCiphersRequest } from '../../../core/models/request/importCiphers
 import { KvpRequest } from '../../../core/models/request/kvpRequest'
 import { observer } from 'mobx-react-lite'
 import { color, colorDark } from '../../theme'
+import moment from 'moment'
+
 
 const { createContext, useContext } = React
 
@@ -158,8 +160,15 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       }
 
       if (res.kind !== 'ok') {
+        if (res.kind === 'bad-data') {
+          if (res.data.code === '1008') {
+            notify('error', `${translate('error.login_locked')} ${moment.duration(res.data.wait, 'seconds').humanize()}`)
+            return res
+          }
+        }
+
         notify('error', translate('error.session_login_failed'))
-        return { kind: 'bad-data' }
+        return res
       }
 
       // Setup service
