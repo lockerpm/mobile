@@ -436,7 +436,8 @@
     "export": "Export data",
     "theme": "Theme",
     "dark_theme": "Dark",
-    "light_theme": "Light"
+    "light_theme": "Light",
+    "defaultTab": "Start Screen"
   },
   "autofill_service": {
     "ios": {

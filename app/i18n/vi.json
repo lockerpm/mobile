@@ -436,7 +436,8 @@
     "export": "Xuất dữ liệu",
     "theme": "Chủ đề",
     "dark_theme": "Tối",
-    "light_theme": "Sáng"
+    "light_theme": "Sáng",
+    "defaultTab": "Màn hình mặc định"
   },
   "autofill_service": {
     "ios": {

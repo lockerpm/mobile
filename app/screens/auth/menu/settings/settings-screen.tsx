@@ -137,6 +137,34 @@ export const SettingsScreen = observer(function SettingsScreen() {
         }
       ]
     },
+    defaultTab: {
+      value: user.defaultTab,
+      onChange: (defaultTab: string) => {
+        user.setDefaultTab(defaultTab)
+      },
+      options: [
+        {
+          label: translate('common.home'),
+          value: 'homeTab'
+        },
+        {
+          label: translate('common.browse'),
+          value: 'browseTab'
+        },
+        {
+          label: translate('authenticator.title'),
+          value: 'authenticatorTab'
+        },
+        {
+          label: translate('common.tools'),
+          value: 'toolsTab'
+        },
+        {
+          label: translate('common.menu'),
+          value: 'menuTab'
+        }
+      ]
+    },
     biometric: {
       value: user.isBiometricUnlock,
       onChage: (isActive: boolean) => {
@@ -245,7 +273,6 @@ export const SettingsScreen = observer(function SettingsScreen() {
           title={translate('settings.theme')}
           renderSelected={({ label }) => (
             <SettingsItem
-              noBorder
               style={{ width: '100%' }}
               name={translate('settings.theme')}
               right={(
@@ -255,6 +282,25 @@ export const SettingsScreen = observer(function SettingsScreen() {
           )}
         />
         {/* Theme end */}
+
+        {/* Default tab */}
+        <Select
+          value={settings.defaultTab.value}
+          onChange={settings.defaultTab.onChange}
+          options={settings.defaultTab.options}
+          title={translate('settings.defaultTab')}
+          renderSelected={({ label }) => (
+            <SettingsItem
+              noBorder
+              style={{ width: '100%' }}
+              name={translate('settings.defaultTab')}
+              right={(
+                <Text text={label} />
+              )}
+            />
+          )}
+        />
+        {/* Default tab end */}
       </View>
       {/* Account end */}
 
