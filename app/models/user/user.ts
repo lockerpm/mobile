@@ -32,6 +32,7 @@ export const UserModel = types
     teams: types.array(types.frozen()),
     plan: types.maybeNull(types.frozen()),
     invitations: types.array(types.frozen()),
+    lastSync: types.maybeNull(types.number),
 
     // User
     language: types.optional(types.string, 'en'),
@@ -107,6 +108,9 @@ export const UserModel = types
     },
     setInvitations: (invitations: object[]) => {
       self.invitations = cast(invitations)
+    },
+    setLastSync: (lastSync: number) => {
+      self.lastSync = lastSync
     },
 
     // User
@@ -302,6 +306,12 @@ export const UserModel = types
     getPolicy: async (organizationId: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getPolicy(organizationId)
+      return res
+    },
+
+    getLastUpdate: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getLastUpdate()
       return res
     }
   }))

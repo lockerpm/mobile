@@ -24,23 +24,34 @@ export const StartScreen = observer(function StartScreen() {
     const connectionState = await NetInfo.fetch()
 
     if (connectionState.isInternetReachable) {
-      setMsg(translate('start.synching'))
-      await delay(500)
-      const [syncRes, invitationsRes] = await Promise.all([
-        getSyncData(),
+      // Check if need to sync
+      const lastUpdateRes = await user.getLastUpdate()
+      if (
+        lastUpdateRes.kind !== 'ok' 
+        || !user.lastSync 
+        || user.lastSync < lastUpdateRes.data.revision_date * 1000
+      ) {
+        setMsg(translate('start.synching'))
+        const syncRes = await getSyncData()
+
+        if (syncRes.kind === 'ok') {
+          notify('success', translate('success.sync_success'))
+          user.setLastSync(Date.now())
+        } else {
+          // Prevent duplicate synchronization
+          if (syncRes.kind !== 'synching') {
+            notify('error', translate('error.sync_failed'))
+          }
+        }
+      }
+
+      // Sync teams and plan
+      setMsg(translate('start.getting_team_info'))
+      const [invitationsRes] = await Promise.all([
         user.getInvitations(),
         user.loadTeams(),
         user.loadPlan(),
       ])
-
-      // Sync handler
-      if (syncRes.kind === 'ok') {
-        notify('success', translate('success.sync_success'))
-      } else {
-        if (syncRes.kind !== 'synching') {
-          notify('error', translate('error.sync_failed'))
-        }
-      }
 
       // Invitations handler
       if (invitationsRes.kind == 'ok') {
