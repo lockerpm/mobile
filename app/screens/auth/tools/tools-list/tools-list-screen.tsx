@@ -40,7 +40,11 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
               preset="link"
               isDisabled={item.premium && (user.plan && user.plan.alias === 'pm_free')}
               onPress={() => {
-                navigation.navigate(item.routeName, { fromTools: true })
+                if (item.routeName === 'authenticator') {
+                  navigation.navigate('mainTab', { screen: 'authenticatorTab' })
+                } else {
+                  navigation.navigate(item.routeName, { fromTools: true })
+                }
               }}
               style={{
                 borderBottomColor: color.line,
