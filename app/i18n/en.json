@@ -28,6 +28,8 @@
     "help": "Help",
     "home": "Home",
     "identity": "Personal Info",
+    "item": "item",
+    "items": "items",
     "language": "Language",
     "length": "Length",
     "lock": "Lock",
@@ -106,7 +108,9 @@
     "too_many_failed_attempts": "Too many failed attempts",
     "no_team_available": "Nothing here. Join a team with the role Manager to start sharing items.",
     "no_collection_available": "You don't have access to any team folder.",
-    "not_available_offlie": "This action is unavailable in offline mode"
+    "not_available_offlie": "This action is unavailable in offline mode",
+    "login_locked": "You have been locked from accessing your account due to the team's policy. Please try again after: ",
+    "duplicate_cipher_name": "Duplicated cipher name! Please choose another name!"
   },
   "success": {
     "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation.",
@@ -121,6 +125,16 @@
     "cipher_shared": "Item shared!",
     "sync_success": "Data synchronized!",
     "will_sync_when_online": "Your data will be synced when there is an internet connection."
+  },
+  "policy": {
+    "min_password_length": "Minimum password length is {length}",
+    "max_password_length": "Maximum password length is {length}",
+    "password_composition": "Password must contain at least 1 special character",
+    "requires_lowercase": "Requires lowercase letters (abc)",
+    "requires_uppercase": "Requires uppercase letters (ABC)",
+    "requires_special": "Requires special characters (@#!$%)",
+    "requires_number": "Requires digits (0 1 2 3)",
+    "avoid_ambiguous": "Avoid ambiguous characters (O vs 0, l vs I, etc)"
   },
   "password_strength": {
     "very_weak": "Very weak",
@@ -197,6 +211,7 @@
   },
   "start": {
     "synching": "Synchronizing...",
+    "getting_team_info": "Getting your team information...",
     "decrypting": "Preparing your data..."
   },
   "biometric_intro": {
@@ -329,7 +344,10 @@
   "help": {
     "help_center": "Help Center",
     "terms": "Terms of Service",
-    "policy": "Privacy Policy"
+    "policy": "Privacy Policy",
+    "feedback": "Feedback",
+    "tell_us": "Tell us what you think",
+    "thank_you": "Thank you for your feedback!"
   },
   "menu": {
     "fingerprint": "Fingerprint",
@@ -362,7 +380,7 @@
       "desc": "Add an additional layer of security when signing in",
       "btn": "Get Started"
     },
-    "secret_key": "Your key"
+    "secret_key": "Secret key"
   },
   "pass_health": {
     "title": "Password Health",
@@ -418,7 +436,8 @@
     "export": "Export data",
     "theme": "Theme",
     "dark_theme": "Dark",
-    "light_theme": "Light"
+    "light_theme": "Light",
+    "defaultTab": "Start Screen"
   },
   "autofill_service": {
     "ios": {

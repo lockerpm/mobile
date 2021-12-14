@@ -13,12 +13,13 @@ import {
   IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, 
   CreateMasterPasswordScreen, ForgotPasswordScreen, CountrySelectorScreen
 } from "../screens"
-import { color as colorLight, colorDark, fontSize } from "../theme"
+import { fontSize } from "../theme"
 import { useStores } from "../models"
 import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Linking, View } from "react-native"
 import { observer } from "mobx-react-lite"
+import { useMixins } from "../services/mixins"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -48,8 +49,8 @@ export type RootParamList = {
 const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = observer(() => {
+  const { color } = useMixins()
   const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
 
   const handleDeepLinking = async (url: string | null) => {
     __DEV__ && console.log(`Deep link ${url}`)
@@ -125,21 +126,21 @@ const RootStack = observer(() => {
   )
 })
 
-const SuccessToast = observer((props: BaseToastProps) => {
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+const SuccessToast = (props: BaseToastProps) => {
+  const { color, isDark } = useMixins()
 
   return (
     <BaseToast
       {...props}
       style={{ 
         borderLeftColor: color.primary,
-        backgroundColor: uiStore.isDark ? color.block : color.background
+        backgroundColor: isDark ? color.block : color.background
       }}
       text2Style={{
         color: color.primary,
         fontSize: fontSize.small
       }}
+      text2NumberOfLines={0}
       contentContainerStyle={{
         paddingLeft: 10
       }}
@@ -158,23 +159,23 @@ const SuccessToast = observer((props: BaseToastProps) => {
       )}
     />
   )
-})
+}
 
-const ErrorToast = observer((props: BaseToastProps) => {
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+const ErrorToast = (props: BaseToastProps) => {
+  const { color, isDark } = useMixins()
 
   return (
     <BaseToast
       {...props}
       style={{ 
         borderLeftColor: color.error,
-        backgroundColor: uiStore.isDark ? color.block : color.background
+        backgroundColor: isDark ? color.block : color.background
       }}
       text2Style={{
         color: color.error,
         fontSize: fontSize.small
       }}
+      text2NumberOfLines={0}
       contentContainerStyle={{
         paddingLeft: 10
       }}
@@ -193,7 +194,7 @@ const ErrorToast = observer((props: BaseToastProps) => {
       )}
     />
   )
-})
+}
 
 export const RootNavigator = React.forwardRef<
   NavigationContainerRef,

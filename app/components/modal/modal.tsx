@@ -1,13 +1,12 @@
 import React, { useEffect } from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
-import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
 import Dialog from "react-native-ui-lib/dialog"
-import { commonStyles, fontSize, color as colorLight, colorDark } from "../../theme"
+import { commonStyles, fontSize } from "../../theme"
 import { Text } from "../text/text"
 import { Button } from "../button/button"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { useStores } from "../../models"
+import { useMixins } from "../../services/mixins"
 
 
 export interface ModalProps {
@@ -22,10 +21,9 @@ export interface ModalProps {
 /**
  * Describe your component here
  */
-export const Modal = observer(function Modal(props: ModalProps) {
+export const Modal = function Modal(props: ModalProps) {
   const { style, isOpen, children, onClose, onOpen, title } = props
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { color } = useMixins()
 
   const CONTAINER: ViewStyle = {
     justifyContent: "center",
@@ -80,4 +78,4 @@ export const Modal = observer(function Modal(props: ModalProps) {
       {children}
     </Dialog>
   )
-})
+}

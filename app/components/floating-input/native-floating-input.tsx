@@ -1,13 +1,11 @@
 import React, { useState } from "react"
 import { StyleProp, View, ViewStyle, TextInput, TextInputProps } from "react-native"
-import { observer } from "mobx-react-lite"
-import { color as colorLight, colorDark, fontSize } from "../../theme"
+import { fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { TextInputMask, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
 import { useMixins } from "../../services/mixins"
-import { useStores } from "../../models"
 
 
 export interface NativeFloatingInputProps extends TextInputProps {
@@ -30,7 +28,7 @@ export interface NativeFloatingInputProps extends TextInputProps {
 /**
  * Describe your component here
  */
-export const NativeFloatingInput = observer(function NativeFloatingInput(props: NativeFloatingInputProps) {
+export const NativeFloatingInput = function NativeFloatingInput(props: NativeFloatingInputProps) {
   const {
     style, inputStyle, isInvalid, isRequired, label, isPassword, value, placeholder,
     fixedLabel, editable = true, disabled, buttonRight, textarea, onChangeText,
@@ -38,9 +36,7 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
     ...rest
   } = props
 
-  const { copyToClipboard } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { copyToClipboard, color } = useMixins()
 
   const [isFocused, setFocus] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -172,4 +168,4 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
       </View>
     </View>
   )
-})
+}

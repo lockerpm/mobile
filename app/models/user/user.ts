@@ -32,12 +32,14 @@ export const UserModel = types
     teams: types.array(types.frozen()),
     plan: types.maybeNull(types.frozen()),
     invitations: types.array(types.frozen()),
+    lastSync: types.maybeNull(types.number),
 
     // User
     language: types.optional(types.string, 'en'),
     isBiometricUnlock: types.maybeNull(types.boolean),
-    appTimeout: types.optional(types.number, -1),
+    appTimeout: types.optional(types.number, 0),
     appTimeoutAction: types.optional(types.string, 'lock'),
+    defaultTab: types.optional(types.string, 'homeTab')
   })
   .extend(withEnvironment)
   .views((self) => ({}))
@@ -88,8 +90,9 @@ export const UserModel = types
     },
     clearSettings: () => {
       self.isBiometricUnlock = false
-      self.appTimeout = -1
+      self.appTimeout = 0
       self.appTimeoutAction = 'lock'
+      self.defaultTab = 'homeTab'
     },
     setLoggedInPw: (isLoggedInPw: boolean) => {
       self.isLoggedInPw = isLoggedInPw
@@ -108,6 +111,9 @@ export const UserModel = types
     setInvitations: (invitations: object[]) => {
       self.invitations = cast(invitations)
     },
+    setLastSync: (lastSync: number) => {
+      self.lastSync = lastSync
+    },
 
     // User
     setDeviceID: (id: string) => {
@@ -125,6 +131,9 @@ export const UserModel = types
     },
     setAppTimeoutAction: (action: string) => {
       self.appTimeoutAction = action
+    },
+    setDefaultTab: (defaultTab: string) => {
+      self.defaultTab = defaultTab
     }
   }))
   .actions((self) => ({
@@ -297,7 +306,28 @@ export const UserModel = types
         self.setPlan(res.data)
       }
       return res
-    }
+    },
+
+    getPolicy: async (organizationId: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getPolicy(organizationId)
+      return res
+    },
+
+    getLastUpdate: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getLastUpdate()
+      return res
+    },
+
+    feedback: async (description: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.sendFeedback({
+        type: 'feedback',
+        description
+      })
+      return res
+    },
   }))
 
 /**

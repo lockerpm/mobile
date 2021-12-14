@@ -31,6 +31,8 @@ export const FolderAction = (props: Props) => {
 
   const [isRenameOpen, setIsRenameOpen] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [nextModal, setNextModal] = useState<'rename' | 'deleteConfirm' | null>(null)
+
 
   // ---------------- METHODS -----------------
 
@@ -87,6 +89,19 @@ export const FolderAction = (props: Props) => {
     
     await reloadCache()
   }
+
+  const handleActionSheetClose = () => {
+    onClose()
+    switch (nextModal) {
+      case 'rename':
+        setIsRenameOpen(true)
+        break
+      case 'deleteConfirm':
+        setShowConfirmModal(true)
+        break
+    }
+    setNextModal(null)
+  }
   
   // ---------------- RENDER -----------------
 
@@ -113,7 +128,7 @@ export const FolderAction = (props: Props) => {
 
       <ActionSheet
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={handleActionSheetClose}
       >
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -141,12 +156,8 @@ export const FolderAction = (props: Props) => {
             name={translate('common.rename')}
             icon="edit"
             action={() => {
-              onLoadingChange && onLoadingChange(true)
+              setNextModal('rename')
               onClose()
-              setTimeout(() => {
-                onLoadingChange && onLoadingChange(false)
-                setIsRenameOpen(true)
-              }, 1500)
             }}
           />
 
@@ -155,12 +166,8 @@ export const FolderAction = (props: Props) => {
             icon="trash"
             textColor={color.error}
             action={() => {
-              onLoadingChange && onLoadingChange(true)
+              setNextModal('deleteConfirm')
               onClose()
-              setTimeout(() => {
-                onLoadingChange && onLoadingChange(false)
-                setShowConfirmModal(true)
-              }, 1500)
             }}
           />
         </ActionSheetContent>

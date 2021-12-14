@@ -5,7 +5,7 @@ import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
+import { commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { TextInputMaskOptionProp, TextInputMaskTypeProp } from "react-native-masked-text"
@@ -36,10 +36,9 @@ export const CardEditScreen = observer(function CardEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<CardEditScreenProp>()
   const { mode } = route.params
-  const { newCipher, createCipher, updateCipher, translate } = useMixins()
-  const { cipherStore, uiStore } = useStores()
+  const { newCipher, createCipher, updateCipher, translate, color } = useMixins()
+  const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // Params
 

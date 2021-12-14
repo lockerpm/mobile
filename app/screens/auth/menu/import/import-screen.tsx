@@ -1,9 +1,8 @@
 import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Header, Select, Text, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
+import { commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { SettingsItem } from "../settings/settings-item"
 import { useCoreService } from "../../../../services/core-service"
@@ -11,16 +10,16 @@ import DocumentPicker from 'react-native-document-picker'
 import RNFS from 'react-native-fs'
 import { CipherType } from "../../../../../core/enums"
 import { Utils } from "../../../../../core/misc/utils"
+import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 const DOMParser = require('react-native-html-parser').DOMParser
 
 
 export const ImportScreen = observer(function ImportScreen() {
   const navigation = useNavigation()
-  const { translate, notify, importCiphers } = useMixins()
+  const { translate, notify, importCiphers, color } = useMixins()
   const { importService } = useCoreService()
   const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // PARAMS
 
@@ -70,6 +69,9 @@ export const ImportScreen = observer(function ImportScreen() {
 
   const pickFile = async () => {
     try {
+      // Mark as overlay task to prevent lock when return
+      uiStore.setIsPerformOverlayTask(true)
+
       const targetFormat = formats.find(i => i.value === format)
       const targetExtension = targetFormat.label.split(' (')[1].split(')')[0]
 
@@ -108,6 +110,7 @@ export const ImportScreen = observer(function ImportScreen() {
           content = pre.textContent
         } else {
           notify('error', translate('import.invalid_data_format'))
+          setFile(fileData)
           setIsLoading(false)
           return
         }
@@ -118,6 +121,7 @@ export const ImportScreen = observer(function ImportScreen() {
         importResult = await importer.parse(content)
       } catch (e) {
         notify('error', translate('import.invalid_data_format'))
+        setFile(fileData)
         setIsLoading(false)
         return
       }
@@ -125,6 +129,7 @@ export const ImportScreen = observer(function ImportScreen() {
       if (importResult.success) {
         if (importResult.folders.length === 0 && importResult.ciphers.length === 0) {
           notify('error', translate('import.no_data'))
+          setFile(fileData)
           setIsLoading(false)
           return
         } else if (importResult.ciphers.length > 0) {
@@ -136,6 +141,7 @@ export const ImportScreen = observer(function ImportScreen() {
             badData(importResult.ciphers[last])
           ) {
             notify('error', translate('import.invalid_data_format'))
+            setFile(fileData)
             setIsLoading(false)
             return
           }
@@ -143,6 +149,7 @@ export const ImportScreen = observer(function ImportScreen() {
 
         try {
           await importCiphers(importResult)
+          setFile(fileData)
           setIsLoading(false)
           return
         } catch (error) {

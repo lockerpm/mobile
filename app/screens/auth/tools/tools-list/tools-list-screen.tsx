@@ -4,7 +4,7 @@ import { View } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Text, Button, Layout, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 import { TOOLS_ITEMS } from "../../../../common/mappings"
 import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
@@ -12,8 +12,7 @@ import { useStores } from "../../../../models"
 export const ToolsListScreen = observer(function ToolsListScreen() {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { translate } = useMixins()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, color } = useMixins()
 
   return (
     <Layout
@@ -41,7 +40,11 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
               preset="link"
               isDisabled={item.premium && (user.plan && user.plan.alias === 'pm_free')}
               onPress={() => {
-                navigation.navigate(item.routeName, { fromTools: true })
+                if (item.routeName === 'authenticator') {
+                  navigation.navigate('mainTab', { screen: 'authenticatorTab' })
+                } else {
+                  navigation.navigate(item.routeName, { fromTools: true })
+                }
               }}
               style={{
                 borderBottomColor: color.line,

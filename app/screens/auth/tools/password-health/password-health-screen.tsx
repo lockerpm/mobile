@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/core"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
 import { Button, Header, Layout, Text } from "../../../../components"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 
 // @ts-ignore
 import DataBreachScannerIcon from './data-breach-scanner.svg'
@@ -13,10 +13,9 @@ import { useStores } from "../../../../models"
 
 
 export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
-  const { translate } = useMixins()
+  const { translate, color } = useMixins()
   const navigation = useNavigation()
-  const { toolStore, uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { toolStore } = useStores()
 
   // -------------------- RENDER ----------------------
 

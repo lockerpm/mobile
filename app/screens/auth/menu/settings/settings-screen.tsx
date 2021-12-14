@@ -3,12 +3,13 @@ import { observer } from "mobx-react-lite"
 import { TextStyle, View, Switch } from "react-native"
 import { Layout, Text, Header, Select } from "../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import { PrimaryParamList } from "../../../../navigators/main-navigator"
 import ReactNativeBiometrics from "react-native-biometrics"
+import { AutofillDataType, loadShared, saveShared } from "../../../../utils/keychain"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -22,10 +23,9 @@ type ScreenProp = RouteProp<PrimaryParamList, 'settings'>;
 export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { notify, isBiometricAvailable, translate } = useMixins()
+  const { notify, isBiometricAvailable, translate, color } = useMixins()
   const route = useRoute<ScreenProp>()
   const { fromIntro } = route.params
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // ----------------------- PARAMS -----------------------
 
@@ -53,7 +53,20 @@ export const SettingsScreen = observer(function SettingsScreen() {
     }
 
     user.setBiometricUnlock(true)
+    
+    // Update autofill settings
+    await updateAutofillFaceIdSetting(true)
+
     notify('success', translate('success.biometric_enabled'))
+  }
+
+  const updateAutofillFaceIdSetting = async (enabled: boolean) => {
+    const credentials = await loadShared()
+    if (credentials) {
+      const sharedData: AutofillDataType = JSON.parse(credentials.password)
+      sharedData.faceIdEnabled = enabled
+      await saveShared('autofill', JSON.stringify(sharedData))
+    }
   }
 
   // ----------------------- EFFECT -------------------------
@@ -124,13 +137,42 @@ export const SettingsScreen = observer(function SettingsScreen() {
         }
       ]
     },
+    defaultTab: {
+      value: user.defaultTab,
+      onChange: (defaultTab: string) => {
+        user.setDefaultTab(defaultTab)
+      },
+      options: [
+        {
+          label: translate('common.home'),
+          value: 'homeTab'
+        },
+        {
+          label: translate('common.browse'),
+          value: 'browseTab'
+        },
+        {
+          label: translate('authenticator.title'),
+          value: 'authenticatorTab'
+        },
+        {
+          label: translate('common.tools'),
+          value: 'toolsTab'
+        },
+        {
+          label: translate('common.menu'),
+          value: 'menuTab'
+        }
+      ]
+    },
     biometric: {
       value: user.isBiometricUnlock,
       onChage: (isActive: boolean) => {
         if (isActive){
           enableBiometric()
         } else {
-          user.setBiometricUnlock(isActive)
+          user.setBiometricUnlock(false)
+          updateAutofillFaceIdSetting(false)
         }
       }
     },
@@ -231,7 +273,6 @@ export const SettingsScreen = observer(function SettingsScreen() {
           title={translate('settings.theme')}
           renderSelected={({ label }) => (
             <SettingsItem
-              noBorder
               style={{ width: '100%' }}
               name={translate('settings.theme')}
               right={(
@@ -241,6 +282,25 @@ export const SettingsScreen = observer(function SettingsScreen() {
           )}
         />
         {/* Theme end */}
+
+        {/* Default tab */}
+        <Select
+          value={settings.defaultTab.value}
+          onChange={settings.defaultTab.onChange}
+          options={settings.defaultTab.options}
+          title={translate('settings.defaultTab')}
+          renderSelected={({ label }) => (
+            <SettingsItem
+              noBorder
+              style={{ width: '100%' }}
+              name={translate('settings.defaultTab')}
+              right={(
+                <Text text={label} />
+              )}
+            />
+          )}
+        />
+        {/* Default tab end */}
       </View>
       {/* Account end */}
 
