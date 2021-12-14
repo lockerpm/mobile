@@ -185,32 +185,38 @@ export const FoldersScreen = observer(function FoldersScreen() {
                       )
                     }
 
-                    <View style={{ 
-                      flex: 1, 
-                      marginLeft: 12, 
-                      flexDirection: 'row', 
-                      alignItems: 'center', 
-                      flexWrap: 'wrap' 
-                    }}>
-                      <Text
-                        preset="semibold"
-                        text={
-                          (item.name || translate('folder.unassigned')) 
-                          + (item.cipherCount !== undefined ? ` (${item.cipherCount})` : '')
-                        }
-                      />
+                    <View style={{ flex: 1, marginLeft: 12 }}>
+                      <View style={{ 
+                        flexDirection: 'row', 
+                        alignItems: 'center', 
+                        flexWrap: 'wrap'
+                      }}>
+                        <Text
+                          preset="semibold"
+                          text={item.name || translate('folder.unassigned')}
+                        />
 
-                      {
-                        folderStore.notSynchedFolders.includes(item.id) && (
-                          <View style={{ marginLeft: 10 }}>
-                            <MaterialCommunityIconsIcon
-                              name="cloud-off-outline"
-                              size={22}
-                              color={color.textBlack}
-                            />
-                          </View>
-                        )
-                      }
+                        {
+                          folderStore.notSynchedFolders.includes(item.id) && (
+                            <View style={{ marginLeft: 10 }}>
+                              <MaterialCommunityIconsIcon
+                                name="cloud-off-outline"
+                                size={22}
+                                color={color.textBlack}
+                              />
+                            </View>
+                          )
+                        }
+                      </View>
+
+                      <Text
+                        text={
+                          (item.cipherCount !== undefined ? `${item.cipherCount}` : '0')
+                          + ' '
+                          + (item.cipherCount > 1 ? translate('common.items') : translate('common.item'))
+                        }
+                        style={{ fontSize: fontSize.small }}
+                      />
                     </View>
 
                     {

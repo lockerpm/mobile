@@ -864,6 +864,17 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
   // Create
   const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
     try {
+      // Check name duplication
+      const ciphers = await getCiphers({
+        deleted: false,
+        searchText: cipher.name,
+        filters: [(c: CipherView) => c.type === cipher.type && c.name === cipher.name]
+      })
+      if (ciphers.length) {
+        notify('error', translate('error.duplicate_cipher_name'))
+        return { kind: 'bad-data' }
+      }
+
       // Offline
       if (uiStore.isOffline) {
         await _offlineCreateCipher(cipher, collectionIds)

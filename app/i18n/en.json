@@ -28,6 +28,8 @@
     "help": "Help",
     "home": "Home",
     "identity": "Personal Info",
+    "item": "item",
+    "items": "items",
     "language": "Language",
     "length": "Length",
     "lock": "Lock",
@@ -107,7 +109,8 @@
     "no_team_available": "Nothing here. Join a team with the role Manager to start sharing items.",
     "no_collection_available": "You don't have access to any team folder.",
     "not_available_offlie": "This action is unavailable in offline mode",
-    "login_locked": "You have been locked from accessing your account due to the team's policy. Please try again after: "
+    "login_locked": "You have been locked from accessing your account due to the team's policy. Please try again after: ",
+    "duplicate_cipher_name": "Duplicated cipher name! Please choose another name!"
   },
   "success": {
     "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation.",
