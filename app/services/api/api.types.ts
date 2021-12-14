@@ -14,6 +14,28 @@ type SessionSnapshot = {
     private_key: string
 }
 
+export type PolicyType = {
+    avoid_ambiguous_character: boolean
+    block_mobile: boolean
+    failed_login_attempts: number | null
+    failed_login_block_time: number | null
+    failed_login_duration: number | null
+    failed_login_owner_email: boolean
+    ip_allow: string[]
+    ip_block: string[]
+    max_password_length: number | null
+    min_password_length: number | null
+    password_composition: boolean
+    require_digit: boolean
+    require_lower_case: boolean
+    require_special_character: boolean
+    require_upper_case: boolean
+    team: {
+        id: string
+        name: string
+    }
+}
+
 // ------------------ Response ------------------------
 
 export type LoginResult = { 
@@ -69,23 +91,6 @@ export type ResetPasswordWithCodeResult = {
     } 
 } | GeneralApiProblem
 
-export type GetMembersResult = {
-    kind: "ok"
-    data: {
-        access_time: number,
-        avatar: string,
-        collections: string[],
-        full_name: string,
-        id: number,
-        is_default: boolean,
-        is_primary: boolean,
-        pwd_user_id: string,
-        role: 'owner' | 'admin' | 'manager' | 'member',
-        status: 'confirmed' | 'invited',
-        username: string
-    }[]
-} | GeneralApiProblem
-
 export type GetInvitationsResult = {
     kind: "ok"
     data: {
@@ -120,6 +125,11 @@ export type CheckBreachResult = {
         pwn_count: number
         title: string
     }[]
+} | GeneralApiProblem
+
+export type GetPolicyResult = {
+    kind: 'ok',
+    data: PolicyType
 } | GeneralApiProblem
 
 // ---------------- Request data --------------------
@@ -248,12 +258,6 @@ export type CipherData = {
         title: string | null,
         username: string | null
     } | null
-}
-
-export type AddMemberData = {
-    username: string
-    role: 'admin' | 'manager' | 'member'
-    collections: string[]
 }
 
 export type ImportCipherData = {
