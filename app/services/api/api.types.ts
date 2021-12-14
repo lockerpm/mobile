@@ -132,6 +132,13 @@ export type GetPolicyResult = {
     data: PolicyType
 } | GeneralApiProblem
 
+export type GetLastUpdateResult = {
+    kind: 'ok',
+    data: {
+        revision_date: number
+    }
+} | GeneralApiProblem
+
 // ---------------- Request data --------------------
 
 export type LoginData = {

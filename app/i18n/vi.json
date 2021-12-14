@@ -208,6 +208,7 @@
   },
   "start": {
     "synching": "Đồng bộ hoá dữ liệu...",
+    "getting_team_info": "Kiểm tra thông tin team của bạn...",
     "decrypting": "Hoàn tất chuẩn bị dữ liệu..."
   },
   "biometric_intro": {

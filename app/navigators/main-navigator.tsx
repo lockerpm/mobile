@@ -115,6 +115,11 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // Sync
   const handleSync = async () => {
+    const lastUpdateRes = await user.getLastUpdate()
+    if (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= user.lastSync) {
+      return
+    }
+
     const syncRes = await getSyncData()
     if (syncRes.kind === 'ok') {
       notify('success', translate('success.sync_success'))
