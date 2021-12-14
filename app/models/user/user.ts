@@ -297,6 +297,12 @@ export const UserModel = types
         self.setPlan(res.data)
       }
       return res
+    },
+
+    getPolicy: async (organizationId: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getPolicy(organizationId)
+      return res
     }
   }))
 

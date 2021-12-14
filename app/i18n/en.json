@@ -123,6 +123,16 @@
     "sync_success": "Data synchronized!",
     "will_sync_when_online": "Your data will be synced when there is an internet connection."
   },
+  "policy": {
+    "min_password_length": "Minimum password length is {length}",
+    "max_password_length": "Maximum password length is {length}",
+    "password_composition": "Password must contain at least 1 special character",
+    "requires_lowercase": "Requires lowercase letters (abc)",
+    "requires_uppercase": "Requires uppercase letters (ABC)",
+    "requires_special": "Requires special characters (@#!$%)",
+    "requires_number": "Requires digits (0 1 2 3)",
+    "avoid_ambiguous": "Avoid ambiguous characters (O vs 0, l vs I, etc)"
+  },
   "password_strength": {
     "very_weak": "Very weak",
     "weak": "Weak",
