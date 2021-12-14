@@ -313,7 +313,16 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getLastUpdate()
       return res
-    }
+    },
+
+    feedback: async (description: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.sendFeedback({
+        type: 'feedback',
+        description
+      })
+      return res
+    },
   }))
 
 /**

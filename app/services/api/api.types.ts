@@ -275,3 +275,8 @@ export type ImportCipherData = {
         value: number
     }[]
 }
+
+export type FeedbackData = {
+    type: 'feedback' | 'support',
+    description: string
+}

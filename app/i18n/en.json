@@ -344,7 +344,10 @@
   "help": {
     "help_center": "Help Center",
     "terms": "Terms of Service",
-    "policy": "Privacy Policy"
+    "policy": "Privacy Policy",
+    "feedback": "Feedback",
+    "tell_us": "Tell us what you think",
+    "thank_you": "Thank you for your feedback!"
   },
   "menu": {
     "fingerprint": "Fingerprint",
