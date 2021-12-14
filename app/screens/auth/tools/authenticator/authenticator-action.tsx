@@ -27,6 +27,7 @@ export const AuthenticatorAction = (props: Props) => {
   // ---------------- PARAMS -----------------
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [nextModal, setNextModal] = useState<'deleteConfirm' | null>(null)
 
   // ---------------- COMPUTED -----------------
 
@@ -41,6 +42,16 @@ export const AuthenticatorAction = (props: Props) => {
       onClose && onClose()
     }
     onLoadingChange && onLoadingChange(false)
+  }
+
+  const handleActionSheetClose = () => {
+    onClose()
+    switch (nextModal) {
+      case 'deleteConfirm':
+        setShowConfirmModal(true)
+        break
+    }
+    setNextModal(null)
   }
   
   // ---------------- RENDER -----------------
@@ -62,7 +73,7 @@ export const AuthenticatorAction = (props: Props) => {
 
       <ActionSheet
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={handleActionSheetClose}
       >
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -118,12 +129,8 @@ export const AuthenticatorAction = (props: Props) => {
             icon="trash"
             textColor={color.error}
             action={() => {
-              onLoadingChange && onLoadingChange(true)
+              setNextModal('deleteConfirm')
               onClose()
-              setTimeout(() => {
-                onLoadingChange && onLoadingChange(false)
-                setShowConfirmModal(true)
-              }, 1500)
             }}
           />
         </ActionSheetContent>
