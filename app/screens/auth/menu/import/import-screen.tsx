@@ -10,13 +10,16 @@ import DocumentPicker from 'react-native-document-picker'
 import RNFS from 'react-native-fs'
 import { CipherType } from "../../../../../core/enums"
 import { Utils } from "../../../../../core/misc/utils"
+import { observer } from "mobx-react-lite"
+import { useStores } from "../../../../models"
 const DOMParser = require('react-native-html-parser').DOMParser
 
 
-export const ImportScreen = function ImportScreen() {
+export const ImportScreen = observer(function ImportScreen() {
   const navigation = useNavigation()
   const { translate, notify, importCiphers, color } = useMixins()
   const { importService } = useCoreService()
+  const { uiStore } = useStores()
 
   // PARAMS
 
@@ -66,6 +69,9 @@ export const ImportScreen = function ImportScreen() {
 
   const pickFile = async () => {
     try {
+      // Mark as overlay task to prevent lock when return
+      uiStore.setIsPerformOverlayTask(true)
+
       const targetFormat = formats.find(i => i.value === format)
       const targetExtension = targetFormat.label.split(' (')[1].split(')')[0]
 
@@ -232,4 +238,4 @@ export const ImportScreen = function ImportScreen() {
       </View> 
     </Layout>
   )
-}
+})

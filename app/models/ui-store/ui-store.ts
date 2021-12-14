@@ -10,6 +10,7 @@ export const UiStoreModel = types
     isOffline: types.maybeNull(types.boolean),
     isDark: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
+    isPerformOverlayTask: types.maybeNull(types.boolean),
 
     // Cache
     selectedCountry: types.maybeNull(types.string),
@@ -28,6 +29,10 @@ export const UiStoreModel = types
 
     setIsSelecting: (isSelecting: boolean) => {
       self.isSelecting = isSelecting
+    },
+
+    setIsPerformOverlayTask: (isPerformOverlayTask: boolean) => {
+      self.isPerformOverlayTask = isPerformOverlayTask
     },
 
     setSelectedCountry(country_code: string) {
