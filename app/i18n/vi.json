@@ -344,7 +344,10 @@
   "help": {
     "help_center": "Trung tâm trợ giúp",
     "terms": "Điều khoản dịch vụ",
-    "policy": "Chính sách bảo mật"
+    "policy": "Chính sách bảo mật",
+    "feedback": "Phản hồi & Góp ý",
+    "tell_us": "Cho chúng tôi biết ý kiến của bạn",
+    "thank_you": "Cảm ơn bạn đã góp ý cho chúng tôi!"
   },
   "menu": {
     "fingerprint": "Định danh",
