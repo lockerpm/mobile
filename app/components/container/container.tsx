@@ -2,15 +2,12 @@ import * as React from "react"
 import { ScrollView, View } from "react-native"
 import { ContainerProps } from "./container.props"
 import { OverlayLoading, Loading } from "../loading/loading"
-import { color as colorLight, colorDark } from "../../theme"
 import { ViewStyle } from "react-native"
-import { observer } from "mobx-react-lite"
-import { useStores } from "../../models"
+import { useMixins } from "../../services/mixins"
 
 
-export const Container = observer(function Container(props: ContainerProps) {
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+export const Container = function Container(props: ContainerProps) {
+  const { color } = useMixins()
 
   const preset = {
     outer: {
@@ -31,14 +28,14 @@ export const Container = observer(function Container(props: ContainerProps) {
   let borderStyle = {}
   if (props.borderTop) {
     borderStyle = {
-      borderTopWidth: 1,
+      borderTopWidth: 0.5,
       borderTopColor: color.line
     }
   }
   if (props.borderBottom) {
     borderStyle = {
       ...borderStyle,
-      borderBottomWidth: 1,
+      borderBottomWidth: 0.5,
       borderBottomColor: color.line
     }
   }
@@ -61,4 +58,4 @@ export const Container = observer(function Container(props: ContainerProps) {
       }
     </View>
   )
-})
+}

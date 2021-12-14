@@ -6,22 +6,23 @@ import { Text } from "../../text/text"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import find from 'lodash/find'
 import { useStores } from "../../../models"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../theme"
+import { commonStyles, fontSize } from "../../../theme"
 import { FloatingInput } from "../../floating-input"
 import { useMixins } from "../../../services/mixins"
 import { OwnershipSelectionModal } from "../cipher-action/ownership-selection-modal"
 
 
 export interface CipherOthersInfoProps {
-  navigation: any,
-  hasNote?: boolean,
-  note?: string,
-  onChangeNote?: Function,
-  folderId?: string,
-  organizationId: string,
-  setOrganizationId: Function,
-  collectionIds: string[],
+  navigation: any
+  hasNote?: boolean
+  note?: string
+  onChangeNote?: Function
+  folderId?: string
+  organizationId: string
+  setOrganizationId: Function
+  collectionIds: string[]
   setCollectionIds: Function
+  isDeleted?: boolean
 }
 
 /**
@@ -29,12 +30,11 @@ export interface CipherOthersInfoProps {
  */
 export const CipherOthersInfo = observer(function CipherOthersInfo(props: CipherOthersInfoProps) {
   const { 
-    navigation, hasNote, note, onChangeNote, folderId = null, 
+    navigation, hasNote, note, onChangeNote, folderId = null, isDeleted,
     organizationId, collectionIds, setOrganizationId, setCollectionIds
   } = props
   const { folderStore, user, uiStore } = useStores()
-  const { translate, getTeam } = useMixins()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, getTeam, color } = useMixins()
 
   const [showOwnershipSelectionModal, setShowOwnershipSelectionModal] = useState(false)
 
@@ -61,6 +61,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
         {/* Folder */}
         <Button
           preset="link"
+          isDisabled={isDeleted}
           onPress={() => {
             navigation.navigate('folders__select', {
               mode: 'add',
@@ -95,7 +96,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
 
         {/* Ownership */}
         <Button
-          isDisabled={uiStore.isOffline}
+          isDisabled={uiStore.isOffline || isDeleted}
           preset="link"
           onPress={() => {
             setShowOwnershipSelectionModal(true)

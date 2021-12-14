@@ -30,6 +30,7 @@ export const color = {
   primary: palette.green,
   error: palette.danger,
   warning: palette.warning,
+  white: palette.white,
 
   /**
    * Storybook background for Text stories, or any stories where

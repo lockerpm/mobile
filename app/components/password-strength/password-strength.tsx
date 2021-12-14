@@ -1,6 +1,5 @@
 import * as React from "react"
-import { observer } from "mobx-react-lite"
-import { color, fontSize } from "../../theme"
+import { fontSize } from "../../theme"
 import { Text } from "../text/text"
 import { StyleProp, ViewStyle, View } from "react-native"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -17,9 +16,9 @@ export interface PasswordStrengthProps {
 /**
  * Describe your component here
  */
-export const PasswordStrength = observer(function PasswordStrength(props: PasswordStrengthProps) {
+export const PasswordStrength = function PasswordStrength(props: PasswordStrengthProps) {
   const { value, style, preset = 'progress' } = props
-  const { translate } = useMixins()
+  const { translate, color } = useMixins()
 
   const config = {
     '-1': {
@@ -46,14 +45,14 @@ export const PasswordStrength = observer(function PasswordStrength(props: Passwo
     },
     3: {
       text: translate('password_strength.good'),
-      color: color.palette.green,
-      textColor: color.palette.green,
+      color: color.primary,
+      textColor: color.primary,
       icon: 'shield-checkmark-outline'
     },
     4: {
       text: translate('password_strength.strong'),
-      color: color.palette.green,
-      textColor: color.palette.green,
+      color: color.primary,
+      textColor: color.primary,
       icon: 'shield-checkmark'
     }
   }
@@ -91,4 +90,4 @@ export const PasswordStrength = observer(function PasswordStrength(props: Passwo
       </Text>
     </View>
   )
-})
+}

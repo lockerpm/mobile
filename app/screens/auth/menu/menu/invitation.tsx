@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { View } from "react-native"
 import { Button, Text } from "../../../../components"
-import { commonStyles, color } from "../../../../theme"
+import { commonStyles } from "../../../../theme"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
@@ -20,7 +20,7 @@ export type InvitationData = {
 
 export const Invitation = observer((props: InvitationData) => {
   const { user } = useStores()
-  const { notify, translate, notifyApiError } = useMixins()
+  const { notify, translate, notifyApiError, color, isDark } = useMixins()
   const [isLoading, setIsLoading] = useState('')
 
   const handleInvitation = async (status: 'accept' | 'reject') => {
@@ -40,7 +40,7 @@ export const Invitation = observer((props: InvitationData) => {
 
   return (
     <View style={{
-      backgroundColor: color.palette.white,
+      backgroundColor: isDark ? color.block : color.background,
       borderRadius: 10,
       paddingHorizontal: 14,
       paddingVertical: 20,

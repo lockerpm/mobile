@@ -1,10 +1,8 @@
 import * as React from "react"
 import { StyleProp, ViewStyle } from "react-native"
-import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
-import { color as colorLight, colorDark } from "../../theme"
 import { Button } from "../button/button"
-import { useStores } from "../../models"
+import { useMixins } from "../../services/mixins"
 
 
 export interface ActionSheetItemProps {
@@ -19,10 +17,9 @@ export interface ActionSheetItemProps {
 /**
  * Describe your component here
  */
-export const ActionSheetItem = observer(function ActionSheetItem(props: ActionSheetItemProps) {
+export const ActionSheetItem = function ActionSheetItem(props: ActionSheetItemProps) {
   const { style, children, onPress, disabled, border } = props
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { color } = useMixins()
 
   const CONTAINER: ViewStyle = {
     borderBottomColor: color.line, 
@@ -45,4 +42,4 @@ export const ActionSheetItem = observer(function ActionSheetItem(props: ActionSh
       {children}
     </Button>
   )
-})
+}

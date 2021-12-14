@@ -5,17 +5,18 @@ import { View } from "react-native"
 import { useMixins } from "../../../../services/mixins"
 
 interface Props {
-  isOpen: boolean,
-  onClose: () => void,
-  onSelect?: Function,
+  isOpen: boolean
+  onClose: () => void
+  onSelect?: Function
   value?: string
+  byNameOnly?: boolean
 }
 
 export const SortAction = (props: Props) => {
   const { translate } = useMixins()
-  const { isOpen, onClose, onSelect, value } = props
+  const { isOpen, onClose, onSelect, value, byNameOnly } = props
 
-  const sortOptions = [
+  const lastUpdateOptions = [
     {
       label: translate('all_items.last_updated'),
       value: 'last_updated',
@@ -31,7 +32,10 @@ export const SortAction = (props: Props) => {
         orderField: 'revisionDate',
         order: 'asc'
       }
-    },
+    }
+  ]
+
+  const nameOptions = [
     {
       label: 'A - Z',
       value: 'az',
@@ -49,6 +53,11 @@ export const SortAction = (props: Props) => {
       }
     }
   ]
+
+  let sortOptions = [...nameOptions]
+  if (!byNameOnly) {
+    sortOptions = [...lastUpdateOptions, ...sortOptions]
+  }
 
   return (
     <ActionSheet

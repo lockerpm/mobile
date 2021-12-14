@@ -20,16 +20,17 @@ export const colorDark = {
    * by their under-powered GPUs.
    */
   transparent: "rgba(0, 0, 0, 0)",
-  background: 'black',
+  background: '#131313',
   disabled: palette.gray,
   line: '#8E8E93',
-  block: '#1C1C1E',
+  block: '#313131',
   text: '#8E8E93',
-  textBlack: palette.white,
-  title: palette.white,
-  primary: palette.green,
+  textBlack: '#FDFDFD',
+  title: '#FDFDFD',
+  primary: '#62AD56',
   error: palette.danger,
   warning: palette.warning,
+  white: '#FDFDFD',
 
   /**
    * Storybook background for Text stories, or any stories where

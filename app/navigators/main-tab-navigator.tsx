@@ -4,12 +4,13 @@ import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
 import { View } from "react-native"
 import { Button, Text } from "../components"
-import { color as colorLight, colorDark, fontSize } from "../theme"
+import { fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import { useMixins } from "../services/mixins"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useStores } from "../models"
+import { observer } from "mobx-react-lite"
 
 // @ts-ignore
 import HomeIcon from './icons/home.svg'
@@ -19,17 +20,15 @@ import BrowseIcon from './icons/menu.svg'
 import ToolsIcon from './icons/settings.svg'
 // @ts-ignore
 import MenuIcon from './icons/menu-2.svg'
-import { observer } from "mobx-react-lite"
 
 
 const Tab = createBottomTabNavigator()
 
 // @ts-ignore
 const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
-  const { translate } = useMixins()
+  const { translate, color } = useMixins()
   const { user, uiStore } = useStores()
   const insets = useSafeAreaInsets()
-  const color = uiStore.isDark ? colorDark : colorLight
   
   const mappings = {
     homeTab: {
@@ -54,7 +53,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
     }
   }
 
-  return (
+  return uiStore.isSelecting ? null : (
     <View style={{ paddingBottom: insets.bottom, backgroundColor: color.background }}>
       {/* Offline mode */}
       {
@@ -69,12 +68,12 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
             <MaterialIconsIcon
               name="wifi-off"
               size={16}
-              color={color.palette.white}
+              color={color.white}
             />
             <Text
               style={{
                 fontSize: fontSize.small,
-                color: color.palette.white,
+                color: color.white,
                 marginLeft: 5
               }}
               text={translate('navigator.is_offline')}
@@ -141,7 +140,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                   (notiCount > 0) && (
                     <View
                       style={{
-                        backgroundColor: color.palette.danger,
+                        backgroundColor: color.error,
                         borderRadius: 20,
                         minWidth: 20,
                         height: 20,
@@ -155,7 +154,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                         style={{
                           fontSize: 12,
                           textAlign: 'center',
-                          color: color.palette.white,
+                          color: color.white,
                           lineHeight: 20
                         }}
                       />
@@ -177,7 +176,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
       </View>
       {/* Tab items end */}
     </View>
-  );
+  )
 })
 
 export function MainTabNavigator() {

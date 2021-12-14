@@ -7,19 +7,22 @@ import { useMixins } from "../../../../services/mixins"
 import { DeleteConfirmModal } from "../../browse/trash/delete-confirm-modal"
 import { CipherView } from "../../../../../core/models/view"
 import { parseOTPUri, getTOTP } from "../../../../utils/totp"
+import { useStores } from "../../../../models"
 
 
 type Props = {
-  isOpen?: boolean,
-  onClose?: () => void,
-  onLoadingChange?: Function,
+  navigation: any
+  isOpen?: boolean
+  onClose?: () => void
+  onLoadingChange?: Function
   cipher: CipherView
 }
 
 
 export const AuthenticatorAction = (props: Props) => {
-  const { isOpen, onClose, onLoadingChange, cipher } = props
+  const { navigation, isOpen, onClose, onLoadingChange, cipher } = props
   const { translate, copyToClipboard, deleteCiphers } = useMixins()
+  const { cipherStore } = useStores()
 
   // ---------------- PARAMS -----------------
 
@@ -97,6 +100,18 @@ export const AuthenticatorAction = (props: Props) => {
               />
             )
           }
+
+          <Divider style={{ marginVertical: 5 }} />
+
+          <ActionItem
+            name={translate('common.edit')}
+            icon="edit"
+            action={() => {
+              cipherStore.setSelectedCipher(cipher)
+              onClose()
+              navigation.navigate('authenticator__edit', { mode: 'edit' })
+            }}
+          />
 
           <ActionItem
             name={translate('common.delete')}

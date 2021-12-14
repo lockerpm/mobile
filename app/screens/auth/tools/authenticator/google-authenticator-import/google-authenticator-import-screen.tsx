@@ -1,21 +1,16 @@
 import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { useNavigation } from "@react-navigation/core"
 import { Header, Layout } from "../../../../../components"
-import { color as colorLight, colorDark } from "../../../../../theme"
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
-import { decodeGoogleAuthenticatorImport } from "../../../../../utils/totp"
-import { useStores } from "../../../../../models"
+import { decodeGoogleAuthenticatorImport, beautifyName } from "../../../../../utils/totp"
 
 
-export const GoogleAuthenticatorImportScreen = observer(function GoogleAuthenticatorImportScreen() {
+export const GoogleAuthenticatorImportScreen = function GoogleAuthenticatorImportScreen() {
   const navigation = useNavigation()
-  const { newCipher, importCiphers, translate, notify } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { newCipher, importCiphers, translate, notify, color } = useMixins()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -25,7 +20,7 @@ export const GoogleAuthenticatorImportScreen = observer(function GoogleAuthentic
       const otps = decodeGoogleAuthenticatorImport(e.data)
       const ciphers = otps.map((otp) => {
         const payload = newCipher(CipherType.TOTP)
-        payload.name = otp.account
+        payload.name = beautifyName(otp.account)
         payload.notes = `otpauth://totp/${encodeURIComponent(otp.account)}`
           + `?secret=${otp.secret}` 
           + `&issuer=${encodeURIComponent(otp.account)}`
@@ -69,4 +64,4 @@ export const GoogleAuthenticatorImportScreen = observer(function GoogleAuthentic
       />
     </Layout>
   )
-})
+}

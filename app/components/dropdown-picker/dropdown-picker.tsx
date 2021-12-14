@@ -1,11 +1,10 @@
 import React, { useState } from "react"
 import { StyleProp, ViewStyle } from "react-native"
-import { observer } from "mobx-react-lite"
-import { color as colorLight, colorDark, fontSize } from "../../theme"
+import { fontSize } from "../../theme"
 import { Text } from "../text/text"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import DropDownPicker from 'react-native-dropdown-picker'
-import { useStores } from "../../models"
+import { useMixins } from "../../services/mixins"
 
 
 export interface DropdownPickerProps {
@@ -22,17 +21,23 @@ export interface DropdownPickerProps {
   emptyText?: string
   multiple?: boolean
   isDisabled?: boolean
+  zIndex?: number
+  zIndexInverse?: number
 }
 
-export const DropdownPicker = observer(function DropdownPicker(props: DropdownPickerProps) {
-  const { style, items, setItems, value, setValue, placeholder, loading, emptyText, multiple, isDisabled } = props
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+export const DropdownPicker = function DropdownPicker(props: DropdownPickerProps) {
+  const { 
+    style, items, setItems, value, setValue, placeholder, loading, emptyText, 
+    multiple, isDisabled, zIndex, zIndexInverse
+  } = props
+  const { color } = useMixins()
   
   const [open, setOpen] = useState(false)
 
   return (
     <DropDownPicker
+      zIndex={zIndex}
+      zIndexInverse={zIndexInverse}
       disabled={isDisabled}
       disabledStyle={{
         opacity: 0.4
@@ -85,4 +90,4 @@ export const DropdownPicker = observer(function DropdownPicker(props: DropdownPi
       ) : undefined}
     />
   )
-})
+}

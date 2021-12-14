@@ -1,19 +1,15 @@
 import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
 import { View, TouchableOpacity } from "react-native"
 import { AutoImage as Image, Text, Layout, Button } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../theme"
+import { commonStyles, fontSize } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../services/mixins"
-import { useStores } from "../../../models"
 
 
-export const IntroScreen = observer(function IntroScreen() {
-  const { translate } = useMixins()
+export const IntroScreen = function IntroScreen() {
+  const { translate, color } = useMixins()
   const navigation = useNavigation()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
 
   const tabs = [
     {
@@ -129,4 +125,4 @@ export const IntroScreen = observer(function IntroScreen() {
       </View>
     </Layout>
   )
-})
+}

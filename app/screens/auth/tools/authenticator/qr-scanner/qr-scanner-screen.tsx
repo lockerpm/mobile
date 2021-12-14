@@ -1,21 +1,16 @@
 import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { useNavigation } from "@react-navigation/core"
 import { Header, Layout } from "../../../../../components"
-import { color as colorLight, colorDark } from "../../../../../theme"
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
-import { parseOTPUri, getTOTP } from "../../../../../utils/totp"
-import { useStores } from "../../../../../models"
+import { parseOTPUri, getTOTP, beautifyName } from "../../../../../utils/totp"
 
 
-export const QRScannerScreen = observer(function QRScannerScreen() {
+export const QRScannerScreen = function QRScannerScreen() {
   const navigation = useNavigation()
-  const { newCipher, createCipher, translate, notify } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { newCipher, createCipher, translate, notify, color } = useMixins()
   
   const [isLoading, setIsLoading] = useState(false)
 
@@ -37,7 +32,7 @@ export const QRScannerScreen = observer(function QRScannerScreen() {
   const handleSave = async (name: string, note: string) => {
     setIsLoading(true)
     const payload = newCipher(CipherType.TOTP)
-    payload.name = name
+    payload.name = beautifyName(name)
     payload.notes = note
 
     const res = await createCipher(payload, 0, [])
@@ -70,4 +65,4 @@ export const QRScannerScreen = observer(function QRScannerScreen() {
       />
     </Layout>
   )
-})
+}

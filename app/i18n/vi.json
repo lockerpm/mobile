@@ -61,9 +61,11 @@
     "second": "giây",
     "seconds": "giây",
     "select": "Chọn",
+    "selected": "Đã chọn",
     "settings": "Cài đặt",
     "security": "Bảo mật",
     "share": "Chia sẻ",
+    "show_password": "Hiện mật khẩu",
     "sign_up": "Đăng ký",
     "skip": "Bỏ qua",
     "sort": "Sắp xếp",
@@ -104,7 +106,8 @@
     "too_many_failed_attempts": "Quá nhiều lần thử không thành công",
     "no_team_available": "Không có dữ liệu. Tham gia nhóm với vai trò Quản lý để sử dụng tính năng chia sẻ.",
     "no_collection_available": "Bạn không có quyền truy cập vào bất kỳ thư mục chung nào.",
-    "not_available_offlie": "Không thể thực hiện hành động này trong chế độ ngoại tuyến"
+    "not_available_offlie": "Không thể thực hiện hành động này trong chế độ ngoại tuyến",
+    "login_locked": "Tài khoản của bạn đã bị khoá do chính sách bảo mật của team. Thử lại sau: "
   },
   "success": {
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",

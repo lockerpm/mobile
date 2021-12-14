@@ -4,7 +4,7 @@ import { View } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Text, Button, Layout, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 import { TOOLS_ITEMS } from "../../../../common/mappings"
 import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
@@ -12,19 +12,22 @@ import { useStores } from "../../../../models"
 export const ToolsListScreen = observer(function ToolsListScreen() {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { translate } = useMixins()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, color } = useMixins()
 
   return (
     <Layout
-      containerStyle={{ backgroundColor: color.block, paddingTop: 0 }}
+      borderBottom
+      containerStyle={{ 
+        backgroundColor: uiStore.isDark ? color.background : color.block, 
+        paddingTop: 0 
+      }}
       header={(
         <Text preset="largeHeader" text={translate('common.tools')} />
       )}
     >
       <View
         style={{
-          backgroundColor: color.background,
+          backgroundColor: uiStore.isDark ? color.block : color.background,
           borderRadius: 10,
           paddingHorizontal: 14,
           marginTop: 20

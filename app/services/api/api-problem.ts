@@ -36,7 +36,7 @@ export type GeneralApiProblem =
   /**
    * The data we received is not in the expected format.
    */
-  | { kind: "bad-data" }
+  | { kind: "bad-data"; data?: any }
 
 /**
  * Attempts to get a common cause of problems from an api response.
@@ -57,6 +57,8 @@ export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProb
       return { kind: "unknown", temporary: true }
     case "CLIENT_ERROR":
       switch (response.status) {
+        case 400:
+          return { kind: 'bad-data', data: response.data }
         case 401:
           return { kind: "unauthorized" }
         case 403:

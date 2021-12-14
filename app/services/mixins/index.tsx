@@ -17,13 +17,17 @@ import { GET_LOGO_URL, GOOGLE_CLIENT_ID } from '../../config/constants'
 import i18n from "i18n-js"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { saveShared } from '../../utils/keychain'
+import { AutofillDataType, loadShared, saveShared } from '../../utils/keychain'
 import { GeneralApiProblem } from '../api/api-problem'
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
 import { FolderView } from '../../../core/models/view/folderView'
 import { FolderRequest } from '../../../core/models/request/folderRequest'
 import { ImportCiphersRequest } from '../../../core/models/request/importCiphersRequest'
 import { KvpRequest } from '../../../core/models/request/kvpRequest'
+import { observer } from 'mobx-react-lite'
+import { color, colorDark } from '../../theme'
+import moment from 'moment'
+
 
 const { createContext, useContext } = React
 
@@ -39,14 +43,16 @@ type GetCiphersParams = {
 // Mixins data
 
 const defaultData = {
-  //makeAutofillHashPassword: async()
+  // Data
+  color,
+  isDark: false,
+
+  // Methods
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   biometricLogin: async () => { return { kind: 'unknown' } },
   logout: async () => {},
   lock: async () => {},
   getSyncData: async () => { return { kind: 'unknown' } },
-  notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
-  randomString: () => '',
   newCipher: (type: CipherType) => { return new CipherView() },
   registerLocker: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   changeMasterPassword: async (oldPassword: string, newPassword: string) => { return { kind: 'unknown' } },
@@ -64,19 +70,24 @@ const defaultData = {
   toTrashCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
+  importCiphers: async (importResult) => { return { kind: 'unknown' } },
+  loadPasswordsHealth: async () => {},
+  reloadCache: async () => {},
+  syncAutofillData: async () => {},
+
+  // Supporting methods
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
   notifyApiError: (problem: GeneralApiProblem) => {},
-  loadPasswordsHealth: async () => {},
-  reloadCache: async () => {},
-  importCiphers: async (importResult) => { return { kind: 'unknown' } }
+  notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
+  randomString: () => '',
 }
 
 
 const MixinsContext = createContext(defaultData)
 
-export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
+export const MixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore } = useStores()
   const {
     cryptoService,
@@ -95,6 +106,11 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   } = useCoreService()
   const insets = useSafeAreaInsets()
 
+  // ------------------------ DATA -------------------------
+
+  const isDark = uiStore.isDark
+  const themeColor = isDark ? colorDark : color
+
   // -------------------- AUTHENTICATION --------------------
 
   // Session login
@@ -106,6 +122,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
+      
       // setup service offline
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
 
@@ -143,8 +160,15 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       }
 
       if (res.kind !== 'ok') {
+        if (res.kind === 'bad-data') {
+          if (res.data.code === '1008') {
+            notify('error', `${translate('error.login_locked')} ${moment.duration(res.data.wait, 'seconds').humanize()}`)
+            return res
+          }
+        }
+
         notify('error', translate('error.session_login_failed'))
-        return { kind: 'bad-data' }
+        return res
       }
 
       // Setup service
@@ -326,7 +350,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       }
   
       // Reset shared data
-      await saveShared('autofill', '[]')
+      await saveShared('autofill', '')
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       __DEV__ && console.log(e)
@@ -347,8 +371,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // Sync
   const getSyncData = async () => {
     try {
-
-      
       if (cipherStore.isSynching) {
         return { kind: 'synching' }
       }
@@ -387,30 +409,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       user.setFingerprint(fingerprint.join('-'))
 
       // Save to shared keychain for autofill service
-      const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-      // console.log("-------------------------------------------------------------------------------------------", hashPasswordAutofill)
-      const passwordRes = await getCiphers({
-        filters: [
-          (c : CipherView) => c.type === CipherType.Login && c.login.uri
-        ],
-        searchText: '',
-        deleted: false
-      })
-      const passwordData = passwordRes.map((c: CipherView) => ({
-        id: c.id,
-        name: c.name,
-        uri: c.login.uri || '',
-        username: c.login.username || '',
-        password: c.login.password || '',
-        isOwner: !c.organizationId
-      }))
-
-      const sharedData = {
-        passwords: passwordData,
-        deleted: [],
-        authen: {email: user.email, hashPass: hashPasswordAutofill} 
-      }
-      await saveShared('autofill', JSON.stringify(sharedData))
+      await _updateAutofillData()
 
       cipherStore.setIsSynching(false)
       return { kind: 'ok' }
@@ -507,6 +506,78 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
   }
 
+  // Store password for autofill
+  const _updateAutofillData = async () => {
+    const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
+    const passwordRes = await getCiphers({
+      filters: [
+        (c : CipherView) => c.type === CipherType.Login && c.login.username && c.login.password
+      ],
+      searchText: '',
+      deleted: false
+    })
+    const passwordData = passwordRes.map((c: CipherView) => ({
+      id: c.id,
+      name: c.name,
+      uri: c.login.uri || '',
+      username: c.login.username || '',
+      password: c.login.password || '',
+      isOwner: !c.organizationId
+    }))
+
+    const sharedData: AutofillDataType = {
+      passwords: passwordData,
+      deleted: [],
+      authen: { email: user.email, hashPass: hashPasswordAutofill },
+      faceIdEnabled: user.isBiometricUnlock
+    }
+    await saveShared('autofill', JSON.stringify(sharedData))
+  }
+
+  // Sync autofill data
+  const syncAutofillData = async () => {
+    const credentials = await loadShared()
+    if (!credentials) {
+      return
+    }
+
+    let hasUpdate = false
+    const sharedData: AutofillDataType = JSON.parse(credentials.password)
+    
+    // Delete passwords
+    if (sharedData.deleted) {
+      await _offlineDeleteCiphers(sharedData.deleted.map(c => c.id))
+      hasUpdate = true
+    }
+
+    // Create passwords
+    if (sharedData.passwords) {
+      for (let cipher of sharedData.passwords) {
+        if (!cipher.id) {
+          const payload = newCipher(CipherType.Login)
+          const data = new LoginView()
+          data.username = cipher.username
+          data.password = cipher.password
+          if (cipher.uri) {
+            const uriView = new LoginUriView()
+            uriView.uri = cipher.uri
+            data.uris = [uriView]
+          }
+          payload.name = cipher.name
+          payload.login = data
+          await _offlineCreateCipher(payload, [])
+          hasUpdate = true
+        }
+      }
+    }
+
+    await _updateAutofillData()
+
+    if (hasUpdate && !uiStore.isOffline) {
+      await _syncOfflineData()
+    }
+  }
+
   // Reload offline cache
   const reloadCache = async () => {
     await cipherService.clearCache()
@@ -517,6 +588,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
+    await _updateAutofillData()
   }
 
   // Load folders
@@ -1046,7 +1118,10 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       position: 'top',
       autoHide: true,
       visibilityTime: duration ? duration : type === 'error' ? 3000 : 1500,
-      topOffset: insets.top + 10
+      topOffset: insets.top + 10,
+      onPress: () => {
+        Toast.hide()
+      }
     })
   }
 
@@ -1057,12 +1132,15 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Clipboard
   const copyToClipboard = (text: string) => {
-    notify('success', translate('common.copied_to_clipboard'), 500)
+    notify('success', translate('common.copied_to_clipboard'), 1000)
     Clipboard.setString(text)
   }
 
   // Get website logo
   const getWebsiteLogo = (uri: string) => {
+    if (!uri) {
+      return { uri: null }
+    }
     const imgUri = `${GET_LOGO_URL}/${uri.split('//')[1]}?size=40`
     return { uri: imgUri }
   }
@@ -1119,6 +1197,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
+    color: themeColor,
+    isDark,
+
     sessionLogin,
     biometricLogin,
     logout,
@@ -1149,7 +1230,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     notifyApiError,
     loadPasswordsHealth,
     reloadCache,
-    importCiphers
+    importCiphers,
+    syncAutofillData
   }
 
   return (
@@ -1157,6 +1239,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       {props.children}
     </MixinsContext.Provider>
   )
-}
+})
 
 export const useMixins = () => useContext(MixinsContext)

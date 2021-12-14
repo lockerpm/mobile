@@ -53,7 +53,7 @@
     "ownership": "Ownership",
     "password": "Password",
     "regenerate": "Regenerate",
-    "reject": "reject",
+    "reject": "Reject",
     "rename": "Rename",
     "restore": "Restore",
     "save": "Save",
@@ -61,9 +61,11 @@
     "second": "second",
     "seconds": "seconds",
     "select": "Select",
+    "selected": "Selected",
     "settings": "Settings",
     "security": "Security",
     "share": "Share",
+    "show_password": "Show password",
     "sign_up": "Sign up",
     "skip": "Skip",
     "sort": "Sort",
@@ -104,7 +106,8 @@
     "too_many_failed_attempts": "Too many failed attempts",
     "no_team_available": "Nothing here. Join a team with the role Manager to start sharing items.",
     "no_collection_available": "You don't have access to any team folder.",
-    "not_available_offlie": "This action is unavailable in offline mode"
+    "not_available_offlie": "This action is unavailable in offline mode",
+    "login_locked": "You have been locked from accessing your account due to the team's policy. Please try again after: "
   },
   "success": {
     "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation.",
@@ -360,7 +363,7 @@
       "desc": "Add an additional layer of security when signing in",
       "btn": "Get Started"
     },
-    "secret_key": "Your key"
+    "secret_key": "Secret key"
   },
   "pass_health": {
     "title": "Password Health",

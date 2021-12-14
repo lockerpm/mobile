@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Header, Text, Button, PasswordStrength } from "../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { useMixins } from "../../../../services/mixins"
 import { useCoreService } from "../../../../services/core-service"
@@ -16,12 +16,11 @@ type ScreenProp = RouteProp<PrimaryParamList, 'passwordGenerator'>;
 
 export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen() {
   const navigation = useNavigation()
-  const { getPasswordStrength, copyToClipboard, translate } = useMixins()
+  const { getPasswordStrength, copyToClipboard, translate, color } = useMixins()
   const { passwordGenerationService } = useCoreService()
-  const { cipherStore, uiStore } = useStores()
+  const { cipherStore } = useStores()
   const route = useRoute<ScreenProp>()
   const { fromTools } = route.params
-  const color = uiStore.isDark ? colorDark : colorLight
 
   const [password, setPassword] = useState('')
   const [passwordLen, setPasswordLen] = useState(16)
@@ -79,7 +78,6 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         backgroundColor: color.block,
         paddingHorizontal: 0
       }}
-      borderBottom
       header={(
         <Header
           title={translate('pass_generator.title')}
@@ -164,8 +162,8 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
         />
         <Slider
           // value={passwordLen}
-          thumbTintColor={color.palette.green}
-          minimumTrackTintColor={color.palette.green}
+          thumbTintColor={color.primary}
+          minimumTrackTintColor={color.primary}
           maximumTrackTintColor={color.line}
           minimumValue={8}
           maximumValue={64}
@@ -182,7 +180,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
                 key={item.key}
                 value={options[item.key]}
                 accessibilityLabel={item.key}
-                color={color.palette.green}
+                color={color.primary}
                 label={item.label}
                 onValueChange={checked => {
                   const newOptions = { ...options }
