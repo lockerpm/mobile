@@ -35,7 +35,6 @@ export interface CipherListProps {
   folderId?: string
   collectionId?: string
   organizationId?: string
-  isPersonalUndefined?: boolean
   isSelecting: boolean
   setIsSelecting: Function
   selectedItems: string[]
@@ -48,8 +47,8 @@ export interface CipherListProps {
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
   const {
-    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId,
-    collectionId, organizationId, isPersonalUndefined,
+    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList,
+    folderId, collectionId, organizationId,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
   const { getWebsiteLogo, getCiphers, translate, color } = useMixins()
@@ -137,10 +136,14 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       res = res.filter(i => i.folderId === folderId)
     }
     if (collectionId !== undefined) {
-      res = res.filter(i => i.collectionIds.includes(collectionId))
+      if (collectionId === null) {
+        res = res.filter(i => !i.collectionIds.length)
+      } else {
+        res = res.filter(i => i.collectionIds.includes(collectionId))
+      }
     }
-    if (isPersonalUndefined) {
-      res = res.filter(i => !i.collectionIds.length)
+    if (organizationId === undefined && folderId === null) {
+      res = res.filter(i => !i.organizationId)
     }
     if (organizationId !== undefined) {
       if (organizationId === null) {
