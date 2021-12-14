@@ -15,6 +15,14 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* CyStackLockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CyStackLockerTests.m */; };
+		7C0685F32758F1210003C996 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0685F22758F1210003C996 /* CustomTextField.swift */; };
+		7C633CE02761ED1700140CAA /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 7C633CDF2761ED1700140CAA /* Toast */; };
+		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
+		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
+		7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */; };
+		7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */; };
+		7C84A5622755DD0400482CB5 /* CredentialIdentityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */; };
+		7CD96CEB275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD96CEA275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A4B148D367B119F99EC2C2E5 /* libPods-CyStackLocker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EADEA568884090C1B008E181 /* libPods-CyStackLocker.a */; };
 		CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
@@ -96,6 +104,15 @@
 		6102F80C8AA04C85ADA0AEE2 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		643666B7E5804C808CAF1052 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		771E1616CFA147CD9E433C3F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		7C0685F22758F1210003C996 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		7C633CDB2761EA0D00140CAA /* Toast */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Toast; path = "Pods/Toast-Swift/Toast"; sourceTree = "<group>"; };
+		7C633CDC2761EA9B00140CAA /* libToast-Swift.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libToast-Swift.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
+		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
+		7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPasaswordViewController.swift; sourceTree = "<group>"; };
+		7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
+		7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialIdentityStore.swift; sourceTree = "<group>"; };
+		7CD96CEA275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCredentialProviderViewController.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CyStackLocker/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		96D89FDC55DA47C5942CCE3B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
@@ -152,6 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C633CE02761ED1700140CAA /* Toast in Frameworks */,
 				CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */,
 				CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */,
 			);
@@ -196,6 +214,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7C633CDC2761EA9B00140CAA /* libToast-Swift.a */,
 				CA53478927181A9C00BA4901 /* AuthenticationServices.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -239,6 +258,34 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		7C633CDA2761EA0D00140CAA /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				7C633CDB2761EA0D00140CAA /* Toast */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		7C80ADBA2759F1C000AD45BF /* view */ = {
+			isa = PBXGroup;
+			children = (
+				7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */,
+				CA53479227181AB400BA4901 /* CredentialProviderViewController.swift */,
+				7CD96CEA275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift */,
+				7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		7C80ADBD2759F29200AD45BF /* customUI */ = {
+			isa = PBXGroup;
+			children = (
+				7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */,
+				7C0685F22758F1210003C996 /* CustomTextField.swift */,
+			);
+			path = customUI;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,6 +296,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				7C633CDA2761EA0D00140CAA /* Packages */,
 				CAFA4CF7270AF9A20003FFA5 /* File.swift */,
 				13B07FAE1A68108700A75B9A /* CyStackLocker */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -280,10 +328,13 @@
 		CA53479127181AB400BA4901 /* LockerAutofill */ = {
 			isa = PBXGroup;
 			children = (
-				CA53479227181AB400BA4901 /* CredentialProviderViewController.swift */,
+				7C80ADBD2759F29200AD45BF /* customUI */,
+				7C80ADBA2759F1C000AD45BF /* view */,
+				7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */,
 				CA53479427181AB400BA4901 /* MainInterface.storyboard */,
 				CA53479727181AB400BA4901 /* Info.plist */,
 				CA53479827181AB400BA4901 /* LockerAutofill.entitlements */,
+				7C70B7BD2758CD2B005D0D8E /* assets.xcassets */,
 			);
 			path = LockerAutofill;
 			sourceTree = "<group>";
@@ -388,6 +439,7 @@
 			name = LockerAutofill;
 			packageProductDependencies = (
 				CA9F41E927183FC300B0C0A5 /* KeychainAccess */,
+				7C633CDF2761ED1700140CAA /* Toast */,
 			);
 			productName = LockerAutofill;
 			productReference = CA53478F27181AB400BA4901 /* LockerAutofill.appex */;
@@ -407,7 +459,6 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = W7S57TNBH5;
 						LastSwiftMigration = 1300;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -437,6 +488,7 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -488,6 +540,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */,
 				CA53479627181AB400BA4901 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -535,6 +588,7 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CyStackLocker/Pods-CyStackLocker-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FontAwesome.swift/FontAwesome.swift.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -557,6 +611,7 @@
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.swift.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -647,6 +702,7 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FontAwesome.swift/FontAwesome.swift.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -669,6 +725,7 @@
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.swift.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -791,7 +848,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C84A5622755DD0400482CB5 /* CredentialIdentityStore.swift in Sources */,
+				7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */,
+				7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */,
+				7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */,
+				7CD96CEB275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift in Sources */,
 				CA53479327181AB400BA4901 /* CredentialProviderViewController.swift in Sources */,
+				7C0685F32758F1210003C996 /* CustomTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -888,17 +951,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = CyStackLocker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.10;
+				MARKETING_VERSION = 1.12;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -909,7 +973,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLocker-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -922,16 +986,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
+				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = CyStackLocker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.10;
+				MARKETING_VERSION = 1.12;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -941,7 +1007,7 @@
 				PRODUCT_NAME = CyStackLocker;
 				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLocker-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -1327,6 +1393,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -1338,6 +1412,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7C633CDF2761ED1700140CAA /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
+		};
 		CA9F41E927183FC300B0C0A5 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */;

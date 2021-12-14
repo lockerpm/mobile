@@ -1,10 +1,8 @@
 import * as React from "react"
-import { observer } from "mobx-react-lite"
 import Picker from "react-native-ui-lib/picker"
-import { color as colorLight, colorDark, fontSize } from "../../theme"
+import { fontSize } from "../../theme"
 import { StyleProp, ViewStyle } from "react-native"
 import { useMixins } from "../../services/mixins"
-import { useStores } from "../../models"
 import { SearchBar } from "../search-bar/search-bar"
 
 
@@ -30,10 +28,8 @@ export interface SelectProps {
 /**
  * Describe your component here
  */
-export const Select = observer(function Select(props: SelectProps) {
-  const { translate } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+export const Select = function Select(props: SelectProps) {
+  const { translate, color } = useMixins()
   
   const { 
     style, value, onChange, options,
@@ -122,4 +118,4 @@ export const Select = observer(function Select(props: SelectProps) {
       ))}
     </Picker>
   )
-})
+}

@@ -1,10 +1,9 @@
 import React from "react"
 import { View } from "react-native"
 import { Button, Text } from "../../../../components"
-import { commonStyles, color as colorLight, colorDark } from "../../../../theme"
+import { commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { observer } from "mobx-react-lite"
-import { useStores } from "../../../../models"
+import { useMixins } from "../../../../services/mixins"
 
 export type MenuItemProps = {
   icon: React.ReactNode,
@@ -16,10 +15,9 @@ export type MenuItemProps = {
   debug?: boolean
 }
 
-export const MenuItem = observer((props: MenuItemProps) => {
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
-  
+export const MenuItem = (props: MenuItemProps) => {
+  const { color } = useMixins()
+
   return !props.debug || __DEV__ ? (
     <Button
       isDisabled={props.disabled}
@@ -28,7 +26,7 @@ export const MenuItem = observer((props: MenuItemProps) => {
       style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
         paddingVertical: 16,
         borderBottomColor: color.line,
-        borderBottomWidth: props.noBorder? 0 : 1,
+        borderBottomWidth: props.noBorder ? 0 : 1,
       }]}
     >
       <View style={{ width: 25 }}>
@@ -50,4 +48,4 @@ export const MenuItem = observer((props: MenuItemProps) => {
       }
     </Button>
   ) : null
-})
+}

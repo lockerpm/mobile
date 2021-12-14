@@ -28,6 +28,8 @@
     "help": "Trợ giúp",
     "home": "Tất cả",
     "identity": "Danh tính",
+    "item": "mục",
+    "items": "mục",
     "language": "Ngôn ngữ",
     "length": "Độ dài",
     "lock": "Khóa",
@@ -106,7 +108,9 @@
     "too_many_failed_attempts": "Quá nhiều lần thử không thành công",
     "no_team_available": "Không có dữ liệu. Tham gia nhóm với vai trò Quản lý để sử dụng tính năng chia sẻ.",
     "no_collection_available": "Bạn không có quyền truy cập vào bất kỳ thư mục chung nào.",
-    "not_available_offlie": "Không thể thực hiện hành động này trong chế độ ngoại tuyến"
+    "not_available_offlie": "Không thể thực hiện hành động này trong chế độ ngoại tuyến",
+    "login_locked": "Tài khoản của bạn đã bị khoá do chính sách bảo mật của team. Thử lại sau: ",
+    "duplicate_cipher_name": "Tên trùng lặp! Vui lòng chọn tên khác!"
   },
   "success": {
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
@@ -121,6 +125,16 @@
     "cipher_shared": "Chia sẻ thành công",
     "sync_success": "Đồng bộ hóa hoàn tất",
     "will_sync_when_online": "Dữ liệu của bạn sẽ được đồng bộ khi có kết nối internet."
+  },
+  "policy": {
+    "min_password_length": "Mật khẩu phải chứa ít nhất {length} ký tự",
+    "max_password_length": "Độ dài tối đa của mật khẩu là {length}",
+    "password_composition": "Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt",
+    "requires_lowercase": "Phải chứa chữ cái thường (abc)",
+    "requires_uppercase": "Phải chứa chữ cái in hoa (ABC)",
+    "requires_special": "Phải chứa ký tự đặc biệt (@#!$%)",
+    "requires_number": "Phải chứa ký tự số (0 1 2 3)",
+    "avoid_ambiguous": "Tránh các ký tự không rõ ràng (O vs 0, l vs I,...)"
   },
   "password_strength": {
     "very_weak": "Rất yếu",
@@ -197,6 +211,7 @@
   },
   "start": {
     "synching": "Đồng bộ hoá dữ liệu...",
+    "getting_team_info": "Kiểm tra thông tin team của bạn...",
     "decrypting": "Hoàn tất chuẩn bị dữ liệu..."
   },
   "biometric_intro": {
@@ -329,7 +344,10 @@
   "help": {
     "help_center": "Trung tâm trợ giúp",
     "terms": "Điều khoản dịch vụ",
-    "policy": "Chính sách bảo mật"
+    "policy": "Chính sách bảo mật",
+    "feedback": "Phản hồi & Góp ý",
+    "tell_us": "Cho chúng tôi biết ý kiến của bạn",
+    "thank_you": "Cảm ơn bạn đã góp ý cho chúng tôi!"
   },
   "menu": {
     "fingerprint": "Định danh",
@@ -418,7 +436,8 @@
     "export": "Xuất dữ liệu",
     "theme": "Chủ đề",
     "dark_theme": "Tối",
-    "light_theme": "Sáng"
+    "light_theme": "Sáng",
+    "defaultTab": "Màn hình mặc định"
   },
   "autofill_service": {
     "ios": {

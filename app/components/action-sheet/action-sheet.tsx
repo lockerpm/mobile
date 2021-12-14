@@ -1,11 +1,10 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
-import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
 import Dialog from "react-native-ui-lib/dialog"
-import { color as colorLight, colorDark, commonStyles } from "../../theme"
+import { commonStyles } from "../../theme"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useStores } from "../../models"
+import { useMixins } from "../../services/mixins"
 
 
 export interface ActionSheetProps {
@@ -18,11 +17,10 @@ export interface ActionSheetProps {
 /**
  * Describe your component here
  */
-export const ActionSheet = observer(function ActionSheet(props: ActionSheetProps) {
+export const ActionSheet = function ActionSheet(props: ActionSheetProps) {
   const { style, children, isOpen, onClose } = props
   const insets = useSafeAreaInsets()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { color } = useMixins()
 
   const CONTAINER: ViewStyle = {
     justifyContent: "center",
@@ -57,4 +55,4 @@ export const ActionSheet = observer(function ActionSheet(props: ActionSheetProps
       {children}
     </Dialog>
   )
-})
+}

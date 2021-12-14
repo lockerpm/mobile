@@ -5,7 +5,7 @@ import {
   Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
+import { commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
@@ -28,10 +28,9 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
-  const { newCipher, createCipher, updateCipher, translate } = useMixins()
-  const { cipherStore, uiStore } = useStores()
+  const { newCipher, createCipher, updateCipher, translate, color } = useMixins()
+  const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // Params
 

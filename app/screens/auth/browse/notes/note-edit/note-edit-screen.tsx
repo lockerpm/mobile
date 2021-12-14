@@ -5,7 +5,7 @@ import {
   Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
+import { commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { useStores } from "../../../../../models"
@@ -21,10 +21,9 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<NoteEditScreenProp>()
   const { mode } = route.params
-  const { cipherStore, uiStore } = useStores()
+  const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-  const color = uiStore.isDark ? colorDark : colorLight
-  const { newCipher, createCipher, updateCipher, translate } = useMixins()
+  const { newCipher, createCipher, updateCipher, translate, color } = useMixins()
 
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')

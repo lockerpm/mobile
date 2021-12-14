@@ -1,10 +1,9 @@
 import React from "react"
-import { observer } from "mobx-react-lite"
 import { Screen } from "../screen/screen"
 import { Container } from "../container/container"
 import { StyleProp, View, ViewStyle } from "react-native"
-import { commonStyles, color as colorLight, colorDark } from "../../theme"
-import { useStores } from "../../models"
+import { commonStyles } from "../../theme"
+import { useMixins } from "../../services/mixins"
 
 export interface LayoutProps {
   children?: React.ReactNode,
@@ -24,9 +23,8 @@ export interface LayoutProps {
 /**
  * Describe your component here
  */
-export const Layout = observer(function Layout(props: LayoutProps) {
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+export const Layout = function Layout(props: LayoutProps) {
+  const { color, isDark } = useMixins()
 
   return (
     <Screen 
@@ -37,7 +35,7 @@ export const Layout = observer(function Layout(props: LayoutProps) {
         backgroundColor: color.background
       }, props.style]}
       hasFooter={!!props.footer}
-      statusBar={uiStore.isDark ? "light-content" : "dark-content"}
+      statusBar={isDark ? "light-content" : "dark-content"}
     >
       {
         props.header && (
@@ -69,4 +67,4 @@ export const Layout = observer(function Layout(props: LayoutProps) {
       }
     </Screen>
   )
-})
+}

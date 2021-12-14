@@ -5,7 +5,7 @@ import {
   Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength, CipherInfoCommon
 } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
+import { commonStyles, fontSize } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -19,10 +19,9 @@ import { CipherView } from "../../../../../../core/models/view"
 
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const navigation = useNavigation()
-  const { getWebsiteLogo, getPasswordStrength, translate } = useMixins()
-  const { cipherStore, uiStore } = useStores()
+  const { getWebsiteLogo, getPasswordStrength, translate, color } = useMixins()
+  const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-  const color = uiStore.isDark ? colorDark : colorLight
 
   const [showAction, setShowAction] = useState(false)
   const [isLoading, setIsLoading] = useState(false)

@@ -17,13 +17,17 @@ import { GET_LOGO_URL, GOOGLE_CLIENT_ID } from '../../config/constants'
 import i18n from "i18n-js"
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { saveShared } from '../../utils/keychain'
+import { AutofillDataType, loadShared, saveShared } from '../../utils/keychain'
 import { GeneralApiProblem } from '../api/api-problem'
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
 import { FolderView } from '../../../core/models/view/folderView'
 import { FolderRequest } from '../../../core/models/request/folderRequest'
 import { ImportCiphersRequest } from '../../../core/models/request/importCiphersRequest'
 import { KvpRequest } from '../../../core/models/request/kvpRequest'
+import { observer } from 'mobx-react-lite'
+import { color, colorDark } from '../../theme'
+import moment from 'moment'
+
 
 const { createContext, useContext } = React
 
@@ -39,13 +43,16 @@ type GetCiphersParams = {
 // Mixins data
 
 const defaultData = {
+  // Data
+  color,
+  isDark: false,
+
+  // Methods
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   biometricLogin: async () => { return { kind: 'unknown' } },
   logout: async () => {},
   lock: async () => {},
   getSyncData: async () => { return { kind: 'unknown' } },
-  notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
-  randomString: () => '',
   newCipher: (type: CipherType) => { return new CipherView() },
   registerLocker: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   changeMasterPassword: async (oldPassword: string, newPassword: string) => { return { kind: 'unknown' } },
@@ -63,19 +70,24 @@ const defaultData = {
   toTrashCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
+  importCiphers: async (importResult) => { return { kind: 'unknown' } },
+  loadPasswordsHealth: async () => {},
+  reloadCache: async () => {},
+  syncAutofillData: async () => {},
+
+  // Supporting methods
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
   notifyApiError: (problem: GeneralApiProblem) => {},
-  loadPasswordsHealth: async () => {},
-  reloadCache: async () => {},
-  importCiphers: async (importResult) => { return { kind: 'unknown' } }
+  notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
+  randomString: () => '',
 }
 
 
 const MixinsContext = createContext(defaultData)
 
-export const MixinsProvider = (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
+export const MixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore } = useStores()
   const {
     cryptoService,
@@ -94,6 +106,11 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   } = useCoreService()
   const insets = useSafeAreaInsets()
 
+  // ------------------------ DATA -------------------------
+
+  const isDark = uiStore.isDark
+  const themeColor = isDark ? colorDark : color
+
   // -------------------- AUTHENTICATION --------------------
 
   // Session login
@@ -104,12 +121,17 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
+      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
+      
+      // setup service offline
+      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
 
       // Offline compare
       if (uiStore.isOffline) {
         const storedKeyHash = await cryptoService.getKeyHash()
         if (storedKeyHash) {
           const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
+          
           if (passwordValid) {
             messagingService.send('loggedIn')
   
@@ -138,8 +160,15 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       }
 
       if (res.kind !== 'ok') {
+        if (res.kind === 'bad-data') {
+          if (res.data.code === '1008') {
+            notify('error', `${translate('error.login_locked')} ${moment.duration(res.data.wait, 'seconds').humanize()}`)
+            return res
+          }
+        }
+
         notify('error', translate('error.session_login_failed'))
-        return { kind: 'bad-data' }
+        return res
       }
 
       // Setup service
@@ -205,10 +234,12 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
       const encKey = await cryptoService.makeEncKey(key)
       const hashedPassword = await cryptoService.hashPassword(masterPassword, key)
+      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
       const keys = await cryptoService.makeKeyPair(encKey[0])
 
       await cryptoService.setKey(key)
       await cryptoService.setKeyHash(hashedPassword)
+      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
       await cryptoService.setEncKey(encKey[1].encryptedString)
       await cryptoService.setEncPrivateKey(keys[1].encryptedString)
 
@@ -319,7 +350,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       }
   
       // Reset shared data
-      await saveShared('autofill', '[]')
+      await saveShared('autofill', '')
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       __DEV__ && console.log(e)
@@ -378,19 +409,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       user.setFingerprint(fingerprint.join('-'))
 
       // Save to shared keychain for autofill service
-      const passwordRes = await getCiphers({
-        filters: [
-          (c : CipherView) => c.type === CipherType.Login && c.login.uri
-        ],
-        searchText: '',
-        deleted: false
-      })
-      const sharedData = passwordRes.map((c: CipherView) => ({
-        uri: c.login.uri || '',
-        username: c.login.username || '',
-        password: c.login.password || ''
-      }))
-      await saveShared('autofill', JSON.stringify(sharedData))
+      await _updateAutofillData()
 
       cipherStore.setIsSynching(false)
       return { kind: 'ok' }
@@ -487,6 +506,78 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     }
   }
 
+  // Store password for autofill
+  const _updateAutofillData = async () => {
+    const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
+    const passwordRes = await getCiphers({
+      filters: [
+        (c : CipherView) => c.type === CipherType.Login && c.login.username && c.login.password
+      ],
+      searchText: '',
+      deleted: false
+    })
+    const passwordData = passwordRes.map((c: CipherView) => ({
+      id: c.id,
+      name: c.name,
+      uri: c.login.uri || '',
+      username: c.login.username || '',
+      password: c.login.password || '',
+      isOwner: !c.organizationId
+    }))
+
+    const sharedData: AutofillDataType = {
+      passwords: passwordData,
+      deleted: [],
+      authen: { email: user.email, hashPass: hashPasswordAutofill },
+      faceIdEnabled: user.isBiometricUnlock
+    }
+    await saveShared('autofill', JSON.stringify(sharedData))
+  }
+
+  // Sync autofill data
+  const syncAutofillData = async () => {
+    const credentials = await loadShared()
+    if (!credentials) {
+      return
+    }
+
+    let hasUpdate = false
+    const sharedData: AutofillDataType = JSON.parse(credentials.password)
+    
+    // Delete passwords
+    if (sharedData.deleted) {
+      await _offlineDeleteCiphers(sharedData.deleted.map(c => c.id))
+      hasUpdate = true
+    }
+
+    // Create passwords
+    if (sharedData.passwords) {
+      for (let cipher of sharedData.passwords) {
+        if (!cipher.id) {
+          const payload = newCipher(CipherType.Login)
+          const data = new LoginView()
+          data.username = cipher.username
+          data.password = cipher.password
+          if (cipher.uri) {
+            const uriView = new LoginUriView()
+            uriView.uri = cipher.uri
+            data.uris = [uriView]
+          }
+          payload.name = cipher.name
+          payload.login = data
+          await _offlineCreateCipher(payload, [])
+          hasUpdate = true
+        }
+      }
+    }
+
+    await _updateAutofillData()
+
+    if (hasUpdate && !uiStore.isOffline) {
+      await _syncOfflineData()
+    }
+  }
+
   // Reload offline cache
   const reloadCache = async () => {
     await cipherService.clearCache()
@@ -497,6 +588,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
+    await _updateAutofillData()
   }
 
   // Load folders
@@ -507,7 +599,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         let ciphers = await getCiphers({
           deleted: false,
           searchText: '',
-          filters: [c => c.folderId ? c.folderId === f.id : (!c.collectionIds.length && !f.id)]
+          filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && !c.organizationId)]
         })
         f.cipherCount = ciphers ? ciphers.length : 0
       }
@@ -530,6 +622,29 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
         })
         f.cipherCount = ciphers ? ciphers.length : 0
       }
+
+      // Add unassigned
+      let unassignedTeamCiphers = await getCiphers({
+        deleted: false,
+        searchText: '',
+        filters: [(c : CipherView) => !c.collectionIds.length && !!c.organizationId]
+      })
+      unassignedTeamCiphers.forEach((item: CipherView) => {
+        const target = res.find(f => f.id === null && f.organizationId === item.organizationId)
+        if (target) {
+          target.cipherCount += 1
+        } else {
+          // @ts-ignore
+          res.push({
+            cipherCount: 1,
+            hidePasswords: null,
+            id: null,
+            name: '',
+            organizationId: item.organizationId
+          })
+        }
+      })
+
       collectionStore.setCollections(res)
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
@@ -684,13 +799,23 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     // Online
     const request = new ImportCiphersRequest()
     for (let i = 0; i < importResult.ciphers.length; i++) {
-      const c = await cipherService.encrypt(importResult.ciphers[i])
-      request.ciphers.push(new CipherRequest(c))
+      const cipher = importResult.ciphers[i]
+      const countDuplicate = await _countDuplicateCipherName(cipher)
+      if (countDuplicate > 0) {
+        cipher.name = `${cipher.name} (${countDuplicate})`
+      }
+      const enc = await cipherService.encrypt(cipher)
+      request.ciphers.push(new CipherRequest(enc))
     }
     if (importResult.folders != null) {
       for (let i = 0; i < importResult.folders.length; i++) {
-        const f = await folderService.encrypt(importResult.folders[i])
-        request.folders.push(new FolderRequest(f))
+        const folder = importResult.folders[i]
+        const countDuplicate = _countDuplicateFolderName(folder)
+        if (countDuplicate > 0) {
+          folder.name = `${folder.name} (${countDuplicate})`
+        }
+        const enc = await folderService.encrypt(folder)
+        request.folders.push(new FolderRequest(enc))
       }
     }
     if (importResult.folderRelationships != null) {
@@ -708,27 +833,42 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   }
 
   const _offlineImportCiphers = async (importResult) => {
-    // Prepare data
     const ciphers = []
     const folders = []
+
+    // Prepare ciphers
     for (let i = 0; i < importResult.ciphers.length; i++) {
-      const c = await cipherService.encrypt(importResult.ciphers[i])
-      const enc = new CipherRequest(c)
+      const cipher = importResult.ciphers[i]
+      const countDuplicate = await _countDuplicateCipherName(cipher)
+      if (countDuplicate > 0) {
+        cipher.name = `${cipher.name} (${countDuplicate})`
+      }
+      const enc = await cipherService.encrypt(cipher)
+      const cr = new CipherRequest(enc)
       const tempId = 'tmp__' + randomString()
       // @ts-ignore
-      enc.id = tempId
-      ciphers.push(enc)
+      cr.id = tempId
+      ciphers.push(cr)
     }
+
+    // Prepare folders
     if (importResult.folders != null) {
       for (let i = 0; i < importResult.folders.length; i++) {
-        const f = await folderService.encrypt(importResult.folders[i])
-        const enc = new FolderRequest(f)
+        const folder = importResult.folders[i]
+        const countDuplicate = _countDuplicateFolderName(folder)
+        if (countDuplicate > 0) {
+          folder.name = `${folder.name} (${countDuplicate})`
+        }
+        const enc = await folderService.encrypt(folder)
+        const fr = new FolderRequest(enc)
         const tempId = 'tmp__' + randomString()
         // @ts-ignore
-        enc.id = tempId
-        folders.push(enc)
+        fr.id = tempId
+        folders.push(fr)
       }
     }
+
+    // Prepare relationships
     if (importResult.folderRelationships != null) {
       importResult.folderRelationships.forEach(r => {
         ciphers[r[0]].folderId = folders[r[1]].id
@@ -769,9 +909,43 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     return { kind: 'ok' }
   }
 
+  // Check cipher name duplication
+  const _countDuplicateCipherName = async (cipher: CipherView) => {
+    const ciphers = await getCiphers({
+      deleted: false,
+      searchText: cipher.name,
+      filters: [(c: CipherView) => c.type === cipher.type && c.name.startsWith(cipher.name)]
+    })
+    let count = 1
+    let name = cipher.name
+    while (ciphers.some((c: CipherView) => c.name === name)) {
+      name = `${cipher.name} (${count})`
+      count += 1
+    }
+    return count - 1
+  }
+
+  // Check folder name duplication
+  const _countDuplicateFolderName = (folder: FolderView) => {
+    let count = 1
+    let name = folder.name
+    while (folderStore.folders.some((f: FolderView) => f.name === name)) {
+      name = `${folder.name} (${count})`
+      count += 1
+    }
+    return count - 1
+  }
+
   // Create
   const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
     try {
+      // Check name duplication
+      const countDuplicate = await _countDuplicateCipherName(cipher)
+      if (countDuplicate > 0) {
+        notify('error', translate('error.duplicate_cipher_name'))
+        return { kind: 'bad-data' }
+      }
+
       // Offline
       if (uiStore.isOffline) {
         await _offlineCreateCipher(cipher, collectionIds)
@@ -1040,7 +1214,7 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
 
   // Clipboard
   const copyToClipboard = (text: string) => {
-    notify('success', translate('common.copied_to_clipboard'), 500)
+    notify('success', translate('common.copied_to_clipboard'), 1000)
     Clipboard.setString(text)
   }
 
@@ -1105,6 +1279,9 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
+    color: themeColor,
+    isDark,
+
     sessionLogin,
     biometricLogin,
     logout,
@@ -1135,7 +1312,8 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
     notifyApiError,
     loadPasswordsHealth,
     reloadCache,
-    importCiphers
+    importCiphers,
+    syncAutofillData
   }
 
   return (
@@ -1143,6 +1321,6 @@ export const MixinsProvider = (props: { children: boolean | React.ReactChild | R
       {props.children}
     </MixinsContext.Provider>
   )
-}
+})
 
 export const useMixins = () => useContext(MixinsContext)

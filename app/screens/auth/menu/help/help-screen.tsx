@@ -1,13 +1,13 @@
-import React from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Linking, View } from "react-native"
 import { Layout, Text, Button, Header } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
+import { commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
 import { PRIVACY_POLICY_URL, TERMS_URL } from "../../../../config/constants"
-import { useStores } from "../../../../models"
+import { FeedbackModal } from "./feedback-modal"
 
 
 type Item = {
@@ -19,9 +19,9 @@ type Item = {
 
 export const HelpScreen = observer(function HelpScreen() {
   const navigation = useNavigation()
-  const { translate } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, color } = useMixins()
+
+  const [showFeedback, setShowFeedback] = useState(false)
   
   const items: Item[] = [
     {
@@ -39,6 +39,12 @@ export const HelpScreen = observer(function HelpScreen() {
       action: () => {
         Linking.openURL(PRIVACY_POLICY_URL)
       }
+    },
+    {
+      name: translate('help.feedback'),
+      action: () => {
+        setShowFeedback(true)
+      }
     }
   ]
 
@@ -53,6 +59,11 @@ export const HelpScreen = observer(function HelpScreen() {
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
+      <FeedbackModal
+        isOpen={showFeedback}
+        onClose={() => setShowFeedback(false)}
+      />
+
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background
       }]}>

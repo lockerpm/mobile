@@ -7,23 +7,27 @@ import { useMixins } from "../../../../services/mixins"
 import { DeleteConfirmModal } from "../../browse/trash/delete-confirm-modal"
 import { CipherView } from "../../../../../core/models/view"
 import { parseOTPUri, getTOTP } from "../../../../utils/totp"
+import { useStores } from "../../../../models"
 
 
 type Props = {
-  isOpen?: boolean,
-  onClose?: () => void,
-  onLoadingChange?: Function,
+  navigation: any
+  isOpen?: boolean
+  onClose?: () => void
+  onLoadingChange?: Function
   cipher: CipherView
 }
 
 
 export const AuthenticatorAction = (props: Props) => {
-  const { isOpen, onClose, onLoadingChange, cipher } = props
+  const { navigation, isOpen, onClose, onLoadingChange, cipher } = props
   const { translate, copyToClipboard, deleteCiphers } = useMixins()
+  const { cipherStore } = useStores()
 
   // ---------------- PARAMS -----------------
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [nextModal, setNextModal] = useState<'deleteConfirm' | null>(null)
 
   // ---------------- COMPUTED -----------------
 
@@ -38,6 +42,16 @@ export const AuthenticatorAction = (props: Props) => {
       onClose && onClose()
     }
     onLoadingChange && onLoadingChange(false)
+  }
+
+  const handleActionSheetClose = () => {
+    onClose()
+    switch (nextModal) {
+      case 'deleteConfirm':
+        setShowConfirmModal(true)
+        break
+    }
+    setNextModal(null)
   }
   
   // ---------------- RENDER -----------------
@@ -59,7 +73,7 @@ export const AuthenticatorAction = (props: Props) => {
 
       <ActionSheet
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={handleActionSheetClose}
       >
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -98,17 +112,25 @@ export const AuthenticatorAction = (props: Props) => {
             )
           }
 
+          <Divider style={{ marginVertical: 5 }} />
+
+          <ActionItem
+            name={translate('common.edit')}
+            icon="edit"
+            action={() => {
+              cipherStore.setSelectedCipher(cipher)
+              onClose()
+              navigation.navigate('authenticator__edit', { mode: 'edit' })
+            }}
+          />
+
           <ActionItem
             name={translate('common.delete')}
             icon="trash"
             textColor={color.error}
             action={() => {
-              onLoadingChange && onLoadingChange(true)
+              setNextModal('deleteConfirm')
               onClose()
-              setTimeout(() => {
-                onLoadingChange && onLoadingChange(false)
-                setShowConfirmModal(true)
-              }, 1500)
             }}
           />
         </ActionSheetContent>

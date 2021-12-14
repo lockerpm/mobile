@@ -11,6 +11,8 @@ import { fontSize } from "../../../theme"
 import { CipherView } from "../../../../core/models/view"
 import { useCoreService } from "../../../services/core-service"
 import { CipherRequest } from "../../../../core/models/request/cipherRequest"
+import { PolicyType } from "../../../services/api"
+import { CipherType } from "../../../../core/enums"
 
 
 interface Props {
@@ -42,6 +44,7 @@ export const ShareModal = observer((props: Props) => {
   const [owners, setOwners] = useState(teams)
   const [collectionIds, setCollectionIds] = useState([])
   const [writeableCollections, setWriteableCollections] = useState([])
+  const [policy, setPolicy] = useState<PolicyType>(null)
 
   // --------------- COMPUTED ----------------
 
@@ -54,7 +57,80 @@ export const ShareModal = observer((props: Props) => {
 
   // --------------- METHODS ----------------
 
+  const getPolicy = async (organizationId: string) => {
+    setIsLoading(true)
+    const res = await user.getPolicy(organizationId)
+    if (res.kind === 'ok') {
+      setPolicy(res.data)
+    } else {
+      notifyApiError(res)
+      setPolicy(null)
+    }
+    setIsLoading(false)
+  }
+
+  const checkPolicy = (cipher: CipherView) => {
+    if (cipher.type === CipherType.Login) {
+      if (policy.min_password_length && cipher.login.password.length < policy.min_password_length) {
+        notify('error', translate('policy.min_password_length', { length: policy.min_password_length }))
+        return false
+      }
+      if (policy.max_password_length && cipher.login.password.length > policy.max_password_length) {
+        notify('error', translate('policy.max_password_length', { length: policy.max_password_length }))
+        return false
+      }
+      if (policy.password_composition) {
+        if (policy.require_special_character) {
+          const reg = /(?=.*[!@#$%^&*])/
+          const check = reg.test(cipher.login.password)
+          if (!check) {
+            notify('error', translate('policy.requires_special'))
+            return false
+          }
+        }
+        if (policy.require_lower_case) {
+          const reg = /[a-z]/
+          const check = reg.test(cipher.login.password)
+          if (!check) {
+            notify('error', translate('policy.requires_lowercase'))
+            return false
+          }
+        }
+        if (policy.require_upper_case) {
+          const reg = /[A-Z]/
+          const check = reg.test(cipher.login.password)
+          if (!check) {
+            notify('error', translate('policy.requires_uppercase'))
+            return false
+          }
+        }
+        if (policy.require_digit) {
+          const reg = /[1-9]/
+          const check = reg.test(cipher.login.password)
+          if (!check) {
+            notify('error', translate('policy.requires_number'))
+            return false
+          }
+        }
+        if (policy.avoid_ambiguous_character) {
+          const ambiguousCharacters = ['I', 'l', '1', 'O', '0']
+          const check = ambiguousCharacters.some(c => cipher.login.password.includes(c))
+          if (check) {
+            notify('error', translate('policy.avoid_ambiguous'))
+            return false
+          }
+        }
+      }
+    }
+    return true
+  }
+
   const handleShare = async () => {
+    const passPolicyTest = checkPolicy(selectedCipher)
+    if (!passPolicyTest) {
+      return
+    }
+
     setIsLoading(true)
 
     const payload = {...selectedCipher}
@@ -92,8 +168,10 @@ export const ShareModal = observer((props: Props) => {
           value: c.id
         }))
       )
+      getPolicy(owner)
     } else {
       setWriteableCollections([])
+      setPolicy(null)
     }
   }, [owner])
 

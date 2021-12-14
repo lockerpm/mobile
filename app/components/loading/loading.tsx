@@ -1,10 +1,8 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle, ActivityIndicator } from "react-native"
-import { observer } from "mobx-react-lite"
 import { flatten } from "ramda"
-import { color as colorLight, colorDark } from "../../theme"
 import { Text } from "../text/text"
-import { useStores } from "../../models"
+import { useMixins } from "../../services/mixins"
 
 
 const CONTAINER: ViewStyle = {
@@ -35,10 +33,9 @@ export interface LoadingProps {
 /**
  * Describe your component here
  */
-export const Loading = observer(function Loading(props: LoadingProps) {
+export const Loading = function Loading(props: LoadingProps) {
   const { style, message } = props
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { color } = useMixins()
 
   const styles = flatten([CONTAINER, style])
 
@@ -59,12 +56,11 @@ export const Loading = observer(function Loading(props: LoadingProps) {
       }
     </View>
   )
-})
+}
 
-export const OverlayLoading = observer(function OverlayLoading(props: LoadingProps) {
+export const OverlayLoading = function OverlayLoading(props: LoadingProps) {
   const { style } = props
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { color } = useMixins()
   const styles = flatten([OVERLAY_CONTAINER, style])
 
   return (
@@ -74,4 +70,4 @@ export const OverlayLoading = observer(function OverlayLoading(props: LoadingPro
       <ActivityIndicator size="large" color={color.primary} />
     </View>
   )
-})
+}

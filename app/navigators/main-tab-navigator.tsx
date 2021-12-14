@@ -4,8 +4,8 @@ import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
 import { View } from "react-native"
 import { Button, Text } from "../components"
-import { color as colorLight, colorDark, fontSize } from "../theme"
-import { AllItemScreen, ToolsListScreen } from "../screens"
+import { fontSize } from "../theme"
+import { AllItemScreen, ToolsListScreen, AuthenticatorScreen } from "../screens"
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import { useMixins } from "../services/mixins"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -20,16 +20,17 @@ import BrowseIcon from './icons/menu.svg'
 import ToolsIcon from './icons/settings.svg'
 // @ts-ignore
 import MenuIcon from './icons/menu-2.svg'
+// @ts-ignore
+import AuthenticatorIcon from './icons/authenticator.svg'
 
 
 const Tab = createBottomTabNavigator()
 
 // @ts-ignore
 const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
-  const { translate } = useMixins()
+  const { translate, color } = useMixins()
   const { user, uiStore } = useStores()
   const insets = useSafeAreaInsets()
-  const color = uiStore.isDark ? colorDark : colorLight
   
   const mappings = {
     homeTab: {
@@ -40,6 +41,11 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
     browseTab: {
       label: translate('common.browse'),
       icon: BrowseIcon,
+      notiCount: 0
+    },
+    authenticatorTab: {
+      label: 'OTP',
+      icon: AuthenticatorIcon,
       notiCount: 0
     },
     toolsTab: {
@@ -162,6 +168,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                     </View>
                   )
                 }
+
                 <Text
                   text={label}
                   style={{
@@ -188,6 +195,7 @@ export function MainTabNavigator() {
     >
       <Tab.Screen name="homeTab" component={AllItemScreen} />
       <Tab.Screen name="browseTab" component={BrowseNavigator} />
+      <Tab.Screen name="authenticatorTab" component={AuthenticatorScreen} />
       <Tab.Screen name="toolsTab" component={ToolsListScreen} />
       <Tab.Screen name="menuTab" component={MenuNavigator} />
     </Tab.Navigator>

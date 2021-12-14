@@ -1,21 +1,16 @@
 import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { useNavigation } from "@react-navigation/core"
 import { Header, Layout } from "../../../../../components"
-import { color as colorLight, colorDark } from "../../../../../theme"
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
 import { decodeGoogleAuthenticatorImport, beautifyName } from "../../../../../utils/totp"
-import { useStores } from "../../../../../models"
 
 
-export const GoogleAuthenticatorImportScreen = observer(function GoogleAuthenticatorImportScreen() {
+export const GoogleAuthenticatorImportScreen = function GoogleAuthenticatorImportScreen() {
   const navigation = useNavigation()
-  const { newCipher, importCiphers, translate, notify } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { newCipher, importCiphers, translate, notify, color } = useMixins()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -69,4 +64,4 @@ export const GoogleAuthenticatorImportScreen = observer(function GoogleAuthentic
       />
     </Layout>
   )
-})
+}

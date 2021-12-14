@@ -8,7 +8,7 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { SectionList, View } from "react-native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { NewFolderModal } from "./new-folder-modal"
@@ -23,11 +23,10 @@ import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
-  const { getTeam, randomString, translate } = useMixins()
+  const { getTeam, randomString, translate, color } = useMixins()
   const { folderStore, collectionStore, user, uiStore } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // Params
 
@@ -166,7 +165,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                   preset="link"
                   onPress={() => {
                     if (item.shared) {
-                      navigation.navigate('folders__ciphers', { collectionId: item.id })
+                      navigation.navigate('folders__ciphers', { collectionId: item.id, organizationId: item.organizationId })
                     } else {
                       navigation.navigate('folders__ciphers', { folderId: item.id })
                     }
@@ -186,32 +185,38 @@ export const FoldersScreen = observer(function FoldersScreen() {
                       )
                     }
 
-                    <View style={{ 
-                      flex: 1, 
-                      marginLeft: 12, 
-                      flexDirection: 'row', 
-                      alignItems: 'center', 
-                      flexWrap: 'wrap' 
-                    }}>
-                      <Text
-                        preset="semibold"
-                        text={
-                          (item.name || translate('folder.unassigned')) 
-                          + (item.cipherCount !== undefined ? ` (${item.cipherCount})` : '')
-                        }
-                      />
+                    <View style={{ flex: 1, marginLeft: 12 }}>
+                      <View style={{ 
+                        flexDirection: 'row', 
+                        alignItems: 'center', 
+                        flexWrap: 'wrap'
+                      }}>
+                        <Text
+                          preset="semibold"
+                          text={item.name || translate('folder.unassigned')}
+                        />
 
-                      {
-                        folderStore.notSynchedFolders.includes(item.id) && (
-                          <View style={{ marginLeft: 10 }}>
-                            <MaterialCommunityIconsIcon
-                              name="cloud-off-outline"
-                              size={22}
-                              color={color.textBlack}
-                            />
-                          </View>
-                        )
-                      }
+                        {
+                          folderStore.notSynchedFolders.includes(item.id) && (
+                            <View style={{ marginLeft: 10 }}>
+                              <MaterialCommunityIconsIcon
+                                name="cloud-off-outline"
+                                size={22}
+                                color={color.textBlack}
+                              />
+                            </View>
+                          )
+                        }
+                      </View>
+
+                      <Text
+                        text={
+                          (item.cipherCount !== undefined ? `${item.cipherCount}` : '0')
+                          + ' '
+                          + (item.cipherCount > 1 ? translate('common.items') : translate('common.item'))
+                        }
+                        style={{ fontSize: fontSize.small }}
+                      />
                     </View>
 
                     {

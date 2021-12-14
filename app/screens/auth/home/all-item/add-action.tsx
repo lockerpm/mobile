@@ -1,10 +1,11 @@
 import React from "react"
 import { Text, AutoImage as Image, ActionSheet, ActionSheetItem, ActionSheetContent } from "../../../../components"
-import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
+import { commonStyles } from "../../../../theme"
 import { BROWSE_ITEMS } from "../../../../common/mappings"
 import { View } from "react-native"
 import { useStores } from "../../../../models"
 import { observer } from "mobx-react-lite"
+import { useMixins } from "../../../../services/mixins"
 
 interface Props {
   isOpen?: boolean,
@@ -14,8 +15,8 @@ interface Props {
 }
 
 export const AddAction = observer((props: Props) => {
-  const { cipherStore, uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { color } = useMixins()
+  const { cipherStore } = useStores()
 
   return (
     <ActionSheet

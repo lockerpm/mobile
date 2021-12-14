@@ -16,7 +16,7 @@ import { PasswordAction } from "../../../screens/auth/browse/passwords/password-
 import { CardAction } from "../../../screens/auth/browse/cards/card-action"
 import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
 import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../theme"
+import { commonStyles, fontSize } from "../../../theme"
 import { DeletedAction } from "../cipher-action/deleted-action"
 import { Checkbox } from "react-native-ui-lib"
 
@@ -35,7 +35,6 @@ export interface CipherListProps {
   folderId?: string
   collectionId?: string
   organizationId?: string
-  isPersonalUndefined?: boolean
   isSelecting: boolean
   setIsSelecting: Function
   selectedItems: string[]
@@ -48,13 +47,12 @@ export interface CipherListProps {
  */
 export const CipherList = observer(function CipherList(props: CipherListProps) {
   const {
-    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId,
-    collectionId, organizationId, isPersonalUndefined,
+    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList,
+    folderId, collectionId, organizationId,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { getWebsiteLogo, getCiphers, translate } = useMixins()
-  const { cipherStore, uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { getWebsiteLogo, getCiphers, translate, color } = useMixins()
+  const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
 
@@ -138,10 +136,14 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       res = res.filter(i => i.folderId === folderId)
     }
     if (collectionId !== undefined) {
-      res = res.filter(i => i.collectionIds.includes(collectionId))
+      if (collectionId === null) {
+        res = res.filter(i => !i.collectionIds.length)
+      } else {
+        res = res.filter(i => i.collectionIds.includes(collectionId))
+      }
     }
-    if (isPersonalUndefined) {
-      res = res.filter(i => !i.collectionIds.length)
+    if (organizationId === undefined && folderId === null) {
+      res = res.filter(i => !i.organizationId)
     }
     if (organizationId !== undefined) {
       if (organizationId === null) {
