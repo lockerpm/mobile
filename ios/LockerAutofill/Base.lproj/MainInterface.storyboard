@@ -42,7 +42,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Verify Master Password" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHt-Az-rZe">
                                 <rect key="frame" x="16" y="164" width="343" height="25.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please verify your Master Password to unlock your vault." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RW4-xA-kRE">
@@ -98,23 +98,15 @@
                                     <action selector="unlockDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="Vov-zV-0EN"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Or Unlock with FaceID" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hX-hu-hC3">
-                                <rect key="frame" x="16" y="404" width="343" height="17"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mmq-4w-Hai">
-                                <rect key="frame" x="147" y="451" width="81" height="80"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="wkF-jV-mm5"/>
-                                </constraints>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VAo-LQ-WML">
+                                <rect key="frame" x="16" y="402" width="343" height="34.5"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain">
-                                    <imageReference key="image" image="faceid" catalog="system" symbolScale="default"/>
+                                <buttonConfiguration key="configuration" style="plain" image="faceid" catalog="system" title=" Unlock with Face ID/Touch ID">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="17"/>
+                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="biometricFaceIdDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="6bj-Tk-oud"/>
+                                    <action selector="biometricFaceIdDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="z0N-yN-L3i"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -127,7 +119,8 @@
                             <constraint firstItem="vj6-uN-Bj0" firstAttribute="top" secondItem="RW4-xA-kRE" secondAttribute="bottom" constant="30" id="6VO-uO-6KM"/>
                             <constraint firstItem="cmq-AZ-LBm" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" id="8jA-zP-3tQ"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="vj6-uN-Bj0" secondAttribute="trailing" constant="20" id="9Bg-tV-Na6"/>
-                            <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="3hX-hu-hC3" secondAttribute="trailing" constant="16" id="Glk-yq-knI"/>
+                            <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="VAo-LQ-WML" secondAttribute="trailing" constant="16" id="B3Q-de-k3Q"/>
+                            <constraint firstItem="VAo-LQ-WML" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="16" id="Ex2-qp-q7j"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="Iqt-pY-FVh" secondAttribute="trailing" constant="20" id="Jpd-8d-urF"/>
                             <constraint firstItem="cmq-AZ-LBm" firstAttribute="trailing" secondItem="Khm-HA-POC" secondAttribute="trailing" id="Ka9-S2-fPe"/>
                             <constraint firstItem="vj6-uN-Bj0" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="PP1-G2-CiO"/>
@@ -135,20 +128,15 @@
                             <constraint firstItem="RW4-xA-kRE" firstAttribute="top" secondItem="BHt-Az-rZe" secondAttribute="bottom" constant="25" id="Uiv-CO-LAF"/>
                             <constraint firstItem="RW4-xA-kRE" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="16" id="Wfp-Or-EQE"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="BHt-Az-rZe" secondAttribute="trailing" constant="16" id="Ymb-q4-hWR"/>
-                            <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="mmq-4w-Hai" secondAttribute="trailing" constant="147" id="efQ-hp-QzC"/>
-                            <constraint firstItem="mmq-4w-Hai" firstAttribute="top" secondItem="3hX-hu-hC3" secondAttribute="bottom" constant="30" id="gbz-pp-LrA"/>
-                            <constraint firstItem="mmq-4w-Hai" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="147" id="hXs-ru-ouN"/>
-                            <constraint firstItem="3hX-hu-hC3" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="16" id="hap-6D-jeK"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="2Tu-q5-Aqh" secondAttribute="trailing" constant="27" id="n3y-bd-v1d"/>
                             <constraint firstItem="BHt-Az-rZe" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="16" id="tdg-ca-Iin"/>
-                            <constraint firstItem="3hX-hu-hC3" firstAttribute="top" secondItem="Iqt-pY-FVh" secondAttribute="bottom" constant="40" id="u8Z-tZ-nx5"/>
                             <constraint firstItem="2Tu-q5-Aqh" firstAttribute="top" secondItem="RW4-xA-kRE" secondAttribute="bottom" constant="32" id="uNv-CC-ECC"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="RW4-xA-kRE" secondAttribute="trailing" constant="16" id="vCG-B1-1di"/>
+                            <constraint firstItem="VAo-LQ-WML" firstAttribute="top" secondItem="Iqt-pY-FVh" secondAttribute="bottom" constant="38" id="wPH-Cf-ng1"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="eyeIconButton" destination="2Tu-q5-Aqh" id="bmn-ok-Sj5"/>
-                        <outlet property="faceIDButton" destination="mmq-4w-Hai" id="R3Z-vy-3JQ"/>
                         <outlet property="masterPasswordTxt" destination="vj6-uN-Bj0" id="KQn-CJ-PiW"/>
                         <segue destination="Xki-Si-B7m" kind="show" identifier="authenUser" id="luv-Kl-SdN"/>
                     </connections>
