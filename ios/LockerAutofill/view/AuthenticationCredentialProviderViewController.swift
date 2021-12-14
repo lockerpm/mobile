@@ -12,19 +12,19 @@ import Toast
 class AuthenticationCredentialProviderViewController: ASCredentialProviderViewController {
   var masterPassword: String = ""
   var isHidePassword: Bool = true
-  
+  var isFaceIdEnabled: Bool = false
   let cipherStore = CoreAuthenticationCredentialProvider()
   
   @IBOutlet weak var eyeIconButton: UIButton!
   @IBOutlet weak var masterPasswordTxt: UITextField!
-  @IBOutlet weak var faceIDButton: UIButton!
-  
+ 
   override func viewDidLoad() {
     super.viewDidLoad()
     // basic usage
-    faceIDButton.contentHorizontalAlignment = .fill
-    faceIDButton.contentVerticalAlignment = .fill
-    faceIDButton.imageView?.contentMode = .scaleAspectFill
+   
+    let myColor : UIColor = UIColor( red: 0, green:0 , blue:0, alpha: 0.2 )
+    masterPasswordTxt.layer.borderColor = myColor.cgColor
+    
   }
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     // Get uri
@@ -35,12 +35,16 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
     
     
     credentialIdStore = CredentialIdentityStore(uri)
+    self.isFaceIdEnabled = credentialIdStore.isFaceIdEnabled()
     
     masterPasswordTxt.isSecureTextEntry = true
     let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
     eyeIconButton.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)
     //faceIDButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
-    biometricAuthentication()
+    
+    if (isFaceIdEnabled){
+        biometricAuthentication()
+    }
     
   }
   @IBAction func unlockDidPress(_ sender: Any) {
@@ -57,16 +61,22 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
     if hashMasterPass == passwordAuthen["hashPass"] {
         authenSuccess()
     } else {
-//      var style = ToastStyle()
-//      style.backgroundColor = .white
-//      style.messageColor = .red
-//      //style.imageSize = CGSize(width: 300, height: 100)
-//      self.view.makeToast("Incorrect Master Password", duration: 2.0, position: .top, style: style)
+        self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
     }
     
   }
   @IBAction func biometricFaceIdDidPress(_ sender: Any) {
-      biometricAuthentication()
+    if (isFaceIdEnabled){
+        biometricAuthentication()
+    }
+    else {
+      let refreshAlert = UIAlertController(title: "Face ID is Not Available", message: "Please enable Faceid/TouchId in Locker to use this feature.", preferredStyle: UIAlertController.Style.alert)
+
+      refreshAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action: UIAlertAction!) in
+            // ok press
+      }))
+      present(refreshAlert, animated: true, completion: nil)
+    }
   }
   
   func biometricAuthentication() {

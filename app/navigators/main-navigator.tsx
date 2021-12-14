@@ -15,7 +15,7 @@ import {
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
-  ImportScreen, ExportScreen, AuthenticatorScreen, QRScannerScreen, AuthenticatorEditScreen,
+  ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
   GoogleAuthenticatorImportScreen
 } from "../screens"
 // @ts-ignore
@@ -46,7 +46,6 @@ export type PrimaryParamList = {
   passwordGenerator: {
     fromTools?: boolean
   },
-  authenticator: undefined,
   authenticator__edit: {
     mode: 'add' | 'edit'
   },
@@ -124,6 +123,7 @@ export const MainNavigator = observer(function MainNavigator() {
     const syncRes = await getSyncData()
     if (syncRes.kind === 'ok') {
       notify('success', translate('success.sync_success'))
+      user.setLastSync(Date.now())
     } else {
       if (syncRes.kind !== 'synching') {
         notify('error', translate('error.sync_failed'))
@@ -311,7 +311,6 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
         <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} initialParams={{ fromTools: false }} />
-        <Stack.Screen name="authenticator" component={AuthenticatorScreen} />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="googleAuthenticatorImport" component={GoogleAuthenticatorImportScreen} />

@@ -244,15 +244,24 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
     </View>
   )
 
+  const renderHeaderAuthenticatorLeft = () => (
+    <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+      <Text
+        preset="largeHeader"
+        text={header}
+      />
+    </View>
+  )
+
   return (
     <Header
-      goBack={() => navigation.goBack()}
+      goBack={!isAuthenticator ? () => navigation.goBack() : undefined}
       right={isSelecting ? renderHeaderSelectRight() : renderHeaderRight()}
-      left={isSelecting ? renderHeaderSelectLeft() : null}
+      left={isSelecting ? renderHeaderSelectLeft() : isAuthenticator && renderHeaderAuthenticatorLeft()}
     >
       <View style={{ marginTop: 10 }}>
 				{
-          !isSelecting && (
+          !isSelecting && !isAuthenticator && (
             <Text
               preset="largeHeader"
               text={header}
