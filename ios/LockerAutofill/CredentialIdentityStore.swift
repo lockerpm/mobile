@@ -46,6 +46,7 @@ class CredentialIdentityStore {
   var passwords: [String: [[String: Any]]] = [:]    // convert autofilldata string to array
   private var keychain: Keychain
   private var passwordAuthen: [String: String] = [:]
+  private var faceIdEnabled: Bool = false
   
   
   var credentials: [PasswordCredential] = []
@@ -67,6 +68,9 @@ class CredentialIdentityStore {
     
     setAutofillData()
     
+  }
+  public func isFaceIdEnabled() -> Bool {
+    return self.faceIdEnabled
   }
   public func getPasswordAuthen() -> [String: String]{
     return self.passwordAuthen
@@ -168,6 +172,9 @@ class CredentialIdentityStore {
         }
         if let authen = autofillData["authen"] as? [String: String] {
           self.passwordAuthen = authen
+        }
+        if let faceIdEnabled = autofillData["faceIdEnabled"] as? Bool {
+          self.faceIdEnabled = faceIdEnabled
         }
       }
       else {

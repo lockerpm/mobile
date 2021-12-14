@@ -21,7 +21,6 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     
   override func viewDidLoad() {
     super.viewDidLoad()
-    print("1")
     self.searchBar.delegate = self
     self.tableView.delegate = self
     self.tableView.dataSource = self
@@ -36,7 +35,10 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     
     newPassword.uri = credentialIdStore.URI
 
-    //self.view.backgroundColor = .black
+    tableView.backgroundColor = .white
+    // set default search bar text color.
+    let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
+    textFieldInsideSearchBar?.textColor = .black
   }
   
   
@@ -138,9 +140,31 @@ extension CredentialProviderViewController: UITableViewDataSource, UITableViewDe
   }
   
   
-  func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    return section == 0 ? "Passwords for \"\(credentialIdStore.URI)\" (\(self.filterCredentials.count))" : "All passwords (\(self.filterOthers.count))"
+//  func tableView(_ tableView: UITableView, 	 section: Int) -> String? {
+//    return section == 0 ? "Passwords for \"\(credentialIdStore.URI)\" (\(self.filterCredentials.count))" : "All passwords (\(self.filterOthers.count))"
+//  }
+//
+  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    let label = UILabel()
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.firstLineHeadIndent = 20
+    
+   // paragraphStyle.
+    let content: String
+    	
+    if section == 0 {
+      content = "Passwords for \"\(credentialIdStore.URI)\" (\(self.filterCredentials.count))"
+    } else {
+      content = "All passwords (\(self.filterOthers.count))"
+    }
+    let attributedString = NSAttributedString(string: content, attributes: [.paragraphStyle : paragraphStyle, .backgroundColor: UIColor.white])
+    label.attributedText = attributedString
+    label.textColor = .lightGray
+    return label
   }
+
+
+
   func numberOfSections(in tableView: UITableView) -> Int {
     
     // #warning Incomplete implementation, return the number of sections

@@ -33,6 +33,7 @@ export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
   return (
     <Layout
       noScroll
+      borderBottom
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
