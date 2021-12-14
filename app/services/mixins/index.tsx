@@ -599,7 +599,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
         let ciphers = await getCiphers({
           deleted: false,
           searchText: '',
-          filters: [c => c.folderId ? c.folderId === f.id : (!c.collectionIds.length && !f.id)]
+          filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && !c.organizationId)]
         })
         f.cipherCount = ciphers ? ciphers.length : 0
       }
@@ -622,6 +622,29 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
         })
         f.cipherCount = ciphers ? ciphers.length : 0
       }
+
+      // Add unassigned
+      let unassignedTeamCiphers = await getCiphers({
+        deleted: false,
+        searchText: '',
+        filters: [(c : CipherView) => !c.collectionIds.length && !!c.organizationId]
+      })
+      unassignedTeamCiphers.forEach((item: CipherView) => {
+        const target = res.find(f => f.id === null && f.organizationId === item.organizationId)
+        if (target) {
+          target.cipherCount += 1
+        } else {
+          // @ts-ignore
+          res.push({
+            cipherCount: 1,
+            hidePasswords: null,
+            id: null,
+            name: '',
+            organizationId: item.organizationId
+          })
+        }
+      })
+
       collectionStore.setCollections(res)
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
@@ -776,13 +799,23 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     // Online
     const request = new ImportCiphersRequest()
     for (let i = 0; i < importResult.ciphers.length; i++) {
-      const c = await cipherService.encrypt(importResult.ciphers[i])
-      request.ciphers.push(new CipherRequest(c))
+      const cipher = importResult.ciphers[i]
+      const countDuplicate = await _countDuplicateCipherName(cipher)
+      if (countDuplicate > 0) {
+        cipher.name = `${cipher.name} (${countDuplicate})`
+      }
+      const enc = await cipherService.encrypt(cipher)
+      request.ciphers.push(new CipherRequest(enc))
     }
     if (importResult.folders != null) {
       for (let i = 0; i < importResult.folders.length; i++) {
-        const f = await folderService.encrypt(importResult.folders[i])
-        request.folders.push(new FolderRequest(f))
+        const folder = importResult.folders[i]
+        const countDuplicate = _countDuplicateFolderName(folder)
+        if (countDuplicate > 0) {
+          folder.name = `${folder.name} (${countDuplicate})`
+        }
+        const enc = await folderService.encrypt(folder)
+        request.folders.push(new FolderRequest(enc))
       }
     }
     if (importResult.folderRelationships != null) {
@@ -800,27 +833,42 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
   }
 
   const _offlineImportCiphers = async (importResult) => {
-    // Prepare data
     const ciphers = []
     const folders = []
+
+    // Prepare ciphers
     for (let i = 0; i < importResult.ciphers.length; i++) {
-      const c = await cipherService.encrypt(importResult.ciphers[i])
-      const enc = new CipherRequest(c)
+      const cipher = importResult.ciphers[i]
+      const countDuplicate = await _countDuplicateCipherName(cipher)
+      if (countDuplicate > 0) {
+        cipher.name = `${cipher.name} (${countDuplicate})`
+      }
+      const enc = await cipherService.encrypt(cipher)
+      const cr = new CipherRequest(enc)
       const tempId = 'tmp__' + randomString()
       // @ts-ignore
-      enc.id = tempId
-      ciphers.push(enc)
+      cr.id = tempId
+      ciphers.push(cr)
     }
+
+    // Prepare folders
     if (importResult.folders != null) {
       for (let i = 0; i < importResult.folders.length; i++) {
-        const f = await folderService.encrypt(importResult.folders[i])
-        const enc = new FolderRequest(f)
+        const folder = importResult.folders[i]
+        const countDuplicate = _countDuplicateFolderName(folder)
+        if (countDuplicate > 0) {
+          folder.name = `${folder.name} (${countDuplicate})`
+        }
+        const enc = await folderService.encrypt(folder)
+        const fr = new FolderRequest(enc)
         const tempId = 'tmp__' + randomString()
         // @ts-ignore
-        enc.id = tempId
-        folders.push(enc)
+        fr.id = tempId
+        folders.push(fr)
       }
     }
+
+    // Prepare relationships
     if (importResult.folderRelationships != null) {
       importResult.folderRelationships.forEach(r => {
         ciphers[r[0]].folderId = folders[r[1]].id
@@ -861,16 +909,39 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     return { kind: 'ok' }
   }
 
+  // Check cipher name duplication
+  const _countDuplicateCipherName = async (cipher: CipherView) => {
+    const ciphers = await getCiphers({
+      deleted: false,
+      searchText: cipher.name,
+      filters: [(c: CipherView) => c.type === cipher.type && c.name.startsWith(cipher.name)]
+    })
+    let count = 1
+    let name = cipher.name
+    while (ciphers.some((c: CipherView) => c.name === name)) {
+      name = `${cipher.name} (${count})`
+      count += 1
+    }
+    return count - 1
+  }
+
+  // Check folder name duplication
+  const _countDuplicateFolderName = (folder: FolderView) => {
+    let count = 1
+    let name = folder.name
+    while (folderStore.folders.some((f: FolderView) => f.name === name)) {
+      name = `${folder.name} (${count})`
+      count += 1
+    }
+    return count - 1
+  }
+
   // Create
   const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
     try {
       // Check name duplication
-      const ciphers = await getCiphers({
-        deleted: false,
-        searchText: cipher.name,
-        filters: [(c: CipherView) => c.type === cipher.type && c.name === cipher.name]
-      })
-      if (ciphers.length) {
+      const countDuplicate = await _countDuplicateCipherName(cipher)
+      if (countDuplicate > 0) {
         notify('error', translate('error.duplicate_cipher_name'))
         return { kind: 'bad-data' }
       }

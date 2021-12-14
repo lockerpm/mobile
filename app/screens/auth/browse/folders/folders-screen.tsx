@@ -165,7 +165,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                   preset="link"
                   onPress={() => {
                     if (item.shared) {
-                      navigation.navigate('folders__ciphers', { collectionId: item.id })
+                      navigation.navigate('folders__ciphers', { collectionId: item.id, organizationId: item.organizationId })
                     } else {
                       navigation.navigate('folders__ciphers', { folderId: item.id })
                     }

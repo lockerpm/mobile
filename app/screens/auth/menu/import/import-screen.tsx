@@ -104,6 +104,7 @@ export const ImportScreen = function ImportScreen() {
           content = pre.textContent
         } else {
           notify('error', translate('import.invalid_data_format'))
+          setFile(fileData)
           setIsLoading(false)
           return
         }
@@ -114,6 +115,7 @@ export const ImportScreen = function ImportScreen() {
         importResult = await importer.parse(content)
       } catch (e) {
         notify('error', translate('import.invalid_data_format'))
+        setFile(fileData)
         setIsLoading(false)
         return
       }
@@ -121,6 +123,7 @@ export const ImportScreen = function ImportScreen() {
       if (importResult.success) {
         if (importResult.folders.length === 0 && importResult.ciphers.length === 0) {
           notify('error', translate('import.no_data'))
+          setFile(fileData)
           setIsLoading(false)
           return
         } else if (importResult.ciphers.length > 0) {
@@ -132,6 +135,7 @@ export const ImportScreen = function ImportScreen() {
             badData(importResult.ciphers[last])
           ) {
             notify('error', translate('import.invalid_data_format'))
+            setFile(fileData)
             setIsLoading(false)
             return
           }
@@ -139,6 +143,7 @@ export const ImportScreen = function ImportScreen() {
 
         try {
           await importCiphers(importResult)
+          setFile(fileData)
           setIsLoading(false)
           return
         } catch (error) {

@@ -84,6 +84,7 @@ export type PrimaryParamList = {
   folders__ciphers: {
     folderId?: string | null
     collectionId?: string | null
+    organizationId?: string | null
   },
   settings: {
     fromIntro?: boolean
