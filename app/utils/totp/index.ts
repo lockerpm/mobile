@@ -182,3 +182,18 @@ const _parseAlgorithm = (algo: string) => {
   }
   return 'SHA-1'
 }
+
+export const beautifyName = (name: string) => {
+  try {
+    if (name.includes(':')) {
+      const components = name.split(':')
+      const provider = components[0]
+      const account = components.slice(1).join(':')
+      return `${provider} (${account})`
+    }
+  } catch (e) {
+    return name
+  }
+
+  return name
+}

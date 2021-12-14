@@ -3,7 +3,6 @@ import { FloatingInput, Button, Modal, Text } from "../../../../components"
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../../../../services/mixins"
 import { View } from "react-native"
-import { color as colorLight, colorDark } from "../../../../theme"
 import { useStores } from "../../../../models"
 import { useCoreService } from "../../../../services/core-service"
 
@@ -15,10 +14,9 @@ interface Props {
 
 export const PurgeAccountModal = observer((props: Props) => {
   const { isOpen, onClose, navigation } = props
-  const { user, uiStore } = useStores()
-  const { notify, translate, notifyApiError, lock } = useMixins()
+  const { user } = useStores()
+  const { notify, translate, notifyApiError, lock, color } = useMixins()
   const { cryptoService } = useCoreService()
-  const color = uiStore.isDark ? colorDark : colorLight
 
   const [masterPass, setMasterPass] = useState('')
   const [count, setCount] = useState(0)
@@ -75,7 +73,7 @@ export const PurgeAccountModal = observer((props: Props) => {
       <View style={{
         borderRadius: 5,
         borderTopWidth: 1,
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.5,
         borderRightWidth: 1,
         borderLeftWidth: 4,
         borderTopColor: color.line,

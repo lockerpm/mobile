@@ -23,6 +23,9 @@ export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
   })
   const [sortOption, setSortOption] = useState('az')
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedItems, setSelectedItems] = useState([])
+  const [isSelecting, setIsSelecting] = useState(false)
+  const [allItems, setAllItems] = useState([])
 
 
   // -------------------- RENDER ----------------------
@@ -33,12 +36,25 @@ export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
+          isAuthenticator
           header={translate('authenticator.title')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
           searchText={searchText}
           onSearch={setSearchText}
+          isSelecting={isSelecting}
+          setIsSelecting={setIsSelecting}
+          selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
+          setIsLoading={setIsLoading}
+          toggleSelectAll={() => {
+            if (selectedItems.length < allItems.length) {
+              setSelectedItems(allItems)
+            } else {
+              setSelectedItems([])
+            }
+          }}
         />
       )}
     >
@@ -62,9 +78,15 @@ export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
 
       {/* OTP list */}
       <OtpList
+        navigation={navigation}
         searchText={searchText}
         sortList={sortList}
         onLoadingChange={setIsLoading}
+        isSelecting={isSelecting}
+        setIsSelecting={setIsSelecting}
+        selectedItems={selectedItems}
+        setSelectedItems={setSelectedItems}
+        setAllItems={setAllItems}
         emptyContent={(
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}

@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { StyleProp, View, ViewStyle, TextInput, TextInputProps } from "react-native"
-import { observer } from "mobx-react-lite"
-import { color, fontSize } from "../../theme"
+import { fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -29,7 +28,7 @@ export interface NativeFloatingInputProps extends TextInputProps {
 /**
  * Describe your component here
  */
-export const NativeFloatingInput = observer(function NativeFloatingInput(props: NativeFloatingInputProps) {
+export const NativeFloatingInput = function NativeFloatingInput(props: NativeFloatingInputProps) {
   const {
     style, inputStyle, isInvalid, isRequired, label, isPassword, value, placeholder,
     fixedLabel, editable = true, disabled, buttonRight, textarea, onChangeText,
@@ -37,7 +36,8 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
     ...rest
   } = props
 
-  const { copyToClipboard } = useMixins()
+  const { copyToClipboard, color } = useMixins()
+
   const [isFocused, setFocus] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -78,8 +78,8 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
   return (
     <View style={[
       {
-        borderBottomColor: isInvalid ? color.error : isFocused ? color.palette.green : color.line,
-        borderBottomWidth: 1,
+        borderBottomColor: isInvalid ? color.error : isFocused ? color.primary : color.line,
+        borderBottomWidth: 0.5,
         height: textarea ? 92 : 50
       }, style
     ]}>
@@ -111,6 +111,7 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
       </View>
       {
         maskType || maskOptions ? (
+          // @ts-ignore
           <TextInputMask
             type={maskType || 'custom'}
             options={maskOptions}
@@ -118,6 +119,7 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
             onChangeText={(text) => onChangeText && onChangeText(text)}
           />
         ) : (
+          // @ts-ignore
           <TextInput
             {...textInputProps}
             onChangeText={(text) => onChangeText && onChangeText(text)}
@@ -166,4 +168,4 @@ export const NativeFloatingInput = observer(function NativeFloatingInput(props: 
       </View>
     </View>
   )
-})
+}

@@ -13,14 +13,16 @@ export const StartScreen = observer(function StartScreen() {
   const { user } = useStores()
   const { 
     getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate, 
-    loadPasswordsHealth
+    loadPasswordsHealth, syncAutofillData
   } = useMixins()
   const navigation = useNavigation()
 
   const [msg, setMsg] = useState('')
 
   const mounted = async () => {
+    await syncAutofillData()
     const connectionState = await NetInfo.fetch()
+
     if (connectionState.isInternetReachable) {
       setMsg(translate('start.synching'))
       await delay(500)

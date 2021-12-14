@@ -6,16 +6,15 @@ import { useMixins } from "../../../../../services/mixins"
 import { Button, Header, Layout, AutoImage as Image, Text } from "../../../../../components"
 import { FlatList, View } from "react-native"
 import { CipherView } from "../../../../../../core/models/view"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
+import { commonStyles, fontSize } from "../../../../../theme"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 
 
 export const ExposedPasswordList = observer(function ExposedPasswordList() {
   const navigation = useNavigation()
-  const { toolStore, cipherStore, uiStore } = useStores()
-  const { translate, getWebsiteLogo } = useMixins()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { toolStore, cipherStore } = useStores()
+  const { translate, getWebsiteLogo, color } = useMixins()
 
   // -------------- COMPUTED ------------------
 
@@ -78,7 +77,7 @@ export const ExposedPasswordList = observer(function ExposedPasswordList() {
               onPress={() => goToDetail(item)}
               style={{
                 borderBottomColor: color.line,
-                borderBottomWidth: 1,
+                borderBottomWidth: 0.5,
                 paddingVertical: 15
               }}
             >
@@ -122,7 +121,7 @@ export const ExposedPasswordList = observer(function ExposedPasswordList() {
                           text={`${item.count} ${translate('common.times')}`}
                           style={{
                             fontWeight: 'bold',
-                            color: color.palette.white,
+                            color: color.white,
                             fontSize: fontSize.mini
                           }}
                         />

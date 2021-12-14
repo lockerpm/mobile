@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react"
-import { observer } from "mobx-react-lite"
 import { Button, Header, Layout, Text } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../services/mixins"
 import { View } from "react-native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import RNAndroidSettingsTool from "react-native-android-settings-tool"
 import { getApiLevel } from 'react-native-device-info'
-import { useStores } from "../../../../models"
 
 
-export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
+export const AutofillServiceScreen = function AutofillServiceScreen() {
   const navigation = useNavigation()
-  const { translate } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, color } = useMixins()
 
 	const [api, setApi] = useState(0)
 
@@ -107,4 +103,4 @@ export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
 			}
     </Layout>
   )
-})
+}

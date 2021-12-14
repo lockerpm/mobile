@@ -3,11 +3,10 @@ import { observer } from "mobx-react-lite"
 import { Linking, View } from "react-native"
 import { Layout, Text, Button, Header } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
+import { commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
 import { PRIVACY_POLICY_URL, TERMS_URL } from "../../../../config/constants"
-import { useStores } from "../../../../models"
 
 
 type Item = {
@@ -19,9 +18,7 @@ type Item = {
 
 export const HelpScreen = observer(function HelpScreen() {
   const navigation = useNavigation()
-  const { translate } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { translate, color } = useMixins()
   
   const items: Item[] = [
     {

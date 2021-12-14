@@ -8,7 +8,7 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../home/all-item/sort-action"
 import { SectionList, View } from "react-native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { NewFolderModal } from "./new-folder-modal"
@@ -23,11 +23,10 @@ import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
-  const { getTeam, randomString, translate } = useMixins()
+  const { getTeam, randomString, translate, color } = useMixins()
   const { folderStore, collectionStore, user, uiStore } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // Params
 
@@ -93,7 +92,13 @@ export const FoldersScreen = observer(function FoldersScreen() {
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
           searchText={searchText}
-          onSearch={setSearchText}
+          onSearch={setSearchText} 
+          isSelecting={false} 
+          setIsSelecting={() => {}} 
+          selectedItems={[]} 
+          setSelectedItems={() => {}} 
+          toggleSelectAll={() => {}} 
+          setIsLoading={() => {}}        
         />
       )}
       borderBottom
@@ -109,6 +114,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
       />
 
       <SortAction
+        byNameOnly
         isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string, order: string }) => {
@@ -166,7 +172,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                   }}
                   style={{
                     borderBottomColor: color.line,
-                    borderBottomWidth: 1,
+                    borderBottomWidth: 0.5,
                     paddingVertical: 15,
                   }}
                 >

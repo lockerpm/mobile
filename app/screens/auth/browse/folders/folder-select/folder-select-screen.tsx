@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Text, Header, Button } from "../../../../../components"
 import { useNavigation, useRoute } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
+import { commonStyles, fontSize } from "../../../../../theme"
 import { RouteProp } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -21,9 +21,8 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
   const navigation = useNavigation()
   const route = useRoute<FolderSelectScreenProp>()
   const { mode, initialId, cipherIds = [] } = route.params
-  const { folderStore, cipherStore, uiStore } = useStores()
-  const { notify, translate, notifyApiError } = useMixins()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { folderStore, cipherStore } = useStores()
+  const { notify, translate, notifyApiError, color } = useMixins()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)

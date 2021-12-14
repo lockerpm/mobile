@@ -1,9 +1,8 @@
 import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Header, Select, Text, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { color as colorLight, colorDark, commonStyles } from "../../../../theme"
+import { commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { SettingsItem } from "../settings/settings-item"
 import { useCoreService } from "../../../../services/core-service"
@@ -11,16 +10,13 @@ import DocumentPicker from 'react-native-document-picker'
 import RNFS from 'react-native-fs'
 import { CipherType } from "../../../../../core/enums"
 import { Utils } from "../../../../../core/misc/utils"
-import { useStores } from "../../../../models"
 const DOMParser = require('react-native-html-parser').DOMParser
 
 
-export const ImportScreen = observer(function ImportScreen() {
+export const ImportScreen = function ImportScreen() {
   const navigation = useNavigation()
-  const { translate, notify, importCiphers } = useMixins()
+  const { translate, notify, importCiphers, color } = useMixins()
   const { importService } = useCoreService()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // PARAMS
 
@@ -183,13 +179,15 @@ export const ImportScreen = observer(function ImportScreen() {
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
-        backgroundColor: color.background
+        backgroundColor: color.background,
+        paddingVertical: 20
       }]}>
         <Select
           showSearch
           value={format}
           onChange={(val: string) => setFormat(val)}
           options={formats}
+          title={translate('import.format')}
           renderSelected={({ label }) => (
             <SettingsItem
               style={{ width: '100%' }}
@@ -222,11 +220,11 @@ export const ImportScreen = observer(function ImportScreen() {
           text={translate('settings.import')}
           onPress={handleImport}
           style={{
-            marginBottom: 30,
-            marginTop: 30
+            marginTop: 30,
+            marginBottom: 10
           }}
         />
       </View> 
     </Layout>
   )
-})
+}

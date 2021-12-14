@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { StyleProp, View, ViewStyle, TextInputProps } from "react-native"
-import { observer } from "mobx-react-lite"
-import { color as colorLight, colorDark, fontSize } from "../../theme"
+import { fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -9,7 +8,6 @@ import { useMixins } from "../../services/mixins"
 import TextField from 'react-native-ui-lib/textField'
 import { MaskService, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
 import { translate } from "../../i18n"
-import { useStores } from "../../models"
 
 
 export interface WixFloatingInputProps extends TextInputProps {
@@ -29,23 +27,22 @@ export interface WixFloatingInputProps extends TextInputProps {
   maskType?: TextInputMaskTypeProp,
   maskOptions?: TextInputMaskOptionProp,
   copyAble?: boolean,
-  persistError?: boolean
+  persistError?: boolean,
+  hidePassword?: boolean
 }
 
 /**
  * Describe your component here
  */
-export const WixFloatingInput = observer(function WixFloatingInput(props: WixFloatingInputProps) {
+export const WixFloatingInput = function WixFloatingInput(props: WixFloatingInputProps) {
   const {
     outerRef, style, inputStyle, label, isPassword, value, placeholder,
     editable = true, disabled, buttonRight, onChangeText, copyAble, textarea,
-    maskType, maskOptions, isRequired, persistError,
+    maskType, maskOptions, isRequired, persistError, hidePassword,
     ...rest
   } = props
 
-  const { copyToClipboard } = useMixins()
-  const { uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { copyToClipboard, color } = useMixins()
   const [showPassword, setShowPassword] = useState(false)
   const [firstFocused, setFirstFocused] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
@@ -136,7 +133,7 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
       {/* Button right */}
       <View style={BUTTON_CONTAINER}>
         {
-          isPassword && (
+          (isPassword && !hidePassword) && (
             <Button
               preset="link"
               onPress={() => setShowPassword(!showPassword)}
@@ -176,4 +173,4 @@ export const WixFloatingInput = observer(function WixFloatingInput(props: WixFlo
       {/* Button right end */}
     </View>
   )
-})
+}

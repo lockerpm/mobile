@@ -21,7 +21,6 @@ import {
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
-import { color } from "../theme"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../models"
@@ -48,7 +47,9 @@ export type PrimaryParamList = {
     fromTools?: boolean
   },
   authenticator: undefined,
-  authenticator__edit: undefined,
+  authenticator__edit: {
+    mode: 'add' | 'edit'
+  },
   qrScanner: undefined,
   googleAuthenticatorImport: undefined,
   passwordHealth: undefined,
@@ -101,11 +102,12 @@ export const MainNavigator = observer(function MainNavigator() {
   const navigation = useNavigation()
   const { 
     lock, getSyncData, getCipherById, loadFolders, loadCollections, logout, 
-    loadPasswordsHealth
+    loadPasswordsHealth, notify, translate, syncAutofillData
   } = useMixins()
   const { uiStore, user, cipherStore } = useStores()
 
   let appIsActive = true
+  let isSynchingAutofill = false
   const [socket, setSocket] = useState(null)
   const [appIsReady, setAppIsReady] = useState(false)
 
@@ -113,7 +115,15 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // Sync
   const handleSync = async () => {
-    await getSyncData()
+    const syncRes = await getSyncData()
+    if (syncRes.kind === 'ok') {
+      notify('success', translate('success.sync_success'))
+    } else {
+      if (syncRes.kind !== 'synching') {
+        notify('error', translate('error.sync_failed'))
+      }
+    }
+
     await Promise.all([
       loadFolders(),
       loadCollections()
@@ -144,9 +154,22 @@ export const MainNavigator = observer(function MainNavigator() {
       return
     }
 
+    // Sync autofill data
+    if (!appIsActive && !isSynchingAutofill) {
+      isSynchingAutofill = true
+      syncAutofillData().then(() => {
+        isSynchingAutofill = false
+      }).catch(e => {
+        __DEV__ && console.log(e)
+        isSynchingAutofill = false
+      })
+    }
+
     // Active
     if (!appIsActive && user.appTimeout && user.appTimeout === -1) {
       appIsActive = true
+
+      // Check user settings to lock
       if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
         await logout()
         navigation.navigate('onBoarding')
@@ -262,7 +285,6 @@ export const MainNavigator = observer(function MainNavigator() {
       <Stack.Navigator
         initialRouteName="start"
         screenOptions={{
-          cardStyle: { backgroundColor: color.palette.white },
           headerShown: false
         }}
       >
@@ -277,7 +299,7 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} initialParams={{ fromTools: false }} />
         <Stack.Screen name="authenticator" component={AuthenticatorScreen} />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
-        <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} />
+        <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="googleAuthenticatorImport" component={GoogleAuthenticatorImportScreen} />
 
         <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />

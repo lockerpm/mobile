@@ -5,15 +5,14 @@ import { useNavigation } from "@react-navigation/core"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { Button, Header, Layout, Text, AutoImage as Image } from "../../../../../components"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../../../theme"
+import { commonStyles, fontSize } from "../../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
 
 export const DataBreachListScreen = observer(function DataBreachListScreen() {
-  const { translate } = useMixins()
+  const { translate, color } = useMixins()
   const navigation = useNavigation()
-  const { toolStore, uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { toolStore } = useStores()
 
   return (
     <Layout

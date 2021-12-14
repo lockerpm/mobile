@@ -16,25 +16,31 @@ import { PasswordAction } from "../../../screens/auth/browse/passwords/password-
 import { CardAction } from "../../../screens/auth/browse/cards/card-action"
 import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
 import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
-import { color as colorLight, colorDark, commonStyles, fontSize } from "../../../theme"
+import { commonStyles, fontSize } from "../../../theme"
 import { DeletedAction } from "../cipher-action/deleted-action"
+import { Checkbox } from "react-native-ui-lib"
 
 
 export interface CipherListProps {
-  emptyContent?: JSX.Element,
-  navigation: any,
-  searchText?: string,
-  onLoadingChange?: Function,
-  cipherType?: CipherType,
-  deleted?: boolean,
+  emptyContent?: JSX.Element
+  navigation: any
+  searchText?: string
+  onLoadingChange?: Function
+  cipherType?: CipherType
+  deleted?: boolean
   sortList?: {
-    orderField: string,
+    orderField: string
     order: string
   },
-  folderId?: string,
-  collectionId?: string,
-  organizationId?: string,
+  folderId?: string
+  collectionId?: string
+  organizationId?: string
   isPersonalUndefined?: boolean
+  isSelecting: boolean
+  setIsSelecting: Function
+  selectedItems: string[]
+  setSelectedItems: Function
+  setAllItems: Function
 }
 
 /**
@@ -43,11 +49,11 @@ export interface CipherListProps {
 export const CipherList = observer(function CipherList(props: CipherListProps) {
   const {
     emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList, folderId,
-    collectionId, organizationId, isPersonalUndefined
+    collectionId, organizationId, isPersonalUndefined,
+    isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { getWebsiteLogo, getCiphers, translate } = useMixins()
-  const { cipherStore, uiStore } = useStores()
-  const color = uiStore.isDark ? colorDark : colorLight
+  const { getWebsiteLogo, getCiphers, translate, color } = useMixins()
+  const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
 
@@ -90,7 +96,8 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
         logo: null,
         imgLogo: null,
         svg: null,
-        notSync: cipherStore.notSynchedCiphers.includes(c.id)
+        notSync: cipherStore.notSynchedCiphers.includes(c.id),
+        isDeleted: c.isDeleted
       }
       switch (c.type) {
         case CipherType.Login: {
@@ -160,6 +167,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
     // Done
     setCiphers(res)
+    setAllItems(res.map(c => c.id))
   }
 
   // Handle action menu open
@@ -222,6 +230,20 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     return ''
   }
 
+  // Toggle item selection
+  const toggleItemSelection = (item: CipherView) => {
+    if (!isSelecting) {
+      setIsSelecting(true)
+    }
+    let selected = [...selectedItems]
+    if (!selected.includes(item.id)) {
+      selected.push(item.id)
+    } else {
+      selected = selected.filter(id => id !== item.id)
+    }
+    setSelectedItems(selected)
+  }
+
   // ------------------------ RENDER ----------------------------
 
   return ciphers.length ? (
@@ -267,16 +289,25 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
       {/* Cipher list */}
       <FlatList
-        style={{ paddingHorizontal: 20 }}
+        style={{ 
+          paddingHorizontal: 20, 
+        }}
         data={ciphers}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <Button
             preset="link"
-            onPress={() => goToDetail(item)}
+            onPress={() => {
+              if (isSelecting) {
+                toggleItemSelection(item)
+              } else {
+                goToDetail(item)
+              }
+            }}
+            onLongPress={() => toggleItemSelection(item)}
             style={{
               borderBottomColor: color.line,
-              borderBottomWidth: 1,
+              borderBottomWidth: 0.5,
               paddingVertical: 15
             }}
           >
@@ -338,17 +369,29 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                 }
               </View>
 
-              <Button
-                preset="link"
-                onPress={() => openActionMenu(item)}
-                style={{ height: 40, alignItems: 'center' }}
-              >
-                <IoniconsIcon
-                  name="ellipsis-horizontal"
-                  size={18}
-                  color={color.textBlack}
-                />
-              </Button>
+              {
+                isSelecting ? (
+                  <Checkbox
+                    value={selectedItems.includes(item.id)}
+                    color={color.primary}
+                    onValueChange={() => {
+                      toggleItemSelection(item)
+                    }}
+                  />
+                ) : (
+                  <Button
+                    preset="link"
+                    onPress={() => openActionMenu(item)}
+                    style={{ height: 40, alignItems: 'center' }}
+                  >
+                    <IoniconsIcon
+                      name="ellipsis-horizontal"
+                      size={18}
+                      color={color.textBlack}
+                    />
+                  </Button>
+                )
+              }
             </View>
           </Button>
         )}

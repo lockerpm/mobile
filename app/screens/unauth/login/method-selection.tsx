@@ -5,7 +5,7 @@ import {Text, Button } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { color as colorLight, colorDark, commonStyles } from "../../../theme"
+import { commonStyles } from "../../../theme"
 import { useStores } from "../../../models"
 
 
@@ -22,10 +22,9 @@ type Props = {
 
 
 export const MethodSelection = observer(function MethodSelection(props: Props) {
-  const { user, uiStore } = useStores()
-  const { translate, notifyApiError } = useMixins()
+  const { user } = useStores()
+  const { translate, notifyApiError, color } = useMixins()
   const { methods, onSelect, goBack, username, password } = props
-  const color = uiStore.isDark ? colorDark : colorLight
 
   // ------------------ Params -----------------------
 

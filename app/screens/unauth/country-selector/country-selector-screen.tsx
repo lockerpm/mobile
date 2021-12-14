@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View, FlatList, Image } from "react-native"
 import { Button, Header, Layout, SearchBar, Text } from "../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { color, commonStyles } from "../../../theme"
+import { commonStyles } from "../../../theme"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import countries from '../../../common/countries.json'
 import flags from '../../../common/flags.json'
@@ -16,7 +16,7 @@ type CountrySelectScreenProp = RouteProp<RootParamList, 'countrySelector'>;
 export const CountrySelectorScreen = observer(function CountrySelectorScreen() {
   const navigation = useNavigation()
   const { uiStore } = useStores()
-  const { translate } = useMixins()
+  const { translate, color } = useMixins()
   const route = useRoute<CountrySelectScreenProp>()
   const { initialId } = route.params
 
@@ -89,7 +89,7 @@ export const CountrySelectorScreen = observer(function CountrySelectorScreen() {
                   <Icon
                     name="check"
                     size={16}
-                    color={color.palette.green}
+                    color={color.primary}
                   />
                 )
               }
