@@ -25,6 +25,9 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
     faceIDButton.contentHorizontalAlignment = .fill
     faceIDButton.contentVerticalAlignment = .fill
     faceIDButton.imageView?.contentMode = .scaleAspectFill
+    let myColor : UIColor = UIColor( red: 0, green:0 , blue:0, alpha: 0.2 )
+    masterPasswordTxt.layer.borderColor = myColor.cgColor
+    
   }
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     // Get uri
