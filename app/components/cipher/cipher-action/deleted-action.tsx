@@ -25,9 +25,10 @@ export interface DeletedActionProps {
  * Describe your component here
  */
 export const DeletedAction = observer(function DeletedAction(props: DeletedActionProps) {
-  const { navigation, isOpen, onClose, children, onLoadingChange } = props
+  const { navigation, isOpen, onClose, children } = props
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [nextModal, setNextModal] = useState<'deleteConfirm' | null>(null)
 
   const { deleteCiphers, getRouteName, restoreCiphers, translate, getWebsiteLogo } = useMixins()
   const { cipherStore, uiStore } = useStores()
@@ -94,6 +95,16 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
     }
   }
 
+  const handleActionSheetClose = () => {
+    onClose()
+    switch (nextModal) {
+      case 'deleteConfirm':
+        setShowConfirmModal(true)
+        break
+    }
+    setNextModal(null)
+  }
+
   // Render
 
   return (
@@ -114,7 +125,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
       {/* Actionsheet */}
       <ActionSheet
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={handleActionSheetClose}
       >
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -182,12 +193,8 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
             icon="trash"
             textColor={color.error}
             action={() => {
-              onLoadingChange && onLoadingChange(true)
+              setNextModal('deleteConfirm')
               onClose()
-              setTimeout(() => {
-                setShowConfirmModal(true)
-                onLoadingChange && onLoadingChange(false)
-              }, 1500)
             }}
           />
         </ActionSheetContent>

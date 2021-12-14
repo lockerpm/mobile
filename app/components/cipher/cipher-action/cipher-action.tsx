@@ -29,11 +29,12 @@ export interface CipherActionProps {
  * Describe your component here
  */
 export const CipherAction = observer(function CipherAction(props: CipherActionProps) {
-  const { navigation, isOpen, onClose, children, onLoadingChange } = props
+  const { navigation, isOpen, onClose, children } = props
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
   const [showChangeTeamFolderModal, setShowChangeTeamFolderModal] = useState(false)
+  const [nextModal, setNextModal] = useState<'changeTeamFolder' | 'share' | 'trashConfirm' | null>(null)
 
   const { toTrashCiphers, getRouteName, translate, getTeam, getWebsiteLogo, color } = useMixins()
   const { cipherStore, user, uiStore } = useStores()
@@ -93,6 +94,22 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
     }
   }
 
+  const handleActionSheetClose = () => {
+    onClose()
+    switch (nextModal) {
+      case 'changeTeamFolder':
+        setShowChangeTeamFolderModal(true)
+        break
+      case 'share':
+        setShowShareModal(true)
+        break
+      case 'trashConfirm':
+        setShowConfirmModal(true)
+        break
+    }
+    setNextModal(null)
+  }
+
   // Render
 
   return (
@@ -123,7 +140,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
       {/* Actionsheet */}
       <ActionSheet
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={handleActionSheetClose}
       >
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -198,12 +215,8 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                       name={translate('common.team_folders')}
                       icon="user-o"
                       action={() => {
-                        onLoadingChange && onLoadingChange(true)
+                        setNextModal('changeTeamFolder')
                         onClose()
-                        setTimeout(() => {
-                          setShowChangeTeamFolderModal(true)
-                          onLoadingChange && onLoadingChange(false)
-                        }, 1500)
                       }}
                     />
                   )
@@ -228,12 +241,8 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                       name={translate('common.share')}
                       icon="share-square-o"
                       action={() => {
-                        onLoadingChange && onLoadingChange(true)
+                        setNextModal('share')
                         onClose()
-                        setTimeout(() => {
-                          setShowShareModal(true)
-                          onLoadingChange && onLoadingChange(false)
-                        }, 1500)
                       }}
                     />
                   )
@@ -245,12 +254,8 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   icon="trash"
                   textColor={color.error}
                   action={() => {
-                    onLoadingChange && onLoadingChange(true)
+                    setNextModal('trashConfirm')
                     onClose()
-                    setTimeout(() => {
-                      onLoadingChange && onLoadingChange(false)
-                      setShowConfirmModal(true)
-                    }, 1500)
                   }}
                 />
               </View>
