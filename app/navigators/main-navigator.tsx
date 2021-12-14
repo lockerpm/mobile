@@ -153,8 +153,10 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // App screen lock trigger
   const _handleAppStateChange = async (nextAppState: string) => {
+    __DEV__ && console.log(nextAppState)
+
     // Ohter state (background/inactive)
-    if (nextAppState !== 'active') {
+    if (nextAppState === 'background') {
       appIsActive = false
       uiStore.clearDeepLink()
       return
@@ -174,6 +176,12 @@ export const MainNavigator = observer(function MainNavigator() {
     // Active
     if (!appIsActive && user.appTimeout && user.appTimeout === -1) {
       appIsActive = true
+
+      // Dont lock if user just return from overlay task
+      if (uiStore.isPerformOverlayTask) {
+        uiStore.setIsPerformOverlayTask(false)
+        return
+      }
 
       // Check user settings to lock
       if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {

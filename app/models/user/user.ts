@@ -37,7 +37,7 @@ export const UserModel = types
     // User
     language: types.optional(types.string, 'en'),
     isBiometricUnlock: types.maybeNull(types.boolean),
-    appTimeout: types.optional(types.number, -1),
+    appTimeout: types.optional(types.number, 0),
     appTimeoutAction: types.optional(types.string, 'lock'),
   })
   .extend(withEnvironment)
@@ -89,7 +89,7 @@ export const UserModel = types
     },
     clearSettings: () => {
       self.isBiometricUnlock = false
-      self.appTimeout = -1
+      self.appTimeout = 0
       self.appTimeoutAction = 'lock'
     },
     setLoggedInPw: (isLoggedInPw: boolean) => {
