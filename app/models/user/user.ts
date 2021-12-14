@@ -39,6 +39,7 @@ export const UserModel = types
     isBiometricUnlock: types.maybeNull(types.boolean),
     appTimeout: types.optional(types.number, 0),
     appTimeoutAction: types.optional(types.string, 'lock'),
+    defaultTab: types.optional(types.string, 'homeTab')
   })
   .extend(withEnvironment)
   .views((self) => ({}))
@@ -91,6 +92,7 @@ export const UserModel = types
       self.isBiometricUnlock = false
       self.appTimeout = 0
       self.appTimeoutAction = 'lock'
+      self.defaultTab = 'homeTab'
     },
     setLoggedInPw: (isLoggedInPw: boolean) => {
       self.isLoggedInPw = isLoggedInPw
@@ -129,6 +131,9 @@ export const UserModel = types
     },
     setAppTimeoutAction: (action: string) => {
       self.appTimeoutAction = action
+    },
+    setDefaultTab: (defaultTab: string) => {
+      self.defaultTab = defaultTab
     }
   }))
   .actions((self) => ({
