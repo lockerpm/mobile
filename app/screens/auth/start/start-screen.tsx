@@ -86,10 +86,14 @@ export const StartScreen = observer(function StartScreen() {
     navigation.navigate('mainTab', { screen: user.defaultTab })
   }
 
-  // Life cycle
+  // --------------------------- EFFECT ----------------------------
+
+  // Always move forward
   useEffect(() => {
-    mounted()
-  }, [])
+    const unsubscribe = navigation.addListener('focus', mounted)
+    return unsubscribe
+  }, [navigation])
+
 
   return (
     <Loading message={msg} />
