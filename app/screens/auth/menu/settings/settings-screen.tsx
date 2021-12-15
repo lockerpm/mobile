@@ -62,7 +62,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
   const updateAutofillFaceIdSetting = async (enabled: boolean) => {
     const credentials = await loadShared()
-    if (credentials) {
+    if (credentials && credentials.password) {
       const sharedData: AutofillDataType = JSON.parse(credentials.password)
       sharedData.faceIdEnabled = enabled
       await saveShared('autofill', JSON.stringify(sharedData))
