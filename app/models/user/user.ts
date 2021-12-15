@@ -87,6 +87,7 @@ export const UserModel = types
       self.invitations = cast([])
       self.plan = null
       self.fingerprint = ''
+      self.lastSync = null
     },
     clearSettings: () => {
       self.isBiometricUnlock = false

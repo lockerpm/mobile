@@ -414,6 +414,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       cipherStore.setIsSynching(false)
       return { kind: 'ok' }
     } catch (e) {
+      console.log(e)
       cipherStore.setIsSynching(false)
       messagingService.send('syncCompleted', { successfully: false })
       return { kind: 'bad-data' }
@@ -537,7 +538,14 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
   // Sync autofill data
   const syncAutofillData = async () => {
     const credentials = await loadShared()
-    if (!credentials) {
+    if (!credentials || !credentials.password) {
+      const sharedData: AutofillDataType = {
+        passwords: [],
+        deleted: [],
+        authen: null,
+        faceIdEnabled: false
+      }
+      await saveShared('autofill', JSON.stringify(sharedData))
       return
     }
 
