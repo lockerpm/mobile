@@ -414,6 +414,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       cipherStore.setIsSynching(false)
       return { kind: 'ok' }
     } catch (e) {
+      console.log(e)
       cipherStore.setIsSynching(false)
       messagingService.send('syncCompleted', { successfully: false })
       return { kind: 'bad-data' }
