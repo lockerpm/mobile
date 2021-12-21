@@ -23,7 +23,8 @@ class EditPasaswordViewController: UIViewController {
   
   @IBOutlet weak var hidePasswordIconButton: UIButton!
   
-
+  @IBOutlet weak var deleteButton: UIButton!
+  
   var credential: PasswordCredential!
   let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
   override func viewDidLoad() {
@@ -35,9 +36,15 @@ class EditPasaswordViewController: UIViewController {
     self.uriLabel.text = credential.uri
     self.password.text = credential.password
     
+    
     //disable input text field
     self.username.isUserInteractionEnabled = false
     self.password.isUserInteractionEnabled = false
+    
+    // Unable to delete credentials that the user does not own
+    if ( !credential.isOwner ) {
+      self.deleteButton.isEnabled = false
+    }
     
     
     hidePasswordIconButton.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)

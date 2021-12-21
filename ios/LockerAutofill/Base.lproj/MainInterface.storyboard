@@ -704,6 +704,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="vJ1-90-vx5"/>
                     <connections>
+                        <outlet property="deleteButton" destination="qT4-kH-DIQ" id="wUb-UA-vkf"/>
                         <outlet property="hidePasswordIconButton" destination="k5T-7a-coE" id="TEt-hN-pW8"/>
                         <outlet property="nameLabel" destination="3e0-5H-fCC" id="AWL-LU-BFK"/>
                         <outlet property="passCopyButton" destination="KNm-CT-R4A" id="3FT-Dz-KUH"/>
