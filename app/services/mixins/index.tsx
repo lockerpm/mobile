@@ -27,6 +27,7 @@ import { KvpRequest } from '../../../core/models/request/kvpRequest'
 import { observer } from 'mobx-react-lite'
 import { color, colorDark } from '../../theme'
 import moment from 'moment'
+import DeviceInfo from 'react-native-device-info'
 
 
 const { createContext, useContext } = React
@@ -151,7 +152,8 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
         password: keyHash,
         device_name: platformUtilsService.getDeviceString(),
         device_type: platformUtilsService.getDevice(),
-        device_identifier: await storageService.get('device_id') || randomString()
+        // device_identifier: await storageService.get('device_id') || randomString(),
+        device_identifier: DeviceInfo.getUniqueId()
       })
       if (res.kind === 'unauthorized') {
         notify('error', translate('error.token_expired'))
