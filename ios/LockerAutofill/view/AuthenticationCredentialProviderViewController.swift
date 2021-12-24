@@ -20,12 +20,12 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
  
   override func viewDidLoad() {
     super.viewDidLoad()
-    // basic usage
+    
    
     let myColor : UIColor = UIColor( red: 0, green:0 , blue:0, alpha: 0.2 )
     masterPasswordTxt.layer.borderColor = myColor.cgColor
-    
   }
+  
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     // Get uri
     var uri = ""
@@ -42,20 +42,34 @@ class AuthenticationCredentialProviderViewController: ASCredentialProviderViewCo
     eyeIconButton.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)
     //faceIDButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
     
+    
+    // first using biometric authentication
     if (isFaceIdEnabled){
         biometricAuthentication()
     }
     
   }
   @IBAction func unlockDidPress(_ sender: Any) {
-    //?? update later
-    //authenSuccess()
     let masterPass = self.masterPasswordTxt.text!
     let passwordAuthen = credentialIdStore.getPasswordAuthen()
+    
+    // password authen == nil when the user is not logged in to the locker
+    // show alert to noti and quit autofill
     if passwordAuthen == [:] {
-      
+
+      let refreshAlert = UIAlertController(title: "Authentication", message: "You must to login Locker befor using autofill service", preferredStyle: UIAlertController.Style.alert)
+
+      refreshAlert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (action: UIAlertAction!) in
+          // quit autofill service
+          self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
+      }))
+
+      present(refreshAlert, animated: true, completion: 	nil)
       return
     }
+    
+    
+    // password authen != nil, hasing masster pass and compare to authen data
     let hashMasterPass = cipherStore.makeKeyHash(masterPassword: masterPass, email: passwordAuthen["email"]!)
     
     if hashMasterPass == passwordAuthen["hashPass"] {
