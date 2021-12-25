@@ -11,6 +11,7 @@ import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { GeneralApiProblem } from "../../../../services/api/api-problem"
 import { useCoreService } from "../../../../services/core-service"
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 
 
 type Props = {
@@ -24,7 +25,8 @@ type Props = {
 export const FolderAction = (props: Props) => {
   const { isOpen, onClose, folder, onLoadingChange } = props
   const { folderStore, collectionStore, uiStore, cipherStore } = useStores()
-  const { notify, translate, notifyApiError, reloadCache } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
+  const { reloadCache } = useCipherDataMixins()
   const { userService, storageService } = useCoreService()
 
   // ---------------- PARAMS -----------------

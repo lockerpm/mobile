@@ -8,12 +8,14 @@ import { AddAction } from "./add-action"
 import { useMixins } from "../../../../services/mixins"
 import { Alert, BackHandler } from "react-native"
 import { useStores } from "../../../../models"
+import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 
 
 export const AllItemScreen = observer(function AllItemScreen() {
   const navigation = useNavigation()
   const { uiStore } = useStores()
-  const { translate, lock } = useMixins()
+  const { translate } = useMixins()
+  const { lock } = useCipherAuthenticationMixins()
 
   // -------------- PARAMS ------------------
 

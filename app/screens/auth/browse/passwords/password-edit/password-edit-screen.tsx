@@ -13,6 +13,8 @@ import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherType } from "../../../../../../core/enums"
 import { CipherView, LoginUriView, LoginView } from "../../../../../../core/models/view"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
 
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
@@ -22,7 +24,9 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<PasswordEditScreenProp>()
   const { mode } = route.params
-  const { getPasswordStrength, newCipher, createCipher, updateCipher, translate, color } = useMixins()
+  const { translate, color } = useMixins()
+  const { createCipher, updateCipher } = useCipherDataMixins()
+  const { getPasswordStrength, newCipher } = useCipherHelpersMixins()
   const { cipherStore, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 

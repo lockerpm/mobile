@@ -7,14 +7,15 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import { delay } from "../../../utils/delay"
 import NetInfo from '@react-native-community/netinfo'
+import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
 
 
 export const StartScreen = observer(function StartScreen() {
   const { user } = useStores()
-  const { 
-    getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate, 
-    loadPasswordsHealth, syncAutofillData
-  } = useMixins()
+  const { isBiometricAvailable, notify, translate } = useMixins()
+  const { getSyncData, loadFolders, loadCollections, syncAutofillData } = useCipherDataMixins()
+  const { loadPasswordsHealth } = useCipherToolsMixins()
   const navigation = useNavigation()
 
   const [msg, setMsg] = useState('')

@@ -12,6 +12,7 @@ import { useMixins } from "../../../services/mixins"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
 import { ActionSheet, ActionSheetContent } from "../../action-sheet"
 import { Divider } from "../../divider/divider"
+import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 
 export interface DeletedActionProps {
   children?: React.ReactNode,
@@ -30,7 +31,8 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [nextModal, setNextModal] = useState<'deleteConfirm' | null>(null)
 
-  const { deleteCiphers, getRouteName, restoreCiphers, translate, getWebsiteLogo } = useMixins()
+  const { getRouteName, translate, getWebsiteLogo } = useMixins()
+  const { deleteCiphers, restoreCiphers } = useCipherDataMixins()
   const { cipherStore, uiStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 

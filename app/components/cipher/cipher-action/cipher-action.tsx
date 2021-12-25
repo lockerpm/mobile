@@ -16,6 +16,7 @@ import { Divider } from "../../divider/divider"
 import { CipherView } from "../../../../core/models/view"
 import { ShareModal } from "./share-modal"
 import { ChangeTeamFolderModal } from "./change-team-folder-modal"
+import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 
 export interface CipherActionProps {
   children?: React.ReactNode,
@@ -36,7 +37,8 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const [showChangeTeamFolderModal, setShowChangeTeamFolderModal] = useState(false)
   const [nextModal, setNextModal] = useState<'changeTeamFolder' | 'share' | 'trashConfirm' | null>(null)
 
-  const { toTrashCiphers, getRouteName, translate, getTeam, getWebsiteLogo, color } = useMixins()
+  const { getRouteName, translate, getTeam, getWebsiteLogo, color } = useMixins()
+  const { toTrashCiphers } = useCipherDataMixins()
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 

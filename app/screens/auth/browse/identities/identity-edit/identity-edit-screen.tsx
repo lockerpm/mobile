@@ -12,6 +12,8 @@ import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherView, IdentityView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
 
 type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'identities__edit'>;
@@ -28,7 +30,9 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
-  const { newCipher, createCipher, updateCipher, translate, color } = useMixins()
+  const { translate, color } = useMixins()
+  const { createCipher, updateCipher } = useCipherDataMixins()
+  const { newCipher } = useCipherHelpersMixins()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 

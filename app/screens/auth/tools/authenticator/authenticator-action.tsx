@@ -8,6 +8,7 @@ import { DeleteConfirmModal } from "../../browse/trash/delete-confirm-modal"
 import { CipherView } from "../../../../../core/models/view"
 import { parseOTPUri, getTOTP } from "../../../../utils/totp"
 import { useStores } from "../../../../models"
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 
 
 type Props = {
@@ -21,7 +22,8 @@ type Props = {
 
 export const AuthenticatorAction = (props: Props) => {
   const { navigation, isOpen, onClose, onLoadingChange, cipher } = props
-  const { translate, copyToClipboard, deleteCiphers } = useMixins()
+  const { translate, copyToClipboard } = useMixins()
+  const { deleteCiphers } = useCipherDataMixins()
   const { cipherStore } = useStores()
 
   // ---------------- PARAMS -----------------
