@@ -19,6 +19,7 @@ import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
 import { commonStyles, fontSize } from "../../../theme"
 import { DeletedAction } from "../cipher-action/deleted-action"
 import { Checkbox } from "react-native-ui-lib"
+import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 
 
 export interface CipherListProps {
@@ -51,7 +52,8 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     folderId, collectionId, organizationId,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { getWebsiteLogo, getCiphers, translate, color } = useMixins()
+  const { getWebsiteLogo, translate, color } = useMixins()
+  const { getCiphers } = useCipherDataMixins()
   const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------

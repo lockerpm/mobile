@@ -33,12 +33,14 @@ import SettingsIconLight from './gear-light.svg'
 import HelpIconLight from './question-light.svg'
 // @ts-ignore
 import LockIconLight from './lock-light.svg'
+import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 
 
 export const MenuScreen = observer(function MenuScreen() {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { lock, logout, translate, notify, color, isDark } = useMixins()
+  const { translate, notify, color, isDark } = useMixins()
+  const { lock, logout } = useCipherAuthenticationMixins()
 
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)

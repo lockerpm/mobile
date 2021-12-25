@@ -8,6 +8,7 @@ import { FolderRequest } from "../../../../../core/models/request/folderRequest"
 import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { CollectionRequest } from "../../../../../core/models/request/collectionRequest"
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 
 interface Props {
   isOpen?: boolean,
@@ -19,7 +20,8 @@ export const RenameFolderModal = observer((props: Props) => {
   const { isOpen, onClose, folder } = props
   const { folderStore, collectionStore, uiStore } = useStores()
   const { folderService, collectionService, userService, storageService } = useCoreService()
-  const { notify, translate, notifyApiError, reloadCache } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
+  const { reloadCache } = useCipherDataMixins()
 
   // --------------- PARAMS ----------------
 

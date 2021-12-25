@@ -6,11 +6,15 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
 import { decodeGoogleAuthenticatorImport, beautifyName } from "../../../../../utils/totp"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers";
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data";
 
 
 export const GoogleAuthenticatorImportScreen = function GoogleAuthenticatorImportScreen() {
   const navigation = useNavigation()
-  const { newCipher, importCiphers, translate, notify, color } = useMixins()
+  const { translate, notify, color } = useMixins()
+  const { newCipher } = useCipherHelpersMixins()
+  const { importCiphers } = useCipherDataMixins()
 
   const [isLoading, setIsLoading] = useState(false)
 

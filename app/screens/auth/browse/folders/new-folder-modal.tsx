@@ -11,6 +11,7 @@ import { GeneralApiProblem } from "../../../../services/api/api-problem"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { CollectionRequest } from "../../../../../core/models/request/collectionRequest"
 import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 
 
 interface Props {
@@ -22,7 +23,8 @@ export const NewFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
   const { folderStore, user, collectionStore, uiStore } = useStores()
   const { folderService, collectionService, userService, storageService } = useCoreService()
-  const { notify, translate, notifyApiError, randomString, reloadCache } = useMixins()
+  const { notify, translate, notifyApiError, randomString } = useMixins()
+  const { reloadCache } = useCipherDataMixins()
 
   // --------------- PARAMS ----------------
 

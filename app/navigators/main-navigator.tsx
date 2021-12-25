@@ -25,6 +25,9 @@ import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../models"
 import { observer } from "mobx-react-lite"
+import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
+import { useCipherDataMixins } from "../services/mixins/cipher/data"
+import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -100,10 +103,10 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export const MainNavigator = observer(function MainNavigator() {
   const navigation = useNavigation()
-  const { 
-    lock, getSyncData, getCipherById, loadFolders, loadCollections, logout, 
-    loadPasswordsHealth, notify, translate, syncAutofillData
-  } = useMixins()
+  const { notify, translate } = useMixins()
+  const { lock, logout } = useCipherAuthenticationMixins()
+  const { getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData } = useCipherDataMixins()
+  const { loadPasswordsHealth } = useCipherToolsMixins()
   const { uiStore, user, cipherStore } = useStores()
 
   let appIsActive = true

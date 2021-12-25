@@ -11,6 +11,7 @@ import { CipherView } from "../../../../core/models/view"
 import { useCoreService } from "../../../services/core-service"
 import { CipherRequest } from "../../../../core/models/request/cipherRequest"
 import isEqual from "lodash/isEqual"
+import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 
 
 interface Props {
@@ -21,7 +22,8 @@ interface Props {
 export const ChangeTeamFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
   const { cipherStore, collectionStore } = useStores()
-  const { notify, translate, notifyApiError, getPasswordStrength } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
+  const { getPasswordStrength } = useCipherHelpersMixins()
   const { cipherService } = useCoreService()
 
   const selectedCipher: CipherView = cipherStore.cipherView

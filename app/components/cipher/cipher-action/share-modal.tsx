@@ -13,6 +13,7 @@ import { useCoreService } from "../../../services/core-service"
 import { CipherRequest } from "../../../../core/models/request/cipherRequest"
 import { PolicyType } from "../../../services/api"
 import { CipherType } from "../../../../core/enums"
+import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 
 
 interface Props {
@@ -23,7 +24,8 @@ interface Props {
 export const ShareModal = observer((props: Props) => {
   const { isOpen, onClose } = props
   const { user, cipherStore, collectionStore } = useStores()
-  const { notify, translate, notifyApiError, getPasswordStrength } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
+  const { getPasswordStrength } = useCipherHelpersMixins()
   const { cipherService } = useCoreService()
 
   const selectedCipher: CipherView = cipherStore.cipherView

@@ -13,6 +13,7 @@ import { commonStyles, fontSize } from "../../../../theme"
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { parseOTPUri, getTOTP } from "../../../../utils/totp"
 import { Checkbox } from "react-native-ui-lib"
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 
 
 interface Props {
@@ -39,7 +40,8 @@ export const OtpList = observer(function OtpList(props: Props) {
     navigation, emptyContent, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { getCiphers, translate, color } = useMixins()
+  const { translate, color } = useMixins()
+  const { getCiphers } = useCipherDataMixins()
   const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------

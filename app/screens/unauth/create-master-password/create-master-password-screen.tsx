@@ -7,13 +7,16 @@ import { useStores } from "../../../models"
 import { fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
+import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
+import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 
 
 export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
   const navigation = useNavigation()
-  const { logout, registerLocker, translate, sessionLogin } = useMixins()
+  const { translate, color } = useMixins()
+  const { getPasswordStrength } = useCipherHelpersMixins()
+  const { logout, registerLocker, sessionLogin } = useCipherAuthenticationMixins()
   const { user } = useStores()
-  const { getPasswordStrength, color } = useMixins()
 
   // Params
   const [masterPassword, setMasterPassword] = useState('')

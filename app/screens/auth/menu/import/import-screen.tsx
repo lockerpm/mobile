@@ -12,12 +12,14 @@ import { CipherType } from "../../../../../core/enums"
 import { Utils } from "../../../../../core/misc/utils"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 const DOMParser = require('react-native-html-parser').DOMParser
 
 
 export const ImportScreen = observer(function ImportScreen() {
   const navigation = useNavigation()
-  const { translate, notify, importCiphers, color } = useMixins()
+  const { translate, notify, color } = useMixins()
+  const { importCiphers } = useCipherDataMixins()
   const { importService } = useCoreService()
   const { uiStore } = useStores()
 

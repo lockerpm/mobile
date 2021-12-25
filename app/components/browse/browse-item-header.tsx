@@ -18,6 +18,7 @@ import ConfigIconLight from './config-light.svg'
 import PlusIcon from './plus.svg'
 // @ts-ignore
 import PlusIconLight from './plus-light.svg'
+import { useCipherDataMixins } from "../../services/mixins/cipher/data"
 
 
 export interface BrowseItemHeaderProps {
@@ -45,7 +46,8 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
     openAdd, openSort, navigation, header, onSearch, searchText, isTrash, isAuthenticator,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll, setIsLoading
   } = props
-  const { translate, toTrashCiphers, restoreCiphers, deleteCiphers, color, isDark } = useMixins()
+  const { translate, color, isDark } = useMixins()
+  const { toTrashCiphers, restoreCiphers, deleteCiphers } = useCipherDataMixins()
 
   // ----------------------- PARAMS ------------------------
 
