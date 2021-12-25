@@ -136,7 +136,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
                 <Image
                   source={cipherMapper.img}
                   backupSource={cipherMapper.backup}
-                  style={{ height: 40, width: 40 }}
+                  style={{ height: 40, width: 40, borderRadius: 8 }}
                 />
               )
             }

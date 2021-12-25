@@ -28,6 +28,7 @@ import { observer } from 'mobx-react-lite'
 import { color, colorDark } from '../../theme'
 import moment from 'moment'
 import DeviceInfo from 'react-native-device-info'
+import extractDomain from 'extract-domain'
 
 
 const { createContext, useContext } = React
@@ -1230,10 +1231,14 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
 
   // Get website logo
   const getWebsiteLogo = (uri: string) => {
-    if (!uri) {
+    const domain = extractDomain(uri)
+    if (uri === 'gmail.com') {
+      console.log(domain)
+    }
+    if (!uri || !domain) {
       return { uri: null }
     }
-    const imgUri = `${GET_LOGO_URL}/${uri.split('//')[1]}?size=40`
+    const imgUri = `${GET_LOGO_URL}/${domain}?size=120`
     return { uri: imgUri }
   }
 
