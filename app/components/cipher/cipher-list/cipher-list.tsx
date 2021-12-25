@@ -324,7 +324,8 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                     backupSource={item.logo}
                     style={{
                       height: 40,
-                      width: 40
+                      width: 40,
+                      borderRadius: 8
                     }}
                   />
                 )

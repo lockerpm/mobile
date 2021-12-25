@@ -94,7 +94,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
                 : BROWSE_ITEMS.password.icon
             }
             backupSource={BROWSE_ITEMS.password.icon}
-            style={{ height: 55, width: 55, marginBottom: 5 }}
+            style={{ height: 55, width: 55, marginBottom: 5, borderRadius: 8 }}
           />
           <Text
             preset="header"

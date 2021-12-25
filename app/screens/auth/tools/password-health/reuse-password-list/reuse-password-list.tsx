@@ -87,7 +87,8 @@ export const ReusePasswordList = observer(function ReusePasswordList() {
                   backupSource={item.logo}
                   style={{
                     height: 40,
-                    width: 40
+                    width: 40,
+                    borderRadius: 8
                   }}
                 />
 

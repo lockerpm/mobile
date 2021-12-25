@@ -3,7 +3,6 @@ import {
   Image as RNImage,
   ImageProps as DefaultImageProps,
   ImageURISource,
-  Platform,
 } from "react-native"
 
 type ImageProps = DefaultImageProps & {
@@ -22,17 +21,7 @@ export function AutoImage(props: ImageProps) {
       RNImage.getSize(props.source.uri as any, (width, height) => {
         setImageSize({ width, height })
       }, (err) => {
-        if (props.backupSource && !props.backupSource.uri) {
-          const { width, height } = RNImage.resolveAssetSource(props.backupSource)
-          setImageSize({ width, height })
-          setUseBackup(true)
-        }
-      })
-    } else if (Platform.OS === "web") {
-      // web requires a different method to get it's size
-      RNImage.getSize(props.source as any, (width, height) => {
-        setImageSize({ width, height })
-      }, (err) => {
+        // Use backup in case of get image from uri failed
         if (props.backupSource && !props.backupSource.uri) {
           const { width, height } = RNImage.resolveAssetSource(props.backupSource)
           setImageSize({ width, height })
@@ -40,6 +29,13 @@ export function AutoImage(props: ImageProps) {
         }
       })
     } else {
+      // Use backup in case of { uri: null }
+      if (props.source?.uri === null && props.backupSource && !props.backupSource.uri) {
+        const { width, height } = RNImage.resolveAssetSource(props.backupSource)
+        setImageSize({ width, height })
+        setUseBackup(true)
+        return
+      }
       const { width, height } = RNImage.resolveAssetSource(props.source)
       setImageSize({ width, height })
     }
