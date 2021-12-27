@@ -17,7 +17,7 @@ import { fontSize } from "../theme"
 import { useStores } from "../models"
 import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { Linking, View } from "react-native"
+import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../services/mixins"
 
@@ -52,25 +52,6 @@ const RootStack = observer(() => {
   const { color } = useMixins()
   const { uiStore } = useStores()
 
-  const handleDeepLinking = async (url: string | null) => {
-    __DEV__ && console.log(`Deep link ${url}`)
-    if (!url) {
-      return
-    }
-
-    const path = url.split('://')[1]
-    if (path.startsWith('add?domain=')) {
-      const domain = path.split('domain=')[1]
-      uiStore.setDeepLinkAction('add', domain)
-      return
-    }
-    if (path === 'save?domain=') {
-      const domain = path.split('domain=')[1]
-      uiStore.setDeepLinkAction('save', domain)
-      return
-    }
-  }
-
   // Prevent store from being called too soon and break the initialization
   let removeNetInfoSubscription = () => {}
 
@@ -84,17 +65,8 @@ const RootStack = observer(() => {
       })
     }, 2000)
 
-    // Check deep linking
-    Linking.getInitialURL().then(handleDeepLinking)
-    const checkDeepLinking = ({ url }) => {
-      handleDeepLinking(url)
-    }
-    Linking.addEventListener('url', checkDeepLinking)
-
-
     return () => {
       removeNetInfoSubscription()
-      Linking.removeEventListener('url', checkDeepLinking)
     }
   }, [])
 

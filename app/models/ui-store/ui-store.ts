@@ -13,9 +13,10 @@ export const UiStoreModel = types
     isPerformOverlayTask: types.maybeNull(types.boolean),
 
     // Cache
+    isFromAutoFill: types.maybeNull(types.boolean),
     selectedCountry: types.maybeNull(types.string),
     deepLinkAction: types.maybeNull(types.string),
-    deepLinkAddDomain: types.maybeNull(types.string)
+    deepLinkUrl: types.maybeNull(types.string)
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -39,16 +40,20 @@ export const UiStoreModel = types
       self.selectedCountry = country_code
     },
 
-    setDeepLinkAction(action: 'save' | 'add', data?: string) {
+    setIsFromAutoFill(val: boolean) {
+      self.isFromAutoFill = true
+    },
+
+    setDeepLinkAction(action: 'fill' | 'save', data?: string) {
       self.deepLinkAction = action
-      if (action === 'add') {
-        self.deepLinkAddDomain = data || ''
+      if (['fill', 'save'].includes(action)) {
+        self.deepLinkUrl = data || ''
       }
     },
 
     clearDeepLink() {
       self.deepLinkAction = null
-      self.deepLinkAddDomain = null
+      self.deepLinkUrl = null
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
