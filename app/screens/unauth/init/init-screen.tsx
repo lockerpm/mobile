@@ -25,10 +25,10 @@ export const InitScreen = observer(function InitScreen() {
 
   const handleDeepLinking = async (url: string | null) => {
     __DEV__ && console.log(`Deep link ${url}`)
+    uiStore.clearDeepLink()
     if (!url) {
       return
     }
-    uiStore.clearDeepLink()
     const path = url.split('://')[1]
     if (path.startsWith('add?domain=')) {
       const domain = path.split('domain=')[1]

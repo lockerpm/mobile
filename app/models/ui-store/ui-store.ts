@@ -41,7 +41,7 @@ export const UiStoreModel = types
     },
 
     setIsFromAutoFill(val: boolean) {
-      self.isFromAutoFill = true
+      self.isFromAutoFill = val
     },
 
     setDeepLinkAction(action: 'fill' | 'save', data?: string) {
