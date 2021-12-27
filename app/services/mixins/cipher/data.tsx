@@ -425,6 +425,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
     const res = await cipherStore.importCipher(request)
     if (res.kind === 'ok') {
+      await _offlineImportCiphers(importResult, true)
       notify('success', translate('import.success'))
       return res
     } else {
@@ -433,7 +434,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
   }
 
-  const _offlineImportCiphers = async (importResult) => {
+  const _offlineImportCiphers = async (importResult, isCaching?: boolean) => {
     const ciphers = []
     const folders = []
 
@@ -482,7 +483,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const key = `ciphers_${userId}`
       const res = await storageService.get(key)
       ciphers.forEach(c => {
-        cipherStore.addNotSync(c.id)
+        if (!isCaching) {
+          cipherStore.addNotSync(c.id)
+        }
         res[c.id] = {
           ...c,
           userId
@@ -496,7 +499,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const key = `folders_${userId}`
       const res = await storageService.get(key)
       ciphers.forEach(f => {
-        folderStore.addNotSync(f.id)
+        if (!isCaching) {
+          folderStore.addNotSync(f.id)
+        }
         res[f.id] = {
           ...f,
           userId
@@ -559,6 +564,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const data = new CipherRequest(cipherEnc)
       const res = await cipherStore.createCipher(data, score, collectionIds)
       if (res.kind === 'ok') {
+        await _offlineCreateCipher(cipher, collectionIds, true) 
         notify('success', translate('success.cipher_created'))
       } else {
         notifyApiError(res)
@@ -572,7 +578,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline create
-  const _offlineCreateCipher = async (cipher: CipherView, collectionIds: string[]) => {
+  const _offlineCreateCipher = async (cipher: CipherView, collectionIds: string[], isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
     const res = await storageService.get(key)
@@ -588,7 +594,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       collectionIds
     }
     await storageService.save(key, res)
-    cipherStore.addNotSync(tempId)
+    if (!isCaching) {
+      cipherStore.addNotSync(tempId)
+    }
     await reloadCache()
   }
 
@@ -607,6 +615,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const data = new CipherRequest(cipherEnc)
       const res = await cipherStore.updateCipher(id, data, score, collectionIds)
       if (res.kind === 'ok') {
+        await _offlineUpdateCipher(cipher, collectionIds, true)
         notify('success', translate('success.cipher_updated'))
       } else {
         notifyApiError(res)
@@ -620,7 +629,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline update
-  const _offlineUpdateCipher = async (cipher: CipherView, collectionIds: string[]) => {
+  const _offlineUpdateCipher = async (cipher: CipherView, collectionIds: string[], isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
     const res = await storageService.get(key)
@@ -635,7 +644,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       revisionDate: new Date().toISOString()
     }
     await storageService.save(key, res)
-    cipherStore.addNotSync(cipher.id)
+    if (!isCaching) {
+      cipherStore.addNotSync(cipher.id)
+    }
     await reloadCache()
   }
 
@@ -652,6 +663,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       // Online
       const res = await cipherStore.deleteCiphers(ids)
       if (res.kind === 'ok') {
+        await _offlineDeleteCiphers(ids, true)
         notify('success', translate('success.cipher_deleted'))
       } else {
         notifyApiError(res)
@@ -665,14 +677,16 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline delete
-  const _offlineDeleteCiphers = async (ids: string[]) => {
+  const _offlineDeleteCiphers = async (ids: string[], isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
     const res = await storageService.get(key)
 
     ids.forEach(id => {
       delete res[id]
-      cipherStore.removeNotSync(id)
+      if (!isCaching) {
+        cipherStore.removeNotSync(id)
+      }
     })
     await storageService.save(key, res)
     await reloadCache()
@@ -691,6 +705,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       // Online
       const res = await cipherStore.toTrashCiphers(ids)
       if (res.kind === 'ok') {
+        await _offlineToTrashCiphers(ids, true)
         notify('success', translate('success.cipher_trashed'))
       } else {
         notifyApiError(res)
@@ -704,14 +719,16 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline to trash
-  const _offlineToTrashCiphers = async (ids: string[]) => {
+  const _offlineToTrashCiphers = async (ids: string[], isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
     const res = await storageService.get(key)
 
     ids.forEach(id => {
       res[id].deletedDate = new Date().toISOString()
-      cipherStore.addNotSync(id)
+      if (!isCaching) {
+        cipherStore.addNotSync(id)
+      }
     })
     await storageService.save(key, res)
     await reloadCache()
@@ -730,6 +747,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     try {
       const res = await cipherStore.restoreCiphers(ids)
       if (res.kind === 'ok') {
+        await _offlineRestoreCiphers(ids, true)
         notify('success', translate('success.cipher_restored'))
       } else {
         notifyApiError(res)
@@ -743,14 +761,16 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline restore
-  const _offlineRestoreCiphers = async (ids: string[]) => {
+  const _offlineRestoreCiphers = async (ids: string[], isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
     const res = await storageService.get(key)
 
     ids.forEach(id => {
       res[id].deletedDate = null
-      cipherStore.addNotSync(id)
+      if (!isCaching) {
+        cipherStore.addNotSync(id)
+      }
     })
     await storageService.save(key, res)
     await reloadCache()
