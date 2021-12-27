@@ -237,9 +237,13 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     ws.onerror = (e) => {
-      if (__DEV__) {
-        console.log(`SOCKET ERROR: ${JSON.stringify(e)}`)
-      }
+      __DEV__ && console.log(`SOCKET ERROR: ${JSON.stringify(e)}`)
+      __DEV__ && console.log('SOCKET RECONNECTING')
+      setTimeout(() => {
+        if (ws.readyState === WebSocket.CLOSED && !uiStore.isOffline) {
+          setSocket(generateSocket())
+        }
+      }, 1000)
     }
 
     ws.onclose = (e) => {

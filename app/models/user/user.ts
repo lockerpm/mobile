@@ -187,7 +187,15 @@ export const UserModel = types
       const res = await userApi.login(payload, isOtp)
       if (res.kind === "ok") {
         if (res.data.token) {
-          self.saveToken(res.data.token)
+          const pmRes = await userApi.getPMToken(res.data.token, {
+            SERVICE_URL: '/',
+            SERVICE_SCOPE: 'pwdmanager',
+            CLIENT: 'mobile'
+          })
+          if (pmRes.kind === 'ok') {
+            self.saveToken(pmRes.data.access_token)
+          }
+          return pmRes
         }
       }
       return res
@@ -198,7 +206,15 @@ export const UserModel = types
       const res = await userApi.socialLogin(payload)
       if (res.kind === "ok") {
         if (res.data.token) {
-          self.saveToken(res.data.token)
+          const pmRes = await userApi.getPMToken(res.data.token, {
+            SERVICE_URL: '/',
+            SERVICE_SCOPE: 'pwdmanager',
+            CLIENT: 'mobile'
+          })
+          if (pmRes.kind === 'ok') {
+            self.saveToken(pmRes.data.access_token)
+          }
+          return pmRes
         }
       }
       return res

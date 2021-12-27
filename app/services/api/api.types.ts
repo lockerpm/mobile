@@ -50,6 +50,14 @@ export type LoginResult = {
     }
 } | GeneralApiProblem
 
+export type GetPMTokenResult = { 
+    kind: "ok"
+    data: {
+        url: string
+        access_token: string
+    }
+} | GeneralApiProblem
+
 export type SocialLoginResult = { 
     kind: "ok"
     data: {
@@ -147,6 +155,12 @@ export type LoginData = {
     method?: string
     otp?: string
     save_device?: boolean
+}
+
+export type GetPMTokenData = {
+    SERVICE_URL: '/'
+    SERVICE_SCOPE: 'pwdmanager'
+    CLIENT: 'mobile'
 }
 
 export type RegisterData = {
