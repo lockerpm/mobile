@@ -7,7 +7,7 @@ import { load, save, storageKeys } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
-import { BackHandler, Appearance } from "react-native"
+import { BackHandler, Appearance, Linking } from "react-native"
 
 
 export const InitScreen = observer(function InitScreen() {
@@ -23,6 +23,27 @@ export const InitScreen = observer(function InitScreen() {
     }
   }
 
+  const handleDeepLinking = async (url: string | null) => {
+    __DEV__ && console.log(`Deep link ${url}`)
+    if (!url) {
+      return
+    }
+    uiStore.clearDeepLink()
+    const path = url.split('://')[1]
+    if (path.startsWith('add?domain=')) {
+      const domain = path.split('domain=')[1]
+      uiStore.setDeepLinkAction('fill', domain)
+      uiStore.setIsFromAutoFill(true)
+      return
+    }
+    if (path === 'save?domain=') {
+      const domain = path.split('domain=')[1]
+      uiStore.setDeepLinkAction('save', domain)
+      uiStore.setIsFromAutoFill(true)
+      return
+    }
+  }
+
   const mounted = async () => {
     user.setLanguage(user.language)
     user.setDeviceID(DeviceInfo.getUniqueId())
@@ -31,6 +52,9 @@ export const InitScreen = observer(function InitScreen() {
     if (uiStore.isDark === null) {
       uiStore.setIsDark(theme === 'dark')
     }
+
+    // Check deep linking
+    Linking.getInitialURL().then(handleDeepLinking)
 
     // Testing
     // if (__DEV__) {

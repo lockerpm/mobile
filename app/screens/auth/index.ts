@@ -1,4 +1,5 @@
 export * from "./start/start-screen"
+export * from "./autofill/autofill-screen"
 export * from "./switch-device/switch-device-screen"
 export * from "./biometric-unlock-intro/biometric-unlock-intro-screen"
 export * from "./home"

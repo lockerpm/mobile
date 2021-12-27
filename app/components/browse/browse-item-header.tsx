@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View } from "react-native"
+import { View, BackHandler } from "react-native"
 import { commonStyles, fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
@@ -36,6 +36,7 @@ export interface BrowseItemHeaderProps {
   setIsLoading: Function
   isTrash?: boolean
   isAuthenticator?: boolean
+  isAutoFill?: boolean
 }
 
 /**
@@ -43,7 +44,7 @@ export interface BrowseItemHeaderProps {
  */
 export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeaderProps) {
   const { 
-    openAdd, openSort, navigation, header, onSearch, searchText, isTrash, isAuthenticator,
+    openAdd, openSort, navigation, header, onSearch, searchText, isTrash, isAuthenticator, isAutoFill,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll, setIsLoading
   } = props
   const { translate, color, isDark } = useMixins()
@@ -155,7 +156,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
         selectedItems.length > 0 && (
           <>
             {
-              isTrash || isAuthenticator ? (
+              isTrash || isAuthenticator || isAutoFill ? (
                 <>
                   {
                     isTrash && (
@@ -246,6 +247,16 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
     </View>
   )
 
+  const renderGoBack = () => {
+    if (isAuthenticator) {
+      return undefined
+    }
+    if (isAutoFill) {
+      return () => BackHandler.exitApp()
+    }
+    return () => navigation.goBack()
+  }
+
   const renderHeaderAuthenticatorLeft = () => (
     <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
       <Text
@@ -257,7 +268,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
 
   return (
     <Header
-      goBack={!isAuthenticator ? () => navigation.goBack() : undefined}
+      goBack={renderGoBack()}
       right={isSelecting ? renderHeaderSelectRight() : renderHeaderRight()}
       left={isSelecting ? renderHeaderSelectLeft() : isAuthenticator && renderHeaderAuthenticatorLeft()}
     >

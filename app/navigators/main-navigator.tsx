@@ -16,7 +16,7 @@ import {
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
   ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
-  GoogleAuthenticatorImportScreen
+  GoogleAuthenticatorImportScreen, AutoFillScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -42,60 +42,62 @@ import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
-  start: undefined,
-  switchDevice: undefined,
-  biometricUnlockIntro: undefined,
-  mainTab: undefined,
+  start: undefined
+  switchDevice: undefined
+  biometricUnlockIntro: undefined
+  mainTab: undefined
   passwordGenerator: {
     fromTools?: boolean
-  },
+  }
   authenticator__edit: {
     mode: 'add' | 'edit'
-  },
-  qrScanner: undefined,
-  googleAuthenticatorImport: undefined,
-  passwordHealth: undefined,
-  weakPasswordList: undefined,
-  reusePasswordList: undefined,
-  exposedPasswordList: undefined,
-  dataBreachScanner: undefined,
-  dataBreachList: undefined,
-  dataBreachDetail: undefined,
-  countrySelector: undefined,
-  passwords__info: undefined,
+  }
+  qrScanner: undefined
+  googleAuthenticatorImport: undefined
+  passwordHealth: undefined
+  weakPasswordList: undefined
+  reusePasswordList: undefined
+  exposedPasswordList: undefined
+  dataBreachScanner: undefined
+  dataBreachList: undefined
+  dataBreachDetail: undefined
+  countrySelector: undefined
+  passwords__info: undefined
   passwords__edit: {
     mode: 'add' | 'edit' | 'clone'
-  },
+    initialUrl?: string
+  }
   notes__info: undefined,
   notes__edit: {
     mode: 'add' | 'edit' | 'clone'
-  },
-  cards__info: undefined,
+  }
+  cards__info: undefined
   cards__edit: {
     mode: 'add' | 'edit' | 'clone'
-  },
-  identities__info: undefined,
+  }
+  identities__info: undefined
   identities__edit: {
     mode: 'add' | 'edit' | 'clone'
-  },
+  }
   folders__select: {
     mode: 'add' | 'move',
     initialId?: string,
     cipherIds?: string[]
-  },
+  }
   folders__ciphers: {
     folderId?: string | null
     collectionId?: string | null
     organizationId?: string | null
-  },
+  }
   settings: {
     fromIntro?: boolean
-  },
-  changeMasterPassword: undefined,
-  help: undefined,
-  autofillService: undefined,
-  import: undefined,
+  }
+  changeMasterPassword: undefined
+  help: undefined
+  autofillService: undefined
+  import: undefined
   export: undefined
+  autofill: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -161,7 +163,6 @@ export const MainNavigator = observer(function MainNavigator() {
     // Ohter state (background/inactive)
     if (nextAppState === 'background') {
       appIsActive = false
-      uiStore.clearDeepLink()
       return
     }
 
@@ -282,16 +283,6 @@ export const MainNavigator = observer(function MainNavigator() {
     }
   }, [uiStore.isOffline])
 
-  // Listen to deep linking
-  useEffect(() => {
-    if (!appIsReady) {
-      return
-    }
-    if (['add', 'save'].includes(uiStore.deepLinkAction)) {
-      navigation.navigate('passwords__edit', { mode: 'add' })
-    }
-  }, [uiStore.deepLinkAction])
-
   // ------------------ RENDER --------------------
   
   return (
@@ -344,6 +335,8 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
         <Stack.Screen name="import" component={ImportScreen} />
         <Stack.Screen name="export" component={ExportScreen} />
+
+        <Stack.Screen name="autofill" component={AutoFillScreen} />
       </Stack.Navigator>
     </UserInactivity>
   )
