@@ -20,7 +20,7 @@ type Props = {
 
 
 export const Step2 = observer(function Step2(props: Props) {
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { translate, notifyApiError, color } = useMixins()
   const { methods, onSelect, goBack } = props
 
@@ -31,10 +31,16 @@ export const Step2 = observer(function Step2(props: Props) {
   // ------------------ Methods ----------------------
 
   const sendEmail = async (data: any) => {
+    if (uiStore.lockResendOtpResetPasswordTime) {
+      onSelect('mail', data)
+      return
+    }
+
     setIsSendingEmail(true)
     const res = await user.resetPassword(data[0], 'mail')
     setIsSendingEmail(false)
     if (res.kind === 'ok') {
+      uiStore.setLockResendOtpResetPasswordTime(Date.now() + 60 * 1000)
       onSelect('mail', data)
     } else {
       notifyApiError(res)
@@ -64,6 +70,12 @@ export const Step2 = observer(function Step2(props: Props) {
           text={translate('login.verify_your_identity')}
         />
       </View>
+
+      <Text
+        preset="black"
+        text={translate('forgot_password.select_method')}
+        style={{ marginBottom: 20 }}
+      />
 
       {
         methods.map((item, index) => (

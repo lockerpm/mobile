@@ -11,6 +11,7 @@ export const UiStoreModel = types
     isDark: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
     isPerformOverlayTask: types.maybeNull(types.boolean),
+    lockResendOtpResetPasswordTime: types.maybeNull(types.number),
 
     // Cache
     isFromAutoFill: types.maybeNull(types.boolean),
@@ -54,6 +55,10 @@ export const UiStoreModel = types
     clearDeepLink() {
       self.deepLinkAction = null
       self.deepLinkUrl = null
+    },
+
+    setLockResendOtpResetPasswordTime(val: number) {
+      self.lockResendOtpResetPasswordTime = val
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

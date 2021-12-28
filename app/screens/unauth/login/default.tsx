@@ -21,7 +21,7 @@ type Props = {
 
 export const DefaultLogin = observer(function DefaultLogin(props: Props) {
   const { user, uiStore } = useStores()
-  const { translate, notify } = useMixins()
+  const { translate, notify, notifyApiError } = useMixins()
   const { nextStep, onLoggedIn, handleForgot } = props
 
   // ------------------ Params -----------------------
@@ -42,7 +42,27 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
     setIsLoading(false)
     if (res.kind !== 'ok') {
       setIsError(true)
-      notify('error', translate('error.login_failed'))
+      if (res.kind === 'unauthorized' && res.data) {
+        const errorData: {
+          code: string
+          message: string
+        } = res.data
+        switch (errorData.code) {
+          case '1001': {
+            notify('error', translate('error.wrong_username_or_password'))
+            break
+          }
+          case '1003': {
+            notify('error', translate('error.account_not_activated'))
+            break
+          }
+          default: {
+            notify('error', errorData.message)
+          }
+        }
+      } else {
+        notifyApiError(res)
+      }
     } else {
       setPassword('')
       if (res.data.is_factor2) {
@@ -50,6 +70,21 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
       } else {
         onLoggedIn()
       }
+    }
+  }
+
+  const handleSocialLogin = async (provider: string, token: string) => {
+    setIsLoading(true)
+    const loginRes = await user.socialLogin({
+      provider: provider,
+      access_token: token
+    })
+    setIsLoading(false)
+    if (loginRes.kind !== 'ok') {
+      notifyApiError(loginRes)
+      notify('error', translate('error.login_failed'))
+    } else {
+      onLoggedIn()
     }
   }
 
@@ -65,21 +100,11 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
           })
           await GoogleSignin.signIn()
           const tokens = await GoogleSignin.getTokens()
-          setIsLoading(true)
-          const loginRes = await user.socialLogin({
-            provider: 'google',
-            access_token: tokens.accessToken 
-          })
-          setIsLoading(false)
-          if (loginRes.kind !== 'ok') {
-            notify('error', translate('error.login_failed'))
-          } else {
-            onLoggedIn()
-          }
+          await handleSocialLogin('google', tokens.accessToken)
         } catch (e) {
           setIsLoading(false)
           __DEV__ && console.log(e)
-          notify('error', e.toString())
+          notify('error', translate('error.something_went_wrong'))
         }
       }
     },
@@ -98,23 +123,11 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
               return
             }
           }
-          
-          setIsLoading(true)
-
-          const loginRes = await user.socialLogin({
-            provider: 'facebook',
-            access_token: res.accessToken 
-          })
-          setIsLoading(false)
-          if (loginRes.kind !== 'ok') {
-            notify('error', translate('error.login_failed'))
-          } else {
-            onLoggedIn()
-          }
+          await handleSocialLogin('facebook', res.accessToken)
         } catch (e) {
           setIsLoading(false)
           __DEV__ && console.log(e)
-          notify('error', e.toString())
+          notify('error', translate('error.something_went_wrong'))
         }
       }
     },
@@ -129,22 +142,11 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
             notify('error', translate('error.something_went_wrong'))
             return
           }
-          setIsLoading(true)
-
-          const loginRes = await user.socialLogin({
-            provider: 'github',
-            access_token: res.accessToken 
-          })
-          setIsLoading(false)
-          if (loginRes.kind !== 'ok') {
-            notify('error', translate('error.login_failed'))
-          } else {
-            onLoggedIn()
-          }
+          await handleSocialLogin('github', res.accessToken)
         } catch (e) {
           setIsLoading(false)
           __DEV__ && console.log(e)
-          notify('error', e.toString())
+          notify('error', translate('error.something_went_wrong'))
         }
       }
     }
