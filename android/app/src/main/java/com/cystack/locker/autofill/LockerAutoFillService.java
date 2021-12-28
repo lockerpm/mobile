@@ -67,7 +67,7 @@ public class LockerAutoFillService extends AutofillService {
 
 
         IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, emailIDs,
-                usernameIds, passIds);
+                usernameIds, passIds, parseResult.webDomain.get(0));
 
         // Add the locker autofill option
         RemoteViews remoteView = new RemoteViews(getPackageName(), android.R.layout.simple_list_item_1);

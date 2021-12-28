@@ -28,6 +28,7 @@ import { observer } from "mobx-react-lite"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { useCipherDataMixins } from "../services/mixins/cipher/data"
 import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
+import { IS_IOS } from "../config/constants"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -167,7 +168,7 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     // Sync autofill data
-    if (!appIsActive && !isSynchingAutofill) {
+    if (IS_IOS && !appIsActive && !isSynchingAutofill) {
       isSynchingAutofill = true
       syncAutofillData().then(() => {
         isSynchingAutofill = false

@@ -13,6 +13,7 @@ import { KvpRequest } from '../../../../core/models/request/kvpRequest'
 import { CipherType } from '../../../../core/enums'
 import { AutofillDataType, loadShared, saveShared } from '../../../utils/keychain'
 import { useCipherHelpersMixins } from './helpers'
+import { IS_IOS } from '../../../config/constants'
 
 
 type GetCiphersParams = {
@@ -69,7 +70,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
-    await _updateAutofillData()
+    if (IS_IOS) {
+      await _updateAutofillData()
+    }
   }
 
   // Sync
@@ -113,7 +116,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       user.setFingerprint(fingerprint.join('-'))
 
       // Save to shared keychain for autofill service
-      await _updateAutofillData()
+      if (IS_IOS) {
+        await _updateAutofillData()
+      }
 
       cipherStore.setIsSynching(false)
       return { kind: 'ok' }
