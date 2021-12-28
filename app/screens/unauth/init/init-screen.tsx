@@ -7,7 +7,7 @@ import { load, save, storageKeys } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
-import { BackHandler, Appearance, Linking } from "react-native"
+import { BackHandler, Appearance } from "react-native"
 
 
 export const InitScreen = observer(function InitScreen() {
@@ -23,25 +23,13 @@ export const InitScreen = observer(function InitScreen() {
     }
   }
 
-  const handleDeepLinking = async (url: string | null) => {
-    __DEV__ && console.log(`Deep link ${url}`)
-    uiStore.clearDeepLink()
-    if (!url) {
-      return
-    }
-    const path = url.split('://')[1]
-    if (path.startsWith('add?domain=')) {
-      const domain = path.split('domain=')[1]
-      uiStore.setDeepLinkAction('fill', domain)
+  const checkAutoFill = async () => {
+    const isAutoFill = await load(storageKeys.APP_FROM_AUTOFILL)
+    if (isAutoFill) {
+      uiStore.setDeepLinkAction('fill', '')
       uiStore.setIsFromAutoFill(true)
-      return
     }
-    if (path === 'save?domain=') {
-      const domain = path.split('domain=')[1]
-      uiStore.setDeepLinkAction('save', domain)
-      uiStore.setIsFromAutoFill(true)
-      return
-    }
+    return isAutoFill
   }
 
   const mounted = async () => {
@@ -53,8 +41,8 @@ export const InitScreen = observer(function InitScreen() {
       uiStore.setIsDark(theme === 'dark')
     }
 
-    // Check deep linking
-    Linking.getInitialURL().then(handleDeepLinking)
+    // Check autofill
+    const isAutoFill = await checkAutoFill()
 
     // Testing
     // if (__DEV__) {
@@ -65,7 +53,7 @@ export const InitScreen = observer(function InitScreen() {
     // Logged in?
     if (!user.isLoggedIn) {
       const introShown = await load(storageKeys.APP_SHOW_INTRO)
-      if (!introShown) {
+      if (!introShown && !isAutoFill) {
         await save(storageKeys.APP_SHOW_INTRO, 1)
         navigation.navigate('intro')
       } else {
@@ -74,9 +62,9 @@ export const InitScreen = observer(function InitScreen() {
       return
     }
 
-    // Network connected?
+    // Network connected? || Is autofill?
     const connectionState = await NetInfo.fetch()
-    if (!connectionState.isInternetReachable) {
+    if (!connectionState.isInternetReachable || isAutoFill) {
       goLockOrCreatePassword()
       return
     }
