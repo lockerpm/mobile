@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, FlatList } from "react-native"
+import { View, FlatList, NativeModules, BackHandler } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -15,6 +15,7 @@ import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { Button, AutoImage as Image, Text } from "../../../components"
 import { AutoFillItemAction } from "./autofill-item-action"
 
+const { AutofillAndroid } = NativeModules
 
 interface AutoFillListProps {
   emptyContent?: JSX.Element
@@ -117,7 +118,12 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
 
   // Go to detail
   const selectForAutoFill = (item: CipherView) => {
-    // TODO
+    AutofillAndroid.addAutofillValue(
+      item.login.username,
+      item.login.username,
+      item.login.password
+    )
+    BackHandler.exitApp()
   }
 
   // Get cipher description
