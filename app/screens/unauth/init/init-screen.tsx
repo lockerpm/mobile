@@ -24,12 +24,13 @@ export const InitScreen = observer(function InitScreen() {
   }
 
   const checkAutoFill = async () => {
-    const isAutoFill = await load(storageKeys.APP_FROM_AUTOFILL)
-    if (isAutoFill) {
-      uiStore.setDeepLinkAction('fill', '')
+    const autoFillData = await load(storageKeys.APP_FROM_AUTOFILL)
+    if (autoFillData && autoFillData.enabled) {
+      uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
       uiStore.setIsFromAutoFill(true)
+      return autoFillData.enabled
     }
-    return isAutoFill
+    return false
   }
 
   const mounted = async () => {

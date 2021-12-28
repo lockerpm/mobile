@@ -8,6 +8,7 @@ import { useStores } from "../../../models"
 import NetInfo from '@react-native-community/netinfo'
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
+import { IS_IOS } from "../../../config/constants"
 
 
 export const StartScreen = observer(function StartScreen() {
@@ -24,7 +25,9 @@ export const StartScreen = observer(function StartScreen() {
   // ------------------------- METHODS ----------------------------
 
   const mounted = async () => {
-    await syncAutofillData()
+    if (IS_IOS) {
+      await syncAutofillData()
+    }
     const connectionState = await NetInfo.fetch()
 
     // Sync
@@ -70,7 +73,9 @@ export const StartScreen = observer(function StartScreen() {
       loadFolders(),
       loadCollections()
     ])
-    loadPasswordsHealth()
+    if (!uiStore.isFromAutoFill) {
+      loadPasswordsHealth()
+    }
 
     // TODO: check device limit
     const isDeviceLimitReached = false

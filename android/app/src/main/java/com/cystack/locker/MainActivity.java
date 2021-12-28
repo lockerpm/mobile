@@ -32,6 +32,7 @@ public class MainActivity extends ReactActivity {
 
   public static class AppActivityDelegate extends ReactActivityDelegate {
     private static final String ENABLE_AUTOFILL = "autofill";
+    private static final String DOMAIN_FILL = "domain";
     private Bundle mInitialProps = null;
     private final
     @Nullable
@@ -48,6 +49,7 @@ public class MainActivity extends ReactActivity {
       if (bundle != null && bundle.containsKey(ENABLE_AUTOFILL)) {
         mInitialProps = new Bundle();
         mInitialProps.putInt(ENABLE_AUTOFILL, bundle.getInt(ENABLE_AUTOFILL));
+        mInitialProps.putString(DOMAIN_FILL, bundle.getString(DOMAIN_FILL));//fdgdf
       }
       super.onCreate(savedInstanceState);
     }
