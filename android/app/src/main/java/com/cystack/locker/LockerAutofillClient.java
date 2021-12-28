@@ -25,19 +25,28 @@ import com.cystack.locker.autofill.Prefs;
 
 public class LockerAutofillClient extends AppCompatActivity {
     Button fillButton;
+
+    private static final String DOMAIN = "domain";
     private static final String EMAIL_IDS = "email_ids";
     private static final String USERNAME_IDS = "username_ids";
     private static final String PASS_IDS = "pass_ids";
     private static int sPendingIntentId = 0;
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static IntentSender newIntentSenderForResponse(@NonNull Context context,
-                                                          @NonNull AutofillId[] emailIds, @NonNull AutofillId[] userNameIds, @NonNull AutofillId[] passwordIds) {
+                                                          @NonNull AutofillId[] emailIds, @NonNull AutofillId[] userNameIds, @NonNull AutofillId[] passwordIds, String domain) {
 
         Intent intent = new Intent(context, LockerAutofillClient.class);
 
-        intent.putExtra(EMAIL_IDS, emailIds[0]);
+        if (emailIds.length > 0) {
+            intent.putExtra(EMAIL_IDS, emailIds[0]);
+        }
+
+        if (passwordIds.length > 0) {
+            intent.putExtra(PASS_IDS, passwordIds[0]);
+        }
+
 //        intent.putExtra(USERNAME_IDS, userNameIds[0]);
-        intent.putExtra(PASS_IDS, passwordIds[0]);
+        intent.putExtra(DOMAIN, domain);
 
         return PendingIntent.getActivity(context, ++sPendingIntentId, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT).getIntentSender();
@@ -52,8 +61,10 @@ public class LockerAutofillClient extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client);
 
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("autofill", 1); //start app by autofill service
+        intent.putExtra("domain", getIntent().getStringExtra(DOMAIN));
         pcapFileLauncher.launch(intent);
     }
 
