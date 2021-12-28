@@ -29,6 +29,8 @@ import java.util.List;
 import com.cystack.locker.MainActivity;
 import com.facebook.react.bridge.ReactApplicationContext;
 
+import com.cystack.locker.LockerAutofillClient;
+
 
 @TargetApi(Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
@@ -40,6 +42,9 @@ public class LockerAutoFillService extends AutofillService {
         super.onCreate();
     }
 
+    //The autofill framework defines a workflow to fill out views that is 
+    //designed to minimize the time that the Android system is bound to 
+    //the autofill service.
     @Override
     public void onFillRequest(
             @NonNull FillRequest request,
@@ -48,77 +53,37 @@ public class LockerAutoFillService extends AutofillService {
     ) {
         Log.d(TAG, "onFillRequest");
 
-        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
-        AutoFillHelpers autoFillHelper = new AutoFillHelpers(reactContext);
-
-        // Get the structure from the request
         List<FillContext> context = request.getFillContexts();
         AssistStructure structure = context.get(context.size() - 1).getStructure();
 
         // Parse the structure into fillable view IDs
         StructureParser.Result parseResult = new StructureParser(structure).parse();
 
-        // Add a dataset to the response
-        FillResponse.Builder fillResponseBuilder = new FillResponse.Builder();
+        AutofillId[] emailIDs = toArray(parseResult.email);
+        AutofillId[] usernameIds = toArray(parseResult.username);
+        AutofillId[] passIds = toArray(parseResult.password);
 
-        try {
-            for (String domain: parseResult.webDomain) {
-                Log.d(TAG, domain);
-                // Search Locker Entries that match this domain name
-                ArrayList<AutoFillEntry> matchedEntries = autoFillHelper.getAutoFillEntriesForDomain(domain);
 
-                for (AutoFillEntry entry: matchedEntries) {
-                    // Build the presentation of the datasets
-                    RemoteViews remoteView = new RemoteViews(getPackageName(), android.R.layout.simple_list_item_1);
-                    remoteView.setTextViewText(android.R.id.text1, entry.getUsername());
-                    Dataset.Builder builder = new Dataset.Builder(remoteView);
 
-                    // Assign the username/password to any found view IDs
-                    parseResult.email.forEach(id -> builder.setValue(id, AutofillValue.forText(entry.getUsername())));
-                    parseResult.username.forEach(id -> builder.setValue(id, AutofillValue.forText(entry.getUsername())));
-                    parseResult.password.forEach(id -> builder.setValue(id, AutofillValue.forText(entry.getPassword())));
 
-                    Dataset dataSet = builder.build();
-                    fillResponseBuilder.addDataset(dataSet);
-                }
-            }
+        IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, emailIDs,
+                usernameIds, passIds);
 
-            // Add the 'Add new password' option
-            RemoteViews remoteView = new RemoteViews(getPackageName(), android.R.layout.simple_list_item_1);
-            remoteView.setTextViewText(android.R.id.text1, "Add new password");
+        // Add the locker autofill option
+        RemoteViews remoteView = new RemoteViews(getPackageName(), android.R.layout.simple_list_item_1);
+        remoteView.setTextViewText(android.R.id.text1, "Locker..");
 
-            // Create the sender intent so that we can start the Locker app and let the user add new credential
-            String q = String.join(",", parseResult.webDomain);
-            String uri = "locker://add?domain=" + URLEncoder.encode(q, "UTF-8");
-            Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        FillResponse fillResponse = new FillResponse.Builder()
+                .addDataset(new Dataset.Builder()
+                        // The values in the dataset are replaced by the actual
+                        // data once the user provides the CVC.
+                        .setValue(emailIDs[0], AutofillValue.forText("asdasd"), remoteView)
+                        .setValue(passIds[0], AutofillValue.forText("asdasd"), remoteView)
+                        .setAuthentication(authentication)
+                        .build())
+                .build();
 
-            // Add the domain names to the intent for Search to work in the app
-            String[] serviceIdentifiers = new String[parseResult.webDomain.size()];
-            launchIntent.putExtra("serviceIdentifiers", parseResult.webDomain.toArray(serviceIdentifiers));
-            IntentSender intentSender = PendingIntent.getActivity(
-                    this,
-                    1001,
-                    launchIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT
-            ).getIntentSender();
-
-            // Finally build the Login with Locker dataset and add it to the list
-            Dataset.Builder builder = new Dataset.Builder(remoteView);
-            builder.setAuthentication(intentSender);
-
-            // Note the dataset MUST have values set. These aren't actually used so we'll just fill dummy values out
-            parseResult.email.forEach(id -> builder.setValue(id, AutofillValue.forText("-")));
-            parseResult.username.forEach(id -> builder.setValue(id, AutofillValue.forText("-")));
-            parseResult.password.forEach(id -> builder.setValue(id, AutofillValue.forText("-")));
-            Dataset dataSet = builder.build();
-            fillResponseBuilder.addDataset(dataSet);
-
-            callback.onSuccess(fillResponseBuilder.build());
-        } catch (Exception ex) {
-            Log.e(TAG, ex.getMessage());
-            callback.onSuccess(null);
-        }
+        callback.onSuccess(fillResponse);
     }
 
     @Override
@@ -135,5 +100,11 @@ public class LockerAutoFillService extends AutofillService {
     @Override
     public void onDisconnected() {
         Log.d(TAG, "onDisconnected");
+    }
+
+    private AutofillId[] toArray(List<AutofillId> idList) {
+        AutofillId[] ids = new AutofillId[idList.size()];
+        ids = idList.toArray(ids);
+        return ids;
     }
 }
