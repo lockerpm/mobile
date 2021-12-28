@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, View } from "react-native"
+import { Alert, View, Button as BaseButton, BackHandler, NativeModules } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
@@ -10,6 +10,8 @@ import { APP_ICON } from "../../../common/mappings"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 
+
+const {AutofillAndroid} = NativeModules
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
@@ -251,6 +253,12 @@ export const LockScreen = observer(function LockScreen() {
             />
           </View>
         </Button>
+
+        <BaseButton title="test" onPress={() => {
+          console.log("autofill test")
+          AutofillAndroid.addAutofillValue("123", "123", "123")
+          BackHandler.exitApp()
+        }}></BaseButton>
       </View>
     </Layout>
   )
