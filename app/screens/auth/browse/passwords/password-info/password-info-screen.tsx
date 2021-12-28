@@ -137,7 +137,8 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         <FloatingInput
           isPassword
           fixedLabel
-          copyAble={selectedCipher.viewPassword}
+          copyAble
+          lockCopy={!selectedCipher.viewPassword}
           hidePassword={!selectedCipher.viewPassword}
           label={translate('common.password')}
           value={selectedCipher.login.password}

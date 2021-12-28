@@ -131,8 +131,24 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       case 'cannot-connect':
         notify('error', translate('error.network_error'))
         break
-      case 'bad-data':
       case 'rejected':
+        notify('error', translate('error.invalid_data'))
+        break
+      case 'bad-data':
+        const errorData: {
+          details?: {
+            [key: string]: string[]
+          }
+          code: string
+          message: string
+        } = problem.data
+        if (errorData.details) {
+          Object.keys(errorData.details).forEach((key) => {
+            notify('error', errorData.details[key][0])
+          })
+        } else {
+          notify('error', errorData.message)
+        }
         notify('error', translate('error.invalid_data'))
         break
       case 'forbidden':

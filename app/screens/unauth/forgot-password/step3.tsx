@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import {Text, Button, FloatingInput } from "../../../components"
@@ -16,8 +16,8 @@ type Props = {
 
 
 export const Step3 = observer(function Step3(props: Props) {
-  const { user } = useStores()
-  const { translate, notify, color } = useMixins()
+  const { user, uiStore } = useStores()
+  const { translate, notify, color, notifyApiError } = useMixins()
   const { goBack, nextStep, username } = props
 
   // ------------------ Params -----------------------
@@ -25,6 +25,9 @@ export const Step3 = observer(function Step3(props: Props) {
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [code, setCode] = useState('')
+  const [remainingLockTime, setRemainingLockTime] = useState(0)
+  const [sendingEmail, setIsSendingEmail] = useState(false)
+  let countdown = null
 
   // ------------------ Methods ----------------------
 
@@ -41,6 +44,51 @@ export const Step3 = observer(function Step3(props: Props) {
       nextStep(urlArray[urlArray.length - 1])
     }
   }
+
+  const getRemainingLockTime = () => {
+    return Math.max(Math.floor((uiStore.lockResendOtpResetPasswordTime - Date.now()) / 1000), 0)
+  }
+
+  const resendEmail = async () => {
+    setIsSendingEmail(true)
+    const res = await user.resetPassword(username, 'mail')
+    if (res.kind === 'ok') {
+      uiStore.setLockResendOtpResetPasswordTime(Date.now() + 60 * 1000)
+      startInterval()
+      setRemainingLockTime(getRemainingLockTime())
+      notify('success', translate('forgot_password.resend_success'))
+    } else {
+      notifyApiError(res)
+    }
+    setIsSendingEmail(false)
+  }
+
+  const startInterval = () => {
+    countdown = setInterval(() => {
+      const remaining = getRemainingLockTime()
+      if (remaining > 0) {
+        setRemainingLockTime(remaining)
+      } else {
+        clearTimeout(countdown)
+        setRemainingLockTime(0)
+        uiStore.setLockResendOtpResetPasswordTime(null)
+      }
+    }, 1000)
+  }
+
+  // ------------------------------ EFFECT -------------------------------
+
+  useEffect(() => {
+    if (uiStore.lockResendOtpResetPasswordTime) {
+      setRemainingLockTime(getRemainingLockTime())
+      startInterval()
+    } else {
+      clearInterval(countdown)
+    }
+    return () => {
+      clearInterval(countdown)
+    }
+  }, [])
 
   // ------------------------------ RENDER -------------------------------
 
@@ -64,6 +112,12 @@ export const Step3 = observer(function Step3(props: Props) {
         />
       </View>
 
+      <Text
+        preset="black"
+        text={translate('forgot_password.enter_code_desc')}
+        style={{ marginTop: 20 }}
+      />
+
       <FloatingInput
         isInvalid={isError}
         label={translate('forgot_password.enter_code_here')}
@@ -81,6 +135,18 @@ export const Step3 = observer(function Step3(props: Props) {
         style={{
           width: '100%',
           marginTop: 30
+        }}
+      />
+
+      <Button
+        preset="outline"
+        isDisabled={!!remainingLockTime || sendingEmail}
+        isLoading={sendingEmail}
+        onPress={resendEmail}
+        text={`${translate('forgot_password.resend_email')}${remainingLockTime ? ` (${remainingLockTime}s)` : ''}`}
+        style={{
+          width: '100%',
+          marginTop: 15
         }}
       />
     </View>

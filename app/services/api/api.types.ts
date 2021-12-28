@@ -55,6 +55,14 @@ export type GetPMTokenResult = {
     data: {
         url: string
         access_token: string
+
+        // Clone data here to hide error
+        // These data actually not exists
+        is_factor2?: boolean
+        methods?: {
+            type: string
+            data: any
+        }[]
     }
 } | GeneralApiProblem
 

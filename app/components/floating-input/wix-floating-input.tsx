@@ -27,6 +27,7 @@ export interface WixFloatingInputProps extends TextInputProps {
   maskType?: TextInputMaskTypeProp,
   maskOptions?: TextInputMaskOptionProp,
   copyAble?: boolean,
+  lockCopy?: boolean,
   persistError?: boolean,
   hidePassword?: boolean
 }
@@ -37,12 +38,12 @@ export interface WixFloatingInputProps extends TextInputProps {
 export const WixFloatingInput = function WixFloatingInput(props: WixFloatingInputProps) {
   const {
     outerRef, style, inputStyle, label, isPassword, value, placeholder,
-    editable = true, disabled, buttonRight, onChangeText, copyAble, textarea,
+    editable = true, disabled, buttonRight, onChangeText, copyAble, lockCopy, textarea,
     maskType, maskOptions, isRequired, persistError, hidePassword,
     ...rest
   } = props
 
-  const { copyToClipboard, color } = useMixins()
+  const { copyToClipboard, color, notify } = useMixins()
   const [showPassword, setShowPassword] = useState(false)
   const [firstFocused, setFirstFocused] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
@@ -133,10 +134,16 @@ export const WixFloatingInput = function WixFloatingInput(props: WixFloatingInpu
       {/* Button right */}
       <View style={BUTTON_CONTAINER}>
         {
-          (isPassword && !hidePassword) && (
+          isPassword && (
             <Button
               preset="link"
-              onPress={() => setShowPassword(!showPassword)}
+              onPress={() => {
+                if (hidePassword) {
+                  notify('error', translate('error.not_allowed_to_see_pw'))
+                } else {
+                  setShowPassword(!showPassword)
+                }
+              }}
               style={BUTTON}
             >
               <Icon
@@ -151,7 +158,13 @@ export const WixFloatingInput = function WixFloatingInput(props: WixFloatingInpu
           copyAble && (
             <Button
               preset="link"
-              onPress={() => copyToClipboard(value)}
+              onPress={() => {
+                if (lockCopy) {
+                  notify('error', translate('error.not_allowed_to_copy_pw'))
+                } else {
+                  copyToClipboard(value)
+                }
+              }}
               style={BUTTON}
             >
               <Icon
