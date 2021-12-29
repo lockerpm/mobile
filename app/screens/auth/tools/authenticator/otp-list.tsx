@@ -56,7 +56,6 @@ export const OtpList = observer(function OtpList(props: Props) {
   // ------------------------ WATCHERS ----------------------------
 
   useEffect(() => {
-    // setOtps([])
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastOfflineSync, sortList])
 
@@ -64,7 +63,7 @@ export const OtpList = observer(function OtpList(props: Props) {
 
   // Get ciphers list
   const loadData = async () => {
-    // onLoadingChange && onLoadingChange(true)
+    onLoadingChange && onLoadingChange(true)
 
     // Filter
     const filters = [(c : CipherView) => c.type === CipherType.TOTP]
@@ -159,7 +158,7 @@ export const OtpList = observer(function OtpList(props: Props) {
 
   // ------------------------ RENDER ----------------------------
 
-  return ciphers.length ? (
+  return otps.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
