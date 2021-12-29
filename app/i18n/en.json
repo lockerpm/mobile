@@ -381,7 +381,7 @@
     "copy_code": "Copy OTP",
     "import_from_google_authenticator": "Import from Google Authenticator",
     "scan_a_qr": "Scan a QR code",
-    "invalid_qr": "Invalid QR code",
+    "invalid_qr": "Invalid QR code! Try again",
     "enter_key": "Enter a setup key",
     "invalid_key": "Invalid key",
     "empty": {

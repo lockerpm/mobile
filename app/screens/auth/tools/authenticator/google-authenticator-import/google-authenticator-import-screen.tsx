@@ -32,12 +32,19 @@ export const GoogleAuthenticatorImportScreen = function GoogleAuthenticatorImpor
           + `&digits=${otp.digits}&period=${otp.period}`
         return payload
       })
+
+      if (!ciphers.length) {
+        notify('error', translate('authenticator.invalid_qr'))
+        return
+      }
+
       await importCiphers({
         ciphers,
         folders: [],
         folderRelationships: []
       })
     } catch (e) {
+      __DEV__ && console.log(e)
       notify('error', translate('authenticator.invalid_qr'))
     }
     setIsLoading(false)

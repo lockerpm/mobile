@@ -381,7 +381,7 @@
     "copy_code": "Sao chép mã OTP",
     "scan_a_qr": "Quét mã QR",
     "import_from_google_authenticator": "Nhập từ Google Authenticator",
-    "invalid_qr": "Mã QR không hợp lệ",
+    "invalid_qr": "Mã QR không hợp lệ! Vui lòng thử lại",
     "enter_key": "Nhập khoá bí mật",
     "invalid_key": "Khóa không hợp lệ",
     "empty": {
