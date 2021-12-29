@@ -21,6 +21,9 @@ export const ToolStoreModel = types
     passwordStrengthMap: types.maybeNull(types.frozen()),
     passwordUseMap: types.maybeNull(types.frozen()),
     exposedPasswordMap: types.maybeNull(types.frozen()),
+
+    // Authenticator
+    authenticatorOrder: types.optional(types.array(types.string), [])
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -63,6 +66,10 @@ export const ToolStoreModel = types
       self.exposedPasswordMap = cast(data)
     },
 
+    setAuthenticatorOrder: (ids: string[]) => {
+      self.authenticatorOrder = cast(ids)
+    },
+
     clearStore: () => {
       self.breachedEmail = null
       self.breaches = cast([])
@@ -73,9 +80,11 @@ export const ToolStoreModel = types
       self.passwordStrengthMap = null
       self.passwordUseMap = null
       self.exposedPasswordMap = null
+      self.authenticatorOrder = cast([])
     },
 
     // ----------------- API -------------------
+
     checkBreaches: async (email: string) => {
       const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.checkBreaches(email)

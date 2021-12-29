@@ -102,20 +102,24 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
         justifyContent: 'space-between'
       }]}
     >
-      <Button
-        preset="link"
-        style={{ marginRight: openAdd ? 20 : 0 }}
-        onPress={() => openSort && openSort()}
-      >
-        {
-          isDark ? (
-            <ConfigIconLight height={17} />
-          ) : (
-            <ConfigIcon height={17} />
-          )
-        }
-      </Button>
-
+      {
+        !isAuthenticator && (
+          <Button
+            preset="link"
+            style={{ marginRight: openAdd ? 20 : 0 }}
+            onPress={() => openSort && openSort()}
+          >
+            {
+              isDark ? (
+                <ConfigIconLight height={17} />
+              ) : (
+                <ConfigIcon height={17} />
+              )
+            }
+          </Button>
+        )
+      }
+      
       {
         openAdd && (
           <Button
