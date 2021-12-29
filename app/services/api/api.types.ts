@@ -302,3 +302,8 @@ export type FeedbackData = {
     type: 'feedback' | 'support',
     description: string
 }
+
+export type UpdateFCMData = {
+    fcm_id: string
+    device_identifier: string
+}

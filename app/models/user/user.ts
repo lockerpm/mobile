@@ -2,8 +2,9 @@ import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
 import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
-import { saveSecure, removeSecure } from "../../utils/storage"
+import { saveSecure, removeSecure, save, storageKeys } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
+import DeviceInfo from 'react-native-device-info'
 
 
 /**
@@ -13,6 +14,7 @@ export const UserModel = types
   .model("User")
   .props({
     token: types.maybeNull(types.string),
+    fcmToken: types.maybeNull(types.string),
 
     // ID
     isLoggedIn: types.maybeNull(types.boolean),
@@ -34,12 +36,13 @@ export const UserModel = types
     invitations: types.array(types.frozen()),
     lastSync: types.maybeNull(types.number),
 
-    // User
+    // User settings
     language: types.optional(types.string, 'en'),
     isBiometricUnlock: types.maybeNull(types.boolean),
     appTimeout: types.optional(types.number, 0),
     appTimeoutAction: types.optional(types.string, 'lock'),
-    defaultTab: types.optional(types.string, 'homeTab')
+    defaultTab: types.optional(types.string, 'homeTab'),
+    disablePushNotifications: types.maybeNull(types.boolean)
   })
   .extend(withEnvironment)
   .views((self) => ({}))
@@ -56,6 +59,9 @@ export const UserModel = types
       self.isLoggedIn = false
       self.environment.api.apisauce.deleteHeader('Authorization')
       removeSecure('API_TOKEN')
+    },
+    setFCMToken: (token: string) => {
+      self.fcmToken = token
     },
 
     // Info
@@ -94,6 +100,7 @@ export const UserModel = types
       self.appTimeout = 0
       self.appTimeoutAction = 'lock'
       self.defaultTab = 'homeTab'
+      self.disablePushNotifications = false
     },
     setLoggedInPw: (isLoggedInPw: boolean) => {
       self.isLoggedInPw = isLoggedInPw
@@ -116,13 +123,16 @@ export const UserModel = types
       self.lastSync = lastSync
     },
 
-    // User
+    // User settings
     setDeviceID: (id: string) => {
       self.environment.api.apisauce.setHeader('device-id', id)
     },
     setLanguage: (lang: string) => {
       self.language = lang
       setLang(lang)
+      save(storageKeys.APP_CURRENT_USER, {
+        language: lang
+      })
     },
     setBiometricUnlock: (isActive: boolean) => {
       self.isBiometricUnlock = isActive
@@ -135,6 +145,9 @@ export const UserModel = types
     },
     setDefaultTab: (defaultTab: string) => {
       self.defaultTab = defaultTab
+    },
+    setPushNotificationsSetting: (val: boolean) => {
+      self.disablePushNotifications = val
     }
   }))
   .actions((self) => ({
@@ -345,6 +358,15 @@ export const UserModel = types
       })
       return res
     },
+
+    updateFCM: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.updateFCM({
+        fcm_id: self.fcmToken,
+        device_identifier: DeviceInfo.getUniqueId()
+      })
+      return res
+    }
   }))
 
 /**

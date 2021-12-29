@@ -2192,6 +2192,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@notifee/react-native@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@notifee/react-native/-/react-native-4.0.1.tgz#342ee79695f5753f8f32b9de48f428f6354c102e"
+  integrity sha512-vkRJnDMg7z21APm6RytD6ddHk4Og+zro/V0/Fk2a3Hvk1apDfSDXo1n4e3S+WPqsJEJSCXVGkRNWxam9Wq22sQ==
+
 "@npmcli/fs@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@npmcli/fs/-/fs-1.0.0.tgz#589612cfad3a6ea0feafcb901d29c63fd52db09f"
@@ -2398,6 +2403,11 @@
     "@expo/config-plugins" "^4.0.12"
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
+
+"@react-native-firebase/messaging@^14.1.0":
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-14.1.0.tgz#b2b3f85e9c6a9e73fb6ad6ec046ca95c8a1b4a6e"
+  integrity sha512-rF4T/euNx9YNCyxXSdvG2ImhL1El+5nWTR5tWIJQM/JmAgrzgoE36VtG7AOVYvtf3Vw0dkCCC0j3QhlwfmoCQw==
 
 "@react-native-google-signin/google-signin@^7.0.1":
   version "7.0.1"
