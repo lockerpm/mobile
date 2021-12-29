@@ -29,6 +29,7 @@
     "dev-ios": "npx react-native run-ios"
   },
   "dependencies": {
+    "@notifee/react-native": "^4.0.1",
     "@react-native-async-storage/async-storage": "^1.14.1",
     "@react-native-clipboard/clipboard": "^1.8.2",
     "@react-native-community/blur": "^3.6.0",
@@ -36,6 +37,7 @@
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/netinfo": "^6.0.2",
     "@react-native-firebase/app": "^14.1.0",
+    "@react-native-firebase/messaging": "^14.1.0",
     "@react-native-google-signin/google-signin": "^7.0.1",
     "@react-native-picker/picker": "^1.16.7",
     "@react-navigation/bottom-tabs": "^5.11.11",

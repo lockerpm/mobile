@@ -14,6 +14,7 @@ import { GeneralApiProblem } from '../api/api-problem'
 import { observer } from 'mobx-react-lite'
 import { color, colorDark } from '../../theme'
 import extractDomain from 'extract-domain'
+import { PushNotifier } from '../../utils/push-notification'
 
 
 const { createContext, useContext } = React
@@ -34,6 +35,7 @@ const defaultData = {
   notifyApiError: (problem: GeneralApiProblem) => {},
   notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
   randomString: () => '',
+  boostrapPushNotifier: async () => {}
 }
 
 
@@ -165,6 +167,21 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     }
   }
 
+  // Setup push notifier
+  const boostrapPushNotifier = async () => {
+    if (user.disablePushNotifications) {
+      return
+    }
+    const permissionGranted = await PushNotifier.getPermission()
+    if (permissionGranted) {
+      const token = await PushNotifier.getToken()
+      console.log(token)
+      user.setFCMToken(token)
+    } else {
+      user.setFCMToken(null)
+    }
+  }
+
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
@@ -180,6 +197,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     isBiometricAvailable,
     translate,
     notifyApiError,
+    boostrapPushNotifier
   }
 
   return (

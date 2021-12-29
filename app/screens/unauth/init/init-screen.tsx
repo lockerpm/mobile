@@ -8,12 +8,16 @@ import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
 import { BackHandler, Appearance } from "react-native"
+import { useMixins } from "../../../services/mixins"
 
 
 export const InitScreen = observer(function InitScreen() {
   const { user, cipherStore, uiStore } = useStores()
   const navigation = useNavigation()
   const theme = Appearance.getColorScheme()
+  const { boostrapPushNotifier } = useMixins()
+
+  // ------------------ METHODS ---------------------
 
   const goLockOrCreatePassword = () => {
     if (user.is_pwd_manager) {
@@ -41,6 +45,8 @@ export const InitScreen = observer(function InitScreen() {
     if (uiStore.isDark === null) {
       uiStore.setIsDark(theme === 'dark')
     }
+
+    await boostrapPushNotifier()
 
     // Check autofill
     const isAutoFill = await checkAutoFill()
@@ -87,13 +93,15 @@ export const InitScreen = observer(function InitScreen() {
     }
   }
 
-  // Life cycle
+  // ------------------ EFFECTS ---------------------
+
+  // Mounted
   useEffect(() => {
     setTimeout(mounted, 1500)
     // mounted()
   }, [])
 
-  // No back here
+  // Back handler
   useEffect(() => {
     const handleBack = (e) => {
       e.preventDefault()
@@ -101,13 +109,13 @@ export const InitScreen = observer(function InitScreen() {
         BackHandler.exitApp()
       }
     }
-
     navigation.addListener('beforeRemove', handleBack)
-
     return () => {
       navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
+
+  // ------------------ RENDER ---------------------
 
   return (
     <Loading />

@@ -32,6 +32,9 @@ export const StartScreen = observer(function StartScreen() {
 
     // Sync
     if (connectionState.isInternetReachable) {
+      // Update FCM
+      user.updateFCM()
+
       // Check if need to sync
       const lastUpdateRes = await user.getLastUpdate()
       if (

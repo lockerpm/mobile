@@ -10,6 +10,9 @@
 import './shim.js'
 import App from "./app/app.tsx"
 import { AppRegistry } from "react-native"
+import { PushNotifier } from './app/utils/push-notification'
+
+PushNotifier.setupBackgroundHandler()
 
 AppRegistry.registerComponent("CyStackLocker", () => App)
 export default App

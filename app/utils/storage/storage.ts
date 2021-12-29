@@ -1,11 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export const storageKeys = {
-  USER_INFO_KEY: 'user_info',
-  USER_TOKEN_KEY: 'user_token',
   APP_SHOW_INTRO: 'app__show_intro',
   APP_SHOW_BIOMETRIC_INTRO: 'app__show_biometric_intro',
-  APP_FROM_AUTOFILL: 'app__from_autofill'
+  APP_FROM_AUTOFILL: 'app__from_autofill',
+  APP_CURRENT_USER: 'app__current_user'
 }
 
 /**
