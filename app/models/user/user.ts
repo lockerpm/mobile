@@ -359,10 +359,10 @@ export const UserModel = types
       return res
     },
 
-    updateFCM: async () => {
+    updateFCM: async (token: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.updateFCM({
-        fcm_id: self.fcmToken,
+        fcm_id: token,
         device_identifier: DeviceInfo.getUniqueId()
       })
       return res

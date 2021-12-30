@@ -16,7 +16,7 @@ import {
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
   ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
-  GoogleAuthenticatorImportScreen, AutoFillScreen
+  GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -99,6 +99,7 @@ export type PrimaryParamList = {
   import: undefined
   export: undefined
   autofill: undefined
+  notificationSettings: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -340,6 +341,7 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
         <Stack.Screen name="import" component={ImportScreen} />
         <Stack.Screen name="export" component={ExportScreen} />
+        <Stack.Screen name="notificationSettings" component={NotificationSettingsScreen} />
 
         <Stack.Screen name="autofill" component={AutoFillScreen} />
       </Stack.Navigator>
