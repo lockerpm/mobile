@@ -8,11 +8,13 @@ import { commonStyles, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
-  const { logout, sessionLogin, notify, biometricLogin, translate, notifyApiError, color } = useMixins()
+  const { notify, translate, notifyApiError, color } = useMixins()
+  const { logout, sessionLogin, biometricLogin } = useCipherAuthenticationMixins()
   const { user } = useStores()
 
   // ---------------------- PARAMS -------------------------

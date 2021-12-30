@@ -14,6 +14,8 @@ import { useMixins } from "../../../../../services/mixins"
 import { CardView, CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { CARD_BRANDS } from "../constants"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
 
 type CardEditScreenProp = RouteProp<PrimaryParamList, 'cards__edit'>;
@@ -36,7 +38,9 @@ export const CardEditScreen = observer(function CardEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<CardEditScreenProp>()
   const { mode } = route.params
-  const { newCipher, createCipher, updateCipher, translate, color } = useMixins()
+  const { translate, color } = useMixins()
+  const { createCipher, updateCipher } = useCipherDataMixins()
+  const { newCipher } = useCipherHelpersMixins()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 

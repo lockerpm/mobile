@@ -15,6 +15,7 @@ import ConfigIconLight from './config-light.svg'
 import PlusIcon from './plus.svg'
 // @ts-ignore
 import PlusIconLight from './plus-light.svg'
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 
 
 interface Props {
@@ -36,7 +37,8 @@ export const ItemsHeader = (props: Props) => {
     openAdd, openSort, onSearch, searchText, setIsLoading, navigation,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll
   } = props
-  const { translate, toTrashCiphers, color, isDark } = useMixins()
+  const { translate, color, isDark } = useMixins()
+  const { toTrashCiphers } = useCipherDataMixins()
 
   // ----------------------- PARAMS ------------------------
 

@@ -87,7 +87,8 @@ export const ExposedPasswordList = observer(function ExposedPasswordList() {
                   backupSource={item.logo}
                   style={{
                     height: 40,
-                    width: 40
+                    width: 40,
+                    borderRadius: 8
                   }}
                 />
 

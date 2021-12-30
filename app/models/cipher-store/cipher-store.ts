@@ -84,6 +84,12 @@ export const CipherStoreModel = types
       return res
     },
 
+    getCipher: async (id: string) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getCipher(id)
+      return res
+    },
+
     createCipher: async (data: CipherRequest, score: number, collectionIds: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.postCipher(data, score, collectionIds)

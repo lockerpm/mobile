@@ -15,11 +15,13 @@ import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { CipherView } from "../../../../../../core/models/view"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
 
 export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   const navigation = useNavigation()
-  const { getWebsiteLogo, getPasswordStrength, translate, color } = useMixins()
+  const { getWebsiteLogo, translate, color } = useMixins()
+  const { getPasswordStrength } = useCipherHelpersMixins()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 
@@ -94,7 +96,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
                 : BROWSE_ITEMS.password.icon
             }
             backupSource={BROWSE_ITEMS.password.icon}
-            style={{ height: 55, width: 55, marginBottom: 5 }}
+            style={{ height: 55, width: 55, marginBottom: 5, borderRadius: 8 }}
           />
           <Text
             preset="header"
@@ -135,7 +137,8 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
         <FloatingInput
           isPassword
           fixedLabel
-          copyAble={selectedCipher.viewPassword}
+          copyAble
+          lockCopy={!selectedCipher.viewPassword}
           hidePassword={!selectedCipher.viewPassword}
           label={translate('common.password')}
           value={selectedCipher.login.password}

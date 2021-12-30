@@ -16,7 +16,7 @@ export type GeneralApiProblem =
   /**
    * We're not allowed because we haven't identified ourself. This is 401.
    */
-  | { kind: "unauthorized" }
+  | { kind: "unauthorized"; data?: any }
   /**
    * We don't have access to perform that request. This is 403.
    */
@@ -60,7 +60,7 @@ export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProb
         case 400:
           return { kind: 'bad-data', data: response.data }
         case 401:
-          return { kind: "unauthorized" }
+          return { kind: "unauthorized", data: response.data }
         case 403:
           return { kind: "forbidden" }
         case 404:

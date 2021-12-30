@@ -6,6 +6,7 @@ import { FolderResponse } from "../../../core/models/response/folderResponse"
 import { CollectionResponse } from "../../../core/models/response/collectionResponse"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
+import { CipherResponse } from "../../../core/models/response/cipherResponse"
 
 type SessionSnapshot = {
     access_token: string
@@ -50,6 +51,22 @@ export type LoginResult = {
     }
 } | GeneralApiProblem
 
+export type GetPMTokenResult = { 
+    kind: "ok"
+    data: {
+        url: string
+        access_token: string
+
+        // Clone data here to hide error
+        // These data actually not exists
+        is_factor2?: boolean
+        methods?: {
+            type: string
+            data: any
+        }[]
+    }
+} | GeneralApiProblem
+
 export type SocialLoginResult = { 
     kind: "ok"
     data: {
@@ -69,6 +86,8 @@ export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | General
 export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
 export type EmptyResult = { kind: "ok" } | GeneralApiProblem
 export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
+export type GetCipherResult = { kind: "ok", data: CipherResponse } | GeneralApiProblem
+export type GetFolderResult = { kind: "ok", data: FolderResponse } | GeneralApiProblem
 export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
 export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | GeneralApiProblem
@@ -147,6 +166,12 @@ export type LoginData = {
     method?: string
     otp?: string
     save_device?: boolean
+}
+
+export type GetPMTokenData = {
+    SERVICE_URL: '/'
+    SERVICE_SCOPE: 'pwdmanager'
+    CLIENT: 'mobile'
 }
 
 export type RegisterData = {
@@ -279,4 +304,9 @@ export type ImportCipherData = {
 export type FeedbackData = {
     type: 'feedback' | 'support',
     description: string
+}
+
+export type UpdateFCMData = {
+    fcm_id: string
+    device_identifier: string
 }

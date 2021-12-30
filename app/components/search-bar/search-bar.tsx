@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState, useEffect } from "react"
 import { StyleProp, TextInput, View, ViewStyle } from "react-native"
 import { fontSize } from "../../theme"
 import { flatten } from "ramda"
@@ -22,6 +22,8 @@ export const SearchBar = function SearchBar(props: SearchBarProps) {
   const { style, onSearch, value } = props
   const { translate, color, isDark } = useMixins()
 
+  const [text, setText] = useState('')
+
   const CONTAINER: ViewStyle = {
     flexDirection: "row", 
     alignItems: "center",
@@ -30,13 +32,24 @@ export const SearchBar = function SearchBar(props: SearchBarProps) {
   }
   const styles = flatten([CONTAINER, style])
 
+  useEffect(() => {
+    setText(value)
+  }, [])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => onSearch(text), 200)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [text])
+
   return (
     <View style={styles}>
       <TextInput
-        value={value}
+        value={text}
         placeholder={translate('common.search')}
         placeholderTextColor={color.text}
-        onChangeText={(txt) => onSearch && onSearch(txt)}
+        onChangeText={setText}
         clearButtonMode="while-editing"
         style={{
           flex: 1,

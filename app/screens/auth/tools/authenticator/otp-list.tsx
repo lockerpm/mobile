@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react"
-import { View, FlatList } from "react-native"
+import { View, TouchableWithoutFeedback } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
+import sortBy from 'lodash/sortBy'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
@@ -13,6 +14,8 @@ import { commonStyles, fontSize } from "../../../../theme"
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { parseOTPUri, getTOTP } from "../../../../utils/totp"
 import { Checkbox } from "react-native-ui-lib"
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
+import DraggableFlatList from 'react-native-draggable-flatlist'
 
 
 interface Props {
@@ -39,8 +42,9 @@ export const OtpList = observer(function OtpList(props: Props) {
     navigation, emptyContent, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { getCiphers, translate, color } = useMixins()
-  const { cipherStore } = useStores()
+  const { translate, color } = useMixins()
+  const { getCiphers } = useCipherDataMixins()
+  const { cipherStore, toolStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
 
@@ -52,7 +56,6 @@ export const OtpList = observer(function OtpList(props: Props) {
   // ------------------------ WATCHERS ----------------------------
 
   useEffect(() => {
-    // setOtps([])
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastOfflineSync, sortList])
 
@@ -60,7 +63,7 @@ export const OtpList = observer(function OtpList(props: Props) {
 
   // Get ciphers list
   const loadData = async () => {
-    // onLoadingChange && onLoadingChange(true)
+    onLoadingChange && onLoadingChange(true)
 
     // Filter
     const filters = [(c : CipherView) => c.type === CipherType.TOTP]
@@ -98,9 +101,12 @@ export const OtpList = observer(function OtpList(props: Props) {
     }, 100)
 
     // Done
-    setCiphers(res)
-    setAllItems(res.map(c => c.id))
-    updateOtp(res)
+    const sortedData = toolStore.authenticatorOrder.length > 0 ? sortBy(res, (item: CipherView) => {
+      return toolStore.authenticatorOrder.indexOf(item.id)
+    }) : [...res]
+    setCiphers(sortedData)
+    setAllItems(sortedData.map(c => c.id))
+    updateOtp(sortedData)
   }
 
   // Handle action menu open
@@ -143,9 +149,16 @@ export const OtpList = observer(function OtpList(props: Props) {
     setSelectedItems(selected)
   }
 
+  // Handle changing order
+  const handleChangeOrder = ({ data }) => {
+    setCiphers(data)
+    updateOtp(data)
+    toolStore.setAuthenticatorOrder(data.map((i: CipherView) => i.id))
+  }
+
   // ------------------------ RENDER ----------------------------
 
-  return ciphers.length ? (
+  return otps.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
@@ -160,11 +173,12 @@ export const OtpList = observer(function OtpList(props: Props) {
       {/* Action menus end */}
 
       {/* Cipher list */}
-      <FlatList
+      <DraggableFlatList
         style={{ paddingHorizontal: 20 }}
         data={otps}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item, index }) => (
+        onDragEnd={handleChangeOrder}
+        renderItem={({ item, index, drag, isActive }) => (
           <Button
             preset="link"
             onPress={() => {
@@ -174,21 +188,54 @@ export const OtpList = observer(function OtpList(props: Props) {
                 openActionMenu(item)
               }
             }}
-            onLongPress={() => toggleItemSelection(item)}
+            onLongPress={() => {
+              if (isSelecting) {
+                drag()
+              } else {
+                toggleItemSelection(item)
+              }
+            }}
             style={{
               borderBottomColor: color.line,
               borderBottomWidth: 0.5,
-              paddingVertical: 15
+              paddingVertical: 15,
+              backgroundColor: color.background
             }}
           >
             <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
               justifyContent: 'space-between'
             }]}>
-              <View style={{ flex: 1, marginLeft: 12 }}>
+              {/* Drag anchor */}
+              {
+                isSelecting && (
+                  <TouchableWithoutFeedback
+                    onPressIn={() => {
+                      drag()
+                    }}
+                  >
+                    <View style={{
+                      paddingVertical: 10,
+                      paddingRight: 15,
+                    }}>
+                      <MaterialCommunityIconsIcon
+                        name="menu"
+                        size={18}
+                        color={color.textBlack}
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
+                )
+              }
+              {/* Drag anchor end */}
+
+              {/* Content */}
+              <View style={{ flex: 1 }}>
                 <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
                   <Text
                     preset="semibold"
                     text={item.name}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
                   />
 
                   {
@@ -212,7 +259,9 @@ export const OtpList = observer(function OtpList(props: Props) {
                   }}
                 />
               </View>
+              {/* Content end */}
 
+              {/* Couter/Select */}
               {
                 isSelecting ? (
                   <Checkbox
@@ -237,6 +286,7 @@ export const OtpList = observer(function OtpList(props: Props) {
                   />
                 )
               }
+              {/* Couter/Select end */}
             </View>
           </Button>
         )}

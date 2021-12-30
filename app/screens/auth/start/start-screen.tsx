@@ -5,25 +5,36 @@ import { useNavigation } from "@react-navigation/native"
 import { storageKeys, load } from "../../../utils/storage"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
-import { delay } from "../../../utils/delay"
 import NetInfo from '@react-native-community/netinfo'
+import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
+import { IS_IOS } from "../../../config/constants"
 
 
 export const StartScreen = observer(function StartScreen() {
-  const { user } = useStores()
-  const { 
-    getSyncData, loadFolders, loadCollections, isBiometricAvailable, notify, translate, 
-    loadPasswordsHealth, syncAutofillData
-  } = useMixins()
+  const { user, uiStore } = useStores()
+  const { isBiometricAvailable, notify, translate } = useMixins()
+  const { getSyncData, loadFolders, loadCollections, syncAutofillData } = useCipherDataMixins()
+  const { loadPasswordsHealth } = useCipherToolsMixins()
   const navigation = useNavigation()
+
+  // ------------------------- PARAMS ----------------------------
 
   const [msg, setMsg] = useState('')
 
+  // ------------------------- METHODS ----------------------------
+
   const mounted = async () => {
-    await syncAutofillData()
+    if (IS_IOS) {
+      await syncAutofillData()
+    }
     const connectionState = await NetInfo.fetch()
 
+    // Sync
     if (connectionState.isInternetReachable) {
+      // Update FCM
+      user.updateFCM(user.fcmToken)
+
       // Check if need to sync
       const lastUpdateRes = await user.getLastUpdate()
       if (
@@ -46,44 +57,56 @@ export const StartScreen = observer(function StartScreen() {
       }
 
       // Sync teams and plan
-      setMsg(translate('start.getting_team_info'))
-      const [invitationsRes] = await Promise.all([
-        user.getInvitations(),
-        user.loadTeams(),
-        user.loadPlan(),
-      ])
-
-      // Invitations handler
-      if (invitationsRes.kind == 'ok') {
-        user.setInvitations(invitationsRes.data)
+      if (!uiStore.isFromAutoFill) {
+        setMsg(translate('start.getting_team_info'))
+        const [invitationsRes] = await Promise.all([
+          user.getInvitations(),
+          user.loadTeams(),
+          user.loadPlan(),
+        ])
+        if (invitationsRes.kind == 'ok') {
+          user.setInvitations(invitationsRes.data)
+        }
       }
     }
     
+    // Load folders and collections
     setMsg(translate('start.decrypting'))
-    await delay(500)
     await Promise.all([
       loadFolders(),
       loadCollections()
     ])
-    loadPasswordsHealth()
+    if (!uiStore.isFromAutoFill) {
+      loadPasswordsHealth()
+    }
 
-    // TODO
+    // TODO: check device limit
     const isDeviceLimitReached = false
     if (isDeviceLimitReached) {
       navigation.navigate('switchDevice')
     }
 
     setMsg('')
-    const introShown = await load(storageKeys.APP_SHOW_BIOMETRIC_INTRO)
-    if (!introShown) {
-      const available = await isBiometricAvailable()
-      if (available) {
-        navigation.navigate('biometricUnlockIntro')
-        return
+
+    // Show biometric intro
+    if (!uiStore.isFromAutoFill) {
+      const introShown = await load(storageKeys.APP_SHOW_BIOMETRIC_INTRO)
+      if (!introShown) {
+        const available = await isBiometricAvailable()
+        if (available) {
+          navigation.navigate('biometricUnlockIntro')
+          return
+        }
       }
     }
-
-    navigation.navigate('mainTab', { screen: user.defaultTab })
+    
+    // Done -> navigate
+    if (uiStore.isFromAutoFill) {
+      uiStore.setIsFromAutoFill(false)
+      navigation.navigate('autofill')
+    } else {
+      navigation.navigate('mainTab', { screen: user.defaultTab })
+    }
   }
 
   // --------------------------- EFFECT ----------------------------
@@ -94,6 +117,7 @@ export const StartScreen = observer(function StartScreen() {
     return unsubscribe
   }, [navigation])
 
+  // ------------------------- RENDER ----------------------------
 
   return (
     <Loading message={msg} />

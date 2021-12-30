@@ -18,7 +18,7 @@ import { authorize } from "react-native-app-auth"
 export const SignupScreen = observer(function SignupScreen() {
   const { user, uiStore } = useStores()
   const navigation = useNavigation()
-  const { translate, notify } = useMixins()
+  const { translate, notify, notifyApiError } = useMixins()
 
   // ---------------- PARAMS ---------------------
 
@@ -45,21 +45,11 @@ export const SignupScreen = observer(function SignupScreen() {
           })
           await GoogleSignin.signIn()
           const tokens = await GoogleSignin.getTokens()
-          setIsLoading(true)
-          const loginRes = await user.socialLogin({
-            provider: 'google',
-            access_token: tokens.accessToken
-          })
-          setIsLoading(false)
-          if (loginRes.kind !== 'ok') {
-            notify('error', translate('error.login_failed'))
-          } else {
-            onLoggedIn()
-          }
+          await handleSocialLogin('google', tokens.accessToken)
         } catch (e) {
           setIsLoading(false)
           __DEV__ && console.log(e)
-          notify('error', e.toString())
+          notify('error', translate('error.something_went_wrong'))
         }
       }
     },
@@ -78,23 +68,11 @@ export const SignupScreen = observer(function SignupScreen() {
               return
             }
           }
-          
-          setIsLoading(true)
-
-          const loginRes = await user.socialLogin({
-            provider: 'facebook',
-            access_token: res.accessToken 
-          })
-          setIsLoading(false)
-          if (loginRes.kind !== 'ok') {
-            notify('error', translate('error.login_failed'))
-          } else {
-            onLoggedIn()
-          }
+          await handleSocialLogin('facebook', res.accessToken)
         } catch (e) {
           setIsLoading(false)
           __DEV__ && console.log(e)
-          notify('error', e.toString())
+          notify('error', translate('error.something_went_wrong'))
         }
       }
     },
@@ -109,22 +87,11 @@ export const SignupScreen = observer(function SignupScreen() {
             notify('error', translate('error.something_went_wrong'))
             return
           }
-          setIsLoading(true)
-
-          const loginRes = await user.socialLogin({
-            provider: 'github',
-            access_token: res.accessToken 
-          })
-          setIsLoading(false)
-          if (loginRes.kind !== 'ok') {
-            notify('error', translate('error.login_failed'))
-          } else {
-            onLoggedIn()
-          }
+          await handleSocialLogin('github', res.accessToken)
         } catch (e) {
           setIsLoading(false)
           __DEV__ && console.log(e)
-          notify('error', e.toString())
+          notify('error', translate('error.something_went_wrong'))
         }
       }
     }
@@ -151,7 +118,22 @@ export const SignupScreen = observer(function SignupScreen() {
       notify('success', translate('signup.signup_successful'), 5000)
       navigation.navigate('login')
     } else {
-      notify('error', translate('error.invalid_data'))
+      notifyApiError(res)
+    }
+  }
+
+  const handleSocialLogin = async (provider: string, token: string) => {
+    setIsLoading(true)
+    const loginRes = await user.socialLogin({
+      provider: provider,
+      access_token: token
+    })
+    setIsLoading(false)
+    if (loginRes.kind !== 'ok') {
+      notifyApiError(loginRes)
+      notify('error', translate('error.login_failed'))
+    } else {
+      onLoggedIn()
     }
   }
 

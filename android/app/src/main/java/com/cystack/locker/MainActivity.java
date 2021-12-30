@@ -1,9 +1,16 @@
 package com.cystack.locker;
 
+import android.app.Activity;
 import android.os.Bundle; // here
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen; // here
 import android.view.WindowManager;
+
+import androidx.annotation.Nullable;
+
+import com.facebook.react.ReactActivity;
+import com.facebook.react.ReactActivityDelegate;
+
 
 public class MainActivity extends ReactActivity {
 
@@ -21,5 +28,40 @@ public class MainActivity extends ReactActivity {
     SplashScreen.show(this);  // here
     super.onCreate(savedInstanceState);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+  }
+
+  public static class AppActivityDelegate extends ReactActivityDelegate {
+    private static final String ENABLE_AUTOFILL = "autofill";
+    private static final String DOMAIN_FILL = "domain";
+    private Bundle mInitialProps = null;
+    private final
+    @Nullable
+    Activity mActivity;
+
+    public AppActivityDelegate(Activity activity, String mainComponentName) {
+      super(activity, mainComponentName);
+      this.mActivity = activity;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+      Bundle bundle = mActivity.getIntent().getExtras();
+      if (bundle != null && bundle.containsKey(ENABLE_AUTOFILL)) {
+        mInitialProps = new Bundle();
+        mInitialProps.putInt(ENABLE_AUTOFILL, bundle.getInt(ENABLE_AUTOFILL));
+        mInitialProps.putString(DOMAIN_FILL, bundle.getString(DOMAIN_FILL));//fdgdf
+      }
+      super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected Bundle getLaunchOptions() {
+      return mInitialProps;
+    }
+  }
+
+  @Override
+  protected ReactActivityDelegate createReactActivityDelegate() {
+    return new AppActivityDelegate(this, getMainComponentName());
   }
 }
