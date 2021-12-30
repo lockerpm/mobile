@@ -115,6 +115,7 @@
     "not_available_offline": "Không thể thực hiện hành động này trong chế độ ngoại tuyến",
     "login_locked": "Tài khoản của bạn đã bị khoá do chính sách bảo mật của team. Thử lại sau: ",
     "duplicate_cipher_name": "Tên trùng lặp! Vui lòng chọn tên khác!",
+    "duplicate_folder_name": "Tên trùng lặp! Vui lòng chọn tên khác!",
     "not_allowed_to_see_pw": "Không thể thực hiện hành động này! Mật khẩu này chỉ có thể sử dụng cho tính năng Tự động điền!",
     "not_allowed_to_copy_pw": "Không thể thực hiện hành động này! Mật khẩu này chỉ có thể sử dụng cho tính năng Tự động điền!"
   },

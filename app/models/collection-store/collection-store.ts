@@ -11,7 +11,8 @@ import { withEnvironment } from "../extensions/with-environment"
 export const CollectionStoreModel = types
   .model("CollectionStore")
   .props({
-    collections: types.array(types.frozen())
+    collections: types.array(types.frozen()),
+    notSynchedCollections: types.array(types.string)
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -24,6 +25,22 @@ export const CollectionStoreModel = types
 
     clearStore: () => {
       self.collections = cast([])
+    },
+
+    addNotSync: (id: string) => {
+      if (!self.notSynchedCollections.includes(id)) {
+        self.notSynchedCollections.push(id)
+      }
+    },
+
+    removeNotSync: (id: string) => {
+      if (!self.notSynchedCollections.includes(id)) {
+        self.notSynchedCollections = cast(self.notSynchedCollections.filter(i => i !== id))
+      }
+    },
+
+    clearNotSync: () => {
+      self.notSynchedCollections = cast([])
     },
 
     // ----------------- CRUD -------------------

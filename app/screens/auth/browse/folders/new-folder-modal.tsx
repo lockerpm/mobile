@@ -3,13 +3,10 @@ import { FloatingInput, Button, Modal, Text, DropdownPicker } from "../../../../
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 import { FolderView } from "../../../../../core/models/view/folderView"
-import { useCoreService } from "../../../../services/core-service"
-import { FolderRequest } from "../../../../../core/models/request/folderRequest"
 import { useMixins } from "../../../../services/mixins"
 import { fontSize } from "../../../../theme"
 import { GeneralApiProblem } from "../../../../services/api/api-problem"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
-import { CollectionRequest } from "../../../../../core/models/request/collectionRequest"
 import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 
@@ -22,9 +19,8 @@ interface Props {
 export const NewFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
   const { folderStore, user, collectionStore, uiStore } = useStores()
-  const { folderService, collectionService, userService, storageService } = useCoreService()
-  const { notify, translate, notifyApiError, randomString } = useMixins()
-  const { reloadCache } = useCipherDataMixins()
+  const { translate } = useMixins()
+  const { createFolder, createCollection } = useCipherDataMixins()
 
   // --------------- PARAMS ----------------
 
@@ -69,63 +65,24 @@ export const NewFolderModal = observer((props: Props) => {
     if (owner === 'me') {
       const data = new FolderView()
       data.name = name
-
-      // Offline
-      if (uiStore.isOffline) {
-        await _offlineCreatePersonalFolder(data)
-        res = { kind: 'ok' }
-      }
-
-      // Online
-      else {
-        const folderEnc = await folderService.encrypt(data)
-        const payload = new FolderRequest(folderEnc)
-        res = await folderStore.createFolder(payload)
-      }
+      res = await createFolder(data)
     } else {
       const data = new CollectionView()
       data.name = name
       data.organizationId = owner
-      const folderEnc = await collectionService.encrypt(data)
-      const payload = new CollectionRequest(folderEnc)
-      res = await collectionStore.createCollection(owner, payload)
+      res = await createCollection(data)
     }
 
     setIsLoading(false)
 
     if (res.kind === 'ok') {
-      notify(
-        'success', translate('folder.folder_created') 
-        + (uiStore.isOffline ? ` ${translate('success.will_sync_when_online')}` : '')
-      )
       setName('')
       onClose()
     } else {
-      // @ts-ignore
-      notifyApiError(res)
       if (res.kind === 'unauthorized') {
         onClose()
       }
     }
-  }
-
-  const _offlineCreatePersonalFolder = async (folder: FolderView) => {
-    const userId = await userService.getUserId()
-    const key = `folders_${userId}`
-    const res = await storageService.get(key)
-
-    const folderEnc = await folderService.encrypt(folder)
-    const data = new FolderRequest(folderEnc)
-    const tempId = 'tmp__' + randomString()
-
-    res[tempId] = {
-      ...data,
-      userId,
-      id: tempId
-    }
-    await storageService.save(key, res)
-    folderStore.addNotSync(tempId)
-    await reloadCache()
   }
 
   // --------------- EFFECT ----------------

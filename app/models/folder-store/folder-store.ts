@@ -46,6 +46,12 @@ export const FolderStoreModel = types
 
     // ----------------- CRUD -------------------
 
+    getFolder: async (id: string) => {
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.getFolder(id)
+      return res
+    },
+
     createFolder: async (data: FolderRequest) => {
       const folderApi = new FolderApi(self.environment.api)
       const res = await folderApi.postFolder(data)

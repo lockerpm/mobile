@@ -109,7 +109,9 @@ export const MainNavigator = observer(function MainNavigator() {
   const navigation = useNavigation()
   const { notify, translate } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
-  const { getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData } = useCipherDataMixins()
+  const { 
+    getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData, syncSingleCipher, syncSingleFolder
+  } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const { uiStore, user, cipherStore } = useStores()
 
@@ -218,9 +220,7 @@ export const MainNavigator = observer(function MainNavigator() {
   const generateSocket = () => {
     const ws = new WebSocket(wsUrl)
     ws.onopen = () => {
-      if (__DEV__) {
-        console.log('SOCKET OPEN')
-      }
+      __DEV__ && console.log('SOCKET OPEN')
     }
 
     ws.onmessage = async (e) => {
@@ -228,10 +228,23 @@ export const MainNavigator = observer(function MainNavigator() {
       __DEV__ && console.log('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
         case 'sync':
-          await handleSync()
+          switch (data.type) {
+            case 'cipher_update': {
+              const cipherId = data.data.id
+              syncSingleCipher(cipherId)
+              break
+            }
+            case 'folder_update': {
+              const folderId = data.data.id
+              syncSingleFolder(folderId)
+              break
+            }
+            default:
+              handleSync()
+          }
           break
         case 'members':
-          await handleInvitationSync()
+          handleInvitationSync()
           break
         default:
           break
@@ -249,9 +262,7 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     ws.onclose = (e) => {
-      if (__DEV__) {
-        console.log(`SOCKET CLOSE: ${JSON.stringify(e)}`);
-      }
+      __DEV__ && console.log(`SOCKET CLOSE: ${JSON.stringify(e)}`);
     }
 
     return ws

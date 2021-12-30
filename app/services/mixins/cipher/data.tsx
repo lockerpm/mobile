@@ -14,6 +14,10 @@ import { CipherType } from '../../../../core/enums'
 import { AutofillDataType, loadShared, saveShared } from '../../../utils/keychain'
 import { useCipherHelpersMixins } from './helpers'
 import { IS_IOS } from '../../../config/constants'
+import { CollectionView } from '../../../../core/models/view/collectionView'
+import { CollectionRequest } from '../../../../core/models/request/collectionRequest'
+import { CipherData } from '../../../../core/models/data/cipherData'
+import { FolderData } from '../../../../core/models/data/folderData'
 
 
 type GetCiphersParams = {
@@ -38,6 +42,14 @@ const defaultData = {
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   importCiphers: async (importResult) => { return { kind: 'unknown' } },
+  createFolder: async (folder: FolderView) => { return { kind: 'unknown' } },
+  updateFolder: async (folder: FolderView) => { return { kind: 'unknown' } },
+  deleteFolder: async (id: string) => { return { kind: 'unknown' } },
+  createCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
+  updateCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
+  deleteCollection: async (id: string, teamId: string) => { return { kind: 'unknown' } },
+  syncSingleCipher: async (id: string) => {},
+  syncSingleFolder: async (id: string) => {},
 }
 
 export const CipherDataMixinsContext = createContext(defaultData)
@@ -61,11 +73,24 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   // ----------------------------- METHODS ---------------------------
 
   // Reload offline cache
-  const reloadCache = async () => {
-    await cipherService.clearCache()
-    cipherStore.setLastOfflineSync(new Date().getTime())
+  const reloadCache = async (options?: {
+    isOnline?: boolean
+    notCipher?: boolean
+  }) => {
+    if (options?.isOnline) {
+      cipherStore.setLastSync(new Date().getTime())
+    } else {
+      cipherStore.setLastOfflineSync(new Date().getTime())
+    }
+    if (!options?.notCipher) {
+      await cipherService.clearCache()
+    }
     folderService.clearCache()
-    await loadFolders()
+    collectionService.clearCache()
+    await Promise.all([
+      loadFolders(),
+      loadCollections()
+    ])
     if (cipherStore.selectedCipher) {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
@@ -123,7 +148,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       cipherStore.setIsSynching(false)
       return { kind: 'ok' }
     } catch (e) {
-      console.log(e)
+      __DEV__ && console.log(e)
       cipherStore.setIsSynching(false)
       messagingService.send('syncCompleted', { successfully: false })
       return { kind: 'bad-data' }
@@ -399,7 +424,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const importCiphers = async (importResult) => {
     // Offline
     if (uiStore.isOffline) {
-      return _offlineImportCiphers(importResult)
+      await _offlineImportCiphers(importResult)
+      notify('success', translate('import.success') + ' ' + translate('success.will_sync_when_online'))
+      return { kind: 'ok' }
     }
 
     // Online
@@ -516,7 +543,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
 
     await reloadCache()
-    notify('success', translate('import.success') + ' ' + translate('success.will_sync_when_online'))
     return { kind: 'ok' }
   }
 
@@ -546,6 +572,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
     return count - 1
   }
+
+  // ----------------------- CIPHER ---------------------------
 
   // Create
   const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
@@ -781,6 +809,364 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await reloadCache()
   }
 
+  // ----------------------- FOLDER ---------------------------
+
+  // Create folder
+  const createFolder = async (folder: FolderView) => {
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineCreateFolder(folder)
+        notify('success', `${translate('folder.folder_created')} ${translate('success.will_sync_when_online')}`)
+        return { kind: 'ok' }
+      } 
+
+      // Online
+      const folderEnc = await folderService.encrypt(folder)
+      const payload = new FolderRequest(folderEnc)
+      const res = await folderStore.createFolder(payload)
+      if (res.kind === 'ok') {
+        await _offlineCreateFolder(folder, true) 
+        notify('success', translate('folder.folder_created'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
+    }
+  }
+
+  // Offline create folder
+  const _offlineCreateFolder = async (folder: FolderView, isCaching?: boolean) => {
+    const userId = await userService.getUserId()
+    const key = `folders_${userId}`
+    const res = await storageService.get(key)
+
+    const folderEnc = await folderService.encrypt(folder)
+    const data = new FolderRequest(folderEnc)
+    const tempId = 'tmp__' + randomString()
+
+    res[tempId] = {
+      ...data,
+      userId,
+      id: tempId
+    }
+    await storageService.save(key, res)
+    if (!isCaching) {
+      folderStore.addNotSync(tempId)
+    }
+    await reloadCache()
+  }
+
+  // Update folder
+  const updateFolder = async (folder: FolderView) => {
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineUpdateFolder(folder)
+        notify('success', `${translate('folder.folder_updated')} ${translate('success.will_sync_when_online')}`)
+        return { kind: 'ok' }
+      } 
+
+      // Online
+      const folderEnc = await folderService.encrypt(folder)
+      const payload = new FolderRequest(folderEnc)
+      const res = await folderStore.updateFolder(folder.id, payload)
+      if (res.kind === 'ok') {
+        await _offlineUpdateFolder(folder, true) 
+        notify('success', translate('folder.folder_updated'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
+    }
+  }
+
+  // Offline update folder
+  const _offlineUpdateFolder = async (folder: FolderView, isCaching?: boolean) => {
+    const userId = await userService.getUserId()
+    const key = `folders_${userId}`
+    const res = await storageService.get(key)
+
+    const folderEnc = await folderService.encrypt(folder)
+    const data = new FolderRequest(folderEnc)
+
+    res[folder.id] = {
+      ...res[folder.id],
+      ...data
+    }
+    await storageService.save(key, res)
+    if (!isCaching) {
+      folderStore.addNotSync(folder.id)
+    }
+    await reloadCache()
+  }
+
+  // Delete folder
+  const deleteFolder = async (id: string) => {
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineDeleteFolder(id)
+        notify('success', translate('folder.folder_deleted'))
+        return { kind: 'ok' }
+      } 
+
+      // Online
+      const res = await folderStore.deleteFolder(id)
+      if (res.kind === 'ok') {
+        await _offlineDeleteFolder(id, true) 
+        notify('success', translate('folder.folder_deleted'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
+    }
+  }
+
+  // Offline delete folder
+  const _offlineDeleteFolder = async (id: string, isCaching?: boolean) => {
+    const userId = await userService.getUserId()
+    const key = `folders_${userId}`
+    const res = await storageService.get(key)
+
+    delete res[id]
+    if (!isCaching) {
+      folderStore.removeNotSync(id)
+    }
+    await storageService.save(key, res)
+    await reloadCache()
+  }
+
+  // ----------------------- COLLECTION ---------------------------
+
+  // Create collection
+  const createCollection = async (collection: CollectionView) => {
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        // await _offlineCreateCollection(collection)
+        // notify('success', `${translate('folder.folder_created')} ${translate('success.will_sync_when_online')}`)
+        // return { kind: 'ok' }
+        return { kind: 'unknown' }
+      }
+
+      // Online
+      const collectionEnc = await collectionService.encrypt(collection)
+      const payload = new CollectionRequest(collectionEnc)
+      const res = await collectionStore.createCollection(collection.organizationId, payload)
+
+      if (res.kind === 'ok') {
+        await _offlineCreateCollection(collection, true) 
+        notify('success', translate('folder.folder_created'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
+    }
+  }
+
+  // Offline create collection
+  const _offlineCreateCollection = async (collection: CollectionView, isCaching?: boolean) => {
+    const userId = await userService.getUserId()
+    const key = `collections_${userId}`
+    const res = await storageService.get(key)
+
+    const collectionEnc = await collectionService.encrypt(collection)
+    const data = new CollectionRequest(collectionEnc)
+    const tempId = 'tmp__' + randomString()
+
+    res[tempId] = {
+      ...data,
+      userId,
+      id: tempId
+    }
+    await storageService.save(key, res)
+    if (!isCaching) {
+      collectionStore.addNotSync(tempId)
+    }
+    await reloadCache()
+  }
+
+  // Update collection
+  const updateCollection = async (collection: CollectionView) => {
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        // await _offlineUpdateCollection(collection)
+        // notify('success', `${translate('folder.folder_updated')} ${translate('success.will_sync_when_online')}`)
+        // return { kind: 'ok' }
+        return { kind: 'unknown' }
+      }
+
+      // Online
+      const collectionEnc = await collectionService.encrypt(collection)
+      const payload = new CollectionRequest(collectionEnc)
+      const res = await collectionStore.updateCollection(collection.id, collection.organizationId, payload)
+
+      if (res.kind === 'ok') {
+        await _offlineUpdateCollection(collection, true) 
+        notify('success', translate('folder.folder_updated'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
+    }
+  }
+
+  // Offline Update collection
+  const _offlineUpdateCollection = async (collection: CollectionView, isCaching?: boolean) => {
+    const userId = await userService.getUserId()
+    const key = `collections_${userId}`
+    const res = await storageService.get(key)
+
+    const collectionEnc = await collectionService.encrypt(collection)
+    const data = new CollectionRequest(collectionEnc)
+
+    res[collection.id] = {
+      ...res[collection.id],
+      ...data
+    }
+    await storageService.save(key, res)
+    if (!isCaching) {
+      collectionStore.addNotSync(collection.id)
+    }
+    await reloadCache()
+  }
+
+  // Delete collection
+  const deleteCollection = async (id: string, teamId: string) => {
+    try {
+      // Offline
+      if (uiStore.isOffline) {
+        await _offlineDeleteCollection(id)
+        notify('success', translate('folder.folder_deleted'))
+        return { kind: 'ok' }
+      } 
+
+      // Online
+      const res = await collectionStore.deleteCollection(id, teamId)
+      if (res.kind === 'ok') {
+        await _offlineDeleteCollection(id, true) 
+        notify('success', translate('folder.folder_deleted'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      __DEV__ && console.log(e)
+      return { kind: 'unknown' }
+    }
+  }
+
+  // Offline delete collection
+  const _offlineDeleteCollection = async (id: string, isCaching?: boolean) => {
+    const userId = await userService.getUserId()
+    const key = `collections_${userId}`
+    const res = await storageService.get(key)
+
+    delete res[id]
+    if (!isCaching) {
+      collectionStore.removeNotSync(id)
+    }
+    await storageService.save(key, res)
+    await reloadCache()
+  }
+
+  // Sync single cipher
+  const syncSingleCipher = async (id: string) => {
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+
+    const cipherRes = await cipherStore.getCipher(id)
+    if (cipherRes.kind !== 'ok') {
+      if (cipherRes.kind === 'not-found') {
+        delete res[id]
+      } else {
+        notifyApiError(cipherRes)
+      }
+    } else {
+      const cipher = cipherRes.data
+      const cipherData = new CipherData(cipher, userId, cipher.collectionIds)
+
+      // Update cipher
+      res[cipher.id] = {
+        ...cipherData
+      }
+
+      // Remove temporary cipher
+      for (const _id of Object.keys(res)) {
+        if (_id.startsWith('tmp__') && res[_id].name === cipher.name && res[_id].type === cipher.type ) {
+          delete res[_id]
+          break
+        }
+      }
+    }
+
+    await storageService.save(key, res)
+    await reloadCache({
+      isOnline: true
+    })
+  }
+
+  // Sync single folder
+  const syncSingleFolder = async (id: string) => {
+    const userId = await userService.getUserId()
+    const key = `folders_${userId}`
+    const res = await storageService.get(key)
+
+    const folderRes = await folderStore.getFolder(id)
+    if (folderRes.kind !== 'ok') {
+      if (folderRes.kind === 'not-found') {
+        delete res[id]
+      } else {
+        notifyApiError(folderRes)
+      }
+    } else {
+      const folder = folderRes.data
+      const folderData = new FolderData(folder, userId)
+
+      // Update cipher
+      res[folder.id] = {
+        ...folderData
+      }
+
+      // Remove temporary cipher
+      for (const _id of Object.keys(res)) {
+        if (_id.startsWith('tmp__') && res[_id].name === folder.name) {
+          delete res[_id]
+          break
+        }
+      }
+    }
+
+    await storageService.save(key, res)
+    await reloadCache({
+      isOnline: true
+    })
+  }
+
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
@@ -797,7 +1183,15 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     deleteCiphers,
     toTrashCiphers,
     restoreCiphers,
-    importCiphers
+    importCiphers,
+    createFolder,
+    updateFolder,
+    deleteFolder,
+    createCollection,
+    updateCollection,
+    deleteCollection,
+    syncSingleCipher,
+    syncSingleFolder
   }
 
   return (

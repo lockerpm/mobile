@@ -3,13 +3,32 @@ import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { FolderResponse } from "../../../core/models/response/folderResponse"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
-import { EmptyResult, PostFolderResult } from "./api.types"
+import { EmptyResult, GetFolderResult, PostFolderResult } from "./api.types"
 
 export class FolderApi {
   private api: Api
 
   constructor(api: Api) {
     this.api = api
+  }
+
+  // Get single folder
+  async getFolder(id: string): Promise<GetFolderResult> {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/folders/${id}`)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const res = new FolderResponse(response.data)
+
+      return { kind: "ok", data: res }
+    } catch (e) {
+      __DEV__ && console.log(e.message)
+      return { kind: "bad-data" }
+    }
   }
 
   // Create folder
