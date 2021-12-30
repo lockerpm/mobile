@@ -6,6 +6,7 @@ import { FolderResponse } from "../../../core/models/response/folderResponse"
 import { CollectionResponse } from "../../../core/models/response/collectionResponse"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
+import { CipherResponse } from "../../../core/models/response/cipherResponse"
 
 type SessionSnapshot = {
     access_token: string
@@ -85,6 +86,8 @@ export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | General
 export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
 export type EmptyResult = { kind: "ok" } | GeneralApiProblem
 export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
+export type GetCipherResult = { kind: "ok", data: CipherResponse } | GeneralApiProblem
+export type GetFolderResult = { kind: "ok", data: FolderResponse } | GeneralApiProblem
 export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
 export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | GeneralApiProblem

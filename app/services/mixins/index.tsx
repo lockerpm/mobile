@@ -142,16 +142,17 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
             [key: string]: string[]
           }
           code: string
-          message: string
+          message?: string
         } = problem.data
         if (errorData.details) {
           Object.keys(errorData.details).forEach((key) => {
             notify('error', errorData.details[key][0])
           })
-        } else {
+        } else if (errorData.message) {
           notify('error', errorData.message)
+        } else {
+          notify('error', translate('error.invalid_data'))
         }
-        notify('error', translate('error.invalid_data'))
         break
       case 'forbidden':
         notify('error', translate('error.forbidden'))

@@ -115,6 +115,7 @@
     "not_available_offline": "This action is unavailable in offline mode",
     "login_locked": "You have been locked from accessing your account due to the team's policy. Please try again after: ",
     "duplicate_cipher_name": "Duplicated cipher name! Please choose another name!",
+    "duplicate_folder_name": "Duplicated folder name! Please choose another name!",
     "not_allowed_to_see_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
     "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!"
   },
