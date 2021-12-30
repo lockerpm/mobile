@@ -82,7 +82,7 @@ export const decodeGoogleAuthenticatorImport = (uri: string): OTPData[] => {
 
   const components = uri.split('?')
 
-  if (!components.length) {
+  if (components.length < 2) {
     return []
   }
 
@@ -124,11 +124,12 @@ export const decodeGoogleAuthenticatorImport = (uri: string): OTPData[] => {
         digits = 6
     }
     
-  
+    const account = (item.issuer && !item.name.startsWith(item.issuer)) ? `${item.issuer} (${item.name})` : item.name
+
     const otp: OTPData = {
       algorithm,
       digits,
-      account: item.name,
+      account,
       secret: base32.encode(Buffer.from(item.secret, "base64")),
       period: 30
     }

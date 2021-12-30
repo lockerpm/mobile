@@ -12,6 +12,8 @@ import { useStores } from "../../../../../models"
 import { useMixins } from "../../../../../services/mixins"
 import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, 'notes__edit'>;
@@ -23,7 +25,9 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
   const { mode } = route.params
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-  const { newCipher, createCipher, updateCipher, translate, color } = useMixins()
+  const { translate, color } = useMixins()
+  const { newCipher } = useCipherHelpersMixins()
+  const { createCipher, updateCipher } = useCipherDataMixins()
 
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')

@@ -13,6 +13,8 @@ import { getTOTP, parseOTPUri } from "../../../../../utils/totp"
 import { useStores } from "../../../../../models"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { CipherView } from "../../../../../../core/models/view"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
 
 type ScreenProp = RouteProp<PrimaryParamList, 'authenticator__edit'>;
@@ -20,7 +22,9 @@ type ScreenProp = RouteProp<PrimaryParamList, 'authenticator__edit'>;
 
 export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen() {
   const navigation = useNavigation()
-  const { newCipher, createCipher, updateCipher, translate, notify, color } = useMixins()
+  const { translate, notify, color } = useMixins()
+  const { createCipher, updateCipher } = useCipherDataMixins()
+  const { newCipher } = useCipherHelpersMixins()
   const { cipherStore } = useStores()
   const route = useRoute<ScreenProp>()
 

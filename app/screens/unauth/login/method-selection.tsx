@@ -50,10 +50,10 @@ export const MethodSelection = observer(function MethodSelection(props: Props) {
       <FontAwesomeIcon
         name={icon}
         size={iconSize}
-        color={color.textBlack}
+        color={color.primary}
       />
       <Text style={{
-        color: color.textBlack,
+        color: color.primary,
         marginLeft: 10
       }}>
         {title}
@@ -83,11 +83,17 @@ export const MethodSelection = observer(function MethodSelection(props: Props) {
         />
       </View>
 
+      <Text
+        preset="black"
+        text={translate('login.select_method')}
+        style={{ marginBottom: 20 }}
+      />
+
       {
         methods.map((item, index) => (
           <Button
             key={index}
-            preset="outlinePlain"
+            preset="outline"
             isDisabled={item.type === 'mail' && sendingEmail}
             isLoading={item.type === 'mail' && sendingEmail}
             onPress={() => item.type === 'mail' ? sendEmail(item.data) : onSelect(item.type, item.data)}

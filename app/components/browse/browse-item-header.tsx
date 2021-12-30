@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View } from "react-native"
+import { View, BackHandler } from "react-native"
 import { commonStyles, fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
@@ -18,6 +18,7 @@ import ConfigIconLight from './config-light.svg'
 import PlusIcon from './plus.svg'
 // @ts-ignore
 import PlusIconLight from './plus-light.svg'
+import { useCipherDataMixins } from "../../services/mixins/cipher/data"
 
 
 export interface BrowseItemHeaderProps {
@@ -35,6 +36,7 @@ export interface BrowseItemHeaderProps {
   setIsLoading: Function
   isTrash?: boolean
   isAuthenticator?: boolean
+  isAutoFill?: boolean
 }
 
 /**
@@ -42,10 +44,11 @@ export interface BrowseItemHeaderProps {
  */
 export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeaderProps) {
   const { 
-    openAdd, openSort, navigation, header, onSearch, searchText, isTrash, isAuthenticator,
+    openAdd, openSort, navigation, header, onSearch, searchText, isTrash, isAuthenticator, isAutoFill,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll, setIsLoading
   } = props
-  const { translate, toTrashCiphers, restoreCiphers, deleteCiphers, color, isDark } = useMixins()
+  const { translate, color, isDark } = useMixins()
+  const { toTrashCiphers, restoreCiphers, deleteCiphers } = useCipherDataMixins()
 
   // ----------------------- PARAMS ------------------------
 
@@ -99,20 +102,24 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
         justifyContent: 'space-between'
       }]}
     >
-      <Button
-        preset="link"
-        style={{ marginRight: openAdd ? 20 : 0 }}
-        onPress={() => openSort && openSort()}
-      >
-        {
-          isDark ? (
-            <ConfigIconLight height={17} />
-          ) : (
-            <ConfigIcon height={17} />
-          )
-        }
-      </Button>
-
+      {
+        !isAuthenticator && (
+          <Button
+            preset="link"
+            style={{ marginRight: openAdd ? 20 : 0 }}
+            onPress={() => openSort && openSort()}
+          >
+            {
+              isDark ? (
+                <ConfigIconLight height={17} />
+              ) : (
+                <ConfigIcon height={17} />
+              )
+            }
+          </Button>
+        )
+      }
+      
       {
         openAdd && (
           <Button
@@ -153,7 +160,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
         selectedItems.length > 0 && (
           <>
             {
-              isTrash || isAuthenticator ? (
+              isTrash || isAuthenticator || isAutoFill ? (
                 <>
                   {
                     isTrash && (
@@ -244,6 +251,16 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
     </View>
   )
 
+  const renderGoBack = () => {
+    if (isAuthenticator) {
+      return undefined
+    }
+    if (isAutoFill) {
+      return () => BackHandler.exitApp()
+    }
+    return () => navigation.goBack()
+  }
+
   const renderHeaderAuthenticatorLeft = () => (
     <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
       <Text
@@ -255,7 +272,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
 
   return (
     <Header
-      goBack={!isAuthenticator ? () => navigation.goBack() : undefined}
+      goBack={renderGoBack()}
       right={isSelecting ? renderHeaderSelectRight() : renderHeaderRight()}
       left={isSelecting ? renderHeaderSelectLeft() : isAuthenticator && renderHeaderAuthenticatorLeft()}
     >

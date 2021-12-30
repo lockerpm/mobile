@@ -3,6 +3,7 @@ import { FloatingInput, Button, Modal } from "../../../../components"
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../../../../services/mixins"
 import { useCoreService } from "../../../../services/core-service"
+import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 
 interface Props {
   isOpen?: boolean,
@@ -13,7 +14,8 @@ interface Props {
 
 export const ConfirmPassModal = observer((props: Props) => {
   const { isOpen, onClose, onConfirm, navigation } = props
-  const { translate, lock, notify } = useMixins()
+  const { translate, notify } = useMixins()
+  const { lock } = useCipherAuthenticationMixins()
   const { cryptoService } = useCoreService()
 
   const [masterPass, setMasterPass] = useState('')

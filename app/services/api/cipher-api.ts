@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { EmptyResult, ImportCipherData, MoveFolderData, SyncResult } from "."
+import { EmptyResult, GetCipherResult, ImportCipherData, MoveFolderData, SyncResult } from "."
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { Api } from "./api"
@@ -25,6 +25,24 @@ export class CipherApi {
       const res = new SyncResponse(response.data)
 
       return { kind: "ok", data: res }
+    } catch (e) {
+      __DEV__ && console.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Get single cipher
+  async getCipher(id: string): Promise<GetCipherResult> {
+    try {
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/ciphers/${id}`)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok", data: response.data }
     } catch (e) {
       __DEV__ && console.log(e.message)
       return { kind: "bad-data" }

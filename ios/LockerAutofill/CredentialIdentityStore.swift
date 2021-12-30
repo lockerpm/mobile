@@ -29,7 +29,6 @@ struct PasswordCredential {
 }
 
 
-// stupid work :< i will find a better way to handle share data in swift 
 // support for add new password
 var newPassword = PasswordCredential()
 
@@ -40,18 +39,18 @@ var credentialIdStore: CredentialIdentityStore!
 class CredentialIdentityStore {
   private let KEYCHAIN_SERVICE: String = "W7S57TNBH5.com.cystack.lockerapp"
   private let KEYCHAIN_ACCESS_GROUP: String = "group.com.cystack.lockerapp"
-  
   private let KEYCHAIN_PROPS: String = "autofill"
-  private var autofillData: String
-  var passwords: [String: [[String: Any]]] = [:]    // convert autofilldata string to array
   private var keychain: Keychain
-  private var passwordAuthen: [String: String] = [:]
-  private var faceIdEnabled: Bool = false
   
+  private var autofillData: String
+  var passwords: [String: [[String: Any]]] = [:]      // convert autofilldata passwords string to array
+  private var passwordAuthen: [String: String] = [:]  // convert autofilldata authentication
+  private var faceIdEnabled: Bool = false             // convert autofilldata enable faceid
   
-  var credentials: [PasswordCredential] = []
-  var otherCredentials: [PasswordCredential] = []
   let URI: String
+  var credentials: [PasswordCredential] = []          // credential for this URI
+  var otherCredentials: [PasswordCredential] = []
+  
   
   
   init(_ uri: String) {
@@ -62,19 +61,24 @@ class CredentialIdentityStore {
     self.keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
     self.autofillData = try! keychain.get(KEYCHAIN_PROPS) ?? "[]"
 
+    // convert autofillData to usable autofill data
     self.jsonToDict(text: self.autofillData)
-//    passwords = self.toArray(text: self.autofillData) ?? []
+    
+    //passwords = self.toArray(text: self.autofillData) ?? []
     print(self.passwords)
     
     setAutofillData()
     
   }
+  
   public func isFaceIdEnabled() -> Bool {
     return self.faceIdEnabled
   }
+  
   public func getPasswordAuthen() -> [String: String]{
     return self.passwordAuthen
   }
+  
   public func addNewCredential(credential: PasswordCredential) {
     var newPassword: [String: Any] = [:]
     //newPassword["autofillID"] = self.passwords["passwords"]?.count
@@ -91,6 +95,7 @@ class CredentialIdentityStore {
 //  public func editCredential(credential: PasswordCredential) {
 //
 //  }
+  
   public func removeCredential(credential: PasswordCredential) {
     let passwords = self.passwords["passwords"]!
     print(credential)
@@ -115,7 +120,7 @@ class CredentialIdentityStore {
     setKeychain(dictionary: self.passwords)
     setAutofillData()
   }
-//
+
   private func setAutofillData(){
     // reset data
     self.credentials = []
@@ -138,6 +143,7 @@ class CredentialIdentityStore {
     }
     
   }
+  
   private func setKeychain(dictionary: [String: [[String: Any]]]) {
     var data = dictionary
     for index in 0...data["passwords"]!.count-1 {
@@ -152,6 +158,7 @@ class CredentialIdentityStore {
         print(error)
     }
   }
+  
   private func dictToJson(dictionary: [String: [[String: Any]]]) -> String{
     if let theJSONData = try? JSONSerialization.data(
         withJSONObject: dictionary,
@@ -160,6 +167,7 @@ class CredentialIdentityStore {
     }
     return ""
   }
+  
   private func jsonToDict(text: String) {
     let jsonData = Data(text.utf8)
     do {

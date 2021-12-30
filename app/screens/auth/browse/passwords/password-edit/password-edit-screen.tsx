@@ -13,6 +13,8 @@ import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherType } from "../../../../../../core/enums"
 import { CipherView, LoginUriView, LoginView } from "../../../../../../core/models/view"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
 
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
@@ -21,9 +23,11 @@ type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
 export const PasswordEditScreen = observer(function PasswordEditScreen() {
   const navigation = useNavigation()
   const route = useRoute<PasswordEditScreenProp>()
-  const { mode } = route.params
-  const { getPasswordStrength, newCipher, createCipher, updateCipher, translate, color } = useMixins()
-  const { cipherStore, uiStore } = useStores()
+  const { mode, initialUrl } = route.params
+  const { translate, color } = useMixins()
+  const { createCipher, updateCipher } = useCipherDataMixins()
+  const { getPasswordStrength, newCipher } = useCipherHelpersMixins()
+  const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 
   // ----------------- PARAMS ------------------
@@ -52,12 +56,8 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       setFolder(selectedCipher.folderId)
       setOrganizationId(selectedCipher.organizationId)
       setCollectionIds(selectedCipher.collectionIds)
-    }
-    if (uiStore.deepLinkAction === 'add') {
-      setUrl(uiStore.deepLinkAddDomain)
-    }
-    if (uiStore.deepLinkAction === 'save') {
-      setUrl(uiStore.deepLinkAddDomain)
+    } else {
+      setUrl(initialUrl)
     }
   }, [])
 
@@ -76,7 +76,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
         }
         cipherStore.setSelectedFolder(null)
       }
-    });
+    })
 
     return unsubscribe
   }, [navigation])
@@ -118,7 +118,6 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
 
     setIsLoading(false)
     if (res.kind === 'ok') {
-      uiStore.clearDeepLink()
       navigation.goBack()
     }
   }
@@ -140,7 +139,6 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
               : translate('common.edit')
           }
           goBack={() => {
-            uiStore.clearDeepLink()
             navigation.goBack()
           }}
           goBackText={translate('common.cancel')}

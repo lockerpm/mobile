@@ -4,11 +4,15 @@ import { Layout, Button, Header, FloatingInput, PasswordStrength } from "../../.
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
+import { useCipherHelpersMixins } from "../../../../services/mixins/cipher/helpers"
+import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 
 
 export const ChangeMasterPasswordScreen = function ChangeMasterPasswordScreen() {
   const navigation = useNavigation()
-  const { getPasswordStrength, changeMasterPassword, translate, color } = useMixins()
+  const { translate, color } = useMixins()
+  const { getPasswordStrength } = useCipherHelpersMixins()
+  const { changeMasterPassword } = useCipherAuthenticationMixins()
 
   const [isLoading, setIsLoading] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(-1)

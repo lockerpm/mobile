@@ -16,7 +16,7 @@ import {
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
   ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
-  GoogleAuthenticatorImportScreen
+  GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -25,6 +25,10 @@ import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../models"
 import { observer } from "mobx-react-lite"
+import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
+import { useCipherDataMixins } from "../services/mixins/cipher/data"
+import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
+import { IS_IOS } from "../config/constants"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -39,60 +43,63 @@ import { observer } from "mobx-react-lite"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
-  start: undefined,
-  switchDevice: undefined,
-  biometricUnlockIntro: undefined,
-  mainTab: undefined,
+  start: undefined
+  switchDevice: undefined
+  biometricUnlockIntro: undefined
+  mainTab: undefined
   passwordGenerator: {
     fromTools?: boolean
-  },
+  }
   authenticator__edit: {
     mode: 'add' | 'edit'
-  },
-  qrScanner: undefined,
-  googleAuthenticatorImport: undefined,
-  passwordHealth: undefined,
-  weakPasswordList: undefined,
-  reusePasswordList: undefined,
-  exposedPasswordList: undefined,
-  dataBreachScanner: undefined,
-  dataBreachList: undefined,
-  dataBreachDetail: undefined,
-  countrySelector: undefined,
-  passwords__info: undefined,
+  }
+  qrScanner: undefined
+  googleAuthenticatorImport: undefined
+  passwordHealth: undefined
+  weakPasswordList: undefined
+  reusePasswordList: undefined
+  exposedPasswordList: undefined
+  dataBreachScanner: undefined
+  dataBreachList: undefined
+  dataBreachDetail: undefined
+  countrySelector: undefined
+  passwords__info: undefined
   passwords__edit: {
     mode: 'add' | 'edit' | 'clone'
-  },
+    initialUrl?: string
+  }
   notes__info: undefined,
   notes__edit: {
     mode: 'add' | 'edit' | 'clone'
-  },
-  cards__info: undefined,
+  }
+  cards__info: undefined
   cards__edit: {
     mode: 'add' | 'edit' | 'clone'
-  },
-  identities__info: undefined,
+  }
+  identities__info: undefined
   identities__edit: {
     mode: 'add' | 'edit' | 'clone'
-  },
+  }
   folders__select: {
     mode: 'add' | 'move',
     initialId?: string,
     cipherIds?: string[]
-  },
+  }
   folders__ciphers: {
     folderId?: string | null
     collectionId?: string | null
     organizationId?: string | null
-  },
+  }
   settings: {
     fromIntro?: boolean
-  },
-  changeMasterPassword: undefined,
-  help: undefined,
-  autofillService: undefined,
-  import: undefined,
+  }
+  changeMasterPassword: undefined
+  help: undefined
+  autofillService: undefined
+  import: undefined
   export: undefined
+  autofill: undefined
+  notificationSettings: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -100,10 +107,12 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export const MainNavigator = observer(function MainNavigator() {
   const navigation = useNavigation()
+  const { notify, translate } = useMixins()
+  const { lock, logout } = useCipherAuthenticationMixins()
   const { 
-    lock, getSyncData, getCipherById, loadFolders, loadCollections, logout, 
-    loadPasswordsHealth, notify, translate, syncAutofillData
-  } = useMixins()
+    getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData, syncSingleCipher, syncSingleFolder
+  } = useCipherDataMixins()
+  const { loadPasswordsHealth } = useCipherToolsMixins()
   const { uiStore, user, cipherStore } = useStores()
 
   let appIsActive = true
@@ -158,12 +167,11 @@ export const MainNavigator = observer(function MainNavigator() {
     // Ohter state (background/inactive)
     if (nextAppState === 'background') {
       appIsActive = false
-      uiStore.clearDeepLink()
       return
     }
 
     // Sync autofill data
-    if (!appIsActive && !isSynchingAutofill) {
+    if (IS_IOS && !appIsActive && !isSynchingAutofill) {
       isSynchingAutofill = true
       syncAutofillData().then(() => {
         isSynchingAutofill = false
@@ -212,9 +220,7 @@ export const MainNavigator = observer(function MainNavigator() {
   const generateSocket = () => {
     const ws = new WebSocket(wsUrl)
     ws.onopen = () => {
-      if (__DEV__) {
-        console.log('SOCKET OPEN')
-      }
+      __DEV__ && console.log('SOCKET OPEN')
     }
 
     ws.onmessage = async (e) => {
@@ -222,10 +228,23 @@ export const MainNavigator = observer(function MainNavigator() {
       __DEV__ && console.log('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
         case 'sync':
-          await handleSync()
+          switch (data.type) {
+            case 'cipher_update': {
+              const cipherId = data.data.id
+              syncSingleCipher(cipherId)
+              break
+            }
+            case 'folder_update': {
+              const folderId = data.data.id
+              syncSingleFolder(folderId)
+              break
+            }
+            default:
+              handleSync()
+          }
           break
         case 'members':
-          await handleInvitationSync()
+          handleInvitationSync()
           break
         default:
           break
@@ -233,15 +252,17 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     ws.onerror = (e) => {
-      if (__DEV__) {
-        console.log(`SOCKET ERROR: ${JSON.stringify(e)}`)
-      }
+      __DEV__ && console.log(`SOCKET ERROR: ${JSON.stringify(e)}`)
+      __DEV__ && console.log('SOCKET RECONNECTING')
+      setTimeout(() => {
+        if (ws.readyState === WebSocket.CLOSED && !uiStore.isOffline) {
+          setSocket(generateSocket())
+        }
+      }, 1000)
     }
 
     ws.onclose = (e) => {
-      if (__DEV__) {
-        console.log(`SOCKET CLOSE: ${JSON.stringify(e)}`);
-      }
+      __DEV__ && console.log(`SOCKET CLOSE: ${JSON.stringify(e)}`);
     }
 
     return ws
@@ -278,16 +299,6 @@ export const MainNavigator = observer(function MainNavigator() {
       }
     }
   }, [uiStore.isOffline])
-
-  // Listen to deep linking
-  useEffect(() => {
-    if (!appIsReady) {
-      return
-    }
-    if (['add', 'save'].includes(uiStore.deepLinkAction)) {
-      navigation.navigate('passwords__edit', { mode: 'add' })
-    }
-  }, [uiStore.deepLinkAction])
 
   // ------------------ RENDER --------------------
   
@@ -341,6 +352,9 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
         <Stack.Screen name="import" component={ImportScreen} />
         <Stack.Screen name="export" component={ExportScreen} />
+        <Stack.Screen name="notificationSettings" component={NotificationSettingsScreen} />
+
+        <Stack.Screen name="autofill" component={AutoFillScreen} />
       </Stack.Navigator>
     </UserInactivity>
   )

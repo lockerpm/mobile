@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react"
 import { FloatingInput, Button, Modal } from "../../../../components"
 import { useStores } from "../../../../models"
 import { observer } from "mobx-react-lite"
-import { useCoreService } from "../../../../services/core-service"
 import { FolderView } from "../../../../../core/models/view/folderView"
-import { FolderRequest } from "../../../../../core/models/request/folderRequest"
 import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
-import { CollectionRequest } from "../../../../../core/models/request/collectionRequest"
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 
 interface Props {
   isOpen?: boolean,
@@ -17,9 +15,9 @@ interface Props {
 
 export const RenameFolderModal = observer((props: Props) => {
   const { isOpen, onClose, folder } = props
-  const { folderStore, collectionStore, uiStore } = useStores()
-  const { folderService, collectionService, userService, storageService } = useCoreService()
-  const { notify, translate, notifyApiError, reloadCache } = useMixins()
+  const { folderStore, collectionStore } = useStores()
+  const { translate } = useMixins()
+  const { updateFolder, updateCollection } = useCipherDataMixins()
 
   // --------------- PARAMS ----------------
 
@@ -54,57 +52,22 @@ export const RenameFolderModal = observer((props: Props) => {
 
     // @ts-ignore
     if (!data.organizationId) {
-      // Offline
-      if (uiStore.isOffline) {
-        // @ts-ignore
-        await _offlineUpdatePersonalFolder(data)
-        res = { kind: 'ok' }
-      } else {
-        // @ts-ignore
-        const folderEnc = await folderService.encrypt(data)
-        const payload = new FolderRequest(folderEnc)
-        res = await folderStore.updateFolder(folder.id, payload)
-      }
+      // @ts-ignore
+      res = await updateFolder(data)
     } else {
       // @ts-ignore
-      const collectionEnc = await collectionService.encrypt(data)
-      const payload = new CollectionRequest(collectionEnc)
-      // @ts-ignore
-      res = await collectionStore.updateCollection(folder.id, data.organizationId, payload)
+      res = await updateCollection(data)
     }
 
     setIsLoading(false)
 
     if (res.kind === 'ok') {
-      notify(
-        'success', translate('folder.folder_updated') 
-        + (uiStore.isOffline ? ` ${translate('success.will_sync_when_online')}` : '')
-      )
       onClose()
     } else {
-      // @ts-ignore
-      notifyApiError(res)
       if (res.kind === 'unauthorized') {
         onClose()
       }
     }
-  }
-
-  const _offlineUpdatePersonalFolder = async (folder: FolderView) => {
-    const userId = await userService.getUserId()
-    const key = `folders_${userId}`
-    const res = await storageService.get(key)
-
-    const folderEnc = await folderService.encrypt(folder)
-    const data = new FolderRequest(folderEnc)
-
-    res[folder.id] = {
-      ...res[folder.id],
-      ...data
-    }
-    await storageService.save(key, res)
-    folderStore.addNotSync(folder.id)
-    await reloadCache()
   }
 
   // --------------- EFFECT ----------------

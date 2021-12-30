@@ -247,6 +247,13 @@ export const SettingsScreen = observer(function SettingsScreen() {
         />
         {/* Change master pass end */}
 
+        {/* Notifications */}
+        <SettingsItem
+          name={translate('common.notifications')}
+          action={() => navigation.navigate('notificationSettings')}
+        />
+        {/* Notifications end */}
+
         {/* Language */}
         <Select
           value={settings.language.value}

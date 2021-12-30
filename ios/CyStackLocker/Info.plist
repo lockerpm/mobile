@@ -27,7 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.31609893092-dum60tipehdc9q9l3i9jd2orj5n5ol2k</string>
+				<string>com.googleusercontent.apps.576960862167-0gor6mqlftu7co4tdn58rg4vdgqlsten</string>
 			</array>
 		</dict>
 		<dict>
@@ -94,6 +94,11 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

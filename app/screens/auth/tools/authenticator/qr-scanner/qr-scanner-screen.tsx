@@ -6,11 +6,15 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
 import { parseOTPUri, getTOTP, beautifyName } from "../../../../../utils/totp"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers";
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data";
 
 
 export const QRScannerScreen = function QRScannerScreen() {
   const navigation = useNavigation()
-  const { newCipher, createCipher, translate, notify, color } = useMixins()
+  const { translate, notify, color } = useMixins()
+  const { newCipher } = useCipherHelpersMixins()
+  const { createCipher } = useCipherDataMixins()
   
   const [isLoading, setIsLoading] = useState(false)
 

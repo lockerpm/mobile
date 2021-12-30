@@ -5,6 +5,7 @@ import { useMixins } from "../../../../services/mixins"
 import { View } from "react-native"
 import { useStores } from "../../../../models"
 import { useCoreService } from "../../../../services/core-service"
+import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 
 interface Props {
   isOpen?: boolean,
@@ -15,7 +16,8 @@ interface Props {
 export const DeleteAccountModal = observer((props: Props) => {
   const { isOpen, onClose, navigation } = props
   const { user } = useStores()
-  const { notify, translate, notifyApiError, lock, logout, color } = useMixins()
+  const { notify, translate, notifyApiError, color } = useMixins()
+  const { lock, logout } = useCipherAuthenticationMixins()
   const { cryptoService } = useCoreService()
 
   const [masterPass, setMasterPass] = useState('')
