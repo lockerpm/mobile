@@ -57,33 +57,44 @@ public class LockerAutoFillService extends AutofillService {
         AssistStructure structure = context.get(context.size() - 1).getStructure();
 
         // Parse the structure into fillable view IDs
+        // Parse the structure into fillable view IDs
         StructureParser.Result parseResult = new StructureParser(structure).parse();
+        String domain = parseResult.webDomain.size() > 0 ? parseResult.webDomain.get(0) : "";
 
         AutofillId[] emailIDs = toArray(parseResult.email);
         AutofillId[] usernameIds = toArray(parseResult.username);
         AutofillId[] passIds = toArray(parseResult.password);
 
 
-
-
         IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, emailIDs,
-                usernameIds, passIds, parseResult.webDomain.get(0));
+                usernameIds, passIds, domain);
 
-        // Add the locker autofill option
         RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.remote_locker_app);
 
         FillResponse fillResponse = new FillResponse.Builder()
-                .addDataset(new Dataset.Builder()
-                        // The values in the dataset are replaced by the actual
-                        // data once the user provides the CVC.
-                        .setValue(emailIDs[0], AutofillValue.forText("asdasd"), remoteView)
-                        .setValue(passIds[0], AutofillValue.forText("asdasd"), remoteView)
-                        .setAuthentication(authentication)
-                        .build())
+                .addDataset(buildDataSetWithAuthen(emailIDs, usernameIds, passIds, remoteView, authentication))
                 .build();
 
         callback.onSuccess(fillResponse);
     }
+
+    public static Dataset buildDataSetWithAuthen(AutofillId[] emailIds, AutofillId[] usenameIds, AutofillId[] passwordIds, RemoteViews remoteView,IntentSender authentication){
+        Dataset.Builder builder = new Dataset.Builder();
+
+        for(AutofillId id: emailIds){
+            builder.setValue(id, AutofillValue.forText("locker"), remoteView);
+        }
+        for(AutofillId id: usenameIds){
+            builder.setValue(id, null, remoteView);
+        }
+        for(AutofillId id: passwordIds){
+            builder.setValue(id, null, remoteView);
+        }
+        builder.setAuthentication(authentication);
+
+        return builder.build();
+    }
+
 
     @Override
     public void onSaveRequest(@NonNull SaveRequest request, @NonNull SaveCallback callback) {
