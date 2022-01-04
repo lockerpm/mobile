@@ -30,7 +30,7 @@ import com.cystack.locker.MainActivity;
 import com.facebook.react.bridge.ReactApplicationContext;
 
 import com.cystack.locker.LockerAutofillClient;
-
+import com.cystack.locker.R;
 
 @TargetApi(Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
@@ -70,8 +70,7 @@ public class LockerAutoFillService extends AutofillService {
                 usernameIds, passIds, parseResult.webDomain.get(0));
 
         // Add the locker autofill option
-        RemoteViews remoteView = new RemoteViews(getPackageName(), android.R.layout.simple_list_item_1);
-        remoteView.setTextViewText(android.R.id.text1, "Locker..");
+        RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.remote_locker_app);
 
         FillResponse fillResponse = new FillResponse.Builder()
                 .addDataset(new Dataset.Builder()
