@@ -90,9 +90,7 @@ export type PrimaryParamList = {
     collectionId?: string | null
     organizationId?: string | null
   }
-  settings: {
-    fromIntro?: boolean
-  }
+  settings: undefined
   changeMasterPassword: undefined
   help: undefined
   autofillService: undefined
@@ -258,7 +256,7 @@ export const MainNavigator = observer(function MainNavigator() {
         if (ws.readyState === WebSocket.CLOSED && !uiStore.isOffline) {
           setSocket(generateSocket())
         }
-      }, 1000)
+      }, 5000)
     }
 
     ws.onclose = (e) => {
@@ -346,7 +344,7 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
 
-        <Stack.Screen name="settings" component={SettingsScreen} initialParams={{ fromIntro: false }} />
+        <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />
         <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
