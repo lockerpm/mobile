@@ -49,7 +49,7 @@ export const StartScreen = observer(function StartScreen() {
           user.setLastSync(Date.now())
         } else {
           // Prevent duplicate synchronization
-          if (syncRes.kind !== 'synching') {
+          if (syncRes.kind !== 'synching' && syncRes.kind === 'error') {
             notify('error', translate('error.sync_failed'))
           }
         }

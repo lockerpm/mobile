@@ -28,7 +28,7 @@ import { observer } from "mobx-react-lite"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { useCipherDataMixins } from "../services/mixins/cipher/data"
 import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
-import { IS_IOS } from "../config/constants"
+import { IS_IOS, WS_URL } from "../config/constants"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -108,13 +108,17 @@ export const MainNavigator = observer(function MainNavigator() {
   const { notify, translate } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { 
-    getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData, syncSingleCipher, syncSingleFolder
+    getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData, 
+    syncSingleCipher, syncSingleFolder
   } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const { uiStore, user, cipherStore } = useStores()
 
-  let appIsActive = true
+  // ------------------ PARAMS --------------------
+
   let isSynchingAutofill = false
+  let appIsActive = true      // Store this to compare to old state
+  
   const [socket, setSocket] = useState(null)
   const [appIsReady, setAppIsReady] = useState(false)
 
@@ -132,7 +136,7 @@ export const MainNavigator = observer(function MainNavigator() {
       notify('success', translate('success.sync_success'))
       user.setLastSync(Date.now())
     } else {
-      if (syncRes.kind !== 'synching') {
+      if (syncRes.kind !== 'synching' && syncRes.kind === 'error') {
         notify('error', translate('error.sync_failed'))
       }
     }
@@ -214,7 +218,7 @@ export const MainNavigator = observer(function MainNavigator() {
   }
 
   // Web socket
-  const wsUrl = `wss://api.cystack.net/ws/cystack_platform/pm/sync?token=${user.token}`
+  const wsUrl = `${WS_URL}?token=${user.token}`
   const generateSocket = () => {
     const ws = new WebSocket(wsUrl)
     ws.onopen = () => {
@@ -268,35 +272,39 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // ------------------ EFFECT --------------------
 
-  // Life cycle
+  // Check device screen on/off
   useEffect(() => {
-    // Check device screen on/off
-    AppState.addEventListener("change", _handleAppStateChange)
-
-    // Connect web socket
-    !appIsReady && setSocket(generateSocket())
-
     setAppIsReady(true)
-
+    AppState.addEventListener("change", _handleAppStateChange)
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
-      socket && socket.close()
-    };
-  }, []);
+    }
+  }, [])
 
-  // Check network to connect socket
+  // Web socket connection
   useEffect(() => {
-    if (uiStore.isOffline) {
-      socket && socket.close()
-      setSocket(null)
-    } else {
-      if (appIsReady) {
-        setSocket(generateSocket())
-        handleSync()
-        handleInvitationSync()
+    if (
+      !appIsReady 
+      && !uiStore.isOffline 
+      && (!socket || socket?.readyState === WebSocket.CLOSED)
+      && user.isLoggedInPw
+    ) {
+      setSocket(generateSocket())
+    }
+    return () => {
+      if (uiStore.isOffline || !user.isLoggedInPw) {
+        socket && socket.close()
       }
     }
-  }, [uiStore.isOffline])
+  }, [appIsReady, socket?.readyState, uiStore.isOffline, user.isLoggedInPw])
+
+  // Check network to sync
+  useEffect(() => {
+    if (!uiStore.isOffline && appIsReady) {
+      handleSync()
+      handleInvitationSync()
+    }
+  }, [uiStore.isOffline, appIsReady])
 
   // ------------------ RENDER --------------------
   

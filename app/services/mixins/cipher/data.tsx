@@ -116,6 +116,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       // Sync api
       const res = await cipherStore.syncData()
       if (res.kind !== 'ok') {
+        notifyApiError(res)
         messagingService.send('syncCompleted', { successfully: false })
         cipherStore.setIsSynching(false)
         return res
@@ -151,7 +152,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       __DEV__ && console.log(e)
       cipherStore.setIsSynching(false)
       messagingService.send('syncCompleted', { successfully: false })
-      return { kind: 'bad-data' }
+      return { kind: 'error' }
     }
   }
 
