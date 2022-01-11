@@ -1,24 +1,65 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { AutoImage as Image, Text, Button, Layout } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { View } from "react-native"
-import { save, storageKeys } from "../../../utils/storage"
+import { useStores } from "../../../models"
+import { useMixins } from "../../../services/mixins"
+import ReactNativeBiometrics from "react-native-biometrics"
+import { AutofillDataType, loadShared, saveShared } from "../../../utils/keychain"
 
 
 export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntroScreen() {
   const navigation = useNavigation()
+  const { user } = useStores()
+  const { isBiometricAvailable, notify, translate } = useMixins()
 
-  // Methods
+  // ----------------------- PARAMS ----------------------
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  // ----------------------- METHODS ----------------------
+
   const handleUseBiometric = async () => {
-    await save(storageKeys.APP_SHOW_BIOMETRIC_INTRO, 1)
-    navigation.navigate('settings', { fromIntro: true })
+    setIsLoading(true)
+    const available = await isBiometricAvailable()
+    setIsLoading(false)
+
+    if (!available) {
+      notify('error', translate('error.biometric_not_support'))
+      return
+    }
+
+    const { success } = await ReactNativeBiometrics.simplePrompt({
+      promptMessage: 'Verify FaceID/TouchID'
+    })
+    if (!success) {
+      notify('error', translate('error.biometric_unlock_failed'))
+      return
+    }
+
+    user.setBiometricUnlock(true)
+    await _updateAutofillFaceIdSetting(true)
+    notify('success', translate('success.biometric_enabled'))
+    user.setBiometricIntroShown(true)
+    navigation.navigate('mainTab', { screen: user.defaultTab })
   }
 
   const handleSkip = async () => {
-    await save(storageKeys.APP_SHOW_BIOMETRIC_INTRO, 1)
+    user.setBiometricIntroShown(true)
     navigation.navigate('mainTab', { screen: 'homeTab' })
   }
+
+  const _updateAutofillFaceIdSetting = async (enabled: boolean) => {
+    const credentials = await loadShared()
+    if (credentials && credentials.password) {
+      const sharedData: AutofillDataType = JSON.parse(credentials.password)
+      sharedData.faceIdEnabled = enabled
+      await saveShared('autofill', JSON.stringify(sharedData))
+    }
+  }
+
+  // ----------------------- EFFECT ----------------------
 
   useEffect(() => {
     const handleBack = (e) => {
@@ -38,6 +79,8 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
     }
   }, [navigation])
 
+  // ----------------------- RENDER ----------------------
+
   return (
     <Layout>
       <View style={{ alignItems: 'center', paddingTop: '15%' }}>
@@ -55,6 +98,8 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
         />
 
         <Button
+          isDisabled={isLoading}
+          isLoading={isLoading}
           tx={"biometric_intro.use_btn"}
           onPress={handleUseBiometric}
           style={{

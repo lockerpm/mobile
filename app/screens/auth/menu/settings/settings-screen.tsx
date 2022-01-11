@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View, Switch } from "react-native"
 import { Layout, Text, Header, Select } from "../../../../components"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../theme"
 import { useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
-import { PrimaryParamList } from "../../../../navigators/main-navigator"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { AutofillDataType, loadShared, saveShared } from "../../../../utils/keychain"
 
@@ -18,14 +17,11 @@ const SECTION_TITLE: TextStyle = {
   marginBottom: 12,
 }
 
-type ScreenProp = RouteProp<PrimaryParamList, 'settings'>;
 
 export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
   const { notify, isBiometricAvailable, translate, color } = useMixins()
-  const route = useRoute<ScreenProp>()
-  const { fromIntro } = route.params
 
   // ----------------------- PARAMS -----------------------
 
@@ -87,12 +83,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
       e.preventDefault()
       isBacking = true
-
-      if (fromIntro) {
-        navigation.navigate('mainTab', { screen: 'homeTab' })
-      } else {
-        navigation.goBack()
-      }
+      navigation.goBack()
     }
 
     navigation.addListener('beforeRemove', handleBack)
