@@ -104,8 +104,10 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
         if (res.kind === 'bad-data') {
           if (res.data.code === '1008') {
             notify('error', `${translate('error.login_locked')} ${moment.duration(res.data.wait, 'seconds').humanize()}`)
-            return res
+          } else {
+            notifyApiError(res)
           }
+          return res
         }
 
         notify('error', translate('error.session_login_failed'))
