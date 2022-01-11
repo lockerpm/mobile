@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
 import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
-import { save, storageKeys } from "../../utils/storage"
+import { removeSecure, save, saveSecure, storageKeys } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
 
@@ -54,11 +54,13 @@ export const UserModel = types
       self.token = token
       self.isLoggedIn = true
       self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      saveSecure('API_TOKEN', token)
     },
     clearToken: () => {
       self.token = ''
       self.isLoggedIn = false
       self.environment.api.apisauce.deleteHeader('Authorization')
+      removeSecure('API_TOKEN')
     },
     setFCMToken: (token: string) => {
       self.fcmToken = token
