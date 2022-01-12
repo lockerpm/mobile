@@ -34,7 +34,6 @@ export const UserModel = types
     teams: types.array(types.frozen()),
     plan: types.maybeNull(types.frozen()),
     invitations: types.array(types.frozen()),
-    lastSync: types.maybeNull(types.number),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
 
@@ -95,7 +94,6 @@ export const UserModel = types
       self.invitations = cast([])
       self.plan = null
       self.fingerprint = ''
-      self.lastSync = null
     },
     clearSettings: () => {
       self.isBiometricUnlock = false
@@ -120,9 +118,6 @@ export const UserModel = types
     },
     setInvitations: (invitations: object[]) => {
       self.invitations = cast(invitations)
-    },
-    setLastSync: (lastSync: number) => {
-      self.lastSync = lastSync
     },
     setIntroShown: (val: boolean) => {
       self.introShown = val

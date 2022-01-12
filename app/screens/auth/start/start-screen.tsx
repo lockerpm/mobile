@@ -12,8 +12,8 @@ import { IS_IOS } from "../../../config/constants"
 
 export const StartScreen = observer(function StartScreen() {
   const { user, uiStore } = useStores()
-  const { isBiometricAvailable, notify, translate } = useMixins()
-  const { getSyncData, loadFolders, loadCollections, syncAutofillData } = useCipherDataMixins()
+  const { isBiometricAvailable, translate } = useMixins()
+  const { loadFolders, loadCollections, syncAutofillData } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const navigation = useNavigation()
 
@@ -34,38 +34,13 @@ export const StartScreen = observer(function StartScreen() {
       // Update FCM
       user.updateFCM(user.fcmToken)
 
-      // Check if need to sync
-      const lastUpdateRes = await user.getLastUpdate()
-      if (
-        lastUpdateRes.kind !== 'ok' 
-        || !user.lastSync 
-        || user.lastSync < lastUpdateRes.data.revision_date * 1000
-      ) {
-        setMsg(translate('start.synching'))
-        const syncRes = await getSyncData()
-
-        if (syncRes.kind === 'ok') {
-          notify('success', translate('success.sync_success'))
-          user.setLastSync(Date.now())
-        } else {
-          // Prevent duplicate synchronization
-          if (syncRes.kind !== 'synching' && syncRes.kind === 'error') {
-            notify('error', translate('error.sync_failed'))
-          }
-        }
-      }
-
       // Sync teams and plan
       if (!uiStore.isFromAutoFill) {
         setMsg(translate('start.getting_team_info'))
-        const [invitationsRes] = await Promise.all([
-          user.getInvitations(),
+        await Promise.all([
           user.loadTeams(),
           user.loadPlan(),
         ])
-        if (invitationsRes.kind == 'ok') {
-          user.setInvitations(invitationsRes.data)
-        }
       }
     }
     

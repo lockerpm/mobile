@@ -4,7 +4,7 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import NetInfo from "@react-native-community/netinfo"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
@@ -51,22 +51,28 @@ const RootStack = observer(() => {
   const { uiStore } = useStores()
 
   // Prevent store from being called too soon and break the initialization
+  const [appIsReady, setAppIsReady] = useState(false)
   let removeNetInfoSubscription = () => {}
 
   useEffect(() => {
     // Check network (delay to protect the store initialization)
-    setTimeout(() => {
-      removeNetInfoSubscription = NetInfo.addEventListener((state) => {
-        const offline = !state.isInternetReachable
-        __DEV__ && console.log(offline ? 'OFFLINE' : 'ONLINE')
-        uiStore.setIsOffline(offline)
-      })
-    }, 2000)
+    if (!appIsReady) {
+      setTimeout(() => {
+        setAppIsReady(true)
+      }, 2000)
+      return () => {}
+    }
+    
+    removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+      const offline = !state.isInternetReachable
+      __DEV__ && console.log(offline ? 'OFFLINE' : 'ONLINE')
+      uiStore.setIsOffline(offline)
+    })
 
     return () => {
       removeNetInfoSubscription()
     }
-  }, [])
+  }, [appIsReady])
 
   // -------------------- RENDER ----------------------
 

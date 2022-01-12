@@ -13,6 +13,8 @@ export const CipherStoreModel = types
   .model("CipherStore")
   .props({
     isSynching: types.maybeNull(types.boolean),
+    isSynchingOffline: types.maybeNull(types.boolean),
+    isSynchingAutofill: types.maybeNull(types.boolean),
     notSynchedCiphers: types.array(types.string),
     lastSync: types.maybeNull(types.number),
     lastOfflineSync: types.maybeNull(types.number),
@@ -43,6 +45,14 @@ export const CipherStoreModel = types
 
     setIsSynching: (val: boolean) => {
       self.isSynching = val
+    },
+
+    setIsSynchingOffline: (val: boolean) => {
+      self.isSynchingOffline = val
+    },
+
+    setIsSynchingAutofill: (val: boolean) => {
+      self.isSynchingAutofill = val
     },
 
     setLastSync: (ts: number) => {
@@ -143,7 +153,13 @@ export const CipherStoreModel = types
       const res = await cipherApi.moveToFolder(data)
       return res
     }
-  })).postProcessSnapshot(omit(['generatedPassword', 'selectedCipher', 'lastSync', 'lastOfflineSync']))
+  })).postProcessSnapshot(omit([
+    'generatedPassword', 
+    'selectedCipher', 
+    'isSynching',
+    'isSynchingOffline',
+    'isSynchingAutofill'
+  ]))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

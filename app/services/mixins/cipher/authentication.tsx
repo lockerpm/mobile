@@ -4,7 +4,7 @@ import { KdfType } from '../../../../core/enums/kdfType'
 import { useStores } from '../../../models'
 import { useCoreService } from '../../core-service'
 import { delay } from '../../../utils/delay'
-import { GOOGLE_CLIENT_ID } from '../../../config/constants'
+import { GOOGLE_CLIENT_ID, IS_IOS } from '../../../config/constants'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { saveShared } from '../../../utils/keychain'
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
@@ -293,7 +293,9 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       }
   
       // Reset shared data
-      await saveShared('autofill', '')
+      if (IS_IOS) {
+        await saveShared('autofill', '')
+      }
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       __DEV__ && console.log(e)

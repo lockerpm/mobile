@@ -30,6 +30,7 @@ type GetCiphersParams = {
 const defaultData = {
   reloadCache: async () => {},
   getSyncData: async () => { return { kind: 'unknown' } },
+  syncOfflineData: async () => {},
   syncAutofillData: async () => {},
   getCiphers: async (params: GetCiphersParams) => { return [] },
   getCipherById: async (id: string) => new CipherView(),
@@ -78,9 +79,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     notCipher?: boolean
   }) => {
     if (options?.isOnline) {
-      cipherStore.setLastSync(new Date().getTime())
+      cipherStore.setLastSync(Date.now())
     } else {
-      cipherStore.setLastOfflineSync(new Date().getTime())
+      cipherStore.setLastOfflineSync(Date.now())
     }
     if (!options?.notCipher) {
       await cipherService.clearCache()
@@ -110,9 +111,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       cipherStore.setIsSynching(true)
       messagingService.send('syncStarted')
 
-      // Sync offline data first
-      await _syncOfflineData()
-
       // Sync api
       const res = await cipherStore.syncData()
       if (res.kind !== 'ok') {
@@ -134,7 +132,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       await syncService.syncPolicies(res.data.policies)
       await syncService.setLastSync(new Date())
       
-      cipherStore.setLastSync(new Date().getTime())
+      cipherStore.setLastSync(Date.now())
       messagingService.send('syncCompleted', { successfully: true })
 
       // Save fingerprint
@@ -157,7 +155,13 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Sync offline data
-  const _syncOfflineData = async () => {
+  const syncOfflineData = async () => {
+    // Prevent duplicate sync
+    if (cipherStore.isSynchingOffline) {
+      return
+    }
+    cipherStore.setIsSynchingOffline(true)
+
     const ciphers = []
     const folders = []
     const folderRelationships = []
@@ -240,10 +244,16 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       cipherStore.clearNotSync()
       folderStore.clearNotSync()
     }
+    cipherStore.setIsSynchingOffline(false)
   }
 
   // Store password for autofill
   const _updateAutofillData = async () => {
+    // Only iOS
+    if (!IS_IOS) {
+      return
+    }
+    
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
     const passwordRes = await getCiphers({
       filters: [
@@ -272,52 +282,69 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Sync autofill data
   const syncAutofillData = async () => {
-    const credentials = await loadShared()
-    if (!credentials || !credentials.password) {
-      const sharedData: AutofillDataType = {
-        passwords: [],
-        deleted: [],
-        authen: null,
-        faceIdEnabled: false
+    try {
+      // Only iOS
+      if (!IS_IOS) {
+        return
       }
-      await saveShared('autofill', JSON.stringify(sharedData))
-      return
-    }
 
-    let hasUpdate = false
-    const sharedData: AutofillDataType = JSON.parse(credentials.password)
-    
-    // Delete passwords
-    if (sharedData.deleted) {
-      await _offlineDeleteCiphers(sharedData.deleted.map(c => c.id))
-      hasUpdate = true
-    }
+      // Prevent duplicate sync
+      if (cipherStore.isSynchingAutofill) {
+        return
+      }
+      cipherStore.setIsSynchingAutofill(true)
 
-    // Create passwords
-    if (sharedData.passwords) {
-      for (let cipher of sharedData.passwords) {
-        if (!cipher.id) {
-          const payload = newCipher(CipherType.Login)
-          const data = new LoginView()
-          data.username = cipher.username
-          data.password = cipher.password
-          if (cipher.uri) {
-            const uriView = new LoginUriView()
-            uriView.uri = cipher.uri
-            data.uris = [uriView]
+      const credentials = await loadShared()
+      if (!credentials || !credentials.password) {
+        const sharedData: AutofillDataType = {
+          passwords: [],
+          deleted: [],
+          authen: null,
+          faceIdEnabled: false
+        }
+        await saveShared('autofill', JSON.stringify(sharedData))
+        return
+      }
+
+      let hasUpdate = false
+      const sharedData: AutofillDataType = JSON.parse(credentials.password)
+      
+      // Delete passwords
+      if (sharedData.deleted) {
+        await _offlineDeleteCiphers(sharedData.deleted.map(c => c.id))
+        hasUpdate = true
+      }
+
+      // Create passwords
+      if (sharedData.passwords) {
+        for (let cipher of sharedData.passwords) {
+          if (!cipher.id) {
+            const payload = newCipher(CipherType.Login)
+            const data = new LoginView()
+            data.username = cipher.username
+            data.password = cipher.password
+            if (cipher.uri) {
+              const uriView = new LoginUriView()
+              uriView.uri = cipher.uri
+              data.uris = [uriView]
+            }
+            payload.name = cipher.name
+            payload.login = data
+            await _offlineCreateCipher(payload, [])
+            hasUpdate = true
           }
-          payload.name = cipher.name
-          payload.login = data
-          await _offlineCreateCipher(payload, [])
-          hasUpdate = true
         }
       }
-    }
 
-    await _updateAutofillData()
+      await _updateAutofillData()
 
-    if (hasUpdate && !uiStore.isOffline) {
-      await _syncOfflineData()
+      if (hasUpdate && !uiStore.isOffline) {
+        await syncOfflineData()
+      }
+      cipherStore.setIsSynchingAutofill(false)
+    } catch (e) {
+      __DEV__ && console.log(e)
+      cipherStore.setIsSynchingAutofill(false)
     }
   }
 
@@ -1173,6 +1200,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const data = {
     reloadCache,
     getSyncData,
+    syncOfflineData,
     syncAutofillData,
     getCiphers,
     getCipherById,
