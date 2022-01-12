@@ -117,6 +117,7 @@ export const MainNavigator = observer(function MainNavigator() {
   // ------------------ PARAMS --------------------
 
   let appIsActive = true      // Cache this to compare to old state
+  let timeout = null
   const [socket, setSocket] = useState(null)
 
   // ------------------ METHODS --------------------
@@ -213,9 +214,8 @@ export const MainNavigator = observer(function MainNavigator() {
   }
 
   // Web socket
-  const wsUrl = `${WS_URL}?token=${user.token}`
   const generateSocket = () => {
-    const ws = new WebSocket(wsUrl)
+    const ws = new WebSocket(`${WS_URL}?token=${user.token}`)
     ws.onopen = () => {
       __DEV__ && console.log('SOCKET OPEN')
     }
@@ -250,9 +250,10 @@ export const MainNavigator = observer(function MainNavigator() {
 
     ws.onerror = (e) => {
       __DEV__ && console.log(`SOCKET ERROR: ${JSON.stringify(e)}`)
-      __DEV__ && console.log('SOCKET RECONNECTING')
-      setTimeout(() => {
+      timeout = setTimeout(async () => {
         if (ws.readyState === WebSocket.CLOSED && !uiStore.isOffline) {
+          // Manually check for update
+          await handleSync()
           setSocket(generateSocket())
         }
       }, 5000)
@@ -272,24 +273,26 @@ export const MainNavigator = observer(function MainNavigator() {
     AppState.addEventListener("change", _handleAppStateChange)
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
+      clearTimeout(timeout)
     }
-  }, [])
+  }, [timeout])
 
   // Web socket connection
   useEffect(() => {
-    if (
-      !uiStore.isOffline 
-      && (!socket || socket?.readyState === WebSocket.CLOSED)
-      && user.isLoggedInPw
-    ) {
+    // WebSocket.CLOSED     = 3
+    // WebSocket.CLOSING    = 2
+    // WebSocket.CONNECTING = 0
+    // WebSocket.OPEN       = 1
+    if (!uiStore.isOffline && !socket && user.isLoggedInPw) {
       setSocket(generateSocket())
     }
     return () => {
       if (uiStore.isOffline || !user.isLoggedInPw) {
         socket && socket.close()
+        setSocket(null)
       }
     }
-  }, [socket?.readyState, uiStore.isOffline, user.isLoggedInPw])
+  }, [!!socket, uiStore.isOffline, user.isLoggedInPw])
 
   // Check network to sync
   useEffect(() => {

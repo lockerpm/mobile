@@ -10,6 +10,8 @@ import { useMixins } from "../../../../services/mixins"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { AutofillDataType, loadShared, saveShared } from "../../../../utils/keychain"
 import { IS_IOS } from "../../../../config/constants"
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
+import moment from 'moment'
 
 
 const SECTION_TITLE: TextStyle = {
@@ -21,8 +23,9 @@ const SECTION_TITLE: TextStyle = {
 
 export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
-  const { user, uiStore } = useStores()
+  const { user, uiStore, cipherStore } = useStores()
   const { notify, isBiometricAvailable, translate, color } = useMixins()
+  const { getSyncData } = useCipherDataMixins()
 
   // ----------------------- PARAMS -----------------------
 
@@ -66,6 +69,13 @@ export const SettingsScreen = observer(function SettingsScreen() {
       const sharedData: AutofillDataType = JSON.parse(credentials.password)
       sharedData.faceIdEnabled = enabled
       await saveShared('autofill', JSON.stringify(sharedData))
+    }
+  }
+
+  const syncDataManually = async () => {
+    const res = await getSyncData()
+    if (res.kind === 'ok') {
+      notify('success', translate('success.sync_success'))
     }
   }
 
@@ -377,7 +387,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
       {/* Import/Export */}
       <Text
-        text={translate('settings.import_export').toUpperCase()}
+        text={translate('common.data').toUpperCase()}
         style={[SECTION_TITLE, {
           marginTop: 15,
         }]}
@@ -385,6 +395,18 @@ export const SettingsScreen = observer(function SettingsScreen() {
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background
       }]}>
+        {/* Sync */}
+        <SettingsItem
+          isLoading={cipherStore.isSynching}
+          disabled={uiStore.isOffline || cipherStore.isSynching}
+          name={translate('settings.sync_now')}
+          action={syncDataManually}
+          right={(
+            <Text text={moment(cipherStore.lastSync).fromNow()} />
+          )}
+        />
+        {/* Sync end */}
+
         {/* Import */}
         <SettingsItem
           name={translate('settings.import')}
