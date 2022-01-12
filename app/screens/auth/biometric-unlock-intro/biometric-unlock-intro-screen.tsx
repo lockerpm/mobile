@@ -7,6 +7,7 @@ import { useStores } from "../../../models"
 import { useMixins } from "../../../services/mixins"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { AutofillDataType, loadShared, saveShared } from "../../../utils/keychain"
+import { IS_IOS } from "../../../config/constants"
 
 
 export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntroScreen() {
@@ -23,10 +24,10 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
   const handleUseBiometric = async () => {
     setIsLoading(true)
     const available = await isBiometricAvailable()
-    setIsLoading(false)
 
     if (!available) {
       notify('error', translate('error.biometric_not_support'))
+      setIsLoading(false)
       return
     }
 
@@ -35,6 +36,7 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
     })
     if (!success) {
       notify('error', translate('error.biometric_unlock_failed'))
+      setIsLoading(false)
       return
     }
 
@@ -42,6 +44,7 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
     await _updateAutofillFaceIdSetting(true)
     notify('success', translate('success.biometric_enabled'))
     user.setBiometricIntroShown(true)
+    setIsLoading(false)
     navigation.navigate('mainTab', { screen: user.defaultTab })
   }
 
@@ -51,6 +54,9 @@ export const BiometricUnlockIntroScreen = observer(function BiometricUnlockIntro
   }
 
   const _updateAutofillFaceIdSetting = async (enabled: boolean) => {
+    if (!IS_IOS) {
+      return
+    }
     const credentials = await loadShared()
     if (credentials && credentials.password) {
       const sharedData: AutofillDataType = JSON.parse(credentials.password)

@@ -109,38 +109,39 @@ export const MainNavigator = observer(function MainNavigator() {
   const { lock, logout } = useCipherAuthenticationMixins()
   const { 
     getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData, 
-    syncSingleCipher, syncSingleFolder
+    syncSingleCipher, syncSingleFolder, syncOfflineData
   } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const { uiStore, user, cipherStore } = useStores()
 
   // ------------------ PARAMS --------------------
 
-  let isSynchingAutofill = false
-  let appIsActive = true      // Store this to compare to old state
-  
+  let appIsActive = true      // Cache this to compare to old state
   const [socket, setSocket] = useState(null)
-  const [appIsReady, setAppIsReady] = useState(false)
 
   // ------------------ METHODS --------------------
 
   // Sync
   const handleSync = async () => {
+    // Sync offline data
+    await syncOfflineData()
+    
+    // Check if sync is needed
     const lastUpdateRes = await user.getLastUpdate()
-    if (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= user.lastSync) {
+    if (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= cipherStore.lastSync) {
       return
     }
 
+    // Send request
     const syncRes = await getSyncData()
-    if (syncRes.kind === 'ok') {
-      notify('success', translate('success.sync_success'))
-      user.setLastSync(Date.now())
-    } else {
+    if (syncRes.kind !== 'ok') {
       if (syncRes.kind !== 'synching' && syncRes.kind === 'error') {
         notify('error', translate('error.sync_failed'))
       }
+      return
     }
 
+    // Load data
     await Promise.all([
       loadFolders(),
       loadCollections()
@@ -149,7 +150,7 @@ export const MainNavigator = observer(function MainNavigator() {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
-    user.loadTeams(),
+    user.loadTeams()
     user.loadPlan()
     loadPasswordsHealth()
   }
@@ -173,14 +174,8 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     // Sync autofill data
-    if (IS_IOS && !appIsActive && !isSynchingAutofill) {
-      isSynchingAutofill = true
-      syncAutofillData().then(() => {
-        isSynchingAutofill = false
-      }).catch(e => {
-        __DEV__ && console.log(e)
-        isSynchingAutofill = false
-      })
+    if (IS_IOS && !appIsActive) {
+      syncAutofillData()
     }
 
     // Active
@@ -274,7 +269,6 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // Check device screen on/off
   useEffect(() => {
-    setAppIsReady(true)
     AppState.addEventListener("change", _handleAppStateChange)
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
@@ -284,8 +278,7 @@ export const MainNavigator = observer(function MainNavigator() {
   // Web socket connection
   useEffect(() => {
     if (
-      !appIsReady 
-      && !uiStore.isOffline 
+      !uiStore.isOffline 
       && (!socket || socket?.readyState === WebSocket.CLOSED)
       && user.isLoggedInPw
     ) {
@@ -296,15 +289,15 @@ export const MainNavigator = observer(function MainNavigator() {
         socket && socket.close()
       }
     }
-  }, [appIsReady, socket?.readyState, uiStore.isOffline, user.isLoggedInPw])
+  }, [socket?.readyState, uiStore.isOffline, user.isLoggedInPw])
 
   // Check network to sync
   useEffect(() => {
-    if (!uiStore.isOffline && appIsReady) {
+    if (!uiStore.isOffline && user.isLoggedInPw) {
       handleSync()
       handleInvitationSync()
     }
-  }, [uiStore.isOffline, appIsReady])
+  }, [uiStore.isOffline, user.isLoggedInPw])
 
   // ------------------ RENDER --------------------
   
