@@ -69,7 +69,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   useEffect(() => {
     loadData()
-  }, [searchText, cipherStore.lastSync, cipherStore.lastOfflineSync, sortList])
+  }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
 
   // ------------------------ METHODS ----------------------------
 
@@ -97,7 +97,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
         logo: null,
         imgLogo: null,
         svg: null,
-        notSync: cipherStore.notSynchedCiphers.includes(c.id),
+        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
         isDeleted: c.isDeleted
       }
       switch (c.type) {
@@ -317,6 +317,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
             }}
           >
             <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+              {/* Cipher avatar */}
               {
                 item.svg ? (
                   <item.svg height={40} width={40} />
@@ -332,6 +333,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                   />
                 )
               }
+              {/* Cipher avatar end */}
 
               <View style={{ flex: 1, marginLeft: 12 }}>
                 <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
@@ -340,6 +342,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                     text={item.name}
                   />
 
+                  {/* Belong to team icon */}
                   {
                     item.organizationId && (
                       <View style={{ marginLeft: 10 }}>
@@ -351,7 +354,9 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                       </View>
                     )
                   }
+                  {/* Belong to team icon end */}
 
+                  {/* Not sync icon */}
                   {
                     item.notSync && (
                       <View style={{ marginLeft: 10 }}>
@@ -363,8 +368,10 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                       </View>
                     )
                   }
+                  {/* Not sync icon end */}
                 </View>
 
+                {/* Description */}
                 {
                   !!getDescription(item) && (
                     <Text
@@ -373,6 +380,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                     />
                   )
                 }
+                {/* Description end */}
               </View>
 
               {

@@ -1,6 +1,7 @@
 import { ApiResponse } from "apisauce"
 import { CollectionRequest } from "../../../core/models/request/collectionRequest"
 import { CollectionResponse } from "../../../core/models/response/collectionResponse"
+import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
 import { EmptyResult, PostCollectionResult } from "./api.types"
@@ -25,7 +26,7 @@ export class CollectionApi {
       const res = new CollectionResponse(response.data)
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -43,7 +44,7 @@ export class CollectionApi {
       const res = new CollectionResponse(response.data)
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -60,7 +61,7 @@ export class CollectionApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }

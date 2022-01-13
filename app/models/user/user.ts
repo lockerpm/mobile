@@ -7,6 +7,16 @@ import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
 
 
+export enum AppTimeoutType {
+  SCREEN_OFF = -1,
+  APP_CLOSE = 0
+}
+export enum TimeoutActionType {
+  LOCK = 'lock',
+  LOGOUT = 'logout'
+}
+
+
 /**
  * Model description here for TypeScript hints.
  */
@@ -40,8 +50,8 @@ export const UserModel = types
     // User settings
     language: types.optional(types.string, 'en'),
     isBiometricUnlock: types.maybeNull(types.boolean),
-    appTimeout: types.optional(types.number, 0),
-    appTimeoutAction: types.optional(types.string, 'lock'),
+    appTimeout: types.optional(types.number, AppTimeoutType.APP_CLOSE),
+    appTimeoutAction: types.optional(types.string, TimeoutActionType.LOCK),
     defaultTab: types.optional(types.string, 'homeTab'),
     disablePushNotifications: types.maybeNull(types.boolean)
   })
@@ -97,8 +107,8 @@ export const UserModel = types
     },
     clearSettings: () => {
       self.isBiometricUnlock = false
-      self.appTimeout = 0
-      self.appTimeoutAction = 'lock'
+      self.appTimeout = AppTimeoutType.APP_CLOSE
+      self.appTimeoutAction = TimeoutActionType.LOCK
       self.defaultTab = 'homeTab'
       self.disablePushNotifications = false
     },

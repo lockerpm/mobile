@@ -54,7 +54,7 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
 
   useEffect(() => {
     loadData()
-  }, [searchText, cipherStore.lastSync, cipherStore.lastOfflineSync, sortList])
+  }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
 
   // ------------------------ METHODS ----------------------------
 
@@ -80,7 +80,7 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
         logo: null,
         imgLogo: null,
         svg: null,
-        notSync: cipherStore.notSynchedCiphers.includes(c.id),
+        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
         isDeleted: c.isDeleted
       }
       if (c.login.uri) {

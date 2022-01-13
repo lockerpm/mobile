@@ -12,6 +12,7 @@ import { NewFolderModal } from "../new-folder-modal"
 import { FOLDER_IMG } from "../../../../../common/mappings"
 import { useStores } from "../../../../../models"
 import { useMixins } from "../../../../../services/mixins"
+import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 
 type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
@@ -150,9 +151,27 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
           >
             <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
               <FOLDER_IMG.normal.svg height={30} />
-              <Text preset="black" style={{ flex: 1, marginLeft: 10 }}>
-                {item.name}
-              </Text>
+
+              <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+                flex: 1,
+                marginLeft: 10
+              }]}>
+                <Text preset="black">
+                  {item.name}
+                </Text>
+
+                {
+                  ([...folderStore.notSynchedFolders, ...folderStore.notUpdatedFolders].includes(item.id)) && (
+                    <View style={{ marginLeft: 10 }}>
+                      <MaterialCommunityIconsIcon
+                        name="cloud-off-outline"
+                        size={22}
+                        color={color.textBlack}
+                      />
+                    </View>
+                  )
+                }
+              </View>
 
               {
                 selectedFolder === item.id && (

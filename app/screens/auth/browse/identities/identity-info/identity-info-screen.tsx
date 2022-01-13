@@ -20,6 +20,8 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
   const selectedCipher: CipherView = cipherStore.cipherView
   const { translate, color } = useMixins()
 
+  const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
+
   const [showAction, setShowAction] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -156,7 +158,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
           >
             {selectedCipher.name}
             {
-              cipherStore.notSynchedCiphers.includes(selectedCipher.id) && (
+              notSync && (
                 <View style={{ paddingLeft: 10 }}>
                   <MaterialCommunityIconsIcon
                     name="cloud-off-outline"

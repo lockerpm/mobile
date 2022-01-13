@@ -12,7 +12,9 @@ export const CollectionStoreModel = types
   .model("CollectionStore")
   .props({
     collections: types.array(types.frozen()),
-    notSynchedCollections: types.array(types.string)
+    lastUpdate: types.maybeNull(types.number),
+    notSynchedCollections: types.array(types.string),   // Offline
+    notUpdatedCollections: types.array(types.string)    // Online but somehow not update
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -23,8 +25,15 @@ export const CollectionStoreModel = types
       self.collections = cast(collections)
     },
 
+    setLastUpdate: () => {
+      self.lastUpdate = Date.now()
+      self.lastUpdate = null
+    },
+
     clearStore: () => {
       self.collections = cast([])
+      self.notSynchedCollections = cast([])
+      self.notUpdatedCollections = cast([])
     },
 
     addNotSync: (id: string) => {
@@ -41,6 +50,22 @@ export const CollectionStoreModel = types
 
     clearNotSync: () => {
       self.notSynchedCollections = cast([])
+    },
+
+    addNotUpdate: (id: string) => {
+      if (!self.notUpdatedCollections.includes(id)) {
+        self.notUpdatedCollections.push(id)
+      }
+    },
+
+    removeNotUpdate: (id: string) => {
+      if (self.notUpdatedCollections.includes(id)) {
+        self.notUpdatedCollections = cast(self.notUpdatedCollections.filter(i => i !== id))
+      }
+    },
+
+    clearNotUpdate: () => {
+      self.notUpdatedCollections = cast([])
     },
 
     // ----------------- CRUD -------------------

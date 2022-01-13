@@ -2,6 +2,7 @@ import { ApiResponse } from "apisauce"
 import { EmptyResult, GetCipherResult, ImportCipherData, MoveFolderData, SyncResult } from "."
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
+import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
 
@@ -26,7 +27,7 @@ export class CipherApi {
 
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -44,7 +45,7 @@ export class CipherApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -65,7 +66,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -82,7 +83,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -99,7 +100,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -120,7 +121,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -141,7 +142,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -158,7 +159,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -175,7 +176,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -192,7 +193,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -209,7 +210,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }

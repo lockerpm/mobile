@@ -1,6 +1,7 @@
 import { ApiResponse } from "apisauce"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { FolderResponse } from "../../../core/models/response/folderResponse"
+import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
 import { EmptyResult, GetFolderResult, PostFolderResult } from "./api.types"
@@ -26,7 +27,7 @@ export class FolderApi {
 
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -44,7 +45,7 @@ export class FolderApi {
       const res = new FolderResponse(response.data)
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -62,7 +63,7 @@ export class FolderApi {
       const res = new FolderResponse(response.data)
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
@@ -79,7 +80,7 @@ export class FolderApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
