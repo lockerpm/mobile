@@ -14,8 +14,10 @@ export class CipherApi {
   }
 
   // Sync
-  async syncData(): Promise<SyncResult> {
+  async syncData(token: string): Promise<SyncResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get('/cystack_platform/pm/sync')
       // the typical ways to die when calling an api
@@ -33,8 +35,10 @@ export class CipherApi {
   }
 
   // Get single cipher
-  async getCipher(id: string): Promise<GetCipherResult> {
+  async getCipher(token: string, id: string): Promise<GetCipherResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/ciphers/${id}`)
       // the typical ways to die when calling an api
@@ -51,8 +55,10 @@ export class CipherApi {
   }
 
   // Create cipher
-  async postCipher(data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
+  async postCipher(token: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/ciphers/vaults', {
         ...data,
@@ -72,8 +78,10 @@ export class CipherApi {
   }
 
   // Import cipher
-  async importCipher(data: ImportCipherData): Promise<EmptyResult> {
+  async importCipher(token: string, data: ImportCipherData): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/ciphers/import', data)
       // the typical ways to die when calling an api
@@ -89,8 +97,10 @@ export class CipherApi {
   }
 
   // Offline sync cipher
-  async offlineSyncCipher(data: ImportCipherData): Promise<EmptyResult> {
+  async offlineSyncCipher(token: string, data: ImportCipherData): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/ciphers/sync/offline', data)
       // the typical ways to die when calling an api
@@ -106,8 +116,10 @@ export class CipherApi {
   }
 
   // Update cipher
-  async putCipher(id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
+  async putCipher(token: string, id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/ciphers/${id}`, {
         ...data,
@@ -127,8 +139,10 @@ export class CipherApi {
   }
 
   // Share cipher
-  async shareCipher(id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
+  async shareCipher(token: string, id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/ciphers/${id}/share`, {
         ...data,
@@ -148,8 +162,10 @@ export class CipherApi {
   }
 
   // Permanent delete ciphers
-  async deleteCiphers(ids: string[]): Promise<EmptyResult> {
+  async deleteCiphers(token: string, ids: string[]): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/ciphers/permanent_delete`, { ids })
       // the typical ways to die when calling an api
@@ -165,8 +181,10 @@ export class CipherApi {
   }
 
   // Move to trash ciphers
-  async toTrashCiphers(ids: string[]): Promise<EmptyResult> {
+  async toTrashCiphers(token: string, ids: string[]): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/ciphers/delete`, { ids })
       // the typical ways to die when calling an api
@@ -182,8 +200,10 @@ export class CipherApi {
   }
 
   // Restore ciphers
-  async restoresCiphers(ids: string[]): Promise<EmptyResult> {
+  async restoresCiphers(token: string, ids: string[]): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/ciphers/restore`, { ids })
       // the typical ways to die when calling an api
@@ -199,8 +219,10 @@ export class CipherApi {
   }
 
   // Move to folder
-  async moveToFolder(data: MoveFolderData): Promise<EmptyResult> {
+  async moveToFolder(token: string, data: MoveFolderData): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put('/cystack_platform/pm/ciphers/move', data)
       // the typical ways to die when calling an api

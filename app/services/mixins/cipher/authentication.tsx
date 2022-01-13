@@ -22,6 +22,7 @@ const { createContext, useContext } = React
 // Mixins data
 const defaultData = {
   // Methods
+  setApiTokens: (token: string) => {},
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   biometricLogin: async () => { return { kind: 'unknown' } },
   logout: async () => {},
@@ -54,6 +55,15 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
 
   // -------------------- AUTHENTICATION --------------------
 
+  // Set tokens
+  const setApiTokens = (token: string) => {
+    user.setApiToken(token)
+    cipherStore.setApiToken(token)
+    collectionStore.setApiToken(token)
+    folderStore.setApiToken(token)
+    toolStore.setApiToken(token)
+  }
+
   // Session login
   const sessionLogin = async (masterPassword: string): Promise<{ kind: string }> => {
     try {
@@ -62,10 +72,6 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
-      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
-      
-      // setup service offline
-      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
 
       // Offline compare
       if (uiStore.isOffline) {
@@ -97,7 +103,6 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       })
       if (res.kind === 'unauthorized') {
         notify('error', translate('error.token_expired'))
-        user.clearToken()
         return { kind: 'unauthorized' }
       }
 
@@ -123,6 +128,12 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       await cryptoService.setKeyHash(keyHash)
       await cryptoService.setEncKey(res.data.key)
       await cryptoService.setEncPrivateKey(res.data.private_key)
+
+      // setup service offline
+      if (IS_IOS) {
+        const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
+        await cryptoService.setAutofillKeyHash(autofillHashedPassword)
+      }
 
       return { kind: 'ok' }
     } catch (e) {
@@ -161,6 +172,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       messagingService.send('loggedIn')
       const storedKey = await cryptoService.getKey()
       await cryptoService.setKey(storedKey)
+
       return { kind: 'ok' }
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
@@ -178,14 +190,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
       const encKey = await cryptoService.makeEncKey(key)
       const hashedPassword = await cryptoService.hashPassword(masterPassword, key)
-      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
       const keys = await cryptoService.makeKeyPair(encKey[0])
-
-      await cryptoService.setKey(key)
-      await cryptoService.setKeyHash(hashedPassword)
-      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
-      await cryptoService.setEncKey(encKey[1].encryptedString)
-      await cryptoService.setEncPrivateKey(keys[1].encryptedString)
 
       const res = await user.registerLocker({
         name: user.full_name,
@@ -207,6 +212,16 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       if (res.kind !== 'ok') {
         notifyApiError(res)
         return { kind: 'bad-data' }
+      }
+
+      await cryptoService.setKey(key)
+      await cryptoService.setKeyHash(hashedPassword)
+      await cryptoService.setEncKey(encKey[1].encryptedString)
+      await cryptoService.setEncPrivateKey(keys[1].encryptedString)
+
+      if (IS_IOS) {
+        const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
+        await cryptoService.setAutofillKeyHash(autofillHashedPassword)
       }
 
       // Success
@@ -264,19 +279,11 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
   // Logout
   const logout = async () => {
     try {
-      await Promise.all([
-        folderService.clearCache(),
-        cipherService.clearCache(),
-        collectionService.clearCache(),
-        cryptoService.clearKeys(),
-        userService.clear()
-      ])
-  
       cipherStore.clearStore()
       collectionStore.clearStore()
       folderStore.clearStore()
       toolStore.clearStore()
-      
+  
       await user.logout()
   
       // Sign out of Google
@@ -297,6 +304,15 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       if (IS_IOS) {
         await saveShared('autofill', '')
       }
+
+      // Clear services
+      await Promise.all([
+        folderService.clearCache(),
+        cipherService.clearCache(),
+        collectionService.clearCache(),
+        cryptoService.clearKeys(),
+        userService.clear()
+      ])
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       Logger.error(e)
@@ -309,6 +325,11 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     cipherService.clearCache()
     // searchService.clearCache()
     collectionService.clearCache()
+
+    cipherStore.lock()
+    collectionStore.lock()
+    folderStore.lock()
+    toolStore.lock()
     user.lock()
   }
 
@@ -318,6 +339,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     color: themeColor,
     isDark,
 
+    setApiTokens,
     sessionLogin,
     biometricLogin,
     logout,

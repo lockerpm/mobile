@@ -11,6 +11,7 @@ import { withEnvironment } from "../extensions/with-environment"
 export const FolderStoreModel = types
   .model("FolderStore")
   .props({
+    apiToken: types.maybeNull(types.string),
     folders: types.array(types.frozen()),
     lastUpdate: types.maybeNull(types.number),
     notSynchedFolders: types.array(types.string),   // Create in offline mode
@@ -19,6 +20,10 @@ export const FolderStoreModel = types
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setApiToken: (token: string) => {
+      self.apiToken = token
+    },
+
     // ----------------- DATA -------------------
 
     setFolders: (folders: FolderView[]) => {
@@ -30,10 +35,15 @@ export const FolderStoreModel = types
     },
 
     clearStore: () => {
+      self.apiToken = null
       self.folders = cast([])
       self.lastUpdate = null
       self.notSynchedFolders = cast([])
       self.notUpdatedFolders = cast([])
+    },
+
+    lock: () => {
+      self.folders = cast([])
     },
 
     addNotSync: (id: string) => {
@@ -72,25 +82,25 @@ export const FolderStoreModel = types
 
     getFolder: async (id: string) => {
       const folderApi = new FolderApi(self.environment.api)
-      const res = await folderApi.getFolder(id)
+      const res = await folderApi.getFolder(self.apiToken, id)
       return res
     },
 
     createFolder: async (data: FolderRequest) => {
       const folderApi = new FolderApi(self.environment.api)
-      const res = await folderApi.postFolder(data)
+      const res = await folderApi.postFolder(self.apiToken, data)
       return res
     },
 
     updateFolder: async (id: string, data: FolderRequest) => {
       const folderApi = new FolderApi(self.environment.api)
-      const res = await folderApi.putFolder(id, data)
+      const res = await folderApi.putFolder(self.apiToken, id, data)
       return res
     },
 
     deleteFolder: async (id: string) => {
       const folderApi = new FolderApi(self.environment.api)
-      const res = await folderApi.deleteFolder(id)
+      const res = await folderApi.deleteFolder(self.apiToken, id)
       return res
     },
   }))

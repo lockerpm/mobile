@@ -75,7 +75,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
     }
   }
 
-  const isStatusBarVisible = uiStore.isOffline || cipherStore.isSynching || cipherStore.isSynchingOffline || cipherStore.isSynchingAutofill
+  const isStatusBarVisible = uiStore.isOffline || cipherStore.isSynching || cipherStore.isSynchingOffline
 
   return uiStore.isSelecting ? null : (
     <View style={{ paddingBottom: insets.bottom, backgroundColor: color.background }}>

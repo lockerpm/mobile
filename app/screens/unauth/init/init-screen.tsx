@@ -78,11 +78,10 @@ export const InitScreen = observer(function InitScreen() {
     }
 
     // Session validated?
-    if (!user.token) {
+    if (!user.isLoggedIn) {
       navigation.navigate('login')
       return
     }
-    user.saveToken(user.token)
     const [userRes, userPwRes] = await Promise.all([
       user.getUser(),
       user.getUserPw()

@@ -11,6 +11,7 @@ import { GITHUB_CONFIG, GOOGLE_CLIENT_ID } from "../../../config/constants"
 import { LoginManager, AccessToken } from "react-native-fbsdk-next"
 import { authorize } from 'react-native-app-auth'
 import { Logger } from "../../../utils/logger"
+import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 
 
 type Props = {
@@ -23,6 +24,7 @@ type Props = {
 export const DefaultLogin = observer(function DefaultLogin(props: Props) {
   const { user, uiStore } = useStores()
   const { translate, notify, notifyApiError } = useMixins()
+  const { setApiTokens } = useCipherAuthenticationMixins()
   const { nextStep, onLoggedIn, handleForgot } = props
 
   // ------------------ Params -----------------------
@@ -69,6 +71,8 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
       if (res.data.is_factor2) {
         nextStep(username, password, res.data.methods)
       } else {
+        // @ts-ignore
+        setApiTokens(res.data?.access_token)
         onLoggedIn()
       }
     }
@@ -85,6 +89,8 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
       notifyApiError(loginRes)
       notify('error', translate('error.login_failed'))
     } else {
+      // @ts-ignore
+      setApiTokens(loginRes.data?.access_token)
       onLoggedIn()
     }
   }

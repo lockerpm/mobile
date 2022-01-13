@@ -11,6 +11,7 @@ import { withEnvironment } from "../extensions/with-environment"
 export const CollectionStoreModel = types
   .model("CollectionStore")
   .props({
+    apiToken: types.maybeNull(types.string),
     collections: types.array(types.frozen()),
     lastUpdate: types.maybeNull(types.number),
     notSynchedCollections: types.array(types.string),   // Offline
@@ -19,6 +20,10 @@ export const CollectionStoreModel = types
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setApiToken: (token: string) => {
+      self.apiToken = token
+    },
+
     // ----------------- DATA -------------------
 
     setCollections: (collections: CollectionView[]) => {
@@ -31,9 +36,14 @@ export const CollectionStoreModel = types
     },
 
     clearStore: () => {
+      self.apiToken = null
       self.collections = cast([])
       self.notSynchedCollections = cast([])
       self.notUpdatedCollections = cast([])
+    },
+
+    lock: () => {
+      self.collections = cast([])
     },
 
     addNotSync: (id: string) => {
@@ -72,19 +82,19 @@ export const CollectionStoreModel = types
 
     createCollection: async (teamId: string, data: CollectionRequest) => {
       const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.postCollection(teamId, data)
+      const res = await collectionApi.postCollection(self.apiToken, teamId, data)
       return res
     },
 
     updateCollection: async (id: string, teamId: string, data: CollectionRequest) => {
       const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.putCollection(id, teamId, data)
+      const res = await collectionApi.putCollection(self.apiToken, id, teamId, data)
       return res
     },
 
     deleteCollection: async (id: string, teamId: string) => {
       const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.deleteCollection(id, teamId)
+      const res = await collectionApi.deleteCollection(self.apiToken, id, teamId)
       return res
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

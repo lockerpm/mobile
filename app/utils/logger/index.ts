@@ -16,7 +16,6 @@ export class Logger {
   }
 
   static error(e: any) {
-    const data = typeof e === 'object' ? JSON.stringify(e) : e
-    __DEV__ && console.log(`[${Logger.getTime()}] (ERROR) ${PLATFORM}: ${data}`)
+    __DEV__ && console.log(`[${Logger.getTime()}] (ERROR) ${PLATFORM}: ${e}`)
   }
 }
