@@ -23,12 +23,13 @@ import { AutofillServiceScreen } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../models"
+import { AppTimeoutType, TimeoutActionType, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { useCipherDataMixins } from "../services/mixins/cipher/data"
 import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
 import { IS_IOS, WS_URL } from "../config/constants"
+import { Logger } from "../utils/logger"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -166,7 +167,7 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // App screen lock trigger
   const _handleAppStateChange = async (nextAppState: string) => {
-    __DEV__ && console.log(nextAppState)
+    Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
     if (nextAppState === 'background') {
@@ -180,7 +181,7 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     // Active
-    if (!appIsActive && user.appTimeout && user.appTimeout === -1) {
+    if (!appIsActive && user.appTimeout === AppTimeoutType.SCREEN_OFF) {
       appIsActive = true
 
       // Dont lock if user just return from overlay task
@@ -190,7 +191,7 @@ export const MainNavigator = observer(function MainNavigator() {
       }
 
       // Check user settings to lock
-      if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
+      if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
         await logout()
         navigation.navigate('onBoarding')
       } else {
@@ -203,7 +204,7 @@ export const MainNavigator = observer(function MainNavigator() {
   // App inactive trigger
   const handleInactive = async (isActive : boolean) => {
     if (!isActive && user.appTimeout && user.appTimeout > 0) {
-      if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
+      if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
         await logout()
         navigation.navigate('onBoarding')
       } else {
@@ -217,12 +218,12 @@ export const MainNavigator = observer(function MainNavigator() {
   const generateSocket = () => {
     const ws = new WebSocket(`${WS_URL}?token=${user.token}`)
     ws.onopen = () => {
-      __DEV__ && console.log('SOCKET OPEN')
+      Logger.debug('SOCKET OPEN')
     }
 
     ws.onmessage = async (e) => {
       const data = JSON.parse(e.data)
-      __DEV__ && console.log('WEBSOCKET EVENT: ' + data.event)
+      Logger.debug('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
         case 'sync':
           switch (data.type) {
@@ -249,18 +250,23 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     ws.onerror = (e) => {
-      __DEV__ && console.log(`SOCKET ERROR: ${JSON.stringify(e)}`)
+      Logger.debug(`SOCKET ERROR: ${JSON.stringify(e)}`)
       timeout = setTimeout(async () => {
         if (ws.readyState === WebSocket.CLOSED && !uiStore.isOffline) {
+          // WebSocket.CLOSED     = 3
+          // WebSocket.CLOSING    = 2
+          // WebSocket.CONNECTING = 0
+          // WebSocket.OPEN       = 1
+
           // Manually check for update
           await handleSync()
           setSocket(generateSocket())
         }
-      }, 5000)
+      }, 10000)
     }
 
     ws.onclose = (e) => {
-      __DEV__ && console.log(`SOCKET CLOSE: ${JSON.stringify(e)}`);
+      Logger.debug(`SOCKET CLOSE: ${JSON.stringify(e)}`);
     }
 
     return ws
@@ -279,10 +285,6 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // Web socket connection
   useEffect(() => {
-    // WebSocket.CLOSED     = 3
-    // WebSocket.CLOSING    = 2
-    // WebSocket.CONNECTING = 0
-    // WebSocket.OPEN       = 1
     if (!uiStore.isOffline && !socket && user.isLoggedInPw) {
       setSocket(generateSocket())
     }

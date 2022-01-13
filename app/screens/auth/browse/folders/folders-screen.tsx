@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
@@ -27,8 +27,13 @@ export const FoldersScreen = observer(function FoldersScreen() {
   const { folderStore, collectionStore, user, uiStore } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
+  type SectionType = {
+    id: string
+    title: string
+    data: any[]
+  }[]
 
-  // Params
+  // ------------------- PARAMS ---------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isActionOpen, setIsActionOpen] = useState(false)
@@ -41,8 +46,9 @@ export const FoldersScreen = observer(function FoldersScreen() {
   const [sortOption, setSortOption] = useState('az')
   const [selectedFolder, setSelectedFolder] = useState(new FolderView())
   const [isLoading, setIsLoading] = useState(false)
+  const [sections, setSections] = useState<SectionType>([])
 
-  // Computed
+  // ------------------- METHODS ---------------------
 
   const getFilteredData = (items: any[], shared: boolean, editable: boolean) => {
     const filtered = items.filter((item: FolderView | CollectionView) => {
@@ -62,25 +68,35 @@ export const FoldersScreen = observer(function FoldersScreen() {
     }
     return filtered
   }
-  const filteredCollection = groupBy(collections, 'organizationId')
-  const sections = [
-    {
-      id: randomString(),
-      title: translate('common.me'),
-      data: getFilteredData(folders, false, true),
-    },
-    ...Object.keys(filteredCollection).map((id) => ({
-      id: randomString(),
-      title: getTeam(user.teams, id).name,
-      data: getFilteredData(
-        filteredCollection[id], 
-        true, 
-        TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role) && !uiStore.isOffline
-      )
-    }))
-  ]
 
-  // Render
+  const loadSections = () => {
+    const filteredCollection = groupBy(collections, 'organizationId')
+    const data = [
+      {
+        id: randomString(),
+        title: translate('common.me'),
+        data: getFilteredData(folders, false, true),
+      },
+      ...Object.keys(filteredCollection).map((id) => ({
+        id: randomString(),
+        title: getTeam(user.teams, id).name,
+        data: getFilteredData(
+          filteredCollection[id], 
+          true, 
+          TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role) && !uiStore.isOffline
+        )
+      }))
+    ]
+    setSections(data)
+  }
+
+  // ------------------- EFFECTS ---------------------
+
+  useEffect(() => {
+    loadSections()
+  }, [folderStore.lastUpdate, collectionStore.lastUpdate])
+
+  // ------------------- RENDER ---------------------
 
   return (
     <Layout
@@ -197,7 +213,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                         />
 
                         {
-                          folderStore.notSynchedFolders.includes(item.id) && (
+                          ([...folderStore.notSynchedFolders, ...folderStore.notUpdatedFolders].includes(item.id)) && (
                             <View style={{ marginLeft: 10 }}>
                               <MaterialCommunityIconsIcon
                                 name="cloud-off-outline"

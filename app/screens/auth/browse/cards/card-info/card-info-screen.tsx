@@ -20,6 +20,8 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
   const { cipherStore } = useStores()
   const { translate, color } = useMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
+  
+  const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
   const [showAction, setShowAction] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -88,7 +90,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           >
             {selectedCipher.name}
             {
-              cipherStore.notSynchedCiphers.includes(selectedCipher.id) && (
+              notSync && (
                 <View style={{ paddingLeft: 10 }}>
                   <MaterialCommunityIconsIcon
                     name="cloud-off-outline"

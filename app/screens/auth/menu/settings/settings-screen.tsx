@@ -4,7 +4,7 @@ import { TextStyle, View, Switch } from "react-native"
 import { Layout, Text, Header, Select } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../theme"
-import { useStores } from "../../../../models"
+import { AppTimeoutType, TimeoutActionType, useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import ReactNativeBiometrics from "react-native-biometrics"
@@ -199,11 +199,11 @@ export const SettingsScreen = observer(function SettingsScreen() {
         },
         {
           label: translate('settings.on_screen_off'),
-          value: -1
+          value: AppTimeoutType.SCREEN_OFF
         },
         {
           label: translate('settings.on_app_close'),
-          value: 0
+          value: AppTimeoutType.APP_CLOSE
         }
       ]
     },
@@ -213,11 +213,11 @@ export const SettingsScreen = observer(function SettingsScreen() {
       options: [
         {
           label: translate('common.lock'),
-          value: 'lock'
+          value: TimeoutActionType.LOCK
         },
         {
           label: translate('common.logout'),
-          value: 'logout'
+          value: TimeoutActionType.LOGOUT
         }
       ]
     }

@@ -12,7 +12,9 @@ export const FolderStoreModel = types
   .model("FolderStore")
   .props({
     folders: types.array(types.frozen()),
-    notSynchedFolders: types.array(types.string),
+    lastUpdate: types.maybeNull(types.number),
+    notSynchedFolders: types.array(types.string),   // Create in offline mode
+    notUpdatedFolders: types.array(types.string),   // Create in online mode but somehow not update yet
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -23,9 +25,15 @@ export const FolderStoreModel = types
       self.folders = cast(folders)
     },
 
+    setLastUpdate: () => {
+      self.lastUpdate = Date.now()
+    },
+
     clearStore: () => {
       self.folders = cast([])
+      self.lastUpdate = null
       self.notSynchedFolders = cast([])
+      self.notUpdatedFolders = cast([])
     },
 
     addNotSync: (id: string) => {
@@ -42,6 +50,22 @@ export const FolderStoreModel = types
 
     clearNotSync: () => {
       self.notSynchedFolders = cast([])
+    },
+
+    addNotUpdate: (id: string) => {
+      if (!self.notUpdatedFolders.includes(id)) {
+        self.notUpdatedFolders.push(id)
+      }
+    },
+
+    removeNotUpdate: (id: string) => {
+      if (self.notUpdatedFolders.includes(id)) {
+        self.notUpdatedFolders = cast(self.notUpdatedFolders.filter(i => i !== id))
+      }
+    },
+
+    clearNotUpdate: () => {
+      self.notUpdatedFolders = cast([])
     },
 
     // ----------------- CRUD -------------------

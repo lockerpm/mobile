@@ -2,6 +2,7 @@ import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messag
 import notifee, { Notification, EventType, Event } from '@notifee/react-native'
 import { IS_IOS } from '../../config/constants'
 import { load, storageKeys } from '../storage'
+import { Logger } from '../logger'
 
 
 type NotifeeNotificationData = {
@@ -32,7 +33,7 @@ export class PushNotifier {
   static setupForegroundHandler() {
     // Firebase
     messaging().onMessage((message: FirebaseMessagingTypes.RemoteMessage) => {
-      __DEV__ && console.log('Firebase: FOREGROUND HANDLER')
+      Logger.debug('Firebase: FOREGROUND HANDLER')
 
       const { event } = message.data
       switch (event) {
@@ -40,13 +41,13 @@ export class PushNotifier {
           // Handled in socket -> dismiss
           break
         default:
-          __DEV__ && console.log('Unknow FCM event: ' + JSON.stringify(message))
+          Logger.debug('Unknow FCM event: ' + JSON.stringify(message))
       }
     })
 
     // Notifee - Handle user interaction with notification here
     return notifee.onForegroundEvent((event: Event) => {
-      __DEV__ && console.log('Notifee: FOREGROUND HANDLER')
+      Logger.debug('Notifee: FOREGROUND HANDLER')
 
       const { detail } = event
       const data: NotifeeNotificationData = detail.notification.data
@@ -66,7 +67,7 @@ export class PushNotifier {
   static setupBackgroundHandler() {
     // Firebase
     messaging().setBackgroundMessageHandler(async (message: FirebaseMessagingTypes.RemoteMessage) => {
-      __DEV__ && console.log('Firebase: BACKGROUND HANDLER')
+      Logger.debug('Firebase: BACKGROUND HANDLER')
       
       const { event } = message.data
       switch (event) {
@@ -81,14 +82,14 @@ export class PushNotifier {
         }
           
         default:
-          __DEV__ && console.log('Unknow FCM event: ' + JSON.stringify(message))
+          Logger.debug('Unknow FCM event: ' + JSON.stringify(message))
       }
     })
 
     // Notifee
     notifee.onBackgroundEvent(async (event: Event) => {
       // Handle user interaction with notification here
-      __DEV__ && console.log('BACKGROUND HANDLER NOTIFEE')
+      Logger.debug('BACKGROUND HANDLER NOTIFEE')
       const { type, detail } = event
       if (type === EventType.PRESS) {
         const data: NotifeeNotificationData = detail.notification.data

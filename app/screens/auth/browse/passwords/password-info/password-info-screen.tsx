@@ -31,7 +31,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   // ------------------ COMPUTED --------------------
 
   const passwordStrength = getPasswordStrength(selectedCipher.login.password)
-
+  const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
   // ------------------ RENDER --------------------
 
@@ -104,7 +104,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           >
             {selectedCipher.name}
             {
-              cipherStore.notSynchedCiphers.includes(selectedCipher.id) && (
+              notSync && (
                 <View style={{ paddingLeft: 10 }}>
                   <MaterialCommunityIconsIcon
                     name="cloud-off-outline"

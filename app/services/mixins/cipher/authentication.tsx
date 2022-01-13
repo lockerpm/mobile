@@ -13,6 +13,7 @@ import { color, colorDark } from '../../../theme'
 import moment from 'moment'
 import DeviceInfo from 'react-native-device-info'
 import { useMixins } from '..'
+import { Logger } from '../../../utils/logger'
 
 
 const { createContext, useContext } = React
@@ -298,7 +299,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       }
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
     }
   }
 

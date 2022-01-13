@@ -18,6 +18,7 @@ import Toast, { BaseToastProps } from 'react-native-toast-message'
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../services/mixins"
 import { ErrorToast, SuccessToast } from "./helpers/toast"
+import { Logger } from "../utils/logger"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -65,7 +66,7 @@ const RootStack = observer(() => {
     
     removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isInternetReachable
-      __DEV__ && console.log(offline ? 'OFFLINE' : 'ONLINE')
+      Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
       uiStore.setIsOffline(offline)
     })
 

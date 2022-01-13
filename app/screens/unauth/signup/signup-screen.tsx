@@ -13,6 +13,7 @@ import { Checkbox } from "react-native-ui-lib"
 import countries from '../../../common/countries.json'
 import { AccessToken, LoginManager } from "react-native-fbsdk-next"
 import { authorize } from "react-native-app-auth"
+import { Logger } from "../../../utils/logger"
 
 
 export const SignupScreen = observer(function SignupScreen() {
@@ -48,7 +49,7 @@ export const SignupScreen = observer(function SignupScreen() {
           await handleSocialLogin('google', tokens.accessToken)
         } catch (e) {
           setIsLoading(false)
-          __DEV__ && console.log(e)
+          Logger.error(e)
           notify('error', translate('error.something_went_wrong'))
         }
       }
@@ -71,7 +72,7 @@ export const SignupScreen = observer(function SignupScreen() {
           await handleSocialLogin('facebook', res.accessToken)
         } catch (e) {
           setIsLoading(false)
-          __DEV__ && console.log(e)
+          Logger.error(e)
           notify('error', translate('error.something_went_wrong'))
         }
       }
@@ -90,7 +91,7 @@ export const SignupScreen = observer(function SignupScreen() {
           await handleSocialLogin('github', res.accessToken)
         } catch (e) {
           setIsLoading(false)
-          __DEV__ && console.log(e)
+          Logger.error(e)
           notify('error', translate('error.something_went_wrong'))
         }
       }

@@ -4,6 +4,7 @@ import { useMixins } from '..'
 import { CipherType } from '../../../../core/enums'
 import { CipherView } from '../../../../core/models/view'
 import { useStores } from '../../../models'
+import { Logger } from '../../../utils/logger'
 import { useCoreService } from '../../core-service'
 import { useCipherDataMixins } from './data'
 
@@ -117,7 +118,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       toolStore.setExposedPasswordMap(exposedPasswordMap)
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
     }
   }
   

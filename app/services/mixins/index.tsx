@@ -15,6 +15,7 @@ import { observer } from 'mobx-react-lite'
 import { color, colorDark } from '../../theme'
 import extractDomain from 'extract-domain'
 import { PushNotifier } from '../../utils/push-notification'
+import { Logger } from '../../utils/logger'
 
 
 const { createContext, useContext } = React
@@ -114,7 +115,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       return available
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return false
     }
   }

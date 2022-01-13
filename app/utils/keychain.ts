@@ -1,5 +1,6 @@
 import * as ReactNativeKeychain from "react-native-keychain"
 import { SHARED_KEYCHAIN_ACCESS_GROUP, SHARED_KEYCHAIN_SERVICE } from "../config/constants"
+import { Logger } from "./logger"
 
 
 export type AutofillDataType = {
@@ -52,7 +53,7 @@ export async function saveShared(username: string, password: string) {
     })
     return true
   } catch (e) {
-    __DEV__ && console.log(e)
+    Logger.error(e)
     return false
   }
 }
@@ -65,7 +66,7 @@ export async function loadShared() {
     })
     return res
   } catch (e) {
-    __DEV__ && console.log(e)
+    Logger.error(e)
     return false
   }
 }

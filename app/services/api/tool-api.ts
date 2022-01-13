@@ -1,4 +1,5 @@
 import { ApiResponse } from "apisauce"
+import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
 import { CheckBreachResult } from "./api.types"
@@ -22,7 +23,7 @@ export class ToolApi {
       }
       return { kind: "ok", data: response.data }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }

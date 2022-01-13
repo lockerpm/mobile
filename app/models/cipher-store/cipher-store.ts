@@ -15,9 +15,10 @@ export const CipherStoreModel = types
     isSynching: types.maybeNull(types.boolean),
     isSynchingOffline: types.maybeNull(types.boolean),
     isSynchingAutofill: types.maybeNull(types.boolean),
-    notSynchedCiphers: types.array(types.string),
+    notSynchedCiphers: types.array(types.string),         // Create in offline mode
+    notUpdatedCiphers: types.array(types.string),         // Create in online mode but somehow not update yet
     lastSync: types.maybeNull(types.number),
-    lastOfflineSync: types.maybeNull(types.number),
+    lastCacheUpdate: types.maybeNull(types.number),
     generatedPassword: types.maybeNull(types.string),
     selectedCipher: types.maybeNull(types.frozen()),
     selectedFolder: types.maybeNull(types.string)
@@ -55,12 +56,12 @@ export const CipherStoreModel = types
       self.isSynchingAutofill = val
     },
 
-    setLastSync: (ts: number) => {
-      self.lastSync = ts
+    setLastSync: () => {
+      self.lastSync = Date.now()
     },
 
-    setLastOfflineSync: (ts: number) => {
-      self.lastOfflineSync = ts
+    setLastCacheUpdate: () => {
+      self.lastCacheUpdate = Date.now()
     },
 
     addNotSync: (id: string) => {
@@ -79,11 +80,33 @@ export const CipherStoreModel = types
       self.notSynchedCiphers = cast([])
     },
 
+    addNotUpdate: (id: string) => {
+      if (!self.notUpdatedCiphers.includes(id)) {
+        self.notUpdatedCiphers.push(id)
+      }
+    },
+
+    removeNotUpdate: (id: string) => {
+      if (self.notUpdatedCiphers.includes(id)) {
+        self.notUpdatedCiphers = cast(self.notUpdatedCiphers.filter(i => i !== id))
+      }
+    },
+
+    clearNotUpdate: () => {
+      self.notUpdatedCiphers = cast([])
+    },
+
     clearStore: () => {
       self.generatedPassword = null
       self.selectedCipher = null
       self.selectedFolder = null
       self.notSynchedCiphers = cast([])
+      self.notUpdatedCiphers = cast([])
+      self.isSynching = false
+      self.isSynchingOffline = false
+      self.isSynchingAutofill = false
+      self.lastSync = null
+      self.lastCacheUpdate = null
     },
 
     // ----------------- CRUD -------------------
@@ -155,7 +178,8 @@ export const CipherStoreModel = types
     }
   })).postProcessSnapshot(omit([
     'generatedPassword', 
-    'selectedCipher', 
+    'selectedCipher',
+    'selectedFolder',
     'isSynching',
     'isSynchingOffline',
     'isSynchingAutofill'

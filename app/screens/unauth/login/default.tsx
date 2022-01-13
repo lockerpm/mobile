@@ -10,6 +10,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { GITHUB_CONFIG, GOOGLE_CLIENT_ID } from "../../../config/constants"
 import { LoginManager, AccessToken } from "react-native-fbsdk-next"
 import { authorize } from 'react-native-app-auth'
+import { Logger } from "../../../utils/logger"
 
 
 type Props = {
@@ -103,7 +104,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
           await handleSocialLogin('google', tokens.accessToken)
         } catch (e) {
           setIsLoading(false)
-          __DEV__ && console.log(e)
+          Logger.error(e)
           notify('error', translate('error.something_went_wrong'))
         }
       }
@@ -126,7 +127,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
           await handleSocialLogin('facebook', res.accessToken)
         } catch (e) {
           setIsLoading(false)
-          __DEV__ && console.log(e)
+          Logger.error(e)
           notify('error', translate('error.something_went_wrong'))
         }
       }
@@ -145,7 +146,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
           await handleSocialLogin('github', res.accessToken)
         } catch (e) {
           setIsLoading(false)
-          __DEV__ && console.log(e)
+          Logger.error(e)
           notify('error', translate('error.something_went_wrong'))
         }
       }
