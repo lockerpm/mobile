@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite"
 import * as React from "react"
-import { ActivityIndicator, TouchableOpacity } from "react-native"
+import { ActivityIndicator, TouchableOpacity, View } from "react-native"
 import { useStores } from "../../models"
 import { Text } from "../text/text"
 import { viewPresets, textPresets, viewPresetsDark, textPresetsDark } from "./button.presets"
@@ -52,7 +52,9 @@ export const Button = observer(function Button(props: ButtonProps) {
     >
       {
         isLoading && (
-          <ActivityIndicator size="small" color={textStyle.color} />
+          <View style={{ marginRight: 3 }}>
+            <ActivityIndicator size="small" color={textStyle.color} />
+          </View>
         )
       }
       {content}

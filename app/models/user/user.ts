@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
 import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
-import { removeSecure, save, saveSecure, storageKeys } from "../../utils/storage"
+import { save, storageKeys } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
 
@@ -23,7 +23,7 @@ export enum TimeoutActionType {
 export const UserModel = types
   .model("User")
   .props({
-    token: types.maybeNull(types.string),
+    apiToken: types.maybeNull(types.string),
     fcmToken: types.maybeNull(types.string),
 
     // ID
@@ -59,17 +59,8 @@ export const UserModel = types
   .views((self) => ({}))
   .actions((self) => ({
     // Token
-    saveToken: (token: string) => {
-      self.token = token
-      self.isLoggedIn = true
-      self.environment.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      saveSecure('API_TOKEN', token)
-    },
-    clearToken: () => {
-      self.token = ''
-      self.isLoggedIn = false
-      self.environment.api.apisauce.deleteHeader('Authorization')
-      removeSecure('API_TOKEN')
+    setApiToken: (token: string) => {
+      self.apiToken = token
     },
     setFCMToken: (token: string) => {
       self.fcmToken = token
@@ -92,7 +83,7 @@ export const UserModel = types
     clearUser: () => {
       self.isLoggedIn = false
       self.isLoggedInPw = false
-      self.token = ''
+      self.apiToken = ''
       self.email = ''
       self.username = ''
       self.full_name = ''
@@ -111,6 +102,9 @@ export const UserModel = types
       self.appTimeoutAction = TimeoutActionType.LOCK
       self.defaultTab = 'homeTab'
       self.disablePushNotifications = false
+    },
+    setLoggedIn: (isLoggedIn: boolean) => {
+      self.isLoggedIn = isLoggedIn
     },
     setLoggedInPw: (isLoggedInPw: boolean) => {
       self.isLoggedInPw = isLoggedInPw
@@ -168,7 +162,7 @@ export const UserModel = types
 
     getUser: async () => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getUser()
+      const res = await userApi.getUser(self.apiToken)
       if (res.kind === "ok") {
         if (self.email && res.user.email !== self.email) {
           self.clearSettings()
@@ -219,7 +213,8 @@ export const UserModel = types
             CLIENT: 'mobile'
           })
           if (pmRes.kind === 'ok') {
-            self.saveToken(pmRes.data.access_token)
+            self.setApiToken(pmRes.data.access_token)
+            self.setLoggedIn(true)
           }
           return pmRes
         }
@@ -238,7 +233,8 @@ export const UserModel = types
             CLIENT: 'mobile'
           })
           if (pmRes.kind === 'ok') {
-            self.saveToken(pmRes.data.access_token)
+            self.setApiToken(pmRes.data.access_token)
+            self.setLoggedIn(true)
           }
           return pmRes
         }
@@ -254,8 +250,7 @@ export const UserModel = types
 
     logout: async () => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.logout()
-      self.clearToken()
+      const res = await userApi.logout(self.apiToken)
       self.clearUser()
       self.clearSettings()
       return res
@@ -263,19 +258,19 @@ export const UserModel = types
 
     deauthorizeSessions: async (hashedPassword: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.deauthorizeSessions(hashedPassword)
+      const res = await userApi.deauthorizeSessions(self.apiToken, hashedPassword)
       return res
     },
 
     purgeAccount: async (hashedPassword: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.purgeAccount(hashedPassword)
+      const res = await userApi.purgeAccount(self.apiToken, hashedPassword)
       return res
     },
 
     deleteAccount: async (hashedPassword: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.deleteAccount(hashedPassword)
+      const res = await userApi.deleteAccount(self.apiToken, hashedPassword)
       return res
     },
 
@@ -283,25 +278,25 @@ export const UserModel = types
 
     sendPasswordHint: async (email: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.sendMasterPasswordHint({ email })
+      const res = await userApi.sendMasterPasswordHint(self.apiToken, { email })
       return res
     },
 
     getInvitations: async () => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getInvitations()
+      const res = await userApi.getInvitations(self.apiToken)
       return res
     },
 
     invitationRespond: async (id: string, status: 'accept' | 'reject') => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.invitationRespond(id, status)
+      const res = await userApi.invitationRespond(self.apiToken, id, status)
       return res
     },
 
     getUserPw: async () => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getUserPw()
+      const res = await userApi.getUserPw(self.apiToken)
       if (res.kind === "ok") {
         self.saveUserPw(res.user)
       }
@@ -310,7 +305,7 @@ export const UserModel = types
 
     sessionLogin: async (payload: SessionLoginData) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.sessionLogin(payload)
+      const res = await userApi.sessionLogin(self.apiToken, payload)
       if (res.kind === "ok") {
         self.setLoggedInPw(true)
       }
@@ -319,13 +314,13 @@ export const UserModel = types
 
     registerLocker: async (payload: RegisterLockerData) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.registerLocker(payload)
+      const res = await userApi.registerLocker(self.apiToken, payload)
       return res
     },
 
     changeMasterPassword: async (payload: ChangePasswordData) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.changeMasterPassword(payload)
+      const res = await userApi.changeMasterPassword(self.apiToken, payload)
       return res
     },
 
@@ -335,7 +330,7 @@ export const UserModel = types
 
     loadTeams: async () => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getTeams()
+      const res = await userApi.getTeams(self.apiToken)
       if (res.kind === "ok") {
         self.setTeams(res.teams)
       }
@@ -344,7 +339,7 @@ export const UserModel = types
 
     loadPlan: async () => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getPlan()
+      const res = await userApi.getPlan(self.apiToken)
       if (res.kind === "ok") {
         self.setPlan(res.data)
       }
@@ -353,19 +348,19 @@ export const UserModel = types
 
     getPolicy: async (organizationId: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getPolicy(organizationId)
+      const res = await userApi.getPolicy(self.apiToken, organizationId)
       return res
     },
 
     getLastUpdate: async () => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getLastUpdate()
+      const res = await userApi.getLastUpdate(self.apiToken)
       return res
     },
 
     feedback: async (description: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.sendFeedback({
+      const res = await userApi.sendFeedback(self.apiToken, {
         type: 'feedback',
         description
       })
@@ -374,7 +369,7 @@ export const UserModel = types
 
     updateFCM: async (token: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.updateFCM({
+      const res = await userApi.updateFCM(self.apiToken, {
         fcm_id: token,
         device_identifier: DeviceInfo.getUniqueId()
       })

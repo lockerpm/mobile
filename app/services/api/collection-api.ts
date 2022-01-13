@@ -14,8 +14,10 @@ export class CollectionApi {
   }
 
   // Create collection
-  async postCollection(teamId: string, data: CollectionRequest): Promise<PostCollectionResult> {
+  async postCollection(token: string, teamId: string, data: CollectionRequest): Promise<PostCollectionResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/teams/${teamId}/folders`, data)
       // the typical ways to die when calling an api
@@ -32,8 +34,10 @@ export class CollectionApi {
   }
 
   // Update collection
-  async putCollection(id: string, teamId: string, data: CollectionRequest): Promise<PostCollectionResult> {
+  async putCollection(token: string, id: string, teamId: string, data: CollectionRequest): Promise<PostCollectionResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/teams/${teamId}/folders/${id}`, data)
       // the typical ways to die when calling an api
@@ -50,8 +54,10 @@ export class CollectionApi {
   }
 
   // Delete collection
-  async deleteCollection(id: string, teamId: string): Promise<EmptyResult> {
+  async deleteCollection(token: string, id: string, teamId: string): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/teams/${teamId}/folders/${id}/delete`)
       // the typical ways to die when calling an api

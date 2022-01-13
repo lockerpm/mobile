@@ -130,7 +130,10 @@ export const MainNavigator = observer(function MainNavigator() {
     
     // Check if sync is needed
     const lastUpdateRes = await user.getLastUpdate()
-    if (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= cipherStore.lastSync) {
+    if (
+      lastUpdateRes.kind === 'unauthorized' ||
+      (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= cipherStore.lastSync)
+    ) {
       return
     }
 
@@ -216,7 +219,7 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // Web socket
   const generateSocket = () => {
-    const ws = new WebSocket(`${WS_URL}?token=${user.token}`)
+    const ws = new WebSocket(`${WS_URL}?token=${user.apiToken}`)
     ws.onopen = () => {
       Logger.debug('SOCKET OPEN')
     }

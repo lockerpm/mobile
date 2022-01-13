@@ -14,8 +14,10 @@ export class FolderApi {
   }
 
   // Get single folder
-  async getFolder(id: string): Promise<GetFolderResult> {
+  async getFolder(token: string, id: string): Promise<GetFolderResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/folders/${id}`)
       // the typical ways to die when calling an api
@@ -33,8 +35,10 @@ export class FolderApi {
   }
 
   // Create folder
-  async postFolder(data: FolderRequest): Promise<PostFolderResult> {
+  async postFolder(token: string, data: FolderRequest): Promise<PostFolderResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/folders', data)
       // the typical ways to die when calling an api
@@ -51,8 +55,10 @@ export class FolderApi {
   }
 
   // Update folder
-  async putFolder(id: string, data: FolderRequest): Promise<PostFolderResult> {
+  async putFolder(token: string, id: string, data: FolderRequest): Promise<PostFolderResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/folders/${id}`, data)
       // the typical ways to die when calling an api
@@ -69,8 +75,10 @@ export class FolderApi {
   }
 
   // Delete folder
-  async deleteFolder(id: string): Promise<EmptyResult> {
+  async deleteFolder(token: string, id: string): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(`/cystack_platform/pm/folders/${id}`)
       // the typical ways to die when calling an api

@@ -12,13 +12,20 @@ import { withEnvironment } from "../extensions/with-environment"
 export const CipherStoreModel = types
   .model("CipherStore")
   .props({
+    apiToken: types.maybeNull(types.string),
+
+    // Status
     isSynching: types.maybeNull(types.boolean),
     isSynchingOffline: types.maybeNull(types.boolean),
     isSynchingAutofill: types.maybeNull(types.boolean),
+
+    // Data
     notSynchedCiphers: types.array(types.string),         // Create in offline mode
     notUpdatedCiphers: types.array(types.string),         // Create in online mode but somehow not update yet
     lastSync: types.maybeNull(types.number),
     lastCacheUpdate: types.maybeNull(types.number),
+
+    // Selector
     generatedPassword: types.maybeNull(types.string),
     selectedCipher: types.maybeNull(types.frozen()),
     selectedFolder: types.maybeNull(types.string)
@@ -30,6 +37,10 @@ export const CipherStoreModel = types
     }
   }))
   .actions((self) => ({
+    setApiToken: (token: string) => {
+      self.apiToken = token
+    },
+
     // ----------------- CACHE -------------------
 
     setGeneratedPassword: (password: string) => {
@@ -97,6 +108,7 @@ export const CipherStoreModel = types
     },
 
     clearStore: () => {
+      self.apiToken = null
       self.generatedPassword = null
       self.selectedCipher = null
       self.selectedFolder = null
@@ -109,71 +121,77 @@ export const CipherStoreModel = types
       self.lastCacheUpdate = null
     },
 
+    lock: () => {
+      self.generatedPassword = null
+      self.selectedCipher = null
+      self.selectedFolder = null
+    },
+
     // ----------------- CRUD -------------------
 
     syncData: async () => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.syncData()
+      const res = await cipherApi.syncData(self.apiToken)
       return res
     },
 
     getCipher: async (id: string) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.getCipher(id)
+      const res = await cipherApi.getCipher(self.apiToken, id)
       return res
     },
 
     createCipher: async (data: CipherRequest, score: number, collectionIds: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.postCipher(data, score, collectionIds)
+      const res = await cipherApi.postCipher(self.apiToken, data, score, collectionIds)
       return res
     },
 
     importCipher: async (data: ImportCipherData) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.importCipher(data)
+      const res = await cipherApi.importCipher(self.apiToken, data)
       return res
     },
 
     offlineSyncCipher: async (data: ImportCipherData) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.offlineSyncCipher(data)
+      const res = await cipherApi.offlineSyncCipher(self.apiToken, data)
       return res
     },
 
     updateCipher: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.putCipher(id, data, score, collectionIds)
+      const res = await cipherApi.putCipher(self.apiToken, id, data, score, collectionIds)
       return res
     },
 
     shareCipher: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.shareCipher(id, data, score, collectionIds)
+      const res = await cipherApi.shareCipher(self.apiToken, id, data, score, collectionIds)
       return res
     },
 
     toTrashCiphers: async (ids: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.toTrashCiphers(ids)
+      const res = await cipherApi.toTrashCiphers(self.apiToken, ids)
       return res
     },
 
     deleteCiphers: async (ids: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.deleteCiphers(ids)
+      const res = await cipherApi.deleteCiphers(self.apiToken, ids)
       return res
     },
 
     restoreCiphers: async (ids: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.restoresCiphers(ids)
+      const res = await cipherApi.restoresCiphers(self.apiToken, ids)
       return res
     },
 
     moveToFolder: async (data: MoveFolderData) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.moveToFolder(data)
+      const res = await cipherApi.moveToFolder(self.apiToken, data)
       return res
     }
   })).postProcessSnapshot(omit([

@@ -12,8 +12,10 @@ export class ToolApi {
   }
 
   // Check email breaches
-  async checkBreaches(email: string): Promise<CheckBreachResult> {
+  async checkBreaches(token: string, email: string): Promise<CheckBreachResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/tools/breach', { email })
       // the typical ways to die when calling an api
