@@ -111,6 +111,11 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
             <Button
               preset="link"
               onPress={() => setShowAction(true)}
+              style={{ 
+                height: 35,
+                alignItems: 'center',
+                paddingLeft: 10
+              }}
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"

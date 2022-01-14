@@ -49,7 +49,12 @@ export const Header = observer(function Header(props: HeaderProps) {
               <Button 
                 preset="link" 
                 onPress={() => props.goBack()}
-                style={{ height: 30, alignItems: 'center'}}
+                style={{ 
+                  height: 35,
+                  width: props.goBackText ? undefined : 35,
+                  justifyContent: 'flex-start',
+                  alignItems: 'center'
+                }}
               >
                 {
                   props.goBackText ? (

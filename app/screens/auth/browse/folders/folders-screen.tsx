@@ -243,7 +243,12 @@ export const FoldersScreen = observer(function FoldersScreen() {
                             setSelectedFolder(item)
                             setIsActionOpen(true)
                           }}
-                          style={{ height: 30, alignItems: 'center'}}
+                          style={{ 
+                            height: 35,
+                            width: 40,
+                            justifyContent: 'flex-end', 
+                            alignItems: 'center'
+                          }}
                         >
                           <IoniconsIcon
                             name="ellipsis-horizontal"
