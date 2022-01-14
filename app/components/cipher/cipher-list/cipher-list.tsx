@@ -396,7 +396,12 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                   <Button
                     preset="link"
                     onPress={() => openActionMenu(item)}
-                    style={{ height: 40, alignItems: 'center' }}
+                    style={{ 
+                      height: 40,
+                      width: 40,
+                      justifyContent: 'flex-end',
+                      alignItems: 'center'
+                    }}
                   >
                     <IoniconsIcon
                       name="ellipsis-horizontal"

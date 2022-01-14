@@ -72,6 +72,10 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
               preset="link"
               text={translate('common.save')}
               onPress={handleMove}
+              style={{
+                height: 35,
+                alignItems: 'center'
+              }}
               textStyle={{
                 fontSize: fontSize.p
               }}

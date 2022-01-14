@@ -53,7 +53,7 @@ export const OtpList = observer(function OtpList(props: Props) {
   const [ciphers, setCiphers] = useState([])
   const [otps, setOtps] = useState([])
 
-  // ------------------------ WATCHERS ----------------------------
+  // ------------------------ EFFECT ----------------------------
 
   useEffect(() => {
     loadData()

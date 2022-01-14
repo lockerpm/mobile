@@ -190,6 +190,11 @@ export const CardEditScreen = observer(function CardEditScreen() {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
+              style={{ 
+                height: 35,
+                alignItems: 'center',
+                paddingLeft: 10
+              }}
               textStyle={{
                 fontSize: fontSize.p
               }}
