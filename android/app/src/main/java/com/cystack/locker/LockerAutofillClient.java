@@ -96,17 +96,25 @@ public class LockerAutofillClient extends AppCompatActivity {
         Intent replyIntent = new Intent();
 
         AutofillId emailIds = intent.getParcelableExtra(EMAIL_IDS);
-//        AutofillId usernameId = intent.getParcelableExtra(USERNAME_IDS);
         AutofillId passIds = intent.getParcelableExtra(PASS_IDS);
 
+        if (emailIds != null || passIds != null) {
+            Dataset.Builder builder = new Dataset.Builder();
 
-        Dataset.Builder builder = new Dataset.Builder();
-        builder.setValue(emailIds, AutofillValue.forText(username));
-        builder.setValue(passIds, AutofillValue.forText(password));
-        Dataset dataSet = builder.build();
+            if (emailIds != null ){
+                builder.setValue(emailIds, AutofillValue.forText(username));
+            }
+            if (passIds != null ){
+                builder.setValue(passIds, AutofillValue.forText(password));
+            }
+            Dataset dataSet = builder.build();
 
-        replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, dataSet);
-        setResult(RESULT_OK, replyIntent);
+            replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, dataSet);
+            setResult(RESULT_OK, replyIntent);
+        } else {
+            setResult(RESULT_CANCELED);
+        }
+
         finish();
     }
 }

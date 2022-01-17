@@ -20,6 +20,10 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.O)
 class StructureParser {
     static private final String TAG = "LockerAutoFillService";
+    
+    public  boolean isNullOrWhiteSpace(String value) {
+        return value == null || value.trim().isEmpty();
+    }
 
     final private AssistStructure structure;
     private Result result;
@@ -32,7 +36,10 @@ class StructureParser {
         result = new Result();
         for (int i=0; i<structure.getWindowNodeCount(); ++i) {
             AssistStructure.WindowNode windowNode = structure.getWindowNodeAt(i);
-            result.title.add(windowNode.getTitle());
+            if (i == 0)
+            {
+                result.title.add(getTitlePackageId(windowNode));
+            }
             parseViewNode(windowNode.getRootViewNode());
         }
         return result;
@@ -106,8 +113,25 @@ class StructureParser {
         return null;
     }
 
+    private String getTitlePackageId(AssistStructure.WindowNode node)
+    {
+        if (node != null && !isNullOrWhiteSpace((String) node.getTitle()))
+        {
+            int slashPosition = ((String) node.getTitle()).indexOf('/');
+            if (slashPosition > -1)
+            {
+                String packageId = ((String) node.getTitle()).substring(0, slashPosition);
+                if (packageId.contains("."))
+                {
+                    return packageId;
+                }
+            }
+        }
+        return "";
+    }
+
     static class Result {
-        final List<CharSequence> title;
+        final List<String> title;
         final List<String> webDomain;
         final List<AutofillId> username;
         final List<AutofillId> email;
