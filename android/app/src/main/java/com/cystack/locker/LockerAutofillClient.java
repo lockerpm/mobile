@@ -33,13 +33,16 @@ public class LockerAutofillClient extends AppCompatActivity {
     private static int sPendingIntentId = 0;
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static IntentSender newIntentSenderForResponse(@NonNull Context context,
-                                                          @NonNull AutofillId[] emailIds, @NonNull AutofillId[] userNameIds, @NonNull AutofillId[] passwordIds, String domain) {
+                                                        AutofillId[] emailIds, AutofillId[] userNameIds,  AutofillId[] passwordIds, String domain) {
 
         Intent intent = new Intent(context, LockerAutofillClient.class);
 
         if (emailIds.length > 0) {
             intent.putExtra(EMAIL_IDS, emailIds[0]);
+        } else if (userNameIds.length > 0) {
+            intent.putExtra(EMAIL_IDS, userNameIds[0]);
         }
+
 
         if (passwordIds.length > 0) {
             intent.putExtra(PASS_IDS, passwordIds[0]);

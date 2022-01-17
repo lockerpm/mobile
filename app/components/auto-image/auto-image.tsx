@@ -14,17 +14,32 @@ type ImageProps = DefaultImageProps & {
 
 export function AutoImage(props: ImageProps) {
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 })
+  const [layoutWidth, setLayoutWidth] = useState(0)
   const [useBackup, setUseBackup] = useState(false)
 
   useLayoutEffect(() => {
     if (props.source?.uri) {
       RNImage.getSize(props.source.uri as any, (width, height) => {
-        setImageSize({ width, height })
+        if (layoutWidth) {
+          setImageSize({
+            width: layoutWidth,
+            height: height * (layoutWidth / width)
+          })
+        } else {
+          setImageSize({ width, height })
+        }
       }, (err) => {
         // Use backup in case of get image from uri failed
         if (props.backupSource && !props.backupSource.uri) {
           const { width, height } = RNImage.resolveAssetSource(props.backupSource)
-          setImageSize({ width, height })
+          if (layoutWidth) {
+            setImageSize({
+              width: layoutWidth,
+              height: height * (layoutWidth / width)
+            })
+          } else {
+            setImageSize({ width, height })
+          }
           setUseBackup(true)
         }
       })
@@ -32,20 +47,47 @@ export function AutoImage(props: ImageProps) {
       // Use backup in case of { uri: null }
       if (props.source?.uri === null && props.backupSource && !props.backupSource.uri) {
         const { width, height } = RNImage.resolveAssetSource(props.backupSource)
-        setImageSize({ width, height })
+        if (layoutWidth) {
+          setImageSize({
+            width: layoutWidth,
+            height: height * (layoutWidth / width)
+          })
+        } else {
+          setImageSize({ width, height })
+        }
         setUseBackup(true)
         return
       }
       const { width, height } = RNImage.resolveAssetSource(props.source)
-      setImageSize({ width, height })
+      if (layoutWidth) {
+        setImageSize({
+          width: layoutWidth,
+          height: height * (layoutWidth / width)
+        })
+      } else {
+        setImageSize({ width, height })
+      }
     }
   }, [])
 
   return (
-    <RNImage 
+    <RNImage
+      resizeMode="contain"
       {...props} 
       source={useBackup ? props.backupSource : props.source} 
-      style={[imageSize, props.style]} 
+      style={[imageSize, props.style]}
+      onLayout={(e) => {
+        const w = e.nativeEvent.layout.width
+        setLayoutWidth(w)
+        const { width, height } = imageSize
+        if (width && height) {
+          setImageSize({
+            width: w,
+            height: height * (w / width)
+          })
+        }
+      }}
+
     />
   )
 }

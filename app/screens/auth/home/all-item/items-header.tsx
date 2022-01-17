@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View } from "react-native"
+import { View, ViewStyle } from "react-native"
 import { Button, Header, SearchBar, Text } from "../../../../components"
 import { commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -32,6 +32,20 @@ interface Props {
   navigation: any
 }
 
+const BUTTON_LEFT: ViewStyle = {
+  height: 35,
+  width: 35,
+  justifyContent: 'flex-start',
+  alignItems: 'center'
+}
+
+const BUTTON_RIGHT: ViewStyle = {
+  height: 35,
+  width: 35,
+  justifyContent: 'flex-end',
+  alignItems: 'center'
+}
+
 export const ItemsHeader = (props: Props) => {
   const { 
     openAdd, openSort, onSearch, searchText, setIsLoading, navigation,
@@ -54,7 +68,7 @@ export const ItemsHeader = (props: Props) => {
     >
       <Button
         preset="link"
-        style={{ marginRight: 20 }}
+        style={BUTTON_RIGHT}
         onPress={() => openSort && openSort()}
       >
         {
@@ -68,6 +82,7 @@ export const ItemsHeader = (props: Props) => {
 
       <Button
         preset="link"
+        style={BUTTON_RIGHT}
         onPress={() => openAdd && openAdd()}
       >
         {
@@ -89,6 +104,7 @@ export const ItemsHeader = (props: Props) => {
     >
       <Button
         preset="link"
+        style={BUTTON_RIGHT}
         onPress={() => toggleSelectAll()}
       >
         <IoniconsIcon
@@ -104,7 +120,7 @@ export const ItemsHeader = (props: Props) => {
             <Button
               preset="link"
               onPress={handleMoveFolder}
-              style={{ marginLeft: 20 }}
+              style={BUTTON_RIGHT}
             >
               <FontAwesomeIcon
                 name="folder-o"
@@ -116,7 +132,7 @@ export const ItemsHeader = (props: Props) => {
             <Button
               preset="link"
               onPress={() => setShowConfirmModal(true)}
-              style={{ marginLeft: 20 }}
+              style={BUTTON_RIGHT}
             >
               <FontAwesomeIcon
                 name="trash"
@@ -134,6 +150,7 @@ export const ItemsHeader = (props: Props) => {
     <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
       <Button
         preset="link"
+        style={BUTTON_LEFT}
         onPress={() => {
           setIsSelecting(false)
           setSelectedItems([])
@@ -151,7 +168,7 @@ export const ItemsHeader = (props: Props) => {
         text={selectedItems.length ? `${selectedItems.length} ${translate('common.selected')}` : translate('common.select')}
         style={{
           fontSize: fontSize.h5,
-          marginLeft: 15
+          marginLeft: 5
         }}
       />
     </View>

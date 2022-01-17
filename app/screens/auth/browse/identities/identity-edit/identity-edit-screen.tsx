@@ -252,6 +252,11 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
+              style={{ 
+                height: 35,
+                alignItems: 'center',
+                paddingLeft: 10
+              }}
               textStyle={{
                 fontSize: fontSize.p
               }}

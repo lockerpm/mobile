@@ -6,6 +6,7 @@ import ReactNativeBiometrics from 'react-native-biometrics'
 import DeviceInfo from 'react-native-device-info'
 import Toast from 'react-native-toast-message'
 import RNFS from 'react-native-fs'
+import { Logger } from "../../../utils/logger"
 
 
 export class MobilePlatformUtilsService implements PlatformUtilsService {
@@ -135,7 +136,7 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
       await RNFS.writeFile(path, blobData, blobOptions)
       return true
     } catch (e) {
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return false
     }
   }

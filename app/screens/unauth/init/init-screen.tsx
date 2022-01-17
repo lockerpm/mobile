@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { load, save, storageKeys } from "../../../utils/storage"
+import { load, storageKeys } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
@@ -32,8 +32,10 @@ export const InitScreen = observer(function InitScreen() {
     if (autoFillData && autoFillData.enabled) {
       uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
       uiStore.setIsFromAutoFill(true)
-      return autoFillData.enabled
+      return true
     }
+
+    uiStore.setIsFromAutoFill(false)
     return false
   }
 
@@ -59,9 +61,8 @@ export const InitScreen = observer(function InitScreen() {
 
     // Logged in?
     if (!user.isLoggedIn) {
-      const introShown = await load(storageKeys.APP_SHOW_INTRO)
-      if (!introShown && !isAutoFill) {
-        await save(storageKeys.APP_SHOW_INTRO, 1)
+      if (!user.introShown && !isAutoFill) {
+        user.setIntroShown(true)
         navigation.navigate('intro')
       } else {
         navigation.navigate('onBoarding')
@@ -77,11 +78,10 @@ export const InitScreen = observer(function InitScreen() {
     }
 
     // Session validated?
-    if (!user.token) {
+    if (!user.isLoggedIn) {
       navigation.navigate('login')
       return
     }
-    user.saveToken(user.token)
     const [userRes, userPwRes] = await Promise.all([
       user.getUser(),
       user.getUserPw()

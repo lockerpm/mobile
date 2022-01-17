@@ -11,6 +11,7 @@ import { useMixins } from "../services/mixins"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useStores } from "../models"
 import { observer } from "mobx-react-lite"
+import Animated, { withSequence, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated'
 
 // @ts-ignore
 import HomeIcon from './icons/home.svg'
@@ -29,8 +30,22 @@ const Tab = createBottomTabNavigator()
 // @ts-ignore
 const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
   const { translate, color } = useMixins()
-  const { user, uiStore } = useStores()
+  const { user, uiStore, cipherStore } = useStores()
   const insets = useSafeAreaInsets()
+  // @ts-ignore
+  const spin = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          rotate: withRepeat(
+            withSequence(withTiming('360deg', { duration: 0 }), withTiming('0deg', { duration: 1000 })),
+            -1,
+            false
+          )
+        }
+      ]
+    }
+  })
   
   const mappings = {
     homeTab: {
@@ -60,11 +75,13 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
     }
   }
 
+  const isStatusBarVisible = uiStore.isOffline || cipherStore.isSynching || cipherStore.isSynchingOffline
+
   return uiStore.isSelecting ? null : (
     <View style={{ paddingBottom: insets.bottom, backgroundColor: color.background }}>
-      {/* Offline mode */}
+      {/* Status bar */}
       {
-        uiStore.isOffline && (
+        isStatusBarVisible && (
           <View style={{
             backgroundColor: '#161922',
             flexDirection: 'row',
@@ -72,23 +89,48 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
             alignItems: 'center',
             paddingVertical: 4
           }}>
-            <MaterialIconsIcon
-              name="wifi-off"
-              size={16}
-              color={color.white}
-            />
-            <Text
-              style={{
-                fontSize: fontSize.small,
-                color: color.white,
-                marginLeft: 5
-              }}
-              text={translate('navigator.is_offline')}
-            />
+            {
+              uiStore.isOffline ? (
+                <>
+                  <MaterialIconsIcon
+                    name="wifi-off"
+                    size={16}
+                    color={color.white}
+                  />
+                  <Text
+                    style={{
+                      fontSize: fontSize.small,
+                      color: color.white,
+                      marginLeft: 5
+                    }}
+                    text={translate('navigator.is_offline')}
+                  />
+                </>
+              ) : (
+                <>
+                  <Animated.View style={spin}>
+                    <MaterialIconsIcon
+                      name="sync"
+                      size={18}
+                      color={color.white}
+                    />
+                  </Animated.View>
+                  <Text
+                    style={{
+                      fontSize: fontSize.small,
+                      color: color.white,
+                      marginLeft: 5
+                    }}
+                    text={translate('start.synching')}
+                  />
+                </>
+              )
+            }
+            
           </View>
         )
       }
-      {/* Offline mode end */}
+      {/* Status bar end */}
 
       {/* Tab items */}
       <View style={{ flexDirection: 'row' }}>

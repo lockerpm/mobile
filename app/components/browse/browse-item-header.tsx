@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View, BackHandler } from "react-native"
+import { View, BackHandler, ViewStyle } from "react-native"
 import { commonStyles, fontSize } from "../../theme"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
@@ -37,6 +37,20 @@ export interface BrowseItemHeaderProps {
   isTrash?: boolean
   isAuthenticator?: boolean
   isAutoFill?: boolean
+}
+
+const BUTTON_LEFT: ViewStyle = {
+  height: 35,
+  width: 35,
+  justifyContent: 'flex-start',
+  alignItems: 'center'
+}
+
+const BUTTON_RIGHT: ViewStyle = {
+  height: 35,
+  width: 35,
+  justifyContent: 'flex-end',
+  alignItems: 'center'
 }
 
 /**
@@ -106,7 +120,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
         !isAuthenticator && (
           <Button
             preset="link"
-            style={{ marginRight: openAdd ? 20 : 0 }}
+            style={BUTTON_RIGHT}
             onPress={() => openSort && openSort()}
           >
             {
@@ -124,6 +138,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
         openAdd && (
           <Button
             preset="link"
+            style={BUTTON_RIGHT}
             onPress={() => openAdd && openAdd()}
           >
             {
@@ -147,6 +162,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
     >
       <Button
         preset="link"
+        style={BUTTON_RIGHT}
         onPress={() => toggleSelectAll()}
       >
         <IoniconsIcon
@@ -167,7 +183,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
                       <Button
                         preset="link"
                         onPress={handleRestore}
-                        style={{ marginLeft: 20 }}
+                        style={BUTTON_RIGHT}
                       >
                         <FontAwesomeIcon
                           name="repeat"
@@ -181,7 +197,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
                   <Button
                     preset="link"
                     onPress={() => setShowConfirmModal(true)}
-                    style={{ marginLeft: 20 }}
+                    style={BUTTON_RIGHT}
                   >
                     <FontAwesomeIcon
                       name="trash"
@@ -195,7 +211,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
                   <Button
                     preset="link"
                     onPress={handleMoveFolder}
-                    style={{ marginLeft: 20 }}
+                    style={BUTTON_RIGHT}
                   >
                     <FontAwesomeIcon
                       name="folder-o"
@@ -207,7 +223,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
                   <Button
                     preset="link"
                     onPress={() => setShowConfirmModal(true)}
-                    style={{ marginLeft: 20 }}
+                    style={BUTTON_RIGHT}
                   >
                     <FontAwesomeIcon
                       name="trash"
@@ -228,6 +244,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
     <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
       <Button
         preset="link"
+        style={BUTTON_LEFT}
         onPress={() => {
           setIsSelecting(false)
           setSelectedItems([])
@@ -245,7 +262,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
         text={selectedItems.length ? `${selectedItems.length} ${translate('common.selected')}` : translate('common.select')}
         style={{
           fontSize: fontSize.h5,
-          marginLeft: 15
+          marginLeft: 5
         }}
       />
     </View>

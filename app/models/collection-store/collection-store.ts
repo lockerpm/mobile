@@ -11,19 +11,38 @@ import { withEnvironment } from "../extensions/with-environment"
 export const CollectionStoreModel = types
   .model("CollectionStore")
   .props({
+    apiToken: types.maybeNull(types.string),
     collections: types.array(types.frozen()),
-    notSynchedCollections: types.array(types.string)
+    lastUpdate: types.maybeNull(types.number),
+    notSynchedCollections: types.array(types.string),   // Offline
+    notUpdatedCollections: types.array(types.string)    // Online but somehow not update
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setApiToken: (token: string) => {
+      self.apiToken = token
+    },
+
     // ----------------- DATA -------------------
 
     setCollections: (collections: CollectionView[]) => {
       self.collections = cast(collections)
     },
 
+    setLastUpdate: () => {
+      self.lastUpdate = Date.now()
+      self.lastUpdate = null
+    },
+
     clearStore: () => {
+      self.apiToken = null
+      self.collections = cast([])
+      self.notSynchedCollections = cast([])
+      self.notUpdatedCollections = cast([])
+    },
+
+    lock: () => {
       self.collections = cast([])
     },
 
@@ -43,23 +62,39 @@ export const CollectionStoreModel = types
       self.notSynchedCollections = cast([])
     },
 
+    addNotUpdate: (id: string) => {
+      if (!self.notUpdatedCollections.includes(id)) {
+        self.notUpdatedCollections.push(id)
+      }
+    },
+
+    removeNotUpdate: (id: string) => {
+      if (self.notUpdatedCollections.includes(id)) {
+        self.notUpdatedCollections = cast(self.notUpdatedCollections.filter(i => i !== id))
+      }
+    },
+
+    clearNotUpdate: () => {
+      self.notUpdatedCollections = cast([])
+    },
+
     // ----------------- CRUD -------------------
 
     createCollection: async (teamId: string, data: CollectionRequest) => {
       const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.postCollection(teamId, data)
+      const res = await collectionApi.postCollection(self.apiToken, teamId, data)
       return res
     },
 
     updateCollection: async (id: string, teamId: string, data: CollectionRequest) => {
       const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.putCollection(id, teamId, data)
+      const res = await collectionApi.putCollection(self.apiToken, id, teamId, data)
       return res
     },
 
     deleteCollection: async (id: string, teamId: string) => {
       const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.deleteCollection(id, teamId)
+      const res = await collectionApi.deleteCollection(self.apiToken, id, teamId)
       return res
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

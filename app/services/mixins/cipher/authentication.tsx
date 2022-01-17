@@ -4,7 +4,7 @@ import { KdfType } from '../../../../core/enums/kdfType'
 import { useStores } from '../../../models'
 import { useCoreService } from '../../core-service'
 import { delay } from '../../../utils/delay'
-import { GOOGLE_CLIENT_ID } from '../../../config/constants'
+import { GOOGLE_CLIENT_ID, IS_IOS } from '../../../config/constants'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { saveShared } from '../../../utils/keychain'
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
@@ -13,6 +13,8 @@ import { color, colorDark } from '../../../theme'
 import moment from 'moment'
 import DeviceInfo from 'react-native-device-info'
 import { useMixins } from '..'
+import { Logger } from '../../../utils/logger'
+import { SymmetricCryptoKey } from '../../../../core/models/domain'
 
 
 const { createContext, useContext } = React
@@ -21,6 +23,7 @@ const { createContext, useContext } = React
 // Mixins data
 const defaultData = {
   // Methods
+  setApiTokens: (token: string) => {},
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   biometricLogin: async () => { return { kind: 'unknown' } },
   logout: async () => {},
@@ -53,6 +56,63 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
 
   // -------------------- AUTHENTICATION --------------------
 
+  // Set tokens
+  const setApiTokens = (token: string) => {
+    user.setApiToken(token)
+    cipherStore.setApiToken(token)
+    collectionStore.setApiToken(token)
+    folderStore.setApiToken(token)
+    toolStore.setApiToken(token)
+  }
+
+  // Login vault using API
+  const _loginUsingApi = async (key: SymmetricCryptoKey, keyHash: string, kdf: number, kdfIterations: number, masterPassword?: string) => {
+    // Session login API
+    const res = await user.sessionLogin({
+      client_id: 'mobile',
+      password: keyHash,
+      device_name: platformUtilsService.getDeviceString(),
+      device_type: platformUtilsService.getDevice(),
+      // device_identifier: await storageService.get('device_id') || randomString(),
+      device_identifier: DeviceInfo.getUniqueId()
+    })
+    if (res.kind === 'unauthorized') {
+      notify('error', translate('error.token_expired'))
+      return { kind: 'unauthorized' }
+    }
+
+    if (res.kind !== 'ok') {
+      if (res.kind === 'bad-data') {
+        if (res.data.code === '1008') {
+          notify('error', `${translate('error.login_locked')} ${moment.duration(res.data.wait, 'seconds').humanize()}`)
+        } else {
+          notifyApiError(res)
+        }
+        return res
+      }
+
+      notify('error', translate('error.session_login_failed'))
+      return res
+    }
+
+    // Setup service
+    messagingService.send('loggedIn')
+    await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
+    await userService.setInformation(tokenService.getUserId(), user.email, kdf, kdfIterations)
+    await cryptoService.setKey(key)
+    await cryptoService.setKeyHash(keyHash)
+    await cryptoService.setEncKey(res.data.key)
+    await cryptoService.setEncPrivateKey(res.data.private_key)
+
+    // setup service offline
+    if (IS_IOS && masterPassword) {
+      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
+      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
+    }
+
+    return { kind: 'ok' }
+  }
+
   // Session login
   const sessionLogin = async (masterPassword: string): Promise<{ kind: string }> => {
     try {
@@ -61,17 +121,12 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
-      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
-      
-      // setup service offline
-      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
 
       // Offline compare
       if (uiStore.isOffline) {
         const storedKeyHash = await cryptoService.getKeyHash()
         if (storedKeyHash) {
           const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
-          
           if (passwordValid) {
             messagingService.send('loggedIn')
   
@@ -84,44 +139,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
 
       // Online session login
       const keyHash = await cryptoService.hashPassword(masterPassword, key)
-
-      // Session login API
-      const res = await user.sessionLogin({
-        client_id: 'mobile',
-        password: keyHash,
-        device_name: platformUtilsService.getDeviceString(),
-        device_type: platformUtilsService.getDevice(),
-        // device_identifier: await storageService.get('device_id') || randomString(),
-        device_identifier: DeviceInfo.getUniqueId()
-      })
-      if (res.kind === 'unauthorized') {
-        notify('error', translate('error.token_expired'))
-        user.clearToken()
-        return { kind: 'unauthorized' }
-      }
-
-      if (res.kind !== 'ok') {
-        if (res.kind === 'bad-data') {
-          if (res.data.code === '1008') {
-            notify('error', `${translate('error.login_locked')} ${moment.duration(res.data.wait, 'seconds').humanize()}`)
-            return res
-          }
-        }
-
-        notify('error', translate('error.session_login_failed'))
-        return res
-      }
-
-      // Setup service
-      messagingService.send('loggedIn')
-      await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
-      await userService.setInformation(tokenService.getUserId(), user.email, kdf, kdfIterations)
-      await cryptoService.setKey(key)
-      await cryptoService.setKeyHash(keyHash)
-      await cryptoService.setEncKey(res.data.key)
-      await cryptoService.setEncPrivateKey(res.data.private_key)
-
-      return { kind: 'ok' }
+      return _loginUsingApi(key, keyHash, kdf, kdfIterations, masterPassword)
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
       return { kind: 'bad-data' }
@@ -138,7 +156,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
         return { kind: 'bad-data' }
       }
 
-      // Validate
+      // Validate biometric
       const { success } = await ReactNativeBiometrics.simplePrompt({
         promptMessage: 'Unlock Locker'
       })
@@ -147,18 +165,27 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
         return { kind: 'bad-data' }
       }
 
-      // Check key
-      const hasKey = await cryptoService.hasKey()
-      if (!hasKey) {
-        notify('error', translate('error.session_login_failed'))
-        return { kind: 'bad-data' }
-      }
+      // Offline login
+      if (uiStore.isOffline) {
+        const hasKey = await cryptoService.hasKey()
+        if (!hasKey) {
+          notify('error', translate('error.session_login_failed'))
+          return { kind: 'bad-data' }
+        }
 
-      // Fake set key
-      messagingService.send('loggedIn')
-      const storedKey = await cryptoService.getKey()
-      await cryptoService.setKey(storedKey)
-      return { kind: 'ok' }
+        // Fake set key
+        messagingService.send('loggedIn')
+        const storedKey = await cryptoService.getKey()
+        await cryptoService.setKey(storedKey)
+        return { kind: 'ok' }
+      }
+      
+      // Online login
+      const key = await cryptoService.getKey()
+      const keyHash = await cryptoService.getKeyHash()
+      const kdf = KdfType.PBKDF2_SHA256
+      const kdfIterations = 100000
+      return _loginUsingApi(key, keyHash, kdf, kdfIterations)
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
       return { kind: 'bad-data' }
@@ -175,14 +202,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
       const encKey = await cryptoService.makeEncKey(key)
       const hashedPassword = await cryptoService.hashPassword(masterPassword, key)
-      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
       const keys = await cryptoService.makeKeyPair(encKey[0])
-
-      await cryptoService.setKey(key)
-      await cryptoService.setKeyHash(hashedPassword)
-      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
-      await cryptoService.setEncKey(encKey[1].encryptedString)
-      await cryptoService.setEncPrivateKey(keys[1].encryptedString)
 
       const res = await user.registerLocker({
         name: user.full_name,
@@ -204,6 +224,16 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       if (res.kind !== 'ok') {
         notifyApiError(res)
         return { kind: 'bad-data' }
+      }
+
+      await cryptoService.setKey(key)
+      await cryptoService.setKeyHash(hashedPassword)
+      await cryptoService.setEncKey(encKey[1].encryptedString)
+      await cryptoService.setEncPrivateKey(keys[1].encryptedString)
+
+      if (IS_IOS) {
+        const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
+        await cryptoService.setAutofillKeyHash(autofillHashedPassword)
       }
 
       // Success
@@ -261,19 +291,11 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
   // Logout
   const logout = async () => {
     try {
-      await Promise.all([
-        folderService.clearCache(),
-        cipherService.clearCache(),
-        collectionService.clearCache(),
-        cryptoService.clearKeys(),
-        userService.clear()
-      ])
-  
       cipherStore.clearStore()
       collectionStore.clearStore()
       folderStore.clearStore()
       toolStore.clearStore()
-      
+  
       await user.logout()
   
       // Sign out of Google
@@ -291,10 +313,21 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       }
   
       // Reset shared data
-      await saveShared('autofill', '')
+      if (IS_IOS) {
+        await saveShared('autofill', '')
+      }
+
+      // Clear services
+      await Promise.all([
+        folderService.clearCache(),
+        cipherService.clearCache(),
+        collectionService.clearCache(),
+        cryptoService.clearKeys(),
+        userService.clear()
+      ])
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
     }
   }
 
@@ -304,6 +337,11 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     cipherService.clearCache()
     // searchService.clearCache()
     collectionService.clearCache()
+
+    cipherStore.lock()
+    collectionStore.lock()
+    folderStore.lock()
+    toolStore.lock()
     user.lock()
   }
 
@@ -313,6 +351,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     color: themeColor,
     isDark,
 
+    setApiTokens,
     sessionLogin,
     biometricLogin,
     logout,

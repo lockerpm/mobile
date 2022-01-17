@@ -20,6 +20,8 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
   const selectedCipher: CipherView = cipherStore.cipherView
   const { translate, color } = useMixins()
 
+  const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
+
   const [showAction, setShowAction] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -109,6 +111,11 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
             <Button
               preset="link"
               onPress={() => setShowAction(true)}
+              style={{ 
+                height: 35,
+                alignItems: 'center',
+                paddingLeft: 10
+              }}
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"
@@ -156,7 +163,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
           >
             {selectedCipher.name}
             {
-              cipherStore.notSynchedCiphers.includes(selectedCipher.id) && (
+              notSync && (
                 <View style={{ paddingLeft: 10 }}>
                   <MaterialCommunityIconsIcon
                     name="cloud-off-outline"

@@ -1,6 +1,7 @@
 import { ApiResponse } from "apisauce"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { FolderResponse } from "../../../core/models/response/folderResponse"
+import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
 import { EmptyResult, GetFolderResult, PostFolderResult } from "./api.types"
@@ -13,8 +14,10 @@ export class FolderApi {
   }
 
   // Get single folder
-  async getFolder(id: string): Promise<GetFolderResult> {
+  async getFolder(token: string, id: string): Promise<GetFolderResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/folders/${id}`)
       // the typical ways to die when calling an api
@@ -26,14 +29,16 @@ export class FolderApi {
 
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
 
   // Create folder
-  async postFolder(data: FolderRequest): Promise<PostFolderResult> {
+  async postFolder(token: string, data: FolderRequest): Promise<PostFolderResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/folders', data)
       // the typical ways to die when calling an api
@@ -44,14 +49,16 @@ export class FolderApi {
       const res = new FolderResponse(response.data)
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
 
   // Update folder
-  async putFolder(id: string, data: FolderRequest): Promise<PostFolderResult> {
+  async putFolder(token: string, id: string, data: FolderRequest): Promise<PostFolderResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/folders/${id}`, data)
       // the typical ways to die when calling an api
@@ -62,14 +69,16 @@ export class FolderApi {
       const res = new FolderResponse(response.data)
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
 
   // Delete folder
-  async deleteFolder(id: string): Promise<EmptyResult> {
+  async deleteFolder(token: string, id: string): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(`/cystack_platform/pm/folders/${id}`)
       // the typical ways to die when calling an api
@@ -79,7 +88,7 @@ export class FolderApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }

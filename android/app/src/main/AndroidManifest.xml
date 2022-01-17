@@ -12,12 +12,11 @@
     android:allowBackup="false" 
     android:theme="@style/AppTheme"
   >
-    <activity
-        android:name=".LockerAutofillClient"
-        android:exported="false" />
+    <activity android:name=".LockerAutofillClient" android:exported="true" />
 
     <activity 
       android:name=".MainActivity" 
+      android:exported="true"
       android:label="@string/app_name" 
       android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" 
       android:launchMode="singleTask" 
@@ -40,6 +39,7 @@
 
     <service
       android:name=".autofill.LockerAutoFillService"
+      android:exported="true"
       android:label="Locker"
       android:permission="android.permission.BIND_AUTOFILL_SERVICE">
       <intent-filter>

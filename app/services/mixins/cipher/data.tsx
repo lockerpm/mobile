@@ -18,6 +18,7 @@ import { CollectionView } from '../../../../core/models/view/collectionView'
 import { CollectionRequest } from '../../../../core/models/request/collectionRequest'
 import { CipherData } from '../../../../core/models/data/cipherData'
 import { FolderData } from '../../../../core/models/data/folderData'
+import { Logger } from '../../../utils/logger'
 
 
 type GetCiphersParams = {
@@ -30,6 +31,7 @@ type GetCiphersParams = {
 const defaultData = {
   reloadCache: async () => {},
   getSyncData: async () => { return { kind: 'unknown' } },
+  syncOfflineData: async () => {},
   syncAutofillData: async () => {},
   getCiphers: async (params: GetCiphersParams) => { return [] },
   getCipherById: async (id: string) => new CipherView(),
@@ -77,11 +79,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     isOnline?: boolean
     notCipher?: boolean
   }) => {
-    if (options?.isOnline) {
-      cipherStore.setLastSync(new Date().getTime())
-    } else {
-      cipherStore.setLastOfflineSync(new Date().getTime())
-    }
+    cipherStore.setLastCacheUpdate()
     if (!options?.notCipher) {
       await cipherService.clearCache()
     }
@@ -110,14 +108,11 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       cipherStore.setIsSynching(true)
       messagingService.send('syncStarted')
 
-      // Sync offline data first
-      await _syncOfflineData()
-
       // Sync api
       const res = await cipherStore.syncData()
       if (res.kind !== 'ok') {
+        notifyApiError(res)
         messagingService.send('syncCompleted', { successfully: false })
-        cipherStore.setIsSynching(false)
         return res
       }
 
@@ -133,8 +128,13 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       await syncService.syncPolicies(res.data.policies)
       await syncService.setLastSync(new Date())
       
-      cipherStore.setLastSync(new Date().getTime())
+      cipherStore.setLastSync()
       messagingService.send('syncCompleted', { successfully: true })
+
+      // Clear not updated list
+      cipherStore.clearNotUpdate()
+      folderStore.clearNotUpdate()
+      collectionStore.clearNotUpdate()
 
       // Save fingerprint
       const fingerprint = await cryptoService.getFingerprint(userId)
@@ -144,19 +144,24 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       if (IS_IOS) {
         await _updateAutofillData()
       }
-
-      cipherStore.setIsSynching(false)
       return { kind: 'ok' }
     } catch (e) {
-      __DEV__ && console.log(e)
-      cipherStore.setIsSynching(false)
+      Logger.error(e)
       messagingService.send('syncCompleted', { successfully: false })
-      return { kind: 'bad-data' }
+      return { kind: 'error' }
+    } finally {
+      cipherStore.setIsSynching(false)
     }
   }
 
   // Sync offline data
-  const _syncOfflineData = async () => {
+  const syncOfflineData = async () => {
+    // Prevent duplicate sync
+    if (cipherStore.isSynchingOffline) {
+      return
+    }
+    cipherStore.setIsSynchingOffline(true)
+
     const ciphers = []
     const folders = []
     const folderRelationships = []
@@ -239,10 +244,16 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       cipherStore.clearNotSync()
       folderStore.clearNotSync()
     }
+    cipherStore.setIsSynchingOffline(false)
   }
 
   // Store password for autofill
   const _updateAutofillData = async () => {
+    // Only iOS
+    if (!IS_IOS) {
+      return
+    }
+    
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
     const passwordRes = await getCiphers({
       filters: [
@@ -271,52 +282,69 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Sync autofill data
   const syncAutofillData = async () => {
-    const credentials = await loadShared()
-    if (!credentials || !credentials.password) {
-      const sharedData: AutofillDataType = {
-        passwords: [],
-        deleted: [],
-        authen: null,
-        faceIdEnabled: false
+    try {
+      // Only iOS
+      if (!IS_IOS) {
+        return
       }
-      await saveShared('autofill', JSON.stringify(sharedData))
-      return
-    }
 
-    let hasUpdate = false
-    const sharedData: AutofillDataType = JSON.parse(credentials.password)
-    
-    // Delete passwords
-    if (sharedData.deleted) {
-      await _offlineDeleteCiphers(sharedData.deleted.map(c => c.id))
-      hasUpdate = true
-    }
+      // Prevent duplicate sync
+      if (cipherStore.isSynchingAutofill) {
+        return
+      }
+      cipherStore.setIsSynchingAutofill(true)
 
-    // Create passwords
-    if (sharedData.passwords) {
-      for (let cipher of sharedData.passwords) {
-        if (!cipher.id) {
-          const payload = newCipher(CipherType.Login)
-          const data = new LoginView()
-          data.username = cipher.username
-          data.password = cipher.password
-          if (cipher.uri) {
-            const uriView = new LoginUriView()
-            uriView.uri = cipher.uri
-            data.uris = [uriView]
+      const credentials = await loadShared()
+      if (!credentials || !credentials.password) {
+        const sharedData: AutofillDataType = {
+          passwords: [],
+          deleted: [],
+          authen: null,
+          faceIdEnabled: false
+        }
+        await saveShared('autofill', JSON.stringify(sharedData))
+        return
+      }
+
+      let hasUpdate = false
+      const sharedData: AutofillDataType = JSON.parse(credentials.password)
+      
+      // Delete passwords
+      if (sharedData.deleted) {
+        await _offlineDeleteCiphers(sharedData.deleted.map(c => c.id))
+        hasUpdate = true
+      }
+
+      // Create passwords
+      if (sharedData.passwords) {
+        for (let cipher of sharedData.passwords) {
+          if (!cipher.id) {
+            const payload = newCipher(CipherType.Login)
+            const data = new LoginView()
+            data.username = cipher.username
+            data.password = cipher.password
+            if (cipher.uri) {
+              const uriView = new LoginUriView()
+              uriView.uri = cipher.uri
+              data.uris = [uriView]
+            }
+            payload.name = cipher.name
+            payload.login = data
+            await _offlineCreateCipher(payload, [])
+            hasUpdate = true
           }
-          payload.name = cipher.name
-          payload.login = data
-          await _offlineCreateCipher(payload, [])
-          hasUpdate = true
         }
       }
-    }
 
-    await _updateAutofillData()
+      await _updateAutofillData()
 
-    if (hasUpdate && !uiStore.isOffline) {
-      await _syncOfflineData()
+      if (hasUpdate && !uiStore.isOffline) {
+        await syncOfflineData()
+      }
+    } catch (e) {
+      Logger.error(e)
+    } finally {
+      cipherStore.setIsSynchingAutofill(false)
     }
   }
 
@@ -333,9 +361,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         f.cipherCount = ciphers ? ciphers.length : 0
       }
       folderStore.setFolders(res)
+      folderStore.setLastUpdate()
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
     }
   }
 
@@ -375,9 +404,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       })
 
       collectionStore.setCollections(res)
+      collectionStore.setLastUpdate()
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
     }
   }
 
@@ -392,7 +422,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return await searchService.searchCiphers(params.searchText || '', filters, null) || []
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return []
     }
   }
@@ -415,7 +445,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return []
     }
   }
@@ -517,6 +547,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       ciphers.forEach(c => {
         if (!isCaching) {
           cipherStore.addNotSync(c.id)
+        } else {
+          cipherStore.addNotUpdate(c.id)
         }
         res[c.id] = {
           ...c,
@@ -533,6 +565,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       ciphers.forEach(f => {
         if (!isCaching) {
           folderStore.addNotSync(f.id)
+        } else {
+          folderStore.addNotUpdate(f.id)
         }
         res[f.id] = {
           ...f,
@@ -605,7 +639,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -629,6 +663,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await storageService.save(key, res)
     if (!isCaching) {
       cipherStore.addNotSync(tempId)
+    } else {
+      cipherStore.addNotUpdate(tempId)
     }
     await reloadCache()
   }
@@ -656,7 +692,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -679,6 +715,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await storageService.save(key, res)
     if (!isCaching) {
       cipherStore.addNotSync(cipher.id)
+    } else {
+      cipherStore.addNotUpdate(cipher.id)
     }
     await reloadCache()
   }
@@ -704,7 +742,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -719,6 +757,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       delete res[id]
       if (!isCaching) {
         cipherStore.removeNotSync(id)
+      } else {
+        cipherStore.removeNotUpdate(id)
       }
     })
     await storageService.save(key, res)
@@ -746,7 +786,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -761,6 +801,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       res[id].deletedDate = new Date().toISOString()
       if (!isCaching) {
         cipherStore.addNotSync(id)
+      } else {
+        cipherStore.addNotUpdate(id)
       }
     })
     await storageService.save(key, res)
@@ -788,7 +830,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -803,6 +845,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       res[id].deletedDate = null
       if (!isCaching) {
         cipherStore.addNotSync(id)
+      } else {
+        cipherStore.addNotUpdate(id)
       }
     })
     await storageService.save(key, res)
@@ -834,7 +878,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -857,6 +901,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await storageService.save(key, res)
     if (!isCaching) {
       folderStore.addNotSync(tempId)
+    } else {
+      folderStore.addNotUpdate(tempId)
     }
     await reloadCache()
   }
@@ -884,7 +930,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -905,6 +951,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await storageService.save(key, res)
     if (!isCaching) {
       folderStore.addNotSync(folder.id)
+    } else {
+      folderStore.addNotUpdate(folder.id)
     }
     await reloadCache()
   }
@@ -930,7 +978,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -944,6 +992,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     delete res[id]
     if (!isCaching) {
       folderStore.removeNotSync(id)
+    } else {
+      folderStore.removeNotUpdate(id)
     }
     await storageService.save(key, res)
     await reloadCache()
@@ -976,7 +1026,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -999,6 +1049,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await storageService.save(key, res)
     if (!isCaching) {
       collectionStore.addNotSync(tempId)
+    } else {
+      collectionStore.addNotUpdate(tempId)
     }
     await reloadCache()
   }
@@ -1028,7 +1080,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -1049,6 +1101,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await storageService.save(key, res)
     if (!isCaching) {
       collectionStore.addNotSync(collection.id)
+    } else {
+      collectionStore.addNotUpdate(collection.id)
     }
     await reloadCache()
   }
@@ -1074,7 +1128,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      __DEV__ && console.log(e)
+      Logger.error(e)
       return { kind: 'unknown' }
     }
   }
@@ -1088,6 +1142,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     delete res[id]
     if (!isCaching) {
       collectionStore.removeNotSync(id)
+    } else {
+      collectionStore.removeNotUpdate(id)
     }
     await storageService.save(key, res)
     await reloadCache()
@@ -1103,8 +1159,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     if (cipherRes.kind !== 'ok') {
       if (cipherRes.kind === 'not-found') {
         delete res[id]
+        cipherStore.removeNotUpdate(id)
       } else {
         notifyApiError(cipherRes)
+        return
       }
     } else {
       const cipher = cipherRes.data
@@ -1114,11 +1172,13 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       res[cipher.id] = {
         ...cipherData
       }
+      cipherStore.removeNotUpdate(cipher.id)
 
       // Remove temporary cipher
       for (const _id of Object.keys(res)) {
         if (_id.startsWith('tmp__') && res[_id].name === cipher.name && res[_id].type === cipher.type ) {
           delete res[_id]
+          cipherStore.removeNotUpdate(_id)
           break
         }
       }
@@ -1140,8 +1200,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     if (folderRes.kind !== 'ok') {
       if (folderRes.kind === 'not-found') {
         delete res[id]
+        folderStore.removeNotUpdate(id)
       } else {
         notifyApiError(folderRes)
+        return
       }
     } else {
       const folder = folderRes.data
@@ -1151,11 +1213,13 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       res[folder.id] = {
         ...folderData
       }
+      folderStore.removeNotUpdate(folder.id)
 
       // Remove temporary cipher
       for (const _id of Object.keys(res)) {
         if (_id.startsWith('tmp__') && res[_id].name === folder.name) {
           delete res[_id]
+          folderStore.removeNotUpdate(_id)
           break
         }
       }
@@ -1172,6 +1236,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const data = {
     reloadCache,
     getSyncData,
+    syncOfflineData,
     syncAutofillData,
     getCiphers,
     getCipherById,

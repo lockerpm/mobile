@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleProp, ViewStyle, View } from 'react-native'
+import { StyleProp, ViewStyle, View, ActivityIndicator } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { Button, Text } from '../../../../components'
 import { useMixins } from '../../../../services/mixins'
@@ -14,6 +14,7 @@ export type SettingsItemProps = {
   action?: Function
   noBorder?: boolean
   disabled?: boolean
+  isLoading?: boolean
 }
 
 export const SettingsItem = (props: SettingsItemProps) => {
@@ -37,7 +38,9 @@ export const SettingsItem = (props: SettingsItemProps) => {
         style={{ color: props.color || color.textBlack }}
       />
       {
-        props.right || !props.noCaret && (
+        props.isLoading ? (
+          <ActivityIndicator size="small" color={color.primary} />
+        ) : props.right || !props.noCaret && (
           <FontAwesomeIcon
             name="angle-right"
             size={18}

@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View, Switch } from "react-native"
 import { Layout, Text, Header, Select } from "../../../../components"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../theme"
-import { useStores } from "../../../../models"
+import { AppTimeoutType, TimeoutActionType, useStores } from "../../../../models"
 import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
-import { PrimaryParamList } from "../../../../navigators/main-navigator"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { AutofillDataType, loadShared, saveShared } from "../../../../utils/keychain"
+import { IS_IOS } from "../../../../config/constants"
+import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
+import moment from 'moment'
 
 
 const SECTION_TITLE: TextStyle = {
@@ -18,14 +20,12 @@ const SECTION_TITLE: TextStyle = {
   marginBottom: 12,
 }
 
-type ScreenProp = RouteProp<PrimaryParamList, 'settings'>;
 
 export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
-  const { user, uiStore } = useStores()
+  const { user, uiStore, cipherStore } = useStores()
   const { notify, isBiometricAvailable, translate, color } = useMixins()
-  const route = useRoute<ScreenProp>()
-  const { fromIntro } = route.params
+  const { getSyncData } = useCipherDataMixins()
 
   // ----------------------- PARAMS -----------------------
 
@@ -61,11 +61,21 @@ export const SettingsScreen = observer(function SettingsScreen() {
   }
 
   const updateAutofillFaceIdSetting = async (enabled: boolean) => {
+    if (!IS_IOS) {
+      return
+    }
     const credentials = await loadShared()
     if (credentials && credentials.password) {
       const sharedData: AutofillDataType = JSON.parse(credentials.password)
       sharedData.faceIdEnabled = enabled
       await saveShared('autofill', JSON.stringify(sharedData))
+    }
+  }
+
+  const syncDataManually = async () => {
+    const res = await getSyncData()
+    if (res.kind === 'ok') {
+      notify('success', translate('success.sync_success'))
     }
   }
 
@@ -87,12 +97,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
       e.preventDefault()
       isBacking = true
-
-      if (fromIntro) {
-        navigation.navigate('mainTab', { screen: 'homeTab' })
-      } else {
-        navigation.goBack()
-      }
+      navigation.goBack()
     }
 
     navigation.addListener('beforeRemove', handleBack)
@@ -194,11 +199,11 @@ export const SettingsScreen = observer(function SettingsScreen() {
         },
         {
           label: translate('settings.on_screen_off'),
-          value: -1
+          value: AppTimeoutType.SCREEN_OFF
         },
         {
           label: translate('settings.on_app_close'),
-          value: 0
+          value: AppTimeoutType.APP_CLOSE
         }
       ]
     },
@@ -208,11 +213,11 @@ export const SettingsScreen = observer(function SettingsScreen() {
       options: [
         {
           label: translate('common.lock'),
-          value: 'lock'
+          value: TimeoutActionType.LOCK
         },
         {
           label: translate('common.logout'),
-          value: 'logout'
+          value: TimeoutActionType.LOGOUT
         }
       ]
     }
@@ -382,7 +387,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
 
       {/* Import/Export */}
       <Text
-        text={translate('settings.import_export').toUpperCase()}
+        text={translate('common.data').toUpperCase()}
         style={[SECTION_TITLE, {
           marginTop: 15,
         }]}
@@ -390,6 +395,18 @@ export const SettingsScreen = observer(function SettingsScreen() {
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background
       }]}>
+        {/* Sync */}
+        <SettingsItem
+          isLoading={cipherStore.isSynching}
+          disabled={uiStore.isOffline || cipherStore.isSynching}
+          name={translate('settings.sync_now')}
+          action={syncDataManually}
+          right={(
+            <Text text={moment(cipherStore.lastSync).fromNow()} />
+          )}
+        />
+        {/* Sync end */}
+
         {/* Import */}
         <SettingsItem
           name={translate('settings.import')}
