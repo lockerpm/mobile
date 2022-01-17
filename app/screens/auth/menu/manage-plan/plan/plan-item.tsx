@@ -1,26 +1,22 @@
 import React, { useState } from "react"
 import { useMixins } from "../../../../../services/mixins";
+import { PlanSnapshot } from "../../../../../models/plan/plan";
 import { View, StyleSheet, Text, TouchableOpacity} from "react-native"
 
 
-interface PlanDescription {
-    id: number;
-    label: string,
-    description: string,
-    price: string,
-    priceDescription: string,
-    features: string[]
-}
+
 
 interface Props {
     selected: number
-    plan: PlanDescription,
+    plan: PlanSnapshot,
+    features: string[],
     onSelect?(id): void;
 }
 
 const Plan: React.FC<Props> = ({
     selected,
     plan,
+    features,
     onSelect
 }) => {
 
@@ -31,20 +27,22 @@ const Plan: React.FC<Props> = ({
 
     const handleSelected = () => {
         onSelect(plan.id);
+        console.log(plan.id);
+        
     }
 
     return (
         <TouchableOpacity onPress={handleSelected} style={[styles.container, { borderColor: borderColor,}]}>
             <View style={styles.text}>
-                <Text style={styles.label}>{plan.label}</Text>
-                <Text style={styles.description}>{plan.description}</Text>
+                <Text style={styles.label}>{plan.name}</Text>
+                <Text style={styles.description}>{plan.alias}</Text>
                 <View style={styles.priceContainer}>
-                    <Text style={styles.price}>{plan.price}</Text>
-                    <Text style={[styles.description, { marginTop: 14 }]}>{plan.priceDescription}</Text>
+                    <Text style={styles.price}>{plan.price.usd}</Text>
+                    <Text style={[styles.description, { marginTop: 14 }]}>{plan.price.duration}</Text>
                 </View>
                 <View style={styles.featuresContainer}>
                     {
-                        plan.features.map((i) => {
+                        features.map((i) => {
                             return <Text key={i} style={styles.feature}> + {i}</Text>
                         })
                     }
