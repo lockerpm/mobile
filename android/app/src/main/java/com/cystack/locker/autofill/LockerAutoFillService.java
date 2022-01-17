@@ -51,31 +51,39 @@ public class LockerAutoFillService extends AutofillService {
             @NonNull CancellationSignal cancellationSignal,
             @NonNull FillCallback callback
     ) {
-        Log.d(TAG, "onFillRequest");
+        try {
+            Log.d(TAG, "onFillRequest");
 
-        List<FillContext> context = request.getFillContexts();
-        AssistStructure structure = context.get(context.size() - 1).getStructure();
+            List<FillContext> context = request.getFillContexts();
+            AssistStructure structure = context.get(context.size() - 1).getStructure();
 
-        // Parse the structure into fillable view IDs
-        // Parse the structure into fillable view IDs
-        StructureParser.Result parseResult = new StructureParser(structure).parse();
-        String domain = parseResult.webDomain.size() > 0 ? parseResult.webDomain.get(0) : "";
-
-        AutofillId[] emailIDs = toArray(parseResult.email);
-        AutofillId[] usernameIds = toArray(parseResult.username);
-        AutofillId[] passIds = toArray(parseResult.password);
+            // Parse the structure into fillable view IDs
+            StructureParser.Result parseResult = new StructureParser(structure).parse();
 
 
-        IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, emailIDs,
-                usernameIds, passIds, domain);
+            AutofillId[] emailIDs = toArray(parseResult.email);
+            AutofillId[] usernameIds = toArray(parseResult.username);
+            AutofillId[] passIds = toArray(parseResult.password);
 
-        RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.remote_locker_app);
+            if (emailIDs.length == 0 && usernameIds.length == 0 && passIds.length == 0)
+                callback.onSuccess(null);
+            else {
+                String domain = parseResult.webDomain.size() > 0 ? parseResult.webDomain.get(0) : "";
+                IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, emailIDs,
+                        usernameIds, passIds, domain);
 
-        FillResponse fillResponse = new FillResponse.Builder()
-                .addDataset(buildDataSetWithAuthen(emailIDs, usernameIds, passIds, remoteView, authentication))
-                .build();
+                RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.remote_locker_app);
 
-        callback.onSuccess(fillResponse);
+                FillResponse fillResponse = new FillResponse.Builder()
+                        .addDataset(buildDataSetWithAuthen(emailIDs, usernameIds, passIds, remoteView, authentication))
+                        .build();
+
+                callback.onSuccess(fillResponse);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+            callback.onFailure(e.toString());
+        }
     }
 
     public static Dataset buildDataSetWithAuthen(AutofillId[] emailIds, AutofillId[] usenameIds, AutofillId[] passwordIds, RemoteViews remoteView,IntentSender authentication){
