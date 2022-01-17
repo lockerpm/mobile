@@ -68,7 +68,7 @@ public class LockerAutoFillService extends AutofillService {
             if (emailIDs.length == 0 && usernameIds.length == 0 && passIds.length == 0)
                 callback.onSuccess(null);
             else {
-                String domain = parseResult.webDomain.size() > 0 ? parseResult.webDomain.get(0) : "";
+                String domain = parseResult.webDomain.size() > 0 ? parseResult.webDomain.get(0) : parseResult.title.get(0);
                 IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, emailIDs,
                         usernameIds, passIds, domain);
 
