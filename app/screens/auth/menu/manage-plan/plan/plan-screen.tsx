@@ -34,34 +34,12 @@ export const PlanScreen = observer(function PlanScreen() {
   // const {plans} = planStore
 
 
+  const planFeatures = {
+    "free" : ["Secure passwords and data", "Auto-fill on browsers and mobile devices", "Generate strong passwords and 2-factor authenticator", "Sync data between devices"],
+    "premium": ["Unlimited storage", "Data Breach Scanner", "Emergency access", "Share passwords"],
+    "family": ["Unlimited storage", "Data Breach Scanner", "Emergency access", "Share passwords"]
+  }
 
-
-  const plan_test = [
-    {
-      id: 0,
-      label: "free",
-      description: "Secure passwords and enjoy Locker’s essential features.",
-      price: "0 usd",
-      priceDescription: "/mo /1 member",
-      features: ["Secure passwords and data", "Auto-fill on browsers and mobile devices", "Generate strong passwords and 2-factor authenticator", "Sync data between devices"]
-    },
-    {
-      id: 1,
-      label: "premium",
-      description: "Enhance experiences with additional utility features.",
-      price: "5 usd",
-      priceDescription: "/mo /1 member",
-      features: ["Unlimited storage", "Data Breach Scanner", "Emergency access", "Share passwords"]
-    },
-    {
-      id: 2,
-      label: "family",
-      description: "Get the most out of Locker with unlimited storage",
-      price: "10 usd",
-      priceDescription: "/mo /6 members",
-      features: ["Unlimited storage", "Data Breach Scanner", "Emergency access", "Share passwords"]
-    }
-  ]
 
   return (
     <Layout
@@ -84,15 +62,15 @@ export const PlanScreen = observer(function PlanScreen() {
         <View style={styles.row}>
           {
             plans.map((i) => {
-              return <Text> {i.name}</Text>
+              return <Plan onSelect={setPlanIdSelected} selected={planIdSelected} plan={i} features={planFeatures[i.name.toLocaleLowerCase()]}  ></Plan>
             })
           }
 
 
 
-          <Plan onSelect={setPlanIdSelected} selected={planIdSelected} plan={plan_test[0]} ></Plan>
-          <Plan onSelect={setPlanIdSelected} selected={planIdSelected} plan={plan_test[1]} ></Plan>
-          <Plan onSelect={setPlanIdSelected} selected={planIdSelected} plan={plan_test[2]} ></Plan>
+          
+          {/* <Plan onSelect={setPlanIdSelected} selected={planIdSelected} plan={plan_test[1]} ></Plan>
+          <Plan onSelect={setPlanIdSelected} selected={planIdSelected} plan={plan_test[2]} ></Plan> */}
 
           {/* {Platform.OS === 'android' && planIdSelected !== 0 &&(
             <GooglePayScreen  planId={planIdSelected} />

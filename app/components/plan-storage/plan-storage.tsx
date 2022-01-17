@@ -20,8 +20,11 @@ export const PlanStorage = function PlanStorage(props: PlanStorageProps) {
     const { translate, color } = useMixins()
     return (
         <View style={[{ width: '100%' }, style]}>
-            <Text>{title}</Text>
-            <Text>{value}/{limits}</Text>
+            <View style={{flexDirection: "row", justifyContent:"space-between"}}>
+                <Text>{title}</Text>
+                <Text>{value}/{limits}</Text>
+            </View>
+
             <ProgressBar
                 height={8}
                 containerStyle={{
