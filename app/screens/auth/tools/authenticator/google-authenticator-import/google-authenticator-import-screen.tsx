@@ -8,6 +8,7 @@ import { CipherType } from "../../../../../../core/enums"
 import { decodeGoogleAuthenticatorImport, beautifyName } from "../../../../../utils/totp"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers";
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data";
+import { Logger } from "../../../../../utils/logger";
 
 
 export const GoogleAuthenticatorImportScreen = function GoogleAuthenticatorImportScreen() {
@@ -44,7 +45,7 @@ export const GoogleAuthenticatorImportScreen = function GoogleAuthenticatorImpor
         folderRelationships: []
       })
     } catch (e) {
-      __DEV__ && console.log(e)
+      Logger.error(e)
       notify('error', translate('authenticator.invalid_qr'))
     }
     setIsLoading(false)

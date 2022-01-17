@@ -13,6 +13,7 @@ import { Utils } from "../../../../../core/misc/utils"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
+import { Logger } from "../../../../utils/logger"
 const DOMParser = require('react-native-html-parser').DOMParser
 
 
@@ -90,7 +91,7 @@ export const ImportScreen = observer(function ImportScreen() {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
       } else {
-        __DEV__ && console.log(err)
+        Logger.error(err)
         notify('error', translate('error.something_went_wrong'))
       }
     }
@@ -161,7 +162,7 @@ export const ImportScreen = observer(function ImportScreen() {
         notify('error', translate('import.invalid_data_format'))
       }
     } catch(e) {
-      __DEV__ && console.log(e)
+      Logger.error(e)
       notify('error', translate('error.something_went_wrong'))
     }
 

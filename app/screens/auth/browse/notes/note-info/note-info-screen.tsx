@@ -19,6 +19,8 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
+  const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
+
   const [showAction, setShowAction] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -37,6 +39,11 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
             <Button
               preset="link"
               onPress={() => setShowAction(true)}
+              style={{ 
+                height: 35,
+                alignItems: 'center',
+                paddingLeft: 10
+              }}
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"
@@ -83,7 +90,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
           >
             {selectedCipher.name}
             {
-              cipherStore.notSynchedCiphers.includes(selectedCipher.id) && (
+              notSync && (
                 <View style={{ paddingLeft: 10 }}>
                   <MaterialCommunityIconsIcon
                     name="cloud-off-outline"

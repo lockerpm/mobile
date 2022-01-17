@@ -31,7 +31,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
   // ------------------ COMPUTED --------------------
 
   const passwordStrength = getPasswordStrength(selectedCipher.login.password)
-
+  const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
   // ------------------ RENDER --------------------
 
@@ -50,6 +50,11 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
             <Button
               preset="link"
               onPress={() => setShowAction(true)}
+              style={{ 
+                height: 35,
+                alignItems: 'center',
+                paddingLeft: 10
+              }}
             >
               <IoniconsIcon
                 name="ellipsis-horizontal"
@@ -104,7 +109,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           >
             {selectedCipher.name}
             {
-              cipherStore.notSynchedCiphers.includes(selectedCipher.id) && (
+              notSync && (
                 <View style={{ paddingLeft: 10 }}>
                   <MaterialCommunityIconsIcon
                     name="cloud-off-outline"

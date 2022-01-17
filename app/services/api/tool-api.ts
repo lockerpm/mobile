@@ -1,4 +1,5 @@
 import { ApiResponse } from "apisauce"
+import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
 import { CheckBreachResult } from "./api.types"
@@ -11,8 +12,10 @@ export class ToolApi {
   }
 
   // Check email breaches
-  async checkBreaches(email: string): Promise<CheckBreachResult> {
+  async checkBreaches(token: string, email: string): Promise<CheckBreachResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/tools/breach', { email })
       // the typical ways to die when calling an api
@@ -22,7 +25,7 @@ export class ToolApi {
       }
       return { kind: "ok", data: response.data }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }

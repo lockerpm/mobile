@@ -1,6 +1,7 @@
 import { ApiResponse } from "apisauce"
 import { CollectionRequest } from "../../../core/models/request/collectionRequest"
 import { CollectionResponse } from "../../../core/models/response/collectionResponse"
+import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
 import { EmptyResult, PostCollectionResult } from "./api.types"
@@ -13,8 +14,10 @@ export class CollectionApi {
   }
 
   // Create collection
-  async postCollection(teamId: string, data: CollectionRequest): Promise<PostCollectionResult> {
+  async postCollection(token: string, teamId: string, data: CollectionRequest): Promise<PostCollectionResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/teams/${teamId}/folders`, data)
       // the typical ways to die when calling an api
@@ -25,14 +28,16 @@ export class CollectionApi {
       const res = new CollectionResponse(response.data)
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
 
   // Update collection
-  async putCollection(id: string, teamId: string, data: CollectionRequest): Promise<PostCollectionResult> {
+  async putCollection(token: string, id: string, teamId: string, data: CollectionRequest): Promise<PostCollectionResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/teams/${teamId}/folders/${id}`, data)
       // the typical ways to die when calling an api
@@ -43,14 +48,16 @@ export class CollectionApi {
       const res = new CollectionResponse(response.data)
       return { kind: "ok", data: res }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }
 
   // Delete collection
-  async deleteCollection(id: string, teamId: string): Promise<EmptyResult> {
+  async deleteCollection(token: string, id: string, teamId: string): Promise<EmptyResult> {
     try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/teams/${teamId}/folders/${id}/delete`)
       // the typical ways to die when calling an api
@@ -60,7 +67,7 @@ export class CollectionApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      __DEV__ && console.log(e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }

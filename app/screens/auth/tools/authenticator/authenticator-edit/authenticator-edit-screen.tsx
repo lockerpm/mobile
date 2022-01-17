@@ -110,6 +110,10 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
               preset="link"
               text={translate('common.save')}
               onPress={handleSave}
+              style={{ 
+                height: 35,
+                alignItems: 'center'
+              }}
               textStyle={{
                 fontSize: fontSize.p
               }}

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/core"
 import { useMixins } from "../../../../services/mixins"
@@ -6,11 +6,14 @@ import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../co
 import { SortAction } from "../../home/all-item/sort-action"
 import { AuthenticatorAddAction } from "./authenticator-add-action"
 import { OtpList } from "./otp-list"
+import { useStores } from "../../../../models"
+import { BackHandler } from "react-native"
 
 
 export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
   const { translate } = useMixins()
   const navigation = useNavigation()
+  const { uiStore } = useStores()
 
   // -------------------- PARAMS ----------------------
 
@@ -27,6 +30,24 @@ export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
 
+  // -------------------- EFFECT ----------------------
+
+  // Close select before leave
+  useEffect(() => {
+    uiStore.setIsSelecting(isSelecting)
+    const checkSelectBeforeLeaving = () => {
+      if (isSelecting) {
+        setIsSelecting(false)
+        setSelectedItems([])
+        return true
+      }
+      return false
+    }
+    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    }
+  }, [isSelecting])
 
   // -------------------- RENDER ----------------------
 

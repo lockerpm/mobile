@@ -4,7 +4,7 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import NetInfo from "@react-native-community/netinfo"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
@@ -13,13 +13,12 @@ import {
   IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, 
   CreateMasterPasswordScreen, ForgotPasswordScreen, CountrySelectorScreen
 } from "../screens"
-import { fontSize } from "../theme"
 import { useStores } from "../models"
-import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import { View } from "react-native"
+import Toast, { BaseToastProps } from 'react-native-toast-message'
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../services/mixins"
+import { ErrorToast, SuccessToast } from "./helpers/toast"
+import { Logger } from "../utils/logger"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -53,22 +52,30 @@ const RootStack = observer(() => {
   const { uiStore } = useStores()
 
   // Prevent store from being called too soon and break the initialization
+  const [appIsReady, setAppIsReady] = useState(false)
   let removeNetInfoSubscription = () => {}
 
   useEffect(() => {
     // Check network (delay to protect the store initialization)
-    setTimeout(() => {
-      removeNetInfoSubscription = NetInfo.addEventListener((state) => {
-        const offline = !state.isInternetReachable
-        __DEV__ && console.log(offline ? 'OFFLINE' : 'ONLINE')
-        uiStore.setIsOffline(offline)
-      })
-    }, 2000)
+    if (!appIsReady) {
+      setTimeout(() => {
+        setAppIsReady(true)
+      }, 2000)
+      return () => {}
+    }
+    
+    removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+      const offline = !state.isInternetReachable
+      Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
+      uiStore.setIsOffline(offline)
+    })
 
     return () => {
       removeNetInfoSubscription()
     }
-  }, [])
+  }, [appIsReady])
+
+  // -------------------- RENDER ----------------------
 
   return (
     <Stack.Navigator
@@ -98,75 +105,7 @@ const RootStack = observer(() => {
   )
 })
 
-const SuccessToast = (props: BaseToastProps) => {
-  const { color, isDark } = useMixins()
 
-  return (
-    <BaseToast
-      {...props}
-      style={{ 
-        borderLeftColor: color.primary,
-        backgroundColor: isDark ? color.block : color.background
-      }}
-      text2Style={{
-        color: color.primary,
-        fontSize: fontSize.small
-      }}
-      text2NumberOfLines={0}
-      contentContainerStyle={{
-        paddingLeft: 10
-      }}
-      renderLeadingIcon={() => (
-        <View style={{
-          height: '100%',
-          justifyContent: 'center',
-          marginLeft: 15
-        }}>
-          <Ionicons
-            name="checkmark-circle-outline"
-            size={22}
-            color={color.primary}
-          />
-        </View>
-      )}
-    />
-  )
-}
-
-const ErrorToast = (props: BaseToastProps) => {
-  const { color, isDark } = useMixins()
-
-  return (
-    <BaseToast
-      {...props}
-      style={{ 
-        borderLeftColor: color.error,
-        backgroundColor: isDark ? color.block : color.background
-      }}
-      text2Style={{
-        color: color.error,
-        fontSize: fontSize.small
-      }}
-      text2NumberOfLines={0}
-      contentContainerStyle={{
-        paddingLeft: 10
-      }}
-      renderLeadingIcon={() => (
-        <View style={{
-          height: '100%',
-          justifyContent: 'center',
-          marginLeft: 15
-        }}>
-          <Ionicons
-            name="close-circle-outline"
-            size={22}
-            color={color.error}
-          />
-        </View>
-      )}
-    />
-  )
-}
 
 export const RootNavigator = React.forwardRef<
   NavigationContainerRef,

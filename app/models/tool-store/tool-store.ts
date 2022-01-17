@@ -9,6 +9,8 @@ import { omit } from "ramda"
 export const ToolStoreModel = types
   .model("ToolStore")
   .props({
+    apiToken: types.maybeNull(types.string),
+
     // Data breach scanner
     breachedEmail: types.maybeNull(types.string),
     breaches: types.array(types.frozen()),
@@ -28,6 +30,10 @@ export const ToolStoreModel = types
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setApiToken: (token: string) => {
+      self.apiToken = token
+    },
+
     // ----------------- DATA -------------------
 
     setBreachedEmail: (email: string) => {
@@ -71,6 +77,7 @@ export const ToolStoreModel = types
     },
 
     clearStore: () => {
+      self.apiToken = null
       self.breachedEmail = null
       self.breaches = cast([])
       self.selectedBreach = null
@@ -83,11 +90,23 @@ export const ToolStoreModel = types
       self.authenticatorOrder = cast([])
     },
 
+    lock: () => {
+      self.breachedEmail = null
+      self.breaches = cast([])
+      self.selectedBreach = null
+      self.weakPasswords = cast([])
+      self.reusedPasswords = cast([])
+      self.exposedPasswords = cast([])
+      self.passwordStrengthMap = null
+      self.passwordUseMap = null
+      self.exposedPasswordMap = null
+    },
+
     // ----------------- API -------------------
 
     checkBreaches: async (email: string) => {
       const toolApi = new ToolApi(self.environment.api)
-      const res = await toolApi.checkBreaches(email)
+      const res = await toolApi.checkBreaches(self.apiToken, email)
       return res
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

@@ -23,12 +23,13 @@ import { AutofillServiceScreen } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
 import { useMixins } from "../services/mixins"
 import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../models"
+import { AppTimeoutType, TimeoutActionType, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { useCipherDataMixins } from "../services/mixins/cipher/data"
 import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
-import { IS_IOS } from "../config/constants"
+import { IS_IOS, WS_URL } from "../config/constants"
+import { Logger } from "../utils/logger"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -90,9 +91,7 @@ export type PrimaryParamList = {
     collectionId?: string | null
     organizationId?: string | null
   }
-  settings: {
-    fromIntro?: boolean
-  }
+  settings: undefined
   changeMasterPassword: undefined
   help: undefined
   autofillService: undefined
@@ -110,35 +109,44 @@ export const MainNavigator = observer(function MainNavigator() {
   const { notify, translate } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { 
-    getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData, syncSingleCipher, syncSingleFolder
+    getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData, 
+    syncSingleCipher, syncSingleFolder, syncOfflineData
   } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const { uiStore, user, cipherStore } = useStores()
 
-  let appIsActive = true
-  let isSynchingAutofill = false
+  // ------------------ PARAMS --------------------
+
+  let appIsActive = true      // Cache this to compare to old state
+  let timeout = null
   const [socket, setSocket] = useState(null)
-  const [appIsReady, setAppIsReady] = useState(false)
 
   // ------------------ METHODS --------------------
 
   // Sync
   const handleSync = async () => {
+    // Sync offline data
+    await syncOfflineData()
+    
+    // Check if sync is needed
     const lastUpdateRes = await user.getLastUpdate()
-    if (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= user.lastSync) {
+    if (
+      lastUpdateRes.kind === 'unauthorized' ||
+      (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= cipherStore.lastSync)
+    ) {
       return
     }
 
+    // Send request
     const syncRes = await getSyncData()
-    if (syncRes.kind === 'ok') {
-      notify('success', translate('success.sync_success'))
-      user.setLastSync(Date.now())
-    } else {
-      if (syncRes.kind !== 'synching') {
+    if (syncRes.kind !== 'ok') {
+      if (syncRes.kind !== 'synching' && syncRes.kind === 'error') {
         notify('error', translate('error.sync_failed'))
       }
+      return
     }
 
+    // Load data
     await Promise.all([
       loadFolders(),
       loadCollections()
@@ -147,7 +155,7 @@ export const MainNavigator = observer(function MainNavigator() {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
-    user.loadTeams(),
+    user.loadTeams()
     user.loadPlan()
     loadPasswordsHealth()
   }
@@ -162,7 +170,7 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // App screen lock trigger
   const _handleAppStateChange = async (nextAppState: string) => {
-    __DEV__ && console.log(nextAppState)
+    Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
     if (nextAppState === 'background') {
@@ -171,18 +179,12 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     // Sync autofill data
-    if (IS_IOS && !appIsActive && !isSynchingAutofill) {
-      isSynchingAutofill = true
-      syncAutofillData().then(() => {
-        isSynchingAutofill = false
-      }).catch(e => {
-        __DEV__ && console.log(e)
-        isSynchingAutofill = false
-      })
+    if (IS_IOS && !appIsActive) {
+      syncAutofillData()
     }
 
     // Active
-    if (!appIsActive && user.appTimeout && user.appTimeout === -1) {
+    if (!appIsActive && user.appTimeout === AppTimeoutType.SCREEN_OFF) {
       appIsActive = true
 
       // Dont lock if user just return from overlay task
@@ -192,7 +194,7 @@ export const MainNavigator = observer(function MainNavigator() {
       }
 
       // Check user settings to lock
-      if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
+      if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
         await logout()
         navigation.navigate('onBoarding')
       } else {
@@ -205,7 +207,7 @@ export const MainNavigator = observer(function MainNavigator() {
   // App inactive trigger
   const handleInactive = async (isActive : boolean) => {
     if (!isActive && user.appTimeout && user.appTimeout > 0) {
-      if (user.appTimeoutAction && user.appTimeoutAction === 'logout') {
+      if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
         await logout()
         navigation.navigate('onBoarding')
       } else {
@@ -216,16 +218,15 @@ export const MainNavigator = observer(function MainNavigator() {
   }
 
   // Web socket
-  const wsUrl = `wss://api.cystack.net/ws/cystack_platform/pm/sync?token=${user.token}`
   const generateSocket = () => {
-    const ws = new WebSocket(wsUrl)
+    const ws = new WebSocket(`${WS_URL}?token=${user.apiToken}`)
     ws.onopen = () => {
-      __DEV__ && console.log('SOCKET OPEN')
+      Logger.debug('SOCKET OPEN')
     }
 
     ws.onmessage = async (e) => {
       const data = JSON.parse(e.data)
-      __DEV__ && console.log('WEBSOCKET EVENT: ' + data.event)
+      Logger.debug('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
         case 'sync':
           switch (data.type) {
@@ -252,17 +253,23 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     ws.onerror = (e) => {
-      __DEV__ && console.log(`SOCKET ERROR: ${JSON.stringify(e)}`)
-      __DEV__ && console.log('SOCKET RECONNECTING')
-      setTimeout(() => {
+      Logger.debug(`SOCKET ERROR: ${JSON.stringify(e)}`)
+      timeout = setTimeout(async () => {
         if (ws.readyState === WebSocket.CLOSED && !uiStore.isOffline) {
+          // WebSocket.CLOSED     = 3
+          // WebSocket.CLOSING    = 2
+          // WebSocket.CONNECTING = 0
+          // WebSocket.OPEN       = 1
+
+          // Manually check for update
+          await handleSync()
           setSocket(generateSocket())
         }
-      }, 1000)
+      }, 10000)
     }
 
     ws.onclose = (e) => {
-      __DEV__ && console.log(`SOCKET CLOSE: ${JSON.stringify(e)}`);
+      Logger.debug(`SOCKET CLOSE: ${JSON.stringify(e)}`);
     }
 
     return ws
@@ -270,35 +277,35 @@ export const MainNavigator = observer(function MainNavigator() {
 
   // ------------------ EFFECT --------------------
 
-  // Life cycle
+  // Check device screen on/off
   useEffect(() => {
-    // Check device screen on/off
     AppState.addEventListener("change", _handleAppStateChange)
-
-    // Connect web socket
-    !appIsReady && setSocket(generateSocket())
-
-    setAppIsReady(true)
-
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
-      socket && socket.close()
-    };
-  }, []);
+      clearTimeout(timeout)
+    }
+  }, [timeout])
 
-  // Check network to connect socket
+  // Web socket connection
   useEffect(() => {
-    if (uiStore.isOffline) {
-      socket && socket.close()
-      setSocket(null)
-    } else {
-      if (appIsReady) {
-        setSocket(generateSocket())
-        handleSync()
-        handleInvitationSync()
+    if (!uiStore.isOffline && !socket && user.isLoggedInPw) {
+      setSocket(generateSocket())
+    }
+    return () => {
+      if (uiStore.isOffline || !user.isLoggedInPw) {
+        socket && socket.close()
+        setSocket(null)
       }
     }
-  }, [uiStore.isOffline])
+  }, [!!socket, uiStore.isOffline, user.isLoggedInPw])
+
+  // Check network to sync
+  useEffect(() => {
+    if (!uiStore.isOffline && user.isLoggedInPw) {
+      handleSync()
+      handleInvitationSync()
+    }
+  }, [uiStore.isOffline, user.isLoggedInPw])
 
   // ------------------ RENDER --------------------
   
@@ -346,7 +353,7 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
 
-        <Stack.Screen name="settings" component={SettingsScreen} initialParams={{ fromIntro: false }} />
+        <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />
         <Stack.Screen name="autofillService" component={AutofillServiceScreen} />

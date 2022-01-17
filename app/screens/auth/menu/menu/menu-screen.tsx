@@ -95,7 +95,6 @@ export const MenuScreen = observer(function MenuScreen() {
         setIsLoading(true)
         await lock()
         setIsLoading(false)
-        console.log('user lock -> lock')
         navigation.navigate('lock')
       }
     },

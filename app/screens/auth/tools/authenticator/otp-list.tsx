@@ -53,11 +53,11 @@ export const OtpList = observer(function OtpList(props: Props) {
   const [ciphers, setCiphers] = useState([])
   const [otps, setOtps] = useState([])
 
-  // ------------------------ WATCHERS ----------------------------
+  // ------------------------ EFFECT ----------------------------
 
   useEffect(() => {
     loadData()
-  }, [searchText, cipherStore.lastSync, cipherStore.lastOfflineSync, sortList])
+  }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
 
   // ------------------------ METHODS ----------------------------
 
@@ -80,7 +80,7 @@ export const OtpList = observer(function OtpList(props: Props) {
     let res = searchRes.map((c: CipherView) => {
       const data = {
         ...c,
-        notSync: cipherStore.notSynchedCiphers.includes(c.id)
+        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id)
       }
       return data
     })

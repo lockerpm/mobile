@@ -13,12 +13,15 @@ import { Checkbox } from "react-native-ui-lib"
 import countries from '../../../common/countries.json'
 import { AccessToken, LoginManager } from "react-native-fbsdk-next"
 import { authorize } from "react-native-app-auth"
+import { Logger } from "../../../utils/logger"
+import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 
 
 export const SignupScreen = observer(function SignupScreen() {
   const { user, uiStore } = useStores()
   const navigation = useNavigation()
   const { translate, notify, notifyApiError } = useMixins()
+  const { setApiTokens } = useCipherAuthenticationMixins()
 
   // ---------------- PARAMS ---------------------
 
@@ -48,7 +51,7 @@ export const SignupScreen = observer(function SignupScreen() {
           await handleSocialLogin('google', tokens.accessToken)
         } catch (e) {
           setIsLoading(false)
-          __DEV__ && console.log(e)
+          Logger.error(e)
           notify('error', translate('error.something_went_wrong'))
         }
       }
@@ -71,7 +74,7 @@ export const SignupScreen = observer(function SignupScreen() {
           await handleSocialLogin('facebook', res.accessToken)
         } catch (e) {
           setIsLoading(false)
-          __DEV__ && console.log(e)
+          Logger.error(e)
           notify('error', translate('error.something_went_wrong'))
         }
       }
@@ -90,7 +93,7 @@ export const SignupScreen = observer(function SignupScreen() {
           await handleSocialLogin('github', res.accessToken)
         } catch (e) {
           setIsLoading(false)
-          __DEV__ && console.log(e)
+          Logger.error(e)
           notify('error', translate('error.something_went_wrong'))
         }
       }
@@ -133,6 +136,8 @@ export const SignupScreen = observer(function SignupScreen() {
       notifyApiError(loginRes)
       notify('error', translate('error.login_failed'))
     } else {
+      // @ts-ignore
+      setApiTokens(loginRes.data?.access_token)
       onLoggedIn()
     }
   }

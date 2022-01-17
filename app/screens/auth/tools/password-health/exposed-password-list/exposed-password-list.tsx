@@ -19,7 +19,6 @@ export const ExposedPasswordList = observer(function ExposedPasswordList() {
   // -------------- COMPUTED ------------------
 
   const listData = toolStore.exposedPasswords.map((c: CipherView) => {
-    console.log(toolStore.exposedPasswordMap)
     return {
       ...c,
       logo: BROWSE_ITEMS.password.icon,

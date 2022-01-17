@@ -11,21 +11,39 @@ import { withEnvironment } from "../extensions/with-environment"
 export const FolderStoreModel = types
   .model("FolderStore")
   .props({
+    apiToken: types.maybeNull(types.string),
     folders: types.array(types.frozen()),
-    notSynchedFolders: types.array(types.string),
+    lastUpdate: types.maybeNull(types.number),
+    notSynchedFolders: types.array(types.string),   // Create in offline mode
+    notUpdatedFolders: types.array(types.string),   // Create in online mode but somehow not update yet
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setApiToken: (token: string) => {
+      self.apiToken = token
+    },
+
     // ----------------- DATA -------------------
 
     setFolders: (folders: FolderView[]) => {
       self.folders = cast(folders)
     },
 
+    setLastUpdate: () => {
+      self.lastUpdate = Date.now()
+    },
+
     clearStore: () => {
+      self.apiToken = null
       self.folders = cast([])
+      self.lastUpdate = null
       self.notSynchedFolders = cast([])
+      self.notUpdatedFolders = cast([])
+    },
+
+    lock: () => {
+      self.folders = cast([])
     },
 
     addNotSync: (id: string) => {
@@ -44,29 +62,45 @@ export const FolderStoreModel = types
       self.notSynchedFolders = cast([])
     },
 
+    addNotUpdate: (id: string) => {
+      if (!self.notUpdatedFolders.includes(id)) {
+        self.notUpdatedFolders.push(id)
+      }
+    },
+
+    removeNotUpdate: (id: string) => {
+      if (self.notUpdatedFolders.includes(id)) {
+        self.notUpdatedFolders = cast(self.notUpdatedFolders.filter(i => i !== id))
+      }
+    },
+
+    clearNotUpdate: () => {
+      self.notUpdatedFolders = cast([])
+    },
+
     // ----------------- CRUD -------------------
 
     getFolder: async (id: string) => {
       const folderApi = new FolderApi(self.environment.api)
-      const res = await folderApi.getFolder(id)
+      const res = await folderApi.getFolder(self.apiToken, id)
       return res
     },
 
     createFolder: async (data: FolderRequest) => {
       const folderApi = new FolderApi(self.environment.api)
-      const res = await folderApi.postFolder(data)
+      const res = await folderApi.postFolder(self.apiToken, data)
       return res
     },
 
     updateFolder: async (id: string, data: FolderRequest) => {
       const folderApi = new FolderApi(self.environment.api)
-      const res = await folderApi.putFolder(id, data)
+      const res = await folderApi.putFolder(self.apiToken, id, data)
       return res
     },
 
     deleteFolder: async (id: string) => {
       const folderApi = new FolderApi(self.environment.api)
-      const res = await folderApi.deleteFolder(id)
+      const res = await folderApi.deleteFolder(self.apiToken, id)
       return res
     },
   }))

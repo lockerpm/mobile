@@ -30,7 +30,7 @@ import com.cystack.locker.MainActivity;
 import com.facebook.react.bridge.ReactApplicationContext;
 
 import com.cystack.locker.LockerAutofillClient;
-
+import com.cystack.locker.R;
 
 @TargetApi(Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
@@ -51,40 +51,58 @@ public class LockerAutoFillService extends AutofillService {
             @NonNull CancellationSignal cancellationSignal,
             @NonNull FillCallback callback
     ) {
-        Log.d(TAG, "onFillRequest");
+        try {
+            Log.d(TAG, "onFillRequest");
 
-        List<FillContext> context = request.getFillContexts();
-        AssistStructure structure = context.get(context.size() - 1).getStructure();
+            List<FillContext> context = request.getFillContexts();
+            AssistStructure structure = context.get(context.size() - 1).getStructure();
 
-        // Parse the structure into fillable view IDs
-        StructureParser.Result parseResult = new StructureParser(structure).parse();
-
-        AutofillId[] emailIDs = toArray(parseResult.email);
-        AutofillId[] usernameIds = toArray(parseResult.username);
-        AutofillId[] passIds = toArray(parseResult.password);
+            // Parse the structure into fillable view IDs
+            StructureParser.Result parseResult = new StructureParser(structure).parse();
 
 
+            AutofillId[] emailIDs = toArray(parseResult.email);
+            AutofillId[] usernameIds = toArray(parseResult.username);
+            AutofillId[] passIds = toArray(parseResult.password);
 
+            if (emailIDs.length == 0 && usernameIds.length == 0 && passIds.length == 0)
+                callback.onSuccess(null);
+            else {
+                String domain = parseResult.webDomain.size() > 0 ? parseResult.webDomain.get(0) : "";
+                IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, emailIDs,
+                        usernameIds, passIds, domain);
 
-        IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, emailIDs,
-                usernameIds, passIds, parseResult.webDomain.get(0));
+                RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.remote_locker_app);
 
-        // Add the locker autofill option
-        RemoteViews remoteView = new RemoteViews(getPackageName(), android.R.layout.simple_list_item_1);
-        remoteView.setTextViewText(android.R.id.text1, "Locker..");
+                FillResponse fillResponse = new FillResponse.Builder()
+                        .addDataset(buildDataSetWithAuthen(emailIDs, usernameIds, passIds, remoteView, authentication))
+                        .build();
 
-        FillResponse fillResponse = new FillResponse.Builder()
-                .addDataset(new Dataset.Builder()
-                        // The values in the dataset are replaced by the actual
-                        // data once the user provides the CVC.
-                        .setValue(emailIDs[0], AutofillValue.forText("asdasd"), remoteView)
-                        .setValue(passIds[0], AutofillValue.forText("asdasd"), remoteView)
-                        .setAuthentication(authentication)
-                        .build())
-                .build();
-
-        callback.onSuccess(fillResponse);
+                callback.onSuccess(fillResponse);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+            callback.onFailure(e.toString());
+        }
     }
+
+    public static Dataset buildDataSetWithAuthen(AutofillId[] emailIds, AutofillId[] usenameIds, AutofillId[] passwordIds, RemoteViews remoteView,IntentSender authentication){
+        Dataset.Builder builder = new Dataset.Builder();
+
+        for(AutofillId id: emailIds){
+            builder.setValue(id, AutofillValue.forText("locker"), remoteView);
+        }
+        for(AutofillId id: usenameIds){
+            builder.setValue(id, null, remoteView);
+        }
+        for(AutofillId id: passwordIds){
+            builder.setValue(id, null, remoteView);
+        }
+        builder.setAuthentication(authentication);
+
+        return builder.build();
+    }
+
 
     @Override
     public void onSaveRequest(@NonNull SaveRequest request, @NonNull SaveCallback callback) {
