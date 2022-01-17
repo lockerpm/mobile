@@ -50,7 +50,8 @@ export const MenuScreen = observer(function MenuScreen() {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
       action: () => {
-        Linking.openURL(MANAGE_PLAN_URL)
+        // Linking.openURL(MANAGE_PLAN_URL)
+        navigation.navigate('manage__plan')
       }
     },
     // {
@@ -119,6 +120,7 @@ export const MenuScreen = observer(function MenuScreen() {
     paddingHorizontal: 14,
   }
 
+  console.log(user.plan)
   return (
     <Layout
       borderBottom

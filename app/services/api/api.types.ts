@@ -1,5 +1,6 @@
 import { GeneralApiProblem } from "./api-problem"
 import { UserSnapshot } from "../../models/user/user"
+import { PlanSnapshot } from "../../models/plan/plan"
 import { DeviceType } from "../../../core/enums"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { FolderResponse } from "../../../core/models/response/folderResponse"
@@ -94,11 +95,10 @@ export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | Ge
 
 export type GetPlanResult = {
     kind: 'ok'
-    data: {
-        name: string,
-        alias: string
-    }
+    data: PlanSnapshot[],
 } | GeneralApiProblem
+
+
 
 export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
 export type ResetPasswordResult = { kind: "ok"; success: boolean } | GeneralApiProblem
