@@ -13,7 +13,14 @@ export const PlanStoreModel = types
     plans: types.optional(types.array(PlanModel), [])
   })
   .extend(withEnvironment)
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({
+    getPlansById(id: number) {
+      return self.plans.find((e) => {
+        if (e.id === id)
+          return true;
+      });
+    }
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     savePlans: (planSnapshots: PlanSnapshot[]) => {
       const planModels: Plan[] = planSnapshots.map((c) => PlanModel.create(c))
