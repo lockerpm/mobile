@@ -62,7 +62,7 @@ export const PlanScreen = observer(function PlanScreen() {
         <View style={styles.row}>
           {
             plans.map((i) => {
-              return <Plan onSelect={setPlanIdSelected} selected={planIdSelected} plan={i} features={planFeatures[i.name.toLocaleLowerCase()]}  ></Plan>
+              return <Plan key={i.id} onSelect={setPlanIdSelected} selected={planIdSelected} plan={i} features={planFeatures[i.name.toLocaleLowerCase()]}  ></Plan>
             })
           }
 

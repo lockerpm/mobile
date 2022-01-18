@@ -5,6 +5,7 @@ import { UserApi } from "../../services/api/user-api"
 import { save, storageKeys } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
+import { number } from "mobx-state-tree/dist/internal"
 
 
 export enum AppTimeoutType {
@@ -374,7 +375,14 @@ export const UserModel = types
         device_identifier: DeviceInfo.getUniqueId()
       })
       return res
+    },
+
+    getBillingDocuments: async (page: number) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getBillingDocuments(self.apiToken, page)
+      return res
     }
+
   }))
 
 /**

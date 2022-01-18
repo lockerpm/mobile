@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
-import { View, StyleSheet, ScrollView, ViewStyle } from "react-native"
+import { View, StyleSheet, ScrollView, ViewStyle, Alert } from "react-native"
 import { Layout, Header, Text, Button, PlanStorage } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { commonStyles } from "../../../../theme"
+// import { commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
@@ -17,27 +17,48 @@ import LightingIcon from './lighting.svg'
 export const ManagePlanScreen = observer(function ManagePlanScreen() {
 
   const navigation = useNavigation()
-  const { translate, notify, color, isDark } = useMixins()
-  const { user, uiStore } = useStores()
+  const { translate, color, isDark } = useMixins()
+  const { user } = useStores()
 
-  const backgroundColor = isDark ? color.background : color.block
+  // const backgroundColor = isDark ? color.background : color.block
 
   const [isLoading, setIsLoading] = useState(false)
+  const [tableData, setTableData] = useState([])
+
+
+  const fetchInvoices = async () => {
+    const res =  await user.getBillingDocuments(1)
+    if (res.kind === "ok") {
+      setTable(res.data)
+    }
+  }
+
+
+  useEffect(() => {
+    setTimeout(fetchInvoices, 1)
+  }, [])
 
 
   const tableHead = ['ID', 'Created date', 'Plan']
-  const tableData = [
-    ['1', '2', '3'],
-    ['a', 'b', 'c'],
-    ['1', '2', '3'],
-    ['a', 'b', 'c']
-  ]
+  const setTable = (data: any) => {
+    const tableData = []
+    data.map((r)=> {
+      const row = [r.id, r.created_time, r.duration, r.total_price]
+      console.log(row)
+      tableData.push(row)
+    })
+    setTableData(tableData)
+  }
+
+  
+ 
   const CONTAINER: ViewStyle = {
     backgroundColor: isDark ? color.block : color.background,
     borderRadius: 10,
     margin: 10,
     paddingHorizontal: 14,
   }
+
   return (
     <Layout
       isContentOverlayLoading={isLoading}
@@ -73,26 +94,53 @@ export const ManagePlanScreen = observer(function ManagePlanScreen() {
             }}>
               {user.plan.name}
             </Text>
-            <Button onPress={() => navigation.navigate("plan")}>
-              <LightingIcon />
-              <Text style={{ color: "white", paddingLeft: 10, paddingRight: 10 }}>Buy Premium </Text>
-            </Button>
+
+            {
+              user.plan.name === "Free" && (
+                <Button onPress={() => navigation.navigate("plan")}>
+                  <LightingIcon />
+                  <Text style={{ color: "white", paddingLeft: 10, paddingRight: 10 }}>Buy Premium </Text>
+                </Button>
+              )
+            }
+
+            {
+              user.plan.name === "Premium" && (
+                <Button style={{ backgroundColor: "#DBDFE140" }} onPress={() => Alert.alert("Cancel subcription", "notting")}>
+                  <Text style={{ paddingLeft: 10, paddingRight: 10, color: "#072245"  }}>Cancel subcription </Text>
+                </Button>
+              )
+            }
+
           </View>
-          <View style={{ borderTopColor: "black", borderTopWidth: 1, marginBottom: 15, }}>
+          <View style={{ borderTopColor: "#DBDFE140", borderTopWidth: 1, marginBottom: 15, }}>
             <View style={{ marginTop: 15 }}>
               <Text style={styles.title}>Plan Storage</Text>
               <Text>See your inventory limits.</Text>
             </View>
 
-            <View>
-              <PlanStorage title="Password" value={10} limits={100}></PlanStorage>
-              <PlanStorage title="Note" value={10} limits={100}></PlanStorage>
-              <PlanStorage title="Cards" value={10} limits={100}></PlanStorage>
-              <PlanStorage title="Identities" value={10} limits={100}></PlanStorage>
-            </View>
+            {
+              user.plan.name === "Free" && (
+                <View>
+                  <PlanStorage title="Password" value={10} limits={100}></PlanStorage>
+                  <PlanStorage title="Note" value={10} limits={100}></PlanStorage>
+                  <PlanStorage title="Cards" value={10} limits={100}></PlanStorage>
+                  <PlanStorage title="Identities" value={10} limits={100}></PlanStorage>
+                </View>
+              )
+            }
+
+            {
+              user.plan.name === "Premium" && (
+
+                <Text style={{ paddingLeft: 10, paddingRight: 10 }}>Unlimited</Text>
+
+              )
+            }
+
           </View>
-          <View style={{ borderTopColor: "black", borderTopWidth: 1 }}>
-            <Text style={[styles.title,{ marginTop: 15 }]} >Extra Security</Text>
+          <View style={{ borderTopColor: "#DBDFE140", borderTopWidth: 1 }}>
+            <Text style={[styles.title, { marginTop: 15 }]} >Extra Security</Text>
             <Text>Data Breach Scanner, Weak Password Detection, Password Re-usage Detection, and Emergency Access.*</Text>
           </View>
           <View>
@@ -118,13 +166,10 @@ export const ManagePlanScreen = observer(function ManagePlanScreen() {
         ]}>
           <View>
             <View>
-              <Text style={styles.title}>Payment Method</Text>
+              <Text style={styles.title}>Billing Documents</Text>
             </View>
           </View>
 
-          <View>
-            <Text>Billing Documents</Text>
-          </View>
           <View style={styles.container}>
             <Table borderStyle={{ borderColor: 'transparent' }}>
               <Row data={tableHead} style={styles.head} textStyle={styles.text} />
@@ -149,7 +194,7 @@ export const ManagePlanScreen = observer(function ManagePlanScreen() {
 
 const styles = StyleSheet.create({
   title: {
-    color: "black",  fontSize: 18, fontWeight: "500", 
+    color: "black", fontSize: 18, fontWeight: "500",
   },
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
   head: { height: 40, backgroundColor: '#808B97' },
