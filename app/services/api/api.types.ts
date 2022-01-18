@@ -110,6 +110,26 @@ export type ResetPasswordWithCodeResult = {
     } 
 } | GeneralApiProblem
 
+export type BillingResult = {
+    kind: "ok",
+    data: {
+        id: number
+        created_time: number
+        currency: "VNP" | "USD"
+        description: string,
+        discount: number,
+        duration: "monthly" | "yearly"
+        failure_reason?: string
+        payment_id: string
+        payment_method: string
+        plan: string
+        status: string
+        total_price: number
+        transaction_type: string
+    }[]
+
+} | GeneralApiProblem
+
 export type GetInvitationsResult = {
     kind: "ok"
     data: {
@@ -124,6 +144,7 @@ export type GetInvitationsResult = {
         }
     }[]
 } | GeneralApiProblem
+
 
 export type CheckBreachResult = {
     kind: "ok"
