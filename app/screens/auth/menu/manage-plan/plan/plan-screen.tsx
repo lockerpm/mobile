@@ -7,7 +7,7 @@ import { useMixins } from "../../../../../services/mixins"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../../models"
 import { GooglePayScreen } from "../payment/google-pay"
-// import {ApplePayScreen} from "./payment/apple-pay"
+import {ApplePayScreen} from "../payment/apple-pay"
 import Plan from "./plan-item"
 
 
@@ -66,13 +66,13 @@ export const PlanScreen = observer(function PlanScreen() {
             })
           }
 
-          {Platform.OS === 'android' && planIdSelected !== 0 &&(
+          {Platform.OS === 'android' && planIdSelected !== 1 &&(
             <GooglePayScreen  planId={planIdSelected} />
           )}
 
-          {/* {Platform.OS === 'ios' && planIdSelected !== 0 &&(
-            <ApplePayScreen planId={planIdSelected}/>
-          )} */}
+          {Platform.OS === 'ios' && planIdSelected !== 1 &&(
+            <ApplePayScreen plan={planStore.getPlansById(planIdSelected)}/>
+          )}
 
         </View>
       </View>
