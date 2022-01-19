@@ -143,6 +143,8 @@ android {
             appAuthRedirectScheme: 'com.cystack.locker'
         ]
         missingDimensionStrategy 'react-native-camera', 'general'
+        // react-native-iap: we only use the Google Play flavor
+        missingDimensionStrategy 'store', 'play'
     }
     splits {
         abi {
