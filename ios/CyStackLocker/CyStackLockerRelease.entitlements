@@ -6,10 +6,6 @@
 	<string>development</string>
 	<key>com.apple.developer.authentication-services.autofill-credential-provider</key>
 	<true/>
-	<key>com.apple.developer.in-app-payments</key>
-	<array>
-		<string>merchant.com.cystack.locker</string>
-	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.com.cystack.lockerapp</string>

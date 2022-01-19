@@ -87,6 +87,7 @@
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-html-parser": "^0.1.0",
+    "react-native-iap": "^7.5.5",
     "react-native-keychain": "6.2.0",
     "react-native-level-fs": "3.0.0",
     "react-native-masked-text": "^1.13.0",

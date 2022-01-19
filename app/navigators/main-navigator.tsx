@@ -19,6 +19,7 @@
    GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, 
    ManagePlanScreen, PlanScreen
  } from "../screens"
+//  import PlanScreen from "../screens/auth/menu/manage-plan/plan/plan-screen"
  // @ts-ignore
  import { AutofillServiceScreen } from "../screens"
  import UserInactivity from "react-native-user-inactivity"
