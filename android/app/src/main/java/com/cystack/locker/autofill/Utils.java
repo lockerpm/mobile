@@ -11,13 +11,32 @@ import androidx.annotation.RequiresApi;
 
 import com.cystack.locker.R;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Utils {
-    /**
-     * Helper method to get the {@link AssistStructure} associated with the latest request
-     * in an autofill context.
-     */
+
+    // The URLs are blacklisted from autofilling
+    public static HashSet<String> BlacklistedUris = new HashSet<String>(
+            Arrays.asList("android",
+                    "com.android.settings",
+                    "com.android.settings.intelligence",
+                    "com.cystack.locker"
+            )
+    );
+
+    public static boolean isBlackListUri(String domain) {
+        Iterator<String> it = BlacklistedUris.iterator();
+        while (it.hasNext()) {
+            String bl = it.next();
+            if (bl.contains(domain) || domain.contains(bl))
+                return true;
+        }
+        return false;
+    }
 
     @NonNull
     static AssistStructure getLatestAssistStructure(@NonNull FillRequest request) {
@@ -25,9 +44,7 @@ public class Utils {
         return fillContexts.get(fillContexts.size() - 1).getStructure();
     }
 
-    /**
-     * Helper method to create a dataset presentation with the given text.
-     */
+  
     @NonNull
     static RemoteViews newDatasetPresentation(@NonNull String packageName,
                                               @NonNull CharSequence text) {

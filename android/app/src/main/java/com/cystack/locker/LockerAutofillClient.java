@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.service.autofill.Dataset;
 import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillValue;
+import android.widget.RemoteViews;
 import android.widget.Button;
 import android.util.ArrayMap;
 import android.os.Parcelable;
@@ -87,6 +88,7 @@ public class LockerAutofillClient extends AppCompatActivity {
     }
 
     private void onFillPassword(AutofillData data) {
+        
         Intent myIntent = getIntent();
         Intent replyIntent = new Intent();
 
@@ -97,8 +99,9 @@ public class LockerAutofillClient extends AppCompatActivity {
         for (int i = 0; i < size; i++) {
             fields.put(hints[i], (AutofillId) ids[i]);
         }
+        RemoteViews presentation = new RemoteViews(getPackageName(), R.layout.remote_locker_app); // crash ?
         Dataset response =
-                LockerAutoFillService.newUnlockDataset(fields, data);
+                LockerAutoFillService.newUnlockDataset(fields, data, presentation);
         replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, response);
 
         setResult(RESULT_OK, replyIntent);
