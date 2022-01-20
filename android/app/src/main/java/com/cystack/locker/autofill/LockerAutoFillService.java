@@ -55,7 +55,7 @@ public class LockerAutoFillService extends AutofillService {
         Log.d(TAG, "Domain: " + domain);
         Log.d(TAG, "autofillable fields:" + fields);
 
-        if (fields.isEmpty()) {
+        if (fields.isEmpty() || Utils.BlacklistedUris.contains(domain)) {
             Log.d(TAG, "No autofill hints found");
             callback.onSuccess(null);
             return;
@@ -97,13 +97,13 @@ public class LockerAutoFillService extends AutofillService {
     }
 
 
-    public static Dataset newUnlockDataset(@NonNull Map<String, AutofillId> fields,@NonNull AutofillData data){
+    public static Dataset newUnlockDataset(@NonNull Map<String, AutofillId> fields, @NonNull AutofillData data, RemoteViews presentation){
         Dataset.Builder dataset = new Dataset.Builder();
         for (Map.Entry<String, AutofillId> field : fields.entrySet()) {
             String hint = field.getKey();
             AutofillId id = field.getValue();
             String value = hint.contains("password") ? data.getPassword() : data.getUserName();
-            dataset.setValue(id, AutofillValue.forText(value));
+            dataset.setValue(id, AutofillValue.forText(value), presentation);
         }
         return dataset.build();
     }
@@ -118,7 +118,7 @@ public class LockerAutoFillService extends AutofillService {
                 String value = hint.contains("password") ? data.getPassword() : data.getUserName();
                 dataset.setValue(id, AutofillValue.forText(value), presentation);
             } else {
-                dataset.setValue(id, null, presentation);
+                dataset.setValue(id,  null, presentation);
             }
         }
         dataset.setAuthentication(authentication);

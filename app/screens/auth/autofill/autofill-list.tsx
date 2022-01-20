@@ -120,10 +120,8 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
   const selectForAutoFill = (item: CipherView) => {
     AutofillAndroid.addAutofillValue(
       item.login.username,
-      item.login.username,
       item.login.password
     )
-    BackHandler.exitApp()
   }
 
   // Get cipher description
