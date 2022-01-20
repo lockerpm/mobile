@@ -13,7 +13,8 @@ import android.service.autofill.Dataset;
 import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillValue;
 import android.widget.Button;
-
+import android.util.ArrayMap;
+import android.os.Parcelable;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,33 +23,33 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cystack.locker.autofill.Prefs;
+import com.cystack.locker.autofill.AutofillData;
+import com.cystack.locker.autofill.LockerAutoFillService;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutofillClient extends AppCompatActivity {
     Button fillButton;
 
     private static final String DOMAIN = "domain";
-    private static final String EMAIL_IDS = "email_ids";
-    private static final String USERNAME_IDS = "username_ids";
-    private static final String PASS_IDS = "pass_ids";
+    private static final String EXTRA_HINTS = "hints";
+    private static final String EXTRA_IDS = "ids";
     private static int sPendingIntentId = 0;
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public static IntentSender newIntentSenderForResponse(@NonNull Context context,
-                                                        AutofillId[] emailIds, AutofillId[] userNameIds,  AutofillId[] passwordIds, String domain) {
+                                                          @NonNull ArrayMap<String, AutofillId> fields, String domain) {
 
         Intent intent = new Intent(context, LockerAutofillClient.class);
 
-        if (emailIds.length > 0) {
-            intent.putExtra(EMAIL_IDS, emailIds[0]);
-        } else if (userNameIds.length > 0) {
-            intent.putExtra(EMAIL_IDS, userNameIds[0]);
+        int size = fields.size();
+        String[] hints = new String[size];
+        AutofillId[] ids = new AutofillId[size];
+        for (int i = 0; i < size; i++) {
+            hints[i] = fields.keyAt(i);
+            ids[i] = fields.valueAt(i);
         }
 
-
-        if (passwordIds.length > 0) {
-            intent.putExtra(PASS_IDS, passwordIds[0]);
-        }
-
-//        intent.putExtra(USERNAME_IDS, userNameIds[0]);
+        intent.putExtra(EXTRA_HINTS, hints);
+        intent.putExtra(EXTRA_IDS, ids);
         intent.putExtra(DOMAIN, domain);
 
         return PendingIntent.getActivity(context, ++sPendingIntentId, intent,
@@ -56,8 +57,8 @@ public class LockerAutofillClient extends AppCompatActivity {
     }
 
 
-    private final ActivityResultLauncher<Intent> pcapFileLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::pcapFileResult);
+    private final ActivityResultLauncher<Intent> lockerLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::lockerLauncherResult);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,53 +69,40 @@ public class LockerAutofillClient extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("autofill", 1); //start app by autofill service
         intent.putExtra("domain", getIntent().getStringExtra(DOMAIN));
-        pcapFileLauncher.launch(intent);
+        lockerLauncher.launch(intent);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void pcapFileResult(final ActivityResult result) {
+    private void lockerLauncherResult(final ActivityResult result) {
         final SharedPreferences prefs = getSharedPreferences(Prefs.NAME, MODE_PRIVATE);
-        String emailFillValue = Prefs.getEmail(prefs);
         String passFillValue = Prefs.getPassword(prefs);
         String usernameFillValue = Prefs.getUserName(prefs);
-        if (passFillValue == null)
+
+        AutofillData data = new AutofillData(usernameFillValue, passFillValue, usernameFillValue, "...", System.currentTimeMillis());
+
+        if (passFillValue == null){
+            setResult(RESULT_CANCELED);
             finish();
-
-        if (emailFillValue != "") {
-            onFillPassword(emailFillValue, passFillValue);
         }
-
-        if (usernameFillValue != "") {
-            onFillPassword(usernameFillValue, passFillValue);
-        }
+        onFillPassword(data);
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void onFillPassword(String username, String password){
-        Intent intent = getIntent();
+    private void onFillPassword(AutofillData data) {
+        Intent myIntent = getIntent();
         Intent replyIntent = new Intent();
 
-        AutofillId emailIds = intent.getParcelableExtra(EMAIL_IDS);
-        AutofillId passIds = intent.getParcelableExtra(PASS_IDS);
-
-        if (emailIds != null || passIds != null) {
-            Dataset.Builder builder = new Dataset.Builder();
-
-            if (emailIds != null ){
-                builder.setValue(emailIds, AutofillValue.forText(username));
-            }
-            if (passIds != null ){
-                builder.setValue(passIds, AutofillValue.forText(password));
-            }
-            Dataset dataSet = builder.build();
-
-            replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, dataSet);
-            setResult(RESULT_OK, replyIntent);
-        } else {
-            setResult(RESULT_CANCELED);
+        String[] hints = myIntent.getStringArrayExtra(EXTRA_HINTS);
+        Parcelable[] ids = myIntent.getParcelableArrayExtra(EXTRA_IDS);
+        int size = hints.length;
+        ArrayMap<String, AutofillId> fields = new ArrayMap<>(size);
+        for (int i = 0; i < size; i++) {
+            fields.put(hints[i], (AutofillId) ids[i]);
         }
+        Dataset response =
+                LockerAutoFillService.newUnlockDataset(fields, data);
+        replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, response);
 
+        setResult(RESULT_OK, replyIntent);
         finish();
     }
+
 }
