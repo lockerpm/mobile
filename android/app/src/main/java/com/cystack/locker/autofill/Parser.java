@@ -137,7 +137,6 @@ public class Parser {
             Log.v(TAG, "Ignoring 'label/container' hint: " + hint);
             return null;
         }
-
         if (hint.contains("password")) return View.AUTOFILL_HINT_PASSWORD;
         if (hint.contains("username")
                 || (hint.contains("login") && hint.contains("id")))
@@ -146,11 +145,10 @@ public class Parser {
         if (hint.contains("name")) return View.AUTOFILL_HINT_NAME;
         if (hint.contains("phone")) return View.AUTOFILL_HINT_PHONE;
 
+//         if (node.isEnabled() && node.getAutofillType() != View.AUTOFILL_TYPE_NONE) {
+//             return actualHint;
+//         }
 
-        if (node.isEnabled() && node.getAutofillType() != View.AUTOFILL_TYPE_NONE) {
-//            Log.v(TAG, "Falling back to " + actualHint);
-            return actualHint;
-        }
         return null;
     }
 
