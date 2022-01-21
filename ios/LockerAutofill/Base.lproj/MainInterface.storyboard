@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vxG-7A-bij">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="IlT-a8-mfU">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Authentication Credential Provider View Controller-->
+        <!--Verify Master Password View Controller-->
         <scene sceneID="VIg-Pd-FOJ">
             <objects>
-                <viewController id="vxG-7A-bij" customClass="AuthenticationCredentialProviderViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="verifyMasterPasswordScreen" id="vxG-7A-bij" customClass="VerifyMasterPasswordViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8K8-9F-otc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -65,7 +65,7 @@
                                         <integer key="value" value="1"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="10"/>
+                                        <integer key="value" value="7"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
@@ -81,7 +81,7 @@
                                     <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="eyeIconDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="rFb-KT-gNd"/>
+                                    <action selector="eyeIconDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="WAB-Yd-Wym"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iqt-pY-FVh">
@@ -95,7 +95,7 @@
                                     <color key="baseBackgroundColor" red="0.3204087317" green="0.62138414379999996" blue="0.26844969390000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="unlockDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="Vov-zV-0EN"/>
+                                    <action selector="unlockDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="p2K-JQ-ovu"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VAo-LQ-WML">
@@ -106,7 +106,7 @@
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="biometricFaceIdDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="z0N-yN-L3i"/>
+                                    <action selector="faceIdDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="gWv-jY-Yvn"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -136,25 +136,48 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="eyeIconButton" destination="2Tu-q5-Aqh" id="bmn-ok-Sj5"/>
-                        <outlet property="masterPasswordTxt" destination="vj6-uN-Bj0" id="KQn-CJ-PiW"/>
-                        <segue destination="Xki-Si-B7m" kind="show" identifier="authenUser" id="luv-Kl-SdN"/>
+                        <outlet property="eyeIconButton" destination="2Tu-q5-Aqh" id="L9G-Xz-f4t"/>
+                        <outlet property="masterPasswordTxt" destination="vj6-uN-Bj0" id="lVa-W0-BrX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="537-z4-4UF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="317.60000000000002" y="81.409295352323838"/>
+            <point key="canvasLocation" x="729" y="1818"/>
         </scene>
-        <!--Credential Provider View Controller-->
+        <!--Credential Provider Controller-->
+        <scene sceneID="tUj-BI-mok">
+            <objects>
+                <viewController id="IlT-a8-mfU" customClass="CredentialProviderController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Hyv-8i-pka">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="LogoDark" translatesAutoresizingMaskIntoConstraints="NO" id="Roz-hO-dne">
+                                <rect key="frame" x="67" y="269" width="240" height="128"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="obO-z1-YfH"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Roz-hO-dne" firstAttribute="centerX" secondItem="Hyv-8i-pka" secondAttribute="centerX" id="GJa-cp-mOV"/>
+                            <constraint firstItem="Roz-hO-dne" firstAttribute="centerY" secondItem="Hyv-8i-pka" secondAttribute="centerY" id="WvH-N1-uy7"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1CR-rL-5MY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-41" y="2191"/>
+        </scene>
+        <!--Login List View Controller-->
         <scene sceneID="Uma-9u-xWV">
             <objects>
-                <viewController storyboardIdentifier="CredentialProviderViewController" id="Xki-Si-B7m" customClass="CredentialProviderViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginListViewController" id="Xki-Si-B7m" customClass="LoginListViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BuU-Ak-iZz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="20" estimatedSectionHeaderHeight="20" sectionFooterHeight="1" estimatedSectionFooterHeight="4" translatesAutoresizingMaskIntoConstraints="NO" id="Tnx-2s-k97">
-                                <rect key="frame" x="0.0" y="127" width="375" height="520"/>
+                                <rect key="frame" x="0.0" y="115" width="375" height="552"/>
                                 <color key="backgroundColor" red="1" green="0.98958333330000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -167,7 +190,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F76-pU-sgw">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F76-pU-sgw">
                                                     <rect key="frame" x="72" y="7" width="237" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.14835506679999999" green="0.12858635190000001" blue="0.14345479010000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -184,8 +207,8 @@
                                                         <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="large"/>
                                                     </buttonConfiguration>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zdC-rG-Xmh">
-                                                    <rect key="frame" x="72" y="30" width="237" height="14.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zdC-rG-Xmh">
+                                                    <rect key="frame" x="72" y="32.5" width="237" height="10.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" red="0.58380502460000006" green="0.58380502460000006" blue="0.58380502460000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -231,7 +254,7 @@
                                 </userDefinedRuntimeAttributes>
                             </tableView>
                             <searchBar contentMode="redraw" text="" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="2aL-Ft-xPm">
-                                <rect key="frame" x="0.0" y="56" width="375" height="55"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="55"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="CqN-RO-gAf"/>
@@ -241,7 +264,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3wq-kG-lGu">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <color key="barTintColor" red="0.23727124929999999" green="0.58758485319999998" blue="0.17723390459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <textAttributes key="titleTextAttributes">
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -292,12 +315,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RwB-HB-TSk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1072.8" y="82.3088455772114"/>
+            <point key="canvasLocation" x="1423" y="1818"/>
         </scene>
         <!--New Password View Controller-->
         <scene sceneID="JHE-Kh-CJZ">
             <objects>
-                <viewController storyboardIdentifier="AddNewPasswordView" id="weL-I6-gtR" customClass="NewPasswordViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="newLoginView" id="weL-I6-gtR" customClass="NewPasswordViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5ec-kE-cWo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -469,12 +492,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nac-OJ-7ZD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2119.1999999999998" y="625.63718140929541"/>
+            <point key="canvasLocation" x="1422" y="2502"/>
         </scene>
         <!--Edit Pasasword View Controller-->
         <scene sceneID="FYZ-nk-jcP">
             <objects>
-                <viewController storyboardIdentifier="EditPasswordView" id="HiT-rB-bYB" customClass="EditPasaswordViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="editPasswordView" id="HiT-rB-bYB" customClass="EditPasaswordViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KT3-fQ-e3Z">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -659,18 +682,16 @@
                                     <constraint firstAttribute="trailing" secondItem="hcG-PM-6hW" secondAttribute="trailing" constant="16" id="2fN-dh-xPu"/>
                                     <constraint firstItem="Mbw-qo-zoa" firstAttribute="leading" secondItem="gzk-kh-tQZ" secondAttribute="leading" constant="16" id="30a-dp-d4i"/>
                                     <constraint firstItem="hcG-PM-6hW" firstAttribute="top" secondItem="Mbw-qo-zoa" secondAttribute="bottom" constant="16" id="3XJ-D0-Dnf"/>
-                                    <constraint firstAttribute="bottom" secondItem="k5T-7a-coE" secondAttribute="bottom" constant="34" id="4gT-3a-AYe"/>
                                     <constraint firstItem="Mbw-qo-zoa" firstAttribute="top" secondItem="KWk-8O-Iw4" secondAttribute="bottom" constant="16" id="AFU-BG-R8c"/>
                                     <constraint firstItem="2TU-uF-36I" firstAttribute="leading" secondItem="gzk-kh-tQZ" secondAttribute="leading" constant="16" id="E6d-Dh-GbI"/>
                                     <constraint firstItem="KWk-8O-Iw4" firstAttribute="leading" secondItem="gzk-kh-tQZ" secondAttribute="leading" constant="16" id="FOs-EJ-X0w"/>
                                     <constraint firstAttribute="bottom" secondItem="KNm-CT-R4A" secondAttribute="bottom" constant="34" id="Gnl-Gu-Ud9"/>
-                                    <constraint firstAttribute="bottom" secondItem="hcG-PM-6hW" secondAttribute="bottom" constant="24" id="GwP-AZ-iX9"/>
                                     <constraint firstItem="2TU-uF-36I" firstAttribute="top" secondItem="gzk-kh-tQZ" secondAttribute="top" constant="16" id="HuH-e3-3Oy"/>
                                     <constraint firstItem="KNm-CT-R4A" firstAttribute="leading" secondItem="k5T-7a-coE" secondAttribute="trailing" constant="16" id="Lh9-EF-ZY0"/>
                                     <constraint firstAttribute="trailing" secondItem="KWk-8O-Iw4" secondAttribute="trailing" constant="16" id="Rl1-yh-f43"/>
                                     <constraint firstItem="KWk-8O-Iw4" firstAttribute="top" secondItem="2TU-uF-36I" secondAttribute="bottom" constant="16" id="et2-8e-V1M"/>
-                                    <constraint firstItem="k5T-7a-coE" firstAttribute="bottom" secondItem="hcG-PM-6hW" secondAttribute="bottom" id="geK-36-jce"/>
                                     <constraint firstAttribute="trailing" secondItem="3fB-gl-Qzd" secondAttribute="trailing" constant="15" id="kek-TV-34d"/>
+                                    <constraint firstItem="k5T-7a-coE" firstAttribute="baseline" secondItem="KNm-CT-R4A" secondAttribute="baseline" id="pxo-3G-R7L"/>
                                     <constraint firstItem="3fB-gl-Qzd" firstAttribute="top" secondItem="gzk-kh-tQZ" secondAttribute="top" constant="63" id="rtM-Y1-Iew"/>
                                     <constraint firstItem="hcG-PM-6hW" firstAttribute="leading" secondItem="gzk-kh-tQZ" secondAttribute="leading" constant="16" id="sGM-qM-vUS"/>
                                     <constraint firstAttribute="height" constant="210" id="txy-Bh-ngW"/>
@@ -705,7 +726,7 @@
                     <navigationItem key="navigationItem" id="vJ1-90-vx5"/>
                     <connections>
                         <outlet property="deleteButton" destination="qT4-kH-DIQ" id="wUb-UA-vkf"/>
-                        <outlet property="hidePasswordIconButton" destination="k5T-7a-coE" id="TEt-hN-pW8"/>
+                        <outlet property="eyeIconButton" destination="k5T-7a-coE" id="XHW-Dq-cHO"/>
                         <outlet property="nameLabel" destination="3e0-5H-fCC" id="AWL-LU-BFK"/>
                         <outlet property="passCopyButton" destination="KNm-CT-R4A" id="3FT-Dz-KUH"/>
                         <outlet property="password" destination="hcG-PM-6hW" id="n1d-wy-ndL"/>
@@ -716,15 +737,19 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EYE-0l-Ytc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2119.1999999999998" y="-67.016491754122939"/>
+            <point key="canvasLocation" x="729" y="2502"/>
         </scene>
     </scenes>
     <resources>
+        <image name="LogoDark" width="178" height="55"/>
         <image name="doc.on.doc" catalog="system" width="116" height="128"/>
         <image name="edit" width="18" height="4"/>
         <image name="eye.slash" catalog="system" width="128" height="86"/>
         <image name="faceid" catalog="system" width="128" height="115"/>
         <image name="passIcon" width="120" height="120"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
