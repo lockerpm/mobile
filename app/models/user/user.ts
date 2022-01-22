@@ -352,12 +352,6 @@ export const UserModel = types
       return res
     },
 
-    getLastUpdate: async () => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getLastUpdate(self.apiToken)
-      return res
-    },
-
     feedback: async (description: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.sendFeedback(self.apiToken, {

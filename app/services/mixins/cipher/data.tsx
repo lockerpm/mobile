@@ -19,6 +19,8 @@ import { CollectionRequest } from '../../../../core/models/request/collectionReq
 import { CipherData } from '../../../../core/models/data/cipherData'
 import { FolderData } from '../../../../core/models/data/folderData'
 import { Logger } from '../../../utils/logger'
+import { EncString, SymmetricCryptoKey } from '../../../../core/models/domain'
+import { Utils } from '../../core-service/utils'
 
 
 type GetCiphersParams = {
@@ -33,23 +35,30 @@ const defaultData = {
   getSyncData: async () => { return { kind: 'unknown' } },
   syncOfflineData: async () => {},
   syncAutofillData: async () => {},
+
   getCiphers: async (params: GetCiphersParams) => { return [] },
   getCipherById: async (id: string) => new CipherView(),
+
   getCollections: async () => { return [] },
   loadFolders: async () => {},
   loadCollections: async () => {},
+
   createCipher: async (cipher: CipherView, score: number, collectionIds: string[]) => { return { kind: 'unknown' } },
   updateCipher: async (id: string, cipher: CipherView, score: number, collectionIds: string[]) => { return { kind: 'unknown' } },
   toTrashCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   importCiphers: async (importResult) => { return { kind: 'unknown' } },
+  shareCipher: async (cipher: CipherView, emails: string[], role: 'member' | 'admin', autofillOnly: boolean) => { return { kind: 'unknown' } },
+
   createFolder: async (folder: FolderView) => { return { kind: 'unknown' } },
   updateFolder: async (folder: FolderView) => { return { kind: 'unknown' } },
   deleteFolder: async (id: string) => { return { kind: 'unknown' } },
+
   createCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
   updateCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
   deleteCollection: async (id: string, teamId: string) => { return { kind: 'unknown' } },
+
   syncSingleCipher: async (id: string) => {},
   syncSingleFolder: async (id: string) => {},
 }
@@ -853,6 +862,66 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await reloadCache()
   }
 
+  // Share cipher
+  const shareCipher = async (cipher: CipherView, emails: string[], role: 'member' | 'admin', autofillOnly: boolean) => {
+    try {
+      // Prepare org key
+      let orgKey: SymmetricCryptoKey = null
+      let shareKey: [EncString, SymmetricCryptoKey] = null
+      if (cipher.organizationId) {
+        orgKey = await cryptoService.getOrgKey(cipher.organizationId)
+      } else {
+        shareKey = await cryptoService.makeShareKey()
+        orgKey = shareKey[1]
+      }
+
+      // Prepare cipher
+      const cipherEnc = await cipherService.encrypt(cipher, orgKey)
+      const data = new CipherRequest(cipherEnc)
+
+      // Get public keys
+      const members = await Promise.all(emails.map(async (email) => {
+        const publicKeyRes = await cipherStore.getSharingPublicKey(email)
+        let publicKey = ''
+        if (publicKeyRes.kind === 'ok') {
+          publicKey = publicKeyRes.data.public_key
+        }
+        return {
+          username: email,
+          role,
+          hide_passwords: autofillOnly,
+          key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null
+        }
+      }))
+
+      // Send API
+      const res = await cipherStore.shareCipher({
+        members,
+        cipher: {
+          id: cipher.id,
+          ...data
+        },
+        sharing_key: shareKey ? shareKey[0].encryptedString : null
+      })
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_shared'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      Logger.error(e)
+      return { kind: 'unknown' }
+    }
+  }
+
+  const _generateMemberKey = async (publicKey: string, orgKey: SymmetricCryptoKey) => {
+    const pk = Utils.fromB64ToArray(publicKey)
+    const key = await cryptoService.rsaEncrypt(orgKey.key, pk.buffer)
+    return key.encryptedString
+  }
+
   // ----------------------- FOLDER ---------------------------
 
   // Create folder
@@ -1185,6 +1254,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
 
     await storageService.save(key, res)
+    cipherStore.setLastSync()
     await reloadCache({
       isOnline: true
     })
@@ -1226,6 +1296,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
 
     await storageService.save(key, res)
+    cipherStore.setLastSync()
     await reloadCache({
       isOnline: true
     })
@@ -1248,6 +1319,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     deleteCiphers,
     toTrashCiphers,
     restoreCiphers,
+    shareCipher,
     importCiphers,
     createFolder,
     updateFolder,

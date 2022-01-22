@@ -2,7 +2,7 @@ import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CipherView } from "../../../core/models/view"
-import { ImportCipherData, MoveFolderData } from "../../services/api"
+import { ImportCipherData, MoveFolderData, ShareCipherData } from "../../services/api"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -165,9 +165,9 @@ export const CipherStoreModel = types
       return res
     },
 
-    shareCipher: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
+    shareCipherToTeam: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.shareCipher(self.apiToken, id, data, score, collectionIds)
+      const res = await cipherApi.shareCipherToTeam(self.apiToken, id, data, score, collectionIds)
       return res
     },
 
@@ -192,6 +192,24 @@ export const CipherStoreModel = types
     moveToFolder: async (data: MoveFolderData) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.moveToFolder(self.apiToken, data)
+      return res
+    },
+
+    getLastUpdate: async () => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getLastUpdate(self.apiToken)
+      return res
+    },
+
+    getSharingPublicKey: async (email: string) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getSharingPublicKey(self.apiToken, { email })
+      return res
+    },
+
+    shareCipher: async (payload: ShareCipherData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.shareCipher(self.apiToken, payload)
       return res
     }
   })).postProcessSnapshot(omit([

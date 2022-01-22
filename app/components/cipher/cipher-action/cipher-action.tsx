@@ -210,7 +210,8 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   }}
                 />
 
-                {
+                {/* TODO: team feature -> temporary disabled */}
+                {/* {
                   selectedCipher.organizationId && (
                     <ActionItem
                       disabled={uiStore.isOffline}
@@ -222,7 +223,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                       }}
                     />
                   )
-                }
+                } */}
 
                 <Divider style={{ marginVertical: 5 }} />
 
@@ -236,19 +237,16 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   }}
                 />
 
-                {
-                  !selectedCipher.organizationId && (
-                    <ActionItem
-                      disabled={uiStore.isOffline}
-                      name={translate('common.share')}
-                      icon="share-square-o"
-                      action={() => {
-                        setNextModal('share')
-                        onClose()
-                      }}
-                    />
-                  )
-                }
+                <ActionItem
+                  isPremium
+                  disabled={uiStore.isOffline}
+                  name={translate('common.share')}
+                  icon="share-square-o"
+                  action={() => {
+                    setNextModal('share')
+                    onClose()
+                  }}
+                />
 
                 <ActionItem
                   disabled={uiStore.isOffline && !!selectedCipher.organizationId}
