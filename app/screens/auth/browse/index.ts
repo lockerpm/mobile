@@ -4,6 +4,8 @@ export * from "./passwords/passwords-screen"
 export * from "./notes/notes-screen"
 export * from "./identities/identities-screen"
 export * from "./shares/shares-screen"
+export * from "./shares/share-items/share-items-screen"
+export * from "./shares/shared-items/shared-items-screen"
 export * from "./trash/trash-screen"
 export * from "./browse-list/browse-list-screen"
 

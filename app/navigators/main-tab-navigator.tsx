@@ -56,7 +56,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
     browseTab: {
       label: translate('common.browse'),
       icon: BrowseIcon,
-      notiCount: 0
+      notiCount: cipherStore.sharingInvitations.length
     },
     authenticatorTab: {
       label: 'OTP',
@@ -190,12 +190,13 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                     <View
                       style={{
                         backgroundColor: color.error,
+                        opacity: 0.9,
                         borderRadius: 20,
-                        minWidth: 20,
-                        height: 20,
+                        minWidth: 17,
+                        height: 17,
                         position: 'absolute',
                         top: 3,
-                        right: 24
+                        right: 20
                       }}
                     >
                       <Text
@@ -204,7 +205,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                           fontSize: 12,
                           textAlign: 'center',
                           color: color.white,
-                          lineHeight: 20
+                          lineHeight: 17
                         }}
                       />
                     </View>

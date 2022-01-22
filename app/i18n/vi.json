@@ -321,7 +321,9 @@
     }
   },
   "shares": {
-    "share_items": "Các mục được chia sẻ",
+    "shares": "Chia sẻ",
+    "share_items": "Bạn chia sẻ",
+    "shared_items": "Được chia sẻ với bạn",
     "empty": {
       "title": "Chia sẻ tài nguyên một cách an toàn",
       "desc": "Mọi mật khẩu, ghi chú hoặc thẻ tín dụng được chia sẻ hoặc nhận được sẽ xuất hiện ở đây"

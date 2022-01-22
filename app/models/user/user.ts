@@ -285,6 +285,9 @@ export const UserModel = types
     getInvitations: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getInvitations(self.apiToken)
+      if (res.kind === 'ok') {
+        self.setInvitations(res.data)
+      }
       return res
     },
 

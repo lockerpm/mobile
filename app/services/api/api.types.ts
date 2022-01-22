@@ -37,6 +37,45 @@ export type PolicyType = {
     }
 }
 
+export type SharingInvitationType = {
+    access_time: number
+    cipher_type: number
+    id: string
+    item_type: string
+    owner: {
+        email: string
+        full_name: string
+    }
+    role: 'member' | 'admin'
+    share_type: 'View' | 'Edit' | 'Only fill'
+    status: 'invited' | 'accepted' | 'confirmed'
+    team: {
+        id: string
+        name: string
+        organization_id: string
+    }
+}
+
+export type MyShareType = {
+    id: string
+    description: string
+    name: string
+    organization_id: string
+    members: {
+        access_time: string
+        avatar: string
+        email: string
+        full_name: string
+        hide_passwords: boolean
+        id: string
+        pwd_user_id: string
+        role: 'member' | 'admin'
+        share_type: 'View' | 'Edit' | 'Only fill'
+        status: 'confirmed' | 'accepted' | 'invited'
+        username: string
+    }[]
+}
+
 // ------------------ Response ------------------------
 
 export type LoginResult = { 
@@ -174,24 +213,12 @@ export type ShareCipherResult = {
 
 export type GetShareInvitationsResult = {
     kind: 'ok',
-    data: {
-        access_time: number
-        cipher_type: number
-        id: string
-        item_type: string
-        owner: {
-            email: string
-            full_name: string
-        }
-        role: 'member' | 'admin'
-        share_type: 'View' | 'Edit' | 'Only fill'
-        status: 'invited' | 'accepted' | 'confirmed'
-        team: {
-            id: string
-            name: string
-            organization_id: string
-        }
-    }[]
+    data: SharingInvitationType[]
+} | GeneralApiProblem
+
+export type GetMySharesResult = {
+    kind: 'ok',
+    data: MyShareType[]
 } | GeneralApiProblem
 
 // ---------------- Request data --------------------

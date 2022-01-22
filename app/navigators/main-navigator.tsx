@@ -161,11 +161,10 @@ export const MainNavigator = observer(function MainNavigator() {
   }
 
   // Check invitation
-  const handleInvitationSync = async () => {
-    const invitationsRes = await user.getInvitations()
-    if (invitationsRes.kind === 'ok') {
-      user.setInvitations(invitationsRes.data)
-    }
+  const handleUserDataSync = () => {
+    user.getInvitations()
+    cipherStore.loadSharingInvitations()    
+    cipherStore.loadMyShares()
   }
 
   // App screen lock trigger
@@ -245,7 +244,7 @@ export const MainNavigator = observer(function MainNavigator() {
           }
           break
         case 'members':
-          handleInvitationSync()
+          handleUserDataSync()
           break
         default:
           break
@@ -303,7 +302,7 @@ export const MainNavigator = observer(function MainNavigator() {
   useEffect(() => {
     if (!uiStore.isOffline && user.isLoggedInPw) {
       handleSync()
-      handleInvitationSync()
+      handleUserDataSync()
     }
   }, [uiStore.isOffline, user.isLoggedInPw])
 
