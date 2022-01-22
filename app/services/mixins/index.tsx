@@ -145,7 +145,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
           code: string
           message?: string
         } = problem.data
-        if (errorData.details) {
+        if (errorData.details && Object.keys(errorData.details).length) {
           Object.keys(errorData.details).forEach((key) => {
             notify('error', errorData.details[key][0])
           })

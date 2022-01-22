@@ -325,6 +325,13 @@
     "empty": {
       "title": "Securely share items",
       "desc": "Any shared or received passwords, notes or credit cards will appear here"
+    },
+    "add_emails": "Add recipient emails",
+    "share_type": {
+      "label": "Share type",
+      "view": "View",
+      "only_fill": "Only Fill",
+      "edit": "Edit"
     }
   },
   "trash": {

@@ -129,7 +129,7 @@ export const MainNavigator = observer(function MainNavigator() {
     await syncOfflineData()
     
     // Check if sync is needed
-    const lastUpdateRes = await user.getLastUpdate()
+    const lastUpdateRes = await cipherStore.getLastUpdate()
     if (
       lastUpdateRes.kind === 'unauthorized' ||
       (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= cipherStore.lastSync)

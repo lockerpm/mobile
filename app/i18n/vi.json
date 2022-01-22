@@ -325,6 +325,13 @@
     "empty": {
       "title": "Chia sẻ tài nguyên một cách an toàn",
       "desc": "Mọi mật khẩu, ghi chú hoặc thẻ tín dụng được chia sẻ hoặc nhận được sẽ xuất hiện ở đây"
+    },
+    "add_emails": "Thêm email người nhận",
+    "share_type": {
+      "label": "Loại chia sẻ",
+      "view": "Xem",
+      "only_fill": "Chỉ tự động điền",
+      "edit": "Sửa"
     }
   },
   "trash": {

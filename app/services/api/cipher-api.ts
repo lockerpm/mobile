@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { EmptyResult, GetCipherResult, ImportCipherData, MoveFolderData, SyncResult } from "."
+import { EmptyResult, GetCipherResult, GetLastUpdateResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, ShareCipherData, ShareCipherResult, SyncResult } from "./api.types"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { Logger } from "../../utils/logger"
@@ -138,8 +138,8 @@ export class CipherApi {
     }
   }
 
-  // Share cipher
-  async shareCipher(token: string, id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
+  // Share cipher to team
+  async shareCipherToTeam(token: string, id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
@@ -231,6 +231,69 @@ export class CipherApi {
         if (problem) return problem
       }
       return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Get last update time
+  async getLastUpdate(token: string): Promise<GetLastUpdateResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/users/me/revision_date`)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const data = response.data
+
+      return { kind: "ok", data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Get sharing public key
+  async getSharingPublicKey(token: string, payload: GetSharingPublicKeyData): Promise<GetSharingPublicKeyResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/public_key`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const data = response.data
+
+      return { kind: "ok", data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Share cipher
+  async shareCipher(token: string, payload: ShareCipherData): Promise<ShareCipherResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/sharing`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const data = response.data
+
+      return { kind: "ok", data }
     } catch (e) {
       Logger.error(e.message)
       return { kind: "bad-data" }

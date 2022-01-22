@@ -158,6 +158,42 @@ export type GetLastUpdateResult = {
     }
 } | GeneralApiProblem
 
+export type GetSharingPublicKeyResult = {
+    kind: 'ok',
+    data: {
+        public_key: string
+    }
+} | GeneralApiProblem
+
+export type ShareCipherResult = {
+    kind: 'ok',
+    data: {
+        id: string      // organizationId
+    }
+} | GeneralApiProblem
+
+export type GetShareInvitationsResult = {
+    kind: 'ok',
+    data: {
+        access_time: number
+        cipher_type: number
+        id: string
+        item_type: string
+        owner: {
+            email: string
+            full_name: string
+        }
+        role: 'member' | 'admin'
+        share_type: 'View' | 'Edit' | 'Only fill'
+        status: 'invited' | 'accepted' | 'confirmed'
+        team: {
+            id: string
+            name: string
+            organization_id: string
+        }
+    }[]
+} | GeneralApiProblem
+
 // ---------------- Request data --------------------
 
 export type LoginData = {
@@ -309,4 +345,19 @@ export type FeedbackData = {
 export type UpdateFCMData = {
     fcm_id: string
     device_identifier: string
+}
+
+export type GetSharingPublicKeyData = {
+    email: string
+}
+
+export type ShareCipherData = {
+    cipher: CipherRequest & { id: string }
+    sharing_key: string
+    members: {
+        username: string
+        role: 'member' | 'admin'
+        key: string
+        hide_passwords: boolean
+    }[]
 }

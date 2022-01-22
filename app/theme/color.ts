@@ -27,6 +27,7 @@ export const color = {
   text: palette.lighterBlack,
   textBlack: palette.lightBlack,
   title: palette.black,
+  lightPrimary: palette.lightGreen,
   primary: palette.green,
   error: palette.danger,
   warning: palette.warning,
