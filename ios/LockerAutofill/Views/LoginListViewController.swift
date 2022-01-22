@@ -30,6 +30,7 @@ class LoginListViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    isModalInPresentation = true //disable the pull-down gesture
     
     self.searchBar.delegate = self
     self.tableView.delegate = self
@@ -44,8 +45,8 @@ class LoginListViewController: UIViewController {
     self.credentialProviderDelegate.cancel()
   }
   
-  func completeRequest(user: String, password: String){
-    self.credentialProviderDelegate.loginSelected(user: user, password: password)
+  func completeRequest(data: AutofillData){
+    self.credentialProviderDelegate.loginSelected(data: data)
   }
   
   @IBAction func add() {
@@ -156,7 +157,7 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let target = indexPath.section == 0 ? filterCredentials[indexPath.row] : filterOthers[indexPath.row]
-    completeRequest(user: target.username ?? "", password: target.password ?? "")
+    completeRequest(data: target)
   }
 }
 
@@ -166,7 +167,7 @@ extension LoginListViewController: LoginListControllerDelegate {
   }
   
   func addLogin(credential: AutofillData) {
-    completeRequest(user: credential.username, password: credential.password)
+    completeRequest(data: credential)
   }
 }
 

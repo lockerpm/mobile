@@ -14,18 +14,18 @@ class VerifyMasterPasswordViewController: UIViewController {
   var credentialProviderDelegate: CredentialProviderDelegate!
   var userEmail: String!
   var hassMasterPass: String!
+  var authenQuickBar: Bool = false
   
   @IBOutlet weak var eyeIconButton: UIButton!
   @IBOutlet weak var masterPasswordTxt: UITextField!
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    isModalInPresentation = true //disable the pull-down gesture
+    
     Utils.ToggleHidePass(text: masterPasswordTxt, eyeIcon: eyeIconButton, initial: true)
     
-    // fist authen by face id
-    if (credentialProviderDelegate.isFaceIdEnable()){
-        biometricAuthentication()
-    }
+//    verifyFaceId()
   }
   
   @IBAction func eyeIconDidPress(_ sender: Any) {
@@ -46,6 +46,10 @@ class VerifyMasterPasswordViewController: UIViewController {
   }
   
   @IBAction func faceIdDidPress(_ sender: Any) {
+    verifyFaceId()
+  }
+  
+  private func verifyFaceId() {
     if (credentialProviderDelegate.isFaceIdEnable()){
         biometricAuthentication()
     }
@@ -64,15 +68,20 @@ class VerifyMasterPasswordViewController: UIViewController {
   
   private func authenSuccess(){
     dismiss(animated: true, completion: nil)
-    self.credentialProviderDelegate.authenSuccess()
     
+    if (authenQuickBar){
+      self.credentialProviderDelegate.quickBarAuthenSuccess()
+    } else {
+      self.credentialProviderDelegate.authenSuccess()
+    }
   }
+  
   private func cancel() {
     dismiss(animated: true, completion: nil)
     self.credentialProviderDelegate.cancel()
   }
   
   private func biometricAuthentication() {
-    Utils.BiometricAuthentication(contex: self, authenSuccess: self.authenSuccess)
+    Utils.BiometricAuthentication(view: self, onSuccess: authenSuccess, onFailed: cancel)
   }
 }
