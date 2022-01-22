@@ -321,7 +321,9 @@
     }
   },
   "shares": {
-    "share_items": "Shared Items",
+    "shares": "Shares",
+    "share_items": "Your Shares",
+    "shared_items": "Shared With You",
     "empty": {
       "title": "Securely share items",
       "desc": "Any shared or received passwords, notes or credit cards will appear here"

@@ -2,7 +2,7 @@ import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CipherView } from "../../../core/models/view"
-import { ImportCipherData, MoveFolderData, ShareCipherData } from "../../services/api"
+import { ImportCipherData, MoveFolderData, MyShareType, ShareCipherData, SharingInvitationType } from "../../services/api"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -24,6 +24,8 @@ export const CipherStoreModel = types
     notUpdatedCiphers: types.array(types.string),         // Create in online mode but somehow not update yet
     lastSync: types.maybeNull(types.number),
     lastCacheUpdate: types.maybeNull(types.number),
+    sharingInvitations: types.array(types.frozen<SharingInvitationType>()),
+    myShares: types.array(types.frozen<MyShareType>()),
 
     // Selector
     generatedPassword: types.maybeNull(types.string),
@@ -119,6 +121,8 @@ export const CipherStoreModel = types
       self.isSynchingAutofill = false
       self.lastSync = null
       self.lastCacheUpdate = null
+      self.sharingInvitations = cast([])
+      self.myShares = cast([])
     },
 
     lock: () => {
@@ -127,8 +131,15 @@ export const CipherStoreModel = types
       self.selectedFolder = null
     },
 
-    // ----------------- CRUD -------------------
+    setSharingInvitations: (data: SharingInvitationType[]) => {
+      self.sharingInvitations = cast(data)
+    },
 
+    setMyShares: (data: MyShareType[]) => {
+      self.myShares = cast(data)
+    }
+  }))
+  .actions(self => ({
     syncData: async () => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.syncData(self.apiToken)
@@ -211,8 +222,27 @@ export const CipherStoreModel = types
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.shareCipher(self.apiToken, payload)
       return res
+    },
+
+    loadSharingInvitations: async () => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getSharingInvitations(self.apiToken)
+      if (res.kind === 'ok') {
+        self.setSharingInvitations(res.data)
+      }
+      return res
+    },
+
+    loadMyShares: async () => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getMyShares(self.apiToken)
+      if (res.kind === 'ok') {
+        self.setMyShares(res.data)
+      }
+      return res
     }
-  })).postProcessSnapshot(omit([
+  }))
+  .postProcessSnapshot(omit([
     'generatedPassword', 
     'selectedCipher',
     'selectedFolder',
