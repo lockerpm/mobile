@@ -17,7 +17,56 @@ class Utils {
     return pbkdf2.makeKeyHash(masterPassword: key, email: text)
   }
   
-  static public func BiometricAuthentication(contex: UIViewController, authenSuccess: @escaping () -> Void) {
+  static public func AddCredentialsQuickTypeBar(identifier: String, type: Int = 0, user: String, recordIdentifier: String){
+    
+    let store = ASCredentialIdentityStore.shared
+    store.getState { state in
+        if state.isEnabled {
+         
+          let credential = ASPasswordCredentialIdentity(
+            serviceIdentifier: ASCredentialServiceIdentifier(
+              identifier: identifier,
+              type: (type == 0) ? .domain : .URL),
+              user: user,
+              recordIdentifier: recordIdentifier
+          )
+
+          ASCredentialIdentityStore.shared.saveCredentialIdentities([credential]) { bool, error in
+              if let error = error {
+                  print(error)
+              } else {
+                  print("Saved Credential!")
+              }
+          }
+        }
+    }
+  }
+  
+  static public func ReplaceCredentialIdentities(identifier: String, type: Int = 0, user: String, recordIdentifier: String) {
+    let store = ASCredentialIdentityStore.shared
+    store.getState { state in
+        if state.isEnabled {
+         
+          let credential = ASPasswordCredentialIdentity(
+            serviceIdentifier: ASCredentialServiceIdentifier(
+              identifier: identifier,
+              type: (type == 0) ? .domain : .URL),
+              user: user,
+              recordIdentifier: recordIdentifier
+          )
+
+          ASCredentialIdentityStore.shared.replaceCredentialIdentities(with: [credential]) { bool, error in
+              if let error = error {
+                  print(error)
+              } else {
+                  print("Replace Credential!")
+              }
+          }
+        }
+    }
+  }
+  
+  static public func BiometricAuthentication(view: UIViewController, onSuccess: @escaping () -> Void, onFailed: @escaping () -> Void) {
     let context = LAContext()
     var error: NSError? = nil
 
@@ -26,20 +75,21 @@ class Utils {
       let reason = "Please authorize with Touch Id"
       
       context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics,
-                             localizedReason: reason) {[weak contex] success, authenError in
+                             localizedReason: reason) {success, authenError in
         DispatchQueue.main.async {
           guard success, authenError == nil else {
               //failed, can not use biometric for auth
-              Noti(contex: contex!, title: "Authentication Failed", message: "Please try again")
+//              print(authenError)
+              onFailed()
               return
             }
             //success
-            authenSuccess()
+           onSuccess()
           }
         }
     } else {
       // can not use biometric for auth
-      Noti(contex: contex, title: "Biometry is Unvaliable", message: "Your device is not configured for biometric authentication")
+      Noti(contex: view, title: "Biometry is Unvaliable", message: "Your device is not configured for biometric authentication")
     }
   }
   

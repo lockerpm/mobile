@@ -5,56 +5,72 @@
 //  Created by Nguyen Thinh on 21/01/2022.
 //
 
-
+import UIKit
+import LocalAuthentication
 import AuthenticationServices
-
 
 protocol CredentialProviderDelegate {
   func cancel()
-  func loginSelected(user: String, password: String)
+  func loginSelected(data: AutofillData)
   func isFaceIdEnable() -> Bool
   func authenSuccess()
+  func quickBarAuthenSuccess()
 }
 
 class CredentialProviderController: ASCredentialProviderViewController {
-  private var lock: Bool = true;
   private var dataModel: AutofillDataModel = AutofillDataModel()
+  private var serviceIdentifier: String!
+  private var quickBarCredential: Bool = false
   
-    
-  override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    
-    let uri = Utils.GetCipherUri(for: serviceIdentifiers)
-    
-    self.dataModel.fetchAutofillDataForUriKeychain(uri: uri)
-    
+  
+  private func initController(serviceIdentifier: String, quickBarAccess: Bool = false) {
+    self.quickBarCredential = quickBarAccess
+    self.dataModel.fetchAutofillDataForUriKeychain(uri: serviceIdentifier)
     
     if (!self.dataModel.isLoginLocker()){
       Utils.Noti(contex: self, title: "Authentication", message:  "You must to login Locker befor using autofill service", completion: cancel)
       return
     }
-    
-    if (self.dataModel.isFaceIdEnabled()){
-      lock = false
-      Utils.BiometricAuthentication(contex: self, authenSuccess: performLoginListScreen)
-    }
-    
-    if (lock) {
+//    print(quickBarAccess)
+//    print(self.dataModel.isFaceIdEnabled())
+//    if (self.dataModel.isFaceIdEnabled()){
+//      Utils.BiometricAuthentication(
+//        view: self,
+//        onSuccess: quickBarAccess ? quickBarAuthenSuccess : performLoginListScreen,
+//        onFailed: performVerifyPasswordScreen
+//      )
+//    }
+////    else {
       performVerifyPasswordScreen()
-    }
+//    }
+  }
+  
+  override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    self.serviceIdentifier = serviceIdentifiers.count > 0 ? serviceIdentifiers[0].identifier : ""
+    initController(serviceIdentifier: self.serviceIdentifier)
+  }
+  
+  override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
+    self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
+    initController(serviceIdentifier: self.serviceIdentifier, quickBarAccess: true)
   }
   
   override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-
-      let passwordCredential = ASPasswordCredential(user: "j_appleseed", password: "apple1234")
-      self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
-
+    // require for user authen tication
+    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
   }
   
+  private func completeRequest(user: String, password: String){
+    let passwordCredential = ASPasswordCredential(user: user, password: password)
+    self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+  }
+
   private func performVerifyPasswordScreen(){
     let verifyMasterPasswordScreen = storyboard?.instantiateViewController(withIdentifier: "verifyMasterPasswordScreen") as! VerifyMasterPasswordViewController
     verifyMasterPasswordScreen.credentialProviderDelegate = self
     verifyMasterPasswordScreen.userEmail = self.dataModel.getUserEmail()
     verifyMasterPasswordScreen.hassMasterPass = self.dataModel.getUserHashMasterPass()
+    verifyMasterPasswordScreen.authenQuickBar = self.quickBarCredential
     present(verifyMasterPasswordScreen, animated: true, completion: nil)
   }
   
@@ -75,9 +91,9 @@ extension CredentialProviderController: CredentialProviderDelegate{
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
   }
   
-  func loginSelected(user: String, password: String) {
-    let passwordCredential = ASPasswordCredential(user: user, password: password)
-    self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+  func loginSelected(data: AutofillData) {
+    Utils.ReplaceCredentialIdentities(identifier: self.serviceIdentifier, type: 1, user: data.username, recordIdentifier: data.id)
+    completeRequest(user: data.username, password: data.password)
   }
   
   func isFaceIdEnable() -> Bool {
@@ -85,7 +101,10 @@ extension CredentialProviderController: CredentialProviderDelegate{
   }
   
   func authenSuccess() {
-    print("authen success")
     performLoginListScreen()
+  }
+  
+  func quickBarAuthenSuccess() {
+    completeRequest(user: "asdasdasd", password: "asdasd")
   }
 }
