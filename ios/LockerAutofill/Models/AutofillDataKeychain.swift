@@ -51,7 +51,8 @@ class AutofillDataModel {
   }
   
   public func isFaceIdEnabled() -> Bool {
-    return self.faceIdEnabled
+//    return self.faceIdEnabled
+    return true
   }
   
   public func getUserEmail() -> String {

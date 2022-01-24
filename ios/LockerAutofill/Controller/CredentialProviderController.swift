@@ -24,7 +24,11 @@ class CredentialProviderController: ASCredentialProviderViewController {
   private var quickBarCredential: AutofillData!
   
   
+  @IBOutlet weak var logo: UIImageView!
   private func initController(serviceIdentifier: String, quickBarAccess: Bool = false) {
+    
+   
+    
     self.quickBar = quickBarAccess
     self.dataModel.fetchAutofillDataForUriKeychain(uri: serviceIdentifier)
   
@@ -36,6 +40,14 @@ class CredentialProviderController: ASCredentialProviderViewController {
     }
 
   }
+  override func viewDidLoad() {
+    if (Utils.LightTheme(self)) {
+       logo.isHighlighted = false
+    } else {
+      logo.isHighlighted = true
+    }
+  }
+  
   override func viewDidAppear(_ animated: Bool) {
       if (self.dataModel.isFaceIdEnabled()){
         Utils.BiometricAuthentication(

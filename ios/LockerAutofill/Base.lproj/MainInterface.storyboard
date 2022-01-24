@@ -152,7 +152,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoDark" translatesAutoresizingMaskIntoConstraints="NO" id="Roz-hO-dne">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoDark" highlightedImage="LogoWhite" translatesAutoresizingMaskIntoConstraints="NO" id="Roz-hO-dne">
                                 <rect key="frame" x="98.5" y="306" width="178" height="55"/>
                             </imageView>
                         </subviews>
@@ -163,6 +163,9 @@
                             <constraint firstItem="Roz-hO-dne" firstAttribute="centerY" secondItem="Hyv-8i-pka" secondAttribute="centerY" id="WvH-N1-uy7"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="logo" destination="Roz-hO-dne" id="mqP-Gl-Dma"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1CR-rL-5MY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -736,6 +739,7 @@
     </scenes>
     <resources>
         <image name="LogoDark" width="178" height="55"/>
+        <image name="LogoWhite" width="712" height="219.5"/>
         <image name="doc.on.doc" catalog="system" width="116" height="128"/>
         <image name="edit" width="18" height="4"/>
         <image name="eye.slash" catalog="system" width="128" height="86"/>
