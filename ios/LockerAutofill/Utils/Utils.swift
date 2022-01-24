@@ -45,6 +45,21 @@ class Utils {
     }
   }
   
+  static public func RemoveCredentialIdentities(_ credentialIdentities: ASPasswordCredentialIdentity){
+    Task.init {
+      let state =  await CredentialIdentityStoreEnabled()
+      if (state) {
+        ASCredentialIdentityStore.shared.removeCredentialIdentities([credentialIdentities]) { bool, error in
+            if let error = error {
+                print(error)
+            } else {
+                print("Remove Credential!")
+            }
+        }
+      }
+    }
+  }
+  
   static public func ReplaceCredentialIdentities(identifier: String, type: Int = 0, user: String, recordIdentifier: String) {
     Task.init {
       let state =  await CredentialIdentityStoreEnabled()
@@ -96,6 +111,7 @@ class Utils {
         DispatchQueue.main.async {
           guard success, authenError == nil else {
               //failed, can not use biometric for auth
+              print(authenError)
               onFailed()
               return
             }

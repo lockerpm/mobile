@@ -24,9 +24,8 @@ class VerifyMasterPasswordViewController: UIViewController {
     isModalInPresentation = true //disable the pull-down gesture
     
     Utils.ToggleHidePass(text: masterPasswordTxt, eyeIcon: eyeIconButton, initial: true)
-    
-//    verifyFaceId()
   }
+ 
   
   @IBAction func eyeIconDidPress(_ sender: Any) {
     Utils.ToggleHidePass(text: masterPasswordTxt, eyeIcon: eyeIconButton)
@@ -46,17 +45,14 @@ class VerifyMasterPasswordViewController: UIViewController {
   }
   
   @IBAction func faceIdDidPress(_ sender: Any) {
-    verifyFaceId()
-  }
-  
-  private func verifyFaceId() {
     if (credentialProviderDelegate.isFaceIdEnable()){
-        biometricAuthentication()
+      Utils.BiometricAuthentication(view: self, onSuccess: authenSuccess, onFailed: cancel)
     }
     else {
       Utils.Noti(contex: self, title: "Face ID is Not Available", message: "Please enable Faceid/TouchId in Locker to use this feature.")
     }
   }
+  
   
   private func verifyMasterPassword(masterPass: String) -> Bool {
     let hash = Utils.MakeKeyHash(key: masterPass, text: userEmail)
@@ -81,7 +77,5 @@ class VerifyMasterPasswordViewController: UIViewController {
     self.credentialProviderDelegate.cancel()
   }
   
-  private func biometricAuthentication() {
-    Utils.BiometricAuthentication(view: self, onSuccess: authenSuccess, onFailed: cancel)
-  }
 }
+

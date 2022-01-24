@@ -20,11 +20,12 @@ protocol CredentialProviderDelegate {
 class CredentialProviderController: ASCredentialProviderViewController {
   private var dataModel: AutofillDataModel = AutofillDataModel()
   private var serviceIdentifier: String!
-  private var quickBarCredential: Bool = false
+  private var quickBar: Bool = false
+  private var quickBarCredential: AutofillData!
   
   
   private func initController(serviceIdentifier: String, quickBarAccess: Bool = false) {
-    self.quickBarCredential = quickBarAccess
+    self.quickBar = quickBarAccess
     self.dataModel.fetchAutofillDataForUriKeychain(uri: serviceIdentifier)
   
     
@@ -33,18 +34,19 @@ class CredentialProviderController: ASCredentialProviderViewController {
       Utils.RemoveAllCredentialIdentities() // remove all credentials in store
       return
     }
-//    print(quickBarAccess)
-//    print(self.dataModel.isFaceIdEnabled())
-//    if (self.dataModel.isFaceIdEnabled()){
-//      Utils.BiometricAuthentication(
-//        view: self,
-//        onSuccess: quickBarAccess ? quickBarAuthenSuccess : performLoginListScreen,
-//        onFailed: performVerifyPasswordScreen
-//      )
-//    }
-////    else {
-      performVerifyPasswordScreen()
-//    }
+
+  }
+  override func viewDidAppear(_ animated: Bool) {
+      if (self.dataModel.isFaceIdEnabled()){
+        Utils.BiometricAuthentication(
+          view: self,
+          onSuccess: quickBar ? quickBarAuthenSuccess : performLoginListScreen,
+          onFailed: performVerifyPasswordScreen
+        )
+      }
+      else {
+        performVerifyPasswordScreen()
+      }
   }
   
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
@@ -55,6 +57,12 @@ class CredentialProviderController: ASCredentialProviderViewController {
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
     self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
     initController(serviceIdentifier: self.serviceIdentifier, quickBarAccess: true)
+    
+    if let credential = self.dataModel.getAutofillDataById(id: credentialIdentity.recordIdentifier!)  {
+      self.quickBarCredential = credential
+    } else {
+      Utils.RemoveCredentialIdentities(credentialIdentity)
+    }
   }
   
   override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
@@ -72,7 +80,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
     verifyMasterPasswordScreen.credentialProviderDelegate = self
     verifyMasterPasswordScreen.userEmail = self.dataModel.getUserEmail()
     verifyMasterPasswordScreen.hassMasterPass = self.dataModel.getUserHashMasterPass()
-    verifyMasterPasswordScreen.authenQuickBar = self.quickBarCredential
+    verifyMasterPasswordScreen.authenQuickBar = self.quickBar
     present(verifyMasterPasswordScreen, animated: true, completion: nil)
   }
   
@@ -107,6 +115,11 @@ extension CredentialProviderController: CredentialProviderDelegate{
   }
   
   func quickBarAuthenSuccess() {
-    completeRequest(user: "asdasdasd", password: "asdasd")
+    if (self.quickBarCredential == nil) {
+      performLoginListScreen()
+    } else {
+      completeRequest(user: quickBarCredential.username, password: quickBarCredential.password)
+    }
+
   }
 }
