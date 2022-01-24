@@ -10,6 +10,7 @@ import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-co
 import { CipherView } from "../../../../core/models/view"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Divider, Text } from "../../../components"
+import { AccountRoleText } from "../../../config/types"
 
 interface Props {
   isOpen?: boolean,
@@ -35,7 +36,7 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
   // Computed
 
   const teamUser = getTeam(user.teams, selectedCipher.organizationId)
-  const editable = !selectedCipher.organizationId || teamUser.role !== 'member'
+  const editable = !selectedCipher.organizationId || teamUser.role !== AccountRoleText.MEMBER
 
   const cipherMapper = (() => {
     return {

@@ -11,6 +11,7 @@ import { commonStyles, fontSize } from "../../../theme"
 import { CipherView } from "../../../../core/models/view"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import { AccountRoleText } from "../../../config/types"
 
 
 interface Props {
@@ -59,14 +60,14 @@ export const ShareModal = observer((props: Props) => {
   const handleShare = async () => {
     setIsLoading(true)
 
-    let role: 'member' | 'admin' = 'member'
+    let role = AccountRoleText.MEMBER
     let autofillOnly = false
     switch (shareType) {
       case 0:
         autofillOnly = true
         break
       case 2:
-        role = 'admin'
+        role = AccountRoleText.ADMIN
         break
     }
     const res = await shareCipher(selectedCipher, emails, role, autofillOnly)
