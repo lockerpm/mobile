@@ -81,7 +81,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     syncService,
     cryptoService
   } = useCoreService()
-  const { notify, translate, randomString, notifyApiError } = useMixins()
+  const { notify, translate, randomString, notifyApiError, getTeam } = useMixins()
   const { newCipher } = useCipherHelpersMixins()
 
   // ----------------------------- METHODS ---------------------------
@@ -379,7 +379,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         let ciphers = await getCiphers({
           deleted: false,
           searchText: '',
-          filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && !c.organizationId)]
+          filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name))]
         })
         f.cipherCount = ciphers ? ciphers.length : 0
       }
@@ -408,7 +408,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       let unassignedTeamCiphers = await getCiphers({
         deleted: false,
         searchText: '',
-        filters: [(c : CipherView) => !c.collectionIds.length && !!c.organizationId]
+        filters: [(c : CipherView) => !c.collectionIds.length && !!getTeam(user.teams, c.organizationId).name]
       })
       unassignedTeamCiphers.forEach((item: CipherView) => {
         const target = res.find(f => f.id === null && f.organizationId === item.organizationId)
