@@ -2,40 +2,36 @@ import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
-import { Button } from "../../button/button"
-import { Text } from "../../text/text"
-import { AutoImage as Image } from "../../auto-image/auto-image"
+import { Button } from "../../../../../components/button/button"
+import { Text } from "../../../../../components/text/text"
+import { AutoImage as Image } from "../../../../../components/auto-image/auto-image"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { CipherType } from "../../../../core/enums"
-import { useMixins } from "../../../services/mixins"
-import { useStores } from "../../../models"
-import { CipherView } from "../../../../core/models/view"
-import { BROWSE_ITEMS } from "../../../common/mappings"
-import { PasswordAction } from "../../../screens/auth/browse/passwords/password-action"
-import { CardAction } from "../../../screens/auth/browse/cards/card-action"
-import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
-import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
-import { commonStyles, fontSize } from "../../../theme"
-import { DeletedAction } from "../cipher-action/deleted-action"
+import { CipherType } from "../../../../../../core/enums"
+import { useMixins } from "../../../../../services/mixins"
+import { useStores } from "../../../../../models"
+import { CipherView } from "../../../../../../core/models/view"
+import { BROWSE_ITEMS } from "../../../../../common/mappings"
+import { commonStyles, fontSize } from "../../../../../theme"
 import { Checkbox } from "react-native-ui-lib"
-import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { AccountRole } from "../../../../../config/types"
+import { Organization } from "../../../../../../core/models/domain/organization"
+import { PasswordAction } from "../../passwords/password-action"
+import { CardAction } from "../../cards/card-action"
+import { NoteAction } from "../../notes/note-action"
+import { IdentityAction } from "../../identities/identity-action"
 
 
-export interface CipherListProps {
+export interface CipherSharedListProps {
   emptyContent?: JSX.Element
   navigation: any
   searchText?: string
   onLoadingChange?: Function
-  cipherType?: CipherType
-  deleted?: boolean
   sortList?: {
     orderField: string
     order: string
   },
-  folderId?: string
-  collectionId?: string
-  organizationId?: string
   isSelecting: boolean
   setIsSelecting: Function
   selectedItems: string[]
@@ -46,24 +42,23 @@ export interface CipherListProps {
 /**
  * Describe your component here
  */
-export const CipherList = observer(function CipherList(props: CipherListProps) {
+export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const {
-    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList,
-    folderId, collectionId, organizationId,
+    emptyContent, navigation, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
   const { getWebsiteLogo, translate, color } = useMixins()
   const { getCiphers } = useCipherDataMixins()
   const { cipherStore } = useStores()
+  const organizations = cipherStore.organizations
 
   // ------------------------ PARAMS ----------------------------
 
+  const [ciphers, setCiphers] = useState([])
   const [showPasswordAction, setShowPasswordAction] = useState(false)
   const [showNoteAction, setShowNoteAction] = useState(false)
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
-  const [showDeletedAction, setShowDeletedAction] = useState(false)
-  const [ciphers, setCiphers] = useState([])
 
   // ------------------------ WATCHERS ----------------------------
 
@@ -73,32 +68,38 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // ------------------------ METHODS ----------------------------
 
+  const _getOrg = (id: string) => {
+    return organizations.find((o: Organization) => o.id === id)
+  }
+
   // Get ciphers list
   const loadData = async () => {
     onLoadingChange && onLoadingChange(true)
-
+    
     // Filter
-    const filters = []
-    if (props.cipherType) {
-      filters.push((c : CipherView) => c.type === props.cipherType)
-    }
+    const filters = [(c: CipherView) => {
+      if (!c.organizationId) {
+        return false
+      }
+      const org = _getOrg(c.organizationId)
+      return org && org.type !== AccountRole.OWNER
+    }]
 
     // Search
     const searchRes = await getCiphers({
       filters,
       searchText,
-      deleted
+      deleted: false
     })
 
-    // Add image
+    // Add image + org info
     let res = searchRes.map((c: CipherView) => {
       const data = {
         ...c,
         logo: null,
         imgLogo: null,
         svg: null,
-        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
-        isDeleted: c.isDeleted
+        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id)
       }
       switch (c.type) {
         case CipherType.Login: {
@@ -133,28 +134,6 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       return data
     })
 
-    // Filter
-    if (folderId !== undefined) {
-      res = res.filter(i => i.folderId === folderId)
-    }
-    if (collectionId !== undefined) {
-      if (collectionId === null) {
-        res = res.filter(i => !i.collectionIds.length)
-      } else {
-        res = res.filter(i => i.collectionIds.includes(collectionId))
-      }
-    }
-    if (organizationId === undefined && folderId === null) {
-      res = res.filter(i => !i.organizationId)
-    }
-    if (organizationId !== undefined) {
-      if (organizationId === null) {
-        res = res.filter(i => !!i.organizationId)
-      } else {
-        res = res.filter(i => i.organizationId === organizationId)
-      }
-    }
-
     // Sort
     if (sortList) {
       const { orderField, order } = sortList
@@ -178,11 +157,6 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   // Handle action menu open
   const openActionMenu = (item: CipherView) => {
     cipherStore.setSelectedCipher(item)
-    if (deleted) {
-      setShowDeletedAction(true)
-      return
-    }
-
     switch (item.type) {
       case CipherType.Login:
         setShowPasswordAction(true)
@@ -222,17 +196,19 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // Get cipher description
   const getDescription = (item: CipherView) => {
-    switch (item.type) {
-      case CipherType.Login:
-        return item.login.username
-      case CipherType.Card:
-        return (item.card.brand && item.card.number) 
-          ? `${item.card.brand}, *${item.card.number.slice(-4)}`
-          : ''
-      case CipherType.Identity:
-        return item.identity.fullName
+    const org = _getOrg(item.organizationId)
+    let shareType = ''
+    if (org) {
+      switch (org.type) {
+        case AccountRole.MEMBER:
+          shareType = item.viewPassword ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
+          break
+        case AccountRole.ADMIN:
+          shareType = translate('shares.share_type.edit')
+          break
+      }
     }
-    return ''
+    return org ? `${org.name} - ${shareType}` : ''
   }
 
   // Toggle item selection
@@ -279,13 +255,6 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       <NoteAction
         isOpen={showNoteAction}
         onClose={() => setShowNoteAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <DeletedAction
-        isOpen={showDeletedAction}
-        onClose={() => setShowDeletedAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
       />
@@ -341,20 +310,6 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
                     preset="semibold"
                     text={item.name}
                   />
-
-                  {/* Belong to team icon */}
-                  {
-                    item.organizationId && (
-                      <View style={{ marginLeft: 10 }}>
-                        <MaterialCommunityIconsIcon
-                          name="account-group-outline"
-                          size={22}
-                          color={color.textBlack}
-                        />
-                      </View>
-                    )
-                  }
-                  {/* Belong to team icon end */}
 
                   {/* Not sync icon */}
                   {

@@ -41,6 +41,7 @@ const defaultData = {
   getCipherById: async (id: string) => new CipherView(),
 
   getCollections: async () => { return [] },
+  loadOrganizations: async () => {},
   loadFolders: async () => {},
   loadCollections: async () => {},
 
@@ -51,6 +52,7 @@ const defaultData = {
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   importCiphers: async (importResult) => { return { kind: 'unknown' } },
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
+  leaveShare: async (id: string, organizationId: string) => { return { kind: 'unknown' } },
 
   createFolder: async (folder: FolderView) => { return { kind: 'unknown' } },
   updateFolder: async (folder: FolderView) => { return { kind: 'unknown' } },
@@ -355,6 +357,17 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       Logger.error(e)
     } finally {
       cipherStore.setIsSynchingAutofill(false)
+    }
+  }
+
+  // Load organizations
+  const loadOrganizations = async () => {
+    try {
+      const res = await userService.getAllOrganizations() || []
+      cipherStore.setOrganizations(res)
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      Logger.error(e)
     }
   }
 
@@ -923,6 +936,26 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     return key.encryptedString
   }
 
+  // Offline delete
+  const leaveShare = async (id: string, organizationId: string) => {
+    const apiRes = await cipherStore.leaveShare(organizationId)
+    if (apiRes.kind !== 'ok') {
+      notifyApiError(apiRes)
+      return apiRes
+    }
+
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
+    delete res[id]
+    
+    await storageService.save(key, res)
+    await reloadCache()
+
+    cipherStore.setOrganizations(cipherStore.organizations.filter(o => o.id !== organizationId))
+    return apiRes
+  }
+
   // ----------------------- FOLDER ---------------------------
 
   // Create folder
@@ -1313,6 +1346,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     getCiphers,
     getCipherById,
     getCollections,
+    loadOrganizations,
     loadFolders,
     loadCollections,
     createCipher,
@@ -1321,6 +1355,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     toTrashCiphers,
     restoreCiphers,
     shareCipher,
+    leaveShare,
     importCiphers,
     createFolder,
     updateFolder,

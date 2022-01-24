@@ -80,6 +80,7 @@
     "trash": "Thùng rác",
     "tools": "Công cụ",
     "unlock": "Mở khóa",
+    "warning": "Cảnh báo",
     "website": "Website"
   },
   "navigator": {
@@ -121,6 +122,7 @@
     "not_allowed_to_copy_pw": "Không thể thực hiện hành động này! Mật khẩu này chỉ có thể sử dụng cho tính năng Tự động điền!"
   },
   "success": {
+    "done": "Hoàn tất",
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
     "invitation_rejected": "Đã từ chối lời mời",
     "master_password_updated": "Mật khẩu chính đã được cập nhật",
@@ -334,7 +336,9 @@
       "view": "Xem",
       "only_fill": "Chỉ tự động điền",
       "edit": "Sửa"
-    }
+    },
+    "leave": "Thoát chia sẻ",
+    "leave_desc": "Bạn có chắc muốn xoá mục chia sẻ này?"
   },
   "trash": {
     "delete_item": "Xóa",

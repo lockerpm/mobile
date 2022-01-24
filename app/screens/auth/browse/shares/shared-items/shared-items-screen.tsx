@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../../components"
+import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../../home/all-item/sort-action"
 import { AddAction } from "../../../home/all-item/add-action"
 import { useMixins } from "../../../../../services/mixins"
 import { BackHandler } from "react-native"
 import { useStores } from "../../../../../models"
+import { CipherSharedList } from "./cipher-shared-list"
 
 
 export const SharedItemsScreen = observer(() => {
@@ -88,12 +89,11 @@ export const SharedItemsScreen = observer(() => {
         navigation={navigation}
       />
 
-      <CipherList
+      <CipherSharedList
         navigation={navigation}
         onLoadingChange={setIsLoading}
         searchText={searchText}
         sortList={sortList}
-        organizationId={null}
         isSelecting={isSelecting}
         setIsSelecting={setIsSelecting}
         selectedItems={selectedItems}

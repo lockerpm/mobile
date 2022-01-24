@@ -1,5 +1,6 @@
 import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
+import { Organization } from "../../../core/models/domain/organization"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CipherView } from "../../../core/models/view"
 import { ImportCipherData, MoveFolderData, MyShareType, ShareCipherData, SharingInvitationType } from "../../services/api"
@@ -26,6 +27,7 @@ export const CipherStoreModel = types
     lastCacheUpdate: types.maybeNull(types.number),
     sharingInvitations: types.array(types.frozen<SharingInvitationType>()),
     myShares: types.array(types.frozen<MyShareType>()),
+    organizations: types.array(types.frozen<Organization>()),
 
     // Selector
     generatedPassword: types.maybeNull(types.string),
@@ -123,6 +125,7 @@ export const CipherStoreModel = types
       self.lastCacheUpdate = null
       self.sharingInvitations = cast([])
       self.myShares = cast([])
+      self.organizations = cast([])
     },
 
     lock: () => {
@@ -137,6 +140,10 @@ export const CipherStoreModel = types
 
     setMyShares: (data: MyShareType[]) => {
       self.myShares = cast(data)
+    },
+
+    setOrganizations: (data: Organization[]) => {
+      self.organizations = cast(data)
     }
   }))
   .actions(self => ({
@@ -240,6 +247,12 @@ export const CipherStoreModel = types
         self.setMyShares(res.data)
       }
       return res
+    },
+
+    leaveShare: async (organizationId: string) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.leaveShare(self.apiToken, organizationId)
+      return res
     }
   }))
   .postProcessSnapshot(omit([
@@ -248,7 +261,8 @@ export const CipherStoreModel = types
     'selectedFolder',
     'isSynching',
     'isSynchingOffline',
-    'isSynchingAutofill'
+    'isSynchingAutofill',
+    'organizations'
   ]))
 
 /**

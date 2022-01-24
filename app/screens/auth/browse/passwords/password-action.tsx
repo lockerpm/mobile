@@ -5,23 +5,27 @@ import { useStores } from "../../../../models"
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { ActionItem } from "../../../../components/cipher/cipher-action/action-item"
 import { CipherView } from "../../../../../core/models/view"
+import { SharedItemAction } from "../../../../components/cipher/cipher-action/shared-item-action"
+import { observer } from "mobx-react-lite"
 
 
 type Props = {
-  isOpen?: boolean,
-  onClose?: () => void,
-  navigation: any,
+  isOpen?: boolean
+  onClose?: () => void
+  navigation: any
   onLoadingChange?: Function
 }
 
 
-export const PasswordAction = (props: Props) => {
+export const PasswordAction = observer((props: Props) => {
   const { copyToClipboard, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 
-  return (
-    <CipherAction {...props}>
+  const isShared = !!selectedCipher.organizationId
+
+  const renderContent = () => (
+    <>
       <ActionItem
         name={translate('password.launch_website')}
         icon="external-link"
@@ -42,6 +46,16 @@ export const PasswordAction = (props: Props) => {
         action={() => copyToClipboard(selectedCipher.login.password)}
         disabled={!selectedCipher.login.password || !selectedCipher.viewPassword}
       />
+    </>
+  )
+
+  return isShared ? (
+    <SharedItemAction {...props}>
+      {renderContent()}
+    </SharedItemAction>
+  ) : (
+    <CipherAction {...props}>
+      {renderContent()}
     </CipherAction>
   )
-}
+})
