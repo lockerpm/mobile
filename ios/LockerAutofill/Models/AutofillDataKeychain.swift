@@ -74,6 +74,22 @@ class AutofillDataModel {
     return self.URI
   }
 
+  public func getAutofillDataById(id: String?) -> AutofillData? {
+    if id == nil {
+      return nil
+    }
+    
+    if let autofillData = credentials.first(where: {$0.id == id}){
+      return autofillData
+    }
+    
+    if let autofillData = otherCredentials.first(where: {$0.id == id}){
+      return autofillData
+    }
+    
+    return nil
+  }
+  
   public func addNewAutofillData(credential: AutofillData) {
 //    var newPassword: [String: Any] = [:]
 //    //newPassword["autofillID"] = self.passwords["passwords"]?.count
