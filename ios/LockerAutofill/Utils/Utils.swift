@@ -17,52 +17,69 @@ class Utils {
     return pbkdf2.makeKeyHash(masterPassword: key, email: text)
   }
   
+  static public func CredentialIdentityStoreEnabled() async -> Bool {
+    let state = await ASCredentialIdentityStore.shared.state()
+    return state.isEnabled
+  }
+  
   static public func AddCredentialsQuickTypeBar(identifier: String, type: Int = 0, user: String, recordIdentifier: String){
-    
-    let store = ASCredentialIdentityStore.shared
-    store.getState { state in
-        if state.isEnabled {
-         
-          let credential = ASPasswordCredentialIdentity(
-            serviceIdentifier: ASCredentialServiceIdentifier(
-              identifier: identifier,
-              type: (type == 0) ? .domain : .URL),
-              user: user,
-              recordIdentifier: recordIdentifier
-          )
+    Task.init {
+      let state =  await CredentialIdentityStoreEnabled()
+      if (state) {
+        let credential = ASPasswordCredentialIdentity(
+          serviceIdentifier: ASCredentialServiceIdentifier(
+            identifier: identifier,
+            type: (type == 0) ? .domain : .URL),
+            user: user,
+            recordIdentifier: recordIdentifier
+        )
 
-          ASCredentialIdentityStore.shared.saveCredentialIdentities([credential]) { bool, error in
-              if let error = error {
-                  print(error)
-              } else {
-                  print("Saved Credential!")
-              }
-          }
+        ASCredentialIdentityStore.shared.saveCredentialIdentities([credential]) { bool, error in
+            if let error = error {
+                print(error)
+            } else {
+                print("Saved Credential!")
+            }
         }
+      }
     }
   }
   
   static public func ReplaceCredentialIdentities(identifier: String, type: Int = 0, user: String, recordIdentifier: String) {
-    let store = ASCredentialIdentityStore.shared
-    store.getState { state in
-        if state.isEnabled {
-         
-          let credential = ASPasswordCredentialIdentity(
-            serviceIdentifier: ASCredentialServiceIdentifier(
-              identifier: identifier,
-              type: (type == 0) ? .domain : .URL),
-              user: user,
-              recordIdentifier: recordIdentifier
-          )
+    Task.init {
+      let state =  await CredentialIdentityStoreEnabled()
+      if (state) {
+        let credential = ASPasswordCredentialIdentity(
+          serviceIdentifier: ASCredentialServiceIdentifier(
+            identifier: identifier,
+            type: (type == 0) ? .domain : .URL),
+            user: user,
+            recordIdentifier: recordIdentifier
+        )
 
-          ASCredentialIdentityStore.shared.replaceCredentialIdentities(with: [credential]) { bool, error in
-              if let error = error {
-                  print(error)
-              } else {
-                  print("Replace Credential!")
-              }
-          }
+        ASCredentialIdentityStore.shared.saveCredentialIdentities([credential]) { bool, error in
+            if let error = error {
+                print(error)
+            } else {
+                print("Replace Credential!")
+            }
         }
+      }
+    }
+  }
+  
+  static public func RemoveAllCredentialIdentities() {
+    Task.init {
+      let state =  await CredentialIdentityStoreEnabled()
+      if (state) {
+        ASCredentialIdentityStore.shared.removeAllCredentialIdentities({ bool, error in
+            if let error = error {
+                print(error)
+            } else {
+                print("Remove Credential!")
+            }
+        })
+      }
     }
   }
   
@@ -79,7 +96,6 @@ class Utils {
         DispatchQueue.main.async {
           guard success, authenError == nil else {
               //failed, can not use biometric for auth
-//              print(authenError)
               onFailed()
               return
             }

@@ -291,12 +291,6 @@
                                                 <action selector="cancel:" destination="Xki-Si-B7m" id="6ap-3Q-iEX"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Add" id="qj7-JW-LCA">
-                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <connections>
-                                                <action selector="add" destination="Xki-Si-B7m" id="P6l-qR-eq1"/>
-                                            </connections>
-                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
