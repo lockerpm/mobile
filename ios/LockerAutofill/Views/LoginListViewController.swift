@@ -139,9 +139,9 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
     let content: String
 
     if section == 0 {
-      content = "Passwords for \"\(uri!)\" (\(self.filterCredentials.count))"
+      content = Utils.Translate("Passwords for") +  " \"\(uri!)\" (\(self.filterCredentials.count))"
     } else {
-      content = "All passwords (\(self.filterOthers.count))"
+      content = Utils.Translate("All passwords") + " (\(self.filterOthers.count))"
     }
     let attributedString = NSAttributedString(string: content, attributes: [.paragraphStyle : paragraphStyle, .backgroundColor: UIColor.white])
     label.attributedText = attributedString

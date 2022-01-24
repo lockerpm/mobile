@@ -59,12 +59,12 @@ class EditPasaswordViewController: UIViewController {
   
   @IBAction func passwordCopyDidPress(_ sender: Any) {
     UIPasteboard.general.string = password.text
-    self.view.makeToast("password copied", duration: 1.5, position: .top)
+    self.view.makeToast(Utils.Translate("password copied"), duration: 1.5, position: .top)
   }
   
   @IBAction func usernameCopyDidPress(_ sender: Any) {
     UIPasteboard.general.string = username.text
-    self.view.makeToast("username copied", duration: 1.5, position: .top)
+    self.view.makeToast(Utils.Translate("username copied"), duration: 1.5, position: .top)
   }
   
   @IBAction func deleteCredential(_ sender: Any) {
