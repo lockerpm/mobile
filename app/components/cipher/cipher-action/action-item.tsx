@@ -7,6 +7,7 @@ import { ActionSheetItem } from "../../action-sheet/action-sheet-item"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import { observer } from "mobx-react-lite"
+import { PlanType } from "../../../config/types"
 
 
 export interface ActionItemProps {
@@ -32,7 +33,7 @@ export const ActionItem = observer((props: ActionItemProps) => {
   const { color } = useMixins()
   const { user } = useStores()
 
-  const premiumLock = isPremium && (user.plan && user.plan.alias === 'pm_free')
+  const premiumLock = isPremium && (user.plan && user.plan.alias === PlanType.FREE)
 
   return (
     <ActionSheetItem

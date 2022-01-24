@@ -30,6 +30,7 @@ import { useCipherDataMixins } from "../services/mixins/cipher/data"
 import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
 import { IS_IOS, WS_URL } from "../config/constants"
 import { Logger } from "../utils/logger"
+import { SocketEvent, SocketEventType } from "../config/types"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -227,14 +228,14 @@ export const MainNavigator = observer(function MainNavigator() {
       const data = JSON.parse(e.data)
       Logger.debug('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
-        case 'sync':
+        case SocketEvent.SYNC:
           switch (data.type) {
-            case 'cipher_update': {
+            case SocketEventType.CIPHER_UPDATE: {
               const cipherId = data.data.id
               syncSingleCipher(cipherId)
               break
             }
-            case 'folder_update': {
+            case SocketEventType.FOLDER_UPDATE: {
               const folderId = data.data.id
               syncSingleFolder(folderId)
               break
@@ -243,7 +244,7 @@ export const MainNavigator = observer(function MainNavigator() {
               handleSync()
           }
           break
-        case 'members':
+        case SocketEvent.MEMBERS:
           handleUserDataSync()
           break
         default:

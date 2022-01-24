@@ -17,6 +17,7 @@ import { CipherView } from "../../../../core/models/view"
 import { ShareModal } from "./share-modal"
 import { ChangeTeamFolderModal } from "./change-team-folder-modal"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { AccountRoleText } from "../../../config/types"
 
 export interface CipherActionProps {
   children?: React.ReactNode,
@@ -45,7 +46,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   // Computed
 
   const teamUser = getTeam(user.teams, selectedCipher.organizationId)
-  const editable = !selectedCipher.organizationId || teamUser.role !== 'member'
+  const editable = !selectedCipher.organizationId || teamUser.role !== AccountRoleText.MEMBER
 
   const cipherMapper = (() => {
     switch (selectedCipher.type) {

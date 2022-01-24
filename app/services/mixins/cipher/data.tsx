@@ -21,6 +21,7 @@ import { FolderData } from '../../../../core/models/data/folderData'
 import { Logger } from '../../../utils/logger'
 import { EncString, SymmetricCryptoKey } from '../../../../core/models/domain'
 import { Utils } from '../../core-service/utils'
+import { AccountRoleText } from '../../../config/types'
 
 
 type GetCiphersParams = {
@@ -49,7 +50,7 @@ const defaultData = {
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   importCiphers: async (importResult) => { return { kind: 'unknown' } },
-  shareCipher: async (cipher: CipherView, emails: string[], role: 'member' | 'admin', autofillOnly: boolean) => { return { kind: 'unknown' } },
+  shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
 
   createFolder: async (folder: FolderView) => { return { kind: 'unknown' } },
   updateFolder: async (folder: FolderView) => { return { kind: 'unknown' } },
@@ -863,7 +864,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Share cipher
-  const shareCipher = async (cipher: CipherView, emails: string[], role: 'member' | 'admin', autofillOnly: boolean) => {
+  const shareCipher = async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => {
     try {
       // Prepare org key
       let orgKey: SymmetricCryptoKey = null

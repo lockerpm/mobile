@@ -7,6 +7,7 @@ import { CollectionResponse } from "../../../core/models/response/collectionResp
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { CipherResponse } from "../../../core/models/response/cipherResponse"
+import { AccountRoleText, InvitationStatus, SharingStatus, SharingType } from "../../config/types"
 
 type SessionSnapshot = {
     access_token: string
@@ -46,9 +47,9 @@ export type SharingInvitationType = {
         email: string
         full_name: string
     }
-    role: 'member' | 'admin'
-    share_type: 'View' | 'Edit' | 'Only fill'
-    status: 'invited' | 'accepted' | 'confirmed'
+    role: AccountRoleText
+    share_type: SharingType
+    status: SharingStatus
     team: {
         id: string
         name: string
@@ -69,9 +70,9 @@ export type MyShareType = {
         hide_passwords: boolean
         id: string
         pwd_user_id: string
-        role: 'member' | 'admin'
-        share_type: 'View' | 'Edit' | 'Only fill'
-        status: 'confirmed' | 'accepted' | 'invited'
+        role: AccountRoleText
+        share_type: SharingType
+        status: SharingStatus
         username: string
     }[]
 }
@@ -127,9 +128,13 @@ export type EmptyResult = { kind: "ok" } | GeneralApiProblem
 export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
 export type GetCipherResult = { kind: "ok", data: CipherResponse } | GeneralApiProblem
 export type GetFolderResult = { kind: "ok", data: FolderResponse } | GeneralApiProblem
-export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
 export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | GeneralApiProblem
+
+export type GetTeamsResult = { 
+    kind: 'ok', 
+    teams: object[] 
+} | GeneralApiProblem
 
 export type GetPlanResult = {
     kind: 'ok'
@@ -154,8 +159,8 @@ export type GetInvitationsResult = {
     data: {
         access_time: number
         id: string
-        role: 'admin' | 'manager' | 'member'
-        status: 'confirmed' | 'invited'
+        role: AccountRoleText
+        status: InvitationStatus
         team: {
             id: string
             name: string
@@ -383,7 +388,7 @@ export type ShareCipherData = {
     sharing_key: string
     members: {
         username: string
-        role: 'member' | 'admin'
+        role: AccountRoleText
         key: string
         hide_passwords: boolean
     }[]
