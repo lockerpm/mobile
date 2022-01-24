@@ -16,6 +16,7 @@ import { color, colorDark } from '../../theme'
 import extractDomain from 'extract-domain'
 import { PushNotifier } from '../../utils/push-notification'
 import { Logger } from '../../utils/logger'
+import { useCoreService } from '../core-service'
 
 
 const { createContext, useContext } = React
@@ -28,6 +29,7 @@ const defaultData = {
 
   // Methods
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
+  getAllOrganizations: async () => [],
   getTeam: (teams: object[], orgId: string) => ({ name: '', role: '' }),
   copyToClipboard: (text: string) => {},
   getRouteName: async () => { return '' },
@@ -45,6 +47,7 @@ export const MixinsContext = createContext(defaultData)
 export const MixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const { uiStore, user } = useStores()
   const insets = useSafeAreaInsets()
+  const { userService } = useCoreService()
 
   // ------------------------ DATA -------------------------
 
@@ -101,6 +104,11 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     }
     const imgUri = `${GET_LOGO_URL}/${domain}?size=120`
     return { uri: imgUri }
+  }
+
+  // Get all org
+  const getAllOrganizations = () => {
+    return userService.getAllOrganizations()
   }
 
   // Get team
@@ -192,6 +200,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     notify,
     randomString,
     getWebsiteLogo,
+    getAllOrganizations,
     getTeam,
     copyToClipboard,
     getRouteName,

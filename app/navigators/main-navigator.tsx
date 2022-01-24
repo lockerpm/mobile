@@ -111,7 +111,7 @@ export const MainNavigator = observer(function MainNavigator() {
   const { lock, logout } = useCipherAuthenticationMixins()
   const { 
     getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData, 
-    syncSingleCipher, syncSingleFolder, syncOfflineData
+    syncSingleCipher, syncSingleFolder, syncOfflineData, loadOrganizations
   } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const { uiStore, user, cipherStore } = useStores()
@@ -150,7 +150,8 @@ export const MainNavigator = observer(function MainNavigator() {
     // Load data
     await Promise.all([
       loadFolders(),
-      loadCollections()
+      loadCollections(),
+      loadOrganizations()
     ])
     if (cipherStore.selectedCipher) {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)

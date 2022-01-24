@@ -5,11 +5,22 @@ import { Text, Button, Layout, AutoImage as Image } from "../../../../components
 import { useNavigation } from "@react-navigation/native"
 import { BROWSE_ITEMS } from "../../../../common/mappings"
 import { useMixins } from "../../../../services/mixins"
+import { commonStyles } from "../../../../theme"
+import { useStores } from "../../../../models"
+import { observer } from "mobx-react-lite"
 
 
-export const BrowseListScreen = function BrowseListScreen() {
+export const BrowseListScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, color, isDark } = useMixins()
+  const { cipherStore } = useStores()
+
+  const data = Object.keys(BROWSE_ITEMS).map(key => {
+    return {
+      ...BROWSE_ITEMS[key],
+      notiCount: key === 'shares' ? cipherStore.sharingInvitations.length : 0
+    }
+  })
   
   return (
     <Layout
@@ -31,7 +42,7 @@ export const BrowseListScreen = function BrowseListScreen() {
         }}
       >
         {
-          Object.values(BROWSE_ITEMS).map((item, index) => (
+          data.map((item, index) => (
             <Button
               key={index}
               preset="link"
@@ -53,10 +64,34 @@ export const BrowseListScreen = function BrowseListScreen() {
                   <Image source={item.icon} style={{ height: 40, width: 40 }} />
                 )
               }
-              <Text
-                tx={item.label}
-                style={{ color: color.title, flex: 1, paddingHorizontal: 10 }}
-              />
+              <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flex: 1, paddingHorizontal: 10 }]}>
+                <Text
+                  tx={item.label}
+                  style={{ color: color.title, marginRight: 10 }}
+                />
+                {
+                  (item.notiCount > 0) && (
+                    <View
+                      style={{
+                        backgroundColor: color.error,
+                        borderRadius: 20,
+                        minWidth: 17,
+                        height: 17
+                      }}
+                    >
+                      <Text
+                        text={item.notiCount.toString()}
+                        style={{
+                          fontSize: 12,
+                          textAlign: 'center',
+                          color: color.white,
+                          lineHeight: 17
+                        }}
+                      />
+                    </View>
+                  )
+                }
+              </View>
               <Icon name="angle-right" size={20} color={color.title} />
             </Button>
           ))
@@ -64,4 +99,4 @@ export const BrowseListScreen = function BrowseListScreen() {
       </View>
     </Layout>
   )
-}
+})

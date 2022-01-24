@@ -13,7 +13,7 @@ import { IS_IOS } from "../../../config/constants"
 export const StartScreen = observer(function StartScreen() {
   const { user, uiStore } = useStores()
   const { isBiometricAvailable, translate } = useMixins()
-  const { loadFolders, loadCollections, syncAutofillData } = useCipherDataMixins()
+  const { loadFolders, loadCollections, syncAutofillData, loadOrganizations } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const navigation = useNavigation()
 
@@ -50,7 +50,8 @@ export const StartScreen = observer(function StartScreen() {
     setMsg(translate('start.decrypting'))
     await Promise.all([
       loadFolders(),
-      loadCollections()
+      loadCollections(),
+      loadOrganizations()
     ])
     if (!uiStore.isFromAutoFill) {
       loadPasswordsHealth()
