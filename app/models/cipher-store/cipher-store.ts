@@ -253,7 +253,21 @@ export const CipherStoreModel = types
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.leaveShare(self.apiToken, organizationId)
       return res
-    }
+    },
+
+    respondShare: async (id: string, accepted: boolean) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.respondShareInvitation(self.apiToken, id, {
+        status: accepted ? 'accept' : 'reject'
+      })
+      return res
+    },
+
+    getOrganization: async (id: string) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getOrganization(self.apiToken, id)
+      return res
+    },
   }))
   .postProcessSnapshot(omit([
     'generatedPassword', 
