@@ -41,7 +41,7 @@ class AutofillDataModel {
       self.loginedLocker = true;
       // convert autofillData to usable autofill data
       fetchAutofillData(text: self.keychainData)
-      print(self.passwords)
+//      print(self.passwords)
     }
   }
   

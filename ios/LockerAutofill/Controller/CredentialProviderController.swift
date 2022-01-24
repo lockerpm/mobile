@@ -26,9 +26,11 @@ class CredentialProviderController: ASCredentialProviderViewController {
   private func initController(serviceIdentifier: String, quickBarAccess: Bool = false) {
     self.quickBarCredential = quickBarAccess
     self.dataModel.fetchAutofillDataForUriKeychain(uri: serviceIdentifier)
+  
     
     if (!self.dataModel.isLoginLocker()){
       Utils.Noti(contex: self, title: "Authentication", message:  "You must to login Locker befor using autofill service", completion: cancel)
+      Utils.RemoveAllCredentialIdentities() // remove all credentials in store
       return
     }
 //    print(quickBarAccess)
