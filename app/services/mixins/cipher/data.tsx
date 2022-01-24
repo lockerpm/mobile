@@ -53,6 +53,8 @@ const defaultData = {
   importCiphers: async (importResult) => { return { kind: 'unknown' } },
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   leaveShare: async (id: string, organizationId: string) => { return { kind: 'unknown' } },
+  acceptShareInvitation: async (id: string) => { return { kind: 'unknown' } },
+  rejectShareInvitation: async (id: string) => { return { kind: 'unknown' } },
 
   createFolder: async (folder: FolderView) => { return { kind: 'unknown' } },
   updateFolder: async (folder: FolderView) => { return { kind: 'unknown' } },
@@ -936,7 +938,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     return key.encryptedString
   }
 
-  // Offline delete
+  // Leave share
   const leaveShare = async (id: string, organizationId: string) => {
     const apiRes = await cipherStore.leaveShare(organizationId)
     if (apiRes.kind !== 'ok') {
@@ -954,6 +956,31 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
     cipherStore.setOrganizations(cipherStore.organizations.filter(o => o.id !== organizationId))
     return apiRes
+  }
+
+  // Accept share invitation
+  const acceptShareInvitation = async (id: string) => {
+    const res = await cipherStore.respondShare(id, true)
+    if (res.kind === 'ok') {
+      notify('success', translate('success.done'))
+      cipherStore.setSharingInvitations(cipherStore.sharingInvitations.filter(i => i.id !== id))
+      await syncSingleCipher(id)
+    } else {
+      notifyApiError(res)
+    }
+    return res
+  }
+
+  // Reject share invitation
+  const rejectShareInvitation = async (id: string) => {
+    const res = await cipherStore.respondShare(id, false)
+    if (res.kind === 'ok') {
+      notify('success', translate('success.done'))
+      cipherStore.setSharingInvitations(cipherStore.sharingInvitations.filter(i => i.id !== id))
+    } else {
+      notifyApiError(res)
+    }
+    return res
   }
 
   // ----------------------- FOLDER ---------------------------
@@ -1343,12 +1370,14 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     getSyncData,
     syncOfflineData,
     syncAutofillData,
+
     getCiphers,
     getCipherById,
     getCollections,
     loadOrganizations,
     loadFolders,
     loadCollections,
+
     createCipher,
     updateCipher,
     deleteCiphers,
@@ -1356,13 +1385,18 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     restoreCiphers,
     shareCipher,
     leaveShare,
+    acceptShareInvitation,
+    rejectShareInvitation,
     importCiphers,
+
     createFolder,
     updateFolder,
     deleteFolder,
+
     createCollection,
     updateCollection,
     deleteCollection,
+
     syncSingleCipher,
     syncSingleFolder
   }

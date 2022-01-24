@@ -50,6 +50,7 @@ export type SharingInvitationType = {
     role: AccountRoleText
     share_type: SharingType
     status: SharingStatus
+    hide_passwords: boolean
     team: {
         id: string
         name: string
@@ -392,4 +393,8 @@ export type ShareCipherData = {
         key: string
         hide_passwords: boolean
     }[]
+}
+
+export type ShareInvitationResponseData = {
+    status: 'accept' | 'reject'
 }
