@@ -4,9 +4,10 @@ import { useNavigation } from "@react-navigation/native"
 import { BackHandler } from "react-native"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
-import { BrowseItemEmptyContent, BrowseItemHeader, CipherList, Layout } from "../../../../../components"
+import { BrowseItemEmptyContent, BrowseItemHeader, Layout } from "../../../../../components"
 import { SortAction } from "../../../home/all-item/sort-action"
 import { AddAction } from "../../../home/all-item/add-action"
+import { CipherShareList } from "./cipher-share-list"
 
 
 export const ShareItemsScreen = observer(() => {
@@ -49,7 +50,7 @@ export const ShareItemsScreen = observer(() => {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header={translate('shares.shared_items')}
+          header={translate('shares.share_items')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           onSearch={setSearchText}
@@ -88,12 +89,11 @@ export const ShareItemsScreen = observer(() => {
         navigation={navigation}
       />
 
-      <CipherList
+      <CipherShareList
         navigation={navigation}
         onLoadingChange={setIsLoading}
         searchText={searchText}
         sortList={sortList}
-        organizationId={null}
         isSelecting={isSelecting}
         setIsSelecting={setIsSelecting}
         selectedItems={selectedItems}
@@ -104,7 +104,7 @@ export const ShareItemsScreen = observer(() => {
             img={require('./empty-img.png')}
             imgStyle={{ height: 55, width: 55 }}
             title={translate('shares.empty.title')}
-            desc={translate('shares.empty.desc')}
+            desc={translate('shares.empty.desc_share')}
           />
         )}
       />

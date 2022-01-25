@@ -60,6 +60,7 @@ export const ItemsHeader = (props: Props) => {
   
   // ----------------------- METHODS ------------------------
 
+  // Header left
   const renderHeaderRight = () => (
     <View
       style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -96,6 +97,7 @@ export const ItemsHeader = (props: Props) => {
     </View>
   )
 
+  // Select right
   const renderHeaderSelectRight = () => (
     <View
       style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -146,6 +148,7 @@ export const ItemsHeader = (props: Props) => {
     </View>
   )
 
+  // Select left
   const renderHeaderSelectLeft = () => (
     <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
       <Button
@@ -173,6 +176,8 @@ export const ItemsHeader = (props: Props) => {
       />
     </View>
   )
+
+  // Actions
 
   const handleDelete = async () => {
     setIsLoading(true)

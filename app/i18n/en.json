@@ -328,7 +328,8 @@
     "shared_items": "Shared With You",
     "empty": {
       "title": "Securely share items",
-      "desc": "Any shared or received passwords, notes or credit cards will appear here"
+      "desc_share": "Any shared passwords, notes or credit cards will appear here",
+      "desc_shared": "Any received passwords, notes or credit cards will appear here"
     },
     "add_emails": "Add recipient emails",
     "share_type": {
@@ -338,7 +339,9 @@
       "edit": "Edit"
     },
     "leave": "Leave",
-    "leave_desc": "Are you sure you want to leave this share group?"
+    "leave_desc": "Are you sure you want to leave this share group?",
+    "shared_with": "Shared with",
+    "no_members": "No member"
   },
   "trash": {
     "delete_item": "Delete Item",

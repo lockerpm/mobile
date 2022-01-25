@@ -328,7 +328,8 @@
     "shared_items": "Được chia sẻ với bạn",
     "empty": {
       "title": "Chia sẻ tài nguyên một cách an toàn",
-      "desc": "Mọi mật khẩu, ghi chú hoặc thẻ tín dụng được chia sẻ hoặc nhận được sẽ xuất hiện ở đây"
+      "desc_share": "Mọi mật khẩu, ghi chú hoặc thẻ tín dụng được chia sẻ sẽ xuất hiện ở đây",
+      "desc_shared": "Mọi mật khẩu, ghi chú hoặc thẻ tín dụng nhận được sẽ xuất hiện ở đây"
     },
     "add_emails": "Thêm email người nhận",
     "share_type": {
@@ -338,7 +339,9 @@
       "edit": "Sửa"
     },
     "leave": "Thoát chia sẻ",
-    "leave_desc": "Bạn có chắc muốn xoá mục chia sẻ này?"
+    "leave_desc": "Bạn có chắc muốn xoá mục chia sẻ này?",
+    "shared_with": "Chia sẻ với",
+    "no_members": "Không có thành viên nào"
   },
   "trash": {
     "delete_item": "Xóa",
