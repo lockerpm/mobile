@@ -64,8 +64,9 @@ const defaultData = {
   updateCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
   deleteCollection: async (id: string, teamId: string) => { return { kind: 'unknown' } },
 
-  syncSingleCipher: async (id: string) => {},
-  syncSingleFolder: async (id: string) => {},
+  syncSingleCipher: async (id: string) => { return { kind: 'unknown' } },
+  syncSingleFolder: async (id: string) => { return { kind: 'unknown' } },
+  syncProfile: async () => { return { kind: 'unknown' } },
 }
 
 export const CipherDataMixinsContext = createContext(defaultData)
@@ -103,7 +104,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       loadFolders(),
       loadCollections()
     ])
-    if (cipherStore.selectedCipher) {
+    if (cipherStore.selectedCipher && cipherStore.selectedCipher.name) {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
@@ -964,7 +965,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     if (res.kind === 'ok') {
       notify('success', translate('success.done'))
       cipherStore.setSharingInvitations(cipherStore.sharingInvitations.filter(i => i.id !== id))
-      await syncSingleCipher(id)
     } else {
       notifyApiError(res)
     }
@@ -1287,12 +1287,12 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
     const cipherRes = await cipherStore.getCipher(id)
     if (cipherRes.kind !== 'ok') {
-      if (cipherRes.kind === 'not-found') {
+      if (cipherRes.kind === 'not-found' || cipherRes.kind === 'forbidden') {
         delete res[id]
         cipherStore.removeNotUpdate(id)
       } else {
         notifyApiError(cipherRes)
-        return
+        return cipherRes
       }
     } else {
       const cipher = cipherRes.data
@@ -1312,6 +1312,11 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
           break
         }
       }
+
+      // Sync profile
+      if (!!cipher.organizationId) {
+        await syncProfile()
+      }
     }
 
     await storageService.save(key, res)
@@ -1319,6 +1324,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await reloadCache({
       isOnline: true
     })
+    return cipherRes
   }
 
   // Sync single folder
@@ -1334,7 +1340,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         folderStore.removeNotUpdate(id)
       } else {
         notifyApiError(folderRes)
-        return
+        return folderRes
       }
     } else {
       const folder = folderRes.data
@@ -1361,6 +1367,19 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await reloadCache({
       isOnline: true
     })
+    return folderRes
+  }
+
+  // Sync profile
+  const syncProfile = async () => {
+    const res = await cipherStore.getProfile()
+    if (res.kind === 'ok') {
+      await syncService.syncProfile(res.data)
+      await loadOrganizations()
+    } else {
+      notifyApiError(res)
+    }
+    return res
   }
 
   // -------------------- REGISTER FUNCTIONS ------------------
@@ -1398,7 +1417,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     deleteCollection,
 
     syncSingleCipher,
-    syncSingleFolder
+    syncSingleFolder,
+    syncProfile
   }
 
   return (

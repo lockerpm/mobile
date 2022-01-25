@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, SyncResult } from "./api.types"
+import { EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, SyncResult } from "./api.types"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { Logger } from "../../utils/logger"
@@ -40,7 +40,7 @@ export class CipherApi {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/ciphers/${id}`)
+      const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/sync/ciphers/${id}`)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -376,6 +376,27 @@ export class CipherApi {
       }
 
       return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Get profile
+  async getPMProfile(token: string): Promise<GetProfileResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.get('/cystack_platform/pm/sync/profile')
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const data = response.data
+
+      return { kind: "ok", data }
     } catch (e) {
       Logger.error(e.message)
       return { kind: "bad-data" }

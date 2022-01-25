@@ -8,6 +8,7 @@ import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { CipherResponse } from "../../../core/models/response/cipherResponse"
 import { AccountRoleText, InvitationStatus, SharingStatus, SharingType } from "../../config/types"
+import { ProfileResponse } from "../../../core/models/response/profileResponse"
 
 type SessionSnapshot = {
     access_token: string
@@ -131,6 +132,7 @@ export type GetCipherResult = { kind: "ok", data: CipherResponse } | GeneralApiP
 export type GetFolderResult = { kind: "ok", data: FolderResponse } | GeneralApiProblem
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
 export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | GeneralApiProblem
+export type GetProfileResult = { kind: "ok", data: ProfileResponse } | GeneralApiProblem
 
 export type GetTeamsResult = { 
     kind: 'ok', 
