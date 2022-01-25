@@ -91,7 +91,7 @@ export class SearchService implements SearchServiceAbstraction {
         }
 
         if (ciphers == null) {
-            ciphers = await this.cipherService.getAllDecrypted();
+            ciphers = await this.cipherService.getAllDecrypted() || [];
         }
 
         if (filter != null && Array.isArray(filter) && filter.length > 0) {

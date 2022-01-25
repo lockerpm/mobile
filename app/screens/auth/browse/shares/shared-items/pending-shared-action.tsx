@@ -132,14 +132,12 @@ export const PendingSharedAction = observer((props: Props) => {
           <ActionItem
             disabled={uiStore.isOffline}
             name={translate('common.accept')}
-            icon="angle-right"
             action={handleAccept}
           />
 
           <ActionItem
             disabled={uiStore.isOffline}
             name={translate('common.reject')}
-            icon="angle-right"
             action={handleReject}
           />
         </ActionSheetContent>

@@ -299,7 +299,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
   // ------------------------ RENDER ----------------------------
 
-  return allCiphers.length ? (
+  return !allCiphers.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
