@@ -3,7 +3,6 @@ import React from "react"
 import { CipherView } from "../../../../../core/models/view"
 import { ActionItem } from "../../../../components/cipher/cipher-action/action-item"
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
-import { SharedItemAction } from "../../../../components/cipher/cipher-action/shared-item-action"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
 
@@ -21,7 +20,6 @@ export const IdentityAction = observer((props: Props) => {
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 
-  const isShared = !!selectedCipher.organizationId
 
   const renderContent = () => (
     <>
@@ -46,11 +44,7 @@ export const IdentityAction = observer((props: Props) => {
     </>
   )
 
-  return isShared ? (
-    <SharedItemAction {...props}>
-      {renderContent()}
-    </SharedItemAction>
-  ) : (
+  return (
     <CipherAction {...props}>
       {renderContent()}
     </CipherAction>

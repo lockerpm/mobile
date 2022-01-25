@@ -2,7 +2,6 @@ import { observer } from "mobx-react-lite"
 import React from "react"
 import { ActionItem } from "../../../../components/cipher/cipher-action/action-item"
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
-import { SharedItemAction } from "../../../../components/cipher/cipher-action/shared-item-action"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
 
@@ -20,8 +19,6 @@ export const NoteAction = observer((props: Props) => {
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
-  const isShared = !!selectedCipher.organizationId
-
   const renderContent = () => (
     <ActionItem
       name={translate('note.copy_note')}
@@ -31,11 +28,7 @@ export const NoteAction = observer((props: Props) => {
     />
   )
 
-  return isShared ? (
-    <SharedItemAction {...props}>
-      {renderContent()}
-    </SharedItemAction>
-  ) : (
+  return (
     <CipherAction {...props}>
       {renderContent()}
     </CipherAction>

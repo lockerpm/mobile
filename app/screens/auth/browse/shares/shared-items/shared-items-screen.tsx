@@ -3,7 +3,6 @@ import { observer } from "mobx-react-lite"
 import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../../../home/all-item/sort-action"
-import { AddAction } from "../../../home/all-item/add-action"
 import { useMixins } from "../../../../../services/mixins"
 import { BackHandler } from "react-native"
 import { useStores } from "../../../../../models"
@@ -16,7 +15,6 @@ export const SharedItemsScreen = observer(() => {
   const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [isAddOpen, setIsAddOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
@@ -52,7 +50,6 @@ export const SharedItemsScreen = observer(() => {
         <BrowseItemHeader
           header={translate('shares.shared_items')}
           openSort={() => setIsSortOpen(true)}
-          openAdd={() => setIsAddOpen(true)}
           onSearch={setSearchText}
           searchText={searchText}
           navigation={navigation}
@@ -83,12 +80,6 @@ export const SharedItemsScreen = observer(() => {
         value={sortOption}
       />
 
-      <AddAction
-        isOpen={isAddOpen}
-        onClose={() => setIsAddOpen(false)}
-        navigation={navigation}
-      />
-
       <CipherSharedList
         navigation={navigation}
         onLoadingChange={setIsLoading}
@@ -104,7 +95,7 @@ export const SharedItemsScreen = observer(() => {
             img={require('./empty-img.png')}
             imgStyle={{ height: 55, width: 55 }}
             title={translate('shares.empty.title')}
-            desc={translate('shares.empty.desc')}
+            desc={translate('shares.empty.desc_shared')}
           />
         )}
       />

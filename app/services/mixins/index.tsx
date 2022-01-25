@@ -30,7 +30,7 @@ const defaultData = {
   // Methods
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getAllOrganizations: async () => [],
-  getTeam: (teams: object[], orgId: string) => ({ name: '', role: '' }),
+  getTeam: (teams: object[], orgId: string) => ({ name: '', role: '', type: 0 }),
   copyToClipboard: (text: string) => {},
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
@@ -113,7 +113,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
 
   // Get team
   const getTeam = (teams: object[], orgId: string) => {
-    return find(teams, e => e.id === orgId) || { name: '', role: '' }
+    return find(teams, e => e.id === orgId) || { name: '', role: '', type: 0 }
   }
 
   // Check if biometric is viable

@@ -17,7 +17,8 @@ import { CipherView } from "../../../../core/models/view"
 import { ShareModal } from "./share-modal"
 import { ChangeTeamFolderModal } from "./change-team-folder-modal"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { AccountRoleText } from "../../../config/types"
+import { AccountRole, AccountRoleText } from "../../../config/types"
+import { LeaveShareModal } from "./leave-share-modal"
 
 export interface CipherActionProps {
   children?: React.ReactNode,
@@ -33,10 +34,11 @@ export interface CipherActionProps {
 export const CipherAction = observer(function CipherAction(props: CipherActionProps) {
   const { navigation, isOpen, onClose, children } = props
 
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showConfirmTrashModal, setShowConfirmTrashModal] = useState(false)
+  const [showConfirmLeaveModal, setShowConfirmLeaveModal] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
   const [showChangeTeamFolderModal, setShowChangeTeamFolderModal] = useState(false)
-  const [nextModal, setNextModal] = useState<'changeTeamFolder' | 'share' | 'trashConfirm' | null>(null)
+  const [nextModal, setNextModal] = useState<'changeTeamFolder' | 'share' | 'trashConfirm' | 'leaveConfirm' | null>(null)
 
   const { getRouteName, translate, getTeam, getWebsiteLogo, color } = useMixins()
   const { toTrashCiphers } = useCipherDataMixins()
@@ -45,8 +47,14 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
 
   // Computed
 
-  const teamUser = getTeam(user.teams, selectedCipher.organizationId)
-  const editable = !selectedCipher.organizationId || teamUser.role !== AccountRoleText.MEMBER
+  const organizations = cipherStore.organizations
+  const teamRole = getTeam(user.teams, selectedCipher.organizationId).role 
+  const shareRole = getTeam(organizations, selectedCipher.organizationId).type
+  const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
+  const isOwner = shareRole === AccountRole.ADMIN
+  const editable = !selectedCipher.organizationId 
+    || (teamRole && teamRole !== AccountRoleText.MEMBER )
+    || (shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER)
 
   const cipherMapper = (() => {
     switch (selectedCipher.type) {
@@ -107,7 +115,10 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         setShowShareModal(true)
         break
       case 'trashConfirm':
-        setShowConfirmModal(true)
+        setShowConfirmTrashModal(true)
+        break
+      case 'leaveConfirm':
+        setShowConfirmLeaveModal(true)
         break
     }
     setNextModal(null)
@@ -120,8 +131,8 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
       {/* Modals */}
 
       <DeleteConfirmModal
-        isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
+        isOpen={showConfirmTrashModal}
+        onClose={() => setShowConfirmTrashModal(false)}
         onConfirm={handleDelete}
         title={translate('trash.to_trash')}
         desc={translate('trash.to_trash_desc')}
@@ -137,6 +148,17 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         isOpen={showChangeTeamFolderModal}
         onClose={() => setShowChangeTeamFolderModal(false)}
       />
+
+      {
+        isShared && (
+          <LeaveShareModal
+            isOpen={showConfirmLeaveModal}
+            onClose={() => setShowConfirmLeaveModal(false)}
+            cipherId={selectedCipher.id}
+            organizationId={selectedCipher.organizationId}
+          />
+        )
+      }
 
       {/* Modals end */}
 
@@ -238,16 +260,20 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   }}
                 />
 
-                <ActionItem
-                  isPremium
-                  disabled={uiStore.isOffline}
-                  name={translate('common.share')}
-                  icon="share-square-o"
-                  action={() => {
-                    setNextModal('share')
-                    onClose()
-                  }}
-                />
+                {
+                  !isShared && (
+                    <ActionItem
+                      isPremium
+                      disabled={uiStore.isOffline}
+                      name={translate('common.share')}
+                      icon="share-square-o"
+                      action={() => {
+                        setNextModal('share')
+                        onClose()
+                      }}
+                    />
+                  )
+                }
 
                 <ActionItem
                   disabled={uiStore.isOffline && !!selectedCipher.organizationId}
@@ -260,6 +286,21 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   }}
                 />
               </View>
+            )
+          }
+
+          {
+            isShared && (
+              <ActionItem
+                disabled={uiStore.isOffline}
+                name={translate('shares.leave')}
+                icon="sign-out"
+                textColor={color.error}
+                action={() => {
+                  setNextModal('leaveConfirm')
+                  onClose()
+                }}
+              />
             )
           }
         </ActionSheetContent>

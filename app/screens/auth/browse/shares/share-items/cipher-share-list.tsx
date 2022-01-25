@@ -21,11 +21,9 @@ import { PasswordAction } from "../../passwords/password-action"
 import { CardAction } from "../../cards/card-action"
 import { NoteAction } from "../../notes/note-action"
 import { IdentityAction } from "../../identities/identity-action"
-import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
-import { PendingSharedAction } from "./pending-shared-action"
 
 
-export interface CipherSharedListProps {
+type Props = {
   emptyContent?: JSX.Element
   navigation: any
   searchText?: string
@@ -44,7 +42,7 @@ export interface CipherSharedListProps {
 /**
  * Describe your component here
  */
-export const CipherSharedList = observer((props: CipherSharedListProps) => {
+export const CipherShareList = observer((props: Props) => {
   const {
     emptyContent, navigation, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
@@ -52,14 +50,13 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const { getWebsiteLogo, translate, color } = useMixins()
   const { getCiphers } = useCipherDataMixins()
   const { cipherStore } = useStores()
-  const { newCipher } = useCipherHelpersMixins()
   type ListItem = CipherView & {
-    isShared?: boolean
-    description?: string
     logo?: any
     imgLogo?: any
     svg?: any
     notSync?: boolean
+    description?: string
+    status?: string
   }
 
   // ------------------------ PARAMS ----------------------------
@@ -69,55 +66,12 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const [showNoteAction, setShowNoteAction] = useState(false)
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
-  const [showPendingAction, setShowPendingAction] = useState(false)
 
   // ------------------------ COMPUTED ----------------------------
  
   const organizations = cipherStore.organizations
-  const pendingCiphers = cipherStore.sharingInvitations.map(i => {
-    const cipher: ListItem = newCipher(i.cipher_type)
-    cipher.isShared = true
-    cipher.id = i.id
-    cipher.organizationId = i.team.id
-    cipher.name = 'N/A'
-    switch (i.cipher_type) {
-      case CipherType.Login: {
-        cipher.logo = BROWSE_ITEMS.password.icon
-        break
-      }
-      case CipherType.SecureNote: {
-        cipher.logo = BROWSE_ITEMS.note.icon
-        cipher.svg = BROWSE_ITEMS.note.svgIcon
-        break
-      }
-      case CipherType.Card: {
-        cipher.logo = BROWSE_ITEMS.card.icon
-        break
-      }
-      case CipherType.Identity: {
-        cipher.logo = BROWSE_ITEMS.identity.icon
-        cipher.svg = BROWSE_ITEMS.identity.svgIcon
-        break
-      }
-      default:
-        cipher.logo = BROWSE_ITEMS.trash.icon
-        cipher.svg = BROWSE_ITEMS.trash.svgIcon
-    }
-    let shareType = ''
-    if (i.role === AccountRoleText.MEMBER) {
-      if (i.hide_passwords) {
-        shareType = translate('shares.share_type.only_fill')
-      } else {
-        shareType = translate('shares.share_type.view')
-      }
-    }
-    if (i.role === AccountRoleText.ADMIN) {
-      shareType = translate('shares.share_type.edit')
-    }
-    cipher.description = `${i.team.name} - ${shareType}`
-    return cipher
-  })
-  const allCiphers = !!searchText.trim() ? ciphers : [...pendingCiphers, ...ciphers]
+  const allCiphers = ciphers
+  const myShares = cipherStore.myShares
 
   // ------------------------ EFFECTS ----------------------------
 
@@ -131,6 +85,10 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     return organizations.find((o: Organization) => o.id === id)
   }
 
+  const _getShare = (id: string) => {
+    return myShares.find(s => s.id === id)
+  }
+
   // Get ciphers list
   const loadData = async () => {
     onLoadingChange && onLoadingChange(true)
@@ -140,8 +98,9 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       if (!c.organizationId) {
         return false
       }
+      const share = _getShare(c.organizationId)
       const org = _getOrg(c.organizationId)
-      return org && org.type !== AccountRole.OWNER
+      return org && org.type === AccountRole.OWNER && share.members.length
     }]
 
     // Search
@@ -150,15 +109,17 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       searchText,
       deleted: false
     })
+    let res: ListItem[] = []
 
-    // Add image + org info
-    let res = searchRes.map((c: CipherView) => {
+    // Add image + share info
+    searchRes.forEach((c: CipherView) => {
       const data = {
         ...c,
         logo: null,
         imgLogo: null,
         svg: null,
-        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id)
+        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
+        description: ''
       }
       switch (c.type) {
         case CipherType.Login: {
@@ -190,7 +151,25 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
           data.logo = BROWSE_ITEMS.trash.icon
           data.svg = BROWSE_ITEMS.trash.svgIcon
       }
-      return data
+
+      // Display for each sharing member
+      const share = _getShare(c.organizationId)
+      share.members.forEach(m => {
+        let shareType = ''
+        switch (m.role) {
+          case AccountRoleText.MEMBER:
+            shareType = !m.hide_passwords ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
+            break
+          case AccountRoleText.ADMIN:
+            shareType = translate('shares.share_type.edit')
+            break
+        }
+
+        data.description = `${translate('shares.shared_with')} ${m.full_name} - ${shareType}`
+
+        // @ts-ignore
+        res.push({ ...data })
+      })
     })
 
     // Sort
@@ -209,7 +188,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     }, 100)
 
     // Done
-    // @ts-ignore
     setCiphers(res)
     setAllItems(res.map(c => c.id))
   }
@@ -217,10 +195,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   // Handle action menu open
   const openActionMenu = (item: ListItem) => {
     cipherStore.setSelectedCipher(item)
-    if (item.isShared) {
-      setShowPendingAction(true)
-      return
-    }
     switch (item.type) {
       case CipherType.Login:
         setShowPasswordAction(true)
@@ -242,10 +216,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   // Go to detail
   const goToDetail = (item: ListItem) => {
     cipherStore.setSelectedCipher(item)
-    if (item.isShared) {
-      setShowPendingAction(true)
-      return
-    }
     switch (item.type) {
       case CipherType.Login:
         navigation.navigate('passwords__info')
@@ -264,23 +234,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
   // Get cipher description
   const getDescription = (item: ListItem) => {
-    if (item.isShared) {
-      return item.description
-    }
-
-    const org = _getOrg(item.organizationId)
-    let shareType = ''
-    if (org) {
-      switch (org.type) {
-        case AccountRole.MEMBER:
-          shareType = item.viewPassword ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
-          break
-        case AccountRole.ADMIN:
-          shareType = translate('shares.share_type.edit')
-          break
-      }
-    }
-    return org ? `${org.name} - ${shareType}` : ''
+    return item.description
   }
 
   // Toggle item selection
@@ -331,12 +285,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         onLoadingChange={onLoadingChange}
       />
 
-      <PendingSharedAction
-        isOpen={showPendingAction}
-        onClose={() => setShowPendingAction(false)}
-        onLoadingChange={onLoadingChange}
-      />
-
       {/* Action menus end */}
 
       {/* Cipher list */}
@@ -345,7 +293,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
           paddingHorizontal: 20, 
         }}
         data={allCiphers}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item, index) => item.id.toString() + index.toString()}
         renderItem={({ item }) => (
           <Button
             preset="link"
@@ -388,27 +336,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
                     preset="semibold"
                     text={item.name}
                   />
-
-                  {
-                    item.isShared && (
-                      <View style={{
-                        paddingHorizontal: 10,
-                        paddingVertical: 2,
-                        backgroundColor: color.warning,
-                        borderRadius: 3,
-                        marginLeft: 10
-                      }}>
-                        <Text
-                          text="PENDING"
-                          style={{
-                            fontWeight: 'bold',
-                            color: color.background,
-                            fontSize: fontSize.mini
-                          }}
-                        />
-                      </View>
-                    )
-                  }
 
                   {/* Not sync icon */}
                   {

@@ -5,7 +5,6 @@ import { useStores } from "../../../../models"
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { ActionItem } from "../../../../components/cipher/cipher-action/action-item"
 import { CipherView } from "../../../../../core/models/view"
-import { SharedItemAction } from "../../../../components/cipher/cipher-action/shared-item-action"
 import { observer } from "mobx-react-lite"
 
 
@@ -21,8 +20,6 @@ export const PasswordAction = observer((props: Props) => {
   const { copyToClipboard, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-
-  const isShared = !!selectedCipher.organizationId
 
   const renderContent = () => (
     <>
@@ -49,11 +46,7 @@ export const PasswordAction = observer((props: Props) => {
     </>
   )
 
-  return isShared ? (
-    <SharedItemAction {...props}>
-      {renderContent()}
-    </SharedItemAction>
-  ) : (
+  return (
     <CipherAction {...props}>
       {renderContent()}
     </CipherAction>
