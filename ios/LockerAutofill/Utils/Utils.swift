@@ -44,6 +44,7 @@ class Utils {
             user: user,
             recordIdentifier: recordIdentifier
         )
+        credential.rank = Utils.CurrentTimeInMilliSeconds()
 
         ASCredentialIdentityStore.shared.saveCredentialIdentities([credential]) { bool, error in
             if let error = error {
@@ -82,6 +83,7 @@ class Utils {
             user: user,
             recordIdentifier: recordIdentifier
         )
+        credential.rank = Utils.CurrentTimeInMilliSeconds()
 
         ASCredentialIdentityStore.shared.saveCredentialIdentities([credential]) { bool, error in
             if let error = error {
@@ -170,6 +172,12 @@ class Utils {
     }))
 
     contex.present(alert, animated: true, completion:   nil)
+  }
+  static public func CurrentTimeInMilliSeconds()-> Int
+  {
+      let currentDate = Date()
+      let since1970 = currentDate.timeIntervalSince1970
+      return Int(since1970 * 1000)
   }
 
 }

@@ -62,6 +62,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    print(serviceIdentifiers.count)
     self.serviceIdentifier = serviceIdentifiers.count > 0 ? serviceIdentifiers[0].identifier : ""
     initController(serviceIdentifier: self.serviceIdentifier)
   }
