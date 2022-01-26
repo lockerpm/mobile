@@ -59,24 +59,26 @@ export type SharingInvitationType = {
     }
 }
 
+export type SharedMemberType = {
+    access_time: string
+    avatar: string
+    email: string
+    full_name: string
+    hide_passwords: boolean
+    id: string
+    pwd_user_id: string
+    role: AccountRoleText
+    share_type: SharingType
+    status: SharingStatus
+    username: string
+}
+
 export type MyShareType = {
     id: string
     description: string
     name: string
     organization_id: string
-    members: {
-        access_time: string
-        avatar: string
-        email: string
-        full_name: string
-        hide_passwords: boolean
-        id: string
-        pwd_user_id: string
-        role: AccountRoleText
-        share_type: SharingType
-        status: SharingStatus
-        username: string
-    }[]
+    members: SharedMemberType[]
 }
 
 // ------------------ Response ------------------------
@@ -399,4 +401,13 @@ export type ShareCipherData = {
 
 export type ShareInvitationResponseData = {
     status: 'accept' | 'reject'
+}
+
+export type StopShareCipherData = {
+    cipher: CipherRequest & { id: string }
+}
+
+export type EditShareCipherData = {
+    role: AccountRoleText
+    hide_passwords: boolean
 }

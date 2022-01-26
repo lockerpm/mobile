@@ -65,7 +65,17 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   const [showDeletedAction, setShowDeletedAction] = useState(false)
   const [ciphers, setCiphers] = useState([])
 
-  // ------------------------ WATCHERS ----------------------------
+  // ------------------------ COMPUTED ----------------------------
+
+  const isShared = (organizationId: string) => {
+    const share = cipherStore.myShares.find(s => s.id === organizationId)
+    if (share) {
+      return share.members.length > 0
+    }
+    return !!organizationId
+  }
+
+  // ------------------------ EFFECTS ----------------------------
 
   useEffect(() => {
     loadData()
@@ -344,7 +354,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
                   {/* Belong to team icon */}
                   {
-                    item.organizationId && (
+                    isShared(item.organizationId) && (
                       <View style={{ marginLeft: 10 }}>
                         <MaterialCommunityIconsIcon
                           name="account-group-outline"

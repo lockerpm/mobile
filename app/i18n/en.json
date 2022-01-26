@@ -80,6 +80,8 @@
     "trash": "Trash",
     "tools": "Tools",
     "unlock": "Unlock",
+    "upgrade": "Upgrade",
+    "user": "User",
     "warning": "Warning",
     "website": "Website"
   },
@@ -119,7 +121,8 @@
     "duplicate_cipher_name": "Duplicated cipher name! Please choose another name!",
     "duplicate_folder_name": "Duplicated folder name! Please choose another name!",
     "not_allowed_to_see_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
-    "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!"
+    "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
+    "not_available_for_free": "This feature is not available for free account!"
   },
   "success": {
     "done": "Done",
@@ -341,7 +344,9 @@
     "leave": "Leave",
     "leave_desc": "Are you sure you want to leave this share group?",
     "shared_with": "Shared with",
-    "no_members": "No member"
+    "no_members": "No member",
+    "start_sharing": "Start Sharing",
+    "stop_sharing": "Stop Sharing"
   },
   "trash": {
     "delete_item": "Delete Item",

@@ -43,14 +43,17 @@ const BUTTON_LEFT: ViewStyle = {
   height: 35,
   width: 35,
   justifyContent: 'flex-start',
-  alignItems: 'center'
+  alignItems: 'center',
+  marginLeft: -8,
+  paddingLeft: 8
 }
 
 const BUTTON_RIGHT: ViewStyle = {
   height: 35,
   width: 35,
   justifyContent: 'flex-end',
-  alignItems: 'center'
+  alignItems: 'center',
+  paddingRight: 8,
 }
 
 /**
@@ -197,7 +200,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
                   <Button
                     preset="link"
                     onPress={() => setShowConfirmModal(true)}
-                    style={BUTTON_RIGHT}
+                    style={[BUTTON_RIGHT, { marginRight: -8 }]}
                   >
                     <FontAwesomeIcon
                       name="trash"
@@ -223,7 +226,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
                   <Button
                     preset="link"
                     onPress={() => setShowConfirmModal(true)}
-                    style={BUTTON_RIGHT}
+                    style={[BUTTON_RIGHT, { marginRight: -8 }]}
                   >
                     <FontAwesomeIcon
                       name="trash"

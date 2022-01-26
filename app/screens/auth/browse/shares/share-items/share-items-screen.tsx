@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
-import { BackHandler } from "react-native"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { BrowseItemEmptyContent, BrowseItemHeader, Layout } from "../../../../../components"
 import { SortAction } from "../../../home/all-item/sort-action"
 import { AddAction } from "../../../home/all-item/add-action"
 import { CipherShareList } from "./cipher-share-list"
+import { PlanType } from "../../../../../config/types"
 
 
 export const ShareItemsScreen = observer(() => {
   const navigation = useNavigation()
-  const { translate } = useMixins()
-  const { uiStore } = useStores()
+  const { translate, goPremium } = useMixins()
+  const { user } = useStores()
+
+  // --------------------- PARAMS -------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -24,26 +26,14 @@ export const ShareItemsScreen = observer(() => {
     order: 'asc'
   })
   const [sortOption, setSortOption] = useState('az')
-  const [selectedItems, setSelectedItems] = useState([])
-  const [isSelecting, setIsSelecting] = useState(false)
-  const [allItems, setAllItems] = useState([])
 
-  // Close select before leave
-  useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
-    const checkSelectBeforeLeaving = () => {
-      if (isSelecting) {
-        setIsSelecting(false)
-        setSelectedItems([])
-        return true
-      }
-      return false
-    }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-    }
-  }, [isSelecting])
+  // --------------------- COMPUTED -------------------------
+
+  const isFreeAccount = user.plan.alias === PlanType.FREE
+
+  // --------------------- EFFECTS -------------------------
+
+  // --------------------- RENDER -------------------------
 
   return (
     <Layout
@@ -52,22 +42,22 @@ export const ShareItemsScreen = observer(() => {
         <BrowseItemHeader
           header={translate('shares.share_items')}
           openSort={() => setIsSortOpen(true)}
-          openAdd={() => setIsAddOpen(true)}
+          openAdd={() => {
+            if (isFreeAccount) {
+              goPremium()
+            } else {
+              setIsAddOpen(true)
+            }
+          }}
           onSearch={setSearchText}
           searchText={searchText}
           navigation={navigation}
-          isSelecting={isSelecting}
-          setIsSelecting={setIsSelecting}
-          selectedItems={selectedItems}
-          setSelectedItems={setSelectedItems}
+          isSelecting={false}
+          setIsSelecting={() => {}}
+          selectedItems={[]}
+          setSelectedItems={() => {}}
           setIsLoading={setIsLoading}
-          toggleSelectAll={() => {
-            if (selectedItems.length < allItems.length) {
-              setSelectedItems(allItems)
-            } else {
-              setSelectedItems([])
-            }
-          }}
+          toggleSelectAll={() => {}}
         />
       )}
       borderBottom
@@ -94,17 +84,23 @@ export const ShareItemsScreen = observer(() => {
         onLoadingChange={setIsLoading}
         searchText={searchText}
         sortList={sortList}
-        isSelecting={isSelecting}
-        setIsSelecting={setIsSelecting}
-        selectedItems={selectedItems}
-        setSelectedItems={setSelectedItems}
-        setAllItems={setAllItems}
-        emptyContent={(
+        emptyContent={isFreeAccount ? (
+          <BrowseItemEmptyContent
+            img={require('./empty-img.png')}
+            imgStyle={{ height: 55, width: 55 }}
+            title={translate('shares.empty.title')}
+            desc={translate('error.not_available_for_free')}
+            buttonText={translate('common.upgrade')}
+            addItem={goPremium}
+          />
+        ) : (
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
             imgStyle={{ height: 55, width: 55 }}
             title={translate('shares.empty.title')}
             desc={translate('shares.empty.desc_share')}
+            buttonText={translate('shares.start_sharing')}
+            addItem={() => setIsAddOpen(true)}
           />
         )}
       />

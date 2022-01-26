@@ -389,6 +389,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
                     text={item.name}
                   />
 
+                  {/* Pending status */}
                   {
                     item.isShared && (
                       <View style={{
@@ -409,6 +410,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
                       </View>
                     )
                   }
+                  {/* Pending status */}
 
                   {/* Not sync icon */}
                   {
