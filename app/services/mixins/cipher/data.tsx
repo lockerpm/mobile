@@ -22,6 +22,7 @@ import { Logger } from '../../../utils/logger'
 import { EncString, SymmetricCryptoKey } from '../../../../core/models/domain'
 import { Utils } from '../../core-service/utils'
 import { AccountRoleText } from '../../../config/types'
+import { OrganizationData } from '../../../../core/models/data/organizationData'
 
 
 type GetCiphersParams = {
@@ -68,7 +69,7 @@ const defaultData = {
 
   syncSingleCipher: async (id: string) => { return { kind: 'unknown' } },
   syncSingleFolder: async (id: string) => { return { kind: 'unknown' } },
-  syncProfile: async () => { return { kind: 'unknown' } },
+  syncSingleOrganization: async (id: string) => { return { kind: 'unknown' } },
 }
 
 export const CipherDataMixinsContext = createContext(defaultData)
@@ -104,7 +105,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     collectionService.clearCache()
     await Promise.all([
       loadFolders(),
-      loadCollections()
+      loadCollections(),
+      loadOrganizations()
     ])
     if (cipherStore.selectedCipher && cipherStore.selectedCipher.name) {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
@@ -1388,7 +1390,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
       // Sync profile
       if (!!cipher.organizationId) {
-        await syncProfile()
+        await syncSingleOrganization(cipher.organizationId)
       }
     }
 
@@ -1443,16 +1445,32 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     return folderRes
   }
 
-  // Sync profile
-  const syncProfile = async () => {
-    const res = await cipherStore.getProfile()
-    if (res.kind === 'ok') {
-      await syncService.syncProfile(res.data)
-      await loadOrganizations()
+  // Sync single organization
+  const syncSingleOrganization = async (id: string) => {
+    const userId = await userService.getUserId()
+    const key = `organizations_${userId}`
+    const res = await storageService.get(key)
+
+    const orgRes = await cipherStore.getOrganization(id)
+    if (orgRes.kind !== 'ok') {
+      if (orgRes.kind === 'not-found' || orgRes.kind === 'forbidden') {
+        delete res[id]
+      } else {
+        notifyApiError(orgRes)
+        return orgRes
+      }
     } else {
-      notifyApiError(res)
+      const org = orgRes.data
+      const orgData = new OrganizationData(org)
+
+      // Update organization
+      res[org.id] = {
+        ...orgData
+      }
     }
-    return res
+
+    await storageService.save(key, res)
+    return orgRes
   }
 
   // -------------------- REGISTER FUNCTIONS ------------------
@@ -1493,7 +1511,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
     syncSingleCipher,
     syncSingleFolder,
-    syncProfile
+    syncSingleOrganization
   }
 
   return (
