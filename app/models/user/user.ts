@@ -42,7 +42,7 @@ export const UserModel = types
 
     // Others data
     teams: types.array(types.frozen()),
-    plan: types.maybeNull(types.frozen()),
+    plan: types.maybeNull(types.frozen<{ name: string; alias: string }>()),
     invitations: types.array(types.frozen()),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
@@ -117,7 +117,7 @@ export const UserModel = types
     setTeams: (teams: object[]) => {
       self.teams = cast(teams)
     },
-    setPlan: (plan: object) => {
+    setPlan: (plan: { name: string; alias: string }) => {
       self.plan = cast(plan)
     },
     setInvitations: (invitations: object[]) => {

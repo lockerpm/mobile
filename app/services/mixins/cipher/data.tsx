@@ -52,6 +52,8 @@ const defaultData = {
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   importCiphers: async (importResult) => { return { kind: 'unknown' } },
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
+  stopShareCipher: async (cipher: CipherView, memberId: string) => { return { kind: 'unknown' } },
+  editShareCipher: async (organizationId: string, memberId: string, role: AccountRoleText, onlyFill: boolean) => { return { kind: 'unknown' } },
   leaveShare: async (id: string, organizationId: string) => { return { kind: 'unknown' } },
   acceptShareInvitation: async (id: string) => { return { kind: 'unknown' } },
   rejectShareInvitation: async (id: string) => { return { kind: 'unknown' } },
@@ -939,6 +941,77 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     return key.encryptedString
   }
 
+  // Stop share cipher
+  const stopShareCipher = async (cipher: CipherView, memberId: string) => {
+    try {
+      // Prepare cipher
+      const cipherEnc = await cipherService.encrypt(cipher)
+      const data = new CipherRequest(cipherEnc)
+
+      // Send API
+      const res = await cipherStore.stopShareCipher(cipher.organizationId, memberId, {
+        cipher: {
+          id: cipher.id,
+          ...data
+        }
+      })
+      if (res.kind === 'ok') {
+        notify('success', translate('success.done'))
+
+        // Remove member in local my share first
+        const myShares = [...cipherStore.myShares]
+        for (let share of myShares) {
+          if (share.id === cipher.organizationId) {
+            share.members = share.members.filter(m => m.id !== memberId)
+          }
+        }
+        cipherStore.setMyShares(myShares)
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      Logger.error(e)
+      return { kind: 'unknown' }
+    }
+  }
+
+  // Edit share cipher
+  const editShareCipher = async (organizationId: string, memberId: string, role: AccountRoleText, onlyFill: boolean) => {
+    try {
+      // Send API
+      const res = await cipherStore.editShareCipher(organizationId, memberId, {
+        role,
+        hide_passwords: onlyFill
+      })
+      if (res.kind === 'ok') {
+        notify('success', translate('success.done'))
+
+        // Update member in local my share first
+        const myShares = [...cipherStore.myShares]
+        for (let share of myShares) {
+          if (share.id === organizationId) {
+            for (let member of share.members) {
+              if (member.id === memberId) {
+                member.role = role
+                member.hide_passwords = onlyFill
+              }
+            }
+          }
+        }
+        cipherStore.setMyShares(myShares)
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      Logger.error(e)
+      return { kind: 'unknown' }
+    }
+  }
+
   // Leave share
   const leaveShare = async (id: string, organizationId: string) => {
     const apiRes = await cipherStore.leaveShare(organizationId)
@@ -1403,6 +1476,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     toTrashCiphers,
     restoreCiphers,
     shareCipher,
+    stopShareCipher,
+    editShareCipher,
     leaveShare,
     acceptShareInvitation,
     rejectShareInvitation,

@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, SyncResult } from "./api.types"
+import { EditShareCipherData, EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, StopShareCipherData, SyncResult } from "./api.types"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { Logger } from "../../utils/logger"
@@ -294,6 +294,46 @@ export class CipherApi {
       const data = response.data
 
       return { kind: "ok", data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Stop share cipher
+  async stopShareCipher(token: string, organizationId: string, memberId: string, payload: StopShareCipherData): Promise<EmptyResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${organizationId}/members/${memberId}/stop`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Edit share cipher
+  async editShareCipher(token: string, organizationId: string, memberId: string, payload: EditShareCipherData): Promise<EmptyResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/sharing/${organizationId}/members/${memberId}`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok" }
     } catch (e) {
       Logger.error(e.message)
       return { kind: "bad-data" }

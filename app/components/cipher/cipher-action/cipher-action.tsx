@@ -51,7 +51,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
   const teamRole = getTeam(user.teams, selectedCipher.organizationId).role 
   const shareRole = getTeam(organizations, selectedCipher.organizationId).type
   const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
-  const isOwner = shareRole === AccountRole.ADMIN
+  // const isOwner = shareRole === AccountRole.ADMIN
   const editable = !selectedCipher.organizationId 
     || (teamRole && teamRole !== AccountRoleText.MEMBER )
     || (shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER)

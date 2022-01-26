@@ -13,14 +13,11 @@ import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { commonStyles, fontSize } from "../../../../../theme"
-import { Checkbox } from "react-native-ui-lib"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { AccountRole, AccountRoleText } from "../../../../../config/types"
+import { AccountRole, AccountRoleText, SharingStatus } from "../../../../../config/types"
 import { Organization } from "../../../../../../core/models/domain/organization"
-import { PasswordAction } from "../../passwords/password-action"
-import { CardAction } from "../../cards/card-action"
-import { NoteAction } from "../../notes/note-action"
-import { IdentityAction } from "../../identities/identity-action"
+import { ShareItemAction } from "./share-item-action"
+import { SharedMemberType } from "../../../../../services/api/api.types"
 
 
 type Props = {
@@ -31,12 +28,7 @@ type Props = {
   sortList?: {
     orderField: string
     order: string
-  },
-  isSelecting: boolean
-  setIsSelecting: Function
-  selectedItems: string[]
-  setSelectedItems: Function
-  setAllItems: Function
+  }
 }
 
 /**
@@ -44,8 +36,7 @@ type Props = {
  */
 export const CipherShareList = observer((props: Props) => {
   const {
-    emptyContent, navigation, onLoadingChange, searchText, sortList,
-    isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
+    emptyContent, navigation, onLoadingChange, searchText, sortList
   } = props
   const { getWebsiteLogo, translate, color } = useMixins()
   const { getCiphers } = useCipherDataMixins()
@@ -57,15 +48,14 @@ export const CipherShareList = observer((props: Props) => {
     notSync?: boolean
     description?: string
     status?: string
+    member?: SharedMemberType
   }
 
   // ------------------------ PARAMS ----------------------------
 
   const [ciphers, setCiphers] = useState<ListItem[]>([])
-  const [showPasswordAction, setShowPasswordAction] = useState(false)
-  const [showNoteAction, setShowNoteAction] = useState(false)
-  const [showIdentityAction, setShowIdentityAction] = useState(false)
-  const [showCardAction, setShowCardAction] = useState(false)
+  const [showAction, setShowAction] = useState(false)
+  const [selectedMember, setSelectedMember] = useState<SharedMemberType>(null)
 
   // ------------------------ COMPUTED ----------------------------
  
@@ -77,7 +67,7 @@ export const CipherShareList = observer((props: Props) => {
 
   useEffect(() => {
     loadData()
-  }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
+  }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList, JSON.stringify(cipherStore.myShares)])
 
   // ------------------------ METHODS ----------------------------
 
@@ -113,13 +103,15 @@ export const CipherShareList = observer((props: Props) => {
 
     // Add image + share info
     searchRes.forEach((c: CipherView) => {
-      const data = {
+      // @ts-ignore
+      const data: ListItem = {
         ...c,
         logo: null,
         imgLogo: null,
         svg: null,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
-        description: ''
+        description: '',
+        status: null
       }
       switch (c.type) {
         case CipherType.Login: {
@@ -166,6 +158,8 @@ export const CipherShareList = observer((props: Props) => {
         }
 
         data.description = `${translate('shares.shared_with')} ${m.full_name} - ${shareType}`
+        data.status = m.status
+        data.member = m
 
         // @ts-ignore
         res.push({ ...data })
@@ -189,28 +183,13 @@ export const CipherShareList = observer((props: Props) => {
 
     // Done
     setCiphers(res)
-    setAllItems(res.map(c => c.id))
   }
 
   // Handle action menu open
   const openActionMenu = (item: ListItem) => {
     cipherStore.setSelectedCipher(item)
-    switch (item.type) {
-      case CipherType.Login:
-        setShowPasswordAction(true)
-        break
-      case CipherType.Card:
-        setShowCardAction(true)
-        break
-      case CipherType.Identity:
-        setShowIdentityAction(true)
-        break
-      case CipherType.SecureNote:
-        setShowNoteAction(true)
-        break
-      default:
-        return
-    }
+    setSelectedMember(item.member)
+    setShowAction(true)
   }
 
   // Go to detail
@@ -237,52 +216,17 @@ export const CipherShareList = observer((props: Props) => {
     return item.description
   }
 
-  // Toggle item selection
-  const toggleItemSelection = (item: ListItem) => {
-    if (!isSelecting) {
-      setIsSelecting(true)
-    }
-    let selected = [...selectedItems]
-    if (!selected.includes(item.id)) {
-      selected.push(item.id)
-    } else {
-      selected = selected.filter(id => id !== item.id)
-    }
-    setSelectedItems(selected)
-  }
-
   // ------------------------ RENDER ----------------------------
 
   return allCiphers.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
-      <PasswordAction
-        isOpen={showPasswordAction}
-        onClose={() => setShowPasswordAction(false)}
-        navigation={navigation}
+      <ShareItemAction
+        isOpen={showAction}
+        onClose={() => setShowAction(false)}
         onLoadingChange={onLoadingChange}
-      />
-
-      <CardAction
-        isOpen={showCardAction}
-        onClose={() => setShowCardAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <IdentityAction
-        isOpen={showIdentityAction}
-        onClose={() => setShowIdentityAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <NoteAction
-        isOpen={showNoteAction}
-        onClose={() => setShowNoteAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
+        member={selectedMember}
       />
 
       {/* Action menus end */}
@@ -298,13 +242,8 @@ export const CipherShareList = observer((props: Props) => {
           <Button
             preset="link"
             onPress={() => {
-              if (isSelecting) {
-                toggleItemSelection(item)
-              } else {
-                goToDetail(item)
-              }
+              goToDetail(item)
             }}
-            onLongPress={() => toggleItemSelection(item)}
             style={{
               borderBottomColor: color.line,
               borderBottomWidth: 0.5,
@@ -337,6 +276,29 @@ export const CipherShareList = observer((props: Props) => {
                     text={item.name}
                   />
 
+                  {/* Sharing status */}
+                  {
+                    item.status && (
+                      <View style={{
+                        paddingHorizontal: 10,
+                        paddingVertical: 2,
+                        backgroundColor: item.status === SharingStatus.INVITED ? color.warning : color.primary,
+                        borderRadius: 3,
+                        marginLeft: 10
+                      }}>
+                        <Text
+                          text={item.status.toUpperCase()}
+                          style={{
+                            fontWeight: 'bold',
+                            color: color.background,
+                            fontSize: fontSize.mini
+                          }}
+                        />
+                      </View>
+                    )
+                  }
+                  {/* Sharing status */}
+
                   {/* Not sync icon */}
                   {
                     item.notSync && (
@@ -364,34 +326,22 @@ export const CipherShareList = observer((props: Props) => {
                 {/* Description end */}
               </View>
 
-              {
-                isSelecting ? (
-                  <Checkbox
-                    value={selectedItems.includes(item.id)}
-                    color={color.primary}
-                    onValueChange={() => {
-                      toggleItemSelection(item)
-                    }}
-                  />
-                ) : (
-                  <Button
-                    preset="link"
-                    onPress={() => openActionMenu(item)}
-                    style={{ 
-                      height: 40,
-                      width: 40,
-                      justifyContent: 'flex-end',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <IoniconsIcon
-                      name="ellipsis-horizontal"
-                      size={18}
-                      color={color.textBlack}
-                    />
-                  </Button>
-                )
-              }
+              <Button
+                preset="link"
+                onPress={() => openActionMenu(item)}
+                style={{ 
+                  height: 40,
+                  width: 40,
+                  justifyContent: 'flex-end',
+                  alignItems: 'center'
+                }}
+              >
+                <IoniconsIcon
+                  name="ellipsis-horizontal"
+                  size={18}
+                  color={color.textBlack}
+                />
+              </Button>
             </View>
           </Button>
         )}

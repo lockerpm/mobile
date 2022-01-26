@@ -30,18 +30,24 @@ export interface ActionItemProps {
  */
 export const ActionItem = observer((props: ActionItemProps) => {
   const { style, name, icon, textColor, action, children, iconColor, disabled, isPremium } = props
-  const { color } = useMixins()
+  const { color, goPremium } = useMixins()
   const { user } = useStores()
 
   const premiumLock = isPremium && (user.plan && user.plan.alias === PlanType.FREE)
 
   return (
     <ActionSheetItem
-      disabled={disabled || premiumLock}
+      disabled={disabled}
       style={[{
         paddingVertical: 12
       }, style]}
-      onPress={() => action && action()}
+      onPress={() => {
+        if (premiumLock) {
+          goPremium()
+        } else {
+          action && action()
+        }
+      }}
     >
       <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
         justifyContent: 'space-between',
