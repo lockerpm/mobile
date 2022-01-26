@@ -133,7 +133,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
   // Get ciphers list
   const loadData = async () => {
-    onLoadingChange && onLoadingChange(true)
+    // onLoadingChange && onLoadingChange(true)
     
     // Filter
     const filters = [(c: CipherView) => {

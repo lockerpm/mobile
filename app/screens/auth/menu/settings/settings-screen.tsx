@@ -25,7 +25,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
   const navigation = useNavigation()
   const { user, uiStore, cipherStore } = useStores()
   const { notify, isBiometricAvailable, translate, color } = useMixins()
-  const { getSyncData } = useCipherDataMixins()
+  const { startSyncProcess } = useCipherDataMixins()
 
   // ----------------------- PARAMS -----------------------
 
@@ -73,7 +73,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
   }
 
   const syncDataManually = async () => {
-    const res = await getSyncData()
+    const res = await startSyncProcess()
     if (res.kind === 'ok') {
       notify('success', translate('success.sync_success'))
     }

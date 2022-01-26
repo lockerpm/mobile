@@ -1,7 +1,6 @@
 import { ApiResponse } from "apisauce"
 import { EditShareCipherData, EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetOrganizationResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, StopShareCipherData, SyncResult } from "./api.types"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
-import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
@@ -14,20 +13,23 @@ export class CipherApi {
   }
 
   // Sync
-  async syncData(token: string): Promise<SyncResult> {
+  async syncData(token: string, page?: number, size?: number): Promise<SyncResult> {
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get('/cystack_platform/pm/sync')
+      const response: ApiResponse<any> = await this.api.apisauce.get('/cystack_platform/pm/sync', {
+        paging: page ? 1 : 0,
+        page,
+        size
+      })
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      const res = new SyncResponse(response.data)
 
-      return { kind: "ok", data: res }
+      return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error(e.message)
       return { kind: "bad-data" }

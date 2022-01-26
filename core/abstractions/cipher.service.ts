@@ -40,6 +40,7 @@ export abstract class CipherService {
     saveCollectionsWithServer: (cipher: Cipher) => Promise<any>;
     upsert: (cipher: CipherData | CipherData[]) => Promise<any>;
     replace: (ciphers: { [id: string]: CipherData; }) => Promise<any>;
+    replaceSome: (ciphers: { [id: string]: CipherData; }) => Promise<any>;
     clear: (userId: string) => Promise<any>;
     moveManyWithServer: (ids: string[], folderId: string) => Promise<any>;
     delete: (id: string | string[]) => Promise<any>;

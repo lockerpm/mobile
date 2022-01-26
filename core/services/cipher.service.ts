@@ -729,6 +729,17 @@ export class CipherService implements CipherServiceAbstraction {
         this.decryptedCipherCache = null;
     }
 
+    async replaceSome(ciphers: { [id: string]: CipherData; }): Promise<any> {
+        const userId = await this.userService.getUserId();
+        const key = Keys.ciphersPrefix + userId;
+        const data: { [id: string]: CipherData; } = await this.storageService.get(key) || {};
+        for (let id in ciphers) {
+            data[id] = ciphers[id]
+        }
+        await this.storageService.save(key, data);
+        this.decryptedCipherCache = null;
+    }
+
     async clear(userId: string): Promise<any> {
         await this.storageService.remove(Keys.ciphersPrefix + userId);
         this.clearCache();
@@ -903,7 +914,7 @@ export class CipherService implements CipherServiceAbstraction {
         }
 
         await this.storageService.save(Keys.ciphersPrefix + userId, ciphers);
-        this.decryptedCipherCache = null;
+        // this.decryptedCipherCache = null;
     }
 
     async softDeleteWithServer(id: string): Promise<any> {
