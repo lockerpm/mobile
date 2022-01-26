@@ -147,9 +147,9 @@ export const CipherStoreModel = types
     }
   }))
   .actions(self => ({
-    syncData: async () => {
+    syncData: async (page?: number, size?: number) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.syncData(self.apiToken)
+      const res = await cipherApi.syncData(self.apiToken, page, size)
       return res
     },
 
@@ -294,7 +294,8 @@ export const CipherStoreModel = types
     'isSynching',
     'isSynchingOffline',
     'isSynchingAutofill',
-    'organizations'
+    'organizations',
+    'lastUpdate'
   ]))
 
 /**

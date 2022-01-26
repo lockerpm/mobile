@@ -110,8 +110,7 @@ export const MainNavigator = observer(function MainNavigator() {
   const { notify, translate } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { 
-    getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData, 
-    syncSingleCipher, syncSingleFolder, syncOfflineData, loadOrganizations
+    getCipherById, syncAutofillData, syncSingleCipher, syncSingleFolder, syncOfflineData, startSyncProcess
   } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const { uiStore, user, cipherStore } = useStores()
@@ -139,7 +138,7 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     // Send request
-    const syncRes = await getSyncData()
+    const syncRes = await startSyncProcess()
     if (syncRes.kind !== 'ok') {
       if (syncRes.kind !== 'synching' && syncRes.kind === 'error') {
         notify('error', translate('error.sync_failed'))
@@ -148,11 +147,6 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     // Load data
-    await Promise.all([
-      loadFolders(),
-      loadCollections(),
-      loadOrganizations()
-    ])
     if (cipherStore.selectedCipher) {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)

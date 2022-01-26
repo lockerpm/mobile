@@ -85,7 +85,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
   // Get ciphers list
   const loadData = async () => {
-    onLoadingChange && onLoadingChange(true)
+    // onLoadingChange && onLoadingChange(true)
 
     // Filter
     const filters = []
