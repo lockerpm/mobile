@@ -15,15 +15,17 @@ import { AccountRoleText } from "../../../config/types"
 
 
 interface Props {
-  isOpen?: boolean,
+  isOpen?: boolean
   onClose?: () => void
+  cipherIds?: string[]
+  onSuccess?: () => void
 }
 
 export const ShareModal = observer((props: Props) => {
-  const { isOpen, onClose } = props
+  const { isOpen, onClose, cipherIds, onSuccess } = props
   const { cipherStore } = useStores()
   const { translate, color } = useMixins()
-  const { shareCipher } = useCipherDataMixins()
+  const { shareCipher, shareMultipleCiphers } = useCipherDataMixins()
 
   const selectedCipher: CipherView = cipherStore.cipherView
   const shareTypes = [
@@ -57,6 +59,7 @@ export const ShareModal = observer((props: Props) => {
     setEmails(emails.filter(e => e !== val))
   }
 
+  // Share single/multiple
   const handleShare = async () => {
     setIsLoading(true)
 
@@ -70,11 +73,17 @@ export const ShareModal = observer((props: Props) => {
         role = AccountRoleText.ADMIN
         break
     }
-    const res = await shareCipher(selectedCipher, emails, role, autofillOnly)
+
+    const res = !!cipherIds
+      ? await shareMultipleCiphers(cipherIds, emails, role, autofillOnly)
+      : await shareCipher(selectedCipher, emails, role, autofillOnly)
 
     setIsLoading(false)
 
     if (res.kind === 'ok' || res.kind === 'unauthorized') {
+      if (res.kind === 'ok') {
+        onSuccess && onSuccess()
+      }
       onClose()
     }
   }
@@ -92,7 +101,7 @@ export const ShareModal = observer((props: Props) => {
         setEmails([])
         setShareType(1)
       }}
-      title={selectedCipher.name}
+      title={cipherIds ? translate('shares.share_x_items', { count: cipherIds.length }) : selectedCipher.name}
     >
       <Text
         text={translate('shares.add_emails')}

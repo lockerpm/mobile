@@ -346,7 +346,8 @@
     "shared_with": "Shared with",
     "no_members": "No member",
     "start_sharing": "Start Sharing",
-    "stop_sharing": "Stop Sharing"
+    "stop_sharing": "Stop Sharing",
+    "share_x_items": "Share {{count}} items"
   },
   "trash": {
     "delete_item": "Delete Item",

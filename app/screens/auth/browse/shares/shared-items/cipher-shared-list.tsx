@@ -117,7 +117,8 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     cipher.description = `${i.team.name} - ${shareType}`
     return cipher
   })
-  const allCiphers = !!searchText.trim() ? ciphers : [...pendingCiphers, ...ciphers]
+
+  const allCiphers = !!searchText.trim() || isSelecting ? ciphers : [...pendingCiphers, ...ciphers]
 
   // ------------------------ EFFECTS ----------------------------
 
@@ -356,7 +357,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
                 goToDetail(item)
               }
             }}
-            onLongPress={() => toggleItemSelection(item)}
+            onLongPress={() => !item.isShared && toggleItemSelection(item)}
             style={{
               borderBottomColor: color.line,
               borderBottomWidth: 0.5,

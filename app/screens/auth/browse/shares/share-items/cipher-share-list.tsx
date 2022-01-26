@@ -274,6 +274,9 @@ export const CipherShareList = observer((props: Props) => {
                   <Text
                     preset="semibold"
                     text={item.name}
+                    style={{
+                      marginRight: item.status ? 10 : 0
+                    }}
                   />
 
                   {/* Sharing status */}
@@ -284,7 +287,6 @@ export const CipherShareList = observer((props: Props) => {
                         paddingVertical: 2,
                         backgroundColor: item.status === SharingStatus.INVITED ? color.warning : color.primary,
                         borderRadius: 3,
-                        marginLeft: 10
                       }}>
                         <Text
                           text={item.status.toUpperCase()}

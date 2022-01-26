@@ -346,7 +346,8 @@
     "shared_with": "Chia sẻ với",
     "no_members": "Không có thành viên nào",
     "start_sharing": "Bắt đầu chia sẻ",
-    "stop_sharing": "Ngừng chia sẻ"
+    "stop_sharing": "Ngừng chia sẻ",
+    "share_x_items": "Chia sẻ {{count}} mục"
   },
   "trash": {
     "delete_item": "Xóa",
