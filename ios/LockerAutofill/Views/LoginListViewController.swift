@@ -38,7 +38,6 @@ class LoginListViewController: UIViewController {
     
     filterCredentials = credentials
     filterOthers = others
-    
   }
   
   @IBAction func cancel(_ sender: AnyObject?) {
@@ -72,19 +71,33 @@ extension LoginListViewController: UISearchBarDelegate {
     }
     // get matches credentiral username
     for credential in credentials {
-      let username: String = credential.username.lowercased()
-      if username.contains(searchText.lowercased()) {
+      if (isMatchCredentials(credential: credential, searchPattern: searchText)) {
           filterCredentials.append(credential)
       }
     }
     // for ohters
     for credential in others {
-      let username: String = credential.username.lowercased()
-      if username.contains(searchText.lowercased()) {
-          filterOthers.append(credential)
+      if (isMatchCredentials(credential: credential, searchPattern: searchText)) {
+          filterCredentials.append(credential)
       }
     }
     self.tableView.reloadData()
+  }
+  
+  private func isMatchCredentials(credential: AutofillData, searchPattern: String) -> Bool {
+    let username: String = credential.username.lowercased()
+    let uri = credential.uri.lowercased()
+    let name = credential.name.lowercased()
+    if username.contains(searchPattern.lowercased()) {
+        return true
+    }
+    if uri.contains(searchPattern.lowercased()) {
+        return true
+    }
+    if name.contains(searchPattern.lowercased()) {
+        return true
+    }
+    return false
   }
 }
 
@@ -163,7 +176,7 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension LoginListViewController: LoginListControllerDelegate {
   func deleteLogin() {
-    print("asd")
+
   }
   
   func addLogin(credential: AutofillData) {
