@@ -138,29 +138,25 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
     present(editPassView, animated: true)
   }
   
-  
-//  func tableView(_ tableView: UITableView,    section: Int) -> String? {
-//    return section == 0 ? "Passwords for \"\(credentialIdStore.URI)\" (\(self.filterCredentials.count))" : "All passwords (\(self.filterOthers.count))"
-//  }
 //
-  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    let label = UILabel()
-    let paragraphStyle = NSMutableParagraphStyle()
-    paragraphStyle.firstLineHeadIndent = 20
-
-   // paragraphStyle.
-    let content: String
-
-    if section == 0 {
-      content = Utils.Translate("Passwords for") +  " \"\(uri!)\" (\(self.filterCredentials.count))"
-    } else {
-      content = Utils.Translate("All passwords") + " (\(self.filterOthers.count))"
-    }
-    let attributedString = NSAttributedString(string: content, attributes: [.paragraphStyle : paragraphStyle, .backgroundColor: UIColor.white])
-    label.attributedText = attributedString
-    label.textColor = .lightGray
-    return label
-  }
+//  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//    let label = UILabel()
+//    let paragraphStyle = NSMutableParagraphStyle()
+//    paragraphStyle.firstLineHeadIndent = 20
+//
+//   // paragraphStyle.
+//    let content: String
+//
+//    if section == 0 {
+//      content = Utils.Translate("Passwords for") +  " \"\(uri!)\" (\(self.filterCredentials.count))"
+//    } else {
+//      content = Utils.Translate("All passwords") + " (\(self.filterOthers.count))"
+//    }
+//    let attributedString = NSAttributedString(string: content, attributes: [.paragraphStyle : paragraphStyle, .backgroundColor: UIColor.white])
+//    label.attributedText = attributedString
+//    label.textColor = .lightGray
+//    return label
+//  }
 
   func numberOfSections(in tableView: UITableView) -> Int {
     // #warning Incomplete implementation, return the number of sections
@@ -172,6 +168,24 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
     let target = indexPath.section == 0 ? filterCredentials[indexPath.row] : filterOthers[indexPath.row]
     completeRequest(data: target)
   }
+  
+  
+  func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    let edit = UITableViewRowAction(style: .normal, title: Utils.Translate("Detail")) { (action, index) in
+      let credential = indexPath.section == 0 ? self.filterCredentials[indexPath.row] : self.filterOthers[indexPath.row]
+      let editPassView = self.storyboard?.instantiateViewController(withIdentifier: "editPasswordView") as! EditPasaswordViewController
+      editPassView.credential = credential
+      self.present(editPassView, animated: true)
+    }
+    edit.backgroundColor = UIColor(
+      red: CGFloat(61) / 255.0,
+      green: CGFloat(150) / 255.0,
+      blue: CGFloat(45) / 255.0,
+      alpha: CGFloat(1.0)
+  )
+    return [edit]
+  }
+
 }
 
 extension LoginListViewController: LoginListControllerDelegate {
