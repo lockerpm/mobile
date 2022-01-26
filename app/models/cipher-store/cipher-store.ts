@@ -280,6 +280,12 @@ export const CipherStoreModel = types
       const res = await cipherApi.getPMProfile(self.apiToken)
       return res
     },
+
+    getOrganization: async (id: string) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getOrganization(self.apiToken, id)
+      return res
+    },
   }))
   .postProcessSnapshot(omit([
     'generatedPassword', 
