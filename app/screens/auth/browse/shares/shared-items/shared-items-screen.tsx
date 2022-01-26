@@ -48,6 +48,7 @@ export const SharedItemsScreen = observer(() => {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
+          isShared
           header={translate('shares.shared_items')}
           openSort={() => setIsSortOpen(true)}
           onSearch={setSearchText}

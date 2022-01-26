@@ -53,7 +53,9 @@ const defaultData = {
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   importCiphers: async (importResult) => { return { kind: 'unknown' } },
+  
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
+  shareMultipleCiphers: async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   stopShareCipher: async (cipher: CipherView, memberId: string) => { return { kind: 'unknown' } },
   editShareCipher: async (organizationId: string, memberId: string, role: AccountRoleText, onlyFill: boolean) => { return { kind: 'unknown' } },
   leaveShare: async (id: string, organizationId: string) => { return { kind: 'unknown' } },
@@ -71,6 +73,7 @@ const defaultData = {
   syncSingleCipher: async (id: string) => { return { kind: 'unknown' } },
   syncSingleFolder: async (id: string) => { return { kind: 'unknown' } },
   syncSingleOrganization: async (id: string) => { return { kind: 'unknown' } },
+  syncProfile: async () => { return { kind: 'unknown' } },
 }
 
 export const CipherDataMixinsContext = createContext(defaultData)
@@ -1032,6 +1035,27 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     return key.encryptedString
   }
 
+  // Share multiple ciphers
+  const shareMultipleCiphers = async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => {
+    const ciphers = await getCiphers({
+      deleted: false,
+      searchText: '',
+      filters: [(c: CipherView) => ids.includes(c.id)]
+    }) || []
+    if (!ciphers.length) {
+      return { kind: 'ok' }
+    }
+    const responses = await Promise.all(ciphers.map(c => {
+      return shareCipher(c, emails, role, autofillOnly)
+    }))
+    for (const res of responses) {
+      if (res.kind !== 'ok') {
+        return res
+      }
+    }
+    return { kind: 'ok' }
+  }
+
   // Stop share cipher
   const stopShareCipher = async (cipher: CipherView, memberId: string) => {
     try {
@@ -1479,7 +1503,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
       // Sync profile
       if (!!cipher.organizationId) {
-        await syncSingleOrganization(cipher.organizationId)
+        // await syncSingleOrganization(cipher.organizationId)
+        await syncProfile()
       }
     }
 
@@ -1562,6 +1587,18 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     return orgRes
   }
 
+  // Sync profile
+  const syncProfile = async () => {
+    const res = await cipherStore.getProfile()
+    if (res.kind === 'ok') {
+      await syncService.syncProfile(res.data)
+      await loadOrganizations()
+    } else {
+      notifyApiError(res)
+    }
+    return res
+  }
+
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
@@ -1583,13 +1620,15 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     deleteCiphers,
     toTrashCiphers,
     restoreCiphers,
+    importCiphers,
+
     shareCipher,
+    shareMultipleCiphers,
     stopShareCipher,
     editShareCipher,
     leaveShare,
     acceptShareInvitation,
     rejectShareInvitation,
-    importCiphers,
 
     createFolder,
     updateFolder,
@@ -1601,7 +1640,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
     syncSingleCipher,
     syncSingleFolder,
-    syncSingleOrganization
+    syncSingleOrganization,
+    syncProfile
   }
 
   return (
