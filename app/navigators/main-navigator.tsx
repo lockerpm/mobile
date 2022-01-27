@@ -16,7 +16,7 @@ import {
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
   ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
-  GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen
+  GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -100,6 +100,7 @@ export type PrimaryParamList = {
   export: undefined
   autofill: undefined
   notificationSettings: undefined
+  shareMultiple: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -347,6 +348,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
+        <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} />
 
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />

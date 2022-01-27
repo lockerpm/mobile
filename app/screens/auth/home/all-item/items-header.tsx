@@ -72,7 +72,7 @@ export const ItemsHeader = observer((props: Props) => {
   
   // ----------------------- METHODS ------------------------
 
-  // Header left
+  // Header right
   const renderHeaderRight = () => (
     <View
       style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
