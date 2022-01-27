@@ -30,7 +30,7 @@ export const StartScreen = observer(function StartScreen() {
     const connectionState = await NetInfo.fetch()
 
     // Sync
-    if (connectionState.isInternetReachable) {
+    if (connectionState.isConnected) {
       // Update FCM
       user.updateFCM(user.fcmToken)
 
