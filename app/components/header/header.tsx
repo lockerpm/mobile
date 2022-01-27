@@ -51,7 +51,7 @@ export const Header = observer(function Header(props: HeaderProps) {
                 onPress={() => props.goBack()}
                 style={{ 
                   height: 35,
-                  width: 35,
+                  width: props.goBackText ? undefined : 35,
                   justifyContent: 'flex-start',
                   alignItems: 'center',
                   marginLeft: -8,

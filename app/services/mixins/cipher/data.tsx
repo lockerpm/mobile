@@ -23,6 +23,7 @@ import { Cipher, EncString, SymmetricCryptoKey } from '../../../../core/models/d
 import { Utils } from '../../core-service/utils'
 import { AccountRoleText } from '../../../config/types'
 import { OrganizationData } from '../../../../core/models/data/organizationData'
+import { ImportResult } from '../../../../core/models/domain/importResult'
 
 
 type GetCiphersParams = {
@@ -52,7 +53,7 @@ const defaultData = {
   toTrashCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
-  importCiphers: async (importResult) => { return { kind: 'unknown' } },
+  importCiphers: async (importResult: ImportResult) => { return { kind: 'unknown' } },
   
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   shareMultipleCiphers: async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
@@ -472,7 +473,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
             }
             payload.name = cipher.name
             payload.login = data
-            await _offlineCreateCipher(payload, [])
+            await _offlineCreateCipher({
+              cipher: payload, 
+              collectionIds: []
+            })
             hasUpdate = true
           }
         }
@@ -604,10 +608,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Import
-  const importCiphers = async (importResult) => {
+  const importCiphers = async (importResult: ImportResult) => {
     // Offline
     if (uiStore.isOffline) {
-      await _offlineImportCiphers(importResult)
+      await _offlineImportCiphers({ importResult })
       notify('success', translate('import.success') + ' ' + translate('success.will_sync_when_online'))
       return { kind: 'ok' }
     }
@@ -640,7 +644,12 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
     const res = await cipherStore.importCipher(request)
     if (res.kind === 'ok') {
-      await _offlineImportCiphers(importResult, true)
+      await _offlineImportCiphers({
+        importResult,
+        isCaching: true,
+        cipherRequests: request.ciphers,
+        folderRequests: request.folders
+      })
       notify('success', translate('import.success'))
       return res
     } else {
@@ -649,39 +658,50 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
   }
 
-  const _offlineImportCiphers = async (importResult, isCaching?: boolean) => {
-    const ciphers = []
-    const folders = []
+  const _offlineImportCiphers = async (payload: {
+    importResult: ImportResult
+    isCaching?: boolean
+    cipherRequests?: (CipherRequest & { id?: string })[]
+    folderRequests?: (FolderRequest & { id?: string })[]
+  }) => {
+    const { importResult, isCaching, cipherRequests, folderRequests } = payload
+
+    const ciphers = cipherRequests || []
+    const folders = folderRequests || []
 
     // Prepare ciphers
-    for (let i = 0; i < importResult.ciphers.length; i++) {
-      const cipher = importResult.ciphers[i]
-      const countDuplicate = await _countDuplicateCipherName(cipher)
-      if (countDuplicate > 0) {
-        cipher.name = `${cipher.name} (${countDuplicate})`
-      }
-      const enc = await cipherService.encrypt(cipher)
-      const cr = new CipherRequest(enc)
-      const tempId = 'tmp__' + randomString()
-      // @ts-ignore
-      cr.id = tempId
-      ciphers.push(cr)
-    }
-
-    // Prepare folders
-    if (importResult.folders != null) {
-      for (let i = 0; i < importResult.folders.length; i++) {
-        const folder = importResult.folders[i]
-        const countDuplicate = _countDuplicateFolderName(folder)
+    if (!cipherRequests) {
+      for (let i = 0; i < importResult.ciphers.length; i++) {
+        const cipher = importResult.ciphers[i]
+        const countDuplicate = await _countDuplicateCipherName(cipher)
         if (countDuplicate > 0) {
-          folder.name = `${folder.name} (${countDuplicate})`
+          cipher.name = `${cipher.name} (${countDuplicate})`
         }
-        const enc = await folderService.encrypt(folder)
-        const fr = new FolderRequest(enc)
+        const enc = await cipherService.encrypt(cipher)
+        const cr = new CipherRequest(enc)
         const tempId = 'tmp__' + randomString()
         // @ts-ignore
-        fr.id = tempId
-        folders.push(fr)
+        cr.id = tempId
+        ciphers.push(cr)
+      }
+    }
+    
+    // Prepare folders
+    if (!folderRequests) {
+      if (importResult.folders != null) {
+        for (let i = 0; i < importResult.folders.length; i++) {
+          const folder = importResult.folders[i]
+          const countDuplicate = _countDuplicateFolderName(folder)
+          if (countDuplicate > 0) {
+            folder.name = `${folder.name} (${countDuplicate})`
+          }
+          const enc = await folderService.encrypt(folder)
+          const fr = new FolderRequest(enc)
+          const tempId = 'tmp__' + randomString()
+          // @ts-ignore
+          fr.id = tempId
+          folders.push(fr)
+        }
       }
     }
 
@@ -774,7 +794,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
       // Offline
       if (uiStore.isOffline) {
-        await _offlineCreateCipher(cipher, collectionIds)
+        await _offlineCreateCipher({ cipher, collectionIds })
         notify('success', `${translate('success.cipher_created')} ${translate('success.will_sync_when_online')}`)
         return { kind: 'ok' }
       } 
@@ -784,7 +804,12 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const data = new CipherRequest(cipherEnc)
       const res = await cipherStore.createCipher(data, score, collectionIds)
       if (res.kind === 'ok') {
-        await _offlineCreateCipher(cipher, collectionIds, true) 
+        await _offlineCreateCipher({ 
+          cipher, 
+          collectionIds, 
+          isCaching: true,
+          cipherRequest: data
+        }) 
         notify('success', translate('success.cipher_created'))
       } else {
         notifyApiError(res)
@@ -798,13 +823,19 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline create
-  const _offlineCreateCipher = async (cipher: CipherView, collectionIds: string[], isCaching?: boolean) => {
+  const _offlineCreateCipher = async (payload: {
+    cipher: CipherView
+    collectionIds: string[]
+    isCaching?: boolean
+    cipherRequest?: CipherRequest
+  }) => {
+    const { cipher, collectionIds, isCaching, cipherRequest } = payload
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
     const res = await storageService.get(key) || {}
 
     const cipherEnc = await cipherService.encrypt(cipher)
-    const data = new CipherRequest(cipherEnc)
+    const data = cipherRequest || new CipherRequest(cipherEnc)
     const tempId = 'tmp__' + randomString()
 
     res[tempId] = {
@@ -830,7 +861,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     try {
       // Offline
       if (uiStore.isOffline) {
-        await _offlineUpdateCipher(cipher, collectionIds)
+        await _offlineUpdateCipher({ cipher, collectionIds })
         notify('success', `${translate('success.cipher_updated')} ${translate('success.will_sync_when_online')}`)
         return { kind: 'ok' }
       } 
@@ -840,7 +871,12 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const data = new CipherRequest(cipherEnc)
       const res = await cipherStore.updateCipher(id, data, score, collectionIds)
       if (res.kind === 'ok') {
-        await _offlineUpdateCipher(cipher, collectionIds, true)
+        await _offlineUpdateCipher({
+          cipher, 
+          collectionIds,
+          isCaching: true,
+          cipherRequest: data
+        })
         notify('success', translate('success.cipher_updated'))
       } else {
         notifyApiError(res)
@@ -854,13 +890,20 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline update
-  const _offlineUpdateCipher = async (cipher: CipherView, collectionIds: string[], isCaching?: boolean) => {
+  const _offlineUpdateCipher = async (payload: {
+    cipher: CipherView
+    collectionIds: string[]
+    isCaching?: boolean
+    cipherRequest?: CipherRequest
+  }) => {
+    const { cipher, collectionIds, isCaching, cipherRequest } = payload
+
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
     const res = await storageService.get(key) || {}
 
     const cipherEnc = await cipherService.encrypt(cipher)
-    const data = new CipherRequest(cipherEnc)
+    const data = cipherRequest || new CipherRequest(cipherEnc)
     const revisionDate = new Date()
     
     res[cipher.id] = {
@@ -1199,7 +1242,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     try {
       // Offline
       if (uiStore.isOffline) {
-        await _offlineCreateFolder(folder)
+        await _offlineCreateFolder({ folder })
         notify('success', `${translate('folder.folder_created')} ${translate('success.will_sync_when_online')}`)
         return { kind: 'ok' }
       } 
@@ -1209,7 +1252,11 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const payload = new FolderRequest(folderEnc)
       const res = await folderStore.createFolder(payload)
       if (res.kind === 'ok') {
-        await _offlineCreateFolder(folder, true) 
+        await _offlineCreateFolder({
+          folder,
+          isCaching: true,
+          folderRequest: payload
+        }) 
         notify('success', translate('folder.folder_created'))
       } else {
         notifyApiError(res)
@@ -1223,13 +1270,19 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline create folder
-  const _offlineCreateFolder = async (folder: FolderView, isCaching?: boolean) => {
+  const _offlineCreateFolder = async (payload: {
+    folder: FolderView
+    isCaching?: boolean
+    folderRequest?: FolderRequest
+  }) => {
+    const { folder, isCaching, folderRequest } = payload
+
     const userId = await userService.getUserId()
     const key = `folders_${userId}`
     const res = await storageService.get(key) || {}
 
     const folderEnc = await folderService.encrypt(folder)
-    const data = new FolderRequest(folderEnc)
+    const data = folderRequest || new FolderRequest(folderEnc)
     const tempId = 'tmp__' + randomString()
 
     res[tempId] = {
@@ -1251,7 +1304,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     try {
       // Offline
       if (uiStore.isOffline) {
-        await _offlineUpdateFolder(folder)
+        await _offlineUpdateFolder({ folder })
         notify('success', `${translate('folder.folder_updated')} ${translate('success.will_sync_when_online')}`)
         return { kind: 'ok' }
       } 
@@ -1261,7 +1314,11 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const payload = new FolderRequest(folderEnc)
       const res = await folderStore.updateFolder(folder.id, payload)
       if (res.kind === 'ok') {
-        await _offlineUpdateFolder(folder, true) 
+        await _offlineUpdateFolder({
+          folder,
+          isCaching: true,
+          folderRequest: payload
+        }) 
         notify('success', translate('folder.folder_updated'))
       } else {
         notifyApiError(res)
@@ -1275,13 +1332,19 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline update folder
-  const _offlineUpdateFolder = async (folder: FolderView, isCaching?: boolean) => {
+  const _offlineUpdateFolder = async (payload: {
+    folder: FolderView
+    isCaching?: boolean
+    folderRequest?: FolderRequest
+  }) => {
+    const { folder, isCaching, folderRequest } = payload
+
     const userId = await userService.getUserId()
     const key = `folders_${userId}`
     const res = await storageService.get(key) || {}
 
     const folderEnc = await folderService.encrypt(folder)
-    const data = new FolderRequest(folderEnc)
+    const data = folderRequest || new FolderRequest(folderEnc)
 
     res[folder.id] = {
       ...res[folder.id],
@@ -1357,7 +1420,11 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const res = await collectionStore.createCollection(collection.organizationId, payload)
 
       if (res.kind === 'ok') {
-        await _offlineCreateCollection(collection, true) 
+        await _offlineCreateCollection({
+          collection,
+          isCaching: true,
+          collectionRequest: payload
+        }) 
         notify('success', translate('folder.folder_created'))
       } else {
         notifyApiError(res)
@@ -1371,13 +1438,19 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline create collection
-  const _offlineCreateCollection = async (collection: CollectionView, isCaching?: boolean) => {
+  const _offlineCreateCollection = async (payload: {
+    collection: CollectionView
+    isCaching?: boolean
+    collectionRequest?: CollectionRequest
+  }) => {
+    const { collection, isCaching, collectionRequest } = payload
+
     const userId = await userService.getUserId()
     const key = `collections_${userId}`
     const res = await storageService.get(key) || {}
 
     const collectionEnc = await collectionService.encrypt(collection)
-    const data = new CollectionRequest(collectionEnc)
+    const data = collectionRequest || new CollectionRequest(collectionEnc)
     const tempId = 'tmp__' + randomString()
 
     res[tempId] = {
@@ -1411,7 +1484,11 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const res = await collectionStore.updateCollection(collection.id, collection.organizationId, payload)
 
       if (res.kind === 'ok') {
-        await _offlineUpdateCollection(collection, true) 
+        await _offlineUpdateCollection({
+          collection,
+          isCaching: true,
+          collectionRequest: payload
+        }) 
         notify('success', translate('folder.folder_updated'))
       } else {
         notifyApiError(res)
@@ -1425,13 +1502,19 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Offline Update collection
-  const _offlineUpdateCollection = async (collection: CollectionView, isCaching?: boolean) => {
+  const _offlineUpdateCollection = async (payload: {
+    collection: CollectionView
+    isCaching?: boolean
+    collectionRequest?: CollectionRequest
+  }) => {
+    const { collection, isCaching, collectionRequest } = payload
+
     const userId = await userService.getUserId()
     const key = `collections_${userId}`
     const res = await storageService.get(key) || {}
 
     const collectionEnc = await collectionService.encrypt(collection)
-    const data = new CollectionRequest(collectionEnc)
+    const data = collectionRequest || new CollectionRequest(collectionEnc)
 
     res[collection.id] = {
       ...res[collection.id],
@@ -1525,6 +1608,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       if (_id.startsWith('tmp__') && res[_id].name === cipher.name && res[_id].type === cipher.type ) {
         delete res[_id]
         cipherStore.removeNotUpdate(_id)
+        cipherService.csDeleteFromDecryptedCache([_id])
         break
       }
     }
