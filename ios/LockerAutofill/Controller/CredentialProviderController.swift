@@ -49,16 +49,17 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   override func viewDidAppear(_ animated: Bool) {
-      if (self.dataModel.isFaceIdEnabled()){
-        Utils.BiometricAuthentication(
-          view: self,
-          onSuccess: quickBar ? quickBarAuthenSuccess : performLoginListScreen,
-          onFailed: performVerifyPasswordScreen
-        )
-      }
-      else {
-        performVerifyPasswordScreen()
-      }
+    performVerifyPasswordScreen()
+//      if (self.dataModel.isFaceIdEnabled()){
+//        Utils.BiometricAuthentication(
+//          view: self,
+//          onSuccess: quickBar ? quickBarAuthenSuccess : performLoginListScreen,
+//          onFailed: performVerifyPasswordScreen
+//        )
+//      }
+//      else {
+//        performVerifyPasswordScreen()
+//      }
   }
   
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
@@ -83,29 +84,37 @@ class CredentialProviderController: ASCredentialProviderViewController {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
   }
   
+
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+  {
+      if segue.identifier == "loginListSegue"
+      {
+        let loginListView = (segue.destination as! UINavigationController).topViewController as! LoginListViewController
+        loginListView.credentialProviderDelegate = self
+        loginListView.credentials = self.dataModel.getCredentials()
+        loginListView.others = self.dataModel.getOtherCredentials()
+        loginListView.uri = self.dataModel.getUri()
+      } else if segue.identifier == "verifyMasterPasswordSegue" {
+        let verifyMasterPasswordScreen = segue.destination as! VerifyMasterPasswordViewController
+        verifyMasterPasswordScreen.credentialProviderDelegate = self
+        verifyMasterPasswordScreen.userEmail = self.dataModel.getUserEmail()
+        verifyMasterPasswordScreen.hassMasterPass = self.dataModel.getUserHashMasterPass()
+        verifyMasterPasswordScreen.authenQuickBar = self.quickBar
+      }
+  }
+  private func performVerifyPasswordScreen(){
+    self.performSegue(withIdentifier: "verifyMasterPasswordSegue", sender: self)
+  }
+  
+  private func performLoginListScreen(){
+      self.performSegue(withIdentifier: "loginListSegue", sender: self)
+  }
+  
   private func completeRequest(user: String, password: String){
     let passwordCredential = ASPasswordCredential(user: user, password: password)
     self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
   }
 
-  private func performVerifyPasswordScreen(){
-    let verifyMasterPasswordScreen = storyboard?.instantiateViewController(withIdentifier: "verifyMasterPasswordScreen") as! VerifyMasterPasswordViewController
-    verifyMasterPasswordScreen.credentialProviderDelegate = self
-    verifyMasterPasswordScreen.userEmail = self.dataModel.getUserEmail()
-    verifyMasterPasswordScreen.hassMasterPass = self.dataModel.getUserHashMasterPass()
-    verifyMasterPasswordScreen.authenQuickBar = self.quickBar
-    present(verifyMasterPasswordScreen, animated: true, completion: nil)
-  }
-  
-  private func performLoginListScreen(){
-    let loginListScreen = storyboard?.instantiateViewController(withIdentifier: "loginListViewController") as! LoginListViewController
-    loginListScreen.credentialProviderDelegate = self
-    loginListScreen.credentials = self.dataModel.getCredentials()
-    loginListScreen.others = self.dataModel.getOtherCredentials()
-    loginListScreen.uri = self.dataModel.getUri()
-    
-    present(loginListScreen, animated: true, completion: nil)
-  }
 }
 
 

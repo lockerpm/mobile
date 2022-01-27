@@ -135,6 +135,7 @@
                             <constraint firstItem="VAo-LQ-WML" firstAttribute="top" secondItem="Iqt-pY-FVh" secondAttribute="bottom" constant="38" id="wPH-Cf-ng1"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="py4-7U-hfY"/>
                     <connections>
                         <outlet property="eyeIconButton" destination="2Tu-q5-Aqh" id="L9G-Xz-f4t"/>
                         <outlet property="masterPasswordTxt" destination="vj6-uN-Bj0" id="lVa-W0-BrX"/>
@@ -142,7 +143,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="537-z4-4UF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="729" y="1818"/>
+            <point key="canvasLocation" x="654" y="2501"/>
         </scene>
         <!--Credential Provider Controller-->
         <scene sceneID="tUj-BI-mok">
@@ -165,13 +166,15 @@
                     </view>
                     <connections>
                         <outlet property="logo" destination="Roz-hO-dne" id="mqP-Gl-Dma"/>
+                        <segue destination="gjg-ly-tQ8" kind="presentation" identifier="loginListSegue" modalPresentationStyle="fullScreen" id="9Ee-XU-HMP"/>
+                        <segue destination="vxG-7A-bij" kind="presentation" identifier="verifyMasterPasswordSegue" modalPresentationStyle="fullScreen" id="zxi-TY-vjH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1CR-rL-5MY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-41" y="2191"/>
+            <point key="canvasLocation" x="-292" y="2239"/>
         </scene>
-        <!--Login List View Controller-->
+        <!--Login List-->
         <scene sceneID="Uma-9u-xWV">
             <objects>
                 <viewController storyboardIdentifier="loginListViewController" id="Xki-Si-B7m" customClass="LoginListViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
@@ -180,7 +183,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="20" estimatedSectionHeaderHeight="20" sectionFooterHeight="1" estimatedSectionFooterHeight="4" translatesAutoresizingMaskIntoConstraints="NO" id="Tnx-2s-k97">
-                                <rect key="frame" x="0.0" y="115" width="375" height="552"/>
+                                <rect key="frame" x="0.0" y="119" width="375" height="548"/>
                                 <color key="backgroundColor" red="1" green="0.98958333330000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -256,63 +259,45 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </tableView>
-                            <searchBar contentMode="redraw" text="" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="2aL-Ft-xPm">
-                                <rect key="frame" x="0.0" y="44" width="375" height="55"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="UJx-sW-kG0">
+                                <rect key="frame" x="0.0" y="44" width="375" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="CqN-RO-gAf"/>
+                                    <constraint firstAttribute="height" constant="50" id="IoI-tr-Dxp"/>
                                 </constraints>
-                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3wq-kG-lGu">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                <color key="barTintColor" red="0.23727124929999999" green="0.58758485319999998" blue="0.17723390459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <textAttributes key="titleTextAttributes">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <color key="textShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </textAttributes>
-                                <textAttributes key="largeTitleTextAttributes">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <color key="textShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </textAttributes>
-                                <items>
-                                    <navigationItem title="Locker Password Manager" id="cbj-pk-SYj" colorLabel="IBBuiltInLabel-Green">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="bEZ-MG-jDy">
-                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <connections>
-                                                <action selector="cancel:" destination="Xki-Si-B7m" id="6ap-3Q-iEX"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ky8-vK-JVj"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="2aL-Ft-xPm" firstAttribute="trailing" secondItem="Ky8-vK-JVj" secondAttribute="trailing" id="4Jh-VC-DoR"/>
                             <constraint firstItem="Ky8-vK-JVj" firstAttribute="trailing" secondItem="Tnx-2s-k97" secondAttribute="trailing" id="7n4-p2-6Ga"/>
-                            <constraint firstItem="Ky8-vK-JVj" firstAttribute="bottom" secondItem="Tnx-2s-k97" secondAttribute="bottom" id="G3t-Lb-zrI"/>
-                            <constraint firstItem="2aL-Ft-xPm" firstAttribute="leading" secondItem="Ky8-vK-JVj" secondAttribute="leading" id="GRi-Og-Dkg"/>
-                            <constraint firstItem="2aL-Ft-xPm" firstAttribute="top" secondItem="3wq-kG-lGu" secondAttribute="bottom" id="HhQ-oz-3jn"/>
-                            <constraint firstItem="3wq-kG-lGu" firstAttribute="top" secondItem="Ky8-vK-JVj" secondAttribute="top" id="Jrd-z6-f2L"/>
+                            <constraint firstItem="Tnx-2s-k97" firstAttribute="top" secondItem="UJx-sW-kG0" secondAttribute="bottom" constant="25" id="EaS-aI-BhA"/>
+                            <constraint firstItem="UJx-sW-kG0" firstAttribute="leading" secondItem="Ky8-vK-JVj" secondAttribute="leading" id="IvN-pv-Dwj"/>
+                            <constraint firstItem="Tnx-2s-k97" firstAttribute="leading" secondItem="UJx-sW-kG0" secondAttribute="leading" id="ShR-LK-Un8"/>
+                            <constraint firstItem="Tnx-2s-k97" firstAttribute="bottom" secondItem="Ky8-vK-JVj" secondAttribute="bottom" id="Td7-fR-vMV"/>
+                            <constraint firstItem="UJx-sW-kG0" firstAttribute="top" secondItem="Ky8-vK-JVj" secondAttribute="top" id="Uh0-9I-xio"/>
                             <constraint firstItem="Tnx-2s-k97" firstAttribute="leading" secondItem="Ky8-vK-JVj" secondAttribute="leading" id="bSB-i7-NPg"/>
-                            <constraint firstItem="Tnx-2s-k97" firstAttribute="top" secondItem="2aL-Ft-xPm" secondAttribute="bottom" constant="16" id="eIx-QB-4tq"/>
-                            <constraint firstItem="3wq-kG-lGu" firstAttribute="trailing" secondItem="Ky8-vK-JVj" secondAttribute="trailing" id="eSO-X1-ZFL"/>
-                            <constraint firstItem="3wq-kG-lGu" firstAttribute="leading" secondItem="Ky8-vK-JVj" secondAttribute="leading" id="qHk-yc-uas"/>
+                            <constraint firstItem="Tnx-2s-k97" firstAttribute="trailing" secondItem="UJx-sW-kG0" secondAttribute="trailing" id="lW2-pS-5b8"/>
+                            <constraint firstItem="UJx-sW-kG0" firstAttribute="trailing" secondItem="Ky8-vK-JVj" secondAttribute="trailing" id="xEa-6r-Ov7"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="djK-6Z-utw"/>
+                    <navigationItem key="navigationItem" title="Login List" id="djK-6Z-utw">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="1mO-wz-8ct">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="cancel:" destination="Xki-Si-B7m" id="Wql-Ed-Eo4"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
-                        <outlet property="searchBar" destination="2aL-Ft-xPm" id="rw1-4S-G9B"/>
+                        <outlet property="searchBar" destination="UJx-sW-kG0" id="njg-4p-FzT"/>
                         <outlet property="tableView" destination="Tnx-2s-k97" id="XIc-2D-361"/>
+                        <segue destination="HiT-rB-bYB" kind="push" identifier="loginDetailSegue" id="ZCy-Vm-Upn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RwB-HB-TSk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1423" y="1818"/>
+            <point key="canvasLocation" x="1529" y="1776"/>
         </scene>
         <!--New Password View Controller-->
         <scene sceneID="JHE-Kh-CJZ">
@@ -491,7 +476,7 @@
             </objects>
             <point key="canvasLocation" x="1422" y="2502"/>
         </scene>
-        <!--Edit Pasasword View Controller-->
+        <!--LoginDetail-->
         <scene sceneID="FYZ-nk-jcP">
             <objects>
                 <viewController storyboardIdentifier="editPasswordView" id="HiT-rB-bYB" customClass="EditPasaswordViewController" customModule="LockerAutofill" customModuleProvider="target" sceneMemberID="viewController">
@@ -500,7 +485,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WOI-jT-LSg">
-                                <rect key="frame" x="16" y="84" width="343" height="120"/>
+                                <rect key="frame" x="16" y="128" width="343" height="120"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ff5-Zg-48E">
                                         <rect key="frame" x="20" y="24" width="70" height="24"/>
@@ -556,7 +541,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Credential" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vwZ-VA-0aI">
-                                <rect key="frame" x="16" y="239" width="78" height="21"/>
+                                <rect key="frame" x="16" y="283" width="78" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -572,29 +557,8 @@
                                     <action selector="saveButtonDidPress:" destination="weL-I6-gtR" eventType="touchUpInside" id="xMa-TO-kEh"/>
                                 </connections>
                             </button>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aBc-o4-7Ru">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                <color key="backgroundColor" systemColor="systemGreenColor"/>
-                                <color key="barTintColor" red="0.23727124929999999" green="0.58758485319999998" blue="0.17723390459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <textAttributes key="titleTextAttributes">
-                                    <color key="textColor" red="0.93531984089999998" green="0.93531984089999998" blue="0.93531984089999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </textAttributes>
-                                <textAttributes key="largeTitleTextAttributes">
-                                    <color key="textColor" red="0.93531984089999998" green="0.93531984089999998" blue="0.93531984089999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </textAttributes>
-                                <items>
-                                    <navigationItem title="Create New Password" id="SUr-BZ-ISg">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="3JY-v1-lVS">
-                                            <color key="tintColor" red="0.93531984089999998" green="0.93531984089999998" blue="0.93531984089999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <connections>
-                                                <action selector="cancel1:" destination="HiT-rB-bYB" id="iad-2b-f8B"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gzk-kh-tQZ">
-                                <rect key="frame" x="16" y="277" width="343" height="210"/>
+                                <rect key="frame" x="16" y="321" width="343" height="210"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email or Username:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2TU-uF-36I">
                                         <rect key="frame" x="16" y="16" width="148" height="21"/>
@@ -707,20 +671,17 @@
                             <constraint firstItem="ZgS-18-MKV" firstAttribute="trailing" secondItem="qT4-kH-DIQ" secondAttribute="trailing" constant="16" id="3No-19-44O"/>
                             <constraint firstItem="ZgS-18-MKV" firstAttribute="trailing" secondItem="gzk-kh-tQZ" secondAttribute="trailing" constant="16" id="4uS-Gz-XIt"/>
                             <constraint firstItem="WOI-jT-LSg" firstAttribute="leading" secondItem="ZgS-18-MKV" secondAttribute="leading" constant="16" id="4yZ-vr-Mwr"/>
-                            <constraint firstItem="aBc-o4-7Ru" firstAttribute="trailing" secondItem="ZgS-18-MKV" secondAttribute="trailing" id="5fl-Fy-Mn1"/>
+                            <constraint firstItem="WOI-jT-LSg" firstAttribute="top" secondItem="ZgS-18-MKV" secondAttribute="top" constant="84" id="6xx-rk-6bP"/>
                             <constraint firstItem="gzk-kh-tQZ" firstAttribute="top" secondItem="vwZ-VA-0aI" secondAttribute="bottom" constant="17" id="DZ5-Uq-yXE"/>
-                            <constraint firstItem="aBc-o4-7Ru" firstAttribute="top" secondItem="ZgS-18-MKV" secondAttribute="top" id="GW7-Gd-Ya1"/>
                             <constraint firstItem="ZgS-18-MKV" firstAttribute="trailing" secondItem="WOI-jT-LSg" secondAttribute="trailing" constant="16" id="Mtc-05-zZq"/>
                             <constraint firstItem="vwZ-VA-0aI" firstAttribute="top" secondItem="WOI-jT-LSg" secondAttribute="bottom" constant="35" id="QQ1-sU-rNO"/>
                             <constraint firstItem="vwZ-VA-0aI" firstAttribute="leading" secondItem="ZgS-18-MKV" secondAttribute="leading" constant="16" id="VYK-m1-iAl"/>
                             <constraint firstItem="ZgS-18-MKV" firstAttribute="bottom" secondItem="qT4-kH-DIQ" secondAttribute="bottom" constant="36" id="b9c-xI-CXi"/>
                             <constraint firstItem="gzk-kh-tQZ" firstAttribute="leading" secondItem="ZgS-18-MKV" secondAttribute="leading" constant="16" id="bIy-ai-wA6"/>
-                            <constraint firstItem="WOI-jT-LSg" firstAttribute="top" secondItem="aBc-o4-7Ru" secondAttribute="bottom" constant="40" id="jCl-Nx-TJL"/>
                             <constraint firstItem="qT4-kH-DIQ" firstAttribute="leading" secondItem="ZgS-18-MKV" secondAttribute="leading" constant="16" id="uyF-Vx-qEO"/>
-                            <constraint firstItem="aBc-o4-7Ru" firstAttribute="leading" secondItem="ZgS-18-MKV" secondAttribute="leading" id="wzE-fe-98z"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="vJ1-90-vx5"/>
+                    <navigationItem key="navigationItem" title="LoginDetail" id="vJ1-90-vx5"/>
                     <connections>
                         <outlet property="deleteButton" destination="qT4-kH-DIQ" id="wUb-UA-vkf"/>
                         <outlet property="eyeIconButton" destination="k5T-7a-coE" id="XHW-Dq-cHO"/>
@@ -734,7 +695,32 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EYE-0l-Ytc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="729" y="2502"/>
+            <point key="canvasLocation" x="2321" y="1776"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="CDf-eD-Bmd">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gjg-ly-tQ8" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="unB-kb-UYq"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="UDN-UZ-Dpw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" red="0.23921568630000001" green="0.58758485319999998" blue="0.17723390459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" red="0.23921568630000001" green="0.58823529409999997" blue="0.1764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="0.98958333330000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Xki-Si-B7m" kind="relationship" relationship="rootViewController" id="KaI-ri-UVX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7mu-ms-U3B" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="653.60000000000002" y="1776.1619190404799"/>
         </scene>
     </scenes>
     <resources>

@@ -22,7 +22,6 @@ class VerifyMasterPasswordViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     isModalInPresentation = true //disable the pull-down gesture
-    
     Utils.ToggleHidePass(text: masterPasswordTxt, eyeIcon: eyeIconButton, initial: true)
   }
  
@@ -64,12 +63,12 @@ class VerifyMasterPasswordViewController: UIViewController {
   
   private func authenSuccess(){
     dismiss(animated: true, completion: nil)
-    
     if (authenQuickBar){
       self.credentialProviderDelegate.quickBarAuthenSuccess()
     } else {
       self.credentialProviderDelegate.authenSuccess()
     }
+    
   }
   
   private func cancel() {
