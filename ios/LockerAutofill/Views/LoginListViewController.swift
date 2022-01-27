@@ -135,7 +135,7 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
         editPassView.credential = item
       }
     }
-    present(editPassView, animated: true)
+    self.navigationController?.pushViewController(editPassView, animated: true)
   }
   
 //
@@ -175,7 +175,7 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
       let credential = indexPath.section == 0 ? self.filterCredentials[indexPath.row] : self.filterOthers[indexPath.row]
       let editPassView = self.storyboard?.instantiateViewController(withIdentifier: "editPasswordView") as! EditPasaswordViewController
       editPassView.credential = credential
-      self.present(editPassView, animated: true)
+      self.navigationController?.pushViewController(editPassView, animated: true)
     }
     edit.backgroundColor = UIColor(
       red: CGFloat(61) / 255.0,
