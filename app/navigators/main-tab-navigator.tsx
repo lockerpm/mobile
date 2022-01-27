@@ -200,7 +200,7 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                       }}
                     >
                       <Text
-                        text={notiCount.toString()}
+                        text={notiCount >= 100 ? '99+' : notiCount.toString()}
                         style={{
                           fontSize: 12,
                           textAlign: 'center',
