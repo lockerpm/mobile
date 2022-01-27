@@ -19,7 +19,7 @@ import { CollectionRequest } from '../../../../core/models/request/collectionReq
 import { CipherData } from '../../../../core/models/data/cipherData'
 import { FolderData } from '../../../../core/models/data/folderData'
 import { Logger } from '../../../utils/logger'
-import { EncString, SymmetricCryptoKey } from '../../../../core/models/domain'
+import { Cipher, EncString, SymmetricCryptoKey } from '../../../../core/models/domain'
 import { Utils } from '../../core-service/utils'
 import { AccountRoleText } from '../../../config/types'
 import { OrganizationData } from '../../../../core/models/data/organizationData'
@@ -121,6 +121,34 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
   }
 
+  // Reload offline cache of a single cipher only
+  const minimalReloadCache = async (payload: {
+    cipher?: CipherView
+    deletedIds?: string[]
+  }) => {
+    const { cipher, deletedIds } = payload
+    if (cipher) {
+      cipherService.csUpdateDecryptedCache([cipher])
+    }
+    if (deletedIds) {
+      cipherService.csDeleteFromDecryptedCache(deletedIds)
+    }
+
+    await Promise.all([
+      loadFolders(),
+      loadCollections(),
+      loadOrganizations()
+    ])
+    if (cipherStore.selectedCipher && cipherStore.selectedCipher.name) {
+      const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
+      cipherStore.setSelectedCipher(updatedCipher)
+    }
+    if (IS_IOS) {
+      _updateAutofillData()
+    }
+    cipherStore.setLastCacheUpdate()
+  }
+
   // Sync
   const getSyncData = async () => {
     try {
@@ -212,7 +240,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
       // Load all loaded data
       loadOrganizations()
-      cipherStore.setLastSync()
+      cipherStore.setLastCacheUpdate()
 
       // Sync other ciphers
       const totalCipherCount = res.data.count.ciphers
@@ -229,13 +257,16 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       }
 
       // Clear deleted ciphers
+      const deletedIds: string[] = []
       const storageRes: { [id: string]: any } = await storageService.get(`ciphers_${userId}`)
       for (let id in { ...storageRes }) {
         if (!cipherIds.includes(id)) {
           delete storageRes[id]
+          deletedIds.push(id)
         }
       }
       await storageService.save(`ciphers_${userId}`, storageRes)
+      await cipherService.csDeleteFromDecryptedCache(deletedIds)
 
       // Set last sync
       cipherStore.setLastSync()
@@ -419,7 +450,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
       let hasUpdate = false
       const sharedData: AutofillDataType = JSON.parse(credentials.password)
-      
+
       // Delete passwords
       if (sharedData.deleted) {
         await _offlineDeleteCiphers(sharedData.deleted.map(c => c.id))
@@ -788,7 +819,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     } else {
       cipherStore.addNotUpdate(tempId)
     }
-    await reloadCache()
+
+    // Update cache
+    cipher.id = tempId
+    await minimalReloadCache({ cipher })
   }
 
   // Update
@@ -827,12 +861,13 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
     const cipherEnc = await cipherService.encrypt(cipher)
     const data = new CipherRequest(cipherEnc)
+    const revisionDate = new Date()
     
     res[cipher.id] = {
       ...res[cipher.id],
       ...data,
       collectionIds,
-      revisionDate: new Date().toISOString()
+      revisionDate: revisionDate.toISOString()
     }
     await storageService.save(key, res)
     if (!isCaching) {
@@ -840,7 +875,11 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     } else {
       cipherStore.addNotUpdate(cipher.id)
     }
-    await reloadCache()
+
+    // Update cache
+    cipher.collectionIds = collectionIds
+    cipher.revisionDate = revisionDate
+    await minimalReloadCache({ cipher })
   }
 
   // Delete
@@ -871,20 +910,15 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Offline delete
   const _offlineDeleteCiphers = async (ids: string[], isCaching?: boolean) => {
-    const userId = await userService.getUserId()
-    const key = `ciphers_${userId}`
-    const res = await storageService.get(key)
-
+    await cipherService.delete(ids)
     ids.forEach(id => {
-      delete res[id]
       if (!isCaching) {
         cipherStore.removeNotSync(id)
       } else {
         cipherStore.removeNotUpdate(id)
       }
     })
-    await storageService.save(key, res)
-    await reloadCache()
+    minimalReloadCache({})
   }
 
   // To trash
@@ -915,20 +949,15 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Offline to trash
   const _offlineToTrashCiphers = async (ids: string[], isCaching?: boolean) => {
-    const userId = await userService.getUserId()
-    const key = `ciphers_${userId}`
-    const res = await storageService.get(key)
-
+    await cipherService.softDelete(ids)
     ids.forEach(id => {
-      res[id].deletedDate = new Date().toISOString()
       if (!isCaching) {
         cipherStore.addNotSync(id)
       } else {
         cipherStore.addNotUpdate(id)
       }
     })
-    await storageService.save(key, res)
-    await reloadCache()
+    await minimalReloadCache({})
   }
 
   // Restore
@@ -959,20 +988,19 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Offline restore
   const _offlineRestoreCiphers = async (ids: string[], isCaching?: boolean) => {
-    const userId = await userService.getUserId()
-    const key = `ciphers_${userId}`
-    const res = await storageService.get(key)
+    await cipherService.restore(ids.map(id => ({
+      id,
+      revisionDate: new Date().toISOString()
+    })))
 
     ids.forEach(id => {
-      res[id].deletedDate = null
       if (!isCaching) {
         cipherStore.addNotSync(id)
       } else {
         cipherStore.addNotUpdate(id)
       }
     })
-    await storageService.save(key, res)
-    await reloadCache()
+    await minimalReloadCache({})
   }
 
   // Share cipher
@@ -1134,15 +1162,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       notifyApiError(apiRes)
       return apiRes
     }
-
-    const userId = await userService.getUserId()
-    const key = `ciphers_${userId}`
-    const res = await storageService.get(key)
-    delete res[id]
-    
-    await storageService.save(key, res)
-    await reloadCache()
-
+    await cipherService.delete(id)
+    await minimalReloadCache({})
     cipherStore.setOrganizations(cipherStore.organizations.filter(o => o.id !== organizationId))
     return apiRes
   }
@@ -1222,7 +1243,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     } else {
       folderStore.addNotUpdate(tempId)
     }
-    await reloadCache()
+    await reloadCache({ notCipher: true })
   }
 
   // Update folder
@@ -1272,7 +1293,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     } else {
       folderStore.addNotUpdate(folder.id)
     }
-    await reloadCache()
+    await reloadCache({ notCipher: true })
   }
 
   // Delete folder
@@ -1370,7 +1391,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     } else {
       collectionStore.addNotUpdate(tempId)
     }
-    await reloadCache()
+    await reloadCache({ notCipher: true })
   }
 
   // Update collection
@@ -1422,7 +1443,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     } else {
       collectionStore.addNotUpdate(collection.id)
     }
-    await reloadCache()
+    await reloadCache({ notCipher: true })
   }
 
   // Delete collection
@@ -1467,95 +1488,109 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await reloadCache()
   }
 
+  // --------------------------- MINIMAL SYNC --------------------------------
+
   // Sync single cipher
   const syncSingleCipher = async (id: string) => {
-    const userId = await userService.getUserId()
-    const key = `ciphers_${userId}`
-    const res = await storageService.get(key)
-
     const cipherRes = await cipherStore.getCipher(id)
+
+    // Error/Deleted
     if (cipherRes.kind !== 'ok') {
       if (cipherRes.kind === 'not-found' || cipherRes.kind === 'forbidden') {
-        delete res[id]
-        cipherStore.removeNotUpdate(id)
+        await _offlineDeleteCiphers([id], true)
+        cipherStore.setLastSync()
       } else {
         notifyApiError(cipherRes)
         return cipherRes
       }
-    } else {
-      const cipher = cipherRes.data
-      const cipherData = new CipherData(cipher, userId, cipher.collectionIds)
+      return cipherRes
+    }
 
-      // Update cipher
-      res[cipher.id] = {
-        ...cipherData
-      }
-      cipherStore.removeNotUpdate(cipher.id)
+    // Create/Update
+    const userId = await userService.getUserId()
+    const key = `ciphers_${userId}`
+    const res = await storageService.get(key)
 
-      // Remove temporary cipher
-      for (const _id of Object.keys(res)) {
-        if (_id.startsWith('tmp__') && res[_id].name === cipher.name && res[_id].type === cipher.type ) {
-          delete res[_id]
-          cipherStore.removeNotUpdate(_id)
-          break
-        }
-      }
+    const cipher = cipherRes.data
+    const cipherData = new CipherData(cipher, userId, cipher.collectionIds)
 
-      // Sync profile
-      if (!!cipher.organizationId) {
-        // await syncSingleOrganization(cipher.organizationId)
-        await syncProfile()
+    // Update cipher
+    res[cipher.id] = {
+      ...cipherData
+    }
+    cipherStore.removeNotUpdate(cipher.id)
+
+    // Remove temporary cipher
+    for (const _id of Object.keys(res)) {
+      if (_id.startsWith('tmp__') && res[_id].name === cipher.name && res[_id].type === cipher.type ) {
+        delete res[_id]
+        cipherStore.removeNotUpdate(_id)
+        break
       }
     }
 
+    // Sync profile
+    if (!!cipher.organizationId) {
+      // await syncSingleOrganization(cipher.organizationId)
+      await syncProfile()
+    }
+
     await storageService.save(key, res)
+    
+    // Decrypt and minimal reload cache
     cipherStore.setLastSync()
-    await reloadCache({
-      isOnline: true
-    })
+    const c = new Cipher(cipherData, false)
+    const hasKey = await cryptoService.hasKey()
+    if (hasKey) {
+      await minimalReloadCache({
+        cipher: await c.decrypt()
+      })
+    } else {
+      await reloadCache()
+    }
     return cipherRes
   }
 
   // Sync single folder
   const syncSingleFolder = async (id: string) => {
+    const folderRes = await folderStore.getFolder(id)
+
+    // Error/Deleted
+    if (folderRes.kind !== 'ok') {
+      if (folderRes.kind === 'not-found') {
+        await _offlineDeleteFolder(id, true)
+        cipherStore.setLastSync()
+      } else {
+        notifyApiError(folderRes)
+      }
+      return folderRes
+    }
+
     const userId = await userService.getUserId()
     const key = `folders_${userId}`
     const res = await storageService.get(key)
 
-    const folderRes = await folderStore.getFolder(id)
-    if (folderRes.kind !== 'ok') {
-      if (folderRes.kind === 'not-found') {
-        delete res[id]
-        folderStore.removeNotUpdate(id)
-      } else {
-        notifyApiError(folderRes)
-        return folderRes
-      }
-    } else {
-      const folder = folderRes.data
-      const folderData = new FolderData(folder, userId)
+    const folder = folderRes.data
+    const folderData = new FolderData(folder, userId)
 
-      // Update cipher
-      res[folder.id] = {
-        ...folderData
-      }
-      folderStore.removeNotUpdate(folder.id)
+    // Update folder
+    res[folder.id] = {
+      ...folderData
+    }
+    folderStore.removeNotUpdate(folder.id)
 
-      // Remove temporary cipher
-      for (const _id of Object.keys(res)) {
-        if (_id.startsWith('tmp__') && res[_id].name === folder.name) {
-          delete res[_id]
-          folderStore.removeNotUpdate(_id)
-          break
-        }
+    // Remove temporary folder
+    for (const _id of Object.keys(res)) {
+      if (_id.startsWith('tmp__') && res[_id].name === folder.name) {
+        delete res[_id]
+        folderStore.removeNotUpdate(_id)
+        break
       }
     }
 
     await storageService.save(key, res)
     cipherStore.setLastSync()
-    await reloadCache({
-      isOnline: true
-    })
+    await reloadCache({ notCipher: true })
     return folderRes
   }
 
