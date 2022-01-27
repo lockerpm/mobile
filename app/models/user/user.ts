@@ -75,7 +75,6 @@ export const UserModel = types
       self.avatar = userSnapshot.avatar
     },
     saveUserPw: (userSnapshot: UserSnapshot) => {
-      self.isLoggedInPw = true
       self.pwd_user_id = userSnapshot.pwd_user_id
       self.is_pwd_manager = userSnapshot.is_pwd_manager
       self.default_team_id = userSnapshot.default_team_id

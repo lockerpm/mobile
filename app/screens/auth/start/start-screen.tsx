@@ -36,13 +36,13 @@ export const StartScreen = observer(function StartScreen() {
 
       // Sync teams and plan
       if (!uiStore.isFromAutoFill) {
-        // setMsg(translate('start.getting_team_info'))
-        // await Promise.all([
-        //   user.loadTeams(),
-        //   user.loadPlan(),
-        // ])
-        user.loadTeams()
-        user.loadPlan()
+        setMsg(translate('start.getting_team_info'))
+        await Promise.all([
+          user.loadTeams(),
+          user.loadPlan(),
+        ])
+        // user.loadTeams()
+        // user.loadPlan()
       }
     }
     
