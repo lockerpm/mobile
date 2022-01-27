@@ -1175,8 +1175,10 @@ export class CipherService implements CipherServiceAbstraction {
     }
 
     csDeleteFromDecryptedCache(ids: string[]) {
-        let decCiphers = this.decryptedCipherCache ? [...this.decryptedCipherCache] : [];
-        decCiphers = decCiphers.filter(c => !ids.includes(c.id));
-        this.decryptedCipherCache = decCiphers.length === 0 ? null : decCiphers;
+        if (this.decryptedCipherCache) {
+            let decCiphers = [...this.decryptedCipherCache]
+            decCiphers = decCiphers.filter(c => !ids.includes(c.id));
+            this.decryptedCipherCache = decCiphers
+        }
     }
 }

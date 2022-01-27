@@ -105,7 +105,7 @@ export type PrimaryParamList = {
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createStackNavigator<PrimaryParamList>()
 
-export const MainNavigator = observer(function MainNavigator() {
+export const MainNavigator = observer(() => {
   const navigation = useNavigation()
   const { notify, translate } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
@@ -298,7 +298,7 @@ export const MainNavigator = observer(function MainNavigator() {
   useEffect(() => {
     if (!uiStore.isOffline && user.isLoggedInPw) {
       handleSync()
-      handleUserDataSync()
+      // handleUserDataSync()
     }
   }, [uiStore.isOffline, user.isLoggedInPw])
 
