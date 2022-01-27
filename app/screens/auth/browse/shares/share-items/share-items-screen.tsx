@@ -5,7 +5,6 @@ import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { BrowseItemEmptyContent, BrowseItemHeader, Layout } from "../../../../../components"
 import { SortAction } from "../../../home/all-item/sort-action"
-import { AddAction } from "../../../home/all-item/add-action"
 import { CipherShareList } from "./cipher-share-list"
 import { PlanType } from "../../../../../config/types"
 
@@ -18,7 +17,6 @@ export const ShareItemsScreen = observer(() => {
   // --------------------- PARAMS -------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [isAddOpen, setIsAddOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
@@ -46,7 +44,7 @@ export const ShareItemsScreen = observer(() => {
             if (isFreeAccount) {
               goPremium()
             } else {
-              setIsAddOpen(true)
+              navigation.navigate('shareMultiple')
             }
           }}
           onSearch={setSearchText}
@@ -73,12 +71,6 @@ export const ShareItemsScreen = observer(() => {
         value={sortOption}
       />
 
-      <AddAction
-        isOpen={isAddOpen}
-        onClose={() => setIsAddOpen(false)}
-        navigation={navigation}
-      />
-
       <CipherShareList
         navigation={navigation}
         onLoadingChange={setIsLoading}
@@ -100,7 +92,7 @@ export const ShareItemsScreen = observer(() => {
             title={translate('shares.empty.title')}
             desc={translate('shares.empty.desc_share')}
             buttonText={translate('shares.start_sharing')}
-            addItem={() => setIsAddOpen(true)}
+            addItem={() => navigation.navigate('shareMultiple')}
           />
         )}
       />
