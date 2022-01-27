@@ -696,7 +696,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     const userId = await userService.getUserId()
     if (ciphers.length) {
       const key = `ciphers_${userId}`
-      const res = await storageService.get(key)
+      const res = await storageService.get(key) || {}
       ciphers.forEach(c => {
         if (!isCaching) {
           cipherStore.addNotSync(c.id)
@@ -714,7 +714,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     // Update folder storage
     if (folders.length) {
       const key = `folders_${userId}`
-      const res = await storageService.get(key)
+      const res = await storageService.get(key) || {}
       ciphers.forEach(f => {
         if (!isCaching) {
           folderStore.addNotSync(f.id)
@@ -801,7 +801,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const _offlineCreateCipher = async (cipher: CipherView, collectionIds: string[], isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     const cipherEnc = await cipherService.encrypt(cipher)
     const data = new CipherRequest(cipherEnc)
@@ -857,7 +857,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const _offlineUpdateCipher = async (cipher: CipherView, collectionIds: string[], isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     const cipherEnc = await cipherService.encrypt(cipher)
     const data = new CipherRequest(cipherEnc)
@@ -1226,7 +1226,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const _offlineCreateFolder = async (folder: FolderView, isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `folders_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     const folderEnc = await folderService.encrypt(folder)
     const data = new FolderRequest(folderEnc)
@@ -1278,7 +1278,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const _offlineUpdateFolder = async (folder: FolderView, isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `folders_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     const folderEnc = await folderService.encrypt(folder)
     const data = new FolderRequest(folderEnc)
@@ -1326,7 +1326,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const _offlineDeleteFolder = async (id: string, isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `folders_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     delete res[id]
     if (!isCaching) {
@@ -1374,7 +1374,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const _offlineCreateCollection = async (collection: CollectionView, isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `collections_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     const collectionEnc = await collectionService.encrypt(collection)
     const data = new CollectionRequest(collectionEnc)
@@ -1428,7 +1428,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const _offlineUpdateCollection = async (collection: CollectionView, isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `collections_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     const collectionEnc = await collectionService.encrypt(collection)
     const data = new CollectionRequest(collectionEnc)
@@ -1476,7 +1476,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const _offlineDeleteCollection = async (id: string, isCaching?: boolean) => {
     const userId = await userService.getUserId()
     const key = `collections_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     delete res[id]
     if (!isCaching) {
@@ -1509,7 +1509,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     // Create/Update
     const userId = await userService.getUserId()
     const key = `ciphers_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     const cipher = cipherRes.data
     const cipherData = new CipherData(cipher, userId, cipher.collectionIds)
@@ -1568,7 +1568,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
     const userId = await userService.getUserId()
     const key = `folders_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     const folder = folderRes.data
     const folderData = new FolderData(folder, userId)
@@ -1598,7 +1598,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const syncSingleOrganization = async (id: string) => {
     const userId = await userService.getUserId()
     const key = `organizations_${userId}`
-    const res = await storageService.get(key)
+    const res = await storageService.get(key) || {}
 
     const orgRes = await cipherStore.getOrganization(id)
     if (orgRes.kind !== 'ok') {

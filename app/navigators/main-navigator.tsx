@@ -298,7 +298,7 @@ export const MainNavigator = observer(() => {
   useEffect(() => {
     if (!uiStore.isOffline && user.isLoggedInPw) {
       handleSync()
-      // handleUserDataSync()
+      handleUserDataSync()
     }
   }, [uiStore.isOffline, user.isLoggedInPw])
 
