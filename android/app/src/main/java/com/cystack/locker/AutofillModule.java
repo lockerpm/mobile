@@ -14,6 +14,7 @@ import com.cystack.locker.autofill.Prefs;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class AutofillModule extends ReactContextBaseJavaModule {
     AutofillModule(ReactApplicationContext context) {
@@ -27,11 +28,12 @@ public class AutofillModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void addAutofillValue(String username, String email ,String password) {
+    public void addAutofillValue(String username ,String password) {
         SharedPreferences pref = getReactApplicationContext().getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE);
         pref.edit().putString(Prefs.AUTOFILL_HINT_USERNAME, username)
-                .putString(Prefs.AUTOFILL_HINT_EMAIL, email)
                 .putString(Prefs.AUTOFILL_HINT_PASSWORD, password)
             .commit();
+        
+        Objects.requireNonNull(getCurrentActivity()).finish();
     }
 }
