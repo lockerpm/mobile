@@ -347,7 +347,12 @@
     "no_members": "No member",
     "start_sharing": "Start Sharing",
     "stop_sharing": "Stop Sharing",
-    "share_x_items": "Share {{count}} items"
+    "share_x_items": "Share {{count}} items",
+    "confirm_share": {
+      "verify_fingerprint": "Verify fingerprint phrase",
+      "verification_desc": "To ensure the integrity of your encryption keys, please verify the user's fingerprint phrase before continuing.",
+      "fingerprint_desc": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
+    }
   },
   "trash": {
     "delete_item": "Delete Item",

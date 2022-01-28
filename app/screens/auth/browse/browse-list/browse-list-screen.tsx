@@ -8,6 +8,7 @@ import { useMixins } from "../../../../services/mixins"
 import { commonStyles } from "../../../../theme"
 import { useStores } from "../../../../models"
 import { observer } from "mobx-react-lite"
+import { SharingStatus } from "../../../../config/types"
 
 
 export const BrowseListScreen = observer(() => {
@@ -15,10 +16,14 @@ export const BrowseListScreen = observer(() => {
   const { translate, color, isDark } = useMixins()
   const { cipherStore } = useStores()
 
+  const shareNotiCount = cipherStore.sharingInvitations.length + cipherStore.myShares.reduce((total, s) => {
+    return total + s.members.filter(m => m.status === SharingStatus.ACCEPTED).length
+  }, 0)
+
   const data = Object.keys(BROWSE_ITEMS).map(key => {
     return {
       ...BROWSE_ITEMS[key],
-      notiCount: key === 'shares' ? cipherStore.sharingInvitations.length : 0
+      notiCount: key === 'shares' ? shareNotiCount : 0
     }
   })
   

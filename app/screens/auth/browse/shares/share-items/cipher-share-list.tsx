@@ -285,7 +285,11 @@ export const CipherShareList = observer((props: Props) => {
                       <View style={{
                         paddingHorizontal: 10,
                         paddingVertical: 2,
-                        backgroundColor: item.status === SharingStatus.INVITED ? color.warning : color.primary,
+                        backgroundColor: item.status === SharingStatus.INVITED 
+                          ? color.warning
+                          : item.status === SharingStatus.ACCEPTED
+                            ? color.info
+                            : color.primary,
                         borderRadius: 3,
                       }}>
                         <Text

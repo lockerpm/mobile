@@ -13,6 +13,7 @@ import BackIconLight from '../../../../components/header/arrow-left-light.svg'
 
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
+import { SharingStatus } from "../../../../config/types"
 
 
 export const SharesScreen = observer(() => {
@@ -20,7 +21,20 @@ export const SharesScreen = observer(() => {
   const { translate, color, isDark } = useMixins()
   const { cipherStore } = useStores()
 
-  const notiCount = cipherStore.sharingInvitations.length
+  const menu = [
+    {
+      path: 'sharedItems',
+      name: translate('shares.shared_items'),
+      notiCount: cipherStore.sharingInvitations.length
+    },
+    {
+      path: 'shareItems',
+      name: translate('shares.share_items'),
+      notiCount: cipherStore.myShares.reduce((total, s) => {
+        return total + s.members.filter(m => m.status === SharingStatus.ACCEPTED).length
+      }, 0)
+    }
+  ]
   
   return (
     <Layout
@@ -62,64 +76,52 @@ export const SharesScreen = observer(() => {
           marginTop: 20
         }}
       >
-        <Button
-          preset="link"
-          onPress={() => {
-            navigation.navigate('sharedItems')
-          }}
-          style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-            borderBottomColor: color.line,
-            borderBottomWidth: 1,
-            paddingVertical: 18
-          }]}
-        >
-          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flex: 1 }]}>
-            <Text
-              text={translate('shares.shared_items')}
-              style={{ color: color.title, paddingHorizontal: 10 }}
-            />
-            {
-              (notiCount > 0) && (
-                <View
-                  style={{
-                    backgroundColor: color.error,
-                    borderRadius: 20,
-                    minWidth: 17,
-                    height: 17
-                  }}
-                >
-                  <Text
-                    text={notiCount.toString()}
-                    style={{
-                      fontSize: 12,
-                      textAlign: 'center',
-                      color: color.white,
-                      lineHeight: 17
-                    }}
-                  />
-                </View>
-              )
-            }
-          </View>
-          <Icon name="angle-right" size={20} color={color.title} />
-        </Button>
-
-        <Button
-          preset="link"
-          onPress={() => {
-            navigation.navigate('shareItems')
-          }}
-          style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-            borderBottomColor: color.line,
-            paddingVertical: 18
-          }]}
-        >
-          <Text
-            text={translate('shares.share_items')}
-            style={{ color: color.title, flex: 1, paddingHorizontal: 10 }}
-          />
-          <Icon name="angle-right" size={20} color={color.title} />
-        </Button>
+        {
+          menu.map((item, index) => (
+            <Button
+              key={index}
+              preset="link"
+              onPress={() => {
+                navigation.navigate(item.path)
+              }}
+              style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+                borderBottomColor: color.line,
+                borderBottomWidth: index !== menu.length - 1 ? 1 : 0,
+                paddingVertical: 18
+              }]}
+            >
+              <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flex: 1 }]}>
+                <Text
+                  text={item.name}
+                  style={{ color: color.title, paddingHorizontal: 10 }}
+                />
+                {
+                  (item.notiCount > 0) && (
+                    <View
+                      style={{
+                        backgroundColor: color.error,
+                        borderRadius: 20,
+                        minWidth: 17,
+                        height: 17
+                      }}
+                    >
+                      <Text
+                        text={item.notiCount >= 100 ? '99+' : item.notiCount.toString()}
+                        style={{
+                          fontSize: 12,
+                          textAlign: 'center',
+                          color: color.white,
+                          lineHeight: 17
+                        }}
+                      />
+                    </View>
+                  )
+                }
+              </View>
+              <Icon name="angle-right" size={20} color={color.title} />
+            </Button>
+          ))
+        }
       </View>
     </Layout>
   )
