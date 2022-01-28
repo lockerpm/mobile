@@ -16,7 +16,7 @@ import {
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
   ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
-  GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen
+  GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -30,6 +30,7 @@ import { useCipherDataMixins } from "../services/mixins/cipher/data"
 import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
 import { IS_IOS, WS_URL } from "../config/constants"
 import { Logger } from "../utils/logger"
+import { SocketEvent, SocketEventType } from "../config/types"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -99,18 +100,18 @@ export type PrimaryParamList = {
   export: undefined
   autofill: undefined
   notificationSettings: undefined
+  shareMultiple: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createStackNavigator<PrimaryParamList>()
 
-export const MainNavigator = observer(function MainNavigator() {
+export const MainNavigator = observer(() => {
   const navigation = useNavigation()
   const { notify, translate } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { 
-    getSyncData, getCipherById, loadFolders, loadCollections, syncAutofillData, 
-    syncSingleCipher, syncSingleFolder, syncOfflineData
+    getCipherById, syncAutofillData, syncSingleCipher, syncSingleFolder, syncOfflineData, startSyncProcess
   } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const { uiStore, user, cipherStore } = useStores()
@@ -129,7 +130,7 @@ export const MainNavigator = observer(function MainNavigator() {
     await syncOfflineData()
     
     // Check if sync is needed
-    const lastUpdateRes = await user.getLastUpdate()
+    const lastUpdateRes = await cipherStore.getLastUpdate()
     if (
       lastUpdateRes.kind === 'unauthorized' ||
       (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= cipherStore.lastSync)
@@ -138,7 +139,7 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     // Send request
-    const syncRes = await getSyncData()
+    const syncRes = await startSyncProcess()
     if (syncRes.kind !== 'ok') {
       if (syncRes.kind !== 'synching' && syncRes.kind === 'error') {
         notify('error', translate('error.sync_failed'))
@@ -147,10 +148,6 @@ export const MainNavigator = observer(function MainNavigator() {
     }
 
     // Load data
-    await Promise.all([
-      loadFolders(),
-      loadCollections()
-    ])
     if (cipherStore.selectedCipher) {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
@@ -161,11 +158,10 @@ export const MainNavigator = observer(function MainNavigator() {
   }
 
   // Check invitation
-  const handleInvitationSync = async () => {
-    const invitationsRes = await user.getInvitations()
-    if (invitationsRes.kind === 'ok') {
-      user.setInvitations(invitationsRes.data)
-    }
+  const handleUserDataSync = () => {
+    user.getInvitations()
+    cipherStore.loadSharingInvitations()    
+    cipherStore.loadMyShares()
   }
 
   // App screen lock trigger
@@ -228,14 +224,14 @@ export const MainNavigator = observer(function MainNavigator() {
       const data = JSON.parse(e.data)
       Logger.debug('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
-        case 'sync':
+        case SocketEvent.SYNC:
           switch (data.type) {
-            case 'cipher_update': {
+            case SocketEventType.CIPHER_UPDATE: {
               const cipherId = data.data.id
               syncSingleCipher(cipherId)
               break
             }
-            case 'folder_update': {
+            case SocketEventType.FOLDER_UPDATE: {
               const folderId = data.data.id
               syncSingleFolder(folderId)
               break
@@ -244,8 +240,8 @@ export const MainNavigator = observer(function MainNavigator() {
               handleSync()
           }
           break
-        case 'members':
-          handleInvitationSync()
+        case SocketEvent.MEMBERS:
+          handleUserDataSync()
           break
         default:
           break
@@ -303,7 +299,7 @@ export const MainNavigator = observer(function MainNavigator() {
   useEffect(() => {
     if (!uiStore.isOffline && user.isLoggedInPw) {
       handleSync()
-      handleInvitationSync()
+      handleUserDataSync()
     }
   }, [uiStore.isOffline, user.isLoggedInPw])
 
@@ -352,6 +348,7 @@ export const MainNavigator = observer(function MainNavigator() {
         <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
+        <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} />
 
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />

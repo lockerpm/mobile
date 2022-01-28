@@ -5,16 +5,17 @@ import { commonStyles } from "../../../../theme"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
+import { AccountRoleText, InvitationStatus } from "../../../../config/types"
 
 export type InvitationData = {
   access_time: number
   id: string
-  role: 'admin' | 'manager' | 'member'
-  status: 'confirmed' | 'invited' | 'rejected'
+  role: AccountRoleText
+  status: InvitationStatus
   team: {
-      id: string
-      name: string
-      organization_id: string
+    id: string
+    name: string
+    organization_id: string
   }
 }
 

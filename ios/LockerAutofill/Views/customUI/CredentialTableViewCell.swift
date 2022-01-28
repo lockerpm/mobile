@@ -22,11 +22,10 @@ class CredentialTableViewCell: UITableViewCell {
     }
   
   
-  func makeCell(credential: PasswordCredential){
+  func makeCell(credential: AutofillData){
     self.credentialID = credential.id
     self.username.text = credential.username
     self.uri.text = credential.uri
-
   }
   
 }

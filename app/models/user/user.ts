@@ -42,7 +42,7 @@ export const UserModel = types
 
     // Others data
     teams: types.array(types.frozen()),
-    plan: types.maybeNull(types.frozen()),
+    plan: types.maybeNull(types.frozen<{ name: string; alias: string }>()),
     invitations: types.array(types.frozen()),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
@@ -75,7 +75,6 @@ export const UserModel = types
       self.avatar = userSnapshot.avatar
     },
     saveUserPw: (userSnapshot: UserSnapshot) => {
-      self.isLoggedInPw = true
       self.pwd_user_id = userSnapshot.pwd_user_id
       self.is_pwd_manager = userSnapshot.is_pwd_manager
       self.default_team_id = userSnapshot.default_team_id
@@ -117,7 +116,7 @@ export const UserModel = types
     setTeams: (teams: object[]) => {
       self.teams = cast(teams)
     },
-    setPlan: (plan: object) => {
+    setPlan: (plan: { name: string; alias: string }) => {
       self.plan = cast(plan)
     },
     setInvitations: (invitations: object[]) => {
@@ -285,6 +284,9 @@ export const UserModel = types
     getInvitations: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getInvitations(self.apiToken)
+      if (res.kind === 'ok') {
+        self.setInvitations(res.data)
+      }
       return res
     },
 
@@ -349,12 +351,6 @@ export const UserModel = types
     getPolicy: async (organizationId: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getPolicy(self.apiToken, organizationId)
-      return res
-    },
-
-    getLastUpdate: async () => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getLastUpdate(self.apiToken)
       return res
     },
 

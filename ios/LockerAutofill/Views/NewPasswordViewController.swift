@@ -8,9 +8,9 @@
 import UIKit
 import AuthenticationServices
 
-class NewPasswordViewController:  ASCredentialProviderViewController {
-
-
+class NewPasswordViewController:  UIViewController {
+  var loginListControllerDelegate: LoginListControllerDelegate!
+  var uri: String!
   
   @IBOutlet weak var saveNavBarButton: UIBarButtonItem!
   @IBOutlet weak var saveBottomButton: UIButton!
@@ -18,13 +18,14 @@ class NewPasswordViewController:  ASCredentialProviderViewController {
   @IBOutlet weak var passwordField: CustomTextField!
   @IBOutlet weak var usernameField: CustomTextField!
   @IBOutlet weak var nameField: CustomTextField!
+  
   //send data back to credential view
   public var completionHandler: ((String?, String?) -> Void)?
   
   override func viewDidLoad() {
         super.viewDidLoad()
 //    self.uriField.isUserInteractionEnabled = false
-    self.uriField.text = newPassword.uri
+    self.uriField.text = uri
     disableSaveButton()
     passwordField.addTarget(self, action: #selector(passwordFieldDidChange), for: .editingChanged)
     nameField.addTarget(self, action: #selector(nameFieldDidChange), for: .editingChanged)
@@ -57,24 +58,18 @@ class NewPasswordViewController:  ASCredentialProviderViewController {
   @IBAction func cancel1(_ sender: Any) {
     dismiss(animated: true, completion: nil)
   }
+  
   @IBAction func saveButtonDidPress(_ sender: Any) {
-    newPassword.password = passwordField.text!
-    newPassword.username = usernameField.text!
-    newPassword.uri = uriField.text!
-    newPassword.name = nameField.text!
-    newPassword.isOwner = true
-    
-    
-    credentialIdStore.addNewCredential(credential: newPassword)
-    
-    //dismiss(animated: true, completion: nil)
-    completeRequest(user: newPassword.password, password: newPassword.username)
+    let newData: AutofillData = AutofillData(autofillID: "",
+                                             name: nameField.text!,
+                                             id: "",
+                                             uri: uriField.text!,
+                                             username: usernameField.text!,
+                                             password: passwordField.text!,
+                                             isOwner: true)
+  
+    loginListControllerDelegate.addLogin(credential: newData)
   }
-  func completeRequest(user: String, password: String){
-    let passwordCredential = ASPasswordCredential(user: user, password: password)
-    self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
-  }
-    
 }
 
 

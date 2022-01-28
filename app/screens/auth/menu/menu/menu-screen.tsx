@@ -166,7 +166,7 @@ export const MenuScreen = observer(function MenuScreen() {
             alignItems: 'center'
           }]}
         >
-          <View>
+          <View style={{ flex: 1, paddingRight: 5 }}>
             <Text
               preset="black"
               text={translate('menu.fingerprint')}
