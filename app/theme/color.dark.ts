@@ -31,6 +31,7 @@ export const colorDark = {
   primary: '#62AD56',
   error: palette.danger,
   warning: palette.warning,
+  info: palette.blue,
   white: '#FDFDFD',
 
   /**

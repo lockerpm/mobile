@@ -11,6 +11,8 @@ import { commonStyles } from "../../../../../theme"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { SharedMemberType } from "../../../../../services/api/api.types"
 import { EditShareModal } from "./edit-share-modal"
+import { SharingStatus } from "../../../../../config/types"
+import { ConfirmShareModal } from "./confirm-share-modal"
 
 type Props = {
   isOpen: boolean
@@ -30,8 +32,9 @@ export const ShareItemAction = observer((props: Props) => {
 
   // Params
 
-  const [nextModal, setNextModal] = useState<'edit' | null>(null)
+  const [nextModal, setNextModal] = useState<'edit' | 'confirm' | null>(null)
   const [showEditModal, setShowEditModal] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
 
   // Computed
 
@@ -81,6 +84,9 @@ export const ShareItemAction = observer((props: Props) => {
   const handleActionSheetClose = () => {
     onClose()
     switch (nextModal) {
+      case 'confirm':
+        setShowConfirmModal(true)
+        break
       case 'edit':
         setShowEditModal(true)
         break
@@ -98,6 +104,13 @@ export const ShareItemAction = observer((props: Props) => {
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
         member={member}
+      />
+
+      <ConfirmShareModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        member={member}
+        organizationId={selectedCipher.organizationId}
       />
 
       {/* Modals end */}
@@ -131,6 +144,19 @@ export const ShareItemAction = observer((props: Props) => {
 
         <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
           <Divider style={{ marginVertical: 5 }} />
+
+          {
+            member?.status === SharingStatus.ACCEPTED && (
+              <ActionItem
+                disabled={uiStore.isOffline}
+                name={translate('common.confirm')}
+                action={() => {
+                  setNextModal('confirm')
+                  onClose()
+                }}
+              />
+            )
+          }
 
           <ActionItem
             disabled={uiStore.isOffline}

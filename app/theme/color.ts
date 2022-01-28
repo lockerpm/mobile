@@ -31,6 +31,7 @@ export const color = {
   primary: palette.green,
   error: palette.danger,
   warning: palette.warning,
+  info: palette.blue,
   white: palette.white,
 
   /**

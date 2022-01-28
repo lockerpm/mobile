@@ -57,6 +57,7 @@ const defaultData = {
   
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   shareMultipleCiphers: async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
+  confirmShareCipher: async (organizationId: string, memberId: string, publicKey: string) => { return { kind: 'unknown' } },
   stopShareCipher: async (cipher: CipherView, memberId: string) => { return { kind: 'unknown' } },
   editShareCipher: async (organizationId: string, memberId: string, role: AccountRoleText, onlyFill: boolean) => { return { kind: 'unknown' } },
   leaveShare: async (id: string, organizationId: string) => { return { kind: 'unknown' } },
@@ -1127,6 +1128,31 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     return { kind: 'ok' }
   }
 
+  // Confirm share cipher
+  const confirmShareCipher = async (organizationId: string, memberId: string, publicKey: string) => {
+    try {
+      const key = await _generateOrgKey(organizationId, publicKey)
+      const res = await cipherStore.confirmShareCipher(organizationId, memberId, { key })
+      if (res.kind === 'ok') {
+        notify('success', translate('success.done'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      Logger.error(e)
+      return { kind: 'unknown' }
+    }
+  }
+
+  const _generateOrgKey = async (organizationId: string, publicKey: string) => {
+    const pk = Utils.fromB64ToArray(publicKey)
+    const orgKey = await cryptoService.getOrgKey(organizationId)
+    const key = await cryptoService.rsaEncrypt(orgKey.key, pk.buffer)
+    return key.encryptedString
+  }
+
   // Stop share cipher
   const stopShareCipher = async (cipher: CipherView, memberId: string) => {
     try {
@@ -1743,6 +1769,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
     shareCipher,
     shareMultipleCiphers,
+    confirmShareCipher,
     stopShareCipher,
     editShareCipher,
     leaveShare,

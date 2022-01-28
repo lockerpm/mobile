@@ -413,3 +413,7 @@ export type EditShareCipherData = {
     role: AccountRoleText
     hide_passwords: boolean
 }
+
+export type ConfirmShareCipherData = {
+    key: string
+}
