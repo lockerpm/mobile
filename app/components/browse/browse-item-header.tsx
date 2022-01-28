@@ -9,6 +9,11 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../services/mixins"
 import { DeleteConfirmModal } from "../../screens/auth/browse/trash/delete-confirm-modal"
+import { useCipherDataMixins } from "../../services/mixins/cipher/data"
+import { useStores } from "../../models"
+import { PlanType } from "../../config/types"
+import { observer } from "mobx-react-lite"
+import { ShareModal } from "../cipher/cipher-action/share-modal"
 
 // @ts-ignore
 import ConfigIcon from './config.svg'
@@ -18,7 +23,6 @@ import ConfigIconLight from './config-light.svg'
 import PlusIcon from './plus.svg'
 // @ts-ignore
 import PlusIconLight from './plus-light.svg'
-import { useCipherDataMixins } from "../../services/mixins/cipher/data"
 
 
 export interface BrowseItemHeaderProps {
@@ -37,37 +41,46 @@ export interface BrowseItemHeaderProps {
   isTrash?: boolean
   isAuthenticator?: boolean
   isAutoFill?: boolean
+  isShared?: boolean
 }
 
 const BUTTON_LEFT: ViewStyle = {
   height: 35,
   width: 35,
   justifyContent: 'flex-start',
-  alignItems: 'center'
+  alignItems: 'center',
+  paddingLeft: 8
 }
 
 const BUTTON_RIGHT: ViewStyle = {
   height: 35,
   width: 35,
   justifyContent: 'flex-end',
-  alignItems: 'center'
+  alignItems: 'center',
+  paddingRight: 8
 }
 
 /**
  * Describe your component here
  */
-export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeaderProps) {
+export const BrowseItemHeader = observer((props: BrowseItemHeaderProps) => {
   const { 
     openAdd, openSort, navigation, header, onSearch, searchText, isTrash, isAuthenticator, isAutoFill,
-    isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll, setIsLoading
+    isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll, setIsLoading, isShared
   } = props
   const { translate, color, isDark } = useMixins()
   const { toTrashCiphers, restoreCiphers, deleteCiphers } = useCipherDataMixins()
+  const { user, uiStore } = useStores()
 
   // ----------------------- PARAMS ------------------------
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
+
+  // ----------------------- COMPUTED ------------------------
   
+  const isFreeAccount = user.plan?.alias === PlanType.FREE
+
   // ----------------------- METHODS ------------------------
 
   const handleDelete = async () => {
@@ -113,7 +126,8 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
   const renderHeaderRight = () => (
     <View
       style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginRight: -8
       }]}
     >
       {
@@ -157,7 +171,8 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
   const renderHeaderSelectRight = () => (
     <View
       style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginRight: -8
       }]}
     >
       <Button
@@ -208,6 +223,22 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
                 </>
               ) : (
                 <>
+                  {
+                    !uiStore.isOffline && !isShared && !isFreeAccount && (
+                      <Button
+                        preset="link"
+                        onPress={() => setShowShareModal(true)}
+                        style={BUTTON_RIGHT}
+                      >
+                        <FontAwesomeIcon
+                          name="share-square-o"
+                          size={20}
+                          color={color.textBlack}
+                        />
+                      </Button>
+                    )
+                  }
+
                   <Button
                     preset="link"
                     onPress={handleMoveFolder}
@@ -241,7 +272,7 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
   )
 
   const renderHeaderSelectLeft = () => (
-    <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+    <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginLeft: - 8 }]}>
       <Button
         preset="link"
         style={BUTTON_LEFT}
@@ -315,6 +346,16 @@ export const BrowseItemHeader = function BrowseItemHeader(props: BrowseItemHeade
         desc={isTrash || isAuthenticator ? translate('trash.perma_delete_desc') : translate('trash.to_trash_desc')}
         btnText="OK"
       />
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        cipherIds={selectedItems}
+        onSuccess={() => {
+          setIsSelecting(false)
+          setSelectedItems([])
+        }}
+      />
     </Header>
   )
-}
+})

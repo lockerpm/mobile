@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import Animated, { withSequence, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated'
+import { SharingStatus } from "../config/types"
 
 // @ts-ignore
 import HomeIcon from './icons/home.svg'
@@ -56,7 +57,9 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
     browseTab: {
       label: translate('common.browse'),
       icon: BrowseIcon,
-      notiCount: 0
+      notiCount: cipherStore.sharingInvitations.length + cipherStore.myShares.reduce((total, s) => {
+        return total + s.members.filter(m => m.status === SharingStatus.ACCEPTED).length
+      }, 0)
     },
     authenticatorTab: {
       label: 'OTP',
@@ -190,21 +193,22 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                     <View
                       style={{
                         backgroundColor: color.error,
+                        opacity: 0.9,
                         borderRadius: 20,
-                        minWidth: 20,
-                        height: 20,
+                        minWidth: 17,
+                        height: 17,
                         position: 'absolute',
                         top: 3,
-                        right: 24
+                        right: 20
                       }}
                     >
                       <Text
-                        text={notiCount.toString()}
+                        text={notiCount >= 100 ? '99+' : notiCount.toString()}
                         style={{
                           fontSize: 12,
                           textAlign: 'center',
                           color: color.white,
-                          lineHeight: 20
+                          lineHeight: 17
                         }}
                       />
                     </View>

@@ -72,7 +72,7 @@ export const InitScreen = observer(function InitScreen() {
 
     // Network connected? || Is autofill?
     const connectionState = await NetInfo.fetch()
-    if (!connectionState.isInternetReachable || isAutoFill) {
+    if (!connectionState.isConnected || isAutoFill) {
       goLockOrCreatePassword()
       return
     }

@@ -21,14 +21,19 @@
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
 		7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */; };
 		7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */; };
-		7C84A5622755DD0400482CB5 /* CredentialIdentityStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */; };
-		7CD96CEB275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD96CEA275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift */; };
+		7CAB332C279972020000B15E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332B279972020000B15E /* Utils.swift */; };
+		7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332D2799777B0000B15E /* AutofillData.swift */; };
+		7CAB3330279979650000B15E /* AutofillDataKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332F279979650000B15E /* AutofillDataKeychain.swift */; };
+		7CAB3332279A548A0000B15E /* CredentialProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3331279A548A0000B15E /* CredentialProviderController.swift */; };
+		7CAB3334279A6AD70000B15E /* VerifyMasterPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */; };
+		7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3335279AA04E0000B15E /* LoginListViewController.swift */; };
+		7CE29ABB279E98A00055B0C5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7CE29ABD279E98A00055B0C5 /* Localizable.strings */; };
+		7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A4B148D367B119F99EC2C2E5 /* libPods-CyStackLocker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EADEA568884090C1B008E181 /* libPods-CyStackLocker.a */; };
 		CA03E5CB277C244500E64FA1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CA03E5CA277C244500E64FA1 /* GoogleService-Info.plist */; };
 		CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
-		CA53479327181AB400BA4901 /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA53479227181AB400BA4901 /* CredentialProviderViewController.swift */; };
 		CA53479627181AB400BA4901 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA53479427181AB400BA4901 /* MainInterface.storyboard */; };
 		CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CA53478F27181AB400BA4901 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CA9F41E927183FC300B0C0A5 /* KeychainAccess */; };
@@ -111,8 +116,16 @@
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
 		7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPasaswordViewController.swift; sourceTree = "<group>"; };
 		7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
-		7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialIdentityStore.swift; sourceTree = "<group>"; };
-		7CD96CEA275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCredentialProviderViewController.swift; sourceTree = "<group>"; };
+		7CAB332B279972020000B15E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		7CAB332D2799777B0000B15E /* AutofillData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillData.swift; sourceTree = "<group>"; };
+		7CAB332F279979650000B15E /* AutofillDataKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillDataKeychain.swift; sourceTree = "<group>"; };
+		7CAB3331279A548A0000B15E /* CredentialProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderController.swift; sourceTree = "<group>"; };
+		7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyMasterPasswordViewController.swift; sourceTree = "<group>"; };
+		7CAB3335279AA04E0000B15E /* LoginListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
+		7CE29AB8279E98330055B0C5 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
+		7CE29ABC279E98A00055B0C5 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7CE29ABF279E999F0055B0C5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashCore.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CyStackLocker/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		96D89FDC55DA47C5942CCE3B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
@@ -120,7 +133,6 @@
 		CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLocker.entitlements; path = CyStackLocker/CyStackLocker.entitlements; sourceTree = "<group>"; };
 		CA53478927181A9C00BA4901 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		CA53478F27181AB400BA4901 /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		CA53479227181AB400BA4901 /* CredentialProviderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderViewController.swift; sourceTree = "<group>"; };
 		CA53479527181AB400BA4901 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		CA53479727181AB400BA4901 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA53479827181AB400BA4901 /* LockerAutofill.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofill.entitlements; sourceTree = "<group>"; };
@@ -266,17 +278,6 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
-		7C80ADBA2759F1C000AD45BF /* view */ = {
-			isa = PBXGroup;
-			children = (
-				7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */,
-				CA53479227181AB400BA4901 /* CredentialProviderViewController.swift */,
-				7CD96CEA275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift */,
-				7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */,
-			);
-			path = view;
-			sourceTree = "<group>";
-		};
 		7C80ADBD2759F29200AD45BF /* customUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -284,6 +285,44 @@
 				7C0685F22758F1210003C996 /* CustomTextField.swift */,
 			);
 			path = customUI;
+			sourceTree = "<group>";
+		};
+		7CAB3325279969B60000B15E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7CAB332D2799777B0000B15E /* AutofillData.swift */,
+				7CAB332F279979650000B15E /* AutofillDataKeychain.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7CAB332627996A310000B15E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7CAB3331279A548A0000B15E /* CredentialProviderController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		7CAB332727996A480000B15E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7C80ADBD2759F29200AD45BF /* customUI */,
+				7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */,
+				7CAB3335279AA04E0000B15E /* LoginListViewController.swift */,
+				7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */,
+				7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7CAB332A279971E20000B15E /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				7CAB332B279972020000B15E /* Utils.swift */,
+				7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -328,13 +367,15 @@
 		CA53479127181AB400BA4901 /* LockerAutofill */ = {
 			isa = PBXGroup;
 			children = (
-				7C80ADBD2759F29200AD45BF /* customUI */,
-				7C80ADBA2759F1C000AD45BF /* view */,
-				7C84A5612755DD0400482CB5 /* CredentialIdentityStore.swift */,
-				CA53479427181AB400BA4901 /* MainInterface.storyboard */,
-				CA53479727181AB400BA4901 /* Info.plist */,
+				7CAB332A279971E20000B15E /* Utils */,
+				7CAB332727996A480000B15E /* Views */,
+				7CAB332627996A310000B15E /* Controller */,
+				7CAB3325279969B60000B15E /* Models */,
 				CA53479827181AB400BA4901 /* LockerAutofill.entitlements */,
 				7C70B7BD2758CD2B005D0D8E /* assets.xcassets */,
+				CA53479727181AB400BA4901 /* Info.plist */,
+				CA53479427181AB400BA4901 /* MainInterface.storyboard */,
+				7CE29ABD279E98A00055B0C5 /* Localizable.strings */,
 			);
 			path = LockerAutofill;
 			sourceTree = "<group>";
@@ -485,6 +526,7 @@
 			knownRegions = (
 				en,
 				Base,
+				vi,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
@@ -542,6 +584,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */,
+				7CE29ABB279E98A00055B0C5 /* Localizable.strings in Resources */,
 				CA53479627181AB400BA4901 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -862,13 +905,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C84A5622755DD0400482CB5 /* CredentialIdentityStore.swift in Sources */,
+				7CAB3334279A6AD70000B15E /* VerifyMasterPasswordViewController.swift in Sources */,
 				7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */,
+				7CAB332C279972020000B15E /* Utils.swift in Sources */,
+				7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */,
 				7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */,
+				7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */,
+				7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */,
 				7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */,
-				7CD96CEB275F5B0D000979D9 /* AuthenticationCredentialProviderViewController.swift in Sources */,
-				CA53479327181AB400BA4901 /* CredentialProviderViewController.swift in Sources */,
 				7C0685F32758F1210003C996 /* CustomTextField.swift in Sources */,
+				7CAB3332279A548A0000B15E /* CredentialProviderController.swift in Sources */,
+				7CAB3330279979650000B15E /* AutofillDataKeychain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -893,10 +940,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		7CE29ABD279E98A00055B0C5 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7CE29ABC279E98A00055B0C5 /* vi */,
+				7CE29ABF279E999F0055B0C5 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		CA53479427181AB400BA4901 /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				CA53479527181AB400BA4901 /* Base */,
+				7CE29AB8279E98330055B0C5 /* vi */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -965,7 +1022,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				ENABLE_BITCODE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -976,7 +1033,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14;
+				MARKETING_VERSION = 1.15;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1000,7 +1057,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1011,7 +1068,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14;
+				MARKETING_VERSION = 1.15;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1207,6 +1264,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Debug;
 		};
@@ -1263,6 +1321,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

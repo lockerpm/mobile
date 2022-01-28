@@ -321,6 +321,14 @@ export class SyncService implements SyncServiceAbstraction {
         return await this.cipherService.replace(ciphers);
     }
 
+    async syncSomeCiphers(userId: string, response: CipherResponse[]) {
+        const ciphers: { [id: string]: CipherData; } = {};
+        response.forEach(c => {
+            ciphers[c.id] = new CipherData(c, userId);
+        });
+        return await this.cipherService.replaceSome(ciphers);
+    }
+
     async syncSends(userId: string, response: SendResponse[]) {
         const sends: { [id: string]: SendData; } = {};
         response.forEach(s => {

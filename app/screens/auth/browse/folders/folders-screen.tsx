@@ -50,7 +50,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   // ------------------- METHODS ---------------------
 
-  const getFilteredData = (items: any[], shared: boolean, editable: boolean) => {
+  const getFilteredData = (items: any[], teamShared: boolean, editable: boolean) => {
     const filtered = items.filter((item: FolderView | CollectionView) => {
       if (searchText) {
         return item.name && item.name.toLowerCase().includes(searchText.toLowerCase())
@@ -63,7 +63,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
         filtered,
         [f => orderField === 'name' ? (f.name && f.name.toLowerCase()) : f.revisionDate],
         [order]
-      ).map(i => ({ ...i, shared, editable })) || []
+      ).map(i => ({ ...i, teamShared, editable })) || []
       return result
     }
     return filtered
@@ -180,7 +180,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                 <Button
                   preset="link"
                   onPress={() => {
-                    if (item.shared) {
+                    if (item.teamShared) {
                       navigation.navigate('folders__ciphers', { collectionId: item.id, organizationId: item.organizationId })
                     } else {
                       navigation.navigate('folders__ciphers', { folderId: item.id })
@@ -194,7 +194,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                 >
                   <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
                     {
-                      item.shared ? (
+                      item.teamShared ? (
                         <FOLDER_IMG.share.svg height={30} />
                       ) : (
                         <FOLDER_IMG.normal.svg height={30} />

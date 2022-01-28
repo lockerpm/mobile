@@ -1,0 +1,27 @@
+// utils
+"Please authorize with Touch Id" = "Xác thực bằng vân tay";
+
+"Biometry is Unvaliable" = "Xác thực bằng sinh trắc học không khả dụng";
+
+"Your device is not configured for biometric authentication" = "Thiết bị của bạn chưa cấu hình để sử dụng sinh trắc học";
+
+"Face ID is Not Available" = "Xác thực bằng nhận dạng khuôn mặt không khả dụng";
+
+// verify master password
+"Please enable Faceid/TouchId in Locker to use this feature." = "Kích hoạt Face Id/Touch Id trong ứng dụng Locker để sử dụng tính năng này";
+
+"Passwords for" = "Mật khẩu cho";
+
+"All passwords" = "Tất cả mật khẩu";
+
+// edit password
+"password copied" = "sao chép mật khẩu";
+
+"username copied" = "sao chép tên đăng nhập";
+
+// controller
+"Authentication" = "Xác thực người dùng dịch vụ";
+
+"You must to login Locker befor using autofill service" = "Đăng nhập vào Locker trước khi sử dụng dịch vụ tự động điền";
+
+"Detail" = "Chi tiết";

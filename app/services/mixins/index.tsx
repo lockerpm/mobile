@@ -7,7 +7,7 @@ import { useStores } from '../../models'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { load } from '../../utils/storage'
 import { translate as tl, TxKeyPath } from "../../i18n"
-import { GET_LOGO_URL } from '../../config/constants'
+import { GET_LOGO_URL, MANAGE_PLAN_URL } from '../../config/constants'
 import i18n from "i18n-js"
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { GeneralApiProblem } from '../api/api-problem'
@@ -16,6 +16,8 @@ import { color, colorDark } from '../../theme'
 import extractDomain from 'extract-domain'
 import { PushNotifier } from '../../utils/push-notification'
 import { Logger } from '../../utils/logger'
+import { useCoreService } from '../core-service'
+import { Linking } from 'react-native'
 
 
 const { createContext, useContext } = React
@@ -28,7 +30,8 @@ const defaultData = {
 
   // Methods
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
-  getTeam: (teams: object[], orgId: string) => ({ name: '', role: '' }),
+  getAllOrganizations: async () => [],
+  getTeam: (teams: object[], orgId: string) => ({ name: '', role: '', type: 0 }),
   copyToClipboard: (text: string) => {},
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
@@ -36,7 +39,8 @@ const defaultData = {
   notifyApiError: (problem: GeneralApiProblem) => {},
   notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
   randomString: () => '',
-  boostrapPushNotifier: async () => {}
+  boostrapPushNotifier: async () => {},
+  goPremium: () => {}
 }
 
 
@@ -45,6 +49,7 @@ export const MixinsContext = createContext(defaultData)
 export const MixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const { uiStore, user } = useStores()
   const insets = useSafeAreaInsets()
+  const { userService } = useCoreService()
 
   // ------------------------ DATA -------------------------
 
@@ -103,9 +108,14 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     return { uri: imgUri }
   }
 
+  // Get all org
+  const getAllOrganizations = () => {
+    return userService.getAllOrganizations()
+  }
+
   // Get team
   const getTeam = (teams: object[], orgId: string) => {
-    return find(teams, e => e.id === orgId) || { name: '', role: '' }
+    return find(teams, e => e.id === orgId) || { name: '', role: '', type: 0 }
   }
 
   // Check if biometric is viable
@@ -145,7 +155,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
           code: string
           message?: string
         } = problem.data
-        if (errorData.details) {
+        if (errorData.details && Object.keys(errorData.details).length) {
           Object.keys(errorData.details).forEach((key) => {
             notify('error', errorData.details[key][0])
           })
@@ -183,6 +193,11 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     }
   }
 
+  // Go premium (temporary)
+  const goPremium = () => {
+    Linking.openURL(MANAGE_PLAN_URL)
+  }
+
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
@@ -192,13 +207,15 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     notify,
     randomString,
     getWebsiteLogo,
+    getAllOrganizations,
     getTeam,
     copyToClipboard,
     getRouteName,
     isBiometricAvailable,
     translate,
     notifyApiError,
-    boostrapPushNotifier
+    boostrapPushNotifier,
+    goPremium
   }
 
   return (

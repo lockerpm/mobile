@@ -8,6 +8,7 @@ import { commonStyles, fontSize } from "../../../../theme"
 import { TOOLS_ITEMS } from "../../../../common/mappings"
 import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
+import { PlanType } from "../../../../config/types"
 
 export const ToolsListScreen = observer(function ToolsListScreen() {
   const navigation = useNavigation()
@@ -38,7 +39,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
             <Button
               key={index}
               preset="link"
-              isDisabled={item.premium && (user.plan && user.plan.alias === 'pm_free')}
+              isDisabled={item.premium && (user.plan && user.plan.alias === PlanType.FREE)}
               onPress={() => {
                 if (item.routeName === 'authenticator') {
                   navigation.navigate('mainTab', { screen: 'authenticatorTab' })
