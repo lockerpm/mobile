@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "pen.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "pen@2x.png",
+      "filename" : "lockerLogo.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "pen@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

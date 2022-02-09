@@ -15,12 +15,12 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* CyStackLockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CyStackLockerTests.m */; };
-		7C0685F32758F1210003C996 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0685F22758F1210003C996 /* CustomTextField.swift */; };
 		7C633CE02761ED1700140CAA /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 7C633CDF2761ED1700140CAA /* Toast */; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
 		7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */; };
 		7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */; };
+		7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A609C27A38D5D00477348 /* FormFieldView.swift */; };
 		7CAB332C279972020000B15E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332B279972020000B15E /* Utils.swift */; };
 		7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332D2799777B0000B15E /* AutofillData.swift */; };
 		7CAB3330279979650000B15E /* AutofillDataKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332F279979650000B15E /* AutofillDataKeychain.swift */; };
@@ -109,13 +109,15 @@
 		6102F80C8AA04C85ADA0AEE2 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		643666B7E5804C808CAF1052 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		771E1616CFA147CD9E433C3F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		7C0685F22758F1210003C996 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLockerRelease.entitlements; path = CyStackLocker/CyStackLockerRelease.entitlements; sourceTree = "<group>"; };
+		7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
 		7C633CDB2761EA0D00140CAA /* Toast */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Toast; path = "Pods/Toast-Swift/Toast"; sourceTree = "<group>"; };
 		7C633CDC2761EA9B00140CAA /* libToast-Swift.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libToast-Swift.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
 		7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPasaswordViewController.swift; sourceTree = "<group>"; };
 		7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
+		7C8A609C27A38D5D00477348 /* FormFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldView.swift; sourceTree = "<group>"; };
 		7CAB332B279972020000B15E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		7CAB332D2799777B0000B15E /* AutofillData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillData.swift; sourceTree = "<group>"; };
 		7CAB332F279979650000B15E /* AutofillDataKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillDataKeychain.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 		13B07FAE1A68108700A75B9A /* CyStackLocker */ = {
 			isa = PBXGroup;
 			children = (
+				7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */,
 				CA03E5CA277C244500E64FA1 /* GoogleService-Info.plist */,
 				CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -282,9 +285,16 @@
 			isa = PBXGroup;
 			children = (
 				7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */,
-				7C0685F22758F1210003C996 /* CustomTextField.swift */,
+				7C8A609C27A38D5D00477348 /* FormFieldView.swift */,
 			);
 			path = customUI;
+			sourceTree = "<group>";
+		};
+		7C8A609427A27C2600477348 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		7CAB3325279969B60000B15E /* Models */ = {
@@ -367,6 +377,8 @@
 		CA53479127181AB400BA4901 /* LockerAutofill */ = {
 			isa = PBXGroup;
 			children = (
+				7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */,
+				7C8A609427A27C2600477348 /* Service */,
 				7CAB332A279971E20000B15E /* Utils */,
 				7CAB332727996A480000B15E /* Views */,
 				7CAB332627996A310000B15E /* Controller */,
@@ -493,7 +505,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -910,10 +922,10 @@
 				7CAB332C279972020000B15E /* Utils.swift in Sources */,
 				7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */,
 				7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */,
+				7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */,
 				7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */,
 				7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */,
 				7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */,
-				7C0685F32758F1210003C996 /* CustomTextField.swift in Sources */,
 				7CAB3332279A548A0000B15E /* CredentialProviderController.swift in Sources */,
 				7CAB3330279979650000B15E /* AutofillDataKeychain.swift in Sources */,
 			);
@@ -1056,7 +1068,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
+				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLockerRelease.entitlements;
 				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				ENABLE_BITCODE = NO;
@@ -1376,7 +1388,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = LockerAutofill/LockerAutofill.entitlements;
+				CODE_SIGN_ENTITLEMENTS = LockerAutofill/LockerAutofillRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
