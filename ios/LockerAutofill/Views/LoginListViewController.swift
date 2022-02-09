@@ -28,6 +28,8 @@ class LoginListViewController: UIViewController {
   var filterCredentials:  [AutofillData]!
   var filterOthers: [AutofillData]!
   
+  var hideOtherPasswordsSession = true
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     isModalInPresentation = true //disable the pull-down gesture
@@ -44,8 +46,9 @@ class LoginListViewController: UIViewController {
     self.credentialProviderDelegate.cancel()
   }
   
-  func completeRequest(data: AutofillData){
-    self.credentialProviderDelegate.loginSelected(data: data)
+  func completeRequest(data: AutofillData, forServiceIdentifer: Bool){
+      self.credentialProviderDelegate.loginSelected(data: data)
+
   }
   
   @IBAction func add() {
@@ -78,7 +81,7 @@ extension LoginListViewController: UISearchBarDelegate {
     // for ohters
     for credential in others {
       if (isMatchCredentials(credential: credential, searchPattern: searchText)) {
-          filterCredentials.append(credential)
+         filterOthers.append(credential)
       }
     }
     self.tableView.reloadData()
@@ -109,8 +112,8 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
     if section == 0 {
       return self.filterCredentials.count
     }
-
-    return self.filterOthers.count
+   
+    return hideOtherPasswordsSession ? 0 : self.filterOthers.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -137,26 +140,33 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     self.navigationController?.pushViewController(editPassView, animated: true)
   }
+  @objc
+  private func toggleHideSection(sender: UIButton) {
+    print(hideOtherPasswordsSession)
+    self.hideOtherPasswordsSession = !self.hideOtherPasswordsSession
+    tableView.reloadData()
+  }
   
-//
-//  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//    let label = UILabel()
-//    let paragraphStyle = NSMutableParagraphStyle()
-//    paragraphStyle.firstLineHeadIndent = 20
-//
-//   // paragraphStyle.
-//    let content: String
-//
-//    if section == 0 {
-//      content = Utils.Translate("Passwords for") +  " \"\(uri!)\" (\(self.filterCredentials.count))"
-//    } else {
-//      content = Utils.Translate("All passwords") + " (\(self.filterOthers.count))"
-//    }
-//    let attributedString = NSAttributedString(string: content, attributes: [.paragraphStyle : paragraphStyle, .backgroundColor: UIColor.white])
-//    label.attributedText = attributedString
-//    label.textColor = .lightGray
-//    return label
-//  }
+
+  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    let sectionButton = UIButton()
+    let content: String
+    if section == 0 {
+      content = Utils.Translate("Passwords for") +  " \"\(uri!)\" (\(self.filterCredentials.count))"
+    } else {
+      content = Utils.Translate("Other passwords") + " (\(self.filterOthers.count))"
+      // 5
+      sectionButton.addTarget(self,
+                              action: #selector(self.toggleHideSection(sender:)),
+                              for: .touchUpInside)
+    }
+     sectionButton.setTitle(content,
+                            for: .normal)
+     sectionButton.setTitleColor(.lightGray, for: .normal)
+     sectionButton.backgroundColor = .white
+     sectionButton.tag = section
+     return sectionButton
+  }
 
   func numberOfSections(in tableView: UITableView) -> Int {
     // #warning Incomplete implementation, return the number of sections
@@ -166,7 +176,7 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let target = indexPath.section == 0 ? filterCredentials[indexPath.row] : filterOthers[indexPath.row]
-    completeRequest(data: target)
+    completeRequest(data: target, forServiceIdentifer: indexPath.section == 0)
   }
   
   
@@ -194,7 +204,7 @@ extension LoginListViewController: LoginListControllerDelegate {
   }
   
   func addLogin(credential: AutofillData) {
-    completeRequest(data: credential)
+    completeRequest(data: credential, forServiceIdentifer: true)
   }
 }
 

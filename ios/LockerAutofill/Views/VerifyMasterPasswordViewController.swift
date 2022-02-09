@@ -16,26 +16,27 @@ class VerifyMasterPasswordViewController: UIViewController {
   var hassMasterPass: String!
   var authenQuickBar: Bool = false
   
-  @IBOutlet weak var eyeIconButton: UIButton!
-  @IBOutlet weak var masterPasswordTxt: UITextField!
-
+  @IBOutlet weak var emailLabel: UILabel!
+  @IBOutlet weak var masterPassword: FormFieldView!
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     isModalInPresentation = true //disable the pull-down gesture
-    Utils.ToggleHidePass(text: masterPasswordTxt, eyeIcon: eyeIconButton, initial: true)
+   
+    masterPassword.setLabel(label: Utils.Translate("Master Password"), passwordField: true)
+    emailLabel.text = userEmail
+    emailLabel.lineBreakMode = .byWordWrapping
+    emailLabel.numberOfLines = 0
+
   }
  
-  
-  @IBAction func eyeIconDidPress(_ sender: Any) {
-    Utils.ToggleHidePass(text: masterPasswordTxt, eyeIcon: eyeIconButton)
-  }
  
   @IBAction func cancel(_ sender: AnyObject?) {
     cancel()
   }
   
   @IBAction func unlockDidPress(_ sender: Any) {
-    let masterPass = self.masterPasswordTxt.text!
+    let masterPass = self.masterPassword.textField.text!
     if (verifyMasterPassword(masterPass: masterPass)) {
       authenSuccess()
     } else {

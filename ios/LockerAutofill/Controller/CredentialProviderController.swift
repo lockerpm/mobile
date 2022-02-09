@@ -49,6 +49,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   override func viewDidAppear(_ animated: Bool) {
+//    performLoginListScreen()
     performVerifyPasswordScreen()
 //      if (self.dataModel.isFaceIdEnabled()){
 //        Utils.BiometricAuthentication(

@@ -7,7 +7,6 @@
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.com.cystack.lockerapp</string>
-		<string>group.cystack.lockerapp</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
