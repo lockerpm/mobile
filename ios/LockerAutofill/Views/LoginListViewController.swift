@@ -11,16 +11,16 @@ import UIKit
 
 
 protocol LoginListControllerDelegate {
-  func deleteLogin()
-  func addLogin(credential: AutofillData)
+  var uri: String {get}
+  func cancel()
+  func loginSelected(data: AutofillData)
 }
 
 
 class LoginListViewController: UIViewController {
-  var credentialProviderDelegate: CredentialProviderDelegate!
+  var delegate: LoginListControllerDelegate!
   var credentials:  [AutofillData]!
   var others: [AutofillData]!
-  var uri: String!
   
   @IBOutlet weak var searchBar: UISearchBar!
   @IBOutlet weak var tableView: UITableView!
@@ -32,7 +32,7 @@ class LoginListViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    isModalInPresentation = true //disable the pull-down gesture
+//    isModalInPresentation = true //disable the pull-down gesture
     
     self.searchBar.delegate = self
     self.tableView.delegate = self
@@ -43,18 +43,17 @@ class LoginListViewController: UIViewController {
   }
   
   @IBAction func cancel(_ sender: AnyObject?) {
-    self.credentialProviderDelegate.cancel()
+    delegate.cancel()
   }
   
   func completeRequest(data: AutofillData, forServiceIdentifer: Bool){
-      self.credentialProviderDelegate.loginSelected(data: data)
-
+    delegate.loginSelected(data: data)
   }
   
   @IBAction func add() {
     let newLogin = storyboard?.instantiateViewController(withIdentifier: "newLoginView") as! NewPasswordViewController
-    newLogin.uri = uri
-    newLogin.loginListControllerDelegate = self
+    newLogin.uri = delegate.uri
+//    newLogin.loginListControllerDelegate = self
     present(newLogin, animated: true)
   }
   
@@ -120,21 +119,22 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
     let credential = indexPath.section == 0 ? self.filterCredentials[indexPath.row] : self.filterOthers[indexPath.row]
     let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! CredentialTableViewCell
     cell.makeCell(credential: credential)
-    cell.editCredential.tag = Int(credential.autofillID)!
-    cell.editCredential.addTarget(self, action: #selector(connected(sender:)), for: .touchUpInside)
+    cell.editCredential.tag = credential.fillID
+    cell.editCredential.addTarget(self, action: #selector(self.connected(_:)), for: .touchUpInside)
+
     return cell
   }
   
-  @objc func connected(sender: UIButton){
+  @objc func connected(_ sender: UIButton){
     let editPassView = storyboard?.instantiateViewController(withIdentifier: "editPasswordView") as! EditPasaswordViewController
 
     for item in credentials {
-      if item.autofillID == String(sender.tag) {
+      if item.fillID == sender.tag {
         editPassView.credential = item
       }
     }
     for item in others {
-      if item.autofillID == String(sender.tag) {
+      if item.fillID == sender.tag {
         editPassView.credential = item
       }
     }
@@ -152,7 +152,7 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
     let sectionButton = UIButton()
     let content: String
     if section == 0 {
-      content = Utils.Translate("Passwords for") +  " \"\(uri!)\" (\(self.filterCredentials.count))"
+      content = Utils.Translate("Passwords for") +  " \"\(delegate.uri)\" (\(self.filterCredentials.count))"
     } else {
       content = Utils.Translate("Other passwords") + " (\(self.filterOthers.count))"
       // 5
@@ -198,14 +198,5 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
 
 }
 
-extension LoginListViewController: LoginListControllerDelegate {
-  func deleteLogin() {
-
-  }
-  
-  func addLogin(credential: AutofillData) {
-    completeRequest(data: credential, forServiceIdentifer: true)
-  }
-}
 
 

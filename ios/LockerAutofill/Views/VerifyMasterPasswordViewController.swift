@@ -8,28 +8,34 @@
 
 import UIKit
 import LocalAuthentication
-import Toast
+
+
+
+protocol VerifyMasterPasswordDelegate {
+  var userEmail: String! {get}
+  var hassMasterPass: String! {get}
+  var authenQuickBar: Bool {get}
+  var faceidEnabled: Bool {get}
+  
+  func cancel()
+  func authenSuccess()
+  func quickBarAuthenSuccess()
+}
 
 class VerifyMasterPasswordViewController: UIViewController {
-  var credentialProviderDelegate: CredentialProviderDelegate!
-  var userEmail: String!
-  var hassMasterPass: String!
-  var authenQuickBar: Bool = false
-  
-  @IBOutlet weak var emailLabel: UILabel!
+  var delegate: VerifyMasterPasswordDelegate!
+ 
+  @IBOutlet weak var unlockBtn: UIButton!
+  @IBOutlet weak var emailView: UIView!
   @IBOutlet weak var masterPassword: FormFieldView!
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    isModalInPresentation = true //disable the pull-down gesture
+//    isModalInPresentation = true //disable the pull-down gesture
    
     masterPassword.setLabel(label: Utils.Translate("Master Password"), passwordField: true)
-    emailLabel.text = userEmail
-    emailLabel.lineBreakMode = .byWordWrapping
-    emailLabel.numberOfLines = 0
-
+    makeEmailView()
   }
- 
  
   @IBAction func cancel(_ sender: AnyObject?) {
     cancel()
@@ -45,7 +51,7 @@ class VerifyMasterPasswordViewController: UIViewController {
   }
   
   @IBAction func faceIdDidPress(_ sender: Any) {
-    if (credentialProviderDelegate.isFaceIdEnable()){
+    if (delegate.faceidEnabled){
       Utils.BiometricAuthentication(view: self, onSuccess: authenSuccess, onFailed: cancel)
     }
     else {
@@ -53,10 +59,9 @@ class VerifyMasterPasswordViewController: UIViewController {
     }
   }
   
-  
   private func verifyMasterPassword(masterPass: String) -> Bool {
-    let hash = Utils.MakeKeyHash(key: masterPass, text: userEmail)
-    if hash == hassMasterPass {
+    let hash = Utils.MakeKeyHash(key: masterPass, text: delegate.userEmail)
+    if hash == delegate.hassMasterPass {
       return true
     }
     return false
@@ -64,18 +69,70 @@ class VerifyMasterPasswordViewController: UIViewController {
   
   private func authenSuccess(){
     dismiss(animated: true, completion: nil)
-    if (authenQuickBar){
-      self.credentialProviderDelegate.quickBarAuthenSuccess()
+    if (delegate.authenQuickBar){
+      delegate.quickBarAuthenSuccess()
     } else {
-      self.credentialProviderDelegate.authenSuccess()
+      delegate.authenSuccess()
     }
     
   }
-  
   private func cancel() {
     dismiss(animated: true, completion: nil)
-    self.credentialProviderDelegate.cancel()
+    delegate.cancel()
   }
-  
 }
 
+extension VerifyMasterPasswordViewController {
+  private func makeEmailView(){
+    
+    let firstCharacter = UILabel()
+    let firstCharacterPadding = UIView()
+    let emailBackground = UIView()
+    let email = UILabel()
+    
+    emailBackground.translatesAutoresizingMaskIntoConstraints = false
+    emailBackground.backgroundColor = .lightGray
+    emailBackground.layer.cornerRadius = 16
+    
+    firstCharacterPadding.translatesAutoresizingMaskIntoConstraints = false
+    firstCharacterPadding.backgroundColor = .blue
+    firstCharacterPadding.layer.cornerRadius = 12
+
+    
+    firstCharacter.translatesAutoresizingMaskIntoConstraints = false
+    firstCharacter.textColor = .white
+    firstCharacter.font = UIFont.boldSystemFont(ofSize: 22)
+    firstCharacter.text = "T"
+ 
+    email.translatesAutoresizingMaskIntoConstraints = false
+    email.font = email.font.withSize(16)
+    email.tintColor = .gray
+    email.text = delegate.userEmail
+    
+ 
+    emailView.addSubview(emailBackground)
+    emailView.addSubview(firstCharacterPadding)
+    emailView.addSubview(firstCharacter)
+    emailView.addSubview(email)
+    
+    NSLayoutConstraint.activate([
+        // textfield
+      emailBackground.centerXAnchor.constraint(equalTo: emailView.centerXAnchor),
+      emailBackground.bottomAnchor.constraint(equalTo: emailView.bottomAnchor),
+      emailBackground.topAnchor.constraint(equalTo: emailView.topAnchor),
+      
+      emailBackground.trailingAnchor.constraint(equalTo: email.trailingAnchor, constant: 12),
+      
+      firstCharacterPadding.leadingAnchor.constraint(equalTo: emailBackground.leadingAnchor, constant: 4),
+      firstCharacterPadding.bottomAnchor.constraint(equalTo: emailBackground.bottomAnchor, constant: -4),
+      firstCharacterPadding.topAnchor.constraint(equalTo: emailBackground.topAnchor, constant: 4),
+      firstCharacterPadding.widthAnchor.constraint(equalTo: emailBackground.heightAnchor, constant: -4),
+      
+      email.leadingAnchor.constraint(equalTo: firstCharacterPadding.trailingAnchor, constant: 10),
+      email.centerYAnchor.constraint(equalTo: emailView.centerYAnchor),
+   
+      firstCharacter.centerXAnchor.constraint(equalTo: firstCharacterPadding.centerXAnchor),
+      firstCharacter.centerYAnchor.constraint(equalTo: firstCharacterPadding.centerYAnchor)
+    ])
+  }
+}

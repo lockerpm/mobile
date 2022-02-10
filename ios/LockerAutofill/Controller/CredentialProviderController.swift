@@ -9,37 +9,15 @@ import UIKit
 import LocalAuthentication
 import AuthenticationServices
 
-protocol CredentialProviderDelegate {
-  func cancel()
-  func loginSelected(data: AutofillData)
-  func isFaceIdEnable() -> Bool
-  func authenSuccess()
-  func quickBarAuthenSuccess()
-}
 
 class CredentialProviderController: ASCredentialProviderViewController {
   private var dataModel: AutofillDataModel = AutofillDataModel()
-  private var serviceIdentifier: String!
+  private var serviceIdentifier: String = ""
   private var quickBar: Bool = false
   private var quickBarCredential: AutofillData!
   
-  
   @IBOutlet weak var logo: UIImageView!
-  private func initController(serviceIdentifier: String, quickBarAccess: Bool = false) {
-    
-   
-    
-    self.quickBar = quickBarAccess
-    self.dataModel.fetchAutofillDataForUriKeychain(uri: serviceIdentifier)
   
-    
-    if (!self.dataModel.isLoginLocker()){
-      Utils.Noti(contex: self, title: "Authentication", message:  "You must to login Locker befor using autofill service", completion: cancel)
-      Utils.RemoveAllCredentialIdentities() // remove all credentials in store
-      return
-    }
-
-  }
   override func viewDidLoad() {
     if (Utils.LightTheme(self)) {
        logo.isHighlighted = false
@@ -49,34 +27,46 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   override func viewDidAppear(_ animated: Bool) {
-//    performLoginListScreen()
-    performVerifyPasswordScreen()
-//      if (self.dataModel.isFaceIdEnabled()){
-//        Utils.BiometricAuthentication(
-//          view: self,
-//          onSuccess: quickBar ? quickBarAuthenSuccess : performLoginListScreen,
-//          onFailed: performVerifyPasswordScreen
-//        )
-//      }
-//      else {
-//        performVerifyPasswordScreen()
-//      }
+    if (!self.dataModel.loginedLocker){
+      Utils.Noti(contex: self, title: "Authentication", message:  "You must to login Locker befor using autofill service", completion: cancel)
+      AutofillHelpers.RemoveAllCredentialIdentities() // remove all credentials in store
+    }
+    
+    if (self.dataModel.faceIdEnabled){
+      Utils.BiometricAuthentication(
+        view: self,
+        onSuccess: quickBar ? quickBarAuthenSuccess : performLoginListScreen,
+        onFailed: performVerifyPasswordScreen
+      )
+    }
+    else {
+      performVerifyPasswordScreen()
+    }
   }
   
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    print(serviceIdentifiers.count)
-    self.serviceIdentifier = serviceIdentifiers.count > 0 ? serviceIdentifiers[0].identifier : ""
-    initController(serviceIdentifier: self.serviceIdentifier)
+    if serviceIdentifiers.count > 0 {
+      self.serviceIdentifier = serviceIdentifiers[0].identifier
+      if serviceIdentifiers[0].type == .URL {
+        self.dataModel.fetchAutofillData(identifier:  URL(string: serviceIdentifier)?.host ?? "")
+      }
+      else {
+        // domain
+        self.dataModel.fetchAutofillData(identifier: serviceIdentifier)
+        self.serviceIdentifier = "https://" +  serviceIdentifier
+      }
+    }
   }
   
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
     self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
-    initController(serviceIdentifier: self.serviceIdentifier, quickBarAccess: true)
+    self.quickBar = true
+    self.dataModel.fetchAutofillData(identifier: URL(string: serviceIdentifier)?.host ?? serviceIdentifier)
     
     if let credential = self.dataModel.getAutofillDataById(id: credentialIdentity.recordIdentifier!)  {
       self.quickBarCredential = credential
     } else {
-      Utils.RemoveCredentialIdentities(credentialIdentity)
+      AutofillHelpers.RemoveCredentialIdentities(credentialIdentity)
     }
   }
   
@@ -91,16 +81,12 @@ class CredentialProviderController: ASCredentialProviderViewController {
       if segue.identifier == "loginListSegue"
       {
         let loginListView = (segue.destination as! UINavigationController).topViewController as! LoginListViewController
-        loginListView.credentialProviderDelegate = self
-        loginListView.credentials = self.dataModel.getCredentials()
-        loginListView.others = self.dataModel.getOtherCredentials()
-        loginListView.uri = self.dataModel.getUri()
+        loginListView.delegate = self
+        loginListView.credentials = self.dataModel.credentials
+        loginListView.others = self.dataModel.otherCredentials
       } else if segue.identifier == "verifyMasterPasswordSegue" {
         let verifyMasterPasswordScreen = segue.destination as! VerifyMasterPasswordViewController
-        verifyMasterPasswordScreen.credentialProviderDelegate = self
-        verifyMasterPasswordScreen.userEmail = self.dataModel.getUserEmail()
-        verifyMasterPasswordScreen.hassMasterPass = self.dataModel.getUserHashMasterPass()
-        verifyMasterPasswordScreen.authenQuickBar = self.quickBar
+        verifyMasterPasswordScreen.delegate = self
       }
   }
   private func performVerifyPasswordScreen(){
@@ -115,22 +101,28 @@ class CredentialProviderController: ASCredentialProviderViewController {
     let passwordCredential = ASPasswordCredential(user: user, password: password)
     self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
   }
-
-}
-
-
-extension CredentialProviderController: CredentialProviderDelegate{
+  
   func cancel() {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
   }
-  
-  func loginSelected(data: AutofillData) {
-    Utils.ReplaceCredentialIdentities(identifier: self.serviceIdentifier, type: 1, user: data.username, recordIdentifier: data.id)
-    completeRequest(user: data.username, password: data.password)
+}
+
+
+extension CredentialProviderController: VerifyMasterPasswordDelegate {
+  var userEmail: String! {
+    return self.dataModel.email
   }
   
-  func isFaceIdEnable() -> Bool {
-    return self.dataModel.isFaceIdEnabled()
+  var hassMasterPass: String! {
+    return self.dataModel.hashMassterPass
+  }
+  
+  var authenQuickBar: Bool {
+    return self.quickBar
+  }
+  
+  var faceidEnabled: Bool {
+    return self.dataModel.faceIdEnabled
   }
   
   func authenSuccess() {
@@ -143,6 +135,18 @@ extension CredentialProviderController: CredentialProviderDelegate{
     } else {
       completeRequest(user: quickBarCredential.username, password: quickBarCredential.password)
     }
+  }
+}
 
+
+extension CredentialProviderController: LoginListControllerDelegate {
+  
+  var uri: String {
+    return self.dataModel.URI
+  }
+  
+  func loginSelected(data: AutofillData) {
+    AutofillHelpers.ReplaceCredentialIdentities(identifier: self.serviceIdentifier, type: 1, user: data.username, recordIdentifier: data.id)
+    completeRequest(user: data.username, password: data.password)
   }
 }

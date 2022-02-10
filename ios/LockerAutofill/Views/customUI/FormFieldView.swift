@@ -17,8 +17,8 @@ private struct Local {
         green: CGFloat(150) / 255.0,
         blue: CGFloat(45) / 255.0,
         alpha: CGFloat(1.0))
-    static let backgroundColor: UIColor = .systemGray5
-    static let foregroundColor: UIColor = .systemGray
+    static let backgroundColor: UIColor = .gray
+    static let foregroundColor: UIColor = .gray
 }
 
 class FormFieldView: UIView {
@@ -26,7 +26,7 @@ class FormFieldView: UIView {
     let underLineView = UIView()
     let label = UILabel()
     let textField = UITextField()
-    let eyeIcon = makeSymbolButton(systemName: "eye", target: self, selector: #selector(toggle(_:)))
+    let eyeIcon = makeSymbolButton(name: "eye", target: self, selector: #selector(toggle(_:)))
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -41,7 +41,6 @@ class FormFieldView: UIView {
         layout()
     }
     
-    
     override var intrinsicContentSize: CGSize {
         return CGSize(width: UIView.noIntrinsicMetric, height: Local.height)
     }
@@ -55,29 +54,29 @@ extension FormFieldView {
     }
     
     func style() {
-        translatesAutoresizingMaskIntoConstraints = false
-     
-        // underline
-        underLineView.translatesAutoresizingMaskIntoConstraints = false
-        underLineView.backgroundColor = .black
-        
-        // label
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .systemGray
-        label.font = label.font.withSize(18)
+      translatesAutoresizingMaskIntoConstraints = false
+   
+      // underline
+      underLineView.translatesAutoresizingMaskIntoConstraints = false
+      underLineView.backgroundColor = .black
+      
+      // label
+      label.translatesAutoresizingMaskIntoConstraints = false
+      label.textColor = .systemGray
+      label.font = label.font.withSize(16)
 
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.tintColor = Local.tintColorValid
-        textField.isHidden = true
-        textField.borderStyle = UITextField.BorderStyle.none
-        
-        // button
-        eyeIcon.translatesAutoresizingMaskIntoConstraints = false
-        eyeIcon.imageView?.tintColor = Local.foregroundColor
-        eyeIcon.isHidden = true
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_: )))
-        addGestureRecognizer(tap)
+      textField.translatesAutoresizingMaskIntoConstraints = false
+      textField.tintColor = Local.tintColorValid
+      textField.isHidden = true
+      textField.borderStyle = UITextField.BorderStyle.none
+      
+      // button
+      eyeIcon.translatesAutoresizingMaskIntoConstraints = false
+      eyeIcon.imageView?.tintColor = Local.foregroundColor
+      eyeIcon.isHidden = true
+      
+      let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_: )))
+      addGestureRecognizer(tap)
     }
     
     func layout() {
@@ -86,25 +85,24 @@ extension FormFieldView {
         addSubview(underLineView)
         addSubview(eyeIcon)
         NSLayoutConstraint.activate([
-            
             // textfield
-            textField.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 0),
-            textField.bottomAnchor.constraint(equalTo: textField.bottomAnchor, constant: 0),
-            trailingAnchor.constraint(equalToSystemSpacingAfter: textField.trailingAnchor, multiplier: 0),
-
-       
-            // button
-            trailingAnchor.constraint(equalToSystemSpacingAfter: eyeIcon.trailingAnchor, multiplier: 0),
-            eyeIcon.bottomAnchor.constraint(equalTo: textField.bottomAnchor, constant: 0),
+            textField.leadingAnchor.constraint(equalTo: leadingAnchor),
+            textField.trailingAnchor.constraint(equalTo: trailingAnchor),
+            textField.centerYAnchor.constraint(equalTo: centerYAnchor),
             
+            label.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
+            label.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
+            
+            eyeIcon.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
+            eyeIcon.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
+     
             underLineView.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
             underLineView.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
-            underLineView.bottomAnchor.constraint(equalTo: textField.bottomAnchor, constant: 6),
+            underLineView.bottomAnchor.constraint(equalTo: textField.bottomAnchor, constant: 8),
             underLineView.heightAnchor.constraint(equalToConstant: 0.5)
 
         ])
     }
-    
     
     @objc func tapped(_ recognizer: UITapGestureRecognizer) {
         if(recognizer.state == UIGestureRecognizer.State.ended) {
@@ -115,7 +113,6 @@ extension FormFieldView {
 
 
 extension FormFieldView {
-    
     func enterEmailAnimation() {
 
         UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.3,
@@ -127,8 +124,8 @@ extension FormFieldView {
             self.textField.tintColor = Local.tintColorValid
             self.underLineView.backgroundColor = Local.tintColorValid
             // move
-            let transpose = CGAffineTransform(translationX: -5, y: -30)
-            let scale = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            let transpose = CGAffineTransform(translationX: 0, y: -28)
+            let scale = CGAffineTransform(scaleX: 1, y: 1)
             self.label.transform = transpose.concatenating(scale)
             
         } completion: { position in
@@ -166,12 +163,13 @@ extension FormFieldView: UITextFieldDelegate {
     @objc func toggle(_ sender: UIButton) {
         textField.isSecureTextEntry = !textField.isSecureTextEntry
       
-        let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
+//        let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
         if textField.isSecureTextEntry {
-          eyeIcon.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)
+          eyeIcon.setImage(UIImage(named: "eye"), for: .normal)
         } else {
-          eyeIcon.setImage(UIImage(systemName: "eye.slash", withConfiguration: mediumConfig), for: .normal)
+          eyeIcon.setImage(UIImage(named: "eye-slash"), for: .normal)
         }
+//      eyeIcon.image
     }
 }
 
@@ -198,8 +196,8 @@ extension FormFieldView {
       self.label.text = label
       self.textField.isHidden = false
       self.textField.text = textField
-      let transpose = CGAffineTransform(translationX: -5, y: -30)
-      let scale = CGAffineTransform(scaleX: 0.9, y: 0.9)
+      let transpose = CGAffineTransform(translationX: 0, y: -28)
+      let scale = CGAffineTransform(scaleX: 1, y: 1)
       self.label.transform = transpose.concatenating(scale)
     }
     
@@ -230,10 +228,9 @@ extension FormFieldView {
 
 // MARK: - Factories
 
-func makeSymbolButton(systemName: String, target: Any, selector: Selector) -> UIButton {
+func makeSymbolButton(name: String, target: Any, selector: Selector) -> UIButton {
     
-    let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
-    let image = UIImage(systemName: systemName, withConfiguration: mediumConfig)
+    let image = UIImage(named: name)
     
     let button = UIButton()
     button.translatesAutoresizingMaskIntoConstraints = false

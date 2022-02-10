@@ -46,9 +46,11 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = ""
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      language = "vi"
+      region = "VN"
       launchStyle = "0"
       askForAppToLaunch = "Yes"
       useCustomWorkingDirectory = "NO"
@@ -60,7 +62,7 @@
       <RemoteRunnable
          runnableDebuggingMode = "1"
          BundleIdentifier = "com.apple.mobilesafari"
-         RemotePath = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/Applications/MobileSafari.app">
+         RemotePath = "/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 13.4.simruntime/Contents/Resources/RuntimeRoot/Applications/MobileSafari.app">
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference
