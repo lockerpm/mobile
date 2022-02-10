@@ -15,11 +15,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* CyStackLockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CyStackLockerTests.m */; };
-		7C306D3127B3A09900F64944 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
-		7C306D3427B3A09900F64944 /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C306D3327B3A09900F64944 /* CredentialProviderViewController.swift */; };
-		7C306D3727B3A09900F64944 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C306D3527B3A09900F64944 /* MainInterface.storyboard */; };
-		7C306D3C27B3A09900F64944 /* testaf.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7C306D3027B3A09900F64944 /* testaf.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		7C633CE02761ED1700140CAA /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 7C633CDF2761ED1700140CAA /* Toast */; };
+		7C306D7D27B4B5A600F64944 /* AutofillHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
 		7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */; };
@@ -31,7 +27,6 @@
 		7CAB3332279A548A0000B15E /* CredentialProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3331279A548A0000B15E /* CredentialProviderController.swift */; };
 		7CAB3334279A6AD70000B15E /* VerifyMasterPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */; };
 		7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3335279AA04E0000B15E /* LoginListViewController.swift */; };
-		7CE29ABB279E98A00055B0C5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7CE29ABD279E98A00055B0C5 /* Localizable.strings */; };
 		7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A4B148D367B119F99EC2C2E5 /* libPods-CyStackLocker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EADEA568884090C1B008E181 /* libPods-CyStackLocker.a */; };
@@ -60,13 +55,6 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "CyStackLocker-tvOS";
 		};
-		7C306D3A27B3A09900F64944 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7C306D2F27B3A09900F64944;
-			remoteInfo = testaf;
-		};
 		CA53479927181AB400BA4901 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
@@ -84,7 +72,6 @@
 			dstSubfolderSpec = 13;
 			files = (
 				CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */,
-				7C306D3C27B3A09900F64944 /* testaf.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -123,13 +110,8 @@
 		771E1616CFA147CD9E433C3F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLockerRelease.entitlements; path = CyStackLocker/CyStackLockerRelease.entitlements; sourceTree = "<group>"; };
 		7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
-		7C306D3027B3A09900F64944 /* testaf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = testaf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		7C306D3327B3A09900F64944 /* CredentialProviderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderViewController.swift; sourceTree = "<group>"; };
-		7C306D3627B3A09900F64944 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		7C306D3827B3A09900F64944 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7C306D3927B3A09900F64944 /* testaf.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = testaf.entitlements; sourceTree = "<group>"; };
+		7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillHelpers.swift; sourceTree = "<group>"; };
 		7C633CDB2761EA0D00140CAA /* Toast */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Toast; path = "Pods/Toast-Swift/Toast"; sourceTree = "<group>"; };
-		7C633CDC2761EA9B00140CAA /* libToast-Swift.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libToast-Swift.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
 		7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPasaswordViewController.swift; sourceTree = "<group>"; };
@@ -141,9 +123,6 @@
 		7CAB3331279A548A0000B15E /* CredentialProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderController.swift; sourceTree = "<group>"; };
 		7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyMasterPasswordViewController.swift; sourceTree = "<group>"; };
 		7CAB3335279AA04E0000B15E /* LoginListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
-		7CE29AB8279E98330055B0C5 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
-		7CE29ABC279E98A00055B0C5 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
-		7CE29ABF279E999F0055B0C5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashCore.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CyStackLocker/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -196,19 +175,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7C306D2D27B3A09900F64944 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7C306D3127B3A09900F64944 /* AuthenticationServices.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		CA53478C27181AB400BA4901 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C633CE02761ED1700140CAA /* Toast in Frameworks */,
 				CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */,
 				CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */,
 			);
@@ -254,7 +224,6 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7C633CDC2761EA9B00140CAA /* libToast-Swift.a */,
 				CA53478927181A9C00BA4901 /* AuthenticationServices.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -298,17 +267,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		7C306D3227B3A09900F64944 /* testaf */ = {
-			isa = PBXGroup;
-			children = (
-				7C306D3327B3A09900F64944 /* CredentialProviderViewController.swift */,
-				7C306D3527B3A09900F64944 /* MainInterface.storyboard */,
-				7C306D3827B3A09900F64944 /* Info.plist */,
-				7C306D3927B3A09900F64944 /* testaf.entitlements */,
-			);
-			path = testaf;
-			sourceTree = "<group>";
-		};
 		7C633CDA2761EA0D00140CAA /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -329,6 +287,7 @@
 		7C8A609427A27C2600477348 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -366,7 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				7CAB332B279972020000B15E /* Utils.swift */,
-				7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */,
+				7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -387,7 +346,6 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* CyStackLockerTests */,
 				CA53479127181AB400BA4901 /* LockerAutofill */,
-				7C306D3227B3A09900F64944 /* testaf */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				71ED362ACEA45F9F60DCD285 /* Pods */,
@@ -407,7 +365,6 @@
 				2D02E47B1E0B4A5D006451C7 /* CyStackLocker-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* CyStackLocker-tvOSTests.xctest */,
 				CA53478F27181AB400BA4901 /* LockerAutofill.appex */,
-				7C306D3027B3A09900F64944 /* testaf.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -415,17 +372,16 @@
 		CA53479127181AB400BA4901 /* LockerAutofill */ = {
 			isa = PBXGroup;
 			children = (
+				CA53479827181AB400BA4901 /* LockerAutofill.entitlements */,
 				7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */,
 				7C8A609427A27C2600477348 /* Service */,
 				7CAB332A279971E20000B15E /* Utils */,
 				7CAB332727996A480000B15E /* Views */,
 				7CAB332627996A310000B15E /* Controller */,
 				7CAB3325279969B60000B15E /* Models */,
-				CA53479827181AB400BA4901 /* LockerAutofill.entitlements */,
 				7C70B7BD2758CD2B005D0D8E /* assets.xcassets */,
 				CA53479727181AB400BA4901 /* Info.plist */,
 				CA53479427181AB400BA4901 /* MainInterface.storyboard */,
-				7CE29ABD279E98A00055B0C5 /* Localizable.strings */,
 			);
 			path = LockerAutofill;
 			sourceTree = "<group>";
@@ -473,7 +429,6 @@
 			);
 			dependencies = (
 				CA53479A27181AB400BA4901 /* PBXTargetDependency */,
-				7C306D3B27B3A09900F64944 /* PBXTargetDependency */,
 			);
 			name = CyStackLocker;
 			productName = CyStackLocker;
@@ -517,23 +472,6 @@
 			productReference = 2D02E4901E0B4A5D006451C7 /* CyStackLocker-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		7C306D2F27B3A09900F64944 /* testaf */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7C306D3D27B3A09900F64944 /* Build configuration list for PBXNativeTarget "testaf" */;
-			buildPhases = (
-				7C306D2C27B3A09900F64944 /* Sources */,
-				7C306D2D27B3A09900F64944 /* Frameworks */,
-				7C306D2E27B3A09900F64944 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = testaf;
-			productName = testaf;
-			productReference = 7C306D3027B3A09900F64944 /* testaf.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		CA53478E27181AB400BA4901 /* LockerAutofill */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CA53479C27181AB400BA4901 /* Build configuration list for PBXNativeTarget "LockerAutofill" */;
@@ -549,7 +487,6 @@
 			name = LockerAutofill;
 			packageProductDependencies = (
 				CA9F41E927183FC300B0C0A5 /* KeychainAccess */,
-				7C633CDF2761ED1700140CAA /* Toast */,
 			);
 			productName = LockerAutofill;
 			productReference = CA53478F27181AB400BA4901 /* LockerAutofill.appex */;
@@ -580,9 +517,6 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
 					};
-					7C306D2F27B3A09900F64944 = {
-						CreatedOnToolsVersion = 13.2.1;
-					};
 					CA53478E27181AB400BA4901 = {
 						CreatedOnToolsVersion = 13.0;
 						DevelopmentTeam = W7S57TNBH5;
@@ -597,12 +531,10 @@
 			knownRegions = (
 				en,
 				Base,
-				vi,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -613,7 +545,6 @@
 				2D02E47A1E0B4A5D006451C7 /* CyStackLocker-tvOS */,
 				2D02E48F1E0B4A5D006451C7 /* CyStackLocker-tvOSTests */,
 				CA53478E27181AB400BA4901 /* LockerAutofill */,
-				7C306D2F27B3A09900F64944 /* testaf */,
 			);
 		};
 /* End PBXProject section */
@@ -651,20 +582,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7C306D2E27B3A09900F64944 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7C306D3727B3A09900F64944 /* MainInterface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		CA53478D27181AB400BA4901 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */,
-				7CE29ABB279E98A00055B0C5 /* Localizable.strings in Resources */,
 				CA53479627181AB400BA4901 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -981,14 +903,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7C306D2C27B3A09900F64944 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7C306D3427B3A09900F64944 /* CredentialProviderViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		CA53478B27181AB400BA4901 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -996,6 +910,7 @@
 				7CAB3334279A6AD70000B15E /* VerifyMasterPasswordViewController.swift in Sources */,
 				7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */,
 				7CAB332C279972020000B15E /* Utils.swift in Sources */,
+				7C306D7D27B4B5A600F64944 /* AutofillHelpers.swift in Sources */,
 				7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */,
 				7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */,
 				7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */,
@@ -1020,11 +935,6 @@
 			target = 2D02E47A1E0B4A5D006451C7 /* CyStackLocker-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
-		7C306D3B27B3A09900F64944 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7C306D2F27B3A09900F64944 /* testaf */;
-			targetProxy = 7C306D3A27B3A09900F64944 /* PBXContainerItemProxy */;
-		};
 		CA53479A27181AB400BA4901 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CA53478E27181AB400BA4901 /* LockerAutofill */;
@@ -1033,28 +943,10 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		7C306D3527B3A09900F64944 /* MainInterface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7C306D3627B3A09900F64944 /* Base */,
-			);
-			name = MainInterface.storyboard;
-			sourceTree = "<group>";
-		};
-		7CE29ABD279E98A00055B0C5 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7CE29ABC279E98A00055B0C5 /* vi */,
-				7CE29ABF279E999F0055B0C5 /* en */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
 		CA53479427181AB400BA4901 /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				CA53479527181AB400BA4901 /* Base */,
-				7CE29AB8279E98330055B0C5 /* vi */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -1304,86 +1196,6 @@
 			};
 			name = Release;
 		};
-		7C306D3E27B3A09900F64944 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = testaf/testaf.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = W7S57TNBH5;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = testaf/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = testaf;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.testaf;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		7C306D3F27B3A09900F64944 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = testaf/testaf.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = W7S57TNBH5;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = testaf/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = testaf;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.testaf;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1527,7 +1339,7 @@
 				INFOPLIST_FILE = LockerAutofill/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Locker;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1568,7 +1380,7 @@
 				INFOPLIST_FILE = LockerAutofill/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Locker;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1626,15 +1438,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7C306D3D27B3A09900F64944 /* Build configuration list for PBXNativeTarget "testaf" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7C306D3E27B3A09900F64944 /* Debug */,
-				7C306D3F27B3A09900F64944 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "CyStackLocker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1656,14 +1459,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/scalessec/Toast-Swift";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -1675,11 +1470,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7C633CDF2761ED1700140CAA /* Toast */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */;
-			productName = Toast;
-		};
 		CA9F41E927183FC300B0C0A5 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */;

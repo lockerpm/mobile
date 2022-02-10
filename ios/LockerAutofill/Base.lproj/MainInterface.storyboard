@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="IlT-a8-mfU">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -51,23 +52,31 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iqt-pY-FVh">
-                                <rect key="frame" x="20" y="412.5" width="335" height="40"/>
+                                <rect key="frame" x="25" y="414" width="325" height="40"/>
+                                <color key="backgroundColor" red="0.23921568630000001" green="0.58823529409999997" blue="0.1764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="MYK-dm-1B3"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Unlock">
                                     <fontDescription key="titleFontDescription" type="system" pointSize="19"/>
+                                    <color key="baseForegroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="baseBackgroundColor" red="0.3204087317" green="0.62138414379999996" blue="0.26844969390000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </buttonConfiguration>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="unlockDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="p2K-JQ-ovu"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VAo-LQ-WML">
-                                <rect key="frame" x="20" y="476.5" width="335" height="34.5"/>
+                                <rect key="frame" x="20" y="478" width="335" height="38"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="faceid" catalog="system" title=" Unlock with Face ID/Touch ID">
+                                <buttonConfiguration key="configuration" style="plain" image="face-recognition" title=" Unlock with Face ID/Touch ID">
                                     <fontDescription key="titleFontDescription" type="system" pointSize="17"/>
                                     <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
@@ -81,55 +90,55 @@
                                     <constraint firstAttribute="height" constant="70" id="xNh-u7-Uzu"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kpu-DD-re1">
-                                <rect key="frame" x="20" y="286" width="335" height="21.5"/>
-                                <rect key="contentStretch" x="0.45000000000000001" y="0.0" width="1" height="1"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                                <size key="shadowOffset" width="13" height="-1"/>
-                            </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wJC-JS-tPU" customClass="FormFieldView" customModule="LockerAutofill" customModuleProvider="target">
-                                <rect key="frame" x="20" y="352.5" width="335" height="40"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1ZC-tS-t6U">
+                                <rect key="frame" x="25" y="279" width="325" height="35"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="cn9-ms-GFu"/>
+                                    <constraint firstAttribute="height" constant="35" id="x93-6m-qwT"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JFY-nD-Xag" customClass="FormFieldView" customModule="LockerAutofill" customModuleProvider="target">
+                                <rect key="frame" x="25" y="339" width="325" height="50"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="ahe-pg-xUY"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Khm-HA-POC"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="JFY-nD-Xag" secondAttribute="trailing" constant="25" id="2p1-zR-e5d"/>
+                            <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="Iqt-pY-FVh" secondAttribute="trailing" constant="25" id="3MR-DI-4bz"/>
                             <constraint firstItem="BHt-Az-rZe" firstAttribute="top" secondItem="dsu-2U-t3t" secondAttribute="bottom" constant="17" id="3iE-os-XKx"/>
-                            <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="wJC-JS-tPU" secondAttribute="trailing" constant="20" id="4IQ-KA-1mk"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="VAo-LQ-WML" secondAttribute="trailing" constant="20" id="4Kc-gE-FOY"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="dsu-2U-t3t" secondAttribute="trailing" constant="153" id="8pA-gT-tZY"/>
                             <constraint firstItem="VAo-LQ-WML" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="G5V-Is-jxf"/>
-                            <constraint firstItem="wJC-JS-tPU" firstAttribute="top" secondItem="kpu-DD-re1" secondAttribute="bottom" constant="45" id="HhC-ss-jJF"/>
                             <constraint firstItem="VAo-LQ-WML" firstAttribute="top" secondItem="Iqt-pY-FVh" secondAttribute="bottom" constant="24" id="Hhm-Yl-RVu"/>
+                            <constraint firstItem="Iqt-pY-FVh" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="25" id="JgP-N7-cVF"/>
                             <constraint firstItem="cmq-AZ-LBm" firstAttribute="top" secondItem="Khm-HA-POC" secondAttribute="top" id="LS6-f2-5Xk"/>
-                            <constraint firstItem="kpu-DD-re1" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="OJu-Ex-ZaO"/>
+                            <constraint firstItem="Iqt-pY-FVh" firstAttribute="top" secondItem="JFY-nD-Xag" secondAttribute="bottom" constant="25" id="V9V-3Q-5fe"/>
+                            <constraint firstItem="1ZC-tS-t6U" firstAttribute="top" secondItem="RW4-xA-kRE" secondAttribute="bottom" constant="17" id="Wka-vd-mjq"/>
                             <constraint firstItem="BHt-Az-rZe" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="Wuw-7a-OnD"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="RW4-xA-kRE" secondAttribute="trailing" constant="20" id="a5m-mv-L4y"/>
-                            <constraint firstItem="wJC-JS-tPU" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="bsi-zJ-tVE"/>
+                            <constraint firstItem="1ZC-tS-t6U" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="25" id="cCq-o5-nIN"/>
                             <constraint firstItem="cmq-AZ-LBm" firstAttribute="trailing" secondItem="Khm-HA-POC" secondAttribute="trailing" id="dHi-Ik-nA8"/>
                             <constraint firstItem="dsu-2U-t3t" firstAttribute="top" secondItem="cmq-AZ-LBm" secondAttribute="bottom" constant="74" id="dLW-Cw-Y2T"/>
-                            <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="kpu-DD-re1" secondAttribute="trailing" constant="20" id="fT5-u7-gXZ"/>
-                            <constraint firstItem="Iqt-pY-FVh" firstAttribute="top" secondItem="wJC-JS-tPU" secondAttribute="bottom" constant="20" id="g64-dr-KFC"/>
-                            <constraint firstItem="Iqt-pY-FVh" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="gg4-hN-hXU"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="BHt-Az-rZe" secondAttribute="trailing" constant="20" id="k7p-gF-wgQ"/>
+                            <constraint firstItem="JFY-nD-Xag" firstAttribute="top" secondItem="1ZC-tS-t6U" secondAttribute="bottom" constant="25" id="lIL-Ye-YMn"/>
                             <constraint firstItem="RW4-xA-kRE" firstAttribute="top" secondItem="BHt-Az-rZe" secondAttribute="bottom" constant="17" id="mYZ-oG-cUg"/>
-                            <constraint firstItem="kpu-DD-re1" firstAttribute="top" secondItem="RW4-xA-kRE" secondAttribute="bottom" constant="24" id="ma0-r6-73j"/>
-                            <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="Iqt-pY-FVh" secondAttribute="trailing" constant="20" id="sDq-3m-PC0"/>
+                            <constraint firstItem="JFY-nD-Xag" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="25" id="uS7-ZD-Del"/>
                             <constraint firstItem="dsu-2U-t3t" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="152" id="us5-HG-N2x"/>
                             <constraint firstItem="cmq-AZ-LBm" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" id="vAH-Ux-jlg"/>
                             <constraint firstItem="RW4-xA-kRE" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="vXb-Az-ElD"/>
+                            <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="1ZC-tS-t6U" secondAttribute="trailing" constant="25" id="xSX-Hb-ZC4"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="py4-7U-hfY"/>
                     <connections>
-                        <outlet property="emailLabel" destination="kpu-DD-re1" id="mzt-Sc-Cba"/>
-                        <outlet property="masterPassword" destination="wJC-JS-tPU" id="zbc-wh-a2e"/>
+                        <outlet property="emailView" destination="1ZC-tS-t6U" id="4wa-M1-obA"/>
+                        <outlet property="masterPassword" destination="JFY-nD-Xag" id="fV0-kp-pov"/>
+                        <outlet property="unlockBtn" destination="Iqt-pY-FVh" id="3vd-x9-Yoz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="537-z4-4UF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -433,7 +442,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nac-OJ-7ZD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2444" y="268.51574212893553"/>
+            <point key="canvasLocation" x="2465" y="1305"/>
         </scene>
         <!--Login Detail-->
         <scene sceneID="FYZ-nk-jcP">
@@ -710,7 +719,7 @@
         <image name="LogoDark" width="178" height="55"/>
         <image name="LogoWhite" width="712" height="219.5"/>
         <image name="edit" width="18" height="4"/>
-        <image name="faceid" catalog="system" width="128" height="115"/>
+        <image name="face-recognition" width="24" height="24"/>
         <image name="lockerLogo" width="150" height="150"/>
         <image name="passIcon" width="120" height="120"/>
         <systemColor name="systemBackgroundColor">

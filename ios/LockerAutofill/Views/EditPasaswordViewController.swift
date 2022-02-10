@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Toast
 
 class EditPasaswordViewController: UIViewController {
   var loginListControllerDelegate: LoginListControllerDelegate!
