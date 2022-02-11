@@ -17,6 +17,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* CyStackLockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CyStackLockerTests.m */; };
 		7C306D7D27B4B5A600F64944 /* AutofillHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */; };
 		7C306DB127B6467900F64944 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C306DB027B6467900F64944 /* Colors.xcassets */; };
+		7C306DB327B65CDC00F64944 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C306DB227B65CDC00F64944 /* MainInterface.storyboard */; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
 		7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */; };
@@ -34,7 +35,6 @@
 		CA03E5CB277C244500E64FA1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CA03E5CA277C244500E64FA1 /* GoogleService-Info.plist */; };
 		CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
-		CA53479627181AB400BA4901 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA53479427181AB400BA4901 /* MainInterface.storyboard */; };
 		CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CA53478F27181AB400BA4901 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CA9F41E927183FC300B0C0A5 /* KeychainAccess */; };
 		CAFA4CF8270AF9A20003FFA5 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFA4CF7270AF9A20003FFA5 /* File.swift */; };
@@ -113,6 +113,7 @@
 		7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
 		7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillHelpers.swift; sourceTree = "<group>"; };
 		7C306DB027B6467900F64944 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		7C306DB227B65CDC00F64944 /* MainInterface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MainInterface.storyboard; path = ../../../../.Trash/MainInterface.storyboard; sourceTree = "<group>"; };
 		7C633CDB2761EA0D00140CAA /* Toast */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Toast; path = "Pods/Toast-Swift/Toast"; sourceTree = "<group>"; };
 		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
@@ -133,7 +134,6 @@
 		CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLocker.entitlements; path = CyStackLocker/CyStackLocker.entitlements; sourceTree = "<group>"; };
 		CA53478927181A9C00BA4901 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		CA53478F27181AB400BA4901 /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		CA53479527181AB400BA4901 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		CA53479727181AB400BA4901 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA53479827181AB400BA4901 /* LockerAutofill.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofill.entitlements; sourceTree = "<group>"; };
 		CAFA4CF6270AF9A20003FFA5 /* CyStackLocker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CyStackLocker-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -383,8 +383,8 @@
 				7CAB3325279969B60000B15E /* Models */,
 				7C70B7BD2758CD2B005D0D8E /* assets.xcassets */,
 				7C306DB027B6467900F64944 /* Colors.xcassets */,
+				7C306DB227B65CDC00F64944 /* MainInterface.storyboard */,
 				CA53479727181AB400BA4901 /* Info.plist */,
-				CA53479427181AB400BA4901 /* MainInterface.storyboard */,
 			);
 			path = LockerAutofill;
 			sourceTree = "<group>";
@@ -590,8 +590,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */,
+				7C306DB327B65CDC00F64944 /* MainInterface.storyboard in Resources */,
 				7C306DB127B6467900F64944 /* Colors.xcassets in Resources */,
-				CA53479627181AB400BA4901 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -945,17 +945,6 @@
 			targetProxy = CA53479927181AB400BA4901 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		CA53479427181AB400BA4901 /* MainInterface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CA53479527181AB400BA4901 /* Base */,
-			);
-			name = MainInterface.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
