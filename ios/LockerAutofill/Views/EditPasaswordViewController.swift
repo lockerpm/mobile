@@ -22,7 +22,9 @@ class EditPasaswordViewController: UIViewController {
     uri.text = credential.uri
     name.text = credential.name
     username.setText(label: Utils.Translate("Email or username"), textField: credential.username, passwordField: false)
+    username.backgroundColor = UIColor(named: "block")
     password.setText(label: Utils.Translate("Password"), textField: credential.password, passwordField: true)
+    password.backgroundColor = UIColor(named: "block")
     ownedBy.text = credential.isOwner ? "Me" : "Another"
   }
   

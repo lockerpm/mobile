@@ -27,12 +27,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   override func viewDidAppear(_ animated: Bool) {
-    if (!self.dataModel.loginedLocker){
-      Utils.Noti(contex: self, title: "Authentication", message:  "You must to login Locker befor using autofill service", completion: cancel)
-      AutofillHelpers.RemoveAllCredentialIdentities() // remove all credentials in store
-    }
-    
-    if (self.dataModel.faceIdEnabled){
+   if (self.dataModel.faceIdEnabled){
       Utils.BiometricAuthentication(
         view: self,
         onSuccess: quickBar ? quickBarAuthenSuccess : performLoginListScreen,
@@ -45,6 +40,8 @@ class CredentialProviderController: ASCredentialProviderViewController {
   }
   
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+    loginLocker()
+    
     if serviceIdentifiers.count > 0 {
       self.serviceIdentifier = serviceIdentifiers[0].identifier
       if serviceIdentifiers[0].type == .URL {
@@ -56,25 +53,32 @@ class CredentialProviderController: ASCredentialProviderViewController {
         self.serviceIdentifier = "https://" +  serviceIdentifier
       }
     }
+    
   }
   
   override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
+    loginLocker()
+    
     self.serviceIdentifier = credentialIdentity.serviceIdentifier.identifier
     self.quickBar = true
+  
     self.dataModel.fetchAutofillData(identifier: URL(string: serviceIdentifier)?.host ?? serviceIdentifier)
-    
     if let credential = self.dataModel.getAutofillDataById(id: credentialIdentity.recordIdentifier!)  {
       self.quickBarCredential = credential
     } else {
       AutofillHelpers.RemoveCredentialIdentities(credentialIdentity)
     }
+    loadView()
   }
-  
+
   override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-    // require for user authen tication
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
   }
   
+  
+  override func prepareInterfaceForExtensionConfiguration() {
+    // dont need 
+  }
 
   override func prepare(for segue: UIStoryboardSegue, sender: Any?)
   {
@@ -100,6 +104,13 @@ class CredentialProviderController: ASCredentialProviderViewController {
   private func completeRequest(user: String, password: String){
     let passwordCredential = ASPasswordCredential(user: user, password: password)
     self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+  }
+  
+  private func loginLocker(){
+    if (!self.dataModel.loginedLocker){
+      Utils.Noti(contex: self, title: "Authentication", message:  "You must to login Locker befor using autofill service", completion: cancel)
+      AutofillHelpers.RemoveAllCredentialIdentities() // remove all credentials in store
+    }
   }
   
   func cancel() {

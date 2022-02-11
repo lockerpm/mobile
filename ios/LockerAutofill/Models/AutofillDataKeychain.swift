@@ -14,6 +14,7 @@ class AutofillDataModel {
   private let KEYCHAIN_SERVICE: String = "W7S57TNBH5.com.cystack.lockerapp"
   private let KEYCHAIN_ACCESS_GROUP: String = "group.com.cystack.lockerapp"
   private let KEYCHAIN_PROPS: String = "autofill"
+  private var keychainData: String!
   
   // Data used by autofill service
   private(set) var faceIdEnabled: Bool = false
@@ -24,18 +25,17 @@ class AutofillDataModel {
   private(set) var credentials: [AutofillData] = []          // credential for this URI
   private(set) var otherCredentials: [AutofillData] = []
 
-
-  public func fetchAutofillData(identifier: String){
-    self.URI = identifier
+  init(){
     let keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
-    let keychainData = try! keychain.get(KEYCHAIN_PROPS) ?? ""
-    print(keychainData)
+    keychainData = try! keychain.get(KEYCHAIN_PROPS) ?? ""
     if (keychainData != "") {
-      // Keychain dont have data -> login app first
       self.loginedLocker = true;
-      // convert autofillData to usable autofill data
-      fetchAutofillData(text: keychainData)
     }
+  }
+
+  public func fetchAutofillData(identifier: String) {
+    self.URI = identifier
+    fetchAutofillData(text: keychainData)
   }
   
   public func getAutofillDataById(id: String?) -> AutofillData? {
