@@ -91,22 +91,22 @@ extension VerifyMasterPasswordViewController {
     let email = UILabel()
     
     emailBackground.translatesAutoresizingMaskIntoConstraints = false
-    emailBackground.backgroundColor = .lightGray
-    emailBackground.layer.cornerRadius = 16
+    emailBackground.backgroundColor = UIColor(named: "block")
+    emailBackground.layer.cornerRadius = 20
     
     firstCharacterPadding.translatesAutoresizingMaskIntoConstraints = false
     firstCharacterPadding.backgroundColor = .blue
-    firstCharacterPadding.layer.cornerRadius = 12
+    firstCharacterPadding.layer.cornerRadius = 14
 
     
     firstCharacter.translatesAutoresizingMaskIntoConstraints = false
-    firstCharacter.textColor = .white
-    firstCharacter.font = UIFont.boldSystemFont(ofSize: 22)
+    firstCharacter.textColor = UIColor(named: "white")
+    firstCharacter.font = UIFont.boldSystemFont(ofSize: 20)
     firstCharacter.text = "T"
  
     email.translatesAutoresizingMaskIntoConstraints = false
-    email.font = email.font.withSize(16)
-    email.tintColor = .gray
+    email.font = email.font.withSize(14)
+    email.tintColor = UIColor(named: "title")
     email.text = delegate.userEmail
     
  
@@ -126,7 +126,8 @@ extension VerifyMasterPasswordViewController {
       firstCharacterPadding.leadingAnchor.constraint(equalTo: emailBackground.leadingAnchor, constant: 4),
       firstCharacterPadding.bottomAnchor.constraint(equalTo: emailBackground.bottomAnchor, constant: -4),
       firstCharacterPadding.topAnchor.constraint(equalTo: emailBackground.topAnchor, constant: 4),
-      firstCharacterPadding.widthAnchor.constraint(equalTo: emailBackground.heightAnchor, constant: -4),
+      firstCharacterPadding.widthAnchor.constraint(equalToConstant: 28),
+      firstCharacterPadding.heightAnchor.constraint(equalToConstant: 28),
       
       email.leadingAnchor.constraint(equalTo: firstCharacterPadding.trailingAnchor, constant: 10),
       email.centerYAnchor.constraint(equalTo: emailView.centerYAnchor),

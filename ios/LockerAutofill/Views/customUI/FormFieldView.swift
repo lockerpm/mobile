@@ -10,16 +10,7 @@
 import Foundation
 import UIKit
 
-private struct Local {
-    static let height: CGFloat = 60
-    static let tintColorValid: UIColor = UIColor(
-        red: CGFloat(61) / 255.0,
-        green: CGFloat(150) / 255.0,
-        blue: CGFloat(45) / 255.0,
-        alpha: CGFloat(1.0))
-    static let backgroundColor: UIColor = .gray
-    static let foregroundColor: UIColor = .gray
-}
+
 
 class FormFieldView: UIView {
     var passwordField = false
@@ -42,7 +33,7 @@ class FormFieldView: UIView {
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: Local.height)
+        return CGSize(width: UIView.noIntrinsicMetric, height: 60)
     }
    
 }
@@ -54,25 +45,27 @@ extension FormFieldView {
     }
     
     func style() {
+      backgroundColor = UIColor(named: "background")
       translatesAutoresizingMaskIntoConstraints = false
    
       // underline
       underLineView.translatesAutoresizingMaskIntoConstraints = false
-      underLineView.backgroundColor = .black
+      underLineView.backgroundColor = UIColor(named: "title")
       
       // label
       label.translatesAutoresizingMaskIntoConstraints = false
-      label.textColor = .systemGray
+      label.textColor = UIColor(named: "text")
       label.font = label.font.withSize(16)
 
       textField.translatesAutoresizingMaskIntoConstraints = false
-      textField.tintColor = Local.tintColorValid
+      textField.tintColor = UIColor(named: "textBlack")
       textField.isHidden = true
       textField.borderStyle = UITextField.BorderStyle.none
+      textField.backgroundColor = UIColor(named: "background")
       
       // button
       eyeIcon.translatesAutoresizingMaskIntoConstraints = false
-      eyeIcon.imageView?.tintColor = Local.foregroundColor
+      eyeIcon.imageView?.tintColor = UIColor(named: "text")
       eyeIcon.isHidden = true
       
       let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_: )))
@@ -98,7 +91,7 @@ extension FormFieldView {
      
             underLineView.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
             underLineView.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
-            underLineView.bottomAnchor.constraint(equalTo: textField.bottomAnchor, constant: 8),
+            underLineView.bottomAnchor.constraint(equalTo: textField.bottomAnchor, constant: 10),
             underLineView.heightAnchor.constraint(equalToConstant: 0.5)
 
         ])
@@ -118,11 +111,7 @@ extension FormFieldView {
         UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.3,
                                                        delay: 0.1,
                                                        options: []) {
-            // style
-            self.backgroundColor = .white
-           
-            self.textField.tintColor = Local.tintColorValid
-            self.underLineView.backgroundColor = Local.tintColorValid
+            self.underLineView.backgroundColor = UIColor(named: "primary")
             // move
             let transpose = CGAffineTransform(translationX: 0, y: -28)
             let scale = CGAffineTransform(scaleX: 1, y: 1)
@@ -154,7 +143,6 @@ extension FormFieldView: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-       
         if textField.text == "" {
             undo()
         }
@@ -169,7 +157,6 @@ extension FormFieldView: UITextFieldDelegate {
         } else {
           eyeIcon.setImage(UIImage(named: "eye-slash"), for: .normal)
         }
-//      eyeIcon.image
     }
 }
 
@@ -205,7 +192,7 @@ extension FormFieldView {
         let size = UIViewPropertyAnimator(duration: 0.2, curve: .linear) {
             // style
             // visibility
-            self.underLineView.backgroundColor = .black
+            self.underLineView.backgroundColor = UIColor(named: "title")
             self.label.isHidden = false
             self.textField.isHidden = true
             self.textField.text = ""
@@ -217,11 +204,11 @@ extension FormFieldView {
     }
     
     func unSelect() {
-        self.underLineView.backgroundColor = .black
+        self.underLineView.backgroundColor = UIColor(named: "disabled")
     }
     
     func select() {
-        self.underLineView.backgroundColor = Local.tintColorValid
+        self.underLineView.backgroundColor = UIColor(named: "primary")
     }
 }
 
