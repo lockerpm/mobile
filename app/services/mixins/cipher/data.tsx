@@ -217,7 +217,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     syncQueue.clear()
     return syncQueue.add(async () => {
       try {
-        const pageSize = 1
+        const pageSize = 50
         let page = 1
         let cipherIds: string[] = []
   
@@ -519,7 +519,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     try {
       const res = await folderService.getAllDecrypted() || []
       for (let f of res) {
-        let ciphers = await getCiphers({
+        const ciphers = await getEncryptedCiphers({
           deleted: false,
           searchText: '',
           filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name))]
@@ -539,7 +539,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     try {
       const res = await collectionService.getAllDecrypted() || []
       for (let f of res) {
-        let ciphers = await getCiphers({
+        const ciphers = await getEncryptedCiphers({
           deleted: false,
           searchText: '',
           filters: [c => c.collectionIds.includes(f.id)]
@@ -548,7 +548,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       }
 
       // Add unassigned
-      let unassignedTeamCiphers = await getCiphers({
+      let unassignedTeamCiphers = await getEncryptedCiphers({
         deleted: false,
         searchText: '',
         filters: [(c : CipherView) => !c.collectionIds.length && !!getTeam(user.teams, c.organizationId).name]
@@ -574,6 +574,22 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       Logger.error(e)
+    }
+  }
+
+  // Get encrypted ciphers
+  const getEncryptedCiphers = async (params: GetCiphersParams) => {
+    try {
+      const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
+      const filters = [deletedFilter, ...params.filters]
+      if (!params.includeExtensions) {
+        filters.unshift((c : CipherView) => 1 <= c.type && c.type <= 4)
+      }
+      return await searchService.searchEncryptedCiphers(filters, null) || []
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      Logger.error(e)
+      return []
     }
   }
 
