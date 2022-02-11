@@ -20,8 +20,6 @@
 		7C306DB327B65CDC00F64944 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C306DB227B65CDC00F64944 /* MainInterface.storyboard */; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
-		7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */; };
-		7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */; };
 		7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A609C27A38D5D00477348 /* FormFieldView.swift */; };
 		7CAB332C279972020000B15E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332B279972020000B15E /* Utils.swift */; };
 		7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332D2799777B0000B15E /* AutofillData.swift */; };
@@ -117,8 +115,6 @@
 		7C633CDB2761EA0D00140CAA /* Toast */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Toast; path = "Pods/Toast-Swift/Toast"; sourceTree = "<group>"; };
 		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
-		7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPasaswordViewController.swift; sourceTree = "<group>"; };
-		7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
 		7C8A609C27A38D5D00477348 /* FormFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldView.swift; sourceTree = "<group>"; };
 		7CAB332B279972020000B15E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		7CAB332D2799777B0000B15E /* AutofillData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillData.swift; sourceTree = "<group>"; };
@@ -286,14 +282,6 @@
 			path = customUI;
 			sourceTree = "<group>";
 		};
-		7C8A609427A27C2600477348 /* Service */ = {
-			isa = PBXGroup;
-			children = (
-				7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */,
-			);
-			path = Service;
-			sourceTree = "<group>";
-		};
 		7CAB3325279969B60000B15E /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -317,8 +305,6 @@
 				7C80ADBD2759F29200AD45BF /* customUI */,
 				7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */,
 				7CAB3335279AA04E0000B15E /* LoginListViewController.swift */,
-				7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */,
-				7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -328,6 +314,7 @@
 			children = (
 				7CAB332B279972020000B15E /* Utils.swift */,
 				7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */,
+				7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -376,7 +363,6 @@
 			children = (
 				CA53479827181AB400BA4901 /* LockerAutofill.entitlements */,
 				7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */,
-				7C8A609427A27C2600477348 /* Service */,
 				7CAB332A279971E20000B15E /* Utils */,
 				7CAB332727996A480000B15E /* Views */,
 				7CAB332627996A310000B15E /* Controller */,
@@ -912,11 +898,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CAB3334279A6AD70000B15E /* VerifyMasterPasswordViewController.swift in Sources */,
-				7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */,
 				7CAB332C279972020000B15E /* Utils.swift in Sources */,
 				7C306D7D27B4B5A600F64944 /* AutofillHelpers.swift in Sources */,
 				7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */,
-				7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */,
 				7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */,
 				7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */,
 				7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */,

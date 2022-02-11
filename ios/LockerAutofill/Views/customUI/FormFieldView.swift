@@ -65,7 +65,7 @@ extension FormFieldView {
       
       // button
       eyeIcon.translatesAutoresizingMaskIntoConstraints = false
-      eyeIcon.imageView?.tintColor = UIColor(named: "text")
+      eyeIcon.tintColor = UIColor(named: "text")
       eyeIcon.isHidden = true
       
       let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_: )))
