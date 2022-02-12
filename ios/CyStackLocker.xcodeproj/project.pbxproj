@@ -19,7 +19,8 @@
 		7C306DB127B6467900F64944 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C306DB027B6467900F64944 /* Colors.xcassets */; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
-		7C8496D327B7693700CFEA8B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496D227B7693700CFEA8B /* MainInterface.storyboard */; };
+		7C8496E027B7759200CFEA8B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496E227B7759200CFEA8B /* MainInterface.storyboard */; };
+		7C8496E627B7765C00CFEA8B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496E527B7765C00CFEA8B /* Localizable.strings */; };
 		7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A609C27A38D5D00477348 /* FormFieldView.swift */; };
 		7CAB332C279972020000B15E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332B279972020000B15E /* Utils.swift */; };
 		7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332D2799777B0000B15E /* AutofillData.swift */; };
@@ -114,7 +115,9 @@
 		7C633CDB2761EA0D00140CAA /* Toast */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Toast; path = "Pods/Toast-Swift/Toast"; sourceTree = "<group>"; };
 		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
-		7C8496D227B7693700CFEA8B /* MainInterface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
+		7C8496E127B7759200CFEA8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		7C8496E427B7759900CFEA8B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
+		7C8496E527B7765C00CFEA8B /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		7C8A609C27A38D5D00477348 /* FormFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldView.swift; sourceTree = "<group>"; };
 		7CAB332B279972020000B15E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		7CAB332D2799777B0000B15E /* AutofillData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillData.swift; sourceTree = "<group>"; };
@@ -315,6 +318,7 @@
 				7CAB332B279972020000B15E /* Utils.swift */,
 				7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */,
 				7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */,
+				7C8496E527B7765C00CFEA8B /* Localizable.strings */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -363,14 +367,14 @@
 			children = (
 				CA53479827181AB400BA4901 /* LockerAutofill.entitlements */,
 				7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */,
+				7CAB3325279969B60000B15E /* Models */,
 				7CAB332A279971E20000B15E /* Utils */,
 				7CAB332727996A480000B15E /* Views */,
 				7CAB332627996A310000B15E /* Controller */,
-				7CAB3325279969B60000B15E /* Models */,
 				7C70B7BD2758CD2B005D0D8E /* assets.xcassets */,
 				7C306DB027B6467900F64944 /* Colors.xcassets */,
 				CA53479727181AB400BA4901 /* Info.plist */,
-				7C8496D227B7693700CFEA8B /* MainInterface.storyboard */,
+				7C8496E227B7759200CFEA8B /* MainInterface.storyboard */,
 			);
 			path = LockerAutofill;
 			sourceTree = "<group>";
@@ -520,6 +524,7 @@
 			knownRegions = (
 				en,
 				Base,
+				vi,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
@@ -576,7 +581,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */,
-				7C8496D327B7693700CFEA8B /* MainInterface.storyboard in Resources */,
+				7C8496E627B7765C00CFEA8B /* Localizable.strings in Resources */,
+				7C8496E027B7759200CFEA8B /* MainInterface.storyboard in Resources */,
 				7C306DB127B6467900F64944 /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -929,6 +935,18 @@
 			targetProxy = CA53479927181AB400BA4901 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		7C8496E227B7759200CFEA8B /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7C8496E127B7759200CFEA8B /* Base */,
+				7C8496E427B7759900CFEA8B /* vi */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
