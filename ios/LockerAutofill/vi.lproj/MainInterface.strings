@@ -1,0 +1,36 @@
+
+/* Class = "UIBarButtonItem"; title = "Cancel"; ObjectID = "1mO-wz-8ct"; */
+"1mO-wz-8ct.title" = "Huỷ";
+
+/* Class = "UILabel"; text = "Verify Master Password"; ObjectID = "BHt-Az-rZe"; */
+"BHt-Az-rZe.text" = "Xác thực mật kẩu chính";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "F76-pU-sgw"; */
+"F76-pU-sgw.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "IPd-gT-lCD"; */
+"IPd-gT-lCD.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "Unlock"; ObjectID = "Iqt-pY-FVh"; */
+"Iqt-pY-FVh.configuration.title" = "Mở khoá";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Iqt-pY-FVh"; */
+"Iqt-pY-FVh.normalTitle" = "Mở khoá";
+
+/* Class = "UILabel"; text = "Verify your Master Password to unlock"; ObjectID = "RW4-xA-kRE"; */
+"RW4-xA-kRE.text" = "Nhập mật khẩu chính để mở khoá";
+
+/* Class = "UIButton"; configuration.title = " Unlock with Face ID/Touch ID"; ObjectID = "VAo-LQ-WML"; */
+"VAo-LQ-WML.configuration.title" = " Mở khoá bằng Face ID/Touch ID";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "VAo-LQ-WML"; */
+"VAo-LQ-WML.normalTitle" = " Mở khoá bằng Face ID/Touch ID";
+
+/* Class = "UINavigationItem"; title = "Login List"; ObjectID = "djK-6Z-utw"; */
+"djK-6Z-utw.title" = "Danh sách mật khẩu";
+
+/* Class = "UINavigationItem"; title = "Locker Password Manager"; ObjectID = "wAz-cy-c7C"; */
+"wAz-cy-c7C.title" = "Locker";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "zdC-rG-Xmh"; */
+"zdC-rG-Xmh.text" = "Label";

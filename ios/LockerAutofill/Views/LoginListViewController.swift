@@ -148,15 +148,15 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
       }
     }
     
-    let actionSheet = UIAlertController(title: nil, message: selectedCredentials.name, preferredStyle: .actionSheet)
-    actionSheet.addAction(UIAlertAction(title: "Copy Username", style: .default, handler: {action in
+    let actionSheet = UIAlertController(title: Utils.Translate("Name: ") + selectedCredentials.name, message: nil , preferredStyle: .actionSheet)
+    actionSheet.addAction(UIAlertAction(title: Utils.Translate("Copy Username"), style: .default, handler: {action in
        UIPasteboard.general.string = selectedCredentials.username
     }))
-    actionSheet.addAction(UIAlertAction(title: "Copy Password", style: .default, handler: {action in
+    actionSheet.addAction(UIAlertAction(title: Utils.Translate("Copy Password"), style: .default, handler: {action in
       UIPasteboard.general.string = selectedCredentials.password
     }))
     
-    actionSheet.addAction(UIAlertAction(title: "Dismiss", style: .destructive, handler: nil))
+    actionSheet.addAction(UIAlertAction(title: Utils.Translate("Dismiss"), style: .destructive, handler: nil))
   
     present(actionSheet, animated: true, completion: nil)
   }
