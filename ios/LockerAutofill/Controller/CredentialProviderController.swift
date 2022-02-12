@@ -18,13 +18,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
   
   @IBOutlet weak var logo: UIImageView!
   
-  override func viewDidLoad() {
-    if (Utils.LightTheme(self)) {
-       logo.isHighlighted = false
-    } else {
-      logo.isHighlighted = true
-    }
-  }
   
   override func viewDidAppear(_ animated: Bool) {
    if (self.dataModel.faceIdEnabled){
@@ -120,6 +113,9 @@ class CredentialProviderController: ASCredentialProviderViewController {
 
 
 extension CredentialProviderController: VerifyMasterPasswordDelegate {
+  var userAvatar: String! {
+    return self.dataModel.userAvatar
+  }
   var userEmail: String! {
     return self.dataModel.email
   }

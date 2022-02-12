@@ -18,6 +18,7 @@ export type AutofillDataType = {
   authen: {
     email: string
     hashPass: string
+    avatar: string
   }
   faceIdEnabled: boolean
 }
