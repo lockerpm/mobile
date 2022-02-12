@@ -274,7 +274,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     const sharedData: AutofillDataType = {
       passwords: passwordData,
       deleted: [],
-      authen: { email: user.email, hashPass: hashPasswordAutofill },
+      authen: { email: user.email, hashPass: hashPasswordAutofill, avatar: user.avatar },
       faceIdEnabled: user.isBiometricUnlock
     }
     await saveShared('autofill', JSON.stringify(sharedData))
