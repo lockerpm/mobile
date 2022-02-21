@@ -70,21 +70,21 @@ public class LockerAutofillClient extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("autofill", 1); //start app by autofill service
         intent.putExtra("domain", getIntent().getStringExtra(DOMAIN));
-        lockerLauncher.launch(intent);
+        //lockerLauncher.launch(intent);
     }
 
     private void lockerLauncherResult(final ActivityResult result) {
-        final SharedPreferences prefs = getSharedPreferences(Prefs.NAME, MODE_PRIVATE);
-        String passFillValue = Prefs.getPassword(prefs);
-        String usernameFillValue = Prefs.getUserName(prefs);
+        // final SharedPreferences prefs = getSharedPreferences(Prefs.NAME, MODE_PRIVATE);
+        // String passFillValue = Prefs.getPassword(prefs);
+        // String usernameFillValue = Prefs.getUserName(prefs);
 
-        AutofillData data = new AutofillData(usernameFillValue, passFillValue, usernameFillValue, "...", System.currentTimeMillis());
+        // AutofillData data = new AutofillData(usernameFillValue, passFillValue, usernameFillValue, "...", System.currentTimeMillis());
 
-        if (passFillValue == null){
-            setResult(RESULT_CANCELED);
-            finish();
-        }
-        onFillPassword(data);
+        // if (passFillValue == null){
+        //     setResult(RESULT_CANCELED);
+        //     finish();
+        // }
+        // onFillPassword(data);
     }
 
     private void onFillPassword(AutofillData data) {

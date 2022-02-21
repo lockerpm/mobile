@@ -26,6 +26,8 @@ import com.cystack.locker.R;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.facebook.react.bridge.ReactApplicationContext;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
     private static final String TAG = "Locker_Service";
@@ -44,6 +46,7 @@ public class LockerAutoFillService extends AutofillService {
     public void onFillRequest(@NonNull FillRequest request, @NonNull CancellationSignal cancellationSignal, @NonNull FillCallback callback) {
         Log.d(TAG, "onFillRequest()");
 
+       
         // Find autofillable fields
         AssistStructure structure = Utils.getLatestAssistStructure(request);
 
@@ -54,6 +57,9 @@ public class LockerAutoFillService extends AutofillService {
 
         Log.d(TAG, "Domain: " + domain);
         Log.d(TAG, "autofillable fields:" + fields);
+
+        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
+        AutofillDataKeychain autoFillHelper = new AutofillDataKeychain(reactContext, domain);
 
         if (fields.isEmpty() || Utils.BlacklistedUris.contains(domain)) {
             Log.d(TAG, "No autofill hints found");

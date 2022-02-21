@@ -46,6 +46,8 @@ export async function save(username: string, password: string, server?: string) 
  * @param password The password
  */
 export async function saveShared(username: string, password: string) {
+  console.log("222222"+ password);
+  
   try {
     await ReactNativeKeychain.setGenericPassword(username, password, {
       service: SHARED_KEYCHAIN_SERVICE,
