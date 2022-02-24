@@ -27,18 +27,16 @@ public class AutofillDataKeychain {
     private final CipherStorage cipherStorage;
 
     // Data used by autofill service
-    private boolean faceIdEnabled;
-    private boolean loginedLocker;
-    private String email;
-    private String hashMassterPass;
-    private String userAvatar;
-    private String URI;
-    private ArrayList<AutofillData> credentials = new ArrayList<>();
-    private ArrayList<AutofillData> otherCredentials = new ArrayList<>();
+    public  boolean faceIdEnabled;
+    public  boolean loginedLocker;
+    public String email;
+    public String hashMassterPass;
+    public String userAvatar;
+    public ArrayList<AutofillData> credentials = new ArrayList<>();
+    public ArrayList<AutofillData> otherCredentials = new ArrayList<>();
      
 
     public AutofillDataKeychain(ReactApplicationContext reactContext, String domain) {
-        Log.d("1111111111111111", "email");
         cipherStorage = new CipherStorageKeystoreAesCbc();
         prefsStorage = new PrefsStorage(reactContext);
         getAutoFillEntriesForDomain(domain);
@@ -76,9 +74,9 @@ public class AutofillDataKeychain {
             JSONObject authen = jsonObject.getJSONObject("authen");
             email = authen.getString("email");
             faceIdEnabled = jsonObject.getBoolean("faceIdEnabled");
-
-            Log.d("1111111111111111", email);
+            loginedLocker = true;
         } catch (Exception ex) {
+            loginedLocker = false;
             Log.e(TAG, ex.getMessage());
 
         }
