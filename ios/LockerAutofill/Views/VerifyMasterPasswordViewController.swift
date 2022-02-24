@@ -12,6 +12,7 @@ import LocalAuthentication
 
 
 protocol VerifyMasterPasswordDelegate {
+  var userAvatar: String! {get}
   var userEmail: String! {get}
   var hassMasterPass: String! {get}
   var authenQuickBar: Bool {get}
@@ -86,7 +87,7 @@ extension VerifyMasterPasswordViewController {
   private func makeEmailView(){
     
     let firstCharacter = UILabel()
-    let firstCharacterPadding = UIView()
+    let avatar = UIImageView()
     let emailBackground = UIView()
     let email = UILabel()
     
@@ -94,15 +95,17 @@ extension VerifyMasterPasswordViewController {
     emailBackground.backgroundColor = UIColor(named: "block")
     emailBackground.layer.cornerRadius = 20
     
-    firstCharacterPadding.translatesAutoresizingMaskIntoConstraints = false
-    firstCharacterPadding.backgroundColor = .blue
-    firstCharacterPadding.layer.cornerRadius = 14
+    avatar.translatesAutoresizingMaskIntoConstraints = false
+    avatar.downloaded(from: delegate.userAvatar)
+    avatar.layer.masksToBounds = true
+    avatar.layer.cornerRadius = 14
 
     
     firstCharacter.translatesAutoresizingMaskIntoConstraints = false
     firstCharacter.textColor = UIColor(named: "white")
     firstCharacter.font = UIFont.boldSystemFont(ofSize: 20)
-    firstCharacter.text = "T"
+    let index = delegate.userEmail.index(delegate.userEmail.startIndex, offsetBy: 0)
+    firstCharacter.text = String(delegate.userEmail[index]).uppercased()
  
     email.translatesAutoresizingMaskIntoConstraints = false
     email.font = email.font.withSize(14)
@@ -111,7 +114,7 @@ extension VerifyMasterPasswordViewController {
     
  
     emailView.addSubview(emailBackground)
-    emailView.addSubview(firstCharacterPadding)
+    emailView.addSubview(avatar)
     emailView.addSubview(firstCharacter)
     emailView.addSubview(email)
     
@@ -123,17 +126,38 @@ extension VerifyMasterPasswordViewController {
       
       emailBackground.trailingAnchor.constraint(equalTo: email.trailingAnchor, constant: 12),
       
-      firstCharacterPadding.leadingAnchor.constraint(equalTo: emailBackground.leadingAnchor, constant: 4),
-      firstCharacterPadding.bottomAnchor.constraint(equalTo: emailBackground.bottomAnchor, constant: -4),
-      firstCharacterPadding.topAnchor.constraint(equalTo: emailBackground.topAnchor, constant: 4),
-      firstCharacterPadding.widthAnchor.constraint(equalToConstant: 28),
-      firstCharacterPadding.heightAnchor.constraint(equalToConstant: 28),
+      avatar.leadingAnchor.constraint(equalTo: emailBackground.leadingAnchor, constant: 4),
+      avatar.bottomAnchor.constraint(equalTo: emailBackground.bottomAnchor, constant: -4),
+      avatar.topAnchor.constraint(equalTo: emailBackground.topAnchor, constant: 4),
+      avatar.widthAnchor.constraint(equalToConstant: 28),
+      avatar.heightAnchor.constraint(equalToConstant: 28),
       
-      email.leadingAnchor.constraint(equalTo: firstCharacterPadding.trailingAnchor, constant: 10),
+      email.leadingAnchor.constraint(equalTo: avatar.trailingAnchor, constant: 10),
       email.centerYAnchor.constraint(equalTo: emailView.centerYAnchor),
    
-      firstCharacter.centerXAnchor.constraint(equalTo: firstCharacterPadding.centerXAnchor),
-      firstCharacter.centerYAnchor.constraint(equalTo: firstCharacterPadding.centerYAnchor)
+      firstCharacter.centerXAnchor.constraint(equalTo: avatar.centerXAnchor),
+      firstCharacter.centerYAnchor.constraint(equalTo: avatar.centerYAnchor)
     ])
   }
+}
+
+extension UIImageView {
+    func downloaded(from url: URL, contentMode mode: ContentMode = .scaleAspectFit) {
+        contentMode = mode
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard
+                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                let data = data, error == nil,
+                let image = UIImage(data: data)
+                else { return }
+            DispatchQueue.main.async() { [weak self] in
+                self?.image = image
+            }
+        }.resume()
+    }
+    func downloaded(from link: String, contentMode mode: ContentMode = .scaleAspectFit) {
+        guard let url = URL(string: link) else { return }
+        downloaded(from: url, contentMode: mode)
+    }
 }
