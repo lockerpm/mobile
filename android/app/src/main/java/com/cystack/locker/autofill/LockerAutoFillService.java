@@ -51,21 +51,21 @@ public class LockerAutoFillService extends AutofillService {
         AssistStructure structure = Utils.getLatestAssistStructure(request);
 
         Parser.Result result =  new Parser(structure).parse();
-
-        ArrayMap<String, AutofillId> fields =result.getFillable();
+        ArrayMap<String, AutofillId> fields = result.getFillable();
         String domain = result.getDomain();
 
         Log.d(TAG, "Domain: " + domain);
         Log.d(TAG, "autofillable fields:" + fields);
-
-        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
-        AutofillDataKeychain autoFillHelper = new AutofillDataKeychain(reactContext, domain);
 
         if (fields.isEmpty() || Utils.BlacklistedUris.contains(domain)) {
             Log.d(TAG, "No autofill hints found");
             callback.onSuccess(null);
             return;
         }
+
+        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
+        AutofillDataKeychain autoFillHelper = new AutofillDataKeychain(reactContext, domain);
+
 
         IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, fields, domain);
         // Create response...
