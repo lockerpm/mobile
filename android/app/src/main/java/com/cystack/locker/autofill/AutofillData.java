@@ -1,6 +1,8 @@
 package com.cystack.locker.autofill;
 
-public class AutofillData {
+import java.io.Serializable;
+
+public class AutofillData implements Serializable  {
     private String userName;
     private String password;
     private String name;

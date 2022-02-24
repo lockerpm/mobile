@@ -14,6 +14,9 @@
     android:theme="@style/AppTheme"
   >
     <activity
+        android:name=".autofill.LoginList"
+        android:exported="false" />
+    <activity
         android:name=".LockerAutofillClient"
         android:exported="true" />
 
