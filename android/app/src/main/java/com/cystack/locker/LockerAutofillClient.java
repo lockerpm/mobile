@@ -9,6 +9,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.service.autofill.Dataset;
 import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillValue;
@@ -26,6 +27,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cystack.locker.autofill.Prefs;
 import com.cystack.locker.autofill.AutofillData;
 import com.cystack.locker.autofill.LockerAutoFillService;
+import com.cystack.locker.autofill.LoginList;
+import com.cystack.locker.autofill.AutofillDataKeychain;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.facebook.react.bridge.ReactApplicationContext;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutofillClient extends AppCompatActivity {
@@ -58,33 +66,36 @@ public class LockerAutofillClient extends AppCompatActivity {
     }
 
 
-    private final ActivityResultLauncher<Intent> lockerLauncher =
+    private final ActivityResultLauncher<Intent> loginList =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::lockerLauncherResult);
+
+    private ArrayList<AutofillData> datas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client);
+        List<AutofillData> loginList = new ArrayList<>();
 
+        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
+        AutofillDataKeychain autoFillHelper = new AutofillDataKeychain(reactContext, "m.facebook.com");
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("autofill", 1); //start app by autofill service
-        intent.putExtra("domain", getIntent().getStringExtra(DOMAIN));
-        //lockerLauncher.launch(intent);
+       
+        datas =  autoFillHelper.credentials;
+        
     }
 
     private void lockerLauncherResult(final ActivityResult result) {
-        // final SharedPreferences prefs = getSharedPreferences(Prefs.NAME, MODE_PRIVATE);
-        // String passFillValue = Prefs.getPassword(prefs);
-        // String usernameFillValue = Prefs.getUserName(prefs);
-
-        // AutofillData data = new AutofillData(usernameFillValue, passFillValue, usernameFillValue, "...", System.currentTimeMillis());
-
-        // if (passFillValue == null){
-        //     setResult(RESULT_CANCELED);
-        //     finish();
-        // }
-        // onFillPassword(data);
+        if (result.getResultCode() == 1) {
+            Intent intent = result.getData();
+            if (intent != null) {
+                AutofillData data = (AutofillData) intent.getSerializableExtra("autofill_data");
+                onFillPassword(data);
+            }
+        }
+        else {
+            cancel();
+        }
     }
 
     private void onFillPassword(AutofillData data) {
@@ -106,6 +117,26 @@ public class LockerAutofillClient extends AppCompatActivity {
 
         setResult(RESULT_OK, replyIntent);
         finish();
+    }
+    public void unlock(View view) {
+        preformLoginList();
+    }
+
+    public void biometricAuthen(View view) {
+    }
+
+    public void cancel(View view) {
+        cancel();
+    }
+
+    private void cancel(){
+        setResult(RESULT_CANCELED);
+        finish();
+    }
+    private void preformLoginList() {
+        Intent i = new Intent(this, LoginList.class);
+        i.putExtra("data", datas);
+        loginList.launch(i);
     }
 
 }

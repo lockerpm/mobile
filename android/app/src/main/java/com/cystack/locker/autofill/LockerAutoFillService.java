@@ -26,20 +26,15 @@ import com.cystack.locker.R;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.facebook.react.bridge.ReactApplicationContext;
+
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
     private static final String TAG = "Locker_Service";
-    private int mNumberDatasets;
-    private ArrayList<AutofillData> datas = new ArrayList<>();
     @Override
     public void onConnected() {
         super.onConnected();
 
-        // datas.add(new AutofillData("username", "pass", "locker", "facebook", System.currentTimeMillis()));
-        // mNumberDatasets = datas.size() + 1;
-        mNumberDatasets = 1;
     }
 
     @Override
@@ -63,17 +58,16 @@ public class LockerAutoFillService extends AutofillService {
             return;
         }
 
-        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
-        AutofillDataKeychain autoFillHelper = new AutofillDataKeychain(reactContext, domain);
+       
 
 
         IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, fields, domain);
         // Create response...
         FillResponse.Builder response = new FillResponse.Builder();
 
-        for (int i = 0 ; i < mNumberDatasets -1; i++){
-            response.addDataset(buildDataSetWithAuthen(fields, datas.get(i), authentication));
-        }
+        // for (int i = 0 ; i < mNumberDatasets -1; i++){
+        //     response.addDataset(buildDataSetWithAuthen(fields, datas.get(i), authentication));
+        // }
         response.addDataset(buildDataSetLocker(fields, authentication));
 
         // ... and return it
