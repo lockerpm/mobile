@@ -1,3 +1,11 @@
+/* 
+  Localizable.strings
+  CyStackLocker
+
+  Created by Nguyen Thinh on 12/02/2022.
+  
+*/
+
 // utils
 "Please authorize with Touch Id" = "Xác thực bằng vân tay";
 
@@ -10,14 +18,6 @@
 // verify master password
 "Please enable Faceid/TouchId in Locker to use this feature." = "Kích hoạt Face Id/Touch Id trong ứng dụng Locker để sử dụng tính năng này";
 
-"Passwords for" = "Mật khẩu cho";
-
-"All passwords" = "Tất cả mật khẩu";
-
-// edit password
-"password copied" = "sao chép mật khẩu";
-
-"username copied" = "sao chép tên đăng nhập";
 
 // controller
 "Authentication" = "Xác thực người dùng dịch vụ";
@@ -25,3 +25,17 @@
 "You must to login Locker befor using autofill service" = "Đăng nhập vào Locker trước khi sử dụng dịch vụ tự động điền";
 
 "Detail" = "Chi tiết";
+
+// login list
+
+"Passwords for" = "Mật khẩu cho";
+
+"Other passwords" = "Khác ";
+
+"Copy Password" = "Sao chép mật khẩu";
+
+"Copy Username" = "Sao chép tên đăng nhập";
+
+"Name: " = "Tên: ";
+
+"Dismiss" = "Huỷ";

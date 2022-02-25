@@ -6,11 +6,11 @@
 //
 
 import Foundation
-import AuthenticationServices
-import Toast
 import LocalAuthentication
+import UIKit
 
 class Utils {
+
   static private let pbkdf2: HashCore = HashCore()
   
   static public func Translate(_ key: String) -> String {
@@ -28,88 +28,7 @@ class Utils {
     return pbkdf2.makeKeyHash(masterPassword: key, email: text)
   }
   
-  static public func CredentialIdentityStoreEnabled() async -> Bool {
-    let state = await ASCredentialIdentityStore.shared.state()
-    return state.isEnabled
-  }
   
-  static public func AddCredentialsQuickTypeBar(identifier: String, type: Int = 0, user: String, recordIdentifier: String){
-    Task.init {
-      let state =  await CredentialIdentityStoreEnabled()
-      if (state) {
-        let credential = ASPasswordCredentialIdentity(
-          serviceIdentifier: ASCredentialServiceIdentifier(
-            identifier: identifier,
-            type: (type == 0) ? .domain : .URL),
-            user: user,
-            recordIdentifier: recordIdentifier
-        )
-        credential.rank = Utils.CurrentTimeInMilliSeconds()
-
-        ASCredentialIdentityStore.shared.saveCredentialIdentities([credential]) { bool, error in
-            if let error = error {
-                print(error)
-            } else {
-                print("Saved Credential!")
-            }
-        }
-      }
-    }
-  }
-  
-  static public func RemoveCredentialIdentities(_ credentialIdentities: ASPasswordCredentialIdentity){
-    Task.init {
-      let state =  await CredentialIdentityStoreEnabled()
-      if (state) {
-        ASCredentialIdentityStore.shared.removeCredentialIdentities([credentialIdentities]) { bool, error in
-            if let error = error {
-                print(error)
-            } else {
-                print("Remove Credential!")
-            }
-        }
-      }
-    }
-  }
-  
-  static public func ReplaceCredentialIdentities(identifier: String, type: Int = 0, user: String, recordIdentifier: String) {
-    Task.init {
-      let state =  await CredentialIdentityStoreEnabled()
-      if (state) {
-        let credential = ASPasswordCredentialIdentity(
-          serviceIdentifier: ASCredentialServiceIdentifier(
-            identifier: identifier,
-            type: (type == 0) ? .domain : .URL),
-            user: user,
-            recordIdentifier: recordIdentifier
-        )
-        credential.rank = Utils.CurrentTimeInMilliSeconds()
-
-        ASCredentialIdentityStore.shared.saveCredentialIdentities([credential]) { bool, error in
-            if let error = error {
-                print(error)
-            } else {
-                print("Replace Credential!")
-            }
-        }
-      }
-    }
-  }
-  
-  static public func RemoveAllCredentialIdentities() {
-    Task.init {
-      let state =  await CredentialIdentityStoreEnabled()
-      if (state) {
-        ASCredentialIdentityStore.shared.removeAllCredentialIdentities({ bool, error in
-            if let error = error {
-                print(error)
-            } else {
-                print("Remove Credential!")
-            }
-        })
-      }
-    }
-  }
   
   static public func BiometricAuthentication(view: UIViewController, onSuccess: @escaping () -> Void, onFailed: @escaping () -> Void) {
     let context = LAContext()
@@ -137,14 +56,7 @@ class Utils {
      
     }
   }
-  
-  static public func GetCipherUri(for serviceIdentifiers: [ASCredentialServiceIdentifier]) -> String {
-    if serviceIdentifiers.count > 0 {
-      return serviceIdentifiers[0].identifier
-    }
-    return ""
-  }
-  
+
   
   static public func ToggleHidePass(text: UITextField, eyeIcon: UIButton, initial: Bool = false) -> Void{
     
@@ -154,12 +66,12 @@ class Utils {
       text.isSecureTextEntry = !text.isSecureTextEntry
     }
   
-    let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
-    if text.isSecureTextEntry {
-      eyeIcon.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)
-    } else {
-      eyeIcon.setImage(UIImage(systemName: "eye.slash", withConfiguration: mediumConfig), for: .normal)
-    }
+//    let mediumConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .light, scale: .medium)
+//    if text.isSecureTextEntry {
+//      eyeIcon.setImage(UIImage(systemName: "eye", withConfiguration: mediumConfig), for: .normal)
+//    } else {
+//      eyeIcon.setImage(UIImage(systemName: "eye.slash", withConfiguration: mediumConfig), for: .normal)
+//    }
   }
   
   static public func Noti(contex: UIViewController ,title: String, message: String, completion: (() -> Void)? = nil) -> Void {
