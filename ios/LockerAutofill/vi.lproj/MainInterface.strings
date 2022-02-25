@@ -1,39 +1,12 @@
 
-/* Class = "UIButton"; configuration.title = "Save"; ObjectID = "1RI-a9-cNX"; */
-"1RI-a9-cNX.configuration.title" = "Lưu";
-
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "1RI-a9-cNX"; */
-"1RI-a9-cNX.normalTitle" = "Button";
-
-/* Class = "UILabel"; text = "Email or Username:"; ObjectID = "2TU-uF-36I"; */
-"2TU-uF-36I.text" = "Email/Tên đăng nhập:";
-
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "2Tu-q5-Aqh"; */
-"2Tu-q5-Aqh.normalTitle" = "Button";
-
-/* Class = "UISearchBar"; placeholder = "Search"; ObjectID = "2aL-Ft-xPm"; */
-"2aL-Ft-xPm.placeholder" = "Tìm kiến";
-
-/* Class = "UILabel"; text = "Website"; ObjectID = "3e0-5H-fCC"; */
-"3e0-5H-fCC.text" = "Website";
-
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "3fB-gl-Qzd"; */
-"3fB-gl-Qzd.normalTitle" = "Button";
-
-/* Class = "UILabel"; text = "Name:"; ObjectID = "4sk-dY-KxA"; */
-"4sk-dY-KxA.text" = "Tên:";
+/* Class = "UIBarButtonItem"; title = "Cancel"; ObjectID = "1mO-wz-8ct"; */
+"1mO-wz-8ct.title" = "Huỷ";
 
 /* Class = "UILabel"; text = "Verify Master Password"; ObjectID = "BHt-Az-rZe"; */
-"BHt-Az-rZe.text" = "Xác thực mật khẩu chính";
-
-/* Class = "UITextField"; placeholder = "name"; ObjectID = "Bsp-2q-gg1"; */
-"Bsp-2q-gg1.placeholder" = "tên khoá";
+"BHt-Az-rZe.text" = "Xác thực mật kẩu chính";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "F76-pU-sgw"; */
 "F76-pU-sgw.text" = "Label";
-
-/* Class = "UILabel"; text = "Name:"; ObjectID = "Ff5-Zg-48E"; */
-"Ff5-Zg-48E.text" = "Tên:";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "IPd-gT-lCD"; */
 "IPd-gT-lCD.normalTitle" = "Button";
@@ -42,76 +15,22 @@
 "Iqt-pY-FVh.configuration.title" = "Mở khoá";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Iqt-pY-FVh"; */
-"Iqt-pY-FVh.normalTitle" = "Button";
+"Iqt-pY-FVh.normalTitle" = "Mở khoá";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "KNm-CT-R4A"; */
-"KNm-CT-R4A.normalTitle" = "Button";
-
-/* Class = "UITextField"; placeholder = "email or username"; ObjectID = "KWk-8O-Iw4"; */
-"KWk-8O-Iw4.placeholder" = "email hoặc tên đăng nhập";
-
-/* Class = "UILabel"; text = "Password:"; ObjectID = "Mbw-qo-zoa"; */
-"Mbw-qo-zoa.text" = "Mật khẩu:";
-
-/* Class = "UILabel"; text = "Website URL:"; ObjectID = "QQq-8c-0Ye"; */
-"QQq-8c-0Ye.text" = "Website URL:";
-
-/* Class = "UILabel"; text = "Please verify your Master Password to unlock your vault."; ObjectID = "RW4-xA-kRE"; */
-"RW4-xA-kRE.text" = "Sử dụng mật khẩu chính để mở khoá dịch vụ tự động điền";
-
-/* Class = "UILabel"; text = "Email or Username:"; ObjectID = "RWL-dI-Neb"; */
-"RWL-dI-Neb.text" = "Email / Tên đăng nhập:";
-
-/* Class = "UINavigationItem"; title = "Create New Password"; ObjectID = "SUr-BZ-ISg"; */
-"SUr-BZ-ISg.title" = "Tạo mật khẩu mới";
-
-/* Class = "UINavigationItem"; title = "Create New Password"; ObjectID = "SkE-ll-Asr"; */
-"SkE-ll-Asr.title" = "Tạo mật khẩu mới";
+/* Class = "UILabel"; text = "Verify your Master Password to unlock"; ObjectID = "RW4-xA-kRE"; */
+"RW4-xA-kRE.text" = "Nhập mật khẩu chính để mở khoá";
 
 /* Class = "UIButton"; configuration.title = " Unlock with Face ID/Touch ID"; ObjectID = "VAo-LQ-WML"; */
-"VAo-LQ-WML.configuration.title" = "Mở khoá bằng sinh trắc học";
+"VAo-LQ-WML.configuration.title" = " Mở khoá bằng Face ID/Touch ID";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "VAo-LQ-WML"; */
-"VAo-LQ-WML.normalTitle" = "Button";
+"VAo-LQ-WML.normalTitle" = " Mở khoá bằng Face ID/Touch ID";
 
-/* Class = "UITextField"; placeholder = "email or username"; ObjectID = "YVa-CN-ubL"; */
-"YVa-CN-ubL.placeholder" = "email hoặc tên đăng nhập";
-
-/* Class = "UIBarButtonItem"; title = "Save"; ObjectID = "Yju-BI-Hm8"; */
-"Yju-BI-Hm8.title" = "Lưu";
-
-/* Class = "UINavigationItem"; title = "Locker Password Manager"; ObjectID = "cbj-pk-SYj"; */
-"cbj-pk-SYj.title" = "Locker Password Manager";
-
-/* Class = "UILabel"; text = "Website:"; ObjectID = "fRr-cy-nY9"; */
-"fRr-cy-nY9.text" = "Website:";
-
-/* Class = "UITextField"; placeholder = "password"; ObjectID = "hcG-PM-6hW"; */
-"hcG-PM-6hW.placeholder" = "mật khẩu";
-
-/* Class = "UILabel"; text = "Password:"; ObjectID = "htC-RE-rnW"; */
-"htC-RE-rnW.text" = "Mật khẩu:";
-
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "k5T-7a-coE"; */
-"k5T-7a-coE.normalTitle" = "Button";
-
-/* Class = "UITextField"; placeholder = "password"; ObjectID = "kfj-TE-lzc"; */
-"kfj-TE-lzc.placeholder" = "mật khẩu";
-
-/* Class = "UIButton"; configuration.title = "Delete"; ObjectID = "qT4-kH-DIQ"; */
-"qT4-kH-DIQ.configuration.title" = "Xoá";
-
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "qT4-kH-DIQ"; */
-"qT4-kH-DIQ.normalTitle" = "Button";
-
-/* Class = "UILabel"; text = "Credential"; ObjectID = "vwZ-VA-0aI"; */
-"vwZ-VA-0aI.text" = "Thông tin đăng nhập";
+/* Class = "UINavigationItem"; title = "Login List"; ObjectID = "djK-6Z-utw"; */
+"djK-6Z-utw.title" = "Danh sách mật khẩu";
 
 /* Class = "UINavigationItem"; title = "Locker Password Manager"; ObjectID = "wAz-cy-c7C"; */
-"wAz-cy-c7C.title" = "Locker Password Manager";
-
-/* Class = "UILabel"; text = "Website:"; ObjectID = "yzM-dV-t56"; */
-"yzM-dV-t56.text" = "Website:";
+"wAz-cy-c7C.title" = "Locker";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "zdC-rG-Xmh"; */
 "zdC-rG-Xmh.text" = "Label";

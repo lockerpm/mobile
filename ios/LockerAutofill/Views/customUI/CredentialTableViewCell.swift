@@ -19,8 +19,7 @@ class CredentialTableViewCell: UITableViewCell {
         // Initialization code
     //credentialIconLabel.backgroundColor = UIColor(patternImage: UIImage(named: "backgroundImage")!)
     //editCredential.setImage(UIImage(name: "edi", withConfiguration: mediumConfig), for: .normal)
-    }
-  
+  }
   
   func makeCell(credential: AutofillData){
     self.credentialID = credential.id
