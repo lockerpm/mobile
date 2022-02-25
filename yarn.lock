@@ -2254,6 +2254,11 @@
   dependencies:
     prop-types "^15.5.10"
 
+"@react-native-community/checkbox@^0.5.11":
+  version "0.5.11"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.11.tgz#58f0a840660c1638738dc59669b8fcdfb61debf2"
+  integrity sha512-VkZ6w+q3rIWUPTNw2yRlr/4Kz0EStVNXABs3ht9xKrDwt8jaglavo61JzAnjPEurCwV34nCfjIXNthMfAptnEQ==
+
 "@react-native-community/cli-debugger-ui@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-5.0.1.tgz#6b1f3367b8e5211e899983065ea2e72c1901d75f"
@@ -14439,6 +14444,11 @@ react-native-level-fs@3.0.0:
   dependencies:
     level-filesystem "^1.0.1"
     levelup "^0.18.2"
+
+react-native-linear-gradient@^2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
+  integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
 
 react-native-masked-text@^1.13.0:
   version "1.13.0"

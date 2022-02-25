@@ -17,7 +17,7 @@
    DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
    ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
    GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, 
-   ManagePlanScreen, PlanScreen
+   ManagePlanScreen, PlanScreen, PaymentScreen
  } from "../screens"
 //  import PlanScreen from "../screens/auth/menu/manage-plan/plan/plan-screen"
  // @ts-ignore
@@ -93,7 +93,7 @@
      collectionId?: string | null
      organizationId?: string | null
    }
- 
+   payment: undefined
    plan: undefined
    manage__plan: undefined
    settings: undefined
@@ -358,6 +358,7 @@
          <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
          <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
  
+         <Stack.Screen name="payment" component={PaymentScreen} />
          <Stack.Screen name="plan" component={PlanScreen} />
          <Stack.Screen name="manage__plan" component={ManagePlanScreen} />
          <Stack.Screen name="settings" component={SettingsScreen} />

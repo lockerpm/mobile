@@ -97,7 +97,7 @@ export const ManagePlanScreen = observer(function ManagePlanScreen() {
 
             {
               user.plan.name === "Free" && (
-                <Button onPress={() => navigation.navigate("plan")}>
+                <Button onPress={() => navigation.navigate("payment")}>
                   <LightingIcon />
                   <Text style={{ color: "white", paddingLeft: 10, paddingRight: 10 }}>Buy Premium </Text>
                 </Button>
