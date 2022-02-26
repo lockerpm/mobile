@@ -26,8 +26,26 @@ import com.cystack.locker.R;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.oblador.keychain.PrefsStorage;
+import com.oblador.keychain.SecurityLevel;
+import com.oblador.keychain.cipherStorage.CipherStorage;
+import com.oblador.keychain.cipherStorage.CipherStorageKeystoreAesCbc;
+
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
+    // private static final String TAG = "LockerAutoFillService";
+    private static final String service = "W7S57TNBH5.com.cystack.lockerapp";
+
+    private PrefsStorage prefsStorage;
+    private CipherStorage cipherStorage;
+
+
+
+
+    
+
     private static final String TAG = "Locker_Service";
     private int mNumberDatasets;
     private ArrayList<AutofillData> datas = new ArrayList<>();
@@ -44,6 +62,20 @@ public class LockerAutoFillService extends AutofillService {
     public void onFillRequest(@NonNull FillRequest request, @NonNull CancellationSignal cancellationSignal, @NonNull FillCallback callback) {
         Log.d(TAG, "onFillRequest()");
 
+        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
+        cipherStorage = new CipherStorageKeystoreAesCbc();
+        prefsStorage = new PrefsStorage(reactContext);
+
+        try {
+            PrefsStorage.ResultSet resultSet = prefsStorage.getEncryptedEntry(service);
+            if (resultSet == null) {
+                Log.e(TAG, "No entry found");
+            }
+            CipherStorage.DecryptionResult decryptionResult = cipherStorage.decrypt(service, resultSet.username, resultSet.password, SecurityLevel.ANY);
+            Log.d(TAG, decryptionResult.password);
+        } catch (Exception e) {
+            Log.d(TAG, "Failed");
+        }
         // Find autofillable fields
         AssistStructure structure = Utils.getLatestAssistStructure(request);
 
