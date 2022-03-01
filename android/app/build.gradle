@@ -137,8 +137,8 @@ android {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4016
-        versionName "1.15"
+        versionCode 4017
+        versionName "1.16"
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.cystack.locker'
         ]

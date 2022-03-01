@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react"
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native"
 
-import { Button } from "../../../../../components"
+import { AutoImage as Image, Button } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../../services/mixins"
 import { observer } from "mobx-react-lite"
 import LinearGradient from "react-native-linear-gradient"
+import { PremiumBenefits } from "./premium-benefits"
 
 // @ts-ignore
 import LockerPremium from "./locker-premium.svg"
@@ -28,14 +29,17 @@ import { requestSubscription, useIAP, Purchase, Subscription } from 'react-nativ
 const subSkus = [
   'com.cystack.lockerapp.per.premium.year',
   'com.cystack.lockerapp.per.premium.mon',
-  'com.cystack.lockerapp.fam.premium.year',
-  'com.cystack.lockerapp.fam.premium.mon'
+  // 'com.cystack.lockerapp.fam.premium.year',
+  // 'com.cystack.lockerapp.fam.premium.mon'
 ]
 
 export const PaymentScreen = observer(function PaymentScreen() {
+  // const { translate, color } = useMixins()
   const navigation = useNavigation();
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = React.useState(true)
+
+ 
 
   const {
     connected,
@@ -89,6 +93,8 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   useEffect(() => {
     getSubscriptions(subSkus);
+    console.log(subscriptions);
+    
   }, [getSubscriptions]);
 
   useEffect(() => {
@@ -133,9 +139,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
     checkCurrentPurchase(currentPurchase);
   }, [currentPurchase, finishTransaction]);
 
-
-
-
   const purchase = (items: Subscription[]): void => {
     // if (item.type === 'iap') requestPurchase(item.productId);
     var subID = isEnable? currentPriceSegment.year.subId : currentPriceSegment.mon.subId
@@ -144,27 +147,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
     requestSubscription(subID);
   };
 
-
-  const DescribeItem = ({ node, text }) => {
-    const Icon = node
-    return (
-      <View style={{ flexDirection: "row", padding: 5 }}>
-        <Icon />
-        <Text
-          style={[
-            styles.p1,
-            {
-              color: "white",
-              marginLeft: 11,
-              marginRight: 35,
-            },
-          ]}
-        >
-          {text}
-        </Text>
-      </View>
-    )
-  }
 
   const Segment = () => {
     return (
@@ -190,35 +172,17 @@ export const PaymentScreen = observer(function PaymentScreen() {
   }
   return (
     // Within your render function
-    <LinearGradient colors={["#268334", "#000000"]} style={{ flex: 1 }}>
+    <LinearGradient colors={["#ffffff", "#268334"]} style={{ flex: 1 }}>
       <View style={{flex: 1, height: "20%", position: "absolute", width: "100%"}}>
         <View style={styles.header}>
           <LockerPremium />
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity style={{zIndex:1}} onPress={() => navigation.goBack()}>
             <DeleteIcon />
           </TouchableOpacity>
-        </View>
-        <View style={styles.content}>
-          <Text style={{ color: "white", fontSize: 24, fontWeight: "bold", marginBottom: 10 }}>
-            Upgrade to Locker Premium to Unlock All These Features
-          </Text>
-          <DescribeItem
-            node={LockSimpleIcon}
-            text="Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Assets"
-          />
-          <DescribeItem
-            node={ShieldIcon}
-            text="Dark Web Monitoring protects your accounts from massive data breaches"
-          />
-          <DescribeItem
-            node={MegaphoneIcon}
-            text="Emergency Contact let trusted accounts access your vault when needed"
-          />
-          <DescribeItem
-            node={UsersIcon}
-            text="Share Passwords and items securely with your friends and family members."
-          />
-        </View>
+        </View> 
+      </View>
+      <View>
+        <PremiumBenefits/>
       </View>
       <View
         style={[
@@ -265,6 +229,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   content: {
+    justifyContent: 'center',
     paddingLeft: 15,
     width: "100%",
     color: "white",

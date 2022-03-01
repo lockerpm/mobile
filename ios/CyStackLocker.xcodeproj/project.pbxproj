@@ -157,7 +157,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CEEF9B32796B74B006CEE2D /* StoreKit.framework in Frameworks */,
 				CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */,
 				A4B148D367B119F99EC2C2E5 /* libPods-CyStackLocker.a in Frameworks */,
 			);
