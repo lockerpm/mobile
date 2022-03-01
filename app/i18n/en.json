@@ -17,6 +17,9 @@
     "copied_to_clipboard": "Copied to clipboard",
     "country": "Country",
     "create": "Create",
+    "crypto_account": "Crypto Account",
+    "crypto_asset": "Crypto Asset",
+    "crypto_wallet": "Crypto Wallet",
     "data": "Data",
     "delete": "Delete",
     "details": "Details",
@@ -506,5 +509,14 @@
     "invalid_data_format": "Invalid data format",
     "success": "Data imported",
     "pls_select_right_format": "Must be a {{format}} file"
+  },
+  "crypto_asset": {
+    "choose_type": "Choose your type of asset",
+    "choose_type_desc": "Select the method that crypto you want to add",
+    "empty": {
+      "title": "Add your first crypto asset",
+      "desc": "Keep your crypto account/wallet in safe place",
+      "btn": "Add Asset"
+    }
   }
 }
