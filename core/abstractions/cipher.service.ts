@@ -40,6 +40,7 @@ export abstract class CipherService {
     saveCollectionsWithServer: (cipher: Cipher) => Promise<any>;
     upsert: (cipher: CipherData | CipherData[]) => Promise<any>;
     replace: (ciphers: { [id: string]: CipherData; }) => Promise<any>;
+    replaceSome: (ciphers: { [id: string]: CipherData; }) => Promise<any>;
     clear: (userId: string) => Promise<any>;
     moveManyWithServer: (ids: string[], folderId: string) => Promise<any>;
     delete: (id: string | string[]) => Promise<any>;
@@ -56,4 +57,6 @@ export abstract class CipherService {
     restore: (cipher: { id: string, revisionDate: string; } | { id: string, revisionDate: string; }[]) => Promise<any>;
     restoreWithServer: (id: string) => Promise<any>;
     restoreManyWithServer: (ids: string[]) => Promise<any>;
+    csUpdateDecryptedCache: (ciphers: CipherView[]) => void;
+    csDeleteFromDecryptedCache: (ids: string[]) => void;
 }

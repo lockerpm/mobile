@@ -13,11 +13,11 @@ import { FOLDER_IMG } from "../../../common/mappings"
 import { CollectionView } from "../../../../core/models/view/collectionView"
 
 const CONTAINER: ViewStyle = {
-  justifyContent: "center",
+  justifyContent: "center"
 }
 
 export interface CipherInfoCommonProps {
-  style?: StyleProp<ViewStyle>,
+  style?: StyleProp<ViewStyle>
   cipher: CipherView
 }
 
@@ -27,7 +27,7 @@ export interface CipherInfoCommonProps {
 export const CipherInfoCommon = observer(function CipherInfoCommon(props: CipherInfoCommonProps) {
   const { style, cipher } = props
   const { getTeam, translate } = useMixins()
-  const { user, folderStore, collectionStore } = useStores()
+  const { user, folderStore, collectionStore, cipherStore } = useStores()
 
   const styles = flatten([CONTAINER, style])
 
@@ -49,7 +49,11 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
       />
       <Text
         preset="black"
-        text={getTeam(user.teams, cipher.organizationId).name || translate('common.me')}
+        text={
+          getTeam(user.teams, cipher.organizationId).name
+          || getTeam(cipherStore.organizations, cipher.organizationId).name
+          || translate('common.me')
+        }
       />
 
       {/* Folder */}
@@ -77,7 +81,7 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
         ))
       }
       {
-        (!cipher.organizationId || !!folder.name) && (
+        (!cipher.organizationId || !!folder.name || getTeam(user.teams, cipher.organizationId)) && (
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             <FOLDER_IMG.normal.svg height={30} />
             <Text

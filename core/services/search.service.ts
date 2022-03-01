@@ -11,6 +11,7 @@ import { CipherType } from '../enums/cipherType';
 import { FieldType } from '../enums/fieldType';
 import { UriMatchType } from '../enums/uriMatchType';
 import { SendView } from '../models/view/sendView';
+import { Cipher } from '../models/domain';
 
 export class SearchService implements SearchServiceAbstraction {
     indexedEntityId?: string = null;
@@ -91,7 +92,7 @@ export class SearchService implements SearchServiceAbstraction {
         }
 
         if (ciphers == null) {
-            ciphers = await this.cipherService.getAllDecrypted();
+            ciphers = await this.cipherService.getAllDecrypted() || [];
         }
 
         if (filter != null && Array.isArray(filter) && filter.length > 0) {
@@ -148,6 +149,23 @@ export class SearchService implements SearchServiceAbstraction {
             });
         }
         return results;
+    }
+
+    async searchEncryptedCiphers(
+        filter: (((cipher: Cipher) => boolean) | (((cipher: Cipher) => boolean)[])) = null,
+        ciphers: Cipher[] = null):
+        Promise<Cipher[]> {
+        if (ciphers == null) {
+            ciphers = await this.cipherService.getAll() || [];
+        }
+
+        if (filter != null && Array.isArray(filter) && filter.length > 0) {
+            ciphers = ciphers.filter(c => filter.every(f => f == null || f(c)));
+        } else if (filter != null) {
+            ciphers = ciphers.filter(filter as (cipher: Cipher) => boolean);
+        }
+
+        return ciphers
     }
 
     searchCiphersBasic(ciphers: CipherView[], query: string, deleted: boolean = false) {

@@ -8,6 +8,8 @@ export const palette = {
   lightBlack: '#072245',
   black: '#031B4E',
   green: "#268334",
+  lightGreen: '#e9f3eb',
   danger: '#F54F64',
-  warning: '#FF9900'
+  warning: '#FF9900',
+  blue: '#3379b7'
 }
