@@ -23,7 +23,7 @@ export const CryptoTypeAction = (props: Props) => {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <View style={{ width: '100%', paddingHorizontal: 20 }}>
+      <View style={{ width: '100%', paddingHorizontal: 10 }}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <View style={{ marginLeft: 10 }}>
             <Text
@@ -39,7 +39,7 @@ export const CryptoTypeAction = (props: Props) => {
         </View>
       </View>
 
-      <Divider style={{ marginTop: 10 }} />
+      <Divider style={{ marginTop: 15 }} />
 
       <ActionSheetContent>
         {

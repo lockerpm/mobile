@@ -59,6 +59,7 @@
     "owned_by": "Sở hữu bởi",
     "ownership": "Quyền sở hữu",
     "password": "Mật khẩu",
+    "phone": "Điện thoại",
     "push_notifications": "Thông báo đẩy",
     "regenerate": "Tạo lại",
     "reject": "Từ chối",
@@ -85,6 +86,7 @@
     "unlock": "Mở khóa",
     "upgrade": "Nâng cấp",
     "user": "Người dùng",
+    "username": "Username",
     "warning": "Cảnh báo",
     "website": "Website"
   },
@@ -517,6 +519,11 @@
       "title": "Thêm tài sản crypto đầu tiên của bạn",
       "desc": "Lưu lại tài khoản/ví crypto của bạn",
       "btn": "Thêm tài sản"
-    }
+    },
+    "copy_seed": "Sao chép Seed Phrase",
+    "copy_username": "Sao chép Username",
+    "copy_password": "Sao chép mật khẩu",
+    "email_recovery": "Email khôi phục",
+    "seed": "Seed Phrase"
   }
 }

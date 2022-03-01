@@ -155,10 +155,17 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
           code: string
           message?: string
         } = problem.data
-        if (errorData.details && Object.keys(errorData.details).length) {
+        if (errorData.details) {
+          let notified = false
           Object.keys(errorData.details).forEach((key) => {
-            notify('error', errorData.details[key][0])
+            if (errorData.details[key][0]) {
+              notify('error', errorData.details[key][0])
+              notified = true
+            }
           })
+          if (!notified) {
+            notify('error', translate('error.invalid_data'))
+          }
         } else if (errorData.message) {
           notify('error', errorData.message)
         } else {

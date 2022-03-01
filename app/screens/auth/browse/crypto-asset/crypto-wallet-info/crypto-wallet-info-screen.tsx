@@ -11,13 +11,16 @@ import { CryptoWalletAction } from "../crypto-wallet-action"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { useMixins } from "../../../../../services/mixins"
+import { toCryptoWalletData } from "../../../../../utils/crypto"
 
 
 export const CryptoWalletInfoScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, color } = useMixins()
   const { cipherStore } = useStores()
+
   const selectedCipher = cipherStore.cipherView
+  const cryptoWalletData = toCryptoWalletData(selectedCipher.notes)
 
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
@@ -110,10 +113,30 @@ export const CryptoWalletInfoScreen = observer(() => {
           backgroundColor: color.background,
           paddingVertical: 22
       }]}>
+        {/* Email */}
+        <FloatingInput
+          fixedLabel
+          copyAble
+          label={translate('common.email')}
+          value={cryptoWalletData.email}
+          editable={false}
+        />
+
+        {/* Seed */}
+        <FloatingInput
+          label={translate('crypto_asset.seed')}
+          value={cryptoWalletData.seed}
+          editable={false}
+          textarea
+          fixedLabel
+          copyAble
+          style={{ marginVertical: 20 }}
+        />
+
         {/* Notes */}
         <FloatingInput
           label={translate('common.notes')}
-          value={selectedCipher.notes}
+          value={cryptoWalletData.notes}
           editable={false}
           textarea
           fixedLabel

@@ -19,6 +19,7 @@ import { ChangeTeamFolderModal } from "./change-team-folder-modal"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { AccountRole, AccountRoleText } from "../../../config/types"
 import { LeaveShareModal } from "./leave-share-modal"
+import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 
 export interface CipherActionProps {
   children?: React.ReactNode,
@@ -42,6 +43,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
 
   const { getRouteName, translate, getTeam, getWebsiteLogo, color } = useMixins()
   const { toTrashCiphers } = useCipherDataMixins()
+  const { getCipherDescription } = useCipherHelpersMixins()
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 
@@ -83,6 +85,20 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
           backup: BROWSE_ITEMS.note.icon,
           path: 'notes',
           svg: BROWSE_ITEMS.note.svgIcon
+        }
+      case CipherType.CryptoAccount:
+        return {
+          img: BROWSE_ITEMS.cryptoAccount.icon,
+          backup: BROWSE_ITEMS.cryptoAccount.icon,
+          path: 'cryptoAccounts',
+          svg: BROWSE_ITEMS.cryptoAccount.svgIcon
+        }
+      case CipherType.CryptoWallet:
+        return {
+          img: BROWSE_ITEMS.cryptoWallet.icon,
+          backup: BROWSE_ITEMS.cryptoWallet.icon,
+          path: 'cryptoWallets',
+          svg: BROWSE_ITEMS.cryptoWallet.svgIcon
         }
       default:
         return {
@@ -186,9 +202,9 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 text={selectedCipher.name}
               />
               {
-                (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
+                !!getCipherDescription(selectedCipher) && (
                   <Text
-                    text={selectedCipher.login.username}
+                    text={getCipherDescription(selectedCipher)}
                     style={{ fontSize: fontSize.small }}
                   />
                 )

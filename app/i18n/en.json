@@ -59,6 +59,7 @@
     "owned_by": "Owned by",
     "ownership": "Ownership",
     "password": "Password",
+    "phone": "Phone",
     "push_notifications": "Push Notifications",
     "regenerate": "Regenerate",
     "reject": "Reject",
@@ -85,6 +86,7 @@
     "unlock": "Unlock",
     "upgrade": "Upgrade",
     "user": "User",
+    "username": "Username",
     "warning": "Warning",
     "website": "Website"
   },
@@ -307,7 +309,7 @@
     }
   },
   "note": {
-    "copy_note": "Copy notes",
+    "copy_note": "Copy Notes",
     "empty": {
       "title": "Add your first item",
       "desc": "Jot down a WiFi code, office security alarm code or your friend’s birthday",
@@ -517,6 +519,11 @@
       "title": "Add your first crypto asset",
       "desc": "Keep your crypto account/wallet in safe place",
       "btn": "Add Asset"
-    }
+    },
+    "copy_seed": "Copy Seed Phrase",
+    "copy_username": "Copy Username",
+    "copy_password": "Copy Password",
+    "email_recovery": "Email Recovery",
+    "seed": "Seed Phrase"
   }
 }
