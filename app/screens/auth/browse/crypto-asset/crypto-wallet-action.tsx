@@ -4,6 +4,7 @@ import { ActionItem } from "../../../../components/cipher/cipher-action/action-i
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
+import { toCryptoWalletData } from "../../../../utils/crypto"
 
 
 type Props = {
@@ -19,12 +20,14 @@ export const CryptoWalletAction = observer((props: Props) => {
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
+  const data = toCryptoWalletData(selectedCipher.notes)
+
   const renderContent = () => (
     <ActionItem
-      name={translate('note.copy_note')}
+      name={translate('crypto_asset.copy_seed')}
       icon="copy"
-      action={() => copyToClipboard(selectedCipher.notes)}
-      disabled={!selectedCipher.notes}
+      action={() => copyToClipboard(data.seed)}
+      disabled={!data.seed}
     />
   )
 

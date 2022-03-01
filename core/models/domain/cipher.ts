@@ -76,6 +76,8 @@ export class Cipher extends Domain {
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.CryptoAccount:
+            case CipherType.CryptoWallet:
                 this.secureNote = new SecureNote(obj.secureNote, alreadyEncrypted);
                 break;
             case CipherType.Card:
@@ -121,6 +123,8 @@ export class Cipher extends Domain {
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.CryptoAccount:
+            case CipherType.CryptoWallet:
                 model.secureNote = await this.secureNote.decrypt(this.organizationId, encKey);
                 break;
             case CipherType.Card:
@@ -201,6 +205,8 @@ export class Cipher extends Domain {
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.CryptoAccount:
+            case CipherType.CryptoWallet:
                 c.secureNote = this.secureNote.toSecureNoteData();
                 break;
             case CipherType.Card:

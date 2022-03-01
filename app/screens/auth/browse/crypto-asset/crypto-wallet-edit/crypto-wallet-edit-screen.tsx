@@ -96,7 +96,7 @@ export const CryptoWalletEditScreen = observer(() => {
         <Header
           title={
             mode === 'add'
-              ? `${translate('common.add')} ${translate('common.note')}`
+              ? `${translate('common.add')} ${translate('common.crypto_wallet')}`
               : translate('common.edit')
           }
           goBack={() => navigation.goBack()}
@@ -125,7 +125,7 @@ export const CryptoWalletEditScreen = observer(() => {
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <BROWSE_ITEMS.note.svgIcon height={40} width={40} />
+          <BROWSE_ITEMS.cryptoWallet.svgIcon height={40} width={40} />
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired

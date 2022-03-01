@@ -4,4 +4,6 @@ export enum CipherType {
     Card = 3,
     Identity = 4,
     TOTP = 5,
+    CryptoAccount = 6,
+    CryptoWallet = 7
 }

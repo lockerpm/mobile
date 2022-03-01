@@ -46,18 +46,20 @@ export const AddAction = observer((props: Props) => {
                 key={index}
                 border={index !== items.length - 1}
                 onPress={() => {
-                  if (item.group === 'cryptoAsset') {
-                    setNextModal('crypto')
-                  }
-                  onClose()
                   if (defaultFolder) {
                     cipherStore.setSelectedFolder(defaultFolder)
                   } else {
                     cipherStore.setSelectedFolder(null)
                   }
-                  navigation.navigate(`${item.routeName}__edit`, {
-                    mode: 'add'
-                  })
+                  if (item.routeName === 'cryptoAssets') {
+                    setNextModal('crypto')
+                    onClose()
+                  } else {
+                    onClose()
+                    navigation.navigate(`${item.routeName}__edit`, {
+                      mode: 'add'
+                    })
+                  }
                 }}
               >
                 <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>

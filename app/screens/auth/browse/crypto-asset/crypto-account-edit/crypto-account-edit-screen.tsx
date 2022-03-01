@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, PasswordStrength
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -14,6 +14,8 @@ import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { CryptoAccountData, toCryptoAccountData } from "../../../../../utils/crypto"
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, 'cryptoAccounts__edit'>;
@@ -22,16 +24,24 @@ type NoteEditScreenProp = RouteProp<PrimaryParamList, 'cryptoAccounts__edit'>;
 export const CryptoAccountEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<NoteEditScreenProp>()
-  const { mode } = route.params
   const { cipherStore } = useStores()
-  const selectedCipher: CipherView = cipherStore.cipherView
   const { translate, color } = useMixins()
-  const { newCipher } = useCipherHelpersMixins()
+  const { newCipher, getPasswordStrength } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
+
+
+  const selectedCipher: CipherView = cipherStore.cipherView
+  const cryptoAccountData = toCryptoAccountData(selectedCipher?.notes)
+  const { mode } = route.params
 
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+  const [note, setNote] = useState(mode !== 'add' ? cryptoAccountData.notes : '')
+  const [username, setUsername] = useState(mode !== 'add' ? cryptoAccountData.username : '')
+  const [password, setPassword] = useState(mode !== 'add' ? cryptoAccountData.password : '')
+  const [phone, setPhone] = useState(mode !== 'add' ? cryptoAccountData.phone : '')
+  const [emailRecovery, setEmailRecovery] = useState(mode !== 'add' ? cryptoAccountData.emailRecovery : '')
+  const [url, setUrl] = useState(mode !== 'add' ? cryptoAccountData.uris?.uri : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
@@ -39,9 +49,14 @@ export const CryptoAccountEditScreen = observer(() => {
   // Params
   const [isLoading, setIsLoading] = useState(false)
 
-  // Watchers
+  // Effects
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      if (cipherStore.generatedPassword) {
+        setPassword(cipherStore.generatedPassword)
+        cipherStore.setGeneratedPassword('')
+      }
+
       if (cipherStore.selectedFolder) {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
@@ -55,21 +70,55 @@ export const CryptoAccountEditScreen = observer(() => {
     return unsubscribe
   }, [navigation])
 
+  useEffect(() => {
+    if (mode !== 'add') {
+      setName(selectedCipher.name)
+      setUsername(cryptoAccountData.username)
+      setPassword(cryptoAccountData.password)
+      setUrl(cryptoAccountData.uris?.uri)
+      setPhone(cryptoAccountData.phone)
+      setEmailRecovery(cryptoAccountData.emailRecovery)
+      setNote(cryptoAccountData.notes)
+      setFolder(selectedCipher.folderId)
+      setOrganizationId(selectedCipher.organizationId)
+      setCollectionIds(selectedCipher.collectionIds)
+    }
+  }, [])
+
   // Methods
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
     if (mode === 'add') {
-      payload = newCipher(CipherType.SecureNote)
+      payload = newCipher(CipherType.CryptoAccount)
     } else {
       // @ts-ignore
       payload = {...selectedCipher}
     }
 
+    const cryptoData: CryptoAccountData = {
+      username,
+      password,
+      phone,
+      emailRecovery,
+      response: null,
+      uris: {
+        match: null,
+        response: null,
+        uri: url
+      },
+      notes: note
+    }
+
     payload.name = name
-    payload.notes = note
+    payload.notes = JSON.stringify(cryptoData)
     payload.folderId = folder
     payload.organizationId = organizationId
+    payload.secureNote = {
+      // @ts-ignore
+      response: null,
+      type: 0
+    }
 
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
@@ -96,7 +145,7 @@ export const CryptoAccountEditScreen = observer(() => {
         <Header
           title={
             mode === 'add'
-              ? `${translate('common.add')} ${translate('common.note')}`
+              ? `${translate('common.add')} ${translate('common.crypto_account')}`
               : translate('common.edit')
           }
           goBack={() => navigation.goBack()}
@@ -125,7 +174,7 @@ export const CryptoAccountEditScreen = observer(() => {
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <BROWSE_ITEMS.note.svgIcon height={40} width={40} />
+          <BROWSE_ITEMS.cryptoAccount.svgIcon height={40} width={40} />
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
@@ -152,22 +201,108 @@ export const CryptoAccountEditScreen = observer(() => {
           paddingBottom: 32
         }]}
       >
-        {/* Note */}
-        <View style={{ flex: 1, marginTop: 20 }}>
+        {/* Username */}
+        <View style={{ flex: 1 }}>
           <FloatingInput
-            fixedLabel
-            textarea
-            label={translate('common.notes')}
-            value={note}
-            onChangeText={setNote}
+            label={translate('common.username')}
+            value={username}
+            onChangeText={setUsername}
           />
         </View>
-        {/* Note end */}
+        {/* Username end */}
+
+        {/* Password */}
+        <View style={{ flex: 1, marginTop: 20 }}>
+          <FloatingInput
+            isPassword
+            label={translate('common.password')}
+            value={password}
+            onChangeText={setPassword}
+          />
+
+          {
+            !!password && (
+              <PasswordStrength
+                value={getPasswordStrength(password).score}
+                style={{ marginTop: 15 }}
+              />
+            )
+          }
+        </View>
+        {/* Password end */}
+
+        {/* Generate password */}
+        <Button
+          preset="link"
+          onPress={() => navigation.navigate('passwordGenerator')}
+          style={{
+            marginTop: 20
+          }}
+        >
+          <View
+            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+              justifyContent: 'space-between',
+              width: '100%'
+            }]}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <FontAwesomeIcon
+                name="repeat"
+                size={18}
+                color={color.primary}
+              />
+              <Text
+                preset="green"
+                text={translate('common.generate')}
+                style={{ fontSize: fontSize.small, marginLeft: 7 }}
+              />
+            </View>
+            <FontAwesomeIcon
+              name="angle-right"
+              size={20}
+              color={color.text}
+            />
+          </View>
+        </Button>
+        {/* Generate password end */}
+
+        {/* Phone */}
+        <View style={{ flex: 1, marginTop: 20 }}>
+          <FloatingInput
+            label={translate('common.phone')}
+            value={phone}
+            onChangeText={setPhone}
+          />
+        </View>
+        {/* Phone end */}
+
+        {/* Email recovery */}
+        <View style={{ flex: 1, marginTop: 20 }}>
+          <FloatingInput
+            label={translate('crypto_asset.email_recovery')}
+            value={emailRecovery}
+            onChangeText={setEmailRecovery}
+          />
+        </View>
+        {/* Web url end */}
+
+        {/* Web url */}
+        <View style={{ flex: 1, marginTop: 20 }}>
+          <FloatingInput
+            label={translate('password.website_url')}
+            value={url}
+            onChangeText={setUrl}
+          />
+        </View>
+        {/* Web url end */}
       </View>
       {/* Info end */}
 
       {/* Others */}
       <CipherOthersInfo
+        hasNote
+        note={note}
+        onChangeNote={setNote}
         navigation={navigation}
         folderId={folder}
         organizationId={organizationId}

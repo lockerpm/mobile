@@ -20,6 +20,9 @@ import { commonStyles, fontSize } from "../../../theme"
 import { DeletedAction } from "../cipher-action/deleted-action"
 import { Checkbox } from "react-native-ui-lib"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { CryptoAccountAction } from "../../../screens/auth/browse/crypto-asset/crypto-account-action"
+import { CryptoWalletAction } from "../../../screens/auth/browse/crypto-asset/crypto-wallet-action"
+import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 
 
 export interface CipherListProps {
@@ -54,6 +57,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   } = props
   const { getWebsiteLogo, translate, color, getTeam } = useMixins()
   const { getCiphers } = useCipherDataMixins()
+  const { getCipherDescription } = useCipherHelpersMixins()
   const { cipherStore, user } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -62,6 +66,8 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   const [showNoteAction, setShowNoteAction] = useState(false)
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
+  const [showCryptoAccountAction, setShowCryptoAccountAction] = useState(false)
+  const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showDeletedAction, setShowDeletedAction] = useState(false)
   const [ciphers, setCiphers] = useState([])
 
@@ -136,6 +142,18 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
           break
         }
 
+        case CipherType.CryptoAccount: {
+          data.logo = BROWSE_ITEMS.cryptoAccount.icon
+          data.svg = BROWSE_ITEMS.cryptoAccount.svgIcon
+          break
+        }
+
+        case CipherType.CryptoWallet: {
+          data.logo = BROWSE_ITEMS.cryptoWallet.icon
+          data.svg = BROWSE_ITEMS.cryptoWallet.svgIcon
+          break
+        }
+
         default:
           data.logo = BROWSE_ITEMS.trash.icon
           data.svg = BROWSE_ITEMS.trash.svgIcon
@@ -206,6 +224,12 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       case CipherType.SecureNote:
         setShowNoteAction(true)
         break
+      case CipherType.CryptoAccount:
+        setShowCryptoAccountAction(true)
+        break
+      case CipherType.CryptoWallet:
+        setShowCryptoWalletAction(true)
+        break
       default:
         return
     }
@@ -227,22 +251,13 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       case CipherType.SecureNote:
         navigation.navigate('notes__info')
         break
+      case CipherType.CryptoAccount:
+        navigation.navigate('cryptoAccounts__info')
+        break
+      case CipherType.CryptoWallet:
+        navigation.navigate('cryptoWallets__info')
+        break
     }
-  }
-
-  // Get cipher description
-  const getDescription = (item: CipherView) => {
-    switch (item.type) {
-      case CipherType.Login:
-        return item.login.username
-      case CipherType.Card:
-        return (item.card.brand && item.card.number) 
-          ? `${item.card.brand}, *${item.card.number.slice(-4)}`
-          : ''
-      case CipherType.Identity:
-        return item.identity.fullName
-    }
-    return ''
   }
 
   // Toggle item selection
@@ -289,6 +304,20 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       <NoteAction
         isOpen={showNoteAction}
         onClose={() => setShowNoteAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <CryptoAccountAction
+        isOpen={showCryptoAccountAction}
+        onClose={() => setShowCryptoAccountAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <CryptoWalletAction
+        isOpen={showCryptoWalletAction}
+        onClose={() => setShowCryptoWalletAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
       />
@@ -383,9 +412,9 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
                 {/* Description */}
                 {
-                  !!getDescription(item) && (
+                  !!getCipherDescription(item) && (
                     <Text
-                      text={getDescription(item)}
+                      text={getCipherDescription(item)}
                       style={{ fontSize: fontSize.small }}
                     />
                   )

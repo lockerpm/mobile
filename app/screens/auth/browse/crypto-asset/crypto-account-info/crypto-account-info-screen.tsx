@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View } from "react-native"
-import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon } from "../../../../../components"
+import { Linking, View } from "react-native"
+import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon, PasswordStrength } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { commonStyles } from "../../../../../theme"
+import { commonStyles, fontSize } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
@@ -11,13 +11,20 @@ import { CryptoAccountAction } from "../crypto-account-action"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { useMixins } from "../../../../../services/mixins"
+import { toCryptoAccountData } from "../../../../../utils/crypto"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
 
 export const CryptoAccountInfoScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, color } = useMixins()
   const { cipherStore } = useStores()
+  const { getPasswordStrength } = useCipherHelpersMixins()
+
   const selectedCipher = cipherStore.cipherView
+  const cryptoAccountData = toCryptoAccountData(selectedCipher.notes)
+  const passwordStrength = getPasswordStrength(cryptoAccountData.password)
 
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
@@ -110,10 +117,85 @@ export const CryptoAccountInfoScreen = observer(() => {
           backgroundColor: color.background,
           paddingVertical: 22
       }]}>
+        {/* Username */}
+        <FloatingInput
+          fixedLabel
+          copyAble
+          label={translate('common.username')}
+          value={cryptoAccountData.username}
+          editable={false}
+        />
+
+        {/* Password */}
+        <FloatingInput
+          isPassword
+          fixedLabel
+          copyAble
+          label={translate('common.password')}
+          value={cryptoAccountData.password}
+          editable={false}
+          style={{ marginVertical: 20 }}
+        />
+
+        {/* Password strength */}
+        <Text
+          text={translate('password.password_security')}
+          style={{ fontSize: fontSize.small }}
+        />
+        <PasswordStrength preset="text" value={passwordStrength.score} />
+
+        {/* Phone */}
+        <FloatingInput
+          fixedLabel
+          copyAble
+          label={translate('common.phone')}
+          value={cryptoAccountData.phone}
+          editable={false}
+          style={{ marginVertical: 20 }}
+        />
+
+        {/* Email recovery */}
+        <FloatingInput
+          fixedLabel
+          copyAble
+          label={translate('crypto_asset.email_recovery')}
+          value={cryptoAccountData.emailRecovery}
+          editable={false}
+        />
+
+        {/* Website URL */}
+        <FloatingInput
+          fixedLabel
+          label={translate('password.website_url')}
+          value={cryptoAccountData.uris.uri}
+          editable={false}
+          style={{ marginVertical: 20 }}
+          buttonRight={(
+            <Button
+              isDisabled={!cryptoAccountData.uris.uri}
+              preset="link"
+              onPress={() => {
+                Linking.openURL(cryptoAccountData.uris.uri)
+              }}
+              style={{
+                alignItems: 'center',
+                width: 35,
+                height: 30
+              }}
+            >
+              <FontAwesomeIcon
+                name="external-link"
+                size={16}
+                color={color.text}
+              />
+            </Button>
+          )}
+        />
+        
         {/* Notes */}
         <FloatingInput
           label={translate('common.notes')}
-          value={selectedCipher.notes}
+          value={cryptoAccountData.notes}
           editable={false}
           textarea
           fixedLabel

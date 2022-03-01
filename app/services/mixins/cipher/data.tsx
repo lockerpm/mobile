@@ -599,7 +599,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
       const filters = [deletedFilter, ...params.filters]
       if (!params.includeExtensions) {
-        filters.unshift((c : CipherView) => 1 <= c.type && c.type <= 4)
+        filters.unshift((c : CipherView) => ![CipherType.TOTP].includes(c.type))
       }
       return await searchService.searchCiphers(params.searchText || '', filters, null) || []
     } catch (e) {
