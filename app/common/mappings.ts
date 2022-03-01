@@ -43,7 +43,7 @@ type BrowseItemContainer = {
   note: BrowseItem,
   card: BrowseItem,
   identity: BrowseItem,
-  shared: BrowseItem,
+  shares: BrowseItem,
   trash: BrowseItem,
 }
 
@@ -81,8 +81,8 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     addable: true,
     svgIcon: IdentityIcon
   },
-  shared: {
-    label: 'shares.share_items',
+  shares: {
+    label: 'shares.shares',
     icon: require('./images/vault/shared.png'),
     routeName: 'shares',
     svgIcon: SharedIcon

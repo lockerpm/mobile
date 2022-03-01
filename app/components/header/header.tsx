@@ -53,7 +53,9 @@ export const Header = observer(function Header(props: HeaderProps) {
                   height: 35,
                   width: props.goBackText ? undefined : 35,
                   justifyContent: 'flex-start',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  marginLeft: -8,
+                  paddingLeft: 8
                 }}
               >
                 {

@@ -1,10 +1,13 @@
 import * as React from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
-import { commonStyles } from "../../../theme"
+import { commonStyles, fontSize } from "../../../theme"
 import { Text } from "../../text/text"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { ActionSheetItem } from "../../action-sheet/action-sheet-item"
 import { useMixins } from "../../../services/mixins"
+import { useStores } from "../../../models"
+import { observer } from "mobx-react-lite"
+import { PlanType } from "../../../config/types"
 
 
 export interface ActionItemProps {
@@ -13,20 +16,24 @@ export interface ActionItemProps {
    */
   style?: StyleProp<ViewStyle>
   name?: string
-  icon?: string,
-  iconColor?: string,
+  icon?: string
+  iconColor?: string
   textColor?: string
-  action?: Function,
-  children?: React.ReactNode,
+  action?: Function
+  children?: React.ReactNode
   disabled?: boolean
+  isPremium?: boolean
 }
 
 /**
  * Describe your component here
  */
-export const ActionItem = function ActionItem(props: ActionItemProps) {
-  const { style, name, icon, textColor, action, children, iconColor, disabled } = props
-  const { color } = useMixins()
+export const ActionItem = observer((props: ActionItemProps) => {
+  const { style, name, icon, textColor, action, children, iconColor, disabled, isPremium } = props
+  const { color, goPremium } = useMixins()
+  const { user } = useStores()
+
+  const premiumLock = isPremium && (user.plan && user.plan.alias === PlanType.FREE)
 
   return (
     <ActionSheetItem
@@ -34,20 +41,49 @@ export const ActionItem = function ActionItem(props: ActionItemProps) {
       style={[{
         paddingVertical: 12
       }, style]}
-      onPress={() => action && action()}
+      onPress={() => {
+        if (premiumLock) {
+          goPremium()
+        } else {
+          action && action()
+        }
+      }}
     >
       <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
         justifyContent: 'space-between',
         width: '100%'
       }]}>
-        {
-          children || (
-          <Text
-            text={name}
-            style={{ color: textColor || color.textBlack }}
-          />
-          )
-        }
+        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+          {
+            children || (
+              <Text
+                text={name}
+                style={{ color: textColor || color.textBlack }}
+              />
+            )
+          }
+          {
+            premiumLock && (
+              <View style={{
+                paddingHorizontal: 10,
+                paddingVertical: 2,
+                backgroundColor: color.textBlack,
+                borderRadius: 3,
+                marginLeft: 10
+              }}>
+                <Text
+                  text="PREMIUM"
+                  style={{
+                    fontWeight: 'bold',
+                    color: color.background,
+                    fontSize: fontSize.mini
+                  }}
+                />
+              </View>
+            )
+          }
+        </View>
+        
         {
           !!icon && (
             <FontAwesomeIcon 
@@ -60,4 +96,4 @@ export const ActionItem = function ActionItem(props: ActionItemProps) {
       </View>
     </ActionSheetItem>
   )
-}
+})

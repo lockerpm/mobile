@@ -322,7 +322,7 @@ export class CipherService implements CipherServiceAbstraction {
     }
 
     async getAllDecryptedForGrouping(groupingId: string, folder: boolean = true): Promise<CipherView[]> {
-        const ciphers = await this.getAllDecrypted();
+        const ciphers = await this.getAllDecrypted() || [];
 
         return ciphers.filter(cipher => {
             if (cipher.isDeleted) {
@@ -363,7 +363,7 @@ export class CipherService implements CipherServiceAbstraction {
 
         const result = await Promise.all([eqDomainsPromise, this.getAllDecrypted()]);
         const matchingDomains = result[0];
-        const ciphers = result[1];
+        const ciphers = result[1] || [];
 
         if (defaultMatch == null) {
             defaultMatch = await this.storageService.get<UriMatchType>(ConstantsService.defaultUriMatch);
@@ -713,20 +713,32 @@ export class CipherService implements CipherServiceAbstraction {
         if (cipher instanceof CipherData) {
             const c = cipher as CipherData;
             ciphers[c.id] = c;
+            await this.csDecryptAndUpdateCache([c]);
         } else {
             (cipher as CipherData[]).forEach(c => {
                 ciphers[c.id] = c;
             });
+            this.csDecryptAndUpdateCache((cipher as CipherData[]));
         }
 
         await this.storageService.save(Keys.ciphersPrefix + userId, ciphers);
-        this.decryptedCipherCache = null;
     }
 
     async replace(ciphers: { [id: string]: CipherData; }): Promise<any> {
         const userId = await this.userService.getUserId();
         await this.storageService.save(Keys.ciphersPrefix + userId, ciphers);
         this.decryptedCipherCache = null;
+    }
+
+    async replaceSome(ciphers: { [id: string]: CipherData; }): Promise<any> {
+        const userId = await this.userService.getUserId();
+        const key = Keys.ciphersPrefix + userId;
+        const data: { [id: string]: CipherData; } = await this.storageService.get(key) || {};
+        for (let id in ciphers) {
+            data[id] = ciphers[id]
+        }
+        await this.storageService.save(key, data);
+        await this.csDecryptAndUpdateCache(Object.values(ciphers))
     }
 
     async clear(userId: string): Promise<any> {
@@ -767,14 +779,15 @@ export class CipherService implements CipherServiceAbstraction {
                 return;
             }
             delete ciphers[id];
+            this.csDeleteFromDecryptedCache([id]);
         } else {
             (id as string[]).forEach(i => {
                 delete ciphers[i];
             });
+            this.csDeleteFromDecryptedCache(id);
         }
 
         await this.storageService.save(Keys.ciphersPrefix + userId, ciphers);
-        this.decryptedCipherCache = null;
     }
 
     async deleteWithServer(id: string): Promise<any> {
@@ -898,12 +911,13 @@ export class CipherService implements CipherServiceAbstraction {
 
         if (typeof id === 'string') {
             setDeletedDate(id);
+            await this.csDecryptAndUpdateCache([ciphers[id]]);
         } else {
             (id as string[]).forEach(setDeletedDate);
+            await this.csDecryptAndUpdateCache(id.map(i => ciphers[i]));
         }
 
         await this.storageService.save(Keys.ciphersPrefix + userId, ciphers);
-        this.decryptedCipherCache = null;
     }
 
     async softDeleteWithServer(id: string): Promise<any> {
@@ -934,13 +948,16 @@ export class CipherService implements CipherServiceAbstraction {
 
 
         if (cipher.constructor.name === 'Array') {
-            (cipher as { id: string, revisionDate: string; }[]).forEach(clearDeletedDate);
+            const temp = (cipher as { id: string, revisionDate: string; }[])
+            temp.forEach(clearDeletedDate);
+            await this.csDecryptAndUpdateCache(temp.map(c => ciphers[c.id]));
         } else {
-            clearDeletedDate(cipher as { id: string, revisionDate: string; });
+            const temp = cipher as { id: string, revisionDate: string; }
+            clearDeletedDate(temp);
+            await this.csDecryptAndUpdateCache([ciphers[temp.id]]);
         }
 
         await this.storageService.save(Keys.ciphersPrefix + userId, ciphers);
-        this.decryptedCipherCache = null;
     }
 
     async restoreWithServer(id: string): Promise<any> {
@@ -1122,6 +1139,46 @@ export class CipherService implements CipherServiceAbstraction {
             return this.sortedCiphersCache.getLastUsed(cacheKey);
         } else {
             return this.sortedCiphersCache.getNext(cacheKey);
+        }
+    }
+
+    private async csDecryptAndUpdateCache(ciphers: CipherData[]) {
+        const hasKey = await this.cryptoService.hasKey();
+        if (!hasKey) {
+            this.decryptedCipherCache = null;
+            return
+        }
+        const promises: Promise<CipherView>[] = []
+        for (let cipher of ciphers) {
+            if (!!cipher) {
+                const c = new Cipher(cipher, false)
+                promises.push(c.decrypt())
+            }
+        }
+        const decCiphers = await Promise.all(promises)
+        this.csUpdateDecryptedCache(decCiphers)
+    }
+
+    csUpdateDecryptedCache(ciphers: CipherView[]) {
+        const decCiphers = this.decryptedCipherCache ? [...this.decryptedCipherCache] : [];
+        for (let cipher of ciphers) {
+            const cachedIndex = decCiphers.findIndex(c => c.id === cipher.id);
+            if (cachedIndex >= 0) {
+                decCiphers[cachedIndex] = cipher;
+            } else {
+                decCiphers.push(cipher);
+            }
+        }
+        
+        decCiphers.sort(this.getLocaleSortingFunction());
+        this.decryptedCipherCache = decCiphers;
+    }
+
+    csDeleteFromDecryptedCache(ids: string[]) {
+        if (this.decryptedCipherCache) {
+            let decCiphers = [...this.decryptedCipherCache]
+            decCiphers = decCiphers.filter(c => !ids.includes(c.id));
+            this.decryptedCipherCache = decCiphers
         }
     }
 }

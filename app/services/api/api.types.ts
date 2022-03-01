@@ -8,6 +8,9 @@ import { CollectionResponse } from "../../../core/models/response/collectionResp
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { CipherResponse } from "../../../core/models/response/cipherResponse"
+import { AccountRoleText, InvitationStatus, SharingStatus, SharingType } from "../../config/types"
+import { ProfileResponse } from "../../../core/models/response/profileResponse"
+import { ProfileOrganizationResponse } from "../../../core/models/response/profileOrganizationResponse"
 
 type SessionSnapshot = {
     access_token: string
@@ -36,6 +39,48 @@ export type PolicyType = {
         id: string
         name: string
     }
+}
+
+export type SharingInvitationType = {
+    access_time: number
+    cipher_type: number
+    id: string
+    item_type: string
+    owner: {
+        email: string
+        full_name: string
+    }
+    role: AccountRoleText
+    share_type: SharingType
+    status: SharingStatus
+    hide_passwords: boolean
+    team: {
+        id: string
+        name: string
+        organization_id: string
+    }
+}
+
+export type SharedMemberType = {
+    access_time: string
+    avatar: string
+    email: string
+    full_name: string
+    hide_passwords: boolean
+    id: string
+    pwd_user_id: string
+    role: AccountRoleText
+    share_type: SharingType
+    status: SharingStatus
+    username: string
+}
+
+export type MyShareType = {
+    id: string
+    description: string
+    name: string
+    organization_id: string
+    members: SharedMemberType[]
 }
 
 // ------------------ Response ------------------------
@@ -86,12 +131,18 @@ export type AccountRecoveryResult = {
 export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
 export type EmptyResult = { kind: "ok" } | GeneralApiProblem
-export type SyncResult = { kind: "ok", data: SyncResponse } | GeneralApiProblem
+export type SyncResult = { kind: "ok", data: SyncResponse & { count?: { ciphers: number } } } | GeneralApiProblem
 export type GetCipherResult = { kind: "ok", data: CipherResponse } | GeneralApiProblem
 export type GetFolderResult = { kind: "ok", data: FolderResponse } | GeneralApiProblem
-export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
+export type GetOrganizationResult = { kind: "ok", data: ProfileOrganizationResponse } | GeneralApiProblem
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
 export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | GeneralApiProblem
+export type GetProfileResult = { kind: "ok", data: ProfileResponse } | GeneralApiProblem
+
+export type GetTeamsResult = { 
+    kind: 'ok', 
+    teams: object[] 
+} | GeneralApiProblem
 
 export type GetPlanResult = {
     kind: 'ok'
@@ -135,8 +186,8 @@ export type GetInvitationsResult = {
     data: {
         access_time: number
         id: string
-        role: 'admin' | 'manager' | 'member'
-        status: 'confirmed' | 'invited'
+        role: AccountRoleText
+        status: InvitationStatus
         team: {
             id: string
             name: string
@@ -177,6 +228,30 @@ export type GetLastUpdateResult = {
     data: {
         revision_date: number
     }
+} | GeneralApiProblem
+
+export type GetSharingPublicKeyResult = {
+    kind: 'ok',
+    data: {
+        public_key: string
+    }
+} | GeneralApiProblem
+
+export type ShareCipherResult = {
+    kind: 'ok',
+    data: {
+        id: string      // organizationId
+    }
+} | GeneralApiProblem
+
+export type GetShareInvitationsResult = {
+    kind: 'ok',
+    data: SharingInvitationType[]
+} | GeneralApiProblem
+
+export type GetMySharesResult = {
+    kind: 'ok',
+    data: MyShareType[]
 } | GeneralApiProblem
 
 // ---------------- Request data --------------------
@@ -330,4 +405,36 @@ export type FeedbackData = {
 export type UpdateFCMData = {
     fcm_id: string
     device_identifier: string
+}
+
+export type GetSharingPublicKeyData = {
+    email: string
+}
+
+export type ShareCipherData = {
+    cipher: CipherRequest & { id: string }
+    sharing_key: string
+    members: {
+        username: string
+        role: AccountRoleText
+        key: string
+        hide_passwords: boolean
+    }[]
+}
+
+export type ShareInvitationResponseData = {
+    status: 'accept' | 'reject'
+}
+
+export type StopShareCipherData = {
+    cipher: CipherRequest & { id: string }
+}
+
+export type EditShareCipherData = {
+    role: AccountRoleText
+    hide_passwords: boolean
+}
+
+export type ConfirmShareCipherData = {
+    key: string
 }

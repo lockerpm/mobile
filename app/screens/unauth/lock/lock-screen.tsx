@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, View } from "react-native"
+import { Alert, BackHandler, View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
@@ -9,13 +9,14 @@ import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
+import { IS_IOS } from "../../../config/constants"
 
 
 export const LockScreen = observer(function LockScreen() {
   const navigation = useNavigation()
   const { notify, translate, notifyApiError, color } = useMixins()
   const { logout, sessionLogin, biometricLogin } = useCipherAuthenticationMixins()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
 
   // ---------------------- PARAMS -------------------------
   
@@ -118,6 +119,11 @@ export const LockScreen = observer(function LockScreen() {
 
       e.preventDefault()
 
+      if (!IS_IOS && uiStore.isFromAutoFill) {
+        BackHandler.exitApp()
+        return
+      }
+
       Alert.alert(
         translate('alert.logout') + user.email + '?',
         '',
@@ -182,15 +188,16 @@ export const LockScreen = observer(function LockScreen() {
         >
           {
             !!user.avatar && (
-              <Image
-                source={{ uri: user.avatar }}
-                style={{
-                  height: 28,
-                  width: 28,
-                  borderRadius: 14,
-                  backgroundColor: color.white
-                }}
-              />
+              <View style={{ borderRadius: 14, overflow: 'hidden' }}>
+                <Image
+                  source={{ uri: user.avatar }}
+                  style={{
+                    height: 28,
+                    width: 28,
+                    backgroundColor: color.white
+                  }}
+                />
+              </View>
             )
           }
           <Text
