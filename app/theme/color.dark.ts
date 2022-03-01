@@ -27,9 +27,11 @@ export const colorDark = {
   text: '#8E8E93',
   textBlack: '#FDFDFD',
   title: '#FDFDFD',
+  lightPrimary: palette.lightGreen,
   primary: '#62AD56',
   error: palette.danger,
   warning: palette.warning,
+  info: palette.blue,
   white: '#FDFDFD',
 
   /**

@@ -65,7 +65,7 @@ const RootStack = observer(() => {
     }
     
     removeNetInfoSubscription = NetInfo.addEventListener((state) => {
-      const offline = !state.isInternetReachable
+      const offline = !state.isConnected
       Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
       uiStore.setIsOffline(offline)
     })

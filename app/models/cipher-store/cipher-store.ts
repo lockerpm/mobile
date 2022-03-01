@@ -1,8 +1,9 @@
 import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
+import { Organization } from "../../../core/models/domain/organization"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CipherView } from "../../../core/models/view"
-import { ImportCipherData, MoveFolderData } from "../../services/api"
+import { ConfirmShareCipherData, EditShareCipherData, ImportCipherData, MoveFolderData, MyShareType, ShareCipherData, SharingInvitationType, StopShareCipherData } from "../../services/api"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -24,6 +25,9 @@ export const CipherStoreModel = types
     notUpdatedCiphers: types.array(types.string),         // Create in online mode but somehow not update yet
     lastSync: types.maybeNull(types.number),
     lastCacheUpdate: types.maybeNull(types.number),
+    sharingInvitations: types.array(types.frozen<SharingInvitationType>()),
+    myShares: types.array(types.frozen<MyShareType>()),
+    organizations: types.array(types.frozen<Organization>()),
 
     // Selector
     generatedPassword: types.maybeNull(types.string),
@@ -119,6 +123,9 @@ export const CipherStoreModel = types
       self.isSynchingAutofill = false
       self.lastSync = null
       self.lastCacheUpdate = null
+      self.sharingInvitations = cast([])
+      self.myShares = cast([])
+      self.organizations = cast([])
     },
 
     lock: () => {
@@ -127,11 +134,22 @@ export const CipherStoreModel = types
       self.selectedFolder = null
     },
 
-    // ----------------- CRUD -------------------
+    setSharingInvitations: (data: SharingInvitationType[]) => {
+      self.sharingInvitations = cast(data)
+    },
 
-    syncData: async () => {
+    setMyShares: (data: MyShareType[]) => {
+      self.myShares = cast(data)
+    },
+
+    setOrganizations: (data: Organization[]) => {
+      self.organizations = cast(data)
+    }
+  }))
+  .actions(self => ({
+    syncData: async (page?: number, size?: number) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.syncData(self.apiToken)
+      const res = await cipherApi.syncData(self.apiToken, page, size)
       return res
     },
 
@@ -165,9 +183,9 @@ export const CipherStoreModel = types
       return res
     },
 
-    shareCipher: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
+    shareCipherToTeam: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.shareCipher(self.apiToken, id, data, score, collectionIds)
+      const res = await cipherApi.shareCipherToTeam(self.apiToken, id, data, score, collectionIds)
       return res
     },
 
@@ -193,14 +211,97 @@ export const CipherStoreModel = types
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.moveToFolder(self.apiToken, data)
       return res
-    }
-  })).postProcessSnapshot(omit([
+    },
+
+    getLastUpdate: async () => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getLastUpdate(self.apiToken)
+      return res
+    },
+
+    getSharingPublicKey: async (email: string) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getSharingPublicKey(self.apiToken, { email })
+      return res
+    },
+
+    shareCipher: async (payload: ShareCipherData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.shareCipher(self.apiToken, payload)
+      return res
+    },
+
+    stopShareCipher: async (organizationId: string, memberId: string, payload: StopShareCipherData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.stopShareCipher(self.apiToken, organizationId, memberId, payload)
+      return res
+    },
+
+    editShareCipher: async (organizationId: string, memberId: string, payload: EditShareCipherData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.editShareCipher(self.apiToken, organizationId, memberId, payload)
+      return res
+    },
+
+    confirmShareCipher: async (organizationId: string, memberId: string, payload: ConfirmShareCipherData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.confirmShareCipher(self.apiToken, organizationId, memberId, payload)
+      return res
+    },
+
+    loadSharingInvitations: async () => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getSharingInvitations(self.apiToken)
+      if (res.kind === 'ok') {
+        self.setSharingInvitations(res.data)
+      }
+      return res
+    },
+
+    loadMyShares: async () => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getMyShares(self.apiToken)
+      if (res.kind === 'ok') {
+        self.setMyShares(res.data)
+      }
+      return res
+    },
+
+    leaveShare: async (organizationId: string) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.leaveShare(self.apiToken, organizationId)
+      return res
+    },
+
+    respondShare: async (id: string, accepted: boolean) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.respondShareInvitation(self.apiToken, id, {
+        status: accepted ? 'accept' : 'reject'
+      })
+      return res
+    },
+
+    getProfile: async () => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getPMProfile(self.apiToken)
+      return res
+    },
+
+    getOrganization: async (id: string) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.getOrganization(self.apiToken, id)
+      return res
+    },
+  }))
+  .postProcessSnapshot(omit([
     'generatedPassword', 
     'selectedCipher',
     'selectedFolder',
     'isSynching',
     'isSynchingOffline',
-    'isSynchingAutofill'
+    'isSynchingAutofill',
+    'organizations',
+    'lastUpdate'
   ]))
 
 /**

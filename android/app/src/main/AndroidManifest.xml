@@ -3,6 +3,7 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.INSTALL_GRANT_RUNTIME_PERMISSIONS"/>
 
   <application 
     android:name=".MainApplication" 
@@ -14,10 +15,11 @@
   >
     <activity
         android:name=".LockerAutofillClient"
-        android:exported="false" />
+        android:exported="true" />
 
     <activity 
       android:name=".MainActivity" 
+      android:exported="true"
       android:label="@string/app_name" 
       android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" 
       android:launchMode="singleTask" 
@@ -40,6 +42,7 @@
 
     <service
       android:name=".autofill.LockerAutoFillService"
+      android:exported="true"
       android:label="Locker"
       android:permission="android.permission.BIND_AUTOFILL_SERVICE">
       <intent-filter>

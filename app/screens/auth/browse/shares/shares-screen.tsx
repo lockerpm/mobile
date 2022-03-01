@@ -1,113 +1,128 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../components"
+import React from "react"
+import { View } from "react-native"
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { Text, Button, Layout } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { SortAction } from "../../home/all-item/sort-action"
-import { AddAction } from "../../home/all-item/add-action"
 import { useMixins } from "../../../../services/mixins"
-import { BackHandler } from "react-native"
+import { commonStyles } from "../../../../theme"
+
+// @ts-ignore
+import BackIcon from '../../../../components/header/arrow-left.svg'
+// @ts-ignore
+import BackIconLight from '../../../../components/header/arrow-left-light.svg'
+
+import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
+import { SharingStatus } from "../../../../config/types"
 
 
-export const SharesScreen = observer(function SharesScreen() {
+export const SharesScreen = observer(() => {
   const navigation = useNavigation()
-  const { translate } = useMixins()
-  const { uiStore } = useStores()
+  const { translate, color, isDark } = useMixins()
+  const { cipherStore } = useStores()
 
-  const [isSortOpen, setIsSortOpen] = useState(false)
-  const [isAddOpen, setIsAddOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [sortList, setSortList] = useState({
-    orderField: 'name',
-    order: 'asc'
-  })
-  const [sortOption, setSortOption] = useState('az')
-  const [selectedItems, setSelectedItems] = useState([])
-  const [isSelecting, setIsSelecting] = useState(false)
-  const [allItems, setAllItems] = useState([])
-
-  // Close select before leave
-  useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
-    const checkSelectBeforeLeaving = () => {
-      if (isSelecting) {
-        setIsSelecting(false)
-        setSelectedItems([])
-        return true
-      }
-      return false
+  const menu = [
+    {
+      path: 'sharedItems',
+      name: translate('shares.shared_items'),
+      notiCount: cipherStore.sharingInvitations.length
+    },
+    {
+      path: 'shareItems',
+      name: translate('shares.share_items'),
+      notiCount: cipherStore.myShares.reduce((total, s) => {
+        return total + s.members.filter(m => m.status === SharingStatus.ACCEPTED).length
+      }, 0)
     }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-    }
-  }, [isSelecting])
-
+  ]
+  
   return (
     <Layout
-      isContentOverlayLoading={isLoading}
-      header={(
-        <BrowseItemHeader
-          header={translate('shares.share_items')}
-          openSort={() => setIsSortOpen(true)}
-          openAdd={() => setIsAddOpen(true)}
-          onSearch={setSearchText}
-          searchText={searchText}
-          navigation={navigation}
-          isSelecting={isSelecting}
-          setIsSelecting={setIsSelecting}
-          selectedItems={selectedItems}
-          setSelectedItems={setSelectedItems}
-          setIsLoading={setIsLoading}
-          toggleSelectAll={() => {
-            if (selectedItems.length < allItems.length) {
-              setSelectedItems(allItems)
-            } else {
-              setSelectedItems([])
-            }
-          }}
-        />
-      )}
       borderBottom
-      noScroll
+      containerStyle={{ 
+        backgroundColor: isDark ? color.background : color.block, 
+        paddingTop: 0 
+      }}
+      header={(
+        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+          <Button 
+            preset="link" 
+            onPress={() => navigation.goBack()}
+            style={{ 
+              height: 35,
+              width: 35,
+              justifyContent: 'flex-start',
+              alignItems: 'center'
+            }}
+          >
+            {
+              isDark ? (
+                <BackIconLight height={12} />
+              ) : (
+                <BackIcon height={12} />
+              )
+            }
+          </Button>
+
+          <Text preset="largeHeader" text={translate('shares.shares')} />
+        </View>
+      )}
     >
-      <SortAction
-        isOpen={isSortOpen}
-        onClose={() => setIsSortOpen(false)}
-        onSelect={(value: string, obj: { orderField: string, order: string }) => {
-          setSortOption(value)
-          setSortList(obj)
+      <View
+        style={{
+          backgroundColor: isDark ? color.block : color.background,
+          borderRadius: 10,
+          paddingHorizontal: 14,
+          marginTop: 20
         }}
-        value={sortOption}
-      />
-
-      <AddAction
-        isOpen={isAddOpen}
-        onClose={() => setIsAddOpen(false)}
-        navigation={navigation}
-      />
-
-      <CipherList
-        navigation={navigation}
-        onLoadingChange={setIsLoading}
-        searchText={searchText}
-        sortList={sortList}
-        organizationId={null}
-        isSelecting={isSelecting}
-        setIsSelecting={setIsSelecting}
-        selectedItems={selectedItems}
-        setSelectedItems={setSelectedItems}
-        setAllItems={setAllItems}
-        emptyContent={(
-          <BrowseItemEmptyContent
-            img={require('./empty-img.png')}
-            imgStyle={{ height: 55, width: 55 }}
-            title={translate('shares.empty.title')}
-            desc={translate('shares.empty.desc')}
-          />
-        )}
-      />
+      >
+        {
+          menu.map((item, index) => (
+            <Button
+              key={index}
+              preset="link"
+              onPress={() => {
+                navigation.navigate(item.path)
+              }}
+              style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+                borderBottomColor: color.line,
+                borderBottomWidth: index !== menu.length - 1 ? 1 : 0,
+                paddingVertical: 18
+              }]}
+            >
+              <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flex: 1 }]}>
+                <Text
+                  text={item.name}
+                  style={{ color: color.title, paddingHorizontal: 10 }}
+                />
+                {
+                  (item.notiCount > 0) && (
+                    <View
+                      style={{
+                        backgroundColor: color.error,
+                        borderRadius: 20,
+                        minWidth: 17,
+                        height: 17
+                      }}
+                    >
+                      <Text
+                        text={item.notiCount >= 100 ? '99+' : item.notiCount.toString()}
+                        style={{
+                          fontSize: 12,
+                          textAlign: 'center',
+                          color: color.white,
+                          lineHeight: 17
+                        }}
+                      />
+                    </View>
+                  )
+                }
+              </View>
+              <Icon name="angle-right" size={20} color={color.title} />
+            </Button>
+          ))
+        }
+      </View>
     </Layout>
   )
 })

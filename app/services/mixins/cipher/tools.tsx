@@ -3,6 +3,7 @@ import React, { createContext, useContext } from 'react'
 import { useMixins } from '..'
 import { CipherType } from '../../../../core/enums'
 import { CipherView } from '../../../../core/models/view'
+import { PlanType } from '../../../config/types'
 import { useStores } from '../../../models'
 import { Logger } from '../../../utils/logger'
 import { useCoreService } from '../../core-service'
@@ -29,7 +30,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
   // Load weak passwords
   const loadPasswordsHealth = async () => {
     try {
-      if (!user.plan || user.plan.alias === 'pm_free') {
+      if (!user.plan || user.plan.alias === PlanType.FREE) {
         return
       }
   

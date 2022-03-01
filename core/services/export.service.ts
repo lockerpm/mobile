@@ -73,7 +73,7 @@ export class ExportService implements ExportServiceAbstraction {
         }));
 
         promises.push(this.cipherService.getAllDecrypted().then(ciphers => {
-            decCiphers = ciphers.filter(f => f.deletedDate == null);
+            decCiphers = ciphers ? ciphers.filter(f => f.deletedDate == null) : [];
         }));
 
         await Promise.all(promises);
