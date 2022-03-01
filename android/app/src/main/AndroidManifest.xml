@@ -15,7 +15,7 @@
   >
     <activity
         android:name=".LockerAutofillClient"
-        android:exported="true" />
+        android:exported="false" />
 
     <activity 
       android:exported="true" 
@@ -41,6 +41,7 @@
     <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
 
     <service
+      android:exported="false"
       android:name=".autofill.LockerAutoFillService"
       android:label="Locker"
       android:permission="android.permission.BIND_AUTOFILL_SERVICE">
