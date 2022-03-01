@@ -80,6 +80,9 @@
     "trash": "Trash",
     "tools": "Tools",
     "unlock": "Unlock",
+    "upgrade": "Upgrade",
+    "user": "User",
+    "warning": "Warning",
     "website": "Website"
   },
   "navigator": {
@@ -118,9 +121,11 @@
     "duplicate_cipher_name": "Duplicated cipher name! Please choose another name!",
     "duplicate_folder_name": "Duplicated folder name! Please choose another name!",
     "not_allowed_to_see_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
-    "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!"
+    "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
+    "not_available_for_free": "This feature is not available for free account!"
   },
   "success": {
+    "done": "Done",
     "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation.",
     "invitation_rejected": "Invitation rejected",
     "master_password_updated": "Master password updated",
@@ -321,10 +326,32 @@
     }
   },
   "shares": {
-    "share_items": "Shared Items",
+    "shares": "Shares",
+    "share_items": "Your Shares",
+    "shared_items": "Shared With You",
     "empty": {
       "title": "Securely share items",
-      "desc": "Any shared or received passwords, notes or credit cards will appear here"
+      "desc_share": "Any shared passwords, notes or credit cards will appear here",
+      "desc_shared": "Any received passwords, notes or credit cards will appear here"
+    },
+    "add_emails": "Add recipient emails",
+    "share_type": {
+      "label": "Share type",
+      "view": "View",
+      "only_fill": "Only Fill",
+      "edit": "Edit"
+    },
+    "leave": "Leave",
+    "leave_desc": "Are you sure you want to leave this share group?",
+    "shared_with": "Shared with",
+    "no_members": "No member",
+    "start_sharing": "Start Sharing",
+    "stop_sharing": "Stop Sharing",
+    "share_x_items": "Share {{count}} items",
+    "confirm_share": {
+      "verify_fingerprint": "Verify fingerprint phrase",
+      "verification_desc": "To ensure the integrity of your encryption keys, please verify the user's fingerprint phrase before continuing.",
+      "fingerprint_desc": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
     }
   },
   "trash": {

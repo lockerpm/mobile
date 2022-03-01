@@ -3,10 +3,10 @@ import { CipherAction } from "../../../../components/cipher/cipher-action/cipher
 
 
 type Props = {
-  isOpen?: boolean,
-  onClose?: () => void,
-  navigation: any,
-  onLoadingChange?: Function,
+  isOpen?: boolean
+  onClose?: () => void
+  navigation: any
+  onLoadingChange?: Function
 }
 
 

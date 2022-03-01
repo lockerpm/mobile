@@ -318,10 +318,11 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       }
 
       // Clear services
+      const userId = await userService.getUserId()
       await Promise.all([
-        folderService.clearCache(),
-        cipherService.clearCache(),
-        collectionService.clearCache(),
+        folderService.clear(userId),
+        cipherService.clear(userId),
+        collectionService.clear(userId),
         cryptoService.clearKeys(),
         userService.clear()
       ])

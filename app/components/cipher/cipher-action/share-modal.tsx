@@ -1,181 +1,94 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
+import { TextInput, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
 import { useMixins } from "../../../services/mixins"
-import { TEAM_CIPHER_EDITOR } from "../../../config/constants"
 import { Modal } from "../../modal/modal"
 import { DropdownPicker } from "../../dropdown-picker/dropdown-picker"
 import { Button } from "../../button/button"
 import { Text } from "../../text/text"
-import { fontSize } from "../../../theme"
+import { commonStyles, fontSize } from "../../../theme"
 import { CipherView } from "../../../../core/models/view"
-import { useCoreService } from "../../../services/core-service"
-import { CipherRequest } from "../../../../core/models/request/cipherRequest"
-import { PolicyType } from "../../../services/api"
-import { CipherType } from "../../../../core/enums"
-import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
+import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import { AccountRoleText } from "../../../config/types"
 
 
 interface Props {
-  isOpen?: boolean,
+  isOpen?: boolean
   onClose?: () => void
+  cipherIds?: string[]
+  onSuccess?: () => void
 }
 
 export const ShareModal = observer((props: Props) => {
-  const { isOpen, onClose } = props
-  const { user, cipherStore, collectionStore } = useStores()
-  const { notify, translate, notifyApiError } = useMixins()
-  const { getPasswordStrength } = useCipherHelpersMixins()
-  const { cipherService } = useCoreService()
+  const { isOpen, onClose, cipherIds, onSuccess } = props
+  const { cipherStore } = useStores()
+  const { translate, color } = useMixins()
+  const { shareCipher, shareMultipleCiphers } = useCipherDataMixins()
 
   const selectedCipher: CipherView = cipherStore.cipherView
-  const teams = user.teams.filter((team) => {
-    return TEAM_CIPHER_EDITOR.includes(team.role)
-  }).map((team) => {
-    return {
-      label: team.name,
-      value: team.id
-    }
-  })
+  const shareTypes = [
+    translate('shares.share_type.only_fill'),
+    translate('shares.share_type.view'),
+    translate('shares.share_type.edit')
+  ]
 
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)
-
-  const [owner, setOwner] = useState(null)
-  const [owners, setOwners] = useState(teams)
-  const [collectionIds, setCollectionIds] = useState([])
-  const [writeableCollections, setWriteableCollections] = useState([])
-  const [policy, setPolicy] = useState<PolicyType>(null)
+  const [email, setEmail] = useState('')
+  const [emails, setEmails] = useState<string[]>([])
+  const [shareType, setShareType] = useState(1)
 
   // --------------- COMPUTED ----------------
 
-  const passwordStrength = (() => {
-    if (selectedCipher.login) {
-      return getPasswordStrength(selectedCipher.login.password)
-    }
-    return { score: undefined }
-  })()
+  const btnDisabled = isLoading || !emails.length
 
   // --------------- METHODS ----------------
 
-  const getPolicy = async (organizationId: string) => {
-    setIsLoading(true)
-    const res = await user.getPolicy(organizationId)
-    if (res.kind === 'ok') {
-      setPolicy(res.data)
-    } else {
-      notifyApiError(res)
-      setPolicy(null)
+  const addEmail = () => {
+    const e = email.trim().toLowerCase()
+    if (!!e && !emails.includes(e)) {
+      setEmails([...emails, e])
     }
-    setIsLoading(false)
+    setEmail('')
   }
 
-  const checkPolicy = (cipher: CipherView) => {
-    if (cipher.type === CipherType.Login) {
-      if (policy.min_password_length && cipher.login.password.length < policy.min_password_length) {
-        notify('error', translate('policy.min_password_length', { length: policy.min_password_length }))
-        return false
-      }
-      if (policy.max_password_length && cipher.login.password.length > policy.max_password_length) {
-        notify('error', translate('policy.max_password_length', { length: policy.max_password_length }))
-        return false
-      }
-      if (policy.password_composition) {
-        if (policy.require_special_character) {
-          const reg = /(?=.*[!@#$%^&*])/
-          const check = reg.test(cipher.login.password)
-          if (!check) {
-            notify('error', translate('policy.requires_special'))
-            return false
-          }
-        }
-        if (policy.require_lower_case) {
-          const reg = /[a-z]/
-          const check = reg.test(cipher.login.password)
-          if (!check) {
-            notify('error', translate('policy.requires_lowercase'))
-            return false
-          }
-        }
-        if (policy.require_upper_case) {
-          const reg = /[A-Z]/
-          const check = reg.test(cipher.login.password)
-          if (!check) {
-            notify('error', translate('policy.requires_uppercase'))
-            return false
-          }
-        }
-        if (policy.require_digit) {
-          const reg = /[1-9]/
-          const check = reg.test(cipher.login.password)
-          if (!check) {
-            notify('error', translate('policy.requires_number'))
-            return false
-          }
-        }
-        if (policy.avoid_ambiguous_character) {
-          const ambiguousCharacters = ['I', 'l', '1', 'O', '0']
-          const check = ambiguousCharacters.some(c => cipher.login.password.includes(c))
-          if (check) {
-            notify('error', translate('policy.avoid_ambiguous'))
-            return false
-          }
-        }
-      }
-    }
-    return true
+  const removeEmail = (val: string) => {
+    setEmails(emails.filter(e => e !== val))
   }
 
+  // Share single/multiple
   const handleShare = async () => {
-    const passPolicyTest = checkPolicy(selectedCipher)
-    if (!passPolicyTest) {
-      return
-    }
-
     setIsLoading(true)
 
-    const payload = {...selectedCipher}
-    payload.organizationId = owner
+    let role = AccountRoleText.MEMBER
+    let autofillOnly = false
+    switch (shareType) {
+      case 0:
+        autofillOnly = true
+        break
+      case 2:
+        role = AccountRoleText.ADMIN
+        break
+    }
 
-    const cipherEnc = await cipherService.encrypt(payload)
-    const data = new CipherRequest(cipherEnc)
-    const res = await cipherStore.shareCipher(
-      selectedCipher.id, 
-      data, 
-      passwordStrength.score, 
-      collectionIds
-    )
+    const res = !!cipherIds
+      ? await shareMultipleCiphers(cipherIds, emails, role, autofillOnly)
+      : await shareCipher(selectedCipher, emails, role, autofillOnly)
 
     setIsLoading(false)
 
-    if (res.kind === 'ok') {
-      notify('success', translate('success.cipher_shared'))
-      onClose()
-    } else {
-      notifyApiError(res)
-      if (res.kind === 'unauthorized') {
-        onClose()
+    if (res.kind === 'ok' || res.kind === 'unauthorized') {
+      if (res.kind === 'ok') {
+        onSuccess && onSuccess()
       }
+      onClose()
     }
   }
 
   // --------------- EFFECT ----------------
-
-  useEffect(() => {
-    if (owner) {
-      setWriteableCollections(
-        collectionStore.collections.filter(c => !c.readOnly && c.organizationId === owner).map(c => ({
-          label: c.name,
-          value: c.id
-        }))
-      )
-      getPolicy(owner)
-    } else {
-      setWriteableCollections([])
-      setPolicy(null)
-    }
-  }, [owner])
 
   // --------------- RENDER ----------------
 
@@ -184,17 +97,96 @@ export const ShareModal = observer((props: Props) => {
       isOpen={isOpen}
       onClose={onClose}
       onOpen={() => {
-        setOwner(null)
-        setOwners(teams)
-        setCollectionIds([])
-        setWriteableCollections([])
+        setEmail('')
+        setEmails([])
+        setShareType(1)
       }}
-      title={selectedCipher.name}
+      title={cipherIds ? translate('shares.share_x_items', { count: cipherIds.length }) : selectedCipher.name}
     >
       <Text
-        text={translate('common.ownership')}
+        text={translate('shares.add_emails')}
         style={{
           marginTop: 20,
+          marginBottom: 10,
+          fontSize: fontSize.small
+        }}
+      />
+
+      <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+        borderColor: color.line,
+        backgroundColor: color.background,
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingLeft: 10,
+        marginBottom: 10
+      }]}>
+        <TextInput
+          value={email}
+          onChangeText={setEmail}
+          placeholder={translate('common.email')}
+          placeholderTextColor={color.text}
+          onSubmitEditing={addEmail}
+          style={{
+            color: color.textBlack,
+            fontSize: fontSize.p,
+            flex: 1
+          }}
+        />
+
+        <Button
+          preset="link"
+          onPress={addEmail}
+          style={{
+            marginLeft: 5,
+            paddingHorizontal: 6,
+            height: 50,
+            alignItems: 'center'
+          }}
+        >
+          <IoniconsIcon name="add" size={25} color={color.primary} />
+        </Button>
+      </View>
+
+      {
+        emails.map((e, index) => (
+          <View
+            key={index}
+            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+              borderRadius: 8,
+              borderWidth: 0.5,
+              borderColor: color.primary,
+              backgroundColor: color.lightPrimary,
+              paddingLeft: 10,
+              marginBottom: 10
+            }]}
+          >
+            <Text
+              text={e}
+              style={{
+                flex: 1,
+                color: color.primary
+              }}
+            />
+
+            <Button
+              preset="link"
+              onPress={() => removeEmail(e)}
+              style={{
+                paddingHorizontal: 12,
+                height: 30,
+                alignItems: 'center'
+              }}
+            >
+              <IoniconsIcon name="close" size={16} color={color.primary} />
+            </Button>
+          </View>
+        ))
+      }
+
+      <Text
+        text={translate('shares.share_type.label')}
+        style={{
+          marginTop: 10,
           marginBottom: 10,
           fontSize: fontSize.small
         }}
@@ -204,48 +196,18 @@ export const ShareModal = observer((props: Props) => {
         zIndex={2000}
         zIndexInverse={1000}
         placeholder={translate('common.select')}
-        emptyText={translate('error.no_team_available')}
-        value={owner}
-        items={owners}
-        setValue={setOwner}
-        setItems={setOwners}
+        value={shareType}
+        items={shareTypes.map((t, index) => ({ label: t, value: index }))}
+        setValue={setShareType}
+        setItems={() => {}}
         style={{
           marginBottom: 20
         }}
       />
 
-      {
-        owner && (
-          <>
-            <Text
-              text={translate('common.team_folders')}
-              style={{
-                marginBottom: 10,
-                fontSize: fontSize.small
-              }}
-            />
-
-            <DropdownPicker
-              multiple
-              zIndex={1000}
-              zIndexInverse={2000}
-              emptyText={translate('error.no_collection_available')}
-              placeholder={translate('common.select')}
-              value={collectionIds}
-              items={writeableCollections}
-              setValue={setCollectionIds}
-              setItems={setWriteableCollections}
-              style={{
-                marginBottom: 20
-              }}
-            />
-          </>
-        )
-      }
-
       <Button
         text={translate('common.share')}
-        isDisabled={isLoading || !owner || !collectionIds.length}
+        isDisabled={btnDisabled}
         isLoading={isLoading}
         onPress={handleShare}
         style={{

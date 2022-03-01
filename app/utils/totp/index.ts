@@ -52,7 +52,7 @@ export const parseOTPUri = (uri: string) => {
   const account = decodeURIComponent(data[0])
   const query = _parseQueryString(data[1])
 
-  res.account = account
+  res.account = (query.issuer && !account.startsWith(query.issuer)) ? `${query.issuer} (${account})` : account
   res.secret = query.secret
   res.algorithm = _parseAlgorithm(query.algorithm)
   try {
@@ -148,7 +148,8 @@ const _parseQueryString = (query: string) => {
     algorithm: undefined,
     period: undefined,
     digits: undefined,
-    data: undefined
+    data: undefined,
+    issuer: undefined
   }
   for (let i = 0; i < vars.length; i++) {
     const pair = vars[i].split("=")
