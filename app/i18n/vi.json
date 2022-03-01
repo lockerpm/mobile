@@ -17,6 +17,9 @@
     "copied_to_clipboard": "Đã sao chép",
     "country": "Quốc gia",
     "create": "Tạo",
+    "crypto_account": "Tài khoản crypto",
+    "crypto_asset": "Tài sản crypto",
+    "crypto_wallet": "Ví crypto",
     "data": "Dữ liệu",
     "delete": "Xóa",
     "details": "Chi tiết",
@@ -506,5 +509,14 @@
     "invalid_data_format": "Dữ liệu không đúng định dạng",
     "success": "Nhập dữ liệu thành công",
     "pls_select_right_format": "Yêu cầu phải là tệp {{format}}"
+  },
+  "crypto_asset": {
+    "choose_type": "Chọn loại tài sản của bạn",
+    "choose_type_desc": "Chọn phương thức tiền điện tử bạn muốn thêm",
+    "empty": {
+      "title": "Thêm tài sản crypto đầu tiên của bạn",
+      "desc": "Lưu lại tài khoản/ví crypto của bạn",
+      "btn": "Thêm tài sản"
+    }
   }
 }
