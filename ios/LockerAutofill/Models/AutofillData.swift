@@ -8,7 +8,7 @@
 import Foundation
 
 struct AutofillData {
-  var autofillID: String!
+  var fillID: Int!
   var name: String!
   var id: String!
   var uri: String!
@@ -16,8 +16,8 @@ struct AutofillData {
   var password: String!
   var isOwner: Bool!
   
-  init(autofillID: String,name: String, id: String, uri: String, username: String,password: String, isOwner:Bool) {
-    self.autofillID = autofillID
+  init(fillID: Int, name: String, id: String, uri: String, username: String,password: String, isOwner:Bool) {
+    self.fillID = fillID
     self.id = id
     self.uri = uri
     self.username = username

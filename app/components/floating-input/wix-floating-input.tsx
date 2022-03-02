@@ -90,6 +90,7 @@ export const WixFloatingInput = function WixFloatingInput(props: WixFloatingInpu
         editable={editable && !disabled}
         disabled={disabled}
         secureTextEntry={isPassword && !showPassword}
+        selectionColor={color.primary}
         transformer={validateMask}
         onChangeText={onChangeText}
         underlineColor={{ 

@@ -13,7 +13,9 @@
     android:allowBackup="false" 
     android:theme="@style/AppTheme"
   >
-    <activity android:name=".LockerAutofillClient" android:exported="true" />
+    <activity
+        android:name=".LockerAutofillClient"
+        android:exported="true" />
 
     <activity 
       android:name=".MainActivity" 
