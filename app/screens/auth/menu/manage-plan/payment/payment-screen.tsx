@@ -18,10 +18,10 @@ import DeleteIcon from "./delete.svg"
 
 
 const subSkus = [
-  'com.cystack.lockerapp.per.premium.year',
-  'com.cystack.lockerapp.per.premium.mon',
-  // 'com.cystack.lockerapp.fam.premium.year',
-  // 'com.cystack.lockerapp.fam.premium.mon'
+  "pm_family_monthly",
+  "pm_family_yearly",
+  "pm_premium_monthly",
+  "pm_premium_yearly"
 ]
 
 export const PaymentScreen = observer(function PaymentScreen() {
@@ -42,18 +42,18 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const price = {
     per: {
       monthly: {
-        subId: 'com.cystack.lockerapp.per.premium.mon',
+        subId: "pm_premium_monthly",
       },
       yearly: {
-        subId: 'com.cystack.lockerapp.per.premium.year',
+        subId:  "pm_premium_yearly",
       },
     },
     fam: {
       monthly: {
-        subId: 'com.cystack.lockerapp.fam.premium.mon',
+        subId: "pm_family_monthly",
       },
       yearly: {
-        subId: 'com.cystack.lockerapp.fam.premium.year',
+        subId: "pm_family_yearly",
       }
     }
   }
