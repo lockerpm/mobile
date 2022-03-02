@@ -24,6 +24,7 @@ import { Utils } from '../../core-service/utils'
 import { AccountRoleText } from '../../../config/types'
 import { OrganizationData } from '../../../../core/models/data/organizationData'
 import { ImportResult } from '../../../../core/models/domain/importResult'
+import QueueManager from '../../../utils/queue'
 
 
 type GetCiphersParams = {
@@ -95,6 +96,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   } = useCoreService()
   const { notify, translate, randomString, notifyApiError, getTeam } = useMixins()
   const { newCipher } = useCipherHelpersMixins()
+  const syncQueue = QueueManager.getInstance().getSyncQueue()
 
   // ----------------------------- METHODS ---------------------------
 
@@ -152,150 +154,156 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Sync
-  const getSyncData = async () => {
-    try {
-      if (cipherStore.isSynching) {
-        return { kind: 'synching' }
-      }
-
-      cipherStore.setIsSynching(true)
-      messagingService.send('syncStarted')
-
-      // Sync api
-      const res = await cipherStore.syncData()
-      if (res.kind !== 'ok') {
-        notifyApiError(res)
+  const getSyncData = () => {
+    syncQueue.clear()
+    return syncQueue.add(async () => {
+      try {
+        if (cipherStore.isSynching) {
+          return { kind: 'synching' }
+        }
+  
+        cipherStore.setIsSynching(true)
+        messagingService.send('syncStarted')
+  
+        // Sync api
+        const res = await cipherStore.syncData()
+        if (res.kind !== 'ok') {
+          notifyApiError(res)
+          messagingService.send('syncCompleted', { successfully: false })
+          return res
+        }
+  
+        // Sync service
+        const userId = await userService.getUserId()
+  
+        await syncService.syncProfile(res.data.profile)
+        await syncService.syncFolders(userId, res.data.folders)
+        await syncService.syncCollections(res.data.collections)
+        await syncService.syncCiphers(userId, res.data.ciphers)
+        await syncService.syncSends(userId, res.data.sends)
+        await syncService.syncSettings(userId, res.data.domains)
+        await syncService.syncPolicies(res.data.policies)
+        await syncService.setLastSync(new Date())
+        
+        cipherStore.setLastSync()
+        messagingService.send('syncCompleted', { successfully: true })
+  
+        // Clear not updated list
+        cipherStore.clearNotUpdate()
+        folderStore.clearNotUpdate()
+        collectionStore.clearNotUpdate()
+  
+        // Save fingerprint
+        const fingerprint = await cryptoService.getFingerprint(userId)
+        user.setFingerprint(fingerprint.join('-'))
+  
+        // Save to shared keychain for autofill service
+        if (IS_IOS) {
+          await _updateAutofillData()
+        }
+        return { kind: 'ok' }
+      } catch (e) {
+        Logger.error(e)
         messagingService.send('syncCompleted', { successfully: false })
-        return res
+        return { kind: 'error' }
+      } finally {
+        cipherStore.setIsSynching(false)
       }
-
-      // Sync service
-      const userId = await userService.getUserId()
-
-      await syncService.syncProfile(res.data.profile)
-      await syncService.syncFolders(userId, res.data.folders)
-      await syncService.syncCollections(res.data.collections)
-      await syncService.syncCiphers(userId, res.data.ciphers)
-      await syncService.syncSends(userId, res.data.sends)
-      await syncService.syncSettings(userId, res.data.domains)
-      await syncService.syncPolicies(res.data.policies)
-      await syncService.setLastSync(new Date())
-      
-      cipherStore.setLastSync()
-      messagingService.send('syncCompleted', { successfully: true })
-
-      // Clear not updated list
-      cipherStore.clearNotUpdate()
-      folderStore.clearNotUpdate()
-      collectionStore.clearNotUpdate()
-
-      // Save fingerprint
-      const fingerprint = await cryptoService.getFingerprint(userId)
-      user.setFingerprint(fingerprint.join('-'))
-
-      // Save to shared keychain for autofill service
-      if (IS_IOS) {
-        await _updateAutofillData()
-      }
-      return { kind: 'ok' }
-    } catch (e) {
-      Logger.error(e)
-      messagingService.send('syncCompleted', { successfully: false })
-      return { kind: 'error' }
-    } finally {
-      cipherStore.setIsSynching(false)
-    }
+    })
   }
 
   // Sync gradually
-  const startSyncProcess = async () => {
-    try {
-      const pageSize = 50
-      let page = 1
-      let cipherIds: string[] = []
-
-      if (cipherStore.isSynching) {
-        return { kind: 'synching' }
-      }
-
-      cipherStore.setIsSynching(true)
-
-      // Sync api
-      let res = await cipherStore.syncData(page, pageSize)
-      if (res.kind !== 'ok') {
-        notifyApiError(res)
-        return res
-      }
-
-      // Sync service with data from first page
-      const userId = await userService.getUserId()
-
-      await syncService.syncProfile(res.data.profile)
-      await syncService.syncFolders(userId, res.data.folders)
-      await syncService.syncCollections(res.data.collections)
-      await syncService.syncSomeCiphers(userId, res.data.ciphers)
-      await syncService.syncSends(userId, res.data.sends)
-      await syncService.syncSettings(userId, res.data.domains)
-      await syncService.syncPolicies(res.data.policies)
-
-      cipherIds = res.data.ciphers.map(c => c.id)
-
-      // Load all loaded data
-      loadOrganizations()
-      cipherStore.setLastCacheUpdate()
-
-      // Sync other ciphers
-      const totalCipherCount = res.data.count.ciphers
-      while (page * pageSize < totalCipherCount) {
-        page += 1
-        res = await cipherStore.syncData(page, pageSize)
+  const startSyncProcess = () => {
+    syncQueue.clear()
+    return syncQueue.add(async () => {
+      try {
+        const pageSize = 50
+        let page = 1
+        let cipherIds: string[] = []
+  
+        if (cipherStore.isSynching) {
+          return { kind: 'synching' }
+        }
+  
+        cipherStore.setIsSynching(true)
+  
+        // Sync api
+        let res = await cipherStore.syncData(page, pageSize)
         if (res.kind !== 'ok') {
           notifyApiError(res)
           return res
         }
+  
+        // Sync service with data from first page
+        const userId = await userService.getUserId()
+  
+        await syncService.syncProfile(res.data.profile)
+        await syncService.syncFolders(userId, res.data.folders)
+        await syncService.syncCollections(res.data.collections)
         await syncService.syncSomeCiphers(userId, res.data.ciphers)
-        cipherIds = [...cipherIds, ...res.data.ciphers.map(c => c.id)]
+        await syncService.syncSends(userId, res.data.sends)
+        await syncService.syncSettings(userId, res.data.domains)
+        await syncService.syncPolicies(res.data.policies)
+  
+        cipherIds = res.data.ciphers.map(c => c.id)
+  
+        // Load all loaded data
+        loadOrganizations()
         cipherStore.setLastCacheUpdate()
-      }
-
-      // Clear deleted ciphers
-      const deletedIds: string[] = []
-      const storageRes: { [id: string]: any } = await storageService.get(`ciphers_${userId}`)
-      for (let id in { ...storageRes }) {
-        if (!cipherIds.includes(id)) {
-          delete storageRes[id]
-          deletedIds.push(id)
+  
+        // Sync other ciphers
+        const totalCipherCount = res.data.count.ciphers
+        while (page * pageSize < totalCipherCount) {
+          page += 1
+          res = await cipherStore.syncData(page, pageSize)
+          if (res.kind !== 'ok') {
+            notifyApiError(res)
+            return res
+          }
+          await syncService.syncSomeCiphers(userId, res.data.ciphers)
+          cipherIds = [...cipherIds, ...res.data.ciphers.map(c => c.id)]
+          cipherStore.setLastCacheUpdate()
         }
+  
+        // Clear deleted ciphers
+        const deletedIds: string[] = []
+        const storageRes: { [id: string]: any } = await storageService.get(`ciphers_${userId}`)
+        for (let id in { ...storageRes }) {
+          if (!cipherIds.includes(id)) {
+            delete storageRes[id]
+            deletedIds.push(id)
+          }
+        }
+        await storageService.save(`ciphers_${userId}`, storageRes)
+        await cipherService.csDeleteFromDecryptedCache(deletedIds)
+  
+        // Set last sync
+        cipherStore.setLastSync()
+        await syncService.setLastSync(new Date())
+        loadFolders()
+        loadCollections()
+  
+        // Clear not updated list
+        cipherStore.clearNotUpdate()
+        folderStore.clearNotUpdate()
+        collectionStore.clearNotUpdate()
+  
+        // Save fingerprint
+        const fingerprint = await cryptoService.getFingerprint(userId)
+        user.setFingerprint(fingerprint.join('-'))
+  
+        // Save to shared keychain for autofill service
+        if (IS_IOS) {
+          await _updateAutofillData()
+        }
+        return { kind: 'ok' }
+      } catch (e) {
+        Logger.error(e)
+        return { kind: 'error' }
+      } finally {
+        cipherStore.setIsSynching(false)
       }
-      await storageService.save(`ciphers_${userId}`, storageRes)
-      await cipherService.csDeleteFromDecryptedCache(deletedIds)
-
-      // Set last sync
-      cipherStore.setLastSync()
-      await syncService.setLastSync(new Date())
-      loadFolders()
-      loadCollections()
-
-      // Clear not updated list
-      cipherStore.clearNotUpdate()
-      folderStore.clearNotUpdate()
-      collectionStore.clearNotUpdate()
-
-      // Save fingerprint
-      const fingerprint = await cryptoService.getFingerprint(userId)
-      user.setFingerprint(fingerprint.join('-'))
-
-      // Save to shared keychain for autofill service
-      if (IS_IOS) {
-        await _updateAutofillData()
-      }
-      return { kind: 'ok' }
-    } catch (e) {
-      Logger.error(e)
-      return { kind: 'error' }
-    } finally {
-      cipherStore.setIsSynching(false)
-    }
+    })
   }
 
   // Sync offline data
@@ -418,7 +426,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     const sharedData: AutofillDataType = {
       passwords: passwordData,
       deleted: [],
-      authen: { email: user.email, hashPass: hashPasswordAutofill },
+      authen: { email: user.email, hashPass: hashPasswordAutofill, avatar: user.avatar },
       faceIdEnabled: user.isBiometricUnlock
     }
     await saveShared('autofill', JSON.stringify(sharedData))
@@ -511,7 +519,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     try {
       const res = await folderService.getAllDecrypted() || []
       for (let f of res) {
-        let ciphers = await getCiphers({
+        const ciphers = await getEncryptedCiphers({
           deleted: false,
           searchText: '',
           filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name))]
@@ -531,7 +539,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     try {
       const res = await collectionService.getAllDecrypted() || []
       for (let f of res) {
-        let ciphers = await getCiphers({
+        const ciphers = await getEncryptedCiphers({
           deleted: false,
           searchText: '',
           filters: [c => c.collectionIds.includes(f.id)]
@@ -540,7 +548,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       }
 
       // Add unassigned
-      let unassignedTeamCiphers = await getCiphers({
+      let unassignedTeamCiphers = await getEncryptedCiphers({
         deleted: false,
         searchText: '',
         filters: [(c : CipherView) => !c.collectionIds.length && !!getTeam(user.teams, c.organizationId).name]
@@ -569,13 +577,29 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
   }
 
+  // Get encrypted ciphers
+  const getEncryptedCiphers = async (params: GetCiphersParams) => {
+    try {
+      const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
+      const filters = [deletedFilter, ...params.filters]
+      if (!params.includeExtensions) {
+        filters.unshift((c : CipherView) => 1 <= c.type && c.type <= 4)
+      }
+      return await searchService.searchEncryptedCiphers(filters, null) || []
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      Logger.error(e)
+      return []
+    }
+  }
+
   // Get ciphers
   const getCiphers = async (params: GetCiphersParams) => {
     try {
       const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
       const filters = [deletedFilter, ...params.filters]
       if (!params.includeExtensions) {
-        filters.unshift((c : CipherView) => 1 <= c.type && c.type <= 4)
+        filters.unshift((c : CipherView) => ![CipherType.TOTP].includes(c.type))
       }
       return await searchService.searchCiphers(params.searchText || '', filters, null) || []
     } catch (e) {

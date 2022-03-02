@@ -14,6 +14,12 @@ import SharedIcon from './images/vault/shared.svg'
 // @ts-ignore
 import TrashIcon from './images/vault/trash.svg'
 // @ts-ignore
+import CryptoAssetIcon from './images/vault/crypto-asset.svg'
+// @ts-ignore
+import CryptoAccountIcon from './images/vault/crypto-account.svg'
+// @ts-ignore
+import CryptoWalletIcon from './images/vault/crypto-wallet.svg'
+// @ts-ignore
 import DataBreachScannerIcon from './images/vault/data-breach-scanner.svg'
 // @ts-ignore
 import PasswordGeneratorIcon from './images/vault/password-generator.svg'
@@ -30,21 +36,16 @@ import FFolderAddIcon from './images/folder/folder-add.svg'
 
 
 type BrowseItem = {
-  label: TxKeyPath,
-  icon: ImageSourcePropType & ImageURISource,
-  routeName: string,
-  addable?: boolean,
+  label: TxKeyPath
+  icon: ImageSourcePropType & ImageURISource
+  routeName: string
+  addable?: boolean
   svgIcon?: any
+  group?: string
 }
 
 type BrowseItemContainer = {
-  folder: BrowseItem,
-  password: BrowseItem,
-  note: BrowseItem,
-  card: BrowseItem,
-  identity: BrowseItem,
-  shares: BrowseItem,
-  trash: BrowseItem,
+  [name: string]: BrowseItem
 }
 
 
@@ -73,6 +74,27 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     icon: require('./images/vault/card.png'),
     routeName: 'cards',
     addable: true
+  },
+  cryptoAsset: {
+    label: 'common.crypto_asset',
+    icon: require('./images/vault/crypto-asset.png'),
+    routeName: 'cryptoAssets',
+    addable: true,
+    svgIcon: CryptoAssetIcon
+  },
+  cryptoAccount: {
+    label: 'common.crypto_account',
+    icon: require('./images/vault/crypto-account.png'),
+    routeName: 'cryptoAccounts',
+    svgIcon: CryptoAccountIcon,
+    group: 'cryptoAsset'
+  },
+  cryptoWallet: {
+    label: 'common.crypto_wallet',
+    icon: require('./images/vault/crypto-wallet.png'),
+    routeName: 'cryptoWallets',
+    svgIcon: CryptoAssetIcon,
+    group: 'cryptoAsset'
   },
   identity: {
     label: 'common.identity',

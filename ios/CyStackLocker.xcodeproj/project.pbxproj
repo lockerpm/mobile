@@ -15,26 +15,25 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* CyStackLockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CyStackLockerTests.m */; };
-		7C0685F32758F1210003C996 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0685F22758F1210003C996 /* CustomTextField.swift */; };
-		7C633CE02761ED1700140CAA /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 7C633CDF2761ED1700140CAA /* Toast */; };
+		7C306D7D27B4B5A600F64944 /* AutofillHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */; };
+		7C306DB127B6467900F64944 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C306DB027B6467900F64944 /* Colors.xcassets */; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
-		7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */; };
-		7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */; };
+		7C8496E027B7759200CFEA8B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496E227B7759200CFEA8B /* MainInterface.storyboard */; };
+		7C8496E627B7765C00CFEA8B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496E527B7765C00CFEA8B /* Localizable.strings */; };
+		7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A609C27A38D5D00477348 /* FormFieldView.swift */; };
 		7CAB332C279972020000B15E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332B279972020000B15E /* Utils.swift */; };
 		7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332D2799777B0000B15E /* AutofillData.swift */; };
 		7CAB3330279979650000B15E /* AutofillDataKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332F279979650000B15E /* AutofillDataKeychain.swift */; };
 		7CAB3332279A548A0000B15E /* CredentialProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3331279A548A0000B15E /* CredentialProviderController.swift */; };
 		7CAB3334279A6AD70000B15E /* VerifyMasterPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */; };
 		7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3335279AA04E0000B15E /* LoginListViewController.swift */; };
-		7CE29ABB279E98A00055B0C5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7CE29ABD279E98A00055B0C5 /* Localizable.strings */; };
 		7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A4B148D367B119F99EC2C2E5 /* libPods-CyStackLocker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EADEA568884090C1B008E181 /* libPods-CyStackLocker.a */; };
 		CA03E5CB277C244500E64FA1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CA03E5CA277C244500E64FA1 /* GoogleService-Info.plist */; };
 		CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
-		CA53479627181AB400BA4901 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA53479427181AB400BA4901 /* MainInterface.storyboard */; };
 		CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CA53478F27181AB400BA4901 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CA9F41E927183FC300B0C0A5 /* KeychainAccess */; };
 		CAFA4CF8270AF9A20003FFA5 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFA4CF7270AF9A20003FFA5 /* File.swift */; };
@@ -109,22 +108,23 @@
 		6102F80C8AA04C85ADA0AEE2 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		643666B7E5804C808CAF1052 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		771E1616CFA147CD9E433C3F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		7C0685F22758F1210003C996 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLockerRelease.entitlements; path = CyStackLocker/CyStackLockerRelease.entitlements; sourceTree = "<group>"; };
+		7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
+		7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillHelpers.swift; sourceTree = "<group>"; };
+		7C306DB027B6467900F64944 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		7C633CDB2761EA0D00140CAA /* Toast */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Toast; path = "Pods/Toast-Swift/Toast"; sourceTree = "<group>"; };
-		7C633CDC2761EA9B00140CAA /* libToast-Swift.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libToast-Swift.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
-		7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPasaswordViewController.swift; sourceTree = "<group>"; };
-		7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
+		7C8496E127B7759200CFEA8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		7C8496E427B7759900CFEA8B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
+		7C8496E527B7765C00CFEA8B /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		7C8A609C27A38D5D00477348 /* FormFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldView.swift; sourceTree = "<group>"; };
 		7CAB332B279972020000B15E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		7CAB332D2799777B0000B15E /* AutofillData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillData.swift; sourceTree = "<group>"; };
 		7CAB332F279979650000B15E /* AutofillDataKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillDataKeychain.swift; sourceTree = "<group>"; };
 		7CAB3331279A548A0000B15E /* CredentialProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderController.swift; sourceTree = "<group>"; };
 		7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyMasterPasswordViewController.swift; sourceTree = "<group>"; };
 		7CAB3335279AA04E0000B15E /* LoginListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
-		7CE29AB8279E98330055B0C5 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
-		7CE29ABC279E98A00055B0C5 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
-		7CE29ABF279E999F0055B0C5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashCore.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CyStackLocker/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -133,7 +133,6 @@
 		CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLocker.entitlements; path = CyStackLocker/CyStackLocker.entitlements; sourceTree = "<group>"; };
 		CA53478927181A9C00BA4901 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		CA53478F27181AB400BA4901 /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		CA53479527181AB400BA4901 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		CA53479727181AB400BA4901 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA53479827181AB400BA4901 /* LockerAutofill.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofill.entitlements; sourceTree = "<group>"; };
 		CAFA4CF6270AF9A20003FFA5 /* CyStackLocker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CyStackLocker-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -181,7 +180,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C633CE02761ED1700140CAA /* Toast in Frameworks */,
 				CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */,
 				CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */,
 			);
@@ -210,6 +208,7 @@
 		13B07FAE1A68108700A75B9A /* CyStackLocker */ = {
 			isa = PBXGroup;
 			children = (
+				7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */,
 				CA03E5CA277C244500E64FA1 /* GoogleService-Info.plist */,
 				CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -226,7 +225,6 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7C633CDC2761EA9B00140CAA /* libToast-Swift.a */,
 				CA53478927181A9C00BA4901 /* AuthenticationServices.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -282,7 +280,7 @@
 			isa = PBXGroup;
 			children = (
 				7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */,
-				7C0685F22758F1210003C996 /* CustomTextField.swift */,
+				7C8A609C27A38D5D00477348 /* FormFieldView.swift */,
 			);
 			path = customUI;
 			sourceTree = "<group>";
@@ -310,8 +308,6 @@
 				7C80ADBD2759F29200AD45BF /* customUI */,
 				7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */,
 				7CAB3335279AA04E0000B15E /* LoginListViewController.swift */,
-				7C814EC72750CB5C0033F78D /* NewPasswordViewController.swift */,
-				7C80ADBB2759F20700AD45BF /* EditPasaswordViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -320,7 +316,9 @@
 			isa = PBXGroup;
 			children = (
 				7CAB332B279972020000B15E /* Utils.swift */,
+				7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */,
 				7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */,
+				7C8496E527B7765C00CFEA8B /* Localizable.strings */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -367,15 +365,16 @@
 		CA53479127181AB400BA4901 /* LockerAutofill */ = {
 			isa = PBXGroup;
 			children = (
+				CA53479827181AB400BA4901 /* LockerAutofill.entitlements */,
+				7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */,
+				7CAB3325279969B60000B15E /* Models */,
 				7CAB332A279971E20000B15E /* Utils */,
 				7CAB332727996A480000B15E /* Views */,
 				7CAB332627996A310000B15E /* Controller */,
-				7CAB3325279969B60000B15E /* Models */,
-				CA53479827181AB400BA4901 /* LockerAutofill.entitlements */,
 				7C70B7BD2758CD2B005D0D8E /* assets.xcassets */,
+				7C306DB027B6467900F64944 /* Colors.xcassets */,
 				CA53479727181AB400BA4901 /* Info.plist */,
-				CA53479427181AB400BA4901 /* MainInterface.storyboard */,
-				7CE29ABD279E98A00055B0C5 /* Localizable.strings */,
+				7C8496E227B7759200CFEA8B /* MainInterface.storyboard */,
 			);
 			path = LockerAutofill;
 			sourceTree = "<group>";
@@ -481,7 +480,6 @@
 			name = LockerAutofill;
 			packageProductDependencies = (
 				CA9F41E927183FC300B0C0A5 /* KeychainAccess */,
-				7C633CDF2761ED1700140CAA /* Toast */,
 			);
 			productName = LockerAutofill;
 			productReference = CA53478F27181AB400BA4901 /* LockerAutofill.appex */;
@@ -493,7 +491,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -531,7 +529,6 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -584,8 +581,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */,
-				7CE29ABB279E98A00055B0C5 /* Localizable.strings in Resources */,
-				CA53479627181AB400BA4901 /* MainInterface.storyboard in Resources */,
+				7C8496E627B7765C00CFEA8B /* Localizable.strings in Resources */,
+				7C8496E027B7759200CFEA8B /* MainInterface.storyboard in Resources */,
+				7C306DB127B6467900F64944 /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -906,14 +904,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CAB3334279A6AD70000B15E /* VerifyMasterPasswordViewController.swift in Sources */,
-				7C80ADBC2759F20700AD45BF /* EditPasaswordViewController.swift in Sources */,
 				7CAB332C279972020000B15E /* Utils.swift in Sources */,
+				7C306D7D27B4B5A600F64944 /* AutofillHelpers.swift in Sources */,
 				7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */,
-				7C814EC82750CB5C0033F78D /* NewPasswordViewController.swift in Sources */,
+				7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */,
 				7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */,
 				7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */,
 				7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */,
-				7C0685F32758F1210003C996 /* CustomTextField.swift in Sources */,
 				7CAB3332279A548A0000B15E /* CredentialProviderController.swift in Sources */,
 				7CAB3330279979650000B15E /* AutofillDataKeychain.swift in Sources */,
 			);
@@ -940,20 +937,11 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		7CE29ABD279E98A00055B0C5 /* Localizable.strings */ = {
+		7C8496E227B7759200CFEA8B /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				7CE29ABC279E98A00055B0C5 /* vi */,
-				7CE29ABF279E999F0055B0C5 /* en */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		CA53479427181AB400BA4901 /* MainInterface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CA53479527181AB400BA4901 /* Base */,
-				7CE29AB8279E98330055B0C5 /* vi */,
+				7C8496E127B7759200CFEA8B /* Base */,
+				7C8496E427B7759900CFEA8B /* vi */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -1022,7 +1010,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				ENABLE_BITCODE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1033,7 +1021,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.15;
+				MARKETING_VERSION = 1.17;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1057,7 +1045,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1068,7 +1056,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.15;
+				MARKETING_VERSION = 1.17;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1344,9 +1332,9 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LockerAutofill/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = LockerAutofill;
+				INFOPLIST_KEY_CFBundleDisplayName = Locker;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1376,7 +1364,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = LockerAutofill/LockerAutofill.entitlements;
+				CODE_SIGN_ENTITLEMENTS = LockerAutofill/LockerAutofillRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1385,9 +1373,9 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LockerAutofill/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = LockerAutofill;
+				INFOPLIST_KEY_CFBundleDisplayName = Locker;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1466,14 +1454,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/scalessec/Toast-Swift";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -1485,11 +1465,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7C633CDF2761ED1700140CAA /* Toast */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7C633CDE2761ED1700140CAA /* XCRemoteSwiftPackageReference "Toast-Swift" */;
-			productName = Toast;
-		};
 		CA9F41E927183FC300B0C0A5 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
