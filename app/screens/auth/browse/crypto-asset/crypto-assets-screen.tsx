@@ -95,7 +95,7 @@ export const CryptoAssetsScreen = observer(() => {
         navigation={navigation}
         onLoadingChange={setIsLoading}
         searchText={searchText}
-        cipherType={CipherType.SecureNote}
+        cipherType={[CipherType.CryptoAccount, CipherType.CryptoWallet]}
         sortList={sortList}
         isSelecting={isSelecting}
         setIsSelecting={setIsSelecting}

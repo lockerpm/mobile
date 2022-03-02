@@ -30,7 +30,7 @@ export interface CipherListProps {
   navigation: any
   searchText?: string
   onLoadingChange?: Function
-  cipherType?: CipherType
+  cipherType?: CipherType | CipherType[]
   deleted?: boolean
   sortList?: {
     orderField: string
@@ -49,7 +49,7 @@ export interface CipherListProps {
 /**
  * Describe your component here
  */
-export const CipherList = observer(function CipherList(props: CipherListProps) {
+export const CipherList = observer((props: CipherListProps) => {
   const {
     emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList,
     folderId, collectionId, organizationId,
@@ -96,7 +96,12 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     // Filter
     const filters = []
     if (props.cipherType) {
-      filters.push((c : CipherView) => c.type === props.cipherType)
+      if (typeof props.cipherType === 'number') {
+        filters.push((c : CipherView) => c.type === props.cipherType)
+      } else {
+        // @ts-ignore
+        filters.push((c : CipherView) => props.cipherType.includes(c.type))
+      }
     }
 
     // Search
