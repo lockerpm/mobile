@@ -524,6 +524,8 @@
     "copy_username": "Sao chép Username",
     "copy_password": "Sao chép mật khẩu",
     "email_recovery": "Email khôi phục",
-    "seed": "Seed Phrase"
+    "seed": "Seed Phrase",
+    "backup_details": "Thông tin khôi phục",
+    "network": "Mạng Blockchain"
   }
 }

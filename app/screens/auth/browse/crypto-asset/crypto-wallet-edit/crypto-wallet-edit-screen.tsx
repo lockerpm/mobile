@@ -14,6 +14,9 @@ import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { CryptoWalletData, toCryptoWalletData } from "../../../../../utils/crypto"
+import { SeedPhraseInput } from "./seed-phrase-input"
+import { ChainSelect } from "./chain-select"
 
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, 'cryptoWallets__edit'>;
@@ -22,24 +25,33 @@ type NoteEditScreenProp = RouteProp<PrimaryParamList, 'cryptoWallets__edit'>;
 export const CryptoWalletEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<NoteEditScreenProp>()
-  const { mode } = route.params
   const { cipherStore } = useStores()
-  const selectedCipher: CipherView = cipherStore.cipherView
   const { translate, color } = useMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
 
-  // Forms
+  const selectedCipher: CipherView = cipherStore.cipherView
+  const cryptoWalletData = toCryptoWalletData(selectedCipher.notes)
+  const { mode } = route.params
+
+  // ------------------------- PARAMS ------------------------------------
+
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+  const [chainAlias, setChainAlias] = useState(mode !== 'add' ? cryptoWalletData.network.alias : '')
+  const [chainName, setChainName] = useState(mode !== 'add' ? cryptoWalletData.network.name : '')
+  const [email, setEmail] = useState(mode !== 'add' ? cryptoWalletData.email : '')
+  const [seed, setSeed] = useState(mode !== 'add' ? cryptoWalletData.seed : '           ')
+  const [note, setNote] = useState(mode !== 'add' ? cryptoWalletData.notes : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
-  // Params
   const [isLoading, setIsLoading] = useState(false)
 
-  // Watchers
+  // -------------------------- COMPUTED ------------------------------
+
+  // -------------------------- EFFECTS ------------------------------
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (cipherStore.selectedFolder) {
@@ -55,21 +67,37 @@ export const CryptoWalletEditScreen = observer(() => {
     return unsubscribe
   }, [navigation])
 
-  // Methods
+  // -------------------------- METHODS ------------------------------
+
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
     if (mode === 'add') {
-      payload = newCipher(CipherType.SecureNote)
+      payload = newCipher(CipherType.CryptoWallet)
     } else {
       // @ts-ignore
       payload = {...selectedCipher}
     }
 
+    const cryptoData: CryptoWalletData = {
+      email,
+      seed,
+      notes: note,
+      network: {
+        name: chainName,
+        alias: chainAlias
+      }
+    }
+
     payload.name = name
-    payload.notes = note
+    payload.notes = JSON.stringify(cryptoData)
     payload.folderId = folder
     payload.organizationId = organizationId
+    payload.secureNote = {
+      // @ts-ignore
+      response: null,
+      type: 0
+    }
 
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
@@ -84,7 +112,8 @@ export const CryptoWalletEditScreen = observer(() => {
     }
   }
 
-  // Render
+  // -------------------------- RENDER ------------------------------
+
   return (
     <Layout
       isContentOverlayLoading={isLoading}
@@ -152,19 +181,59 @@ export const CryptoWalletEditScreen = observer(() => {
           paddingBottom: 32
         }]}
       >
-        {/* Note */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            fixedLabel
-            textarea
-            label={translate('common.notes')}
-            value={note}
-            onChangeText={setNote}
+        {/* Network */}
+        <View style={{ flex: 1 }}>
+          <ChainSelect
+            alias={chainAlias}
+            onChange={(alias: string, name: string) => {
+              setChainAlias(alias)
+              setChainName(name)
+            }}
           />
         </View>
-        {/* Note end */}
+        {/* Network end */}
       </View>
       {/* Info end */}
+
+      <View style={commonStyles.SECTION_PADDING}>
+        <Text
+          text={translate('crypto_asset.backup_details').toUpperCase()}
+          style={{ fontSize: fontSize.small }}
+        />
+      </View>
+
+      {/* Backup Info */}
+      <View
+        style={[commonStyles.SECTION_PADDING, {
+          backgroundColor: color.background,
+          paddingBottom: 32
+        }]}
+      >
+        {/* Email */}
+        <View style={{ flex: 1 }}>
+          <FloatingInput
+            fixedLabel
+            label={translate('common.email')}
+            value={email}
+            onChangeText={setEmail}
+          />
+        </View>
+        {/* Email end */}
+
+        {/* Seed */}
+        <View style={{ flex: 1, marginTop: 20 }}>
+          <Text
+            text={translate('crypto_asset.seed')}
+            style={{ fontSize: fontSize.small }}
+          />
+          <SeedPhraseInput
+            seed={seed}
+            setSeed={setSeed}
+          />
+        </View>
+        {/* Seed end */}
+      </View>
+      {/* Backup Info end */}
 
       {/* Others */}
       <CipherOthersInfo
@@ -175,6 +244,9 @@ export const CryptoWalletEditScreen = observer(() => {
         collectionIds={collectionIds}
         setCollectionIds={setCollectionIds}
         isDeleted={selectedCipher.isDeleted}
+        hasNote
+        note={note}
+        onChangeNote={setNote}
       />
       {/* Others end */}
     </Layout>

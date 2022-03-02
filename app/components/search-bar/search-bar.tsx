@@ -51,6 +51,7 @@ export const SearchBar = function SearchBar(props: SearchBarProps) {
         placeholderTextColor={color.text}
         onChangeText={setText}
         clearButtonMode="while-editing"
+        selectionColor={color.primary}
         style={{
           flex: 1,
           paddingVertical: 10,

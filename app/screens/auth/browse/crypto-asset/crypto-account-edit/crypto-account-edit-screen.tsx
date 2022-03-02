@@ -70,21 +70,6 @@ export const CryptoAccountEditScreen = observer(() => {
     return unsubscribe
   }, [navigation])
 
-  useEffect(() => {
-    if (mode !== 'add') {
-      setName(selectedCipher.name)
-      setUsername(cryptoAccountData.username)
-      setPassword(cryptoAccountData.password)
-      setUrl(cryptoAccountData.uris?.uri)
-      setPhone(cryptoAccountData.phone)
-      setEmailRecovery(cryptoAccountData.emailRecovery)
-      setNote(cryptoAccountData.notes)
-      setFolder(selectedCipher.folderId)
-      setOrganizationId(selectedCipher.organizationId)
-      setCollectionIds(selectedCipher.collectionIds)
-    }
-  }, [])
-
   // Methods
   const handleSave = async () => {
     setIsLoading(true)

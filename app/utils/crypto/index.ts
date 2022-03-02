@@ -16,6 +16,10 @@ export type CryptoWalletData = {
   email: string
   seed: string
   notes: string
+  network: {
+    name: string
+    alias: string
+  }
 }
 
 export const toCryptoAccountData = (str: string) => {
@@ -47,7 +51,11 @@ export const toCryptoWalletData = (str: string) => {
   let res: CryptoWalletData = {
     email: '',
     seed: '',
-    notes: ''
+    notes: '',
+    network: {
+      name: '',
+      alias: ''
+    }
   }
   try {
     const parsed: CryptoWalletData = JSON.parse(str)
