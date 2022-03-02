@@ -1,29 +1,20 @@
 import React, { useState, useEffect } from "react"
-import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native"
-
-import { AutoImage as Image, Button } from "../../../../../components"
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../../services/mixins"
 import { observer } from "mobx-react-lite"
 import LinearGradient from "react-native-linear-gradient"
 import { PremiumBenefits } from "./premium-benefits"
+import { IS_IOS } from '../../../../../config/constants'
+import { PricePlan } from "./price-plan"
+import { requestSubscription, useIAP, Purchase, Subscription } from 'react-native-iap';
+
 
 // @ts-ignore
-import LockerPremium from "./locker-premium.svg"
-// @ts-ignore
-import LockSimpleIcon from "./lock-simple.svg"
+import LockerPremium from "./LockerPremium.svg"
 // @ts-ignore
 import DeleteIcon from "./delete.svg"
-// @ts-ignore
-import MegaphoneIcon from "./megaphone-simple.svg"
-// @ts-ignore
-import ShieldIcon from "./shield-check.svg"
-// @ts-ignore
-import UsersIcon from "./users.svg"
 
-import { PricePlan } from "./price-plan"
-
-import { requestSubscription, useIAP, Purchase, Subscription } from 'react-native-iap';
 
 
 const subSkus = [
@@ -34,12 +25,10 @@ const subSkus = [
 ]
 
 export const PaymentScreen = observer(function PaymentScreen() {
-  // const { translate, color } = useMixins()
+  const { translate } = useMixins()
   const navigation = useNavigation();
   const [payIndividual, setPayIndividual] = useState(true)
-  const [isEnable, setEnable] = React.useState(true)
-
- 
+  const [isEnable, setEnable] = useState(true)
 
   const {
     connected,
@@ -52,39 +41,19 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   const price = {
     per: {
-      mon: {
-        lockerId: "1",
+      monthly: {
         subId: 'com.cystack.lockerapp.per.premium.mon',
-        title: "$4.99/ month",
-        subtitle: "Billed monthly",
-        sale: "",
-        pay_title: "Upgrade now for $4.99"
       },
-      year: {
-        lockerId: "1",
+      yearly: {
         subId: 'com.cystack.lockerapp.per.premium.year',
-        title: "$1.29/ month",
-        subtitle: "$15.48 billed every 12 months",
-        sale: "Save 75%",
-        pay_title: "Upgrade now for $15.48"
       },
     },
     fam: {
-      mon: {
-        lockerId: "1",
+      monthly: {
         subId: 'com.cystack.lockerapp.fam.premium.mon',
-        title: "$0.99/ month",
-        subtitle: "Per member. $71.88 billed every 12 months",
-        sale: "Save 80%",
-        pay_title: "Upgrade now for $71.88"
       },
-      year: {
-        lockerId: "1",
+      yearly: {
         subId: 'com.cystack.lockerapp.fam.premium.year',
-        title: "$1.6/ month",
-        subtitle: "Per member. $9.99 billed monthly.",
-        sale: "Save 67%",
-        pay_title: "Upgrade now for $9.99"
       }
     }
   }
@@ -94,7 +63,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   useEffect(() => {
     getSubscriptions(subSkus);
     console.log(subscriptions);
-    
+
   }, [getSubscriptions]);
 
   useEffect(() => {
@@ -103,37 +72,13 @@ export const PaymentScreen = observer(function PaymentScreen() {
         const receipt = purchase.transactionReceipt;
         if (receipt)
           console.log(receipt);
-          
-          try {
-            const ackResult = await finishTransaction(purchase);
-            console.log('ackResult', ackResult);
-            Alert.alert(
-              "purchase success",
-              "My Alert Msg",
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel"
-                },
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-              ]
-            );
-          } catch (ackErr) {
-            Alert.alert(
-              "purchase cancel",
-              "My Alert Msg",
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel"
-                },
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-              ]
-            );
-            console.warn('ackErr', ackErr);
-          }
+
+        try {
+          const ackResult = await finishTransaction(purchase);
+          console.log('ackResult', ackResult);
+        } catch (ackErr) {
+          console.warn('ackErr', ackErr);
+        }
       }
     };
     checkCurrentPurchase(currentPurchase);
@@ -141,9 +86,9 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   const purchase = (items: Subscription[]): void => {
     // if (item.type === 'iap') requestPurchase(item.productId);
-    var subID = isEnable? currentPriceSegment.year.subId : currentPriceSegment.mon.subId
+    var subID = isEnable ? currentPriceSegment.yearly.subId : currentPriceSegment.monthly.subId
     console.log(subID);
-    
+
     requestSubscription(subID);
   };
 
@@ -157,15 +102,15 @@ export const PaymentScreen = observer(function PaymentScreen() {
       >
         <TouchableOpacity
           onPress={() => setPayIndividual(true)}
-          style={[styles.planItem, { backgroundColor: payIndividual ? "white" : "#EBEBEB" }]}
+          style={[styles.segmentItem, { backgroundColor: payIndividual ? "white" : "#EBEBEB", left: 0 }]}
         >
-          <Text style={[styles.h6, { marginTop: 4 }]}>Individual</Text>
+          <Text style={[styles.h6, { marginTop: 4 }]}>{translate("payment.individual")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setPayIndividual(false)}
-          style={[styles.planItem, { backgroundColor: payIndividual ? "#EBEBEB" : "white" }]}
+          style={[styles.segmentItem, { backgroundColor: payIndividual ? "#EBEBEB" : "white", right: 0  }]}
         >
-          <Text style={[styles.h6, { marginTop: 4 }]}>Family</Text>
+          <Text style={[styles.h6, { marginTop: 4 }]}>{translate("payment.family")}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -173,40 +118,21 @@ export const PaymentScreen = observer(function PaymentScreen() {
   return (
     // Within your render function
     <LinearGradient colors={["#ffffff", "#268334"]} style={{ flex: 1 }}>
-      <View style={{flex: 1, height: "20%", position: "absolute", width: "100%"}}>
-        <View style={styles.header}>
+      <View style={{ top: 0, height: "50%", position: "absolute", width: "100%", justifyContent: "space-between" }}>
+        <View style={[styles.header, { marginTop: IS_IOS ? 40 : 20}]}>
           <LockerPremium />
-          <TouchableOpacity style={{zIndex:1}} onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <DeleteIcon />
           </TouchableOpacity>
-        </View> 
-      </View>
-      <View>
-        <PremiumBenefits/>
-      </View>
-      <View
-        style={[
-          styles.payment,
-          {
-            backgroundColor: "white",
-          },
-        ]}
-      >
-        <Segment />
-        <View style={{ marginLeft: 20, marginRight: 20 }}>
-          <Text style={[styles.p1, { marginTop: 10, marginBottom: 10 }]}>
-            Enjoy all Locker Premium features with Yearly Plan to save up to 75%.
-          </Text>
-
-          <PricePlan onPress={setEnable} isEnable={isEnable} plan={currentPriceSegment} />
-
         </View>
-        <Button style={styles.payButton} onPress={() => purchase(subscriptions)}>
-          <Text style={{ fontSize: 16, fontWeight: "600", fontStyle: "normal", color: "white" }}>
-            {isEnable ? currentPriceSegment.year.pay_title : currentPriceSegment.mon.pay_title}
-          </Text>
-          <Text style={{ fontSize: 12, color: "white" }}>Recurring billing. Cancel anytime</Text>
-        </Button>
+        <View style={{ zIndex: 1 }}>
+          <PremiumBenefits />
+        </View>
+      </View>
+
+      <View style={[styles.payment, { backgroundColor: "white" }]}>
+        <Segment />
+        <PricePlan onPress={setEnable} isEnable={isEnable} personal={payIndividual} />
       </View>
     </LinearGradient>
   )
@@ -222,9 +148,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   header: {
+    zIndex: 2,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 25,
     padding: 15,
     width: "100%",
   },
@@ -237,32 +163,29 @@ const styles = StyleSheet.create({
   payment: {
     flex: 1,
     bottom: 0,
+    width: "100%",
     position: "absolute",
     height: "50%",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     marginTop: 15,
   },
-  planItem: {
-    height: "86%",
-    margin: 2,
-    borderRadius: 7,
+  segmentItem: {
+    position: "absolute",
+    margin: 2, 
+    padding: 2,
+    borderRadius: 6,
     width: "49%",
     alignItems: "center",
   },
   segment: {
     alignItems: "center",
-    flexDirection: "row",
+    justifyContent: "space-between",
+    flexDirection:"row",
     marginLeft: 20,
     marginRight: 20,
     marginTop: 10,
     height: 32,
-    borderRadius: 7,
+    borderRadius: 6,
   },
-  payButton: {
-    marginLeft: 20,
-    marginRight: 20,
-    flexDirection: "column",
-    marginTop: 20,
-  }
 })
