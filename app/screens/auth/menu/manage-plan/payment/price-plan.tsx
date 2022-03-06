@@ -49,6 +49,7 @@ export const PricePlanItem = (prop: PricePlanItemProps) => {
 
 interface PricePlanProps {
   onPress: React.Dispatch<React.SetStateAction<boolean>>
+  purchase: () => void
   isEnable: boolean
   personal: boolean
 }
@@ -111,7 +112,7 @@ export const PricePlan = (prop: PricePlanProps) => {
       <Button style={{
         flexDirection: "column",
         marginTop: 20,
-      }} onPress={() => { }}>
+      }} onPress={prop.purchase}>
         <Text style={{ fontSize: 16, fontWeight: "600", fontStyle: "normal", color: "white" }}>
           {prop.isEnable ? price.yearly.pay_title : price.monthly.pay_title}
         </Text>

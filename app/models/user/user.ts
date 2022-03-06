@@ -6,6 +6,7 @@ import { save, storageKeys } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
 import { number } from "mobx-state-tree/dist/internal"
+import { IS_IOS } from "../../config/constants"
 
 
 export enum AppTimeoutType {
@@ -377,8 +378,22 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getBillingDocuments(self.apiToken, page)
       return res
-    }
+    },
 
+    
+  }))
+  .actions((self) => ({
+    purchaseValidation :async (receipt_data?: string, packageName?:string, subscriptionId?: string, token?: string, family_members?: string[]) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.purchaseValidation(self.apiToken, receipt_data, packageName, subscriptionId, token, family_members)
+      if (res.kind === "ok") {
+        if (res.data.success){
+          await self.loadPlan()
+          return true
+        } 
+      }
+      return false
+    }
   }))
 
 /**

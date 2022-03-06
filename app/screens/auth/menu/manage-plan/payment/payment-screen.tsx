@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react"
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native"
+import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../../services/mixins"
+import { useStores } from "../../../../../models"
 import { observer } from "mobx-react-lite"
 import LinearGradient from "react-native-linear-gradient"
 import { PremiumBenefits } from "./premium-benefits"
 import { IS_IOS } from '../../../../../config/constants'
 import { PricePlan } from "./price-plan"
-import { requestSubscription, useIAP, Purchase, Subscription } from 'react-native-iap';
+import { requestSubscription, useIAP, Purchase, PurchaseError, Subscription } from 'react-native-iap';
 
 
 // @ts-ignore
@@ -26,14 +27,16 @@ const subSkus = [
 
 export const PaymentScreen = observer(function PaymentScreen() {
   const { translate } = useMixins()
+  const { user } = useStores()
   const navigation = useNavigation();
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
-
+  const [reload, setReload] = useState(false)
   const {
     connected,
     subscriptions,
     getSubscriptions,
+    getAvailablePurchases,
     finishTransaction,
     currentPurchase,
     currentPurchaseError,
@@ -58,21 +61,39 @@ export const PaymentScreen = observer(function PaymentScreen() {
     }
   }
 
-  var currentPriceSegment = payIndividual ? price.per : price.fam
-
   useEffect(() => {
     getSubscriptions(subSkus);
-    console.log(subscriptions);
-
   }, [getSubscriptions]);
+
+  useEffect(() => {
+    setReload(true)
+    console.log(subscriptions);
+    
+    getAvailablePurchases()
+  }, [subscriptions]);
 
   useEffect(() => {
     const checkCurrentPurchase = async (purchase?: Purchase): Promise<void> => {
       if (purchase) {
         const receipt = purchase.transactionReceipt;
-        if (receipt)
-          console.log(receipt);
+        console.log(receipt)
+        console.log(user.apiToken)
 
+        if (!IS_IOS) {
+          console.log(purchase.purchaseToken)
+          console.log(purchase.packageNameAndroid)
+          console.log(purchase.productId)
+        }
+
+        var verify;
+        if (IS_IOS) {
+          verify = await user.purchaseValidation(receipt)
+        }
+        if (verify) {
+          navigation.navigate("mainTab")
+        } else{
+          console.log("false");
+        }
         try {
           const ackResult = await finishTransaction(purchase);
           console.log('ackResult', ackResult);
@@ -81,14 +102,20 @@ export const PaymentScreen = observer(function PaymentScreen() {
         }
       }
     };
+
+    // const purchaseErrorSubscription = (error: PurchaseError) => {
+    //     console.log('purchaseErrorListener', error);
+    //     Alert.alert('purchase error', JSON.stringify(error));
+    // }
     checkCurrentPurchase(currentPurchase);
+    // purchaseErrorSubscription(currentPurchaseError);
+    
   }, [currentPurchase, finishTransaction]);
 
-  const purchase = (items: Subscription[]): void => {
-    // if (item.type === 'iap') requestPurchase(item.productId);
-    var subID = isEnable ? currentPriceSegment.yearly.subId : currentPriceSegment.monthly.subId
+  const purchase = () => {
+    const currentPriceSegment = payIndividual ? price.per : price.fam
+    const subID = isEnable ? currentPriceSegment.yearly.subId : currentPriceSegment.monthly.subId
     console.log(subID);
-
     requestSubscription(subID);
   };
 
@@ -132,7 +159,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
       <View style={[styles.payment, { backgroundColor: "white" }]}>
         <Segment />
-        <PricePlan onPress={setEnable} isEnable={isEnable} personal={payIndividual} />
+        <PricePlan onPress={setEnable} isEnable={isEnable} personal={payIndividual} purchase={purchase}/>
       </View>
     </LinearGradient>
   )
