@@ -1,6 +1,5 @@
 import { GeneralApiProblem } from "./api-problem"
 import { UserSnapshot } from "../../models/user/user"
-import { PlanSnapshot } from "../../models/plan/plan"
 import { DeviceType } from "../../../core/enums"
 import { SyncResponse } from "../../../core/models/response/syncResponse"
 import { FolderResponse } from "../../../core/models/response/folderResponse"
@@ -11,6 +10,7 @@ import { CipherResponse } from "../../../core/models/response/cipherResponse"
 import { AccountRoleText, InvitationStatus, SharingStatus, SharingType } from "../../config/types"
 import { ProfileResponse } from "../../../core/models/response/profileResponse"
 import { ProfileOrganizationResponse } from "../../../core/models/response/profileOrganizationResponse"
+import { type } from "ramda"
 
 type SessionSnapshot = {
     access_token: string
@@ -146,7 +146,7 @@ export type GetTeamsResult = {
 
 export type GetPlanResult = {
     kind: 'ok'
-    data: PlanSnapshot[],
+    data: { name: string; alias: string; },
 } | GeneralApiProblem
 
 
@@ -159,6 +159,15 @@ export type ResetPasswordWithCodeResult = {
     data: {
         reset_password_url: string
     } 
+} | GeneralApiProblem
+
+export type PurchaseValidationResult = {
+    kind: "ok",
+    data: {
+        success: boolean, 
+        detail: string
+    }
+
 } | GeneralApiProblem
 
 export type BillingResult = {
