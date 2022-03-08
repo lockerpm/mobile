@@ -93,9 +93,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
-    if (IS_IOS) {
-      await _updateAutofillData()
-    }
+    // if (IS_IOS) {
+    await _updateAutofillData()
+    // }
   }
 
   // Sync
@@ -141,9 +141,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       user.setFingerprint(fingerprint.join('-'))
 
       // Save to shared keychain for autofill service
-      if (IS_IOS) {
-        await _updateAutofillData()
-      }
+      //if (IS_IOS) {
+      await _updateAutofillData()
+      // }
       return { kind: 'ok' }
     } catch (e) {
       Logger.error(e)
@@ -249,10 +249,12 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Store password for autofill
   const _updateAutofillData = async () => {
+    console.log("ASdasdasdasdasd");
+    
     // Only iOS
-    if (!IS_IOS) {
-      return
-    }
+    // if (!IS_IOS) {
+    //   return
+    // }
     
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
     const passwordRes = await getCiphers({
@@ -274,7 +276,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     const sharedData: AutofillDataType = {
       passwords: passwordData,
       deleted: [],
-      authen: { email: user.email, hashPass: hashPasswordAutofill },
+      authen: { email: user.email, hashPass: hashPasswordAutofill, avatar: user.avatar },
       faceIdEnabled: user.isBiometricUnlock
     }
     await saveShared('autofill', JSON.stringify(sharedData))

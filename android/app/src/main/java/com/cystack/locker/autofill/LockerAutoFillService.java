@@ -26,11 +26,6 @@ import com.cystack.locker.R;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.oblador.keychain.PrefsStorage;
-import com.oblador.keychain.SecurityLevel;
-import com.oblador.keychain.cipherStorage.CipherStorage;
-import com.oblador.keychain.cipherStorage.CipherStorageKeystoreAesCbc;
 
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -47,41 +42,22 @@ public class LockerAutoFillService extends AutofillService {
     
 
     private static final String TAG = "Locker_Service";
-    private int mNumberDatasets;
-    private ArrayList<AutofillData> datas = new ArrayList<>();
     @Override
     public void onConnected() {
         super.onConnected();
 
-        // datas.add(new AutofillData("username", "pass", "locker", "facebook", System.currentTimeMillis()));
-        // mNumberDatasets = datas.size() + 1;
-        mNumberDatasets = 1;
     }
 
     @Override
     public void onFillRequest(@NonNull FillRequest request, @NonNull CancellationSignal cancellationSignal, @NonNull FillCallback callback) {
         Log.d(TAG, "onFillRequest()");
 
-        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
-        cipherStorage = new CipherStorageKeystoreAesCbc();
-        prefsStorage = new PrefsStorage(reactContext);
-
-        try {
-            PrefsStorage.ResultSet resultSet = prefsStorage.getEncryptedEntry(service);
-            if (resultSet == null) {
-                Log.e(TAG, "No entry found");
-            }
-            CipherStorage.DecryptionResult decryptionResult = cipherStorage.decrypt(service, resultSet.username, resultSet.password, SecurityLevel.ANY);
-            Log.d(TAG, decryptionResult.password);
-        } catch (Exception e) {
-            Log.d(TAG, "Failed");
-        }
+       
         // Find autofillable fields
         AssistStructure structure = Utils.getLatestAssistStructure(request);
 
         Parser.Result result =  new Parser(structure).parse();
-
-        ArrayMap<String, AutofillId> fields =result.getFillable();
+        ArrayMap<String, AutofillId> fields = result.getFillable();
         String domain = result.getDomain();
 
         Log.d(TAG, "Domain: " + domain);
@@ -93,13 +69,16 @@ public class LockerAutoFillService extends AutofillService {
             return;
         }
 
+       
+
+
         IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, fields, domain);
         // Create response...
         FillResponse.Builder response = new FillResponse.Builder();
 
-        for (int i = 0 ; i < mNumberDatasets -1; i++){
-            response.addDataset(buildDataSetWithAuthen(fields, datas.get(i), authentication));
-        }
+        // for (int i = 0 ; i < mNumberDatasets -1; i++){
+        //     response.addDataset(buildDataSetWithAuthen(fields, datas.get(i), authentication));
+        // }
         response.addDataset(buildDataSetLocker(fields, authentication));
 
         // ... and return it
