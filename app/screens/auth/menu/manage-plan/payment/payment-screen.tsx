@@ -32,9 +32,11 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
   const [reload, setReload] = useState(false)
+  
   const {
     connected,
     subscriptions,
+    availablePurchases,
     getSubscriptions,
     getAvailablePurchases,
     finishTransaction,
@@ -63,13 +65,11 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   useEffect(() => {
     getSubscriptions(subSkus);
-  }, [getSubscriptions]);
+  }, [ connected ,getSubscriptions]);
 
   useEffect(() => {
     setReload(true)
     console.log(subscriptions);
-    
-    getAvailablePurchases()
   }, [subscriptions]);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
           console.log(purchase.productId)
         }
 
-        var verify;
+        var verify: boolean = false;
         if (IS_IOS) {
           verify = await user.purchaseValidation(receipt)
         }
