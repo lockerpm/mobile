@@ -383,9 +383,10 @@ export const UserModel = types
     
   }))
   .actions((self) => ({
-    purchaseValidation :async (receipt_data?: string, packageName?:string, subscriptionId?: string, token?: string, family_members?: string[]) => {
+    //receipt: 'receipt_data' for ios, 'purchase_token' for android
+    purchaseValidation :async (receipt?: string, subscriptionId?: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.purchaseValidation(self.apiToken, receipt_data, packageName, subscriptionId, token, family_members)
+      const res = await userApi.purchaseValidation(self.apiToken, receipt, subscriptionId)
       if (res.kind === "ok") {
         if (res.data.success){
           await self.loadPlan()
