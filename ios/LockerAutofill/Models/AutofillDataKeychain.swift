@@ -21,6 +21,7 @@ class AutofillDataModel {
   private(set) var loginedLocker: Bool = false
   private(set) var email: String!
   private(set) var hashMassterPass: String!
+  private(set) var userAvatar: String!
   private(set) var URI: String!
   private(set) var credentials: [AutofillData] = []          // credential for this URI
   private(set) var otherCredentials: [AutofillData] = []
@@ -103,6 +104,7 @@ class AutofillDataModel {
         if let authen = autofillData["authen"] as? [String: String] {
           self.email = authen["email"]!
           self.hashMassterPass = authen["hashPass"]!
+          self.userAvatar = authen["avatar"]
         }
         if let faceIdEnabled = autofillData["faceIdEnabled"] as? Bool {
           self.faceIdEnabled = faceIdEnabled
