@@ -30,17 +30,6 @@ import java.util.Map;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService {
-    // private static final String TAG = "LockerAutoFillService";
-    private static final String service = "W7S57TNBH5.com.cystack.lockerapp";
-
-    private PrefsStorage prefsStorage;
-    private CipherStorage cipherStorage;
-
-
-
-
-    
-
     private static final String TAG = "Locker_Service";
     @Override
     public void onConnected() {
