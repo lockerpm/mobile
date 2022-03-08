@@ -32,6 +32,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
   const [reload, setReload] = useState(false)
+  const [purchased, setPurchased] = useState(false)
   
   const {
     connected,
@@ -69,30 +70,27 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   useEffect(() => {
     setReload(true)
-    console.log(subscriptions);
   }, [subscriptions]);
 
   useEffect(() => {
     const checkCurrentPurchase = async (purchase?: Purchase): Promise<void> => {
-      if (purchase) {
-        const receipt = purchase.transactionReceipt;
-        console.log(receipt)
-        console.log(user.apiToken)
-
-        if (!IS_IOS) {
-          console.log(purchase.purchaseToken)
-          console.log(purchase.packageNameAndroid)
-          console.log(purchase.productId)
-        }
-
+      if (purchase && !purchased) {
         var verify: boolean = false;
         if (IS_IOS) {
-          verify = await user.purchaseValidation(receipt)
+          verify = await user.purchaseValidation(purchase.transactionReceipt)
+        } {
+          verify = await user.purchaseValidation(purchase.purchaseToken, purchase.productId )
         }
         if (verify) {
           navigation.navigate("mainTab")
         } else{
-          console.log("false");
+          Alert.alert(
+            "Purchase Verification",
+            "Locker can not verify your purchase",
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+          )
         }
         try {
           const ackResult = await finishTransaction(purchase);
@@ -103,22 +101,14 @@ export const PaymentScreen = observer(function PaymentScreen() {
       }
     };
 
-    // const purchaseErrorSubscription = (error: PurchaseError) => {
-    //     console.log('purchaseErrorListener', error);
-    //     Alert.alert('purchase error', JSON.stringify(error));
-    // }
     checkCurrentPurchase(currentPurchase);
-    // purchaseErrorSubscription(currentPurchaseError);
-    
   }, [currentPurchase, finishTransaction]);
 
   const purchase = () => {
     const currentPriceSegment = payIndividual ? price.per : price.fam
     const subID = isEnable ? currentPriceSegment.yearly.subId : currentPriceSegment.monthly.subId
-    console.log(subID);
     requestSubscription(subID);
   };
-
 
   const Segment = () => {
     return (
