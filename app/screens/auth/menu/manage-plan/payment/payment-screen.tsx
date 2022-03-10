@@ -8,14 +8,12 @@ import LinearGradient from "react-native-linear-gradient"
 import { PremiumBenefits } from "./premium-benefits"
 import { IS_IOS } from '../../../../../config/constants'
 import { PricePlan } from "./price-plan"
-import { requestSubscription, useIAP, Purchase, PurchaseError, Subscription } from 'react-native-iap';
-
+import { requestSubscription, useIAP, SubscriptionPurchase, PurchaseError } from 'react-native-iap';
 
 // @ts-ignore
 import LockerPremium from "./LockerPremium.svg"
 // @ts-ignore
 import DeleteIcon from "./delete.svg"
-
 
 
 const subSkus = [
@@ -37,9 +35,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const {
     connected,
     subscriptions,
-    availablePurchases,
     getSubscriptions,
-    getAvailablePurchases,
     finishTransaction,
     currentPurchase,
     currentPurchaseError,
@@ -73,17 +69,26 @@ export const PaymentScreen = observer(function PaymentScreen() {
   }, [subscriptions]);
 
   useEffect(() => {
-    const checkCurrentPurchase = async (purchase?: Purchase): Promise<void> => {
+    const checkCurrentPurchase = async (purchase?: SubscriptionPurchase): Promise<void> => {
       if (purchase && !purchased) {
-        var verify: boolean = false;
+        var verified: boolean = false;
         if (IS_IOS) {
-          verify = await user.purchaseValidation(purchase.transactionReceipt)
+          verified = await user.purchaseValidation(purchase.transactionReceipt)
         } {
-          verify = await user.purchaseValidation(purchase.purchaseToken, purchase.productId )
+          console.log(purchase.purchaseToken, purchase.productId );
+          
+          verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId )
         }
-        if (verify) {
+        if (verified) {
+          try {
+            const ackResult = await finishTransaction(purchase);
+            console.log('ackResult', ackResult);
+          } catch (ackErr) {
+            console.warn('ackErr', ackErr);
+          }
           navigation.navigate("mainTab")
         } else{
+          // conclude the purchase is fraudulent, etc...
           Alert.alert(
             "Purchase Verification",
             "Locker can not verify your purchase",
@@ -91,12 +96,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
               { text: "OK", onPress: () => console.log("OK Pressed") }
             ]
           )
-        }
-        try {
-          const ackResult = await finishTransaction(purchase);
-          console.log('ackResult', ackResult);
-        } catch (ackErr) {
-          console.warn('ackErr', ackErr);
         }
       }
     };
