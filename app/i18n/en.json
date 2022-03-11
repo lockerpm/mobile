@@ -534,13 +534,13 @@
         }
       },
       "fam": {
-        "monthly": {
+        "yearly": {
           "title": "$0.99/ month",
           "subtitle": "$71.88 billed every 12 months",
           "sale": "Save 80%",
           "pay_title": "Upgrade now for $71.88"
         },
-        "yearly": {
+        "monthly": {
           "title": "$1.6/ month",
           "subtitle": "$9.99 billed monthly",
           "sale": "Save 67%",

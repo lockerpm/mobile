@@ -6,7 +6,7 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../../../services/mixins"
 
 
-export const PremiumBenefits = function PremiumBenefits() {
+export const PremiumBenefits = () => {
   const { translate, color } = useMixins()
 
   const tabs = [
@@ -44,7 +44,7 @@ export const PremiumBenefits = function PremiumBenefits() {
         }}
       >
         <Image source={item.img} style={{ marginBottom: 30, height: "65%" }} />
-        <Text preset="black" text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: 320, marginBottom: 5 }} />
+        <Text preset="black" text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: 320, marginBottom: 5, color: "black" }} />
       </View>
     )
   })

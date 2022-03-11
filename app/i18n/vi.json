@@ -534,13 +534,13 @@
         }
       },
       "fam": {
-        "monthly": {
+        "yearly": {
           "title": "$0.99/ 1 tháng",
           "subtitle": "$71.88 hoá đơn mỗi 12 tháng",
           "sale": "tiết kiệm đến 80%",
           "pay_title": "Nâng cấp ngay với $71.88"
         },
-        "yearly": {
+        "monthly": {
           "title": "$1.6/ month",
           "subtitle": "$9.99 hoá đơn hàng tháng",
           "sale": "tiết kiệm đến 67%",
