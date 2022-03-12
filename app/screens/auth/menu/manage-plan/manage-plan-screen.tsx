@@ -15,11 +15,8 @@ export const ManagePlanScreen = observer(function ManagePlanScreen() {
 
     // ----------------------- PARAMS -----------------------
 
-    const [isLoading, setIsLoading] = useState(false)
-
     return (
         <Layout
-            isContentOverlayLoading={isLoading}
             header={(
                 <Header
                     goBack={() => {
