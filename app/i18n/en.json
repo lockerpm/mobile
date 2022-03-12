@@ -548,5 +548,30 @@
         }
       }
     }
+  },
+  "manage_plan": {
+    "usage": {
+      "title": "Free Plan Usage",
+      "login": "Passwords",
+      "card": "Payment Cards",
+      "identity": "Identities",
+      "note": "Secure Note",
+      "crypto": "Crypto assets"
+    },
+    "feature": {
+      "title": "Explore your full premium feature",
+      "locker": "Unlimited items",
+      "emergency_contact": {
+        "header" : "Emergency Contact",
+        "text": "Add trusted contacts and grant them access to your Locker account in cases of emergencyt",
+        "link": "To add Emergency Contacts, go to Locker Web Vault at: locker.io/vault"
+      },
+      "web": "Dark Web Monitoring",
+      "share_password": "Share Passwords"
+
+    },
+    "free": {
+      "button": "Increase unlimited with Premium"
+    }
   }
 }
