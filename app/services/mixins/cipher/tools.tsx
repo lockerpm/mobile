@@ -12,6 +12,7 @@ import { useCipherDataMixins } from './data'
 
 const defaultData = {
   loadPasswordsHealth: async () => {},
+  getCipherCount: async (type: CipherType):Promise<number> => {return 0}
 }
 
 export const CipherToolsMixinsContext = createContext(defaultData)
@@ -26,6 +27,16 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
   const { translate, notify } = useMixins()
   
   // ----------------------------- METHODS ---------------------------
+  const getCipherCount =async (type: CipherType) => {
+    const allCiphers = await getCiphers({
+      deleted: false,
+      searchText: '',
+      filters: [
+        (c: CipherView) => c.type === type
+      ]
+    })
+    return allCiphers.length
+  }
 
   // Load weak passwords
   const loadPasswordsHealth = async () => {
@@ -126,7 +137,8 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
-    loadPasswordsHealth
+    loadPasswordsHealth,
+    getCipherCount
   }
 
   return (

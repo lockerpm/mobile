@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { View, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import { Text } from "../../../../../components"
-import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { observer } from "mobx-react-lite"
@@ -9,6 +8,8 @@ import LinearGradient from "react-native-linear-gradient"
 import { PremiumBenefits } from "./premium-benefits"
 import { IS_IOS } from '../../../../../config/constants'
 import { PricePlan } from "./price-plan"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { requestSubscription, useIAP, SubscriptionPurchase, PurchaseError } from 'react-native-iap';
 
 // @ts-ignore
@@ -16,6 +17,9 @@ import LockerPremium from "./LockerPremium.svg"
 // @ts-ignore
 import DeleteIcon from "./delete.svg"
 
+
+// control init premium benefit tab
+type ScreenProp = RouteProp<PrimaryParamList, 'payment'>;
 
 export const PaymentScreen = observer(function PaymentScreen() {
   const {
@@ -29,6 +33,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const { translate, color } = useMixins()
   const { user } = useStores()
   const navigation = useNavigation();
+  const route = useRoute<ScreenProp>();
 
   // -------------------- STATE ----------------------
   const [payIndividual, setPayIndividual] = useState(true)
@@ -130,7 +135,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
           </TouchableOpacity>
         </View>
         <View style={{ zIndex: 1 }}>
-          <PremiumBenefits />
+          <PremiumBenefits benefitTab={route.params.benefitTab}  />
         </View>
       </View>
 
@@ -143,14 +148,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
 })
 
 const styles = StyleSheet.create({
-  p1: {
-    fontSize: 14,
-    fontWeight: "400",
-  },
-  h6: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   header: {
     zIndex: 2,
     flexDirection: "row",

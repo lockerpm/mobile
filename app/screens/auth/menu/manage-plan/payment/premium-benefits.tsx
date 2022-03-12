@@ -6,29 +6,29 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../../../services/mixins"
 
 
-export const PremiumBenefits = () => {
-  const { translate, color } = useMixins()
-
+export const PremiumBenefits = (props: {benefitTab: number}) => {
+  // console.log(props.benefitTab)
+  const { translate, color } = useMixins() 
   const tabs = [
     {
-      img: require("./Locker.png"),
+      img: require("../assets/Locker.png"),
       desc: translate("payment.benefit.locker")
     },
     {
-      img: require("./Web.png"),
+      img: require("../assets/Web.png"),
       desc: translate("payment.benefit.web")
     },
     {
-      img: require("./EmergencyContact.png"),
+      img: require("../assets/EmergencyContact.png"),
       desc: translate("payment.benefit.emergency_contact")
     },
     {
-      img: require("./SharePassword.png"),
+      img: require("../assets/SharePassword.png"),
       desc: translate("payment.benefit.share_password")
     }
   ]
   const map = {}
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(props.benefitTab?? 0)
   const [routes] = useState(tabs.map((item, index) => ({
     key: index.toString()
   })))
