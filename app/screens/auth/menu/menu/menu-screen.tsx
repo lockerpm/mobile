@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ScrollView, ViewStyle, Linking } from "react-native"
+import { View, ScrollView, ViewStyle, Linking, TextStyle } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
@@ -45,12 +45,21 @@ export const MenuScreen = observer(function MenuScreen() {
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
 
+  const PLAN_NAME: TextStyle = {
+    fontSize: fontSize.small, 
+    marginTop: 5
+  }
+  const ITEM_CONTAINER: ViewStyle = {
+    backgroundColor: isDark ? color.block : color.background,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+  }
+
   const items: MenuItemProps[] = [
     {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
       action: () => {
-        // Linking.openURL(MANAGE_PLAN_URL)
         navigation.navigate('payment')
       }
     },
@@ -112,13 +121,20 @@ export const MenuScreen = observer(function MenuScreen() {
     }
   ]
 
+  const item3 = {
+    "pm_free": {
+      node: <Text text="FREE PLAN" style={[PLAN_NAME, { color: color.textBlack }]}></Text>,
+    },
+    "pm_premium": {
+      node: <Text text="PREMIUM PERSONAL" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+    },
+    "pm_family": {
+      node: <Text text="PREMIUM FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+    }
+  }
+
   // -------------- RENDER --------------------
 
-  const ITEM_CONTAINER: ViewStyle = {
-    backgroundColor: isDark ? color.block : color.background,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-  }
 
   return (
     <Layout
@@ -131,11 +147,12 @@ export const MenuScreen = observer(function MenuScreen() {
     >
       <ScrollView>
         {/* User info */}
-        <View style={[
-          ITEM_CONTAINER,
-          commonStyles.CENTER_HORIZONTAL_VIEW,
-          { marginBottom: 15, paddingVertical: 14 }
-        ]}>
+        <Button
+          onPress={() => {navigation.navigate('manage_plan')}}
+          style={[
+            ITEM_CONTAINER,
+            { marginBottom: 15, paddingVertical: 14 , justifyContent: "flex-start"}
+          ]}>
           {
             !!user.avatar && (
               <Image
@@ -144,16 +161,21 @@ export const MenuScreen = observer(function MenuScreen() {
               />
             )
           }
-          <View>
+          <View style = {{ flex: 1}}>
             <Text
               preset="black"
               text={user.email}
             />
-            <Text style={{ fontSize: fontSize.small, marginTop: 5 }}>
-              {user.plan && user.plan.name}
-            </Text>
+            {
+              user.plan && item3[user.plan.alias].node
+            }     
           </View>
-        </View>
+          <FontAwesome
+            name="angle-right"
+            size={18}
+            color={color.textBlack}
+          />
+        </Button>
         {/* User info end */}
 
         {/* Fingerprint */}

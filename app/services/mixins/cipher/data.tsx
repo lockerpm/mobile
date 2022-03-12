@@ -55,7 +55,7 @@ const defaultData = {
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   importCiphers: async (importResult: ImportResult) => { return { kind: 'unknown' } },
-  
+
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   shareMultipleCiphers: async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   confirmShareCipher: async (organizationId: string, memberId: string, publicKey: string) => { return { kind: 'unknown' } },
@@ -398,6 +398,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
     cipherStore.setIsSynchingOffline(false)
   }
+
 
   // Store password for autofill
   const _updateAutofillData = async () => {
