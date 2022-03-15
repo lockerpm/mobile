@@ -69,6 +69,7 @@ export const TrashScreen = observer(function TrashScreen() {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}

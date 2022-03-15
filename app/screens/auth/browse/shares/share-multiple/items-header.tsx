@@ -8,13 +8,9 @@ import { commonStyles, fontSize } from "../../../../../theme"
 import { Button, Header, SearchBar, Text } from "../../../../../components"
 import { ShareModal } from "../../../../../components/cipher/cipher-action/share-modal"
 
-// @ts-ignore
 import ConfigIcon from './config.svg'
-// @ts-ignore
 import ConfigIconLight from './config-light.svg'
-// @ts-ignore
 import PlusIcon from './plus.svg'
-// @ts-ignore
 import PlusIconLight from './plus-light.svg'
 
 

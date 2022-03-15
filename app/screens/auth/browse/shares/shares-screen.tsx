@@ -6,9 +6,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../services/mixins"
 import { commonStyles } from "../../../../theme"
 
-// @ts-ignore
 import BackIcon from '../../../../components/header/arrow-left.svg'
-// @ts-ignore
 import BackIconLight from '../../../../components/header/arrow-left-light.svg'
 
 import { observer } from "mobx-react-lite"
@@ -39,6 +37,7 @@ export const SharesScreen = observer(() => {
   return (
     <Layout
       borderBottom
+      hasBottomNav
       containerStyle={{ 
         backgroundColor: isDark ? color.background : color.block, 
         paddingTop: 0 

@@ -119,6 +119,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       {/* Modals / Actions */}
 

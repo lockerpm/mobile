@@ -580,10 +580,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   // Get encrypted ciphers
   const getEncryptedCiphers = async (params: GetCiphersParams) => {
     try {
-      const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
+      const deletedFilter = (c : Cipher) => !!c.deletedDate === params.deleted
       const filters = [deletedFilter, ...params.filters]
       if (!params.includeExtensions) {
-        filters.unshift((c : CipherView) => 1 <= c.type && c.type <= 4)
+        filters.unshift((c: Cipher) => c.type !== CipherType.TOTP)
       }
       return await searchService.searchEncryptedCiphers(filters, null) || []
     } catch (e) {
