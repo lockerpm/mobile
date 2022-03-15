@@ -1,19 +1,16 @@
 import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging'
 import notifee, { Notification, EventType, Event } from '@notifee/react-native'
 import { IS_IOS } from '../../config/constants'
-import { load, storageKeys } from '../storage'
 import { Logger } from '../logger'
-
-
-type NotifeeNotificationData = {
-  type?: 'new_message'
-  source?: string
-}
+import { ConfirmShareData, NewShareData, NotifeeNotificationData, PushEvent } from './types';
+import { load, storageKeys } from '../storage';
+import { CipherType } from '../../../core/enums';
 
 
 export class PushNotifier {
   constructor () {}
 
+  // Request permission
   static async getPermission() {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -22,6 +19,7 @@ export class PushNotifier {
     return enabled
   }
 
+  // Get FCM token
   static async getToken() {
     if (!IS_IOS) {
       await messaging().registerDeviceForRemoteMessages()
@@ -30,6 +28,7 @@ export class PushNotifier {
     return token
   }
 
+  // Forground handler
   static setupForegroundHandler() {
     // Firebase
     messaging().onMessage((message: FirebaseMessagingTypes.RemoteMessage) => {
@@ -37,8 +36,9 @@ export class PushNotifier {
 
       const { event } = message.data
       switch (event) {
-        case 'new_message':
-          // Handled in socket -> dismiss
+        case PushEvent.SHARE_NEW:
+        case PushEvent.SHARE_CONFIRM:
+          // Do nothing on foreground
           break
         default:
           Logger.debug('Unknow FCM event: ' + JSON.stringify(message))
@@ -56,30 +56,100 @@ export class PushNotifier {
       }
 
       switch (data.type) {
-        case 'new_message': {
-          // Handled in socket -> dismiss
+        case PushEvent.SHARE_NEW:
+        case PushEvent.SHARE_CONFIRM:
+          // Do nothing on foreground
           break
-        }
       }
     })
   }
 
+  // Background handler
   static setupBackgroundHandler() {
     // Firebase
     messaging().setBackgroundMessageHandler(async (message: FirebaseMessagingTypes.RemoteMessage) => {
       Logger.debug('Firebase: BACKGROUND HANDLER')
+
+      const currentUser = await load(storageKeys.APP_CURRENT_USER)
+      if (!currentUser) {
+        return
+      }
       
-      const { event } = message.data
+      const { language, pwd_user_id } = currentUser
+      const { event, data } = message.data
+      const isVn = language === 'vi'
+
       switch (event) {
-        case 'new_message': {
-          const account: {
-            language: 'en' | 'vi'
-          } = await load(storageKeys.APP_CURRENT_USER)
-          if (!account) {
+        case PushEvent.SHARE_NEW: {
+          const shareData: NewShareData = JSON.parse(data)
+
+          // Only noti current user
+          if (!shareData.pwd_user_ids.map(i => i.toString()).includes(pwd_user_id)) {
             return
           }
-          break
+
+          if (shareData.count) {
+            PushNotifier._notify({
+              id: `share_new`,
+              title: isVn ? 'Locker' : 'Locker',
+              body: isVn ? `Bạn đã được chia sẻ ${shareData.count} mục. Vào Locker để chấp nhận hoặc từ chối.` : `You have ${shareData.count} new shared items. Open Locker to accept or reject.`,
+              data: {
+                type: PushEvent.SHARE_NEW
+              }
+            })
+            return
+          }
+
+          let typeName = isVn ? 'mục' : 'item'
+          switch (shareData.share_type) {
+            case CipherType.Card:
+              typeName = isVn ? 'thẻ tín dụng' : 'card'
+              break
+            case CipherType.CryptoAccount:
+              typeName = isVn ? 'tài khoản crypto' : 'crypto account'
+              break
+            case CipherType.CryptoWallet:
+              typeName = isVn ? 'ví crypto' : 'crypto wallet'
+              break
+            case CipherType.Identity:
+              typeName = isVn ? 'danh tính' : 'identity'
+              break
+            case CipherType.Login:
+              typeName = isVn ? 'mật khẩu' : 'password'
+              break
+            case CipherType.SecureNote:
+              typeName = isVn ? 'ghi chú' : 'note'
+              break
+          }
+
+          PushNotifier._notify({
+            id: `share_new`,
+            title: isVn ? 'Locker' : 'Locker',
+            body: isVn ? `Bạn đã được chia sẻ một ${typeName}` : `You have a new shared ${typeName}`,
+            data: {
+              type: PushEvent.SHARE_NEW
+            }
+          })
+          return
         }
+
+        case PushEvent.SHARE_CONFIRM:
+          const shareData: ConfirmShareData = JSON.parse(data)
+
+          // Only noti current user
+          if (!shareData.pwd_user_ids.map(i => i.toString()).includes(pwd_user_id)) {
+            return
+          }
+
+          PushNotifier._notify({
+            id: `share_confirm`,
+            title: isVn ? 'Locker' : 'Locker',
+            body: isVn ? `Vui lòng xác nhận yêu cầu chia sẻ của bạn` : `Please confirm your sharing request`,
+            data: {
+              type: PushEvent.SHARE_CONFIRM
+            }
+          })
+          break
           
         default:
           Logger.debug('Unknow FCM event: ' + JSON.stringify(message))
@@ -98,12 +168,20 @@ export class PushNotifier {
         }
 
         switch (data.type) {
-          case 'new_message': {
+          case PushEvent.SHARE_NEW:
+            // TODO: set initial page
             break
-          }
+          case PushEvent.SHARE_CONFIRM:
+            // TODO: set initial page
+            break
         } 
       }      
     })
+  }
+
+  // Cancel notification
+  static cancelNotification(id: string) {
+    return notifee.cancelNotification(id)
   }
 
   static async _notify(data: Notification) {
