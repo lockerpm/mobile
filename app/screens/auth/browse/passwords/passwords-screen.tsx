@@ -72,6 +72,7 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}

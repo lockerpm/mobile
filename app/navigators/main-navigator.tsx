@@ -19,7 +19,6 @@ import {
   GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen,
   CryptoAccountEditScreen, CryptoAccountInfoScreen, CryptoWalletEditScreen, CryptoWalletInfoScreen
 } from "../screens"
-// @ts-ignore
 import { AutofillServiceScreen } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
 import { useMixins } from "../services/mixins"
@@ -233,6 +232,7 @@ export const MainNavigator = observer(() => {
       const data = JSON.parse(e.data)
       Logger.debug('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
+        // SYNC
         case SocketEvent.SYNC:
           switch (data.type) {
             case SocketEventType.CIPHER_UPDATE: {
@@ -249,6 +249,8 @@ export const MainNavigator = observer(() => {
               handleSync()
           }
           break
+
+        // MEMBERS
         case SocketEvent.MEMBERS:
           handleUserDataSync()
           break

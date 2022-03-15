@@ -60,6 +60,7 @@ export const ShareItemsScreen = observer(() => {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}

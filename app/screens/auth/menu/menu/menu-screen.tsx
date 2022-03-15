@@ -13,25 +13,15 @@ import { MANAGE_PLAN_URL } from "../../../../config/constants"
 import { Invitation, InvitationData } from "./invitation"
 
 
-// @ts-ignore
 import PlanIcon from './star.svg'
-// @ts-ignore
 import InviteIcon from './invite.svg'
-// @ts-ignore
 import SettingsIcon from './gear.svg'
-// @ts-ignore
 import HelpIcon from './question.svg'
-// @ts-ignore
 import LockIcon from './lock.svg'
-// @ts-ignore
 import PlanIconLight from './star-light.svg'
-// @ts-ignore
 import InviteIconLight from './invite-light.svg'
-// @ts-ignore
 import SettingsIconLight from './gear-light.svg'
-// @ts-ignore
 import HelpIconLight from './question-light.svg'
-// @ts-ignore
 import LockIconLight from './lock-light.svg'
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 
@@ -122,6 +112,7 @@ export const MenuScreen = observer(function MenuScreen() {
   return (
     <Layout
       borderBottom
+      hasBottomNav
       isContentOverlayLoading={isLoading}
       containerStyle={{ backgroundColor: isDark ? color.background : color.block }}
       header={(

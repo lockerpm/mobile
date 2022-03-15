@@ -72,6 +72,7 @@ export const CardsScreen = observer(function CardsScreen() {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}

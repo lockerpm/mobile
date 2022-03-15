@@ -72,6 +72,7 @@ export const IdentitiesScreen = observer(function IdentitiesScreen() {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}

@@ -3,35 +3,20 @@ import { TxKeyPath } from "../i18n"
 
 // ---------------- Svg icons---------------------
 
-// @ts-ignore
 import FolderIcon from './images/vault/folder.svg'
-// @ts-ignore
 import NoteIcon from './images/vault/note.svg'
-// @ts-ignore
 import IdentityIcon from './images/vault/identity.svg'
-// @ts-ignore
 import SharedIcon from './images/vault/shared.svg'
-// @ts-ignore
 import TrashIcon from './images/vault/trash.svg'
-// @ts-ignore
 import CryptoAssetIcon from './images/vault/crypto-asset.svg'
-// @ts-ignore
 import CryptoAccountIcon from './images/vault/crypto-account.svg'
-// @ts-ignore
 import CryptoWalletIcon from './images/vault/crypto-wallet.svg'
-// @ts-ignore
 import DataBreachScannerIcon from './images/vault/data-breach-scanner.svg'
-// @ts-ignore
 import PasswordGeneratorIcon from './images/vault/password-generator.svg'
-// @ts-ignore
 import PasswordHealthIcon from './images/vault/password-health.svg'
-// @ts-ignore
 import AuthenticatorIcon from './images/vault/authenticator.svg'
-// @ts-ignore
 import FFolderIcon from './images/folder/folder.svg'
-// @ts-ignore
 import FFolderShareIcon from './images/folder/folder-share.svg'
-// @ts-ignore
 import FFolderAddIcon from './images/folder/folder-add.svg'
 
 

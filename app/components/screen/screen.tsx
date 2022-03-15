@@ -14,7 +14,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : {}
   const insetStyle = { 
     paddingTop: props.unsafe ? 0 : insets.top, 
-    paddingBottom: props.unsafe || !props.hasFooter ? 0 : insets.bottom
+    paddingBottom: props.unsafe || props.hasBottomNav ? 0 : insets.bottom
   }
 
   return (

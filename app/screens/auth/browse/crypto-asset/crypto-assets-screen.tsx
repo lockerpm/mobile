@@ -74,6 +74,7 @@ export const CryptoAssetsScreen = observer(() => {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}

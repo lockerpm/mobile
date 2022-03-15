@@ -7,7 +7,6 @@ import { useMixins } from "../../../../services/mixins"
 import { Button, Header, Layout, Text } from "../../../../components"
 import { commonStyles, fontSize } from "../../../../theme"
 
-// @ts-ignore
 import DataBreachScannerIcon from './data-breach-scanner.svg'
 import { useStores } from "../../../../models"
 
