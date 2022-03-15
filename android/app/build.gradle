@@ -227,7 +227,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-    //  androidX
+
+    implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.fragment:fragment:1.4.0'

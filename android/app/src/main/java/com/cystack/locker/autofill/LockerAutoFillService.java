@@ -11,75 +11,66 @@ import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
 import android.service.autofill.SaveCallback;
 import android.service.autofill.SaveRequest;
-import android.util.ArrayMap;
 import android.util.Log;
-import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillValue;
 import android.widget.RemoteViews;
-import android.util.ArrayMap;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.cystack.locker.LockerAutofillClient;
 import com.cystack.locker.R;
+import com.cystack.locker.autofill.activities.VerifyMasterPasswordActivity;
+import com.cystack.locker.autofill.parser.Parser;
 
 import java.util.ArrayList;
-import java.util.Map;
-
 
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class LockerAutoFillService extends AutofillService {
+public class LockerAutoFillService extends AutofillService{
     private static final String TAG = "Locker_Service";
     @Override
     public void onConnected() {
         super.onConnected();
-
     }
 
     @Override
     public void onFillRequest(@NonNull FillRequest request, @NonNull CancellationSignal cancellationSignal, @NonNull FillCallback callback) {
         Log.d(TAG, "onFillRequest()");
 
-       
-        // Find autofillable fields
-        AssistStructure structure = Utils.getLatestAssistStructure(request);
 
-        Parser.Result result =  new Parser(structure).parse();
-        ArrayMap<String, AutofillId> fields = result.getFillable();
-        String domain = result.getDomain();
+        // Find fillable fields
+        AssistStructure structure = Utils.getLatestAssistStructure(request);
+        Parser.Result parseResult = new Parser(structure).Parse();
+        ArrayList<Field> fields = (ArrayList<Field>) parseResult.getFillable();
+        String domain = parseResult.getDomain();
 
         Log.d(TAG, "Domain: " + domain);
-        Log.d(TAG, "autofillable fields:" + fields);
+        Log.d(TAG, "autofillable fields:" + fields.size());
 
-        if (fields.isEmpty() || Utils.BlacklistedUris.contains(domain)) {
+        if ( fields == null || fields.isEmpty() || Utils.BlacklistedUris.contains(domain)) {
             Log.d(TAG, "No autofill hints found");
             callback.onSuccess(null);
             return;
         }
 
-       
-
-
-        IntentSender authentication = LockerAutofillClient.newIntentSenderForResponse(this, fields, domain);
+        IntentSender authentication = VerifyMasterPasswordActivity.newIntentSenderForResponse(this, fields, domain);
         // Create response...
         FillResponse.Builder response = new FillResponse.Builder();
 
-        // for (int i = 0 ; i < mNumberDatasets -1; i++){
-        //     response.addDataset(buildDataSetWithAuthen(fields, datas.get(i), authentication));
-        // }
+//        for (int i = 0 ; i < mNumberDatasets -1; i++){
+//            response.addDataset(buildDataSetWithAuthen(fields, datas.get(i), authentication));
+//        }
         response.addDataset(buildDataSetLocker(fields, authentication));
 
         // ... and return it
         callback.onSuccess(response.build());
     }
 
-
     @Override
     public void onSaveRequest(@NonNull SaveRequest request, @NonNull SaveCallback callback) {
 
     }
-    public Dataset buildDataSetLocker(ArrayMap<String, AutofillId> fields, IntentSender authentication){
+    public Dataset buildDataSetLocker(ArrayList<Field> fields, IntentSender authentication){
         RemoteViews presentation = new RemoteViews(getPackageName(), R.layout.remote_locker_app);
 
         Dataset unlockedDataset = newlockedDataset(fields, null, presentation, authentication);
@@ -87,7 +78,7 @@ public class LockerAutoFillService extends AutofillService {
         return unlockedDataset;
     }
 
-    public Dataset buildDataSetWithAuthen(ArrayMap<String, AutofillId> fields, AutofillData data, IntentSender authentication){
+    public Dataset buildDataSetWithAuthen(ArrayList<Field> fields, AutofillItem data, IntentSender authentication){
         RemoteViews presentation = new RemoteViews(getPackageName(), android.R.layout.simple_list_item_1);
         presentation.setTextViewText(android.R.id.text1, data.getName());
 
@@ -97,28 +88,40 @@ public class LockerAutoFillService extends AutofillService {
     }
 
 
-    public static Dataset newUnlockDataset(@NonNull Map<String, AutofillId> fields, @NonNull AutofillData data, RemoteViews presentation){
+    public static Dataset newUnlockDataset(@NonNull ArrayList<Field> fields, AutofillItem data, RemoteViews presentation){
         Dataset.Builder dataset = new Dataset.Builder();
-        for (Map.Entry<String, AutofillId> field : fields.entrySet()) {
-            String hint = field.getKey();
-            AutofillId id = field.getValue();
-            String value = hint.contains("password") ? data.getPassword() : data.getUserName();
-            dataset.setValue(id, AutofillValue.forText(value), presentation);
+
+        for (Field field : fields) {
+            if (data != null) {
+                if (field.fillType == Field.FILL_TYPE_PASSWORD) {
+                    dataset.setValue(field.autofillId, AutofillValue.forText(data.getPassword()), presentation);
+                } else if (field.fillType == Field.FILL_TYPE_EMAIL) {
+                    dataset.setValue(field.autofillId, AutofillValue.forText(data.getUserName()), presentation);
+                } else if (field.fillType == Field.FILL_TYPE_USERNAME) {
+                    dataset.setValue(field.autofillId, AutofillValue.forText(data.getUserName()), presentation);
+                }
+
+            } else {
+                dataset.setValue(field.autofillId,  null, presentation);
+            }
         }
         return dataset.build();
     }
 
-    static Dataset newlockedDataset(@NonNull Map<String, AutofillId> fields, AutofillData data, RemoteViews presentation, IntentSender authentication) {
+    static Dataset newlockedDataset(@NonNull ArrayList<Field> fields, AutofillItem data, RemoteViews presentation, IntentSender authentication) {
         Dataset.Builder dataset = new Dataset.Builder();
-        for (Map.Entry<String, AutofillId> field : fields.entrySet()) {
-            String hint = field.getKey();
-            AutofillId id = field.getValue();
-
+        for (Field field : fields) {
             if (data != null) {
-                String value = hint.contains("password") ? data.getPassword() : data.getUserName();
-                dataset.setValue(id, AutofillValue.forText(value), presentation);
+                if (field.fillType == Field.FILL_TYPE_PASSWORD) {
+                    dataset.setValue(field.autofillId, AutofillValue.forText(data.getPassword()), presentation);
+                } else if (field.fillType == Field.FILL_TYPE_EMAIL) {
+                    dataset.setValue(field.autofillId, AutofillValue.forText(data.getUserName()), presentation);
+                } else if (field.fillType == Field.FILL_TYPE_USERNAME) {
+                    dataset.setValue(field.autofillId, AutofillValue.forText(data.getUserName()), presentation);
+                }
+
             } else {
-                dataset.setValue(id,  null, presentation);
+                dataset.setValue(field.autofillId,  null, presentation);
             }
         }
         dataset.setAuthentication(authentication);
