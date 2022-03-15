@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { ConfirmShareCipherData, EditShareCipherData, EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetOrganizationResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, StopShareCipherData, SyncResult } from "./api.types"
+import { ConfirmShareCipherData, EditShareCipherData, EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetOrganizationResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, ShareMultipleCiphersData, StopShareCipherData, SyncResult } from "./api.types"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { Logger } from "../../utils/logger"
 import { Api } from "./api"
@@ -296,6 +296,26 @@ export class CipherApi {
       const data = response.data
 
       return { kind: "ok", data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Share multiple ciphers
+  async shareMultipleCiphers(token: string, payload: ShareMultipleCiphersData): Promise<EmptyResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/sharing/multiple`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok" }
     } catch (e) {
       Logger.error(e.message)
       return { kind: "bad-data" }

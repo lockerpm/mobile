@@ -13,7 +13,7 @@ import { KvpRequest } from '../../../../core/models/request/kvpRequest'
 import { CipherType } from '../../../../core/enums'
 import { AutofillDataType, loadShared, saveShared } from '../../../utils/keychain'
 import { useCipherHelpersMixins } from './helpers'
-import { IS_IOS } from '../../../config/constants'
+import { IS_IOS, MAX_MULTIPLE_SHARE_COUNT } from '../../../config/constants'
 import { CollectionView } from '../../../../core/models/view/collectionView'
 import { CollectionRequest } from '../../../../core/models/request/collectionRequest'
 import { CipherData } from '../../../../core/models/data/cipherData'
@@ -1138,18 +1138,85 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       searchText: '',
       filters: [(c: CipherView) => ids.includes(c.id)]
     }) || []
-    if (!ciphers.length) {
+    if (!ciphers.length || ciphers.length > MAX_MULTIPLE_SHARE_COUNT) {
       return { kind: 'ok' }
     }
-    const responses = await Promise.all(ciphers.map(c => {
-      return shareCipher(c, emails, role, autofillOnly)
-    }))
-    for (const res of responses) {
-      if (res.kind !== 'ok') {
-        return res
+
+    try {
+      const sharedCiphers: {
+        cipher: CipherRequest & { id: string }
+        members: {
+          username: string
+          role: AccountRoleText
+          key: string
+          hide_passwords: boolean
+        }[]
+      }[] = []
+
+      // Prepare org key
+      const shareKey: [EncString, SymmetricCryptoKey] = await cryptoService.makeShareKey()
+      const orgKey: SymmetricCryptoKey = shareKey[1]
+
+      // Get public keys
+      const members = await Promise.all(emails.map(async (email) => {
+        const publicKeyRes = await cipherStore.getSharingPublicKey(email)
+        let publicKey = ''
+        if (publicKeyRes.kind === 'ok') {
+          publicKey = publicKeyRes.data.public_key
+        }
+        return {
+          email,
+          publicKey,
+          username: email,
+          role,
+          hide_passwords: autofillOnly,
+          key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null
+        }
+      }))
+
+      // Prepare cipher
+      const prepareCipher = async (c: CipherView) => {
+        let _orgKey = orgKey
+        if (c.organizationId) {
+          _orgKey = await cryptoService.getOrgKey(c.organizationId)
+        }
+        const cipherEnc = await cipherService.encrypt(c, _orgKey)
+        const data = new CipherRequest(cipherEnc)
+        const mem = await Promise.all(members.map(async (m) => {
+          return {
+            username: m.email,
+            role,
+            hide_passwords: autofillOnly,
+            key: m.publicKey ? await _generateMemberKey(m.publicKey, _orgKey) : null
+          }
+        }))
+        sharedCiphers.push({
+          cipher: {
+            id: c.id,
+            ...data
+          },
+          members: mem
+        })
       }
+
+      await Promise.all(ciphers.map(prepareCipher))
+
+      // Send API
+      const res = await cipherStore.shareMultipleCiphers({
+        ciphers: sharedCiphers,
+        sharing_key: shareKey ? shareKey[0].encryptedString : null
+      })
+      if (res.kind === 'ok') {
+        notify('success', translate('success.cipher_shared'))
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      Logger.error(e)
+      return { kind: 'unknown' }
     }
-    return { kind: 'ok' }
   }
 
   // Confirm share cipher

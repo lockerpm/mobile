@@ -401,6 +401,19 @@ export type ShareCipherData = {
     }[]
 }
 
+export type ShareMultipleCiphersData = {
+    ciphers: {
+        cipher: CipherRequest & { id: string }
+        members: {
+            username: string
+            role: AccountRoleText
+            key: string
+            hide_passwords: boolean
+        }[]
+    }[]
+    sharing_key: string
+}
+
 export type ShareInvitationResponseData = {
     status: 'accept' | 'reject'
 }
