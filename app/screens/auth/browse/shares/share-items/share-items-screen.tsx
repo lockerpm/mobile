@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../../services/mixins"
@@ -7,6 +7,7 @@ import { BrowseItemEmptyContent, BrowseItemHeader, Layout } from "../../../../..
 import { SortAction } from "../../../home/all-item/sort-action"
 import { CipherShareList } from "./cipher-share-list"
 import { PlanType } from "../../../../../config/types"
+import { PushNotifier } from "../../../../../utils/push-notification"
 
 
 export const ShareItemsScreen = observer(() => {
@@ -30,6 +31,11 @@ export const ShareItemsScreen = observer(() => {
   const isFreeAccount = user.plan.alias === PlanType.FREE
 
   // --------------------- EFFECTS -------------------------
+
+  // Clear noti
+  useEffect(() => {
+    PushNotifier.cancelNotification('share_confirm')
+  }, [navigation])
 
   // --------------------- RENDER -------------------------
 

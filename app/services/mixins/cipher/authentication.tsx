@@ -296,6 +296,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       folderStore.clearStore()
       toolStore.clearStore()
   
+      await user.updateFCM(null)
       await user.logout()
   
       // Sign out of Google

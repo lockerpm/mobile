@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
 import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
-import { save, storageKeys } from "../../utils/storage"
+import { save, storageKeys, remove } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
 
@@ -78,6 +78,10 @@ export const UserModel = types
       self.pwd_user_id = userSnapshot.pwd_user_id
       self.is_pwd_manager = userSnapshot.is_pwd_manager
       self.default_team_id = userSnapshot.default_team_id
+      save(storageKeys.APP_CURRENT_USER, {
+        language: self.language,
+        pwd_user_id: self.pwd_user_id
+      })
     },
     clearUser: () => {
       self.isLoggedIn = false
@@ -94,6 +98,7 @@ export const UserModel = types
       self.invitations = cast([])
       self.plan = null
       self.fingerprint = ''
+      remove(storageKeys.APP_CURRENT_USER)
     },
     clearSettings: () => {
       self.isBiometricUnlock = false
@@ -137,7 +142,8 @@ export const UserModel = types
       self.language = lang
       setLang(lang)
       save(storageKeys.APP_CURRENT_USER, {
-        language: lang
+        language: lang,
+        pwd_user_id: self.pwd_user_id
       })
     },
     setBiometricUnlock: (isActive: boolean) => {

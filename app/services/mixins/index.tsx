@@ -194,6 +194,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     const permissionGranted = await PushNotifier.getPermission()
     if (permissionGranted) {
       const token = await PushNotifier.getToken()
+      // Logger.debug(token)
       user.setFCMToken(token)
     } else {
       user.setFCMToken(null)
