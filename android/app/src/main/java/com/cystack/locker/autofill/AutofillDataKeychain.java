@@ -1,5 +1,7 @@
 package com.cystack.locker.autofill;
 
+
+
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -19,22 +21,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+
 public class AutofillDataKeychain {
     private static final String TAG = "LockerAutoFillService";
     private static final String service = "W7S57TNBH5.com.cystack.lockerapp";
 
-    private final PrefsStorage prefsStorage;
-    private final CipherStorage cipherStorage;
+   private final PrefsStorage prefsStorage;
+   private final CipherStorage cipherStorage;
 
     // Data used by autofill service
-    public  boolean faceIdEnabled;
-    public  boolean loginedLocker;
+    public  boolean faceIdEnabled = false;
+    public  boolean loginedLocker = true;
     public String email;
     public String hashMassterPass;
     public String userAvatar;
-    public ArrayList<AutofillData> credentials = new ArrayList<>();
-    public ArrayList<AutofillData> otherCredentials = new ArrayList<>();
-     
+    public ArrayList<AutofillItem> credentials = new ArrayList<>();
+    // public ArrayList<AutofillItem> otherCredentials = new ArrayList<>();
+
 
     public AutofillDataKeychain(ReactApplicationContext reactContext, String domain) {
         cipherStorage = new CipherStorageKeystoreAesCbc();
@@ -42,7 +46,7 @@ public class AutofillDataKeychain {
         getAutoFillEntriesForDomain(domain);
     }
 
-     /**
+    /**
      * For a given domain name, attempt to find matching AutoFill credentials
      * @param domain - The domain name to search for
      * @return - List of matching Username/Passwords in the form of the AutofillData class.
@@ -61,18 +65,20 @@ public class AutofillDataKeychain {
                     String uri = (String) map.get("uri");
                     String name = (String) map.get("name");
                     String id = (String) map.get("id");
-        
 
-                    if (domain.contains(uri)) {
-                        credentials.add(new AutofillData(id, username, password, name, uri));
-                    } else {
-                        otherCredentials.add(new AutofillData(id, username, password, name, uri));
-                    }
+                    credentials.add(new AutofillItem(id, username, password, name, uri));
+                    // if (domain.contains(uri)) {
+                    //     credentials.add(new AutofillItem(id, username, password, name, uri));
+                    // } else {
+                    //     otherCredentials.add(new AutofillItem(id, username, password, name, uri));
+                    // }
                 }
             }
-            
+
             JSONObject authen = jsonObject.getJSONObject("authen");
             email = authen.getString("email");
+            hashMassterPass = authen.getString("hashPass");
+            userAvatar = authen.getString("avatar");
             faceIdEnabled = jsonObject.getBoolean("faceIdEnabled");
             loginedLocker = true;
         } catch (Exception ex) {
@@ -82,19 +88,19 @@ public class AutofillDataKeychain {
         }
     }
     private String getAutoFillItems() throws Exception {
-        PrefsStorage.ResultSet resultSet = prefsStorage.getEncryptedEntry(service);
-        if (resultSet == null) {
-            Log.e(TAG, "No entry found");
-            return "[]";
-        }
+       PrefsStorage.ResultSet resultSet = prefsStorage.getEncryptedEntry(service);
+       if (resultSet == null) {
+           Log.e(TAG, "No entry found");
+           return "[]";
+       }
 
-        CipherStorage.DecryptionResult decryptionResult = cipherStorage.decrypt(service, resultSet.username, resultSet.password, SecurityLevel.ANY);
-        return decryptionResult.password;
+       CipherStorage.DecryptionResult decryptionResult = cipherStorage.decrypt(service, resultSet.username, resultSet.password, SecurityLevel.ANY);
+       return decryptionResult.password;
     }
 
     private void setItem(String key, String value) throws Exception {
-        CipherStorage.EncryptionResult result = cipherStorage.encrypt(service, key, value, SecurityLevel.ANY);
-        prefsStorage.storeEncryptedEntry(service, result);
+       CipherStorage.EncryptionResult result = cipherStorage.encrypt(service, key, value, SecurityLevel.ANY);
+       prefsStorage.storeEncryptedEntry(service, result);
     }
 
     public static Map<String, Object> toMap(JSONObject object) throws JSONException {

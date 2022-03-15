@@ -11,14 +11,15 @@
     android:icon="@mipmap/ic_launcher"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:allowBackup="false" 
-    android:theme="@style/AppTheme"
+    android:theme="@style/DeviceCredentialHandlerTheme"
   >
     <activity
-        android:name=".autofill.LoginList"
+        android:name=".autofill.activities.VerifyMasterPasswordActivity"
         android:exported="false" />
     <activity
-        android:name=".LockerAutofillClient"
-        android:exported="true" />
+        android:name=".autofill.activities.LoginListActivity"
+        android:exported="false"
+        android:windowSoftInputMode="stateHidden" />
 
     <activity 
       android:exported="true" 

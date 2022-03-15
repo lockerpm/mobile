@@ -4,7 +4,7 @@ import { KdfType } from '../../../../core/enums/kdfType'
 import { useStores } from '../../../models'
 import { useCoreService } from '../../core-service'
 import { delay } from '../../../utils/delay'
-import { GOOGLE_CLIENT_ID, IS_IOS } from '../../../config/constants'
+import { GOOGLE_CLIENT_ID } from '../../../config/constants'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { saveShared } from '../../../utils/keychain'
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
@@ -105,7 +105,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     await cryptoService.setEncPrivateKey(res.data.private_key)
 
     // setup service offline
-    if (IS_IOS && masterPassword) {
+    if (masterPassword) {
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
     }
@@ -122,11 +122,15 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
 
+      console.log("make key: ", key);
+      
       // Offline compare
       if (uiStore.isOffline) {
         const storedKeyHash = await cryptoService.getKeyHash()
+        console.log("storedKeyHash: ", storedKeyHash);
         if (storedKeyHash) {
           const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
+          console.log("compareAndUpdateKeyHash: ", passwordValid);
           if (passwordValid) {
             messagingService.send('loggedIn')
   
@@ -139,6 +143,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
 
       // Online session login
       const keyHash = await cryptoService.hashPassword(masterPassword, key)
+      console.log("keyHash: ", keyHash);
       return _loginUsingApi(key, keyHash, kdf, kdfIterations, masterPassword)
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
@@ -231,10 +236,10 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       await cryptoService.setEncKey(encKey[1].encryptedString)
       await cryptoService.setEncPrivateKey(keys[1].encryptedString)
 
-      if (IS_IOS) {
-        const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
-        await cryptoService.setAutofillKeyHash(autofillHashedPassword)
-      }
+  
+      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
+      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
+      
 
       // Success
       notify('success', translate('success.master_password_updated'))
@@ -313,9 +318,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       }
   
       // Reset shared data
-      if (IS_IOS) {
         await saveShared('autofill', '')
-      }
 
       // Clear services
       await Promise.all([
