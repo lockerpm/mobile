@@ -120,9 +120,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
-    if (IS_IOS) {
-      await _updateAutofillData()
-    }
+
+    await _updateAutofillData()
+
   }
 
   // Reload offline cache of a single cipher only
@@ -292,10 +292,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         const fingerprint = await cryptoService.getFingerprint(userId)
         user.setFingerprint(fingerprint.join('-'))
   
-        // Save to shared keychain for autofill service
-        if (IS_IOS) {
-          await _updateAutofillData()
-        }
+      
+        await _updateAutofillData()
         return { kind: 'ok' }
       } catch (e) {
         Logger.error(e)
@@ -401,12 +399,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Store password for autofill
   const _updateAutofillData = async () => {
-    // Only iOS
-    if (!IS_IOS) {
-      return
-    }
     
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
+
     const passwordRes = await getCiphers({
       filters: [
         (c : CipherView) => c.type === CipherType.Login && c.login.username && c.login.password
@@ -435,10 +430,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   // Sync autofill data
   const syncAutofillData = async () => {
     try {
-      // Only iOS
-      if (!IS_IOS) {
-        return
-      }
+   
 
       // Prevent duplicate sync
       if (cipherStore.isSynchingAutofill) {

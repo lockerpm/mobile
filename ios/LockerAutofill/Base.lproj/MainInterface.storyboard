@@ -17,28 +17,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmq-AZ-LBm">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                <color key="barTintColor" name="primary"/>
-                                <textAttributes key="titleTextAttributes">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <color key="textShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </textAttributes>
-                                <textAttributes key="largeTitleTextAttributes">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <color key="textShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </textAttributes>
-                                <items>
-                                    <navigationItem title="Locker Password Manager" id="wAz-cy-c7C" colorLabel="IBBuiltInLabel-Green">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="ybp-o9-OjK">
-                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <connections>
-                                                <action selector="cancel:" destination="vxG-7A-bij" id="4hQ-cV-cA8"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Verify Master Password" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHt-Az-rZe">
                                 <rect key="frame" x="20" y="202" width="335" height="29"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
@@ -97,26 +75,32 @@
                                     <action selector="unlockDidPress:" destination="vxG-7A-bij" eventType="touchUpInside" id="p2K-JQ-ovu"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rs5-wt-k7J">
+                                <rect key="frame" x="281" y="30" width="74" height="34"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Cancel">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="16"/>
+                                    <color key="baseForegroundColor" name="primary"/>
+                                </buttonConfiguration>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Khm-HA-POC"/>
                         <color key="backgroundColor" name="background"/>
                         <color key="tintColor" name="text"/>
                         <constraints>
-                            <constraint firstItem="cmq-AZ-LBm" firstAttribute="top" secondItem="Khm-HA-POC" secondAttribute="top" id="3df-3q-O7b"/>
+                            <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="rs5-wt-k7J" secondAttribute="trailing" constant="20" id="3Gm-Rf-l8z"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="Iqt-pY-FVh" secondAttribute="trailing" constant="20" id="4AR-dh-JtP"/>
                             <constraint firstItem="RW4-xA-kRE" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="51T-Lx-kwB"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="dD1-Ps-MMc" secondAttribute="trailing" constant="20" id="8dS-4Q-pOu"/>
-                            <constraint firstItem="cmq-AZ-LBm" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" id="8jA-zP-3tQ"/>
                             <constraint firstItem="Iqt-pY-FVh" firstAttribute="top" secondItem="dD1-Ps-MMc" secondAttribute="bottom" constant="30" id="A4f-ZJ-58t"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="VAo-LQ-WML" secondAttribute="trailing" constant="16" id="B3Q-de-k3Q"/>
                             <constraint firstItem="BHt-Az-rZe" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="CDq-y6-TK0"/>
                             <constraint firstItem="VAo-LQ-WML" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="16" id="Ex2-qp-q7j"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="RW4-xA-kRE" secondAttribute="trailing" constant="20" id="IIV-0E-7fK"/>
                             <constraint firstItem="zsC-4l-BAp" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="JmG-o4-CTy"/>
-                            <constraint firstItem="cmq-AZ-LBm" firstAttribute="trailing" secondItem="Khm-HA-POC" secondAttribute="trailing" id="Ka9-S2-fPe"/>
-                            <constraint firstItem="vl9-cA-g4D" firstAttribute="top" secondItem="cmq-AZ-LBm" secondAttribute="bottom" constant="70" id="MwD-Kc-6Yd"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="vl9-cA-g4D" secondAttribute="trailing" constant="156" id="Rsv-Dm-0c6"/>
                             <constraint firstItem="zsC-4l-BAp" firstAttribute="top" secondItem="RW4-xA-kRE" secondAttribute="bottom" constant="16" id="YZ8-Ul-Lwc"/>
+                            <constraint firstItem="rs5-wt-k7J" firstAttribute="top" secondItem="Khm-HA-POC" secondAttribute="top" constant="30" id="Z3O-b7-pFI"/>
                             <constraint firstItem="vl9-cA-g4D" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="156" id="gA0-u8-2fn"/>
                             <constraint firstItem="Iqt-pY-FVh" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="hoo-yP-kgc"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="zsC-4l-BAp" secondAttribute="trailing" constant="20" id="lix-JG-HHb"/>
@@ -125,6 +109,7 @@
                             <constraint firstItem="dD1-Ps-MMc" firstAttribute="leading" secondItem="Khm-HA-POC" secondAttribute="leading" constant="20" id="p0b-NI-s7X"/>
                             <constraint firstItem="BHt-Az-rZe" firstAttribute="top" secondItem="vl9-cA-g4D" secondAttribute="bottom" constant="25" id="pv6-Zd-Q6x"/>
                             <constraint firstItem="Khm-HA-POC" firstAttribute="trailing" secondItem="BHt-Az-rZe" secondAttribute="trailing" constant="20" id="qI9-4S-Cvl"/>
+                            <constraint firstItem="vl9-cA-g4D" firstAttribute="top" secondItem="Khm-HA-POC" secondAttribute="top" constant="114" id="x9X-oh-8iv"/>
                             <constraint firstItem="dD1-Ps-MMc" firstAttribute="top" secondItem="zsC-4l-BAp" secondAttribute="bottom" constant="26" id="yIy-OG-5ug"/>
                         </constraints>
                     </view>
@@ -181,7 +166,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="50" estimatedSectionHeaderHeight="5020" sectionFooterHeight="1" estimatedSectionFooterHeight="4" translatesAutoresizingMaskIntoConstraints="NO" id="Tnx-2s-k97">
-                                <rect key="frame" x="0.0" y="99" width="375" height="568"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="553"/>
                                 <color key="backgroundColor" name="background"/>
                                 <color key="tintColor" name="text"/>
                                 <color key="separatorColor" name="background"/>
@@ -271,7 +256,7 @@
                         <color key="backgroundColor" name="background"/>
                         <constraints>
                             <constraint firstItem="Ky8-vK-JVj" firstAttribute="trailing" secondItem="Tnx-2s-k97" secondAttribute="trailing" id="7n4-p2-6Ga"/>
-                            <constraint firstItem="Tnx-2s-k97" firstAttribute="top" secondItem="UJx-sW-kG0" secondAttribute="bottom" constant="5" id="A7v-Ey-LSS"/>
+                            <constraint firstItem="Tnx-2s-k97" firstAttribute="top" secondItem="UJx-sW-kG0" secondAttribute="bottom" constant="20" id="GDf-mE-gWN"/>
                             <constraint firstItem="UJx-sW-kG0" firstAttribute="leading" secondItem="Ky8-vK-JVj" secondAttribute="leading" id="IvN-pv-Dwj"/>
                             <constraint firstItem="Tnx-2s-k97" firstAttribute="leading" secondItem="UJx-sW-kG0" secondAttribute="leading" id="ShR-LK-Un8"/>
                             <constraint firstItem="Tnx-2s-k97" firstAttribute="bottom" secondItem="Ky8-vK-JVj" secondAttribute="bottom" id="Td7-fR-vMV"/>
@@ -283,7 +268,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Login List" id="djK-6Z-utw">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="1mO-wz-8ct">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="tintColor" name="primary"/>
                             <connections>
                                 <action selector="cancel:" destination="Xki-Si-B7m" id="Wql-Ed-Eo4"/>
                             </connections>
@@ -307,11 +292,11 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="UDN-UZ-Dpw">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" name="primary"/>
+                        <color key="backgroundColor" name="white"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" name="primary"/>
+                        <color key="barTintColor" name="white"/>
                         <textAttributes key="titleTextAttributes">
-                            <color key="textColor" red="1" green="0.98958333330000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="textColor" name="primary"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -344,6 +329,9 @@
         </namedColor>
         <namedColor name="title">
             <color red="0.012000000104308128" green="0.10599999874830246" blue="0.3059999942779541" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="white">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

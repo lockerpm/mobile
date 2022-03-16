@@ -80,7 +80,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
         let loginListView = (segue.destination as! UINavigationController).topViewController as! LoginListViewController
         loginListView.delegate = self
         loginListView.credentials = self.dataModel.credentials
-        loginListView.others = self.dataModel.otherCredentials
       } else if segue.identifier == "verifyMasterPasswordSegue" {
         let verifyMasterPasswordScreen = segue.destination as! VerifyMasterPasswordViewController
         verifyMasterPasswordScreen.delegate = self
