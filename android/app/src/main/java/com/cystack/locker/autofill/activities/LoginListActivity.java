@@ -1,6 +1,7 @@
 package com.cystack.locker.autofill.activities;
 
 import static com.cystack.locker.autofill.activities.VerifyMasterPasswordActivity.EXTRA_LOGIN_DATA;
+import static com.cystack.locker.autofill.activities.VerifyMasterPasswordActivity.DOMAIN;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,7 +58,6 @@ public class LoginListActivity extends AppCompatActivity {
         });
 
         searchView = findViewById(R.id.search_bar);
-        searchView.setFocusable(false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -70,6 +70,8 @@ public class LoginListActivity extends AppCompatActivity {
                 return false;
             }
         });
+        searchView.setQuery(intent.getStringExtra(DOMAIN), false);
+        searchView.clearFocus();
     }
 
     public void cancel(View view){

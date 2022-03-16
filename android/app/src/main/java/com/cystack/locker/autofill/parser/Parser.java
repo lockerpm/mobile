@@ -64,7 +64,7 @@ public class Parser {
 
         // First try the explicit autofill hints...
         boolean haveAutofillHints = node.getAutofillHints() != null && node.getAutofillHints().length > 0;
-        boolean isEditText = node.getClassName().equals("android.widget.EditText");
+        boolean isEditText = node.getClassName() != null && node.getClassName() .equals("android.widget.EditText");
         boolean isInputTag = node.getHtmlInfo() != null && node.getHtmlInfo().getTag().equals("input");
 
         if (isEditText || isInputTag || haveAutofillHints) {

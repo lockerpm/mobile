@@ -32,7 +32,7 @@ public class AutofillDataKeychain {
 
     // Data used by autofill service
     public  boolean faceIdEnabled = false;
-    public  boolean loginedLocker = true;
+    public  boolean loginedLocker = false;
     public String email;
     public String hashMassterPass;
     public String userAvatar;
@@ -54,6 +54,10 @@ public class AutofillDataKeychain {
     public void getAutoFillEntriesForDomain(String domain) {
         try {
             String itemString = getAutoFillItems();
+            if (itemString == null){
+                return;
+            }
+            loginedLocker = true;
             JSONObject jsonObject = new JSONObject(itemString);
             JSONArray jsonArray  = jsonObject.getJSONArray("passwords");
             List<Object> itemList = toList(jsonArray);
@@ -79,23 +83,23 @@ public class AutofillDataKeychain {
             email = authen.getString("email");
             hashMassterPass = authen.getString("hashPass");
             userAvatar = authen.getString("avatar");
-            faceIdEnabled = jsonObject.getBoolean("faceIdEnabled");
-            loginedLocker = true;
+            faceIdEnabled = jsonObject.getBoolean("faceIdEnabled");        
+             Log.e(TAG, "----------- no error sss");
         } catch (Exception ex) {
-            loginedLocker = false;
             Log.e(TAG, ex.getMessage());
 
         }
     }
     private String getAutoFillItems() throws Exception {
-       PrefsStorage.ResultSet resultSet = prefsStorage.getEncryptedEntry(service);
-       if (resultSet == null) {
-           Log.e(TAG, "No entry found");
-           return "[]";
-       }
+        PrefsStorage.ResultSet resultSet = prefsStorage.getEncryptedEntry(service);
+        if (resultSet == null) {
+            Log.e(TAG, "No entry found");
+            return "[]";
+        }
 
-       CipherStorage.DecryptionResult decryptionResult = cipherStorage.decrypt(service, resultSet.username, resultSet.password, SecurityLevel.ANY);
-       return decryptionResult.password;
+    
+        CipherStorage.DecryptionResult decryptionResult = cipherStorage.decrypt(service, resultSet.username, resultSet.password, SecurityLevel.ANY);
+        return decryptionResult.password;
     }
 
     private void setItem(String key, String value) throws Exception {

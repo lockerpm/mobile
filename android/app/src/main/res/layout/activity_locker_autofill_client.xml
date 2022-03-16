@@ -18,17 +18,17 @@
 
     <Button
         android:id="@+id/unlock"
-        android:layout_width="358dp"
-        android:layout_height="48dp"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:backgroundTint="@color/primary"
         android:onClick="unlock"
         android:text="@string/mp_login"
-        android:textColor="@color/white"
+        android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/master_password" />
 
@@ -56,7 +56,9 @@
 
     <EditText
         android:id="@+id/master_password"
-        android:layout_width="348dp"
+        android:background="@drawable/search_bg"
+        android:paddingStart="10dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
@@ -86,18 +88,18 @@
 
     <TextView
         android:id="@+id/mp_cancel"
-        android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="28dp"
         android:clickable="true"
+        android:minHeight="48dp"
         android:onClick="cancel"
+        android:padding="10dp"
         android:text="@string/cancel"
         android:textColor="@color/primary"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.917"
+        app:layout_constraintHorizontal_bias="0.908"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
