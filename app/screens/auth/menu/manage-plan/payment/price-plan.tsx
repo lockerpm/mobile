@@ -53,6 +53,7 @@ interface PricePlanProps {
   purchase: (subID: string) => void
   isEnable: boolean
   personal: boolean
+  isLoading: boolean
 }
 
 export const PricePlan = (prop: PricePlanProps) => { 
@@ -115,14 +116,19 @@ export const PricePlan = (prop: PricePlanProps) => {
         title={plan.monthly.title}
         subtitle={plan.monthly.subtitle}
       />
-      <Button style={{
-        flexDirection: "column",
-        marginTop: 20,
-      }} onPress={() => prop.purchase(billingCycle.subId)}>
+      <Button 
+        style={{
+          marginTop: 20,
+        }} 
+        isLoading={prop.isLoading}
+        onPress={() => prop.purchase(billingCycle.subId)}
+      >
+        <View style={{ flexDirection: "column",}}>
         <Text preset="bold" style={{ color: color.white}}>
           {billingCycle.pay_title}
         </Text>
         <Text style={{ fontSize: 12, color: color.white}}>{translate("payment.cancel_text")}</Text>
+        </View>
       </Button>
     </View>
   )

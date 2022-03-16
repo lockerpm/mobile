@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { View, StyleSheet, TouchableOpacity, Alert } from "react-native"
-import { Text } from "../../../../../components"
+import { Text, Layout } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { observer } from "mobx-react-lite"
@@ -38,9 +38,10 @@ export const PaymentScreen = observer(function PaymentScreen() {
   // -------------------- STATE ----------------------
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
-  const [reload, setReload] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [purchased, setPurchased] = useState(false)
-  
+
+
   
   const subSkus = [
     "pm_family_monthly",
@@ -61,6 +62,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
     const checkCurrentPurchase = async (purchase?: SubscriptionPurchase): Promise<void> => {
       if (purchase && !purchased) {
         var verified: boolean = false;
+        setIsLoading(true)
         if (IS_IOS) {
           verified = await user.purchaseValidation(purchase.transactionReceipt)
         } {
@@ -75,9 +77,11 @@ export const PaymentScreen = observer(function PaymentScreen() {
           } catch (ackErr) {
             console.warn('ackErr', ackErr);
           }
+          setIsLoading(false)
           navigation.navigate("mainTab")
         } else{
           // conclude the purchase is fraudulent, etc...
+          setIsLoading(false)
           Alert.alert(
             "Purchase Verification",
             "Locker can not verify your purchase",
@@ -86,6 +90,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
             ]
           )
         }
+
       }
     };
 
@@ -141,7 +146,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
       <View style={[styles.payment, { backgroundColor: color.background }]}>
         <Segment />
-        <PricePlan onPress={setEnable} isEnable={isEnable} personal={payIndividual} purchase={purchase}/>
+        <PricePlan isLoading={isLoading} onPress={setEnable} isEnable={isEnable} personal={payIndividual} purchase={purchase}/>
       </View>
     </LinearGradient>
   )
