@@ -124,8 +124,6 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
-
-      console.log("make key: ", key);
       
       // Offline compare
       if (uiStore.isOffline) {
@@ -146,7 +144,6 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
 
       // Online session login
       const keyHash = await cryptoService.hashPassword(masterPassword, key)
-      console.log("keyHash: ", keyHash);
       return _loginUsingApi(key, keyHash, kdf, kdfIterations, masterPassword)
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
