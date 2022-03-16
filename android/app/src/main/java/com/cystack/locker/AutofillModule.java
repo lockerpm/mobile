@@ -10,7 +10,6 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.cystack.locker.autofill.Prefs;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -27,13 +26,13 @@ public class AutofillModule extends ReactContextBaseJavaModule {
         return "AutofillAndroid";
     }
 
-    @ReactMethod
-    public void addAutofillValue(String username ,String password) {
-        SharedPreferences pref = getReactApplicationContext().getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE);
-        pref.edit().putString(Prefs.AUTOFILL_HINT_USERNAME, username)
-                .putString(Prefs.AUTOFILL_HINT_PASSWORD, password)
-            .commit();
-        
-        Objects.requireNonNull(getCurrentActivity()).finish();
-    }
+//    @ReactMethod
+//    public void addAutofillValue(String username ,String password) {
+//        SharedPreferences pref = getReactApplicationContext().getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE);
+//        pref.edit().putString(Prefs.AUTOFILL_HINT_USERNAME, username)
+//                .putString(Prefs.AUTOFILL_HINT_PASSWORD, password)
+//            .commit();
+//
+//        Objects.requireNonNull(getCurrentActivity()).finish();
+//    }
 }
