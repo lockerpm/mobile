@@ -4,6 +4,7 @@ import { Text } from "../../../../../components"
 // import { commonStyles, fontSize } from "../../../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../../../services/mixins"
+import { IS_IOS } from "../../../../../config/constants";
 
 
 export const PremiumBenefits = (props: {benefitTab: number}) => {
@@ -43,9 +44,11 @@ export const PremiumBenefits = (props: {benefitTab: number}) => {
           alignItems: 'center'
         }}
       >
-        <View style={{ flex: 1 }}>
-          <Image source={item.img} style={{ height: 180, width: 180 }} />
-        </View>
+        {
+          IS_IOS ? <Image source={item.img} style={{ marginBottom: 30, height: "65%" }} resizeMode="contain" />
+          : <Image source={item.img} style={{ height: 160, width: 160, marginBottom: 20 }} />
+        }
+        
         <Text preset="black" text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: 320, marginBottom: 5, color: "black" }} />
       </View>
     )
