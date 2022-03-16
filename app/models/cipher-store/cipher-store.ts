@@ -3,7 +3,7 @@ import { omit } from "ramda"
 import { Organization } from "../../../core/models/domain/organization"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CipherView } from "../../../core/models/view"
-import { ConfirmShareCipherData, EditShareCipherData, ImportCipherData, MoveFolderData, MyShareType, ShareCipherData, SharingInvitationType, StopShareCipherData } from "../../services/api"
+import { ConfirmShareCipherData, EditShareCipherData, ImportCipherData, MoveFolderData, MyShareType, ShareCipherData, ShareMultipleCiphersData, SharingInvitationType, StopShareCipherData } from "../../services/api"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -228,6 +228,12 @@ export const CipherStoreModel = types
     shareCipher: async (payload: ShareCipherData) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.shareCipher(self.apiToken, payload)
+      return res
+    },
+
+    shareMultipleCiphers: async (payload: ShareMultipleCiphersData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.shareMultipleCiphers(self.apiToken, payload)
       return res
     },
 

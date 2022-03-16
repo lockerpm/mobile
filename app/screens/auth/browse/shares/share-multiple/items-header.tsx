@@ -8,14 +8,11 @@ import { commonStyles, fontSize } from "../../../../../theme"
 import { Button, Header, SearchBar, Text } from "../../../../../components"
 import { ShareModal } from "../../../../../components/cipher/cipher-action/share-modal"
 
-// @ts-ignore
 import ConfigIcon from './config.svg'
-// @ts-ignore
 import ConfigIconLight from './config-light.svg'
-// @ts-ignore
 import PlusIcon from './plus.svg'
-// @ts-ignore
 import PlusIconLight from './plus-light.svg'
+import { MAX_MULTIPLE_SHARE_COUNT } from "../../../../../config/constants"
 
 
 interface Props {
@@ -58,6 +55,7 @@ export const ShareMultipleHeader = observer((props: Props) => {
 
   // ----------------------- COMPUTED ------------------------
   
+  const isExceeded = selectedItems.length > MAX_MULTIPLE_SHARE_COUNT
   
   // ----------------------- METHODS ------------------------
 
@@ -82,7 +80,7 @@ export const ShareMultipleHeader = observer((props: Props) => {
       </Button>
 
       {
-        selectedItems.length > 0 && (
+        selectedItems.length > 0 && !isExceeded && (
           <>
             <Button
               preset="link"
@@ -149,10 +147,15 @@ export const ShareMultipleHeader = observer((props: Props) => {
 
       <Text
         preset="black"
-        text={selectedItems.length ? `${selectedItems.length} ${translate('common.selected')}` : translate('common.select')}
+        text={
+          selectedItems.length 
+            ? `${selectedItems.length} ${translate('common.selected')} (${translate('common.max')} ${MAX_MULTIPLE_SHARE_COUNT})` 
+            : translate('common.select')
+        }
         style={{
           fontSize: fontSize.h5,
-          marginLeft: 5
+          marginLeft: 5,
+          color: isExceeded ? color.error : color.textBlack
         }}
       />
     </View>

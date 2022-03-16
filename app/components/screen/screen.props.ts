@@ -50,4 +50,5 @@ export interface ScreenProps {
   isLoading?: boolean,
   isOverlayLoading?: boolean
   hasFooter?: boolean
+  hasBottomNav?: boolean
 }

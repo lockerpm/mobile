@@ -20,7 +20,7 @@ export const BrowseListScreen = observer(() => {
     return total + s.members.filter(m => m.status === SharingStatus.ACCEPTED).length
   }, 0)
 
-  const data = Object.keys(BROWSE_ITEMS).map(key => {
+  const data = Object.keys(BROWSE_ITEMS).filter(key => !BROWSE_ITEMS[key].group).map(key => {
     return {
       ...BROWSE_ITEMS[key],
       notiCount: key === 'shares' ? shareNotiCount : 0
@@ -30,6 +30,7 @@ export const BrowseListScreen = observer(() => {
   return (
     <Layout
       borderBottom
+      hasBottomNav
       containerStyle={{ 
         backgroundColor: isDark ? color.background : color.block, 
         paddingTop: 0 

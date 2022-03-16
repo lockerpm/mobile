@@ -3,48 +3,34 @@ import { TxKeyPath } from "../i18n"
 
 // ---------------- Svg icons---------------------
 
-// @ts-ignore
 import FolderIcon from './images/vault/folder.svg'
-// @ts-ignore
 import NoteIcon from './images/vault/note.svg'
-// @ts-ignore
 import IdentityIcon from './images/vault/identity.svg'
-// @ts-ignore
 import SharedIcon from './images/vault/shared.svg'
-// @ts-ignore
 import TrashIcon from './images/vault/trash.svg'
-// @ts-ignore
+import CryptoAssetIcon from './images/vault/crypto-asset.svg'
+import CryptoAccountIcon from './images/vault/crypto-account.svg'
+import CryptoWalletIcon from './images/vault/crypto-wallet.svg'
 import DataBreachScannerIcon from './images/vault/data-breach-scanner.svg'
-// @ts-ignore
 import PasswordGeneratorIcon from './images/vault/password-generator.svg'
-// @ts-ignore
 import PasswordHealthIcon from './images/vault/password-health.svg'
-// @ts-ignore
 import AuthenticatorIcon from './images/vault/authenticator.svg'
-// @ts-ignore
 import FFolderIcon from './images/folder/folder.svg'
-// @ts-ignore
 import FFolderShareIcon from './images/folder/folder-share.svg'
-// @ts-ignore
 import FFolderAddIcon from './images/folder/folder-add.svg'
 
 
 type BrowseItem = {
-  label: TxKeyPath,
-  icon: ImageSourcePropType & ImageURISource,
-  routeName: string,
-  addable?: boolean,
+  label: TxKeyPath
+  icon: ImageSourcePropType & ImageURISource
+  routeName: string
+  addable?: boolean
   svgIcon?: any
+  group?: string
 }
 
 type BrowseItemContainer = {
-  folder: BrowseItem,
-  password: BrowseItem,
-  note: BrowseItem,
-  card: BrowseItem,
-  identity: BrowseItem,
-  shares: BrowseItem,
-  trash: BrowseItem,
+  [name: string]: BrowseItem
 }
 
 
@@ -73,6 +59,27 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     icon: require('./images/vault/card.png'),
     routeName: 'cards',
     addable: true
+  },
+  cryptoAsset: {
+    label: 'common.crypto_asset',
+    icon: require('./images/vault/crypto-asset.png'),
+    routeName: 'cryptoAssets',
+    addable: true,
+    svgIcon: CryptoAssetIcon
+  },
+  cryptoAccount: {
+    label: 'common.crypto_account',
+    icon: require('./images/vault/crypto-account.png'),
+    routeName: 'cryptoAccounts',
+    svgIcon: CryptoAccountIcon,
+    group: 'cryptoAsset'
+  },
+  cryptoWallet: {
+    label: 'common.crypto_wallet',
+    icon: require('./images/vault/crypto-wallet.png'),
+    routeName: 'cryptoWallets',
+    svgIcon: CryptoAssetIcon,
+    group: 'cryptoAsset'
   },
   identity: {
     label: 'common.identity',

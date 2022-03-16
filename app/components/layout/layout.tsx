@@ -6,18 +6,19 @@ import { commonStyles } from "../../theme"
 import { useMixins } from "../../services/mixins"
 
 export interface LayoutProps {
-  children?: React.ReactNode,
-  isScreenLoading?: boolean,
-  isOverlayLoading?: boolean,
-  isContentLoading?: boolean,
-  isContentOverlayLoading?: boolean,
-  header?: JSX.Element,
-  footer?: JSX.Element,
-  noScroll?: boolean,
-  borderTop?: boolean,
-  borderBottom?: boolean,
-  style?: StyleProp<ViewStyle>,
+  children?: React.ReactNode
+  isScreenLoading?: boolean
+  isOverlayLoading?: boolean
+  isContentLoading?: boolean
+  isContentOverlayLoading?: boolean
+  header?: JSX.Element
+  footer?: JSX.Element
+  noScroll?: boolean
+  borderTop?: boolean
+  borderBottom?: boolean
+  style?: StyleProp<ViewStyle>
   containerStyle?: StyleProp<ViewStyle>
+  hasBottomNav?: boolean
 }
 
 /**
@@ -49,6 +50,7 @@ export const Layout = function Layout(props: LayoutProps) {
       isOverlayLoading={props.isOverlayLoading}
       style={props.style}
       hasFooter={!!props.footer}
+      hasBottomNav={props.hasBottomNav}
       statusBar={isDark ? "light-content" : "dark-content"}
       backgroundColor={color.background}
     >

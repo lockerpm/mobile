@@ -126,6 +126,7 @@ export const AllItemScreen = observer(function AllItemScreen() {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}

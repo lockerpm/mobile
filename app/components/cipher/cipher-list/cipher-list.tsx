@@ -20,6 +20,9 @@ import { commonStyles, fontSize } from "../../../theme"
 import { DeletedAction } from "../cipher-action/deleted-action"
 import { Checkbox } from "react-native-ui-lib"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { CryptoAccountAction } from "../../../screens/auth/browse/crypto-asset/crypto-account-action"
+import { CryptoWalletAction } from "../../../screens/auth/browse/crypto-asset/crypto-wallet-action"
+import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 
 
 export interface CipherListProps {
@@ -27,7 +30,7 @@ export interface CipherListProps {
   navigation: any
   searchText?: string
   onLoadingChange?: Function
-  cipherType?: CipherType
+  cipherType?: CipherType | CipherType[]
   deleted?: boolean
   sortList?: {
     orderField: string
@@ -46,7 +49,7 @@ export interface CipherListProps {
 /**
  * Describe your component here
  */
-export const CipherList = observer(function CipherList(props: CipherListProps) {
+export const CipherList = observer((props: CipherListProps) => {
   const {
     emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList,
     folderId, collectionId, organizationId,
@@ -54,6 +57,7 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   } = props
   const { getWebsiteLogo, translate, color, getTeam } = useMixins()
   const { getCiphers } = useCipherDataMixins()
+  const { getCipherDescription } = useCipherHelpersMixins()
   const { cipherStore, user } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -62,6 +66,8 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
   const [showNoteAction, setShowNoteAction] = useState(false)
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
+  const [showCryptoAccountAction, setShowCryptoAccountAction] = useState(false)
+  const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showDeletedAction, setShowDeletedAction] = useState(false)
   const [ciphers, setCiphers] = useState([])
 
@@ -90,7 +96,12 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
     // Filter
     const filters = []
     if (props.cipherType) {
-      filters.push((c : CipherView) => c.type === props.cipherType)
+      if (typeof props.cipherType === 'number') {
+        filters.push((c : CipherView) => c.type === props.cipherType)
+      } else {
+        // @ts-ignore
+        filters.push((c : CipherView) => props.cipherType.includes(c.type))
+      }
     }
 
     // Search
@@ -133,6 +144,18 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
         case CipherType.Identity: {
           data.logo = BROWSE_ITEMS.identity.icon
           data.svg = BROWSE_ITEMS.identity.svgIcon
+          break
+        }
+
+        case CipherType.CryptoAccount: {
+          data.logo = BROWSE_ITEMS.cryptoAccount.icon
+          data.svg = BROWSE_ITEMS.cryptoAccount.svgIcon
+          break
+        }
+
+        case CipherType.CryptoWallet: {
+          data.logo = BROWSE_ITEMS.cryptoWallet.icon
+          data.svg = BROWSE_ITEMS.cryptoWallet.svgIcon
           break
         }
 
@@ -206,6 +229,12 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       case CipherType.SecureNote:
         setShowNoteAction(true)
         break
+      case CipherType.CryptoAccount:
+        setShowCryptoAccountAction(true)
+        break
+      case CipherType.CryptoWallet:
+        setShowCryptoWalletAction(true)
+        break
       default:
         return
     }
@@ -227,22 +256,13 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       case CipherType.SecureNote:
         navigation.navigate('notes__info')
         break
+      case CipherType.CryptoAccount:
+        navigation.navigate('cryptoAccounts__info')
+        break
+      case CipherType.CryptoWallet:
+        navigation.navigate('cryptoWallets__info')
+        break
     }
-  }
-
-  // Get cipher description
-  const getDescription = (item: CipherView) => {
-    switch (item.type) {
-      case CipherType.Login:
-        return item.login.username
-      case CipherType.Card:
-        return (item.card.brand && item.card.number) 
-          ? `${item.card.brand}, *${item.card.number.slice(-4)}`
-          : ''
-      case CipherType.Identity:
-        return item.identity.fullName
-    }
-    return ''
   }
 
   // Toggle item selection
@@ -289,6 +309,20 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
       <NoteAction
         isOpen={showNoteAction}
         onClose={() => setShowNoteAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <CryptoAccountAction
+        isOpen={showCryptoAccountAction}
+        onClose={() => setShowCryptoAccountAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <CryptoWalletAction
+        isOpen={showCryptoWalletAction}
+        onClose={() => setShowCryptoWalletAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
       />
@@ -383,9 +417,9 @@ export const CipherList = observer(function CipherList(props: CipherListProps) {
 
                 {/* Description */}
                 {
-                  !!getDescription(item) && (
+                  !!getCipherDescription(item) && (
                     <Text
-                      text={getDescription(item)}
+                      text={getCipherDescription(item)}
                       style={{ fontSize: fontSize.small }}
                     />
                   )
