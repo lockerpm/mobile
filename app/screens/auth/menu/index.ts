@@ -5,6 +5,7 @@ export * from "./change-master-password/change-master-password-screen"
 export * from "./help/help-screen"
 export * from "./import/import-screen"
 export * from "./export/export-screen"
-
+export * from "./manage-plan/payment/payment-screen"
+export * from "./manage-plan/manage-plan-screen"
 // @ts-ignore
 export * from "./autofill-service/autofill-service-screen"

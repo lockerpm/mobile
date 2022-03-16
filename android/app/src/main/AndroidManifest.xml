@@ -3,6 +3,7 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="com.android.vending.BILLING"/>
   <uses-permission android:name="android.permission.INSTALL_GRANT_RUNTIME_PERMISSIONS"/>
 
   <application 
@@ -45,8 +46,8 @@
     <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
 
     <service
+      android:exported="false"
       android:name=".autofill.LockerAutoFillService"
-      android:exported="true"
       android:label="Locker"
       android:permission="android.permission.BIND_AUTOFILL_SERVICE">
       <intent-filter>
@@ -57,5 +58,6 @@
         android:resource="@xml/autofill_service_configuration"
       />
     </service>
+    <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
   </application>
 </manifest>

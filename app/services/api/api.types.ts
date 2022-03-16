@@ -10,6 +10,7 @@ import { CipherResponse } from "../../../core/models/response/cipherResponse"
 import { AccountRoleText, InvitationStatus, SharingStatus, SharingType } from "../../config/types"
 import { ProfileResponse } from "../../../core/models/response/profileResponse"
 import { ProfileOrganizationResponse } from "../../../core/models/response/profileOrganizationResponse"
+import { type } from "ramda"
 
 type SessionSnapshot = {
     access_token: string
@@ -145,11 +146,10 @@ export type GetTeamsResult = {
 
 export type GetPlanResult = {
     kind: 'ok'
-    data: {
-        name: string,
-        alias: string
-    }
+    data: { name: string; alias: string; },
 } | GeneralApiProblem
+
+
 
 export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
 export type ResetPasswordResult = { kind: "ok"; success: boolean } | GeneralApiProblem
@@ -159,6 +159,35 @@ export type ResetPasswordWithCodeResult = {
     data: {
         reset_password_url: string
     } 
+} | GeneralApiProblem
+
+export type PurchaseValidationResult = {
+    kind: "ok",
+    data: {
+        success: boolean, 
+        detail: string
+    }
+
+} | GeneralApiProblem
+
+export type BillingResult = {
+    kind: "ok",
+    data: {
+        id: number
+        created_time: number
+        currency: "VNP" | "USD"
+        description: string,
+        discount: number,
+        duration: "monthly" | "yearly"
+        failure_reason?: string
+        payment_id: string
+        payment_method: string
+        plan: string
+        status: string
+        total_price: number
+        transaction_type: string
+    }[]
+
 } | GeneralApiProblem
 
 export type GetInvitationsResult = {
@@ -175,6 +204,7 @@ export type GetInvitationsResult = {
         }
     }[]
 } | GeneralApiProblem
+
 
 export type CheckBreachResult = {
     kind: "ok"
