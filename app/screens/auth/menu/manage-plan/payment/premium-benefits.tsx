@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { View, TouchableOpacity } from "react-native"
-import { AutoImage as Image, Text } from "../../../../../components"
+import { View, TouchableOpacity, Image} from "react-native"
+import { Text } from "../../../../../components"
 // import { commonStyles, fontSize } from "../../../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../../../services/mixins"
@@ -43,7 +43,9 @@ export const PremiumBenefits = (props: {benefitTab: number}) => {
           alignItems: 'center'
         }}
       >
-        <Image source={item.img} style={{ marginBottom: 30, height: "65%" }} />
+        <View style={{ flex: 1 }}>
+          <Image source={item.img} style={{ height: 180, width: 180 }} />
+        </View>
         <Text preset="black" text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: 320, marginBottom: 5, color: "black" }} />
       </View>
     )
