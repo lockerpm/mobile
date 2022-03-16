@@ -137,12 +137,14 @@ android {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4016
-        versionName "1.15"
+        versionCode 4018
+        versionName "1.16.1"
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.cystack.locker'
         ]
         missingDimensionStrategy 'react-native-camera', 'general'
+        // react-native-iap: we only use the Google Play flavor
+        missingDimensionStrategy 'store', 'play'
     }
     splits {
         abi {
@@ -165,6 +167,8 @@ android {
                 storePassword MYAPP_UPLOAD_STORE_PASSWORD
                 keyAlias MYAPP_UPLOAD_KEY_ALIAS
                 keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+                
+                v2SigningEnabled true
             }
         }
     }
@@ -202,7 +206,8 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
+    implementation 'com.google.android.gms:play-services-wallet:19.0.1'
+    implementation "com.stripe:stripe-android:19.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     addUnimodulesDependencies()
@@ -235,6 +240,7 @@ dependencies {
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation "com.android.billingclient:billing:4.1.0"
 
     implementation project(':react-native-fs')
 }

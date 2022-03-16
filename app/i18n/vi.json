@@ -528,5 +528,72 @@
     "seed": "Seed Phrase",
     "backup_details": "Thông tin khôi phục",
     "network": "Mạng Blockchain"
+  },
+  "payment" : {
+    "individual" : "Cá nhân",
+    "family": "Gia đình",
+    "ads" : "Tận hưởng tất cả các tính năng của Locker Premium với gói hàng năm để tiết kiệm đến 75%",
+    "cancel_text" : "Thanh toán định kỳ. Hủy bất cứ lúc nào",
+    "benefit" : {
+      "locker" : "Lưu trữ không giới hạn, Ghi chú bảo mật, Thẻ thanh toán, Tài sản tiền điện tử",
+      "web" : "Giám sát Dark Web bảo vệ tài khoản của bạn khỏi các vi phạm dữ liệu lớn",
+      "emergency_contact" : "Liên hệ khẩn cấp cho phép các tài khoản đáng tin cậy truy cập dữ liệu của bạn",
+      "share_password": "Chia sẻ mật khẩu an toàn với bạn bè và thành viên gia đình của bạn"
+    },
+    "price" :{
+      "per": {
+        "monthly": {
+          "title": "$4.99/ 1 tháng",
+          "subtitle": "Thanh toán hàng tháng",
+          "sale": "",
+          "pay_title": "Mua ngay với $4.99"
+        },
+        "yearly": {
+          "title": "$1.29/ 1 tháng",
+          "subtitle": "$15.48 hoá đơn với 12 tháng",
+          "sale": "tiết kiệm đến 75%",
+          "pay_title": "Nâng cấp ngay với $15.48"
+        }
+      },
+      "fam": {
+        "yearly": {
+          "title": "$0.99/ 1 tháng",
+          "subtitle": "$71.88 hoá đơn mỗi 12 tháng",
+          "sale": "tiết kiệm đến 80%",
+          "pay_title": "Nâng cấp ngay với $71.88"
+        },
+        "monthly": {
+          "title": "$1.6/ month",
+          "subtitle": "$9.99 hoá đơn hàng tháng",
+          "sale": "tiết kiệm đến 67%",
+          "pay_title": "Nâng cấp ngay với $9.99"
+        }
+      }
+    }
+  },
+  "manage_plan": {
+    "usage": {
+      "title": "Free Plan Usage",
+      "login": "Passwords",
+      "card": "Payment Cards",
+      "identity": "Identities",
+      "note": "Secure Note",
+      "crypto": "Crypto assets"
+    },
+    "feature": {
+      "title": "Explore your full premium feature",
+      "locker": "Unlimited items",
+      "emergency_contact": {
+        "header" : "Emergency Contact",
+        "text": "Add trusted contacts and grant them access to your Locker account in cases of emergencyt",
+        "link": "To add Emergency Contacts, go to Locker Web Vault at: locker.io/vault"
+      },
+      "web": "Dark Web Monitoring",
+      "share_password": "Share Passwords"
+
+    },
+    "free": {
+      "button": "Increase unlimited with Premium"
+    }
   }
 }
