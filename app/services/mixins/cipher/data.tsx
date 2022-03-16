@@ -249,7 +249,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const _updateAutofillData = async () => {
     
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-    console.log(hashPasswordAutofill + " --------------------");
+
     const passwordRes = await getCiphers({
       filters: [
         (c : CipherView) => c.type === CipherType.Login && c.login.username && c.login.password
@@ -272,7 +272,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       authen: { email: user.email, hashPass: hashPasswordAutofill, avatar: user.avatar },
       faceIdEnabled: user.isBiometricUnlock
     }
-    console.log(hashPasswordAutofill + " --------------------");
     await saveShared('autofill', JSON.stringify(sharedData))
   }
 

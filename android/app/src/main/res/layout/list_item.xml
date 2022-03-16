@@ -35,14 +35,14 @@
                     android:layout_height="wrap_content"
                     android:text=""
                     android:textColor="@color/black"
-                    android:textSize="26dp"
-                    android:textStyle="bold" />
+                    android:textSize="20dp"/>
 
                 <TextView
                     android:id="@+id/login_uri"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
+                     android:textColor="@color/gray"
                     android:textSize="14dp" />
             </LinearLayout>
         </LinearLayout>

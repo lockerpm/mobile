@@ -2,6 +2,7 @@ import React from 'react'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import { KdfType } from '../../../../core/enums/kdfType'
 import { useStores } from '../../../models'
+import { useCipherDataMixins } from './data'
 import { useCoreService } from '../../core-service'
 import { delay } from '../../../utils/delay'
 import { GOOGLE_CLIENT_ID } from '../../../config/constants'
@@ -47,7 +48,8 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     messagingService,
     tokenService,
   } = useCoreService()
-  const { notify, translate, notifyApiError } = useMixins()
+  const { notify, translate, notifyApiError  } = useMixins()
+  const { syncAutofillData } = useCipherDataMixins()
 
   // ------------------------ DATA -------------------------
 
@@ -108,6 +110,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     if (masterPassword) {
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
+      // await syncAutofillData();
     }
 
     return { kind: 'ok' }
