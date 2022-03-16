@@ -19,6 +19,7 @@ import { observer } from "mobx-react-lite"
 import { useMixins } from "../services/mixins"
 import { ErrorToast, SuccessToast } from "./helpers/toast"
 import { Logger } from "../utils/logger"
+import { PushNotifier } from "../utils/push-notification"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -120,6 +121,14 @@ export const RootNavigator = React.forwardRef<
       <ErrorToast {...props} />
     )
   }
+
+   // Push notification handler
+   useEffect(() => {
+    const unsubscribe = PushNotifier.setupForegroundHandler()
+    return () => {
+      unsubscribe()
+    }
+  }, [])
 
   return (
     <NavigationContainer {...props} ref={ref}>

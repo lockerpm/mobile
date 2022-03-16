@@ -18,6 +18,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
   return (
     <Layout
       borderBottom
+      hasBottomNav
       containerStyle={{ 
         backgroundColor: uiStore.isDark ? color.background : color.block, 
         paddingTop: 0 

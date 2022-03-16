@@ -7,12 +7,15 @@ import { useMixins } from "../../../../../services/mixins"
 import { BackHandler } from "react-native"
 import { useStores } from "../../../../../models"
 import { CipherSharedList } from "./cipher-shared-list"
+import { PushNotifier } from "../../../../../utils/push-notification"
 
 
 export const SharedItemsScreen = observer(() => {
   const navigation = useNavigation()
   const { translate } = useMixins()
   const { uiStore } = useStores()
+
+  // ------------------------ PARAMS -------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -25,6 +28,8 @@ export const SharedItemsScreen = observer(() => {
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
+
+  // ------------------------ EFFECTS -------------------------
 
   // Close select before leave
   useEffect(() => {
@@ -42,6 +47,13 @@ export const SharedItemsScreen = observer(() => {
       BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
     }
   }, [isSelecting])
+
+  // Clear noti
+  useEffect(() => {
+    PushNotifier.cancelNotification('share_new')
+  }, [navigation])
+
+  // ------------------------ RENDER -------------------------
 
   return (
     <Layout
@@ -70,6 +82,7 @@ export const SharedItemsScreen = observer(() => {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}

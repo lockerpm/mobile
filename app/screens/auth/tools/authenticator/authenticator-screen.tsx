@@ -55,6 +55,7 @@ export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
     <Layout
       noScroll
       borderBottom
+      hasBottomNav
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader

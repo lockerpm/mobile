@@ -46,7 +46,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
     <View>
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('common.others')}
+          text={translate('common.others').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>

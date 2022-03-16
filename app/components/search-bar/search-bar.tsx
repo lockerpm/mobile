@@ -4,9 +4,7 @@ import { fontSize } from "../../theme"
 import { flatten } from "ramda"
 import { useMixins } from "../../services/mixins"
 
-// @ts-ignore
 import SearchIcon from './search.svg'
-// @ts-ignore
 import SearchIconLight from './search-light.svg'
 
 export interface SearchBarProps {
@@ -51,6 +49,7 @@ export const SearchBar = function SearchBar(props: SearchBarProps) {
         placeholderTextColor={color.text}
         onChangeText={setText}
         clearButtonMode="while-editing"
+        selectionColor={color.primary}
         style={{
           flex: 1,
           paddingVertical: 10,

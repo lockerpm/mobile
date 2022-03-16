@@ -72,6 +72,7 @@ export const NotesScreen = observer(function NotesScreen() {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}
