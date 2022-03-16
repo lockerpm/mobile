@@ -20,14 +20,11 @@ protocol LoginListControllerDelegate {
 class LoginListViewController: UIViewController {
   var delegate: LoginListControllerDelegate!
   var credentials:  [AutofillData]!
-//  var others: [AutofillData]!
   
   @IBOutlet weak var searchBar: UISearchBar!
   @IBOutlet weak var tableView: UITableView!
 
   var filterCredentials:  [AutofillData]!
-//  var filterOthers: [AutofillData]!
-//  var hideOtherPasswordsSession = true
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -38,7 +35,6 @@ class LoginListViewController: UIViewController {
     self.tableView.dataSource = self
     
     filterCredentials = credentials
-//    filterOthers = others
   }
   
   @IBAction func cancel(_ sender: AnyObject?) {
@@ -55,10 +51,9 @@ extension LoginListViewController: UISearchBarDelegate {
   //mark search bar config, handle search function.
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     filterCredentials = []
-//    filterOthers = []
+
     if searchText == "" {
       filterCredentials = credentials
-//      filterOthers = others
     }
     // get matches credentiral username
     for credential in credentials {
@@ -66,12 +61,7 @@ extension LoginListViewController: UISearchBarDelegate {
           filterCredentials.append(credential)
       }
     }
-//    // for ohters
-//    for credential in others {
-//      if (isMatchCredentials(credential: credential, searchPattern: searchText)) {
-//         filterOthers.append(credential)
-//      }
-//    }
+
     self.tableView.reloadData()
   }
   
@@ -97,10 +87,9 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
   
   // section 0 contain credentials for the uri, section 1 for all others
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//    if section == 0 {
-      return self.filterCredentials.count
-//    }
-//    return hideOtherPasswordsSession ? 0 : self.filterOthers.count
+    
+    return self.filterCredentials.count
+
   }
 
   func numberOfSections(in tableView: UITableView) -> Int {
@@ -108,27 +97,15 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//    let target = indexPath.section == 0 ? filterCredentials[indexPath.row] : filterOthers[indexPath.row]
     let target = filterCredentials[indexPath.row]
     completeRequest(data: target)
   }
-  
-//  @objc
-//  private func toggleHideSection(sender: UIButton) {
-//    self.hideOtherPasswordsSession = !self.hideOtherPasswordsSession
-//    tableView.reloadData()
-//  }
-  
 
-//  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//    return setupTableViewHeader(tableView, section)
-//  }
 
   
   
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//    let credential = indexPath.section == 0 ? self.filterCredentials[indexPath.row] : self.filterOthers[indexPath.row]
     let credential = self.filterCredentials[indexPath.row]
     let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! CredentialTableViewCell
     cell.makeCell(credential: credential)
@@ -144,11 +121,7 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
         selectedCredentials = item
       }
     }
-//    for item in others {
-//      if item.fillID == sender.tag {
-//        selectedCredentials = item
-//      }
-//    }
+
     
     let actionSheet = UIAlertController(title: Utils.Translate("Name: ") + selectedCredentials.name, message: nil , preferredStyle: .actionSheet)
     actionSheet.addAction(UIAlertAction(title: Utils.Translate("Copy Username"), style: .default, handler: {action in
@@ -164,51 +137,3 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
   }
 }
 
-extension LoginListViewController {
-//  func setupTableViewHeader(_ tableView: UITableView ,_ section: Int) -> UIView {
-//    let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: 50))
-//    header.backgroundColor = .black
-//    let show = UIButton()
-//    let label = UILabel()
-//
-//    show.translatesAutoresizingMaskIntoConstraints = false
-//    label.translatesAutoresizingMaskIntoConstraints = false
-//
-//    header.backgroundColor = UIColor(named: "block")
-//    label.textColor = UIColor(named: "text")
-//    label.font = label.font.withSize(17)
-//
-//    show.tintColor = UIColor(named: "text")
-//
-//    if hideOtherPasswordsSession {
-//      show.setImage(UIImage(named: "down"), for: .normal)
-//    } else {
-//      show.setImage(UIImage(named: "up"), for: .normal)
-//    }
-//
-//    if section == 0 {
-//      label.text = Utils.Translate("Passwords for") +  " \"\(delegate.uri)\" (\(self.filterCredentials.count))"
-//      show.isHidden = true
-//    } else {
-//      label.text  = Utils.Translate("Other passwords") + " (\(self.filterOthers.count))"
-//      show.isHidden = false
-//      show.addTarget(self, action: #selector(self.toggleHideSection(sender:)),
-//                              for: .touchUpInside)
-//    }
-//
-//    header.addSubview(label)
-//    header.addSubview(show)
-//
-//    NSLayoutConstraint.activate([
-////      header.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-////      header.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-//
-//      label.centerYAnchor.constraint(equalTo: header.centerYAnchor),
-//      label.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16),
-//
-//      show.centerYAnchor.constraint(equalTo: header.centerYAnchor),
-//      show.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -16),
-//    ])
-//    return header
-//  }
-}

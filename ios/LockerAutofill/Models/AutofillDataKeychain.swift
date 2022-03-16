@@ -24,7 +24,6 @@ class AutofillDataModel {
   private(set) var userAvatar: String!
   private(set) var URI: String!
   private(set) var credentials: [AutofillData] = []
-//  private(set) var otherCredentials: [AutofillData] = []
 
   init(){
     let keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
@@ -55,13 +54,10 @@ class AutofillDataModel {
   
   private func setAutofillData(_ passwords: [String: [[String: Any]]]){
     // reset data
-    self.credentials = [] // for this uri
-//    self.otherCredentials = []
-    
+    self.credentials = [] 
+  
     if passwords["passwords"] != nil {
       for (index, item) in passwords["passwords"]!.enumerated() {
-//        let cipherUri = (item["uri"] as? String)!
-        // for autofill only
 
         let credential = AutofillData(fillID: index,
                                       name: (item["name"] as? String)!,
@@ -71,13 +67,6 @@ class AutofillDataModel {
                                       password: (item["password"] as? String)!,
                                       isOwner: (item["isOwner"] as? Bool)!)
         self.credentials.append(credential)
-
-       // print(credential)
-//        if self.URI.isEmpty || self.URI.contains(cipherUri.lowercased()) {
-//          self.credentials.append(credential)
-//        } else {
-//          self.otherCredentials.append(credential)
-//        }
       }
     }
   }
