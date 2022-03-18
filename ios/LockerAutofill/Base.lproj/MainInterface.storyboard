@@ -82,6 +82,9 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="16"/>
                                     <color key="baseForegroundColor" name="primary"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="cancel:" destination="vxG-7A-bij" eventType="touchUpInside" id="qxN-Ky-L7q"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Khm-HA-POC"/>
@@ -244,12 +247,19 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </tableView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="UJx-sW-kG0">
+                            <searchBar contentMode="center" semanticContentAttribute="spatial" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UJx-sW-kG0">
                                 <rect key="frame" x="0.0" y="44" width="375" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="IoI-tr-Dxp"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="100" id="v9d-VU-HFV"/>
                                 </constraints>
+                                <color key="tintColor" name="background"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
                             </searchBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ky8-vK-JVj"/>

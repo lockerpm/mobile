@@ -64,23 +64,18 @@ export const PaymentScreen = observer(function PaymentScreen() {
         var verified: boolean = false;
         // setIsLoading(true)
         if (IS_IOS) {
+          console.log("ios");
+          console.log(purchase.transactionReceipt );
           verified = await user.purchaseValidation(purchase.transactionReceipt)
-        } {
+        } else {
+          console.log("android");
           console.log(purchase.purchaseToken, purchase.productId );
-          
           verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId )
         }
-        if (verified) {
-          try {
-            const ackResult = await finishTransaction(purchase);
-            console.log('ackResult', ackResult);
-          } catch (ackErr) {
-            console.warn('ackErr', ackErr);
-          }
-          // setIsLoading(false)
-          navigation.navigate("mainTab")
-          
-        } else{
+
+        console.log("verified ", verified)
+
+        if (!verified) {
           // conclude the purchase is fraudulent, etc...
           // setIsLoading(false)
           Alert.alert(
@@ -90,6 +85,14 @@ export const PaymentScreen = observer(function PaymentScreen() {
               { text: "OK", onPress: () => console.log("OK Pressed") }
             ]
           )
+        }
+        try {
+          const ackResult = await finishTransaction(purchase);
+          console.log('ackResult', ackResult);
+          // setIsLoading(false)
+          navigation.navigate("mainTab")
+        } catch (ackErr) {
+          console.warn('ackErr', ackErr);
         }
 
       }
