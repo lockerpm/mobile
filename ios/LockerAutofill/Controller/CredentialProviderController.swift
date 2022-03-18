@@ -34,7 +34,6 @@ class CredentialProviderController: ASCredentialProviderViewController {
   
   override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
     loginLocker()
-    
     if serviceIdentifiers.count > 0 {
       self.serviceIdentifier = serviceIdentifiers[0].identifier
       if serviceIdentifiers[0].type == .URL {
@@ -45,6 +44,8 @@ class CredentialProviderController: ASCredentialProviderViewController {
         self.dataModel.fetchAutofillData(identifier: serviceIdentifier)
         self.serviceIdentifier = "https://" +  serviceIdentifier
       }
+    } else {
+      self.dataModel.fetchAutofillData(identifier: "")
     }
     
   }
@@ -67,11 +68,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
   override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
     self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
   }
-  
-  
-  override func prepareInterfaceForExtensionConfiguration() {
-    // dont need 
-  }
+
 
   override func prepare(for segue: UIStoryboardSegue, sender: Any?)
   {
@@ -80,17 +77,18 @@ class CredentialProviderController: ASCredentialProviderViewController {
         let loginListView = (segue.destination as! UINavigationController).topViewController as! LoginListViewController
         loginListView.delegate = self
         loginListView.credentials = self.dataModel.credentials
+        
       } else if segue.identifier == "verifyMasterPasswordSegue" {
         let verifyMasterPasswordScreen = segue.destination as! VerifyMasterPasswordViewController
         verifyMasterPasswordScreen.delegate = self
       }
   }
   private func performVerifyPasswordScreen(){
-    self.performSegue(withIdentifier: "verifyMasterPasswordSegue", sender: self)
+     performSegue(withIdentifier: "verifyMasterPasswordSegue", sender: self)
   }
   
   private func performLoginListScreen(){
-      self.performSegue(withIdentifier: "loginListSegue", sender: self)
+      performSegue(withIdentifier: "loginListSegue", sender: self)
   }
   
   private func completeRequest(user: String, password: String){
