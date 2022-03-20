@@ -13,7 +13,7 @@ import { KvpRequest } from '../../../../core/models/request/kvpRequest'
 import { CipherType } from '../../../../core/enums'
 import { AutofillDataType, loadShared, saveShared } from '../../../utils/keychain'
 import { useCipherHelpersMixins } from './helpers'
-import { IS_IOS, MAX_MULTIPLE_SHARE_COUNT } from '../../../config/constants'
+import { MAX_MULTIPLE_SHARE_COUNT } from '../../../config/constants'
 import { CollectionView } from '../../../../core/models/view/collectionView'
 import { CollectionRequest } from '../../../../core/models/request/collectionRequest'
 import { CipherData } from '../../../../core/models/data/cipherData'
@@ -147,9 +147,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
-    if (IS_IOS) {
-      _updateAutofillData()
-    }
+   
+    _updateAutofillData()
+    
     cipherStore.setLastCacheUpdate()
   }
 
@@ -198,9 +198,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         user.setFingerprint(fingerprint.join('-'))
   
         // Save to shared keychain for autofill service
-        if (IS_IOS) {
-          await _updateAutofillData()
-        }
+        
+        await _updateAutofillData()
+        
         return { kind: 'ok' }
       } catch (e) {
         Logger.error(e)
