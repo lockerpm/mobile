@@ -29,6 +29,7 @@ export const AddAction = observer((props: Props) => {
     switch (nextModal) {
       case 'crypto':
         setShowCrypto(true)
+        setNextModal(null)
         break
     }
   }

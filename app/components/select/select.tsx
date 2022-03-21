@@ -28,7 +28,7 @@ export interface SelectProps {
 /**
  * Describe your component here
  */
-export const Select = function Select(props: SelectProps) {
+export const Select = (props: SelectProps) => {
   const { translate, color } = useMixins()
   
   const { 
@@ -44,7 +44,9 @@ export const Select = function Select(props: SelectProps) {
 
   return (
     <Picker
-      style={style}
+      style={[{
+        color: color.textBlack
+      }, style]}
       value={value}
       onChange={(item: Option) => onChange(item.value)}
       renderPicker={floating ? undefined : (value: string | number | null) => {

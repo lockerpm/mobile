@@ -163,7 +163,7 @@ export const CryptoAccountEditScreen = observer(() => {
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
-              label={translate('common.name')}
+              label={translate('common.item_name')}
               value={name}
               onChangeText={setName}
             />

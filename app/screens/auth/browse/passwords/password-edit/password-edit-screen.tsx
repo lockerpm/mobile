@@ -173,7 +173,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label={translate('common.name')}
+              label={translate('common.item_name')}
               value={name}
               onChangeText={setName}
             />
