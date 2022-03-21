@@ -18,7 +18,7 @@ import { CipherView } from "../../../../../../core/models/view"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
 
-export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
+export const PasswordInfoScreen = observer(() => {
   const navigation = useNavigation()
   const { getWebsiteLogo, translate, color } = useMixins()
   const { getPasswordStrength } = useCipherHelpersMixins()
@@ -105,7 +105,7 @@ export const PasswordInfoScreen = observer(function PasswordInfoScreen() {
           />
           <Text
             preset="header"
-            style={{ marginTop: 5 }}
+            style={{ marginTop: 5, marginHorizontal: 20, textAlign: 'center' }}
           >
             {selectedCipher.name}
             {

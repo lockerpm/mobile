@@ -19,7 +19,7 @@ import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 type NoteEditScreenProp = RouteProp<PrimaryParamList, 'notes__edit'>;
 
 
-export const NoteEditScreen = observer(function NoteEditScreen() {
+export const NoteEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<NoteEditScreenProp>()
   const { mode } = route.params
@@ -33,7 +33,7 @@ export const NoteEditScreen = observer(function NoteEditScreen() {
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
   const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
+  const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
   // Params

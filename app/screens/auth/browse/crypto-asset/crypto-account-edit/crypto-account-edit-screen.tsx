@@ -43,7 +43,7 @@ export const CryptoAccountEditScreen = observer(() => {
   const [emailRecovery, setEmailRecovery] = useState(mode !== 'add' ? cryptoAccountData.emailRecovery : '')
   const [url, setUrl] = useState(mode !== 'add' ? cryptoAccountData.uris?.uri : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
+  const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
   // Params

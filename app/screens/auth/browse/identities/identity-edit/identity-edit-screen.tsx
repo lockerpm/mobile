@@ -26,7 +26,7 @@ type InputItem = {
 }
 
 
-export const IdentityEditScreen = observer(function IdentityEditScreen() {
+export const IdentityEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
@@ -61,7 +61,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const [country, setCountry] = useState(mode !== 'add' ? selectedCipher.identity.country : '')
   const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
+  const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
   // Watchers

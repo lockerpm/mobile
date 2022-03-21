@@ -380,9 +380,11 @@ export const CipherList = observer((props: CipherListProps) => {
               {/* Cipher avatar end */}
 
               <View style={{ flex: 1, marginLeft: 12 }}>
+                {/* Name */}
                 <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
                   <Text
                     preset="semibold"
+                    numberOfLines={2}
                     text={item.name}
                   />
 
@@ -414,6 +416,7 @@ export const CipherList = observer((props: CipherListProps) => {
                   }
                   {/* Not sync icon end */}
                 </View>
+                {/* Name end */}
 
                 {/* Description */}
                 {

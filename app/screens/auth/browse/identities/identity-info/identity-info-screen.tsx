@@ -14,7 +14,7 @@ import { DeletedAction } from "../../../../../components/cipher/cipher-action/de
 import { useMixins } from "../../../../../services/mixins"
 
 
-export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
+export const IdentityInfoScreen = observer(() => {
   const navigation = useNavigation()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
@@ -159,7 +159,7 @@ export const IdentityInfoScreen = observer(function IdentityInfoScreen() {
           <BROWSE_ITEMS.identity.svgIcon height={55} width={55} />
           <Text
             preset="header"
-            style={{ marginTop: 5 }}
+            style={{ marginTop: 5, marginHorizontal: 20, textAlign: 'center' }}
           >
             {selectedCipher.name}
             {
