@@ -4,12 +4,13 @@ import { View, ScrollView, ViewStyle, Linking, TextStyle } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
+import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+import { PlanType } from "../../../../config/types"
 import { commonStyles, fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { MANAGE_PLAN_URL } from "../../../../config/constants"
 import { Invitation, InvitationData } from "./invitation"
 
 
@@ -23,7 +24,7 @@ import InviteIconLight from './invite-light.svg'
 import SettingsIconLight from './gear-light.svg'
 import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
-import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+
 
 
 export const MenuScreen = observer(function MenuScreen() {
@@ -44,20 +45,19 @@ export const MenuScreen = observer(function MenuScreen() {
     borderRadius: 10,
     paddingHorizontal: 14,
   }
-
+  
   const items: MenuItemProps[] = [
     {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
-      action: () => {
-        navigation.navigate('payment')
-      }
+      action: () => navigation.navigate('payment'),
+      hide: user.plan?.alias !== PlanType.FREE  
     },
-    // {
-    //   icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
-    //   name: translate('menu.invite'),
-    //   disabled: true
-    // },
+    {
+      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
+      name: translate('menu.invite'),
+      hide: user.plan?.alias !== PlanType.FAMILY  
+    },
     {
       icon: isDark ? <SettingsIconLight height={22} /> : <SettingsIcon height={22} />,
       name: translate('common.settings'),
@@ -158,7 +158,7 @@ export const MenuScreen = observer(function MenuScreen() {
               text={user.email}
             />
             {
-              user.plan && item3[user.plan.alias].node
+              user.plan && item3[user.plan.alias]?.node
             }     
           </View>
           <FontAwesome

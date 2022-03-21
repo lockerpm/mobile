@@ -22,7 +22,7 @@ export const ManagePlanScreen = observer(function ManagePlanScreen() {
                     goBack={() => {
                         navigation.goBack()
                     }}
-                    title={user.plan.name + " Plan"}
+                    title={user.plan?.name + " Plan"}
                     right={(<View style={{ width: 10 }} />)}
                 />
             )}

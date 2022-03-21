@@ -6,7 +6,7 @@ import { useMixins } from "../../../../services/mixins"
 import { commonStyles } from "../../../../theme"
 import { useStores } from "../../../../models"
 import Modal from "react-native-modal";
-
+import { PlanType } from "../../../../config/types"
 
 
 export const PremiumFeature = () => {
@@ -15,14 +15,14 @@ export const PremiumFeature = () => {
     const navigation = useNavigation()
 
     const [modalVisible, setModalVisible] = useState(false);
-    const plan_free = user.plan.alias === "pm_free"
+    const isFreeAccount = user.plan?.alias === PlanType.FREE
 
     const item = {
         locker: {
             img: require("./assets/Locker.png"),
             desc: translate('manage_plan.feature.locker'),
             action: () => {
-                plan_free ? navigation.navigate("payment", { benefitTab: 0 })
+                isFreeAccount ? navigation.navigate("payment", { benefitTab: 0 })
                     : navigation.navigate('mainTab', { screen: 'homeTab' });
             }
         },
@@ -30,7 +30,7 @@ export const PremiumFeature = () => {
             img: require("./assets/EmergencyContact.png"),
             desc: translate('manage_plan.feature.emergency_contact.header'),
             action: () => {
-                plan_free ? navigation.navigate("payment", { benefitTab: 2 })
+                isFreeAccount ? navigation.navigate("payment", { benefitTab: 2 })
                     : setModalVisible(true)
             }
         },
@@ -38,7 +38,7 @@ export const PremiumFeature = () => {
             img: require("./assets/Web.png"),
             desc: translate('manage_plan.feature.web'),
             action: () => {
-                plan_free ? navigation.navigate("payment", { benefitTab: 1 })
+                isFreeAccount ? navigation.navigate("payment", { benefitTab: 1 })
                     : navigation.navigate('mainTab', { screen: 'toolsTab' });
             }
         },
@@ -46,7 +46,7 @@ export const PremiumFeature = () => {
             img: require("./assets/SharePassword.png"),
             desc: translate('manage_plan.feature.share_password'),
             action: () => {
-                plan_free ? navigation.navigate("payment", { benefitTab: 3 })
+                isFreeAccount ? navigation.navigate("payment", { benefitTab: 3 })
                     : navigation.navigate('mainTab', {
                         screen: 'browseTab',
                         params: {
