@@ -15,7 +15,7 @@ import { useCipherHelpersMixins } from "../../../../services/mixins/cipher/helpe
 
 type ScreenProp = RouteProp<PrimaryParamList, 'passwordGenerator'>;
 
-export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen() {
+export const PasswordGeneratorScreen = observer(() => {
   const navigation = useNavigation()
   const { copyToClipboard, translate, color } = useMixins()
   const { getPasswordStrength } = useCipherHelpersMixins()
@@ -26,6 +26,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
 
   const [password, setPassword] = useState('')
   const [passwordLen, setPasswordLen] = useState(16)
+  const [sliderValue, setSliderValue] = useState(16)
   const [options, setOptions] = useState({
     length: 16,
     uppercase: true,
@@ -163,7 +164,7 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
           style={{ fontSize: fontSize.p }}
         />
         <Slider
-          // value={passwordLen}
+          value={sliderValue}
           thumbTintColor={color.primary}
           minimumTrackTintColor={color.primary}
           maximumTrackTintColor={color.line}
@@ -171,7 +172,10 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
           maximumValue={64}
           step={1}
           onValueChange={setPasswordLen}
-          onSeekEnd={() => setOptions({ ...options, length: passwordLen })}
+          onSeekEnd={() => {
+            setOptions({ ...options, length: passwordLen })
+            setSliderValue(passwordLen)
+          }}
         />
         {/* Password length end */}
 
@@ -187,6 +191,9 @@ export const PasswordGeneratorScreen = observer(function PasswordGeneratorScreen
                 onValueChange={checked => {
                   const newOptions = { ...options }
                   newOptions[item.key] = checked
+                  if (!OPTIONS.some(o => newOptions[o.key])) {
+                    newOptions.lowercase = true
+                  }
                   setOptions(newOptions)
                 }}
                 style={{
