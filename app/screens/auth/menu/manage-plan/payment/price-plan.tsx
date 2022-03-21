@@ -1,5 +1,5 @@
 import React from "react"
-import { View, TouchableOpacity } from "react-native"
+import { View, TouchableOpacity, ViewStyle } from "react-native"
 import CheckBox from "@react-native-community/checkbox"
 import { Button, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
@@ -27,6 +27,12 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
     >
       <View style={{ justifyContent: "center" }}>
         <CheckBox
+          tintColors={{true: "black", false: color.text}}
+          onFillColor={color.textBlack}
+          tintColor={color.text}
+          onTintColor={color.textBlack}
+          animationDuration={0.3}
+          onCheckColor={color.white}
           style={{ margin: 16 }}
           disabled={false}
           value={prop.isEnable}
@@ -36,8 +42,8 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
 
       <View style={{ justifyContent: "center" }}>
         <View style={{ flexDirection: "row" }}>
-          <Text preset={prop.isEnable? "bold" : "default"} style={{ fontStyle: "normal" }}>{prop.title}</Text>
-          <Text preset={prop.isEnable? "black" : "default"} style={{ justifyContent: "center", color: "red", marginLeft: 8, fontSize: 12}}>
+          <Text preset={prop.isEnable? "bold" : "default"} style={{ fontSize: 20, marginBottom: 4 }}>{prop.title}</Text>
+          <Text preset={prop.isEnable? "black" : "default"} style={{ justifyContent: "center", color: "red", marginLeft: 8, fontSize: 14}}>
             {prop.onSale}
           </Text>
         </View>
@@ -96,8 +102,15 @@ export const PricePlan = (prop: PricePlanProps) => {
   const plan = prop.personal? planText.per : planText.fam
   const billingCycle = prop.isEnable ? plan.yearly : plan.monthly
 
+  const CONTAINER: ViewStyle = {
+    marginLeft: 20, 
+    marginRight: 20, 
+    flex:1,
+    justifyContent:"space-around"
+  }
+
   return (
-    <View style={{ marginLeft: 20, marginRight: 20 }}>
+    <View style={CONTAINER}>
       <Text preset="black" style={{marginTop: 10, marginBottom: 10 }}>
         {translate("payment.ads")}
       </Text>
@@ -118,7 +131,7 @@ export const PricePlan = (prop: PricePlanProps) => {
       />
       <Button 
         style={{
-          marginTop: 20,
+          marginVertical: 20,
         }} 
         isLoading={prop.isLoading}
         onPress={() => prop.purchase(billingCycle.subId)}

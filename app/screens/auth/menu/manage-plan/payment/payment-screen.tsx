@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, StyleSheet, TouchableOpacity, Alert } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Alert, Image } from "react-native"
 import { Text, Layout } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
@@ -12,10 +12,6 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { requestSubscription, useIAP, SubscriptionPurchase, PurchaseError } from 'react-native-iap';
 
-// @ts-ignore
-import LockerPremium from "./LockerPremium.svg"
-// @ts-ignore
-import DeleteIcon from "./delete.svg"
 
 
 // control init premium benefit tab
@@ -42,7 +38,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const [purchased, setPurchased] = useState(false)
 
 
-  
+
   const subSkus = [
     "pm_family_monthly",
     "pm_family_yearly",
@@ -52,7 +48,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   useEffect(() => {
     getSubscriptions(subSkus);
-  }, [ connected ,getSubscriptions]);
+  }, [connected, getSubscriptions]);
 
   // useEffect(() => {
   //   setReload(true)
@@ -65,12 +61,12 @@ export const PaymentScreen = observer(function PaymentScreen() {
         // setIsLoading(true)
         if (IS_IOS) {
           console.log("ios");
-          console.log(purchase.transactionReceipt );
+          console.log(purchase.transactionReceipt);
           verified = await user.purchaseValidation(purchase.transactionReceipt)
         } else {
           console.log("android");
-          console.log(purchase.purchaseToken, purchase.productId );
-          verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId )
+          console.log(purchase.purchaseToken, purchase.productId);
+          verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
         }
 
         console.log("verified ", verified)
@@ -101,7 +97,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
     checkCurrentPurchase(currentPurchase);
   }, [currentPurchase, finishTransaction]);
 
-  const purchase = (subID : string) => {
+  const purchase = (subID: string) => {
     console.log("request subId: ", subID);
     requestSubscription(subID);
   };
@@ -119,15 +115,15 @@ export const PaymentScreen = observer(function PaymentScreen() {
       >
         <TouchableOpacity
           onPress={() => setPayIndividual(true)}
-          style={[styles.segmentItem, { backgroundColor: payIndividual ? color.text : color.block, left: 0 }]}
+          style={[styles.segmentItem, { backgroundColor: payIndividual ? color.white : color.block, left: 0 }, payIndividual && styles.shadow]}
         >
-          <Text preset="semibold" style={{ padding: 2, color:  color.white }}>{translate("payment.individual")}</Text>
+          <Text preset="bold" style={{ padding: 2, fontSize:16 }}>{translate("payment.individual")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setPayIndividual(false)}
-          style={[styles.segmentItem, { backgroundColor: payIndividual ? color.block : color.text, right: 0  }]}
+          style={[styles.segmentItem, { backgroundColor: payIndividual ? color.block : color.white, right: 0 }, !payIndividual && styles.shadow]}
         >
-          <Text preset="semibold" style={{ padding: 2, color: color.white }}>{translate("payment.family")}</Text>
+          <Text preset="bold" style={{ padding: 2, fontSize:16 }}>{translate("payment.family")}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -135,24 +131,26 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   // Render screen
   return (
-    <LinearGradient colors={[color.white, color.primary]} style={{ flex: 1 }}>
+    <Layout
+      containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
+    >
       <View style={{ top: 0, height: "50%", position: "absolute", width: "100%", justifyContent: "space-between" }}>
-        <View style={[styles.header, { marginTop: IS_IOS ? 40 : 20}]}>
-          <LockerPremium />
+        <View style={styles.header}>
+          <Image source={require("./LockerPremium.png")} style={{ height: 32, width: 152 }} />
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <DeleteIcon />
+            <Image source={require("./Cross.png")} style={{ height: 24, width: 24 }} />
           </TouchableOpacity>
         </View>
-        <View style={{ zIndex: 1 }}>
-          <PremiumBenefits benefitTab={route.params.benefitTab}  />
+        <View style={{ zIndex: 1, flex: 1 }}>
+          <PremiumBenefits benefitTab={route.params.benefitTab} />
         </View>
       </View>
 
       <View style={[styles.payment, { backgroundColor: color.background }]}>
         <Segment />
-        <PricePlan isLoading={isLoading} onPress={setEnable} isEnable={isEnable} personal={payIndividual} purchase={purchase}/>
+        <PricePlan isLoading={isLoading} onPress={setEnable} isEnable={isEnable} personal={payIndividual} purchase={purchase} />
       </View>
-    </LinearGradient>
+    </Layout>
   )
 })
 
@@ -161,31 +159,43 @@ const styles = StyleSheet.create({
     zIndex: 2,
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingTop: 15,
     width: "100%",
   },
   payment: {
-    flex: 1,
     bottom: 0,
     width: "100%",
     position: "absolute",
-    height: "50%",
+    height: "54%",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    marginTop: 15,
+    marginTop: 20,
   },
   segmentItem: {
     position: "absolute",
-    margin: 2, 
+    margin: 2,
     padding: 2,
     borderRadius: 6,
     width: "49%",
     alignItems: "center",
+
+  },
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
   },
   segment: {
     alignItems: "center",
     justifyContent: "space-between",
-    flexDirection:"row",
+    flexDirection: "row",
     marginLeft: 20,
     marginRight: 20,
     marginTop: 10,
