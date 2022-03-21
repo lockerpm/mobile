@@ -11,7 +11,7 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 
 
-export const ReusePasswordList = observer(function ReusePasswordList() {
+export const ReusePasswordList = observer(() => {
   const navigation = useNavigation()
   const { toolStore, cipherStore } = useStores()
   const { translate, getWebsiteLogo, color } = useMixins()
@@ -97,6 +97,7 @@ export const ReusePasswordList = observer(function ReusePasswordList() {
                     <Text
                       preset="semibold"
                       text={item.name}
+                      numberOfLines={2}
                     />
 
                     {

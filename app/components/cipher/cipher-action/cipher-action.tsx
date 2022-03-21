@@ -183,6 +183,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         isOpen={isOpen}
         onClose={handleActionSheetClose}
       >
+        {/* Cipher info */}
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             {
@@ -196,10 +197,11 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 />
               )
             }
-            <View style={{ marginLeft: 10 }}>
+            <View style={{ marginLeft: 10, flex: 1 }}>
               <Text
                 preset="semibold"
                 text={selectedCipher.name}
+                numberOfLines={2}
               />
               {
                 !!getCipherDescription(selectedCipher) && (
@@ -212,6 +214,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
             </View>
           </View>
         </View>
+        {/* Cipher info end */}
 
         <Divider style={{ marginTop: 10 }} />
 

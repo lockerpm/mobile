@@ -54,7 +54,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       setUrl(selectedCipher.login.uri)
       setNote(selectedCipher.notes)
       setFolder(selectedCipher.folderId)
-      setOrganizationId(selectedCipher.organizationId)
+      setOrganizationId(mode === 'clone' ? null : selectedCipher.organizationId)
       setCollectionIds(selectedCipher.collectionIds)
     } else {
       setUrl(initialUrl)

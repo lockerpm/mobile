@@ -101,26 +101,29 @@ export const NewFolderModal = observer((props: Props) => {
       onClose={onClose}
       title={translate('folder.create_folder')}
     >
-      <Text
-        text={translate('common.ownership')}
-        style={{
-          marginTop: 20,
-          marginBottom: 10,
-          fontSize: fontSize.small
-        }}
-      />
+      {/* TODO: temporary disable */}
+      {/* <>
+        <Text
+          text={translate('common.ownership')}
+          style={{
+            marginTop: 20,
+            marginBottom: 10,
+            fontSize: fontSize.small
+          }}
+        />
 
-      <DropdownPicker
-        isDisabled={uiStore.isOffline}
-        placeholder={translate('common.select')}
-        value={owner}
-        items={owners}
-        setValue={setOwner}
-        setItems={setOwners}
-        style={{
-          marginBottom: 20
-        }}
-      />
+        <DropdownPicker
+          isDisabled={uiStore.isOffline}
+          placeholder={translate('common.select')}
+          value={owner}
+          items={owners}
+          setValue={setOwner}
+          setItems={setOwners}
+          style={{
+            marginBottom: 20
+          }}
+        />
+      </> */}
 
       <FloatingInput
         persistError

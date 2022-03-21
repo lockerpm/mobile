@@ -28,7 +28,7 @@ export interface CipherOthersInfoProps {
 /**
  * Describe your component here
  */
-export const CipherOthersInfo = observer(function CipherOthersInfo(props: CipherOthersInfoProps) {
+export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
   const { 
     navigation, hasNote, note, onChangeNote, folderId = null, isDeleted,
     organizationId, collectionIds, setOrganizationId, setCollectionIds
@@ -94,8 +94,9 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
         </Button>
         {/* Folder end */}
 
+        {/* TODO: temporary disable */}
         {/* Ownership */}
-        <Button
+        {/* <Button
           isDisabled={uiStore.isOffline || isDeleted}
           preset="link"
           onPress={() => {
@@ -127,7 +128,7 @@ export const CipherOthersInfo = observer(function CipherOthersInfo(props: Cipher
               color={color.text}
             />
           </View>
-        </Button>
+        </Button> */}
         {/* Ownership end */}
 
         {/* Note */}

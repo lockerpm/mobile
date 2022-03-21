@@ -326,6 +326,7 @@ export const BrowseItemHeader = observer((props: BrowseItemHeaderProps) => {
             <Text
               preset="largeHeader"
               text={header}
+              numberOfLines={2}
               style={{ marginBottom: 10 }}
             />
           )

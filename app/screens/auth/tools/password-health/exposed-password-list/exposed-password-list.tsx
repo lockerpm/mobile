@@ -11,7 +11,7 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 
 
-export const ExposedPasswordList = observer(function ExposedPasswordList() {
+export const ExposedPasswordList = observer(() => {
   const navigation = useNavigation()
   const { toolStore, cipherStore } = useStores()
   const { translate, getWebsiteLogo, color } = useMixins()
@@ -96,6 +96,7 @@ export const ExposedPasswordList = observer(function ExposedPasswordList() {
                     <Text
                       preset="semibold"
                       text={item.name}
+                      numberOfLines={2}
                     />
 
                     {
