@@ -128,10 +128,9 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       // Offline compare
       if (uiStore.isOffline) {
         const storedKeyHash = await cryptoService.getKeyHash()
-        console.log("storedKeyHash: ", storedKeyHash);
+
         if (storedKeyHash) {
           const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
-          console.log("compareAndUpdateKeyHash: ", passwordValid);
           if (passwordValid) {
             messagingService.send('loggedIn')
   
