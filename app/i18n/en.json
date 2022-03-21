@@ -33,6 +33,7 @@
     "home": "Home",
     "identity": "Personal Info",
     "item": "item",
+    "item_name": "Item Name",
     "items": "items",
     "language": "Language",
     "length": "Length",
@@ -258,6 +259,7 @@
     }
   },
   "folder": {
+    "folder_name": "Folder Name",
     "unassigned": "Unassigned",
     "item_moved": "Item moved to new folder",
     "add_to_folder": "Add to Folder",
@@ -313,7 +315,7 @@
     "copy_note": "Copy Notes",
     "empty": {
       "title": "Add your first item",
-      "desc": "Jot down a WiFi code, office security alarm code or your friend’s birthday",
+      "desc": "Secure your personal secret notes",
       "btn": "Add Note"
     }
   },
@@ -342,10 +344,10 @@
     },
     "add_emails": "Add recipient emails",
     "share_type": {
-      "label": "Share type",
-      "view": "View",
-      "only_fill": "Only Fill",
-      "edit": "Edit"
+      "label": "Permission",
+      "view": "Viewable",
+      "only_fill": "Only Use",
+      "edit": "Editable"
     },
     "leave": "Leave",
     "leave_desc": "Are you sure you want to leave this share group?",
@@ -404,7 +406,7 @@
   },
   "pass_generator": {
     "title": "Password Generator",
-    "desc": "Quickly generate new secure password",
+    "desc": "Generate strong & secure passwords",
     "use_upper": "Use uppercase letters (A-Z)",
     "use_lower": "Use lowercase letters (a-z)",
     "use_digits": "Use digits (0-9)",
@@ -514,6 +516,8 @@
     "pls_select_right_format": "Must be a {{format}} file"
   },
   "crypto_asset": {
+    "wallet_name": "Wallet Name",
+    "account_name": "Account Name",
     "choose_type": "Choose your type of asset",
     "choose_type_desc": "Select the method that crypto you want to add",
     "empty": {

@@ -88,7 +88,7 @@ export const RenameFolderModal = observer((props: Props) => {
         persistError
         isInvalid={isExisted}
         errorText={translate('folder.folder_existed')}
-        label={translate('common.name')}
+        label={translate('folder.folder_name')}
         value={name}
         onChangeText={txt => setName(txt)}
         onSubmitEditing={renameFolder}

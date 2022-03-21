@@ -134,7 +134,7 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label={translate('common.name')}
+              label={translate('common.item_name')}
               value={name}
               onChangeText={setName}
             />
