@@ -16,6 +16,7 @@ import DeviceInfo from 'react-native-device-info'
 import { useMixins } from '..'
 import { Logger } from '../../../utils/logger'
 import { SymmetricCryptoKey } from '../../../../core/models/domain'
+import { remove, StorageKey } from '../../../utils/storage'
 
 
 const { createContext, useContext } = React
@@ -319,9 +320,18 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       }
   
       // Reset shared data
-        await saveShared('autofill', '')
+      await saveShared('autofill', '')
+
+      // Reset push noti data
+      await remove(StorageKey.PUSH_NOTI_DATA)
 
       // Clear services
+      await Promise.all([
+        folderService.clearCache(),
+        cipherService.clearCache(),
+        // searchService.clearCache(),
+        collectionService.clearCache()
+      ])
       const userId = await userService.getUserId()
       await Promise.all([
         folderService.clear(userId),

@@ -12,7 +12,7 @@ import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/a
 import { IS_IOS } from "../../../config/constants"
 
 
-export const LockScreen = observer(function LockScreen() {
+export const LockScreen = observer(() => {
   const navigation = useNavigation()
   const { notify, translate, notifyApiError, color } = useMixins()
   const { logout, sessionLogin, biometricLogin } = useCipherAuthenticationMixins()
@@ -110,6 +110,7 @@ export const LockScreen = observer(function LockScreen() {
 
   // -------------- EFFECT ------------------
 
+  // Handle back press
   useEffect(() => {
     const handleBack = (e) => {
       if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
@@ -151,6 +152,13 @@ export const LockScreen = observer(function LockScreen() {
       navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
+
+  // Auto trigger face id / touch id
+  useEffect(() => {
+    if (user.isBiometricUnlock) {
+      !__DEV__ && handleUnlockBiometric()
+    }
+  }, [])
 
   // ---------------------- RENDER -------------------------
 

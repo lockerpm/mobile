@@ -1,15 +1,14 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ScrollView, ViewStyle, Linking, TextStyle } from "react-native"
+import { View, ScrollView, ViewStyle, TextStyle } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
-import { commonStyles, fontSize } from "../../../../theme"
+import { fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { MANAGE_PLAN_URL } from "../../../../config/constants"
 import { Invitation, InvitationData } from "./invitation"
 
 
@@ -24,9 +23,10 @@ import SettingsIconLight from './gear-light.svg'
 import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+import { PushNotifier } from "../../../../utils/push-notification"
 
 
-export const MenuScreen = observer(function MenuScreen() {
+export const MenuScreen = observer(() => {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
   const { translate, notify, color, isDark } = useMixins()
@@ -86,6 +86,21 @@ export const MenuScreen = observer(function MenuScreen() {
       name: '(DEBUG) Show toast',
       action: () => {
         notify('error', 'test')
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Show push notification',
+      action: () => {
+        PushNotifier._notify({
+          id: `share_confirm`,
+          title: 'Test',
+          body: 'This is a test',
+          data: {
+            type: 'confirm_share_item'
+          }
+        })
       }
     },
     {

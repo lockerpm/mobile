@@ -283,6 +283,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   !isShared && (
                     <ActionItem
                       isPremium
+                      onClose={onClose}
                       disabled={uiStore.isOffline}
                       name={translate('common.share')}
                       icon="share-square-o"
