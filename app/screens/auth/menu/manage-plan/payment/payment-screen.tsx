@@ -9,11 +9,9 @@ import { IS_IOS } from '../../../../../config/constants'
 import { PricePlan } from "./price-plan"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
-// import { requestSubscription, useIAP, SubscriptionPurchase, PurchaseError, clearTransactionIOS } from 'react-native-iap';
 import { Logger } from "../../../../../utils/logger"
 
 import RNIap, {
-  InAppPurchase,
   PurchaseError,
   Subscription,
   SubscriptionPurchase,
@@ -53,66 +51,63 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   const getSubscription = useCallback(async (): Promise<void> => {
 
-
     try {
       const result = await RNIap.initConnection();
-      console.log('result', result);
-
       if (result === false) {
         Alert.alert("couldn't get in-app-purchase information");
         return;
       }
     } catch (err) {
-      console.debug('initConnection');
-      console.error(err.code, err.message);
-      Alert.alert('fail to get in-app-purchase information');
+      Logger.error({ 'initConnection': err })
+      Alert.alert('Fail to get in-app-purchase information');
     }
+
+    RNIap.clearTransactionIOS()
 
     purchaseUpdateSubscription = purchaseUpdatedListener(
       async (purchase: SubscriptionPurchase) => {
-        var verified: boolean = false;
         setIsContentOverlayLoading(true)
-        if (IS_IOS) {
-          verified = await user.purchaseValidation(purchase.transactionReceipt)
-        } else {
-          verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
-        }
-        if (!verified) {
-          // conclude the purchase is fraudulent, etc...
+        console.log("--------------------------------------------")
+        var verified: boolean = false;
+        
+        // if (IS_IOS) {
+        //   verified = await user.purchaseValidation(purchase.transactionReceipt)
+        // } else {
+        //   verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
+        // }
+        // if (!verified) {
+        //   // conclude the purchase is fraudulent, etc...
+        //   setIsContentOverlayLoading(false)
+        //   Alert.alert(
+        //     "Purchase Verification",
+        //     "Locker can not verify your purchase",
+        //     [
+        //       { text: "OK", onPress: () =>{}}
+        //     ]
+        //   )
+        // } else {
+        try {
+          const ackResult = await finishTransaction(purchase);
+          Logger.debug({ 'ackResult': ackResult });
           setIsContentOverlayLoading(false)
-          Alert.alert(
-            "Purchase Verification",
-            "Locker can not verify your purchase",
-            [
-              { text: "OK", onPress: () => console.log("OK Pressed") }
-            ]
-          )
-        } else {
-          try {
-            const ackResult = await finishTransaction(purchase);
-            Logger.debug({ 'ackResult': ackResult });
-            setIsContentOverlayLoading(false)
-            navigation.navigate("mainTab")
-          } catch (ackErr) {
-            Logger.error({ 'ackErr': ackErr });
-          }
+          navigation.navigate("mainTab")
+        } catch (ackErr) {
+          Logger.error({ 'ackErr': ackErr });
         }
+        // }
       },
     );
 
     purchaseErrorSubscription = purchaseErrorListener(
       (error: PurchaseError) => {
-        console.log('purchaseErrorListener', error);
-        Alert.alert('purchase error', JSON.stringify(error));
+        Logger.error({ 'purchaseErrorListener': error });
       },
     );
 
-    // console.log('products', JSON.stringify(products));
     const subscriptions = await RNIap.getSubscriptions(subSkus);
-    console.log(subscriptions);
     setSubcriptions(subscriptions);
     setLoading(false);
-  }, [subcriptions]);
+  }, []);
 
   useEffect(() => {
     getSubscription();
@@ -129,15 +124,16 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
 
   const purchase = (productId: string): void => {
-    RNIap.clearTransactionIOS()
-    RNIap.requestSubscription(productId).catch((e) => {
+
+    RNIap.requestSubscription(productId)
+    .catch((e) => {
       if (e.code === 'E_USER_CANCELLED') {
         return
       } else {
         Logger.error(JSON.stringify(e))
       }
     });
-
+  
   };
 
 
@@ -170,6 +166,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   // Render screen
   return (
     <Layout
+      // isContentLoading={loading}
       isContentOverlayLoading={isContentOverlayLoading}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >

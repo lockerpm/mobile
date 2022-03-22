@@ -575,27 +575,28 @@
   },
   "manage_plan": {
     "usage": {
-      "title": "Free Plan Usage",
-      "login": "Passwords",
-      "card": "Payment Cards",
-      "identity": "Identities",
-      "note": "Secure Note",
+      "title": "Plan Usage",
+      "login": "Mật khẩu",
+      "card": "Thẻ thanh toán",
+      "identity": "Định danh",
+      "note": "Ghi chú",
       "crypto": "Crypto assets"
     },
     "feature": {
-      "title": "Explore your full premium feature",
-      "locker": "Unlimited items",
+      "title": "Tính năng nâng cao",
+      "locker": "Lưu trữ không giới hạn",
       "emergency_contact": {
-        "header" : "Emergency Contact",
-        "text": "Add trusted contacts and grant them access to your Locker account in cases of emergencyt",
-        "link": "To add Emergency Contacts, go to Locker Web Vault at: locker.io/vault"
+        "header" : "Liên hệ khẩn cấp",
+        "text": "Tính năng này cho phép bạn lấy lại tài khoản trong trường hợp khẩn cấp",
+        "link": "Để sử dụng tính năng, vui lòng truy cập: locker.io/vault",
+        "button": "OK"
       },
-      "web": "Dark Web Monitoring",
-      "share_password": "Share Passwords"
+      "web": "Giám sát lộ dữ liệu",
+      "share_password": "Chia sẻ mật khẩu"
 
     },
     "free": {
-      "button": "Increase unlimited with Premium"
+      "button": "Nâng cấp lên Premium"
     }
   }
 }
