@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import { View, StyleSheet, TouchableOpacity, Alert, Image } from "react-native"
+import React, { useState, useEffect, useCallback } from "react"
+import { View, StyleSheet, TouchableOpacity, Alert, Image, EmitterSubscription, Platform } from "react-native"
 import { Text, Layout } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
@@ -9,53 +9,67 @@ import { IS_IOS } from '../../../../../config/constants'
 import { PricePlan } from "./price-plan"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
-import { requestSubscription, useIAP, SubscriptionPurchase, PurchaseError, clearTransactionIOS } from 'react-native-iap';
+// import { requestSubscription, useIAP, SubscriptionPurchase, PurchaseError, clearTransactionIOS } from 'react-native-iap';
 import { Logger } from "../../../../../utils/logger"
 
-
+import RNIap, {
+  InAppPurchase,
+  PurchaseError,
+  Subscription,
+  SubscriptionPurchase,
+  finishTransaction,
+  purchaseErrorListener,
+  purchaseUpdatedListener,
+} from 'react-native-iap';
 
 // control init premium benefit tab
 type ScreenProp = RouteProp<PrimaryParamList, 'payment'>;
 
+let purchaseUpdateSubscription: EmitterSubscription;
+let purchaseErrorSubscription: EmitterSubscription;
+
+const subSkus = Platform.select({
+  default: ["pm_family_monthly",
+    "pm_family_yearly",
+    "pm_premium_monthly",
+    "pm_premium_yearly"],
+});
+
+
+
 export const PaymentScreen = observer(function PaymentScreen() {
-  const {
-    connected,
-    subscriptions,
-    getSubscriptions,
-    finishTransaction,
-    currentPurchase,
-    currentPurchaseError,
-  } = useIAP();
   const { translate, color, isDark } = useMixins()
   const { user } = useStores()
   const navigation = useNavigation();
   const route = useRoute<ScreenProp>();
 
   // -------------------- STATE ----------------------
+  const [subcriptions, setSubcriptions] = useState<Subscription[]>([])
+  const [loading, setLoading] = useState<boolean>(true);
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
   const [isContentOverlayLoading, setIsContentOverlayLoading] = useState(false)
 
 
+  const getSubscription = useCallback(async (): Promise<void> => {
 
-  const subSkus = [
-    "pm_family_monthly",
-    "pm_family_yearly",
-    "pm_premium_monthly",
-    "pm_premium_yearly"
-  ]
 
-  useEffect(() => {
-    getSubscriptions(subSkus);
-  }, [connected, getSubscriptions]);
+    try {
+      const result = await RNIap.initConnection();
+      console.log('result', result);
 
-  useEffect(() => {
-    // console.log(subscriptions)
-  }, [subscriptions]);
+      if (result === false) {
+        Alert.alert("couldn't get in-app-purchase information");
+        return;
+      }
+    } catch (err) {
+      console.debug('initConnection');
+      console.error(err.code, err.message);
+      Alert.alert('fail to get in-app-purchase information');
+    }
 
-  useEffect(() => {
-    const checkCurrentPurchase = async (purchase?: SubscriptionPurchase): Promise<void> => {
-      if (purchase) {
+    purchaseUpdateSubscription = purchaseUpdatedListener(
+      async (purchase: SubscriptionPurchase) => {
         var verified: boolean = false;
         setIsContentOverlayLoading(true)
         if (IS_IOS) {
@@ -63,8 +77,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
         } else {
           verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
         }
-
-
         if (!verified) {
           // conclude the purchase is fraudulent, etc...
           setIsContentOverlayLoading(false)
@@ -85,21 +97,47 @@ export const PaymentScreen = observer(function PaymentScreen() {
             Logger.error({ 'ackErr': ackErr });
           }
         }
+      },
+    );
+
+    purchaseErrorSubscription = purchaseErrorListener(
+      (error: PurchaseError) => {
+        console.log('purchaseErrorListener', error);
+        Alert.alert('purchase error', JSON.stringify(error));
+      },
+    );
+
+    // console.log('products', JSON.stringify(products));
+    const subscriptions = await RNIap.getSubscriptions(subSkus);
+    console.log(subscriptions);
+    setSubcriptions(subscriptions);
+    setLoading(false);
+  }, [subcriptions]);
+
+  useEffect(() => {
+    getSubscription();
+
+    return (): void => {
+      if (purchaseUpdateSubscription) {
+        purchaseUpdateSubscription.remove();
+      }
+      if (purchaseErrorSubscription) {
+        purchaseErrorSubscription.remove();
       }
     };
+  }, []);
 
-    checkCurrentPurchase(currentPurchase);
-  }, [currentPurchase, finishTransaction]);
 
-  const purchase = (subID: string) => {
-    clearTransactionIOS()
-    requestSubscription(subID).catch((e) => {
+  const purchase = (productId: string): void => {
+    RNIap.clearTransactionIOS()
+    RNIap.requestSubscription(productId).catch((e) => {
       if (e.code === 'E_USER_CANCELLED') {
         return
       } else {
         Logger.error(JSON.stringify(e))
       }
     });
+
   };
 
 
