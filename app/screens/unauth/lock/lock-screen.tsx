@@ -10,9 +10,10 @@ import { APP_ICON } from "../../../common/mappings"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 import { IS_IOS } from "../../../config/constants"
+import ReactNativeBiometrics from 'react-native-biometrics'
 
 
-export const LockScreen = observer(function LockScreen() {
+export const LockScreen = observer(() => {
   const navigation = useNavigation()
   const { notify, translate, notifyApiError, color } = useMixins()
   const { logout, sessionLogin, biometricLogin } = useCipherAuthenticationMixins()
@@ -26,6 +27,7 @@ export const LockScreen = observer(function LockScreen() {
   const [isBioUnlocking, setIsBioUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [biometryType, setBiometryType] = useState<'faceid' | 'touchid' | 'biometric'>('biometric')
 
   // ---------------------- METHODS -------------------------
 
@@ -81,6 +83,16 @@ export const LockScreen = observer(function LockScreen() {
     }
   }
 
+  // Detect biometric type
+  const dectectbiometryType = async () => {
+    const { biometryType } = await ReactNativeBiometrics.isSensorAvailable()
+    if (biometryType === ReactNativeBiometrics.TouchID) {
+      setBiometryType('touchid')
+    } else if (biometryType === ReactNativeBiometrics.FaceID) {
+      setBiometryType('faceid')
+    }
+  }
+
   // ---------------------- COMPONENTS -------------------------
 
   const header = (
@@ -110,6 +122,7 @@ export const LockScreen = observer(function LockScreen() {
 
   // -------------- EFFECT ------------------
 
+  // Handle back press
   useEffect(() => {
     const handleBack = (e) => {
       if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
@@ -151,6 +164,15 @@ export const LockScreen = observer(function LockScreen() {
       navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
+
+  // Auto trigger face id / touch id + detect biometry type
+  useEffect(() => {
+    if (user.isBiometricUnlock) {
+      !__DEV__ && handleUnlockBiometric()
+    }
+
+    dectectbiometryType()
+  }, [])
 
   // ---------------------- RENDER -------------------------
 
@@ -247,13 +269,13 @@ export const LockScreen = observer(function LockScreen() {
         >
           <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginHorizontal: 5 }]}>
             <MaterialCommunityIconsIcon
-              name="face-recognition"
+              name={biometryType === 'faceid' ? "face-recognition" : 'fingerprint'}
               size={20}
               color={color.textBlack}
             />
             <Text
               preset="black"
-              text={translate("common.biometric_unlocking")}
+              text={translate(`common.${biometryType}_unlocking`)}
               style={{ marginLeft: 7 }}
             />
           </View>

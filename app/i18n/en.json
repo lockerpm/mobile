@@ -26,6 +26,7 @@
     "edit": "Edit",
     "email": "Email",
     "enter_master_pass": "Enter master password",
+    "faceid_unlocking": "Unlock with Face ID",
     "folder": "Folder",
     "fullname": "Full name",
     "generate": "Generate",
@@ -61,6 +62,7 @@
     "owned_by": "Owned by",
     "ownership": "Ownership",
     "password": "Password",
+    "password_not_match": "Passwords don't match",
     "phone": "Phone",
     "push_notifications": "Push Notifications",
     "regenerate": "Regenerate",
@@ -85,6 +87,7 @@
     "times": "times",
     "trash": "Trash",
     "tools": "Tools",
+    "touchid_unlocking": "Unlock with Touch ID",
     "unlock": "Unlock",
     "upgrade": "Upgrade",
     "user": "User",
@@ -232,7 +235,7 @@
     "has_account": "Already have an account?",
     "terms": "terms",
     "conditions": "conditions",
-    "signup_successful": "A confirmation email has been sent to your address."
+    "signup_successful": "A confirmation email has been sent to your address (check your SPAM folder as well)"
   },
   "start": {
     "synching": "Synchronizing...",
@@ -337,6 +340,7 @@
     "shares": "Shares",
     "share_items": "Your Shares",
     "shared_items": "Shared With You",
+    "encrypted_content": "Encrypted Content",
     "empty": {
       "title": "Securely share items",
       "desc_share": "Any shared passwords, notes or credit cards will appear here",

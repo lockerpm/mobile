@@ -1,12 +1,12 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ScrollView, ViewStyle, Linking, TextStyle } from "react-native"
+import { View, ScrollView, ViewStyle, TextStyle } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 import { PlanType } from "../../../../config/types"
-import { commonStyles, fontSize } from "../../../../theme"
+import { fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -25,9 +25,10 @@ import SettingsIconLight from './gear-light.svg'
 import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
 
+import { PushNotifier } from "../../../../utils/push-notification"
 
 
-export const MenuScreen = observer(function MenuScreen() {
+export const MenuScreen = observer(() => {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
   const { translate, notify, color, isDark } = useMixins()
@@ -85,7 +86,22 @@ export const MenuScreen = observer(function MenuScreen() {
       icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: '(DEBUG) Show toast',
       action: () => {
-        notify('error', 'test')
+        notify('error', 'Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)')
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Show push notification',
+      action: () => {
+        PushNotifier._notify({
+          id: `share_confirm`,
+          title: 'Test',
+          body: 'This is a test',
+          data: {
+            type: 'confirm_share_item'
+          }
+        })
       }
     },
     {

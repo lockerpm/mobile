@@ -227,6 +227,7 @@ export const CipherShareList = observer((props: Props) => {
         onClose={() => setShowAction(false)}
         onLoadingChange={onLoadingChange}
         member={selectedMember}
+        goToDetail={goToDetail}
       />
 
       {/* Action menus end */}
@@ -242,7 +243,8 @@ export const CipherShareList = observer((props: Props) => {
           <Button
             preset="link"
             onPress={() => {
-              goToDetail(item)
+              // goToDetail(item)
+              openActionMenu(item)
             }}
             style={{
               borderBottomColor: color.line,
@@ -333,7 +335,7 @@ export const CipherShareList = observer((props: Props) => {
                 {/* Description end */}
               </View>
 
-              <Button
+              {/* <Button
                 preset="link"
                 onPress={() => openActionMenu(item)}
                 style={{ 
@@ -348,7 +350,7 @@ export const CipherShareList = observer((props: Props) => {
                   size={18}
                   color={color.textBlack}
                 />
-              </Button>
+              </Button> */}
             </View>
           </Button>
         )}

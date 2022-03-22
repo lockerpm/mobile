@@ -4,9 +4,15 @@ import { MMKV } from 'react-native-mmkv'
 const storage = new MMKV()
 
 
-export const storageKeys = {
-  APP_FROM_AUTOFILL: 'app__from_autofill',
-  APP_CURRENT_USER: 'app__current_user'
+export enum StorageKey {
+  APP_FROM_AUTOFILL = 'app__from_autofill',
+  APP_CURRENT_USER = 'app__current_user',
+  PUSH_NOTI_DATA = 'push_noti_data'
+}
+
+export type PushNotiData = {
+  type: string
+  data?: any
 }
 
 /**

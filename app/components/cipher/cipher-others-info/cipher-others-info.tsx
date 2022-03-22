@@ -83,6 +83,7 @@ export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
               <Text
                 preset="black"
                 text={folder.name || translate('common.none')}
+                numberOfLines={2}
               />
             </View>
             <FontAwesomeIcon

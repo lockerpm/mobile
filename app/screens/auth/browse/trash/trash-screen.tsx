@@ -17,10 +17,10 @@ export const TrashScreen = observer(function TrashScreen() {
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'name',
-    order: 'asc'
+    orderField: 'revisionDate',
+    order: 'desc'
   })
-  const [sortOption, setSortOption] = useState('az')
+  const [sortOption, setSortOption] = useState('last_updated')
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])

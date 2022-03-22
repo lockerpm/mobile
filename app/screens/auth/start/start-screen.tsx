@@ -10,9 +10,9 @@ import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
 import { IS_IOS } from "../../../config/constants"
 
 
-export const StartScreen = observer(function StartScreen() {
+export const StartScreen = observer(() => {
   const { user, uiStore } = useStores()
-  const { isBiometricAvailable, translate, boostrapPushNotifier } = useMixins()
+  const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
   const { loadFolders, loadCollections, syncAutofillData, loadOrganizations } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const navigation = useNavigation()
@@ -72,6 +72,13 @@ export const StartScreen = observer(function StartScreen() {
     }
 
     setMsg('')
+
+    // Parse push noti data
+    const navigationRequest = await parsePushNotiData()
+    if (navigationRequest.path) {
+      navigation.navigate(navigationRequest.path, navigationRequest.params)
+      return
+    }
 
     // Show biometric intro
     if (!uiStore.isFromAutoFill) {
