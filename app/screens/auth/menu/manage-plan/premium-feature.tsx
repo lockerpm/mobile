@@ -30,8 +30,9 @@ export const PremiumFeature = () => {
             img: require("./assets/EmergencyContact.png"),
             desc: translate('manage_plan.feature.emergency_contact.header'),
             action: () => {
-                isFreeAccount ? navigation.navigate("payment", { benefitTab: 2 })
-                    : setModalVisible(true)
+                setModalVisible(true)
+                // isFreeAccount ? navigation.navigate("payment", { benefitTab: 2 })
+                //     : setModalVisible(true)
             }
         },
         web: {
@@ -86,11 +87,11 @@ export const PremiumFeature = () => {
             <View style={CENTER_VIEW} >
                 <Modal isVisible={modalVisible}>
                     <View style={{ backgroundColor: color.background, padding: 20, borderRadius: 16}}>
-                        <Image style={{alignSelf: "center"}} source={require("./assets/EmergencyContact.png")} />
+                        <Image style={{alignSelf: "center", height: 180}} source={require("./assets/EmergencyContact.png")} />
                         <Text preset="header">{translate('manage_plan.feature.emergency_contact.header')}</Text>
                         <Text preset="black" style={{marginTop: 12}}>{translate('manage_plan.feature.emergency_contact.text')}</Text>
                         <Text preset="black" style={{marginVertical: 16}}>{translate('manage_plan.feature.emergency_contact.link')}</Text>        
-                        <Button text="Got it" onPress={() => setModalVisible(false)} />
+                        <Button text={translate('manage_plan.feature.emergency_contact.button')} onPress={() => setModalVisible(false)} />
                          {/*                      
                         <TouchableOpacity  onPress={() => Linking.openURL("https://locker.io/settings/security")}>
                             <Text >Go to locker.io/vault</Text>

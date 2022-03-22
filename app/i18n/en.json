@@ -577,7 +577,7 @@
   },
   "manage_plan": {
     "usage": {
-      "title": "Free Plan Usage",
+      "title": "Plan Usage",
       "login": "Passwords",
       "card": "Payment Cards",
       "identity": "Identities",
@@ -589,8 +589,9 @@
       "locker": "Unlimited items",
       "emergency_contact": {
         "header" : "Emergency Contact",
-        "text": "Add trusted contacts and grant them access to your Locker account in cases of emergencyt",
-        "link": "To add Emergency Contacts, go to Locker Web Vault at: locker.io/vault"
+        "text": "Add trusted contacts and grant them access to your Locker account in cases of emergency",
+        "link": "To add Emergency Contacts, go to Locker Web Vault at: locker.io/vault",
+        "button": "Got it"
       },
       "web": "Dark Web Monitoring",
       "share_password": "Share Passwords"

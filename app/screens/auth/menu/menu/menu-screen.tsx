@@ -113,13 +113,13 @@ export const MenuScreen = observer(function MenuScreen() {
 
   const item3 = {
     "pm_free": {
-      node: <Text text="FREE PLAN" style={[PLAN_NAME, { color: color.textBlack }]}></Text>,
+      node: <Text text="FREE" style={[PLAN_NAME, { color: color.textBlack }]}></Text>,
     },
     "pm_premium": {
-      node: <Text text="PREMIUM PERSONAL" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+      node: <Text text="PREMIUM" style={[PLAN_NAME, { color: color.primary }]}></Text>,
     },
     "pm_family": {
-      node: <Text text="PREMIUM FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+      node: <Text text="FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>,
     }
   }
 
