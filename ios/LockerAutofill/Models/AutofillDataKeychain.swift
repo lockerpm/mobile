@@ -29,6 +29,7 @@ class AutofillDataModel {
     let keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
     keychainData = try! keychain.get(KEYCHAIN_PROPS) ?? ""
     if (keychainData != "") {
+      print(keychainData)
       self.loginedLocker = true;
     }
   }

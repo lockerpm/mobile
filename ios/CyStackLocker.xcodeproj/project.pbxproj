@@ -116,7 +116,6 @@
 		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
 		7C8496E127B7759200CFEA8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		7C8496E427B7759900CFEA8B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
 		7C8496E527B7765C00CFEA8B /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		7C8A609C27A38D5D00477348 /* FormFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldView.swift; sourceTree = "<group>"; };
 		7CAB332B279972020000B15E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -125,6 +124,7 @@
 		7CAB3331279A548A0000B15E /* CredentialProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderController.swift; sourceTree = "<group>"; };
 		7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyMasterPasswordViewController.swift; sourceTree = "<group>"; };
 		7CAB3335279AA04E0000B15E /* LoginListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
+		7CB5348927E9C4F600E31C07 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
 		7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashCore.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CyStackLocker/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -941,7 +941,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				7C8496E127B7759200CFEA8B /* Base */,
-				7C8496E427B7759900CFEA8B /* vi */,
+				7CB5348927E9C4F600E31C07 /* vi */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
