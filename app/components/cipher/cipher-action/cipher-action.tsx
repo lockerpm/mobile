@@ -32,7 +32,7 @@ export interface CipherActionProps {
 /**
  * Describe your component here
  */
-export const CipherAction = observer(function CipherAction(props: CipherActionProps) {
+export const CipherAction = observer((props: CipherActionProps) => {
   const { navigation, isOpen, onClose, children } = props
 
   const [showConfirmTrashModal, setShowConfirmTrashModal] = useState(false)

@@ -19,13 +19,14 @@ type Props = {
   onClose: () => void
   onLoadingChange: Function
   member: SharedMemberType
+  goToDetail: Function
 }
 
 /**
  * Describe your component here
  */
 export const ShareItemAction = observer((props: Props) => {
-  const { isOpen, onClose, onLoadingChange, member } = props
+  const { isOpen, onClose, onLoadingChange, member, goToDetail } = props
   const { translate } = useMixins()
   const { stopShareCipher } = useCipherDataMixins()
   const { cipherStore, uiStore } = useStores()
@@ -147,6 +148,14 @@ export const ShareItemAction = observer((props: Props) => {
 
         <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
           <Divider style={{ marginVertical: 5 }} />
+
+          <ActionItem
+            name={translate('common.details')}
+            action={() => {
+              goToDetail(selectedCipher)
+              onClose()
+            }}
+          />
 
           {
             member?.status === SharingStatus.ACCEPTED && (

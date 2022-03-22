@@ -87,7 +87,8 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
             <Text
               preset="black"
               text={folder.name || translate('folder.unassigned')}
-              style={{ marginLeft: 10 }}
+              numberOfLines={2}
+              style={{ marginLeft: 10, flex: 1 }}
             />
           </View>
         )
