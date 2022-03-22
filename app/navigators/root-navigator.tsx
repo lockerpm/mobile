@@ -83,7 +83,7 @@ const RootStack = observer(() => {
       initialRouteName="init"
       screenOptions={{
         cardStyle: { backgroundColor: color.background },
-        headerShown: false,
+        headerShown: false
       }}
     >
       <Stack.Screen name="init" component={InitScreen} />
@@ -100,6 +100,7 @@ const RootStack = observer(() => {
         component={MainNavigator}
         options={{
           headerShown: false,
+          gestureEnabled: false
         }}
       />
     </Stack.Navigator>

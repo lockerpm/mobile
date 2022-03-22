@@ -3,7 +3,7 @@ import notifee, { Notification, EventType, Event } from '@notifee/react-native'
 import { IS_IOS } from '../../config/constants'
 import { Logger } from '../logger'
 import { ConfirmShareData, NewShareData, NotifeeNotificationData, PushEvent } from './types';
-import { load, storageKeys } from '../storage';
+import { load, save, StorageKey } from '../storage';
 import { CipherType } from '../../../core/enums';
 
 
@@ -49,17 +49,26 @@ export class PushNotifier {
     return notifee.onForegroundEvent((event: Event) => {
       Logger.debug('Notifee: FOREGROUND HANDLER')
 
-      const { detail } = event
-      const data: NotifeeNotificationData = detail.notification.data
-      if (!data) {
-        return
-      }
+      const { detail, type } = event
 
-      switch (data.type) {
-        case PushEvent.SHARE_NEW:
-        case PushEvent.SHARE_CONFIRM:
-          // Do nothing on foreground
-          break
+      if (type === EventType.PRESS) {
+        const data: NotifeeNotificationData = detail.notification.data
+        if (!data) {
+          return
+        }
+
+        switch (data.type) {
+          case PushEvent.SHARE_NEW:
+            save(StorageKey.PUSH_NOTI_DATA, {
+              type: PushEvent.SHARE_NEW
+            })
+            break
+          case PushEvent.SHARE_CONFIRM:
+            save(StorageKey.PUSH_NOTI_DATA, {
+              type: PushEvent.SHARE_CONFIRM
+            })
+            break
+        }
       }
     })
   }
@@ -70,7 +79,7 @@ export class PushNotifier {
     messaging().setBackgroundMessageHandler(async (message: FirebaseMessagingTypes.RemoteMessage) => {
       Logger.debug('Firebase: BACKGROUND HANDLER')
 
-      const currentUser = await load(storageKeys.APP_CURRENT_USER)
+      const currentUser = await load(StorageKey.APP_CURRENT_USER)
       if (!currentUser) {
         return
       }
@@ -169,10 +178,14 @@ export class PushNotifier {
 
         switch (data.type) {
           case PushEvent.SHARE_NEW:
-            // TODO: set initial page
+            save(StorageKey.PUSH_NOTI_DATA, {
+              type: PushEvent.SHARE_NEW
+            })
             break
           case PushEvent.SHARE_CONFIRM:
-            // TODO: set initial page
+            save(StorageKey.PUSH_NOTI_DATA, {
+              type: PushEvent.SHARE_CONFIRM
+            })
             break
         } 
       }      
@@ -199,7 +212,9 @@ export class PushNotifier {
         pressAction: {
           launchActivity: "default",
           id: "default"
-        }
+        },
+        smallIcon: 'locker_small',
+        color: '#268334'
       }
     })
   }

@@ -26,6 +26,7 @@
     "edit": "Sửa",
     "email": "Email",
     "enter_master_pass": "Nhập mật khẩu chính",
+    "faceid_unlocking": "Mở khóa bằng Face ID",
     "folder": "Thư mục",
     "fullname": "Họ và tên",
     "generate": "Tạo mới",
@@ -61,6 +62,7 @@
     "owned_by": "Sở hữu bởi",
     "ownership": "Quyền sở hữu",
     "password": "Mật khẩu",
+    "password_not_match": "Mật khẩu không khớp",
     "phone": "Điện thoại",
     "push_notifications": "Thông báo đẩy",
     "regenerate": "Tạo lại",
@@ -85,6 +87,7 @@
     "times": "lần",
     "trash": "Thùng rác",
     "tools": "Công cụ",
+    "touchid_unlocking": "Mở khóa bằng Touch ID",
     "unlock": "Mở khóa",
     "upgrade": "Nâng cấp",
     "user": "Người dùng",
@@ -232,7 +235,7 @@
     "has_account": "Đã có tài khoản?",
     "terms": "điều khoản dịch vụ",
     "conditions": "chính sách bảo mật",
-    "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn."
+    "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)."
   },
   "start": {
     "synching": "Đồng bộ hoá dữ liệu...",
@@ -337,6 +340,7 @@
     "shares": "Chia sẻ",
     "share_items": "Bạn đã chia sẻ",
     "shared_items": "Được chia sẻ với bạn",
+    "encrypted_content": "Nội dung mã hoá",
     "empty": {
       "title": "Chia sẻ tài nguyên một cách an toàn",
       "desc_share": "Mọi mật khẩu, ghi chú hoặc thẻ tín dụng được chia sẻ sẽ xuất hiện ở đây",
@@ -477,7 +481,7 @@
     "delete_all_items_success": "Xoá dữ liệu thành công!",
     "on_app_close": "Khi tắt ứng dụng",
     "on_screen_off": "Khi tắt màn hình",
-    "timeout": "Hẹn giờ",
+    "timeout": "Tự động khoá",
     "timeout_action": "Tự động khoá",
     "import_export": "Nhập và xuất dữ liệu",
     "import": "Nhập dữ liệu",

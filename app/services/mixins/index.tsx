@@ -5,9 +5,9 @@ import ReactNativeBiometrics from 'react-native-biometrics'
 import Toast from 'react-native-toast-message'
 import { useStores } from '../../models'
 import Clipboard from '@react-native-clipboard/clipboard'
-import { load } from '../../utils/storage'
+import { load, PushNotiData, remove, StorageKey } from '../../utils/storage'
 import { translate as tl, TxKeyPath } from "../../i18n"
-import { GET_LOGO_URL, MANAGE_PLAN_URL } from '../../config/constants'
+import { GET_LOGO_URL } from '../../config/constants'
 import i18n from "i18n-js"
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { GeneralApiProblem } from '../api/api-problem'
@@ -17,7 +17,7 @@ import extractDomain from 'extract-domain'
 import { PushNotifier } from '../../utils/push-notification'
 import { Logger } from '../../utils/logger'
 import { useCoreService } from '../core-service'
-import { Linking } from 'react-native'
+import { PushEvent } from '../../utils/push-notification/types'
 
 
 const { createContext, useContext } = React
@@ -40,13 +40,17 @@ const defaultData = {
   notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
   randomString: () => '',
   boostrapPushNotifier: async () => true,
-  goPremium: () => {}
+  goPremium: () => {},
+  parsePushNotiData: async () => ({ path: '', params: {} })
 }
 
 
 export const MixinsContext = createContext(defaultData)
 
-export const MixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
+export const MixinsProvider = observer((props: {
+  children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal
+  navigationRef?: any
+}) => {
   const { uiStore, user } = useStores()
   const insets = useSafeAreaInsets()
   const { userService } = useCoreService()
@@ -208,9 +212,44 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     }
   }
 
-  // Go premium (temporary)
+  // Go premium (navigate to payment screen)
   const goPremium = () => {
-    Linking.openURL(MANAGE_PLAN_URL)
+    if (props.navigationRef.current) {
+      props.navigationRef.current.navigate('payment')
+    }
+  }
+
+  // Parse push notification data
+  const parsePushNotiData = async () => {
+    const res = {
+      path: '',
+      params: {}
+    }
+    const data: PushNotiData = await load(StorageKey.PUSH_NOTI_DATA)
+    if (data) {
+      switch (data.type) {
+        case PushEvent.SHARE_NEW:
+          res.path = 'mainTab'
+          res.params = {
+            screen: 'browseTab',
+            params: {
+              screen: 'sharedItems'
+            }
+          }
+          break
+        case PushEvent.SHARE_CONFIRM:
+          res.path = 'mainTab'
+          res.params = {
+            screen: 'browseTab',
+            params: {
+              screen: 'shareItems'
+            }
+          }
+          break
+      }
+    }
+    await remove(StorageKey.PUSH_NOTI_DATA)
+    return res
   }
 
   // -------------------- REGISTER FUNCTIONS ------------------
@@ -230,7 +269,8 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     translate,
     notifyApiError,
     boostrapPushNotifier,
-    goPremium
+    goPremium,
+    parsePushNotiData
   }
 
   return (

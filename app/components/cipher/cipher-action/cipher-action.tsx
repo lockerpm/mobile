@@ -32,7 +32,7 @@ export interface CipherActionProps {
 /**
  * Describe your component here
  */
-export const CipherAction = observer(function CipherAction(props: CipherActionProps) {
+export const CipherAction = observer((props: CipherActionProps) => {
   const { navigation, isOpen, onClose, children } = props
 
   const [showConfirmTrashModal, setShowConfirmTrashModal] = useState(false)
@@ -271,6 +271,16 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
 
                 <ActionItem
                   disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+                  name={translate('common.details')}
+                  icon="list-alt"
+                  action={() => {
+                    onClose()
+                    navigation.navigate(`${cipherMapper.path}__info`)
+                  }}
+                />
+
+                <ActionItem
+                  disabled={uiStore.isOffline && !!selectedCipher.organizationId}
                   name={translate('common.edit')}
                   icon="edit"
                   action={() => {
@@ -283,6 +293,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   !isShared && (
                     <ActionItem
                       isPremium
+                      onClose={onClose}
                       disabled={uiStore.isOffline}
                       name={translate('common.share')}
                       icon="share-square-o"
