@@ -1,4 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
+// import AsyncStorage from "@react-native-async-storage/async-storage"
+import { MMKV } from 'react-native-mmkv'
+
+const storage = new MMKV()
+
 
 export const storageKeys = {
   APP_FROM_AUTOFILL: 'app__from_autofill',
@@ -12,7 +16,8 @@ export const storageKeys = {
  */
 export async function loadString(key: string): Promise<string | null> {
   try {
-    return await AsyncStorage.getItem(key)
+    // return await AsyncStorage.getItem(key)
+    return Promise.resolve(storage.getString(key))
   } catch {
     // not sure why this would fail... even reading the RN docs I'm unclear
     return null
@@ -27,7 +32,8 @@ export async function loadString(key: string): Promise<string | null> {
  */
 export async function saveString(key: string, value: string): Promise<boolean> {
   try {
-    await AsyncStorage.setItem(key, value)
+    // await AsyncStorage.setItem(key, value)
+    await Promise.resolve(storage.set(key, value))
     return true
   } catch {
     return false
@@ -41,16 +47,18 @@ export async function saveString(key: string, value: string): Promise<boolean> {
  */
 export function load(key: string): Promise<any | null> {
   return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(key, (err, res) => {
-      if (err) {
-        if (__DEV__) {
-          console.log(err)
-        }
-        resolve(err)
-      } else {
-        resolve(JSON.parse(res))
-      }
-    })
+    // AsyncStorage.getItem(key, (err, res) => {
+    //   if (err) {
+    //     if (__DEV__) {
+    //       console.log(err)
+    //     }
+    //     resolve(err)
+    //   } else {
+    //     resolve(JSON.parse(res))
+    //   }
+    // })
+    const res = storage.getString(key)
+    resolve(res ? JSON.parse(res) : null)
   })
 }
 
@@ -65,7 +73,8 @@ export async function save(key: string, value: any): Promise<boolean> {
     // if (__DEV__) {
     //   console.log(`Saving to ASYNC STORAGE key ${key}`)
     // }
-    await AsyncStorage.setItem(key, JSON.stringify(value))
+    // await AsyncStorage.setItem(key, JSON.stringify(value))
+    await Promise.resolve(storage.set(key, JSON.stringify(value)))
     return true
   } catch {
     return false
@@ -82,7 +91,8 @@ export async function remove(key: string): Promise<void> {
     // if (__DEV__) {
     //   console.log(`Removing from ASYNC STORAGE key ${key}`)
     // }
-    await AsyncStorage.removeItem(key)
+    // await AsyncStorage.removeItem(key)
+    await Promise.resolve(storage.delete(key))
   } catch {}
 }
 
@@ -91,7 +101,8 @@ export async function remove(key: string): Promise<void> {
  */
 export async function clear(): Promise<void> {
   try {
-    await AsyncStorage.clear()
+    // await AsyncStorage.clear()
+    await Promise.resolve(storage.clearAll())
   } catch {}
 }
 
