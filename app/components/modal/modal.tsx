@@ -59,6 +59,7 @@ export const Modal = function Modal(props: ModalProps) {
         <Text
           preset="header"
           text={title}
+          numberOfLines={2}
           style={{
             fontSize: fontSize.h4
           }}

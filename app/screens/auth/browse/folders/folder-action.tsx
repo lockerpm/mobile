@@ -89,6 +89,7 @@ export const FolderAction = (props: Props) => {
         isOpen={isOpen}
         onClose={handleActionSheetClose}
       >
+        {/* Info */}
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             {
@@ -98,15 +99,19 @@ export const FolderAction = (props: Props) => {
                 <FOLDER_IMG.normal.svg height={30} />
               )
             }
-            <View>
+            <View style={{
+              marginLeft: 10,
+              flex: 1
+            }}>
               <Text
                 preset="semibold"
                 text={folder.name}
-                style={{ marginLeft: 10 }}
+                numberOfLines={2}
               />
             </View>
           </View>
         </View>
+        {/* Info end */}
 
         <Divider style={{ marginTop: 10 }} />
 

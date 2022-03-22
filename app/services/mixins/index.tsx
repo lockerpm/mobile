@@ -39,7 +39,7 @@ const defaultData = {
   notifyApiError: (problem: GeneralApiProblem) => {},
   notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
   randomString: () => '',
-  boostrapPushNotifier: async () => {},
+  boostrapPushNotifier: async () => true,
   goPremium: () => {}
 }
 
@@ -188,16 +188,23 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
 
   // Setup push notifier
   const boostrapPushNotifier = async () => {
-    if (user.disablePushNotifications) {
-      return
-    }
-    const permissionGranted = await PushNotifier.getPermission()
-    if (permissionGranted) {
-      const token = await PushNotifier.getToken()
-      // Logger.debug(token)
-      user.setFCMToken(token)
-    } else {
-      user.setFCMToken(null)
+    try {
+      if (user.disablePushNotifications) {
+        return true
+      }
+      const permissionGranted = await PushNotifier.getPermission()
+      if (permissionGranted) {
+        const token = await PushNotifier.getToken()
+        // Logger.debug(token)
+        user.setFCMToken(token)
+        return true
+      } else {
+        user.setFCMToken(null)
+        return true
+      }
+    } catch (e) {
+      Logger.error(e)
+      return false
     }
   }
 

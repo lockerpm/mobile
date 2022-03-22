@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -26,7 +26,7 @@ type InputItem = {
 }
 
 
-export const IdentityEditScreen = observer(function IdentityEditScreen() {
+export const IdentityEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
@@ -36,7 +36,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 
-  // Params
+  // ------------------ PARAMS -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -61,10 +61,10 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
   const [country, setCountry] = useState(mode !== 'add' ? selectedCipher.identity.country : '')
   const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
+  const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
-  // Watchers
+  // ------------------ EFFECTS -----------------------
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -81,7 +81,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
     return unsubscribe
   }, [navigation])
 
-  // Methods
+  // ----------------- METHODS ----------------------
 
   const handleSave = async () => {
     setIsLoading(true)
@@ -131,14 +131,9 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
     }
   }
 
-  // Render
+  // ----------------- RENDER ----------------------
 
   const contactDetails: InputItem[] = [
-    {
-      label: translate('identity.title'),
-      value: title,
-      setter: setTitle
-    },
     {
       label: translate('identity.first_name'),
       value: firstName,
@@ -230,6 +225,25 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
     },
   ]
 
+  const TITLES = [
+    {
+      label: 'mr',
+      value: 'mr'
+    },
+    {
+      label: 'mrs',
+      value: 'mrs'
+    },
+    {
+      label: 'ms',
+      value: 'ms'
+    },
+    {
+      label: 'dr',
+      value: 'dr'
+    }
+  ]
+
   return (
     <Layout
       isContentOverlayLoading={isLoading}
@@ -274,7 +288,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
-              label="Name"
+              label={translate('common.item_name')}
               value={name}
               onChangeText={setName}
             />
@@ -297,6 +311,14 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
           paddingBottom: 32
         }]}
       >
+        <Select
+          floating
+          placeholder={translate('identity.title')}
+          value={title}
+          options={TITLES}
+          onChange={val => setTitle(val.toString())}
+        />
+
         {
           contactDetails.map((item, index) => (
             <FloatingInput
@@ -307,7 +329,7 @@ export const IdentityEditScreen = observer(function IdentityEditScreen() {
               value={item.value}
               onChangeText={(text) => item.setter(text)}
               style={{
-                marginTop: index !== 0 ? 20 : 0
+                marginTop: 20
               }}
             />
           ))

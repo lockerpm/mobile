@@ -388,6 +388,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
                   <Text
                     preset="semibold"
                     text={item.name}
+                    numberOfLines={2}
                   />
 
                   {/* Pending status */}

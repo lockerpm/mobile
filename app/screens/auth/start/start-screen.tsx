@@ -12,7 +12,7 @@ import { IS_IOS } from "../../../config/constants"
 
 export const StartScreen = observer(function StartScreen() {
   const { user, uiStore } = useStores()
-  const { isBiometricAvailable, translate } = useMixins()
+  const { isBiometricAvailable, translate, boostrapPushNotifier } = useMixins()
   const { loadFolders, loadCollections, syncAutofillData, loadOrganizations } = useCipherDataMixins()
   const { loadPasswordsHealth } = useCipherToolsMixins()
   const navigation = useNavigation()
@@ -32,7 +32,15 @@ export const StartScreen = observer(function StartScreen() {
     // Sync
     if (connectionState.isConnected) {
       // Update FCM
-      user.updateFCM(user.fcmToken)
+      if (!user.disablePushNotifications) {
+        let isSuccess = true
+        if (!user.fcmToken) {
+          isSuccess = await boostrapPushNotifier()
+        }
+        if (isSuccess) {
+          user.updateFCM(user.fcmToken)
+        }
+      }
 
       // Sync teams and plan
       if (!uiStore.isFromAutoFill) {
@@ -69,7 +77,7 @@ export const StartScreen = observer(function StartScreen() {
     if (!uiStore.isFromAutoFill) {
       if (!user.biometricIntroShown) {
         const available = await isBiometricAvailable()
-        if (available) {
+        if (available && !user.isBiometricUnlock) {
           navigation.navigate('biometricUnlockIntro')
           return
         }

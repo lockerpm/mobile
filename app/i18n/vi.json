@@ -33,6 +33,7 @@
     "home": "Tất cả",
     "identity": "Danh tính",
     "item": "mục",
+    "item_name": "Tên mục",
     "items": "mục",
     "language": "Ngôn ngữ",
     "length": "Độ dài",
@@ -87,7 +88,7 @@
     "unlock": "Mở khóa",
     "upgrade": "Nâng cấp",
     "user": "Người dùng",
-    "username": "Username",
+    "username": "Tên người dùng",
     "warning": "Cảnh báo",
     "website": "Website"
   },
@@ -112,7 +113,7 @@
     "something_went_wrong": "Đã có lỗi xảy ra",
     "sync_failed": "Đồng bộ hóa không thành công",
     "token_expired": "Phiên của bạn đã hết hạn",
-    "no_associated_account": "Không có tài khoản nào sử dụng email hoặc username này. Vui lòng thử lại hoặc tạo tài khoản mới.",
+    "no_associated_account": "Không có tài khoản nào sử dụng email hoặc tên người dùng này. Vui lòng thử lại hoặc tạo tài khoản mới.",
     "invalid_authorization_code": "Mã xác nhận không hợp lệ",
     "invalid_data": "Dữ liệu không hợp lệ",
     "invalid_password": "Mật khẩu không hợp lệ",
@@ -210,7 +211,7 @@
   },
   "forgot_password": {
     "title": "Quên mật khẩu ?",
-    "username_or_email": "Nhập địa chỉ email hoặc username",
+    "username_or_email": "Nhập địa chỉ email hoặc tên người dùng",
     "request": "Khôi phục",
     "select_method": "Chọn phương thức xác thực:",
     "enter_code": "Nhập mã",
@@ -258,6 +259,7 @@
     }
   },
   "folder": {
+    "folder_name": "Tên thư mục",
     "unassigned": "Không xác định",
     "item_moved": "Chuyển đến thư mục mới thành công",
     "add_to_folder": "Thêm vào thư mục",
@@ -286,7 +288,7 @@
     "title": "Tiêu đề",
     "first_name": "Tên",
     "last_name": "Họ",
-    "username": "Username",
+    "username": "Tên người dùng",
     "email": "Email",
     "company": "Công ty",
     "phone": "Số điện thoại",
@@ -313,17 +315,17 @@
     "copy_note": "Sao chép ghi chú",
     "empty": {
       "title": "Thêm ghi chú đầu tiên của bạn",
-      "desc": "Ghi lại mã WiFi, mã báo vào cửa hoặc sinh nhật của bạn bè bạn",
+      "desc": "Ghi lại các thông tin riêng tư quan trọng của bạn",
       "btn": "Thêm ghi chú"
     }
   },
   "password": {
     "login_details": "Thông tin đăng nhập",
-    "username": "Email / Username",
+    "username": "Email / Tên người dùng",
     "website_url": "Địa chỉ website",
     "password_security": "Mức độ bảo mật",
     "launch_website": "Mở website",
-    "copy_username": "Sao chép Email / Username",
+    "copy_username": "Sao chép Email / Tên người dùng",
     "copy_password": "Sao chép mật khẩu",
     "empty": {
       "title": "Khỏi lo quên mật khẩu",
@@ -333,7 +335,7 @@
   },
   "shares": {
     "shares": "Chia sẻ",
-    "share_items": "Bạn chia sẻ",
+    "share_items": "Bạn đã chia sẻ",
     "shared_items": "Được chia sẻ với bạn",
     "empty": {
       "title": "Chia sẻ tài nguyên một cách an toàn",
@@ -342,10 +344,10 @@
     },
     "add_emails": "Thêm email người nhận",
     "share_type": {
-      "label": "Loại chia sẻ",
-      "view": "Xem",
-      "only_fill": "Chỉ tự động điền",
-      "edit": "Sửa"
+      "label": "Quyền hạn",
+      "view": "Có thể xem",
+      "only_fill": "Chỉ sử dụng",
+      "edit": "Có thể chỉnh sửa"
     },
     "leave": "Thoát chia sẻ",
     "leave_desc": "Bạn có chắc muốn xoá mục chia sẻ này?",
@@ -373,8 +375,8 @@
     }
   },
   "all_items": {
-    "last_updated": "Thời gian giảm dần",
-    "first_updated": "Thời gian tăng dần",
+    "last_updated": "Mới nhất",
+    "first_updated": "Cũ nhất",
     "empty": {
       "title": "Thêm mật khẩu đầu tiên của bạn",
       "desc": "Tạo mật khẩu đầu tiên để bắt đầu xây dựng kho của bạn",
@@ -419,7 +421,7 @@
     "scan_a_qr": "Quét mã QR",
     "import_from_google_authenticator": "Nhập từ Google Authenticator",
     "invalid_qr": "Mã QR không hợp lệ! Vui lòng thử lại",
-    "enter_key": "Nhập khoá bí mật",
+    "enter_key": "Nhập mã cài đặt",
     "invalid_key": "Khóa không hợp lệ",
     "empty": {
       "title": "Bảo vệ tài khoản của bạn",
@@ -429,7 +431,7 @@
     "secret_key": "Mã khoá"
   },
   "pass_health": {
-    "title": "Sức khỏe mật khẩu",
+    "title": "Mức độ bảo mật của mật khẩu",
     "desc": "Xác định các mật khẩu yếu, trùng lặp có thể khiến bạn bị tấn công bởi tội phạm mạng",
     "weak_passwords": {
       "name": "Mật khẩu yếu",
@@ -476,11 +478,11 @@
     "on_app_close": "Khi tắt ứng dụng",
     "on_screen_off": "Khi tắt màn hình",
     "timeout": "Hẹn giờ",
-    "timeout_action": "Hành động khi hết giờ",
+    "timeout_action": "Tự động khoá",
     "import_export": "Nhập và xuất dữ liệu",
     "import": "Nhập dữ liệu",
     "export": "Xuất dữ liệu",
-    "sync_now": "Dồng bộ dữ liệu",
+    "sync_now": "Đồng bộ dữ liệu",
     "theme": "Chủ đề",
     "dark_theme": "Tối",
     "light_theme": "Sáng",
@@ -522,7 +524,7 @@
       "btn": "Thêm tài sản"
     },
     "copy_seed": "Sao chép Seed Phrase",
-    "copy_username": "Sao chép Username",
+    "copy_username": "Sao chép tên người dùng",
     "copy_password": "Sao chép mật khẩu",
     "email_recovery": "Email khôi phục",
     "seed": "Seed Phrase",
