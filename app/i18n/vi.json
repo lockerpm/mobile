@@ -545,29 +545,29 @@
     "price" :{
       "per": {
         "monthly": {
-          "title": "$4.99/ 1 tháng",
+          "title": "$4.99/ tháng",
           "subtitle": "Thanh toán hàng tháng",
           "sale": "",
           "pay_title": "Mua ngay với $4.99"
         },
         "yearly": {
-          "title": "$1.29/ 1 tháng",
-          "subtitle": "$15.48 hoá đơn với 12 tháng",
-          "sale": "tiết kiệm đến 75%",
-          "pay_title": "Nâng cấp ngay với $15.48"
+          "title": "$1.29/ tháng",
+          "subtitle": "$15.49/ năm",
+          "sale": "tiết kiệm 75%",
+          "pay_title": "Nâng cấp ngay với $15.49"
         }
       },
       "fam": {
         "yearly": {
-          "title": "$0.99/ 1 tháng",
-          "subtitle": "$71.88 hoá đơn mỗi 12 tháng",
-          "sale": "tiết kiệm đến 80%",
-          "pay_title": "Nâng cấp ngay với $71.88"
+          "title": "$0.99/ thành viên/ tháng",
+          "subtitle": "$71.99/ 6 thành viên/ năm",
+          "sale": "tiết kiệm 80%",
+          "pay_title": "Nâng cấp ngay với $71.99"
         },
         "monthly": {
-          "title": "$1.6/ month",
-          "subtitle": "$9.99 hoá đơn hàng tháng",
-          "sale": "tiết kiệm đến 67%",
+          "title": "$1.6/ thành viên/ tháng",
+          "subtitle": "$9.99/ 6 thành viên/ năm",
+          "sale": "tiết kiệm 67%",
           "pay_title": "Nâng cấp ngay với $9.99"
         }
       }
@@ -575,7 +575,7 @@
   },
   "manage_plan": {
     "usage": {
-      "title": "Plan Usage",
+      "title": "Lưu lượng đã sử dụng",
       "login": "Mật khẩu",
       "card": "Thẻ thanh toán",
       "identity": "Định danh",
