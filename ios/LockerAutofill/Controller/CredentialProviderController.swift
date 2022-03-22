@@ -72,6 +72,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
 
   override func prepare(for segue: UIStoryboardSegue, sender: Any?)
   {
+    if (self.dataModel.loginedLocker){
       if segue.identifier == "loginListSegue"
       {
         let loginListView = (segue.destination as! UINavigationController).topViewController as! LoginListViewController
@@ -82,6 +83,7 @@ class CredentialProviderController: ASCredentialProviderViewController {
         let verifyMasterPasswordScreen = segue.destination as! VerifyMasterPasswordViewController
         verifyMasterPasswordScreen.delegate = self
       }
+    }
   }
   private func performVerifyPasswordScreen(){
      performSegue(withIdentifier: "verifyMasterPasswordSegue", sender: self)
