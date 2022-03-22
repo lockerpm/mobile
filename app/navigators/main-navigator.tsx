@@ -352,7 +352,14 @@ export const MainNavigator = observer(() => {
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
-        <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} initialParams={{ fromTools: false }} />
+        <Stack.Screen 
+          name="passwordGenerator" 
+          component={PasswordGeneratorScreen} 
+          initialParams={{ fromTools: false }}
+          options={{
+            gestureEnabled: false
+          }}
+        />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="googleAuthenticatorImport" component={GoogleAuthenticatorImportScreen} />

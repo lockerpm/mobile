@@ -85,7 +85,7 @@ export const MenuScreen = observer(() => {
       icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: '(DEBUG) Show toast',
       action: () => {
-        notify('error', 'test')
+        notify('error', 'Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)')
       }
     },
     {

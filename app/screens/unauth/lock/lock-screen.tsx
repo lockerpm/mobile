@@ -10,6 +10,7 @@ import { APP_ICON } from "../../../common/mappings"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 import { IS_IOS } from "../../../config/constants"
+import ReactNativeBiometrics from 'react-native-biometrics'
 
 
 export const LockScreen = observer(() => {
@@ -26,6 +27,7 @@ export const LockScreen = observer(() => {
   const [isBioUnlocking, setIsBioUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [biometryType, setBiometryType] = useState<'faceid' | 'touchid' | 'biometric'>('biometric')
 
   // ---------------------- METHODS -------------------------
 
@@ -78,6 +80,16 @@ export const LockScreen = observer(() => {
       notify('success', translate('lock.hint_sent'), 5000)
     } else {
       notifyApiError(res)
+    }
+  }
+
+  // Detect biometric type
+  const dectectbiometryType = async () => {
+    const { biometryType } = await ReactNativeBiometrics.isSensorAvailable()
+    if (biometryType === ReactNativeBiometrics.TouchID) {
+      setBiometryType('touchid')
+    } else if (biometryType === ReactNativeBiometrics.FaceID) {
+      setBiometryType('faceid')
     }
   }
 
@@ -153,11 +165,13 @@ export const LockScreen = observer(() => {
     }
   }, [navigation])
 
-  // Auto trigger face id / touch id
+  // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
     if (user.isBiometricUnlock) {
       !__DEV__ && handleUnlockBiometric()
     }
+
+    dectectbiometryType()
   }, [])
 
   // ---------------------- RENDER -------------------------
@@ -255,13 +269,13 @@ export const LockScreen = observer(() => {
         >
           <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginHorizontal: 5 }]}>
             <MaterialCommunityIconsIcon
-              name="face-recognition"
+              name={biometryType === 'faceid' ? "face-recognition" : 'fingerprint'}
               size={20}
               color={color.textBlack}
             />
             <Text
               preset="black"
-              text={translate("common.biometric_unlocking")}
+              text={translate(`common.${biometryType}_unlocking`)}
               style={{ marginLeft: 7 }}
             />
           </View>
