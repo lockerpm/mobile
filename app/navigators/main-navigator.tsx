@@ -122,7 +122,7 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export const MainNavigator = observer(() => {
   const navigation = useNavigation()
-  const { notify, translate } = useMixins()
+  const { notify, translate, parsePushNotiData } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { 
     getCipherById, syncAutofillData, syncSingleCipher, syncSingleFolder, syncOfflineData, startSyncProcess
@@ -178,12 +178,12 @@ export const MainNavigator = observer(() => {
     cipherStore.loadMyShares()
   }
 
-  // App screen lock trigger
+  // On app return from background -> lock? + sync autofill data + check push noti navigation
   const _handleAppStateChange = async (nextAppState: string) => {
     Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
-    if (nextAppState === 'background') {
+    if (nextAppState !== 'active') {
       appIsActive = false
       return
     }
@@ -194,22 +194,33 @@ export const MainNavigator = observer(() => {
     }
 
     // Active
-    if (!appIsActive && user.appTimeout === AppTimeoutType.SCREEN_OFF) {
+    if (!appIsActive) {
       appIsActive = true
 
-      // Dont lock if user just return from overlay task
-      if (uiStore.isPerformOverlayTask) {
-        uiStore.setIsPerformOverlayTask(false)
+      // Check lock screen
+      if (user.appTimeout === AppTimeoutType.SCREEN_OFF) {
+        // Dont lock if user just return from overlay task
+        if (uiStore.isPerformOverlayTask) {
+          uiStore.setIsPerformOverlayTask(false)
+          return
+        }
+
+        // Check user settings to lock
+        if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
+          await logout()
+          navigation.navigate('onBoarding')
+        } else {
+          await lock()
+          navigation.navigate('lock')
+        }
         return
       }
 
-      // Check user settings to lock
-      if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
-        await logout()
-        navigation.navigate('onBoarding')
-      } else {
-        await lock()
-        navigation.navigate('lock')
+      // Check push noti data
+      const navigationRequest = await parsePushNotiData()
+      if (navigationRequest.path) {
+        navigation.navigate(navigationRequest.path, navigationRequest.params)
+        return
       }
     }
   }

@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { load, storageKeys } from "../../../utils/storage"
+import { load, StorageKey } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
@@ -28,7 +28,7 @@ export const InitScreen = observer(() => {
   }
 
   const checkAutoFill = async () => {
-    const autoFillData = await load(storageKeys.APP_FROM_AUTOFILL)
+    const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL)
     if (autoFillData && autoFillData.enabled) {
       uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
       uiStore.setIsFromAutoFill(true)
