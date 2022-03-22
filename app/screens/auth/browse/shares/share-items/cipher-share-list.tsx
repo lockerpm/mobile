@@ -274,6 +274,7 @@ export const CipherShareList = observer((props: Props) => {
                   <Text
                     preset="semibold"
                     text={item.name}
+                    numberOfLines={2}
                     style={{
                       marginRight: item.status ? 10 : 0
                     }}

@@ -43,7 +43,7 @@ export const CryptoWalletEditScreen = observer(() => {
   const [seed, setSeed] = useState(mode !== 'add' ? cryptoWalletData.seed : '           ')
   const [note, setNote] = useState(mode !== 'add' ? cryptoWalletData.notes : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
+  const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
   const [isLoading, setIsLoading] = useState(false)
@@ -158,7 +158,7 @@ export const CryptoWalletEditScreen = observer(() => {
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
-              label={translate('common.name')}
+              label={translate('common.item_name')}
               value={name}
               onChangeText={setName}
             />

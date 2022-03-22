@@ -11,7 +11,7 @@ import { BackHandler, Appearance } from "react-native"
 import { useMixins } from "../../../services/mixins"
 
 
-export const InitScreen = observer(function InitScreen() {
+export const InitScreen = observer(() => {
   const { user, cipherStore, uiStore } = useStores()
   const navigation = useNavigation()
   const theme = Appearance.getColorScheme()
@@ -40,15 +40,20 @@ export const InitScreen = observer(function InitScreen() {
   }
 
   const mounted = async () => {
+    const connectionState = await NetInfo.fetch()
+
+    // Setup basic data
     user.setLanguage(user.language)
     user.setDeviceID(DeviceInfo.getUniqueId())
     cipherStore.setIsSynching(false)
-
     if (uiStore.isDark === null) {
       uiStore.setIsDark(theme === 'dark')
     }
 
-    await boostrapPushNotifier()
+    // Reload FCM
+    if (connectionState.isConnected) {
+      await boostrapPushNotifier()
+    }
 
     // Check autofill
     const isAutoFill = await checkAutoFill()
@@ -71,7 +76,6 @@ export const InitScreen = observer(function InitScreen() {
     }
 
     // Network connected? || Is autofill?
-    const connectionState = await NetInfo.fetch()
     if (!connectionState.isConnected || isAutoFill) {
       goLockOrCreatePassword()
       return

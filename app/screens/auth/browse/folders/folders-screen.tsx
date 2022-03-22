@@ -211,6 +211,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                         <Text
                           preset="semibold"
                           text={item.name || translate('folder.unassigned')}
+                          numberOfLines={2}
                         />
 
                         {

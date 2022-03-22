@@ -5,8 +5,7 @@ import { UserApi } from "../../services/api/user-api"
 import { save, storageKeys, remove } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
-import { number } from "mobx-state-tree/dist/internal"
-import { IS_IOS } from "../../config/constants"
+import moment from "moment"
 
 
 export enum AppTimeoutType {
@@ -143,6 +142,46 @@ export const UserModel = types
     setLanguage: (lang: string) => {
       self.language = lang
       setLang(lang)
+      switch (lang) {
+        case 'vi':
+          moment.updateLocale('vi', {
+            months: 'tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12'.split('_'),
+            monthsShort: 'Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12'.split('_'),
+            relativeTime: {
+              future: '%s tới',
+              past: '%s trước',
+              s: 'Vài giây',
+              m: '1 phút',
+              mm: '%d phút',
+              h: '1 giờ',
+              hh: '%d giờ',
+              d: '1 ngày',
+              dd: '%d ngày',
+              M: '1 tháng',
+              MM: '%d tháng',
+              y: '1 năm',
+              yy: '%d năm'
+            },
+            longDateFormat: {
+              LT: 'HH:mm',
+              LTS: 'HH:mm:ss',
+              L: 'DD/MM/YYYY',
+              LL: 'D MMMM [năm] YYYY',
+              LLL: 'D MMMM [năm] YYYY HH:mm',
+              LLLL: 'dddd, D MMMM [năm] YYYY HH:mm',
+              l: 'DD/M/YYYY',
+              ll: 'D MMM YYYY',
+              lll: 'D MMM YYYY HH:mm',
+              llll: 'ddd, D MMM YYYY HH:mm'
+            },
+            week: {
+              dow: 1 // Monday is the first day of the week.
+            }
+          })
+          break
+        default:
+          moment.locale('en')
+      }
       save(storageKeys.APP_CURRENT_USER, {
         language: lang,
         pwd_user_id: self.pwd_user_id

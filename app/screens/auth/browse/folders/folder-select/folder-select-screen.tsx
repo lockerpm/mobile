@@ -18,7 +18,7 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
 
 
-export const FolderSelectScreen = observer(function FolderSelectScreen() {
+export const FolderSelectScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<FolderSelectScreenProp>()
   const { mode, initialId, cipherIds = [] } = route.params
@@ -160,9 +160,11 @@ export const FolderSelectScreen = observer(function FolderSelectScreen() {
                 flex: 1,
                 marginLeft: 10
               }]}>
-                <Text preset="black">
-                  {item.name}
-                </Text>
+                <Text
+                  preset="black"
+                  text={item.name}
+                  numberOfLines={2}
+                />
 
                 {
                   ([...folderStore.notSynchedFolders, ...folderStore.notUpdatedFolders].includes(item.id)) && (
