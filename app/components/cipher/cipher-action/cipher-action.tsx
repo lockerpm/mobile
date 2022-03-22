@@ -271,6 +271,16 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
 
                 <ActionItem
                   disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+                  name={translate('common.details')}
+                  icon="list-alt"
+                  action={() => {
+                    onClose()
+                    navigation.navigate(`${cipherMapper.path}__info`)
+                  }}
+                />
+
+                <ActionItem
+                  disabled={uiStore.isOffline && !!selectedCipher.organizationId}
                   name={translate('common.edit')}
                   icon="edit"
                   action={() => {

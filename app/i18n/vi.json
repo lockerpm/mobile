@@ -62,6 +62,7 @@
     "owned_by": "Sở hữu bởi",
     "ownership": "Quyền sở hữu",
     "password": "Mật khẩu",
+    "password_not_match": "Mật khẩu không khớp",
     "phone": "Điện thoại",
     "push_notifications": "Thông báo đẩy",
     "regenerate": "Tạo lại",

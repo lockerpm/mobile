@@ -354,7 +354,8 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
               if (isSelecting) {
                 toggleItemSelection(item)
               } else {
-                goToDetail(item)
+                // goToDetail(item)
+                openActionMenu(item)
               }
             }}
             onLongPress={() => !item.isShared && toggleItemSelection(item)}
@@ -451,22 +452,23 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
                     }}
                   />
                 ) : (
-                  <Button
-                    preset="link"
-                    onPress={() => openActionMenu(item)}
-                    style={{ 
-                      height: 40,
-                      width: 40,
-                      justifyContent: 'flex-end',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <IoniconsIcon
-                      name="ellipsis-horizontal"
-                      size={18}
-                      color={color.textBlack}
-                    />
-                  </Button>
+                  <View />
+                  // <Button
+                  //   preset="link"
+                  //   onPress={() => openActionMenu(item)}
+                  //   style={{ 
+                  //     height: 40,
+                  //     width: 40,
+                  //     justifyContent: 'flex-end',
+                  //     alignItems: 'center'
+                  //   }}
+                  // >
+                  //   <IoniconsIcon
+                  //     name="ellipsis-horizontal"
+                  //     size={18}
+                  //     color={color.textBlack}
+                  //   />
+                  // </Button>
                 )
               }
             </View>

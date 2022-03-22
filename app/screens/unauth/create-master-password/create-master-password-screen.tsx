@@ -165,6 +165,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         <FloatingInput
           isPassword
           isInvalid={isError}
+          errorText={translate('common.password_not_match')}
           label={translate('common.master_pass')}
           onChangeText={(text) => {
             setMasterPassword(text)
@@ -186,6 +187,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         <FloatingInput
           isPassword
           isInvalid={isError}
+          errorText={translate('common.password_not_match')}
           label={translate('create_master_pass.confirm_master_pass')}
           onChangeText={setConfirmPassword}
           value={confirmPassword}

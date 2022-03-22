@@ -62,6 +62,7 @@
     "owned_by": "Owned by",
     "ownership": "Ownership",
     "password": "Password",
+    "password_not_match": "Passwords don't match",
     "phone": "Phone",
     "push_notifications": "Push Notifications",
     "regenerate": "Regenerate",
