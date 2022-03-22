@@ -355,6 +355,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
           options={settings.timeout.options}
           renderSelected={({ label }) => (
             <SettingsItem
+              noBorder
               style={{ width: '100%' }}
               name={translate('settings.timeout')}
               right={(
@@ -365,8 +366,9 @@ export const SettingsScreen = observer(function SettingsScreen() {
         />
         {/* Timeout end */}
 
+        {/* TODO: disable for now */}
         {/* Timeout action */}
-        <Select
+        {/* <Select
           value={settings.timeoutAction.value}
           onChange={settings.timeoutAction.onChange}
           options={settings.timeoutAction.options}
@@ -380,7 +382,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
               )}
             />
           )}
-        />
+        /> */}
         {/* Timeout action end */}
       </View>
       {/* Security end */}

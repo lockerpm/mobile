@@ -21,10 +21,10 @@ export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [sortList, setSortList] = useState({
-    orderField: 'name',
-    order: 'asc'
+    orderField: 'revisionDate',
+    order: 'desc'
   })
-  const [sortOption, setSortOption] = useState('az')
+  const [sortOption, setSortOption] = useState('last_updated')
   const [isLoading, setIsLoading] = useState(false)
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)

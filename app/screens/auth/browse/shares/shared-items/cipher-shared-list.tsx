@@ -79,7 +79,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     cipher.isShared = true
     cipher.id = i.id
     cipher.organizationId = i.team.id
-    cipher.name = 'N/A'
+    cipher.name = `(${translate('shares.encrypted_content')})`
     switch (i.cipher_type) {
       case CipherType.Login: {
         cipher.logo = BROWSE_ITEMS.password.icon

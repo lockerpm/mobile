@@ -438,6 +438,9 @@ export const CipherList = observer((props: CipherListProps) => {
                     onValueChange={() => {
                       toggleItemSelection(item)
                     }}
+                    style={{
+                      marginLeft: 15
+                    }}
                   />
                 ) : (
                   <Button
