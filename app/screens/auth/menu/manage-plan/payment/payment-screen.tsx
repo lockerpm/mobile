@@ -61,40 +61,44 @@ export const PaymentScreen = observer(function PaymentScreen() {
       Logger.error({ 'initConnection': err })
       Alert.alert('Fail to get in-app-purchase information');
     }
+    if (IS_IOS) {
+      RNIap.clearTransactionIOS()
+    } else {
+      RNIap.flushFailedPurchasesCachedAsPendingAndroid();
+    }
 
-    RNIap.clearTransactionIOS()
 
     purchaseUpdateSubscription = purchaseUpdatedListener(
       async (purchase: SubscriptionPurchase) => {
-        setIsContentOverlayLoading(true)
-        console.log("--------------------------------------------")
-        var verified: boolean = false;
-        
-        // if (IS_IOS) {
-        //   verified = await user.purchaseValidation(purchase.transactionReceipt)
-        // } else {
-        //   verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
-        // }
-        // if (!verified) {
-        //   // conclude the purchase is fraudulent, etc...
-        //   setIsContentOverlayLoading(false)
-        //   Alert.alert(
-        //     "Purchase Verification",
-        //     "Locker can not verify your purchase",
-        //     [
-        //       { text: "OK", onPress: () =>{}}
-        //     ]
-        //   )
-        // } else {
-        try {
-          const ackResult = await finishTransaction(purchase);
-          Logger.debug({ 'ackResult': ackResult });
-          setIsContentOverlayLoading(false)
-          navigation.navigate("mainTab")
-        } catch (ackErr) {
-          Logger.error({ 'ackErr': ackErr });
+        if (purchase) {
+          setIsContentOverlayLoading(true)
+          var verified: boolean = false;
+
+          if (IS_IOS) {
+            verified = await user.purchaseValidation(purchase.transactionReceipt, purchase.productId, purchase.originalTransactionIdentifierIOS )
+          } else {
+            verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
+          }
+          try {
+            const ackResult = await finishTransaction(purchase);
+            Logger.debug({ 'ackResult': ackResult });
+          } catch (ackErr) {
+            Logger.error({ 'ackErr': ackErr });
+          }
+
+          if (!verified) {
+            Alert.alert(
+              "Purchase Verification",
+              "Locker can not verify your purchase",
+              [
+                { text: "OK", onPress: () => { } }
+              ]
+            )
+          } else {
+            setIsContentOverlayLoading(false)
+            navigation.navigate("mainTab")
+          }
         }
-        // }
       },
     );
 
@@ -126,14 +130,18 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const purchase = (productId: string): void => {
 
     RNIap.requestSubscription(productId)
-    .catch((e) => {
-      if (e.code === 'E_USER_CANCELLED') {
-        return
-      } else {
-        Logger.error(JSON.stringify(e))
-      }
-    });
-  
+      .then((e) => {
+        Logger.debug("a lololololololoololololololo")
+        Logger.debug(JSON.stringify(e))
+      })
+      .catch((error) => {
+        if (error.code === 'E_USER_CANCELLED') {
+          return
+        } else {
+          Logger.error(JSON.stringify(error))
+        }
+      });
+
   };
 
 
