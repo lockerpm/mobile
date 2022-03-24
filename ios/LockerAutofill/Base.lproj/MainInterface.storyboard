@@ -82,6 +82,9 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="16"/>
                                     <color key="baseForegroundColor" name="primary"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="cancel:" destination="vxG-7A-bij" eventType="touchUpInside" id="qxN-Ky-L7q"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Khm-HA-POC"/>
@@ -244,12 +247,20 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </tableView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="UJx-sW-kG0">
+                            <searchBar contentMode="center" semanticContentAttribute="spatial" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UJx-sW-kG0">
                                 <rect key="frame" x="0.0" y="44" width="375" height="50"/>
+                                <color key="backgroundColor" name="background"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="IoI-tr-Dxp"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="100" id="v9d-VU-HFV"/>
                                 </constraints>
+                                <color key="tintColor" name="text"/>
+                                <color key="barTintColor" name="background"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
                             </searchBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ky8-vK-JVj"/>
@@ -292,9 +303,9 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="UDN-UZ-Dpw">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" name="white"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" name="white"/>
+                        <color key="backgroundColor" name="background"/>
+                        <color key="tintColor" name="background"/>
+                        <color key="barTintColor" name="background"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" name="primary"/>
                         </textAttributes>
@@ -329,9 +340,6 @@
         </namedColor>
         <namedColor name="title">
             <color red="0.012000000104308128" green="0.10599999874830246" blue="0.3059999942779541" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="white">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

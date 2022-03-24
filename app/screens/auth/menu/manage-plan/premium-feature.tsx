@@ -6,7 +6,7 @@ import { useMixins } from "../../../../services/mixins"
 import { commonStyles } from "../../../../theme"
 import { useStores } from "../../../../models"
 import Modal from "react-native-modal";
-
+import { PlanType } from "../../../../config/types"
 
 
 export const PremiumFeature = () => {
@@ -15,14 +15,14 @@ export const PremiumFeature = () => {
     const navigation = useNavigation()
 
     const [modalVisible, setModalVisible] = useState(false);
-    const plan_free = user.plan.alias === "pm_free"
+    const isFreeAccount = user.plan?.alias === PlanType.FREE
 
     const item = {
         locker: {
             img: require("./assets/Locker.png"),
             desc: translate('manage_plan.feature.locker'),
             action: () => {
-                plan_free ? navigation.navigate("payment", { benefitTab: 0 })
+                isFreeAccount ? navigation.navigate("payment", { benefitTab: 0 })
                     : navigation.navigate('mainTab', { screen: 'homeTab' });
             }
         },
@@ -30,15 +30,16 @@ export const PremiumFeature = () => {
             img: require("./assets/EmergencyContact.png"),
             desc: translate('manage_plan.feature.emergency_contact.header'),
             action: () => {
-                plan_free ? navigation.navigate("payment", { benefitTab: 2 })
-                    : setModalVisible(true)
+                setModalVisible(true)
+                // isFreeAccount ? navigation.navigate("payment", { benefitTab: 2 })
+                //     : setModalVisible(true)
             }
         },
         web: {
             img: require("./assets/Web.png"),
             desc: translate('manage_plan.feature.web'),
             action: () => {
-                plan_free ? navigation.navigate("payment", { benefitTab: 1 })
+                isFreeAccount ? navigation.navigate("payment", { benefitTab: 1 })
                     : navigation.navigate('mainTab', { screen: 'toolsTab' });
             }
         },
@@ -46,7 +47,7 @@ export const PremiumFeature = () => {
             img: require("./assets/SharePassword.png"),
             desc: translate('manage_plan.feature.share_password'),
             action: () => {
-                plan_free ? navigation.navigate("payment", { benefitTab: 3 })
+                isFreeAccount ? navigation.navigate("payment", { benefitTab: 3 })
                     : navigation.navigate('mainTab', {
                         screen: 'browseTab',
                         params: {
@@ -86,11 +87,11 @@ export const PremiumFeature = () => {
             <View style={CENTER_VIEW} >
                 <Modal isVisible={modalVisible}>
                     <View style={{ backgroundColor: color.background, padding: 20, borderRadius: 16}}>
-                        <Image style={{alignSelf: "center"}} source={require("./assets/EmergencyContact.png")} />
+                        <Image style={{alignSelf: "center", height: 180}} source={require("./assets/EmergencyContact.png")} />
                         <Text preset="header">{translate('manage_plan.feature.emergency_contact.header')}</Text>
                         <Text preset="black" style={{marginTop: 12}}>{translate('manage_plan.feature.emergency_contact.text')}</Text>
                         <Text preset="black" style={{marginVertical: 16}}>{translate('manage_plan.feature.emergency_contact.link')}</Text>        
-                        <Button text="Got it" onPress={() => setModalVisible(false)} />
+                        <Button text={translate('manage_plan.feature.emergency_contact.button')} onPress={() => setModalVisible(false)} />
                          {/*                      
                         <TouchableOpacity  onPress={() => Linking.openURL("https://locker.io/settings/security")}>
                             <Text >Go to locker.io/vault</Text>

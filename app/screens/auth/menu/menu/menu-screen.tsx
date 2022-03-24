@@ -4,6 +4,8 @@ import { View, ScrollView, ViewStyle, TextStyle } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
+import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+import { PlanType } from "../../../../config/types"
 import { fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
@@ -22,7 +24,7 @@ import InviteIconLight from './invite-light.svg'
 import SettingsIconLight from './gear-light.svg'
 import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
-import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+
 import { PushNotifier } from "../../../../utils/push-notification"
 
 
@@ -44,20 +46,19 @@ export const MenuScreen = observer(() => {
     borderRadius: 10,
     paddingHorizontal: 14,
   }
-
+  
   const items: MenuItemProps[] = [
     {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
-      action: () => {
-        navigation.navigate('payment')
-      }
+      action: () => navigation.navigate('payment'),
+      hide: user.plan?.alias !== PlanType.FREE  
     },
-    // {
-    //   icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
-    //   name: translate('menu.invite'),
-    //   disabled: true
-    // },
+    {
+      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
+      name: translate('menu.invite'),
+      hide: user.plan?.alias !== PlanType.FAMILY  
+    },
     {
       icon: isDark ? <SettingsIconLight height={22} /> : <SettingsIcon height={22} />,
       name: translate('common.settings'),
@@ -128,13 +129,13 @@ export const MenuScreen = observer(() => {
 
   const item3 = {
     "pm_free": {
-      node: <Text text="FREE PLAN" style={[PLAN_NAME, { color: color.textBlack }]}></Text>,
+      node: <Text text="FREE" style={[PLAN_NAME, { color: color.textBlack }]}></Text>,
     },
     "pm_premium": {
-      node: <Text text="PREMIUM PERSONAL" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+      node: <Text text="PREMIUM" style={[PLAN_NAME, { color: color.primary }]}></Text>,
     },
     "pm_family": {
-      node: <Text text="PREMIUM FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+      node: <Text text="FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>,
     }
   }
 
@@ -173,7 +174,7 @@ export const MenuScreen = observer(() => {
               text={user.email}
             />
             {
-              user.plan && item3[user.plan.alias].node
+              user.plan && item3[user.plan.alias]?.node
             }     
           </View>
           <FontAwesome

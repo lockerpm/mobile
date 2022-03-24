@@ -558,21 +558,21 @@
         },
         "yearly": {
           "title": "$1.29/ month",
-          "subtitle": "$15.48 billed every 12 months",
+          "subtitle": "$15.49 billed every 12 months",
           "sale": "Save 75%",
-          "pay_title": "Upgrade now for $15.48"
+          "pay_title": "Upgrade now for $15.49"
         }
       },
       "fam": {
         "yearly": {
-          "title": "$0.99/ month",
-          "subtitle": "$71.88 billed every 12 months",
+          "title": "$0.99/ member/ month",
+          "subtitle": "$71.99/ 6 members, billed every 12 months",
           "sale": "Save 80%",
-          "pay_title": "Upgrade now for $71.88"
+          "pay_title": "Upgrade now for $71.99"
         },
         "monthly": {
-          "title": "$1.6/ month",
-          "subtitle": "$9.99 billed monthly",
+          "title": "$1.6/ member/ month",
+          "subtitle": "$9.99/ 6 members, billed monthly",
           "sale": "Save 67%",
           "pay_title": "Upgrade now for $9.99"
         }
@@ -581,7 +581,7 @@
   },
   "manage_plan": {
     "usage": {
-      "title": "Free Plan Usage",
+      "title": "Plan Usage",
       "login": "Passwords",
       "card": "Payment Cards",
       "identity": "Identities",
@@ -593,12 +593,12 @@
       "locker": "Unlimited items",
       "emergency_contact": {
         "header" : "Emergency Contact",
-        "text": "Add trusted contacts and grant them access to your Locker account in cases of emergencyt",
-        "link": "To add Emergency Contacts, go to Locker Web Vault at: locker.io/vault"
+        "text": "Add trusted contacts and grant them access to your Locker account in cases of emergency",
+        "link": "To add Emergency Contacts, go to Locker Web Vault at: locker.io/vault",
+        "button": "Got it"
       },
       "web": "Dark Web Monitoring",
       "share_password": "Share Passwords"
-
     },
     "free": {
       "button": "Increase unlimited with Premium"
