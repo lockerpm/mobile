@@ -9,7 +9,7 @@ import { APP_ICON } from "../../../common/mappings"
 import { IS_IOS } from "../../../config/constants"
 import { useStores } from "../../../models"
 
-export const OnboardingScreen = observer(function OnboardingScreen() {
+export const OnboardingScreen = observer(() => {
   const navigation = useNavigation()
   const { translate } = useMixins()
   const { uiStore } = useStores()
