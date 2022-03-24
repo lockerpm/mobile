@@ -23,6 +23,7 @@ import { ConstantsService } from './constants.service';
 import { sequentialize } from '../misc/sequentialize';
 import { EEFLongWordList } from '../misc/wordlist';
 import { Utils } from "../misc/utils"
+import { loadSecure, saveSecure } from '../../app/utils/storage';
 
 export const Keys = {
     key: 'key', // Master Key
@@ -259,6 +260,9 @@ export class CryptoService implements CryptoServiceAbstraction {
             return null;
         }
 
+        // TODO: remove this when RSA problem is fixed
+        const decOrgKeys = await loadSecure('decOrgKeys') || {};
+
         const orgKeys: Map<string, SymmetricCryptoKey> = new Map<string, SymmetricCryptoKey>();
         let setKey = false;
 
@@ -267,13 +271,34 @@ export class CryptoService implements CryptoServiceAbstraction {
                 continue;
             }
 
+            // TODO: remove this when RSA problem is fixed
+            if (decOrgKeys.hasOwnProperty(orgId)) {
+                const decValue = Utils.fromB64ToArray(decOrgKeys[orgId]).buffer;
+                orgKeys.set(orgId, new SymmetricCryptoKey(decValue));
+                setKey = true;
+                continue
+            }
+
             const decValue = await this.rsaDecrypt(encOrgKeys[orgId]);
             orgKeys.set(orgId, new SymmetricCryptoKey(decValue));
             setKey = true;
+
+            // TODO: remove this when RSA problem is fixed
+            decOrgKeys[orgId] = Utils.fromBufferToB64(decValue)
+        }
+
+        // TODO: remove this when RSA problem is fixed
+        for (const orgId in { ...decOrgKeys }) {
+            if (!encOrgKeys.hasOwnProperty(orgId)) {
+                delete decOrgKeys[orgId]
+            }
         }
 
         if (setKey) {
             this.orgKeys = orgKeys;
+
+            // TODO: remove this when RSA problem is fixed
+            await saveSecure('decOrgKeys', decOrgKeys)
         }
 
         return this.orgKeys;

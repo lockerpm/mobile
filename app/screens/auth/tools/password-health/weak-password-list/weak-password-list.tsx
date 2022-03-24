@@ -27,7 +27,6 @@ export const WeakPasswordList = observer(() => {
     }
   })
 
-
   // -------------- METHODS ------------------
 
   // Go to detail

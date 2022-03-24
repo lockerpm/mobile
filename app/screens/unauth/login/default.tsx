@@ -21,7 +21,7 @@ type Props = {
 }
 
 
-export const DefaultLogin = observer(function DefaultLogin(props: Props) {
+export const DefaultLogin = observer((props: Props) => {
   const { user, uiStore } = useStores()
   const { translate, notify, notifyApiError } = useMixins()
   const { setApiTokens } = useCipherAuthenticationMixins()
