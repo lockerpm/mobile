@@ -7,7 +7,6 @@ import { CipherView, LoginUriView, LoginView } from '../../../../core/models/vie
 import { FolderView } from '../../../../core/models/view/folderView'
 import { useStores } from '../../../models'
 import { useCoreService } from '../../core-service'
-import find from 'lodash/find'
 import { ImportCiphersRequest } from '../../../../core/models/request/importCiphersRequest'
 import { KvpRequest } from '../../../../core/models/request/kvpRequest'
 import { CipherType } from '../../../../core/enums'
@@ -25,6 +24,7 @@ import { AccountRoleText } from '../../../config/types'
 import { OrganizationData } from '../../../../core/models/data/organizationData'
 import { ImportResult } from '../../../../core/models/domain/importResult'
 import QueueManager from '../../../utils/queue'
+import { AppEventType, EventBus } from '../../../utils/event-bus'
 
 
 type GetCiphersParams = {
@@ -118,11 +118,13 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     ])
     if (cipherStore.selectedCipher && cipherStore.selectedCipher.name) {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
-      cipherStore.setSelectedCipher(updatedCipher)
+      if (updatedCipher.id) {
+        cipherStore.setSelectedCipher(updatedCipher)
+      }
     }
 
     await _updateAutofillData()
-
+    EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
   }
 
   // Reload offline cache of a single cipher only
@@ -145,12 +147,17 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     ])
     if (cipherStore.selectedCipher && cipherStore.selectedCipher.name) {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
-      cipherStore.setSelectedCipher(updatedCipher)
+      if (updatedCipher.id) {
+        cipherStore.setSelectedCipher(updatedCipher)
+      }
     }
     if (IS_IOS) {
       _updateAutofillData()
     }
     cipherStore.setLastCacheUpdate()
+    if (cipher?.type === CipherType.Login || !!deletedIds) {
+      EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
+    }
   }
 
   // Sync
@@ -607,9 +614,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     const ciphers = await getCiphers({
       deleted: false,
       searchText: '',
-      filters: []
+      filters: [c => c.id === id]
     })
-    return find(ciphers, e => e.id === id) || new CipherView()
+    return ciphers[0] || new CipherView()
   }
 
   // Get collections
