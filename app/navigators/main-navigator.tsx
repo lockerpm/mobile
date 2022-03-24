@@ -33,6 +33,7 @@ import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
 import { IS_IOS, WS_URL } from "../config/constants"
 import { Logger } from "../utils/logger"
 import { SocketEvent, SocketEventType } from "../config/types"
+import { AppEventType, EventBus } from "../utils/event-bus"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -330,6 +331,16 @@ export const MainNavigator = observer(() => {
       handleUserDataSync()
     }
   }, [uiStore.isOffline, user.isLoggedInPw])
+
+  // Recalculate password health
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.PASSWORD_UPDATE, () => {
+      loadPasswordsHealth()
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [user.isLoggedInPw])
 
   // ------------------ RENDER --------------------
   

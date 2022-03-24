@@ -32,6 +32,7 @@ export const AddAction = observer((props: Props) => {
         setNextModal(null)
         break
     }
+    onClose()
   }
 
   return (

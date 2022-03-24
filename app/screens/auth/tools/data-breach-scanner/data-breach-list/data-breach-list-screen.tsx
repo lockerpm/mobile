@@ -9,7 +9,7 @@ import { commonStyles, fontSize } from "../../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
 
-export const DataBreachListScreen = observer(function DataBreachListScreen() {
+export const DataBreachListScreen = observer(() => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
   const { toolStore } = useStores()

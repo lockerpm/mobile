@@ -67,7 +67,7 @@ export const PasswordStrength = function PasswordStrength(props: PasswordStrengt
               borderRadius: 4
             }}
             progressBackgroundColor={color.block}
-            backgroundColor={config[value].color}
+            backgroundColor={config[value]?.color}
             // @ts-ignore
             progress={(value + 1) / 5 * 100}
           />
@@ -78,15 +78,15 @@ export const PasswordStrength = function PasswordStrength(props: PasswordStrengt
         style={{
           marginTop: 5,
           fontSize: fontSize.small,
-          color: config[value].textColor || config[value].color
+          color: config[value]?.textColor || config[value]?.color
         }}
       >
         <IoniconsIcon
-          name={config[value].icon}
+          name={config[value]?.icon}
           size={14}
-          color={config[value].textColor || config[value].color}
+          color={config[value]?.textColor || config[value]?.color}
         />
-        {' ' + config[value].text}
+        {' ' + config[value]?.text}
       </Text>
     </View>
   )

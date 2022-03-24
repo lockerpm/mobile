@@ -20,7 +20,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
 
 
-export const PasswordEditScreen = observer(function PasswordEditScreen() {
+export const PasswordEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<PasswordEditScreenProp>()
   const { mode, initialUrl } = route.params
