@@ -16,7 +16,7 @@ import DeviceInfo from 'react-native-device-info'
 import { useMixins } from '..'
 import { Logger } from '../../../utils/logger'
 import { SymmetricCryptoKey } from '../../../../core/models/domain'
-import { remove, StorageKey } from '../../../utils/storage'
+import { remove, removeSecure, StorageKey } from '../../../utils/storage'
 
 
 const { createContext, useContext } = React
@@ -129,10 +129,8 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       // Offline compare
       if (uiStore.isOffline) {
         const storedKeyHash = await cryptoService.getKeyHash()
-        console.log("storedKeyHash: ", storedKeyHash);
         if (storedKeyHash) {
           const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
-          console.log("compareAndUpdateKeyHash: ", passwordValid);
           if (passwordValid) {
             messagingService.send('loggedIn')
   
@@ -324,6 +322,9 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
 
       // Reset push noti data
       await remove(StorageKey.PUSH_NOTI_DATA)
+
+      // TODO: remove this when RSA problem is fixed
+      await removeSecure('decOrgKeys')
 
       // Clear services
       await Promise.all([
