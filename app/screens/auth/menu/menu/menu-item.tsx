@@ -12,13 +12,14 @@ export type MenuItemProps = {
   noBorder?: boolean,
   action?: Function
   disabled?: boolean
+  hide?: boolean
   debug?: boolean
 }
 
 export const MenuItem = (props: MenuItemProps) => {
   const { color } = useMixins()
 
-  return !props.debug || __DEV__ ? (
+  return !props.hide && (!props.debug || __DEV__ )? (
     <Button
       isDisabled={props.disabled}
       preset="link"

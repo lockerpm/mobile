@@ -1,106 +1,147 @@
-import React, { useState, useEffect } from "react"
-import { View, StyleSheet, TouchableOpacity, Alert } from "react-native"
+import React, { useState, useEffect, useCallback } from "react"
+import { View, StyleSheet, TouchableOpacity, Alert, Image, EmitterSubscription, Platform } from "react-native"
 import { Text, Layout } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { observer } from "mobx-react-lite"
-import LinearGradient from "react-native-linear-gradient"
 import { PremiumBenefits } from "./premium-benefits"
 import { IS_IOS } from '../../../../../config/constants'
 import { PricePlan } from "./price-plan"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
-import { requestSubscription, useIAP, SubscriptionPurchase, PurchaseError } from 'react-native-iap';
+import { Logger } from "../../../../../utils/logger"
 
-// @ts-ignore
-import LockerPremium from "./LockerPremium.svg"
-// @ts-ignore
-import DeleteIcon from "./delete.svg"
-
+import RNIap, {
+  PurchaseError,
+  Subscription,
+  SubscriptionPurchase,
+  finishTransaction,
+  purchaseErrorListener,
+  purchaseUpdatedListener,
+} from 'react-native-iap';
 
 // control init premium benefit tab
 type ScreenProp = RouteProp<PrimaryParamList, 'payment'>;
 
+let purchaseUpdateSubscription: EmitterSubscription;
+let purchaseErrorSubscription: EmitterSubscription;
+
+const subSkus = Platform.select({
+  default: ["pm_family_monthly",
+    "pm_family_yearly",
+    "pm_premium_monthly",
+    "pm_premium_yearly"],
+});
+
+
+
 export const PaymentScreen = observer(function PaymentScreen() {
-  const {
-    connected,
-    subscriptions,
-    getSubscriptions,
-    finishTransaction,
-    currentPurchase,
-    currentPurchaseError,
-  } = useIAP();
-  const { translate, color } = useMixins()
+  const { translate, color, isDark } = useMixins()
   const { user } = useStores()
   const navigation = useNavigation();
   const route = useRoute<ScreenProp>();
 
   // -------------------- STATE ----------------------
+  const [subcriptions, setSubcriptions] = useState<Subscription[]>([])
+  const [loading, setLoading] = useState<boolean>(true);
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
-  const [purchased, setPurchased] = useState(false)
+  const [isContentOverlayLoading, setIsContentOverlayLoading] = useState(false)
 
 
-  
-  const subSkus = [
-    "pm_family_monthly",
-    "pm_family_yearly",
-    "pm_premium_monthly",
-    "pm_premium_yearly"
-  ]
+  const getSubscription = useCallback(async (): Promise<void> => {
 
-  useEffect(() => {
-    getSubscriptions(subSkus);
-  }, [ connected ,getSubscriptions]);
+    try {
+      const result = await RNIap.initConnection();
+      if (result === false) {
+        Alert.alert("couldn't get in-app-purchase information");
+        return;
+      }
+    } catch (err) {
+      Logger.error({ 'initConnection': err })
+      Alert.alert('Fail to get in-app-purchase information');
+    }
+    if (IS_IOS) {
+      RNIap.clearTransactionIOS()
+    } else {
+      RNIap.flushFailedPurchasesCachedAsPendingAndroid();
+    }
 
-  // useEffect(() => {
-  //   setReload(true)
-  // }, [subscriptions]);
 
-  useEffect(() => {
-    const checkCurrentPurchase = async (purchase?: SubscriptionPurchase): Promise<void> => {
-      if (purchase && !purchased) {
-        var verified: boolean = false;
-        // setIsLoading(true)
-        if (IS_IOS) {
-          verified = await user.purchaseValidation(purchase.transactionReceipt)
-        } {
-          console.log(purchase.purchaseToken, purchase.productId );
-          
-          verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId )
-        }
-        if (verified) {
+    purchaseUpdateSubscription = purchaseUpdatedListener(
+      async (purchase: SubscriptionPurchase) => {
+        if (purchase) {
+          setIsContentOverlayLoading(true)
+          var verified: boolean = false;
+
+          if (IS_IOS) {
+            verified = await user.purchaseValidation(purchase.transactionReceipt, purchase.productId, purchase.originalTransactionIdentifierIOS )
+          } else {
+            verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
+          }
           try {
             const ackResult = await finishTransaction(purchase);
-            console.log('ackResult', ackResult);
+            Logger.debug({ 'ackResult': ackResult });
           } catch (ackErr) {
-            console.warn('ackErr', ackErr);
+            Logger.error({ 'ackErr': ackErr });
           }
-          // setIsLoading(false)
-          navigation.navigate("mainTab")
-          
-        } else{
-          // conclude the purchase is fraudulent, etc...
-          // setIsLoading(false)
-          Alert.alert(
-            "Purchase Verification",
-            "Locker can not verify your purchase",
-            [
-              { text: "OK", onPress: () => console.log("OK Pressed") }
-            ]
-          )
-        }
 
+          if (!verified) {
+            Alert.alert(
+              "Purchase Verification",
+              "Locker can not verify your purchase",
+              [
+                { text: "OK", onPress: () => { } }
+              ]
+            )
+          } else {
+            setIsContentOverlayLoading(false)
+            navigation.navigate("mainTab")
+          }
+        }
+      },
+    );
+
+    purchaseErrorSubscription = purchaseErrorListener(
+      (error: PurchaseError) => {
+        Logger.error({ 'purchaseErrorListener': error });
+      },
+    );
+
+    const subscriptions = await RNIap.getSubscriptions(subSkus);
+    setSubcriptions(subscriptions);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    getSubscription();
+
+    return (): void => {
+      if (purchaseUpdateSubscription) {
+        purchaseUpdateSubscription.remove();
+      }
+      if (purchaseErrorSubscription) {
+        purchaseErrorSubscription.remove();
       }
     };
+  }, []);
 
-    checkCurrentPurchase(currentPurchase);
-  }, [currentPurchase, finishTransaction]);
 
-  const purchase = (subID : string) => {
-    console.log("request subId: ", subID);
-    requestSubscription(subID);
+  const purchase = (productId: string): void => {
+
+    RNIap.requestSubscription(productId)
+      .then((e) => {
+        Logger.debug("a lololololololoololololololo")
+        Logger.debug(JSON.stringify(e))
+      })
+      .catch((error) => {
+        if (error.code === 'E_USER_CANCELLED') {
+          return
+        } else {
+          Logger.error(JSON.stringify(error))
+        }
+      });
+
   };
 
 
@@ -116,15 +157,15 @@ export const PaymentScreen = observer(function PaymentScreen() {
       >
         <TouchableOpacity
           onPress={() => setPayIndividual(true)}
-          style={[styles.segmentItem, { backgroundColor: payIndividual ? color.text : color.block, left: 0 }]}
+          style={[styles.segmentItem, { backgroundColor: payIndividual ? color.background : color.block, left: 0 }, payIndividual && styles.shadow]}
         >
-          <Text preset="semibold" style={{ padding: 2, color:  color.white }}>{translate("payment.individual")}</Text>
+          <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.individual")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setPayIndividual(false)}
-          style={[styles.segmentItem, { backgroundColor: payIndividual ? color.block : color.text, right: 0  }]}
+          style={[styles.segmentItem, { backgroundColor: payIndividual ? color.block : color.background, right: 0 }, !payIndividual && styles.shadow]}
         >
-          <Text preset="semibold" style={{ padding: 2, color: color.white }}>{translate("payment.family")}</Text>
+          <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.family")}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -132,24 +173,38 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   // Render screen
   return (
-    <LinearGradient colors={[color.white, color.primary]} style={{ flex: 1 }}>
+    <Layout
+      // isContentLoading={loading}
+      isContentOverlayLoading={isContentOverlayLoading}
+      containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
+    >
       <View style={{ top: 0, height: "50%", position: "absolute", width: "100%", justifyContent: "space-between" }}>
-        <View style={[styles.header, { marginTop: IS_IOS ? 40 : 20}]}>
-          <LockerPremium />
+        <View style={styles.header}>
+          <Image
+            source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
+            style={{ height: 32, width: 152 }}
+          />
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <DeleteIcon />
+            <Image
+              source={require("./Cross.png")}
+              style={{ height: 24, width: 24 }}
+            />
           </TouchableOpacity>
         </View>
-        <View style={{ zIndex: 1 }}>
-          <PremiumBenefits benefitTab={route.params.benefitTab}  />
+        <View style={{ zIndex: 1, flex: 1 }}>
+          <PremiumBenefits benefitTab={route.params.benefitTab} />
         </View>
       </View>
 
       <View style={[styles.payment, { backgroundColor: color.background }]}>
         <Segment />
-        <PricePlan isLoading={isLoading} onPress={setEnable} isEnable={isEnable} personal={payIndividual} purchase={purchase}/>
+        <PricePlan
+          onPress={setEnable}
+          isEnable={isEnable}
+          personal={payIndividual}
+          purchase={purchase} />
       </View>
-    </LinearGradient>
+    </Layout>
   )
 })
 
@@ -158,31 +213,42 @@ const styles = StyleSheet.create({
     zIndex: 2,
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingTop: 15,
     width: "100%",
   },
   payment: {
-    flex: 1,
     bottom: 0,
     width: "100%",
     position: "absolute",
-    height: "50%",
+    height: "54%",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    marginTop: 15,
+    marginTop: 20,
   },
   segmentItem: {
     position: "absolute",
-    margin: 2, 
+    margin: 2,
     padding: 2,
     borderRadius: 6,
     width: "49%",
     alignItems: "center",
+
+  },
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   segment: {
     alignItems: "center",
     justifyContent: "space-between",
-    flexDirection:"row",
+    flexDirection: "row",
     marginLeft: 20,
     marginRight: 20,
     marginTop: 10,

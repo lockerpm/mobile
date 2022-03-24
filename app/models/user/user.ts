@@ -144,7 +144,7 @@ export const UserModel = types
       setLang(lang)
       switch (lang) {
         case 'vi':
-          moment.updateLocale('vi', {
+          moment.locale('vi', {
             months: 'tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12'.split('_'),
             monthsShort: 'Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12'.split('_'),
             relativeTime: {
@@ -429,9 +429,9 @@ export const UserModel = types
   }))
   .actions((self) => ({
     //receipt: 'receipt_data' for ios, 'purchase_token' for android
-    purchaseValidation :async (receipt?: string, subscriptionId?: string) => {
+    purchaseValidation :async (receipt?: string, subscriptionId?: string, originalTransactionIdentifierIOS?: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.purchaseValidation(self.apiToken, receipt, subscriptionId)
+      const res = await userApi.purchaseValidation(self.apiToken, receipt, subscriptionId, originalTransactionIdentifierIOS)
       if (res.kind === "ok") {
         if (res.data.success){
           await self.loadPlan()

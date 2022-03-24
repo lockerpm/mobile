@@ -8,6 +8,7 @@ import { commonStyles } from "../../../../theme"
 import ProgressBar from "react-native-ui-lib/progressBar"
 import { useCipherToolsMixins } from "../../../../services/mixins/cipher/tools"
 import { CipherType } from "../../../../../core/enums"
+import { PlanType } from "../../../../config/types"
 
 
 
@@ -78,7 +79,7 @@ export const PlanUsage = () => {
     const navigation = useNavigation()
     const { user } = useStores()
 
-    const is_free = user.plan.alias === "pm_free"
+    const isFreeAccount = user.plan?.alias === PlanType.FREE
     const items: PlanItemUsage[] = [
         {
             cipherType: CipherType.Login,
@@ -118,14 +119,14 @@ export const PlanUsage = () => {
         <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background, marginBottom: 10 }]}>
 
             <View style={USAGE_CONTAINER}>
-                <Text preset="default" text={user.plan.name + " Plan Usage"} style={{ marginBottom: 8 }} />
+                <Text preset="default" text={user.plan?.name + " Plan Usage"} style={{ marginBottom: 8 }} />
                 {
                     items.map(
-                        e => <ItemStorage key={e.cipherType} cipherType={e.cipherType} limits={e.limits} title={e.title} isUnlimited={!is_free}/>
+                        e => <ItemStorage key={e.cipherType} cipherType={e.cipherType} limits={e.limits} title={e.title} isUnlimited={!isFreeAccount}/>
                     )
                 }
             </View>
-            {is_free && <Button
+            {isFreeAccount && <Button
                 onPress={() => { navigation.navigate("payment") }}
                 text={translate('manage_plan.free.button')}
                 style={{ marginTop: 12 }}

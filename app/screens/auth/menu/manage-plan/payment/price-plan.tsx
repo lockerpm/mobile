@@ -1,9 +1,9 @@
 import React from "react"
-import { View, TouchableOpacity } from "react-native"
+import { View, TouchableOpacity, ViewStyle } from "react-native"
 import CheckBox from "@react-native-community/checkbox"
 import { Button, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
-import { observer } from "mobx-react-lite"
+
 
 interface PricePlanItemProps {
   onPress: () => void
@@ -27,6 +27,12 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
     >
       <View style={{ justifyContent: "center" }}>
         <CheckBox
+          tintColors={{ true: "black", false: color.text }}
+          onFillColor={color.textBlack}
+          tintColor={color.text}
+          onTintColor={color.textBlack}
+          animationDuration={0.3}
+          onCheckColor={color.background}
           style={{ margin: 16 }}
           disabled={false}
           value={prop.isEnable}
@@ -36,12 +42,25 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
 
       <View style={{ justifyContent: "center" }}>
         <View style={{ flexDirection: "row" }}>
-          <Text preset={prop.isEnable? "bold" : "default"} style={{ fontStyle: "normal" }}>{prop.title}</Text>
-          <Text preset={prop.isEnable? "black" : "default"} style={{ justifyContent: "center", color: "red", marginLeft: 8, fontSize: 12}}>
+          <Text
+            preset={prop.isEnable ? "bold" : "default"}
+            style={{ fontSize: 20, marginBottom: 4 }}
+          >
+            {prop.title}
+          </Text>
+          <Text
+            preset={prop.isEnable ? "black" : "default"}
+            style={{
+              justifyContent: "center",
+              color: "red",
+              marginLeft: 8,
+              fontSize: 14
+            }}
+          >
             {prop.onSale}
           </Text>
         </View>
-        <Text preset={prop.isEnable? "black" : "default"}>{prop.subtitle}</Text>
+        <Text preset={prop.isEnable ? "black" : "default"}>{prop.subtitle}</Text>
       </View>
     </TouchableOpacity>
   )
@@ -53,52 +72,58 @@ interface PricePlanProps {
   purchase: (subID: string) => void
   isEnable: boolean
   personal: boolean
-  isLoading: boolean
 }
 
-export const PricePlan = (prop: PricePlanProps) => { 
+export const PricePlan = (prop: PricePlanProps) => {
   const { translate, color } = useMixins()
   const planText = {
-    per : {
+    per: {
       monthly: {
         subId: "pm_premium_monthly",
         title: translate("payment.price.per.monthly.title"),
         subtitle: translate("payment.price.per.monthly.subtitle"),
-        onSale:  translate("payment.price.per.monthly.sale"),
+        onSale: translate("payment.price.per.monthly.sale"),
         pay_title: translate("payment.price.per.monthly.pay_title")
       },
       yearly: {
-        subId:  "pm_premium_yearly",
+        subId: "pm_premium_yearly",
         title: translate("payment.price.per.yearly.title"),
-        subtitle:  translate("payment.price.per.yearly.subtitle"),
+        subtitle: translate("payment.price.per.yearly.subtitle"),
         onSale: translate("payment.price.per.yearly.sale"),
-        pay_title:  translate("payment.price.per.yearly.pay_title")
+        pay_title: translate("payment.price.per.yearly.pay_title")
       },
     },
-    fam : {
+    fam: {
       monthly: {
         subId: "pm_family_monthly",
-        title:  translate("payment.price.fam.monthly.title"),
-        subtitle:  translate("payment.price.fam.monthly.subtitle"),
-        onSale:  translate("payment.price.fam.monthly.sale"),
-        pay_title:  translate("payment.price.fam.monthly.pay_title") 
+        title: translate("payment.price.fam.monthly.title"),
+        subtitle: translate("payment.price.fam.monthly.subtitle"),
+        onSale: translate("payment.price.fam.monthly.sale"),
+        pay_title: translate("payment.price.fam.monthly.pay_title")
       },
       yearly: {
         subId: "pm_family_yearly",
-        title:  translate("payment.price.fam.yearly.title"),
-        subtitle:  translate("payment.price.fam.yearly.subtitle"),
-        onSale:  translate("payment.price.fam.yearly.sale"),
-        pay_title:  translate("payment.price.fam.yearly.pay_title")
+        title: translate("payment.price.fam.yearly.title"),
+        subtitle: translate("payment.price.fam.yearly.subtitle"),
+        onSale: translate("payment.price.fam.yearly.sale"),
+        pay_title: translate("payment.price.fam.yearly.pay_title")
       },
     }
   }
 
-  const plan = prop.personal? planText.per : planText.fam
+  const plan = prop.personal ? planText.per : planText.fam
   const billingCycle = prop.isEnable ? plan.yearly : plan.monthly
 
+  const CONTAINER: ViewStyle = {
+    marginLeft: 20,
+    marginRight: 20,
+    flex: 1,
+    justifyContent: "space-around"
+  }
+
   return (
-    <View style={{ marginLeft: 20, marginRight: 20 }}>
-      <Text preset="black" style={{marginTop: 10, marginBottom: 10 }}>
+    <View style={CONTAINER}>
+      <Text preset="black" style={{ marginTop: 10, marginBottom: 10 }}>
         {translate("payment.ads")}
       </Text>
 
@@ -116,18 +141,17 @@ export const PricePlan = (prop: PricePlanProps) => {
         title={plan.monthly.title}
         subtitle={plan.monthly.subtitle}
       />
-      <Button 
+      <Button
         style={{
-          marginTop: 20,
-        }} 
-        isLoading={prop.isLoading}
+          marginVertical: 20,
+        }}
         onPress={() => prop.purchase(billingCycle.subId)}
       >
-        <View style={{ flexDirection: "column",}}>
-        <Text preset="bold" style={{ color: color.white}}>
-          {billingCycle.pay_title}
-        </Text>
-        <Text style={{ fontSize: 12, color: color.white}}>{translate("payment.cancel_text")}</Text>
+        <View style={{ flexDirection: "column", }}>
+          <Text preset="bold" style={{ color: color.white }}>
+            {billingCycle.pay_title}
+          </Text>
+          <Text style={{ fontSize: 12, color: color.white }}>{translate("payment.cancel_text")}</Text>
         </View>
       </Button>
     </View>
