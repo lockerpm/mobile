@@ -21,7 +21,7 @@ type Props = {
 }
 
 
-export const MethodSelection = observer(function MethodSelection(props: Props) {
+export const MethodSelection = observer((props: Props) => {
   const { user } = useStores()
   const { translate, notifyApiError, color } = useMixins()
   const { methods, onSelect, goBack, username, password } = props

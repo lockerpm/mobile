@@ -17,7 +17,7 @@ import { Logger } from "../../../utils/logger"
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 
 
-export const SignupScreen = observer(function SignupScreen() {
+export const SignupScreen = observer(() => {
   const { user, uiStore } = useStores()
   const navigation = useNavigation()
   const { translate, notify, notifyApiError } = useMixins()
