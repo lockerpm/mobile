@@ -21,7 +21,7 @@ const SECTION_TITLE: TextStyle = {
 }
 
 
-export const SettingsScreen = observer(function SettingsScreen() {
+export const SettingsScreen = observer(() => {
   const navigation = useNavigation()
   const { user, uiStore, cipherStore } = useStores()
   const { notify, isBiometricAvailable, translate, color } = useMixins()
@@ -278,7 +278,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
         {/* Language end */}
 
         {/* Theme */}
-        <Select
+        {/* <Select
           value={settings.theme.value}
           onChange={settings.theme.onChange}
           options={settings.theme.options}
@@ -292,7 +292,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
               )}
             />
           )}
-        />
+        /> */}
         {/* Theme end */}
 
         {/* Default tab */}

@@ -60,13 +60,13 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     routeName: 'cards',
     addable: true
   },
-  cryptoAsset: {
-    label: 'common.crypto_asset',
-    icon: require('./images/vault/crypto-asset.png'),
-    routeName: 'cryptoAssets',
-    addable: true,
-    svgIcon: CryptoAssetIcon
-  },
+  // cryptoAsset: {
+  //   label: 'common.crypto_asset',
+  //   icon: require('./images/vault/crypto-asset.png'),
+  //   routeName: 'cryptoAssets',
+  //   addable: true,
+  //   svgIcon: CryptoAssetIcon
+  // },
   cryptoAccount: {
     label: 'common.crypto_account',
     icon: require('./images/vault/crypto-account.png'),
@@ -113,7 +113,7 @@ type ToolsItem = {
 
 type ToolsItemContainer = {
   passwordGenerator: ToolsItem,
-  authenticator: ToolsItem,
+  // authenticator: ToolsItem,
   passwordHealth: ToolsItem,
   dataBreachScanner: ToolsItem
 }
@@ -126,13 +126,13 @@ export const TOOLS_ITEMS: ToolsItemContainer = {
     routeName: 'passwordGenerator',
     svgIcon: PasswordGeneratorIcon
   },
-  authenticator: {
-    label: 'authenticator.title',
-    desc: 'authenticator.desc',
-    icon: require('./images/vault/authenticator.png'),
-    routeName: 'authenticator',
-    svgIcon: AuthenticatorIcon
-  },
+  // authenticator: {
+  //   label: 'authenticator.title',
+  //   desc: 'authenticator.desc',
+  //   icon: require('./images/vault/authenticator.png'),
+  //   routeName: 'authenticator',
+  //   svgIcon: AuthenticatorIcon
+  // },
   passwordHealth: {
     label: 'pass_health.title',
     desc: 'pass_health.desc',

@@ -23,7 +23,7 @@ import { Utils } from '../../core-service/utils'
 import { AccountRoleText } from '../../../config/types'
 import { OrganizationData } from '../../../../core/models/data/organizationData'
 import { ImportResult } from '../../../../core/models/domain/importResult'
-import QueueManager from '../../../utils/queue'
+import { SyncQueue } from '../../../utils/queue'
 import { AppEventType, EventBus } from '../../../utils/event-bus'
 
 
@@ -96,7 +96,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   } = useCoreService()
   const { notify, translate, randomString, notifyApiError, getTeam } = useMixins()
   const { newCipher } = useCipherHelpersMixins()
-  const syncQueue = QueueManager.getInstance().getSyncQueue()
+  const syncQueue = SyncQueue
 
   // ----------------------------- METHODS ---------------------------
 
