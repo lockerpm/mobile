@@ -35,7 +35,7 @@ export interface WixFloatingInputProps extends TextInputProps {
 /**
  * Describe your component here
  */
-export const WixFloatingInput = function WixFloatingInput(props: WixFloatingInputProps) {
+export const WixFloatingInput = (props: WixFloatingInputProps) => {
   const {
     outerRef, style, inputStyle, label, isPassword, value, placeholder,
     editable = true, disabled, buttonRight, onChangeText, copyAble, lockCopy, textarea,

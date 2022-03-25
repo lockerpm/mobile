@@ -5,6 +5,7 @@ import { SymmetricCryptoKey } from "../../../../core/models/domain"
 import { DecryptParameters } from "../../../../core/models/domain/decryptParameters"
 import { Utils } from "../../../../core/misc/utils"
 import RNSimpleCrypto from "react-native-simple-crypto"
+import { DurationTest } from '../../../utils/testing/duration';
 
 export class MobileCryptoFunctionService implements CryptoFunctionService {
   pbkdf2(password: string | ArrayBuffer, salt: string | ArrayBuffer, algorithm: 'sha256' | 'sha512',
@@ -167,8 +168,13 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
       throw new Error('Node crypto does not support RSA-OAEP SHA-256');
     }
 
+    const test = new DurationTest('rsa dec')
+
+    // TODO: fix this
     const pem = this.toPemPrivateKey(privateKey);
     const decipher = crypto.privateDecrypt(pem, this.toNodeBuffer(data));
+
+    test.final()
     return Promise.resolve(this.toArrayBuffer(decipher));
   }
 

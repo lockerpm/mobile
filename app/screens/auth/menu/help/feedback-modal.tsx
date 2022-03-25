@@ -1,8 +1,10 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Button, FloatingInput, Modal } from "../../../../components"
+import { Button, Modal } from "../../../../components"
 import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
+import { TextInput } from "react-native"
+import { fontSize } from "../../../../theme"
 
 
 type Props = {
@@ -11,9 +13,9 @@ type Props = {
 }
 
 
-export const FeedbackModal = observer(function FeedbackModal(props: Props) {
+export const FeedbackModal = observer((props: Props) => {
   const { isOpen, onClose } = props
-  const { translate, notify, notifyApiError } = useMixins()
+  const { translate, notify, notifyApiError, color } = useMixins()
   const { user } = useStores()
 
   // ------------------------ PARAMS -------------------------
@@ -48,14 +50,25 @@ export const FeedbackModal = observer(function FeedbackModal(props: Props) {
       onClose={onClose}
       title={translate('help.feedback')}
     >
-      <FloatingInput
+      <TextInput
         value={content}
         onChangeText={setContent}
-        label={translate('help.tell_us')}
-        onSubmitEditing={handleSubmit}
+        placeholder={translate('help.tell_us')}
+        multiline
+        autoCapitalize="none"
+        placeholderTextColor={color.text}
         style={{
           marginTop: 10,
-          marginBottom: 30
+          marginBottom: 30,
+          borderColor: color.line,
+          borderWidth: 1,
+          borderRadius: 16,
+          fontSize: fontSize.p,
+          color: color.textBlack,
+          minHeight: 100,
+          maxHeight: 100,
+          paddingHorizontal: 16,
+          textAlignVertical: 'top'
         }}
       />
 
