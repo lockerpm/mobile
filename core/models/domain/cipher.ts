@@ -1,3 +1,4 @@
+import { DecryptQueue } from '../../../app/utils/queue';
 import { CipherRepromptType } from '../../enums/cipherRepromptType';
 import { CipherType } from '../../enums/cipherType';
 
@@ -110,72 +111,75 @@ export class Cipher extends Domain {
     }
 
     async decrypt(encKey?: SymmetricCryptoKey): Promise<CipherView> {
-        const model = new CipherView(this);
+        // TODO: test queue
+        return DecryptQueue.add(async () => {
+            const model = new CipherView(this);
 
-        await this.decryptObj(model, {
-            name: null,
-            notes: null,
-        }, this.organizationId, encKey);
+            await this.decryptObj(model, {
+                name: null,
+                notes: null,
+            }, this.organizationId, encKey);
 
-        switch (this.type) {
-            case CipherType.Login:
-                model.login = await this.login.decrypt(this.organizationId, encKey);
-                break;
-            case CipherType.SecureNote:
-            case CipherType.TOTP:
-            case CipherType.CryptoAccount:
-            case CipherType.CryptoWallet:
-                model.secureNote = await this.secureNote.decrypt(this.organizationId, encKey);
-                break;
-            case CipherType.Card:
-                model.card = await this.card.decrypt(this.organizationId, encKey);
-                break;
-            case CipherType.Identity:
-                model.identity = await this.identity.decrypt(this.organizationId, encKey);
-                break;
-            default:
-                break;
-        }
+            switch (this.type) {
+                case CipherType.Login:
+                    model.login = await this.login.decrypt(this.organizationId, encKey);
+                    break;
+                case CipherType.SecureNote:
+                case CipherType.TOTP:
+                case CipherType.CryptoAccount:
+                case CipherType.CryptoWallet:
+                    model.secureNote = await this.secureNote.decrypt(this.organizationId, encKey);
+                    break;
+                case CipherType.Card:
+                    model.card = await this.card.decrypt(this.organizationId, encKey);
+                    break;
+                case CipherType.Identity:
+                    model.identity = await this.identity.decrypt(this.organizationId, encKey);
+                    break;
+                default:
+                    break;
+            }
 
-        const orgId = this.organizationId;
+            const orgId = this.organizationId;
 
-        if (this.attachments != null && this.attachments.length > 0) {
-            const attachments: any[] = [];
-            await this.attachments.reduce((promise, attachment) => {
-                return promise.then(() => {
-                    return attachment.decrypt(orgId, encKey);
-                }).then(decAttachment => {
-                    attachments.push(decAttachment);
-                });
-            }, Promise.resolve());
-            model.attachments = attachments;
-        }
+            if (this.attachments != null && this.attachments.length > 0) {
+                const attachments: any[] = [];
+                await this.attachments.reduce((promise, attachment) => {
+                    return promise.then(() => {
+                        return attachment.decrypt(orgId, encKey);
+                    }).then(decAttachment => {
+                        attachments.push(decAttachment);
+                    });
+                }, Promise.resolve());
+                model.attachments = attachments;
+            }
 
-        if (this.fields != null && this.fields.length > 0) {
-            const fields: any[] = [];
-            await this.fields.reduce((promise, field) => {
-                return promise.then(() => {
-                    return field.decrypt(orgId, encKey);
-                }).then(decField => {
-                    fields.push(decField);
-                });
-            }, Promise.resolve());
-            model.fields = fields;
-        }
+            if (this.fields != null && this.fields.length > 0) {
+                const fields: any[] = [];
+                await this.fields.reduce((promise, field) => {
+                    return promise.then(() => {
+                        return field.decrypt(orgId, encKey);
+                    }).then(decField => {
+                        fields.push(decField);
+                    });
+                }, Promise.resolve());
+                model.fields = fields;
+            }
 
-        if (this.passwordHistory != null && this.passwordHistory.length > 0) {
-            const passwordHistory: any[] = [];
-            await this.passwordHistory.reduce((promise, ph) => {
-                return promise.then(() => {
-                    return ph.decrypt(orgId, encKey);
-                }).then(decPh => {
-                    passwordHistory.push(decPh);
-                });
-            }, Promise.resolve());
-            model.passwordHistory = passwordHistory;
-        }
+            if (this.passwordHistory != null && this.passwordHistory.length > 0) {
+                const passwordHistory: any[] = [];
+                await this.passwordHistory.reduce((promise, ph) => {
+                    return promise.then(() => {
+                        return ph.decrypt(orgId, encKey);
+                    }).then(decPh => {
+                        passwordHistory.push(decPh);
+                    });
+                }, Promise.resolve());
+                model.passwordHistory = passwordHistory;
+            }
 
-        return model;
+            return model;
+        })
     }
 
     toCipherData(userId: string): CipherData {

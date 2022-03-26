@@ -46,9 +46,12 @@ export const InitScreen = observer(() => {
     user.setLanguage(user.language)
     user.setDeviceID(DeviceInfo.getUniqueId())
     cipherStore.setIsSynching(false)
-    if (uiStore.isDark === null) {
-      uiStore.setIsDark(theme === 'dark')
-    }
+
+    // TODO
+    // if (uiStore.isDark === null) {
+    //   uiStore.setIsDark(theme === 'dark')
+    // }
+    uiStore.setIsDark(false)
 
     // Reload FCM
     if (connectionState.isConnected) {
