@@ -62,7 +62,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
       Alert.alert('Fail to get in-app-purchase information');
     }
     if (IS_IOS) {
-      RNIap.clearTransactionIOS()
+      RNIap.clearTransactionIOS() 
     } else {
       RNIap.flushFailedPurchasesCachedAsPendingAndroid();
     }
