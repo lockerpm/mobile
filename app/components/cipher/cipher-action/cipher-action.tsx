@@ -220,11 +220,18 @@ export const CipherAction = observer((props: CipherActionProps) => {
 
         <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
           { children }
-          {
-            !!children && editable && (
-              <Divider style={{ marginVertical: 5 }} />
-            )
-          }
+
+          <Divider style={{ marginVertical: 5 }} />
+
+          <ActionItem
+            disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+            name={translate('common.details')}
+            icon="list-alt"
+            action={() => {
+              onClose()
+              navigation.navigate(`${cipherMapper.path}__info`)
+            }}
+          />
 
           {
             editable && (
@@ -268,16 +275,6 @@ export const CipherAction = observer((props: CipherActionProps) => {
                 } */}
 
                 <Divider style={{ marginVertical: 5 }} />
-
-                <ActionItem
-                  disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-                  name={translate('common.details')}
-                  icon="list-alt"
-                  action={() => {
-                    onClose()
-                    navigation.navigate(`${cipherMapper.path}__info`)
-                  }}
-                />
 
                 <ActionItem
                   disabled={uiStore.isOffline && !!selectedCipher.organizationId}

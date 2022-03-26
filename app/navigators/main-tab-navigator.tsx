@@ -236,7 +236,7 @@ export function MainTabNavigator() {
     >
       <Tab.Screen name="homeTab" component={AllItemScreen} />
       <Tab.Screen name="browseTab" component={BrowseNavigator} />
-      <Tab.Screen name="authenticatorTab" component={AuthenticatorScreen} />
+      {/* <Tab.Screen name="authenticatorTab" component={AuthenticatorScreen} /> */}
       <Tab.Screen name="toolsTab" component={ToolsListScreen} />
       <Tab.Screen name="menuTab" component={MenuNavigator} />
     </Tab.Navigator>
