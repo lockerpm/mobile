@@ -27,43 +27,47 @@ let purchaseUpdateSubscription: EmitterSubscription;
 let purchaseErrorSubscription: EmitterSubscription;
 
 const subSkus = Platform.select({
-  default: ["pm_family_monthly",
+  android: [
+    "pm_family_monthly",
     "pm_family_yearly",
     "pm_premium_monthly",
-    "pm_premium_yearly"],
+    "pm_premium_yearly"
+  ],
+  ios: [
+    "ios_pm_family_monthly",
+    "ios_pm_family_yearly",
+    "ios_pm_premium_monthly",
+    "ios_pm_premium_yearly"
+  ],
 });
 
 
 
 export const PaymentScreen = observer(function PaymentScreen() {
   const { translate, color, isDark } = useMixins()
-  const { user } = useStores()
   const navigation = useNavigation();
   const route = useRoute<ScreenProp>();
-
+  const { user } = useStores()
   // -------------------- STATE ----------------------
   const [subcriptions, setSubcriptions] = useState<Subscription[]>([])
   const [loading, setLoading] = useState<boolean>(true);
+  const [processPayment, setProcessPayment] = useState<boolean>(false);
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
-  const [isContentOverlayLoading, setIsContentOverlayLoading] = useState(false)
 
 
   const getSubscription = useCallback(async (): Promise<void> => {
-
     try {
       const result = await RNIap.initConnection();
       if (result === false) {
-        Alert.alert("couldn't get in-app-purchase information");
         return;
       }
     } catch (err) {
       Logger.error({ 'initConnection': err })
       Alert.alert('Fail to get in-app-purchase information');
     }
-    if (IS_IOS) {
-      RNIap.clearTransactionIOS() 
-    } else {
+
+    if (!IS_IOS) {
       RNIap.flushFailedPurchasesCachedAsPendingAndroid();
     }
 
@@ -71,14 +75,13 @@ export const PaymentScreen = observer(function PaymentScreen() {
     purchaseUpdateSubscription = purchaseUpdatedListener(
       async (purchase: SubscriptionPurchase) => {
         if (purchase) {
-          setIsContentOverlayLoading(true)
           var verified: boolean = false;
-
           if (IS_IOS) {
-            verified = await user.purchaseValidation(purchase.transactionReceipt, purchase.productId, purchase.originalTransactionIdentifierIOS )
+            verified = await user.purchaseValidation(purchase.transactionReceipt, purchase.productId, purchase.originalTransactionIdentifierIOS)
           } else {
             verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
           }
+
           try {
             const ackResult = await finishTransaction(purchase);
             Logger.debug({ 'ackResult': ackResult });
@@ -95,9 +98,9 @@ export const PaymentScreen = observer(function PaymentScreen() {
               ]
             )
           } else {
-            setIsContentOverlayLoading(false)
             navigation.navigate("mainTab")
           }
+          setProcessPayment(false)
         }
       },
     );
@@ -115,7 +118,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   useEffect(() => {
     getSubscription();
-
     return (): void => {
       if (purchaseUpdateSubscription) {
         purchaseUpdateSubscription.remove();
@@ -128,13 +130,16 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
 
   const purchase = (productId: string): void => {
-
+    setProcessPayment(true)
+    if (IS_IOS) {
+      RNIap.clearTransactionIOS()
+    }
     RNIap.requestSubscription(productId)
       .then((e) => {
-        Logger.debug("a lololololololoololololololo")
-        Logger.debug(JSON.stringify(e))
+        // last run
       })
       .catch((error) => {
+        setProcessPayment(false)
         if (error.code === 'E_USER_CANCELLED') {
           return
         } else {
@@ -147,7 +152,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   // -------------------- RENDER ----------------------
 
-  // user choose plan segment
+  // user selects plan segment
   const Segment = () => {
     return (
       <View
@@ -175,7 +180,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
   return (
     <Layout
       // isContentLoading={loading}
-      isContentOverlayLoading={isContentOverlayLoading}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
       <View style={{ top: 0, height: "50%", position: "absolute", width: "100%", justifyContent: "space-between" }}>
@@ -184,7 +188,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
             source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
             style={{ height: 32, width: 152 }}
           />
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
             <Image
               source={require("./Cross.png")}
               style={{ height: 24, width: 24 }}
@@ -200,6 +204,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
         <Segment />
         <PricePlan
           onPress={setEnable}
+          isProcessPayment={processPayment}
           isEnable={isEnable}
           personal={payIndividual}
           purchase={purchase} />

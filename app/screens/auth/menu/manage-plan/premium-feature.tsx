@@ -30,9 +30,8 @@ export const PremiumFeature = () => {
             img: require("./assets/EmergencyContact.png"),
             desc: translate('manage_plan.feature.emergency_contact.header'),
             action: () => {
-                setModalVisible(true)
-                // isFreeAccount ? navigation.navigate("payment", { benefitTab: 2 })
-                //     : setModalVisible(true)
+                isFreeAccount ? navigation.navigate("payment", { benefitTab: 2 })
+                    : setModalVisible(true)
             }
         },
         web: {
@@ -112,19 +111,19 @@ export const PremiumFeature = () => {
     }) => {
         return (
             <TouchableOpacity onPress={prop.item.action} style={[BOX, { marginRight: prop.leftItem ? 10 : 0 }]}>
-                <Image source={prop.item.img} style={{ height: "80%" }} />
+                <Image source={prop.item.img} style={{ height: "80%", width: "80%" }} />
                 <Text preset="black" text={prop.item.desc} style={{ fontSize: 12, marginVertical: 10 }} />
             </TouchableOpacity>
         )
     }
     return (
-        <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
+        <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background, flex: 1 }]}>
             <Text preset="bold" text={translate('manage_plan.feature.title')} style={{ marginBottom: 20 }} />
             <View style={ROW_ITEMS}>
                 <PremiumFeatureItem item={item.locker} leftItem={true} />
                 <PremiumFeatureItem item={item.emergencyContact} />
             </View>
-            <View style={[ROW_ITEMS, { marginTop: 10 }]}>
+            <View style={[ROW_ITEMS, { marginTop: 10}]}>
                 <PremiumFeatureItem item={item.web} leftItem={true} />
                 <PremiumFeatureItem item={item.sharePassword} />
             </View>
