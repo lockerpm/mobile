@@ -586,7 +586,7 @@
       "fam": {
         "yearly": {
           "title": "$0.99/ member/ month",
-          "subtitle": "$71.99/ 6 members, billed every 12 months",
+          "subtitle": "$71.99/ 6 members, billed yearly",
           "sale": "Save 80%",
           "pay_title": "Upgrade now for $71.99"
         },

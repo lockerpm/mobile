@@ -583,14 +583,14 @@
       },
       "fam": {
         "yearly": {
-          "title": "$0.99/ thành viên/ tháng",
-          "subtitle": "$71.99/ 6 thành viên/ năm",
+          "title": "$0.99/ người/ tháng",
+          "subtitle": "$71.99/ 6 người/ năm",
           "sale": "tiết kiệm 80%",
           "pay_title": "Nâng cấp ngay với $71.99"
         },
         "monthly": {
-          "title": "$1.6/ thành viên/ tháng",
-          "subtitle": "$9.99/ 6 thành viên/ năm",
+          "title": "$1.6/ người/ tháng",
+          "subtitle": "$9.99/ 6 người/ năm",
           "sale": "tiết kiệm 67%",
           "pay_title": "Nâng cấp ngay với $9.99"
         }

@@ -52,7 +52,7 @@ export const Button = observer(function Button(props: ButtonProps) {
     >
       {
         isLoading && (
-          <View style={{ marginRight: 3 }}>
+          <View  style={{ marginRight: 3 }}>
             <ActivityIndicator size="small" color={textStyle.color} />
           </View>
         )
