@@ -5,7 +5,7 @@ import orderBy from 'lodash/orderBy'
 import { Button } from "../../button/button"
 import { Text } from "../../text/text"
 import { AutoImage as Image } from "../../auto-image/auto-image"
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+// import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"

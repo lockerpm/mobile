@@ -1249,7 +1249,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const stopShareCipher = async (cipher: CipherView, memberId: string) => {
     try {
       // Prepare cipher
-      const cipherEnc = await cipherService.encrypt(cipher)
+      const personalKey = await cryptoService.getEncKey()
+      const cipherEnc = await cipherService.encrypt(cipher, personalKey)
       const data = new CipherRequest(cipherEnc)
 
       // Send API
