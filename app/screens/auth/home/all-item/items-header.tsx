@@ -64,7 +64,7 @@ export const ItemsHeader = observer((props: Props) => {
 
   // ----------------------- COMPUTED ------------------------
   
-  const isFreeAccount = user.plan?.alias === PlanType.FREE
+  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
   
   // ----------------------- METHODS ------------------------
 

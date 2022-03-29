@@ -86,7 +86,7 @@ export const PricePlan = (props: PricePlanProps) => {
   const { translate, color } = useMixins()
   const { user } = useStores()
 
-  const isFreeAccount = user.plan && user.plan.alias === PlanType.FREE
+  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan 
   const planText = {
     per: {
       monthly: {

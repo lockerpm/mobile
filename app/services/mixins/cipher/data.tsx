@@ -439,8 +439,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   // Sync autofill data
   const syncAutofillData = async () => {
     try {
-   
-
       // Prevent duplicate sync
       if (cipherStore.isSynchingAutofill) {
         return

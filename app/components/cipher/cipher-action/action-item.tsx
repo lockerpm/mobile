@@ -34,7 +34,7 @@ export const ActionItem = observer((props: ActionItemProps) => {
   const { color, goPremium } = useMixins()
   const { user } = useStores()
 
-  const premiumLock = isPremium && (user.plan && user.plan.alias === PlanType.FREE)
+  const premiumLock = isPremium && ((user.plan?.alias === PlanType.FREE) || !user.plan)
 
   return (
     <ActionSheetItem
