@@ -711,6 +711,14 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         ciphers.push(cr)
       }
     }
+
+    // Check for empty id
+    for (const cipher of ciphers) {
+      if (!cipher.id) {
+        const tempId = 'tmp__' + randomString()
+        cipher.id = tempId
+      }
+    }
     
     // Prepare folders
     if (!folderRequests) {
@@ -728,6 +736,14 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
           fr.id = tempId
           folders.push(fr)
         }
+      }
+    }
+
+    // Check for empty id
+    for (const folder of folders) {
+      if (!folder.id) {
+        const tempId = 'tmp__' + randomString()
+        folder.id = tempId
       }
     }
 
