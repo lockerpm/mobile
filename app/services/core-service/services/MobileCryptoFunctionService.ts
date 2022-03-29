@@ -5,7 +5,6 @@ import { SymmetricCryptoKey } from "../../../../core/models/domain"
 import { DecryptParameters } from "../../../../core/models/domain/decryptParameters"
 import { Utils } from "../../../../core/misc/utils"
 import RNSimpleCrypto from "react-native-simple-crypto"
-import { DurationTest } from '../../../utils/testing/duration';
 import { NativeModules } from 'react-native';
 import { IS_IOS } from '../../../config/constants';
 

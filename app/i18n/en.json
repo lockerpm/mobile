@@ -260,13 +260,14 @@
   "start": {
     "synching": "Synchronizing...",
     "getting_team_info": "Getting your team information...",
+    "getting_plan_info": "Getting your plan information...",
     "decrypting": "Preparing your data..."
   },
   "biometric_intro": {
     "title": "Unlock your vault with Face ID/Touch ID",
     "desc": "Use face recognition or fingerprint to protect your passwords",
     "use_btn": "Use Face ID/Touch ID",
-    "later_btn": "I’ll do it later"
+    "later_btn": "I'll do it later"
   },
   "card": {
     "card_name": "Cardholder Name",

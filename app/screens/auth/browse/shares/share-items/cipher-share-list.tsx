@@ -5,7 +5,7 @@ import orderBy from 'lodash/orderBy'
 import { Button } from "../../../../../components/button/button"
 import { Text } from "../../../../../components/text/text"
 import { AutoImage as Image } from "../../../../../components/auto-image/auto-image"
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+// import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CipherType } from "../../../../../../core/enums"
 import { useMixins } from "../../../../../services/mixins"
@@ -90,7 +90,7 @@ export const CipherShareList = observer((props: Props) => {
       }
       const share = _getShare(c.organizationId)
       const org = _getOrg(c.organizationId)
-      return org && org.type === AccountRole.OWNER && share.members.length
+      return org && org.type === AccountRole.OWNER && share && share.members.length
     }]
 
     // Search

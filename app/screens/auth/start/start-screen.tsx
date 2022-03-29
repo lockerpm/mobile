@@ -44,7 +44,7 @@ export const StartScreen = observer(() => {
 
       // Sync teams and plan
       if (!uiStore.isFromAutoFill) {
-        setMsg(translate('start.getting_team_info'))
+        setMsg(translate('start.getting_plan_info'))
         await Promise.all([
           user.loadTeams(),
           user.loadPlan(),
@@ -56,7 +56,7 @@ export const StartScreen = observer(() => {
     
     // Load folders and collections
     setMsg(translate('start.decrypting'))
-    await Promise.all([
+    Promise.all([
       loadFolders(),
       loadCollections(),
       loadOrganizations()
