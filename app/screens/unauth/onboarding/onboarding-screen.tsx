@@ -18,8 +18,8 @@ export const OnboardingScreen = observer(() => {
   const footer = (
     <View>
       <Button 
-        text={translate("common.login")} 
-        onPress={() => navigation.navigate("login")}
+        text={translate("common.sign_up")} 
+        onPress={() => navigation.navigate("signup")}
       />
       <View
         style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -28,15 +28,15 @@ export const OnboardingScreen = observer(() => {
         }]}
       >
         <Text
-          text={translate("onBoarding.no_account")}
+          text={translate("onBoarding.has_account")}
           style={{
             marginRight: 8,
           }}
         />
         <Button
           preset="link"
-          text={translate("common.sign_up")}
-          onPress={() => navigation.navigate("signup")}
+          text={translate("common.login")}
+          onPress={() => navigation.navigate("login")}
         />
       </View>
     </View>

@@ -29,6 +29,7 @@ const defaultData = {
   isDark: false,
 
   // Methods
+  setApiTokens: (token: string) => {},
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getAllOrganizations: async () => [],
   getTeam: (teams: object[], orgId: string) => ({ name: '', role: '', type: 0 }),
@@ -51,7 +52,7 @@ export const MixinsProvider = observer((props: {
   children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal
   navigationRef?: any
 }) => {
-  const { uiStore, user } = useStores()
+  const { uiStore, user, cipherStore, collectionStore, folderStore, toolStore } = useStores()
   const insets = useSafeAreaInsets()
   const { userService } = useCoreService()
 
@@ -61,6 +62,15 @@ export const MixinsProvider = observer((props: {
   const themeColor = isDark ? colorDark : color
 
   // ------------------------ SUPPORT -------------------------
+
+  // Set tokens
+  const setApiTokens = (token: string) => {
+    user.setApiToken(token)
+    cipherStore.setApiToken(token)
+    collectionStore.setApiToken(token)
+    folderStore.setApiToken(token)
+    toolStore.setApiToken(token)
+  }
 
   // Get current route name
   const getRouteName = async () => {
@@ -168,7 +178,7 @@ export const MixinsProvider = observer((props: {
             }
           })
           if (!notified) {
-            notify('error', translate('error.invalid_data'))
+            notify('error', errorData.message || translate('error.invalid_data'))
           }
         } else if (errorData.message) {
           notify('error', errorData.message)
@@ -258,6 +268,7 @@ export const MixinsProvider = observer((props: {
     color: themeColor,
     isDark,
 
+    setApiTokens,
     notify,
     randomString,
     getWebsiteLogo,

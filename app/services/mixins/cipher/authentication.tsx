@@ -5,10 +5,7 @@ import { useStores } from '../../../models'
 import { useCipherDataMixins } from './data'
 import { useCoreService } from '../../core-service'
 import { delay } from '../../../utils/delay'
-import { GOOGLE_CLIENT_ID } from '../../../config/constants'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { saveShared } from '../../../utils/keychain'
-import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
 import { observer } from 'mobx-react-lite'
 import { color, colorDark } from '../../../theme'
 import moment from 'moment'
@@ -17,6 +14,7 @@ import { useMixins } from '..'
 import { Logger } from '../../../utils/logger'
 import { SymmetricCryptoKey } from '../../../../core/models/domain'
 import { remove, removeSecure, StorageKey } from '../../../utils/storage'
+import { useSocialLoginMixins } from '../social-login'
 
 
 const { createContext, useContext } = React
@@ -25,7 +23,6 @@ const { createContext, useContext } = React
 // Mixins data
 const defaultData = {
   // Methods
-  setApiTokens: (token: string) => {},
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   biometricLogin: async () => { return { kind: 'unknown' } },
   logout: async () => {},
@@ -49,7 +46,8 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     messagingService,
     tokenService,
   } = useCoreService()
-  const { notify, translate, notifyApiError  } = useMixins()
+  const { notify, translate, notifyApiError } = useMixins()
+  const { logoutAllServices } = useSocialLoginMixins()
   const { syncAutofillData } = useCipherDataMixins()
 
   // ------------------------ DATA -------------------------
@@ -58,15 +56,6 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
   const themeColor = isDark ? colorDark : color
 
   // -------------------- AUTHENTICATION --------------------
-
-  // Set tokens
-  const setApiTokens = (token: string) => {
-    user.setApiToken(token)
-    cipherStore.setApiToken(token)
-    collectionStore.setApiToken(token)
-    folderStore.setApiToken(token)
-    toolStore.setApiToken(token)
-  }
 
   // Login vault using API
   const _loginUsingApi = async (key: SymmetricCryptoKey, keyHash: string, kdf: number, kdfIterations: number, masterPassword?: string) => {
@@ -304,19 +293,8 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
   
       await user.logout()
   
-      // Sign out of Google
-      GoogleSignin.configure({
-        webClientId: GOOGLE_CLIENT_ID
-      })
-      const isSignedIn = await GoogleSignin.isSignedIn()
-      if (isSignedIn) {
-        await GoogleSignin.signOut()
-      }
-  
-      // Sign out of Facebook
-      if (await AccessToken.getCurrentAccessToken()) {
-        LoginManager.logOut()
-      }
+      // Sign out all social login services
+      await logoutAllServices()
   
       // Reset shared data
       await saveShared('autofill', '')
@@ -368,7 +346,6 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     color: themeColor,
     isDark,
 
-    setApiTokens,
     sessionLogin,
     biometricLogin,
     logout,

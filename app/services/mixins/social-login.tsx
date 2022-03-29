@@ -2,14 +2,18 @@ import React from 'react'
 import { observer } from 'mobx-react-lite'
 import { useStores } from '../../models'
 import { useMixins } from '.'
-import { useCipherAuthenticationMixins } from './cipher/authentication'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { GOOGLE_CLIENT_ID, GITHUB_CONFIG } from '../../config/constants'
 import { Logger } from '../../utils/logger'
 import { LoginManager, AccessToken } from "react-native-fbsdk-next"
-import { authorize } from 'react-native-app-auth'
+import { authorize, logout } from 'react-native-app-auth'
 import { appleAuth } from '@invertase/react-native-apple-authentication'
+import { saveSecure, loadSecure, removeSecure } from '../../utils/storage'
 
+
+enum StorageKeys {
+  GITHUB_ID_TOKEN = 'SOCIAL_LOGIN__GITHUB__ID_TOKEN'
+}
 
 const { createContext, useContext } = React
 
@@ -30,7 +34,8 @@ const defaultData = {
   appleLogin: async (payload: {
     setIsLoading?: (val: boolean) => void
     onLoggedIn: () => void
-  }) => null
+  }) => null,
+  logoutAllServices: async () => null
 }
 
 
@@ -41,8 +46,7 @@ export const SocialLoginMixinsProvider = observer((props: {
   navigationRef?: any
 }) => {
   const { user } = useStores()
-  const { notifyApiError, notify, translate } = useMixins()
-  const { setApiTokens } = useCipherAuthenticationMixins()
+  const { notifyApiError, notify, translate, setApiTokens } = useMixins()
 
   // ------------------ METHODS ---------------------
 
@@ -67,7 +71,15 @@ export const SocialLoginMixinsProvider = observer((props: {
     } catch (e) {
       setIsLoading && setIsLoading(false)
       Logger.error(e)
-      notify('error', translate('error.something_went_wrong'))
+      switch (e.code) {
+        case statusCodes.SIGN_IN_CANCELLED:
+          break
+        case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+          notify('error', translate('error.social_login.google.play_service_not_available'))
+          break
+        default:
+          notify('error', translate('error.could_not_complete'))
+      }
     }
   }
 
@@ -80,11 +92,11 @@ export const SocialLoginMixinsProvider = observer((props: {
     try {
       let res = await AccessToken.getCurrentAccessToken()
       if (!res) {
-        await LoginManager.logInWithPermissions(['public_profile', 'email'])
+        await LoginManager.logInWithPermissions(['email'])
         res = await AccessToken.getCurrentAccessToken()
         if (!res) {
+          // notify('error', translate('error.something_went_wrong'))
           setIsLoading && setIsLoading(false)
-          notify('error', translate('error.something_went_wrong'))
           return
         }
       }
@@ -97,11 +109,11 @@ export const SocialLoginMixinsProvider = observer((props: {
     } catch (e) {
       setIsLoading && setIsLoading(false)
       Logger.error(e)
-      notify('error', translate('error.something_went_wrong'))
+      notify('error', translate('error.could_not_complete'))
     }
   }
 
-  // Github
+  // GitHub
   const githubLogin = async (payload: {
     setIsLoading?: (val: boolean) => void
     onLoggedIn: () => void
@@ -111,9 +123,10 @@ export const SocialLoginMixinsProvider = observer((props: {
       const res = await authorize(GITHUB_CONFIG)
       if (!res) {
         setIsLoading && setIsLoading(false)
-        notify('error', translate('error.something_went_wrong'))
+        // notify('error', translate('error.something_went_wrong'))
         return
       }
+      saveSecure(StorageKeys.GITHUB_ID_TOKEN, res.idToken)
       await _handleSocialLogin({
         provider: 'github',
         token: res.accessToken,
@@ -123,7 +136,27 @@ export const SocialLoginMixinsProvider = observer((props: {
     } catch (e) {
       setIsLoading && setIsLoading(false)
       Logger.error(e)
-      notify('error', translate('error.something_went_wrong'))
+      switch (e.code) {
+        case 'authentication_failed':
+        case 'authentication_error':
+        case 'access_denied':
+          break
+        case 'token_refresh_failed':
+          notify('error', translate('error.social_login.github.token_refresh_failed'))
+          _logoutGitHub()
+          break
+        case 'registration_failed':
+          notify('error', translate('error.social_login.github.registration_failed'))
+          break
+        case 'browser_not_found':
+          notify('error', translate('error.social_login.github.browser_not_found'))
+          break
+        case 'service_configuration_fetch_error':
+          notify('error', translate('error.social_login.github.service_configuration_fetch_error'))
+          break
+        default:
+          notify('error', translate('error.could_not_complete'))
+      }
     }
   }
 
@@ -138,7 +171,6 @@ export const SocialLoginMixinsProvider = observer((props: {
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.EMAIL],
       })
-      console.log(appleAuthRequestResponse)
       await _handleSocialLogin({
         provider: 'apple',
         token: appleAuthRequestResponse.identityToken,
@@ -148,8 +180,25 @@ export const SocialLoginMixinsProvider = observer((props: {
     } catch (e) {
       setIsLoading && setIsLoading(false)
       Logger.error(e)
-      notify('error', translate('error.something_went_wrong'))
+      switch (e.code) {
+        case '1001':
+          break
+        case '1000':
+          notify('error', translate('error.social_login.apple.could_not_complete'))
+          break
+        default:
+          notify('error', translate('error.could_not_complete'))
+      }
     }
+  }
+
+  // Log out all service
+  const logoutAllServices = async () => {
+    await Promise.all([
+      _logoutGoogle(),
+      _logoutFacebook(),
+      _logoutGitHub()
+    ])
   }
 
   // ------------------ PRIVATE METHODS ---------------------
@@ -169,12 +218,55 @@ export const SocialLoginMixinsProvider = observer((props: {
     })
     setIsLoading && setIsLoading(false)
     if (loginRes.kind !== 'ok') {
-      notifyApiError(loginRes)
-      notify('error', translate('error.login_failed'))
+      if (loginRes.kind === 'bad-data' && loginRes.data.code === '1011') {
+        notify('error', translate('error.social_login.cannot_get_email'))
+      } else {
+        notifyApiError(loginRes)
+      }
+      await logoutAllServices()
     } else {
       // @ts-ignore
       setApiTokens(loginRes.data?.access_token)
       onLoggedIn()
+    }
+  }
+
+  const _logoutGoogle = async () => {
+    try {
+      GoogleSignin.configure({
+        webClientId: GOOGLE_CLIENT_ID
+      })
+      const isSignedIn = await GoogleSignin.isSignedIn()
+      if (isSignedIn) {
+        await GoogleSignin.signOut()
+      }
+    } catch (e) {
+      Logger.error('Log out Google: ' + e)
+    }
+  }
+
+  const _logoutFacebook = async () => {
+    try {
+      if (await AccessToken.getCurrentAccessToken()) {
+        LoginManager.logOut()
+      }
+    } catch (e) {
+      Logger.error('Log out Facebook: ' + e)
+    }
+  }
+
+  const _logoutGitHub = async () => {
+    try {
+      const idToken = await loadSecure(StorageKeys.GITHUB_ID_TOKEN)
+      if (idToken) {
+        await logout(GITHUB_CONFIG, {
+          idToken,
+          postLogoutRedirectUrl: ''
+        })
+        removeSecure(StorageKeys.GITHUB_ID_TOKEN)
+      }
+    } catch (e) {
+      Logger.error('Log out GitHub: ' + e)
     }
   }
 
@@ -184,7 +276,8 @@ export const SocialLoginMixinsProvider = observer((props: {
     googleLogin,
     facebookLogin,
     githubLogin,
-    appleLogin
+    appleLogin,
+    logoutAllServices
   }
 
   return (

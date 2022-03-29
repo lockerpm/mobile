@@ -132,7 +132,26 @@
     "duplicate_folder_name": "Duplicated folder name! Please choose another name!",
     "not_allowed_to_see_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
     "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
-    "not_available_for_free": "This feature is not available for free account!"
+    "not_available_for_free": "This feature is not available for free account!",
+    "could_not_complete": "The operation couldn't be completed. Please try again",
+    "social_login": {
+      "cannot_get_email": "Cannot retrieve public email from this account",
+      "apple": {
+        "could_not_complete": "The operation couldn't be completed. Please try again"
+      },
+      "google": {
+        "play_service_not_available": "Google Play services are not available or outdated"
+      },
+      "facebook": {
+
+      },
+      "github": {
+        "token_refresh_failed": "Could not exchange the refresh token. Please try again",
+        "registration_failed": "Registration failed. Please try again",
+        "browser_not_found": "Browser not found! Please install a suitable browser",
+        "service_configuration_fetch_error": "Could not fetch the service configuration. Please try again"
+      }
+    }
   },
   "success": {
     "done": "Done",
@@ -197,6 +216,7 @@
   },
   "onBoarding": {
     "no_account": "Don't have an account?",
+    "has_account": "Already have an account?",
     "title": "Your daily needs"
   },
   "login": {
