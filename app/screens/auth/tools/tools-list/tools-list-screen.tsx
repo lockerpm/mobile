@@ -10,10 +10,12 @@ import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
 import { PlanType } from "../../../../config/types"
 
-export const ToolsListScreen = observer(function ToolsListScreen() {
+export const ToolsListScreen = observer(() => {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
   const { translate, color } = useMixins()
+
+  const isPremiumLock = !user.plan || (user.plan.alias === PlanType.FREE)
 
   return (
     <Layout
@@ -40,7 +42,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
             <Button
               key={index}
               preset="link"
-              isDisabled={item.premium && (user.plan && user.plan.alias === PlanType.FREE)}
+              isDisabled={item.premium && isPremiumLock}
               onPress={() => {
                 if (item.routeName === 'authenticator') {
                   navigation.navigate('mainTab', { screen: 'authenticatorTab' })
@@ -79,7 +81,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                   />
 
                   {
-                    item.premium && (
+                    item.premium && isPremiumLock && (
                       <View style={{
                         paddingHorizontal: 10,
                         paddingVertical: 2,

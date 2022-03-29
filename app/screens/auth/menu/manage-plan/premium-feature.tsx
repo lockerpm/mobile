@@ -15,7 +15,7 @@ export const PremiumFeature = () => {
     const navigation = useNavigation()
 
     const [modalVisible, setModalVisible] = useState(false);
-    const isFreeAccount = user.plan?.alias === PlanType.FREE
+    const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
 
     const item = {
         locker: {

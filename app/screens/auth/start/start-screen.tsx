@@ -23,34 +23,39 @@ export const StartScreen = observer(() => {
 
   // ------------------------- METHODS ----------------------------
 
+  const refreshFCM = async () => {
+    if (!user.disablePushNotifications) {
+      let isSuccess = true
+      if (!user.fcmToken) {
+        isSuccess = await boostrapPushNotifier()
+      }
+      if (isSuccess) {
+        user.updateFCM(user.fcmToken)
+      }
+    }
+  }
+
   const mounted = async () => {
     if (IS_IOS) {
-      await syncAutofillData()
+      syncAutofillData()
     }
+
     const connectionState = await NetInfo.fetch()
 
     // Sync
     if (connectionState.isConnected) {
-      // Update FCM
-      if (!user.disablePushNotifications) {
-        let isSuccess = true
-        if (!user.fcmToken) {
-          isSuccess = await boostrapPushNotifier()
-        }
-        if (isSuccess) {
-          user.updateFCM(user.fcmToken)
-        }
-      }
+      // Refresh FCM
+      refreshFCM()
 
       // Sync teams and plan
       if (!uiStore.isFromAutoFill) {
-        setMsg(translate('start.getting_plan_info'))
-        await Promise.all([
-          user.loadTeams(),
-          user.loadPlan(),
-        ])
-        // user.loadTeams()
-        // user.loadPlan()
+        // setMsg(translate('start.getting_plan_info'))
+        // await Promise.all([
+        //   user.loadTeams(),
+        //   user.loadPlan(),
+        // ])
+        user.loadTeams()
+        user.loadPlan()
       }
     }
     
@@ -82,9 +87,9 @@ export const StartScreen = observer(() => {
 
     // Show biometric intro
     if (!uiStore.isFromAutoFill) {
-      if (!user.biometricIntroShown) {
+      if (!user.biometricIntroShown && !user.isBiometricUnlock) {
         const available = await isBiometricAvailable()
-        if (available && !user.isBiometricUnlock) {
+        if (available) {
           navigation.navigate('biometricUnlockIntro')
           return
         }

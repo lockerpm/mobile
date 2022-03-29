@@ -79,7 +79,7 @@ export const PlanUsage = () => {
     const navigation = useNavigation()
     const { user } = useStores()
 
-    const isFreeAccount = user.plan?.alias === PlanType.FREE
+    const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
     const items: PlanItemUsage[] = [
         {
             cipherType: CipherType.Login,

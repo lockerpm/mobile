@@ -28,7 +28,7 @@ export const ShareItemsScreen = observer(() => {
 
   // --------------------- COMPUTED -------------------------
 
-  const isFreeAccount = user.plan?.alias === PlanType.FREE
+  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
 
   // --------------------- EFFECTS -------------------------
 
