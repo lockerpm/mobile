@@ -48,17 +48,16 @@ export const MenuScreen = observer(() => {
   }
   
   const items: MenuItemProps[] = [
-    // {
-    //   icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
-    //   name: translate('menu.plan'),
-    //   action: () => navigation.navigate('payment'),
-    //   hide: user.plan?.alias !== PlanType.FREE  
-    // },
-    // {
-    //   icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
-    //   name: translate('menu.invite'),
-    //   hide: user.plan?.alias !== PlanType.FAMILY  
-    // },
+    {
+      icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
+      name: translate('menu.plan'),
+      action: () => navigation.navigate('payment'),
+    },
+    {
+      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
+      name: translate('menu.invite'),
+      hide: user.plan?.alias !== PlanType.FAMILY ,
+    },
     {
       icon: isDark ? <SettingsIconLight height={22} /> : <SettingsIcon height={22} />,
       name: translate('common.settings'),

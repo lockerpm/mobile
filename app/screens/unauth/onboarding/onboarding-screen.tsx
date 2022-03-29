@@ -17,9 +17,9 @@ export const OnboardingScreen = observer(() => {
   // Child components
   const footer = (
     <View>
-      <Button 
-        text={translate("common.sign_up")} 
-        onPress={() => navigation.navigate("signup")}
+      <Button
+        text={translate("common.login")}
+        onPress={() => navigation.navigate("login")}
       />
       <View
         style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -45,12 +45,13 @@ export const OnboardingScreen = observer(() => {
   // -------------- EFFECT ------------------
 
   useEffect(() => {
+
     const handleBack = (e) => {
       if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
         navigation.dispatch(e.data.action)
         return
       }
-      
+
       e.preventDefault()
       if (!IS_IOS) {
         BackHandler.exitApp()
@@ -70,9 +71,9 @@ export const OnboardingScreen = observer(() => {
       footer={footer}
     >
       <View style={commonStyles.CENTER_VIEW}>
-        <Image 
-          source={uiStore.isDark ? APP_ICON.textVerticalLight : APP_ICON.textVertical} 
-          style={{ height: 112, width: 128 }} 
+        <Image
+          source={uiStore.isDark ? APP_ICON.textVerticalLight : APP_ICON.textVertical}
+          style={{ height: 112, width: 128 }}
         />
         <Text
           preset="header"

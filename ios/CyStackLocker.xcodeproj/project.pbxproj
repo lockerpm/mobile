@@ -22,6 +22,12 @@
 		7C8496E027B7759200CFEA8B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496E227B7759200CFEA8B /* MainInterface.storyboard */; };
 		7C8496E627B7765C00CFEA8B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496E527B7765C00CFEA8B /* Localizable.strings */; };
 		7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A609C27A38D5D00477348 /* FormFieldView.swift */; };
+		7CA1D4A827F2E3EC009E2A6E /* RCTCryptoServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4A727F2E3EC009E2A6E /* RCTCryptoServiceIos.m */; };
+		7CA1D4A927F2E3EC009E2A6E /* RCTCryptoServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4A727F2E3EC009E2A6E /* RCTCryptoServiceIos.m */; };
+		7CA1D4AC27F2E408009E2A6E /* RNCryptoServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4AB27F2E408009E2A6E /* RNCryptoServiceIos.swift */; };
+		7CA1D4AD27F2E408009E2A6E /* RNCryptoServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4AB27F2E408009E2A6E /* RNCryptoServiceIos.swift */; };
+		7CA1D4AF27F2E424009E2A6E /* RSAUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4AE27F2E424009E2A6E /* RSAUtils.swift */; };
+		7CA1D4B027F2E424009E2A6E /* RSAUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4AE27F2E424009E2A6E /* RSAUtils.swift */; };
 		7CAB332C279972020000B15E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332B279972020000B15E /* Utils.swift */; };
 		7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332D2799777B0000B15E /* AutofillData.swift */; };
 		7CAB3330279979650000B15E /* AutofillDataKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332F279979650000B15E /* AutofillDataKeychain.swift */; };
@@ -118,6 +124,9 @@
 		7C8496E127B7759200CFEA8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7C8496E527B7765C00CFEA8B /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		7C8A609C27A38D5D00477348 /* FormFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldView.swift; sourceTree = "<group>"; };
+		7CA1D4A727F2E3EC009E2A6E /* RCTCryptoServiceIos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTCryptoServiceIos.m; sourceTree = "<group>"; };
+		7CA1D4AB27F2E408009E2A6E /* RNCryptoServiceIos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCryptoServiceIos.swift; sourceTree = "<group>"; };
+		7CA1D4AE27F2E424009E2A6E /* RSAUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAUtils.swift; sourceTree = "<group>"; };
 		7CAB332B279972020000B15E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		7CAB332D2799777B0000B15E /* AutofillData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillData.swift; sourceTree = "<group>"; };
 		7CAB332F279979650000B15E /* AutofillDataKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillDataKeychain.swift; sourceTree = "<group>"; };
@@ -208,6 +217,7 @@
 		13B07FAE1A68108700A75B9A /* CyStackLocker */ = {
 			isa = PBXGroup;
 			children = (
+				7CA1D4A627F2E3AD009E2A6E /* CryptoService */,
 				7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */,
 				CA03E5CA277C244500E64FA1 /* GoogleService-Info.plist */,
 				CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */,
@@ -285,6 +295,16 @@
 			path = customUI;
 			sourceTree = "<group>";
 		};
+		7CA1D4A627F2E3AD009E2A6E /* CryptoService */ = {
+			isa = PBXGroup;
+			children = (
+				7CA1D4A727F2E3EC009E2A6E /* RCTCryptoServiceIos.m */,
+				7CA1D4AB27F2E408009E2A6E /* RNCryptoServiceIos.swift */,
+				7CA1D4AE27F2E424009E2A6E /* RSAUtils.swift */,
+			);
+			name = CryptoService;
+			sourceTree = "<group>";
+		};
 		7CAB3325279969B60000B15E /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,6 +353,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				CAFA4CF6270AF9A20003FFA5 /* CyStackLocker-Bridging-Header.h */,
 				7C633CDA2761EA0D00140CAA /* Packages */,
 				CAFA4CF7270AF9A20003FFA5 /* File.swift */,
 				13B07FAE1A68108700A75B9A /* CyStackLocker */,
@@ -343,7 +364,6 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				71ED362ACEA45F9F60DCD285 /* Pods */,
 				3EA0BBBD3BB04A00BCC6AEE3 /* Resources */,
-				CAFA4CF6270AF9A20003FFA5 /* CyStackLocker-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -496,6 +516,7 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						LastSwiftMigration = 1320;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
@@ -884,6 +905,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CA1D4B027F2E424009E2A6E /* RSAUtils.swift in Sources */,
+				7CA1D4AD27F2E408009E2A6E /* RNCryptoServiceIos.swift in Sources */,
+				7CA1D4A927F2E3EC009E2A6E /* RCTCryptoServiceIos.m in Sources */,
 				00E356F31AD99517003FC87E /* CyStackLockerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -893,7 +917,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				7CA1D4AC27F2E408009E2A6E /* RNCryptoServiceIos.swift in Sources */,
 				CAFA4CF8270AF9A20003FFA5 /* File.swift in Sources */,
+				7CA1D4A827F2E3EC009E2A6E /* RCTCryptoServiceIos.m in Sources */,
+				7CA1D4AF27F2E424009E2A6E /* RSAUtils.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -971,6 +998,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -989,6 +1017,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLockerTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CyStackLocker.app/CyStackLocker";
 			};
 			name = Debug;
@@ -999,6 +1030,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = CyStackLockerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1014,6 +1046,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLockerTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CyStackLocker.app/CyStackLocker";
 			};
 			name = Release;
@@ -1026,7 +1060,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				ENABLE_BITCODE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1061,7 +1095,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;

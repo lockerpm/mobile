@@ -2,9 +2,9 @@ import { DeviceActionService as DeviceActionServiceAbstraction } from "../../../
 import { DeviceType } from "../../../../core/enums";
 import { CipherView } from "../../../../core/models/view";
 
-import { Platform, NativeModules } from 'react-native'
+import { Platform } from 'react-native'
 
-const { AutofillModule } = NativeModules
+
 
 
 export class DeviceActionService implements DeviceActionServiceAbstraction {
@@ -19,7 +19,6 @@ export class DeviceActionService implements DeviceActionServiceAbstraction {
   }
 
   openAutofillSettings() {
-    AutofillModule.test()
   }
   
   disableAutofillService: () => void

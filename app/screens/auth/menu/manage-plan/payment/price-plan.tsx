@@ -3,18 +3,25 @@ import { View, TouchableOpacity, ViewStyle } from "react-native"
 import CheckBox from "@react-native-community/checkbox"
 import { Button, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
+import { useStores } from "../../../../../models"
+import { IS_IOS } from "../../../../../config/constants"
+import { PlanType } from "../../../../../config/types"
 
 
 interface PricePlanItemProps {
   onPress: () => void
   isEnable: boolean
+
   onSale?: string
   title: string
   subtitle: string
+
 }
 
 const PricePlanItem = (prop: PricePlanItemProps) => {
   const { color } = useMixins()
+
+
   return (
     <TouchableOpacity
       onPress={prop.onPress}
@@ -72,21 +79,25 @@ interface PricePlanProps {
   purchase: (subID: string) => void
   isEnable: boolean
   personal: boolean
+  isProcessPayment: boolean
 }
 
-export const PricePlan = (prop: PricePlanProps) => {
+export const PricePlan = (props: PricePlanProps) => {
   const { translate, color } = useMixins()
+  const { user } = useStores()
+
+  const isFreeAccount = user.plan && user.plan.alias === PlanType.FREE
   const planText = {
     per: {
       monthly: {
-        subId: "pm_premium_monthly",
+        subId: !IS_IOS ? "pm_premium_monthly" : "ios_pm_premium_monthly",
         title: translate("payment.price.per.monthly.title"),
         subtitle: translate("payment.price.per.monthly.subtitle"),
         onSale: translate("payment.price.per.monthly.sale"),
         pay_title: translate("payment.price.per.monthly.pay_title")
       },
       yearly: {
-        subId: "pm_premium_yearly",
+        subId: !IS_IOS ? "pm_premium_yearly" : "ios_pm_premium_yearly",
         title: translate("payment.price.per.yearly.title"),
         subtitle: translate("payment.price.per.yearly.subtitle"),
         onSale: translate("payment.price.per.yearly.sale"),
@@ -95,14 +106,14 @@ export const PricePlan = (prop: PricePlanProps) => {
     },
     fam: {
       monthly: {
-        subId: "pm_family_monthly",
+        subId: !IS_IOS ? "pm_family_monthly" : "ios_pm_family_monthly",
         title: translate("payment.price.fam.monthly.title"),
         subtitle: translate("payment.price.fam.monthly.subtitle"),
         onSale: translate("payment.price.fam.monthly.sale"),
         pay_title: translate("payment.price.fam.monthly.pay_title")
       },
       yearly: {
-        subId: "pm_family_yearly",
+        subId: !IS_IOS ? "pm_family_yearly" : "ios_pm_family_yearly",
         title: translate("payment.price.fam.yearly.title"),
         subtitle: translate("payment.price.fam.yearly.subtitle"),
         onSale: translate("payment.price.fam.yearly.sale"),
@@ -111,8 +122,8 @@ export const PricePlan = (prop: PricePlanProps) => {
     }
   }
 
-  const plan = prop.personal ? planText.per : planText.fam
-  const billingCycle = prop.isEnable ? plan.yearly : plan.monthly
+  const plan = props.personal ? planText.per : planText.fam
+  const billingCycle = props.isEnable ? plan.yearly : plan.monthly
 
   const CONTAINER: ViewStyle = {
     marginLeft: 20,
@@ -128,15 +139,15 @@ export const PricePlan = (prop: PricePlanProps) => {
       </Text>
 
       <PricePlanItem
-        onPress={() => prop.onPress(true)}
-        isEnable={prop.isEnable}
+        onPress={() => props.onPress(true)}
+        isEnable={props.isEnable}
         onSale={plan.yearly.onSale}
         title={plan.yearly.title}
         subtitle={plan.yearly.subtitle}
       />
       <PricePlanItem
-        onPress={() => prop.onPress(false)}
-        isEnable={!prop.isEnable}
+        onPress={() => props.onPress(false)}
+        isEnable={!props.isEnable}
         onSale={plan.monthly.onSale}
         title={plan.monthly.title}
         subtitle={plan.monthly.subtitle}
@@ -145,13 +156,22 @@ export const PricePlan = (prop: PricePlanProps) => {
         style={{
           marginVertical: 20,
         }}
-        onPress={() => prop.purchase(billingCycle.subId)}
+        isDisabled={!isFreeAccount}
+        isLoading={props.isProcessPayment}
+        onPress={() => props.purchase(billingCycle.subId)}
       >
         <View style={{ flexDirection: "column", }}>
-          <Text preset="bold" style={{ color: color.white }}>
-            {billingCycle.pay_title}
+          <Text
+            preset="bold"
+            style={{ color: color.white }}
+          >
+            {props.isProcessPayment ? "" : billingCycle.pay_title}
           </Text>
-          <Text style={{ fontSize: 12, color: color.white }}>{translate("payment.cancel_text")}</Text>
+          <Text
+            style={{ fontSize: 12, color: color.white }}
+          >
+            {props.isProcessPayment ? "" : translate("payment.cancel_text")}
+          </Text>
         </View>
       </Button>
     </View>
