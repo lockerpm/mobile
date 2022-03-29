@@ -10,7 +10,7 @@ import { useStores } from "../../../../models"
 import { BackHandler } from "react-native"
 
 
-export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
+export const AuthenticatorScreen = observer(() => {
   const { translate } = useMixins()
   const navigation = useNavigation()
   const { uiStore } = useStores()

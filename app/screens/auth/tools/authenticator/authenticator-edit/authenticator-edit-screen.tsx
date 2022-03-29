@@ -159,7 +159,9 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
                 isRequired
                 label={translate('authenticator.secret_key')}
                 value={secretKey}
-                onChangeText={setSecretKey}
+                onChangeText={(val) => {
+                  setSecretKey(val.replace(/\s/g, ''))
+                }}
               />
             </View>
             {/* Password end */}

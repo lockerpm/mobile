@@ -11,7 +11,7 @@ import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { Logger } from "../../../../../utils/logger";
 
 
-export const GoogleAuthenticatorImportScreen = function GoogleAuthenticatorImportScreen() {
+export const GoogleAuthenticatorImportScreen = () => {
   const navigation = useNavigation()
   const { translate, notify, color } = useMixins()
   const { newCipher } = useCipherHelpersMixins()
@@ -43,7 +43,7 @@ export const GoogleAuthenticatorImportScreen = function GoogleAuthenticatorImpor
         ciphers,
         folders: [],
         folderRelationships: []
-      })
+      } as any)
     } catch (e) {
       Logger.error(e)
       notify('error', translate('authenticator.invalid_qr'))
