@@ -11,7 +11,7 @@ import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 
 
-export const CreateMasterPasswordScreen = observer(function CreateMasterPasswordScreen() {
+export const CreateMasterPasswordScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, color } = useMixins()
   const { getPasswordStrength } = useCipherHelpersMixins()
@@ -36,7 +36,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
     setIsScreenLoading(true)
     await logout()
     setIsScreenLoading(false)
-    navigation.navigate('onBoarding')
+    navigation.navigate('login')
   }
 
   const handleCreate = async () => {
@@ -80,7 +80,7 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
             style: 'destructive',
             onPress: async () => {
               await logout()
-              navigation.navigate('onBoarding')
+              navigation.navigate('login')
             }
           },
         ]
@@ -138,15 +138,16 @@ export const CreateMasterPasswordScreen = observer(function CreateMasterPassword
         >
           {
             !!user.avatar && (
-              <Image
-                source={{ uri: user.avatar }}
-                style={{
-                  height: 28,
-                  width: 28,
-                  borderRadius: 14,
-                  backgroundColor: color.white
-                }}
-              />
+              <View style={{ borderRadius: 14, overflow: 'hidden' }}>
+                <Image
+                  source={{ uri: user.avatar }}
+                  style={{
+                    height: 28,
+                    width: 28,
+                    backgroundColor: color.white
+                  }}
+                />
+              </View>
             )
           }
           <Text

@@ -35,7 +35,7 @@ export const LockScreen = observer(() => {
     setIsScreenLoading(true)
     await logout()
     setIsScreenLoading(false)
-    navigation.navigate('onBoarding')
+    navigation.navigate('login')
   }
 
   const handleUnlock = async () => {
@@ -151,7 +151,7 @@ export const LockScreen = observer(() => {
             style: 'destructive',
             onPress: async () => {
               await logout()
-              navigation.navigate('onBoarding')
+              navigation.navigate('login')
             }
           },
         ]

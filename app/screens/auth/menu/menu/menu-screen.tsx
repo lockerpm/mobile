@@ -121,7 +121,7 @@ export const MenuScreen = observer(() => {
         setIsLoading(true)
         await logout()
         setIsLoading(false)
-        navigation.navigate('onBoarding')
+        navigation.navigate('login')
       },
       noBorder: true
     }

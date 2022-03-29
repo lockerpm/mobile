@@ -6,7 +6,6 @@ import { AutoImage as Image, Text, FloatingInput, Button } from "../../../compon
 import { useMixins } from "../../../services/mixins"
 import { commonStyles } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
-import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { IS_IOS } from "../../../config/constants"
 
@@ -20,8 +19,7 @@ type Props = {
 
 export const DefaultLogin = observer((props: Props) => {
   const { user, uiStore } = useStores()
-  const { translate, notify, notifyApiError } = useMixins()
-  const { setApiTokens } = useCipherAuthenticationMixins()
+  const { translate, notify, notifyApiError, setApiTokens } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
   const { nextStep, onLoggedIn, handleForgot } = props
 
