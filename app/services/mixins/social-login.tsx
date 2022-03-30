@@ -70,7 +70,7 @@ export const SocialLoginMixinsProvider = observer((props: {
       })
     } catch (e) {
       setIsLoading && setIsLoading(false)
-      Logger.error(e)
+      Logger.error('googleLogin: ' + e)
       switch (e.code) {
         case statusCodes.SIGN_IN_CANCELLED:
           break
@@ -108,7 +108,7 @@ export const SocialLoginMixinsProvider = observer((props: {
       })
     } catch (e) {
       setIsLoading && setIsLoading(false)
-      Logger.error(e)
+      Logger.error('facebookLogin: ' + e)
       notify('error', translate('error.could_not_complete'))
     }
   }
@@ -135,7 +135,7 @@ export const SocialLoginMixinsProvider = observer((props: {
       })
     } catch (e) {
       setIsLoading && setIsLoading(false)
-      Logger.error(e)
+      Logger.error('githubLogin: ' + e)
       switch (e.code) {
         case 'authentication_failed':
         case 'authentication_error':
@@ -179,7 +179,7 @@ export const SocialLoginMixinsProvider = observer((props: {
       })
     } catch (e) {
       setIsLoading && setIsLoading(false)
-      Logger.error(e)
+      Logger.error('appleLogin: ' + e)
       switch (e.code) {
         case '1001':
           break

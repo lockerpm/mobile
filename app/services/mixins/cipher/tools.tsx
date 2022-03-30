@@ -132,7 +132,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       toolStore.setExposedPasswordMap(exposedPasswordMap)
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('loadPasswordsHealth: ' + e)
     }
   }
   

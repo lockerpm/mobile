@@ -56,7 +56,7 @@ export async function saveShared(username: string, password: string) {
     })
     return true
   } catch (e) {
-    Logger.error(e)
+    Logger.error('saveShared: ' + e)
     return false
   }
 }
@@ -69,7 +69,7 @@ export async function loadShared() {
     })
     return res
   } catch (e) {
-    Logger.error(e)
+    Logger.error('loadShared: ' + e)
     return false
   }
 }

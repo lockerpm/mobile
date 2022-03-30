@@ -31,7 +31,7 @@ export class CipherApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Sync data: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -51,7 +51,7 @@ export class CipherApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -74,7 +74,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Post cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -93,7 +93,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Import cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -112,7 +112,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Offline sync cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -135,7 +135,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Put cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -158,7 +158,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Share cipher to team: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -177,7 +177,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Delete ciphers: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -196,7 +196,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('To trash ciphers: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -215,7 +215,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Restore cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -234,7 +234,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Move to folder: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -255,7 +255,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get last update: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -276,7 +276,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get sharing public key: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -297,7 +297,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Share cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -317,7 +317,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Share multiple ciphers: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -337,7 +337,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Stop share cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -357,7 +357,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Edit share cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -377,7 +377,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Confirm share cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -398,7 +398,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get sharing invitation:' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -419,7 +419,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get my shares: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -439,7 +439,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Leave share: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -459,7 +459,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Respond share invitation: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -480,7 +480,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get PM profile: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -500,7 +500,7 @@ export class CipherApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get org: ' + e.message)
       return { kind: "bad-data" }
     }
   }

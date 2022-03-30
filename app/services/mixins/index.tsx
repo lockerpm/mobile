@@ -42,7 +42,8 @@ const defaultData = {
   randomString: () => '',
   boostrapPushNotifier: async () => true,
   goPremium: () => {},
-  parsePushNotiData: async () => ({ path: '', params: {} })
+  parsePushNotiData: async () => ({ path: '', params: {} }),
+  validateMasterPassword: (password: string) => ({ isValid: true, error: '' })
 }
 
 
@@ -139,7 +140,7 @@ export const MixinsProvider = observer((props: {
       return available
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('isBiometricAvailable: ' + e)
       return false
     }
   }
@@ -217,7 +218,7 @@ export const MixinsProvider = observer((props: {
         return true
       }
     } catch (e) {
-      Logger.error(e)
+      Logger.error('boostrapPushNotifier: ' + e)
       return false
     }
   }
@@ -262,6 +263,23 @@ export const MixinsProvider = observer((props: {
     return res
   }
 
+  // Validate master password
+  const validateMasterPassword = (password: string) => {
+    let isValid = true
+    let error = ''
+
+    const MIN_LENGTH = 8
+    if (password.length && password.length < MIN_LENGTH) {
+      isValid = false
+      error = translate('policy.min_password_length', { length: MIN_LENGTH })
+    }
+
+    return {
+      isValid,
+      error
+    }
+  }
+
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
@@ -281,7 +299,8 @@ export const MixinsProvider = observer((props: {
     notifyApiError,
     boostrapPushNotifier,
     goPremium,
-    parsePushNotiData
+    parsePushNotiData,
+    validateMasterPassword
   }
 
   return (

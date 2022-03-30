@@ -165,12 +165,13 @@
     "cipher_trashed": "Đã chuyển vào thùng rác",
     "cipher_updated": "Cập nhật thành công",
     "cipher_shared": "Chia sẻ thành công",
+    "share_invitaion_accepted": "Hoàn tất! Mục được chia sẻ sẽ được giải mã trong thời gian ngắn",
     "sync_success": "Đồng bộ hóa hoàn tất",
     "will_sync_when_online": "Dữ liệu của bạn sẽ được đồng bộ khi có kết nối internet."
   },
   "policy": {
-    "min_password_length": "Mật khẩu phải chứa ít nhất {length} ký tự",
-    "max_password_length": "Độ dài tối đa của mật khẩu là {length}",
+    "min_password_length": "Mật khẩu phải chứa ít nhất {{length}} ký tự",
+    "max_password_length": "Độ dài tối đa của mật khẩu là {{length}}",
     "password_composition": "Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt",
     "requires_lowercase": "Phải chứa chữ cái thường (abc)",
     "requires_uppercase": "Phải chứa chữ cái in hoa (ABC)",
