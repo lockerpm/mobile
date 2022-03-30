@@ -18,7 +18,7 @@ import {
   ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
   CryptoAccountEditScreen, CryptoAccountInfoScreen, CryptoWalletEditScreen, CryptoWalletInfoScreen,
   GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen, 
-  PaymentScreen, ManagePlanScreen
+  PaymentScreen, ManagePlanScreen, InviteMemberScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -99,6 +99,7 @@ export type PrimaryParamList = {
   payment: {
     benefitTab?: 0 | 1 | 2 | 3
   }
+  invite_member: undefined
   settings: undefined
   changeMasterPassword: undefined
   help: undefined
@@ -400,6 +401,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="cryptoWallets__info" component={CryptoWalletInfoScreen} />
         <Stack.Screen name="cryptoWallets__edit" component={CryptoWalletEditScreen} initialParams={{ mode: 'add' }} />
 
+        <Stack.Screen name="invite_member" component={InviteMemberScreen} />
         <Stack.Screen name="manage_plan" component={ManagePlanScreen} />
         <Stack.Screen name="payment" component={PaymentScreen}  initialParams={{ benefitTab: 0 }} />
         <Stack.Screen name="settings" component={SettingsScreen} />
