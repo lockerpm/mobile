@@ -26,6 +26,7 @@ import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
 
 import { PushNotifier } from "../../../../utils/push-notification"
+import { InviteMemberScreen } from "../invite_member/invite_member_screen"
 
 
 export const MenuScreen = observer(() => {
@@ -34,6 +35,7 @@ export const MenuScreen = observer(() => {
   const { translate, notify, color, isDark } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
 
+  const [showInviteMemberModal, setShowInviteMemberModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
 
@@ -49,14 +51,21 @@ export const MenuScreen = observer(() => {
   
   const items: MenuItemProps[] = [
     {
+      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
+      name: translate('menu.invite'),
+      action: () => {
+      
+        // setShowInviteMemberModal(true)
+        console.log(showInviteMemberModal)
+      }
+        
+      // action: () => navigation.navigate('invite_member'),
+      // hide: user.plan?.alias !== PlanType.FAMILY 
+    },
+    {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
       action: () => navigation.navigate('payment'),
-    },
-    {
-      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
-      name: translate('menu.invite'),
-      hide: user.plan?.alias !== PlanType.FAMILY ,
     },
     {
       icon: isDark ? <SettingsIconLight height={22} /> : <SettingsIcon height={22} />,
@@ -151,6 +160,9 @@ export const MenuScreen = observer(() => {
         <Text preset="largeHeader" text={translate('common.menu')} />
       )}
     >
+      {
+        showInviteMemberModal && <InviteMemberScreen/>
+      }
       <ScrollView>
         {/* User info */}
         <Button
