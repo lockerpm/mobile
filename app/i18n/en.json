@@ -165,12 +165,13 @@
     "cipher_trashed": "Item moved to trash!",
     "cipher_updated": "Item updated!",
     "cipher_shared": "Item shared!",
+    "share_invitaion_accepted": "Done! The shared item will be decrypted shortly",
     "sync_success": "Data synchronized!",
     "will_sync_when_online": "Your data will be synced when there is an internet connection."
   },
   "policy": {
-    "min_password_length": "Minimum password length is {length}",
-    "max_password_length": "Maximum password length is {length}",
+    "min_password_length": "Minimum password length is {{length}}",
+    "max_password_length": "Maximum password length is {{length}}",
     "password_composition": "Password must contain at least 1 special character",
     "requires_lowercase": "Requires lowercase letters (abc)",
     "requires_uppercase": "Requires uppercase letters (ABC)",

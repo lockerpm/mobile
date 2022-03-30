@@ -322,7 +322,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       ])
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('logout: ' + e)
     }
   }
 

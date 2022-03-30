@@ -210,7 +210,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         
         return { kind: 'ok' }
       } catch (e) {
-        Logger.error(e)
+        Logger.error('getSyncData: ' + e)
         messagingService.send('syncCompleted', { successfully: false })
         return { kind: 'error' }
       } finally {
@@ -303,7 +303,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await _updateAutofillData()
         return { kind: 'ok' }
       } catch (e) {
-        Logger.error(e)
+        Logger.error('startSyncProcess: ' + e)
         return { kind: 'error' }
       } finally {
         cipherStore.setIsSynching(false)
@@ -496,7 +496,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await syncOfflineData()
       }
     } catch (e) {
-      Logger.error(e)
+      Logger.error('syncAutofillData: ' + e)
     } finally {
       cipherStore.setIsSynchingAutofill(false)
     }
@@ -509,7 +509,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       cipherStore.setOrganizations(res)
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('loadOrganizations: ' + e)
     }
   }
 
@@ -529,7 +529,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       folderStore.setLastUpdate()
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('loadFolders: ' + e)
     }
   }
 
@@ -550,7 +550,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       let unassignedTeamCiphers = await getEncryptedCiphers({
         deleted: false,
         searchText: '',
-        filters: [(c : CipherView) => !c.collectionIds.length && !!getTeam(user.teams, c.organizationId).name]
+        filters: [(c : CipherView) => !c.collectionIds?.length && !!getTeam(user.teams, c.organizationId).name]
       })
       unassignedTeamCiphers.forEach((item: CipherView) => {
         const target = res.find(f => f.id === null && f.organizationId === item.organizationId)
@@ -572,7 +572,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       collectionStore.setLastUpdate()
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('loadCollections: ' + e)
     }
   }
 
@@ -587,7 +587,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return await searchService.searchEncryptedCiphers(filters, null) || []
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('getEncryptedCiphers: ' + e)
       return []
     }
   }
@@ -603,7 +603,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return await searchService.searchCiphers(params.searchText || '', filters, null) || []
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('getCiphers: ' + e)
       return []
     }
   }
@@ -626,7 +626,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('getCollections: ' + e)
       return []
     }
   }
@@ -717,7 +717,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         cipher.id = tempId
       }
     }
-    
+
     // Prepare folders
     if (!folderRequests) {
       if (importResult.folders != null) {
@@ -857,7 +857,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('createCipher: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -924,7 +924,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('updateCipher: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -986,7 +986,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('deleteCiphers: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1025,7 +1025,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('toTrashCiphers: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1064,7 +1064,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('restoreCiphers: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1135,7 +1135,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('shareCipher: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1229,7 +1229,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('shareMultipleCiphers: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1247,7 +1247,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('confirmShareCipher: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1291,7 +1291,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('stopShareCipher: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1326,7 +1326,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('editShareCipher: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1348,7 +1348,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const acceptShareInvitation = async (id: string) => {
     const res = await cipherStore.respondShare(id, true)
     if (res.kind === 'ok') {
-      notify('success', translate('success.done'))
+      notify('success', translate('success.share_invitaion_accepted'))
       cipherStore.setSharingInvitations(cipherStore.sharingInvitations.filter(i => i.id !== id))
     } else {
       notifyApiError(res)
@@ -1397,7 +1397,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('createFolder: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1459,7 +1459,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('updateFolder: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1513,7 +1513,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('deleteFolder: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1565,7 +1565,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('createCollection: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1629,7 +1629,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('updateCollection: ' + e)
       return { kind: 'unknown' }
     }
   }
@@ -1683,7 +1683,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       return res
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('deleteCollection: ' + e)
       return { kind: 'unknown' }
     }
   }

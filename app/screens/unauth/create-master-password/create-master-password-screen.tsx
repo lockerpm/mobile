@@ -13,7 +13,7 @@ import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/a
 
 export const CreateMasterPasswordScreen = observer(() => {
   const navigation = useNavigation()
-  const { translate, color } = useMixins()
+  const { translate, color, validateMasterPassword } = useMixins()
   const { getPasswordStrength } = useCipherHelpersMixins()
   const { logout, registerLocker, sessionLogin } = useCipherAuthenticationMixins()
   const { user } = useStores()
@@ -27,8 +27,10 @@ export const CreateMasterPasswordScreen = observer(() => {
   const [passwordStrength, setPasswordStrength] = useState(-1)
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
+
   const isError = !!masterPassword && !!confirmPassword && (masterPassword !== confirmPassword)
-  const isReady = !isError && !!masterPassword && !!confirmPassword
+  const masterPasswordError = validateMasterPassword(masterPassword).error
+  const isReady = !masterPasswordError && !isError && !!masterPassword && !!confirmPassword
 
   // Methods
 
@@ -165,8 +167,8 @@ export const CreateMasterPasswordScreen = observer(() => {
         {/* Master pass input */}
         <FloatingInput
           isPassword
-          isInvalid={isError}
-          errorText={translate('common.password_not_match')}
+          isInvalid={isError || !!masterPasswordError}
+          errorText={masterPasswordError || translate('common.password_not_match')}
           label={translate('common.master_pass')}
           onChangeText={(text) => {
             setMasterPassword(text)

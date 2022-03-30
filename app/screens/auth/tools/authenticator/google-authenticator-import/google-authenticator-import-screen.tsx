@@ -45,7 +45,7 @@ export const GoogleAuthenticatorImportScreen = () => {
         folderRelationships: []
       } as any)
     } catch (e) {
-      Logger.error(e)
+      Logger.error('Import google qr: ' + e)
       notify('error', translate('authenticator.invalid_qr'))
     }
     setIsLoading(false)
