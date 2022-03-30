@@ -424,7 +424,7 @@
   "menu": {
     "fingerprint": "Định danh",
     "plan": "Quản lý gói cước",
-    "invite": "Mời bạn bè",
+    "invite": "Mời thành viên",
     "invitation_to_join": "Lời mời tham gia ",
     "invitation_desc": "Bạn đã được mời tham gia {{org}}! Tham gia ngay bây giờ và bắt đầu cộng tác với nhóm của bạn."
   },

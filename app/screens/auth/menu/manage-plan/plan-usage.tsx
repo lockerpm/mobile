@@ -4,7 +4,7 @@ import { Text, Button, AutoImage as Image } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
-import { commonStyles } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 import ProgressBar from "react-native-ui-lib/progressBar"
 import { useCipherToolsMixins } from "../../../../services/mixins/cipher/tools"
 import { CipherType } from "../../../../../core/enums"
@@ -39,7 +39,7 @@ const ItemStorage = (props: PlanStorageProps) => {
     const { translate, color } = useMixins()
     const { getCipherCount } = useCipherToolsMixins()
     const [cipherCount, setCipherCount] = useState(0)
-    
+
 
     useEffect(() => {
         const allCiphers = async () => {
@@ -57,19 +57,21 @@ const ItemStorage = (props: PlanStorageProps) => {
                 marginBottom: 8,
             }}>
                 <Text preset="black">{title}</Text>
-                <Text preset="black"> {cipherCount}/{ isUnlimited ? "--" : limits}</Text>
+                <Text preset="black"> {cipherCount}/{isUnlimited ? "∞" : limits}</Text>
             </View>
 
-            <ProgressBar
-                height={6}
-                containerStyle={{
-                    borderRadius: 4
-                }}
-                progressBackgroundColor={color.block}
-                backgroundColor={color.primary}
-                // @ts-ignore
-                progress={ isUnlimited ? 0 : (cipherCount / limits * 100)}
-            />
+            {
+                !isUnlimited && <ProgressBar
+                    height={6}
+                    containerStyle={{
+                        borderRadius: 4
+                    }}
+                    progressBackgroundColor={color.block}
+                    backgroundColor={color.primary}
+                    // @ts-ignore
+                    progress={isUnlimited ? 0 : (cipherCount / limits * 100)}
+                />
+            }
         </View>
     )
 }
@@ -119,10 +121,35 @@ export const PlanUsage = () => {
         <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background, marginBottom: 10 }]}>
 
             <View style={USAGE_CONTAINER}>
-                <Text preset="default" text={user.plan?.name + " Plan Usage"} style={{ marginBottom: 8 }} />
+                {
+                    isFreeAccount && <Text preset="default" text={"Plan Usage"} style={{ marginBottom: 8 }} />
+                }
+                {
+                    !isFreeAccount &&
+                    <View style={{ flex: 1, flexDirection: "row", marginBottom: 8 }}>
+                        <Text preset="default" text={"Plan Usage"} />
+                        <View style={{
+                            marginLeft: 8,
+                            paddingHorizontal: 10,
+                            paddingVertical: 3,
+                            backgroundColor: color.primary,
+                            borderRadius: 3
+                        }}>
+                            <Text
+                                text= {user.plan?.name.toUpperCase()}
+                                style={{
+                                    fontWeight: 'bold',
+                                    color: color.background,
+                                    fontSize: fontSize.mini
+                                }}
+                            />
+                        </View>
+                    </View>
+                }
+
                 {
                     items.map(
-                        e => <ItemStorage key={e.cipherType} cipherType={e.cipherType} limits={e.limits} title={e.title} isUnlimited={!isFreeAccount}/>
+                        e => <ItemStorage key={e.cipherType} cipherType={e.cipherType} limits={e.limits} title={e.title} isUnlimited={!isFreeAccount} />
                     )
                 }
             </View>
