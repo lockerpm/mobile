@@ -94,7 +94,7 @@ export const MixinsProvider = observer((props: {
       text2: text,
       position: 'top',
       autoHide: true,
-      visibilityTime: duration ? duration : type === 'error' ? 3000 : 1500,
+      visibilityTime: duration ? duration : type === 'error' ? 3000 : 2000,
       topOffset: insets.top + 10,
       onPress: () => {
         Toast.hide()
