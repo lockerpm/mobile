@@ -9,14 +9,18 @@ import { ConfirmPassModal } from "./confirm-pass-modal"
 import { useCoreService } from "../../../../services/core-service"
 
 
-export const ExportScreen = function ExportScreen() {
+export const ExportScreen = () => {
   const navigation = useNavigation()
   const { translate, notify, color } = useMixins()
   const { platformUtilsService, exportService } = useCoreService()
   
   // ----------------------- PARAMS -----------------------
 
-  const formats = ['csv', 'json', 'encrypted_json']
+  const formats = [
+    'csv', 
+    'json', 
+    // 'encrypted_json'
+  ]
   const [isLoading, setIsLoading] = useState(false)
   const [format, setFormat] = useState('')
   const [showConfirmModal, setShowConfirmModal] = useState(false)
@@ -71,7 +75,7 @@ export const ExportScreen = function ExportScreen() {
     return 'cystack' + (prefix ? ('_' + prefix) : '') + '_export_' + dateString + '.' + extension
   }
 
-  const padNumber = (num, width, padCharacter = '0') => {
+  const padNumber = (num: number, width: number, padCharacter = '0') => {
     const numString = num.toString()
     return numString.length >= width
       ? numString
