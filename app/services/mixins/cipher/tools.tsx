@@ -79,6 +79,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
   
         // Check password strength
         if (!passwordStrengthCache.has(cacheKey)) {
+          // Compare password with username as well
           let userInput = []
           if (hasUserName) {
             const atPosition = c.login.username.indexOf('@')
@@ -92,7 +93,8 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
           }
           const result = passwordGenerationService.passwordStrength(
             c.login.password, 
-            userInput.length > 0 ? userInput : null
+            // TODO: disable for now
+            // userInput.length > 0 ? userInput : null
           )
           passwordStrengthCache.set(cacheKey, result.score)
         }
