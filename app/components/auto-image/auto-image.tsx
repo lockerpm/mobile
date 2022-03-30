@@ -18,20 +18,11 @@ export function AutoImage(props: ImageProps) {
   const [useBackup, setUseBackup] = useState(false)
 
   useLayoutEffect(() => {
+    let mounted = true
+
     if (props.source?.uri) {
       RNImage.getSize(props.source.uri as any, (width, height) => {
-        if (layoutWidth) {
-          setImageSize({
-            width: layoutWidth,
-            height: height * (layoutWidth / width)
-          })
-        } else {
-          setImageSize({ width, height })
-        }
-      }, (err) => {
-        // Use backup in case of get image from uri failed
-        if (props.backupSource && !props.backupSource.uri) {
-          const { width, height } = RNImage.resolveAssetSource(props.backupSource)
+        if (mounted) {
           if (layoutWidth) {
             setImageSize({
               width: layoutWidth,
@@ -40,6 +31,21 @@ export function AutoImage(props: ImageProps) {
           } else {
             setImageSize({ width, height })
           }
+        }
+      }, (err) => {
+        // Use backup in case of get image from uri failed
+        if (props.backupSource && !props.backupSource.uri) {
+          const { width, height } = RNImage.resolveAssetSource(props.backupSource)
+          if (mounted) {
+            if (layoutWidth) {
+              setImageSize({
+                width: layoutWidth,
+                height: height * (layoutWidth / width)
+              })
+            } else {
+              setImageSize({ width, height })
+            }
+          }
           setUseBackup(true)
         }
       })
@@ -47,28 +53,36 @@ export function AutoImage(props: ImageProps) {
       // Use backup in case of { uri: null }
       if (props.source?.uri === null && props.backupSource && !props.backupSource.uri) {
         const { width, height } = RNImage.resolveAssetSource(props.backupSource)
-        if (layoutWidth) {
-          setImageSize({
-            width: layoutWidth,
-            height: height * (layoutWidth / width)
-          })
-        } else {
-          setImageSize({ width, height })
+        if (mounted) {
+          if (layoutWidth) {
+            setImageSize({
+              width: layoutWidth,
+              height: height * (layoutWidth / width)
+            })
+          } else {
+            setImageSize({ width, height })
+          }
         }
         setUseBackup(true)
-        return
-      }
-      const { width, height } = RNImage.resolveAssetSource(props.source)
-      if (layoutWidth) {
-        setImageSize({
-          width: layoutWidth,
-          height: height * (layoutWidth / width)
-        })
       } else {
-        setImageSize({ width, height })
+        const { width, height } = RNImage.resolveAssetSource(props.source)
+        if (mounted) {
+          if (layoutWidth) {
+            setImageSize({
+              width: layoutWidth,
+              height: height * (layoutWidth / width)
+            })
+          } else {
+            setImageSize({ width, height })
+          }
+        }
       }
     }
-  }, [])
+
+    return () => {
+      mounted = false
+    }
+  }, [props.source])
 
   return (
     <RNImage
