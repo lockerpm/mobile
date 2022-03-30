@@ -104,8 +104,8 @@ export const InitScreen = observer(() => {
 
   // Mounted
   useEffect(() => {
-    setTimeout(mounted, 1500)
-    // mounted()
+    // setTimeout(mounted, 1500)
+    mounted()
   }, [])
 
   // Back handler
