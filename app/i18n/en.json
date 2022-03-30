@@ -426,7 +426,7 @@
   "menu": {
     "fingerprint": "Fingerprint",
     "plan": "Manage Plan",
-    "invite": "Invite Friends",
+    "invite": "Invite Member",
     "invitation_to_join": "Invitation to join ",
     "invitation_desc": "You’ve been invited to the {{org}} organization! Join now and start collaborating with your teammates."
   },

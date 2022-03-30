@@ -15,8 +15,7 @@ export const ToolsListScreen = observer(() => {
   const { user, uiStore } = useStores()
   const { translate, color } = useMixins()
 
-  const isPremiumLock = !user.plan || (user.plan.alias === PlanType.FREE)
-
+  const isFreeAccount = user.plan && user.plan.alias === PlanType.FREE
   return (
     <Layout
       borderBottom
@@ -42,7 +41,7 @@ export const ToolsListScreen = observer(() => {
             <Button
               key={index}
               preset="link"
-              isDisabled={item.premium && isPremiumLock}
+              isDisabled={item.premium && isFreeAccount}
               onPress={() => {
                 if (item.routeName === 'authenticator') {
                   navigation.navigate('mainTab', { screen: 'authenticatorTab' })
@@ -81,7 +80,7 @@ export const ToolsListScreen = observer(() => {
                   />
 
                   {
-                    item.premium && isPremiumLock && (
+                    item.premium && isFreeAccount && (
                       <View style={{
                         paddingHorizontal: 10,
                         paddingVertical: 2,
