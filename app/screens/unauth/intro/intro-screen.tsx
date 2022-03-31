@@ -7,25 +7,25 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../services/mixins"
 
 
-export const IntroScreen = function IntroScreen() {
+export const IntroScreen = () => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
 
   const tabs = [
     {
-      img: require("./intro.png"),
+      img: require("./intro1.png"),
       title: translate('intro.item_1.title'),
       desc: translate('intro.item_1.desc')
     },
     {
-      img: require("./intro.png"),
-      title: translate('intro.item_2.title') + ' 2',
+      img: require("./intro2.png"),
+      title: translate('intro.item_2.title'),
       desc: translate('intro.item_2.desc')
     },
     {
-      img: require("./intro.png"),
-      title: translate('intro.item_2.title') + ' 3',
-      desc: translate('intro.item_2.desc')
+      img: require("./intro3.png"),
+      title: translate('intro.item_3.title'),
+      desc: translate('intro.item_3.desc')
     }
   ]
   const map = {}
@@ -38,19 +38,24 @@ export const IntroScreen = function IntroScreen() {
   tabs.forEach((item, index) => {
     map[index.toString()] = () => (
       <View
-        key={index}
         style={[commonStyles.SECTION_PADDING, {
           flex: 1,
           justifyContent: "flex-end",
-          alignItems: 'center'
+          alignItems: 'center',
+          paddingHorizontal: 37
         }]}
       >
-        <Image source={item.img} />
+        <Image 
+          source={item.img}
+          style={{
+            width: '100%'
+          }}
+        />
         <Text preset="header" text={item.title} style={{
-          marginTop: 30,
+          marginTop: 16,
           marginBottom: 10
         }} />
-        <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: 320 }} />
+        <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24 }} />
       </View>
     )
   })

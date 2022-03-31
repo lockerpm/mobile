@@ -63,7 +63,8 @@ export const InitScreen = observer(() => {
 
     // Testing
     // if (__DEV__) {
-    //   navigation.navigate('createMasterPassword')
+    //   // navigation.navigate('createMasterPassword')
+    //   navigation.navigate('intro')
     //   return
     // }
 
