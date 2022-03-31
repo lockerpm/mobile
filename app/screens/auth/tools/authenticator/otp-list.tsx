@@ -37,7 +37,7 @@ interface Props {
 /**
  * Describe your component here
  */
-export const OtpList = observer(function OtpList(props: Props) {
+export const OtpList = observer((props: Props) => {
   const {
     navigation, emptyContent, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
@@ -174,7 +174,7 @@ export const OtpList = observer(function OtpList(props: Props) {
 
       {/* Cipher list */}
       <DraggableFlatList
-        style={{ paddingHorizontal: 20 }}
+        style={{ paddingHorizontal: 20, height: '100%' }}
         data={otps}
         keyExtractor={item => item.id.toString()}
         onDragEnd={handleChangeOrder}

@@ -196,16 +196,16 @@
   },
   "intro": {
     "item_1": {
-      "title": "Trusted and secure",
-      "desc": "Your vault is protected with world-class security. It's so secure, not even we can access your passwords."
+      "title": "Bảo mật & Riêng tư",
+      "desc": "Kho của bạn được bảo vệ với bảo mật đẳng cấp thế giới."
     },
     "item_2": {
-      "title": "Trusted and secure",
-      "desc": "Your vault is protected with world-class security. It's so secure, not even we can access your passwords."
+      "title": "Đồng bộ hóa không giới hạn",
+      "desc": "Bạn có thể truy cập dữ liệu của Locker từ bất kỳ thiết bị nào."
     },
     "item_3": {
-      "title": "Trusted and secure",
-      "desc": "Your vault is protected with world-class security. It's so secure, not even we can access your passwords."
+      "title": "Tự động điền",
+      "desc": "Tự động điền thông tin đăng nhập của bạn trên các ứng dụng và trang web."
     }
   },
   "lock": {

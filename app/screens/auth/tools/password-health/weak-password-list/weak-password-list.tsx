@@ -97,11 +97,14 @@ export const WeakPasswordList = observer(() => {
                       preset="semibold"
                       text={item.name}
                       numberOfLines={2}
+                      style={{
+                        marginRight: 7
+                      }}
                     />
 
                     {
                       item.organizationId && (
-                        <View style={{ marginLeft: 10 }}>
+                        <View style={{ marginRight: 7 }}>
                           <MaterialCommunityIconsIcon
                             name="account-group-outline"
                             size={22}
@@ -112,7 +115,6 @@ export const WeakPasswordList = observer(() => {
                     }
 
                     <View style={{
-                      marginLeft: 7,
                       paddingBottom: 4
                     }}>
                       <PasswordStrength

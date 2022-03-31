@@ -116,7 +116,7 @@
     "something_went_wrong": "Something went wrong",
     "sync_failed": "Synchronize data failed",
     "token_expired": "Session token expired",
-    "no_associated_account": "There’s no account associated with this email or username. Try another or create a new account.",
+    "no_associated_account": "There's no account associated with this email or username. Try another or create a new account.",
     "invalid_authorization_code": "The authorization code is not valid",
     "invalid_data": "Invalid data",
     "invalid_password": "Invalid password",
@@ -196,16 +196,16 @@
   },
   "intro": {
     "item_1": {
-      "title": "Trusted and secure",
-      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+      "title": "Security & Privacy",
+      "desc": "Your vault is protected with world-class security."
     },
     "item_2": {
-      "title": "Trusted and secure",
-      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+      "title": "Unlimited Sync",
+      "desc": "You can access your Locker's data from any devices."
     },
     "item_3": {
-      "title": "Trusted and secure",
-      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+      "title": "Auto-fill",
+      "desc": "Fill your credentials automatically across applications and websites."
     }
   },
   "lock": {
@@ -428,7 +428,7 @@
     "plan": "Manage Plan",
     "invite": "Invite Member",
     "invitation_to_join": "Invitation to join ",
-    "invitation_desc": "You’ve been invited to the {{org}} organization! Join now and start collaborating with your teammates."
+    "invitation_desc": "You've been invited to the {{org}} organization! Join now and start collaborating with your teammates."
   },
   "pass_generator": {
     "title": "Password Generator",

@@ -97,11 +97,14 @@ export const ExposedPasswordList = observer(() => {
                       preset="semibold"
                       text={item.name}
                       numberOfLines={2}
+                      style={{
+                        marginRight: 7
+                      }}
                     />
 
                     {
                       item.organizationId && (
-                        <View style={{ marginLeft: 10 }}>
+                        <View style={{ marginRight: 7 }}>
                           <MaterialCommunityIconsIcon
                             name="account-group-outline"
                             size={22}
@@ -115,8 +118,7 @@ export const ExposedPasswordList = observer(() => {
                         paddingHorizontal: 10,
                         paddingVertical: 2,
                         backgroundColor: color.warning,
-                        borderRadius: 3,
-                        marginLeft: 7
+                        borderRadius: 3
                       }}>
                         <Text
                           text={`${item.count} ${translate('common.times')}`}
