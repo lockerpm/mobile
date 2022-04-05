@@ -53,18 +53,9 @@ const RootStack = observer(() => {
   const { uiStore } = useStores()
 
   // Prevent store from being called too soon and break the initialization
-  const [appIsReady, setAppIsReady] = useState(false)
   let removeNetInfoSubscription = () => {}
 
   useEffect(() => {
-    // Check network (delay to protect the store initialization)
-    if (!appIsReady) {
-      setTimeout(() => {
-        setAppIsReady(true)
-      }, 2000)
-      return () => {}
-    }
-    
     removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
       Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
@@ -74,7 +65,7 @@ const RootStack = observer(() => {
     return () => {
       removeNetInfoSubscription()
     }
-  }, [appIsReady])
+  }, [])
 
   // -------------------- RENDER ----------------------
 

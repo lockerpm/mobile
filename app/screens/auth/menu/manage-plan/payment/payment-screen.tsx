@@ -34,10 +34,10 @@ const subSkus = Platform.select({
     "pm_premium_yearly"
   ],
   ios: [
-    "ios_pm_family_monthly",
-    "ios_pm_family_yearly",
-    "ios_pm_premium_monthly",
-    "ios_pm_premium_yearly"
+    "locker_pm_family_monthly",
+    "locker_pm_family_yearly",
+    "locker_pm_premium_monthly",
+    "locker_pm_premium_yearly"
   ],
 });
 
