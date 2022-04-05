@@ -1,6 +1,13 @@
 apply plugin: "com.android.application"
-// apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 apply plugin: 'com.google.gms.google-services'
+
+project.ext.envConfigFiles = [
+  productiondebug: "/app/config/.env.production",
+  productionrelease: "/app/config/.env.production",
+  stagingrelease: "/app/config/.env.staging",
+  stagingdebug: "/app/config/.env.staging"
+]
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 // Unimodules: https://docs.expo.io/bare/installing-unimodules/#configuration-for-android
 apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
 
@@ -176,6 +183,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            matchingFallbacks = ['debug', 'release']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -185,6 +193,24 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    flavorDimensions "version"
+    productFlavors {
+        production {     
+            dimension "version"
+            resValue "string", "app_name", "Locker"    
+            resValue "string", "build_config_package", "com.cystack.locker"
+        }
+
+        staging {
+            // We can have build-specific configurations here. Like using applicationIdSuffix to create different package name (ex. ".staging")
+            dimension "version"
+            applicationIdSuffix ".staging"
+            versionNameSuffix "-staging"
+            resValue "string", "app_name", "[Staging] Locker"
+            resValue "string", "build_config_package", "com.cystack.locker"
+        }
+    }
+
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
