@@ -7,7 +7,7 @@ import { useStores } from "../../../models"
 import NetInfo from '@react-native-community/netinfo'
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
-import { IS_IOS } from "../../../config/constants"
+import { IS_IOS, BASE_URL } from "../../../config/constants"
 
 
 export const StartScreen = observer(() => {
@@ -22,7 +22,7 @@ export const StartScreen = observer(() => {
   const [msg, setMsg] = useState('')
 
   // ------------------------- METHODS ----------------------------
-
+  console.log(BASE_URL)
   const refreshFCM = async () => {
     if (!user.disablePushNotifications) {
       let isSuccess = true
