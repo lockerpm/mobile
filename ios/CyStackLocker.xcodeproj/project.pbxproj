@@ -99,7 +99,9 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = CyStackLocker/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CyStackLocker/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = CyStackLocker/main.m; sourceTree = "<group>"; };
+		1578E196A5C6E7A4BE11C4E3 /* Pods-CyStackLocker.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker.debug staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker/Pods-CyStackLocker.debug staging.xcconfig"; sourceTree = "<group>"; };
 		20839F38FDD645F9BF6204AF /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		29E61042944E667AE1836450 /* Pods-CyStackLocker.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker.release staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker/Pods-CyStackLocker.release staging.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* CyStackLocker-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CyStackLocker-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* CyStackLocker-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CyStackLocker-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		301BE758935A381A571F5B21 /* libPods-CyStackLocker-CyStackLockerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CyStackLocker-CyStackLockerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +115,7 @@
 		56D0F3DAF1AC4D5AAB76FEEA /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		6102F80C8AA04C85ADA0AEE2 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		643666B7E5804C808CAF1052 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		6815861EF5345E1CDC822CF6 /* Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig"; sourceTree = "<group>"; };
 		771E1616CFA147CD9E433C3F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLockerRelease.entitlements; path = CyStackLocker/CyStackLockerRelease.entitlements; sourceTree = "<group>"; };
 		7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
@@ -136,6 +139,7 @@
 		7CB5348927E9C4F600E31C07 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
 		7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashCore.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CyStackLocker/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8CE0CE211F1098E461694F3F /* Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig"; sourceTree = "<group>"; };
 		8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		96D89FDC55DA47C5942CCE3B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		CA03E5CA277C244500E64FA1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -274,6 +278,10 @@
 				4D40708BE521DBE7DC6E68C8 /* Pods-CyStackLocker.release.xcconfig */,
 				8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */,
 				32B04630CC446F19212E357A /* Pods-CyStackLocker-CyStackLockerTests.release.xcconfig */,
+				1578E196A5C6E7A4BE11C4E3 /* Pods-CyStackLocker.debug staging.xcconfig */,
+				29E61042944E667AE1836450 /* Pods-CyStackLocker.release staging.xcconfig */,
+				6815861EF5345E1CDC822CF6 /* Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig */,
+				8CE0CE211F1098E461694F3F /* Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1062,6 +1070,7 @@
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
 				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
+				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1097,6 +1106,7 @@
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
 				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
+				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1301,7 +1311,7 @@
 		};
 		7C83F63927FC1DC300F60DAE /* Release Staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4D40708BE521DBE7DC6E68C8 /* Pods-CyStackLocker.release.xcconfig */;
+			baseConfigurationReference = 29E61042944E667AE1836450 /* Pods-CyStackLocker.release staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1309,6 +1319,7 @@
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
 				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
+				DISPLAY_NAME = "Staging Locker";
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1335,7 +1346,7 @@
 		};
 		7C83F63A27FC1DC300F60DAE /* Release Staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 32B04630CC446F19212E357A /* Pods-CyStackLocker-CyStackLockerTests.release.xcconfig */;
+			baseConfigurationReference = 8CE0CE211F1098E461694F3F /* Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1528,7 +1539,7 @@
 		};
 		7C83F63F27FC1DE200F60DAE /* Debug Staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3ECD546F3378FD459F4E82B0 /* Pods-CyStackLocker.debug.xcconfig */;
+			baseConfigurationReference = 1578E196A5C6E7A4BE11C4E3 /* Pods-CyStackLocker.debug staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1536,6 +1547,7 @@
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
 				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
+				DISPLAY_NAME = "Staging Locker";
 				ENABLE_BITCODE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1563,7 +1575,7 @@
 		};
 		7C83F64027FC1DE200F60DAE /* Debug Staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */;
+			baseConfigurationReference = 6815861EF5345E1CDC822CF6 /* Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

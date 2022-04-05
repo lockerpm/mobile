@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>576960862167-0gor6mqlftu7co4tdn58rg4vdgqlsten.apps.googleusercontent.com</string>
+	<string>576960862167-4do74ag7spnibiqh9gkpqa2sgd9s1aks.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.576960862167-0gor6mqlftu7co4tdn58rg4vdgqlsten</string>
+	<string>com.googleusercontent.apps.576960862167-4do74ag7spnibiqh9gkpqa2sgd9s1aks</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>576960862167-cefrs9ri8spjtbhb9r2bbgddnsg46nrl.apps.googleusercontent.com</string>
+	<string>576960862167-2t98r555c7rbm5kdt82bgcf6ij3lh0rk.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCJi3_cYEo_TTlO-cRrl7UYU0wwQWtGnYA</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.cystack.lockerapp</string>
+	<string>com.cystack.lockerapp.staging</string>
 	<key>PROJECT_ID</key>
 	<string>lockerio</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:576960862167:ios:a332ed7d06503500bb1d92</string>
+	<string>1:576960862167:ios:1df736b25a1dd887bb1d92</string>
 </dict>
 </plist>
