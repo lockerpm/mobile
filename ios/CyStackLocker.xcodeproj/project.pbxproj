@@ -798,7 +798,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH_TO_GOOGLE_PLISTS=“${PROJECT_DIR}/Firebase”\n\ncase “${CONFIGURATION}” in\n  “Debug Staging” | “Release Staging” )\n    cp -r “$PATH_TO_GOOGLE_PLISTS/Staging/GoogleService-Info.plist” “${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist” ;;\n  “Debug” | “Release” | “Distribution” | “Test_Poduction” )\n    cp -r “$PATH_TO_GOOGLE_PLISTS/Prod/GoogleService-Info.plist” “${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist” ;;\n  *)\n    ;;\n    \nesac\n";
+			shellScript = "PATH_TO_GOOGLE_PLISTS=\"${PROJECT_DIR}/Firebase\"\n\ncase \"${CONFIGURATION}\" in\n\n   \"Debug Staging\" | \"Release Staging\" )\n        cp -r \"$PATH_TO_GOOGLE_PLISTS/Staging/GoogleService-Info.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n\n   \"Debug\" | \"Release\" )\n        cp -r \"$PATH_TO_GOOGLE_PLISTS/Prod/GoogleService-Info.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n    *)\n        ;;\nesac\n";
 		};
 		821B8C042C64835F8AA180E7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1475,7 +1475,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LockerAutofill;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.staging.LockerAutofill;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -1708,7 +1708,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LockerAutofill;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.staging.LockerAutofill;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
