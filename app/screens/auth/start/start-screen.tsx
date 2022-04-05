@@ -30,6 +30,7 @@ export const StartScreen = observer(() => {
         isSuccess = await boostrapPushNotifier()
       }
       if (isSuccess) {
+        console.log(user.fcmToken)
         user.updateFCM(user.fcmToken)
       }
     }
