@@ -260,7 +260,7 @@
   },
   "start": {
     "synching": "Synchronizing...",
-    "getting_team_info": "Getting your team information...",
+    "getting_team_info": "Getting your information...",
     "getting_plan_info": "Getting your plan information...",
     "decrypting": "Preparing your data..."
   },
@@ -587,13 +587,13 @@
       },
       "fam": {
         "yearly": {
-          "title": "$0.99/ member/ month",
+          "title": "$0.99/ mem/ mon",
           "subtitle": "$71.99/ 6 members, billed yearly",
           "sale": "Save 80%",
           "pay_title": "Upgrade now for $71.99"
         },
         "monthly": {
-          "title": "$1.6/ member/ month",
+          "title": "$1.6/ mem/ mon",
           "subtitle": "$9.99/ 6 members, billed monthly",
           "sale": "Save 67%",
           "pay_title": "Upgrade now for $9.99"

@@ -40,6 +40,8 @@ const ItemStorage = (props: PlanStorageProps) => {
     const { getCipherCount } = useCipherToolsMixins()
     const [cipherCount, setCipherCount] = useState(0)
 
+    const usagePercentage = cipherCount / limits * 100
+    const backgroundColor = usagePercentage > 80 ? (usagePercentage > 100 ? color.error :  color.warning) : color.primary
 
     useEffect(() => {
         const allCiphers = async () => {
@@ -67,7 +69,7 @@ const ItemStorage = (props: PlanStorageProps) => {
                         borderRadius: 4
                     }}
                     progressBackgroundColor={color.block}
-                    backgroundColor={color.primary}
+                    backgroundColor={backgroundColor}
                     // @ts-ignore
                     progress={isUnlimited ? 0 : (cipherCount / limits * 100)}
                 />

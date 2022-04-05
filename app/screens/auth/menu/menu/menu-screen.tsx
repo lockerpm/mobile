@@ -50,18 +50,18 @@ export const MenuScreen = observer(() => {
   }
   
   const items: MenuItemProps[] = [
-    {
-      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
-      name: translate('menu.invite'),
-      action: () => {
+    // {
+    //   icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
+    //   name: translate('menu.invite'),
+    //   action: () => {
       
-        // setShowInviteMemberModal(true)
-        console.log(showInviteMemberModal)
-      }
+    //     // setShowInviteMemberModal(true)
+    //     console.log(showInviteMemberModal)
+    //   }
         
-      // action: () => navigation.navigate('invite_member'),
-      // hide: user.plan?.alias !== PlanType.FAMILY 
-    },
+    //   // action: () => navigation.navigate('invite_member'),
+    //   // hide: user.plan?.alias !== PlanType.FAMILY 
+    // },
     {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
