@@ -13,7 +13,7 @@ import { useStores } from "../../../models"
 
 type CountrySelectScreenProp = RouteProp<RootParamList, 'countrySelector'>;
 
-export const CountrySelectorScreen = observer(function CountrySelectorScreen() {
+export const CountrySelectorScreen = observer(() => {
   const navigation = useNavigation()
   const { uiStore } = useStores()
   const { translate, color } = useMixins()
@@ -34,6 +34,45 @@ export const CountrySelectorScreen = observer(function CountrySelectorScreen() {
     uiStore.setSelectedCountry(code)
     navigation.goBack()
   }
+
+  const renderItem = ({ item }) => (
+    <Button
+      preset="link"
+      onPress={() => handleSelect(item.country_code)}
+      style={{
+        height: 52.2
+      }}
+    >
+      <View
+        style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+          paddingHorizontal: 20,
+          paddingVertical: 15
+        }]}
+      >
+        <Image
+          source={{ uri: item.flag }}
+          style={{
+            height: 22,
+            width: 34
+          }}
+        />
+        <Text
+          preset="black"
+          text={item.country_name}
+          style={{ flex: 1, paddingHorizontal: 10 }}
+        />
+        {
+          initialId === item.country_code && (
+            <Icon
+              name="check"
+              size={16}
+              color={color.primary}
+            />
+          )
+        }
+      </View>
+    </Button>
+  )
 
   return (
     <Layout
@@ -61,41 +100,12 @@ export const CountrySelectorScreen = observer(function CountrySelectorScreen() {
           || i.country_code.includes(search.toUpperCase())
         ))}
         keyExtractor={item => item.country_code}
-        renderItem={({ item }) => (
-          <Button
-            preset="link"
-            onPress={() => handleSelect(item.country_code)}
-          >
-            <View
-              style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-                paddingHorizontal: 20,
-                paddingVertical: 15
-              }]}
-            >
-              <Image
-                source={{ uri: item.flag }}
-                style={{
-                  height: 22,
-                  width: 34
-                }}
-              />
-              <Text
-                preset="black"
-                text={item.country_name}
-                style={{ flex: 1, paddingHorizontal: 10 }}
-              />
-              {
-                initialId === item.country_code && (
-                  <Icon
-                    name="check"
-                    size={16}
-                    color={color.primary}
-                  />
-                )
-              }
-            </View>
-          </Button>
-        )}
+        renderItem={renderItem}
+        getItemLayout={(data, index) => ({
+          length: 52.2,
+          offset: 52.2 * index,
+          index
+        })}
       />
     </Layout>
   )
