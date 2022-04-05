@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "&#10;">
+               scriptText = "cp &#x201c;${PROJECT_DIR}/../app/config/.env.production&#x201d; &#x201c;${PROJECT_DIR}/../.env&#x201d;&#10;">
             </ActionContent>
          </ExecutionAction>
       </PreActions>
