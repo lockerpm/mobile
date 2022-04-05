@@ -6,6 +6,7 @@ import { useStores } from "../../../../../models"
 import { observer } from "mobx-react-lite"
 import { PremiumBenefits } from "./premium-benefits"
 import { IS_IOS } from '../../../../../config/constants'
+import { SKU } from "./price-plan.sku"
 import { PricePlan } from "./price-plan"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
@@ -26,22 +27,12 @@ type ScreenProp = RouteProp<PrimaryParamList, 'payment'>;
 let purchaseUpdateSubscription: EmitterSubscription;
 let purchaseErrorSubscription: EmitterSubscription;
 
-const subSkus = Platform.select({
-  android: [
-    "pm_family_monthly",
-    "pm_family_yearly",
-    "pm_premium_monthly",
-    "pm_premium_yearly"
-  ],
-  ios: [
-    "ios_pm_family_monthly",
-    "ios_pm_family_yearly",
-    "ios_pm_premium_monthly",
-    "ios_pm_premium_yearly"
-  ],
-});
-
-
+const subSkus = [
+  SKU.PRE_MON,
+  SKU.PRE_YEAR,
+  SKU.FAM_MON,
+  SKU.FAM_YEAR
+]
 
 export const PaymentScreen = observer(function PaymentScreen() {
   const { translate, color, isDark } = useMixins()
@@ -58,54 +49,54 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   const getSubscription = useCallback(async (): Promise<void> => {
     try {
-      const result = await RNIap.initConnection();
-      if (result === false) {
-        return;
+      await RNIap.initConnection();
+      if (!IS_IOS) {
+        await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
+      } else {
+        await RNIap.clearTransactionIOS();
       }
+
+      const subscriptions = await RNIap.getSubscriptions(subSkus);
+      setSubcriptions(subscriptions);
     } catch (err) {
       Logger.error({ 'initConnection': err })
       Alert.alert('Fail to get in-app-purchase information');
-    }
-
-    if (IS_IOS) {
-      RNIap.clearTransactionIOS()
-    }
-    else {
-      RNIap.flushFailedPurchasesCachedAsPendingAndroid();
     }
 
 
     purchaseUpdateSubscription = purchaseUpdatedListener(
       async (purchase: SubscriptionPurchase) => {
         if (purchase) {
-          var verified: boolean = false;
-          if (IS_IOS) {
-            verified = await user.purchaseValidation(purchase.transactionReceipt, purchase.productId, purchase.originalTransactionIdentifierIOS)
-          } else {
-            verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
-          }
+          const receipt = purchase.transactionReceipt
+          if (receipt) {
+            try {
+              const ackResult = await finishTransaction(purchase);
+              Logger.debug({ 'ackResult': ackResult });
+            } catch (ackErr) {
+              Logger.error({ 'ackErr': ackErr });
+            }
 
-          try {
-            const ackResult = await finishTransaction(purchase);
-            Logger.debug({ 'ackResult': ackResult });
-          } catch (ackErr) {
-            Logger.error({ 'ackErr': ackErr });
+            var verified: boolean = false;
+            if (IS_IOS) {
+              verified = await user.purchaseValidation(purchase.transactionReceipt, purchase.productId, purchase.originalTransactionIdentifierIOS)
+            } else {
+              verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
+            }
+            if (!verified) {
+              Alert.alert(
+                "Purchase Verification",
+                "Locker can not verify your purchase",
+                [
+                  { text: "OK", onPress: () => { } }
+                ]
+              )
+            } else {
+              navigation.navigate("mainTab")
+            }
+            setProcessPayment(false)
           }
-
-          if (!verified) {
-            Alert.alert(
-              "Purchase Verification",
-              "Locker can not verify your purchase",
-              [
-                { text: "OK", onPress: () => { } }
-              ]
-            )
-          } else {
-            navigation.navigate("mainTab")
-          }
-          setProcessPayment(false)
         }
-      },
+      }
     );
 
     purchaseErrorSubscription = purchaseErrorListener(
@@ -113,10 +104,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
         Logger.error({ 'purchaseErrorListener': error });
       },
     );
-
-    const subscriptions = await RNIap.getSubscriptions(subSkus);
-    setSubcriptions(subscriptions);
-    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -138,9 +125,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
       RNIap.clearTransactionIOS()
     }
     RNIap.requestSubscription(productId)
-      .then((e) => {
-        // last run
-      })
       .catch((error) => {
         setProcessPayment(false)
         if (error.code === 'E_USER_CANCELLED') {
@@ -204,7 +188,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
       </View>
 
       <View style={[styles.payment, { backgroundColor: color.background }]}>
-        <Segment />
+        {/* <Segment /> */}
         <PricePlan
           onPress={setEnable}
           isProcessPayment={processPayment}

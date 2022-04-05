@@ -4,9 +4,8 @@ import CheckBox from "@react-native-community/checkbox"
 import { Button, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
-import { IS_IOS } from "../../../../../config/constants"
 import { PlanType } from "../../../../../config/types"
-
+import { SKU } from "./price-plan.sku"
 
 interface PricePlanItemProps {
   onPress: () => void
@@ -86,18 +85,18 @@ export const PricePlan = (props: PricePlanProps) => {
   const { translate, color } = useMixins()
   const { user } = useStores()
 
-  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan 
+  // const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan 
   const planText = {
     per: {
       monthly: {
-        subId: !IS_IOS ? "pm_premium_monthly" : "ios_pm_premium_monthly",
+        subId: SKU.PRE_MON,
         title: translate("payment.price.per.monthly.title"),
         subtitle: translate("payment.price.per.monthly.subtitle"),
         onSale: translate("payment.price.per.monthly.sale"),
         pay_title: translate("payment.price.per.monthly.pay_title")
       },
       yearly: {
-        subId: !IS_IOS ? "pm_premium_yearly" : "ios_pm_premium_yearly",
+        subId: SKU.PRE_YEAR,
         title: translate("payment.price.per.yearly.title"),
         subtitle: translate("payment.price.per.yearly.subtitle"),
         onSale: translate("payment.price.per.yearly.sale"),
@@ -106,14 +105,14 @@ export const PricePlan = (props: PricePlanProps) => {
     },
     fam: {
       monthly: {
-        subId: !IS_IOS ? "pm_family_monthly" : "ios_pm_family_monthly",
+        subId: SKU.FAM_MON,
         title: translate("payment.price.fam.monthly.title"),
         subtitle: translate("payment.price.fam.monthly.subtitle"),
         onSale: translate("payment.price.fam.monthly.sale"),
         pay_title: translate("payment.price.fam.monthly.pay_title")
       },
       yearly: {
-        subId: !IS_IOS ? "pm_family_yearly" : "ios_pm_family_yearly",
+        subId: SKU.FAM_YEAR,
         title: translate("payment.price.fam.yearly.title"),
         subtitle: translate("payment.price.fam.yearly.subtitle"),
         onSale: translate("payment.price.fam.yearly.sale"),
@@ -156,7 +155,7 @@ export const PricePlan = (props: PricePlanProps) => {
         style={{
           marginVertical: 20,
         }}
-        isDisabled={!isFreeAccount}
+        // isDisabled={!isFreeAccount}
         isLoading={props.isProcessPayment}
         onPress={() => props.purchase(billingCycle.subId)}
       >

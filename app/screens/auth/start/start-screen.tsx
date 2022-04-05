@@ -7,7 +7,7 @@ import { useStores } from "../../../models"
 import NetInfo from '@react-native-community/netinfo'
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
-import { IS_IOS, BASE_URL } from "../../../config/constants"
+import { BASE_URL } from "../../../config/constants"
 
 
 export const StartScreen = observer(() => {
@@ -37,9 +37,9 @@ export const StartScreen = observer(() => {
   }
 
   const mounted = async () => {
-    if (IS_IOS) {
-      syncAutofillData()
-    }
+   
+    syncAutofillData()
+    
 
     const connectionState = await NetInfo.fetch()
 

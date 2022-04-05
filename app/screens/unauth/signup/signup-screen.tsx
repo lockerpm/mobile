@@ -7,7 +7,7 @@ import { Layout, AutoImage as Image, Text, FloatingInput, Button } from "../../.
 import { useMixins } from "../../../services/mixins"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
-import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL } from "../../../config/constants"
+import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL, IS_PROD } from "../../../config/constants"
 import { Checkbox } from "react-native-ui-lib"
 import countries from '../../../common/countries.json'
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
@@ -67,6 +67,7 @@ export const SignupScreen = observer(() => {
     },
 
     facebook: {
+      hide: !IS_PROD,
       icon: SOCIAL_LOGIN_ICON.facebook,
       handler: () => {
         return facebookLogin({
@@ -77,6 +78,7 @@ export const SignupScreen = observer(() => {
     },
 
     github: {
+      hide: !IS_PROD,
       icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.githubLight : SOCIAL_LOGIN_ICON.github,
       handler: () => {
         return githubLogin({
