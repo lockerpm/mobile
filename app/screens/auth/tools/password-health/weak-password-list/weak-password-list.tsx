@@ -42,6 +42,77 @@ export const WeakPasswordList = observer(() => {
 
   // -------------- RENDER ------------------
 
+  const renderItem = ({ item }) => (
+    <Button
+      preset="link"
+      onPress={() => goToDetail(item)}
+      style={{
+        borderBottomColor: color.line,
+        borderBottomWidth: 0.5,
+        paddingVertical: 15,
+        height: 70.5
+      }}
+    >
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        <Image
+          source={item.imgLogo || item.logo}
+          backupSource={item.logo}
+          style={{
+            height: 40,
+            width: 40,
+            borderRadius: 8
+          }}
+        />
+
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+            <View style={{ flex: 1 }}>
+              <Text
+                preset="semibold"
+                text={item.name}
+                numberOfLines={1}
+                style={{
+                  marginRight: 7
+                }}
+              />
+            </View>
+
+            {
+              item.organizationId && (
+                <View style={{ marginRight: 7 }}>
+                  <MaterialCommunityIconsIcon
+                    name="account-group-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+
+            <View style={{
+              paddingBottom: 4
+            }}>
+              <PasswordStrength
+                preset="text"
+                value={item.strength}
+              />
+            </View>
+          </View>
+
+          {
+            !!getDescription(item) && (
+              <Text
+                text={getDescription(item)}
+                style={{ fontSize: fontSize.small }}
+                numberOfLines={1}
+              />
+            )
+          }
+        </View>
+      </View>
+    </Button>
+  )
+
   return (
     <Layout
       header={(
@@ -70,72 +141,12 @@ export const WeakPasswordList = observer(() => {
               }}
             />
           )}
-          renderItem={({ item }) => (
-            <Button
-              preset="link"
-              onPress={() => goToDetail(item)}
-              style={{
-                borderBottomColor: color.line,
-                borderBottomWidth: 0.5,
-                paddingVertical: 15
-              }}
-            >
-              <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-                <Image
-                  source={item.imgLogo || item.logo}
-                  backupSource={item.logo}
-                  style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 8
-                  }}
-                />
-
-                <View style={{ flex: 1, marginLeft: 12 }}>
-                  <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
-                    <Text
-                      preset="semibold"
-                      text={item.name}
-                      numberOfLines={2}
-                      style={{
-                        marginRight: 7
-                      }}
-                    />
-
-                    {
-                      item.organizationId && (
-                        <View style={{ marginRight: 7 }}>
-                          <MaterialCommunityIconsIcon
-                            name="account-group-outline"
-                            size={22}
-                            color={color.textBlack}
-                          />
-                        </View>
-                      )
-                    }
-
-                    <View style={{
-                      paddingBottom: 4
-                    }}>
-                      <PasswordStrength
-                        preset="text"
-                        value={item.strength}
-                      />
-                    </View>
-                  </View>
-
-                  {
-                    !!getDescription(item) && (
-                      <Text
-                        text={getDescription(item)}
-                        style={{ fontSize: fontSize.small }}
-                      />
-                    )
-                  }
-                </View>
-              </View>
-            </Button>
-          )}
+          renderItem={renderItem}
+          getItemLayout={(data, index) => ({
+            length: 71,
+            offset: 71 * index,
+            index
+          })}
         />
       </View>
     </Layout>

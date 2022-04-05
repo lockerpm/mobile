@@ -145,6 +145,114 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
 
   // ------------------------ RENDER ----------------------------
 
+  const renderItem = ({ item }) => (
+    <Button
+      preset="link"
+      onPress={() => {
+        if (isSelecting) {
+          toggleItemSelection(item)
+        } else {
+          selectForAutoFill(item)
+        }
+      }}
+      onLongPress={() => toggleItemSelection(item)}
+      style={{
+        borderBottomColor: color.line,
+        borderBottomWidth: 0.5,
+        paddingVertical: 15,
+        height: 70.5
+      }}
+    >
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        {
+          item.svg ? (
+            <item.svg height={40} width={40} />
+          ) : (
+            <Image
+              source={item.imgLogo || item.logo}
+              backupSource={item.logo}
+              style={{
+                height: 40,
+                width: 40,
+                borderRadius: 8
+              }}
+            />
+          )
+        }
+
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+            <View style={{ flex: 1 }}>
+              <Text
+                preset="semibold"
+                numberOfLines={1}
+                text={item.name}
+              />
+            </View>
+
+            {
+              item.organizationId && (
+                <View style={{ marginLeft: 10 }}>
+                  <MaterialCommunityIconsIcon
+                    name="account-group-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+
+            {
+              item.notSync && (
+                <View style={{ marginLeft: 10 }}>
+                  <MaterialCommunityIconsIcon
+                    name="cloud-off-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+          </View>
+
+          {
+            !!getDescription(item) && (
+              <Text
+                text={getDescription(item)}
+                style={{ fontSize: fontSize.small }}
+                numberOfLines={1}
+              />
+            )
+          }
+        </View>
+
+        {
+          isSelecting ? (
+            <Checkbox
+              value={selectedItems.includes(item.id)}
+              color={color.primary}
+              onValueChange={() => {
+                toggleItemSelection(item)
+              }}
+            />
+          ) : (
+            <Button
+              preset="link"
+              onPress={() => openActionMenu(item)}
+              style={{ height: 40, alignItems: 'center' }}
+            >
+              <IoniconsIcon
+                name="ellipsis-horizontal"
+                size={18}
+                color={color.textBlack}
+              />
+            </Button>
+          )
+        }
+      </View>
+    </Button>
+  )
+
   return ciphers.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
@@ -165,108 +273,12 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
         }}
         data={ciphers}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
-          <Button
-            preset="link"
-            onPress={() => {
-              if (isSelecting) {
-                toggleItemSelection(item)
-              } else {
-                selectForAutoFill(item)
-              }
-            }}
-            onLongPress={() => toggleItemSelection(item)}
-            style={{
-              borderBottomColor: color.line,
-              borderBottomWidth: 0.5,
-              paddingVertical: 15
-            }}
-          >
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              {
-                item.svg ? (
-                  <item.svg height={40} width={40} />
-                ) : (
-                  <Image
-                    source={item.imgLogo || item.logo}
-                    backupSource={item.logo}
-                    style={{
-                      height: 40,
-                      width: 40,
-                      borderRadius: 8
-                    }}
-                  />
-                )
-              }
-
-              <View style={{ flex: 1, marginLeft: 12 }}>
-                <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
-                  <Text
-                    preset="semibold"
-                    text={item.name}
-                  />
-
-                  {
-                    item.organizationId && (
-                      <View style={{ marginLeft: 10 }}>
-                        <MaterialCommunityIconsIcon
-                          name="account-group-outline"
-                          size={22}
-                          color={color.textBlack}
-                        />
-                      </View>
-                    )
-                  }
-
-                  {
-                    item.notSync && (
-                      <View style={{ marginLeft: 10 }}>
-                        <MaterialCommunityIconsIcon
-                          name="cloud-off-outline"
-                          size={22}
-                          color={color.textBlack}
-                        />
-                      </View>
-                    )
-                  }
-                </View>
-
-                {
-                  !!getDescription(item) && (
-                    <Text
-                      text={getDescription(item)}
-                      style={{ fontSize: fontSize.small }}
-                    />
-                  )
-                }
-              </View>
-
-              {
-                isSelecting ? (
-                  <Checkbox
-                    value={selectedItems.includes(item.id)}
-                    color={color.primary}
-                    onValueChange={() => {
-                      toggleItemSelection(item)
-                    }}
-                  />
-                ) : (
-                  <Button
-                    preset="link"
-                    onPress={() => openActionMenu(item)}
-                    style={{ height: 40, alignItems: 'center' }}
-                  >
-                    <IoniconsIcon
-                      name="ellipsis-horizontal"
-                      size={18}
-                      color={color.textBlack}
-                    />
-                  </Button>
-                )
-              }
-            </View>
-          </Button>
-        )}
+        renderItem={renderItem}
+        getItemLayout={(data, index) => ({
+          length: 71,
+          offset: 71 * index,
+          index
+        })}
       />
       {/* Cipher list end */}
     </View>

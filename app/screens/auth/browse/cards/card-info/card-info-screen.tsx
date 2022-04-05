@@ -112,8 +112,8 @@ export const CardInfoScreen = observer(() => {
 
       {/* Info */}
       <View style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingVertical: 22
+        backgroundColor: color.background,
+        paddingVertical: 22
       }]}>
         {/* Cardholder name */}
         <FloatingInput

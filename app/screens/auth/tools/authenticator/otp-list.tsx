@@ -158,6 +158,122 @@ export const OtpList = observer((props: Props) => {
 
   // ------------------------ RENDER ----------------------------
 
+  const renderItem = ({ item, index, drag, isActive }) => (
+    <Button
+      preset="link"
+      onPress={() => {
+        if (isSelecting) {
+          toggleItemSelection(item)
+        } else {
+          openActionMenu(item)
+        }
+      }}
+      onLongPress={() => {
+        if (isSelecting) {
+          drag()
+        } else {
+          toggleItemSelection(item)
+        }
+      }}
+      style={{
+        borderBottomColor: color.line,
+        borderBottomWidth: 0.5,
+        paddingVertical: 15,
+        backgroundColor: color.background,
+        height: 82
+      }}
+    >
+      <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+        justifyContent: 'space-between'
+      }]}>
+        {/* Drag anchor */}
+        {
+          isSelecting && (
+            <TouchableWithoutFeedback
+              onPressIn={() => {
+                drag()
+              }}
+            >
+              <View style={{
+                paddingVertical: 10,
+                paddingRight: 15,
+              }}>
+                <MaterialCommunityIconsIcon
+                  name="menu"
+                  size={18}
+                  color={color.textBlack}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          )
+        }
+        {/* Drag anchor end */}
+
+        {/* Content */}
+        <View style={{ flex: 1 }}>
+          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginRight: 12 }]}>
+            <View style={{ flex: 1 }}>
+              <Text
+                preset="semibold"
+                text={item.name}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              />
+            </View>
+
+            {
+              !item.notSync && (
+                <View style={{ marginLeft: 10 }}>
+                  <MaterialCommunityIconsIcon
+                    name="cloud-off-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+          </View>
+
+          <Text
+            text={getTOTP(item.otp)}
+            style={{
+              color: color.primary,
+              fontSize: fontSize.h3,
+            }}
+          />
+        </View>
+        {/* Content end */}
+
+        {/* Couter/Select */}
+        {
+          isSelecting ? (
+            <Checkbox
+              value={selectedItems.includes(item.id)}
+              color={color.primary}
+              onValueChange={() => {
+                toggleItemSelection(item)
+              }}
+            />
+          ) : (
+            <CountdownCircleTimer
+              onComplete={() => {
+                index === 0 && updateOtp()
+                return [true, 0]
+              }}
+              size={25}
+              isPlaying
+              duration={30}
+              colors={color.primary}
+              initialRemainingTime={getRemainingTime(item.otp.period)}
+              strokeWidth={4}
+            />
+          )
+        }
+        {/* Couter/Select end */}
+      </View>
+    </Button>
+  )
+
   return otps.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
@@ -178,118 +294,7 @@ export const OtpList = observer((props: Props) => {
         data={otps}
         keyExtractor={item => item.id.toString()}
         onDragEnd={handleChangeOrder}
-        renderItem={({ item, index, drag, isActive }) => (
-          <Button
-            preset="link"
-            onPress={() => {
-              if (isSelecting) {
-                toggleItemSelection(item)
-              } else {
-                openActionMenu(item)
-              }
-            }}
-            onLongPress={() => {
-              if (isSelecting) {
-                drag()
-              } else {
-                toggleItemSelection(item)
-              }
-            }}
-            style={{
-              borderBottomColor: color.line,
-              borderBottomWidth: 0.5,
-              paddingVertical: 15,
-              backgroundColor: color.background
-            }}
-          >
-            <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between'
-            }]}>
-              {/* Drag anchor */}
-              {
-                isSelecting && (
-                  <TouchableWithoutFeedback
-                    onPressIn={() => {
-                      drag()
-                    }}
-                  >
-                    <View style={{
-                      paddingVertical: 10,
-                      paddingRight: 15,
-                    }}>
-                      <MaterialCommunityIconsIcon
-                        name="menu"
-                        size={18}
-                        color={color.textBlack}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
-                )
-              }
-              {/* Drag anchor end */}
-
-              {/* Content */}
-              <View style={{ flex: 1 }}>
-                <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
-                  <Text
-                    preset="semibold"
-                    text={item.name}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  />
-
-                  {
-                    item.notSync && (
-                      <View style={{ marginLeft: 10 }}>
-                        <MaterialCommunityIconsIcon
-                          name="cloud-off-outline"
-                          size={22}
-                          color={color.textBlack}
-                        />
-                      </View>
-                    )
-                  }
-                </View>
-
-                <Text
-                  text={getTOTP(item.otp)}
-                  style={{
-                    color: color.primary,
-                    fontSize: fontSize.h3,
-                  }}
-                />
-              </View>
-              {/* Content end */}
-
-              {/* Couter/Select */}
-              {
-                isSelecting ? (
-                  <Checkbox
-                    value={selectedItems.includes(item.id)}
-                    color={color.primary}
-                    onValueChange={() => {
-                      toggleItemSelection(item)
-                    }}
-                  />
-                ) : (
-                  <CountdownCircleTimer
-                    onComplete={() => {
-                      index === 0 && updateOtp()
-                      return [true, 0]
-                    }}
-                    size={25}
-                    isPlaying
-                    duration={30}
-                    colors={color.primary}
-                    initialRemainingTime={getRemainingTime(item.otp.period)}
-                    strokeWidth={4}
-                  />
-                )
-              }
-              {/* Couter/Select end */}
-            </View>
-          </Button>
-        )}
+        renderItem={renderItem}
       />
       {/* Cipher list end */}
     </View>

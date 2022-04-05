@@ -300,6 +300,138 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
   // ------------------------ RENDER ----------------------------
 
+  const renderItem = ({ item }) => (
+    <Button
+      preset="link"
+      onPress={() => {
+        if (isSelecting) {
+          toggleItemSelection(item)
+        } else {
+          // goToDetail(item)
+          openActionMenu(item)
+        }
+      }}
+      onLongPress={() => !item.isShared && toggleItemSelection(item)}
+      style={{
+        borderBottomColor: color.line,
+        borderBottomWidth: 0.5,
+        paddingVertical: 15,
+        height: 70.5
+      }}
+    >
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        {/* Cipher avatar */}
+        {
+          item.svg ? (
+            <item.svg height={40} width={40} />
+          ) : (
+            <Image
+              source={item.imgLogo || item.logo}
+              backupSource={item.logo}
+              style={{
+                height: 40,
+                width: 40,
+                borderRadius: 8
+              }}
+            />
+          )
+        }
+        {/* Cipher avatar end */}
+
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+            <View style={{ flex: 1 }}>
+              <Text
+                preset="semibold"
+                text={item.name}
+                numberOfLines={1}
+              />
+            </View>
+
+            {/* Pending status */}
+            {
+              item.isShared && (
+                <View style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 2,
+                  backgroundColor: color.warning,
+                  borderRadius: 3,
+                  marginLeft: 10
+                }}>
+                  <Text
+                    text="PENDING"
+                    style={{
+                      fontWeight: 'bold',
+                      color: color.background,
+                      fontSize: fontSize.mini
+                    }}
+                  />
+                </View>
+              )
+            }
+            {/* Pending status */}
+
+            {/* Not sync icon */}
+            {
+              item.notSync && (
+                <View style={{ marginLeft: 10 }}>
+                  <MaterialCommunityIconsIcon
+                    name="cloud-off-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+            {/* Not sync icon end */}
+          </View>
+
+          {/* Description */}
+          {
+            !!getDescription(item) && (
+              <Text
+                text={getDescription(item)}
+                style={{ fontSize: fontSize.small }}
+                numberOfLines={1}
+              />
+            )
+          }
+          {/* Description end */}
+        </View>
+
+        {
+          isSelecting ? (
+            <Checkbox
+              value={selectedItems.includes(item.id)}
+              color={color.primary}
+              onValueChange={() => {
+                toggleItemSelection(item)
+              }}
+            />
+          ) : (
+            <View />
+            // <Button
+            //   preset="link"
+            //   onPress={() => openActionMenu(item)}
+            //   style={{ 
+            //     height: 40,
+            //     width: 40,
+            //     justifyContent: 'flex-end',
+            //     alignItems: 'center'
+            //   }}
+            // >
+            //   <IoniconsIcon
+            //     name="ellipsis-horizontal"
+            //     size={18}
+            //     color={color.textBlack}
+            //   />
+            // </Button>
+          )
+        }
+      </View>
+    </Button>
+  )
+
   return allCiphers.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
@@ -347,133 +479,12 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         }}
         data={allCiphers}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
-          <Button
-            preset="link"
-            onPress={() => {
-              if (isSelecting) {
-                toggleItemSelection(item)
-              } else {
-                // goToDetail(item)
-                openActionMenu(item)
-              }
-            }}
-            onLongPress={() => !item.isShared && toggleItemSelection(item)}
-            style={{
-              borderBottomColor: color.line,
-              borderBottomWidth: 0.5,
-              paddingVertical: 15
-            }}
-          >
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              {/* Cipher avatar */}
-              {
-                item.svg ? (
-                  <item.svg height={40} width={40} />
-                ) : (
-                  <Image
-                    source={item.imgLogo || item.logo}
-                    backupSource={item.logo}
-                    style={{
-                      height: 40,
-                      width: 40,
-                      borderRadius: 8
-                    }}
-                  />
-                )
-              }
-              {/* Cipher avatar end */}
-
-              <View style={{ flex: 1, marginLeft: 12 }}>
-                <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
-                  <Text
-                    preset="semibold"
-                    text={item.name}
-                    numberOfLines={2}
-                  />
-
-                  {/* Pending status */}
-                  {
-                    item.isShared && (
-                      <View style={{
-                        paddingHorizontal: 10,
-                        paddingVertical: 2,
-                        backgroundColor: color.warning,
-                        borderRadius: 3,
-                        marginLeft: 10
-                      }}>
-                        <Text
-                          text="PENDING"
-                          style={{
-                            fontWeight: 'bold',
-                            color: color.background,
-                            fontSize: fontSize.mini
-                          }}
-                        />
-                      </View>
-                    )
-                  }
-                  {/* Pending status */}
-
-                  {/* Not sync icon */}
-                  {
-                    item.notSync && (
-                      <View style={{ marginLeft: 10 }}>
-                        <MaterialCommunityIconsIcon
-                          name="cloud-off-outline"
-                          size={22}
-                          color={color.textBlack}
-                        />
-                      </View>
-                    )
-                  }
-                  {/* Not sync icon end */}
-                </View>
-
-                {/* Description */}
-                {
-                  !!getDescription(item) && (
-                    <Text
-                      text={getDescription(item)}
-                      style={{ fontSize: fontSize.small }}
-                    />
-                  )
-                }
-                {/* Description end */}
-              </View>
-
-              {
-                isSelecting ? (
-                  <Checkbox
-                    value={selectedItems.includes(item.id)}
-                    color={color.primary}
-                    onValueChange={() => {
-                      toggleItemSelection(item)
-                    }}
-                  />
-                ) : (
-                  <View />
-                  // <Button
-                  //   preset="link"
-                  //   onPress={() => openActionMenu(item)}
-                  //   style={{ 
-                  //     height: 40,
-                  //     width: 40,
-                  //     justifyContent: 'flex-end',
-                  //     alignItems: 'center'
-                  //   }}
-                  // >
-                  //   <IoniconsIcon
-                  //     name="ellipsis-horizontal"
-                  //     size={18}
-                  //     color={color.textBlack}
-                  //   />
-                  // </Button>
-                )
-              }
-            </View>
-          </Button>
-        )}
+        renderItem={renderItem}
+        getItemLayout={(data, index) => ({
+          length: 71,
+          offset: 71 * index,
+          index
+        })}
       />
       {/* Cipher list end */}
     </View>
