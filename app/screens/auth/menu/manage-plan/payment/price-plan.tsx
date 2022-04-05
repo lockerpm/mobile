@@ -90,14 +90,14 @@ export const PricePlan = (props: PricePlanProps) => {
   const planText = {
     per: {
       monthly: {
-        subId: !IS_IOS ? "pm_premium_monthly" : "ios_pm_premium_monthly",
+        subId: !IS_IOS ? "pm_premium_monthly" : "locker_pm_premium_monthly",
         title: translate("payment.price.per.monthly.title"),
         subtitle: translate("payment.price.per.monthly.subtitle"),
         onSale: translate("payment.price.per.monthly.sale"),
         pay_title: translate("payment.price.per.monthly.pay_title")
       },
       yearly: {
-        subId: !IS_IOS ? "pm_premium_yearly" : "ios_pm_premium_yearly",
+        subId: !IS_IOS ? "pm_premium_yearly" : "locker_pm_premium_yearly",
         title: translate("payment.price.per.yearly.title"),
         subtitle: translate("payment.price.per.yearly.subtitle"),
         onSale: translate("payment.price.per.yearly.sale"),
@@ -106,14 +106,14 @@ export const PricePlan = (props: PricePlanProps) => {
     },
     fam: {
       monthly: {
-        subId: !IS_IOS ? "pm_family_monthly" : "ios_pm_family_monthly",
+        subId: !IS_IOS ? "pm_family_monthly" : "locker_pm_family_monthly",
         title: translate("payment.price.fam.monthly.title"),
         subtitle: translate("payment.price.fam.monthly.subtitle"),
         onSale: translate("payment.price.fam.monthly.sale"),
         pay_title: translate("payment.price.fam.monthly.pay_title")
       },
       yearly: {
-        subId: !IS_IOS ? "pm_family_yearly" : "ios_pm_family_yearly",
+        subId: !IS_IOS ? "pm_family_yearly" : "locker_pm_family_yearly",
         title: translate("payment.price.fam.yearly.title"),
         subtitle: translate("payment.price.fam.yearly.subtitle"),
         onSale: translate("payment.price.fam.yearly.sale"),
