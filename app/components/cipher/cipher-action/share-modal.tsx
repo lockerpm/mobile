@@ -110,6 +110,7 @@ export const ShareModal = observer((props: Props) => {
         setEmails([])
         setShareType('view')
       }}
+      ignoreBackgroundPress={true}
       title={cipherIds ? translate('shares.share_x_items', { count: cipherIds.length }) : selectedCipher.name}
     >
       <Text

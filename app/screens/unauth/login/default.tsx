@@ -7,7 +7,7 @@ import { useMixins } from "../../../services/mixins"
 import { commonStyles } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
-import { IS_IOS } from "../../../config/constants"
+import { IS_IOS, IS_PROD } from "../../../config/constants"
 
 
 type Props = {
@@ -109,6 +109,7 @@ export const DefaultLogin = observer((props: Props) => {
     },
 
     facebook: {
+      hide: !IS_PROD,
       icon: SOCIAL_LOGIN_ICON.facebook,
       handler: () => {
         return facebookLogin({
@@ -119,6 +120,7 @@ export const DefaultLogin = observer((props: Props) => {
     },
 
     github: {
+      hide: !IS_PROD,
       icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.githubLight : SOCIAL_LOGIN_ICON.github,
       handler: () => {
         return githubLogin({

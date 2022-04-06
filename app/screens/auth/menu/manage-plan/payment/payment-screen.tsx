@@ -57,6 +57,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
       }
 
       const subscriptions = await RNIap.getSubscriptions(subSkus);
+      console.log(subcriptions)
       setSubcriptions(subscriptions);
     } catch (err) {
       Logger.error({ 'initConnection': err })
@@ -120,11 +121,12 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
 
   const purchase = (productId: string): void => {
+    console.log(productId)
     setProcessPayment(true)
     if (IS_IOS) {
       RNIap.clearTransactionIOS()
     }
-    RNIap.requestSubscription(productId)
+    RNIap.requestSubscription(SKU.PRE_MON)
       .catch((error) => {
         setProcessPayment(false)
         if (error.code === 'E_USER_CANCELLED') {

@@ -16,13 +16,14 @@ export interface ModalProps {
   onClose?: () => void
   onOpen?: () => void
   title?: string
+  ignoreBackgroundPress?: boolean
 }
 
 /**
  * Describe your component here
  */
 export const Modal = function Modal(props: ModalProps) {
-  const { style, isOpen, children, onClose, onOpen, title } = props
+  const { style, isOpen, children, onClose, onOpen, title, ignoreBackgroundPress } = props
   const { color } = useMixins()
 
   const CONTAINER: ViewStyle = {
@@ -48,6 +49,7 @@ export const Modal = function Modal(props: ModalProps) {
       panDirection={null}
       visible={isOpen}
       onDialogDismissed={onClose}
+      ignoreBackgroundPress={ignoreBackgroundPress}
     >
       <View 
         style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
