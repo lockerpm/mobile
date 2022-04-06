@@ -56,7 +56,6 @@ const RootStack = observer(() => {
   let removeNetInfoSubscription = () => {}
 
   useEffect(() => {
-    
     removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
       Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
