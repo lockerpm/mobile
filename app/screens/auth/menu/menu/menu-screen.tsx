@@ -117,10 +117,10 @@ export const MenuScreen = observer(() => {
     {
       debug: true,
       icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) Generate 100 random passwords',
+      name: '(DEBUG) Generate 50 random passwords',
       action: () => {
         createRandomPasswords({
-          count: 100,
+          count: 50,
           length: 24
         })
       }
