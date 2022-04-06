@@ -42,6 +42,7 @@ const defaultData = {
   syncAutofillData: async () => {},
 
   getCiphers: async (params: GetCiphersParams) => { return [] },
+  getEncryptedCiphers: async (params: GetCiphersParams) => { return [] },
   getCipherById: async (id: string) => new CipherView(),
 
   getCollections: async () => { return [] },
@@ -165,10 +166,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     syncQueue.clear()
     return syncQueue.add(async () => {
       try {
-        if (cipherStore.isSynching) {
-          return { kind: 'synching' }
-        }
-  
         cipherStore.setIsSynching(true)
         messagingService.send('syncStarted')
   
@@ -205,8 +202,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         user.setFingerprint(fingerprint.join('-'))
   
         // Save to shared keychain for autofill service
-        
         await _updateAutofillData()
+
+        // Reload password health
+        EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
         
         return { kind: 'ok' }
       } catch (e) {
@@ -227,10 +226,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         const pageSize = 500
         let page = 1
         let cipherIds: string[] = []
-  
-        if (cipherStore.isSynching) {
-          return { kind: 'synching' }
-        }
   
         cipherStore.setIsSynching(true)
   
@@ -299,8 +294,12 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         const fingerprint = await cryptoService.getFingerprint(userId)
         user.setFingerprint(fingerprint.join('-'))
   
-      
+        // Save to shared keychain for autofill service
         await _updateAutofillData()
+
+        // Reload password health
+        EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
+
         return { kind: 'ok' }
       } catch (e) {
         Logger.error('startSyncProcess: ' + e)
@@ -1861,6 +1860,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     syncAutofillData,
 
     getCiphers,
+    getEncryptedCiphers,
     getCipherById,
     getCollections,
     loadOrganizations,

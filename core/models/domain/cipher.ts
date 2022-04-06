@@ -112,7 +112,7 @@ export class Cipher extends Domain {
 
     async decrypt(encKey?: SymmetricCryptoKey): Promise<CipherView> {
         // TODO: test queue
-        return DecryptQueue.add(async () => {
+        const res = DecryptQueue.add(async () => {
             const model = new CipherView(this);
 
             await this.decryptObj(model, {
@@ -180,6 +180,7 @@ export class Cipher extends Domain {
 
             return model;
         })
+        return res
     }
 
     toCipherData(userId: string): CipherData {

@@ -11,7 +11,7 @@ import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 
 
-export const AllItemScreen = observer(function AllItemScreen() {
+export const AllItemScreen = observer(() => {
   const navigation = useNavigation()
   const { uiStore } = useStores()
   const { translate } = useMixins()

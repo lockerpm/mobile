@@ -6,7 +6,6 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import NetInfo from '@react-native-community/netinfo'
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
 import { IS_IOS } from "../../../config/constants"
 
 
@@ -14,7 +13,6 @@ export const StartScreen = observer(() => {
   const { user, uiStore } = useStores()
   const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
   const { loadFolders, loadCollections, syncAutofillData, loadOrganizations } = useCipherDataMixins()
-  const { loadPasswordsHealth } = useCipherToolsMixins()
   const navigation = useNavigation()
 
   // ------------------------- PARAMS ----------------------------
@@ -66,9 +64,6 @@ export const StartScreen = observer(() => {
       loadCollections(),
       loadOrganizations()
     ])
-    if (!uiStore.isFromAutoFill) {
-      loadPasswordsHealth()
-    }
 
     // TODO: check device limit
     const isDeviceLimitReached = false

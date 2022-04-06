@@ -54,7 +54,7 @@ export const HelpScreen = observer(function HelpScreen() {
         <Header
           goBack={() => navigation.goBack()}
           title={translate('common.help')}
-          right={(<View style={{ width: 10 }} />)}
+          right={(<View style={{ width: 30 }} />)}
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}

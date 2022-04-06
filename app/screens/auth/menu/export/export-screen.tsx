@@ -95,7 +95,7 @@ export const ExportScreen = () => {
             navigation.goBack()
           }}
           title={translate('settings.export')}
-          right={(<View style={{ width: 10 }} />)}
+          right={(<View style={{ width: 30 }} />)}
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}

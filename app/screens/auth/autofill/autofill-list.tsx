@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, FlatList, NativeModules, BackHandler } from "react-native"
+import { View, FlatList, NativeModules } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'

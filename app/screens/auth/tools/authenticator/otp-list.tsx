@@ -222,7 +222,7 @@ export const OtpList = observer((props: Props) => {
             </View>
 
             {
-              !item.notSync && (
+              item.notSync && (
                 <View style={{ marginLeft: 10 }}>
                   <MaterialCommunityIconsIcon
                     name="cloud-off-outline"
