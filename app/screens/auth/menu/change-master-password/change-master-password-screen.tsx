@@ -47,7 +47,7 @@ export const ChangeMasterPasswordScreen = () => {
         <Header
           goBack={() => navigation.goBack()}
           title={translate('change_master_pass.title')}
-          right={(<View style={{ width: 10 }} />)}
+          right={(<View style={{ width: 30 }} />)}
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}

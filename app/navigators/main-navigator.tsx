@@ -10,12 +10,11 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { MainTabNavigator } from "./main-tab-navigator"
 import { 
   SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen, PasswordEditScreen, 
-  PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen, PasswordHealthScreen,
+  PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
-  DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
-  ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
+  DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
   CryptoAccountEditScreen, CryptoAccountInfoScreen, CryptoWalletEditScreen, CryptoWalletInfoScreen,
   GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen, 
   PaymentScreen, ManagePlanScreen, InviteMemberScreen
@@ -29,10 +28,10 @@ import { AppTimeoutType, TimeoutActionType, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { useCipherDataMixins } from "../services/mixins/cipher/data"
-import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
 import { IS_IOS, WS_URL } from "../config/constants"
 import { Logger } from "../utils/logger"
 import { SocketEvent, SocketEventType } from "../config/types"
+import { HealthNavigator } from "./tools/health-navigator"
 import { AppEventType, EventBus } from "../utils/event-bus"
 
 /**
@@ -48,10 +47,12 @@ import { AppEventType, EventBus } from "../utils/event-bus"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
+  mainTab: undefined
+  healthStack: undefined
+
   start: undefined
   switchDevice: undefined
   biometricUnlockIntro: undefined
-  mainTab: undefined
   passwordGenerator: {
     fromTools?: boolean
   }
@@ -60,10 +61,6 @@ export type PrimaryParamList = {
   }
   qrScanner: undefined
   googleAuthenticatorImport: undefined
-  passwordHealth: undefined
-  weakPasswordList: undefined
-  reusePasswordList: undefined
-  exposedPasswordList: undefined
   dataBreachScanner: undefined
   dataBreachList: undefined
   dataBreachDetail: undefined
@@ -129,8 +126,7 @@ export const MainNavigator = observer(() => {
   const { 
     getCipherById, syncAutofillData, syncSingleCipher, syncSingleFolder, syncOfflineData, startSyncProcess
   } = useCipherDataMixins()
-  const { loadPasswordsHealth } = useCipherToolsMixins()
-  const { uiStore, user, cipherStore } = useStores()
+  const { uiStore, user, cipherStore, toolStore } = useStores()
 
   // ------------------ PARAMS --------------------
 
@@ -157,7 +153,7 @@ export const MainNavigator = observer(() => {
     // Send request
     const syncRes = await startSyncProcess()
     if (syncRes.kind !== 'ok') {
-      if (syncRes.kind !== 'synching' && syncRes.kind === 'error') {
+      if (syncRes.kind === 'error') {
         notify('error', translate('error.sync_failed'))
       }
       return
@@ -170,7 +166,6 @@ export const MainNavigator = observer(() => {
     }
     user.loadTeams()
     user.loadPlan()
-    loadPasswordsHealth()
   }
 
   // Check invitation
@@ -336,12 +331,12 @@ export const MainNavigator = observer(() => {
   // Recalculate password health
   useEffect(() => {
     const listener = EventBus.createListener(AppEventType.PASSWORD_UPDATE, () => {
-      loadPasswordsHealth()
+      toolStore.setLastHealthCheck(null)
     })
     return () => {
       EventBus.removeListener(listener)
     }
-  }, [user.isLoggedInPw])
+  }, [])
 
   // ------------------ RENDER --------------------
   
@@ -360,6 +355,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
+        <Stack.Screen name="healthStack" component={HealthNavigator} />
 
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
@@ -375,11 +371,6 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="googleAuthenticatorImport" component={GoogleAuthenticatorImportScreen} />
-
-        <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
-        <Stack.Screen name="weakPasswordList" component={WeakPasswordList} />
-        <Stack.Screen name="reusePasswordList" component={ReusePasswordList} />
-        <Stack.Screen name="exposedPasswordList" component={ExposedPasswordList} />
 
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
         <Stack.Screen name="dataBreachList" component={DataBreachListScreen} />

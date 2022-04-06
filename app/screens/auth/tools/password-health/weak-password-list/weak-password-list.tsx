@@ -9,6 +9,7 @@ import { CipherView } from "../../../../../../core/models/view"
 import { commonStyles, fontSize } from "../../../../../theme"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
+import { LoadingHeader } from "../loading-header"
 
 
 export const WeakPasswordList = observer(() => {
@@ -120,7 +121,7 @@ export const WeakPasswordList = observer(() => {
           title={translate('pass_health.weak_passwords.name')}
           goBack={() => navigation.goBack()}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         />
       )}
@@ -128,6 +129,8 @@ export const WeakPasswordList = observer(() => {
       noScroll
     >
       <View style={{ flex: 1 }}>
+        <LoadingHeader />
+
         <FlatList
           style={{ paddingHorizontal: 20 }}
           data={listData}

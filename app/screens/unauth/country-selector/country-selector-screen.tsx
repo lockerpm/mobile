@@ -82,7 +82,7 @@ export const CountrySelectorScreen = observer(() => {
           goBack={() => navigation.goBack()}
           title={translate('common.country')}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         >
           <SearchBar

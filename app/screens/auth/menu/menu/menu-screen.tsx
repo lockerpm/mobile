@@ -27,6 +27,7 @@ import LockIconLight from './lock-light.svg'
 
 import { PushNotifier } from "../../../../utils/push-notification"
 import { InviteMemberScreen } from "../invite_member/invite_member_screen"
+import { useTestMixins } from "../../../../services/mixins/test"
 
 
 export const MenuScreen = observer(() => {
@@ -34,6 +35,7 @@ export const MenuScreen = observer(() => {
   const { user, uiStore } = useStores()
   const { translate, notify, color, isDark } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
+  const { createRandomPasswords } = useTestMixins()
 
   const [showInviteMemberModal, setShowInviteMemberModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -109,6 +111,17 @@ export const MenuScreen = observer(() => {
           data: {
             type: 'confirm_share_item'
           }
+        })
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Generate 100 random passwords',
+      action: () => {
+        createRandomPasswords({
+          count: 100,
+          length: 24
         })
       }
     },

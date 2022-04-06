@@ -59,7 +59,7 @@ export const QRScannerScreen = function QRScannerScreen() {
           title={translate('authenticator.scan_a_qr')}
           goBack={() => navigation.goBack()}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         />
       )}

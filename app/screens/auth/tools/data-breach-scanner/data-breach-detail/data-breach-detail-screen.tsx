@@ -27,7 +27,7 @@ export const DataBreachDetailScreen = observer(function DataBreachDetailScreen()
           title={toolStore.selectedBreach.title}
           goBack={() => navigation.goBack()}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         />
       )}
