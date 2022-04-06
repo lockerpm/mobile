@@ -328,7 +328,7 @@ export const MainNavigator = observer(() => {
     }
   }, [uiStore.isOffline, user.isLoggedInPw])
 
-  // Recalculate password health
+  // Recalculate password health on password update
   useEffect(() => {
     const listener = EventBus.createListener(AppEventType.PASSWORD_UPDATE, () => {
       toolStore.setLastHealthCheck(null)

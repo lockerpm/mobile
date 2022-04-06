@@ -10,7 +10,6 @@ import { CipherResponse } from "../../../core/models/response/cipherResponse"
 import { AccountRoleText, InvitationStatus, SharingStatus, SharingType } from "../../config/types"
 import { ProfileResponse } from "../../../core/models/response/profileResponse"
 import { ProfileOrganizationResponse } from "../../../core/models/response/profileOrganizationResponse"
-import { type } from "ramda"
 
 type SessionSnapshot = {
     access_token: string
@@ -149,8 +148,6 @@ export type GetPlanResult = {
     data: { name: string; alias: string; },
 } | GeneralApiProblem
 
-
-
 export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
 export type ResetPasswordResult = { kind: "ok"; success: boolean } | GeneralApiProblem
 
@@ -204,7 +201,6 @@ export type GetInvitationsResult = {
         }
     }[]
 } | GeneralApiProblem
-
 
 export type CheckBreachResult = {
     kind: "ok"
@@ -261,6 +257,13 @@ export type GetShareInvitationsResult = {
 export type GetMySharesResult = {
     kind: 'ok',
     data: MyShareType[]
+} | GeneralApiProblem
+
+export type PostCipherResult = {
+    kind: 'ok',
+    data: {
+        id: string      // cipher id
+    }
 } | GeneralApiProblem
 
 // ---------------- Request data --------------------
