@@ -84,6 +84,7 @@
     "skip": "Skip",
     "sort": "Sort",
     "submit": "Submit",
+    "synchronize": "Synchronize",
     "team_folders": "Team folders",
     "times": "times",
     "trash": "Trash",
@@ -626,5 +627,10 @@
     "free": {
       "button": "Increase unlimited with Premium"
     }
+  },
+  "outdated_data": {
+    "desc": "Looks like you are trying to update an unsynchronized item. Please wait for the synchronization process to finish, or you can manually synchronize your data here",
+    "go_back": "Go Back",
+    "synchronizing": "Synchronizing..."
   }
 }

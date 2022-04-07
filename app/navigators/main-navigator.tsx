@@ -17,7 +17,7 @@ import {
   DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
   CryptoAccountEditScreen, CryptoAccountInfoScreen, CryptoWalletEditScreen, CryptoWalletInfoScreen,
   GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen, 
-  PaymentScreen, ManagePlanScreen, InviteMemberScreen
+  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -47,9 +47,14 @@ import { AppEventType, EventBus } from "../utils/event-bus"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
+  // Nested
   mainTab: undefined
   healthStack: undefined
 
+  // Errors
+  dataOutdated: undefined
+
+  // Others
   start: undefined
   switchDevice: undefined
   biometricUnlockIntro: undefined
@@ -338,6 +343,16 @@ export const MainNavigator = observer(() => {
     }
   }, [])
 
+  // Outdated data warning
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.TEMP_ID_DECTECTED, () => {
+      navigation.navigate('dataOutdated')
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [])
+
   // ------------------ RENDER --------------------
   
   return (
@@ -354,6 +369,9 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="start" component={StartScreen} />
         <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
+
+        <Stack.Screen name="dataOutdated" component={DataOutdatedScreen} />
+
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
         <Stack.Screen name="healthStack" component={HealthNavigator} />
 
