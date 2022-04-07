@@ -17,7 +17,7 @@ import extractDomain from 'extract-domain'
 import { PushNotifier } from '../../utils/push-notification'
 import { Logger } from '../../utils/logger'
 import { useCoreService } from '../core-service'
-import { PushEvent } from '../../utils/push-notification/types'
+import { NotifeeNotificationData, PushEvent } from '../../utils/push-notification/types'
 
 
 const { createContext, useContext } = React
@@ -42,7 +42,9 @@ const defaultData = {
   randomString: () => '',
   boostrapPushNotifier: async () => true,
   goPremium: () => {},
-  parsePushNotiData: async () => ({ path: '', params: {} }),
+  parsePushNotiData: async (params?: {
+    notifeeData?: NotifeeNotificationData
+  }) => ({ path: '', params: {} }),
   validateMasterPassword: (password: string) => ({ isValid: true, error: '' })
 }
 
@@ -230,13 +232,20 @@ export const MixinsProvider = observer((props: {
     }
   }
 
-  // Parse push notification data
-  const parsePushNotiData = async () => {
+  // Parse storage push notification data
+  const parsePushNotiData = async (params?: {
+    notifeeData?: NotifeeNotificationData
+  }) => {
+    const { notifeeData } = params || {}
     const res = {
       path: '',
       params: {}
     }
-    const data: PushNotiData = await load(StorageKey.PUSH_NOTI_DATA)
+    let data: PushNotiData | NotifeeNotificationData = notifeeData
+    if (!data) {
+      data = await load(StorageKey.PUSH_NOTI_DATA) 
+    }
+
     if (data) {
       switch (data.type) {
         case PushEvent.SHARE_NEW:
