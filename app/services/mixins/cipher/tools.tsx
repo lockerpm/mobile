@@ -19,7 +19,7 @@ export const CipherToolsMixinsContext = createContext(defaultData)
 
 export const CipherToolsMixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const { user, toolStore } = useStores()
-  const { getCiphers } = useCipherDataMixins()
+  const { getCiphers, getEncryptedCiphers } = useCipherDataMixins()
   const {
     passwordGenerationService,
     auditService
@@ -27,8 +27,9 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
   const { translate, notify } = useMixins()
   
   // ----------------------------- METHODS ---------------------------
-  const getCipherCount =async (type: CipherType) => {
-    const allCiphers = await getCiphers({
+
+  const getCipherCount = async (type: CipherType) => {
+    const allCiphers = await getEncryptedCiphers({
       deleted: false,
       searchText: '',
       filters: [
@@ -44,7 +45,10 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       if (!user.plan || user.plan?.alias === PlanType.FREE) {
         return
       }
-  
+
+      toolStore.setLoadingHealth(true)
+      toolStore.setLastHealthCheck()
+      
       const passwordStrengthCache = new Map()
       const passwordStrengthMap = new Map()
       const passwordUseMap = new Map()
@@ -130,9 +134,11 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       toolStore.setPasswordUseMap(passwordUseMap)
       toolStore.setExposedPasswords(exposedPasswordCiphers)
       toolStore.setExposedPasswordMap(exposedPasswordMap)
+      toolStore.setLoadingHealth(false)
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       Logger.error('loadPasswordsHealth: ' + e)
+      toolStore.setLoadingHealth(false)
     }
   }
   

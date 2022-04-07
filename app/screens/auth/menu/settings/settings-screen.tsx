@@ -232,7 +232,7 @@ export const SettingsScreen = observer(() => {
             navigation.goBack()
           }}
           title={translate('common.settings')}
-          right={(<View style={{ width: 10 }} />)}
+          right={(<View style={{ width: 30 }} />)}
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}

@@ -66,7 +66,7 @@ export const GoogleAuthenticatorImportScreen = () => {
           title={translate('authenticator.import_from_google_authenticator')}
           goBack={() => navigation.goBack()}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         />
       )}

@@ -78,7 +78,7 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     label: 'common.crypto_wallet',
     icon: require('./images/vault/crypto-wallet.png'),
     routeName: 'cryptoWallets',
-    svgIcon: CryptoAssetIcon,
+    svgIcon: CryptoWalletIcon,
     group: 'cryptoAsset'
   },
   identity: {

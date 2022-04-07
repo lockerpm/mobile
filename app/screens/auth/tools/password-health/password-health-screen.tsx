@@ -9,6 +9,7 @@ import { commonStyles, fontSize } from "../../../../theme"
 
 import DataBreachScannerIcon from './data-breach-scanner.svg'
 import { useStores } from "../../../../models"
+import { LoadingHeader } from "./loading-header"
 
 
 export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
@@ -86,18 +87,23 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
     <Layout
       containerStyle={{
         backgroundColor: color.block,
-        paddingHorizontal: 0
+        paddingHorizontal: 0,
+        paddingTop: 0
       }}
       header={(
         <Header
           title={translate('pass_health.title')}
           goBack={() => navigation.goBack()}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         />
       )}
     >
+      <View style={{ marginBottom: 16 }}>
+        <LoadingHeader />
+      </View>
+      
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background
       }]}>

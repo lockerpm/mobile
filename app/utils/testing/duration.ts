@@ -11,7 +11,7 @@ export class DurationTest {
     this.lastTick = this.start
   }
 
-  tick(action: string) {
+  tick(action: any) {
     Logger.debug(`${this.name}: ${action} took ${Date.now() - this.lastTick}ms`)
     this.lastTick = Date.now()
   }
