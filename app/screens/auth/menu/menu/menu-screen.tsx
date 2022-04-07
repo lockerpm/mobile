@@ -105,11 +105,11 @@ export const MenuScreen = observer(() => {
       name: '(DEBUG) Show push notification',
       action: () => {
         PushNotifier._notify({
-          id: `share_confirm`,
-          title: 'Test',
-          body: 'This is a test',
+          id: `share_new`,
+          title: 'Locker',
+          body: `You have a new shared test`,
           data: {
-            type: 'confirm_share_item'
+            type: 'new_share_item'
           }
         })
       }
