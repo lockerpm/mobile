@@ -53,6 +53,7 @@ export const MenuScreen = observer(() => {
     {
       icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
       name: translate('menu.invite'),
+      family: true ,
       action: () => {
         setShowInviteMemberModal(true);
       },

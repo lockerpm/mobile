@@ -15,7 +15,6 @@ export const LoginScreen = observer(() => {
   const navigation = useNavigation()
   const { user } = useStores()
   const { translate } = useMixins()
-  console.log(BASE_URL)
   // ------------------------------ PARAMS -------------------------------
 
   const [isScreenLoading, setIsScreenLoading] = useState(false)
