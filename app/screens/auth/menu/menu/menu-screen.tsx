@@ -35,6 +35,7 @@ export const MenuScreen = observer(() => {
   const { translate, notify, color, isDark } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
 
+  const isFamilyAccount = user.plan?.alias === PlanType.FAMILY  
   const [showInviteMemberModal, setShowInviteMemberModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
@@ -53,11 +54,11 @@ export const MenuScreen = observer(() => {
     {
       icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
       name: translate('menu.invite'),
-      family: true ,
+      family: !isFamilyAccount,
       action: () => {
         setShowInviteMemberModal(true);
       },
-      disabled: user.plan?.alias !== PlanType.FAMILY 
+      disabled: !isFamilyAccount
     },
     {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,

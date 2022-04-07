@@ -46,27 +46,29 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
         />
       </View>
 
-      <View style={{ justifyContent: "center" }}>
+      <View style={{ justifyContent: "center", width: "100%" }}>
         <View style={{ flexDirection: "row" }}>
           <Text
             preset={prop.isEnable ? "bold" : "default"}
-            style={{ fontSize: 20, marginBottom: 4 }}
+            style={{ fontSize: 16, marginBottom: 4 }}
           >
             {prop.title}
           </Text>
           <Text
-            preset={prop.isEnable ? "black" : "default"}
             style={{
               justifyContent: "center",
-              color: "red",
+              color: prop.isEnable ? 'rgba(255, 0, 0, 1.0)' : 'rgba(255, 0, 0, 0.3)',
               marginLeft: 8,
-              fontSize: 14
+              fontSize: 14,
             }}
           >
             {prop.onSale}
           </Text>
         </View>
-        <Text preset={prop.isEnable ? "black" : "default"}>{prop.subtitle}</Text>
+        <Text
+          preset={prop.isEnable ? "black" : "default"}
+          style={{ fontSize: 14, maxWidth: "80%" }}
+        >{prop.subtitle}</Text>
       </View>
     </TouchableOpacity>
   )
