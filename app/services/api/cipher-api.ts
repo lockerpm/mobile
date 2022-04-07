@@ -1,9 +1,10 @@
 import { ApiResponse } from "apisauce"
-import { ConfirmShareCipherData, EditShareCipherData, EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetOrganizationResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, ShareMultipleCiphersData, StopShareCipherData, SyncResult } from "./api.types"
+import { ConfirmShareCipherData, EditShareCipherData, EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetOrganizationResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, PostCipherResult, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, ShareMultipleCiphersData, StopShareCipherData, SyncResult } from "./api.types"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
+import { detectTempId } from "../../utils/event-bus/helpers"
 
 export class CipherApi {
   private api: Api
@@ -39,6 +40,7 @@ export class CipherApi {
   // Get single cipher
   async getCipher(token: string, id: string): Promise<GetCipherResult> {
     try {
+      detectTempId([id])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -57,8 +59,9 @@ export class CipherApi {
   }
 
   // Create cipher
-  async postCipher(token: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
+  async postCipher(token: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<PostCipherResult> {
     try {
+      detectTempId(collectionIds)
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -72,7 +75,7 @@ export class CipherApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error('Post cipher: ' + e.message)
       return { kind: "bad-data" }
@@ -120,6 +123,7 @@ export class CipherApi {
   // Update cipher
   async putCipher(token: string, id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
     try {
+      detectTempId([id, ...collectionIds])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
       
       // make the api call
@@ -143,6 +147,7 @@ export class CipherApi {
   // Share cipher to team
   async shareCipherToTeam(token: string, id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
     try {
+      detectTempId([id, ...collectionIds])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -166,6 +171,7 @@ export class CipherApi {
   // Permanent delete ciphers
   async deleteCiphers(token: string, ids: string[]): Promise<EmptyResult> {
     try {
+      detectTempId(ids)
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -185,6 +191,7 @@ export class CipherApi {
   // Move to trash ciphers
   async toTrashCiphers(token: string, ids: string[]): Promise<EmptyResult> {
     try {
+      detectTempId(ids)
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -204,6 +211,7 @@ export class CipherApi {
   // Restore ciphers
   async restoresCiphers(token: string, ids: string[]): Promise<EmptyResult> {
     try {
+      detectTempId(ids)
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -223,6 +231,7 @@ export class CipherApi {
   // Move to folder
   async moveToFolder(token: string, data: MoveFolderData): Promise<EmptyResult> {
     try {
+      detectTempId([data.folderId, ...data.ids])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -325,6 +334,7 @@ export class CipherApi {
   // Stop share cipher
   async stopShareCipher(token: string, organizationId: string, memberId: string, payload: StopShareCipherData): Promise<EmptyResult> {
     try {
+      detectTempId([organizationId, memberId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -345,6 +355,7 @@ export class CipherApi {
   // Edit share cipher
   async editShareCipher(token: string, organizationId: string, memberId: string, payload: EditShareCipherData): Promise<EmptyResult> {
     try {
+      detectTempId([organizationId, memberId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -365,6 +376,7 @@ export class CipherApi {
   // Confirm share cipher
   async confirmShareCipher(token: string, organizationId: string, memberId: string, payload: ConfirmShareCipherData): Promise<EmptyResult> {
     try {
+      detectTempId([organizationId, memberId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -427,6 +439,7 @@ export class CipherApi {
   // Leave share
   async leaveShare(token: string, organizationId: string): Promise<EmptyResult> {
     try {
+      detectTempId([organizationId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -447,6 +460,7 @@ export class CipherApi {
   // Respond to share invitation
   async respondShareInvitation(token: string, id: string, payload: ShareInvitationResponseData): Promise<EmptyResult> {
     try {
+      detectTempId([id])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -488,6 +502,7 @@ export class CipherApi {
   // Get single organization
   async getOrganization(token: string, id: string): Promise<GetOrganizationResult> {
     try {
+      detectTempId([id])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call

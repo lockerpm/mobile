@@ -4,7 +4,7 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import NetInfo from "@react-native-community/netinfo"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
@@ -20,6 +20,8 @@ import { useMixins } from "../services/mixins"
 import { ErrorToast, SuccessToast } from "./helpers/toast"
 import { Logger } from "../utils/logger"
 import { PushNotifier } from "../utils/push-notification"
+import { NotifeeNotificationData } from "../utils/push-notification/types"
+import { save, StorageKey } from "../utils/storage"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -48,15 +50,35 @@ export type RootParamList = {
 
 const Stack = createStackNavigator<RootParamList>()
 
-const RootStack = observer(() => {
-  const { color } = useMixins()
-  const { uiStore } = useStores()
+type Props = {
+  navigationRef: any
+}
+const RootStack = observer((props: Props) => {
+  const { navigationRef } = props
+  const { color, parsePushNotiData } = useMixins()
+  const { uiStore, user } = useStores()
 
-  // Prevent store from being called too soon and break the initialization
-  let removeNetInfoSubscription = () => {}
+  const handleForegroundNotiPress = async (data: NotifeeNotificationData) => {
+    if (!data) {
+      return
+    }
 
+    const res = await parsePushNotiData({
+      notifeeData: data
+    })
+
+    if (user.isLoggedInPw) {
+      navigationRef.current.navigate(res.path, res.params)
+    } else {
+      save(StorageKey.PUSH_NOTI_DATA, {
+        type: data.type
+      })
+    }
+  }
+
+  // Check internet connection
   useEffect(() => {
-    removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
       Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
       uiStore.setIsOffline(offline)
@@ -64,6 +86,16 @@ const RootStack = observer(() => {
 
     return () => {
       removeNetInfoSubscription()
+    }
+  }, [])
+
+  // Push notification handler
+  useEffect(() => {
+    const unsubscribe = PushNotifier.setupForegroundHandler({
+      handleForegroundPress: handleForegroundNotiPress
+    })
+    return () => {
+      unsubscribe()
     }
   }, [])
 
@@ -99,7 +131,6 @@ const RootStack = observer(() => {
 })
 
 
-
 export const RootNavigator = React.forwardRef<
   NavigationContainerRef,
   Partial<React.ComponentProps<typeof NavigationContainer>>
@@ -114,17 +145,9 @@ export const RootNavigator = React.forwardRef<
     )
   }
 
-   // Push notification handler
-   useEffect(() => {
-    const unsubscribe = PushNotifier.setupForegroundHandler()
-    return () => {
-      unsubscribe()
-    }
-  }, [])
-
   return (
     <NavigationContainer {...props} ref={ref}>
-      <RootStack />
+      <RootStack navigationRef={ref} />
       <Toast config={toastConfig} />
     </NavigationContainer>
   )

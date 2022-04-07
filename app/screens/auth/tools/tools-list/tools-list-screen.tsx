@@ -45,6 +45,8 @@ export const ToolsListScreen = observer(() => {
               onPress={() => {
                 if (item.routeName === 'authenticator') {
                   navigation.navigate('mainTab', { screen: 'authenticatorTab' })
+                } else if (item.routeName === 'passwordHealth') {
+                  navigation.navigate('healthStack')
                 } else {
                   navigation.navigate(item.routeName, { fromTools: true })
                 }

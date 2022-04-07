@@ -27,6 +27,7 @@ import LockIconLight from './lock-light.svg'
 
 import { PushNotifier } from "../../../../utils/push-notification"
 import { InviteMemberScreen } from "../invite_member/invite_member_screen"
+import { useTestMixins } from "../../../../services/mixins/test"
 
 
 export const MenuScreen = observer(() => {
@@ -34,6 +35,7 @@ export const MenuScreen = observer(() => {
   const { user, uiStore } = useStores()
   const { translate, notify, color, isDark } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
+  const { createRandomPasswords } = useTestMixins()
 
   const isFamilyAccount = user.plan?.alias === PlanType.FAMILY  
   const [showInviteMemberModal, setShowInviteMemberModal] = useState(false)
@@ -101,12 +103,23 @@ export const MenuScreen = observer(() => {
       name: '(DEBUG) Show push notification',
       action: () => {
         PushNotifier._notify({
-          id: `share_confirm`,
-          title: 'Test',
-          body: 'This is a test',
+          id: `share_new`,
+          title: 'Locker',
+          body: `You have a new shared test`,
           data: {
-            type: 'confirm_share_item'
+            type: 'new_share_item'
           }
+        })
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Generate 50 random passwords',
+      action: () => {
+        createRandomPasswords({
+          count: 50,
+          length: 24
         })
       }
     },

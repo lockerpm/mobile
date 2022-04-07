@@ -83,7 +83,7 @@ export const AutofillServiceScreen = function AutofillServiceScreen() {
             navigation.goBack()
           }}
           title={translate('settings.autofill_service')}
-          right={(<View style={{ width: 10 }} />)}
+          right={(<View style={{ width: 30 }} />)}
         />
       )}
       containerStyle={{ 

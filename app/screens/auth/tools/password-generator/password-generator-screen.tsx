@@ -86,7 +86,7 @@ export const PasswordGeneratorScreen = observer(() => {
           title={translate('pass_generator.title')}
           goBack={() => navigation.goBack()}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         />
       )}

@@ -6,15 +6,13 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import NetInfo from '@react-native-community/netinfo'
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
-import { BASE_URL } from "../../../config/constants"
+
 
 
 export const StartScreen = observer(() => {
   const { user, uiStore } = useStores()
   const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
   const { loadFolders, loadCollections, syncAutofillData, loadOrganizations } = useCipherDataMixins()
-  const { loadPasswordsHealth } = useCipherToolsMixins()
   const navigation = useNavigation()
 
   // ------------------------- PARAMS ----------------------------
@@ -22,7 +20,6 @@ export const StartScreen = observer(() => {
   const [msg, setMsg] = useState('')
 
   // ------------------------- METHODS ----------------------------
-  console.log(BASE_URL)
   const refreshFCM = async () => {
     if (!user.disablePushNotifications) {
       let isSuccess = true
@@ -30,7 +27,6 @@ export const StartScreen = observer(() => {
         isSuccess = await boostrapPushNotifier()
       }
       if (isSuccess) {
-        console.log(user.fcmToken)
         user.updateFCM(user.fcmToken)
       }
     }
@@ -40,6 +36,12 @@ export const StartScreen = observer(() => {
    
     syncAutofillData()
     
+
+    // Testing
+    // if (__DEV__) {
+    //   navigation.navigate('dataOutdated')
+    //   return
+    // }
 
     const connectionState = await NetInfo.fetch()
 
@@ -67,9 +69,6 @@ export const StartScreen = observer(() => {
       loadCollections(),
       loadOrganizations()
     ])
-    if (!uiStore.isFromAutoFill) {
-      loadPasswordsHealth()
-    }
 
     // TODO: check device limit
     const isDeviceLimitReached = false

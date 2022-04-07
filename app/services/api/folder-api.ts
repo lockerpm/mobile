@@ -1,6 +1,7 @@
 import { ApiResponse } from "apisauce"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { FolderResponse } from "../../../core/models/response/folderResponse"
+import { detectTempId } from "../../utils/event-bus/helpers"
 import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
@@ -16,6 +17,7 @@ export class FolderApi {
   // Get single folder
   async getFolder(token: string, id: string): Promise<GetFolderResult> {
     try {
+      detectTempId([id])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -57,6 +59,7 @@ export class FolderApi {
   // Update folder
   async putFolder(token: string, id: string, data: FolderRequest): Promise<PostFolderResult> {
     try {
+      detectTempId([id])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -77,6 +80,7 @@ export class FolderApi {
   // Delete folder
   async deleteFolder(token: string, id: string): Promise<EmptyResult> {
     try {
+      detectTempId([id])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call

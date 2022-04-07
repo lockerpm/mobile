@@ -17,6 +17,8 @@ export const ToolStoreModel = types
     selectedBreach: types.maybeNull(types.frozen()),
 
     // Password health
+    isLoadingHealth: types.maybeNull(types.boolean),
+    lastHealthCheck: types.maybeNull(types.number),
     weakPasswords: types.array(types.frozen()),
     reusedPasswords: types.array(types.frozen()),
     exposedPasswords: types.array(types.frozen()),
@@ -36,6 +38,8 @@ export const ToolStoreModel = types
 
     // ----------------- DATA -------------------
 
+    // BREACH
+
     setBreachedEmail: (email: string) => {
       self.breachedEmail = email
     },
@@ -46,6 +50,16 @@ export const ToolStoreModel = types
 
     setSelectedBreach: (data: Object) => {
       self.selectedBreach = cast(data)
+    },
+
+    // HEALTH
+
+    setLoadingHealth: (val: boolean) => {
+      self.isLoadingHealth = val
+    },
+
+    setLastHealthCheck: (val?: number) => {
+      self.lastHealthCheck = val === undefined ? Date.now() : val
     },
 
     setWeakPasswords: (data: Object[]) => {
@@ -72,9 +86,13 @@ export const ToolStoreModel = types
       self.exposedPasswordMap = cast(data)
     },
 
+    // AUTHENTICATOR
+
     setAuthenticatorOrder: (ids: string[]) => {
       self.authenticatorOrder = cast(ids)
     },
+
+    // OTHER
 
     clearStore: () => {
       self.apiToken = null
@@ -110,7 +128,14 @@ export const ToolStoreModel = types
       return res
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .postProcessSnapshot(omit(['weakPasswords', 'reusedPasswords', 'passwordUseMap', 'exposedPasswordMap']))
+  .postProcessSnapshot(omit([
+    'isLoadingHealth',
+    'lastHealthCheck',
+    'weakPasswords', 
+    'reusedPasswords', 
+    'passwordUseMap', 
+    'exposedPasswordMap'
+  ]))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

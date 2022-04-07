@@ -25,7 +25,7 @@ export const DataBreachListScreen = observer(() => {
           title={toolStore.breachedEmail}
           goBack={() => navigation.goBack()}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         />
       )}

@@ -57,7 +57,6 @@ export const ConfirmPassModal = observer((props: Props) => {
     >
       <FloatingInput
         isPassword
-        isRequired
         isInvalid={isError}
         errorText={translate('error.invalid_password')}
         label={translate('common.master_pass')}

@@ -240,6 +240,9 @@ export const SignupScreen = observer(() => {
             label={translate('common.country')}
             value={countries[country] ? countries[country].country_name : ''}
             style={{ width: '100%', marginBottom: 10 }}
+            onTouchStart={() => {
+              navigation.navigate('countrySelector', { initialId: country })
+            }}
           />
         </Button>
         {/* Country input end */}
