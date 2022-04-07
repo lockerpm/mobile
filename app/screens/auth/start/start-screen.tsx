@@ -38,6 +38,12 @@ export const StartScreen = observer(() => {
       syncAutofillData()
     }
 
+    // Testing
+    // if (__DEV__) {
+    //   navigation.navigate('dataOutdated')
+    //   return
+    // }
+
     const connectionState = await NetInfo.fetch()
 
     // Sync

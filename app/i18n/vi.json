@@ -84,6 +84,7 @@
     "skip": "Bỏ qua",
     "sort": "Sắp xếp",
     "submit": "Gửi",
+    "synchronize": "Đồng bộ dữ liệu",
     "team_folders": "Thư mục chung",
     "times": "lần",
     "trash": "Thùng rác",
@@ -625,5 +626,10 @@
     "free": {
       "button": "Nâng cấp lên Premium"
     }
+  },
+  "outdated_data": {
+    "desc": "Có vẻ như bạn đang cố gắng cập nhật một mục chưa được đồng bộ hóa. Vui lòng đợi quá trình đồng bộ hóa kết thúc hoặc bạn có thể đồng bộ hóa dữ liệu của mình theo cách thủ công tại đây",
+    "go_back": "Quay lại",
+    "synchronizing": "Đang đồng bộ..."
   }
 }
