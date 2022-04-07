@@ -425,18 +425,34 @@ export const UserModel = types
       return res
     },
 
-    
+    getFamilyMember: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getFamilyMember(self.apiToken)
+      return res
+    },
+
+    addFamilyMember: async (memberEmails: string[]) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.addFamilyMember(self.apiToken, memberEmails)
+      return res
+    },
+
+    removeFamilyMember: async (memberID: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.removeFamilyMember(self.apiToken, memberID)
+      return res
+    }
   }))
   .actions((self) => ({
     //receipt: 'receipt_data' for ios, 'purchase_token' for android
-    purchaseValidation :async (receipt?: string, subscriptionId?: string, originalTransactionIdentifierIOS?: string) => {
+    purchaseValidation: async (receipt?: string, subscriptionId?: string, originalTransactionIdentifierIOS?: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.purchaseValidation(self.apiToken, receipt, subscriptionId, originalTransactionIdentifierIOS)
       if (res.kind === "ok") {
-        if (res.data.success){
+        if (res.data.success) {
           await self.loadPlan()
           return true
-        } 
+        }
       }
       return false
     }
@@ -451,7 +467,7 @@ export const UserModel = types
  */
 
 type UserType = Instance<typeof UserModel>
-export interface User extends UserType {}
+export interface User extends UserType { }
 type UserSnapshotType = SnapshotOut<typeof UserModel>
-export interface UserSnapshot extends UserSnapshotType {}
+export interface UserSnapshot extends UserSnapshotType { }
 export const createUserDefaultModel = () => types.optional(UserModel, {})

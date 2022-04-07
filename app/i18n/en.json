@@ -625,5 +625,14 @@
     "free": {
       "button": "Increase unlimited with Premium"
     }
-  }
+  },
+  "invite_member" : {
+    "action": "Invite",
+    "title": "Add member to your Family Plan",
+    "placeholder": "Invite People to your plan",
+    "list_member_title": "Member you added to the plan will appear at the list below",
+    "select_person": "SELECT A PERSON",
+    "number_member": "Member on Your plan",
+    "remove": "Remove family member"
+  } 
 }
