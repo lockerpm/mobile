@@ -40,7 +40,7 @@ export const MenuScreen = observer(() => {
   const [showFingerprint, setShowFingerprint] = useState(false)
 
   const PLAN_NAME: TextStyle = {
-    fontSize: fontSize.small, 
+    fontSize: fontSize.small,
     marginTop: 5
   }
   const ITEM_CONTAINER: ViewStyle = {
@@ -48,20 +48,16 @@ export const MenuScreen = observer(() => {
     borderRadius: 10,
     paddingHorizontal: 14,
   }
-  
+
   const items: MenuItemProps[] = [
-    // {
-    //   icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
-    //   name: translate('menu.invite'),
-    //   action: () => {
-      
-    //     // setShowInviteMemberModal(true)
-    //     console.log(showInviteMemberModal)
-    //   }
-        
-    //   // action: () => navigation.navigate('invite_member'),
-    //   // hide: user.plan?.alias !== PlanType.FAMILY 
-    // },
+    {
+      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
+      name: translate('menu.invite'),
+      action: () => {
+        setShowInviteMemberModal(true);
+      },
+      disabled: user.plan?.alias !== PlanType.FAMILY 
+    },
     {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
@@ -160,16 +156,18 @@ export const MenuScreen = observer(() => {
         <Text preset="largeHeader" text={translate('common.menu')} />
       )}
     >
-      {
-        showInviteMemberModal && <InviteMemberScreen/>
-      }
+      <InviteMemberScreen
+        isShow={showInviteMemberModal} 
+        onClose={setShowInviteMemberModal}
+      />
+
       <ScrollView>
         {/* User info */}
         <Button
-          onPress={() => {navigation.navigate('manage_plan')}}
+          onPress={() => { navigation.navigate('manage_plan') }}
           style={[
             ITEM_CONTAINER,
-            { marginBottom: 15, paddingVertical: 14 , justifyContent: "flex-start"}
+            { marginBottom: 15, paddingVertical: 14, justifyContent: "flex-start" }
           ]}>
           {
             !!user.avatar && (
@@ -179,14 +177,14 @@ export const MenuScreen = observer(() => {
               />
             )
           }
-          <View style = {{ flex: 1}}>
+          <View style={{ flex: 1 }}>
             <Text
               preset="black"
               text={user.email}
             />
             {
               user.plan && item3[user.plan.alias]?.node
-            }     
+            }
           </View>
           <FontAwesome
             name="angle-right"

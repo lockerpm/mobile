@@ -624,5 +624,14 @@
     "free": {
       "button": "Nâng cấp lên Premium"
     }
-  }
+  },
+  "invite_member" : {
+    "action": "Mời",
+    "title": "Thêm thành viên vào gói Family của bạn",
+    "placeholder": "Nhập email thành viên",
+    "list_member_title": "Danh sách các thành viên trong gói",
+    "select_person": "Chọn email để thêm vào danh sách mời",
+    "number_member": "Số lượng ",
+    "remove": "Xoá thành viên"
+  } 
 }
