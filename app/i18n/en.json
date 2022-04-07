@@ -573,28 +573,28 @@
     "price" :{
       "per": {
         "monthly": {
-          "title": "$4.99/ month",
+          "title": "$4.99/month",
           "subtitle": "Billed monthly",
           "sale": "",
           "pay_title": "Upgrade now for $4.99"
         },
         "yearly": {
-          "title": "$1.29/ month",
-          "subtitle": "$15.49 billed every 12 months",
+          "title": "$15.49/year",
+          "subtitle": "$1.29/month - billed yearly",
           "sale": "Save 75%",
           "pay_title": "Upgrade now for $15.49"
         }
       },
       "fam": {
         "yearly": {
-          "title": "$0.99/ mem/ mon",
-          "subtitle": "$71.99/ 6 members, billed yearly",
+          "title": "$71.99/year/6 people",
+          "subtitle": "$5.99 per month/6 people. Billed yearly", 
           "sale": "Save 80%",
           "pay_title": "Upgrade now for $71.99"
         },
         "monthly": {
-          "title": "$1.6/ mem/ mon",
-          "subtitle": "$9.99/ 6 members, billed monthly",
+          "title": "$9.99/month/6 people",
+          "subtitle": "Billed monthly" ,
           "sale": "Save 67%",
           "pay_title": "Upgrade now for $9.99"
         }

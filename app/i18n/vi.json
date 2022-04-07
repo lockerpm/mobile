@@ -571,29 +571,29 @@
     "price" :{
       "per": {
         "monthly": {
-          "title": "$4.99/ tháng",
-          "subtitle": "Thanh toán hàng tháng",
+          "title": "$4.99/tháng",
+          "subtitle": "Thanh toán theo tháng",
           "sale": "",
-          "pay_title": "Mua ngay với $4.99"
+          "pay_title": "Nâng cấp ngay với $4.99"
         },
         "yearly": {
-          "title": "$1.29/ tháng",
-          "subtitle": "$15.49/ năm",
-          "sale": "tiết kiệm 75%",
+          "title": "$15.49/năm",
+          "subtitle": "$1.29/tháng - thanh toán theo năm",
+          "sale": "Tiết kiệm 75%",
           "pay_title": "Nâng cấp ngay với $15.49"
         }
       },
       "fam": {
         "yearly": {
-          "title": "$0.99/ người/ tháng",
-          "subtitle": "$71.99/ 6 người/ năm",
-          "sale": "tiết kiệm 80%",
+          "title": "$71.99/năm/6 người",
+          "subtitle": "Tận hưởng tất cả các tính năng của Locker, cho 6 người", 
+          "sale": "Tiết kiệm 80%",
           "pay_title": "Nâng cấp ngay với $71.99"
         },
         "monthly": {
-          "title": "$1.6/ người/ tháng",
-          "subtitle": "$9.99/ 6 người/ năm",
-          "sale": "tiết kiệm 67%",
+          "title": "$9.99/tháng/6 người",
+          "subtitle": "Thanh toán theo tháng" ,
+          "sale": "Tiết kiệm 67%",
           "pay_title": "Nâng cấp ngay với $9.99"
         }
       }
