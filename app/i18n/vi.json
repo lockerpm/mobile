@@ -1,5 +1,6 @@
 {
   "common": {
+    "yes": "Đồng ý",
     "accept": "Đồng ý",
     "account": "Tài khoản",
     "authenticate": "Xác thực",
@@ -426,6 +427,7 @@
     "thank_you": "Cảm ơn bạn đã góp ý cho chúng tôi!"
   },
   "menu": {
+    "invite_noti" : "Nâng cấp lên gói Family để sử dụng Locker tiết kiệm hơn với những người thân!",
     "fingerprint": "Định danh",
     "plan": "Quản lý gói cước",
     "invite": "Mời thành viên",
@@ -602,6 +604,8 @@
     }
   },
   "manage_plan": {
+    "verify": "Xác nhận",
+    "verify_msg":  "Locker Không thể xác nhận đơn mua hàng của bạn",
     "usage": {
       "title": "Lưu lượng đã sử dụng",
       "login": "Mật khẩu",
@@ -628,6 +632,11 @@
     }
   },
   "invite_member" : {
+    "header" : "Quản lý thành viên",
+    "info_upgrade" : "Nâng cấp lên gói Family và mời bạn bè gia đình sử dụng Locker!",
+    "add_noti": "Thêm thành viên thành công",
+    "delete_noti": "Xoá thành viên thành công",
+    "confirm": "Bạn có chắc muốn xoá người dùng này khỏi gói Family Plan?",
     "action": "Mời",
     "title": "Thêm thành viên vào gói Family của bạn",
     "placeholder": "Nhập email thành viên",

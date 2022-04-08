@@ -6,6 +6,28 @@ import { BaseToast, BaseToastProps } from 'react-native-toast-message'
 import { useMixins } from '../../services/mixins'
 
 
+export const InfoToast = (props: BaseToastProps) => {
+  const { color, isDark } = useMixins()
+
+  return (
+    <BaseToast
+      {...props}
+      style={{ 
+        borderLeftColor: color.textBlack,
+        backgroundColor: isDark ? color.block : color.background
+      }}
+      text2Style={{
+        color: color.textBlack,
+        fontSize: fontSize.small
+      }}
+      text2NumberOfLines={0}
+      contentContainerStyle={{
+        paddingLeft: 10
+      }}
+    />
+  )
+}
+
 export const SuccessToast = (props: BaseToastProps) => {
   const { color, isDark } = useMixins()
 

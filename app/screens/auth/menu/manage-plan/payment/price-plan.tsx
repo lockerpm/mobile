@@ -4,13 +4,11 @@ import CheckBox from "@react-native-community/checkbox"
 import { Button, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
-import { PlanType } from "../../../../../config/types"
 import { SKU } from "./price-plan.sku"
 
 interface PricePlanItemProps {
   onPress: () => void
   isEnable: boolean
-
   onSale?: string
   title: string
   subtitle: string

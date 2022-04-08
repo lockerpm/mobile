@@ -39,12 +39,20 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const navigation = useNavigation();
   const route = useRoute<ScreenProp>();
   const { user } = useStores()
+
   // -------------------- STATE ----------------------
   const [subcriptions, setSubcriptions] = useState<Subscription[]>([])
-  const [loading, setLoading] = useState<boolean>(true);
   const [processPayment, setProcessPayment] = useState<boolean>(false);
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
+
+  // -------------------- EFFECT ----------------------
+
+  useEffect(()=>{
+    if (route.params.family) {
+       setPayIndividual(false)
+    }
+  })
 
 
   const getSubscription = useCallback(async (): Promise<void> => {
@@ -85,8 +93,8 @@ export const PaymentScreen = observer(function PaymentScreen() {
             }
             if (!verified) {
               Alert.alert(
-                "Purchase Verification",
-                "Locker can not verify your purchase",
+                translate("manage_plan.verify"),
+                translate("manage_plan.verify_msg"),
                 [
                   { text: "OK", onPress: () => { } }
                 ]

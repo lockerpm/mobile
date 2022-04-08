@@ -17,7 +17,7 @@ import { useStores } from "../models"
 import Toast, { BaseToastProps } from 'react-native-toast-message'
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../services/mixins"
-import { ErrorToast, SuccessToast } from "./helpers/toast"
+import { ErrorToast, SuccessToast, InfoToast } from "./helpers/toast"
 import { Logger } from "../utils/logger"
 import { PushNotifier } from "../utils/push-notification"
 import { NotifeeNotificationData } from "../utils/push-notification/types"
@@ -142,6 +142,9 @@ export const RootNavigator = React.forwardRef<
     ),
     error: (props: BaseToastProps) => (
       <ErrorToast {...props} />
+    ),
+    info: (props: BaseToastProps) => (
+      <InfoToast {...props} />
     )
   }
 

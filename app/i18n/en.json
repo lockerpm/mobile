@@ -1,5 +1,6 @@
 {
   "common": {
+    "yes": "Yes",
     "accept": "Accept",
     "account": "Account",
     "authenticate": "Authenticate",
@@ -426,6 +427,7 @@
     "thank_you": "Thank you for your feedback!"
   },
   "menu": {
+    "invite_noti" : "Upgrade to Family Plan and invite your friends joining Locker!",
     "fingerprint": "Fingerprint",
     "plan": "Manage Plan",
     "invite": "Invite Member",
@@ -604,6 +606,8 @@
     }
   },
   "manage_plan": {
+    "verify": "Purchase Verification",
+    "verify_msg":  "Locker can not verify your purchase",
     "usage": {
       "title": "Plan Usage",
       "login": "Passwords",
@@ -629,6 +633,11 @@
     }
   },
   "invite_member" : {
+    "header" : "Manage member",
+    "info_upgrade" : "Upgrade to Family Plan and invite your friends joining Locker!",
+    "add_noti": "Add members successfully ",
+    "delete_noti": "Delete member successfully",
+    "confirm": "Are you sure you want to remove this user from Family Plan?",
     "action": "Invite",
     "title": "Add member to your Family Plan",
     "placeholder": "Invite People to your plan",

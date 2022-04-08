@@ -24,9 +24,7 @@ import InviteIconLight from './invite-light.svg'
 import SettingsIconLight from './gear-light.svg'
 import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
-
 import { PushNotifier } from "../../../../utils/push-notification"
-import { InviteMemberScreen } from "../invite_member/invite_member_screen"
 import { useTestMixins } from "../../../../services/mixins/test"
 
 
@@ -38,7 +36,6 @@ export const MenuScreen = observer(() => {
   const { createRandomPasswords } = useTestMixins()
 
   const isFamilyAccount = user.plan?.alias === PlanType.FAMILY  
-  const [showInviteMemberModal, setShowInviteMemberModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
 
@@ -56,11 +53,14 @@ export const MenuScreen = observer(() => {
     {
       icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
       name: translate('menu.invite'),
-      family: !isFamilyAccount,
       action: () => {
-        setShowInviteMemberModal(true);
+        if(isFamilyAccount) {
+          navigation.navigate("invite_member")
+        } else {
+          notify('info', translate("invite_member.info_upgrade"))
+          navigation.navigate("payment", { family: 0 })
+        }
       },
-      disabled: !isFamilyAccount
     },
     {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
@@ -171,11 +171,6 @@ export const MenuScreen = observer(() => {
         <Text preset="largeHeader" text={translate('common.menu')} />
       )}
     >
-      <InviteMemberScreen
-        isShow={showInviteMemberModal} 
-        onClose={setShowInviteMemberModal}
-      />
-
       <ScrollView>
         {/* User info */}
         <Button
