@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, TouchableOpacity, TextInput, Image } from "react-native"
+import { View, TouchableOpacity, TextInput, Image, Alert } from "react-native"
 import { Button, Text } from "../../../../components"
 import { useStores } from "../../../../models"
 import { observer } from "mobx-react-lite"
@@ -16,10 +16,9 @@ interface InviteProps {
     onClose: React.Dispatch<React.SetStateAction<boolean>>
 }
 export const InviteMemberScreen = observer(function InviteMemberScreen(props: InviteProps) {
-
+    const { translate, color, notify } = useMixins()
     const { isShow, onClose } = props
     const { user } = useStores()
-    const { translate, color } = useMixins()
 
     // ----------------------- PARAMS -----------------------
     const [reload, setRelad] = useState<boolean>(false);
@@ -30,9 +29,10 @@ export const InviteMemberScreen = observer(function InviteMemberScreen(props: In
 
     // ----------------------- METHODS -----------------------
     const addEmailToInviteList = (email: string) => {
-        const isIncluded = familyMembers.some(e => e.email === email)
         const e = email.trim().toLowerCase()
-        if (!!e && !emails.includes(e) && !isIncluded) {
+        const isOwnerEmails = user?.email == e
+        const isIncluded = familyMembers.some(element => element.email === e)
+        if (!!e && !emails.includes(e) && !isIncluded && !isOwnerEmails) {
             setEmails([...emails, e])
             setEmail("")
         }
@@ -45,22 +45,56 @@ export const InviteMemberScreen = observer(function InviteMemberScreen(props: In
         const res = await user.getFamilyMember()
         if (res.kind === "ok") {
             setFamilyMembers(res.data)
+            console.log(res.data)
         }
     }
 
     const addFamilyMember = async (emails?: string[]) => {
         const res = await user.addFamilyMember(emails)
         if (res.kind === "ok") {
+            notify('success', "thêm thàn viên thành công")
             setEmails([])
             setRelad(true)
+        } else {
+            notify('error', "Thêm thành viên thất bại.")
         }
-        
+
     }
 
+    const confirmRemoveAction = async (id: string) => {
+        Alert.alert(
+            "Are you sure you want to remove this user from Family Plan?",
+            "",
+            [
+                {
+                    text: "Remove", 
+                    onPress: () => {
+                        console.log(id)
+                        removeFamilyMember(id)
+                    },
+                    style: "destructive"
+                },
+                {
+                    text: "Cancel", 
+                    onPress: () => {
+                        return
+                    },
+                    style: "cancel"
+                    
+                }
+            ],
+            {
+              cancelable: true,
+            }
+        )
+    }
     const removeFamilyMember = async (id: string) => {
         const res = await user.removeFamilyMember(id)
+        notify('error', "Unknow Error")
         if (res.kind === "ok") {
             setRelad(true)
+        } else {
+            notify('error', "Unknow Error")
         }
     }
 
@@ -75,7 +109,7 @@ export const InviteMemberScreen = observer(function InviteMemberScreen(props: In
             setEmail("")
             onEnterEmail(false)
             getFamilyMember()
-        }       
+        }
     }, [reload])
 
 
@@ -106,8 +140,8 @@ export const InviteMemberScreen = observer(function InviteMemberScreen(props: In
                         onPress={() => {
                             addFamilyMember(emails);
                         }}>
-                        <Text style={{ 
-                            color: (emails.length > 0) ? "#007AFF" : color.block 
+                        <Text style={{
+                            color: (emails.length > 0) ? "#007AFF" : color.block
                         }}>{translate('invite_member.action')}</Text>
                     </Button>
                 </View>
@@ -141,7 +175,7 @@ export const InviteMemberScreen = observer(function InviteMemberScreen(props: In
                             value={email}
                             clearButtonMode="unless-editing"
                             clearTextOnFocus={true}
-                            onTouchStart={()=> [
+                            onTouchStart={() => [
                                 onEnterEmail(true)
                             ]}
                             onFocus={() => {
@@ -208,7 +242,7 @@ export const InviteMemberScreen = observer(function InviteMemberScreen(props: In
                             <Member member={{ email: user.email, avatar: user.avatar }} familyOwner={true} />
                             {
                                 familyMembers.map((e, index) => {
-                                    return <Member key={index} member={e} onRemove={removeFamilyMember} />
+                                    return <Member key={index} member={e} onRemove={confirmRemoveAction} />
                                 })
                             }
                         </ScrollView>
