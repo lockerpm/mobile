@@ -28,6 +28,7 @@ export const Member = (props: MemberProps) => {
     const { member, familyOwner, add, onRemove } = props
     const { id, email, avatar, created_time, username, full_name } = member
     const { color, translate } = useMixins()
+
     // ----------------------- PARAMS -----------------------
     const [showSheetModal, setShowSheetModal] = useState<boolean>(false)
 
@@ -37,6 +38,8 @@ export const Member = (props: MemberProps) => {
         <View
             style={
                 {
+                    borderBottomColor: color.block,
+                    borderBottomWidth: 1,
                     width: "100%",
                     flexDirection: "row",
                     marginBottom: 15,
@@ -49,17 +52,24 @@ export const Member = (props: MemberProps) => {
                 style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
             />
 
-            <View style={{ flex: 1, justifyContent: 'center' }}>
+            {add && <View style={{ flex: 1, justifyContent: 'center' }}>
                 <Text
                     preset="black"
-                    text={email}
-                />
-                {familyOwner && <Text
-                    preset="default"
-                    text={"Family Owner"}
-                    style={{ color: color.primary }}
-                />}
+                    text={email}></Text>
             </View>
+            }
+            {!add && <View style={{ flex: 1, justifyContent: 'center' }}>
+                <Text
+                    preset="black"
+                    text={full_name ? full_name : "Unknown"}
+                    style={{ color: familyOwner ? color.primary : color.textBlack }}
+                />
+                <Text
+                    preset="default"
+                    text={email}
+                    style={{ color: color.text, fontSize: 15 }}
+                />
+            </View>}
 
             {!add && !familyOwner && <TouchableOpacity
                 onPress={() => setShowSheetModal(true)}
@@ -81,7 +91,7 @@ export const Member = (props: MemberProps) => {
                             style={{ height: 40, width: 40, borderRadius: 20 }}
                         />
                         <Text style={{ marginVertical: 20 }}>{email}</Text>
-                        <View style={{ borderBottomColor: color.block, borderWidth: 0.3, width: "100%", marginVertical:2 }}></View>
+                        <View style={{ borderBottomColor: color.block, borderWidth: 0.4, width: "100%", marginVertical: 2 }}></View>
                         <TouchableOpacity
                             onPress={() => {
                                 setShowSheetModal(false)
@@ -94,7 +104,7 @@ export const Member = (props: MemberProps) => {
                 </ActionSheetContent>
             </ActionSheet>
 
-            
+
         </View >
     )
 }

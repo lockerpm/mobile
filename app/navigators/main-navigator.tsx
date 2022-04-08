@@ -99,7 +99,8 @@ export type PrimaryParamList = {
   }
   manage_plan: undefined
   payment: {
-    benefitTab?: 0 | 1 | 2 | 3
+    benefitTab?: 0 | 1 | 2 | 3,
+    family?: boolean
   }
   invite_member: undefined
   settings: undefined
