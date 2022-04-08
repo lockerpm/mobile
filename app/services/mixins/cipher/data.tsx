@@ -225,7 +225,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     syncQueue.clear()
     return syncQueue.add(async () => {
       try {
-        const pageSize = 200
+        const pageSize = 50
         let page = 1
         let cipherIds: string[] = []
   
