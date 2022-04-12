@@ -7,6 +7,7 @@ import { commonStyles } from "../../../../theme"
 import { Modal } from "react-native-ui-lib"
 import { useMixins } from "../../../../services/mixins"
 import { Member } from "./member"
+import { FAMILY_MEMBER_LIMIT } from "../../../../config/constants"
 import Entypo from 'react-native-vector-icons/Entypo'
 
 
@@ -21,6 +22,7 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
     const { user } = useStores()
     const { translate, color, notifyApiError, notify } = useMixins()
 
+    console.log("========", user.plan?.is_family)
     // ----------------------- PARAMS -----------------------
     const [email, setEmail] = useState<string>("");
     const [emails, setEmails] = useState<string[]>([]);
@@ -31,7 +33,7 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
         const e = email.trim().toLowerCase();
         if (!e) return;
 
-        const unreachLimit = familyMembers.length + emails.length < 5
+        const unreachLimit = familyMembers.length + emails.length < FAMILY_MEMBER_LIMIT
         if (!unreachLimit) return;
 
         const isOwner = user?.email === e
