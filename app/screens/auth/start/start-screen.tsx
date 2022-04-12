@@ -8,7 +8,6 @@ import NetInfo from '@react-native-community/netinfo'
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 
 
-
 export const StartScreen = observer(() => {
   const { user, uiStore } = useStores()
   const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()

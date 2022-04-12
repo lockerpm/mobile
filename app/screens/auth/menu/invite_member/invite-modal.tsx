@@ -22,7 +22,6 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
     const { user } = useStores()
     const { translate, color, notifyApiError, notify } = useMixins()
 
-    console.log("========", user.plan?.is_family)
     // ----------------------- PARAMS -----------------------
     const [email, setEmail] = useState<string>("");
     const [emails, setEmails] = useState<string[]>([]);
