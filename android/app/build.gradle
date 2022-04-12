@@ -2,10 +2,10 @@ apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
 
 project.ext.envConfigFiles = [
-  productiondebug: "/app/config/.env.production",
-  productionrelease: "/app/config/.env.production",
-  stagingrelease: "/app/config/.env.staging",
-  stagingdebug: "/app/config/.env.staging"
+  productionDebug: "/app/config/.env.production",
+  productionRelease: "/app/config/.env.production",
+  stagingRelease: "/app/config/.env.staging",
+  stagingDebug: "/app/config/.env.staging"
 ]
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 // Unimodules: https://docs.expo.io/bare/installing-unimodules/#configuration-for-android
@@ -154,6 +154,7 @@ android {
         missingDimensionStrategy 'react-native-camera', 'general'
         // react-native-iap: we only use the Google Play flavor
         missingDimensionStrategy 'store', 'play'
+        resValue "string", "build_config_package", "com.cystack.locker"
     }
     splits {
         abi {
@@ -184,7 +185,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
-            matchingFallbacks = ['debug', 'release']
+            // matchingFallbacks = ['debug']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -192,6 +193,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            // matchingFallbacks = ['release']
         }
     }
     flavorDimensions "version"
@@ -199,7 +201,6 @@ android {
         production {     
             dimension "version"
             resValue "string", "app_name", "Locker"    
-            resValue "string", "build_config_package", "com.cystack.locker"
         }
 
         staging {
@@ -208,7 +209,6 @@ android {
             applicationIdSuffix ".staging"
             versionNameSuffix "-staging"
             resValue "string", "app_name", "[Staging] Locker"
-            resValue "string", "build_config_package", "com.cystack.locker"
         }
     }
 
