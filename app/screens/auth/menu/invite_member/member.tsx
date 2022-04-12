@@ -19,16 +19,17 @@ export interface FamilyMemberProp {
 
 interface MemberProps {
     member: FamilyMemberProp
-    familyOwner?: boolean
+    family?: boolean
     add?: boolean
     onRemove?: (id: string) => Promise<void>
 }
 
 export const Member = (props: MemberProps) => {
-    const { member, familyOwner, add, onRemove } = props
+    const { member, family, add, onRemove } = props
     const { id, email, avatar, created_time, username, full_name } = member
     const { color, translate } = useMixins()
 
+    const owner = id === null
     // ----------------------- PARAMS -----------------------
     const [showSheetModal, setShowSheetModal] = useState<boolean>(false)
 
@@ -62,7 +63,7 @@ export const Member = (props: MemberProps) => {
                 <Text
                     preset="black"
                     text={full_name ? full_name : "Unknown"}
-                    style={{ color: familyOwner ? color.primary : color.textBlack }}
+                    style={{ color: owner? color.primary : color.textBlack }}
                 />
                 <Text
                     preset="default"
@@ -71,7 +72,7 @@ export const Member = (props: MemberProps) => {
                 />
             </View>}
 
-            {!add && !familyOwner && <TouchableOpacity
+            {!add && family && !owner && <TouchableOpacity
                 onPress={() => setShowSheetModal(true)}
                 style={{ justifyContent: 'center' }}>
                 <Feather

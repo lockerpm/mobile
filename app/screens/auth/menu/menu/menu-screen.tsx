@@ -35,7 +35,8 @@ export const MenuScreen = observer(() => {
   const { lock, logout } = useCipherAuthenticationMixins()
   const { createRandomPasswords } = useTestMixins()
 
-  const isFamilyAccount = user.plan?.alias === PlanType.FAMILY  
+  const isFreeAccount = user.plan?.alias === PlanType.FREE  
+  const isPremiumAccount = user.plan?.alias === PlanType.PREMIUM
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
 
@@ -54,11 +55,11 @@ export const MenuScreen = observer(() => {
       icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
       name: translate('menu.invite'),
       action: () => {
-        if(isFamilyAccount) {
-          navigation.navigate("invite_member")
-        } else {
+        if(isFreeAccount || (isPremiumAccount && !user.plan?.is_family)) {
           notify('info', translate("invite_member.info_upgrade"))
-          navigation.navigate("payment", { family: 0 })
+          navigation.navigate("payment", { family: true })
+        } else {
+          navigation.navigate("invite_member")
         }
       },
     },

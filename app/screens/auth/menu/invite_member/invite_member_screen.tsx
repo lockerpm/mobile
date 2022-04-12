@@ -6,10 +6,10 @@ import { observer } from "mobx-react-lite"
 import { commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { useNavigation } from "@react-navigation/native"
+import {PlanType} from "../../../../config/types"
 import { FamilyMemberProp, Member } from "./member"
 import { InviteMemberModal } from "./invite-modal"
-
-
+import { FAMILY_MEMBER_LIMIT } from "../../../../config/constants"
 
 export const InviteMemberScreen = observer(function InviteMemberScreen() {
     const navigation = useNavigation()
@@ -21,6 +21,7 @@ export const InviteMemberScreen = observer(function InviteMemberScreen() {
     const [familyMembers, setFamilyMembers] = useState<FamilyMemberProp[]>([]);
     const [showInviteMemberModal, setShowInviteMemberModal] = useState(false)
 
+    const isFamilyAccount =  user.plan?.alias === PlanType.FAMILY
 
     // ----------------------- METHODS -----------------------
     const getFamilyMember = async () => {
@@ -97,26 +98,25 @@ export const InviteMemberScreen = observer(function InviteMemberScreen() {
                             preset="bold"
                             style={{ marginBottom: 20, fontSize: 16 }}
                         >
-                            {translate('invite_member.number_member')} ({1 + familyMembers?.length} / 6)
+                            {translate('invite_member.number_member')} ({familyMembers?.length} / 6)
                         </Text>
-                        <Button
+                        {isFamilyAccount &&<Button
                             preset="link"
-                            disabled={familyMembers?.length >= 5}
+                            disabled={familyMembers?.length >= FAMILY_MEMBER_LIMIT}
                             onPress={() => {
                                 setShowInviteMemberModal(true);
                             }}>
-                            <Text style={{ color: familyMembers?.length < 5 ?"#007AFF" : color.background }}>
+                            <Text style={{ color: familyMembers?.length < FAMILY_MEMBER_LIMIT ?"#007AFF" : color.background }}>
                                 {translate('invite_member.action')}
                             </Text>
-                        </Button>
+                        </Button>}
                     </View>
 
 
                     <View>
-                        <Member member={{ email: user.email, avatar: user.avatar, full_name: user.full_name }} familyOwner={true} />
                         {
                             familyMembers.map((e, index) => {
-                                return <Member key={index} member={e} onRemove={comfirmRemoveMember} />
+                                return <Member key={index} family={isFamilyAccount} member={e} onRemove={comfirmRemoveMember} />
                             })
                         }
                     </View>

@@ -145,7 +145,7 @@ export type GetTeamsResult = {
 
 export type GetPlanResult = {
     kind: 'ok'
-    data: { name: string; alias: string; },
+    data: { name: string; alias: string; is_family: boolean},
 } | GeneralApiProblem
 
 export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
