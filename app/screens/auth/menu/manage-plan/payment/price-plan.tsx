@@ -1,5 +1,5 @@
 import React from "react"
-import { View, TouchableOpacity, ViewStyle } from "react-native"
+import { View, TouchableOpacity, ViewStyle, Alert } from "react-native"
 import CheckBox from "@react-native-community/checkbox"
 import { Button, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
@@ -86,6 +86,11 @@ export const PricePlan = (props: PricePlanProps) => {
   const { user } = useStores()
 
   // const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan 
+
+  //  const handeUserIsInFamilyPlan = () => {
+  //     Alert.alert("Warning", "User")
+  //  }
+
   const planText = {
     per: {
       monthly: {
@@ -157,7 +162,9 @@ export const PricePlan = (props: PricePlanProps) => {
         }}
         // isDisabled={!isFreeAccount}
         isLoading={props.isProcessPayment}
-        onPress={() => props.purchase(billingCycle.subId)}
+        onPress={() => {
+          props.purchase(billingCycle.subId)
+        }}
       >
         <View style={{ flexDirection: "column", }}>
           <Text
