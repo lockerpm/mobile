@@ -15,7 +15,7 @@ import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { Button, AutoImage as Image, Text } from "../../../components"
 import { AutoFillItemAction } from "./autofill-item-action"
 
-const { AutofillAndroid } = NativeModules
+const { RNAutofillServiceAndroid } = NativeModules
 
 interface AutoFillListProps {
   emptyContent?: JSX.Element
@@ -118,9 +118,12 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
 
   // Go to detail
   const selectForAutoFill = (item: CipherView) => {
-    AutofillAndroid.addAutofillValue(
+    RNAutofillServiceAndroid.addAutofillValue(
+      item.id,
       item.login.username,
-      item.login.password
+      item.login.password,
+      item.name,
+      item.login.uri
     )
   }
 
