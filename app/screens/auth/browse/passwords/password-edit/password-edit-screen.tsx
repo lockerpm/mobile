@@ -20,7 +20,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
 
 
-export const PasswordEditScreen = observer(function PasswordEditScreen() {
+export const PasswordEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<PasswordEditScreenProp>()
   const { mode, initialUrl } = route.params
@@ -54,7 +54,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
       setUrl(selectedCipher.login.uri)
       setNote(selectedCipher.notes)
       setFolder(selectedCipher.folderId)
-      setOrganizationId(selectedCipher.organizationId)
+      setOrganizationId(mode === 'clone' ? null : selectedCipher.organizationId)
       setCollectionIds(selectedCipher.collectionIds)
     } else {
       setUrl(initialUrl)
@@ -173,7 +173,7 @@ export const PasswordEditScreen = observer(function PasswordEditScreen() {
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label={translate('common.name')}
+              label={translate('common.item_name')}
               value={name}
               onChangeText={setName}
             />

@@ -1,9 +1,10 @@
 import { ApiResponse } from "apisauce"
-import { ConfirmShareCipherData, EditShareCipherData, EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetOrganizationResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, StopShareCipherData, SyncResult } from "./api.types"
+import { ConfirmShareCipherData, EditShareCipherData, EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetOrganizationResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, PostCipherResult, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, ShareMultipleCiphersData, StopShareCipherData, SyncResult } from "./api.types"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
+import { detectTempId } from "../../utils/event-bus/helpers"
 
 export class CipherApi {
   private api: Api
@@ -31,7 +32,7 @@ export class CipherApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Sync data: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -39,6 +40,7 @@ export class CipherApi {
   // Get single cipher
   async getCipher(token: string, id: string): Promise<GetCipherResult> {
     try {
+      detectTempId([id])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -51,14 +53,15 @@ export class CipherApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
 
   // Create cipher
-  async postCipher(token: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
+  async postCipher(token: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<PostCipherResult> {
     try {
+      detectTempId(collectionIds)
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -72,9 +75,9 @@ export class CipherApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Post cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -93,7 +96,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Import cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -112,7 +115,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Offline sync cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -120,6 +123,7 @@ export class CipherApi {
   // Update cipher
   async putCipher(token: string, id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
     try {
+      detectTempId([id, ...collectionIds])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
       
       // make the api call
@@ -135,7 +139,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Put cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -143,6 +147,7 @@ export class CipherApi {
   // Share cipher to team
   async shareCipherToTeam(token: string, id: string, data: CipherRequest, score: number, collectionIds: string[]): Promise<EmptyResult> {
     try {
+      detectTempId([id, ...collectionIds])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -158,7 +163,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Share cipher to team: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -166,6 +171,7 @@ export class CipherApi {
   // Permanent delete ciphers
   async deleteCiphers(token: string, ids: string[]): Promise<EmptyResult> {
     try {
+      detectTempId(ids)
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -177,7 +183,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Delete ciphers: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -185,6 +191,7 @@ export class CipherApi {
   // Move to trash ciphers
   async toTrashCiphers(token: string, ids: string[]): Promise<EmptyResult> {
     try {
+      detectTempId(ids)
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -196,7 +203,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('To trash ciphers: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -204,6 +211,7 @@ export class CipherApi {
   // Restore ciphers
   async restoresCiphers(token: string, ids: string[]): Promise<EmptyResult> {
     try {
+      detectTempId(ids)
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -215,7 +223,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Restore cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -223,6 +231,7 @@ export class CipherApi {
   // Move to folder
   async moveToFolder(token: string, data: MoveFolderData): Promise<EmptyResult> {
     try {
+      detectTempId([data.folderId, ...data.ids])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -234,7 +243,7 @@ export class CipherApi {
       }
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Move to folder: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -255,7 +264,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get last update: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -276,7 +285,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get sharing public key: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -297,7 +306,27 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Share cipher: ' + e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Share multiple ciphers
+  async shareMultipleCiphers(token: string, payload: ShareMultipleCiphersData): Promise<EmptyResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/sharing/multiple`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error('Share multiple ciphers: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -305,6 +334,7 @@ export class CipherApi {
   // Stop share cipher
   async stopShareCipher(token: string, organizationId: string, memberId: string, payload: StopShareCipherData): Promise<EmptyResult> {
     try {
+      detectTempId([organizationId, memberId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -317,7 +347,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Stop share cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -325,6 +355,7 @@ export class CipherApi {
   // Edit share cipher
   async editShareCipher(token: string, organizationId: string, memberId: string, payload: EditShareCipherData): Promise<EmptyResult> {
     try {
+      detectTempId([organizationId, memberId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -337,7 +368,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Edit share cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -345,6 +376,7 @@ export class CipherApi {
   // Confirm share cipher
   async confirmShareCipher(token: string, organizationId: string, memberId: string, payload: ConfirmShareCipherData): Promise<EmptyResult> {
     try {
+      detectTempId([organizationId, memberId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -357,7 +389,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Confirm share cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -378,7 +410,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get sharing invitation:' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -399,7 +431,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get my shares: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -407,6 +439,7 @@ export class CipherApi {
   // Leave share
   async leaveShare(token: string, organizationId: string): Promise<EmptyResult> {
     try {
+      detectTempId([organizationId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -419,7 +452,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Leave share: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -427,6 +460,7 @@ export class CipherApi {
   // Respond to share invitation
   async respondShareInvitation(token: string, id: string, payload: ShareInvitationResponseData): Promise<EmptyResult> {
     try {
+      detectTempId([id])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -439,7 +473,7 @@ export class CipherApi {
 
       return { kind: "ok" }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Respond share invitation: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -460,7 +494,7 @@ export class CipherApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get PM profile: ' + e.message)
       return { kind: "bad-data" }
     }
   }
@@ -468,6 +502,7 @@ export class CipherApi {
   // Get single organization
   async getOrganization(token: string, id: string): Promise<GetOrganizationResult> {
     try {
+      detectTempId([id])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -480,7 +515,7 @@ export class CipherApi {
 
       return { kind: "ok", data: response.data }
     } catch (e) {
-      Logger.error(e.message)
+      Logger.error('Get org: ' + e.message)
       return { kind: "bad-data" }
     }
   }

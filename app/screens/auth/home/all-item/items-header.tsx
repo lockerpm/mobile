@@ -11,13 +11,9 @@ import { ShareModal } from "../../../../components/cipher/cipher-action/share-mo
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 
-// @ts-ignore
 import ConfigIcon from './config.svg'
-// @ts-ignore
 import ConfigIconLight from './config-light.svg'
-// @ts-ignore
 import PlusIcon from './plus.svg'
-// @ts-ignore
 import PlusIconLight from './plus-light.svg'
 import { PlanType } from "../../../../config/types"
 
@@ -68,7 +64,7 @@ export const ItemsHeader = observer((props: Props) => {
 
   // ----------------------- COMPUTED ------------------------
   
-  const isFreeAccount = user.plan?.alias === PlanType.FREE
+  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
   
   // ----------------------- METHODS ------------------------
 

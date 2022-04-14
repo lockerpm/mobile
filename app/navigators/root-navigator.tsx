@@ -4,7 +4,7 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import NetInfo from "@react-native-community/netinfo"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
@@ -17,8 +17,11 @@ import { useStores } from "../models"
 import Toast, { BaseToastProps } from 'react-native-toast-message'
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../services/mixins"
-import { ErrorToast, SuccessToast } from "./helpers/toast"
+import { ErrorToast, SuccessToast, InfoToast } from "./helpers/toast"
 import { Logger } from "../utils/logger"
+import { PushNotifier } from "../utils/push-notification"
+import { NotifeeNotificationData } from "../utils/push-notification/types"
+import { save, StorageKey } from "../utils/storage"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -47,24 +50,35 @@ export type RootParamList = {
 
 const Stack = createStackNavigator<RootParamList>()
 
-const RootStack = observer(() => {
-  const { color } = useMixins()
-  const { uiStore } = useStores()
+type Props = {
+  navigationRef: any
+}
+const RootStack = observer((props: Props) => {
+  const { navigationRef } = props
+  const { color, parsePushNotiData } = useMixins()
+  const { uiStore, user } = useStores()
 
-  // Prevent store from being called too soon and break the initialization
-  const [appIsReady, setAppIsReady] = useState(false)
-  let removeNetInfoSubscription = () => {}
-
-  useEffect(() => {
-    // Check network (delay to protect the store initialization)
-    if (!appIsReady) {
-      setTimeout(() => {
-        setAppIsReady(true)
-      }, 2000)
-      return () => {}
+  const handleForegroundNotiPress = async (data: NotifeeNotificationData) => {
+    if (!data) {
+      return
     }
-    
-    removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+
+    const res = await parsePushNotiData({
+      notifeeData: data
+    })
+
+    if (user.isLoggedInPw) {
+      navigationRef.current.navigate(res.path, res.params)
+    } else {
+      save(StorageKey.PUSH_NOTI_DATA, {
+        type: data.type
+      })
+    }
+  }
+
+  // Check internet connection
+  useEffect(() => {
+    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
       Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
       uiStore.setIsOffline(offline)
@@ -73,7 +87,17 @@ const RootStack = observer(() => {
     return () => {
       removeNetInfoSubscription()
     }
-  }, [appIsReady])
+  }, [])
+
+  // Push notification handler
+  useEffect(() => {
+    const unsubscribe = PushNotifier.setupForegroundHandler({
+      handleForegroundPress: handleForegroundNotiPress
+    })
+    return () => {
+      unsubscribe()
+    }
+  }, [])
 
   // -------------------- RENDER ----------------------
 
@@ -82,7 +106,7 @@ const RootStack = observer(() => {
       initialRouteName="init"
       screenOptions={{
         cardStyle: { backgroundColor: color.background },
-        headerShown: false,
+        headerShown: false
       }}
     >
       <Stack.Screen name="init" component={InitScreen} />
@@ -99,12 +123,12 @@ const RootStack = observer(() => {
         component={MainNavigator}
         options={{
           headerShown: false,
+          gestureEnabled: false
         }}
       />
     </Stack.Navigator>
   )
 })
-
 
 
 export const RootNavigator = React.forwardRef<
@@ -118,12 +142,15 @@ export const RootNavigator = React.forwardRef<
     ),
     error: (props: BaseToastProps) => (
       <ErrorToast {...props} />
+    ),
+    info: (props: BaseToastProps) => (
+      <InfoToast {...props} />
     )
   }
 
   return (
     <NavigationContainer {...props} ref={ref}>
-      <RootStack />
+      <RootStack navigationRef={ref} />
       <Toast config={toastConfig} />
     </NavigationContainer>
   )

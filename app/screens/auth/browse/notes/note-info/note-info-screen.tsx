@@ -13,7 +13,7 @@ import { DeletedAction } from "../../../../../components/cipher/cipher-action/de
 import { useMixins } from "../../../../../services/mixins"
 
 
-export const NoteInfoScreen = observer(function NoteInfoScreen() {
+export const NoteInfoScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, color } = useMixins()
   const { cipherStore } = useStores()
@@ -86,7 +86,7 @@ export const NoteInfoScreen = observer(function NoteInfoScreen() {
           <BROWSE_ITEMS.note.svgIcon height={55} width={55} />
           <Text
             preset="header"
-            style={{ marginTop: 5 }}
+            style={{ marginTop: 5, marginHorizontal: 20, textAlign: 'center' }}
           >
             {selectedCipher.name}
             {

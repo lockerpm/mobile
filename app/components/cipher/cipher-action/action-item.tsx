@@ -23,17 +23,18 @@ export interface ActionItemProps {
   children?: React.ReactNode
   disabled?: boolean
   isPremium?: boolean
+  onClose?: () => void
 }
 
 /**
  * Describe your component here
  */
 export const ActionItem = observer((props: ActionItemProps) => {
-  const { style, name, icon, textColor, action, children, iconColor, disabled, isPremium } = props
+  const { style, name, icon, textColor, action, children, iconColor, disabled, isPremium, onClose } = props
   const { color, goPremium } = useMixins()
   const { user } = useStores()
 
-  const premiumLock = isPremium && (user.plan && user.plan.alias === PlanType.FREE)
+  const premiumLock = isPremium && ((user.plan?.alias === PlanType.FREE) || !user.plan)
 
   return (
     <ActionSheetItem
@@ -43,6 +44,7 @@ export const ActionItem = observer((props: ActionItemProps) => {
       }, style]}
       onPress={() => {
         if (premiumLock) {
+          onClose && onClose()
           goPremium()
         } else {
           action && action()

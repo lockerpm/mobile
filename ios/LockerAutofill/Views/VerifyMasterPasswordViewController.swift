@@ -85,7 +85,9 @@ class VerifyMasterPasswordViewController: UIViewController {
 
 extension VerifyMasterPasswordViewController {
   private func makeEmailView(){
-    
+    if (delegate == nil){
+      return
+    }
     let firstCharacter = UILabel()
     let avatar = UIImageView()
     let emailBackground = UIView()
@@ -96,7 +98,7 @@ extension VerifyMasterPasswordViewController {
     emailBackground.layer.cornerRadius = 20
     
     avatar.translatesAutoresizingMaskIntoConstraints = false
-    avatar.downloaded(from: delegate.userAvatar)
+    avatar.downloaded(from: delegate.userAvatar )
     avatar.layer.masksToBounds = true
     avatar.layer.cornerRadius = 14
 

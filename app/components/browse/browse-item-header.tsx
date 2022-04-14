@@ -15,13 +15,9 @@ import { PlanType } from "../../config/types"
 import { observer } from "mobx-react-lite"
 import { ShareModal } from "../cipher/cipher-action/share-modal"
 
-// @ts-ignore
 import ConfigIcon from './config.svg'
-// @ts-ignore
 import ConfigIconLight from './config-light.svg'
-// @ts-ignore
 import PlusIcon from './plus.svg'
-// @ts-ignore
 import PlusIconLight from './plus-light.svg'
 
 
@@ -79,7 +75,7 @@ export const BrowseItemHeader = observer((props: BrowseItemHeaderProps) => {
 
   // ----------------------- COMPUTED ------------------------
   
-  const isFreeAccount = user.plan?.alias === PlanType.FREE
+  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
 
   // ----------------------- METHODS ------------------------
 
@@ -330,6 +326,7 @@ export const BrowseItemHeader = observer((props: BrowseItemHeaderProps) => {
             <Text
               preset="largeHeader"
               text={header}
+              numberOfLines={2}
               style={{ marginBottom: 10 }}
             />
           )

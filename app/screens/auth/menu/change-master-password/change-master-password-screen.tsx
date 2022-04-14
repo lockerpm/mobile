@@ -8,17 +8,27 @@ import { useCipherHelpersMixins } from "../../../../services/mixins/cipher/helpe
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 
 
-export const ChangeMasterPasswordScreen = function ChangeMasterPasswordScreen() {
+export const ChangeMasterPasswordScreen = () => {
   const navigation = useNavigation()
-  const { translate, color } = useMixins()
+  const { translate, color, validateMasterPassword } = useMixins()
   const { getPasswordStrength } = useCipherHelpersMixins()
   const { changeMasterPassword } = useCipherAuthenticationMixins()
+
+  // -------------- PARAMS --------------
 
   const [isLoading, setIsLoading] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(-1)
   const [current, setCurrent] = useState('')
   const [newPass, setNewPass] = useState('')
   const [confirm, setConfirm] = useState('')
+
+  // -------------- COMPUTED --------------
+
+  const isError = !!newPass && !!confirm && (newPass !== confirm)
+  const masterPasswordError = validateMasterPassword(newPass).error
+  const isReady = !masterPasswordError && !isError && !!current && !!newPass && !!confirm
+
+  // -------------- METHODS --------------
 
   const handleChangePassword = async () => {
     setIsLoading(true)
@@ -29,13 +39,15 @@ export const ChangeMasterPasswordScreen = function ChangeMasterPasswordScreen() 
     setIsLoading(false)
   }
 
+  // -------------- RENDER --------------
+
   return (
     <Layout
       header={(
         <Header
           goBack={() => navigation.goBack()}
           title={translate('change_master_pass.title')}
-          right={(<View style={{ width: 10 }} />)}
+          right={(<View style={{ width: 30 }} />)}
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
@@ -54,6 +66,8 @@ export const ChangeMasterPasswordScreen = function ChangeMasterPasswordScreen() 
 
         <FloatingInput
           isPassword
+          isInvalid={isError || !!masterPasswordError}
+          errorText={masterPasswordError || translate('common.password_not_match')}
           label={translate('change_master_pass.new')}
           value={newPass}
           onChangeText={(text) => {
@@ -71,7 +85,8 @@ export const ChangeMasterPasswordScreen = function ChangeMasterPasswordScreen() 
 
         <FloatingInput
           isPassword
-          isInvalid={newPass !== confirm}
+          isInvalid={isError}
+          errorText={translate('common.password_not_match')}
           label={translate('change_master_pass.confirm')}
           value={confirm}
           onChangeText={setConfirm}
@@ -80,7 +95,7 @@ export const ChangeMasterPasswordScreen = function ChangeMasterPasswordScreen() 
 
         <Button
           isLoading={isLoading}
-          isDisabled={isLoading || !current || !newPass || !confirm || (newPass !== confirm)}
+          isDisabled={isLoading || !isReady}
           onPress={handleChangePassword}
           text={translate('common.save')}
         />

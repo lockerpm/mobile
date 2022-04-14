@@ -21,7 +21,7 @@ const SECTION_TITLE: TextStyle = {
 }
 
 
-export const SettingsScreen = observer(function SettingsScreen() {
+export const SettingsScreen = observer(() => {
   const navigation = useNavigation()
   const { user, uiStore, cipherStore } = useStores()
   const { notify, isBiometricAvailable, translate, color } = useMixins()
@@ -232,7 +232,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
             navigation.goBack()
           }}
           title={translate('common.settings')}
-          right={(<View style={{ width: 10 }} />)}
+          right={(<View style={{ width: 30 }} />)}
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
@@ -278,7 +278,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
         {/* Language end */}
 
         {/* Theme */}
-        <Select
+        {/* <Select
           value={settings.theme.value}
           onChange={settings.theme.onChange}
           options={settings.theme.options}
@@ -292,7 +292,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
               )}
             />
           )}
-        />
+        /> */}
         {/* Theme end */}
 
         {/* Default tab */}
@@ -355,6 +355,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
           options={settings.timeout.options}
           renderSelected={({ label }) => (
             <SettingsItem
+              noBorder
               style={{ width: '100%' }}
               name={translate('settings.timeout')}
               right={(
@@ -365,8 +366,9 @@ export const SettingsScreen = observer(function SettingsScreen() {
         />
         {/* Timeout end */}
 
+        {/* TODO: disable for now */}
         {/* Timeout action */}
-        <Select
+        {/* <Select
           value={settings.timeoutAction.value}
           onChange={settings.timeoutAction.onChange}
           options={settings.timeoutAction.options}
@@ -380,7 +382,7 @@ export const SettingsScreen = observer(function SettingsScreen() {
               )}
             />
           )}
-        />
+        /> */}
         {/* Timeout action end */}
       </View>
       {/* Security end */}

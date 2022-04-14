@@ -84,7 +84,7 @@ export type MyShareType = {
 
 // ------------------ Response ------------------------
 
-export type LoginResult = { 
+export type LoginResult = {
     kind: "ok"
     data: {
         token?: string
@@ -96,7 +96,7 @@ export type LoginResult = {
     }
 } | GeneralApiProblem
 
-export type GetPMTokenResult = { 
+export type GetPMTokenResult = {
     kind: "ok"
     data: {
         url: string
@@ -112,19 +112,19 @@ export type GetPMTokenResult = {
     }
 } | GeneralApiProblem
 
-export type SocialLoginResult = { 
+export type SocialLoginResult = {
     kind: "ok"
     data: {
         token: string
     }
 } | GeneralApiProblem
 
-export type AccountRecoveryResult = { 
+export type AccountRecoveryResult = {
     kind: "ok"
     data: {
         type: string
         data: any
-    }[] 
+    }[]
 } | GeneralApiProblem
 
 export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | GeneralApiProblem
@@ -138,27 +138,74 @@ export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApi
 export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | GeneralApiProblem
 export type GetProfileResult = { kind: "ok", data: ProfileResponse } | GeneralApiProblem
 
-export type GetTeamsResult = { 
-    kind: 'ok', 
-    teams: object[] 
+export type GetTeamsResult = {
+    kind: 'ok',
+    teams: object[]
 } | GeneralApiProblem
 
 export type GetPlanResult = {
     kind: 'ok'
-    data: {
-        name: string,
-        alias: string
-    }
+    data: { name: string; alias: string; is_family: boolean},
 } | GeneralApiProblem
 
 export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
 export type ResetPasswordResult = { kind: "ok"; success: boolean } | GeneralApiProblem
 
 export type ResetPasswordWithCodeResult = {
-    kind: "ok" 
+    kind: "ok"
     data: {
         reset_password_url: string
-    } 
+    }
+} | GeneralApiProblem
+
+export type PurchaseValidationResult = {
+    kind: "ok",
+    data: {
+        success: boolean,
+        detail: string
+    }
+
+} | GeneralApiProblem
+
+export type FamilyMemberResult = {
+    kind: "ok",
+    data: {
+        id: number
+        email: string
+        avatar?: string
+        created_time?: string
+        username?: string
+        full_name?: string
+    }[]
+} | GeneralApiProblem
+
+export type AddMemberResult = {
+    kind: "ok",
+    data: any
+} | GeneralApiProblem
+
+export type RemoveMemberResult = {
+    kind: "ok"
+} | GeneralApiProblem
+
+export type BillingResult = {
+    kind: "ok",
+    data: {
+        id: number
+        created_time: number
+        currency: "VNP" | "USD"
+        description: string,
+        discount: number,
+        duration: "monthly" | "yearly"
+        failure_reason?: string
+        payment_id: string
+        payment_method: string
+        plan: string
+        status: string
+        total_price: number
+        transaction_type: string
+    }[]
+
 } | GeneralApiProblem
 
 export type GetInvitationsResult = {
@@ -231,6 +278,13 @@ export type GetShareInvitationsResult = {
 export type GetMySharesResult = {
     kind: 'ok',
     data: MyShareType[]
+} | GeneralApiProblem
+
+export type PostCipherResult = {
+    kind: 'ok',
+    data: {
+        id: string      // cipher id
+    }
 } | GeneralApiProblem
 
 // ---------------- Request data --------------------
@@ -399,6 +453,19 @@ export type ShareCipherData = {
         key: string
         hide_passwords: boolean
     }[]
+}
+
+export type ShareMultipleCiphersData = {
+    ciphers: {
+        cipher: CipherRequest & { id: string }
+        members: {
+            username: string
+            role: AccountRoleText
+            key: string
+            hide_passwords: boolean
+        }[]
+    }[]
+    sharing_key: string
 }
 
 export type ShareInvitationResponseData = {

@@ -78,18 +78,20 @@ export const AuthenticatorAction = observer((props: Props) => {
         isOpen={isOpen}
         onClose={handleActionSheetClose}
       >
+        {/* Info */}
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             <TOOLS_ITEMS.authenticator.svgIcon height={40} />
-            <View>
+            <View style={{ marginLeft: 10, flex: 1  }}>
               <Text
                 preset="semibold"
                 text={cipher.name}
-                style={{ marginLeft: 10 }}
+                numberOfLines={2}
               />
             </View>
           </View>
         </View>
+        {/* Info end */}
 
         <Divider style={{ marginTop: 10 }} />
 

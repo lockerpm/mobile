@@ -15,7 +15,7 @@ import { CARD_BRANDS } from "../constants"
 import { useMixins } from "../../../../../services/mixins"
 
 
-export const CardInfoScreen = observer(function CardInfoScreen() {
+export const CardInfoScreen = observer(() => {
   const navigation = useNavigation()
   const { cipherStore } = useStores()
   const { translate, color } = useMixins()
@@ -91,7 +91,7 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
           />
           <Text
             preset="header"
-            style={{ marginTop: 5 }}
+            style={{ marginTop: 5, marginHorizontal: 20, textAlign: 'center' }}
           >
             {selectedCipher.name}
             {
@@ -112,8 +112,8 @@ export const CardInfoScreen = observer(function CardInfoScreen() {
 
       {/* Info */}
       <View style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingVertical: 22
+        backgroundColor: color.background,
+        paddingVertical: 22
       }]}>
         {/* Cardholder name */}
         <FloatingInput

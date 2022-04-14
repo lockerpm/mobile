@@ -14,22 +14,17 @@ import { observer } from "mobx-react-lite"
 import Animated, { withSequence, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated'
 import { SharingStatus } from "../config/types"
 
-// @ts-ignore
 import HomeIcon from './icons/home.svg'
-// @ts-ignore
 import BrowseIcon from './icons/menu.svg'
-// @ts-ignore
 import ToolsIcon from './icons/settings.svg'
-// @ts-ignore
 import MenuIcon from './icons/menu-2.svg'
-// @ts-ignore
 import AuthenticatorIcon from './icons/authenticator.svg'
 
 
 const Tab = createBottomTabNavigator()
 
 // @ts-ignore
-const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
+const TabBar = observer(({ state, descriptors, navigation }) => {
   const { translate, color } = useMixins()
   const { user, uiStore, cipherStore } = useStores()
   const insets = useSafeAreaInsets()
@@ -111,13 +106,13 @@ const TabBar = observer(function TabBar({ state, descriptors, navigation }) {
                 </>
               ) : (
                 <>
-                  <Animated.View style={spin}>
+                  {/* <Animated.View style={spin}>
                     <MaterialIconsIcon
                       name="sync"
                       size={18}
                       color={color.white}
                     />
-                  </Animated.View>
+                  </Animated.View> */}
                   <Text
                     style={{
                       fontSize: fontSize.small,

@@ -17,14 +17,14 @@ import { Logger } from "../../../../utils/logger"
 const DOMParser = require('react-native-html-parser').DOMParser
 
 
-export const ImportScreen = observer(function ImportScreen() {
+export const ImportScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, notify, color } = useMixins()
   const { importCiphers } = useCipherDataMixins()
   const { importService } = useCoreService()
   const { uiStore } = useStores()
 
-  // PARAMS
+  // -------------------- PARAMS --------------------
 
   const cystackOptions = [
     { name: 'CyStack (json)', id: 'cystackjson' },
@@ -60,7 +60,7 @@ export const ImportScreen = observer(function ImportScreen() {
   const [format, setFormat] = useState('cystackjson')
   const [file, setFile] = useState(fileData)
 
-  // METHODS
+  // -------------------- METHODS --------------------
 
   const getFileName = (file) => {
     if (file.name) {
@@ -91,7 +91,7 @@ export const ImportScreen = observer(function ImportScreen() {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
       } else {
-        Logger.error(err)
+        Logger.error('Import pick file: ' + err)
         notify('error', translate('error.something_went_wrong'))
       }
     }
@@ -128,7 +128,7 @@ export const ImportScreen = observer(function ImportScreen() {
         setIsLoading(false)
         return
       }
-      
+
       if (importResult.success) {
         if (importResult.folders.length === 0 && importResult.ciphers.length === 0) {
           notify('error', translate('import.no_data'))
@@ -138,7 +138,6 @@ export const ImportScreen = observer(function ImportScreen() {
         } else if (importResult.ciphers.length > 0) {
           const halfway = Math.floor(importResult.ciphers.length / 2)
           const last = importResult.ciphers.length - 1
-
           if (badData(importResult.ciphers[0]) &&
             badData(importResult.ciphers[halfway]) &&
             badData(importResult.ciphers[last])
@@ -162,7 +161,7 @@ export const ImportScreen = observer(function ImportScreen() {
         notify('error', translate('import.invalid_data_format'))
       }
     } catch(e) {
-      Logger.error(e)
+      Logger.error('Handle import: ' + e)
       notify('error', translate('error.something_went_wrong'))
     }
 
@@ -174,9 +173,9 @@ export const ImportScreen = observer(function ImportScreen() {
       (c.type === CipherType.Login && c.login != null && Utils.isNullOrWhitespace(c.login.password))
   }
 
-  // EFFECT
+  // -------------------- EFFECT --------------------
 
-  // RENDER
+  // -------------------- RENDER --------------------
 
   return (
     <Layout
@@ -187,7 +186,7 @@ export const ImportScreen = observer(function ImportScreen() {
             navigation.goBack()
           }}
           title={translate('settings.import')}
-          right={(<View style={{ width: 10 }} />)}
+          right={(<View style={{ width: 30 }} />)}
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}

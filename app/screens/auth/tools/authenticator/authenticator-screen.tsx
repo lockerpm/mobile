@@ -10,7 +10,7 @@ import { useStores } from "../../../../models"
 import { BackHandler } from "react-native"
 
 
-export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
+export const AuthenticatorScreen = observer(() => {
   const { translate } = useMixins()
   const navigation = useNavigation()
   const { uiStore } = useStores()
@@ -21,10 +21,10 @@ export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [sortList, setSortList] = useState({
-    orderField: 'name',
-    order: 'asc'
+    orderField: 'revisionDate',
+    order: 'desc'
   })
-  const [sortOption, setSortOption] = useState('az')
+  const [sortOption, setSortOption] = useState('last_updated')
   const [isLoading, setIsLoading] = useState(false)
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
@@ -55,6 +55,7 @@ export const AuthenticatorScreen = observer(function AuthenticatorScreen() {
     <Layout
       noScroll
       borderBottom
+      hasBottomNav
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader

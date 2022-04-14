@@ -9,9 +9,10 @@ import { CipherView } from "../../../../../../core/models/view"
 import { commonStyles, fontSize } from "../../../../../theme"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
+import { LoadingHeader } from "../loading-header"
 
 
-export const ReusePasswordList = observer(function ReusePasswordList() {
+export const ReusePasswordList = observer(() => {
   const navigation = useNavigation()
   const { toolStore, cipherStore } = useStores()
   const { translate, getWebsiteLogo, color } = useMixins()
@@ -43,6 +44,82 @@ export const ReusePasswordList = observer(function ReusePasswordList() {
 
   // -------------- RENDER ------------------
 
+  const renderItem = ({ item }) => (
+    <Button
+      preset="link"
+      onPress={() => goToDetail(item)}
+      style={{
+        borderBottomColor: color.line,
+        borderBottomWidth: 0.5,
+        paddingVertical: 15,
+        height: 70.5
+      }}
+    >
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        <Image
+          source={item.imgLogo || item.logo}
+          backupSource={item.logo}
+          style={{
+            height: 40,
+            width: 40,
+            borderRadius: 8
+          }}
+        />
+
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+            <View style={{ flex: 1 }}>
+              <Text
+                preset="semibold"
+                text={item.name}
+                numberOfLines={1}
+              />
+            </View>
+
+            {
+              item.organizationId && (
+                <View style={{ marginLeft: 10 }}>
+                  <MaterialCommunityIconsIcon
+                    name="account-group-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+
+            <View style={{
+                paddingHorizontal: 10,
+                paddingVertical: 2,
+                backgroundColor: color.warning,
+                borderRadius: 3,
+                marginLeft: 7
+              }}>
+                <Text
+                  text={`${item.count} ${translate('common.times')}`}
+                  style={{
+                    fontWeight: 'bold',
+                    color: color.white,
+                    fontSize: fontSize.mini
+                  }}
+                />
+              </View>
+          </View>
+
+          {
+            !!getDescription(item) && (
+              <Text
+                text={getDescription(item)}
+                style={{ fontSize: fontSize.small }}
+                numberOfLines={1}
+              />
+            )
+          }
+        </View>
+      </View>
+    </Button>
+  )
+
   return (
     <Layout
       header={(
@@ -50,7 +127,7 @@ export const ReusePasswordList = observer(function ReusePasswordList() {
           title={translate('pass_health.reused_passwords.name')}
           goBack={() => navigation.goBack()}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         />
       )}
@@ -58,6 +135,8 @@ export const ReusePasswordList = observer(function ReusePasswordList() {
       noScroll
     >
       <View style={{ flex: 1 }}>
+        <LoadingHeader />
+
         <FlatList
           style={{ paddingHorizontal: 20 }}
           data={listData}
@@ -71,76 +150,12 @@ export const ReusePasswordList = observer(function ReusePasswordList() {
               }}
             />
           )}
-          renderItem={({ item }) => (
-            <Button
-              preset="link"
-              onPress={() => goToDetail(item)}
-              style={{
-                borderBottomColor: color.line,
-                borderBottomWidth: 0.5,
-                paddingVertical: 15
-              }}
-            >
-              <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-                <Image
-                  source={item.imgLogo || item.logo}
-                  backupSource={item.logo}
-                  style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 8
-                  }}
-                />
-
-                <View style={{ flex: 1, marginLeft: 12 }}>
-                  <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
-                    <Text
-                      preset="semibold"
-                      text={item.name}
-                    />
-
-                    {
-                      item.organizationId && (
-                        <View style={{ marginLeft: 10 }}>
-                          <MaterialCommunityIconsIcon
-                            name="account-group-outline"
-                            size={22}
-                            color={color.textBlack}
-                          />
-                        </View>
-                      )
-                    }
-
-                    <View style={{
-                        paddingHorizontal: 10,
-                        paddingVertical: 2,
-                        backgroundColor: color.warning,
-                        borderRadius: 3,
-                        marginLeft: 7
-                      }}>
-                        <Text
-                          text={`${item.count} ${translate('common.times')}`}
-                          style={{
-                            fontWeight: 'bold',
-                            color: color.white,
-                            fontSize: fontSize.mini
-                          }}
-                        />
-                      </View>
-                  </View>
-
-                  {
-                    !!getDescription(item) && (
-                      <Text
-                        text={getDescription(item)}
-                        style={{ fontSize: fontSize.small }}
-                      />
-                    )
-                  }
-                </View>
-              </View>
-            </Button>
-          )}
+          renderItem={renderItem}
+          getItemLayout={(data, index) => ({
+            length: 71,
+            offset: 71 * index,
+            index
+          })}
         />
       </View>
     </Layout>

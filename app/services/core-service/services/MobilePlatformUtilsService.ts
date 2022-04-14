@@ -136,7 +136,7 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
       await RNFS.writeFile(path, blobData, blobOptions)
       return true
     } catch (e) {
-      Logger.error(e)
+      Logger.error('Save file: ' + e)
       return false
     }
   }

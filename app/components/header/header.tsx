@@ -9,9 +9,7 @@ import { AutoImage as Image } from "../auto-image/auto-image"
 import { APP_ICON } from "../../common/mappings"
 import { useStores } from "../../models"
 
-// @ts-ignore
 import BackIcon from './arrow-left.svg'
-// @ts-ignore
 import BackIconLight from './arrow-left-light.svg'
 
 const CONTAINER: ViewStyle = {

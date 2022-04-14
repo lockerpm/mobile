@@ -1,6 +1,7 @@
 import { ApiResponse } from "apisauce"
 import { CollectionRequest } from "../../../core/models/request/collectionRequest"
 import { CollectionResponse } from "../../../core/models/response/collectionResponse"
+import { detectTempId } from "../../utils/event-bus/helpers"
 import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
@@ -16,6 +17,7 @@ export class CollectionApi {
   // Create collection
   async postCollection(token: string, teamId: string, data: CollectionRequest): Promise<PostCollectionResult> {
     try {
+      detectTempId([teamId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -36,6 +38,7 @@ export class CollectionApi {
   // Update collection
   async putCollection(token: string, id: string, teamId: string, data: CollectionRequest): Promise<PostCollectionResult> {
     try {
+      detectTempId([id, teamId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -56,6 +59,7 @@ export class CollectionApi {
   // Delete collection
   async deleteCollection(token: string, id: string, teamId: string): Promise<EmptyResult> {
     try {
+      detectTempId([id, teamId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call

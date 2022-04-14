@@ -4,6 +4,7 @@ import { Button, Text } from "../../../../components"
 import { commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
+import { PlanType } from "../../../../../core/enums/planType"
 
 export type MenuItemProps = {
   icon: React.ReactNode,
@@ -12,13 +13,15 @@ export type MenuItemProps = {
   noBorder?: boolean,
   action?: Function
   disabled?: boolean
+  hide?: boolean
   debug?: boolean
+  family?: boolean
 }
 
 export const MenuItem = (props: MenuItemProps) => {
   const { color } = useMixins()
 
-  return !props.debug || __DEV__ ? (
+  return !props.hide && (!props.debug || __DEV__) ? (
     <Button
       isDisabled={props.disabled}
       preset="link"
@@ -32,11 +35,22 @@ export const MenuItem = (props: MenuItemProps) => {
       <View style={{ width: 25 }}>
         {props.icon}
       </View>
-      <Text
-        preset="black"
-        text={props.name}
-        style={{ flex: 1, paddingHorizontal: 10 }}
-      />
+      <View style={{flex:1, flexDirection: "row"}}>
+        <Text
+          preset="black"
+          text={props.name}
+          style={{  paddingHorizontal: 10 }}
+        />
+        {
+          props.family && (
+            <Text
+              text={"Family"}
+              style={{color: color.primary }}
+            />
+          )
+        }
+      </View>
+
       {
         !props.noCaret && (
           <FontAwesomeIcon

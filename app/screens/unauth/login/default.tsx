@@ -6,12 +6,8 @@ import { AutoImage as Image, Text, FloatingInput, Button } from "../../../compon
 import { useMixins } from "../../../services/mixins"
 import { commonStyles } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
-import { GITHUB_CONFIG, GOOGLE_CLIENT_ID } from "../../../config/constants"
-import { LoginManager, AccessToken } from "react-native-fbsdk-next"
-import { authorize } from 'react-native-app-auth'
-import { Logger } from "../../../utils/logger"
-import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
+import { useSocialLoginMixins } from "../../../services/mixins/social-login"
+import { IS_IOS, IS_PROD } from "../../../config/constants"
 
 
 type Props = {
@@ -21,10 +17,10 @@ type Props = {
 }
 
 
-export const DefaultLogin = observer(function DefaultLogin(props: Props) {
+export const DefaultLogin = observer((props: Props) => {
   const { user, uiStore } = useStores()
-  const { translate, notify, notifyApiError } = useMixins()
-  const { setApiTokens } = useCipherAuthenticationMixins()
+  const { translate, notify, notifyApiError, setApiTokens } = useMixins()
+  const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
   const { nextStep, onLoggedIn, handleForgot } = props
 
   // ------------------ Params -----------------------
@@ -78,83 +74,59 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
     }
   }
 
-  const handleSocialLogin = async (provider: string, token: string) => {
-    setIsLoading(true)
-    const loginRes = await user.socialLogin({
-      provider: provider,
-      access_token: token
-    })
-    setIsLoading(false)
-    if (loginRes.kind !== 'ok') {
-      notifyApiError(loginRes)
-      notify('error', translate('error.login_failed'))
-    } else {
-      // @ts-ignore
-      setApiTokens(loginRes.data?.access_token)
-      onLoggedIn()
-    }
-  }
-
   // ------------------------------ DATA -------------------------------
 
-  const SOCIAL_LOGIN = {
+  const SOCIAL_LOGIN: {
+    [service: string]: {
+      hide?: boolean
+      size?: number
+      marginBottom?: number
+      icon: any
+      handler: () => void
+    }
+  } = {
+    apple: {
+      hide: !IS_IOS,
+      size: 34,
+      marginBottom: 4,
+      icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.appleLight : SOCIAL_LOGIN_ICON.apple,
+      handler: () => {
+        return appleLogin({
+          setIsLoading,
+          onLoggedIn
+        })
+      }
+    },
+
     google: {
       icon: SOCIAL_LOGIN_ICON.google,
-      handler: async () => {
-        try {
-          GoogleSignin.configure({
-            webClientId: GOOGLE_CLIENT_ID
-          })
-          await GoogleSignin.signIn()
-          const tokens = await GoogleSignin.getTokens()
-          await handleSocialLogin('google', tokens.accessToken)
-        } catch (e) {
-          setIsLoading(false)
-          Logger.error(e)
-          notify('error', translate('error.something_went_wrong'))
-        }
+      handler: () => {
+        return googleLogin({
+          setIsLoading,
+          onLoggedIn
+        })
       }
     },
 
     facebook: {
+      hide: !IS_PROD,
       icon: SOCIAL_LOGIN_ICON.facebook,
-      handler: async () => {
-        try {
-          let res = await AccessToken.getCurrentAccessToken()
-          if (!res) {
-            await LoginManager.logInWithPermissions(['public_profile', 'email'])
-            res = await AccessToken.getCurrentAccessToken()
-            if (!res) {
-              setIsLoading(false)
-              notify('error', translate('error.something_went_wrong'))
-              return
-            }
-          }
-          await handleSocialLogin('facebook', res.accessToken)
-        } catch (e) {
-          setIsLoading(false)
-          Logger.error(e)
-          notify('error', translate('error.something_went_wrong'))
-        }
+      handler: () => {
+        return facebookLogin({
+          setIsLoading,
+          onLoggedIn
+        })
       }
     },
 
     github: {
+      hide: !IS_PROD,
       icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.githubLight : SOCIAL_LOGIN_ICON.github,
-      handler: async () => {
-        try {
-          const res = await authorize(GITHUB_CONFIG)
-          if (!res) {
-            setIsLoading(false)
-            notify('error', translate('error.something_went_wrong'))
-            return
-          }
-          await handleSocialLogin('github', res.accessToken)
-        } catch (e) {
-          setIsLoading(false)
-          Logger.error(e)
-          notify('error', translate('error.something_went_wrong'))
-        }
+      handler: () => {
+        return githubLogin({
+          setIsLoading,
+          onLoggedIn
+        })
       }
     }
   }
@@ -230,7 +202,7 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
 
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           {
-            Object.values(SOCIAL_LOGIN).map((item, index) => (
+            Object.values(SOCIAL_LOGIN).filter(item => !item.hide).map((item, index) => (
               <Button
                 key={index}
                 preset="ghost"
@@ -239,7 +211,11 @@ export const DefaultLogin = observer(function DefaultLogin(props: Props) {
               >
                 <Image
                   source={item.icon}
-                  style={{ height: 30, width: 30 }}
+                  style={{ 
+                    height: item.size || 30, 
+                    width: item.size || 30,
+                    marginBottom: item.marginBottom || 0
+                  }}
                 />
               </Button>
             ))

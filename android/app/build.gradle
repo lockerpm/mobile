@@ -1,5 +1,13 @@
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
+
+project.ext.envConfigFiles = [
+  productionDebug: "/app/config/.env.production",
+  productionRelease: "/app/config/.env.production",
+  stagingRelease: "/app/config/.env.staging",
+  stagingDebug: "/app/config/.env.staging"
+]
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 // Unimodules: https://docs.expo.io/bare/installing-unimodules/#configuration-for-android
 apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
 
@@ -137,12 +145,16 @@ android {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4016
-        versionName "1.15"
+        versionCode project.env.get("ANDROID_VERSION_CODE").toInteger()
+        versionName project.env.get("ANDROID_VERSION_NAME")
+        
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.cystack.locker'
         ]
         missingDimensionStrategy 'react-native-camera', 'general'
+        // react-native-iap: we only use the Google Play flavor
+        missingDimensionStrategy 'store', 'play'
+        resValue "string", "build_config_package", "com.cystack.locker"
     }
     splits {
         abi {
@@ -165,12 +177,15 @@ android {
                 storePassword MYAPP_UPLOAD_STORE_PASSWORD
                 keyAlias MYAPP_UPLOAD_KEY_ALIAS
                 keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+                
+                v2SigningEnabled true
             }
         }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            // matchingFallbacks = ['debug']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -178,8 +193,25 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            // matchingFallbacks = ['release']
         }
     }
+    flavorDimensions "version"
+    productFlavors {
+        production {     
+            dimension "version"
+            resValue "string", "app_name", "Locker"    
+        }
+
+        staging {
+            // We can have build-specific configurations here. Like using applicationIdSuffix to create different package name (ex. ".staging")
+            dimension "version"
+            applicationIdSuffix ".staging"
+            versionNameSuffix "-staging"
+            resValue "string", "app_name", "[Staging] Locker"
+        }
+    }
+
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
@@ -202,7 +234,8 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
+    implementation 'com.google.android.gms:play-services-wallet:19.0.1'
+    implementation "com.stripe:stripe-android:19.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     addUnimodulesDependencies()
@@ -227,13 +260,16 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-    //  androidX
+    
+    implementation "androidx.autofill:autofill:1.1.0"
+    implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.fragment:fragment:1.4.0'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation "com.android.billingclient:billing:4.1.0"
 
     implementation project(':react-native-fs')
 }

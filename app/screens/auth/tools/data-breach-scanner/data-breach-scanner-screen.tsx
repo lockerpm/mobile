@@ -44,7 +44,7 @@ export const DataBreachScannerScreen = observer(function DataBreachScannerScreen
           title={translate('data_breach_scanner.title')}
           goBack={() => navigation.goBack()}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         />
       )}

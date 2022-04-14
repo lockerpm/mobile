@@ -30,6 +30,7 @@ export const BrowseListScreen = observer(() => {
   return (
     <Layout
       borderBottom
+      hasBottomNav
       containerStyle={{ 
         backgroundColor: isDark ? color.background : color.block, 
         paddingTop: 0 

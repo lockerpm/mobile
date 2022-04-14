@@ -12,13 +12,14 @@ import { useCipherDataMixins } from './data'
 
 const defaultData = {
   loadPasswordsHealth: async () => {},
+  getCipherCount: async (type: CipherType):Promise<number> => {return 0}
 }
 
 export const CipherToolsMixinsContext = createContext(defaultData)
 
 export const CipherToolsMixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const { user, toolStore } = useStores()
-  const { getCiphers } = useCipherDataMixins()
+  const { getCiphers, getEncryptedCiphers } = useCipherDataMixins()
   const {
     passwordGenerationService,
     auditService
@@ -27,13 +28,27 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
   
   // ----------------------------- METHODS ---------------------------
 
+  const getCipherCount = async (type: CipherType) => {
+    const allCiphers = await getEncryptedCiphers({
+      deleted: false,
+      searchText: '',
+      filters: [
+        (c: CipherView) => c.type === type
+      ]
+    })
+    return allCiphers.length
+  }
+
   // Load weak passwords
   const loadPasswordsHealth = async () => {
     try {
-      if (!user.plan || user.plan.alias === PlanType.FREE) {
+      if (!user.plan || user.plan?.alias === PlanType.FREE) {
         return
       }
-  
+
+      toolStore.setLoadingHealth(true)
+      toolStore.setLastHealthCheck()
+      
       const passwordStrengthCache = new Map()
       const passwordStrengthMap = new Map()
       const passwordUseMap = new Map()
@@ -68,6 +83,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
   
         // Check password strength
         if (!passwordStrengthCache.has(cacheKey)) {
+          // Compare password with username as well
           let userInput = []
           if (hasUserName) {
             const atPosition = c.login.username.indexOf('@')
@@ -81,7 +97,8 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
           }
           const result = passwordGenerationService.passwordStrength(
             c.login.password, 
-            userInput.length > 0 ? userInput : null
+            // TODO: disable for now
+            // userInput.length > 0 ? userInput : null
           )
           passwordStrengthCache.set(cacheKey, result.score)
         }
@@ -117,16 +134,19 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       toolStore.setPasswordUseMap(passwordUseMap)
       toolStore.setExposedPasswords(exposedPasswordCiphers)
       toolStore.setExposedPasswordMap(exposedPasswordMap)
+      toolStore.setLoadingHealth(false)
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('loadPasswordsHealth: ' + e)
+      toolStore.setLoadingHealth(false)
     }
   }
   
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
-    loadPasswordsHealth
+    loadPasswordsHealth,
+    getCipherCount
   }
 
   return (

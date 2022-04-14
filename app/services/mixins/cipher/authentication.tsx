@@ -2,12 +2,10 @@ import React from 'react'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import { KdfType } from '../../../../core/enums/kdfType'
 import { useStores } from '../../../models'
+import { useCipherDataMixins } from './data'
 import { useCoreService } from '../../core-service'
 import { delay } from '../../../utils/delay'
-import { GOOGLE_CLIENT_ID, IS_IOS } from '../../../config/constants'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { saveShared } from '../../../utils/keychain'
-import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
 import { observer } from 'mobx-react-lite'
 import { color, colorDark } from '../../../theme'
 import moment from 'moment'
@@ -15,6 +13,8 @@ import DeviceInfo from 'react-native-device-info'
 import { useMixins } from '..'
 import { Logger } from '../../../utils/logger'
 import { SymmetricCryptoKey } from '../../../../core/models/domain'
+import { remove, removeSecure, StorageKey } from '../../../utils/storage'
+import { useSocialLoginMixins } from '../social-login'
 
 
 const { createContext, useContext } = React
@@ -23,7 +23,6 @@ const { createContext, useContext } = React
 // Mixins data
 const defaultData = {
   // Methods
-  setApiTokens: (token: string) => {},
   sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
   biometricLogin: async () => { return { kind: 'unknown' } },
   logout: async () => {},
@@ -48,6 +47,8 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     tokenService,
   } = useCoreService()
   const { notify, translate, notifyApiError } = useMixins()
+  const { logoutAllServices } = useSocialLoginMixins()
+  const { syncAutofillData } = useCipherDataMixins()
 
   // ------------------------ DATA -------------------------
 
@@ -55,15 +56,6 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
   const themeColor = isDark ? colorDark : color
 
   // -------------------- AUTHENTICATION --------------------
-
-  // Set tokens
-  const setApiTokens = (token: string) => {
-    user.setApiToken(token)
-    cipherStore.setApiToken(token)
-    collectionStore.setApiToken(token)
-    folderStore.setApiToken(token)
-    toolStore.setApiToken(token)
-  }
 
   // Login vault using API
   const _loginUsingApi = async (key: SymmetricCryptoKey, keyHash: string, kdf: number, kdfIterations: number, masterPassword?: string) => {
@@ -105,9 +97,10 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     await cryptoService.setEncPrivateKey(res.data.private_key)
 
     // setup service offline
-    if (IS_IOS && masterPassword) {
+    if (masterPassword) {
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
+      // await syncAutofillData();
     }
 
     return { kind: 'ok' }
@@ -121,7 +114,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
-
+      
       // Offline compare
       if (uiStore.isOffline) {
         const storedKeyHash = await cryptoService.getKeyHash()
@@ -231,10 +224,10 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       await cryptoService.setEncKey(encKey[1].encryptedString)
       await cryptoService.setEncPrivateKey(keys[1].encryptedString)
 
-      if (IS_IOS) {
-        const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
-        await cryptoService.setAutofillKeyHash(autofillHashedPassword)
-      }
+  
+      const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
+      await cryptoService.setAutofillKeyHash(autofillHashedPassword)
+      
 
       // Success
       notify('success', translate('success.master_password_updated'))
@@ -291,6 +284,8 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
   // Logout
   const logout = async () => {
     try {
+      await user.updateFCM(null)
+
       cipherStore.clearStore()
       collectionStore.clearStore()
       folderStore.clearStore()
@@ -298,26 +293,25 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
   
       await user.logout()
   
-      // Sign out of Google
-      GoogleSignin.configure({
-        webClientId: GOOGLE_CLIENT_ID
-      })
-      const isSignedIn = await GoogleSignin.isSignedIn()
-      if (isSignedIn) {
-        await GoogleSignin.signOut()
-      }
-  
-      // Sign out of Facebook
-      if (await AccessToken.getCurrentAccessToken()) {
-        LoginManager.logOut()
-      }
+      // Sign out all social login services
+      await logoutAllServices()
   
       // Reset shared data
-      if (IS_IOS) {
-        await saveShared('autofill', '')
-      }
+      await saveShared('autofill', '')
+
+      // Reset push noti data
+      await remove(StorageKey.PUSH_NOTI_DATA)
+
+      // TODO: remove this when RSA problem is fixed
+      await removeSecure('decOrgKeys')
 
       // Clear services
+      await Promise.all([
+        folderService.clearCache(),
+        cipherService.clearCache(),
+        // searchService.clearCache(),
+        collectionService.clearCache()
+      ])
       const userId = await userService.getUserId()
       await Promise.all([
         folderService.clear(userId),
@@ -328,7 +322,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       ])
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('logout: ' + e)
     }
   }
 
@@ -352,7 +346,6 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     color: themeColor,
     isDark,
 
-    setApiTokens,
     sessionLogin,
     biometricLogin,
     logout,

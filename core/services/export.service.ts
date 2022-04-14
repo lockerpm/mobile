@@ -89,11 +89,12 @@ export class ExportService implements ExportServiceAbstraction {
             const exportCiphers: any[] = [];
             decCiphers.forEach(c => {
                 // only export logins and secure notes
-                if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
-                    return;
-                }
+                // if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
+                //     return;
+                // }
                 if (c.organizationId != null) {
-                    return;
+                    // return;
+                    c.organizationId = null
                 }
 
                 const cipher: any = {};
@@ -123,7 +124,8 @@ export class ExportService implements ExportServiceAbstraction {
 
             decCiphers.forEach(c => {
                 if (c.organizationId != null) {
-                    return;
+                    c.organizationId = null
+                    // return;
                 }
                 const cipher = new CipherExport();
                 cipher.build(c);
