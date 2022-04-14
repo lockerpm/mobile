@@ -56,7 +56,7 @@ export const CipherHelpersMixinsProvider = observer((props: { children: boolean 
       case CipherType.CryptoAccount:
         return toCryptoAccountData(item.notes).username
       case CipherType.CryptoWallet:
-        return toCryptoWalletData(item.notes).email
+        return toCryptoWalletData(item.notes).address
     }
     return ''
   }

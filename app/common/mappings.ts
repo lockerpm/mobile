@@ -60,13 +60,13 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     routeName: 'cards',
     addable: true
   },
-  // cryptoAsset: {
-  //   label: 'common.crypto_asset',
-  //   icon: require('./images/vault/crypto-asset.png'),
-  //   routeName: 'cryptoAssets',
-  //   addable: true,
-  //   svgIcon: CryptoAssetIcon
-  // },
+  cryptoAsset: {
+    label: 'common.crypto_asset',
+    icon: require('./images/vault/crypto-asset.png'),
+    routeName: 'cryptoAssets',
+    addable: true,
+    svgIcon: CryptoAssetIcon
+  },
   cryptoAccount: {
     label: 'common.crypto_account',
     icon: require('./images/vault/crypto-account.png'),
