@@ -27,6 +27,7 @@ import com.cystack.locker.autofill.Utils;
 import com.cystack.locker.autofill.Field;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     public static final String DOMAIN = "domain";
@@ -59,14 +60,14 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
 
         Log.d("--------------","---------------------------------------------------------");
         AutofillItem data = new AutofillItem(id, userName, password, name, uri);
-        RemoteViews presentation = new RemoteViews(getApplicationContext().getPackageName(), R.layout.remote_locker_app); // crash ?
+        RemoteViews presentation = new RemoteViews(getReactApplicationContext().getPackageName(), R.layout.remote_locker_app); // crash ?
         Dataset response = Utils.BuildUnlockDataset(sfields, data, presentation);
 
         Intent replyIntent = new Intent();
         replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, response);
 
-        setResult(RESULT_OK, replyIntent);
-        finish();
+        Objects.requireNonNull(getCurrentActivity()).setResult(-1, replyIntent); //RESULT_OK
+        Objects.requireNonNull(getCurrentActivity()).finish();
     }
 }
 
