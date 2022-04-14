@@ -5,7 +5,7 @@ import orderBy from 'lodash/orderBy'
 import { Button } from "../../button/button"
 import { Text } from "../../text/text"
 import { AutoImage as Image } from "../../auto-image/auto-image"
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+// import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
@@ -281,6 +281,134 @@ export const CipherList = observer((props: CipherListProps) => {
 
   // ------------------------ RENDER ----------------------------
 
+  const renderItem = ({ item }) => (
+    <Button
+      preset="link"
+      onPress={() => {
+        if (isSelecting) {
+          toggleItemSelection(item)
+        } else {
+          // goToDetail(item)
+          openActionMenu(item)
+        }
+      }}
+      onLongPress={() => toggleItemSelection(item)}
+      style={{
+        borderBottomColor: color.line,
+        borderBottomWidth: 0.5,
+        paddingVertical: 15,
+        height: 70.5
+      }}
+    >
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        {/* Cipher avatar */}
+        {
+          item.svg ? (
+            <item.svg height={40} width={40} />
+          ) : (
+            <Image
+              source={item.imgLogo || item.logo}
+              backupSource={item.logo}
+              style={{
+                height: 40,
+                width: 40,
+                borderRadius: 8
+              }}
+            />
+          )
+        }
+        {/* Cipher avatar end */}
+
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          {/* Name */}
+          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+            <View style={{ flex: 1 }}>
+              <Text
+                preset="semibold"
+                numberOfLines={1}
+                text={item.name}
+              />
+            </View>
+
+            {/* Belong to team icon */}
+            {
+              isShared(item.organizationId) && (
+                <View style={{ marginLeft: 10 }}>
+                  <MaterialCommunityIconsIcon
+                    name="account-group-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+            {/* Belong to team icon end */}
+
+            {/* Not sync icon */}
+            {
+              item.notSync && (
+                <View style={{ marginLeft: 10 }}>
+                  <MaterialCommunityIconsIcon
+                    name="cloud-off-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+            {/* Not sync icon end */}
+          </View>
+          {/* Name end */}
+
+          {/* Description */}
+          {
+            !!getCipherDescription(item) && (
+              <Text
+                text={getCipherDescription(item)}
+                style={{ fontSize: fontSize.small }}
+                numberOfLines={1}
+              />
+            )
+          }
+          {/* Description end */}
+        </View>
+
+        {
+          isSelecting ? (
+            <Checkbox
+              value={selectedItems.includes(item.id)}
+              color={color.primary}
+              onValueChange={() => {
+                toggleItemSelection(item)
+              }}
+              style={{
+                marginLeft: 15
+              }}
+            />
+          ) : (
+            <View />
+            // <Button
+            //   preset="link"
+            //   onPress={() => openActionMenu(item)}
+            //   style={{ 
+            //     height: 40,
+            //     width: 40,
+            //     justifyContent: 'flex-end',
+            //     alignItems: 'center'
+            //   }}
+            // >
+            //   <IoniconsIcon
+            //     name="ellipsis-horizontal"
+            //     size={18}
+            //     color={color.textBlack}
+            //   />
+            // </Button>
+          )
+        }
+      </View>
+    </Button>
+  )
+
   return ciphers.length ? (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
@@ -343,121 +471,12 @@ export const CipherList = observer((props: CipherListProps) => {
         }}
         data={ciphers}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
-          <Button
-            preset="link"
-            onPress={() => {
-              if (isSelecting) {
-                toggleItemSelection(item)
-              } else {
-                goToDetail(item)
-              }
-            }}
-            onLongPress={() => toggleItemSelection(item)}
-            style={{
-              borderBottomColor: color.line,
-              borderBottomWidth: 0.5,
-              paddingVertical: 15
-            }}
-          >
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              {/* Cipher avatar */}
-              {
-                item.svg ? (
-                  <item.svg height={40} width={40} />
-                ) : (
-                  <Image
-                    source={item.imgLogo || item.logo}
-                    backupSource={item.logo}
-                    style={{
-                      height: 40,
-                      width: 40,
-                      borderRadius: 8
-                    }}
-                  />
-                )
-              }
-              {/* Cipher avatar end */}
-
-              <View style={{ flex: 1, marginLeft: 12 }}>
-                <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
-                  <Text
-                    preset="semibold"
-                    text={item.name}
-                  />
-
-                  {/* Belong to team icon */}
-                  {
-                    isShared(item.organizationId) && (
-                      <View style={{ marginLeft: 10 }}>
-                        <MaterialCommunityIconsIcon
-                          name="account-group-outline"
-                          size={22}
-                          color={color.textBlack}
-                        />
-                      </View>
-                    )
-                  }
-                  {/* Belong to team icon end */}
-
-                  {/* Not sync icon */}
-                  {
-                    item.notSync && (
-                      <View style={{ marginLeft: 10 }}>
-                        <MaterialCommunityIconsIcon
-                          name="cloud-off-outline"
-                          size={22}
-                          color={color.textBlack}
-                        />
-                      </View>
-                    )
-                  }
-                  {/* Not sync icon end */}
-                </View>
-
-                {/* Description */}
-                {
-                  !!getCipherDescription(item) && (
-                    <Text
-                      text={getCipherDescription(item)}
-                      style={{ fontSize: fontSize.small }}
-                    />
-                  )
-                }
-                {/* Description end */}
-              </View>
-
-              {
-                isSelecting ? (
-                  <Checkbox
-                    value={selectedItems.includes(item.id)}
-                    color={color.primary}
-                    onValueChange={() => {
-                      toggleItemSelection(item)
-                    }}
-                  />
-                ) : (
-                  <Button
-                    preset="link"
-                    onPress={() => openActionMenu(item)}
-                    style={{ 
-                      height: 40,
-                      width: 40,
-                      justifyContent: 'flex-end',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <IoniconsIcon
-                      name="ellipsis-horizontal"
-                      size={18}
-                      color={color.textBlack}
-                    />
-                  </Button>
-                )
-              }
-            </View>
-          </Button>
-        )}
+        renderItem={renderItem}
+        getItemLayout={(data, index) => ({
+          length: 71,
+          offset: 71 * index,
+          index
+        })}
       />
       {/* Cipher list end */}
     </View>

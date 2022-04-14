@@ -7,21 +7,17 @@ import { Layout, AutoImage as Image, Text, FloatingInput, Button } from "../../.
 import { useMixins } from "../../../services/mixins"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
-import { GoogleSignin } from "@react-native-google-signin/google-signin"
-import { GITHUB_CONFIG, GOOGLE_CLIENT_ID, PRIVACY_POLICY_URL, TERMS_URL } from "../../../config/constants"
+import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL, IS_PROD } from "../../../config/constants"
 import { Checkbox } from "react-native-ui-lib"
 import countries from '../../../common/countries.json'
-import { AccessToken, LoginManager } from "react-native-fbsdk-next"
-import { authorize } from "react-native-app-auth"
-import { Logger } from "../../../utils/logger"
-import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
+import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 
 
-export const SignupScreen = observer(function SignupScreen() {
+export const SignupScreen = observer(() => {
   const { user, uiStore } = useStores()
   const navigation = useNavigation()
   const { translate, notify, notifyApiError } = useMixins()
-  const { setApiTokens } = useCipherAuthenticationMixins()
+  const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
 
   // ---------------- PARAMS ---------------------
 
@@ -38,64 +34,57 @@ export const SignupScreen = observer(function SignupScreen() {
 
   // ------------------------------ DATA -------------------------------
 
-  const SOCIAL_LOGIN = {
+  const SOCIAL_LOGIN: {
+    [service: string]: {
+      hide?: boolean
+      size?: number
+      marginBottom?: number
+      icon: any
+      handler: () => void
+    }
+  } = {
+    apple: {
+      hide: !IS_IOS,
+      size: 34,
+      marginBottom: 4,
+      icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.appleLight : SOCIAL_LOGIN_ICON.apple,
+      handler: () => {
+        return appleLogin({
+          setIsLoading,
+          onLoggedIn
+        })
+      }
+    },
+
     google: {
       icon: SOCIAL_LOGIN_ICON.google,
-      handler: async () => {
-        try {
-          GoogleSignin.configure({
-            webClientId: GOOGLE_CLIENT_ID
-          })
-          await GoogleSignin.signIn()
-          const tokens = await GoogleSignin.getTokens()
-          await handleSocialLogin('google', tokens.accessToken)
-        } catch (e) {
-          setIsLoading(false)
-          Logger.error(e)
-          notify('error', translate('error.something_went_wrong'))
-        }
+      handler: () => {
+        return googleLogin({
+          setIsLoading,
+          onLoggedIn
+        })
       }
     },
 
     facebook: {
+      hide: !IS_PROD,
       icon: SOCIAL_LOGIN_ICON.facebook,
-      handler: async () => {
-        try {
-          let res = await AccessToken.getCurrentAccessToken()
-          if (!res) {
-            await LoginManager.logInWithPermissions(['public_profile', 'email'])
-            res = await AccessToken.getCurrentAccessToken()
-            if (!res) {
-              setIsLoading(false)
-              notify('error', translate('error.something_went_wrong'))
-              return
-            }
-          }
-          await handleSocialLogin('facebook', res.accessToken)
-        } catch (e) {
-          setIsLoading(false)
-          Logger.error(e)
-          notify('error', translate('error.something_went_wrong'))
-        }
+      handler: () => {
+        return facebookLogin({
+          setIsLoading,
+          onLoggedIn
+        })
       }
     },
 
     github: {
+      hide: !IS_PROD,
       icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.githubLight : SOCIAL_LOGIN_ICON.github,
-      handler: async () => {
-        try {
-          const res = await authorize(GITHUB_CONFIG)
-          if (!res) {
-            setIsLoading(false)
-            notify('error', translate('error.something_went_wrong'))
-            return
-          }
-          await handleSocialLogin('github', res.accessToken)
-        } catch (e) {
-          setIsLoading(false)
-          Logger.error(e)
-          notify('error', translate('error.something_went_wrong'))
-        }
+      handler: () => {
+        return githubLogin({
+          setIsLoading,
+          onLoggedIn
+        })
       }
     }
   }
@@ -122,23 +111,6 @@ export const SignupScreen = observer(function SignupScreen() {
       navigation.navigate('login')
     } else {
       notifyApiError(res)
-    }
-  }
-
-  const handleSocialLogin = async (provider: string, token: string) => {
-    setIsLoading(true)
-    const loginRes = await user.socialLogin({
-      provider: provider,
-      access_token: token
-    })
-    setIsLoading(false)
-    if (loginRes.kind !== 'ok') {
-      notifyApiError(loginRes)
-      notify('error', translate('error.login_failed'))
-    } else {
-      // @ts-ignore
-      setApiTokens(loginRes.data?.access_token)
-      onLoggedIn()
     }
   }
 
@@ -268,6 +240,9 @@ export const SignupScreen = observer(function SignupScreen() {
             label={translate('common.country')}
             value={countries[country] ? countries[country].country_name : ''}
             style={{ width: '100%', marginBottom: 10 }}
+            onTouchStart={() => {
+              navigation.navigate('countrySelector', { initialId: country })
+            }}
           />
         </Button>
         {/* Country input end */}
@@ -341,7 +316,7 @@ export const SignupScreen = observer(function SignupScreen() {
 
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             {
-              Object.values(SOCIAL_LOGIN).map((item, index) => (
+              Object.values(SOCIAL_LOGIN).filter(item => !item.hide).map((item, index) => (
                 <Button
                   key={index}
                   preset="ghost"
@@ -350,7 +325,11 @@ export const SignupScreen = observer(function SignupScreen() {
                 >
                   <Image
                     source={item.icon}
-                    style={{ height: 30, width: 30 }}
+                    style={{ 
+                      height: item.size || 30, 
+                      width: item.size || 30,
+                      marginBottom: item.marginBottom || 0
+                    }}
                   />
                 </Button>
               ))

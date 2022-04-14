@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { load, storageKeys } from "../../../utils/storage"
+import { load, StorageKey } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
@@ -11,7 +11,7 @@ import { BackHandler, Appearance } from "react-native"
 import { useMixins } from "../../../services/mixins"
 
 
-export const InitScreen = observer(function InitScreen() {
+export const InitScreen = observer(() => {
   const { user, cipherStore, uiStore } = useStores()
   const navigation = useNavigation()
   const theme = Appearance.getColorScheme()
@@ -28,7 +28,7 @@ export const InitScreen = observer(function InitScreen() {
   }
 
   const checkAutoFill = async () => {
-    const autoFillData = await load(storageKeys.APP_FROM_AUTOFILL)
+    const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL)
     if (autoFillData && autoFillData.enabled) {
       uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
       uiStore.setIsFromAutoFill(true)
@@ -40,22 +40,31 @@ export const InitScreen = observer(function InitScreen() {
   }
 
   const mounted = async () => {
+    const connectionState = await NetInfo.fetch()
+
+    // Setup basic data
     user.setLanguage(user.language)
     user.setDeviceID(DeviceInfo.getUniqueId())
     cipherStore.setIsSynching(false)
 
-    if (uiStore.isDark === null) {
-      uiStore.setIsDark(theme === 'dark')
-    }
+    // TODO
+    // if (uiStore.isDark === null) {
+    //   uiStore.setIsDark(theme === 'dark')
+    // }
+    uiStore.setIsDark(false)
 
-    await boostrapPushNotifier()
+    // Reload FCM
+    if (connectionState.isConnected) {
+      await boostrapPushNotifier()
+    }
 
     // Check autofill
     const isAutoFill = await checkAutoFill()
 
     // Testing
     // if (__DEV__) {
-    //   navigation.navigate('createMasterPassword')
+    //   // navigation.navigate('createMasterPassword')
+    //   navigation.navigate('intro')
     //   return
     // }
 
@@ -71,7 +80,6 @@ export const InitScreen = observer(function InitScreen() {
     }
 
     // Network connected? || Is autofill?
-    const connectionState = await NetInfo.fetch()
     if (!connectionState.isConnected || isAutoFill) {
       goLockOrCreatePassword()
       return
@@ -97,8 +105,8 @@ export const InitScreen = observer(function InitScreen() {
 
   // Mounted
   useEffect(() => {
-    setTimeout(mounted, 1500)
-    // mounted()
+    // setTimeout(mounted, 1500)
+    mounted()
   }, [])
 
   // Back handler

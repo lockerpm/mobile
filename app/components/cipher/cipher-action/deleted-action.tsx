@@ -25,7 +25,7 @@ export interface DeletedActionProps {
 /**
  * Describe your component here
  */
-export const DeletedAction = observer(function DeletedAction(props: DeletedActionProps) {
+export const DeletedAction = observer((props: DeletedActionProps) => {
   const { navigation, isOpen, onClose, children } = props
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
@@ -129,6 +129,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
         isOpen={isOpen}
         onClose={handleActionSheetClose}
       >
+        {/* Cipher info */}
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             {
@@ -142,10 +143,11 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
                 />
               )
             }
-            <View style={{ marginLeft: 10 }}>
+            <View style={{ marginLeft: 10, flex: 1 }}>
               <Text
                 preset="semibold"
                 text={selectedCipher.name}
+                numberOfLines={2}
               />
               {
                 (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
@@ -158,6 +160,7 @@ export const DeletedAction = observer(function DeletedAction(props: DeletedActio
             </View>
           </View>
         </View>
+        {/* Cipher info end */}
 
         <Divider style={{ marginTop: 10 }} />
 

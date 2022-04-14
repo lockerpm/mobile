@@ -40,10 +40,10 @@ export const FoldersScreen = observer(function FoldersScreen() {
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [sortList, setSortList] = useState({
-    orderField: 'name',
-    order: 'asc'
+    orderField: 'revisionDate',
+    order: 'desc'
   })
-  const [sortOption, setSortOption] = useState('az')
+  const [sortOption, setSortOption] = useState('last_updated')
   const [selectedFolder, setSelectedFolder] = useState(new FolderView())
   const [isLoading, setIsLoading] = useState(false)
   const [sections, setSections] = useState<SectionType>([])
@@ -119,6 +119,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       {/* Modals / Actions */}
 
@@ -210,6 +211,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
                         <Text
                           preset="semibold"
                           text={item.name || translate('folder.unassigned')}
+                          numberOfLines={2}
                         />
 
                         {

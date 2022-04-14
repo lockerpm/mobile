@@ -11,7 +11,7 @@ import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 
 
-export const AllItemScreen = observer(function AllItemScreen() {
+export const AllItemScreen = observer(() => {
   const navigation = useNavigation()
   const { uiStore } = useStores()
   const { translate } = useMixins()
@@ -24,10 +24,10 @@ export const AllItemScreen = observer(function AllItemScreen() {
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [sortList, setSortList] = useState({
-    orderField: 'name',
-    order: 'asc'
+    orderField: 'revisionDate',
+    order: 'desc'
   })
-  const [sortOption, setSortOption] = useState('az')
+  const [sortOption, setSortOption] = useState('last_updated')
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
@@ -126,6 +126,7 @@ export const AllItemScreen = observer(function AllItemScreen() {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}

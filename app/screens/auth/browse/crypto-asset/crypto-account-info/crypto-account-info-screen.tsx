@@ -93,7 +93,7 @@ export const CryptoAccountInfoScreen = observer(() => {
           <BROWSE_ITEMS.cryptoAccount.svgIcon height={55} width={55} />
           <Text
             preset="header"
-            style={{ marginTop: 5 }}
+            style={{ marginTop: 5, marginHorizontal: 20, textAlign: 'center' }}
           >
             {selectedCipher.name}
             {

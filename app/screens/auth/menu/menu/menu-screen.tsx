@@ -1,63 +1,73 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ScrollView, ViewStyle, Linking } from "react-native"
+import { View, ScrollView, ViewStyle, TextStyle } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
-import { commonStyles, fontSize } from "../../../../theme"
+import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+import { PlanType } from "../../../../config/types"
+import { fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { MANAGE_PLAN_URL } from "../../../../config/constants"
 import { Invitation, InvitationData } from "./invitation"
 
 
-// @ts-ignore
 import PlanIcon from './star.svg'
-// @ts-ignore
 import InviteIcon from './invite.svg'
-// @ts-ignore
 import SettingsIcon from './gear.svg'
-// @ts-ignore
 import HelpIcon from './question.svg'
-// @ts-ignore
 import LockIcon from './lock.svg'
-// @ts-ignore
 import PlanIconLight from './star-light.svg'
-// @ts-ignore
 import InviteIconLight from './invite-light.svg'
-// @ts-ignore
 import SettingsIconLight from './gear-light.svg'
-// @ts-ignore
 import HelpIconLight from './question-light.svg'
-// @ts-ignore
 import LockIconLight from './lock-light.svg'
-import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+import { PushNotifier } from "../../../../utils/push-notification"
+import { useTestMixins } from "../../../../services/mixins/test"
 
 
-export const MenuScreen = observer(function MenuScreen() {
+export const MenuScreen = observer(() => {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
   const { translate, notify, color, isDark } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
+  const { createRandomPasswords } = useTestMixins()
 
+  const isFreeAccount = user.plan?.alias === PlanType.FREE  
+  const isPremiumAccount = user.plan?.alias === PlanType.PREMIUM
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
 
+  const PLAN_NAME: TextStyle = {
+    fontSize: fontSize.small,
+    marginTop: 5
+  }
+  const ITEM_CONTAINER: ViewStyle = {
+    backgroundColor: isDark ? color.block : color.background,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+  }
+
   const items: MenuItemProps[] = [
+    {
+      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
+      name: translate('menu.invite'),
+      action: () => {
+        if(isFreeAccount || (isPremiumAccount && !user.plan?.is_family)) {
+          notify('info', translate("invite_member.info_upgrade"))
+          navigation.navigate("payment", { family: true })
+        } else {
+          navigation.navigate("invite_member")
+        }
+      },
+    },
     {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
-      action: () => {
-        Linking.openURL(MANAGE_PLAN_URL)
-      }
+      action: () => navigation.navigate('payment'),
     },
-    // {
-    //   icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
-    //   name: translate('menu.invite'),
-    //   disabled: true
-    // },
     {
       icon: isDark ? <SettingsIconLight height={22} /> : <SettingsIcon height={22} />,
       name: translate('common.settings'),
@@ -85,7 +95,33 @@ export const MenuScreen = observer(function MenuScreen() {
       icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: '(DEBUG) Show toast',
       action: () => {
-        notify('error', 'test')
+        notify('error', 'Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)')
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Show push notification',
+      action: () => {
+        PushNotifier._notify({
+          id: `share_new`,
+          title: 'Locker',
+          body: `You have a new shared test`,
+          data: {
+            type: 'new_share_item'
+          }
+        })
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Generate 50 random passwords',
+      action: () => {
+        createRandomPasswords({
+          count: 50,
+          length: 24
+        })
       }
     },
     {
@@ -105,23 +141,31 @@ export const MenuScreen = observer(function MenuScreen() {
         setIsLoading(true)
         await logout()
         setIsLoading(false)
-        navigation.navigate('onBoarding')
+        navigation.navigate('login')
       },
       noBorder: true
     }
   ]
 
+  const item3 = {
+    "pm_free": {
+      node: <Text text="FREE" style={[PLAN_NAME, { color: color.textBlack }]}></Text>,
+    },
+    "pm_premium": {
+      node: <Text text="PREMIUM" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+    },
+    "pm_family": {
+      node: <Text text="FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+    }
+  }
+
   // -------------- RENDER --------------------
 
-  const ITEM_CONTAINER: ViewStyle = {
-    backgroundColor: isDark ? color.block : color.background,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-  }
 
   return (
     <Layout
       borderBottom
+      hasBottomNav
       isContentOverlayLoading={isLoading}
       containerStyle={{ backgroundColor: isDark ? color.background : color.block }}
       header={(
@@ -130,11 +174,12 @@ export const MenuScreen = observer(function MenuScreen() {
     >
       <ScrollView>
         {/* User info */}
-        <View style={[
-          ITEM_CONTAINER,
-          commonStyles.CENTER_HORIZONTAL_VIEW,
-          { marginBottom: 15, paddingVertical: 14 }
-        ]}>
+        <Button
+          onPress={() => { navigation.navigate('manage_plan') }}
+          style={[
+            ITEM_CONTAINER,
+            { marginBottom: 15, paddingVertical: 14, justifyContent: "flex-start" }
+          ]}>
           {
             !!user.avatar && (
               <Image
@@ -143,16 +188,21 @@ export const MenuScreen = observer(function MenuScreen() {
               />
             )
           }
-          <View>
+          <View style={{ flex: 1 }}>
             <Text
               preset="black"
               text={user.email}
             />
-            <Text style={{ fontSize: fontSize.small, marginTop: 5 }}>
-              {user.plan && user.plan.name}
-            </Text>
+            {
+              user.plan && item3[user.plan.alias]?.node
+            }
           </View>
-        </View>
+          <FontAwesome
+            name="angle-right"
+            size={18}
+            color={color.textBlack}
+          />
+        </Button>
         {/* User info end */}
 
         {/* Fingerprint */}

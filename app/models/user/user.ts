@@ -2,9 +2,10 @@ import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
 import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
-import { save, storageKeys } from "../../utils/storage"
+import { save, StorageKey, remove } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
+import moment from "moment"
 
 
 export enum AppTimeoutType {
@@ -42,7 +43,7 @@ export const UserModel = types
 
     // Others data
     teams: types.array(types.frozen()),
-    plan: types.maybeNull(types.frozen<{ name: string; alias: string }>()),
+    plan: types.maybeNull(types.frozen<{ name: string; alias: string, is_family: boolean }>()),
     invitations: types.array(types.frozen()),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
@@ -78,6 +79,10 @@ export const UserModel = types
       self.pwd_user_id = userSnapshot.pwd_user_id
       self.is_pwd_manager = userSnapshot.is_pwd_manager
       self.default_team_id = userSnapshot.default_team_id
+      save(StorageKey.APP_CURRENT_USER, {
+        language: self.language,
+        pwd_user_id: self.pwd_user_id
+      })
     },
     clearUser: () => {
       self.isLoggedIn = false
@@ -94,6 +99,7 @@ export const UserModel = types
       self.invitations = cast([])
       self.plan = null
       self.fingerprint = ''
+      remove(StorageKey.APP_CURRENT_USER)
     },
     clearSettings: () => {
       self.isBiometricUnlock = false
@@ -116,7 +122,7 @@ export const UserModel = types
     setTeams: (teams: object[]) => {
       self.teams = cast(teams)
     },
-    setPlan: (plan: { name: string; alias: string }) => {
+    setPlan: (plan: { name: string; alias: string ; is_family: boolean }) => {
       self.plan = cast(plan)
     },
     setInvitations: (invitations: object[]) => {
@@ -136,8 +142,49 @@ export const UserModel = types
     setLanguage: (lang: string) => {
       self.language = lang
       setLang(lang)
-      save(storageKeys.APP_CURRENT_USER, {
-        language: lang
+      switch (lang) {
+        case 'vi':
+          moment.locale('vi', {
+            months: 'tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12'.split('_'),
+            monthsShort: 'Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12'.split('_'),
+            relativeTime: {
+              future: '%s tới',
+              past: '%s trước',
+              s: 'Vài giây',
+              m: '1 phút',
+              mm: '%d phút',
+              h: '1 giờ',
+              hh: '%d giờ',
+              d: '1 ngày',
+              dd: '%d ngày',
+              M: '1 tháng',
+              MM: '%d tháng',
+              y: '1 năm',
+              yy: '%d năm'
+            },
+            longDateFormat: {
+              LT: 'HH:mm',
+              LTS: 'HH:mm:ss',
+              L: 'DD/MM/YYYY',
+              LL: 'D MMMM [năm] YYYY',
+              LLL: 'D MMMM [năm] YYYY HH:mm',
+              LLLL: 'dddd, D MMMM [năm] YYYY HH:mm',
+              l: 'DD/M/YYYY',
+              ll: 'D MMM YYYY',
+              lll: 'D MMM YYYY HH:mm',
+              llll: 'ddd, D MMM YYYY HH:mm'
+            },
+            week: {
+              dow: 1 // Monday is the first day of the week.
+            }
+          })
+          break
+        default:
+          moment.locale('en')
+      }
+      save(StorageKey.APP_CURRENT_USER, {
+        language: lang,
+        pwd_user_id: self.pwd_user_id
       })
     },
     setBiometricUnlock: (isActive: boolean) => {
@@ -370,6 +417,44 @@ export const UserModel = types
         device_identifier: DeviceInfo.getUniqueId()
       })
       return res
+    },
+
+    getBillingDocuments: async (page: number) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getBillingDocuments(self.apiToken, page)
+      return res
+    },
+
+    getFamilyMember: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getFamilyMember(self.apiToken)
+      return res
+    },
+
+    addFamilyMember: async (memberEmails: string[]) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.addFamilyMember(self.apiToken, memberEmails)
+      return res
+    },
+
+    removeFamilyMember: async (memberID: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.removeFamilyMember(self.apiToken, memberID)
+      return res
+    }
+  }))
+  .actions((self) => ({
+    //receipt: 'receipt_data' for ios, 'purchase_token' for android
+    purchaseValidation: async (receipt?: string, subscriptionId?: string, originalTransactionIdentifierIOS?: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.purchaseValidation(self.apiToken, receipt, subscriptionId, originalTransactionIdentifierIOS)
+      if (res.kind === "ok") {
+        if (res.data.success) {
+          await self.loadPlan()
+          return true
+        }
+      }
+      return false
     }
   }))
 
@@ -382,7 +467,7 @@ export const UserModel = types
  */
 
 type UserType = Instance<typeof UserModel>
-export interface User extends UserType {}
+export interface User extends UserType { }
 type UserSnapshotType = SnapshotOut<typeof UserModel>
-export interface UserSnapshot extends UserSnapshotType {}
+export interface UserSnapshot extends UserSnapshotType { }
 export const createUserDefaultModel = () => types.optional(UserModel, {})

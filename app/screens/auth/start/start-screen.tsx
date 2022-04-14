@@ -6,15 +6,12 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import NetInfo from '@react-native-community/netinfo'
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
-import { IS_IOS } from "../../../config/constants"
 
 
-export const StartScreen = observer(function StartScreen() {
+export const StartScreen = observer(() => {
   const { user, uiStore } = useStores()
-  const { isBiometricAvailable, translate } = useMixins()
+  const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
   const { loadFolders, loadCollections, syncAutofillData, loadOrganizations } = useCipherDataMixins()
-  const { loadPasswordsHealth } = useCipherToolsMixins()
   const navigation = useNavigation()
 
   // ------------------------- PARAMS ----------------------------
@@ -22,40 +19,55 @@ export const StartScreen = observer(function StartScreen() {
   const [msg, setMsg] = useState('')
 
   // ------------------------- METHODS ----------------------------
+  const refreshFCM = async () => {
+    if (!user.disablePushNotifications) {
+      let isSuccess = true
+      if (!user.fcmToken) {
+        isSuccess = await boostrapPushNotifier()
+      }
+      if (isSuccess) {
+        user.updateFCM(user.fcmToken)
+      }
+    }
+  }
 
   const mounted = async () => {
-    if (IS_IOS) {
-      await syncAutofillData()
-    }
+   
+    syncAutofillData()
+    
+
+    // Testing
+    // if (__DEV__) {
+    //   navigation.navigate('dataOutdated')
+    //   return
+    // }
+
     const connectionState = await NetInfo.fetch()
 
     // Sync
     if (connectionState.isConnected) {
-      // Update FCM
-      user.updateFCM(user.fcmToken)
+      // Refresh FCM
+      refreshFCM()
 
       // Sync teams and plan
       if (!uiStore.isFromAutoFill) {
-        setMsg(translate('start.getting_team_info'))
-        await Promise.all([
-          user.loadTeams(),
-          user.loadPlan(),
-        ])
-        // user.loadTeams()
-        // user.loadPlan()
+        // setMsg(translate('start.getting_plan_info'))
+        // await Promise.all([
+        //   user.loadTeams(),
+        //   user.loadPlan(),
+        // ])
+        user.loadTeams()
+        user.loadPlan()
       }
     }
     
     // Load folders and collections
     setMsg(translate('start.decrypting'))
-    await Promise.all([
+    Promise.all([
       loadFolders(),
       loadCollections(),
       loadOrganizations()
     ])
-    if (!uiStore.isFromAutoFill) {
-      loadPasswordsHealth()
-    }
 
     // TODO: check device limit
     const isDeviceLimitReached = false
@@ -65,9 +77,16 @@ export const StartScreen = observer(function StartScreen() {
 
     setMsg('')
 
+    // Parse push noti data
+    const navigationRequest = await parsePushNotiData()
+    if (navigationRequest.path) {
+      navigation.navigate(navigationRequest.path, navigationRequest.params)
+      return
+    }
+
     // Show biometric intro
     if (!uiStore.isFromAutoFill) {
-      if (!user.biometricIntroShown) {
+      if (!user.biometricIntroShown && !user.isBiometricUnlock) {
         const available = await isBiometricAvailable()
         if (available) {
           navigation.navigate('biometricUnlockIntro')

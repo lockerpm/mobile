@@ -24,28 +24,37 @@ export const EditShareModal = observer((props: Props) => {
 
   const selectedCipher: CipherView = cipherStore.cipherView
   const shareTypes = [
-    translate('shares.share_type.only_fill'),
-    translate('shares.share_type.view'),
-    translate('shares.share_type.edit')
+    // {
+    //   label: translate('shares.share_type.only_fill'),
+    //   value: 'only_fill'
+    // },
+    {
+      label: translate('shares.share_type.view'),
+      value: 'view'
+    },
+    {
+      label: translate('shares.share_type.edit'),
+      value: 'edit'
+    }
   ]
 
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)
-  const [shareType, setShareType] = useState(1)
+  const [shareType, setShareType] = useState('view')
 
   // --------------- COMPUTED ----------------
 
   const initialShareType = (() => {
     if (member) {
       if (member.role === AccountRoleText.ADMIN) {
-        return 2
+        return 'edit'
       }
       if (member.hide_passwords) {
-        return 0
+        return 'only_fill'
       }
     }
-    return 1
+    return 'view'
   })()
 
   // --------------- METHODS ----------------
@@ -56,10 +65,10 @@ export const EditShareModal = observer((props: Props) => {
     let role = AccountRoleText.MEMBER
     let autofillOnly = false
     switch (shareType) {
-      case 0:
+      case 'only_fill':
         autofillOnly = true
         break
-      case 2:
+      case 'edit':
         role = AccountRoleText.ADMIN
         break
     }
@@ -113,7 +122,7 @@ export const EditShareModal = observer((props: Props) => {
         zIndexInverse={1000}
         placeholder={translate('common.select')}
         value={shareType}
-        items={shareTypes.map((t, index) => ({ label: t, value: index }))}
+        items={shareTypes}
         setValue={setShareType}
         setItems={() => {}}
         style={{

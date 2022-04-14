@@ -5,10 +5,14 @@ import { SymmetricCryptoKey } from "../../../../core/models/domain"
 import { DecryptParameters } from "../../../../core/models/domain/decryptParameters"
 import { Utils } from "../../../../core/misc/utils"
 import RNSimpleCrypto from "react-native-simple-crypto"
+import { NativeModules } from 'react-native';
+import { IS_IOS } from '../../../config/constants';
+
+const { RNCryptoServiceIos, RNCryptoServiceAndroid } = NativeModules
 
 export class MobileCryptoFunctionService implements CryptoFunctionService {
   pbkdf2(password: string | ArrayBuffer, salt: string | ArrayBuffer, algorithm: 'sha256' | 'sha512',
-         iterations: number): Promise<ArrayBuffer> {
+    iterations: number): Promise<ArrayBuffer> {
     const len = algorithm === 'sha256' ? 32 : 64;
     const nodePassword = this.toNodeValue(password);
     const nodeSalt = this.toNodeValue(salt);
@@ -27,7 +31,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
 
   // ref: https://tools.ietf.org/html/rfc5869
   async hkdf(ikm: ArrayBuffer, salt: string | ArrayBuffer, info: string | ArrayBuffer,
-             outputByteSize: number, algorithm: 'sha256' | 'sha512'): Promise<ArrayBuffer> {
+    outputByteSize: number, algorithm: 'sha256' | 'sha512'): Promise<ArrayBuffer> {
     const saltBuf = this.toArrayBuffer(salt);
     const prk = await this.hmac(ikm, saltBuf, algorithm);
     return this.hkdfExpand(prk, info, outputByteSize, algorithm);
@@ -35,7 +39,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
 
   // ref: https://tools.ietf.org/html/rfc5869
   async hkdfExpand(prk: ArrayBuffer, info: string | ArrayBuffer, outputByteSize: number,
-                   algorithm: 'sha256' | 'sha512'): Promise<ArrayBuffer> {
+    algorithm: 'sha256' | 'sha512'): Promise<ArrayBuffer> {
     const hashLen = algorithm === 'sha256' ? 32 : 64;
     if (outputByteSize > 255 * hashLen) {
       throw new Error('outputByteSize is too large.');
@@ -162,14 +166,14 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     return Promise.resolve(this.toArrayBuffer(decipher));
   }
 
-  rsaDecrypt(data: ArrayBuffer, privateKey: ArrayBuffer, algorithm: 'sha1' | 'sha256'): Promise<ArrayBuffer> {
+  async rsaDecrypt(data: ArrayBuffer, privateKey: ArrayBuffer, algorithm: 'sha1' | 'sha256'): Promise<ArrayBuffer> {
     if (algorithm === 'sha256') {
       throw new Error('Node crypto does not support RSA-OAEP SHA-256');
     }
 
-    const pem = this.toPemPrivateKey(privateKey);
-    const decipher = crypto.privateDecrypt(pem, this.toNodeBuffer(data));
-    return Promise.resolve(this.toArrayBuffer(decipher));
+    const CryptoServiceModule = IS_IOS ? RNCryptoServiceIos : RNCryptoServiceAndroid
+    const decipher = await CryptoServiceModule.decryptOAEPSHA1(Utils.fromBufferToB64(data), Utils.fromBufferToB64(privateKey))
+    return Utils.fromB64ToArray(decipher).buffer
   }
 
   rsaExtractPublicKey(privateKey: ArrayBuffer): Promise<ArrayBuffer> {
@@ -187,7 +191,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     return new Promise<[ArrayBuffer, ArrayBuffer]>(async (resolve, reject) => {
       try {
         const keyPair = await RNSimpleCrypto.RSA.generateKeys(length)
-        
+
         const pubKey = forge.pki.publicKeyFromPem(keyPair.public)
         const publicKeyAsn1 = (forge.pki as any).publicKeyToAsn1(pubKey);
         const publicKeyByteString = forge.asn1.toDer(publicKeyAsn1).getBytes();

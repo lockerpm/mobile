@@ -9,7 +9,7 @@ import { APP_ICON } from "../../../common/mappings"
 import { IS_IOS } from "../../../config/constants"
 import { useStores } from "../../../models"
 
-export const OnboardingScreen = observer(function OnboardingScreen() {
+export const OnboardingScreen = observer(() => {
   const navigation = useNavigation()
   const { translate } = useMixins()
   const { uiStore } = useStores()
@@ -17,8 +17,8 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
   // Child components
   const footer = (
     <View>
-      <Button 
-        text={translate("common.login")} 
+      <Button
+        text={translate("common.login")}
         onPress={() => navigation.navigate("login")}
       />
       <View
@@ -28,15 +28,15 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
         }]}
       >
         <Text
-          text={translate("onBoarding.no_account")}
+          text={translate("onBoarding.has_account")}
           style={{
             marginRight: 8,
           }}
         />
         <Button
           preset="link"
-          text={translate("common.sign_up")}
-          onPress={() => navigation.navigate("signup")}
+          text={translate("common.login")}
+          onPress={() => navigation.navigate("login")}
         />
       </View>
     </View>
@@ -45,12 +45,13 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
   // -------------- EFFECT ------------------
 
   useEffect(() => {
+
     const handleBack = (e) => {
       if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
         navigation.dispatch(e.data.action)
         return
       }
-      
+
       e.preventDefault()
       if (!IS_IOS) {
         BackHandler.exitApp()
@@ -70,9 +71,9 @@ export const OnboardingScreen = observer(function OnboardingScreen() {
       footer={footer}
     >
       <View style={commonStyles.CENTER_VIEW}>
-        <Image 
-          source={uiStore.isDark ? APP_ICON.textVerticalLight : APP_ICON.textVertical} 
-          style={{ height: 112, width: 128 }} 
+        <Image
+          source={uiStore.isDark ? APP_ICON.textVerticalLight : APP_ICON.textVertical}
+          style={{ height: 112, width: 128 }}
         />
         <Text
           preset="header"

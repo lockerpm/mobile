@@ -32,7 +32,7 @@ export interface CipherActionProps {
 /**
  * Describe your component here
  */
-export const CipherAction = observer(function CipherAction(props: CipherActionProps) {
+export const CipherAction = observer((props: CipherActionProps) => {
   const { navigation, isOpen, onClose, children } = props
 
   const [showConfirmTrashModal, setShowConfirmTrashModal] = useState(false)
@@ -183,6 +183,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
         isOpen={isOpen}
         onClose={handleActionSheetClose}
       >
+        {/* Cipher info */}
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             {
@@ -196,10 +197,11 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                 />
               )
             }
-            <View style={{ marginLeft: 10 }}>
+            <View style={{ marginLeft: 10, flex: 1 }}>
               <Text
                 preset="semibold"
                 text={selectedCipher.name}
+                numberOfLines={2}
               />
               {
                 !!getCipherDescription(selectedCipher) && (
@@ -212,16 +214,24 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
             </View>
           </View>
         </View>
+        {/* Cipher info end */}
 
         <Divider style={{ marginTop: 10 }} />
 
         <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
           { children }
-          {
-            !!children && editable && (
-              <Divider style={{ marginVertical: 5 }} />
-            )
-          }
+
+          <Divider style={{ marginVertical: 5 }} />
+
+          <ActionItem
+            disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+            name={translate('common.details')}
+            icon="list-alt"
+            action={() => {
+              onClose()
+              navigation.navigate(`${cipherMapper.path}__info`)
+            }}
+          />
 
           {
             editable && (
@@ -280,6 +290,7 @@ export const CipherAction = observer(function CipherAction(props: CipherActionPr
                   !isShared && (
                     <ActionItem
                       isPremium
+                      onClose={onClose}
                       disabled={uiStore.isOffline}
                       name={translate('common.share')}
                       icon="share-square-o"

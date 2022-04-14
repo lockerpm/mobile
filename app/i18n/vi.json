@@ -1,5 +1,6 @@
 {
   "common": {
+    "yes": "Đồng ý",
     "accept": "Đồng ý",
     "account": "Tài khoản",
     "authenticate": "Xác thực",
@@ -8,6 +9,7 @@
     "and": "và",
     "biometric_unlocking": "Mở khóa bằng Face ID/Touch ID",
     "browse": "Kho",
+    "calculating": "Đang kiểm tra",
     "cancel": "Hủy",
     "card": "Thẻ tín dụng",
     "change_ownership": "Thay đổi quyền sở hữu",
@@ -26,6 +28,7 @@
     "edit": "Sửa",
     "email": "Email",
     "enter_master_pass": "Nhập mật khẩu chính",
+    "faceid_unlocking": "Mở khóa bằng Face ID",
     "folder": "Thư mục",
     "fullname": "Họ và tên",
     "generate": "Tạo mới",
@@ -33,6 +36,7 @@
     "home": "Tất cả",
     "identity": "Danh tính",
     "item": "mục",
+    "item_name": "Tên mục",
     "items": "mục",
     "language": "Ngôn ngữ",
     "length": "Độ dài",
@@ -40,6 +44,7 @@
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
     "master_pass": "Mật khẩu chính",
+    "max": "Tối đa",
     "minute": "phút",
     "minutes": "phút",
     "me": "Cá nhân",
@@ -59,6 +64,7 @@
     "owned_by": "Sở hữu bởi",
     "ownership": "Quyền sở hữu",
     "password": "Mật khẩu",
+    "password_not_match": "Mật khẩu không khớp",
     "phone": "Điện thoại",
     "push_notifications": "Thông báo đẩy",
     "regenerate": "Tạo lại",
@@ -79,14 +85,16 @@
     "skip": "Bỏ qua",
     "sort": "Sắp xếp",
     "submit": "Gửi",
+    "synchronize": "Đồng bộ dữ liệu",
     "team_folders": "Thư mục chung",
     "times": "lần",
     "trash": "Thùng rác",
     "tools": "Công cụ",
+    "touchid_unlocking": "Mở khóa bằng Touch ID",
     "unlock": "Mở khóa",
     "upgrade": "Nâng cấp",
     "user": "Người dùng",
-    "username": "Username",
+    "username": "Tên người dùng",
     "warning": "Cảnh báo",
     "website": "Website"
   },
@@ -102,7 +110,7 @@
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
     "biometric_unlock_failed": "Xác thực bằng Face ID/Touch ID không thành công",
-    "network_error": "Kết nối mạng không thành công",
+    "network_error": "Vui lòng kết nối internet để sử dụng tính năng này",
     "required_data": "Không được để trống thông tin này",
     "session_login_failed": "Đăng nhập phiên không thành công! Vui lòng thử lại",
     "login_failed": "Đăng nhập không thành công! Vui lòng thử lại",
@@ -111,7 +119,7 @@
     "something_went_wrong": "Đã có lỗi xảy ra",
     "sync_failed": "Đồng bộ hóa không thành công",
     "token_expired": "Phiên của bạn đã hết hạn",
-    "no_associated_account": "Không có tài khoản nào sử dụng email hoặc username này. Vui lòng thử lại hoặc tạo tài khoản mới.",
+    "no_associated_account": "Không có tài khoản nào sử dụng email hoặc tên người dùng này. Vui lòng thử lại hoặc tạo tài khoản mới.",
     "invalid_authorization_code": "Mã xác nhận không hợp lệ",
     "invalid_data": "Dữ liệu không hợp lệ",
     "invalid_password": "Mật khẩu không hợp lệ",
@@ -127,7 +135,26 @@
     "duplicate_folder_name": "Tên trùng lặp! Vui lòng chọn tên khác!",
     "not_allowed_to_see_pw": "Không thể thực hiện hành động này! Mật khẩu này chỉ có thể sử dụng cho tính năng Tự động điền!",
     "not_allowed_to_copy_pw": "Không thể thực hiện hành động này! Mật khẩu này chỉ có thể sử dụng cho tính năng Tự động điền!",
-    "not_available_for_free": "Tính năng này không khả dụng đối với tài khoản miễn phí!"
+    "not_available_for_free": "Tính năng này không khả dụng đối với tài khoản miễn phí!",
+    "could_not_complete": "Không thể thực hiện hành động. Vui lòng thử lại",
+    "social_login": {
+      "cannot_get_email": "Không thể truy xuất email từ tài khoản này",
+      "apple": {
+        "could_not_complete": "Không thể thực hiện hành động. Vui lòng thử lại"
+      },
+      "google": {
+        "play_service_not_available": "Các dịch vụ của Google Play không khả dụng"
+      },
+      "facebook": {
+
+      },
+      "github": {
+        "token_refresh_failed": "Không thể trao đổi token mới. Vui lòng thử lại",
+        "registration_failed": "Đăng ký không thành công. Vui lòng thử lại",
+        "browser_not_found": "Không tìm thấy trình duyệt! Vui lòng cài đặt một trình duyệt phù hợp",
+        "service_configuration_fetch_error": "Không thể tìm nạp cấu hình dịch vụ. Vui lòng thử lại"
+      }
+    }
   },
   "success": {
     "done": "Hoàn tất",
@@ -141,12 +168,13 @@
     "cipher_trashed": "Đã chuyển vào thùng rác",
     "cipher_updated": "Cập nhật thành công",
     "cipher_shared": "Chia sẻ thành công",
+    "share_invitaion_accepted": "Hoàn tất! Mục được chia sẻ sẽ được giải mã trong thời gian ngắn",
     "sync_success": "Đồng bộ hóa hoàn tất",
     "will_sync_when_online": "Dữ liệu của bạn sẽ được đồng bộ khi có kết nối internet."
   },
   "policy": {
-    "min_password_length": "Mật khẩu phải chứa ít nhất {length} ký tự",
-    "max_password_length": "Độ dài tối đa của mật khẩu là {length}",
+    "min_password_length": "Mật khẩu phải chứa ít nhất {{length}} ký tự",
+    "max_password_length": "Độ dài tối đa của mật khẩu là {{length}}",
     "password_composition": "Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt",
     "requires_lowercase": "Phải chứa chữ cái thường (abc)",
     "requires_uppercase": "Phải chứa chữ cái in hoa (ABC)",
@@ -171,16 +199,16 @@
   },
   "intro": {
     "item_1": {
-      "title": "Trusted and secure",
-      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+      "title": "Bảo mật & Riêng tư",
+      "desc": "Kho của bạn được bảo vệ với bảo mật đẳng cấp thế giới."
     },
     "item_2": {
-      "title": "Trusted and secure",
-      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+      "title": "Đồng bộ hóa không giới hạn",
+      "desc": "Bạn có thể truy cập dữ liệu của Locker từ bất kỳ thiết bị nào."
     },
     "item_3": {
-      "title": "Trusted and secure",
-      "desc": "Your vault is protected with world-class security. It’s so secure, not even we can access your passwords."
+      "title": "Tự động điền",
+      "desc": "Tự động điền thông tin đăng nhập của bạn trên các ứng dụng và trang web."
     }
   },
   "lock": {
@@ -192,6 +220,7 @@
   },
   "onBoarding": {
     "no_account": "Chưa có tài khoản?",
+    "has_account": "Đã có tài khoản?",
     "title": "Your daily needs"
   },
   "login": {
@@ -209,7 +238,7 @@
   },
   "forgot_password": {
     "title": "Quên mật khẩu ?",
-    "username_or_email": "Nhập địa chỉ email hoặc username",
+    "username_or_email": "Nhập địa chỉ email hoặc tên người dùng",
     "request": "Khôi phục",
     "select_method": "Chọn phương thức xác thực:",
     "enter_code": "Nhập mã",
@@ -230,11 +259,12 @@
     "has_account": "Đã có tài khoản?",
     "terms": "điều khoản dịch vụ",
     "conditions": "chính sách bảo mật",
-    "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn."
+    "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)."
   },
   "start": {
     "synching": "Đồng bộ hoá dữ liệu...",
-    "getting_team_info": "Kiểm tra thông tin team của bạn...",
+    "getting_team_info": "Kiểm tra thông tin của bạn...",
+    "getting_plan_info": "Kiểm tra thông tin gói cước...",
     "decrypting": "Hoàn tất chuẩn bị dữ liệu..."
   },
   "biometric_intro": {
@@ -257,6 +287,7 @@
     }
   },
   "folder": {
+    "folder_name": "Tên thư mục",
     "unassigned": "Không xác định",
     "item_moved": "Chuyển đến thư mục mới thành công",
     "add_to_folder": "Thêm vào thư mục",
@@ -285,7 +316,7 @@
     "title": "Tiêu đề",
     "first_name": "Tên",
     "last_name": "Họ",
-    "username": "Username",
+    "username": "Tên người dùng",
     "email": "Email",
     "company": "Công ty",
     "phone": "Số điện thoại",
@@ -312,17 +343,17 @@
     "copy_note": "Sao chép ghi chú",
     "empty": {
       "title": "Thêm ghi chú đầu tiên của bạn",
-      "desc": "Ghi lại mã WiFi, mã báo vào cửa hoặc sinh nhật của bạn bè bạn",
+      "desc": "Ghi lại các thông tin riêng tư quan trọng của bạn",
       "btn": "Thêm ghi chú"
     }
   },
   "password": {
     "login_details": "Thông tin đăng nhập",
-    "username": "Email / Username",
+    "username": "Email / Tên người dùng",
     "website_url": "Địa chỉ website",
     "password_security": "Mức độ bảo mật",
     "launch_website": "Mở website",
-    "copy_username": "Sao chép Email / Username",
+    "copy_username": "Sao chép Email / Tên người dùng",
     "copy_password": "Sao chép mật khẩu",
     "empty": {
       "title": "Khỏi lo quên mật khẩu",
@@ -332,8 +363,9 @@
   },
   "shares": {
     "shares": "Chia sẻ",
-    "share_items": "Bạn chia sẻ",
+    "share_items": "Bạn đã chia sẻ",
     "shared_items": "Được chia sẻ với bạn",
+    "encrypted_content": "Nội dung mã hoá",
     "empty": {
       "title": "Chia sẻ tài nguyên một cách an toàn",
       "desc_share": "Mọi mật khẩu, ghi chú hoặc thẻ tín dụng được chia sẻ sẽ xuất hiện ở đây",
@@ -341,10 +373,10 @@
     },
     "add_emails": "Thêm email người nhận",
     "share_type": {
-      "label": "Loại chia sẻ",
-      "view": "Xem",
-      "only_fill": "Chỉ tự động điền",
-      "edit": "Sửa"
+      "label": "Quyền hạn",
+      "view": "Có thể xem",
+      "only_fill": "Chỉ sử dụng",
+      "edit": "Có thể chỉnh sửa"
     },
     "leave": "Thoát chia sẻ",
     "leave_desc": "Bạn có chắc muốn xoá mục chia sẻ này?",
@@ -372,8 +404,8 @@
     }
   },
   "all_items": {
-    "last_updated": "Thời gian giảm dần",
-    "first_updated": "Thời gian tăng dần",
+    "last_updated": "Mới nhất",
+    "first_updated": "Cũ nhất",
     "empty": {
       "title": "Thêm mật khẩu đầu tiên của bạn",
       "desc": "Tạo mật khẩu đầu tiên để bắt đầu xây dựng kho của bạn",
@@ -395,9 +427,10 @@
     "thank_you": "Cảm ơn bạn đã góp ý cho chúng tôi!"
   },
   "menu": {
+    "invite_noti" : "Nâng cấp lên gói Family để sử dụng Locker tiết kiệm hơn với những người thân!",
     "fingerprint": "Định danh",
     "plan": "Quản lý gói cước",
-    "invite": "Mời bạn bè",
+    "invite": "Mời thành viên",
     "invitation_to_join": "Lời mời tham gia ",
     "invitation_desc": "Bạn đã được mời tham gia {{org}}! Tham gia ngay bây giờ và bắt đầu cộng tác với nhóm của bạn."
   },
@@ -418,7 +451,7 @@
     "scan_a_qr": "Quét mã QR",
     "import_from_google_authenticator": "Nhập từ Google Authenticator",
     "invalid_qr": "Mã QR không hợp lệ! Vui lòng thử lại",
-    "enter_key": "Nhập khoá bí mật",
+    "enter_key": "Nhập mã cài đặt",
     "invalid_key": "Khóa không hợp lệ",
     "empty": {
       "title": "Bảo vệ tài khoản của bạn",
@@ -428,7 +461,7 @@
     "secret_key": "Mã khoá"
   },
   "pass_health": {
-    "title": "Sức khỏe mật khẩu",
+    "title": "Mức độ bảo mật của mật khẩu",
     "desc": "Xác định các mật khẩu yếu, trùng lặp có thể khiến bạn bị tấn công bởi tội phạm mạng",
     "weak_passwords": {
       "name": "Mật khẩu yếu",
@@ -474,12 +507,12 @@
     "delete_all_items_success": "Xoá dữ liệu thành công!",
     "on_app_close": "Khi tắt ứng dụng",
     "on_screen_off": "Khi tắt màn hình",
-    "timeout": "Hẹn giờ",
-    "timeout_action": "Hành động khi hết giờ",
+    "timeout": "Tự động khoá",
+    "timeout_action": "Tự động khoá",
     "import_export": "Nhập và xuất dữ liệu",
     "import": "Nhập dữ liệu",
     "export": "Xuất dữ liệu",
-    "sync_now": "Dồng bộ dữ liệu",
+    "sync_now": "Đồng bộ dữ liệu",
     "theme": "Chủ đề",
     "dark_theme": "Tối",
     "light_theme": "Sáng",
@@ -521,11 +554,100 @@
       "btn": "Thêm tài sản"
     },
     "copy_seed": "Sao chép Seed Phrase",
-    "copy_username": "Sao chép Username",
+    "copy_username": "Sao chép tên người dùng",
     "copy_password": "Sao chép mật khẩu",
     "email_recovery": "Email khôi phục",
     "seed": "Seed Phrase",
     "backup_details": "Thông tin khôi phục",
     "network": "Mạng Blockchain"
+  },
+  "payment" : {
+    "individual" : "Cá nhân",
+    "family": "Gia đình",
+    "ads" : "Tận hưởng tất cả các tính năng của Locker Premium với gói hàng năm để tiết kiệm đến 75%",
+    "cancel_text" : "Thanh toán định kỳ. Hủy bất cứ lúc nào",
+    "benefit" : {
+      "locker" : "Lưu trữ không giới hạn, Ghi chú bảo mật, Thẻ thanh toán, Tài sản tiền điện tử",
+      "web" : "Giám sát Dark Web bảo vệ tài khoản của bạn khỏi các vi phạm dữ liệu lớn",
+      "emergency_contact" : "Liên hệ khẩn cấp cho phép các tài khoản đáng tin cậy truy cập dữ liệu của bạn",
+      "share_password": "Chia sẻ mật khẩu an toàn với bạn bè và thành viên gia đình của bạn"
+    },
+    "price" :{
+      "per": {
+        "monthly": {
+          "title": "$4.99/tháng",
+          "subtitle": "Thanh toán theo tháng",
+          "sale": "",
+          "pay_title": "Nâng cấp ngay với $4.99"
+        },
+        "yearly": {
+          "title": "$15.49/năm",
+          "subtitle": "$1.29/tháng - thanh toán theo năm",
+          "sale": "Tiết kiệm 75%",
+          "pay_title": "Nâng cấp ngay với $15.49"
+        }
+      },
+      "fam": {
+        "yearly": {
+          "title": "$71.99/năm/6 người",
+          "subtitle": "Tận hưởng tất cả các tính năng của Locker, cho 6 người", 
+          "sale": "Tiết kiệm 80%",
+          "pay_title": "Nâng cấp ngay với $71.99"
+        },
+        "monthly": {
+          "title": "$9.99/tháng/6 người",
+          "subtitle": "Thanh toán theo tháng" ,
+          "sale": "Tiết kiệm 67%",
+          "pay_title": "Nâng cấp ngay với $9.99"
+        }
+      }
+    }
+  },
+  "manage_plan": {
+    "verify": "Xác nhận",
+    "verify_msg":  "Locker Không thể xác nhận đơn mua hàng của bạn",
+    "usage": {
+      "title": "Lưu lượng đã sử dụng",
+      "login": "Mật khẩu",
+      "card": "Thẻ thanh toán",
+      "identity": "Định danh",
+      "note": "Ghi chú",
+      "crypto": "Crypto assets"
+    },
+    "feature": {
+      "title": "Tính năng nâng cao",
+      "locker": "Lưu trữ không giới hạn",
+      "emergency_contact": {
+        "header" : "Liên hệ khẩn cấp",
+        "text": "Tính năng này cho phép bạn lấy lại tài khoản trong trường hợp khẩn cấp",
+        "link": "Để sử dụng tính năng, vui lòng truy cập: locker.io/vault",
+        "button": "OK"
+      },
+      "web": "Giám sát lộ dữ liệu",
+      "share_password": "Chia sẻ mật khẩu"
+
+    },
+    "free": {
+      "button": "Nâng cấp lên Premium"
+    }
+  },
+  "invite_member" : {
+    "header" : "Quản lý thành viên",
+    "info_upgrade" : "Nâng cấp lên gói Family và mời bạn bè gia đình sử dụng Locker!",
+    "add_noti": "Thêm thành viên thành công",
+    "delete_noti": "Xoá thành viên thành công",
+    "confirm": "Bạn có chắc muốn xoá người dùng này khỏi gói Family Plan?",
+    "action": "Mời",
+    "title": "Thêm thành viên vào gói Family của bạn",
+    "placeholder": "Nhập email thành viên",
+    "list_member_title": "Danh sách các thành viên trong gói",
+    "select_person": "Chọn email để thêm vào danh sách mời",
+    "number_member": "Số lượng ",
+    "remove": "Xoá thành viên"
+  }, 
+  "outdated_data": {
+    "desc": "Có vẻ như bạn đang cố gắng cập nhật một mục chưa được đồng bộ hóa. Vui lòng đợi quá trình đồng bộ hóa kết thúc hoặc bạn có thể đồng bộ hóa dữ liệu của mình theo cách thủ công tại đây",
+    "go_back": "Quay lại",
+    "synchronizing": "Đang đồng bộ..."
   }
 }

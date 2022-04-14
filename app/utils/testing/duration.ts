@@ -1,3 +1,5 @@
+import { Logger } from "../logger"
+
 export class DurationTest {
   name: string
   start: number
@@ -9,12 +11,12 @@ export class DurationTest {
     this.lastTick = this.start
   }
 
-  tick(action: string) {
-    console.log(`${this.name}: ${action} took ${Date.now() - this.lastTick}ms`)
+  tick(action: any) {
+    Logger.debug(`${this.name}: ${action} took ${Date.now() - this.lastTick}ms`)
     this.lastTick = Date.now()
   }
 
   final() {
-    console.log(`${this.name} took total ${Date.now() - this.start}ms`)
+    Logger.debug(`${this.name} took total ${Date.now() - this.start}ms`)
   }
 }

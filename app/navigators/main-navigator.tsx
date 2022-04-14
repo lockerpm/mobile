@@ -10,14 +10,14 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { MainTabNavigator } from "./main-tab-navigator"
 import { 
   SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen, PasswordEditScreen, 
-  PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen, PasswordHealthScreen,
+  PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
-  DataBreachListScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList,
-  ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
-  GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen,
-  CryptoAccountEditScreen, CryptoAccountInfoScreen, CryptoWalletEditScreen, CryptoWalletInfoScreen
+  DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
+  CryptoAccountEditScreen, CryptoAccountInfoScreen, CryptoWalletEditScreen, CryptoWalletInfoScreen,
+  GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen, 
+  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -28,10 +28,11 @@ import { AppTimeoutType, TimeoutActionType, useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { useCipherDataMixins } from "../services/mixins/cipher/data"
-import { useCipherToolsMixins } from "../services/mixins/cipher/tools"
 import { IS_IOS, WS_URL } from "../config/constants"
 import { Logger } from "../utils/logger"
 import { SocketEvent, SocketEventType } from "../config/types"
+import { HealthNavigator } from "./tools/health-navigator"
+import { AppEventType, EventBus } from "../utils/event-bus"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -46,10 +47,17 @@ import { SocketEvent, SocketEventType } from "../config/types"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
+  // Nested
+  mainTab: undefined
+  healthStack: undefined
+
+  // Errors
+  dataOutdated: undefined
+
+  // Others
   start: undefined
   switchDevice: undefined
   biometricUnlockIntro: undefined
-  mainTab: undefined
   passwordGenerator: {
     fromTools?: boolean
   }
@@ -58,10 +66,6 @@ export type PrimaryParamList = {
   }
   qrScanner: undefined
   googleAuthenticatorImport: undefined
-  passwordHealth: undefined
-  weakPasswordList: undefined
-  reusePasswordList: undefined
-  exposedPasswordList: undefined
   dataBreachScanner: undefined
   dataBreachList: undefined
   dataBreachDetail: undefined
@@ -93,6 +97,12 @@ export type PrimaryParamList = {
     collectionId?: string | null
     organizationId?: string | null
   }
+  manage_plan: undefined
+  payment: {
+    benefitTab?: 0 | 1 | 2 | 3,
+    family?: boolean
+  }
+  invite_member: undefined
   settings: undefined
   changeMasterPassword: undefined
   help: undefined
@@ -117,13 +127,12 @@ const Stack = createStackNavigator<PrimaryParamList>()
 
 export const MainNavigator = observer(() => {
   const navigation = useNavigation()
-  const { notify, translate } = useMixins()
+  const { notify, translate, parsePushNotiData } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { 
     getCipherById, syncAutofillData, syncSingleCipher, syncSingleFolder, syncOfflineData, startSyncProcess
   } = useCipherDataMixins()
-  const { loadPasswordsHealth } = useCipherToolsMixins()
-  const { uiStore, user, cipherStore } = useStores()
+  const { uiStore, user, cipherStore, toolStore } = useStores()
 
   // ------------------ PARAMS --------------------
 
@@ -150,7 +159,7 @@ export const MainNavigator = observer(() => {
     // Send request
     const syncRes = await startSyncProcess()
     if (syncRes.kind !== 'ok') {
-      if (syncRes.kind !== 'synching' && syncRes.kind === 'error') {
+      if (syncRes.kind === 'error') {
         notify('error', translate('error.sync_failed'))
       }
       return
@@ -163,7 +172,6 @@ export const MainNavigator = observer(() => {
     }
     user.loadTeams()
     user.loadPlan()
-    loadPasswordsHealth()
   }
 
   // Check invitation
@@ -173,12 +181,12 @@ export const MainNavigator = observer(() => {
     cipherStore.loadMyShares()
   }
 
-  // App screen lock trigger
+  // On app return from background -> lock? + sync autofill data + check push noti navigation
   const _handleAppStateChange = async (nextAppState: string) => {
     Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
-    if (nextAppState === 'background') {
+    if (nextAppState !== 'active') {
       appIsActive = false
       return
     }
@@ -189,22 +197,33 @@ export const MainNavigator = observer(() => {
     }
 
     // Active
-    if (!appIsActive && user.appTimeout === AppTimeoutType.SCREEN_OFF) {
+    if (!appIsActive) {
       appIsActive = true
 
-      // Dont lock if user just return from overlay task
-      if (uiStore.isPerformOverlayTask) {
-        uiStore.setIsPerformOverlayTask(false)
+      // Check lock screen
+      if (user.appTimeout === AppTimeoutType.SCREEN_OFF) {
+        // Dont lock if user just return from overlay task
+        if (uiStore.isPerformOverlayTask) {
+          uiStore.setIsPerformOverlayTask(false)
+          return
+        }
+
+        // Check user settings to lock
+        if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
+          await logout()
+          navigation.navigate('login')
+        } else {
+          await lock()
+          navigation.navigate('lock')
+        }
         return
       }
 
-      // Check user settings to lock
-      if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
-        await logout()
-        navigation.navigate('onBoarding')
-      } else {
-        await lock()
-        navigation.navigate('lock')
+      // Check push noti data
+      const navigationRequest = await parsePushNotiData()
+      if (navigationRequest.path) {
+        navigation.navigate(navigationRequest.path, navigationRequest.params)
+        return
       }
     }
   }
@@ -214,7 +233,7 @@ export const MainNavigator = observer(() => {
     if (!isActive && user.appTimeout && user.appTimeout > 0) {
       if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
         await logout()
-        navigation.navigate('onBoarding')
+        navigation.navigate('login')
       } else {
         await lock()
         navigation.navigate('lock')
@@ -233,6 +252,7 @@ export const MainNavigator = observer(() => {
       const data = JSON.parse(e.data)
       Logger.debug('WEBSOCKET EVENT: ' + data.event)
       switch (data.event) {
+        // SYNC
         case SocketEvent.SYNC:
           switch (data.type) {
             case SocketEventType.CIPHER_UPDATE: {
@@ -249,6 +269,8 @@ export const MainNavigator = observer(() => {
               handleSync()
           }
           break
+
+        // MEMBERS
         case SocketEvent.MEMBERS:
           handleUserDataSync()
           break
@@ -312,6 +334,26 @@ export const MainNavigator = observer(() => {
     }
   }, [uiStore.isOffline, user.isLoggedInPw])
 
+  // Recalculate password health on password update
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.PASSWORD_UPDATE, () => {
+      toolStore.setLastHealthCheck(null)
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [])
+
+  // Outdated data warning
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.TEMP_ID_DECTECTED, () => {
+      navigation.navigate('dataOutdated')
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [])
+
   // ------------------ RENDER --------------------
   
   return (
@@ -328,20 +370,26 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="start" component={StartScreen} />
         <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
+
+        <Stack.Screen name="dataOutdated" component={DataOutdatedScreen} />
+
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
+        <Stack.Screen name="healthStack" component={HealthNavigator} />
 
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
-        <Stack.Screen name="passwordGenerator" component={PasswordGeneratorScreen} initialParams={{ fromTools: false }} />
+        <Stack.Screen 
+          name="passwordGenerator" 
+          component={PasswordGeneratorScreen} 
+          initialParams={{ fromTools: false }}
+          options={{
+            gestureEnabled: false
+          }}
+        />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="googleAuthenticatorImport" component={GoogleAuthenticatorImportScreen} />
-
-        <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
-        <Stack.Screen name="weakPasswordList" component={WeakPasswordList} />
-        <Stack.Screen name="reusePasswordList" component={ReusePasswordList} />
-        <Stack.Screen name="exposedPasswordList" component={ExposedPasswordList} />
 
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
         <Stack.Screen name="dataBreachList" component={DataBreachListScreen} />
@@ -363,6 +411,9 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="cryptoWallets__info" component={CryptoWalletInfoScreen} />
         <Stack.Screen name="cryptoWallets__edit" component={CryptoWalletEditScreen} initialParams={{ mode: 'add' }} />
 
+        <Stack.Screen name="invite_member" component={InviteMemberScreen} />
+        <Stack.Screen name="manage_plan" component={ManagePlanScreen} />
+        <Stack.Screen name="payment" component={PaymentScreen}  initialParams={{ benefitTab: 0 }} />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />

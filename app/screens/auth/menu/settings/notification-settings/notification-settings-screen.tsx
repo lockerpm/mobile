@@ -51,7 +51,7 @@ export const NotificationSettingsScreen = observer(function NotificationSettings
             navigation.goBack()
           }}
           title={translate('common.notifications')}
-          right={(<View style={{ width: 10 }} />)}
+          right={(<View style={{ width: 30 }} />)}
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}

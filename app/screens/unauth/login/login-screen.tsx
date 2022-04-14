@@ -10,12 +10,10 @@ import { MethodSelection } from "./method-selection"
 import { Otp } from "./otp"
 import { useStores } from "../../../models"
 
-
-export const LoginScreen = observer(function LoginScreen() {
+export const LoginScreen = observer(() => {
   const navigation = useNavigation()
   const { user } = useStores()
   const { translate } = useMixins()
-
   // ------------------------------ PARAMS -------------------------------
 
   const [isScreenLoading, setIsScreenLoading] = useState(false)

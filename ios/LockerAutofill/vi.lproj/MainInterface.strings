@@ -20,6 +20,12 @@
 /* Class = "UILabel"; text = "Verify your Master Password to unlock"; ObjectID = "RW4-xA-kRE"; */
 "RW4-xA-kRE.text" = "Nhập mật khẩu chính để mở khoá";
 
+/* Class = "UISearchBar"; UJx-sW-kG0.scopeButtonTitles[0] = "Title"; ObjectID = "UJx-sW-kG0"; */
+"UJx-sW-kG0.scopeButtonTitles[0]" = "Title";
+
+/* Class = "UISearchBar"; UJx-sW-kG0.scopeButtonTitles[1] = "Title"; ObjectID = "UJx-sW-kG0"; */
+"UJx-sW-kG0.scopeButtonTitles[1]" = "Title";
+
 /* Class = "UIButton"; configuration.title = " Unlock with Face ID/Touch ID"; ObjectID = "VAo-LQ-WML"; */
 "VAo-LQ-WML.configuration.title" = " Mở khoá bằng Face ID/Touch ID";
 
@@ -29,8 +35,13 @@
 /* Class = "UINavigationItem"; title = "Login List"; ObjectID = "djK-6Z-utw"; */
 "djK-6Z-utw.title" = "Danh sách mật khẩu";
 
-/* Class = "UINavigationItem"; title = "Locker Password Manager"; ObjectID = "wAz-cy-c7C"; */
-"wAz-cy-c7C.title" = "Locker";
+/* Class = "UIButton"; configuration.title = "Cancel"; ObjectID = "rs5-wt-k7J"; */
+"rs5-wt-k7J.configuration.title" = "Cancel";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "rs5-wt-k7J"; */
+"rs5-wt-k7J.normalTitle" = "Huỷ";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "zdC-rG-Xmh"; */
 "zdC-rG-Xmh.text" = "Label";
+
+

@@ -7,7 +7,6 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { commonStyles, fontSize } from "../../../theme"
 import { Checkbox } from "react-native-ui-lib"
 import { useStores } from "../../../models"
-import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 
 
 type Props = {
@@ -20,11 +19,10 @@ type Props = {
 }
 
 
-export const Otp = observer(function Otp(props: Props) {
+export const Otp = observer((props: Props) => {
   const { user } = useStores()
-  const { translate, notify, color } = useMixins()
+  const { translate, notify, color, setApiTokens } = useMixins()
   const { goBack, method, email, username, password, onLoggedIn } = props
-  const { setApiTokens } = useCipherAuthenticationMixins()
 
   // ------------------ Params -----------------------
 

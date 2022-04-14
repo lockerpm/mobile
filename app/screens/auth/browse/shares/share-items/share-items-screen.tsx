@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../../services/mixins"
@@ -7,6 +7,7 @@ import { BrowseItemEmptyContent, BrowseItemHeader, Layout } from "../../../../..
 import { SortAction } from "../../../home/all-item/sort-action"
 import { CipherShareList } from "./cipher-share-list"
 import { PlanType } from "../../../../../config/types"
+import { PushNotifier } from "../../../../../utils/push-notification"
 
 
 export const ShareItemsScreen = observer(() => {
@@ -20,16 +21,21 @@ export const ShareItemsScreen = observer(() => {
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'name',
-    order: 'asc'
+    orderField: 'revisionDate',
+    order: 'desc'
   })
-  const [sortOption, setSortOption] = useState('az')
+  const [sortOption, setSortOption] = useState('last_updated')
 
   // --------------------- COMPUTED -------------------------
 
-  const isFreeAccount = user.plan.alias === PlanType.FREE
+  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
 
   // --------------------- EFFECTS -------------------------
+
+  // Clear noti
+  useEffect(() => {
+    PushNotifier.cancelNotification('share_confirm')
+  }, [navigation])
 
   // --------------------- RENDER -------------------------
 
@@ -60,6 +66,7 @@ export const ShareItemsScreen = observer(() => {
       )}
       borderBottom
       noScroll
+      hasBottomNav
     >
       <SortAction
         isOpen={isSortOpen}

@@ -5,9 +5,9 @@ import ReactNativeBiometrics from 'react-native-biometrics'
 import Toast from 'react-native-toast-message'
 import { useStores } from '../../models'
 import Clipboard from '@react-native-clipboard/clipboard'
-import { load } from '../../utils/storage'
+import { load, PushNotiData, remove, StorageKey } from '../../utils/storage'
 import { translate as tl, TxKeyPath } from "../../i18n"
-import { GET_LOGO_URL, MANAGE_PLAN_URL } from '../../config/constants'
+import { GET_LOGO_URL } from '../../config/constants'
 import i18n from "i18n-js"
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { GeneralApiProblem } from '../api/api-problem'
@@ -17,7 +17,7 @@ import extractDomain from 'extract-domain'
 import { PushNotifier } from '../../utils/push-notification'
 import { Logger } from '../../utils/logger'
 import { useCoreService } from '../core-service'
-import { Linking } from 'react-native'
+import { NotifeeNotificationData, PushEvent } from '../../utils/push-notification/types'
 
 
 const { createContext, useContext } = React
@@ -29,6 +29,7 @@ const defaultData = {
   isDark: false,
 
   // Methods
+  setApiTokens: (token: string) => {},
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getAllOrganizations: async () => [],
   getTeam: (teams: object[], orgId: string) => ({ name: '', role: '', type: 0 }),
@@ -39,15 +40,22 @@ const defaultData = {
   notifyApiError: (problem: GeneralApiProblem) => {},
   notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
   randomString: () => '',
-  boostrapPushNotifier: async () => {},
-  goPremium: () => {}
+  boostrapPushNotifier: async () => true,
+  goPremium: () => {},
+  parsePushNotiData: async (params?: {
+    notifeeData?: NotifeeNotificationData
+  }) => ({ path: '', params: {} }),
+  validateMasterPassword: (password: string) => ({ isValid: true, error: '' })
 }
 
 
 export const MixinsContext = createContext(defaultData)
 
-export const MixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
-  const { uiStore, user } = useStores()
+export const MixinsProvider = observer((props: {
+  children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal
+  navigationRef?: any
+}) => {
+  const { uiStore, user, cipherStore, collectionStore, folderStore, toolStore } = useStores()
   const insets = useSafeAreaInsets()
   const { userService } = useCoreService()
 
@@ -57,6 +65,15 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
   const themeColor = isDark ? colorDark : color
 
   // ------------------------ SUPPORT -------------------------
+
+  // Set tokens
+  const setApiTokens = (token: string) => {
+    user.setApiToken(token)
+    cipherStore.setApiToken(token)
+    collectionStore.setApiToken(token)
+    folderStore.setApiToken(token)
+    toolStore.setApiToken(token)
+  }
 
   // Get current route name
   const getRouteName = async () => {
@@ -79,7 +96,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       text2: text,
       position: 'top',
       autoHide: true,
-      visibilityTime: duration ? duration : type === 'error' ? 3000 : 1500,
+      visibilityTime: duration ? duration : type === 'error' ? 3000 : 2000,
       topOffset: insets.top + 10,
       onPress: () => {
         Toast.hide()
@@ -125,7 +142,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
       return available
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
-      Logger.error(e)
+      Logger.error('isBiometricAvailable: ' + e)
       return false
     }
   }
@@ -164,7 +181,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
             }
           })
           if (!notified) {
-            notify('error', translate('error.invalid_data'))
+            notify('error', errorData.message || translate('error.invalid_data'))
           }
         } else if (errorData.message) {
           notify('error', errorData.message)
@@ -188,21 +205,88 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
 
   // Setup push notifier
   const boostrapPushNotifier = async () => {
-    if (user.disablePushNotifications) {
-      return
-    }
-    const permissionGranted = await PushNotifier.getPermission()
-    if (permissionGranted) {
-      const token = await PushNotifier.getToken()
-      user.setFCMToken(token)
-    } else {
-      user.setFCMToken(null)
+    try {
+      if (user.disablePushNotifications) {
+        return true
+      }
+      const permissionGranted = await PushNotifier.getPermission()
+      if (permissionGranted) {
+        const token = await PushNotifier.getToken()
+        // Logger.debug(token)
+        user.setFCMToken(token)
+        return true
+      } else {
+        user.setFCMToken(null)
+        return true
+      }
+    } catch (e) {
+      Logger.error('boostrapPushNotifier: ' + e)
+      return false
     }
   }
 
-  // Go premium (temporary)
+  // Go premium (navigate to payment screen)
   const goPremium = () => {
-    Linking.openURL(MANAGE_PLAN_URL)
+    if (props.navigationRef.current) {
+      props.navigationRef.current.navigate('payment')
+    }
+  }
+
+  // Parse storage push notification data
+  const parsePushNotiData = async (params?: {
+    notifeeData?: NotifeeNotificationData
+  }) => {
+    const { notifeeData } = params || {}
+    const res = {
+      path: '',
+      params: {}
+    }
+    let data: PushNotiData | NotifeeNotificationData = notifeeData
+    if (!data) {
+      data = await load(StorageKey.PUSH_NOTI_DATA) 
+    }
+
+    if (data) {
+      switch (data.type) {
+        case PushEvent.SHARE_NEW:
+          res.path = 'mainTab'
+          res.params = {
+            screen: 'browseTab',
+            params: {
+              screen: 'sharedItems'
+            }
+          }
+          break
+        case PushEvent.SHARE_CONFIRM:
+          res.path = 'mainTab'
+          res.params = {
+            screen: 'browseTab',
+            params: {
+              screen: 'shareItems'
+            }
+          }
+          break
+      }
+    }
+    await remove(StorageKey.PUSH_NOTI_DATA)
+    return res
+  }
+
+  // Validate master password
+  const validateMasterPassword = (password: string) => {
+    let isValid = true
+    let error = ''
+
+    const MIN_LENGTH = 8
+    if (password.length && password.length < MIN_LENGTH) {
+      isValid = false
+      error = translate('policy.min_password_length', { length: MIN_LENGTH })
+    }
+
+    return {
+      isValid,
+      error
+    }
   }
 
   // -------------------- REGISTER FUNCTIONS ------------------
@@ -211,6 +295,7 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     color: themeColor,
     isDark,
 
+    setApiTokens,
     notify,
     randomString,
     getWebsiteLogo,
@@ -222,7 +307,9 @@ export const MixinsProvider = observer((props: { children: boolean | React.React
     translate,
     notifyApiError,
     boostrapPushNotifier,
-    goPremium
+    goPremium,
+    parsePushNotiData,
+    validateMasterPassword
   }
 
   return (

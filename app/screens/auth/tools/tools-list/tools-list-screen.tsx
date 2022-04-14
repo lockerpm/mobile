@@ -10,14 +10,16 @@ import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
 import { PlanType } from "../../../../config/types"
 
-export const ToolsListScreen = observer(function ToolsListScreen() {
+export const ToolsListScreen = observer(() => {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
   const { translate, color } = useMixins()
 
+  const isFreeAccount = user.plan && user.plan.alias === PlanType.FREE
   return (
     <Layout
       borderBottom
+      hasBottomNav
       containerStyle={{ 
         backgroundColor: uiStore.isDark ? color.background : color.block, 
         paddingTop: 0 
@@ -39,10 +41,12 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
             <Button
               key={index}
               preset="link"
-              isDisabled={item.premium && (user.plan && user.plan.alias === PlanType.FREE)}
+              isDisabled={item.premium && isFreeAccount}
               onPress={() => {
                 if (item.routeName === 'authenticator') {
                   navigation.navigate('mainTab', { screen: 'authenticatorTab' })
+                } else if (item.routeName === 'passwordHealth') {
+                  navigation.navigate('healthStack')
                 } else {
                   navigation.navigate(item.routeName, { fromTools: true })
                 }
@@ -78,7 +82,7 @@ export const ToolsListScreen = observer(function ToolsListScreen() {
                   />
 
                   {
-                    item.premium && (
+                    item.premium && isFreeAccount && (
                       <View style={{
                         paddingHorizontal: 10,
                         paddingVertical: 2,

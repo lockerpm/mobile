@@ -29,9 +29,18 @@ export const ShareModal = observer((props: Props) => {
 
   const selectedCipher: CipherView = cipherStore.cipherView
   const shareTypes = [
-    translate('shares.share_type.only_fill'),
-    translate('shares.share_type.view'),
-    translate('shares.share_type.edit')
+    // {
+    //   label: translate('shares.share_type.only_fill'),
+    //   value: 'only_fill'
+    // },
+    {
+      label: translate('shares.share_type.view'),
+      value: 'view'
+    },
+    {
+      label: translate('shares.share_type.edit'),
+      value: 'edit'
+    }
   ]
 
   // --------------- PARAMS ----------------
@@ -39,7 +48,7 @@ export const ShareModal = observer((props: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [emails, setEmails] = useState<string[]>([])
-  const [shareType, setShareType] = useState(1)
+  const [shareType, setShareType] = useState('view')
 
   // --------------- COMPUTED ----------------
 
@@ -66,10 +75,10 @@ export const ShareModal = observer((props: Props) => {
     let role = AccountRoleText.MEMBER
     let autofillOnly = false
     switch (shareType) {
-      case 0:
+      case 'only_fill':
         autofillOnly = true
         break
-      case 2:
+      case 'edit':
         role = AccountRoleText.ADMIN
         break
     }
@@ -99,8 +108,9 @@ export const ShareModal = observer((props: Props) => {
       onOpen={() => {
         setEmail('')
         setEmails([])
-        setShareType(1)
+        setShareType('view')
       }}
+      ignoreBackgroundPress={true}
       title={cipherIds ? translate('shares.share_x_items', { count: cipherIds.length }) : selectedCipher.name}
     >
       <Text
@@ -197,7 +207,7 @@ export const ShareModal = observer((props: Props) => {
         zIndexInverse={1000}
         placeholder={translate('common.select')}
         value={shareType}
-        items={shareTypes.map((t, index) => ({ label: t, value: index }))}
+        items={shareTypes}
         setValue={setShareType}
         setItems={() => {}}
         style={{

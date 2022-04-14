@@ -9,9 +9,10 @@ import { CipherView } from "../../../../../../core/models/view"
 import { commonStyles, fontSize } from "../../../../../theme"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
+import { LoadingHeader } from "../loading-header"
 
 
-export const WeakPasswordList = observer(function WeakPasswordList() {
+export const WeakPasswordList = observer(() => {
   const navigation = useNavigation()
   const { toolStore, cipherStore } = useStores()
   const { translate, getWebsiteLogo, color } = useMixins()
@@ -26,7 +27,6 @@ export const WeakPasswordList = observer(function WeakPasswordList() {
       strength: toolStore.passwordStrengthMap && toolStore.passwordStrengthMap.get(c.id)
     }
   })
-
 
   // -------------- METHODS ------------------
 
@@ -43,6 +43,77 @@ export const WeakPasswordList = observer(function WeakPasswordList() {
 
   // -------------- RENDER ------------------
 
+  const renderItem = ({ item }) => (
+    <Button
+      preset="link"
+      onPress={() => goToDetail(item)}
+      style={{
+        borderBottomColor: color.line,
+        borderBottomWidth: 0.5,
+        paddingVertical: 15,
+        height: 70.5
+      }}
+    >
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        <Image
+          source={item.imgLogo || item.logo}
+          backupSource={item.logo}
+          style={{
+            height: 40,
+            width: 40,
+            borderRadius: 8
+          }}
+        />
+
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+            <View style={{ flex: 1 }}>
+              <Text
+                preset="semibold"
+                text={item.name}
+                numberOfLines={1}
+                style={{
+                  marginRight: 7
+                }}
+              />
+            </View>
+
+            {
+              item.organizationId && (
+                <View style={{ marginRight: 7 }}>
+                  <MaterialCommunityIconsIcon
+                    name="account-group-outline"
+                    size={22}
+                    color={color.textBlack}
+                  />
+                </View>
+              )
+            }
+
+            <View style={{
+              paddingBottom: 4
+            }}>
+              <PasswordStrength
+                preset="text"
+                value={item.strength}
+              />
+            </View>
+          </View>
+
+          {
+            !!getDescription(item) && (
+              <Text
+                text={getDescription(item)}
+                style={{ fontSize: fontSize.small }}
+                numberOfLines={1}
+              />
+            )
+          }
+        </View>
+      </View>
+    </Button>
+  )
+
   return (
     <Layout
       header={(
@@ -50,7 +121,7 @@ export const WeakPasswordList = observer(function WeakPasswordList() {
           title={translate('pass_health.weak_passwords.name')}
           goBack={() => navigation.goBack()}
           right={(
-            <View style={{ width: 10 }} />
+            <View style={{ width: 30 }} />
           )}
         />
       )}
@@ -58,6 +129,8 @@ export const WeakPasswordList = observer(function WeakPasswordList() {
       noScroll
     >
       <View style={{ flex: 1 }}>
+        <LoadingHeader />
+
         <FlatList
           style={{ paddingHorizontal: 20 }}
           data={listData}
@@ -71,69 +144,12 @@ export const WeakPasswordList = observer(function WeakPasswordList() {
               }}
             />
           )}
-          renderItem={({ item }) => (
-            <Button
-              preset="link"
-              onPress={() => goToDetail(item)}
-              style={{
-                borderBottomColor: color.line,
-                borderBottomWidth: 0.5,
-                paddingVertical: 15
-              }}
-            >
-              <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-                <Image
-                  source={item.imgLogo || item.logo}
-                  backupSource={item.logo}
-                  style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 8
-                  }}
-                />
-
-                <View style={{ flex: 1, marginLeft: 12 }}>
-                  <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
-                    <Text
-                      preset="semibold"
-                      text={item.name}
-                    />
-
-                    {
-                      item.organizationId && (
-                        <View style={{ marginLeft: 10 }}>
-                          <MaterialCommunityIconsIcon
-                            name="account-group-outline"
-                            size={22}
-                            color={color.textBlack}
-                          />
-                        </View>
-                      )
-                    }
-
-                    <View style={{
-                      marginLeft: 7,
-                      paddingBottom: 4
-                    }}>
-                      <PasswordStrength
-                        preset="text"
-                        value={item.strength}
-                      />
-                    </View>
-                  </View>
-
-                  {
-                    !!getDescription(item) && (
-                      <Text
-                        text={getDescription(item)}
-                        style={{ fontSize: fontSize.small }}
-                      />
-                    )
-                  }
-                </View>
-              </View>
-            </Button>
-          )}
+          renderItem={renderItem}
+          getItemLayout={(data, index) => ({
+            length: 71,
+            offset: 71 * index,
+            index
+          })}
         />
       </View>
     </Layout>

@@ -34,7 +34,7 @@ type InputItem = {
 }
 
 
-export const CardEditScreen = observer(function CardEditScreen() {
+export const CardEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<CardEditScreenProp>()
   const { mode } = route.params
@@ -58,7 +58,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
   const [securityCode, setSecurityCode] = useState(mode !== 'add' ? selectedCipher.card.code : '')
   const [note, setNote] = useState(mode !== 'add' ? selectedCipher.name : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode !== 'add' ? selectedCipher.organizationId : null)
+  const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
 
   // Watchers
@@ -215,7 +215,7 @@ export const CardEditScreen = observer(function CardEditScreen() {
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
-              label={translate('common.name')}
+              label={translate('common.item_name')}
               value={name}
               onChangeText={setName}
             />

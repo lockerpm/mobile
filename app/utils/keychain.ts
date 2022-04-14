@@ -3,6 +3,7 @@ import { SHARED_KEYCHAIN_ACCESS_GROUP, SHARED_KEYCHAIN_SERVICE } from "../config
 import { Logger } from "./logger"
 
 
+
 export type AutofillDataType = {
   passwords: {
     id: string
@@ -47,6 +48,7 @@ export async function save(username: string, password: string, server?: string) 
  * @param password The password
  */
 export async function saveShared(username: string, password: string) {
+  
   try {
     await ReactNativeKeychain.setGenericPassword(username, password, {
       service: SHARED_KEYCHAIN_SERVICE,
@@ -54,7 +56,7 @@ export async function saveShared(username: string, password: string) {
     })
     return true
   } catch (e) {
-    Logger.error(e)
+    Logger.error('saveShared: ' + e)
     return false
   }
 }
@@ -67,7 +69,7 @@ export async function loadShared() {
     })
     return res
   } catch (e) {
-    Logger.error(e)
+    Logger.error('loadShared: ' + e)
     return false
   }
 }
