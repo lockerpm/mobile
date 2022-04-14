@@ -46,13 +46,13 @@ public class VerifyMasterPasswordActivity extends AppCompatActivity {
     public static final String EXTRA_LOGIN_DATA = "login_data";
     // put and getExtra from intent return null for arraylist<Field> ??
     private static ArrayList<Field> sfields = null;
-    public static IntentSender newIntentSenderForResponse(@NonNull Context context, ArrayList<Field> fields, String domain) {
+    public static PendingIntent newIntentSenderForResponse(@NonNull Context context, ArrayList<Field> fields, String domain) {
         // store fillable field in Activity Static variable
         sfields = fields;
         Intent intent = new Intent(context, VerifyMasterPasswordActivity.class);
         intent.putExtra(DOMAIN, domain);
         return PendingIntent.getActivity(context, 1001, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT).getIntentSender();
+                PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     private AutofillDataKeychain keyStore;
@@ -102,7 +102,7 @@ public class VerifyMasterPasswordActivity extends AppCompatActivity {
 
     private void onFillPassword(AutofillItem data) {
         RemoteViews presentation = new RemoteViews(getPackageName(), R.layout.remote_locker_app); // crash ?
-        Dataset response = LockerAutoFillService.newUnlockDataset(sfields, data, presentation);
+        Dataset response = Utils.BuildUnlockDataset(sfields, data, presentation);
 
         Intent replyIntent = new Intent();
         replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, response);
