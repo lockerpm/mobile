@@ -42,13 +42,13 @@ export const LoadingHeader = observer((props: Props) => {
       alignItems: 'center',
       paddingVertical: 4
     }, style]}>
-      <Animated.View style={spin}>
+      {/* <Animated.View style={spin}>
         <MaterialIconsIcon
           name="sync"
           size={18}
           color={color.white}
         />
-      </Animated.View>
+      </Animated.View> */}
       <Text
         style={{
           fontSize: fontSize.small,
