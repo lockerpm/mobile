@@ -159,6 +159,9 @@ public class Utils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             return null;
         }
+        if (inlinePresentationSpec == null){
+            return null;
+        }
         Slice slice = CreateInlinePresentationSlice(inlinePresentationSpec, pendingIntent, context);
         return new InlinePresentation(slice, inlinePresentationSpec, false);
     }

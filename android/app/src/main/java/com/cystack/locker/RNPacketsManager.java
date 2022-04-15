@@ -22,6 +22,7 @@ public class RNPacketsManager implements ReactPackage {
         List<NativeModule> modules = new ArrayList<>();
 
         modules.add(new RNCryptoServiceAndroid(reactContext));
+        modules.add(new RNAutofillServiceAndroid(reactContext));
         return modules;
     }
 
