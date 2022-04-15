@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi;
 
 import com.cystack.locker.autofill.activities.VerifyMasterPasswordActivity;
 import com.cystack.locker.autofill.parser.Parser;
+import com.cystack.locker.RNAutofillServiceAndroid;
 
 import java.util.ArrayList;
 
@@ -48,7 +49,9 @@ public class LockerAutoFillService extends AutofillService{
             return;
         }
 
-        PendingIntent authentication = VerifyMasterPasswordActivity.newIntentSenderForResponse(this, fields, domain);
+        // PendingIntent authentication = VerifyMasterPasswordActivity.newIntentSenderForResponse(this, fields, domain);
+        PendingIntent authentication = RNAutofillServiceAndroid.newIntentSenderForResponse(this, fields, domain);
+        
         // Create response...
         FillResponse response = Utils.BuildFillResponse(fields, authentication, request, getBaseContext());
 
