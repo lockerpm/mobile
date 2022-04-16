@@ -39,6 +39,18 @@ export const InitScreen = observer(() => {
     return false
   }
 
+  const checkOnSaveLogin = async () => {
+    const loginData = await load(StorageKey.APP_FROM_AUTOFILL_ON_SAVE_REQUEST)
+    if (loginData && loginData.enabled) {
+      uiStore.setDeepLinkAction('save', {domain: loginData.domain, username: loginData.username, password: loginData.password})
+      uiStore.setIsOnSaveLogin(true)
+      return true
+    }
+
+    uiStore.setIsOnSaveLogin(false)
+    return false
+  }
+
   const mounted = async () => {
     const connectionState = await NetInfo.fetch()
 
@@ -61,6 +73,9 @@ export const InitScreen = observer(() => {
     // Check autofill
     const isAutoFill = await checkAutoFill()
 
+    // Check savePassword
+    const isOnSaveLogin = await checkOnSaveLogin()
+
     // Testing
     // if (__DEV__) {
     //   // navigation.navigate('createMasterPassword')
@@ -70,7 +85,7 @@ export const InitScreen = observer(() => {
 
     // Logged in?
     if (!user.isLoggedIn) {
-      if (!user.introShown && !isAutoFill) {
+      if (!user.introShown && !isAutoFill && !isOnSaveLogin) {
         user.setIntroShown(true)
         navigation.navigate('intro')
       } else {
@@ -80,7 +95,7 @@ export const InitScreen = observer(() => {
     }
 
     // Network connected? || Is autofill?
-    if (!connectionState.isConnected || isAutoFill) {
+    if (!connectionState.isConnected || isAutoFill || isOnSaveLogin) {
       goLockOrCreatePassword()
       return
     }

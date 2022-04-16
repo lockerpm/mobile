@@ -4,19 +4,24 @@ import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
-import NetInfo from '@react-native-community/netinfo'
+import NetInfo from "@react-native-community/netinfo"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-
+import { CipherView, LoginUriView } from "../../../../core/models/view"
 
 export const StartScreen = observer(() => {
-  const { user, uiStore } = useStores()
+  const { user, uiStore, cipherStore } = useStores()
   const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
-  const { loadFolders, loadCollections, syncAutofillData, loadOrganizations } = useCipherDataMixins()
+  const {
+    loadFolders,
+    loadCollections,
+    syncAutofillData,
+    loadOrganizations,
+  } = useCipherDataMixins()
   const navigation = useNavigation()
 
   // ------------------------- PARAMS ----------------------------
 
-  const [msg, setMsg] = useState('')
+  const [msg, setMsg] = useState("")
 
   // ------------------------- METHODS ----------------------------
   const refreshFCM = async () => {
@@ -32,9 +37,7 @@ export const StartScreen = observer(() => {
   }
 
   const mounted = async () => {
-   
     syncAutofillData()
-    
 
     // Testing
     // if (__DEV__) {
@@ -60,22 +63,18 @@ export const StartScreen = observer(() => {
         user.loadPlan()
       }
     }
-    
+
     // Load folders and collections
-    setMsg(translate('start.decrypting'))
-    Promise.all([
-      loadFolders(),
-      loadCollections(),
-      loadOrganizations()
-    ])
+    setMsg(translate("start.decrypting"))
+    Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
 
     // TODO: check device limit
     const isDeviceLimitReached = false
     if (isDeviceLimitReached) {
-      navigation.navigate('switchDevice')
+      navigation.navigate("switchDevice")
     }
 
-    setMsg('')
+    setMsg("")
 
     // Parse push noti data
     const navigationRequest = await parsePushNotiData()
@@ -85,36 +84,55 @@ export const StartScreen = observer(() => {
     }
 
     // Show biometric intro
-    if (!uiStore.isFromAutoFill) {
+    if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin) {
       if (!user.biometricIntroShown && !user.isBiometricUnlock) {
         const available = await isBiometricAvailable()
         if (available) {
-          navigation.navigate('biometricUnlockIntro')
+          navigation.navigate("biometricUnlockIntro")
           return
         }
       }
     }
-    
+
     // Done -> navigate
     if (uiStore.isFromAutoFill) {
       uiStore.setIsFromAutoFill(false)
-      navigation.navigate('autofill')
+      navigation.navigate("autofill")
+    } else if (uiStore.isOnSaveLogin) {
+      uiStore.setIsOnSaveLogin(false)
+
+      const cipher = newCipherView(
+        String(uiStore.saveLogin.domain),
+        String(uiStore.saveLogin.domain),
+        String(uiStore.saveLogin.domain),
+      );
+
+      cipherStore.setSelectedCipher(cipher);
+      navigation.navigate("passwords__edit", { mode: 'edit' })
     } else {
-      navigation.navigate('mainTab', { screen: user.defaultTab })
+      navigation.navigate("mainTab", { screen: user.defaultTab })
     }
   }
 
+  const newCipherView = (domain: string, username: string, password: string): CipherView => {
+    const cipher = new CipherView()
+    const uriView = new LoginUriView()
+    uriView.uri = domain
+    cipher.login.uris = new LoginUriView[1]()
+    cipher.login.uris[0] = uriView
+    cipher.login.username = username
+    cipher.login.password = password
+    return cipher
+  }
   // --------------------------- EFFECT ----------------------------
 
   // Always move forward
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', mounted)
+    const unsubscribe = navigation.addListener("focus", mounted)
     return unsubscribe
   }, [navigation])
 
   // ------------------------- RENDER ----------------------------
 
-  return (
-    <Loading message={msg} />
-  )
+  return <Loading message={msg} />
 })
