@@ -12,6 +12,7 @@ import android.service.autofill.Dataset;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.view.autofill.AutofillId;
 
 import androidx.annotation.NonNull;
 
@@ -43,6 +44,25 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
         return PendingIntent.getActivity(context, 1001, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
+
+    public static Intent newIntentForSaveLogin(@NonNull Context context, ArrayList<Field> fields, String domain) {
+        
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("savePassword", 1); //start app with OnSaveRequest
+        intent.putExtra(DOMAIN, domain);
+        for (Field field: fields) {
+            int fillType = field.fillType;
+            if (fillType == Field.FILL_TYPE_PASSWORD) {
+                intent.putExtra("password", field.text);
+            }
+            if (fillType  == Field.FILL_TYPE_EMAIL || fillType == Field.FILL_TYPE_USERNAME) {
+                intent.putExtra("username", field.text);
+            }
+        } 
+        return intent;
+    }
+
 
 
     RNAutofillServiceAndroid(ReactApplicationContext context) {

@@ -14,9 +14,11 @@ import android.service.autofill.Dataset;
 import android.service.autofill.FillContext;
 import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
+import android.service.autofill.SaveInfo;
 import android.service.autofill.InlinePresentation;
 import android.util.Log;
 import android.view.autofill.AutofillValue;
+import android.view.autofill.AutofillId;
 import android.view.inputmethod.InlineSuggestionsRequest;
 import android.widget.RemoteViews;
 import android.widget.inline.InlinePresentationSpec;
@@ -47,6 +49,88 @@ public class Utils {
             Arrays.asList("com.android.settings",
                     "com.android.settings.intelligence",
                     "com.cystack.locker"
+            )
+    );
+    public static HashSet<String> CompatBrowsers = new HashSet<String>(
+            Arrays.asList("alook.browser",
+                "alook.browser.google",
+                "com.amazon.cloud9",
+                "com.android.browser",
+                "com.android.chrome",
+                "com.android.htmlviewer",
+                "com.avast.android.secure.browser",
+                "com.avg.android.secure.browser",
+                "com.brave.browser",
+                "com.brave.browser_beta",
+                "com.brave.browser_default",
+                "com.brave.browser_dev",
+                "com.brave.browser_nightly",
+                "com.chrome.beta",
+                "com.chrome.canary",
+                "com.chrome.dev",
+                "com.cookiegames.smartcookie",
+                "com.cookiejarapps.android.smartcookieweb",
+                "com.ecosia.android",
+                "com.google.android.apps.chrome",
+                "com.google.android.apps.chrome_dev",
+                "com.google.android.captiveportallogin",
+                "com.jamal2367.styx",
+                "com.kiwibrowser.browser",
+                "com.kiwibrowser.browser.dev",
+                "com.microsoft.emmx",
+                "com.microsoft.emmx.beta",
+                "com.microsoft.emmx.canary",
+                "com.microsoft.emmx.dev",
+                "com.mmbox.browser",
+                "com.mmbox.xbrowser",
+                "com.mycompany.app.soulbrowser",
+                "com.naver.whale",
+                "com.opera.browser",
+                "com.opera.browser.beta",
+                "com.opera.mini.native",
+                "com.opera.mini.native.beta",
+                "com.opera.touch",
+                "com.qflair.browserq",
+                "com.qwant.liberty",
+                "com.sec.android.app.sbrowser",
+                "com.sec.android.app.sbrowser.beta",
+                "com.stoutner.privacybrowser.free",
+                "com.stoutner.privacybrowser.standard",
+                "com.vivaldi.browser",
+                "com.vivaldi.browser.snapshot",
+                "com.vivaldi.browser.sopranos",
+                "com.yandex.browser",
+                "com.z28j.feel",
+                "idm.internet.download.manager",
+                "idm.internet.download.manager.adm.lite",
+                "idm.internet.download.manager.plus",
+                "io.github.forkmaintainers.iceraven",
+                "mark.via",
+                "mark.via.gp",
+                "net.slions.fulguris.full.download",
+                "net.slions.fulguris.full.download.debug",
+                "net.slions.fulguris.full.playstore",
+                "net.slions.fulguris.full.playstore.debug",
+                "org.adblockplus.browser",
+                "org.adblockplus.browser.beta",
+                "org.bromite.bromite",
+                "org.bromite.chromium",
+                "org.chromium.chrome",
+                "org.codeaurora.swe.browser",
+                "org.gnu.icecat",
+                "org.mozilla.fenix",
+                "org.mozilla.fenix.nightly",
+                "org.mozilla.fennec_aurora",
+                "org.mozilla.fennec_fdroid",
+                "org.mozilla.firefox",
+                "org.mozilla.firefox_beta",
+                "org.mozilla.reference.browser",
+                "org.mozilla.rocket",
+                "org.torproject.torbrowser",
+                "org.torproject.torbrowser_alpha",
+                "org.ungoogled.chromium.extensions.stable",
+                "org.ungoogled.chromium.stable",
+                "us.spotco.fennec_dos"
             )
     );
     @NonNull
@@ -80,7 +164,7 @@ public class Utils {
         return null;
     }
 
-    public static  FillResponse BuildFillResponse(ArrayList<Field> fields, PendingIntent authentication, @NonNull FillRequest request, Context context){
+    public static  FillResponse.Builder BuildFillResponse(ArrayList<Field> fields, PendingIntent authentication, @NonNull FillRequest request, Context context){
 
         FillResponse.Builder response = new FillResponse.Builder();
 
@@ -111,7 +195,7 @@ public class Utils {
 
         response.addDataset(BuildDataSetLocker(fields, authentication, inlinePresentationSpec, context));
 
-        return response.build();
+        return response;
     }
 
     public static Dataset BuildDataSetLocker(ArrayList<Field> fields, PendingIntent authentication, InlinePresentationSpec inlinePresentationSpec, Context context){
@@ -212,5 +296,26 @@ public class Utils {
             }
         }
         return dataset;
+    }
+
+    public static void AddSaveInfo(@NonNull FillRequest fillRequest, FillResponse.Builder response, List<Field> fields, String packageName) {
+        // Docs state that password fields cannot be reliably saved in Compat mode since they will show as
+        // masked values.
+        boolean compatRequest = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            // Attempt to automatically establish compat request mode on Android 10+
+            compatRequest = (fillRequest.getFlags() | FillRequest.FLAG_COMPATIBILITY_MODE_REQUEST) == fillRequest.getFlags();
+        }
+
+        if (compatRequest && CompatBrowsers.contains(packageName)) {
+            return;
+        }
+        AutofillId[] autofillIds = new AutofillId[fields.size()];
+        for (int i = 0 ; i < fields.size(); i++ ){
+            autofillIds[i] = fields.get(i).autofillId;
+        }
+        SaveInfo.Builder saveBuilder = new SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_USERNAME | SaveInfo.SAVE_DATA_TYPE_PASSWORD,
+                autofillIds);
+        response.setSaveInfo(saveBuilder.build());
     }
 }
