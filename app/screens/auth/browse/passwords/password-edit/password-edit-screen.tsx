@@ -53,7 +53,7 @@ export const PasswordEditScreen = observer(() => {
   // ----------------- EFFECTS ------------------
 
   useEffect(() => {
-    if (mode !== "add" || onSaveFillService) {
+    if (mode !== "add") {
       setName(selectedCipher.name)
       setUsername(selectedCipher.login.username)
       setPassword(selectedCipher.login.password)
@@ -64,6 +64,15 @@ export const PasswordEditScreen = observer(() => {
       setCollectionIds(selectedCipher.collectionIds)
     } else {
       setUrl(initialUrl)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (onSaveFillService) {
+      const saveData = uiStore.saveLogin;
+      setUsername(saveData.username)
+      setPassword(saveData.password)
+      setUrl(saveData.domain)
     }
   }, [])
 
