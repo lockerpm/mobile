@@ -99,31 +99,14 @@ export const StartScreen = observer(() => {
       uiStore.setIsFromAutoFill(false)
       navigation.navigate("autofill")
     } else if (uiStore.isOnSaveLogin) {
-      uiStore.setIsOnSaveLogin(false)
 
-      const cipher = newCipherView(
-        String(uiStore.saveLogin.domain),
-        String(uiStore.saveLogin.domain),
-        String(uiStore.saveLogin.domain),
-      );
-
-      cipherStore.setSelectedCipher(cipher);
-      navigation.navigate("passwords__edit", { mode: 'edit' })
+      // uiStore.setIsOnSaveLogin(false)
+      navigation.navigate("passwords__edit", { mode: 'add' })
     } else {
       navigation.navigate("mainTab", { screen: user.defaultTab })
     }
   }
 
-  const newCipherView = (domain: string, username: string, password: string): CipherView => {
-    const cipher = new CipherView()
-    const uriView = new LoginUriView()
-    uriView.uri = domain
-    cipher.login.uris = new LoginUriView[1]()
-    cipher.login.uris[0] = uriView
-    cipher.login.username = username
-    cipher.login.password = password
-    return cipher
-  }
   // --------------------------- EFFECT ----------------------------
 
   // Always move forward

@@ -19,7 +19,7 @@ export const UiStoreModel = types
     selectedCountry: types.maybeNull(types.string),
     deepLinkAction: types.maybeNull(types.string),
     deepLinkUrl: types.maybeNull(types.string),
-    saveLogin: types.maybeNull(types.frozen({domain: types.string, username: types.string, password: types.string}))
+    saveLogin: types.maybeNull(types.frozen<{domain: string, username: string, password: string}>())
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -56,11 +56,7 @@ export const UiStoreModel = types
       if (action === 'fill') {
         self.deepLinkUrl = data || ''
       } else {
-        try {
-          self.saveLogin = data
-        } catch (error) {
-          self.saveLogin = null
-        } 
+        self.saveLogin = data
       }
     },
 
