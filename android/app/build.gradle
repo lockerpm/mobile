@@ -261,6 +261,7 @@ dependencies {
         implementation jscFlavor
     }
     
+    implementation 'com.tencent:mmkv:1.2.13'
     implementation "androidx.autofill:autofill:1.1.0"
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'

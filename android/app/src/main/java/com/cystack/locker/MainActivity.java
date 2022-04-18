@@ -33,6 +33,7 @@ public class MainActivity extends ReactActivity {
   public static class AppActivityDelegate extends ReactActivityDelegate {
     private static final String ENABLE_AUTOFILL = "autofill";
     private static final String SAVE_LOGIN = "savePassword";
+    private static final String LAST_LOGIN = "lastFill";
     private static final String DOMAIN_FILL = "domain";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -51,11 +52,14 @@ public class MainActivity extends ReactActivity {
       Bundle bundle = mActivity.getIntent().getExtras();
 
       if (bundle != null){
+
         if (bundle.containsKey(ENABLE_AUTOFILL)) {
+
           mInitialProps = new Bundle();
           mInitialProps.putInt(ENABLE_AUTOFILL, bundle.getInt(ENABLE_AUTOFILL));
           mInitialProps.putString(DOMAIN_FILL, bundle.getString(DOMAIN_FILL));
         } else if (bundle.containsKey(SAVE_LOGIN)) {
+
           mInitialProps = new Bundle();
           mInitialProps.putInt(SAVE_LOGIN, bundle.getInt(SAVE_LOGIN));
           mInitialProps.putString(DOMAIN_FILL, bundle.getString(DOMAIN_FILL));
@@ -64,8 +68,13 @@ public class MainActivity extends ReactActivity {
           }
           mInitialProps.putString(PASSWORD, bundle.getString(PASSWORD));
         }
+        else if (bundle.containsKey(LAST_LOGIN)) {
+
+          mInitialProps = new Bundle();
+          mInitialProps.putInt(LAST_LOGIN, bundle.getInt(LAST_LOGIN));
+          mInitialProps.putString("lastUserPasswordID", bundle.getString("itemID"));
+        }
       }
-  
       super.onCreate(savedInstanceState);
     }
 

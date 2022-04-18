@@ -71,7 +71,7 @@ public class VerifyMasterPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_locker_autofill_client);
 
         ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
-        keyStore = new AutofillDataKeychain(reactContext, getIntent().getStringExtra(DOMAIN));
+        keyStore = new AutofillDataKeychain(reactContext);
         datas = keyStore.credentials;
         TextView email  = findViewById(R.id.mp_email);
         email.setText(keyStore.email);

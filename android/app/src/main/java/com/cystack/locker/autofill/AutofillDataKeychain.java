@@ -40,18 +40,17 @@ public class AutofillDataKeychain {
     // public ArrayList<AutofillItem> otherCredentials = new ArrayList<>();
 
 
-    public AutofillDataKeychain(ReactApplicationContext reactContext, String domain) {
+    public AutofillDataKeychain(ReactApplicationContext reactContext) {
         cipherStorage = new CipherStorageKeystoreAesCbc();
         prefsStorage = new PrefsStorage(reactContext);
-        getAutoFillEntriesForDomain(domain);
+        getAutoFillEntriesForDomain();
     }
 
     /**
      * For a given domain name, attempt to find matching AutoFill credentials
-     * @param domain - The domain name to search for
      * @return - List of matching Username/Passwords in the form of the AutofillData class.
      */
-    public void getAutoFillEntriesForDomain(String domain) {
+    public void getAutoFillEntriesForDomain() {
         try {
             String itemString = getAutoFillItems();
             if (itemString == null){
@@ -71,11 +70,6 @@ public class AutofillDataKeychain {
                     String id = (String) map.get("id");
 
                     credentials.add(new AutofillItem(id, username, password, name, uri));
-                    // if (domain.contains(uri)) {
-                    //     credentials.add(new AutofillItem(id, username, password, name, uri));
-                    // } else {
-                    //     otherCredentials.add(new AutofillItem(id, username, password, name, uri));
-                    // }
                 }
             }
 
