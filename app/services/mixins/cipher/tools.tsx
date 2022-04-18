@@ -12,7 +12,8 @@ import { useCipherDataMixins } from './data'
 
 const defaultData = {
   loadPasswordsHealth: async () => {},
-  getCipherCount: async (type: CipherType):Promise<number> => {return 0}
+  getCipherCount: async (type: CipherType):Promise<number> => {return 0},
+  checkLoginIdExist: async (id: string):Promise<boolean> => {return false}
 }
 
 export const CipherToolsMixinsContext = createContext(defaultData)
@@ -27,6 +28,19 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
   const { translate, notify } = useMixins()
   
   // ----------------------------- METHODS ---------------------------
+
+  const checkLoginIdExist = async (id: string) => {
+    const allLogins = await getEncryptedCiphers({
+      deleted: false,
+      searchText: '',
+      filters: [
+        (c: CipherView) => c.type === CipherType.Login
+      ]
+    })
+    const res = allLogins.some( e  => e.id === id)
+    console.log(res)
+    return res
+  }
 
   const getCipherCount = async (type: CipherType) => {
     const allCiphers = await getEncryptedCiphers({
@@ -145,8 +159,9 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
+    checkLoginIdExist,
     loadPasswordsHealth,
-    getCipherCount
+    getCipherCount,
   }
 
   return (

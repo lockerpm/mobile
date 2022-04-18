@@ -10,7 +10,6 @@ const defaultData = {
   newCipher: (type: CipherType) => { return new CipherView() },
   getPasswordStrength: (password: string) => ({ score: 0 }),
   getCipherDescription: (cipher: CipherView) => ''
-  
 }
 
 export const CipherHelpersMixinsContext = createContext(defaultData)

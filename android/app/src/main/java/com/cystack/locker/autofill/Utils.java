@@ -36,7 +36,9 @@ import androidx.annotation.RequiresApi;
 import androidx.autofill.inline.UiVersions;
 import androidx.autofill.inline.v1.InlineSuggestionUi;
 
+import com.tencent.mmkv.MMKV;
 import com.cystack.locker.R;
+import com.cystack.locker.RNAutofillServiceAndroid;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -44,6 +46,7 @@ import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Utils {
+    private static MMKV kv;
     // The URLs are blacklisted from autofilling
     public static HashSet<String> BlacklistedUris = new HashSet<String>(
             Arrays.asList("com.android.settings",
@@ -133,6 +136,7 @@ public class Utils {
                 "us.spotco.fennec_dos"
             )
     );
+
     @NonNull
     public static AssistStructure getLatestAssistStructure(@NonNull FillRequest request) {
         List<FillContext> fillContexts = request.getFillContexts();
@@ -141,6 +145,33 @@ public class Utils {
 
     public static boolean isNullOrWhiteSpace(String value) {
         return value == null || value.trim().isEmpty();
+    }
+
+    public static void InitCredentialsStore(Context context, String id,  String encKey) {
+        MMKV.initialize(context);
+        kv = MMKV.mmkvWithID(id, MMKV.MULTI_PROCESS_MODE, "envKey");
+    }
+
+    public static void SetCredential(String key, AutofillItem value){
+        if (kv == null) return;
+        kv.encode(key, value);
+    }
+
+    @Nullable
+    public static AutofillItem GetCredential(String key){
+       if (kv == null) return null;
+       return kv.decodeParcelable(key, AutofillItem.class);
+    }
+
+    public static void RemoveCredential(String key){
+        if (kv == null) return;
+        kv.remove(key);
+    }
+
+    public static void RemoveAllCredential(){
+        if (kv == null) return;
+        kv.clearMemoryCache();
+        kv.clearAll();
     }
 
     private static String pbkdf2(String password, String salt, int iterations, int keyLength) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -164,8 +195,8 @@ public class Utils {
         return null;
     }
 
-    public static  FillResponse.Builder BuildFillResponse(ArrayList<Field> fields, PendingIntent authentication, @NonNull FillRequest request, Context context){
-
+    public static  FillResponse.Builder BuildFillResponse(ArrayList<Field> fields, @NonNull FillRequest request, String domain, Context context){
+        
         FillResponse.Builder response = new FillResponse.Builder();
 
         List<InlinePresentationSpec> inlinePresentationSpecs = null;
@@ -184,34 +215,41 @@ public class Utils {
             Log.d("Inline-Autofill", "inlineMaxSuggestedCount: " + inlineMaxSuggestedCount);
         }
 
-//        for (int i = 0 ; i < mNumberDatasets -1; i++){
-//            response.addDataset(buildDataSetWithAuthen(fields, datas.get(i), authentication));
-//        }
-
-        InlinePresentationSpec inlinePresentationSpec = null;
+     
+        InlinePresentationSpec itemInlinePresentationSpec = null;
+        InlinePresentationSpec lockerInlinePresentationSpec = null;
         if (inlinePresentationSpecs != null) {
-            inlinePresentationSpec = inlinePresentationSpecs.get(inlinePresentationSpecsCount - 1);
+            if (inlinePresentationSpecsCount > 2) {
+                itemInlinePresentationSpec = inlinePresentationSpecs.get(0);
+            }
+            lockerInlinePresentationSpec = inlinePresentationSpecs.get(inlinePresentationSpecsCount - 1);
         }
 
-        response.addDataset(BuildDataSetLocker(fields, authentication, inlinePresentationSpec, context));
+        AutofillItem storedItem = GetCredential(domain);
+        if (storedItem != null) {
+            response.addDataset(BuildDataSetWithAuthen(fields, storedItem, itemInlinePresentationSpec, domain, context));
+        }
+
+        response.addDataset(BuildDataSetLocker(fields, lockerInlinePresentationSpec, domain, context));
 
         return response;
     }
 
-    public static Dataset BuildDataSetLocker(ArrayList<Field> fields, PendingIntent authentication, InlinePresentationSpec inlinePresentationSpec, Context context){
+    public static Dataset BuildDataSetLocker(ArrayList<Field> fields, InlinePresentationSpec inlinePresentationSpec, String domain, Context context){
         RemoteViews presentation = new RemoteViews(context.getPackageName(), R.layout.remote_locker_app);
 
-        Dataset unlockedDataset = BuildlockedDataset(fields, null, presentation, authentication, inlinePresentationSpec, context);
-        return unlockedDataset;
+        PendingIntent authentication = RNAutofillServiceAndroid.newIntentSenderForResponse(context, fields, domain);
+
+        return BuildlockedDataset(fields, null, presentation, authentication, inlinePresentationSpec, context);
     }
 
-    public static Dataset BuildDataSetWithAuthen(ArrayList<Field> fields, AutofillItem data, PendingIntent authentication, InlinePresentationSpec inlinePresentationSpec, Context context){
+    public static Dataset BuildDataSetWithAuthen(ArrayList<Field> fields, AutofillItem data, InlinePresentationSpec inlinePresentationSpec, String domain, Context context){
         RemoteViews presentation = new RemoteViews(context.getPackageName(), android.R.layout.simple_list_item_1);
         presentation.setTextViewText(android.R.id.text1, data.getName());
 
-        Dataset unlockedDataset = BuildlockedDataset(fields, data , presentation, authentication, inlinePresentationSpec, context);
+        PendingIntent authentication = RNAutofillServiceAndroid.newIntentSenderForFillResponse(context, fields, domain ,data.getId());
 
-        return unlockedDataset;
+        return BuildlockedDataset(fields, data, presentation, authentication, inlinePresentationSpec, context);
     }
 
     public static Dataset BuildUnlockDataset(@NonNull ArrayList<Field> fields,
@@ -230,7 +268,7 @@ public class Utils {
         Dataset.Builder dataset = newDataset(fields, data, presentation);
         dataset.setAuthentication(authentication.getIntentSender());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            InlinePresentation inlinePresentation = buildInlinePresentation(inlinePresentationSpec, authentication, context);
+            InlinePresentation inlinePresentation = buildInlinePresentation(inlinePresentationSpec, authentication, data, context);
             if (inlinePresentation != null) {
                 dataset.setInlinePresentation(inlinePresentation);
             }
@@ -239,20 +277,25 @@ public class Utils {
         return dataset.build();
     }
 
-    private static InlinePresentation buildInlinePresentation( InlinePresentationSpec inlinePresentationSpec, PendingIntent pendingIntent, Context context) {
+    private static InlinePresentation buildInlinePresentation( InlinePresentationSpec inlinePresentationSpec, PendingIntent pendingIntent,  AutofillItem data, Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             return null;
         }
         if (inlinePresentationSpec == null){
             return null;
         }
-        Slice slice = CreateInlinePresentationSlice(inlinePresentationSpec, pendingIntent, context);
+        String title = null;
+        if (data != null) {
+            title = data.getName();
+        }
+        Slice slice = CreateInlinePresentationSlice(inlinePresentationSpec, pendingIntent, title, context);
         return new InlinePresentation(slice, inlinePresentationSpec, false);
     }
     @SuppressLint("RestrictedApi")
     private static Slice CreateInlinePresentationSlice(
             InlinePresentationSpec inlinePresentationSpec,
             PendingIntent pendingIntent,
+            @Nullable String title, 
             Context context)
     {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) {
@@ -267,12 +310,15 @@ public class Utils {
 
         InlineSuggestionUi.Content.Builder contentBuilder = InlineSuggestionUi.newContentBuilder(pendingIntent);
 
-        contentBuilder.setTitle(context.getResources().getString(R.string.mp_title));
-
-        Icon icon =  Icon.createWithResource(context, R.drawable.ic_logo);
-        icon.setTintBlendMode(BlendMode.DST);
-
-        contentBuilder.setStartIcon(icon);
+        if (title != null) {
+            contentBuilder.setTitle(title);
+        } else {
+            contentBuilder.setTitle(context.getResources().getString(R.string.mp_title));
+            Icon icon =  Icon.createWithResource(context, R.drawable.ic_logo);
+            icon.setTintBlendMode(BlendMode.DST);
+    
+            contentBuilder.setStartIcon(icon);
+        }
         return contentBuilder.build().getSlice();
     }
 

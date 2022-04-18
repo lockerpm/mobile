@@ -34,9 +34,10 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     public static final String DOMAIN = "domain";
 
     private static ArrayList<Field> sfields = null;
-
+    private static String credentialID = null;
     public static PendingIntent newIntentSenderForResponse(@NonNull Context context, ArrayList<Field> fields, String domain) {
         // store fillable field in Activity Static variable
+        credentialID = domain;
         sfields = fields;
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("autofill", 1); //start app by autofill service
@@ -45,8 +46,23 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
+    public static PendingIntent newIntentSenderForFillResponse(@NonNull Context context, ArrayList<Field> fields, String domain, String itemID) {
+        // store fillable field in Activity Static variable
+        credentialID = domain;
+        sfields = fields;
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra("lastFill", 1); //start app by autofill service
+        intent.putExtra("itemID", itemID);
+        return PendingIntent.getActivity(context, 1002, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    }
+
     public static Intent newIntentForSaveLogin(@NonNull Context context, ArrayList<Field> fields, String domain) {
-        
+        credentialID = domain;
+
+        String username = null;
+        String password = null;
+
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("savePassword", 1); //start app with OnSaveRequest
@@ -54,12 +70,16 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
         for (Field field: fields) {
             int fillType = field.fillType;
             if (fillType == Field.FILL_TYPE_PASSWORD) {
+                password = field.text;
                 intent.putExtra("password", field.text);
             }
             if (fillType  == Field.FILL_TYPE_EMAIL || fillType == Field.FILL_TYPE_USERNAME) {
+                username = field.text;
                 intent.putExtra("username", field.text);
             }
         } 
+        AutofillItem data = new AutofillItem("", username, password, "", domain);
+        
         return intent;
     }
 
@@ -74,14 +94,30 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     public String getName() {
         return "RNAutofillServiceAndroid";
     }
+    
+    @ReactMethod
+    public void removeLastItem() {
+        Utils.RemoveCredential(credentialID);
+    }
+
+    @ReactMethod
+    public void useLastItem() {
+        AutofillItem data = Utils.GetCredential(credentialID);
+        buildResponse(data);
+    }
 
     @ReactMethod
     public void addAutofillValue(String id, String userName, String password, String name, String uri) {
 
-        Log.d("--------------","---------------------------------------------------------");
         AutofillItem data = new AutofillItem(id, userName, password, name, uri);
+        buildResponse(data);
+    }
+
+    private void buildResponse(AutofillItem data) {
         RemoteViews presentation = new RemoteViews(getReactApplicationContext().getPackageName(), R.layout.remote_locker_app); // crash ?
         Dataset response = Utils.BuildUnlockDataset(sfields, data, presentation);
+
+        Utils.SetCredential(credentialID, data);
 
         Intent replyIntent = new Intent();
         replyIntent.putExtra(EXTRA_AUTHENTICATION_RESULT, response);

@@ -6,10 +6,9 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import NetInfo from "@react-native-community/netinfo"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { CipherView, LoginUriView } from "../../../../core/models/view"
 
 export const StartScreen = observer(() => {
-  const { user, uiStore, cipherStore } = useStores()
+  const { user, uiStore } = useStores()
   const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
   const {
     loadFolders,
@@ -53,7 +52,7 @@ export const StartScreen = observer(() => {
       refreshFCM()
 
       // Sync teams and plan
-      if (!uiStore.isFromAutoFill) {
+      if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
         // setMsg(translate('start.getting_plan_info'))
         // await Promise.all([
         //   user.loadTeams(),
@@ -84,7 +83,7 @@ export const StartScreen = observer(() => {
     }
 
     // Show biometric intro
-    if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin) {
+    if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
       if (!user.biometricIntroShown && !user.isBiometricUnlock) {
         const available = await isBiometricAvailable()
         if (available) {
@@ -98,8 +97,10 @@ export const StartScreen = observer(() => {
     if (uiStore.isFromAutoFill) {
       uiStore.setIsFromAutoFill(false)
       navigation.navigate("autofill")
+    } else if (uiStore.isFromAutoFillItem) {
+      uiStore.setIsFromAutoFillItem(false)
+      navigation.navigate("autofill", { mode: 'item' })
     } else if (uiStore.isOnSaveLogin) {
-
       // uiStore.setIsOnSaveLogin(false)
       navigation.navigate("passwords__edit", { mode: 'add' })
     } else {

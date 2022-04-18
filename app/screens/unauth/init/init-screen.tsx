@@ -39,6 +39,18 @@ export const InitScreen = observer(() => {
     return false
   }
 
+  const checkAutoFillItem = async () => {
+    const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL_ITEM)
+    if (autoFillData && autoFillData.enabled) {
+      uiStore.setDeepLinkAction('fill_item', autoFillData.id || '')
+      uiStore.setIsFromAutoFillItem(true)
+      return true
+    }
+
+    uiStore.setIsFromAutoFillItem(false)
+    return false
+  }
+
   const checkOnSaveLogin = async () => {
     const loginData = await load(StorageKey.APP_FROM_AUTOFILL_ON_SAVE_REQUEST)
     if (loginData && loginData.enabled) {
@@ -73,6 +85,10 @@ export const InitScreen = observer(() => {
     // Check autofill
     const isAutoFill = await checkAutoFill()
 
+    // Check autofillItem
+    const isAutoFillItem = await checkAutoFillItem()
+
+
     // Check savePassword
     const isOnSaveLogin = await checkOnSaveLogin()
 
@@ -85,7 +101,7 @@ export const InitScreen = observer(() => {
 
     // Logged in?
     if (!user.isLoggedIn) {
-      if (!user.introShown && !isAutoFill && !isOnSaveLogin) {
+      if (!user.introShown && !isAutoFill && !isOnSaveLogin && !isAutoFillItem) {
         user.setIntroShown(true)
         navigation.navigate('intro')
       } else {
@@ -95,7 +111,7 @@ export const InitScreen = observer(() => {
     }
 
     // Network connected? || Is autofill?
-    if (!connectionState.isConnected || isAutoFill || isOnSaveLogin) {
+    if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {
       goLockOrCreatePassword()
       return
     }

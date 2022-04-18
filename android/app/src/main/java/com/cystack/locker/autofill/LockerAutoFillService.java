@@ -23,12 +23,24 @@ import com.cystack.locker.RNAutofillServiceAndroid;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.facebook.react.bridge.ReactApplicationContext;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService{
     private static final String TAG = "Locker_Service";
+
     @Override
     public void onConnected() {
+        Log.d(TAG, "onConnected()");
         super.onConnected();
+
+        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
+        AutofillDataKeychain keyStore = new AutofillDataKeychain(reactContext);
+        if (keyStore.loginedLocker) {
+            Utils.InitCredentialsStore(getBaseContext(), keyStore.email , keyStore.hashMassterPass); 
+        } else {
+            Utils.RemoveAllCredential(); 
+        }
     }
 
     @Override
@@ -47,17 +59,12 @@ public class LockerAutoFillService extends AutofillService{
             return;
         }
 
-        for(Field field: fields ) {
-            Log.d("------------------", "type : " + field.autofillType);
-        }
         Log.d(TAG, "Domain: " + domain);
         Log.d(TAG, "autofillable fields:" + fields.size());
 
-        // PendingIntent authentication = VerifyMasterPasswordActivity.newIntentSenderForResponse(this, fields, domain);
-        PendingIntent authentication = RNAutofillServiceAndroid.newIntentSenderForResponse(this, fields, domain);
-        
+       
         // Create response...
-        FillResponse.Builder response = Utils.BuildFillResponse(fields, authentication, request, getBaseContext());
+        FillResponse.Builder response = Utils.BuildFillResponse(fields, request, domain, this);
 
         // add save info
         Utils.AddSaveInfo(request, response, fields, parseResult.getPackageName());
