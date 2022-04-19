@@ -17,7 +17,7 @@ type PasswordEditScreenProp = RouteProp<PrimaryParamList, "autofill">
 
 export const AutoFillScreen = observer(function AutoFillScreen() {
   const navigation = useNavigation()
-  const { translate, notify } = useMixins()
+  const { translate } = useMixins()
   const { uiStore } = useStores()
   const { checkLoginIdExist } = useCipherToolsMixins()
   const route = useRoute<PasswordEditScreenProp>()
