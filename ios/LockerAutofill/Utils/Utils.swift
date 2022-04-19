@@ -13,13 +13,6 @@ class Utils {
 
   static private let pbkdf2: HashCore = HashCore()
   
-  static public func GetKeychainKeyService() -> String {
-    if let appIdPrefix = ProcessInfo.processInfo.environment["APP_ID_PREFIX"] {
-      print(appIdPrefix)
-      return appIdPrefix + ".com.cystack.lockerapp"
-    }
-    return ""
-  }
   static public func Translate(_ key: String) -> String {
     return key.locolized()
   }
