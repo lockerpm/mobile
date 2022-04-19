@@ -11,7 +11,7 @@ import StoreKit
 
 
 class AutofillDataModel {
-  private let KEYCHAIN_SERVICE: String = Utils.GetKeychainKeyService()
+  private let KEYCHAIN_SERVICE: String = "W7S57TNBH5.com.cystack.lockerapp"
   private let KEYCHAIN_ACCESS_GROUP: String = "group.com.cystack.lockerapp"
   private let KEYCHAIN_PROPS: String = "autofill"
   private var keychainData: String!
