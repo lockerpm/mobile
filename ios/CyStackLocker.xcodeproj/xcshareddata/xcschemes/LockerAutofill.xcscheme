@@ -73,6 +73,13 @@
             ReferencedContainer = "container:CyStackLocker.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "APP_ID_PREFIX"
+            value = "W7S57TNBH5"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
