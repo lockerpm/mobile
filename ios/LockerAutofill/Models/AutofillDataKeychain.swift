@@ -11,8 +11,8 @@ import StoreKit
 
 
 class AutofillDataModel {
-  private let KEYCHAIN_SERVICE: String = "W7S57TNBH5.com.cystack.lockerapp"
-  private let KEYCHAIN_ACCESS_GROUP: String = "group.com.cystack.lockerapp"
+  private let KEYCHAIN_SERVICE: String = Utils.GetStringInfo(key: "SHARED_KEYCHAIN_SERVICE") 
+  private let KEYCHAIN_ACCESS_GROUP: String = Utils.GetStringInfo(key: "SHARED_KEYCHAIN_ACCESS_GROUP")
   private let KEYCHAIN_PROPS: String = "autofill"
   private var keychainData: String!
   
@@ -27,8 +27,8 @@ class AutofillDataModel {
 
   init(){
     let keychain = Keychain(service: KEYCHAIN_SERVICE, accessGroup: KEYCHAIN_ACCESS_GROUP)
-    keychainData = try! keychain.get(KEYCHAIN_PROPS) ?? ""
-    if (keychainData != "") {
+    keychainData = try! keychain.get(KEYCHAIN_PROPS)
+    if (keychainData != nil) {
       self.loginedLocker = true;
     }
   }

@@ -13,6 +13,11 @@ class Utils {
 
   static private let pbkdf2: HashCore = HashCore()
   
+  static public func GetStringInfo(key: String) -> String {
+    let a = Bundle.main.object(forInfoDictionaryKey: key) as? String
+    print(a ?? "")
+    return a ?? ""
+  }
   static public func Translate(_ key: String) -> String {
     return key.locolized()
   }
