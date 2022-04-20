@@ -4,11 +4,10 @@ import { observer } from "mobx-react-lite"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
-import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import { CipherType } from "../../../../../../core/enums"
 import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Divider, Text } from "../../../../../components"
 import { commonStyles } from "../../../../../theme"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
 type Props = {
   isOpen: boolean
@@ -23,6 +22,7 @@ export const PendingSharedAction = observer((props: Props) => {
   const { isOpen, onClose, onLoadingChange } = props
   const { translate } = useMixins()
   const { acceptShareInvitation, rejectShareInvitation } = useCipherDataMixins()
+  const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, uiStore } = useStores()
 
   // Params
@@ -34,35 +34,8 @@ export const PendingSharedAction = observer((props: Props) => {
   const selectedCipher: CipherView = cipherStore.cipherView
 
   const cipherMapper = (() => {
-    switch (selectedCipher.type) {
-      case CipherType.Login:
-        return {
-          img: BROWSE_ITEMS.password.icon,
-          backup: BROWSE_ITEMS.password.icon
-        }
-      case CipherType.Card:
-        return {
-          img: BROWSE_ITEMS.card.icon,
-          backup: BROWSE_ITEMS.card.icon
-        }
-      case CipherType.Identity:
-        return {
-          img: BROWSE_ITEMS.identity.icon,
-          backup: BROWSE_ITEMS.identity.icon,
-          svg: BROWSE_ITEMS.identity.svgIcon
-        }
-      case CipherType.SecureNote:
-        return {
-          img: BROWSE_ITEMS.note.icon,
-          backup: BROWSE_ITEMS.note.icon,
-          svg: BROWSE_ITEMS.note.svgIcon
-        }
-      default:
-        return {
-          img: BROWSE_ITEMS.password.icon,
-          backup: BROWSE_ITEMS.password.icon
-        }
-    }
+    const cipherInfo = getCipherInfo(selectedCipher)
+    return cipherInfo
   })()
 
   // Methods
