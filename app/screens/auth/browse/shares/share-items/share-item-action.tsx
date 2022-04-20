@@ -27,7 +27,7 @@ type Props = {
  */
 export const ShareItemAction = observer((props: Props) => {
   const { isOpen, onClose, onLoadingChange, member, goToDetail } = props
-  const { translate } = useMixins()
+  const { translate, getWebsiteLogo } = useMixins()
   const { stopShareCipher } = useCipherDataMixins()
   const { cipherStore, uiStore } = useStores()
 
@@ -45,7 +45,7 @@ export const ShareItemAction = observer((props: Props) => {
     switch (selectedCipher.type) {
       case CipherType.Login:
         return {
-          img: BROWSE_ITEMS.password.icon,
+          img: selectedCipher.login.uri ? getWebsiteLogo(selectedCipher.login.uri) : BROWSE_ITEMS.password.icon,
           backup: BROWSE_ITEMS.password.icon
         }
       case CipherType.Card:
