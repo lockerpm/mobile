@@ -200,7 +200,8 @@ android {
     productFlavors {
         production {     
             dimension "version"
-            resValue "string", "app_name", "Locker"    
+            resValue "string", "app_name", "Locker"   
+            resValue "string", "service_name", "[Staging] Locker" 
         }
 
         staging {
@@ -209,6 +210,7 @@ android {
             applicationIdSuffix ".staging"
             versionNameSuffix "-staging"
             resValue "string", "app_name", "[Staging] Locker"
+            resValue "string", "service_name", "[Staging] Locker"
         }
     }
 

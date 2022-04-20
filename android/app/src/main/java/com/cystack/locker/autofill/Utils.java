@@ -51,7 +51,8 @@ public class Utils {
     public static HashSet<String> BlacklistedUris = new HashSet<String>(
             Arrays.asList("com.android.settings",
                     "com.android.settings.intelligence",
-                    "com.cystack.locker"
+                    "com.cystack.locker",
+                    "com.cystack.locker.staging"
             )
     );
     public static HashSet<String> CompatBrowsers = new HashSet<String>(
