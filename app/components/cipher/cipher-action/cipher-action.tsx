@@ -3,9 +3,7 @@ import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { commonStyles, fontSize } from "../../../theme"
 import { useStores } from "../../../models"
-import { BROWSE_ITEMS } from "../../../common/mappings"
 import { ActionItem } from "./action-item"
-import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
 import { Text } from "../../text/text"
@@ -41,9 +39,9 @@ export const CipherAction = observer((props: CipherActionProps) => {
   const [showChangeTeamFolderModal, setShowChangeTeamFolderModal] = useState(false)
   const [nextModal, setNextModal] = useState<'changeTeamFolder' | 'share' | 'trashConfirm' | 'leaveConfirm' | null>(null)
 
-  const { getRouteName, translate, getTeam, getWebsiteLogo, color } = useMixins()
+  const { getRouteName, translate, getTeam, color } = useMixins()
   const { toTrashCiphers } = useCipherDataMixins()
-  const { getCipherDescription } = useCipherHelpersMixins()
+  const { getCipherDescription, getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 
@@ -59,54 +57,8 @@ export const CipherAction = observer((props: CipherActionProps) => {
     || (shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER)
 
   const cipherMapper = (() => {
-    switch (selectedCipher.type) {
-      case CipherType.Login:
-        return {
-          img: selectedCipher.login.uri ? getWebsiteLogo(selectedCipher.login.uri) : BROWSE_ITEMS.password.icon,
-          backup: BROWSE_ITEMS.password.icon,
-          path: 'passwords'
-        }
-      case CipherType.Card:
-        return {
-          img: BROWSE_ITEMS.card.icon,
-          backup: BROWSE_ITEMS.card.icon,
-          path: 'cards'
-        }
-      case CipherType.Identity:
-        return {
-          img: BROWSE_ITEMS.identity.icon,
-          backup: BROWSE_ITEMS.identity.icon,
-          path: 'identities',
-          svg: BROWSE_ITEMS.identity.svgIcon
-        }
-      case CipherType.SecureNote:
-        return {
-          img: BROWSE_ITEMS.note.icon,
-          backup: BROWSE_ITEMS.note.icon,
-          path: 'notes',
-          svg: BROWSE_ITEMS.note.svgIcon
-        }
-      case CipherType.CryptoAccount:
-        return {
-          img: BROWSE_ITEMS.cryptoAccount.icon,
-          backup: BROWSE_ITEMS.cryptoAccount.icon,
-          path: 'cryptoAccounts',
-          svg: BROWSE_ITEMS.cryptoAccount.svgIcon
-        }
-      case CipherType.CryptoWallet:
-        return {
-          img: BROWSE_ITEMS.cryptoWallet.icon,
-          backup: BROWSE_ITEMS.cryptoWallet.icon,
-          path: 'cryptoWallets',
-          svg: BROWSE_ITEMS.cryptoWallet.svgIcon
-        }
-      default:
-        return {
-          img: BROWSE_ITEMS.password.icon,
-          backup: BROWSE_ITEMS.password.icon,
-          path: 'passwords'
-        }
-    }
+    const cipherInfo = getCipherInfo(selectedCipher)
+    return cipherInfo
   })()
 
   // Methods

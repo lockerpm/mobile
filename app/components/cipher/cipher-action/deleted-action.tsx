@@ -5,7 +5,6 @@ import { color, commonStyles, fontSize } from "../../../theme"
 import { Text } from "../../text/text"
 import { AutoImage as Image } from "../../auto-image/auto-image"
 import { useStores } from "../../../models"
-import { BROWSE_ITEMS } from "../../../common/mappings"
 import { ActionItem } from "./action-item"
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
@@ -13,6 +12,7 @@ import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-co
 import { ActionSheet, ActionSheetContent } from "../../action-sheet"
 import { Divider } from "../../divider/divider"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 
 export interface DeletedActionProps {
   children?: React.ReactNode,
@@ -31,48 +31,17 @@ export const DeletedAction = observer((props: DeletedActionProps) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [nextModal, setNextModal] = useState<'deleteConfirm' | null>(null)
 
-  const { getRouteName, translate, getWebsiteLogo } = useMixins()
+  const { getRouteName, translate } = useMixins()
   const { deleteCiphers, restoreCiphers } = useCipherDataMixins()
+  const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, uiStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
   // Computed
 
   const cipherMapper = (() => {
-    switch (selectedCipher.type) {
-      case CipherType.Login:
-        return {
-          img: selectedCipher.login.uri ? getWebsiteLogo(selectedCipher.login.uri) : BROWSE_ITEMS.password.icon,
-          backup: BROWSE_ITEMS.password.icon,
-          path: 'passwords'
-        }
-      case CipherType.Card:
-        return {
-          img: BROWSE_ITEMS.card.icon,
-          backup: BROWSE_ITEMS.card.icon,
-          path: 'cards'
-        }
-      case CipherType.Identity:
-        return {
-          img: BROWSE_ITEMS.identity.icon,
-          backup: BROWSE_ITEMS.identity.icon,
-          path: 'identities',
-          svg: BROWSE_ITEMS.identity.svgIcon
-        }
-      case CipherType.SecureNote:
-        return {
-          img: BROWSE_ITEMS.note.icon,
-          backup: BROWSE_ITEMS.note.icon,
-          path: 'notes',
-          svg: BROWSE_ITEMS.note.svgIcon
-        }
-      default:
-        return {
-          img: BROWSE_ITEMS.password.icon,
-          backup: BROWSE_ITEMS.password.icon,
-          path: 'passwords'
-        }
-    }
+    const cipherInfo = getCipherInfo(selectedCipher)
+    return cipherInfo
   })()
 
   // Methods

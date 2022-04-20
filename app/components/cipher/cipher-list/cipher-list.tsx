@@ -11,7 +11,6 @@ import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import { CipherView } from "../../../../core/models/view"
-import { BROWSE_ITEMS } from "../../../common/mappings"
 import { PasswordAction } from "../../../screens/auth/browse/passwords/password-action"
 import { CardAction } from "../../../screens/auth/browse/cards/card-action"
 import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
@@ -55,9 +54,9 @@ export const CipherList = observer((props: CipherListProps) => {
     folderId, collectionId, organizationId,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { getWebsiteLogo, translate, color, getTeam } = useMixins()
+  const { translate, color, getTeam } = useMixins()
   const { getCiphers } = useCipherDataMixins()
-  const { getCipherDescription } = useCipherHelpersMixins()
+  const { getCipherDescription, getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, user } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -113,55 +112,14 @@ export const CipherList = observer((props: CipherListProps) => {
 
     // Add image
     let res = searchRes.map((c: CipherView) => {
+      const cipherInfo = getCipherInfo(c)
       const data = {
         ...c,
-        logo: null,
-        imgLogo: null,
-        svg: null,
+        logo: cipherInfo.backup,
+        imgLogo: cipherInfo.img,
+        svg: cipherInfo.svg,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
         isDeleted: c.isDeleted
-      }
-      switch (c.type) {
-        case CipherType.Login: {
-          if (c.login.uri) {
-            data.imgLogo = getWebsiteLogo(c.login.uri)
-          }
-          data.logo = BROWSE_ITEMS.password.icon
-          break
-        }
-
-        case CipherType.SecureNote: {
-          data.logo = BROWSE_ITEMS.note.icon
-          data.svg = BROWSE_ITEMS.note.svgIcon
-          break
-        }
-
-        case CipherType.Card: {
-          data.logo = BROWSE_ITEMS.card.icon
-          break
-        }
-
-        case CipherType.Identity: {
-          data.logo = BROWSE_ITEMS.identity.icon
-          data.svg = BROWSE_ITEMS.identity.svgIcon
-          break
-        }
-
-        case CipherType.CryptoAccount: {
-          data.logo = BROWSE_ITEMS.cryptoAccount.icon
-          data.svg = BROWSE_ITEMS.cryptoAccount.svgIcon
-          break
-        }
-
-        case CipherType.CryptoWallet: {
-          data.logo = BROWSE_ITEMS.cryptoWallet.icon
-          data.svg = BROWSE_ITEMS.cryptoWallet.svgIcon
-          break
-        }
-
-        default:
-          data.logo = BROWSE_ITEMS.trash.icon
-          data.svg = BROWSE_ITEMS.trash.svgIcon
       }
       return data
     })
@@ -243,26 +201,8 @@ export const CipherList = observer((props: CipherListProps) => {
   // Go to detail
   const goToDetail = (item: CipherView) => {
     cipherStore.setSelectedCipher(item)
-    switch (item.type) {
-      case CipherType.Login:
-        navigation.navigate('passwords__info')
-        break
-      case CipherType.Card:
-        navigation.navigate('cards__info')
-        break
-      case CipherType.Identity:
-        navigation.navigate('identities__info')
-        break
-      case CipherType.SecureNote:
-        navigation.navigate('notes__info')
-        break
-      case CipherType.CryptoAccount:
-        navigation.navigate('cryptoAccounts__info')
-        break
-      case CipherType.CryptoWallet:
-        navigation.navigate('cryptoWallets__info')
-        break
-    }
+    const cipherInfo = getCipherInfo(item)
+    navigation.navigate(`${cipherInfo.path}__info`)
   }
 
   // Toggle item selection
