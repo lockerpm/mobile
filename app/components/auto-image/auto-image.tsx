@@ -35,7 +35,7 @@ export function AutoImage(props: ImageProps) {
       }, (err) => {
         // Use backup in case of get image from uri failed
         if (props.backupSource && !props.backupSource.uri) {
-          const { width, height } = RNImage.resolveAssetSource(props.backupSource)
+          const { width, height } = RNImage.resolveAssetSource(props.backupSource) || {}
           if (mounted) {
             if (layoutWidth) {
               setImageSize({
@@ -52,7 +52,7 @@ export function AutoImage(props: ImageProps) {
     } else {
       // Use backup in case of { uri: null }
       if (props.source?.uri === null && props.backupSource && !props.backupSource.uri) {
-        const { width, height } = RNImage.resolveAssetSource(props.backupSource)
+        const { width, height } = RNImage.resolveAssetSource(props.backupSource) || {}
         if (mounted) {
           if (layoutWidth) {
             setImageSize({
@@ -65,7 +65,7 @@ export function AutoImage(props: ImageProps) {
         }
         setUseBackup(true)
       } else {
-        const { width, height } = RNImage.resolveAssetSource(props.source)
+        const { width, height } = RNImage.resolveAssetSource(props.source) || {}
         if (mounted) {
           if (layoutWidth) {
             setImageSize({
