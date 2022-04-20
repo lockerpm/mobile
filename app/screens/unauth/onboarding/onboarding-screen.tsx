@@ -18,8 +18,8 @@ export const OnboardingScreen = observer(() => {
   const footer = (
     <View>
       <Button
-        text={translate("common.login")}
-        onPress={() => navigation.navigate("login")}
+        text={translate("common.sign_up")}
+        onPress={() => navigation.navigate("signup")}
       />
       <View
         style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
