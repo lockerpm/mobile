@@ -14,9 +14,14 @@ type Props = {
 export const SeedPhraseInput = (props: Props) => {
   const { seed, setSeed } = props
   const MAX_WORD_COUNT = 24
+  const MIN_WORD_COUNT = 12
 
-  const [wordCount, setWordCount] = useState(12) 
+  // ---------------- PARAMS ------------------
+
+  const [wordCount, setWordCount] = useState(MIN_WORD_COUNT) 
   const [maxWidth, setMaxWidth] = useState(0) 
+
+  // ---------------- COMPUTED ------------------
 
   const words = (() => {
     const res = seed.split(' ').map(w => w ? w.trim() : '')
@@ -29,6 +34,8 @@ export const SeedPhraseInput = (props: Props) => {
   const refs = words.map(() => {
     return useRef(null)
   })
+
+  // ---------------- METHODS ------------------
 
   const handleChange = (val: string, index: number) => {
     const res = [...words]
@@ -52,11 +59,25 @@ export const SeedPhraseInput = (props: Props) => {
         refs[index + ws.length - 1].current?.focus()
       }, 0)
     } else if (val.endsWith(' ') && index + 1 < MAX_WORD_COUNT) {
+      if (index + 1 === wordCount) {
+        setWordCount(wordCount + 1)
+      }
       setTimeout(() => {
         refs[index + 1].current?.focus()
       }, 0)
     }
   }
+
+  const handleEmpty = (index: number) => {
+    if (index > 0) {
+      refs[index - 1].current?.focus()
+    }
+    if (index + 1 > MIN_WORD_COUNT) {
+      setWordCount(wordCount - 1)
+    }
+  }
+
+  // ---------------- RENDER ------------------
 
   return (
     <View
@@ -82,6 +103,9 @@ export const SeedPhraseInput = (props: Props) => {
             onChange={(val: string) => {
               handleChange(val, index)
             }}
+            onEmpty={() => {
+              handleEmpty(index)
+            }}
           />
         ))
       }
@@ -102,17 +126,19 @@ export const SeedPhraseInput = (props: Props) => {
   )
 }
 
+// ------------------------- EACH WORD INPUT ---------------------------
 
 type InputProps = {
   outerRef?: any
   index: number
   value: string
   onChange: (val: string) => void
+  onEmpty: () => void
   maxWidth?: number
 }
 
 export const WordInput = (props: InputProps) => {
-  const { value, onChange, index, outerRef, maxWidth } = props
+  const { value, onChange, index, outerRef, maxWidth, onEmpty } = props
   const { color } = useMixins()
 
   const [isFocused, setIsFocused] = useState(false)
@@ -140,6 +166,11 @@ export const WordInput = (props: InputProps) => {
         ref={outerRef}
         value={value}
         onChangeText={onChange}
+        onKeyPress={({ nativeEvent }) => {
+          if (nativeEvent.key === 'Backspace' && !value) {
+            onEmpty()
+          }
+        }}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         selectionColor={color.primary}
@@ -155,6 +186,7 @@ export const WordInput = (props: InputProps) => {
   )
 }
 
+// ------------------------- ADD BUTTON ---------------------------
 
 type BtnProps = {
   onPress: () => void
