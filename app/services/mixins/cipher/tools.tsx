@@ -38,7 +38,6 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       ]
     })
     const res = allLogins.some( e  => e.id === id)
-    console.log(res)
     return res
   }
 

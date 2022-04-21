@@ -1,21 +1,27 @@
-import React, { useState } from "react"
-import { TouchableOpacity, View, ViewStyle, Linking } from "react-native"
-import { Text, AutoImage as Image, Button } from "../../../../components"
+import React, { useEffect, useState } from "react"
+import { TouchableOpacity, View, ViewStyle } from "react-native"
+import { Text, AutoImage as Image, Button, Modal } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../services/mixins"
 import { commonStyles } from "../../../../theme"
 import { useStores } from "../../../../models"
-import Modal from "react-native-modal";
 import { PlanType } from "../../../../config/types"
-
+import { useOrientation, Orientation } from "../../../../services/mixins/orientation"
 
 export const PremiumFeature = () => {
     const { color, translate } = useMixins()
     const { user } = useStores()
     const navigation = useNavigation()
-
+    const orientation = useOrientation()
     const [modalVisible, setModalVisible] = useState(false);
     const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
+
+  
+    useEffect(() => {
+        if (modalVisible) {
+            setModalVisible(false)
+        }
+    }, [orientation])
 
     const item = {
         locker: {
@@ -59,13 +65,6 @@ export const PremiumFeature = () => {
 
     // -------------------- RENDER ----------------------
 
-    const CENTER_VIEW: ViewStyle = {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-    }
-
     const ROW_ITEMS: ViewStyle = {
         height: 130,
         flex: 1,
@@ -83,21 +82,36 @@ export const PremiumFeature = () => {
 
     const EmergencyContactModal = () => {
         return (
-            <View style={CENTER_VIEW} >
-                <Modal isVisible={modalVisible}>
-                    <View style={{ backgroundColor: color.background, padding: 20, borderRadius: 16}}>
-                        <Image style={{alignSelf: "center", height: 180}} source={require("./assets/EmergencyContact.png")} />
-                        <Text preset="header">{translate('manage_plan.feature.emergency_contact.header')}</Text>
-                        <Text preset="black" style={{marginTop: 12}}>{translate('manage_plan.feature.emergency_contact.text')}</Text>
-                        <Text preset="black" style={{marginVertical: 16}}>{translate('manage_plan.feature.emergency_contact.link')}</Text>        
-                        <Button text={translate('manage_plan.feature.emergency_contact.button')} onPress={() => setModalVisible(false)} />
-                         {/*                      
-                        <TouchableOpacity  onPress={() => Linking.openURL("https://locker.io/settings/security")}>
-                            <Text >Go to locker.io/vault</Text>
-                        </TouchableOpacity> */}
+            <Modal
+                isOpen={modalVisible}
+                onClose={() => setModalVisible(false)}
+                title={translate('manage_plan.feature.emergency_contact.header')}>
+                
+                {
+                    orientation == Orientation.PORTRAIT ? 
+                    <View>
+                        <Image style={{ alignSelf: "center", height: 200 }} source={require("./assets/EmergencyContact.png")} />
+                        <Text preset="black" style={{ marginTop: 12 }}>{translate('manage_plan.feature.emergency_contact.text')}</Text>
+                        <Text preset="black" style={{ marginVertical: 16 }}>{translate('manage_plan.feature.emergency_contact.link')}</Text>
+                    </View> 
+                    :
+                    <View style={
+                        {
+                            width: "100%",
+                            flexDirection: "row"
+                        }}>
+                        <Image style={{ height: 200, width: 200 }} source={require("./assets/EmergencyContact.png")} />
+                        <View style= {{flex: 1, marginLeft: 20, alignSelf: "center"}}>
+                            <Text preset="black" style={{ marginTop: 12 }}>{translate('manage_plan.feature.emergency_contact.text')}</Text>
+                            <Text preset="black" style={{ marginVertical: 16 }}>{translate('manage_plan.feature.emergency_contact.link')}</Text>
+                        </View>
+    
                     </View>
-                </Modal>
-            </View>
+                }
+
+
+                <Button text={translate('manage_plan.feature.emergency_contact.button')} onPress={() => setModalVisible(false)} />
+            </Modal>
         )
     }
 
@@ -123,7 +137,7 @@ export const PremiumFeature = () => {
                 <PremiumFeatureItem item={item.locker} leftItem={true} />
                 <PremiumFeatureItem item={item.emergencyContact} />
             </View>
-            <View style={[ROW_ITEMS, { marginTop: 10}]}>
+            <View style={[ROW_ITEMS, { marginTop: 10 }]}>
                 <PremiumFeatureItem item={item.web} leftItem={true} />
                 <PremiumFeatureItem item={item.sharePassword} />
             </View>

@@ -48,9 +48,9 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   // -------------------- EFFECT ----------------------
 
-  useEffect(()=>{
+  useEffect(() => {
     if (route.params.family) {
-       setPayIndividual(false)
+      setPayIndividual(false)
     }
   })
 
@@ -178,22 +178,20 @@ export const PaymentScreen = observer(function PaymentScreen() {
       // isContentLoading={loading}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
-      <View style={{ top: 0, height: "50%", position: "absolute", width: "100%", justifyContent: "space-between" }}>
-        <View style={styles.header}>
+      <View style={styles.header}>
+        <Image
+          source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
+          style={{ height: 32, width: 152 }}
+        />
+        <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
           <Image
-            source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
-            style={{ height: 32, width: 152 }}
+            source={require("./Cross.png")}
+            style={{ height: 24, width: 24 }}
           />
-          <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
-            <Image
-              source={require("./Cross.png")}
-              style={{ height: 24, width: 24 }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={{ zIndex: 1, flex: 1 }}>
-          <PremiumBenefits benefitTab={route.params.benefitTab} />
-        </View>
+        </TouchableOpacity>
+      </View>
+      <View style={{ top: 0, height: 310, width: "100%", zIndex: 1, flex: 1 }}>
+        <PremiumBenefits benefitTab={route.params.benefitTab} />
       </View>
 
       <View style={[styles.payment, { backgroundColor: color.background }]}>
@@ -211,6 +209,8 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
 const styles = StyleSheet.create({
   header: {
+    position: "absolute",
+    top: 0,
     zIndex: 2,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -219,16 +219,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   payment: {
-    bottom: 0,
     width: "100%",
-    position: "absolute",
-    height: "54%",
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    flex: 1,
+    borderRadius: 15,
     marginTop: 20,
   },
   segmentItem: {
-    position: "absolute",
     margin: 2,
     padding: 2,
     borderRadius: 6,

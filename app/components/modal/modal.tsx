@@ -49,6 +49,7 @@ export const Modal = function Modal(props: ModalProps) {
       panDirection={null}
       visible={isOpen}
       onDialogDismissed={onClose}
+      supportedOrientations={['portrait', 'landscape']}
       ignoreBackgroundPress={ignoreBackgroundPress}
     >
       <View 

@@ -28,6 +28,8 @@ export const InitScreen = observer(() => {
   }
 
   const checkAutoFill = async () => {
+    if (!IS_IOS) return false
+
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL)
     if (autoFillData && autoFillData.enabled) {
       uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
@@ -40,6 +42,8 @@ export const InitScreen = observer(() => {
   }
 
   const checkAutoFillItem = async () => {
+    if (!IS_IOS) return false
+
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL_ITEM)
     if (autoFillData && autoFillData.enabled) {
       uiStore.setDeepLinkAction('fill_item', autoFillData.id || '')
@@ -52,9 +56,11 @@ export const InitScreen = observer(() => {
   }
 
   const checkOnSaveLogin = async () => {
+    if (!IS_IOS) return false
+
     const loginData = await load(StorageKey.APP_FROM_AUTOFILL_ON_SAVE_REQUEST)
     if (loginData && loginData.enabled) {
-      uiStore.setDeepLinkAction('save', {domain: loginData.domain, username: loginData.username, password: loginData.password})
+      uiStore.setDeepLinkAction('save', { domain: loginData.domain, username: loginData.username, password: loginData.password })
       uiStore.setIsOnSaveLogin(true)
       return true
     }
@@ -87,7 +93,6 @@ export const InitScreen = observer(() => {
 
     // Check autofillItem
     const isAutoFillItem = await checkAutoFillItem()
-
 
     // Check savePassword
     const isOnSaveLogin = await checkOnSaveLogin()

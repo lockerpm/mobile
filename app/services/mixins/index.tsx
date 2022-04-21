@@ -1,4 +1,5 @@
 import React from 'react'
+import { Dimensions } from 'react-native';
 import { nanoid } from 'nanoid'
 import find from 'lodash/find'
 import ReactNativeBiometrics from 'react-native-biometrics'
