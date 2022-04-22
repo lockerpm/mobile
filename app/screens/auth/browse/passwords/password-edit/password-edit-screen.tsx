@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { View } from "react-native"
+import { BackHandler, View } from "react-native"
 import {
-  AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, PasswordStrength
+  AutoImage as Image,
+  Text,
+  Layout,
+  Button,
+  Header,
+  FloatingInput,
+  CipherOthersInfo,
+  PasswordStrength,
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherType } from "../../../../../../core/enums"
@@ -16,9 +23,7 @@ import { CipherView, LoginUriView, LoginView } from "../../../../../../core/mode
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
-
-type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>;
-
+type PasswordEditScreenProp = RouteProp<PrimaryParamList, "passwords__edit">
 
 export const PasswordEditScreen = observer(() => {
   const navigation = useNavigation()
@@ -27,19 +32,20 @@ export const PasswordEditScreen = observer(() => {
   const { translate, color } = useMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { getPasswordStrength, newCipher } = useCipherHelpersMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const onSaveFillService = uiStore.isOnSaveLogin
 
   // ----------------- PARAMS ------------------
 
   const [isLoading, setIsLoading] = useState(false)
 
   // Forms
-  const [name, setName] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [url, setUrl] = useState('')
-  const [note, setNote] = useState('')
+  const [name, setName] = useState("")
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [url, setUrl] = useState("")
+  const [note, setNote] = useState("")
   const [folder, setFolder] = useState(null)
   const [organizationId, setOrganizationId] = useState(null)
   const [collectionIds, setCollectionIds] = useState([])
@@ -47,14 +53,14 @@ export const PasswordEditScreen = observer(() => {
   // ----------------- EFFECTS ------------------
 
   useEffect(() => {
-    if (mode !== 'add') {
+    if (mode !== "add") {
       setName(selectedCipher.name)
       setUsername(selectedCipher.login.username)
       setPassword(selectedCipher.login.password)
       setUrl(selectedCipher.login.uri)
       setNote(selectedCipher.notes)
       setFolder(selectedCipher.folderId)
-      setOrganizationId(mode === 'clone' ? null : selectedCipher.organizationId)
+      setOrganizationId(mode === "clone" ? null : selectedCipher.organizationId)
       setCollectionIds(selectedCipher.collectionIds)
     } else {
       setUrl(initialUrl)
@@ -62,14 +68,24 @@ export const PasswordEditScreen = observer(() => {
   }, [])
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    if (onSaveFillService) {
+      const saveData = uiStore.saveLogin;
+      setUsername(saveData.username)
+      setPassword(saveData.password)
+      setUrl(saveData.domain)
+      uiStore.setIsOnSaveLogin(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
       if (cipherStore.generatedPassword) {
         setPassword(cipherStore.generatedPassword)
-        cipherStore.setGeneratedPassword('')
+        cipherStore.setGeneratedPassword("")
       }
 
       if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === 'unassigned') {
+        if (cipherStore.selectedFolder === "unassigned") {
           setFolder(null)
         } else {
           setFolder(cipherStore.selectedFolder)
@@ -82,15 +98,22 @@ export const PasswordEditScreen = observer(() => {
   }, [navigation])
 
   // ----------------- METHODS ------------------
+  const handleBack = () => {
+    if (onSaveFillService) {
+      BackHandler.exitApp()
+    } else {
+      navigation.goBack()
+    }
+  }
 
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
-    if (mode === 'add') {
+    if (mode === "add") {
       payload = newCipher(CipherType.Login)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
     const data = new LoginView()
@@ -109,16 +132,16 @@ export const PasswordEditScreen = observer(() => {
     payload.organizationId = organizationId
     const passwordStrength = getPasswordStrength(password).score
 
-    let res = { kind: 'unknown' }
-    if (['add', 'clone'].includes(mode)) {
+    let res = { kind: "unknown" }
+    if (["add", "clone"].includes(mode)) {
       res = await createCipher(payload, passwordStrength, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, passwordStrength, collectionIds)
     }
 
     setIsLoading(false)
-    if (res.kind === 'ok') {
-      navigation.goBack()
+    if (res.kind === "ok") {
+      handleBack()
     }
   }
 
@@ -129,42 +152,40 @@ export const PasswordEditScreen = observer(() => {
       isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
-        paddingHorizontal: 0
+        paddingHorizontal: 0,
       }}
-      header={(
+      header={
         <Header
           title={
-            mode === 'add'
-              ? `${translate('common.add')} ${translate('common.password')}`
-              : translate('common.edit')
+            mode === "add"
+              ? `${translate("common.add")} ${translate("common.password")}`
+              : translate("common.edit")
           }
           goBack={() => {
-            navigation.goBack()
+            handleBack();
           }}
-          goBackText={translate('common.cancel')}
-          right={(
+          goBackText={translate("common.cancel")}
+          right={
             <Button
               isDisabled={isLoading || !name.trim()}
               preset="link"
-              text={translate('common.save')}
+              text={translate("common.save")}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
-                alignItems: 'center',
-                paddingLeft: 10
+                alignItems: "center",
+                paddingLeft: 10,
               }}
               textStyle={{
-                fontSize: fontSize.p
+                fontSize: fontSize.p,
               }}
             />
-          )}
+          }
         />
-      )}
+      }
     >
       {/* Name */}
-      <View
-        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
-      >
+      <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <Image
             source={BROWSE_ITEMS.password.icon}
@@ -173,7 +194,7 @@ export const PasswordEditScreen = observer(() => {
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label={translate('common.item_name')}
+              label={translate("common.item_name")}
               value={name}
               onChangeText={setName}
             />
@@ -184,22 +205,25 @@ export const PasswordEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('password.login_details').toUpperCase()}
+          text={translate("password.login_details").toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
 
       {/* Info */}
       <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
+        style={[
+          commonStyles.SECTION_PADDING,
+          {
+            backgroundColor: color.background,
+            paddingBottom: 32,
+          },
+        ]}
       >
         {/* Username */}
         <View style={{ flex: 1 }}>
           <FloatingInput
-            label={translate('password.username')}
+            label={translate("password.username")}
             value={username}
             onChangeText={setUsername}
           />
@@ -210,53 +234,46 @@ export const PasswordEditScreen = observer(() => {
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
             isPassword
-            label={translate('common.password')}
+            label={translate("common.password")}
             value={password}
             onChangeText={setPassword}
           />
 
-          {
-            !!password && (
-              <PasswordStrength
-                value={getPasswordStrength(password).score}
-                style={{ marginTop: 15 }}
-              />
-            )
-          }
+          {!!password && (
+            <PasswordStrength
+              value={getPasswordStrength(password).score}
+              style={{ marginTop: 15 }}
+            />
+          )}
         </View>
         {/* Password end */}
 
         {/* Generate password */}
         <Button
           preset="link"
-          onPress={() => navigation.navigate('passwordGenerator')}
+          onPress={() => navigation.navigate("passwordGenerator")}
           style={{
-            marginTop: 20
+            marginTop: 20,
           }}
         >
           <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
+            style={[
+              commonStyles.CENTER_HORIZONTAL_VIEW,
+              {
+                justifyContent: "space-between",
+                width: "100%",
+              },
+            ]}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesomeIcon
-                name="repeat"
-                size={18}
-                color={color.primary}
-              />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <FontAwesomeIcon name="repeat" size={18} color={color.primary} />
               <Text
                 preset="green"
-                text={translate('common.generate')}
+                text={translate("common.generate")}
                 style={{ fontSize: fontSize.small, marginLeft: 7 }}
               />
             </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
+            <FontAwesomeIcon name="angle-right" size={20} color={color.text} />
           </View>
         </Button>
         {/* Generate password end */}
@@ -264,7 +281,7 @@ export const PasswordEditScreen = observer(() => {
         {/* Web url */}
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
-            label={translate('password.website_url')}
+            label={translate("password.website_url")}
             value={url}
             onChangeText={setUrl}
           />

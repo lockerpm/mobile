@@ -14,10 +14,14 @@ export const UiStoreModel = types
     lockResendOtpResetPasswordTime: types.maybeNull(types.number),
 
     // Cache
+    isFromAutoFillItem: types.maybeNull(types.boolean),
+    isOnSaveLogin: types.maybeNull(types.boolean),
     isFromAutoFill: types.maybeNull(types.boolean),
     selectedCountry: types.maybeNull(types.string),
     deepLinkAction: types.maybeNull(types.string),
-    deepLinkUrl: types.maybeNull(types.string)
+    deepLinkUrl: types.maybeNull(types.string),
+    saveLogin: types.maybeNull(types.frozen<{domain: string, username: string, password: string}>()),
+    saveLastId: types.maybeNull(types.string)
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -45,16 +49,30 @@ export const UiStoreModel = types
       self.isFromAutoFill = val
     },
 
-    setDeepLinkAction(action: 'fill' | 'save', data?: string) {
+    setIsOnSaveLogin(val: boolean) {
+      self.isOnSaveLogin = val
+    },
+
+    setIsFromAutoFillItem(val: boolean) {
+      self.isFromAutoFillItem = val
+    },
+
+
+    setDeepLinkAction(action: 'fill' | 'save' | 'fill_item', data?: any) {
       self.deepLinkAction = action
-      if (['fill', 'save'].includes(action)) {
+      if (action === 'fill') {
         self.deepLinkUrl = data || ''
+      } else if (action === 'fill_item') {
+        self.saveLastId = data || ''
+      } else {
+        self.saveLogin = data 
       }
     },
 
     clearDeepLink() {
       self.deepLinkAction = null
       self.deepLinkUrl = null
+      self.saveLogin = null
     },
 
     setLockResendOtpResetPasswordTime(val: number) {
