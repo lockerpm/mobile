@@ -112,7 +112,6 @@ export const InviteMemberScreen = observer(function InviteMemberScreen() {
                         </Button>}
                     </View>
 
-
                     <View>
                         {
                             familyMembers.map((e, index) => {

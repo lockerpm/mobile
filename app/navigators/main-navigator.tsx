@@ -109,7 +109,9 @@ export type PrimaryParamList = {
   autofillService: undefined
   import: undefined
   export: undefined
-  autofill: undefined
+  autofill: {
+    mode: 'all' | 'item'
+  }
   notificationSettings: undefined
   shareMultiple: undefined
   cryptoAccounts__info: undefined
@@ -419,7 +421,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="export" component={ExportScreen} />
         <Stack.Screen name="notificationSettings" component={NotificationSettingsScreen} />
 
-        <Stack.Screen name="autofill" component={AutoFillScreen} />
+        <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: 'all' }} />
       </Stack.Navigator>
     </UserInactivity>
   )

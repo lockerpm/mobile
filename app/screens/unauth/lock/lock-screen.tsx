@@ -132,7 +132,7 @@ export const LockScreen = observer(() => {
 
       e.preventDefault()
 
-      if (!IS_IOS && uiStore.isFromAutoFill) {
+      if (!IS_IOS && (uiStore.isFromAutoFill || uiStore.isOnSaveLogin)) {
         BackHandler.exitApp()
         return
       }

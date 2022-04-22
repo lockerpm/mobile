@@ -53,6 +53,7 @@ export const SignupScreen = observer(() => {
     },
 
     google: {
+      hide: !IS_PROD,
       icon: SOCIAL_LOGIN_ICON.google,
       handler: () => {
         return googleLogin({
@@ -306,7 +307,7 @@ export const SignupScreen = observer(() => {
 
         <View style={commonStyles.CENTER_VIEW}>
           <Text
-            text={translate("common.or_login_with")}
+            text={IS_PROD ? translate("common.or_login_with") : ""}
             style={{ marginBottom: 5 }}
           />
 

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.CancellationSignal;
 import android.service.autofill.AutofillService;
 import android.service.autofill.FillCallback;
+import android.service.autofill.FillContext;
 import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
 import android.service.autofill.SaveCallback;
@@ -20,14 +21,26 @@ import com.cystack.locker.autofill.parser.Parser;
 import com.cystack.locker.RNAutofillServiceAndroid;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.facebook.react.bridge.ReactApplicationContext;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LockerAutoFillService extends AutofillService{
     private static final String TAG = "Locker_Service";
+
     @Override
     public void onConnected() {
+        Log.d(TAG, "onConnected()");
         super.onConnected();
+
+        ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
+        AutofillDataKeychain keyStore = new AutofillDataKeychain(reactContext);
+        if (keyStore.loginedLocker) {
+            Utils.InitCredentialsStore(getBaseContext(), keyStore.email , keyStore.hashMassterPass); 
+        } else {
+            Utils.RemoveAllCredential(); 
+        }
     }
 
     @Override
@@ -40,27 +53,36 @@ public class LockerAutoFillService extends AutofillService{
         ArrayList<Field> fields = (ArrayList<Field>) parseResult.getFillable();
         String domain = parseResult.getDomain();
 
-        Log.d(TAG, "Domain: " + domain);
-        Log.d(TAG, "autofillable fields:" + fields.size());
-
         if ( fields == null || fields.isEmpty() || Utils.BlacklistedUris.contains(domain)) {
             Log.d(TAG, "No autofill hints found");
             callback.onSuccess(null);
             return;
         }
 
-        // PendingIntent authentication = VerifyMasterPasswordActivity.newIntentSenderForResponse(this, fields, domain);
-        PendingIntent authentication = RNAutofillServiceAndroid.newIntentSenderForResponse(this, fields, domain);
-        
-        // Create response...
-        FillResponse response = Utils.BuildFillResponse(fields, authentication, request, getBaseContext());
+        Log.d(TAG, "Domain: " + domain);
+        Log.d(TAG, "autofillable fields:" + fields.size());
 
-        callback.onSuccess(response);
+       
+        // Create response...
+        FillResponse.Builder response = Utils.BuildFillResponse(fields, request, domain, this);
+
+        // add save info
+        Utils.AddSaveInfo(request, response, fields, parseResult.getPackageName());
+
+        callback.onSuccess(response.build());
     }
 
     @Override
     public void onSaveRequest(@NonNull SaveRequest request, @NonNull SaveCallback callback) {
+        Log.d(TAG, "onSaveRequest()");
 
+        List<FillContext> context = request.getFillContexts();
+        AssistStructure structure = context.get(context.size() - 1).getStructure();
+        Parser.Result parseResult = new Parser(structure).Parse();
+        ArrayList<Field> fields = (ArrayList<Field>) parseResult.getFillable();
+        String domain = parseResult.getDomain();
+
+        startActivity(RNAutofillServiceAndroid.newIntentForSaveLogin(this, fields, domain));
     }
 
 }

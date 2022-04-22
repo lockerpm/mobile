@@ -95,6 +95,7 @@ export const DefaultLogin = observer((props: Props) => {
     },
 
     google: {
+      hide: !IS_PROD,
       icon: SOCIAL_LOGIN_ICON.google,
       handler: () => {
         return googleLogin({
@@ -192,7 +193,7 @@ export const DefaultLogin = observer((props: Props) => {
 
       <View style={commonStyles.CENTER_VIEW}>
         <Text
-          text={translate("common.or_login_with")}
+          text={IS_PROD ? translate("common.or_login_with") : ""}
           style={{ marginBottom: 5 }}
         />
 

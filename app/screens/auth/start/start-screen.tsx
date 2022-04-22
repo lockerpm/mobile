@@ -4,19 +4,23 @@ import { Loading } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
-import NetInfo from '@react-native-community/netinfo'
+import NetInfo from "@react-native-community/netinfo"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-
 
 export const StartScreen = observer(() => {
   const { user, uiStore } = useStores()
   const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
-  const { loadFolders, loadCollections, syncAutofillData, loadOrganizations } = useCipherDataMixins()
+  const {
+    loadFolders,
+    loadCollections,
+    syncAutofillData,
+    loadOrganizations,
+  } = useCipherDataMixins()
   const navigation = useNavigation()
 
   // ------------------------- PARAMS ----------------------------
 
-  const [msg, setMsg] = useState('')
+  const [msg, setMsg] = useState("")
 
   // ------------------------- METHODS ----------------------------
   const refreshFCM = async () => {
@@ -32,9 +36,7 @@ export const StartScreen = observer(() => {
   }
 
   const mounted = async () => {
-   
     syncAutofillData()
-    
 
     // Testing
     // if (__DEV__) {
@@ -50,7 +52,7 @@ export const StartScreen = observer(() => {
       refreshFCM()
 
       // Sync teams and plan
-      if (!uiStore.isFromAutoFill) {
+      if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
         // setMsg(translate('start.getting_plan_info'))
         // await Promise.all([
         //   user.loadTeams(),
@@ -60,22 +62,18 @@ export const StartScreen = observer(() => {
         user.loadPlan()
       }
     }
-    
+
     // Load folders and collections
-    setMsg(translate('start.decrypting'))
-    Promise.all([
-      loadFolders(),
-      loadCollections(),
-      loadOrganizations()
-    ])
+    setMsg(translate("start.decrypting"))
+    Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
 
     // TODO: check device limit
     const isDeviceLimitReached = false
     if (isDeviceLimitReached) {
-      navigation.navigate('switchDevice')
+      navigation.navigate("switchDevice")
     }
 
-    setMsg('')
+    setMsg("")
 
     // Parse push noti data
     const navigationRequest = await parsePushNotiData()
@@ -85,22 +83,28 @@ export const StartScreen = observer(() => {
     }
 
     // Show biometric intro
-    if (!uiStore.isFromAutoFill) {
+    if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
       if (!user.biometricIntroShown && !user.isBiometricUnlock) {
         const available = await isBiometricAvailable()
         if (available) {
-          navigation.navigate('biometricUnlockIntro')
+          navigation.navigate("biometricUnlockIntro")
           return
         }
       }
     }
-    
+
     // Done -> navigate
     if (uiStore.isFromAutoFill) {
       uiStore.setIsFromAutoFill(false)
-      navigation.navigate('autofill')
+      navigation.navigate("autofill")
+    } else if (uiStore.isFromAutoFillItem) {
+      uiStore.setIsFromAutoFillItem(false)
+      navigation.navigate("autofill", { mode: 'item' })
+    } else if (uiStore.isOnSaveLogin) {
+      // uiStore.setIsOnSaveLogin(false)
+      navigation.navigate("passwords__edit", { mode: 'add' })
     } else {
-      navigation.navigate('mainTab', { screen: user.defaultTab })
+      navigation.navigate("mainTab", { screen: user.defaultTab })
     }
   }
 
@@ -108,13 +112,11 @@ export const StartScreen = observer(() => {
 
   // Always move forward
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', mounted)
+    const unsubscribe = navigation.addListener("focus", mounted)
     return unsubscribe
   }, [navigation])
 
   // ------------------------- RENDER ----------------------------
 
-  return (
-    <Loading message={msg} />
-  )
+  return <Loading message={msg} />
 })

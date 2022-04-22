@@ -1,5 +1,5 @@
 import React from "react"
-import { View, TouchableOpacity, ViewStyle, Alert } from "react-native"
+import { View, TouchableOpacity, ViewStyle } from "react-native"
 import CheckBox from "@react-native-community/checkbox"
 import { Button, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
@@ -25,6 +25,7 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
       style={{
         backgroundColor: prop.isEnable ? color.block : color.background,
         height: 67,
+        marginTop: 10,
         borderRadius: 10,
         flexDirection: "row",
       }}
@@ -133,7 +134,6 @@ export const PricePlan = (props: PricePlanProps) => {
     marginLeft: 20,
     marginRight: 20,
     flex: 1,
-    justifyContent: "space-around"
   }
 
   return (

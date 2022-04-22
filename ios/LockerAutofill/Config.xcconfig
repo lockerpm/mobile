@@ -1,0 +1,12 @@
+//
+//  Config.xcconfig
+//  LockerAutofill
+//
+//  Created by Nguyen Thinh on 19/04/2022.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.com.cystack.lockerapp
+SHARED_KEYCHAIN_ACCESS_GROUP = group.com.cystack.lockerapp

@@ -1,15 +1,16 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { View, TouchableOpacity } from "react-native"
 import { AutoImage as Image, Text, Layout, Button } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../services/mixins"
-
+import { useOrientation, Orientation } from "../../../services/mixins/orientation"
 
 export const IntroScreen = () => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
+  const orientation = useOrientation()
 
   const tabs = [
     {
@@ -40,22 +41,28 @@ export const IntroScreen = () => {
       <View
         style={[commonStyles.SECTION_PADDING, {
           flex: 1,
-          justifyContent: "flex-end",
+          justifyContent: "space-around",
           alignItems: 'center',
-          paddingHorizontal: 37
+          paddingHorizontal: 37,
+
+          flexDirection: orientation == Orientation.LANDSCAPE ? "row" : "column"
         }]}
       >
-        <Image 
+        <Image
           source={item.img}
           style={{
-            width: '100%'
+            width: orientation == Orientation.LANDSCAPE ? 250 : "100%"
           }}
         />
-        <Text preset="header" text={item.title} style={{
-          marginTop: 16,
-          marginBottom: 10
-        }} />
-        <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24 }} />
+        <View>
+          <Text preset="header" text={item.title} style={{
+            alignSelf: "center",
+            marginTop: 16,
+            marginBottom: 10
+          }} />
+          <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: 300 }} />
+        </View>
+
       </View>
     )
   })
@@ -97,7 +104,7 @@ export const IntroScreen = () => {
       footer={footer}
       noScroll
     >
-      <View style={{ flex: 1, justifyContent: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', marginBottom: 10}}>
         {/* Tabs */}
         <View style={{ flex: 3, minHeight: 300, maxHeight: 500 }}>
           <TabView
