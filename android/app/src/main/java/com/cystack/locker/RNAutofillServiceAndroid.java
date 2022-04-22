@@ -94,6 +94,11 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     public String getName() {
         return "RNAutofillServiceAndroid";
     }
+
+    @ReactMethod
+    public boolean isAutofillServicesEnabled() {
+       return Utils.IsLockerAutofillServicesEnabled(getReactApplicationContext());
+    }
     
     @ReactMethod
     public void removeLastItem() {
