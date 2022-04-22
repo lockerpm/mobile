@@ -16,7 +16,7 @@ import {
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
   CryptoAccountEditScreen, CryptoAccountInfoScreen, CryptoWalletEditScreen, CryptoWalletInfoScreen,
-  GoogleAuthenticatorImportScreen, AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen, 
+  AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen, 
   PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen
 } from "../screens"
 // @ts-ignore
@@ -65,7 +65,6 @@ export type PrimaryParamList = {
     mode: 'add' | 'edit'
   }
   qrScanner: undefined
-  googleAuthenticatorImport: undefined
   dataBreachScanner: undefined
   dataBreachList: undefined
   dataBreachDetail: undefined
@@ -388,7 +387,6 @@ export const MainNavigator = observer(() => {
         />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} initialParams={{ mode: 'add' }} />
-        <Stack.Screen name="googleAuthenticatorImport" component={GoogleAuthenticatorImportScreen} />
 
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
         <Stack.Screen name="dataBreachList" component={DataBreachListScreen} />
