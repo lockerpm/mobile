@@ -5,25 +5,39 @@ import { Header, Layout } from "../../../../../components"
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useMixins } from "../../../../../services/mixins"
 import { CipherType } from "../../../../../../core/enums"
-import { parseOTPUri, getTOTP, beautifyName } from "../../../../../utils/totp"
+import { parseOTPUri, getTOTP, beautifyName, decodeGoogleAuthenticatorImport } from "../../../../../utils/totp"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers";
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data";
+import { Logger } from "../../../../../utils/logger";
 
 
 export const QRScannerScreen = function QRScannerScreen() {
   const navigation = useNavigation()
   const { translate, notify, color } = useMixins()
   const { newCipher } = useCipherHelpersMixins()
-  const { createCipher } = useCipherDataMixins()
+  const { createCipher, importCiphers } = useCipherDataMixins()
   
   const [isLoading, setIsLoading] = useState(false)
 
   const onSuccess = async (e) => {
-    const payload = parseOTPUri(e.data)
+    if (e.data.startsWith('otpauth-migration://')) {
+      handleGoogleAuthenticatorImport(e.data)
+    } else {
+      handleSaveQr(e.data)
+    }
+  }
+
+  const handleSaveQr = async (uri: string) => {
+    const payload = parseOTPUri(uri)
     try {
       const otp = getTOTP(payload)
       if (otp) {
-        await handleSave(payload.account, e.data)
+        setIsLoading(true)
+        const cipher = newCipher(CipherType.TOTP)
+        cipher.name = beautifyName(payload.account)
+        cipher.notes = uri
+        await createCipher(cipher, 0, [])
+        setIsLoading(false)
       } else {
         notify('error', translate('authenticator.invalid_qr'))
       }
@@ -33,16 +47,37 @@ export const QRScannerScreen = function QRScannerScreen() {
     navigation.goBack()
   }
 
-  const handleSave = async (name: string, note: string) => {
-    setIsLoading(true)
-    const payload = newCipher(CipherType.TOTP)
-    payload.name = beautifyName(name)
-    payload.notes = note
+  const handleGoogleAuthenticatorImport = async (uri: string) => {
+    try {
+      setIsLoading(true)
+      const otps = decodeGoogleAuthenticatorImport(uri)
+      const ciphers = otps.map((otp) => {
+        const payload = newCipher(CipherType.TOTP)
+        payload.name = beautifyName(otp.account)
+        payload.notes = `otpauth://totp/${encodeURIComponent(otp.account)}`
+          + `?secret=${otp.secret}` 
+          + `&issuer=${encodeURIComponent(otp.account)}`
+          + `&algorithm=${otp.algorithm.toLowerCase().split('-').join('')}`
+          + `&digits=${otp.digits}&period=${otp.period}`
+        return payload
+      })
 
-    const res = await createCipher(payload, 0, [])
+      if (!ciphers.length) {
+        notify('error', translate('authenticator.invalid_qr'))
+        return
+      }
 
+      await importCiphers({
+        ciphers,
+        folders: [],
+        folderRelationships: []
+      } as any)
+    } catch (e) {
+      Logger.error('Import google qr: ' + e)
+      notify('error', translate('authenticator.invalid_qr'))
+    }
     setIsLoading(false)
-    return res
+    navigation.goBack()
   }
 
   // -------------------- RENDER ----------------------
