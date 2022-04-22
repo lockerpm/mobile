@@ -3,7 +3,7 @@
 "1mO-wz-8ct.title" = "Huỷ";
 
 /* Class = "UILabel"; text = "Verify Master Password"; ObjectID = "BHt-Az-rZe"; */
-"BHt-Az-rZe.text" = "Xác thực mật kẩu chính";
+"BHt-Az-rZe.text" = "Xác thực mật khẩu chính";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "F76-pU-sgw"; */
 "F76-pU-sgw.text" = "Label";

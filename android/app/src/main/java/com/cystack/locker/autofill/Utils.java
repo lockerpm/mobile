@@ -17,6 +17,7 @@ import android.service.autofill.FillResponse;
 import android.service.autofill.SaveInfo;
 import android.service.autofill.InlinePresentation;
 import android.util.Log;
+import android.view.autofill.AutofillManager;
 import android.view.autofill.AutofillValue;
 import android.view.autofill.AutofillId;
 import android.view.inputmethod.InlineSuggestionsRequest;
@@ -137,6 +138,11 @@ public class Utils {
                 "us.spotco.fennec_dos"
             )
     );
+
+    public static boolean IsLockerAutofillServicesEnabled(Context context) {
+        AutofillManager af = context.getSystemService(AutofillManager.class);
+        return af.hasEnabledAutofillServices();
+    }
 
     @NonNull
     public static AssistStructure getLatestAssistStructure(@NonNull FillRequest request) {

@@ -201,7 +201,7 @@ android {
         production {     
             dimension "version"
             resValue "string", "app_name", "Locker"   
-            resValue "string", "service_name", "[Staging] Locker" 
+            resValue "string", "service_name", "Locker" 
         }
 
         staging {
