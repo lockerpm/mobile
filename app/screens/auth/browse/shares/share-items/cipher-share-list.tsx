@@ -7,17 +7,16 @@ import { Text } from "../../../../../components/text/text"
 import { AutoImage as Image } from "../../../../../components/auto-image/auto-image"
 // import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { CipherType } from "../../../../../../core/enums"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
-import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { commonStyles, fontSize } from "../../../../../theme"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { AccountRole, AccountRoleText, SharingStatus } from "../../../../../config/types"
 import { Organization } from "../../../../../../core/models/domain/organization"
 import { ShareItemAction } from "./share-item-action"
 import { SharedMemberType } from "../../../../../services/api/api.types"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
 
 type Props = {
@@ -38,8 +37,9 @@ export const CipherShareList = observer((props: Props) => {
   const {
     emptyContent, navigation, onLoadingChange, searchText, sortList
   } = props
-  const { getWebsiteLogo, translate, color } = useMixins()
+  const { translate, color } = useMixins()
   const { getCiphers } = useCipherDataMixins()
+  const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore } = useStores()
   type ListItem = CipherView & {
     logo?: any
@@ -103,45 +103,17 @@ export const CipherShareList = observer((props: Props) => {
 
     // Add image + share info
     searchRes.forEach((c: CipherView) => {
+      const cipherInfo = getCipherInfo(c)
+
       // @ts-ignore
       const data: ListItem = {
         ...c,
-        logo: null,
-        imgLogo: null,
-        svg: null,
+        logo: cipherInfo.backup,
+        imgLogo: cipherInfo.img,
+        svg: cipherInfo.svg,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
         description: '',
         status: null
-      }
-      switch (c.type) {
-        case CipherType.Login: {
-          if (c.login.uri) {
-            data.imgLogo = getWebsiteLogo(c.login.uri)
-          }
-          data.logo = BROWSE_ITEMS.password.icon
-          break
-        }
-
-        case CipherType.SecureNote: {
-          data.logo = BROWSE_ITEMS.note.icon
-          data.svg = BROWSE_ITEMS.note.svgIcon
-          break
-        }
-
-        case CipherType.Card: {
-          data.logo = BROWSE_ITEMS.card.icon
-          break
-        }
-
-        case CipherType.Identity: {
-          data.logo = BROWSE_ITEMS.identity.icon
-          data.svg = BROWSE_ITEMS.identity.svgIcon
-          break
-        }
-
-        default:
-          data.logo = BROWSE_ITEMS.trash.icon
-          data.svg = BROWSE_ITEMS.trash.svgIcon
       }
 
       // Display for each sharing member
@@ -195,20 +167,8 @@ export const CipherShareList = observer((props: Props) => {
   // Go to detail
   const goToDetail = (item: ListItem) => {
     cipherStore.setSelectedCipher(item)
-    switch (item.type) {
-      case CipherType.Login:
-        navigation.navigate('passwords__info')
-        break
-      case CipherType.Card:
-        navigation.navigate('cards__info')
-        break
-      case CipherType.Identity:
-        navigation.navigate('identities__info')
-        break
-      case CipherType.SecureNote:
-        navigation.navigate('notes__info')
-        break
-    }
+    const cipherInfo = getCipherInfo(item)
+    navigation.navigate(`${cipherInfo.path}__info`)
   }
 
   // Get cipher description

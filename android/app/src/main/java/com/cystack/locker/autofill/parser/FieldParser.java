@@ -46,9 +46,23 @@ public class FieldParser {
     );
 
 
+    @Nullable
     public List<Field> getFillableItem(){
-        return fillable;
+        // add some heuristics
+        if (fillable.size() == 0) {
+            return null;
+        }
+
+        if (fields.size() == 1) {
+            if (fields.get(0).fillType != Field.FILL_TYPE_PASSWORD) {
+                return null;
+            } else
+                return fields;
+        }
+
+        return parseLoginField(fillable);
     }
+    
     public void addField(Field field){
         if (field.autofillType != View.AUTOFILL_TYPE_NONE) {
             fields.add(field);
@@ -85,6 +99,27 @@ public class FieldParser {
         }
     }
 
+    private List<Field> parseLoginField(List<Field> fields) {
+        int size = fields.size();
+        List<Field> loginField = new ArrayList<>();
+        for (int i = 0 ; i < size; i++ ){
+            int fillType = fields.get(i).fillType;
+            if (fillType == Field.FILL_TYPE_EMAIL || fillType == Field.FILL_TYPE_USERNAME) {
+                loginField.add(fields.get(i));
+                if ( i == size - 1) {
+                    return null;
+                } else {
+                    for (int j = i ; j < size ; j++){
+                        if (fields.get(j).fillType == Field.FILL_TYPE_PASSWORD) {
+                            loginField.add(fields.get(j));
+                            return loginField;
+                        }
+                    }
+                }
+          }
+        }
+        return null;
+    }
 
     private boolean parseInputType(Field field) {
         int type = field.inputType;

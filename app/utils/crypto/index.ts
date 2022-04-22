@@ -14,6 +14,8 @@ export type CryptoAccountData = {
 
 export type CryptoWalletData = {
   email: string
+  password: string
+  address: string
   seed: string
   notes: string
   network: {
@@ -55,7 +57,9 @@ export const toCryptoWalletData = (str: string) => {
     network: {
       name: '',
       alias: ''
-    }
+    },
+    password: '',
+    address: ''
   }
   try {
     const parsed: CryptoWalletData = JSON.parse(str)

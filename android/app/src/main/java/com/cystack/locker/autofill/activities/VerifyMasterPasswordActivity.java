@@ -52,7 +52,7 @@ public class VerifyMasterPasswordActivity extends AppCompatActivity {
         Intent intent = new Intent(context, VerifyMasterPasswordActivity.class);
         intent.putExtra(DOMAIN, domain);
         return PendingIntent.getActivity(context, 1001, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
     private AutofillDataKeychain keyStore;
@@ -71,12 +71,10 @@ public class VerifyMasterPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_locker_autofill_client);
 
         ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
-        keyStore = new AutofillDataKeychain(reactContext, getIntent().getStringExtra(DOMAIN));
+        keyStore = new AutofillDataKeychain(reactContext);
         datas = keyStore.credentials;
         TextView email  = findViewById(R.id.mp_email);
         email.setText(keyStore.email);
-
-
    
         if (keyStore.loginedLocker) {
             if (keyStore.faceIdEnabled){
@@ -110,6 +108,7 @@ public class VerifyMasterPasswordActivity extends AppCompatActivity {
         setResult(RESULT_OK, replyIntent);
         finish();
     }
+    
     public void unlock(View view) {
         EditText text = findViewById(R.id.master_password);
         String masterPassword = text.getText().toString();

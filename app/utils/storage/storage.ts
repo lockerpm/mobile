@@ -6,6 +6,8 @@ const storage = new MMKV()
 
 export enum StorageKey {
   APP_FROM_AUTOFILL = 'app__from_autofill',
+  APP_FROM_AUTOFILL_ITEM = "app__from_autofill_item",
+  APP_FROM_AUTOFILL_ON_SAVE_REQUEST = 'app__on_save_request',
   APP_CURRENT_USER = 'app__current_user',
   PUSH_NOTI_DATA = 'push_noti_data'
 }

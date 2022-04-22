@@ -5,13 +5,12 @@ import orderBy from 'lodash/orderBy'
 import { Button } from "../../../../../components/button/button"
 import { Text } from "../../../../../components/text/text"
 import { AutoImage as Image } from "../../../../../components/auto-image/auto-image"
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+// import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CipherType } from "../../../../../../core/enums"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
-import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { commonStyles, fontSize } from "../../../../../theme"
 import { Checkbox } from "react-native-ui-lib"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
@@ -23,6 +22,8 @@ import { NoteAction } from "../../notes/note-action"
 import { IdentityAction } from "../../identities/identity-action"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { PendingSharedAction } from "./pending-shared-action"
+import { CryptoAccountAction } from "../../crypto-asset/crypto-account-action"
+import { CryptoWalletAction } from "../../crypto-asset/crypto-wallet-action"
 
 
 export interface CipherSharedListProps {
@@ -49,10 +50,10 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     emptyContent, navigation, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { getWebsiteLogo, translate, color } = useMixins()
+  const { translate, color } = useMixins()
   const { getCiphers } = useCipherDataMixins()
   const { cipherStore } = useStores()
-  const { newCipher } = useCipherHelpersMixins()
+  const { newCipher, getCipherInfo } = useCipherHelpersMixins()
   type ListItem = CipherView & {
     isShared?: boolean
     description?: string
@@ -69,6 +70,8 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const [showNoteAction, setShowNoteAction] = useState(false)
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
+  const [showCryptoAccountAction, setShowCryptoAccountAction] = useState(false)
+  const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showPendingAction, setShowPendingAction] = useState(false)
 
   // ------------------------ COMPUTED ----------------------------
@@ -76,33 +79,15 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const organizations = cipherStore.organizations
   const pendingCiphers = cipherStore.sharingInvitations.map(i => {
     const cipher: ListItem = newCipher(i.cipher_type)
+    const cipherInfo = getCipherInfo(cipher)
+
     cipher.isShared = true
     cipher.id = i.id
     cipher.organizationId = i.team.id
     cipher.name = `(${translate('shares.encrypted_content')})`
-    switch (i.cipher_type) {
-      case CipherType.Login: {
-        cipher.logo = BROWSE_ITEMS.password.icon
-        break
-      }
-      case CipherType.SecureNote: {
-        cipher.logo = BROWSE_ITEMS.note.icon
-        cipher.svg = BROWSE_ITEMS.note.svgIcon
-        break
-      }
-      case CipherType.Card: {
-        cipher.logo = BROWSE_ITEMS.card.icon
-        break
-      }
-      case CipherType.Identity: {
-        cipher.logo = BROWSE_ITEMS.identity.icon
-        cipher.svg = BROWSE_ITEMS.identity.svgIcon
-        break
-      }
-      default:
-        cipher.logo = BROWSE_ITEMS.trash.icon
-        cipher.svg = BROWSE_ITEMS.trash.svgIcon
-    }
+    cipher.logo = cipherInfo.backup
+    cipher.svg = cipherInfo.svg
+
     let shareType = ''
     if (i.role === AccountRoleText.MEMBER) {
       if (i.hide_passwords) {
@@ -154,42 +139,13 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
     // Add image + org info
     let res = searchRes.map((c: CipherView) => {
+      const cipherInfo = getCipherInfo(c)
       const data = {
         ...c,
-        logo: null,
-        imgLogo: null,
-        svg: null,
+        logo: cipherInfo.backup,
+        imgLogo: cipherInfo.img,
+        svg: cipherInfo.svg,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id)
-      }
-      switch (c.type) {
-        case CipherType.Login: {
-          if (c.login.uri) {
-            data.imgLogo = getWebsiteLogo(c.login.uri)
-          }
-          data.logo = BROWSE_ITEMS.password.icon
-          break
-        }
-
-        case CipherType.SecureNote: {
-          data.logo = BROWSE_ITEMS.note.icon
-          data.svg = BROWSE_ITEMS.note.svgIcon
-          break
-        }
-
-        case CipherType.Card: {
-          data.logo = BROWSE_ITEMS.card.icon
-          break
-        }
-
-        case CipherType.Identity: {
-          data.logo = BROWSE_ITEMS.identity.icon
-          data.svg = BROWSE_ITEMS.identity.svgIcon
-          break
-        }
-
-        default:
-          data.logo = BROWSE_ITEMS.trash.icon
-          data.svg = BROWSE_ITEMS.trash.svgIcon
       }
       return data
     })
@@ -235,6 +191,12 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       case CipherType.SecureNote:
         setShowNoteAction(true)
         break
+      case CipherType.CryptoAccount:
+        setShowCryptoAccountAction(true)
+        break
+      case CipherType.CryptoWallet:
+        setShowCryptoWalletAction(true)
+        break
       default:
         return
     }
@@ -247,20 +209,8 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       setShowPendingAction(true)
       return
     }
-    switch (item.type) {
-      case CipherType.Login:
-        navigation.navigate('passwords__info')
-        break
-      case CipherType.Card:
-        navigation.navigate('cards__info')
-        break
-      case CipherType.Identity:
-        navigation.navigate('identities__info')
-        break
-      case CipherType.SecureNote:
-        navigation.navigate('notes__info')
-        break
-    }
+    const cipherInfo = getCipherInfo(item)
+    navigation.navigate(`${cipherInfo.path}__info`)
   }
 
   // Get cipher description
@@ -460,6 +410,20 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       <NoteAction
         isOpen={showNoteAction}
         onClose={() => setShowNoteAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <CryptoAccountAction
+        isOpen={showCryptoAccountAction}
+        onClose={() => setShowCryptoAccountAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <CryptoWalletAction
+        isOpen={showCryptoWalletAction}
+        onClose={() => setShowCryptoWalletAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
       />

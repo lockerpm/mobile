@@ -109,7 +109,9 @@ export type PrimaryParamList = {
   autofillService: undefined
   import: undefined
   export: undefined
-  autofill: undefined
+  autofill: {
+    mode: 'all' | 'item'
+  }
   notificationSettings: undefined
   shareMultiple: undefined
   cryptoAccounts__info: undefined
@@ -281,22 +283,19 @@ export const MainNavigator = observer(() => {
 
     ws.onerror = (e) => {
       Logger.debug(`SOCKET ERROR: ${JSON.stringify(e)}`)
-      timeout = setTimeout(async () => {
-        if (ws.readyState === WebSocket.CLOSED && !uiStore.isOffline) {
-          // WebSocket.CLOSED     = 3
-          // WebSocket.CLOSING    = 2
-          // WebSocket.CONNECTING = 0
-          // WebSocket.OPEN       = 1
+    }
 
+    ws.onclose = (e) => {
+      Logger.debug(`SOCKET CLOSE: ${JSON.stringify(e)}`)
+
+      // Auto reconnect
+      timeout = setTimeout(async () => {
+        if (!uiStore.isOffline && user.isLoggedInPw) {
           // Manually check for update
           await handleSync()
           setSocket(generateSocket())
         }
       }, 10000)
-    }
-
-    ws.onclose = (e) => {
-      Logger.debug(`SOCKET CLOSE: ${JSON.stringify(e)}`);
     }
 
     return ws
@@ -422,7 +421,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="export" component={ExportScreen} />
         <Stack.Screen name="notificationSettings" component={NotificationSettingsScreen} />
 
-        <Stack.Screen name="autofill" component={AutoFillScreen} />
+        <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: 'all' }} />
       </Stack.Navigator>
     </UserInactivity>
   )

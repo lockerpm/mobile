@@ -13,6 +13,10 @@ class Utils {
 
   static private let pbkdf2: HashCore = HashCore()
   
+  static public func GetStringInfo(key: String) -> String {
+    let a = Bundle.main.object(forInfoDictionaryKey: key) as? String
+    return a ?? ""
+  }
   static public func Translate(_ key: String) -> String {
     return key.locolized()
   }
@@ -27,7 +31,6 @@ class Utils {
   static public func MakeKeyHash(key: String, text: String) -> String {
     return pbkdf2.makeKeyHash(masterPassword: key, email: text)
   }
-  
   
   
   static public func BiometricAuthentication(view: UIViewController, onSuccess: @escaping () -> Void, onFailed: @escaping () -> Void) {
@@ -105,3 +108,6 @@ extension String {
     }
 }
 
+extension UserDefaults {
+  static let group = UserDefaults(suiteName: "group.com.cystack.lockerapp")!
+}

@@ -23,12 +23,21 @@ export const CryptoWalletAction = observer((props: Props) => {
   const data = toCryptoWalletData(selectedCipher.notes)
 
   const renderContent = () => (
-    <ActionItem
-      name={translate('crypto_asset.copy_seed')}
-      icon="copy"
-      action={() => copyToClipboard(data.seed)}
-      disabled={!data.seed}
-    />
+    <>
+      <ActionItem
+        name={translate('crypto_asset.copy_address')}
+        icon="copy"
+        action={() => copyToClipboard(data.address)}
+        disabled={!data.address}
+      />
+      
+      <ActionItem
+        name={translate('crypto_asset.copy_seed')}
+        icon="copy"
+        action={() => copyToClipboard(data.seed)}
+        disabled={!data.seed}
+      />
+    </>
   )
 
   return (

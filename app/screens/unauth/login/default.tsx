@@ -79,16 +79,12 @@ export const DefaultLogin = observer((props: Props) => {
   const SOCIAL_LOGIN: {
     [service: string]: {
       hide?: boolean
-      size?: number
-      marginBottom?: number
       icon: any
       handler: () => void
     }
   } = {
     apple: {
       hide: !IS_IOS,
-      size: 34,
-      marginBottom: 4,
       icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.appleLight : SOCIAL_LOGIN_ICON.apple,
       handler: () => {
         return appleLogin({
@@ -99,6 +95,7 @@ export const DefaultLogin = observer((props: Props) => {
     },
 
     google: {
+      hide: !IS_PROD,
       icon: SOCIAL_LOGIN_ICON.google,
       handler: () => {
         return googleLogin({
@@ -196,7 +193,7 @@ export const DefaultLogin = observer((props: Props) => {
 
       <View style={commonStyles.CENTER_VIEW}>
         <Text
-          text={translate("common.or_login_with")}
+          text={IS_PROD ? translate("common.or_login_with") : ""}
           style={{ marginBottom: 5 }}
         />
 
@@ -209,14 +206,7 @@ export const DefaultLogin = observer((props: Props) => {
                 onPress={item.handler}
                 style={{ marginHorizontal: 10 }}
               >
-                <Image
-                  source={item.icon}
-                  style={{ 
-                    height: item.size || 30, 
-                    width: item.size || 30,
-                    marginBottom: item.marginBottom || 0
-                  }}
-                />
+                <item.icon height={40} width={40} />
               </Button>
             ))
           }
