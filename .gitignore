@@ -83,3 +83,7 @@ web-build/
 app/config/env.*.js
 !env.js
 
+# Env
+.env
+app/config/.env.production
+app/config/.env.staging

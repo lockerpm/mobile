@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon, AutoImage as Image } from "../../../../../components"
+import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon, AutoImage as Image, PasswordStrength } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -13,18 +13,20 @@ import { DeletedAction } from "../../../../../components/cipher/cipher-action/de
 import { useMixins } from "../../../../../services/mixins"
 import { toCryptoWalletData } from "../../../../../utils/crypto"
 import { CHAIN_LIST } from "../../../../../utils/crypto/chainlist"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
 
 export const CryptoWalletInfoScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, color } = useMixins()
   const { cipherStore } = useStores()
+  const { getPasswordStrength } = useCipherHelpersMixins()
 
   const selectedCipher = cipherStore.cipherView
   const cryptoWalletData = toCryptoWalletData(selectedCipher.notes)
   const selectedChain = CHAIN_LIST.find(c => c.alias === cryptoWalletData.network.alias)
   const otherChain = CHAIN_LIST.find(c => c.alias === 'other')
-
+  const passwordStrength = getPasswordStrength(cryptoWalletData.password)
 
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
@@ -170,6 +172,34 @@ export const CryptoWalletInfoScreen = observer(() => {
           editable={false}
         />
 
+        {/* Password */}
+        <FloatingInput
+          isPassword
+          fixedLabel
+          copyAble
+          label={translate('common.password')}
+          value={cryptoWalletData.password}
+          editable={false}
+          style={{ marginTop: 20 }}
+        />
+
+        {/* Password strength */}
+        <Text
+          text={translate('password.password_security')}
+          style={{ fontSize: fontSize.small, marginTop: 20 }}
+        />
+        <PasswordStrength preset="text" value={passwordStrength.score} />
+
+        {/* Address */}
+        <FloatingInput
+          fixedLabel
+          copyAble
+          label={translate('crypto_asset.wallet_address')}
+          value={cryptoWalletData.address}
+          editable={false}
+          style={{ marginTop: 20 }}
+        />
+
         {/* Seed */}
         <FloatingInput
           label={translate('crypto_asset.seed')}
@@ -178,7 +208,7 @@ export const CryptoWalletInfoScreen = observer(() => {
           textarea
           fixedLabel
           copyAble
-          style={{ marginVertical: 20 }}
+          style={{ marginTop: 20 }}
         />
 
         {/* Notes */}
@@ -189,6 +219,7 @@ export const CryptoWalletInfoScreen = observer(() => {
           textarea
           fixedLabel
           copyAble
+          style={{ marginTop: 20 }}
         />
 
         {/* Others common info */}

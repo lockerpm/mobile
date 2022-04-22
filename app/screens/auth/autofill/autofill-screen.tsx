@@ -4,16 +4,24 @@ import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from "../../../compo
 import { useNavigation } from "@react-navigation/native"
 import { SortAction } from "../home/all-item/sort-action"
 import { useMixins } from "../../../services/mixins"
-import { BackHandler } from "react-native"
+import { BackHandler, NativeModules } from "react-native"
 import { useStores } from "../../../models"
+import { RouteProp, useRoute } from "@react-navigation/native"
+import { PrimaryParamList } from "../../../navigators"
+import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
 import { AutoFillList } from "./autofill-list"
 
+const { RNAutofillServiceAndroid } = NativeModules
+
+type PasswordEditScreenProp = RouteProp<PrimaryParamList, "autofill">
 
 export const AutoFillScreen = observer(function AutoFillScreen() {
   const navigation = useNavigation()
   const { translate } = useMixins()
   const { uiStore } = useStores()
-
+  const { checkLoginIdExist } = useCipherToolsMixins()
+  const route = useRoute<PasswordEditScreenProp>()
+  const { mode } = route.params
   // -------------------- PARAMS ----------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -33,19 +41,33 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
   // If is selecting -> close it instead of exit
   // Quit app on back press
   useEffect(() => {
-    uiStore.setIsSelecting(isSelecting)
-    const checkSelectBeforeLeaving = () => {
-      if (isSelecting) {
-        setIsSelecting(false)
-        setSelectedItems([])
-        return true
+    if (mode === 'item') {
+      const check = async () => {
+        const id = uiStore.saveLastId;
+        const res = await checkLoginIdExist(id);
+        if (res) {
+          RNAutofillServiceAndroid.useLastItem();
+        } else {
+          RNAutofillServiceAndroid.removeLastItem();
+          BackHandler.exitApp();
+        }
       }
-      BackHandler.exitApp()
-      return false
-    }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      check()
+    } else {
+      uiStore.setIsSelecting(isSelecting)
+      const checkSelectBeforeLeaving = () => {
+        if (isSelecting) {
+          setIsSelecting(false)
+          setSelectedItems([])
+          return true
+        }
+        BackHandler.exitApp()
+        return false
+      }
+      BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      }
     }
   }, [isSelecting])
 

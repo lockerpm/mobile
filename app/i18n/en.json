@@ -350,7 +350,7 @@
   "password": {
     "login_details": "Login Details",
     "username": "Email or Username",
-    "website_url": "Website URL",
+    "website_url": "Website",
     "password_security": "Password Security",
     "launch_website": "Launch Website",
     "copy_username": "Copy Email or Username",
@@ -547,6 +547,7 @@
   },
   "crypto_asset": {
     "wallet_name": "Wallet Name",
+    "wallet_address": "Wallet Address",
     "account_name": "Account Name",
     "choose_type": "Choose your type of asset",
     "choose_type_desc": "Select the method that crypto you want to add",
@@ -556,6 +557,7 @@
       "btn": "Add Asset"
     },
     "copy_seed": "Copy Seed Phrase",
+    "copy_address": "Copy Address",
     "copy_username": "Copy Username",
     "copy_password": "Copy Password",
     "email_recovery": "Email Recovery",

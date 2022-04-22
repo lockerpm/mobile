@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>SHARED_KEYCHAIN_SERVICE</key>
+	<string>$(SHARED_KEYCHAIN_SERVICE)</string>
+	<key>SHARED_KEYCHAIN_ACCESS_GROUP</key>
+	<string>$(SHARED_KEYCHAIN_ACCESS_GROUP)</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Please allow to continue with face id</string>
 	<key>NSExtension</key>

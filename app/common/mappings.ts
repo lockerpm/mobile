@@ -19,6 +19,13 @@ import FFolderIcon from './images/folder/folder.svg'
 import FFolderShareIcon from './images/folder/folder-share.svg'
 import FFolderAddIcon from './images/folder/folder-add.svg'
 
+import GitHub from './images/icons/github.svg'
+import GitHubLight from './images/icons/github-light.svg'
+import Facebook from './images/icons/facebook.svg'
+import Google from './images/icons/google.svg'
+import Apple from './images/icons/apple.svg'
+import AppleLight from './images/icons/apple-light.svg'
+
 
 type BrowseItem = {
   label: TxKeyPath
@@ -60,13 +67,13 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     routeName: 'cards',
     addable: true
   },
-  // cryptoAsset: {
-  //   label: 'common.crypto_asset',
-  //   icon: require('./images/vault/crypto-asset.png'),
-  //   routeName: 'cryptoAssets',
-  //   addable: true,
-  //   svgIcon: CryptoAssetIcon
-  // },
+  cryptoAsset: {
+    label: 'common.crypto_asset',
+    icon: require('./images/vault/crypto-asset.png'),
+    routeName: 'cryptoAssets',
+    addable: true,
+    svgIcon: CryptoAssetIcon
+  },
   cryptoAccount: {
     label: 'common.crypto_account',
     icon: require('./images/vault/crypto-account.png'),
@@ -177,10 +184,10 @@ export const APP_ICON = {
 
 
 export const SOCIAL_LOGIN_ICON = {
-  google: require('./images/icons/google.png'),
-  facebook: require('./images/icons/facebook.png'),
-  github: require('./images/icons/github.png'),
-  githubLight: require('./images/icons/github-light.png'),
-  apple: require('./images/icons/apple.png'),
-  appleLight: require('./images/icons/apple-light.png')
+  google: Google,
+  facebook: Facebook,
+  github: GitHub,
+  githubLight: GitHubLight,
+  apple: Apple,
+  appleLight: AppleLight
 }

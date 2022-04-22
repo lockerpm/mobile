@@ -96,15 +96,20 @@ export const ToolStoreModel = types
 
     clearStore: () => {
       self.apiToken = null
+
       self.breachedEmail = null
       self.breaches = cast([])
       self.selectedBreach = null
+      
+      self.isLoadingHealth = false
+      self.lastHealthCheck = null
       self.weakPasswords = cast([])
       self.reusedPasswords = cast([])
       self.exposedPasswords = cast([])
       self.passwordStrengthMap = null
       self.passwordUseMap = null
       self.exposedPasswordMap = null
+
       self.authenticatorOrder = cast([])
     },
 
@@ -112,6 +117,9 @@ export const ToolStoreModel = types
       self.breachedEmail = null
       self.breaches = cast([])
       self.selectedBreach = null
+
+      self.isLoadingHealth = false
+      self.lastHealthCheck = null
       self.weakPasswords = cast([])
       self.reusedPasswords = cast([])
       self.exposedPasswords = cast([])

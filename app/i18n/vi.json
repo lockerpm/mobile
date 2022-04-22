@@ -546,6 +546,9 @@
     "pls_select_right_format": "Yêu cầu phải là tệp {{format}}"
   },
   "crypto_asset": {
+    "wallet_name": "Tên ví",
+    "wallet_address": "Địa chỉ ví",
+    "account_name": "Tên tài khoản",
     "choose_type": "Chọn loại tài sản của bạn",
     "choose_type_desc": "Chọn phương thức tiền điện tử bạn muốn thêm",
     "empty": {
@@ -554,6 +557,7 @@
       "btn": "Thêm tài sản"
     },
     "copy_seed": "Sao chép Seed Phrase",
+    "copy_address": "Sao chép địa chỉ",
     "copy_username": "Sao chép tên người dùng",
     "copy_password": "Sao chép mật khẩu",
     "email_recovery": "Email khôi phục",

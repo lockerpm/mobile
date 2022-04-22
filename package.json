@@ -53,6 +53,7 @@
     "@tradle/react-native-http": "2.0.0",
     "@unimodules/core": "6.0.0",
     "apisauce": "^2.1.1",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "big-integer": "^1.6.48",
     "browser-hrtime": "^1.1.8",
     "browserify-zlib": "~0.1.4",
