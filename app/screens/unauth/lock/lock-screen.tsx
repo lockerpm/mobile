@@ -19,8 +19,10 @@ export const LockScreen = observer(() => {
   const { logout, sessionLogin, biometricLogin } = useCipherAuthenticationMixins()
   const { user, uiStore } = useStores()
 
+  const isAutofillAnroid = uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
+
   // ---------------------- PARAMS -------------------------
-  
+
   const [masterPassword, setMasterPassword] = useState('')
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
@@ -97,13 +99,22 @@ export const LockScreen = observer(() => {
 
   const header = (
     <View style={{ alignItems: "flex-end" }}>
-      <Button
-        text={translate('common.logout').toUpperCase()}
-        textStyle={{ fontSize: fontSize.p }}
-        preset="link"
-        onPress={handleLogout}
-      >
-      </Button>
+
+      {isAutofillAnroid ?
+        <Button
+          text={translate('common.cancel').toUpperCase()}
+          textStyle={{ fontSize: fontSize.p }}
+          preset="link"
+          onPress={() => BackHandler.exitApp()}
+        />
+        :
+        <Button
+          text={translate('common.logout').toUpperCase()}
+          textStyle={{ fontSize: fontSize.p }}
+          preset="link"
+          onPress={handleLogout}
+        />
+        }
     </View>
   )
 
@@ -132,7 +143,7 @@ export const LockScreen = observer(() => {
 
       e.preventDefault()
 
-      if (!IS_IOS && (uiStore.isFromAutoFill || uiStore.isOnSaveLogin)) {
+      if (!IS_IOS && isAutofillAnroid) {
         BackHandler.exitApp()
         return
       }
@@ -141,10 +152,10 @@ export const LockScreen = observer(() => {
         translate('alert.logout') + user.email + '?',
         '',
         [
-          { 
-            text: translate('common.cancel'), 
-            style: 'cancel', 
-            onPress: () => {}
+          {
+            text: translate('common.cancel'),
+            style: 'cancel',
+            onPress: () => { }
           },
           {
             text: translate('common.logout'),

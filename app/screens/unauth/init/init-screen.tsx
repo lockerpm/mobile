@@ -9,6 +9,7 @@ import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
 import { BackHandler, Appearance } from "react-native"
 import { useMixins } from "../../../services/mixins"
+import { Logger } from "../../../utils/logger"
 
 
 export const InitScreen = observer(() => {
@@ -16,6 +17,7 @@ export const InitScreen = observer(() => {
   const navigation = useNavigation()
   const theme = Appearance.getColorScheme()
   const { boostrapPushNotifier } = useMixins()
+
 
   // ------------------ METHODS ---------------------
 
@@ -28,10 +30,11 @@ export const InitScreen = observer(() => {
   }
 
   const checkAutoFill = async () => {
-    if (!IS_IOS) return false
-
+    if (IS_IOS) return false
+ 
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL)
     if (autoFillData && autoFillData.enabled) {
+      console.log("asdasdasd")
       uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
       uiStore.setIsFromAutoFill(true)
       return true
@@ -42,7 +45,7 @@ export const InitScreen = observer(() => {
   }
 
   const checkAutoFillItem = async () => {
-    if (!IS_IOS) return false
+    if (IS_IOS) return false
 
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL_ITEM)
     if (autoFillData && autoFillData.enabled) {
@@ -56,7 +59,7 @@ export const InitScreen = observer(() => {
   }
 
   const checkOnSaveLogin = async () => {
-    if (!IS_IOS) return false
+    if (IS_IOS) return false
 
     const loginData = await load(StorageKey.APP_FROM_AUTOFILL_ON_SAVE_REQUEST)
     if (loginData && loginData.enabled) {
@@ -114,9 +117,9 @@ export const InitScreen = observer(() => {
       }
       return
     }
-
     // Network connected? || Is autofill?
     if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {
+     
       goLockOrCreatePassword()
       return
     }
