@@ -1,0 +1,72 @@
+{
+    "exportFormatVersion": 2,
+    "exportTime": "2022-04-27 10:41:08",
+    "containerVersion": {
+        "path": "accounts/2631724852/containers/62274952/versions/1",
+        "accountId": "2631724852",
+        "containerId": "62274952",
+        "containerVersionId": "1",
+        "name": "Empty Container",
+        "container": {
+            "path": "accounts/2631724852/containers/62274952",
+            "accountId": "2631724852",
+            "containerId": "62274952",
+            "name": "locker android",
+            "publicId": "GTM-PBWCLRP",
+            "usageContext": [
+                "ANDROID_SDK_5"
+            ],
+            "fingerprint": "1649493999811",
+            "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/2631724852/containers/62274952/workspaces?apiLink=container",
+            "features": {
+                "supportUserPermissions": true,
+                "supportEnvironments": true,
+                "supportWorkspaces": true,
+                "supportActivities": false,
+                "supportBuiltInVariables": true,
+                "supportClients": false,
+                "supportFolders": true,
+                "supportTags": true,
+                "supportTemplates": true,
+                "supportTriggers": true,
+                "supportVariables": true,
+                "supportVersions": true,
+                "supportZones": true
+            }
+        },
+        "builtInVariable": [
+            {
+                "accountId": "2631724852",
+                "containerId": "62274952",
+                "type": "APP_ID",
+                "name": "App ID"
+            },
+            {
+                "accountId": "2631724852",
+                "containerId": "62274952",
+                "type": "APP_NAME",
+                "name": "App Name"
+            },
+            {
+                "accountId": "2631724852",
+                "containerId": "62274952",
+                "type": "APP_VERSION_CODE",
+                "name": "App Version Code"
+            },
+            {
+                "accountId": "2631724852",
+                "containerId": "62274952",
+                "type": "APP_VERSION_NAME",
+                "name": "App Version Name"
+            },
+            {
+                "accountId": "2631724852",
+                "containerId": "62274952",
+                "type": "EVENT_NAME",
+                "name": "Event Name"
+            }
+        ],
+        "fingerprint": "1649493999817",
+        "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/2631724852/containers/62274952/versions/1?apiLink=version"
+    }
+}
