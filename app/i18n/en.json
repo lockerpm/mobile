@@ -195,7 +195,7 @@
     "confirm_master_pass": "Confirm Master Password",
     "hint": "Hint (optional)",
     "btn": "Create Password",
-    "note": "Note: CyStack cannot view, store, or re-issue Master Password in case you forget or lose it."
+    "note": "Note: Locker cannot view, store, or re-issue Master Password in case you forget or lose it."
   },
   "intro": {
     "item_1": {
