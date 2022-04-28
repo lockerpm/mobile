@@ -9,7 +9,6 @@ import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
 import { BackHandler, Appearance } from "react-native"
 import { useMixins } from "../../../services/mixins"
-import { Logger } from "../../../utils/logger"
 
 
 export const InitScreen = observer(() => {
@@ -34,7 +33,6 @@ export const InitScreen = observer(() => {
  
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL)
     if (autoFillData && autoFillData.enabled) {
-      console.log("asdasdasd")
       uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
       uiStore.setIsFromAutoFill(true)
       return true

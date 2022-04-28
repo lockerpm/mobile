@@ -42,6 +42,17 @@
       </intent-filter>
     </activity>
 
+    <activity
+      android:name="com.google.android.gms.tagmanager.TagManagerPreviewActivity"
+      android:noHistory="true">
+      <intent-filter>
+        <data android:scheme="com.cystack.locker" />
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE"/>
+      </intent-filter>
+    </activity>
+
     <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
     <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
 

@@ -14,6 +14,8 @@ target 'CyStackLocker' do
     :hermes_enabled => false
   )
 
+  pod 'GoogleTagManager'
+
   pod 'GoogleSignIn', '~> 6.0.2'
 
   pod 'FontAwesome.swift'
