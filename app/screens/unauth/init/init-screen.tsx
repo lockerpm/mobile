@@ -34,7 +34,6 @@ export const InitScreen = observer(() => {
  
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL)
     if (autoFillData && autoFillData.enabled) {
-      console.log("asdasdasd")
       uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
       uiStore.setIsFromAutoFill(true)
       return true
