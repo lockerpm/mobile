@@ -195,7 +195,7 @@
     "confirm_master_pass": "Xác nhận mật khẩu chính",
     "hint": "Gợi ý (không bắt buộc)",
     "btn": "Tạo mật khẩu",
-    "note": "Lưu ý: CyStack không thể xem, không thể lưu trữ, cũng như không thể cấp lại Master Password trong trường hợp bạn quên hoặc đánh mất."
+    "note": "Lưu ý: Locker không thể xem, không thể lưu trữ, cũng như không thể cấp lại Master Password trong trường hợp bạn quên hoặc đánh mất."
   },
   "intro": {
     "item_1": {
