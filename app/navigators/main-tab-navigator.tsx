@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
-import { View } from "react-native"
+import { View, TouchableOpacity } from "react-native"
 import { Button, Text } from "../components"
 import { fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen, AuthenticatorScreen } from "../screens"
@@ -13,7 +13,7 @@ import { useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import Animated, { withSequence, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated'
 import { SharingStatus } from "../config/types"
-
+import { AutofillServiceActived } from "../utils/Autofill"
 import HomeIcon from './icons/home.svg'
 import BrowseIcon from './icons/menu.svg'
 import ToolsIcon from './icons/settings.svg'
@@ -27,6 +27,7 @@ const Tab = createBottomTabNavigator()
 const TabBar = observer(({ state, descriptors, navigation }) => {
   const { translate, color } = useMixins()
   const { user, uiStore, cipherStore } = useStores()
+  const [autofillActived, setAutofillActived] = useState<Boolean>(true)
   const insets = useSafeAreaInsets()
   // @ts-ignore
   const spin = useAnimatedStyle(() => {
@@ -41,6 +42,12 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
         }
       ]
     }
+  })
+
+  useEffect(()=> {
+    AutofillServiceActived(isActived => {
+      setAutofillActived(isActived)
+    })
   })
   
   const mappings = {
@@ -129,6 +136,19 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
         )
       }
       {/* Status bar end */}
+
+      {/* Autofill service */}
+    { !autofillActived && <TouchableOpacity
+      style={{
+        alignItems: "center",
+        padding: 5,
+        backgroundColor: color.block
+      }}
+    >
+      <Text>Autofill is not active</Text>
+    </TouchableOpacity>}
+
+
 
       {/* Tab items */}
       <View style={{ flexDirection: 'row' }}>

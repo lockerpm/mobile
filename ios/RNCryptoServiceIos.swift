@@ -30,5 +30,7 @@ class RNCryptoServiceIos: NSObject {
         resolve(decryptedMessage.base64EncodedString())
       }
   }
+
+  
 }
 
