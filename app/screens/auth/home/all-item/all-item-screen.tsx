@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef  } from "react"
 import { observer } from "mobx-react-lite"
 import { CipherList, Layout, BrowseItemEmptyContent } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
@@ -6,10 +6,13 @@ import { ItemsHeader } from "./items-header"
 import { SortAction } from "./sort-action"
 import { AddAction } from "./add-action"
 import { useMixins } from "../../../../services/mixins"
-import { Alert, BackHandler } from "react-native"
+import { Alert, BackHandler, Image, View, Text, TouchableOpacity, Linking, AppState } from "react-native"
 import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
-
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import { IS_IOS } from "../../../../config/constants"
+import RNAndroidSettingsTool from "react-native-android-settings-tool"
+import { AutofillServiceEnabled } from "../../../../utils/Autofill"
 
 export const AllItemScreen = observer(() => {
   const navigation = useNavigation()
@@ -18,7 +21,8 @@ export const AllItemScreen = observer(() => {
   const { lock } = useCipherAuthenticationMixins()
 
   // -------------- PARAMS ------------------
-
+  const [isAutofillEnabled, setIsAutofillEnabled] = useState(true)
+  const [isShowAutofillSuggest, setShowAutofillSuggest] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -32,7 +36,20 @@ export const AllItemScreen = observer(() => {
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
 
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
   // -------------- EFFECT ------------------
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", nextAppState => {
+      setAppStateVisible(nextAppState);
+    });
+
+    return () => {
+      subscription == null;
+    };
+  }, []);
 
   // Navigation event listener
   useEffect(() => {
@@ -48,10 +65,10 @@ export const AllItemScreen = observer(() => {
         translate('alert.lock_app'),
         '',
         [
-          { 
-            text: translate('common.cancel'), 
-            style: 'cancel', 
-            onPress: () => {}
+          {
+            text: translate('common.cancel'),
+            style: 'cancel',
+            onPress: () => { }
           },
           {
             text: translate('common.lock'),
@@ -71,6 +88,8 @@ export const AllItemScreen = observer(() => {
       navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
+
+
 
   // Close select before leave
   useEffect(() => {
@@ -98,6 +117,13 @@ export const AllItemScreen = observer(() => {
     }
   }, [])
 
+  useEffect(() => {
+    if (!isLoading) {
+      AutofillServiceEnabled(isActived => {
+        setIsAutofillEnabled(isActived)
+      })
+    }
+  }, [appStateVisible])
   // -------------- RENDER ------------------
 
   return (
@@ -143,6 +169,10 @@ export const AllItemScreen = observer(() => {
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
       />
+      <SuggestEnableAutofill
+        isShow={isShowAutofillSuggest && !isAutofillEnabled}
+        onClose={() => setShowAutofillSuggest(false)}
+      />
 
       <CipherList
         navigation={navigation}
@@ -170,3 +200,64 @@ export const AllItemScreen = observer(() => {
     </Layout>
   )
 })
+
+
+const SuggestEnableAutofill = ({ isShow, onClose }) => {
+  const { translate } = useMixins()
+  const handleOpenAutofillSetting = () => {
+    if (IS_IOS) {
+      Linking.canOpenURL('app-settings:').then(supported => {
+        if (supported) {
+          Linking.openURL('App-prefs:root=General&path=Passwords')
+        }
+      })
+    } else {
+      RNAndroidSettingsTool.ACTION_REQUEST_SET_AUTOFILL_SERVICE('packge:com.cystack.locker')
+    }
+  }
+
+  return isShow && <View
+    style={{
+      borderWidth: 1,
+      borderColor: "orange",
+      backgroundColor: "#FCFAF0",
+      flexDirection: "row",
+      paddingVertical: 16,
+      paddingHorizontal: 20,
+      width: "100%",
+    }}>
+
+    <Image
+      source={require("./Keyboard.png")}
+      style={{
+        width: 32,
+        height: 32,
+        marginRight: 16
+      }}></Image>
+    <View>
+      <Text>{translate("all_items.enable_autofill.title")}</Text>
+      <Text>{translate("all_items.enable_autofill.content")}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          handleOpenAutofillSetting()
+        }}>
+        <Text style={{
+          color: "#007AFF",
+          fontWeight: "700"
+        }}>{translate("all_items.enable_autofill.btn")}</Text>
+      </TouchableOpacity>
+    </View>
+    <TouchableOpacity
+      style={{
+        left: 20,
+        alignItems: "flex-end"
+      }}
+      onPress={() => {
+        onClose(true)
+      }}>
+      <AntDesign name="close" size={20} color={"black"} />
+    </TouchableOpacity>
+
+  </View>
+
+}
