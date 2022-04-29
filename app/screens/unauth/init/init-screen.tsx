@@ -9,7 +9,6 @@ import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
 import { BackHandler, Appearance } from "react-native"
 import { useMixins } from "../../../services/mixins"
-import { Logger } from "../../../utils/logger"
 
 
 export const InitScreen = observer(() => {

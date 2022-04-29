@@ -40,6 +40,7 @@
 		7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A4B148D367B119F99EC2C2E5 /* libPods-CyStackLocker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EADEA568884090C1B008E181 /* libPods-CyStackLocker.a */; };
+		CA3BCB36281A78F3007A0503 /* container in Resources */ = {isa = PBXBuildFile; fileRef = CA3BCB35281A78F2007A0503 /* container */; };
 		CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CA53478F27181AB400BA4901 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -147,6 +148,7 @@
 		8CE0CE211F1098E461694F3F /* Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig"; sourceTree = "<group>"; };
 		8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		96D89FDC55DA47C5942CCE3B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		CA3BCB35281A78F2007A0503 /* container */ = {isa = PBXFileReference; lastKnownFileType = folder; path = container; sourceTree = "<group>"; };
 		CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLocker.entitlements; path = CyStackLocker/CyStackLocker.entitlements; sourceTree = "<group>"; };
 		CA53478927181A9C00BA4901 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		CA53478F27181AB400BA4901 /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -374,6 +376,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				CA3BCB35281A78F2007A0503 /* container */,
 				CAFA4CF6270AF9A20003FFA5 /* CyStackLocker-Bridging-Header.h */,
 				7C633CDA2761EA0D00140CAA /* Packages */,
 				CAFA4CF7270AF9A20003FFA5 /* File.swift */,
@@ -599,6 +602,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA3BCB36281A78F3007A0503 /* container in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
@@ -685,6 +689,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-CyStackLocker/Pods-CyStackLocker-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FontAwesome.swift/FontAwesome.swift.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.bundle",
+				"${PODS_ROOT}/GoogleTagManager/Frameworks/GoogleTagManager.xcframework/Resources/TagManagerResources.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -707,6 +712,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.swift.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TagManagerResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -827,6 +833,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FontAwesome.swift/FontAwesome.swift.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.bundle",
+				"${PODS_ROOT}/GoogleTagManager/Frameworks/GoogleTagManager.xcframework/Resources/TagManagerResources.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -849,6 +856,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.swift.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TagManagerResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
