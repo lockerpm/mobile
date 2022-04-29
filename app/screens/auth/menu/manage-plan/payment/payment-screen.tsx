@@ -52,7 +52,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
     if (route.params.family) {
       setPayIndividual(false)
     }
-  })
+  }, [])
 
 
   const getSubscription = useCallback(async (): Promise<void> => {

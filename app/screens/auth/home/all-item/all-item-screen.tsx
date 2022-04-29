@@ -249,7 +249,6 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
     </View>
     <TouchableOpacity
       style={{
-        left: 20,
         alignItems: "flex-end"
       }}
       onPress={() => {
