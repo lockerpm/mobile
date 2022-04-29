@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
-import { View, TouchableOpacity } from "react-native"
+import { View, TouchableOpacity, AppState, Linking } from "react-native"
 import { Button, Text } from "../components"
 import { fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen, AuthenticatorScreen } from "../screens"
@@ -19,16 +19,23 @@ import BrowseIcon from './icons/menu.svg'
 import ToolsIcon from './icons/settings.svg'
 import MenuIcon from './icons/menu-2.svg'
 import AuthenticatorIcon from './icons/authenticator.svg'
-
+import { IS_IOS } from "../config/constants"
+import RNAndroidSettingsTool from "react-native-android-settings-tool"
 
 const Tab = createBottomTabNavigator()
 
 // @ts-ignore
 const TabBar = observer(({ state, descriptors, navigation }) => {
+  
   const { translate, color } = useMixins()
   const { user, uiStore, cipherStore } = useStores()
   const [autofillActived, setAutofillActived] = useState<Boolean>(true)
   const insets = useSafeAreaInsets()
+  
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  
+  
   // @ts-ignore
   const spin = useAnimatedStyle(() => {
     return {
@@ -43,12 +50,33 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
       ]
     }
   })
+  const handleOpenAutofillSetting = () => {
+    if (IS_IOS) {
+      Linking.canOpenURL('app-settings:').then(supported => {
+        if (supported) {
+          Linking.openURL('App-prefs:root=General&path=Passwords')
+        } 
+      })
+    } else {
+      RNAndroidSettingsTool.ACTION_REQUEST_SET_AUTOFILL_SERVICE('packge:com.cystack.locker')
+    }
+  }
 
   useEffect(()=> {
     AutofillServiceActived(isActived => {
       setAutofillActived(isActived)
     })
   })
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", nextAppState => {
+      setAppStateVisible(nextAppState);
+    });
+
+    return () => {
+      subscription == null;
+    };
+  }, []);
   
   const mappings = {
     homeTab: {
@@ -139,13 +167,15 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
 
       {/* Autofill service */}
     { !autofillActived && <TouchableOpacity
+
+      onPress={() => handleOpenAutofillSetting()}
       style={{
         alignItems: "center",
         padding: 5,
         backgroundColor: color.block
       }}
     >
-      <Text>Autofill is not active</Text>
+      <Text>Autofill is not enabled</Text>
     </TouchableOpacity>}
 
 
