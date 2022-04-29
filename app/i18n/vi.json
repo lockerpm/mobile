@@ -1,5 +1,6 @@
 {
   "common": {
+    "open_settings": "Mở cài đặt",
     "yes": "Đồng ý",
     "accept": "Đồng ý",
     "account": "Tài khoản",
@@ -410,6 +411,11 @@
       "title": "Thêm mật khẩu đầu tiên của bạn",
       "desc": "Tạo mật khẩu đầu tiên để bắt đầu xây dựng kho của bạn",
       "btn": "Thêm mục"
+    },
+    "enable_autofill" : {
+      "title": "Tự động điền chưa được kích hoạt",
+      "content": "Khám phá khả năng của tự động điền mật khẩu",
+      "btn": "Kích hoạt tự động điền"      
     }
   },
   "change_master_pass": {

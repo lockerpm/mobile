@@ -1,15 +1,14 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { Header, Layout, Text } from "../../../../components"
+import { Header, Layout, Text, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../services/mixins"
-import { View } from "react-native"
-
+import { View, Image, Linking } from "react-native"
+import { Step } from "./enable_autofill_step"
 
 export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
   const navigation = useNavigation()
   const { translate } = useMixins()
-
   return (
     <Layout
       header={(
@@ -17,53 +16,45 @@ export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
           goBack={() => {
             navigation.goBack()
           }}
-          title={translate('settings.autofill_service')}
-          right={(<View style={{ width: 30 }} />)}
         />
       )}
+
+      footer={(
+        <View>
+          <Button
+            text={translate("common.open_settings")}
+            onPress={() => {
+              Linking.canOpenURL('app-settings:').then(supported => {
+                if (supported) {
+                  Linking.openURL('App-prefs:root=General&path=Passwords')
+                }
+              })
+            }}
+          >
+          </Button>
+        </View>
+      )}
     >
-      <Text
-        preset="black"
-        text={translate("autofill_service.ios.desc")}
-        style={{
-          marginBottom: 20
-        }}
-      />
-      <Text
-        preset="black"
-        text={translate("autofill_service.ios.step_1")}
-        style={{
-          marginBottom: 10
-        }}
-      />
-      <Text
-        preset="black"
-        text={translate("autofill_service.ios.step_2")}
-        style={{
-          marginBottom: 10
-        }}
-      />
-      <Text
-        preset="black"
-        text={translate("autofill_service.ios.step_3")}
-        style={{
-          marginBottom: 10
-        }}
-      />
-      <Text
-        preset="black"
-        text={translate("autofill_service.ios.step_4")}
-        style={{
-          marginBottom: 10
-        }}
-      />
-      <Text
-        preset="black"
-        text={translate("autofill_service.ios.step_5")}
-        style={{
-          marginBottom: 10
-        }}
-      />
+      <View style={{ alignItems: "center" }}>
+        <Text preset="header" text="Enable Password Autofill" />
+
+        <Text text="Get your Locker information right where you need it, from the keyboard" style={{
+          marginTop: 12,
+          marginBottom: 15,
+          textAlign: "center"
+        }} />
+      </View>
+      <Image source={require("./IosHint.png")} style={{ width: 335, height: 215 }}></Image>
+
+      <Text preset="black" text="Step-by-step, in Settings → Passwords:"  style={{
+          marginTop: 25,
+          marginBottom: 10,
+        }}/>
+      
+      <Step img={require("./assets/keyboard.png")} text="Tap on Autofill Passwords"/>
+      <Step img={require("./assets/switch.png")} text="Enable Autofill Passwords"/>
+      <Step img={require("./assets/key.png")} text="Important! Tap to disable Keychain"/>
+      <Step img={require("./assets/locker.png")} text="Tap to enable Locker"/>
     </Layout>
   )
 })

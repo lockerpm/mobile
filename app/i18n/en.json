@@ -1,5 +1,6 @@
 {
   "common": {
+    "open_settings": "Open settings",
     "yes": "Yes",
     "accept": "Accept",
     "account": "Account",
@@ -410,6 +411,11 @@
       "title": "Add your first item",
       "desc": "Create your first item to start building your vault",
       "btn": "Add Item"
+    },
+    "enable_autofill" : {
+      "title": "Don’t miss a magic of autofill",
+      "content": "Let’s enable Autofill to see the magic of login",
+      "btn": "Enable Autofill"      
     }
   },
   "change_master_pass": {
