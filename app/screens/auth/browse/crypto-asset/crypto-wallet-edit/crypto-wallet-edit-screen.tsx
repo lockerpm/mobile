@@ -57,6 +57,11 @@ export const CryptoWalletEditScreen = observer(() => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      if (cipherStore.generatedPassword) {
+        setPassword(cipherStore.generatedPassword)
+        cipherStore.setGeneratedPassword('')
+      }
+
       if (cipherStore.selectedFolder) {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)

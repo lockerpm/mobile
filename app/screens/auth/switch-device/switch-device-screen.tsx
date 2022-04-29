@@ -35,7 +35,7 @@ export const SwitchDeviceScreen = observer(function SwitchDeviceScreen() {
         </Text>
 
         <Text style={{ textAlign: 'center', marginTop: 10 }}>
-        You can only use CyStack Locker for free one type of device. Switch up to 3 times to find the right option for you. 
+        You can only use Locker for free one type of device. Switch up to 3 times to find the right option for you. 
         </Text>
 
         <Button
