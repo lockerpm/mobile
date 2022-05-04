@@ -93,6 +93,7 @@ export const InviteMemberScreen = observer(function InviteMemberScreen() {
                         onClose={setShowInviteMemberModal}
                         familyMembers={familyMembers} 
                         setRelad={setRelad}/>
+                        
                     <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
                         <Text
                             preset="bold"

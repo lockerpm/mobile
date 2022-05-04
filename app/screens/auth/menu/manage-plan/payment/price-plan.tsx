@@ -3,7 +3,6 @@ import { View, TouchableOpacity, ViewStyle } from "react-native"
 import CheckBox from "@react-native-community/checkbox"
 import { Button, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
-import { useStores } from "../../../../../models"
 import { SKU } from "./price-plan.sku"
 
 interface PricePlanItemProps {
@@ -12,7 +11,6 @@ interface PricePlanItemProps {
   onSale?: string
   title: string
   subtitle: string
-
 }
 
 const PricePlanItem = (prop: PricePlanItemProps) => {
@@ -84,13 +82,7 @@ interface PricePlanProps {
 
 export const PricePlan = (props: PricePlanProps) => {
   const { translate, color } = useMixins()
-  const { user } = useStores()
 
-  // const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan 
-
-  //  const handeUserIsInFamilyPlan = () => {
-  //     Alert.alert("Warning", "User")
-  //  }
 
   const planText = {
     per: {

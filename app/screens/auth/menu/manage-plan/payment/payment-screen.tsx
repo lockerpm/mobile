@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { View, StyleSheet, TouchableOpacity, Alert, Image, EmitterSubscription } from "react-native"
-import { Text, Layout } from "../../../../../components"
+import { Text, Layout, Button } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { observer } from "mobx-react-lite"
@@ -19,7 +19,9 @@ import RNIap, {
   finishTransaction,
   purchaseErrorListener,
   purchaseUpdatedListener,
+  presentCodeRedemptionSheetIOS
 } from 'react-native-iap';
+import { PurchaseValidationResult } from "../../../../../services/api"
 
 // control init premium benefit tab
 type ScreenProp = RouteProp<PrimaryParamList, 'payment'>;
@@ -60,7 +62,8 @@ export const PaymentScreen = observer(function PaymentScreen() {
       await RNIap.initConnection();
       if (!IS_IOS) {
         await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
-      } else {
+      } 
+      else {
         await RNIap.clearTransactionIOS();
       }
 
@@ -85,22 +88,26 @@ export const PaymentScreen = observer(function PaymentScreen() {
               Logger.error({ 'ackErr': ackErr });
             }
 
-            var verified: boolean = false;
+            var res: PurchaseValidationResult;
             if (IS_IOS) {
-              verified = await user.purchaseValidation(purchase.transactionReceipt, purchase.productId, purchase.originalTransactionIdentifierIOS)
+              res = await user.purchaseValidation(purchase.transactionReceipt, purchase.productId, purchase.originalTransactionIdentifierIOS)
             } else {
-              verified = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
+              res = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
             }
-            if (!verified) {
-              Alert.alert(
-                translate("manage_plan.verify"),
-                translate("manage_plan.verify_msg"),
-                [
-                  { text: "OK", onPress: () => { } }
-                ]
-              )
-            } else {
-              navigation.navigate("mainTab")
+            if (res.kind === "ok") {
+              if (res.data.success) {
+                await user.loadPlan()
+                navigation.navigate("mainTab")
+              }
+              else {
+                Alert.alert(
+                  translate("manage_plan.verify"),
+                  res.data.detail,
+                  [
+                    { text: "OK", onPress: () => { } }
+                  ]
+                )
+              }
             }
             setProcessPayment(false)
           }
@@ -201,8 +208,21 @@ export const PaymentScreen = observer(function PaymentScreen() {
           isProcessPayment={processPayment}
           isEnable={isEnable}
           personal={payIndividual}
-          purchase={purchase} />
+          purchase={purchase}
+        />
+       { IS_IOS && <Button
+          preset="link"
+          style={{
+            marginBottom: 20
+          }}
+          onPress={() => presentCodeRedemptionSheetIOS()}>
+          <Text style={{ fontSize: 18 ,color: "#007AFF" }}>
+            Redeem code
+          </Text>
+        </Button>}
       </View>
+
+
     </Layout>
   )
 })
