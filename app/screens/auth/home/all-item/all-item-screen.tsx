@@ -222,6 +222,7 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
       borderColor: "orange",
       backgroundColor: "#FCFAF0",
       flexDirection: "row",
+      justifyContent: "space-around",
       paddingVertical: 16,
       paddingHorizontal: 20,
       width: "100%",
@@ -236,7 +237,7 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
       }}></Image>
     <View>
       <Text>{translate("all_items.enable_autofill.title")}</Text>
-      <Text>{translate("all_items.enable_autofill.content")}</Text>
+      <Text >{translate("all_items.enable_autofill.content")}</Text>
       <TouchableOpacity
         onPress={() => {
           handleOpenAutofillSetting()
@@ -248,9 +249,6 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
       </TouchableOpacity>
     </View>
     <TouchableOpacity
-      style={{
-        alignItems: "flex-end"
-      }}
       onPress={() => {
         onClose(true)
       }}>

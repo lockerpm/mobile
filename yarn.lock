@@ -14728,10 +14728,10 @@ react-native-html-parser@^0.1.0:
   resolved "https://registry.yarnpkg.com/react-native-html-parser/-/react-native-html-parser-0.1.0.tgz#c35de1dc325562da26e68befa423bac34505ba48"
   integrity sha512-G5d0pk7TA9YgjVJhLRf2zMOOf1HXd8ItM9JYsTS2pXoEfSRfMfRU5iTj03LGwvHU2NT9kc18NDJeLgZY6+Bbvg==
 
-react-native-iap@^8.0.7:
-  version "8.0.7"
-  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-8.0.7.tgz#78397ad7df2decd31240d89846ab026c8f9ec4d1"
-  integrity sha512-YVZp9g01oSIZ5sT0wxjrYw0kjLUuABH0+PTTxgSUgGQewnGlO9fUIu1fixXkC8nKFS1QhGJLlbaOzVfv+9uRqA==
+react-native-iap@^8.0.8:
+  version "8.0.8"
+  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-8.0.8.tgz#586831269a7fb9c1e005d0ccd5ff17f0c6ca692d"
+  integrity sha512-b9PrJr/eXjS8zwmQp7IUX9Ek/cdjYAV7eCS5epQhlRLyTf03GOHTW6OlKYqC09ncquNvq4Xdx9dFYbAWosatSg==
   dependencies:
     dooboolab-welcome "1.3.2"
 
