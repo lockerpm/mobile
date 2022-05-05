@@ -42,7 +42,7 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
   const { getWebsiteLogo, translate, color } = useMixins()
-  const { getCiphers } = useCipherDataMixins()
+  const { getCiphersFromCache } = useCipherDataMixins()
   const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -67,7 +67,7 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
     filters.push((c : CipherView) => c.type === CipherType.Login)
 
     // Search
-    const searchRes = await getCiphers({
+    const searchRes = await getCiphersFromCache({
       filters,
       searchText,
       deleted: false

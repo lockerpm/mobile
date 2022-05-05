@@ -48,6 +48,8 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
   } = useCoreService()
   const { notify, translate, notifyApiError } = useMixins()
   const { logoutAllServices } = useSocialLoginMixins()
+
+  // TODO: don't know why, but crash if not run
   const { syncAutofillData } = useCipherDataMixins()
 
   // ------------------------ DATA -------------------------

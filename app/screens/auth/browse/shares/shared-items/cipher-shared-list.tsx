@@ -51,7 +51,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
   const { translate, color } = useMixins()
-  const { getCiphers } = useCipherDataMixins()
+  const { getCiphersFromCache } = useCipherDataMixins()
   const { cipherStore } = useStores()
   const { newCipher, getCipherInfo } = useCipherHelpersMixins()
   type ListItem = CipherView & {
@@ -131,7 +131,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     }]
 
     // Search
-    const searchRes = await getCiphers({
+    const searchRes = await getCiphersFromCache({
       filters,
       searchText,
       deleted: false
@@ -203,15 +203,15 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   }
 
   // Go to detail
-  const goToDetail = (item: ListItem) => {
-    cipherStore.setSelectedCipher(item)
-    if (item.isShared) {
-      setShowPendingAction(true)
-      return
-    }
-    const cipherInfo = getCipherInfo(item)
-    navigation.navigate(`${cipherInfo.path}__info`)
-  }
+  // const goToDetail = (item: ListItem) => {
+  //   cipherStore.setSelectedCipher(item)
+  //   if (item.isShared) {
+  //     setShowPendingAction(true)
+  //     return
+  //   }
+  //   const cipherInfo = getCipherInfo(item)
+  //   navigation.navigate(`${cipherInfo.path}__info`)
+  // }
 
   // Get cipher description
   const getDescription = (item: ListItem) => {
