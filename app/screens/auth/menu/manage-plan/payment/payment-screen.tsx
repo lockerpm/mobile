@@ -79,6 +79,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
     purchaseUpdateSubscription = purchaseUpdatedListener(
       async (purchase: SubscriptionPurchase) => {
         if (purchase) {
+          
           const receipt = purchase.transactionReceipt
           if (receipt) {
             try {

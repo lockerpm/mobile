@@ -123,7 +123,7 @@ export const AllItemScreen = observer(() => {
         setIsAutofillEnabled(isActived)
       })
     }
-  }, [appStateVisible])
+  }, [appStateVisible, isLoading])
   // -------------- RENDER ------------------
 
   return (

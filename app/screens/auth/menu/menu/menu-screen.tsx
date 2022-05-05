@@ -12,7 +12,7 @@ import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Invitation, InvitationData } from "./invitation"
-
+import { getBuildNumber, getVersion } from "react-native-device-info"
 
 import PlanIcon from './star.svg'
 import InviteIcon from './invite.svg'
@@ -35,6 +35,7 @@ export const MenuScreen = observer(() => {
   const { lock, logout } = useCipherAuthenticationMixins()
   const { createRandomPasswords } = useTestMixins()
 
+  const appVersion = `${getVersion()}.${getBuildNumber()}`
   const isFreeAccount = user.plan?.alias === PlanType.FREE  
   const isPremiumAccount = user.plan?.alias === PlanType.PREMIUM
   const [isLoading, setIsLoading] = useState(false)
@@ -271,6 +272,8 @@ export const MenuScreen = observer(() => {
             ))
           }
         </View>
+
+        <Text style={{marginTop: 10}}> {appVersion}</Text>
       </ScrollView>
     </Layout>
   )
