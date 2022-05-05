@@ -13,7 +13,6 @@ export const StartScreen = observer(() => {
   const {
     loadFolders,
     loadCollections,
-    syncAutofillData,
     loadOrganizations,
   } = useCipherDataMixins()
   const navigation = useNavigation()
@@ -36,8 +35,6 @@ export const StartScreen = observer(() => {
   }
 
   const mounted = async () => {
-    syncAutofillData()
-
     // Testing
     // if (__DEV__) {
     //   navigation.navigate('dataOutdated')

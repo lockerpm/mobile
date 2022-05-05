@@ -19,6 +19,7 @@ export const CipherStoreModel = types
     isSynching: types.maybeNull(types.boolean),
     isSynchingOffline: types.maybeNull(types.boolean),
     isSynchingAutofill: types.maybeNull(types.boolean),
+    isBatchDecrypting: types.maybeNull(types.boolean),
 
     // Data
     notSynchedCiphers: types.array(types.string),         // Create in offline mode
@@ -69,6 +70,10 @@ export const CipherStoreModel = types
 
     setIsSynchingAutofill: (val: boolean) => {
       self.isSynchingAutofill = val
+    },
+
+    setIsBatchDecrypting: (val: boolean) => {
+      self.isBatchDecrypting = val
     },
 
     setLastSync: () => {
@@ -306,6 +311,7 @@ export const CipherStoreModel = types
     'isSynching',
     'isSynchingOffline',
     'isSynchingAutofill',
+    'isBatchDecrypting',
     'organizations',
     'lastUpdate'
   ]))

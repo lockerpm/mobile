@@ -55,7 +55,7 @@ export const CipherList = observer((props: CipherListProps) => {
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
   const { translate, color, getTeam } = useMixins()
-  const { getCiphers } = useCipherDataMixins()
+  const { getCiphersFromCache } = useCipherDataMixins()
   const { getCipherDescription, getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, user } = useStores()
 
@@ -104,7 +104,7 @@ export const CipherList = observer((props: CipherListProps) => {
     }
 
     // Search
-    const searchRes = await getCiphers({
+    const searchRes = await getCiphersFromCache({
       filters,
       searchText,
       deleted
@@ -199,11 +199,11 @@ export const CipherList = observer((props: CipherListProps) => {
   }
 
   // Go to detail
-  const goToDetail = (item: CipherView) => {
-    cipherStore.setSelectedCipher(item)
-    const cipherInfo = getCipherInfo(item)
-    navigation.navigate(`${cipherInfo.path}__info`)
-  }
+  // const goToDetail = (item: CipherView) => {
+  //   cipherStore.setSelectedCipher(item)
+  //   const cipherInfo = getCipherInfo(item)
+  //   navigation.navigate(`${cipherInfo.path}__info`)
+  // }
 
   // Toggle item selection
   const toggleItemSelection = (item: CipherView) => {

@@ -192,7 +192,7 @@ export const MainNavigator = observer(() => {
       return
     }
 
-    // Sync autofill data
+    // Sync autofill data on iOS
     if (IS_IOS && !appIsActive) {
       syncAutofillData()
     }
@@ -346,6 +346,34 @@ export const MainNavigator = observer(() => {
   useEffect(() => {
     const listener = EventBus.createListener(AppEventType.TEMP_ID_DECTECTED, () => {
       navigation.navigate('dataOutdated')
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [])
+
+  // New batch decrypted
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.NEW_BATCH_DECRYPTED, () => {
+      cipherStore.setLastCacheUpdate()
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [])
+
+  // Batch decrypte
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.DECRYPT_ALL_STATUS, (status) => {
+      switch (status) {
+        case 'started':
+          cipherStore.setIsBatchDecrypting(true)
+          break
+        case 'ended':
+          cipherStore.setIsBatchDecrypting(false)
+          syncAutofillData()
+          break
+      }
     })
     return () => {
       EventBus.removeListener(listener)

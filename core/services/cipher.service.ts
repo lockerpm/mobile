@@ -53,6 +53,8 @@ import { ConstantsService } from './constants.service';
 
 import { sequentialize } from '../misc/sequentialize';
 import { Utils } from '../misc/utils';
+import _ from 'lodash'
+import { AppEventType, EventBus } from '../../app/utils/event-bus';
 
 const Keys = {
     ciphersPrefix: 'ciphers_',
@@ -85,7 +87,7 @@ export class CipherService implements CipherServiceAbstraction {
             if (value == null) {
                 this.searchService().clearIndex();
             } else {
-                this.searchService().indexCiphers();
+                this.searchService().indexCiphers(undefined, value);
             }
         }
     }
@@ -292,6 +294,81 @@ export class CipherService implements CipherServiceAbstraction {
         return response;
     }
 
+    // CS
+    @sequentialize(() => 'getAllDecryptedFromCache')
+    async getAllDecryptedFromCache(): Promise<CipherView[]> {
+        if (this.decryptedCipherCache == null) {
+            const firstBatch = await this.batchDecrypt(0)
+            this.backgroundCiphersDecrypt(1)
+            return firstBatch
+        }
+        const userId = await this.userService.getUserId();
+        if (this.searchService != null && (this.searchService().indexedEntityId ?? userId) !== userId)
+        {
+            await this.searchService().indexCiphers(userId, this.decryptedCipherCache);
+        }
+        return this.decryptedCipherCache;
+    }
+
+    // CS
+    private async backgroundCiphersDecrypt(startingPage: number = 1) {
+        const ciphers = await this.getAll();
+        const length = ciphers.length
+        let page = startingPage
+        while (this._decryptedCipherCache.length < length) {
+            await this.batchDecrypt(page++)
+        }
+    }
+
+    // CS
+    private async batchDecrypt(page: number): Promise<CipherView[]> {
+        const BATCH_SIZE = 100
+        const decCiphers: CipherView[] = [];
+        const hasKey = await this.cryptoService.hasKey();
+        if (!hasKey) {
+            throw new Error('No key get cipher.');
+        }
+
+        const ciphers = await this.getAll();
+        const length = ciphers.length
+
+        const promises: any[] = [];
+        ciphers.slice(page * BATCH_SIZE, Math.min((page + 1) * BATCH_SIZE, length)).forEach(cipher => {
+            promises.push(cipher.decrypt().then(c => decCiphers.push(c)));
+        })
+        await Promise.all(promises);
+        // PERF: disable local sort -> improve time load
+        // decCiphers.sort(this.getLocaleSortingFunction());
+        // PERF: only reindex search every 2 page to save time
+        const isLastPage = (page + 1) * BATCH_SIZE >= length
+        const shouldReindex = (page % 3 === 0) || isLastPage
+        this.mergeDecryptedCipherCache(decCiphers, shouldReindex)
+        if (page > 0) {
+            EventBus.emit(AppEventType.NEW_BATCH_DECRYPTED, null)
+        }
+        if (isLastPage) {
+            EventBus.emit(AppEventType.DECRYPT_ALL_STATUS, 'ended')
+        } else if (page === 0) {
+            EventBus.emit(AppEventType.DECRYPT_ALL_STATUS, 'started')
+        }
+        return decCiphers
+    }
+
+    // CS
+    private mergeDecryptedCipherCache(ciphers: CipherView[], reloadIndex?: boolean) {
+        if (this.decryptedCipherCache == null) {
+            this._decryptedCipherCache = ciphers
+            return
+        }
+        const merged = _.merge(_.keyBy(this.decryptedCipherCache, 'id'), _.keyBy(ciphers, 'id'))
+        const values = _.values(merged)
+        if (reloadIndex) {
+            this.decryptedCipherCache = values
+        } else {
+            this._decryptedCipherCache = values
+        }
+    }
+
     @sequentialize(() => 'getAllDecrypted')
     async getAllDecrypted(): Promise<CipherView[]> {
         if (this.decryptedCipherCache != null) {
@@ -316,7 +393,8 @@ export class CipherService implements CipherServiceAbstraction {
         });
 
         await Promise.all(promises);
-        decCiphers.sort(this.getLocaleSortingFunction());
+        // PERF: disable local sort -> improve time load
+        // decCiphers.sort(this.getLocaleSortingFunction());
         this.decryptedCipherCache = decCiphers;
         return this.decryptedCipherCache;
     }
@@ -1144,6 +1222,7 @@ export class CipherService implements CipherServiceAbstraction {
         }
     }
 
+    // CS
     private async csDecryptAndUpdateCache(ciphers: CipherData[]) {
         const hasKey = await this.cryptoService.hasKey();
         if (!hasKey) {
@@ -1161,6 +1240,7 @@ export class CipherService implements CipherServiceAbstraction {
         this.csUpdateDecryptedCache(decCiphers)
     }
 
+    // CS
     csUpdateDecryptedCache(ciphers: CipherView[]) {
         const decCiphers = this.decryptedCipherCache ? [...this.decryptedCipherCache] : [];
         for (let cipher of ciphers) {
@@ -1176,6 +1256,7 @@ export class CipherService implements CipherServiceAbstraction {
         this.decryptedCipherCache = decCiphers;
     }
 
+    // CS
     csDeleteFromDecryptedCache(ids: string[]) {
         if (this.decryptedCipherCache) {
             let decCiphers = [...this.decryptedCipherCache]

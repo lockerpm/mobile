@@ -265,7 +265,7 @@
     "synching": "Synchronizing...",
     "getting_team_info": "Getting your information...",
     "getting_plan_info": "Getting your plan information...",
-    "decrypting": "Preparing your data..."
+    "decrypting": "Decrypting..."
   },
   "biometric_intro": {
     "title": "Unlock your vault with Face ID/Touch ID",
