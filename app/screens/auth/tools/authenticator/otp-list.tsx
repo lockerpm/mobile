@@ -43,7 +43,7 @@ export const OtpList = observer((props: Props) => {
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
   const { translate, color } = useMixins()
-  const { getCiphers } = useCipherDataMixins()
+  const { getCiphersFromCache } = useCipherDataMixins()
   const { cipherStore, toolStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -69,7 +69,7 @@ export const OtpList = observer((props: Props) => {
     const filters = [(c : CipherView) => c.type === CipherType.TOTP]
 
     // Search
-    const searchRes = await getCiphers({
+    const searchRes = await getCiphersFromCache({
       filters,
       searchText,
       deleted: false,

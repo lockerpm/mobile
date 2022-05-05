@@ -79,6 +79,17 @@ export class SearchService implements SearchServiceAbstraction {
         this.logService.timeEnd('search indexing');
     }
 
+    // CS
+    async searchCiphersFromCache(query: string,
+        filter: (((cipher: CipherView) => boolean) | (((cipher: CipherView) => boolean)[])) = null,
+        ciphers: CipherView[] = null):
+        Promise<CipherView[]> {
+        if (!ciphers) {
+            ciphers = await this.cipherService.getAllDecryptedFromCache() || []
+        }
+        return this.searchCiphers(query, filter, ciphers)
+    }
+
     async searchCiphers(query: string,
         filter: (((cipher: CipherView) => boolean) | (((cipher: CipherView) => boolean)[])) = null,
         ciphers: CipherView[] = null):

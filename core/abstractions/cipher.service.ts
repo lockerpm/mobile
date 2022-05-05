@@ -19,6 +19,7 @@ export abstract class CipherService {
     encryptField: (fieldModel: FieldView, key: SymmetricCryptoKey) => Promise<Field>;
     get: (id: string) => Promise<Cipher>;
     getAll: () => Promise<Cipher[]>;
+    getAllDecryptedFromCache: () => Promise<CipherView[]>;
     getAllDecrypted: () => Promise<CipherView[]>;
     getAllDecryptedForGrouping: (groupingId: string, folder?: boolean) => Promise<CipherView[]>;
     getAllDecryptedForUrl: (url: string, includeOtherTypes?: CipherType[],

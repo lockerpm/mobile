@@ -38,7 +38,7 @@ export const CipherShareList = observer((props: Props) => {
     emptyContent, navigation, onLoadingChange, searchText, sortList
   } = props
   const { translate, color } = useMixins()
-  const { getCiphers } = useCipherDataMixins()
+  const { getCiphersFromCache } = useCipherDataMixins()
   const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore } = useStores()
   type ListItem = CipherView & {
@@ -94,7 +94,7 @@ export const CipherShareList = observer((props: Props) => {
     }]
 
     // Search
-    const searchRes = await getCiphers({
+    const searchRes = await getCiphersFromCache({
       filters,
       searchText,
       deleted: false

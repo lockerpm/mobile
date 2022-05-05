@@ -42,6 +42,7 @@ const defaultData = {
   syncAutofillData: async () => {},
 
   getCiphers: async (params: GetCiphersParams) => { return [] },
+  getCiphersFromCache: async (params: GetCiphersParams) => { return [] },
   getEncryptedCiphers: async (params: GetCiphersParams) => { return [] },
   getCipherById: async (id: string) => new CipherView(),
 
@@ -106,6 +107,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     isOnline?: boolean
     notCipher?: boolean
   }) => {
+    Logger.debug('reload cache')
     cipherStore.setLastCacheUpdate()
     if (!options?.notCipher) {
       await cipherService.clearCache()
@@ -133,6 +135,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     cipher?: CipherView
     deletedIds?: string[]
   }) => {
+    Logger.debug('minimal reload cache')
     const { cipher, deletedIds } = payload
     if (cipher) {
       cipherService.csUpdateDecryptedCache([cipher])
@@ -328,13 +331,13 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
     // Prepare ciphers
     if (cipherStore.notSynchedCiphers.length > 0) {
-      const notSynchedCiphers = await getCiphers({
+      const notSynchedCiphers = await getEncryptedCiphers({
         deleted: false,
         searchText: '',
         filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)],
         includeExtensions: true
       })
-      const notSynchedCiphersDeleted = await getCiphers({
+      const notSynchedCiphersDeleted = await getEncryptedCiphers({
         deleted: true,
         searchText: '',
         filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)],
@@ -342,24 +345,18 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       })
       notSynchedCiphers.push(...notSynchedCiphersDeleted)
   
-      const promises = []
-      notSynchedCiphers.forEach((c: CipherView) => {
-        promises.push(
-          cipherService.encrypt(c).then(enc => {
-            const cipherReq = new CipherRequest(enc)
-            if (!c.id.startsWith(TEMP_PREFIX)) {
-              // @ts-ignore
-              cipherReq.id = c.id
-            }
-            if (c.isDeleted) {
-              // @ts-ignore
-              cipherReq.deletedDate = new Date(c.deletedDate).getTime() / 1000
-            }
-            ciphers.push(cipherReq)
-          })
-        )
+      notSynchedCiphers.forEach((enc: Cipher) => {
+        const cipherReq = new CipherRequest(enc)
+        if (!enc.id.startsWith(TEMP_PREFIX)) {
+          // @ts-ignore
+          cipherReq.id = enc.id
+        }
+        if (!!enc.deletedDate) {
+          // @ts-ignore
+          cipherReq.deletedDate = new Date(enc.deletedDate).getTime() / 1000
+        }
+        ciphers.push(cipherReq)
       })
-      await Promise.all(promises)
     }
 
     // Prepare folders
@@ -411,9 +408,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Store password for autofill
   const _updateAutofillData = async () => {
-    
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
-
     const passwordRes = await getCiphers({
       filters: [
         (c : CipherView) => c.type === CipherType.Login && c.login.username && c.login.password
@@ -607,6 +602,22 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       Logger.error('getCiphers: ' + e)
+      return []
+    }
+  }
+
+  // Get ciphers from cache only
+  const getCiphersFromCache = async (params: GetCiphersParams) => {
+    try {
+      const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
+      const filters = [deletedFilter, ...params.filters]
+      if (!params.includeExtensions) {
+        filters.unshift((c : CipherView) => ![CipherType.TOTP].includes(c.type))
+      }
+      return await searchService.searchCiphersFromCache(params.searchText || '', filters, null) || []
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      Logger.error('getCiphersFromCache: ' + e)
       return []
     }
   }
@@ -967,6 +978,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Delete
   const deleteCiphers = async (ids: string[]) => {
+    if (!ids.length) {
+      return { kind: 'ok' }
+    }
     try {
       // Offline
       if (uiStore.isOffline) {
@@ -993,6 +1007,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Offline delete
   const _offlineDeleteCiphers = async (ids: string[], isAccepted?: boolean) => {
+    if (!ids.length) {
+      return
+    }
     await cipherService.delete(ids)
     ids.forEach(id => {
       if (!isAccepted) {
@@ -1004,6 +1021,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // To trash
   const toTrashCiphers = async (ids: string[]) => {
+    if (!ids.length) {
+      return { kind: 'ok' }
+    }
     try {
       // Offline
       if (uiStore.isOffline) {
@@ -1030,6 +1050,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Offline to trash
   const _offlineToTrashCiphers = async (ids: string[], isAccepted?: boolean) => {
+    if (!ids.length) {
+      return
+    }
     await cipherService.softDelete(ids)
     ids.forEach(id => {
       if (!isAccepted) {
@@ -1041,6 +1064,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Restore
   const restoreCiphers = async (ids: string[]) => {
+    if (!ids.length) {
+      return { kind: 'ok' }
+    }
+
     // Offline
     if (uiStore.isOffline) {
       await _offlineRestoreCiphers(ids)
@@ -1067,6 +1094,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Offline restore
   const _offlineRestoreCiphers = async (ids: string[], isAccepted?: boolean) => {
+    if (!ids.length) {
+      return
+    }
     await cipherService.restore(ids.map(id => ({
       id,
       revisionDate: new Date().toISOString()
@@ -1142,6 +1172,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Share multiple ciphers
   const shareMultipleCiphers = async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => {
+    if (!ids.length) {
+      return { kind: 'ok' }
+    }
     const ciphers = await getCiphers({
       deleted: false,
       searchText: '',
@@ -1852,6 +1885,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     syncAutofillData,
 
     getCiphers,
+    getCiphersFromCache,
     getEncryptedCiphers,
     getCipherById,
     getCollections,
