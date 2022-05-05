@@ -85,6 +85,13 @@ export const MenuScreen = observer(() => {
   const items2: MenuItemProps[] = [
     {
       debug: true,
+      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
+      name: "(DEBUG) Refer friend",
+      action: () => navigation.navigate('refer_friend'),
+      noBorder: true
+    },
+    {
+      debug: true,
       icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: '(DEBUG) ' + (uiStore.isOffline ? 'Go online' : 'Go offline'),
       action: () => {
