@@ -4,7 +4,9 @@ import { EventRegister } from 'react-native-event-listeners'
 
 export enum AppEventType {
   PASSWORD_UPDATE = 'PASSWORD_UPDATE',
-  TEMP_ID_DECTECTED = 'TEMP_ID_DECTECTED'
+  TEMP_ID_DECTECTED = 'TEMP_ID_DECTECTED',
+  NEW_BATCH_DECRYPTED = 'NEW_BATCH_DECRYPTED',
+  DECRYPT_ALL_STATUS = 'DECRYPT_ALL_STATUS'
 }
 
 

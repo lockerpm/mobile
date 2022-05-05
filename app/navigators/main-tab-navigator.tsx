@@ -76,7 +76,9 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
     }
   }
 
-  const isStatusBarVisible = uiStore.isOffline || cipherStore.isSynching || cipherStore.isSynchingOffline
+  const isStatusBarVisible = (
+    uiStore.isOffline || cipherStore.isSynching || cipherStore.isSynchingOffline || cipherStore.isBatchDecrypting
+  )
 
   return uiStore.isSelecting ? null : (
     <View style={{ paddingBottom: insets.bottom, backgroundColor: color.background }}>
@@ -107,15 +109,31 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
                     text={translate('navigator.is_offline')}
                   />
                 </>
+              ) : cipherStore.isBatchDecrypting ? (
+                <>
+                  <MaterialIconsIcon
+                    name="vpn-key"
+                    size={18}
+                    color={color.white}
+                  />
+                  <Text
+                    style={{
+                      fontSize: fontSize.small,
+                      color: color.white,
+                      marginLeft: 5
+                    }}
+                    text={translate('start.decrypting')}
+                  />
+                </>
               ) : (
                 <>
-                  {/* <Animated.View style={spin}>
+                  {/* <Animated.View style={spin}> */}
                     <MaterialIconsIcon
                       name="sync"
                       size={18}
                       color={color.white}
                     />
-                  </Animated.View> */}
+                  {/* </Animated.View> */}
                   <Text
                     style={{
                       fontSize: fontSize.small,

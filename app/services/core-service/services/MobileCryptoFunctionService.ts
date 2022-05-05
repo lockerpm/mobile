@@ -11,6 +11,7 @@ import { IS_IOS } from '../../../config/constants';
 const { RNCryptoServiceIos, RNCryptoServiceAndroid } = NativeModules
 
 export class MobileCryptoFunctionService implements CryptoFunctionService {
+  // DONE
   pbkdf2(password: string | ArrayBuffer, salt: string | ArrayBuffer, algorithm: 'sha256' | 'sha512',
     iterations: number): Promise<ArrayBuffer> {
     const len = algorithm === 'sha256' ? 32 : 64;
@@ -30,17 +31,21 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   }
 
   // ref: https://tools.ietf.org/html/rfc5869
+  // TODO: not calling very much -> ignore for now
   async hkdf(ikm: ArrayBuffer, salt: string | ArrayBuffer, info: string | ArrayBuffer,
     outputByteSize: number, algorithm: 'sha256' | 'sha512'): Promise<ArrayBuffer> {
     const saltBuf = this.toArrayBuffer(salt);
     const prk = await this.hmac(ikm, saltBuf, algorithm);
+    console.log(`-------- HKDF ---------`)
     return this.hkdfExpand(prk, info, outputByteSize, algorithm);
   }
 
   // ref: https://tools.ietf.org/html/rfc5869
+  // TODO: not calling very much -> ignore for now
   async hkdfExpand(prk: ArrayBuffer, info: string | ArrayBuffer, outputByteSize: number,
     algorithm: 'sha256' | 'sha512'): Promise<ArrayBuffer> {
     const hashLen = algorithm === 'sha256' ? 32 : 64;
+    // console.log(`-------- HKDF expand ---------`)
     if (outputByteSize > 255 * hashLen) {
       throw new Error('outputByteSize is too large.');
     }
@@ -69,16 +74,38 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     return okm.slice(0, outputByteSize).buffer;
   }
 
+  // DONE (can ignore md5)
   hash(value: string | ArrayBuffer, algorithm: 'sha1' | 'sha256' | 'sha512' | 'md5'): Promise<ArrayBuffer> {
     const nodeValue = this.toNodeValue(value);
-    const hash = crypto.createHash(algorithm);
-    hash.update(nodeValue);
-    return Promise.resolve(this.toArrayBuffer(hash.digest()));
+
+    switch (algorithm) {
+      case 'sha1':
+        // @ts-ignore
+        return RNSimpleCrypto.SHA.sha1(nodeValue)
+      case 'sha256':
+        // @ts-ignore
+        return RNSimpleCrypto.SHA.sha256(nodeValue)
+      case 'sha512':
+        // @ts-ignore
+        return RNSimpleCrypto.SHA.sha512(nodeValue)
+      default:
+        // Default
+        const hash = crypto.createHash(algorithm);
+        hash.update(nodeValue);
+        return Promise.resolve(this.toArrayBuffer(hash.digest()));
+    }
   }
 
+  // DONE: mostly sha256
   hmac(value: ArrayBuffer, key: ArrayBuffer, algorithm: 'sha1' | 'sha256' | 'sha512'): Promise<ArrayBuffer> {
     const nodeValue = this.toNodeBuffer(value);
     const nodeKey = this.toNodeBuffer(key);
+
+    if (algorithm === 'sha256') {
+      return RNSimpleCrypto.HMAC.hmac256(nodeValue, nodeKey)
+    }
+
+    // Default
     const hmac = crypto.createHmac(algorithm, nodeKey);
     hmac.update(nodeValue);
     return Promise.resolve(this.toArrayBuffer(hmac.digest()));
@@ -111,13 +138,16 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     return this.compare(a, b);
   }
 
+  // DONE
   aesEncrypt(data: ArrayBuffer, iv: ArrayBuffer, key: ArrayBuffer): Promise<ArrayBuffer> {
     const nodeData = this.toNodeBuffer(data);
     const nodeIv = this.toNodeBuffer(iv);
     const nodeKey = this.toNodeBuffer(key);
-    const cipher = crypto.createCipheriv('aes-256-cbc', nodeKey, nodeIv);
-    const encBuf = Buffer.concat([cipher.update(nodeData), cipher.final()]);
-    return Promise.resolve(this.toArrayBuffer(encBuf));
+    // const cipher = crypto.createCipheriv('aes-256-cbc', nodeKey, nodeIv);
+    // const encBuf = Buffer.concat([cipher.update(nodeData), cipher.final()]);
+    // return Promise.resolve(this.toArrayBuffer(encBuf));
+
+    return RNSimpleCrypto.AES.encrypt(nodeData, nodeKey, nodeIv)
   }
 
   aesDecryptFastParameters(data: string, iv: string, mac: string, key: SymmetricCryptoKey):
@@ -147,15 +177,19 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     return Utils.fromBufferToUtf8(decBuf);
   }
 
+  // DONE
   aesDecrypt(data: ArrayBuffer, iv: ArrayBuffer, key: ArrayBuffer): Promise<ArrayBuffer> {
     const nodeData = this.toNodeBuffer(data);
     const nodeIv = this.toNodeBuffer(iv);
     const nodeKey = this.toNodeBuffer(key);
-    const decipher = crypto.createDecipheriv('aes-256-cbc', nodeKey, nodeIv);
-    const decBuf = Buffer.concat([decipher.update(nodeData), decipher.final()]);
-    return Promise.resolve(this.toArrayBuffer(decBuf));
+    // const decipher = crypto.createDecipheriv('aes-256-cbc', nodeKey, nodeIv);
+    // const decBuf = Buffer.concat([decipher.update(nodeData), decipher.final()]);
+    // return Promise.resolve(this.toArrayBuffer(decBuf));
+
+    return RNSimpleCrypto.AES.decrypt(nodeData, nodeKey, nodeIv)
   }
 
+  // DONE
   rsaEncrypt(data: ArrayBuffer, publicKey: ArrayBuffer, algorithm: 'sha1' | 'sha256'): Promise<ArrayBuffer> {
     if (algorithm === 'sha256') {
       throw new Error('Node crypto does not support RSA-OAEP SHA-256');
@@ -166,6 +200,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     return Promise.resolve(this.toArrayBuffer(decipher));
   }
 
+  // DONE
   async rsaDecrypt(data: ArrayBuffer, privateKey: ArrayBuffer, algorithm: 'sha1' | 'sha256'): Promise<ArrayBuffer> {
     if (algorithm === 'sha256') {
       throw new Error('Node crypto does not support RSA-OAEP SHA-256');
@@ -187,6 +222,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     return Promise.resolve(publicKeyArray.buffer);
   }
 
+  // DONE
   async rsaGenerateKeyPair(length: 1024 | 2048 | 4096): Promise<[ArrayBuffer, ArrayBuffer]> {
     return new Promise<[ArrayBuffer, ArrayBuffer]>(async (resolve, reject) => {
       try {
@@ -229,7 +265,9 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     });
   }
 
+  // TODO: replaced in react-native-crypto shim -> ignore
   randomBytes(length: number): Promise<ArrayBuffer> {
+    // console.log(`-------- Randombytes ---------`)
     return new Promise<ArrayBuffer>((resolve, reject) => {
       crypto.randomBytes(length, (error, bytes) => {
         if (error != null) {
