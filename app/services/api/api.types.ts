@@ -287,6 +287,13 @@ export type PostCipherResult = {
     }
 } | GeneralApiProblem
 
+export type ImportFolderResult = {
+    kind: 'ok',
+    data: {
+        ids: string[]      // folder ids
+    }
+} | GeneralApiProblem
+
 // ---------------- Request data --------------------
 
 export type LoginData = {
@@ -421,13 +428,21 @@ export type CipherData = {
     } | null
 }
 
-export type ImportCipherData = {
+export type ImportCipherWithFolderData = {
     ciphers: CipherRequest[]
     folders: FolderRequest[]
     folderRelationships: {
         key: number
         value: number
     }[]
+}
+
+export type ImportCipherData = {
+    ciphers: CipherRequest[]
+}
+
+export type ImportFolderData = {
+    folders: FolderRequest[]
 }
 
 export type FeedbackData = {
