@@ -19,9 +19,8 @@
     "copied_to_clipboard": "Copied to clipboard",
     "country": "Country",
     "create": "Create",
-    "crypto_account": "Crypto Account",
     "crypto_asset": "Crypto Asset",
-    "crypto_wallet": "Crypto Wallet",
+    "crypto_wallet": "Crypto Backup",
     "data": "Data",
     "delete": "Delete",
     "details": "Details",
@@ -50,6 +49,7 @@
     "me": "Me",
     "menu": "Menu",
     "name": "Name",
+    "networks": "networks",
     "next": "Next",
     "none": "None",
     "note": "Secure Note",
@@ -265,7 +265,7 @@
     "synching": "Synchronizing...",
     "getting_team_info": "Getting your information...",
     "getting_plan_info": "Getting your plan information...",
-    "decrypting": "Decrypting..."
+    "decrypting": "Preparing your data..."
   },
   "biometric_intro": {
     "title": "Unlock your vault with Face ID/Touch ID",
@@ -548,6 +548,7 @@
   "crypto_asset": {
     "wallet_name": "Wallet Name",
     "wallet_address": "Wallet Address",
+    "private_key": "Private Key",
     "account_name": "Account Name",
     "choose_type": "Choose your type of asset",
     "choose_type_desc": "Select the method that crypto you want to add",
@@ -559,11 +560,13 @@
     "copy_seed": "Copy Seed Phrase",
     "copy_address": "Copy Address",
     "copy_username": "Copy Username",
-    "copy_password": "Copy Password",
+    "copy_password": "Copy Password / PIN",
+    "copy_private_key": "Copy Private Key",
     "email_recovery": "Email Recovery",
     "seed": "Seed Phrase",
     "backup_details": "Backup Details",
-    "network": "Network"
+    "network": "Network",
+    "wallet_app": "Wallet App"
   },
   "payment" : {
     "individual" : "Individual",

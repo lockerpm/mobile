@@ -19,9 +19,8 @@
     "copied_to_clipboard": "Đã sao chép",
     "country": "Quốc gia",
     "create": "Tạo",
-    "crypto_account": "Tài khoản crypto",
     "crypto_asset": "Tài sản crypto",
-    "crypto_wallet": "Ví crypto",
+    "crypto_wallet": "Sao lưu ví Crypto",
     "data": "Dữ liệu",
     "delete": "Xóa",
     "details": "Chi tiết",
@@ -50,6 +49,7 @@
     "me": "Cá nhân",
     "menu": "Tùy chọn",
     "name": "Tên",
+    "networks": "mạng",
     "next": "Tiếp tục",
     "none": "Không xác định",
     "note": "Ghi chú",
@@ -549,6 +549,7 @@
     "wallet_name": "Tên ví",
     "wallet_address": "Địa chỉ ví",
     "account_name": "Tên tài khoản",
+    "private_key": "Khoá bí mật",
     "choose_type": "Chọn loại tài sản của bạn",
     "choose_type_desc": "Chọn phương thức tiền điện tử bạn muốn thêm",
     "empty": {
@@ -559,11 +560,13 @@
     "copy_seed": "Sao chép Seed Phrase",
     "copy_address": "Sao chép địa chỉ",
     "copy_username": "Sao chép tên người dùng",
-    "copy_password": "Sao chép mật khẩu",
+    "copy_password": "Sao chép mật khẩu / PIN",
+    "copy_private_key": "Sao chép khoá bí mật",
     "email_recovery": "Email khôi phục",
     "seed": "Seed Phrase",
     "backup_details": "Thông tin khôi phục",
-    "network": "Mạng Blockchain"
+    "network": "Mạng Blockchain",
+    "wallet_app": "Ví Blockchain"
   },
   "payment" : {
     "individual" : "Cá nhân",

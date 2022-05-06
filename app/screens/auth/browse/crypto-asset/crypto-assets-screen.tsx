@@ -7,7 +7,6 @@ import { CipherType } from "../../../../../core/enums"
 import { useMixins } from "../../../../services/mixins"
 import { BackHandler } from "react-native"
 import { useStores } from "../../../../models"
-import { CryptoTypeAction } from "./crypto-type-action"
 
 
 export const CryptoAssetsScreen = observer(() => {
@@ -16,7 +15,6 @@ export const CryptoAssetsScreen = observer(() => {
   const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [isAddOpen, setIsAddOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
@@ -53,7 +51,7 @@ export const CryptoAssetsScreen = observer(() => {
           header={translate('common.crypto_asset')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
-            setIsAddOpen(true)
+            navigation.navigate('cryptoWallets__edit', { mode: 'add' })
           }}
           onSearch={setSearchText}
           searchText={searchText}
@@ -86,17 +84,11 @@ export const CryptoAssetsScreen = observer(() => {
         value={sortOption}
       />
 
-      <CryptoTypeAction
-        navigation={navigation}
-        isOpen={isAddOpen}
-        onClose={() => setIsAddOpen(false)}
-      />
-
       <CipherList
         navigation={navigation}
         onLoadingChange={setIsLoading}
         searchText={searchText}
-        cipherType={[CipherType.CryptoAccount, CipherType.CryptoWallet]}
+        cipherType={CipherType.CryptoWallet}
         sortList={sortList}
         isSelecting={isSelecting}
         setIsSelecting={setIsSelecting}
@@ -111,7 +103,7 @@ export const CryptoAssetsScreen = observer(() => {
             desc={translate('crypto_asset.empty.desc')}
             buttonText={translate('crypto_asset.empty.btn')}
             addItem={() => {
-              setIsAddOpen(true)
+              navigation.navigate('cryptoWallets__edit', { mode: 'add' })
             }}
           />
         )}

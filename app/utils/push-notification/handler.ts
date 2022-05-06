@@ -32,9 +32,6 @@ export const handleNewShare = async (data: string) => {
     case CipherType.Card:
       typeName = isVn ? 'thẻ tín dụng' : 'card'
       break
-    case CipherType.CryptoAccount:
-      typeName = isVn ? 'tài khoản crypto' : 'crypto account'
-      break
     case CipherType.CryptoWallet:
       typeName = isVn ? 'ví crypto' : 'crypto wallet'
       break

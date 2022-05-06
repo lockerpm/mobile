@@ -8,8 +8,6 @@ import NoteIcon from './images/vault/note.svg'
 import IdentityIcon from './images/vault/identity.svg'
 import SharedIcon from './images/vault/shared.svg'
 import TrashIcon from './images/vault/trash.svg'
-import CryptoAssetIcon from './images/vault/crypto-asset.svg'
-import CryptoAccountIcon from './images/vault/crypto-account.svg'
 import CryptoWalletIcon from './images/vault/crypto-wallet.svg'
 import DataBreachScannerIcon from './images/vault/data-breach-scanner.svg'
 import PasswordGeneratorIcon from './images/vault/password-generator.svg'
@@ -67,26 +65,12 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     routeName: 'cards',
     addable: true
   },
-  cryptoAsset: {
-    label: 'common.crypto_asset',
-    icon: require('./images/vault/crypto-asset.png'),
-    routeName: 'cryptoAssets',
-    addable: true,
-    svgIcon: CryptoAssetIcon
-  },
-  cryptoAccount: {
-    label: 'common.crypto_account',
-    icon: require('./images/vault/crypto-account.png'),
-    routeName: 'cryptoAccounts',
-    svgIcon: CryptoAccountIcon,
-    group: 'cryptoAsset'
-  },
   cryptoWallet: {
     label: 'common.crypto_wallet',
     icon: require('./images/vault/crypto-wallet.png'),
     routeName: 'cryptoWallets',
     svgIcon: CryptoWalletIcon,
-    group: 'cryptoAsset'
+    addable: true
   },
   identity: {
     label: 'common.identity',
