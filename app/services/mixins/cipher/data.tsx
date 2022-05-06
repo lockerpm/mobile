@@ -840,11 +840,11 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
     try {
       // Check name duplication
-      const countDuplicate = await _countDuplicateCipherName(cipher)
-      if (countDuplicate > 0) {
-        notify('error', translate('error.duplicate_cipher_name'))
-        return { kind: 'bad-data' }
-      }
+      // const countDuplicate = await _countDuplicateCipherName(cipher)
+      // if (countDuplicate > 0) {
+      //   notify('error', translate('error.duplicate_cipher_name'))
+      //   return { kind: 'bad-data' }
+      // }
 
       // Offline
       if (uiStore.isOffline) {
