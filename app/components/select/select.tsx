@@ -14,8 +14,8 @@ type Option = {
 
 export interface SelectProps {
   style?: StyleProp<ViewStyle>
-  value: string | number | null
-  onChange: (value: string | number | null) => void
+  value: any | any[]
+  onChange: (value: any | any[]) => void
   renderSelected?: (item: Option) => React.ReactNode
   options: Option[]
   floating?: boolean
@@ -23,6 +23,7 @@ export interface SelectProps {
   showSearch?: boolean
   searchPlaceholder?: string
   title?: string
+  multiple?: boolean
 }
 
 /**
@@ -33,7 +34,7 @@ export const Select = (props: SelectProps) => {
   
   const { 
     style, value, onChange, options,
-    floating, renderSelected, placeholder, title,
+    floating, renderSelected, placeholder, title, multiple,
     showSearch, searchPlaceholder = translate('common.search')
   } = props
 
@@ -48,7 +49,11 @@ export const Select = (props: SelectProps) => {
         color: color.textBlack
       }, style]}
       value={value}
-      onChange={(item: Option) => onChange(item.value)}
+      mode={multiple ? 'MULTI' : 'SINGLE'}
+      onChange={multiple
+        ? (values: any[]) => onChange(values)
+        : (item: Option) => onChange(item.value)
+      }
       renderPicker={floating ? undefined : (value: string | number | null) => {
         return renderSelected(options.find((item: Option) => item.value === value) || defaultOption)
       }}

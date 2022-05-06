@@ -4,8 +4,8 @@ import { useMixins } from '..'
 import { CipherType, SecureNoteType } from '../../../../core/enums'
 import { CardView, CipherView, IdentityView, LoginUriView, LoginView, SecureNoteView } from '../../../../core/models/view'
 import { BROWSE_ITEMS } from '../../../common/mappings'
-import { toCryptoAccountData, toCryptoWalletData } from '../../../utils/crypto'
-import { CHAIN_LIST } from '../../../utils/crypto/chainlist'
+import { toCryptoWalletData } from '../../../utils/crypto'
+import { WALLET_APP_LIST } from '../../../utils/crypto/applist'
 import { useCoreService } from '../../core-service'
 
 
@@ -57,10 +57,9 @@ export const CipherHelpersMixinsProvider = observer((props: { children: boolean 
           : ''
       case CipherType.Identity:
         return item.identity.fullName
-      case CipherType.CryptoAccount:
-        return toCryptoAccountData(item.notes).username
       case CipherType.CryptoWallet:
-        return toCryptoWalletData(item.notes).address
+        const walletData = toCryptoWalletData(item.notes)
+        return `${walletData.username}${walletData.username ? ', ' : ''}${walletData.networks.length} networks`
     }
     return ''
   }
@@ -94,20 +93,12 @@ export const CipherHelpersMixinsProvider = observer((props: { children: boolean 
           svg: BROWSE_ITEMS.note.svgIcon,
           path: 'notes'
         }
-      case CipherType.CryptoAccount: {
-        return {
-          img: BROWSE_ITEMS.cryptoAccount.icon,
-          backup: BROWSE_ITEMS.cryptoAccount.icon,
-          svg: BROWSE_ITEMS.cryptoAccount.svgIcon,
-          path: 'cryptoAccounts'
-        }
-      }
       case CipherType.CryptoWallet: {
         const walletData = toCryptoWalletData(item.notes)
-        const selectedChain = CHAIN_LIST.find(c => c.alias === walletData.network.alias)
-        const otherChain = CHAIN_LIST.find(c => c.alias === 'other')
+        const selectedApp = WALLET_APP_LIST.find(a => a.alias === walletData.walletApp.alias)
+        const otherApp = WALLET_APP_LIST.find(a => a.alias === 'other')
         return {
-          img: walletData.network.alias ? (selectedChain?.logo || otherChain.logo) : BROWSE_ITEMS.cryptoWallet.icon,
+          img: walletData.walletApp.alias ? (selectedApp?.logo || otherApp.logo) : BROWSE_ITEMS.cryptoWallet.icon,
           backup: BROWSE_ITEMS.cryptoWallet.icon,
           // svg: BROWSE_ITEMS.cryptoWallet.svgIcon,
           path: 'cryptoWallets'

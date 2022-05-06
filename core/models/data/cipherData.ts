@@ -63,7 +63,6 @@ export class CipherData {
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
-            case CipherType.CryptoAccount:
             case CipherType.CryptoWallet:
                 this.secureNote = new SecureNoteData(response.secureNote);
                 break;

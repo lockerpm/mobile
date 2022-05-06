@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, PasswordStrength
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -17,7 +17,7 @@ import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { CryptoWalletData, toCryptoWalletData } from "../../../../../utils/crypto"
 import { SeedPhraseInput } from "./seed-phrase-input"
 import { ChainSelect } from "./chain-select"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import { AppSelect } from "./app-select"
 
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, 'cryptoWallets__edit'>;
@@ -28,7 +28,7 @@ export const CryptoWalletEditScreen = observer(() => {
   const route = useRoute<NoteEditScreenProp>()
   const { cipherStore } = useStores()
   const { translate, color } = useMixins()
-  const { newCipher, getPasswordStrength } = useCipherHelpersMixins()
+  const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
 
   const selectedCipher: CipherView = cipherStore.cipherView
@@ -38,12 +38,15 @@ export const CryptoWalletEditScreen = observer(() => {
   // ------------------------- PARAMS ------------------------------------
 
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  const [chainAlias, setChainAlias] = useState(mode !== 'add' ? cryptoWalletData.network.alias : '')
-  const [chainName, setChainName] = useState(mode !== 'add' ? cryptoWalletData.network.name : '')
-  const [email, setEmail] = useState(mode !== 'add' ? cryptoWalletData.email : '')
+
+  const [walletApp, setWalletApp] = useState(mode !== 'add' ? cryptoWalletData.walletApp : { alias: null, name: null })
+  const [username, setUsername] = useState(mode !== 'add' ? cryptoWalletData.username : '')
   const [password, setPassword] = useState(mode !== 'add' ? cryptoWalletData.password : '')
   const [address, setAddress] = useState(mode !== 'add' ? cryptoWalletData.address : '')
+  const [privateKey, setPrivateKey] = useState(mode !== 'add' ? cryptoWalletData.privateKey : '')
   const [seed, setSeed] = useState(mode !== 'add' ? cryptoWalletData.seed : '           ')
+  const [networks, setNetworks] = useState<{ alias: string; name: string }[]>(mode !== 'add' ? cryptoWalletData.networks : [])
+
   const [note, setNote] = useState(mode !== 'add' ? cryptoWalletData.notes : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
@@ -88,15 +91,14 @@ export const CryptoWalletEditScreen = observer(() => {
     }
 
     const cryptoData: CryptoWalletData = {
-      email,
       seed,
       notes: note,
-      network: {
-        name: chainName,
-        alias: chainAlias
-      },
       password,
-      address
+      address,
+      walletApp,
+      username,
+      privateKey,
+      networks
     }
 
     payload.name = name
@@ -191,111 +193,62 @@ export const CryptoWalletEditScreen = observer(() => {
           paddingBottom: 32
         }]}
       >
-        {/* Network */}
+        {/* App */}
         <View style={{ flex: 1 }}>
-          <ChainSelect
-            alias={chainAlias}
-            onChange={(alias: string, name: string) => {
-              setChainAlias(alias)
-              setChainName(name)
+          <AppSelect
+            alias={walletApp.alias}
+            onChange={(alias: string, appName: string) => {
+              setWalletApp({ alias, name: appName })
+              if (!name) {
+                setName(appName)
+              }
             }}
           />
         </View>
-        {/* Network end */}
+        {/* App end */}
 
-        {/* Email */}
+        {/* Username */}
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
-            fixedLabel
-            label={translate('common.email')}
-            value={email}
-            onChangeText={setEmail}
+            label={translate('common.username')}
+            value={username}
+            onChangeText={setUsername}
           />
         </View>
-        {/* Email end */}
+        {/* Username end */}
 
         {/* Password */}
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
             isPassword
-            label={translate('common.password')}
+            label={translate('common.password') + ' / PIN'}
             value={password}
             onChangeText={setPassword}
           />
-
-          {
-            !!password && (
-              <PasswordStrength
-                value={getPasswordStrength(password).score}
-                style={{ marginTop: 15 }}
-              />
-            )
-          }
         </View>
         {/* Password end */}
-
-        {/* Generate password */}
-        <Button
-          preset="link"
-          onPress={() => navigation.navigate('passwordGenerator')}
-          style={{
-            marginTop: 20
-          }}
-        >
-          <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesomeIcon
-                name="repeat"
-                size={18}
-                color={color.primary}
-              />
-              <Text
-                preset="green"
-                text={translate('common.generate')}
-                style={{ fontSize: fontSize.small, marginLeft: 7 }}
-              />
-            </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
-          </View>
-        </Button>
-        {/* Generate password end */}
 
         {/* Address */}
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
-            fixedLabel
             label={translate('crypto_asset.wallet_address')}
             value={address}
             onChangeText={setAddress}
           />
         </View>
         {/* Address end */}
-      </View>
-      {/* Info end */}
 
-      <View style={commonStyles.SECTION_PADDING}>
-        <Text
-          text={translate('crypto_asset.backup_details').toUpperCase()}
-          style={{ fontSize: fontSize.small }}
-        />
-      </View>
+        {/* Private key */}
+        <View style={{ flex: 1, marginTop: 20 }}>
+          <FloatingInput
+            isPassword
+            label={translate('crypto_asset.private_key')}
+            value={privateKey}
+            onChangeText={setPrivateKey}
+          />
+        </View>
+        {/* Private key end */}
 
-      {/* Backup Info */}
-      <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
-      >
         {/* Seed */}
         <View style={{ flex: 1, marginTop: 20 }}>
           <Text
@@ -308,8 +261,17 @@ export const CryptoWalletEditScreen = observer(() => {
           />
         </View>
         {/* Seed end */}
+
+        {/* Network */}
+        <View style={{ flex: 1, marginTop: 20 }}>
+          <ChainSelect
+            selected={networks}
+            onChange={setNetworks}
+          />
+        </View>
+        {/* Network end */}
       </View>
-      {/* Backup Info end */}
+      {/* Info end */}
 
       {/* Others */}
       <CipherOthersInfo

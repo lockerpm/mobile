@@ -19,7 +19,6 @@ import { commonStyles, fontSize } from "../../../theme"
 import { DeletedAction } from "../cipher-action/deleted-action"
 import { Checkbox } from "react-native-ui-lib"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { CryptoAccountAction } from "../../../screens/auth/browse/crypto-asset/crypto-account-action"
 import { CryptoWalletAction } from "../../../screens/auth/browse/crypto-asset/crypto-wallet-action"
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 
@@ -65,7 +64,6 @@ export const CipherList = observer((props: CipherListProps) => {
   const [showNoteAction, setShowNoteAction] = useState(false)
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
-  const [showCryptoAccountAction, setShowCryptoAccountAction] = useState(false)
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showDeletedAction, setShowDeletedAction] = useState(false)
   const [ciphers, setCiphers] = useState([])
@@ -186,9 +184,6 @@ export const CipherList = observer((props: CipherListProps) => {
         break
       case CipherType.SecureNote:
         setShowNoteAction(true)
-        break
-      case CipherType.CryptoAccount:
-        setShowCryptoAccountAction(true)
         break
       case CipherType.CryptoWallet:
         setShowCryptoWalletAction(true)
@@ -377,13 +372,6 @@ export const CipherList = observer((props: CipherListProps) => {
       <NoteAction
         isOpen={showNoteAction}
         onClose={() => setShowNoteAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <CryptoAccountAction
-        isOpen={showCryptoAccountAction}
-        onClose={() => setShowCryptoAccountAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
       />
