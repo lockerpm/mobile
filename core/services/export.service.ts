@@ -225,9 +225,9 @@ export class ExportService implements ExportServiceAbstraction {
             const exportCiphers: any[] = [];
             decCiphers.forEach(c => {
                 // only export logins and secure notes
-                if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
-                    return;
-                }
+                // if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
+                //     return;
+                // }
 
                 const cipher: any = {};
                 cipher.collections = [];
@@ -362,6 +362,46 @@ export class ExportService implements ExportServiceAbstraction {
             case CipherType.SecureNote:
                 cipher.type = 'note';
                 break;
+            case CipherType.CryptoWallet:
+                cipher.type = 'crypto-wallet'
+                break
+            case CipherType.TOTP:
+                cipher.type = 'totp'
+                break
+            case CipherType.Card:
+                cipher.type = 'card'
+                const cardPayload = {
+                    notes: c.notes
+                }
+                Object.getOwnPropertyNames(c.card).forEach(key => {
+                    if (key.startsWith('_')) {
+                        if (key !== '_subTitle') {
+                            cardPayload[key.slice(1)] = c.card[key]
+                        }
+                    } else {
+                        cardPayload[key] = c.card[key]
+                    }
+                })
+                console.log(cardPayload)
+                cipher.notes = JSON.stringify(cardPayload)
+                break
+            case CipherType.Identity:
+                cipher.type = 'identity'
+                const identityPayload = {
+                    notes: c.notes
+                }
+                Object.getOwnPropertyNames(c.identity).forEach(key => {
+                    if (key.startsWith('_')) {
+                        if (key !== '_subTitle') {
+                            identityPayload[key.slice(1)] = c.identity[key]
+                        }
+                    } else {
+                        identityPayload[key] = c.identity[key]
+                    }
+                })
+                console.log(identityPayload)
+                cipher.notes = JSON.stringify(identityPayload)
+                break
             default:
                 return;
         }
