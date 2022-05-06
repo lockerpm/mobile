@@ -3,7 +3,11 @@ import { omit } from "ramda"
 import { Organization } from "../../../core/models/domain/organization"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CipherView } from "../../../core/models/view"
-import { ConfirmShareCipherData, EditShareCipherData, ImportCipherData, MoveFolderData, MyShareType, ShareCipherData, ShareMultipleCiphersData, SharingInvitationType, StopShareCipherData } from "../../services/api"
+import { 
+  ConfirmShareCipherData, EditShareCipherData, ImportCipherData, ImportCipherWithFolderData, ImportFolderData, MoveFolderData,
+  MyShareType, ShareCipherData, ShareMultipleCiphersData, SharingInvitationType,
+  StopShareCipherData 
+} from "../../services/api"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -170,13 +174,25 @@ export const CipherStoreModel = types
       return res
     },
 
-    importCipher: async (data: ImportCipherData) => {
+    importCipherWithFolder: async (data: ImportCipherWithFolderData) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.importCipher(self.apiToken, data)
+      const res = await cipherApi.importCipherWithFolder(self.apiToken, data)
       return res
     },
 
-    offlineSyncCipher: async (data: ImportCipherData) => {
+    importFolders: async (data: ImportFolderData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.importFolders(self.apiToken, data)
+      return res
+    },
+
+    importCiphers: async (data: ImportCipherData) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.importCiphers(self.apiToken, data)
+      return res
+    },
+
+    offlineSyncCipher: async (data: ImportCipherWithFolderData) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.offlineSyncCipher(self.apiToken, data)
       return res

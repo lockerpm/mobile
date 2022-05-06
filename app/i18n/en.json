@@ -542,7 +542,7 @@
     "file": "Selected File",
     "no_data": "No data available",
     "invalid_data_format": "Invalid data format",
-    "success": "Data imported",
+    "success": "Data imported! Your items will appear shortly",
     "pls_select_right_format": "Must be a {{format}} file"
   },
   "crypto_asset": {

@@ -12,7 +12,7 @@ import { KvpRequest } from '../../../../core/models/request/kvpRequest'
 import { CipherType } from '../../../../core/enums'
 import { AutofillDataType, loadShared, saveShared } from '../../../utils/keychain'
 import { useCipherHelpersMixins } from './helpers'
-import { MAX_MULTIPLE_SHARE_COUNT, TEMP_PREFIX } from '../../../config/constants'
+import { IMPORT_BATCH_SIZE, MAX_MULTIPLE_SHARE_COUNT, TEMP_PREFIX } from '../../../config/constants'
 import { CollectionView } from '../../../../core/models/view/collectionView'
 import { CollectionRequest } from '../../../../core/models/request/collectionRequest'
 import { CipherData } from '../../../../core/models/data/cipherData'
@@ -25,6 +25,7 @@ import { OrganizationData } from '../../../../core/models/data/organizationData'
 import { ImportResult } from '../../../../core/models/domain/importResult'
 import { SyncQueue } from '../../../utils/queue'
 import { AppEventType, EventBus } from '../../../utils/event-bus'
+import chunk from 'lodash/chunk'
 
 
 type GetCiphersParams = {
@@ -56,7 +57,10 @@ const defaultData = {
   toTrashCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
-  importCiphers: async (importResult: ImportResult) => { return { kind: 'unknown' } },
+  importCiphers: async (importResult: ImportResult, extras: {
+    setImportedFolderCount?: (val: number) => void
+    setImportedCipherCount?: (val: number) => void
+  }) => { return { kind: 'unknown' } },
 
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   shareMultipleCiphers: async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
@@ -646,7 +650,12 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Import
-  const importCiphers = async (importResult: ImportResult) => {
+  const importCiphers = async (importResult: ImportResult, extras: {
+    setImportedFolderCount?: (val: number) => void
+    setImportedCipherCount?: (val: number) => void
+  }) => {
+    const { setImportedCipherCount, setImportedFolderCount } = extras
+
     // Offline
     if (uiStore.isOffline) {
       await _offlineImportCiphers({ importResult })
@@ -655,6 +664,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     }
 
     // Online
+
     const request = new ImportCiphersRequest()
     for (let i = 0; i < importResult.ciphers.length; i++) {
       const cipher = importResult.ciphers[i]
@@ -680,20 +690,44 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       importResult.folderRelationships.forEach(r =>
         request.folderRelationships.push(new KvpRequest(r[0], r[1])))
     }
-    const res = await cipherStore.importCipher(request)
-    if (res.kind === 'ok') {
-      await _offlineImportCiphers({
-        importResult,
-        isCaching: true,
-        cipherRequests: request.ciphers,
-        folderRequests: request.folders
-      })
-      notify('success', translate('import.success'))
-      return res
-    } else {
-      notifyApiError(res)
-      return res
+
+    // Import folders first
+    let folderIds = []
+    let importedFolderCount = 0
+    const folderBatches = chunk(request.folders, IMPORT_BATCH_SIZE)
+    for (const batch of folderBatches) {
+      const res = await cipherStore.importFolders({ folders: batch })
+      if (res.kind !== 'ok') {
+        notifyApiError(res)
+        return res
+      }
+      importedFolderCount += batch.length
+      setImportedFolderCount && setImportedFolderCount(importedFolderCount)
+      folderIds = [...folderIds, ...res.data.ids]
     }
+
+    // Then import ciphers with updated folderId
+    request.ciphers = request.ciphers.map((cipher, index) => {
+      const folderRelationship = request.folderRelationships.find(item => item.key === index)
+      return {
+        ...cipher,
+        folderId: folderRelationship ? folderIds[folderRelationship.value] : null
+      }
+    })
+    let importedCipherCount = 0
+    const cipherBatches = chunk(request.ciphers, IMPORT_BATCH_SIZE)
+    for (const batch of cipherBatches) {
+      const res = await cipherStore.importCiphers({ ciphers: batch })
+      if (res.kind !== 'ok') {
+        notifyApiError(res)
+        return res
+      }
+      importedCipherCount += batch.length
+      setImportedCipherCount && setImportedCipherCount(importedCipherCount)
+    }
+
+    notify('success', translate('import.success'))
+    return { kind: 'ok' }
   }
 
   const _offlineImportCiphers = async (payload: {

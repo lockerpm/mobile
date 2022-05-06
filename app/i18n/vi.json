@@ -542,7 +542,7 @@
     "file": "Tệp dữ liệu",
     "no_data": "Không có dữ liệu",
     "invalid_data_format": "Dữ liệu không đúng định dạng",
-    "success": "Nhập dữ liệu thành công",
+    "success": "Nhập dữ liệu thành công! Các mục của bạn sẽ xuất hiện trong thời gian ngắn",
     "pls_select_right_format": "Yêu cầu phải là tệp {{format}}"
   },
   "crypto_asset": {
