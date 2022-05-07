@@ -21,6 +21,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.Callback;
 
 import com.cystack.locker.R;
 import com.cystack.locker.autofill.AutofillItem;
@@ -96,8 +97,8 @@ public class RNAutofillServiceAndroid extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public boolean isAutofillServicesEnabled() {
-       return Utils.IsLockerAutofillServicesEnabled(getReactApplicationContext());
+    public void isAutofillServiceActived(Callback callBack) {
+        callBack.invoke(Utils.IsLockerAutofillServicesEnabled(getReactApplicationContext()));
     }
     
     @ReactMethod

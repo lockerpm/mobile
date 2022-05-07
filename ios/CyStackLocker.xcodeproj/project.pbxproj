@@ -35,6 +35,8 @@
 		7CAB3332279A548A0000B15E /* CredentialProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3331279A548A0000B15E /* CredentialProviderController.swift */; };
 		7CAB3334279A6AD70000B15E /* VerifyMasterPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */; };
 		7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3335279AA04E0000B15E /* LoginListViewController.swift */; };
+		7CADBA04281A5E6600353A83 /* RCTAutofillServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CADBA03281A5E6600353A83 /* RCTAutofillServiceIos.m */; };
+		7CADBA06281A5E8A00353A83 /* RNAutofillServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CADBA05281A5E8A00353A83 /* RNAutofillServiceIos.swift */; };
 		7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A4B148D367B119F99EC2C2E5 /* libPods-CyStackLocker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EADEA568884090C1B008E181 /* libPods-CyStackLocker.a */; };
@@ -138,6 +140,8 @@
 		7CAB3331279A548A0000B15E /* CredentialProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderController.swift; sourceTree = "<group>"; };
 		7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyMasterPasswordViewController.swift; sourceTree = "<group>"; };
 		7CAB3335279AA04E0000B15E /* LoginListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
+		7CADBA03281A5E6600353A83 /* RCTAutofillServiceIos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTAutofillServiceIos.m; sourceTree = "<group>"; };
+		7CADBA05281A5E8A00353A83 /* RNAutofillServiceIos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNAutofillServiceIos.swift; sourceTree = "<group>"; };
 		7CB5348927E9C4F600E31C07 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
 		7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashCore.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CyStackLocker/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -223,6 +227,7 @@
 		13B07FAE1A68108700A75B9A /* CyStackLocker */ = {
 			isa = PBXGroup;
 			children = (
+				7CADBA02281A5E0200353A83 /* RNAutofillService */,
 				7CA1D4A627F2E3AD009E2A6E /* CryptoService */,
 				7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */,
 				CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */,
@@ -350,6 +355,15 @@
 				7C8496E527B7765C00CFEA8B /* Localizable.strings */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		7CADBA02281A5E0200353A83 /* RNAutofillService */ = {
+			isa = PBXGroup;
+			children = (
+				7CADBA03281A5E6600353A83 /* RCTAutofillServiceIos.m */,
+				7CADBA05281A5E8A00353A83 /* RNAutofillServiceIos.swift */,
+			);
+			name = RNAutofillService;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -951,8 +965,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				7CADBA06281A5E8A00353A83 /* RNAutofillServiceIos.swift in Sources */,
 				7CA1D4AC27F2E408009E2A6E /* RNCryptoServiceIos.swift in Sources */,
 				CAFA4CF8270AF9A20003FFA5 /* File.swift in Sources */,
+				7CADBA04281A5E6600353A83 /* RCTAutofillServiceIos.m in Sources */,
 				7CA1D4A827F2E3EC009E2A6E /* RCTCryptoServiceIos.m in Sources */,
 				7CA1D4AF27F2E424009E2A6E /* RSAUtils.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
@@ -1094,7 +1110,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = YES;
@@ -1106,7 +1122,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.17;
+				MARKETING_VERSION = 1.19;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1130,7 +1146,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
@@ -1142,7 +1158,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.17;
+				MARKETING_VERSION = 1.19;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1343,7 +1359,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = "Staging Locker";
 				ENABLE_BITCODE = NO;
@@ -1355,7 +1371,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.17;
+				MARKETING_VERSION = 1.19;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1572,7 +1588,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = "Staging Locker";
 				ENABLE_BITCODE = YES;
@@ -1584,7 +1600,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.17;
+				MARKETING_VERSION = 1.19;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

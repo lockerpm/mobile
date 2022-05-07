@@ -448,13 +448,7 @@ export const UserModel = types
     purchaseValidation: async (receipt?: string, subscriptionId?: string, originalTransactionIdentifierIOS?: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.purchaseValidation(self.apiToken, receipt, subscriptionId, originalTransactionIdentifierIOS)
-      if (res.kind === "ok") {
-        if (res.data.success) {
-          await self.loadPlan()
-          return true
-        }
-      }
-      return false
+      return res
     }
   }))
 

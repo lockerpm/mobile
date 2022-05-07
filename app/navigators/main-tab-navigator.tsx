@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
-import { View } from "react-native"
+import { View, TouchableOpacity, AppState } from "react-native"
 import { Button, Text } from "../components"
 import { fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen, AuthenticatorScreen } from "../screens"
@@ -13,21 +13,24 @@ import { useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import Animated, { withSequence, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated'
 import { SharingStatus } from "../config/types"
-
 import HomeIcon from './icons/home.svg'
 import BrowseIcon from './icons/menu.svg'
 import ToolsIcon from './icons/settings.svg'
 import MenuIcon from './icons/menu-2.svg'
 import AuthenticatorIcon from './icons/authenticator.svg'
 
-
 const Tab = createBottomTabNavigator()
 
 // @ts-ignore
 const TabBar = observer(({ state, descriptors, navigation }) => {
+  
   const { translate, color } = useMixins()
   const { user, uiStore, cipherStore } = useStores()
+
   const insets = useSafeAreaInsets()
+ 
+  
+  
   // @ts-ignore
   const spin = useAnimatedStyle(() => {
     return {
@@ -148,6 +151,7 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
       }
       {/* Status bar end */}
 
+     
       {/* Tab items */}
       <View style={{ flexDirection: 'row' }}>
         {
