@@ -17,7 +17,7 @@ import {
   DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
   CryptoWalletEditScreen, CryptoWalletInfoScreen,
   AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen, 
-  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen
+  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen, ReferFriendScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -101,6 +101,7 @@ export type PrimaryParamList = {
     benefitTab?: 0 | 1 | 2 | 3,
     family?: boolean
   }
+  refer_friend: undefined
   invite_member: undefined
   settings: undefined
   changeMasterPassword: undefined
@@ -434,6 +435,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="cryptoWallets__info" component={CryptoWalletInfoScreen} />
         <Stack.Screen name="cryptoWallets__edit" component={CryptoWalletEditScreen} initialParams={{ mode: 'add' }} />
 
+        <Stack.Screen name="refer_friend" component={ReferFriendScreen} />
         <Stack.Screen name="invite_member" component={InviteMemberScreen} />
         <Stack.Screen name="manage_plan" component={ManagePlanScreen} />
         <Stack.Screen name="payment" component={PaymentScreen}  initialParams={{ benefitTab: 0 }} />

@@ -7,17 +7,16 @@ import { load, StorageKey } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
-import { BackHandler, Appearance } from "react-native"
+import { BackHandler } from "react-native"
 import { useMixins } from "../../../services/mixins"
+
 
 
 export const InitScreen = observer(() => {
   const { user, cipherStore, uiStore } = useStores()
   const navigation = useNavigation()
-  const theme = Appearance.getColorScheme()
+  // const theme = Appearance.getColorScheme()
   const { boostrapPushNotifier } = useMixins()
-
-
   // ------------------ METHODS ---------------------
 
   const goLockOrCreatePassword = () => {
@@ -30,7 +29,7 @@ export const InitScreen = observer(() => {
 
   const checkAutoFill = async () => {
     if (IS_IOS) return false
- 
+
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL)
     if (autoFillData && autoFillData.enabled) {
       uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
@@ -117,7 +116,7 @@ export const InitScreen = observer(() => {
     }
     // Network connected? || Is autofill?
     if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {
-     
+
       goLockOrCreatePassword()
       return
     }
@@ -140,9 +139,8 @@ export const InitScreen = observer(() => {
 
   // ------------------ EFFECTS ---------------------
 
-  // Mounted
+
   useEffect(() => {
-    // setTimeout(mounted, 1500)
     mounted()
   }, [])
 
@@ -162,7 +160,5 @@ export const InitScreen = observer(() => {
 
   // ------------------ RENDER ---------------------
 
-  return (
-    <Loading />
-  )
+  return <Loading />
 })

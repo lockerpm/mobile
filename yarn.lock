@@ -14662,6 +14662,16 @@ react-native-crypto@^2.2.0:
     public-encrypt "^4.0.0"
     randomfill "^1.0.3"
 
+react-native-device-info@^0.9.3:
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.9.9.tgz#42490719b8be2b8ffe689f3c74d56884ca05c0d7"
+  integrity sha1-QkkHGbi+K4/+aJ88dNVohMoFwNc=
+
+react-native-device-info@^8.1.2:
+  version "8.7.1"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.7.1.tgz#fbb06f87dbbc4423abe713874699fb2e6e99fd15"
+  integrity sha512-cVMZztFa2Qn6qpQa601W61CtUwZQ1KXfqCOeltejAWEXmgIWivC692WGSdtGudj4upSi1UgMSaGcvKjfcpdGjg==
+
 react-native-device-info@^8.1.3:
   version "8.4.0"
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.4.0.tgz#c434af5c928c7f8e2c3b1a1ca07061b83d50ccd4"
@@ -14728,10 +14738,10 @@ react-native-html-parser@^0.1.0:
   resolved "https://registry.yarnpkg.com/react-native-html-parser/-/react-native-html-parser-0.1.0.tgz#c35de1dc325562da26e68befa423bac34505ba48"
   integrity sha512-G5d0pk7TA9YgjVJhLRf2zMOOf1HXd8ItM9JYsTS2pXoEfSRfMfRU5iTj03LGwvHU2NT9kc18NDJeLgZY6+Bbvg==
 
-react-native-iap@^8.0.7:
-  version "8.0.7"
-  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-8.0.7.tgz#78397ad7df2decd31240d89846ab026c8f9ec4d1"
-  integrity sha512-YVZp9g01oSIZ5sT0wxjrYw0kjLUuABH0+PTTxgSUgGQewnGlO9fUIu1fixXkC8nKFS1QhGJLlbaOzVfv+9uRqA==
+react-native-iap@^8.0.8:
+  version "8.0.8"
+  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-8.0.8.tgz#586831269a7fb9c1e005d0ccd5ff17f0c6ca692d"
+  integrity sha512-b9PrJr/eXjS8zwmQp7IUX9Ek/cdjYAV7eCS5epQhlRLyTf03GOHTW6OlKYqC09ncquNvq4Xdx9dFYbAWosatSg==
   dependencies:
     dooboolab-welcome "1.3.2"
 
@@ -14879,6 +14889,14 @@ react-native-simple-crypto@^0.2.15:
   dependencies:
     base64-js "^1.3.0"
     hex-lite "^1.5.0"
+
+react-native-siren@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-siren/-/react-native-siren-0.0.5.tgz#cc32e62eda163d3ae28bb2cb1b342eb859c3bd1c"
+  integrity sha512-mOzjFpm8ASNI/vnc+uWcj4ogboRrzfzmueCMYavLvyz5QbLyDem2LI9vtsz7t9fxzw2tZzc8XPfRb0IjUJXfZw==
+  dependencies:
+    apisauce "^2.1.1"
+    react-native-device-info "^0.9.3"
 
 react-native-slider@^0.11.0:
   version "0.11.0"
@@ -15951,6 +15969,11 @@ semver@7.0.0:
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.0.0.tgz#5f3ca35761e47e05b206c6daff2cf814f0316b8e"
   integrity sha512-+GB6zVA9LWh6zovYQLALHwv5rb2PHGlJi3lfiqIHxR0uuwCgefcOJc59v9fv1w8GbStwxuuqqAjI9NMAOOgq1A==
 
+semver@7.2.1:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.2.1.tgz#d997aa36bdbb00b501ae4ac4c7d17e9f7a587ae5"
+  integrity sha512-aHhm1pD02jXXkyIpq25qBZjr3CQgg8KST8uX0OWXch3xE6jw+1bfbWnCjzMwojsTquroUmKFHNzU6x26mEiRxw==
+
 semver@7.3.2:
   version "7.3.2"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.2.tgz#604962b052b81ed0786aae84389ffba70ffd3938"
@@ -16393,6 +16416,16 @@ source-map@^0.7.3:
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
+
+sp-react-native-in-app-updates@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/sp-react-native-in-app-updates/-/sp-react-native-in-app-updates-1.1.7.tgz#e233be398c704626e99d70e0953c4f8c79e232e5"
+  integrity sha512-ncEu6dhfXNCpn6qPETvdhSe4N6ViNTf5oUB9pct5i1+gSJOKuvXEmX7WG/xJrXEfFF0hkuDbJTPFWgzOIyb0Tw==
+  dependencies:
+    react-native-device-info "^8.1.2"
+    react-native-siren "0.0.5"
+    semver "7.2.1"
+    underscore "1.12.1"
 
 space-separated-tokens@^1.0.0:
   version "1.1.5"
@@ -17507,6 +17540,11 @@ unbox-primitive@^1.0.1:
     has-bigints "^1.0.1"
     has-symbols "^1.0.2"
     which-boxed-primitive "^1.0.2"
+
+underscore@1.12.1:
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.12.1.tgz#7bb8cc9b3d397e201cf8553336d262544ead829e"
+  integrity sha512-hEQt0+ZLDVUMhebKxL4x1BTtDY7bavVofhZ9KZ4aI26X9SRaE+Y3m83XUL1UP2jn8ynjndwCCpEHdUG+9pP1Tw==
 
 unfetch@^4.1.0:
   version "4.2.0"

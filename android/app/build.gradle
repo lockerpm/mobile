@@ -145,8 +145,8 @@ android {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4030
-        versionName "1.17"
+        versionCode 4043
+        versionName "1.18"
         
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.cystack.locker'
@@ -262,7 +262,7 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-    
+    implementation 'com.google.android.play:core:1.10.3'
     implementation 'com.tencent:mmkv:1.2.13'
     implementation "androidx.autofill:autofill:1.1.0"
     implementation 'androidx.biometric:biometric:1.1.0'

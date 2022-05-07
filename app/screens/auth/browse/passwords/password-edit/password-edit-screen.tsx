@@ -73,7 +73,6 @@ export const PasswordEditScreen = observer(() => {
       setUsername(saveData.username)
       setPassword(saveData.password)
       setUrl(saveData.domain)
-      uiStore.setIsOnSaveLogin(false)
     }
   }, [])
 
@@ -100,10 +99,11 @@ export const PasswordEditScreen = observer(() => {
   // ----------------- METHODS ------------------
   const handleBack = () => {
     if (onSaveFillService) {
+      uiStore.setIsOnSaveLogin(false)
       BackHandler.exitApp()
     } else {
       navigation.goBack()
-    }
+    } 
   }
 
   const handleSave = async () => {
