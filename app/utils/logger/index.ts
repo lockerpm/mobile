@@ -16,6 +16,6 @@ export class Logger {
   }
 
   static error(e: any) {
-    __DEV__ && console.log(`[${Logger.getTime()}] (ERROR) ${PLATFORM}: ${e}`)
+    __DEV__ && console.error(`[${Logger.getTime()}] (ERROR) ${PLATFORM}: ${e}`)
   }
 }
