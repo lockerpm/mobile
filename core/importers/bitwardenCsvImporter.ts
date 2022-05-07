@@ -14,6 +14,7 @@ import { CipherRepromptType } from '../enums/cipherRepromptType';
 import { CipherType } from '../enums/cipherType';
 import { FieldType } from '../enums/fieldType';
 import { SecureNoteType } from '../enums/secureNoteType';
+import { CardView, IdentityView } from '../models/view';
 
 export class BitwardenCsvImporter extends BaseImporter implements Importer {
     parse(data: string): Promise<ImportResult> {
@@ -98,6 +99,48 @@ export class BitwardenCsvImporter extends BaseImporter implements Importer {
                     cipher.secureNote = new SecureNoteView();
                     cipher.secureNote.type = SecureNoteType.Generic;
                     break;
+                case 'crypto-wallet':
+                    cipher.type = CipherType.CryptoWallet;
+                    cipher.secureNote = new SecureNoteView();
+                    cipher.secureNote.type = SecureNoteType.Generic;
+                    break
+                case 'totp':
+                    cipher.type = CipherType.TOTP;
+                    cipher.secureNote = new SecureNoteView();
+                    cipher.secureNote.type = SecureNoteType.Generic;
+                    break
+                case 'identity':
+                    cipher.type = CipherType.Identity;
+                    cipher.identity = new IdentityView();
+                    try {
+                        const parsedData = JSON.parse(cipher.notes)
+                        Object.keys(parsedData).forEach(key => {
+                            if (key === 'notes') {
+                                cipher.notes = parsedData.notes
+                            } else {
+                                cipher.identity[key] = parsedData[key]
+                            }
+                        })
+                    } catch (e) {
+                        // Do nothing
+                    }
+                    break
+                case 'card':
+                    cipher.type = CipherType.Card;
+                    cipher.card = new CardView();
+                    try {
+                        const parsedData = JSON.parse(cipher.notes)
+                        Object.keys(parsedData).forEach(key => {
+                            if (key === 'notes') {
+                                cipher.notes = parsedData.notes
+                            } else {
+                                cipher.card[key] = parsedData[key]
+                            }
+                        })
+                    } catch (e) {
+                        // Do nothing
+                    }
+                    break
                 default:
                     cipher.type = CipherType.Login;
                     cipher.login = new LoginView();

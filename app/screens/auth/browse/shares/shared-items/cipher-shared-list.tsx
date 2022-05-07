@@ -22,7 +22,6 @@ import { NoteAction } from "../../notes/note-action"
 import { IdentityAction } from "../../identities/identity-action"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { PendingSharedAction } from "./pending-shared-action"
-import { CryptoAccountAction } from "../../crypto-asset/crypto-account-action"
 import { CryptoWalletAction } from "../../crypto-asset/crypto-wallet-action"
 
 
@@ -70,7 +69,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const [showNoteAction, setShowNoteAction] = useState(false)
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
-  const [showCryptoAccountAction, setShowCryptoAccountAction] = useState(false)
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showPendingAction, setShowPendingAction] = useState(false)
 
@@ -190,9 +188,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         break
       case CipherType.SecureNote:
         setShowNoteAction(true)
-        break
-      case CipherType.CryptoAccount:
-        setShowCryptoAccountAction(true)
         break
       case CipherType.CryptoWallet:
         setShowCryptoWalletAction(true)
@@ -410,13 +405,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       <NoteAction
         isOpen={showNoteAction}
         onClose={() => setShowNoteAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <CryptoAccountAction
-        isOpen={showCryptoAccountAction}
-        onClose={() => setShowCryptoAccountAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
       />

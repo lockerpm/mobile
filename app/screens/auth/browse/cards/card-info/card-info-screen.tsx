@@ -91,7 +91,7 @@ export const CardInfoScreen = observer(() => {
           />
           <Text
             preset="header"
-            style={{ marginTop: 5, marginHorizontal: 20, textAlign: 'center' }}
+            style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
           >
             {selectedCipher.name}
             {

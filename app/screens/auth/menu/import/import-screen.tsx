@@ -26,6 +26,21 @@ export const ImportScreen = observer(() => {
 
   // -------------------- PARAMS --------------------
 
+  const fileData = {
+    name: '',
+    uri: '',
+    type: '',
+    size: 0
+  }
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [format, setFormat] = useState('cystackjson')
+  const [file, setFile] = useState(fileData)
+  const [importedFolderCount, setImportedFolderCount] = useState(0)
+  const [importedCipherCount, setImportedCipherCount] = useState(0)
+
+  // -------------------- COMPUTED --------------------
+
   const cystackOptions = [
     { name: 'CyStack (json)', id: 'cystackjson' },
     { name: 'CyStack (csv)', id: 'cystackcsv' }
@@ -49,16 +64,6 @@ export const ImportScreen = observer(() => {
     label: i.name,
     value: i.id
   }))
-  const fileData = {
-    name: '',
-    uri: '',
-    type: '',
-    size: 0
-  }
-
-  const [isLoading, setIsLoading] = useState(false)
-  const [format, setFormat] = useState('cystackjson')
-  const [file, setFile] = useState(fileData)
 
   // -------------------- METHODS --------------------
 
@@ -98,6 +103,8 @@ export const ImportScreen = observer(() => {
   }
 
   const handleImport = async () => {
+    setImportedCipherCount(0)
+    setImportedFolderCount(0)
     setIsLoading(true)
 
     try {
@@ -150,7 +157,10 @@ export const ImportScreen = observer(() => {
         }
 
         try {
-          await importCiphers(importResult)
+          await importCiphers(importResult, {
+            setImportedCipherCount,
+            setImportedFolderCount
+          })
           setFile(fileData)
           setIsLoading(false)
           return
@@ -190,6 +200,15 @@ export const ImportScreen = observer(() => {
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
+      footer={(isLoading || importedFolderCount || importedCipherCount) ? (
+        <Text
+          preset="semibold"
+          text={`Imported ${importedFolderCount} folders, ${importedCipherCount} ciphers`}
+          style={{
+            textAlign: 'center'
+          }}
+        />
+      ) : null}
     >
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background,

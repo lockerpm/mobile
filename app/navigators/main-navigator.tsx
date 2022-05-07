@@ -15,7 +15,7 @@ import {
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
-  CryptoAccountEditScreen, CryptoAccountInfoScreen, CryptoWalletEditScreen, CryptoWalletInfoScreen,
+  CryptoWalletEditScreen, CryptoWalletInfoScreen,
   AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen, 
   PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen, ReferFriendScreen
 } from "../screens"
@@ -114,10 +114,6 @@ export type PrimaryParamList = {
   }
   notificationSettings: undefined
   shareMultiple: undefined
-  cryptoAccounts__info: undefined
-  cryptoAccounts__edit: {
-    mode: 'add' | 'edit' | 'clone'
-  }
   cryptoWallets__info: undefined
   cryptoWallets__edit: {
     mode: 'add' | 'edit' | 'clone'
@@ -151,15 +147,19 @@ export const MainNavigator = observer(() => {
     
     // Check if sync is needed
     const lastUpdateRes = await cipherStore.getLastUpdate()
-    if (
-      lastUpdateRes.kind === 'unauthorized' ||
-      (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= cipherStore.lastSync)
-    ) {
+    let bumpTimestamp = 0
+    if (lastUpdateRes.kind === 'unauthorized') {
       return
+    }
+    if (lastUpdateRes.kind === 'ok') {
+      bumpTimestamp = lastUpdateRes.data.revision_date * 1000
+      if (bumpTimestamp <= cipherStore.lastSync) {
+        return
+      }
     }
 
     // Send request
-    const syncRes = await startSyncProcess()
+    const syncRes = await startSyncProcess(bumpTimestamp)
     if (syncRes.kind !== 'ok') {
       if (syncRes.kind === 'error') {
         notify('error', translate('error.sync_failed'))
@@ -432,8 +432,6 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
         <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} />
-        <Stack.Screen name="cryptoAccounts__info" component={CryptoAccountInfoScreen} />
-        <Stack.Screen name="cryptoAccounts__edit" component={CryptoAccountEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="cryptoWallets__info" component={CryptoWalletInfoScreen} />
         <Stack.Screen name="cryptoWallets__edit" component={CryptoWalletEditScreen} initialParams={{ mode: 'add' }} />
 

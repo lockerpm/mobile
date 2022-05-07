@@ -1,65 +1,33 @@
-export type CryptoAccountData = {
-  username: string
-  password: string
-  phone: string
-  emailRecovery: string
-  response: null
-  uris: {
-    match: null
-    response: null
-    uri: string
-  }
-  notes: string
-}
-
 export type CryptoWalletData = {
-  email: string
-  password: string
-  address: string
-  seed: string
-  notes: string
-  network: {
+  walletApp: {
     name: string
     alias: string
-  }
-}
-
-export const toCryptoAccountData = (str: string) => {
-  let res: CryptoAccountData = {
-    username: '',
-    password: '',
-    phone: '',
-    emailRecovery: '',
-    response: null,
-    uris: {
-      match: null,
-      response: null,
-      uri: ''
-    },
-    notes: ''
-  }
-  try {
-    const parsed: CryptoAccountData = JSON.parse(str)
-    res = {
-      ...res,
-      ...parsed
-    }
-  } catch (e) {
-  }
-  return res
+  },
+  username: string
+  password: string
+  address: string
+  privateKey: string
+  seed: string
+  networks: {
+    name: string
+    alias: string
+  }[]
+  notes: string
 }
 
 export const toCryptoWalletData = (str: string) => {
   let res: CryptoWalletData = {
-    email: '',
-    seed: '',
-    notes: '',
-    network: {
-      name: '',
-      alias: ''
+    walletApp: {
+      name: "",
+      alias: ""
     },
-    password: '',
-    address: ''
+    username: "",
+    password: "",
+    address: "",
+    privateKey: "",
+    seed: "",
+    networks: [],
+    notes: ""
   }
   try {
     const parsed: CryptoWalletData = JSON.parse(str)

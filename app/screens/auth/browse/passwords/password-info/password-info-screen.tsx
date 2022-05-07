@@ -101,11 +101,11 @@ export const PasswordInfoScreen = observer(() => {
                 : BROWSE_ITEMS.password.icon
             }
             backupSource={BROWSE_ITEMS.password.icon}
-            style={{ height: 55, width: 55, marginBottom: 5, borderRadius: 8 }}
+            style={{ height: 55, width: 55, borderRadius: 8 }}
           />
           <Text
             preset="header"
-            style={{ marginTop: 5, marginHorizontal: 20, textAlign: 'center' }}
+            style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
           >
             {selectedCipher.name}
             {
