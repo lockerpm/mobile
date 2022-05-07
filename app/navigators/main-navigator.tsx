@@ -146,15 +146,19 @@ export const MainNavigator = observer(() => {
     
     // Check if sync is needed
     const lastUpdateRes = await cipherStore.getLastUpdate()
-    if (
-      lastUpdateRes.kind === 'unauthorized' ||
-      (lastUpdateRes.kind === 'ok' && lastUpdateRes.data.revision_date * 1000 <= cipherStore.lastSync)
-    ) {
+    let bumpTimestamp = 0
+    if (lastUpdateRes.kind === 'unauthorized') {
       return
+    }
+    if (lastUpdateRes.kind === 'ok') {
+      bumpTimestamp = lastUpdateRes.data.revision_date * 1000
+      if (bumpTimestamp <= cipherStore.lastSync) {
+        return
+      }
     }
 
     // Send request
-    const syncRes = await startSyncProcess()
+    const syncRes = await startSyncProcess(bumpTimestamp)
     if (syncRes.kind !== 'ok') {
       if (syncRes.kind === 'error') {
         notify('error', translate('error.sync_failed'))

@@ -80,8 +80,8 @@ export const CipherStoreModel = types
       self.isBatchDecrypting = val
     },
 
-    setLastSync: () => {
-      self.lastSync = Date.now()
+    setLastSync: (val?: number) => {
+      self.lastSync = Math.max(val || Date.now(), self.lastSync)
     },
 
     setLastCacheUpdate: () => {

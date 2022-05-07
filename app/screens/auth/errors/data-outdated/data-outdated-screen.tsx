@@ -19,7 +19,7 @@ export const DataOutdatedScreen = observer(() => {
   // ------------------------- METHODS ----------------------------
 
   const syncDataManually = async () => {
-    const res = await startSyncProcess()
+    const res = await startSyncProcess(Date.now())
     if (res.kind === 'ok') {
       notify('success', translate('success.sync_success'))
     }
