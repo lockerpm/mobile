@@ -199,9 +199,6 @@ export const CryptoWalletEditScreen = observer(() => {
             alias={walletApp.alias}
             onChange={(alias: string, appName: string) => {
               setWalletApp({ alias, name: appName })
-              if (!name) {
-                setName(appName)
-              }
             }}
           />
         </View>
