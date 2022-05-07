@@ -37,8 +37,8 @@ type GetCiphersParams = {
 
 const defaultData = {
   reloadCache: async () => {},
-  startSyncProcess: async () => { return { kind: 'unknown' } },
-  getSyncData: async () => { return { kind: 'unknown' } },
+  startSyncProcess: async (bumpTimestamp: number) => { return { kind: 'unknown' } },
+  getSyncData: async (bumpTimestamp: number) => { return { kind: 'unknown' } },
   syncOfflineData: async () => {},
   syncAutofillData: async () => {},
 
@@ -169,7 +169,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Sync
-  const getSyncData = () => {
+  const getSyncData = (bumpTimestamp: number) => {
     syncQueue.clear()
     return syncQueue.add(async () => {
       try {
@@ -185,8 +185,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         }
 
         // Start sync
-        cipherStore.setLastSync()
-        await syncService.setLastSync(new Date())
+        cipherStore.setLastSync(bumpTimestamp)
+        await syncService.setLastSync(new Date(bumpTimestamp))
   
         // Sync service
         const userId = await userService.getUserId()
@@ -228,7 +228,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Sync gradually
-  const startSyncProcess = () => {
+  const startSyncProcess = (bumpTimestamp: number) => {
     syncQueue.clear()
     return syncQueue.add(async () => {
       try {
@@ -246,8 +246,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         }
 
         // Set last sync
-        cipherStore.setLastSync()
-        await syncService.setLastSync(new Date())
+        cipherStore.setLastSync(bumpTimestamp)
+        await syncService.setLastSync(new Date(bumpTimestamp))
   
         // Sync service with data from first page
         const userId = await userService.getUserId()
