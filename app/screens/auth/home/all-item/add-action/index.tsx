@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { Text, AutoImage as Image, ActionSheet, ActionSheetItem, ActionSheetContent } from "../../../../../components"
 import { commonStyles } from "../../../../../theme"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
@@ -6,7 +6,6 @@ import { View } from "react-native"
 import { useStores } from "../../../../../models"
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../../../../../services/mixins"
-import { CryptoTypeAction } from "../../../browse/crypto-asset/crypto-type-action"
 
 interface Props {
   isOpen: boolean,
@@ -20,18 +19,9 @@ export const AddAction = observer((props: Props) => {
   const { color } = useMixins()
   const { cipherStore } = useStores()
 
-  const [nextModal, setNextModal] = useState<'crypto' | null>(null)
-  const [showCrypto, setShowCrypto] = useState(false)
-
   const items = Object.values(BROWSE_ITEMS).filter(item => item.addable && !item.group)
   
   const handleClose = () => {
-    switch (nextModal) {
-      case 'crypto':
-        setShowCrypto(true)
-        setNextModal(null)
-        break
-    }
     onClose()
   }
 
@@ -53,15 +43,10 @@ export const AddAction = observer((props: Props) => {
                   } else {
                     cipherStore.setSelectedFolder(null)
                   }
-                  if (item.routeName === 'cryptoAssets') {
-                    setNextModal('crypto')
-                    onClose()
-                  } else {
-                    onClose()
-                    navigation.navigate(`${item.routeName}__edit`, {
-                      mode: 'add'
-                    })
-                  }
+                  onClose()
+                  navigation.navigate(`${item.routeName}__edit`, {
+                    mode: 'add'
+                  })
                 }}
               >
                 <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -85,12 +70,6 @@ export const AddAction = observer((props: Props) => {
           }
         </ActionSheetContent>
       </ActionSheet>
-
-      <CryptoTypeAction
-        navigation={navigation}
-        isOpen={showCrypto}
-        onClose={() => setShowCrypto(false)}
-      />
     </>
   )
 })

@@ -30,6 +30,20 @@ export const CryptoWalletAction = observer((props: Props) => {
         action={() => copyToClipboard(data.address)}
         disabled={!data.address}
       />
+
+      <ActionItem
+        name={translate('crypto_asset.copy_password')}
+        icon="copy"
+        action={() => copyToClipboard(data.password)}
+        disabled={!data.password}
+      />
+
+      <ActionItem
+        name={translate('crypto_asset.copy_private_key')}
+        icon="copy"
+        action={() => copyToClipboard(data.privateKey)}
+        disabled={!data.privateKey}
+      />
       
       <ActionItem
         name={translate('crypto_asset.copy_seed')}

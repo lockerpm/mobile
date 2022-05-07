@@ -1,5 +1,13 @@
 import { ApiResponse } from "apisauce"
-import { ConfirmShareCipherData, EditShareCipherData, EmptyResult, GetCipherResult, GetLastUpdateResult, GetMySharesResult, GetOrganizationResult, GetProfileResult, GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, ImportCipherData, MoveFolderData, PostCipherResult, ShareCipherData, ShareCipherResult, ShareInvitationResponseData, ShareMultipleCiphersData, StopShareCipherData, SyncResult } from "./api.types"
+import { 
+  ConfirmShareCipherData, EditShareCipherData, EmptyResult, GetCipherResult, 
+  GetLastUpdateResult, GetMySharesResult, GetOrganizationResult, GetProfileResult, 
+  GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, 
+  ImportCipherData, 
+  ImportCipherWithFolderData, ImportFolderData, ImportFolderResult, MoveFolderData, PostCipherResult, 
+  ShareCipherData, ShareCipherResult, ShareInvitationResponseData, ShareMultipleCiphersData, 
+  StopShareCipherData, SyncResult 
+} from "./api.types"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { Logger } from "../../utils/logger"
 import { Api } from "./api"
@@ -82,8 +90,8 @@ export class CipherApi {
     }
   }
 
-  // Import cipher
-  async importCipher(token: string, data: ImportCipherData): Promise<EmptyResult> {
+  // Import ciphers + folders + relationships
+  async importCipherWithFolder(token: string, data: ImportCipherWithFolderData): Promise<EmptyResult> {
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
@@ -101,8 +109,46 @@ export class CipherApi {
     }
   }
 
+  // Import folders
+  async importFolders(token: string, data: ImportFolderData): Promise<ImportFolderResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/import/folders', data)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error('Import cipher: ' + e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // Import ciphers
+  async importCiphers(token: string, data: ImportCipherData): Promise<EmptyResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/import/ciphers', data)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error('Import cipher: ' + e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
   // Offline sync cipher
-  async offlineSyncCipher(token: string, data: ImportCipherData): Promise<EmptyResult> {
+  async offlineSyncCipher(token: string, data: ImportCipherWithFolderData): Promise<EmptyResult> {
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 

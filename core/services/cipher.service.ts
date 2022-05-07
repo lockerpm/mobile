@@ -55,6 +55,7 @@ import { sequentialize } from '../misc/sequentialize';
 import { Utils } from '../misc/utils';
 import _ from 'lodash'
 import { AppEventType, EventBus } from '../../app/utils/event-bus';
+import { BACKGROUND_DECRYPT_BATCH_SIZE, BACKGROUND_DECRYPT_FIRST_BATCH_SIZE, BACKGROUND_DECRYPT_REINDEX_EVERY } from '../../app/config/constants';
 
 const Keys = {
     ciphersPrefix: 'ciphers_',
@@ -322,7 +323,6 @@ export class CipherService implements CipherServiceAbstraction {
 
     // CS
     private async batchDecrypt(page: number): Promise<CipherView[]> {
-        const BATCH_SIZE = 100
         const decCiphers: CipherView[] = [];
         const hasKey = await this.cryptoService.hasKey();
         if (!hasKey) {
@@ -333,15 +333,18 @@ export class CipherService implements CipherServiceAbstraction {
         const length = ciphers.length
 
         const promises: any[] = [];
-        ciphers.slice(page * BATCH_SIZE, Math.min((page + 1) * BATCH_SIZE, length)).forEach(cipher => {
+        const start = page === 0 ? 0 : ((page - 1) * BACKGROUND_DECRYPT_BATCH_SIZE + BACKGROUND_DECRYPT_FIRST_BATCH_SIZE)
+        const expectedEnd = page === 0 ? BACKGROUND_DECRYPT_FIRST_BATCH_SIZE : (page * BACKGROUND_DECRYPT_BATCH_SIZE + BACKGROUND_DECRYPT_FIRST_BATCH_SIZE)
+        const end = Math.min(expectedEnd, length)
+        ciphers.slice(start, end).forEach(cipher => {
             promises.push(cipher.decrypt().then(c => decCiphers.push(c)));
         })
         await Promise.all(promises);
         // PERF: disable local sort -> improve time load
         // decCiphers.sort(this.getLocaleSortingFunction());
-        // PERF: only reindex search every 2 page to save time
-        const isLastPage = (page + 1) * BATCH_SIZE >= length
-        const shouldReindex = (page % 3 === 0) || isLastPage
+        // PERF: only reindex search every 3 page to save time
+        const isLastPage = end >= length
+        const shouldReindex = (page % BACKGROUND_DECRYPT_REINDEX_EVERY === 0) || isLastPage
         this.mergeDecryptedCipherCache(decCiphers, shouldReindex)
         if (page > 0) {
             EventBus.emit(AppEventType.NEW_BATCH_DECRYPTED, null)
@@ -1148,7 +1151,6 @@ export class CipherService implements CipherServiceAbstraction {
                 return;
             case CipherType.SecureNote:
             case CipherType.TOTP:
-            case CipherType.CryptoAccount:
             case CipherType.CryptoWallet:
                 cipher.secureNote = new SecureNote();
                 cipher.secureNote.type = model.secureNote.type;

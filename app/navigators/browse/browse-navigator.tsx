@@ -26,7 +26,7 @@ export const BrowseNavigator = () => {
       <Stack.Screen name="sharedItems" component={SharedItemsScreen} />
       <Stack.Screen name="shareItems" component={ShareItemsScreen} />
       <Stack.Screen name="trash" component={TrashScreen} />
-      <Stack.Screen name="cryptoAssets" component={CryptoAssetsScreen} />
+      <Stack.Screen name="cryptoWallets" component={CryptoAssetsScreen} />
     </Stack.Navigator>
   )
 }

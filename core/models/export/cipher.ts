@@ -56,7 +56,6 @@ export class Cipher {
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
-            case CipherType.CryptoAccount:
             case CipherType.CryptoWallet:
                 view.secureNote = SecureNote.toView(req.secureNote);
                 break;
@@ -92,7 +91,6 @@ export class Cipher {
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
-            case CipherType.CryptoAccount:
             case CipherType.CryptoWallet:
                 domain.secureNote = SecureNote.toDomain(req.secureNote);
                 break;
@@ -152,7 +150,6 @@ export class Cipher {
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
-            case CipherType.CryptoAccount:
             case CipherType.CryptoWallet:
                 this.secureNote = new SecureNote(o.secureNote);
                 break;

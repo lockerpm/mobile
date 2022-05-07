@@ -159,7 +159,7 @@ export const IdentityInfoScreen = observer(() => {
           <BROWSE_ITEMS.identity.svgIcon height={55} width={55} />
           <Text
             preset="header"
-            style={{ marginTop: 5, marginHorizontal: 20, textAlign: 'center' }}
+            style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
           >
             {selectedCipher.name}
             {
