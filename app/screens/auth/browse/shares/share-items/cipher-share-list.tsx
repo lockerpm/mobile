@@ -2,21 +2,18 @@ import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
-import { Button } from "../../../../../components/button/button"
 import { Text } from "../../../../../components/text/text"
-import { AutoImage as Image } from "../../../../../components/auto-image/auto-image"
 // import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
-import { commonStyles, fontSize } from "../../../../../theme"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { AccountRole, AccountRoleText, SharingStatus } from "../../../../../config/types"
+import { AccountRole, AccountRoleText } from "../../../../../config/types"
 import { Organization } from "../../../../../../core/models/domain/organization"
 import { ShareItemAction } from "./share-item-action"
 import { SharedMemberType } from "../../../../../services/api/api.types"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { CipherShareListItem, CipherShareType } from "./cipher-share-list-item"
 
 
 type Props = {
@@ -37,23 +34,14 @@ export const CipherShareList = observer((props: Props) => {
   const {
     emptyContent, navigation, onLoadingChange, searchText, sortList
   } = props
-  const { translate, color } = useMixins()
+  const { translate } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore } = useStores()
-  type ListItem = CipherView & {
-    logo?: any
-    imgLogo?: any
-    svg?: any
-    notSync?: boolean
-    description?: string
-    status?: string
-    member?: SharedMemberType
-  }
 
   // ------------------------ PARAMS ----------------------------
 
-  const [ciphers, setCiphers] = useState<ListItem[]>([])
+  const [ciphers, setCiphers] = useState<CipherShareType[]>([])
   const [showAction, setShowAction] = useState(false)
   const [selectedMember, setSelectedMember] = useState<SharedMemberType>(null)
 
@@ -99,14 +87,14 @@ export const CipherShareList = observer((props: Props) => {
       searchText,
       deleted: false
     })
-    let res: ListItem[] = []
+    let res: CipherShareType[] = []
 
     // Add image + share info
     searchRes.forEach((c: CipherView) => {
       const cipherInfo = getCipherInfo(c)
 
       // @ts-ignore
-      const data: ListItem = {
+      const data: CipherShareType = {
         ...c,
         logo: cipherInfo.backup,
         imgLogo: cipherInfo.img,
@@ -158,144 +146,26 @@ export const CipherShareList = observer((props: Props) => {
   }
 
   // Handle action menu open
-  const openActionMenu = (item: ListItem) => {
+  const openActionMenu = (item: CipherShareType) => {
     cipherStore.setSelectedCipher(item)
     setSelectedMember(item.member)
     setShowAction(true)
   }
 
   // Go to detail
-  const goToDetail = (item: ListItem) => {
+  const goToDetail = (item: CipherShareType) => {
     cipherStore.setSelectedCipher(item)
     const cipherInfo = getCipherInfo(item)
     navigation.navigate(`${cipherInfo.path}__info`)
   }
 
-  // Get cipher description
-  const getDescription = (item: ListItem) => {
-    return item.description
-  }
-
   // ------------------------ RENDER ----------------------------
 
   const renderItem = ({ item }) => (
-    <Button
-      preset="link"
-      onPress={() => {
-        // goToDetail(item)
-        openActionMenu(item)
-      }}
-      style={{
-        borderBottomColor: color.line,
-        borderBottomWidth: 0.5,
-        paddingVertical: 15,
-        height: 70.5
-      }}
-    >
-      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-        {/* Cipher avatar */}
-        {
-          item.svg ? (
-            <item.svg height={40} width={40} />
-          ) : (
-            <Image
-              source={item.imgLogo || item.logo}
-              backupSource={item.logo}
-              style={{
-                height: 40,
-                width: 40,
-                borderRadius: 8
-              }}
-            />
-          )
-        }
-        {/* Cipher avatar end */}
-
-        <View style={{ flex: 1, marginLeft: 12 }}>
-          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
-            <View style={{ flex: 1 }}>
-              <Text
-                preset="semibold"
-                text={item.name}
-                numberOfLines={1}
-                style={{
-                  marginRight: item.status ? 10 : 0
-                }}
-              />
-            </View>
-
-            {/* Sharing status */}
-            {
-              item.status && (
-                <View style={{
-                  paddingHorizontal: 10,
-                  paddingVertical: 2,
-                  backgroundColor: item.status === SharingStatus.INVITED 
-                    ? color.warning
-                    : item.status === SharingStatus.ACCEPTED
-                      ? color.info
-                      : color.primary,
-                  borderRadius: 3,
-                }}>
-                  <Text
-                    text={item.status.toUpperCase()}
-                    style={{
-                      fontWeight: 'bold',
-                      color: color.background,
-                      fontSize: fontSize.mini
-                    }}
-                  />
-                </View>
-              )
-            }
-            {/* Sharing status */}
-
-            {/* Not sync icon */}
-            {
-              item.notSync && (
-                <View style={{ marginLeft: 10 }}>
-                  <MaterialCommunityIconsIcon
-                    name="cloud-off-outline"
-                    size={22}
-                    color={color.textBlack}
-                  />
-                </View>
-              )
-            }
-            {/* Not sync icon end */}
-          </View>
-
-          {/* Description */}
-          {
-            !!getDescription(item) && (
-              <Text
-                text={getDescription(item)}
-                style={{ fontSize: fontSize.small }}
-                numberOfLines={1}
-              />
-            )
-          }
-          {/* Description end */}
-        </View>
-
-        {/* <Button
-          preset="link"
-          onPress={() => openActionMenu(item)}
-          style={{ 
-            height: 40,
-            width: 40,
-            justifyContent: 'flex-end',
-            alignItems: 'center'
-          }}
-        >
-          <IoniconsIcon
-            name="ellipsis-horizontal"
-            size={18}
-            color={color.textBlack}
-          />
-        </Button> */}
-      </View>
-    </Button>
+    <CipherShareListItem
+      item={item}
+      openActionMenu={openActionMenu}
+    />
   )
 
   return allCiphers.length ? (

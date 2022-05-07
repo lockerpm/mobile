@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react"
-import { View, FlatList, NativeModules } from "react-native"
+import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import { CipherView } from "../../../../core/models/view"
 import { BROWSE_ITEMS } from "../../../common/mappings"
-import { commonStyles, fontSize } from "../../../theme"
-import { Checkbox } from "react-native-ui-lib"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { Button, AutoImage as Image, Text } from "../../../components"
+import { Text } from "../../../components"
 import { AutoFillItemAction } from "./autofill-item-action"
+import { AutofillListItem } from "./autofill-list-item"
 
-const { RNAutofillServiceAndroid } = NativeModules
 
 interface AutoFillListProps {
   emptyContent?: JSX.Element
@@ -36,12 +32,12 @@ interface AutoFillListProps {
 /**
  * Describe your component here
  */
-export const AutoFillList = observer(function AutoFillList(props: AutoFillListProps) {
+export const AutoFillList = observer((props: AutoFillListProps) => {
   const {
     emptyContent, navigation, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { getWebsiteLogo, translate, color } = useMixins()
+  const { getWebsiteLogo, translate } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { cipherStore } = useStores()
 
@@ -49,12 +45,20 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
 
   const [showPasswordAction, setShowPasswordAction] = useState(false)
   const [ciphers, setCiphers] = useState([])
+  const [checkedItem, setCheckedItem] = useState('')
 
   // ------------------------ WATCHERS ----------------------------
 
   useEffect(() => {
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
+
+  useEffect(() => {
+    if (checkedItem) {
+      toggleItemSelection(checkedItem)
+      setCheckedItem(null)
+    }
+  }, [checkedItem, selectedItems])
 
   // ------------------------ METHODS ----------------------------
 
@@ -116,32 +120,16 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
     setShowPasswordAction(true)
   }
 
-  // Go to detail
-  const selectForAutoFill = (item: CipherView) => {
-    RNAutofillServiceAndroid.addAutofillValue(
-      item.id,
-      item.login.username,
-      item.login.password,
-      item.name,
-      item.login.uri
-    )
-  }
-
-  // Get cipher description
-  const getDescription = (item: CipherView) => {
-    return item.login.username
-  }
-
   // Toggle item selection
-  const toggleItemSelection = (item: CipherView) => {
+  const toggleItemSelection = (id: string) => {
     if (!isSelecting) {
       setIsSelecting(true)
     }
     let selected = [...selectedItems]
-    if (!selected.includes(item.id)) {
-      selected.push(item.id)
+    if (!selected.includes(id)) {
+      selected.push(id)
     } else {
-      selected = selected.filter(id => id !== item.id)
+      selected = selected.filter(i => i !== id)
     }
     setSelectedItems(selected)
   }
@@ -149,111 +137,13 @@ export const AutoFillList = observer(function AutoFillList(props: AutoFillListPr
   // ------------------------ RENDER ----------------------------
 
   const renderItem = ({ item }) => (
-    <Button
-      preset="link"
-      onPress={() => {
-        if (isSelecting) {
-          toggleItemSelection(item)
-        } else {
-          selectForAutoFill(item)
-        }
-      }}
-      onLongPress={() => toggleItemSelection(item)}
-      style={{
-        borderBottomColor: color.line,
-        borderBottomWidth: 0.5,
-        paddingVertical: 15,
-        height: 70.5
-      }}
-    >
-      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-        {
-          item.svg ? (
-            <item.svg height={40} width={40} />
-          ) : (
-            <Image
-              source={item.imgLogo || item.logo}
-              backupSource={item.logo}
-              style={{
-                height: 40,
-                width: 40,
-                borderRadius: 8
-              }}
-            />
-          )
-        }
-
-        <View style={{ flex: 1, marginLeft: 12 }}>
-          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
-            <View style={{ flex: 1 }}>
-              <Text
-                preset="semibold"
-                numberOfLines={1}
-                text={item.name}
-              />
-            </View>
-
-            {
-              item.organizationId && (
-                <View style={{ marginLeft: 10 }}>
-                  <MaterialCommunityIconsIcon
-                    name="account-group-outline"
-                    size={22}
-                    color={color.textBlack}
-                  />
-                </View>
-              )
-            }
-
-            {
-              item.notSync && (
-                <View style={{ marginLeft: 10 }}>
-                  <MaterialCommunityIconsIcon
-                    name="cloud-off-outline"
-                    size={22}
-                    color={color.textBlack}
-                  />
-                </View>
-              )
-            }
-          </View>
-
-          {
-            !!getDescription(item) && (
-              <Text
-                text={getDescription(item)}
-                style={{ fontSize: fontSize.small }}
-                numberOfLines={1}
-              />
-            )
-          }
-        </View>
-
-        {
-          isSelecting ? (
-            <Checkbox
-              value={selectedItems.includes(item.id)}
-              color={color.primary}
-              onValueChange={() => {
-                toggleItemSelection(item)
-              }}
-            />
-          ) : (
-            <Button
-              preset="link"
-              onPress={() => openActionMenu(item)}
-              style={{ height: 40, alignItems: 'center' }}
-            >
-              <IoniconsIcon
-                name="ellipsis-horizontal"
-                size={18}
-                color={color.textBlack}
-              />
-            </Button>
-          )
-        }
-      </View>
-    </Button>
+    <AutofillListItem
+      item={item}
+      isSelecting={isSelecting}
+      toggleItemSelection={setCheckedItem}
+      openActionMenu={openActionMenu}
+      isSelected={selectedItems.includes(item.id)}
+    />
   )
 
   return ciphers.length ? (
