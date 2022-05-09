@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon, AutoImage as Image } from "../../../../../components"
+import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon, AutoImage as Image, Textarea } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -210,12 +210,10 @@ export const CryptoWalletInfoScreen = observer(() => {
         />
 
         {/* Seed */}
-        <FloatingInput
+        <Textarea
           label={translate('crypto_asset.seed')}
           value={cryptoWalletData.seed}
           editable={false}
-          textarea
-          fixedLabel
           copyAble
           style={{ marginTop: 20 }}
         />
@@ -280,12 +278,10 @@ export const CryptoWalletInfoScreen = observer(() => {
         </View>
 
         {/* Notes */}
-        <FloatingInput
+        <Textarea
           label={translate('common.notes')}
           value={cryptoWalletData.notes}
           editable={false}
-          textarea
-          fixedLabel
           copyAble
           style={{ marginTop: 20 }}
         />

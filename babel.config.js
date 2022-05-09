@@ -1,6 +1,21 @@
-module.exports = (api) => {
-  const babelEnv = api.env();
-  const plugins = [
+module.exports = {
+  presets: ["module:metro-react-native-babel-preset"],
+  env: {
+    production: {
+      "plugins": [
+        [
+            "transform-remove-console",
+            {
+                "exclude": [
+                    "error",
+                    "warn"
+                ]
+            }
+        ]
+      ]
+    },
+  },
+  plugins: [
     [
       "@babel/plugin-proposal-decorators",
       {
@@ -10,12 +25,4 @@ module.exports = (api) => {
     ["@babel/plugin-proposal-optional-catch-binding"],
     'react-native-reanimated/plugin' // last
   ]
-  if (babelEnv !== 'development') {
-    plugins.push(['transform-remove-console']);
-  }
-  
-  return {
-    presets: ["module:metro-react-native-babel-preset"],
-    plugins,
-  }
 }

@@ -1,10 +1,11 @@
 import React from 'react'
-import { View } from 'react-native'
+import { ImageStyle, View, ViewStyle } from 'react-native'
 import { Text, Select, AutoImage as Image } from '../../../../../components'
 import { useMixins } from '../../../../../services/mixins'
 import { commonStyles, fontSize } from '../../../../../theme'
 import { WALLET_APP_LIST } from '../../../../../utils/crypto/applist'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import IonIconsIcon from 'react-native-vector-icons/Ionicons'
 
 
 type Props = {
@@ -16,8 +17,33 @@ export const AppSelect = (props: Props) => {
   const { onChange, alias } = props
   const { translate, color } = useMixins()
 
-  const selectedApp = WALLET_APP_LIST.find(c => c.alias === alias)
-  const otherApp = WALLET_APP_LIST.find(c => c.alias === 'other')
+  // ------------------ METHODS ------------------
+
+  const findApp = (al: string) => {
+    return WALLET_APP_LIST.find(c => c.alias === al)
+  }
+
+  // ------------------ COMPUTED ------------------
+
+  const selectedApp = findApp(alias)
+  const otherApp = findApp('other')
+
+  // ------------------ RENDER ------------------
+
+  const IMG_CONTAINER: ViewStyle = {
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: color.line
+  }
+
+  const IMG: ImageStyle = {
+    borderRadius: 20,
+    height: 40,
+    width: 40,
+    backgroundColor: 'white',
+  }
 
   return (
     <Select
@@ -32,6 +58,35 @@ export const AppSelect = (props: Props) => {
         value: a.alias
       }))}
       title={translate('crypto_asset.network')}
+      renderItem={(value, { isSelected }, itemLabel) => (
+        <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+          backgroundColor: color.background,
+          paddingHorizontal: 16,
+          paddingVertical: 8
+        }]}>
+          <View style={IMG_CONTAINER}>
+            <Image
+              source={findApp(value)?.logo || otherApp.logo}
+              borderRadius={20}
+              style={IMG}
+            />
+          </View>
+          <Text
+            preset='black'
+            text={itemLabel}
+            style={{ flex: 1, marginRight: 20 }}
+          />
+          {
+            isSelected && (
+              <IonIconsIcon
+                name='checkmark'
+                color={color.primary}
+                size={24}
+              />
+            )
+          }
+        </View>
+      )}
       renderSelected={({ label }) => (
         <View style={{ flex: 1 }}>
           <View
@@ -48,22 +103,11 @@ export const AppSelect = (props: Props) => {
               <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
                 {
                   !!alias && (
-                    <View style={{
-                      borderRadius: 20,
-                      overflow: 'hidden',
-                      marginRight: 10,
-                      borderWidth: 1,
-                      borderColor: color.line
-                    }}>
+                    <View style={IMG_CONTAINER}>
                       <Image
                         source={selectedApp?.logo || otherApp.logo}
                         borderRadius={20}
-                        style={{
-                          borderRadius: 20,
-                          height: 40,
-                          width: 40,
-                          backgroundColor: 'white',
-                        }}
+                        style={IMG}
                       />
                     </View>
                   )

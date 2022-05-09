@@ -2,17 +2,11 @@ import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
-import { Button } from "../../../../../components/button/button"
 import { Text } from "../../../../../components/text/text"
-import { AutoImage as Image } from "../../../../../components/auto-image/auto-image"
-// import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CipherType } from "../../../../../../core/enums"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
-import { commonStyles, fontSize } from "../../../../../theme"
-import { Checkbox } from "react-native-ui-lib"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { AccountRole, AccountRoleText } from "../../../../../config/types"
 import { Organization } from "../../../../../../core/models/domain/organization"
@@ -23,6 +17,7 @@ import { IdentityAction } from "../../identities/identity-action"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { PendingSharedAction } from "./pending-shared-action"
 import { CryptoWalletAction } from "../../crypto-asset/crypto-wallet-action"
+import { CipherSharedListItem, CipherSharedType } from "./cipher-shared-list-item"
 
 
 export interface CipherSharedListProps {
@@ -49,22 +44,14 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     emptyContent, navigation, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { translate, color } = useMixins()
+  const { translate } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { cipherStore } = useStores()
   const { newCipher, getCipherInfo } = useCipherHelpersMixins()
-  type ListItem = CipherView & {
-    isShared?: boolean
-    description?: string
-    logo?: any
-    imgLogo?: any
-    svg?: any
-    notSync?: boolean
-  }
 
   // ------------------------ PARAMS ----------------------------
 
-  const [ciphers, setCiphers] = useState<ListItem[]>([])
+  const [ciphers, setCiphers] = useState<CipherSharedType[]>([])
   const [showPasswordAction, setShowPasswordAction] = useState(false)
   const [showNoteAction, setShowNoteAction] = useState(false)
   const [showIdentityAction, setShowIdentityAction] = useState(false)
@@ -72,11 +59,13 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showPendingAction, setShowPendingAction] = useState(false)
 
+  const [checkedItem, setCheckedItem] = useState('')
+
   // ------------------------ COMPUTED ----------------------------
  
   const organizations = cipherStore.organizations
   const pendingCiphers = cipherStore.sharingInvitations.map(i => {
-    const cipher: ListItem = newCipher(i.cipher_type)
+    const cipher: CipherSharedType = newCipher(i.cipher_type)
     const cipherInfo = getCipherInfo(cipher)
 
     cipher.isShared = true
@@ -108,6 +97,13 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   useEffect(() => {
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
+
+  useEffect(() => {
+    if (checkedItem) {
+      toggleItemSelection(checkedItem)
+      setCheckedItem(null)
+    }
+  }, [checkedItem, selectedItems])
 
   // ------------------------ METHODS ----------------------------
 
@@ -170,7 +166,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   }
 
   // Handle action menu open
-  const openActionMenu = (item: ListItem) => {
+  const openActionMenu = (item: CipherSharedType) => {
     cipherStore.setSelectedCipher(item)
     if (item.isShared) {
       setShowPendingAction(true)
@@ -208,37 +204,16 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   //   navigation.navigate(`${cipherInfo.path}__info`)
   // }
 
-  // Get cipher description
-  const getDescription = (item: ListItem) => {
-    if (item.isShared) {
-      return item.description
-    }
-
-    const org = _getOrg(item.organizationId)
-    let shareType = ''
-    if (org) {
-      switch (org.type) {
-        case AccountRole.MEMBER:
-          shareType = item.viewPassword ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
-          break
-        case AccountRole.ADMIN:
-          shareType = translate('shares.share_type.edit')
-          break
-      }
-    }
-    return org ? `${org.name} - ${shareType}` : ''
-  }
-
   // Toggle item selection
-  const toggleItemSelection = (item: ListItem) => {
+  const toggleItemSelection = (id: string) => {
     if (!isSelecting) {
       setIsSelecting(true)
     }
     let selected = [...selectedItems]
-    if (!selected.includes(item.id)) {
-      selected.push(item.id)
+    if (!selected.includes(id)) {
+      selected.push(id)
     } else {
-      selected = selected.filter(id => id !== item.id)
+      selected = selected.filter(i => i !== id)
     }
     setSelectedItems(selected)
   }
@@ -246,135 +221,14 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   // ------------------------ RENDER ----------------------------
 
   const renderItem = ({ item }) => (
-    <Button
-      preset="link"
-      onPress={() => {
-        if (isSelecting) {
-          toggleItemSelection(item)
-        } else {
-          // goToDetail(item)
-          openActionMenu(item)
-        }
-      }}
-      onLongPress={() => !item.isShared && toggleItemSelection(item)}
-      style={{
-        borderBottomColor: color.line,
-        borderBottomWidth: 0.5,
-        paddingVertical: 15,
-        height: 70.5
-      }}
-    >
-      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-        {/* Cipher avatar */}
-        {
-          item.svg ? (
-            <item.svg height={40} width={40} />
-          ) : (
-            <Image
-              source={item.imgLogo || item.logo}
-              backupSource={item.logo}
-              style={{
-                height: 40,
-                width: 40,
-                borderRadius: 8
-              }}
-            />
-          )
-        }
-        {/* Cipher avatar end */}
-
-        <View style={{ flex: 1, marginLeft: 12 }}>
-          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
-            <View style={{ flex: 1 }}>
-              <Text
-                preset="semibold"
-                text={item.name}
-                numberOfLines={1}
-              />
-            </View>
-
-            {/* Pending status */}
-            {
-              item.isShared && (
-                <View style={{
-                  paddingHorizontal: 10,
-                  paddingVertical: 2,
-                  backgroundColor: color.warning,
-                  borderRadius: 3,
-                  marginLeft: 10
-                }}>
-                  <Text
-                    text="PENDING"
-                    style={{
-                      fontWeight: 'bold',
-                      color: color.background,
-                      fontSize: fontSize.mini
-                    }}
-                  />
-                </View>
-              )
-            }
-            {/* Pending status */}
-
-            {/* Not sync icon */}
-            {
-              item.notSync && (
-                <View style={{ marginLeft: 10 }}>
-                  <MaterialCommunityIconsIcon
-                    name="cloud-off-outline"
-                    size={22}
-                    color={color.textBlack}
-                  />
-                </View>
-              )
-            }
-            {/* Not sync icon end */}
-          </View>
-
-          {/* Description */}
-          {
-            !!getDescription(item) && (
-              <Text
-                text={getDescription(item)}
-                style={{ fontSize: fontSize.small }}
-                numberOfLines={1}
-              />
-            )
-          }
-          {/* Description end */}
-        </View>
-
-        {
-          isSelecting ? (
-            <Checkbox
-              value={selectedItems.includes(item.id)}
-              color={color.primary}
-              onValueChange={() => {
-                toggleItemSelection(item)
-              }}
-            />
-          ) : (
-            <View />
-            // <Button
-            //   preset="link"
-            //   onPress={() => openActionMenu(item)}
-            //   style={{ 
-            //     height: 40,
-            //     width: 40,
-            //     justifyContent: 'flex-end',
-            //     alignItems: 'center'
-            //   }}
-            // >
-            //   <IoniconsIcon
-            //     name="ellipsis-horizontal"
-            //     size={18}
-            //     color={color.textBlack}
-            //   />
-            // </Button>
-          )
-        }
-      </View>
-    </Button>
+    <CipherSharedListItem 
+      item={item}
+      isSelecting={isSelecting}
+      toggleItemSelection={setCheckedItem}
+      openActionMenu={openActionMenu}
+      isSelected={selectedItems.includes(item.id)}
+      org={_getOrg(item)}
+    />
   )
 
   return allCiphers.length ? (

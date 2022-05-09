@@ -1,4 +1,7 @@
-export const WALLET_APP_LIST = [
+import orderBy from 'lodash/orderBy'
+
+
+export const WALLET_APP_LIST = orderBy([
   {
     name: 'Coinbase',
     alias: 'coinbase',
@@ -70,7 +73,8 @@ export const WALLET_APP_LIST = [
     passcode: true,
     password: false,
     pin: false
-  },
+  }
+], ['name'], ['asc']).concat([
   {
     name: 'Other',
     alias: 'other',
@@ -79,4 +83,4 @@ export const WALLET_APP_LIST = [
     password: true,
     pin: false
   }
-]
+])

@@ -564,15 +564,15 @@
       "desc": "Keep your crypto account/wallet in safe place",
       "btn": "Add Asset"
     },
-    "copy_seed": "Copy Seed Phrase",
+    "copy_seed": "Copy Seed Phrase / Recovery Phrase",
     "copy_address": "Copy Address",
     "copy_username": "Copy Username",
     "copy_password": "Copy Password / PIN",
     "copy_private_key": "Copy Private Key",
     "email_recovery": "Email Recovery",
-    "seed": "Seed Phrase",
+    "seed": "Seed Phrase / Recovery Phrase",
     "backup_details": "Backup Details",
-    "network": "Network",
+    "network": "Networks",
     "wallet_app": "Wallet App"
   },
   "payment" : {
