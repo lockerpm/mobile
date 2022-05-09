@@ -105,14 +105,17 @@ export const ImportScreen = observer(() => {
   const handleImport = async () => {
     setImportedCipherCount(0)
     setImportedFolderCount(0)
+    console.log("1")
     setIsLoading(true)
 
     try {
+      console.log("2")
       const f = cystackOptions.map(e => e.id).includes(format) ? format.replace('cystack', 'bitwarden') : format
       const importer = importService.getImporter(f)
       let content = await RNFS.readFile(file.uri)
-
+      console.log("3")
       if (format === 'lastpasscsv' && file.type === 'text/html') {
+        console.log("4")
         const parser = new DOMParser()
         const doc = parser.parseFromString(content, 'text/html')
         const pre = doc.querySelector('pre')
@@ -120,27 +123,31 @@ export const ImportScreen = observer(() => {
           content = pre.textContent
         } else {
           notify('error', translate('import.invalid_data_format'))
+          console.log("5")
           setFile(fileData)
           setIsLoading(false)
           return
         }
       }
-
+      console.log("6")
       let importResult
       try {
         importResult = await importer.parse(content)
+        console.log("7")
       } catch (e) {
+        console.log("8")
         notify('error', translate('import.invalid_data_format'))
         setFile(fileData)
         setIsLoading(false)
         return
       }
-
+      console.log("9")
       if (importResult.success) {
         if (importResult.folders.length === 0 && importResult.ciphers.length === 0) {
           notify('error', translate('import.no_data'))
           setFile(fileData)
           setIsLoading(false)
+          console.log("10")
           return
         } else if (importResult.ciphers.length > 0) {
           const halfway = Math.floor(importResult.ciphers.length / 2)
@@ -149,18 +156,20 @@ export const ImportScreen = observer(() => {
             badData(importResult.ciphers[halfway]) &&
             badData(importResult.ciphers[last])
           ) {
+            console.log("11")
             notify('error', translate('import.invalid_data_format'))
             setFile(fileData)
             setIsLoading(false)
             return
           }
         }
-
+        console.log("12")
         try {
           await importCiphers(importResult, {
             setImportedCipherCount,
             setImportedFolderCount
           })
+          console.log("13")
           setFile(fileData)
           setIsLoading(false)
           return
@@ -171,10 +180,11 @@ export const ImportScreen = observer(() => {
         notify('error', translate('import.invalid_data_format'))
       }
     } catch(e) {
+      console.log("14")
       Logger.error('Handle import: ' + e)
       notify('error', translate('error.something_went_wrong'))
     }
-
+    console.log("15")
     setIsLoading(false)
   }
 

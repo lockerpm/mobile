@@ -17,6 +17,7 @@ export const ToolStoreModel = types
     selectedBreach: types.maybeNull(types.frozen()),
 
     // Password health
+    isDataLoading: types.maybeNull(types.boolean), // is data synchronizing or decrypting
     isLoadingHealth: types.maybeNull(types.boolean),
     lastHealthCheck: types.maybeNull(types.number),
     weakPasswords: types.array(types.frozen()),
@@ -56,6 +57,10 @@ export const ToolStoreModel = types
 
     setLoadingHealth: (val: boolean) => {
       self.isLoadingHealth = val
+    },
+
+    setDataLoading: (val: boolean) => {
+      self.isDataLoading = val
     },
 
     setLastHealthCheck: (val?: number) => {

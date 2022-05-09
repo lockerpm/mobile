@@ -662,7 +662,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       notify('success', translate('import.success') + ' ' + translate('success.will_sync_when_online'))
       return { kind: 'ok' }
     }
-
     // Online
 
     const request = new ImportCiphersRequest()

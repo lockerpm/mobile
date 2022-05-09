@@ -97,7 +97,8 @@
     "user": "Người dùng",
     "username": "Tên người dùng",
     "warning": "Cảnh báo",
-    "website": "Website"
+    "website": "Website",
+    "loading": "Đang giải mã dữ liệu"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."

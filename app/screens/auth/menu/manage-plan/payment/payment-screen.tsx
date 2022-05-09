@@ -211,7 +211,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
           personal={payIndividual}
           purchase={purchase}
         />
-       { IS_IOS && <Button
+       {/* { IS_IOS && <Button
           preset="link"
           style={{
             marginBottom: 20
@@ -220,7 +220,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
           <Text style={{ fontSize: 18 ,color: "#007AFF" }}>
             Redeem code
           </Text>
-        </Button>}
+        </Button>} */}
       </View>
 
 
