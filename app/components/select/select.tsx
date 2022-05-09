@@ -4,6 +4,8 @@ import { fontSize } from "../../theme"
 import { StyleProp, ViewStyle } from "react-native"
 import { useMixins } from "../../services/mixins"
 import { SearchBar } from "../search-bar/search-bar"
+import { PickerItemProps } from "react-native-ui-lib/typings"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 
 type Option = {
@@ -24,6 +26,11 @@ export interface SelectProps {
   searchPlaceholder?: string
   title?: string
   multiple?: boolean
+  renderItem?: (
+    value: string,
+    props: PickerItemProps & { isSelected: boolean },
+    itemLabel: string
+  ) => React.ReactNode
 }
 
 /**
@@ -31,10 +38,11 @@ export interface SelectProps {
  */
 export const Select = (props: SelectProps) => {
   const { translate, color } = useMixins()
+  const insets = useSafeAreaInsets()
   
   const { 
     style, value, onChange, options,
-    floating, renderSelected, placeholder, title, multiple,
+    floating, renderSelected, renderItem, placeholder, title, multiple,
     showSearch, searchPlaceholder = translate('common.search')
   } = props
 
@@ -95,7 +103,8 @@ export const Select = (props: SelectProps) => {
       }}
       listProps={{
         style: {
-          backgroundColor: color.background
+          backgroundColor: color.background,
+          marginBottom: insets.bottom
         }
       }}
       renderCustomSearch={({ onSearchChange }) => (
@@ -121,6 +130,8 @@ export const Select = (props: SelectProps) => {
             color: color.textBlack
           }}
           selectedIconColor={color.primary}
+          // @ts-ignore
+          renderItem={renderItem}
         />
       ))}
     </Picker>
