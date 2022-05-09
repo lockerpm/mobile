@@ -11,24 +11,24 @@ import { translate } from "../../i18n"
 
 
 export interface WixFloatingInputProps extends TextInputProps {
-  outerRef?: any,
-  style?: StyleProp<ViewStyle>,
-  inputStyle?: StyleProp<ViewStyle>,
-  isRequired?: boolean,
-  isInvalid?: boolean,
-  errorText?: string,
-  label: string,
-  isPassword?: boolean,
-  fixedLabel?: boolean,
-  editable?: boolean,
-  disabled?: boolean,
-  buttonRight?: JSX.Element,
-  textarea?: boolean,
-  maskType?: TextInputMaskTypeProp,
-  maskOptions?: TextInputMaskOptionProp,
-  copyAble?: boolean,
-  lockCopy?: boolean,
-  persistError?: boolean,
+  outerRef?: any
+  style?: StyleProp<ViewStyle>
+  inputStyle?: StyleProp<ViewStyle>
+  isRequired?: boolean
+  isInvalid?: boolean
+  errorText?: string
+  label: string
+  isPassword?: boolean
+  fixedLabel?: boolean
+  editable?: boolean
+  disabled?: boolean
+  buttonRight?: JSX.Element
+  textarea?: boolean
+  maskType?: TextInputMaskTypeProp
+  maskOptions?: TextInputMaskOptionProp
+  copyAble?: boolean
+  lockCopy?: boolean
+  persistError?: boolean
   hidePassword?: boolean
 }
 

@@ -56,7 +56,7 @@ export const CardEditScreen = observer(() => {
   const [cardNumber, setCardNumber] = useState(mode !== 'add' ? selectedCipher.card.number : '')
   const [expDate, setExpDate] = useState(mode !== 'add' ? `${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}` : '')
   const [securityCode, setSecurityCode] = useState(mode !== 'add' ? selectedCipher.card.code : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
