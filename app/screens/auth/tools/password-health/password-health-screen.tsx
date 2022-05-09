@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect} from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { useNavigation } from "@react-navigation/core"
@@ -10,12 +10,42 @@ import { commonStyles, fontSize } from "../../../../theme"
 import DataBreachScannerIcon from './data-breach-scanner.svg'
 import { useStores } from "../../../../models"
 import { LoadingHeader } from "./loading-header"
+import { useCipherToolsMixins } from "../../../../services/mixins/cipher/tools"
+import { AppEventType, EventBus } from "../../../../utils/event-bus"
+import { PasswordHealthQueue } from "../../../../utils/queue"
+
 
 
 export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
-  const { toolStore } = useStores()
+
+  const { toolStore, cipherStore } = useStores()
+  const { loadPasswordsHealth } = useCipherToolsMixins()
+
+
+  useEffect(() => {
+      if (!(cipherStore.isSynching || cipherStore.isBatchDecrypting)) {
+        toolStore.setDataLoading(false)
+      }
+  }, [cipherStore.isSynching, cipherStore.isBatchDecrypting])
+  useEffect(() => {
+    if (!toolStore.lastHealthCheck && !toolStore.isDataLoading) {
+      PasswordHealthQueue.clear()
+      PasswordHealthQueue.add(loadPasswordsHealth)
+    }
+  }, [toolStore.lastHealthCheck, toolStore.isDataLoading])
+
+  // Recalculate password health
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.PASSWORD_UPDATE, () => {
+      PasswordHealthQueue.clear()
+      PasswordHealthQueue.add(loadPasswordsHealth)
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [])
 
   // -------------------- RENDER ----------------------
 

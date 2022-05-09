@@ -54,7 +54,7 @@ export const CipherList = observer((props: CipherListProps) => {
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
   const { translate, color, getTeam } = useMixins()
-  const { getCiphersFromCache } = useCipherDataMixins()
+  const { getCiphersFromCache, getCiphers } = useCipherDataMixins()
   const { getCipherDescription, getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, user } = useStores()
 
@@ -81,6 +81,7 @@ export const CipherList = observer((props: CipherListProps) => {
   // ------------------------ EFFECTS ----------------------------
 
   useEffect(() => {
+    
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
 
@@ -89,7 +90,7 @@ export const CipherList = observer((props: CipherListProps) => {
   // Get ciphers list
   const loadData = async () => {
     // onLoadingChange && onLoadingChange(true)
-
+    // const t = new DurationTest("load")
     // Filter
     const filters = []
     if (props.cipherType) {
@@ -157,8 +158,8 @@ export const CipherList = observer((props: CipherListProps) => {
     // Delay loading
     setTimeout(() => {
       onLoadingChange && onLoadingChange(false)
-    }, 100)
-
+    }, 50)
+    // t.final()
     // Done
     setCiphers(res)
     setAllItems(res.map(c => c.id))

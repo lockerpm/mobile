@@ -97,7 +97,8 @@
     "user": "User",
     "username": "Username",
     "warning": "Warning",
-    "website": "Website"
+    "website": "Website",
+    "loading": "Decrypting data"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."

@@ -56,6 +56,7 @@ import { Utils } from '../misc/utils';
 import _ from 'lodash'
 import { AppEventType, EventBus } from '../../app/utils/event-bus';
 import { BACKGROUND_DECRYPT_BATCH_SIZE, BACKGROUND_DECRYPT_FIRST_BATCH_SIZE, BACKGROUND_DECRYPT_REINDEX_EVERY } from '../../app/config/constants';
+import { DurationTest } from '../../app/utils/testing/duration';
 
 const Keys = {
     ciphersPrefix: 'ciphers_',
@@ -323,6 +324,7 @@ export class CipherService implements CipherServiceAbstraction {
 
     // CS
     private async batchDecrypt(page: number): Promise<CipherView[]> {
+        // const t = new DurationTest("batchDecrypt")
         const decCiphers: CipherView[] = [];
         const hasKey = await this.cryptoService.hasKey();
         if (!hasKey) {
@@ -354,6 +356,7 @@ export class CipherService implements CipherServiceAbstraction {
         } else if (page === 0) {
             EventBus.emit(AppEventType.DECRYPT_ALL_STATUS, 'started')
         }
+        // t.final()
         return decCiphers
     }
 
@@ -374,6 +377,7 @@ export class CipherService implements CipherServiceAbstraction {
 
     @sequentialize(() => 'getAllDecrypted')
     async getAllDecrypted(): Promise<CipherView[]> {
+        const t = new DurationTest("getAll decrypted")
         if (this.decryptedCipherCache != null) {
             const userId = await this.userService.getUserId();
             if (this.searchService != null && (this.searchService().indexedEntityId ?? userId) !== userId)
@@ -389,13 +393,27 @@ export class CipherService implements CipherServiceAbstraction {
             throw new Error('No key get cipher.');
         }
 
+
+        // const encKey: SymmetricCryptoKey = await this.cryptoService.getEncKey() 
+       
         const promises: any[] = [];
         const ciphers = await this.getAll();
+
+        // ciphers.forEach(cipher => {
+        //     if (cipher.type == CipherType.Login) {
+        //         promises.push(cipher.decrypt().then(c => decCiphers.push(c)));
+        //     }
+        //     else {
+        //         promises.push(cipher.decrypt().then(c => decCiphers.push(c)));
+        //     }
+            
+        // });
         ciphers.forEach(cipher => {
-            promises.push(cipher.decrypt().then(c => decCiphers.push(c)));
+            promises.push(cipher.decrypt().then(c => decCiphers.push(c)));       
         });
 
         await Promise.all(promises);
+        t.final()
         // PERF: disable local sort -> improve time load
         // decCiphers.sort(this.getLocaleSortingFunction());
         this.decryptedCipherCache = decCiphers;

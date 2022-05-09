@@ -19,7 +19,7 @@ const defaultData = {
 export const CipherToolsMixinsContext = createContext(defaultData)
 
 export const CipherToolsMixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
-  const { user, toolStore } = useStores()
+  const { user, toolStore, cipherStore } = useStores()
   const { getCiphers, getEncryptedCiphers } = useCipherDataMixins()
   const {
     passwordGenerationService,
@@ -59,6 +59,13 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
         return
       }
 
+      
+      if (cipherStore.isSynching || cipherStore.isBatchDecrypting) {
+        toolStore.setDataLoading(true)
+        return
+      }
+      
+      toolStore.setDataLoading(false)
       toolStore.setLoadingHealth(true)
       toolStore.setLastHealthCheck()
       
