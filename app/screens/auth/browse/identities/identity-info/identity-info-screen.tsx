@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon } from "../../../../../components"
+import { Layout, Header, Button, Text, FloatingInput, CipherInfoCommon, Textarea } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -198,12 +198,10 @@ export const IdentityInfoScreen = observer(() => {
         }
 
         {/* Notes */}
-        <FloatingInput
+        <Textarea
           label={translate('common.notes')}
           value={selectedCipher.notes}
           editable={false}
-          textarea
-          fixedLabel
           copyAble
           style={{ marginTop: 10 }}
         />

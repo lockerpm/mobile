@@ -1,4 +1,7 @@
-export const CHAIN_LIST = [
+import orderBy from 'lodash/orderBy'
+
+
+export const CHAIN_LIST = orderBy([
   {
     name: 'Bitcoin',
     alias: 'bitcoin',
@@ -88,10 +91,11 @@ export const CHAIN_LIST = [
     name: 'Gnosis',
     alias: 'gnosis',
     logo: require('./img/gnosis.png')
-  },
+  }
+], ['name'], ['asc']).concat([
   {
     name: 'Other',
     alias: 'other',
     logo: require('./img/other.png')
   }
-]
+])

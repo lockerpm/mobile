@@ -564,13 +564,13 @@
       "desc": "Lưu lại tài khoản/ví crypto của bạn",
       "btn": "Thêm tài sản"
     },
-    "copy_seed": "Sao chép Seed Phrase",
+    "copy_seed": "Sao chép chuỗi Seed / chuỗi khôi phục",
     "copy_address": "Sao chép địa chỉ",
     "copy_username": "Sao chép tên người dùng",
     "copy_password": "Sao chép mật khẩu / PIN",
     "copy_private_key": "Sao chép khoá bí mật",
     "email_recovery": "Email khôi phục",
-    "seed": "Seed Phrase",
+    "seed": "Chuỗi Seed / Chuỗi khôi phục",
     "backup_details": "Thông tin khôi phục",
     "network": "Mạng Blockchain",
     "wallet_app": "Ví Blockchain"

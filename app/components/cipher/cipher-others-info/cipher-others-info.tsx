@@ -7,9 +7,9 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import find from 'lodash/find'
 import { useStores } from "../../../models"
 import { commonStyles, fontSize } from "../../../theme"
-import { FloatingInput } from "../../floating-input"
 import { useMixins } from "../../../services/mixins"
 import { OwnershipSelectionModal } from "../cipher-action/ownership-selection-modal"
+import { Textarea } from "../../textarea/textarea"
 
 
 export interface CipherOthersInfoProps {
@@ -136,8 +136,7 @@ export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
         {
           hasNote && (
             <View style={{ flex: 1, marginTop: 20 }}>
-              <FloatingInput
-                textarea
+              <Textarea
                 label={translate('common.notes')}
                 value={note}
                 onChangeText={(text) => onChangeNote(text)}

@@ -56,6 +56,7 @@ export const FeedbackModal = observer((props: Props) => {
         placeholder={translate('help.tell_us')}
         multiline
         autoCapitalize="none"
+        selectionColor={color.primary}
         placeholderTextColor={color.text}
         style={{
           marginTop: 10,

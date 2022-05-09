@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
-import { Button } from "../../button/button"
 import { Text } from "../../text/text"
-import { AutoImage as Image } from "../../auto-image/auto-image"
-// import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CipherType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
@@ -15,12 +11,11 @@ import { PasswordAction } from "../../../screens/auth/browse/passwords/password-
 import { CardAction } from "../../../screens/auth/browse/cards/card-action"
 import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
 import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
-import { commonStyles, fontSize } from "../../../theme"
 import { DeletedAction } from "../cipher-action/deleted-action"
-import { Checkbox } from "react-native-ui-lib"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { CryptoWalletAction } from "../../../screens/auth/browse/crypto-asset/crypto-wallet-action"
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
+import { CipherListItem } from "./cipher-list-item"
 
 
 export interface CipherListProps {
@@ -53,9 +48,9 @@ export const CipherList = observer((props: CipherListProps) => {
     folderId, collectionId, organizationId,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { translate, color, getTeam } = useMixins()
-  const { getCiphersFromCache, getCiphers } = useCipherDataMixins()
-  const { getCipherDescription, getCipherInfo } = useCipherHelpersMixins()
+  const { translate, getTeam } = useMixins()
+  const { getCiphersFromCache } = useCipherDataMixins()
+  const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, user } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -67,6 +62,8 @@ export const CipherList = observer((props: CipherListProps) => {
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showDeletedAction, setShowDeletedAction] = useState(false)
   const [ciphers, setCiphers] = useState([])
+
+  const [checkedItem, setCheckedItem] = useState('')
 
   // ------------------------ COMPUTED ----------------------------
 
@@ -84,6 +81,13 @@ export const CipherList = observer((props: CipherListProps) => {
     
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
+
+  useEffect(() => {
+    if (checkedItem) {
+      toggleItemSelection(checkedItem)
+      setCheckedItem(null)
+    }
+  }, [checkedItem, selectedItems])
 
   // ------------------------ METHODS ----------------------------
 
@@ -202,148 +206,33 @@ export const CipherList = observer((props: CipherListProps) => {
   // }
 
   // Toggle item selection
-  const toggleItemSelection = (item: CipherView) => {
+  const toggleItemSelection = (id: string) => {
     if (!isSelecting) {
       setIsSelecting(true)
     }
     let selected = [...selectedItems]
-    if (!selected.includes(item.id)) {
-      selected.push(item.id)
+    if (!selected.includes(id)) {
+      selected.push(id)
     } else {
-      selected = selected.filter(id => id !== item.id)
+      selected = selected.filter(i => i !== id)
     }
     setSelectedItems(selected)
   }
 
   // ------------------------ RENDER ----------------------------
 
-  const renderItem = ({ item }) => (
-    <Button
-      preset="link"
-      onPress={() => {
-        if (isSelecting) {
-          toggleItemSelection(item)
-        } else {
-          // goToDetail(item)
-          openActionMenu(item)
-        }
-      }}
-      onLongPress={() => toggleItemSelection(item)}
-      style={{
-        borderBottomColor: color.line,
-        borderBottomWidth: 0.5,
-        paddingVertical: 15,
-        height: 70.5
-      }}
-    >
-      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-        {/* Cipher avatar */}
-        {
-          item.svg ? (
-            <item.svg height={40} width={40} />
-          ) : (
-            <Image
-              source={item.imgLogo || item.logo}
-              backupSource={item.logo}
-              style={{
-                height: 40,
-                width: 40,
-                borderRadius: 8
-              }}
-            />
-          )
-        }
-        {/* Cipher avatar end */}
-
-        <View style={{ flex: 1, marginLeft: 12 }}>
-          {/* Name */}
-          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
-            <View style={{ flex: 1 }}>
-              <Text
-                preset="semibold"
-                numberOfLines={1}
-                text={item.name}
-              />
-            </View>
-
-            {/* Belong to team icon */}
-            {
-              isShared(item.organizationId) && (
-                <View style={{ marginLeft: 10 }}>
-                  <MaterialCommunityIconsIcon
-                    name="account-group-outline"
-                    size={22}
-                    color={color.textBlack}
-                  />
-                </View>
-              )
-            }
-            {/* Belong to team icon end */}
-
-            {/* Not sync icon */}
-            {
-              item.notSync && (
-                <View style={{ marginLeft: 10 }}>
-                  <MaterialCommunityIconsIcon
-                    name="cloud-off-outline"
-                    size={22}
-                    color={color.textBlack}
-                  />
-                </View>
-              )
-            }
-            {/* Not sync icon end */}
-          </View>
-          {/* Name end */}
-
-          {/* Description */}
-          {
-            !!getCipherDescription(item) && (
-              <Text
-                text={getCipherDescription(item)}
-                style={{ fontSize: fontSize.small }}
-                numberOfLines={1}
-              />
-            )
-          }
-          {/* Description end */}
-        </View>
-
-        {
-          isSelecting ? (
-            <Checkbox
-              value={selectedItems.includes(item.id)}
-              color={color.primary}
-              onValueChange={() => {
-                toggleItemSelection(item)
-              }}
-              style={{
-                marginLeft: 15
-              }}
-            />
-          ) : (
-            <View />
-            // <Button
-            //   preset="link"
-            //   onPress={() => openActionMenu(item)}
-            //   style={{ 
-            //     height: 40,
-            //     width: 40,
-            //     justifyContent: 'flex-end',
-            //     alignItems: 'center'
-            //   }}
-            // >
-            //   <IoniconsIcon
-            //     name="ellipsis-horizontal"
-            //     size={18}
-            //     color={color.textBlack}
-            //   />
-            // </Button>
-          )
-        }
-      </View>
-    </Button>
-  )
+  const renderItem = ({ item }) => {
+    return (
+      <CipherListItem
+        item={item}
+        isSelecting={isSelecting}
+        toggleItemSelection={setCheckedItem}
+        openActionMenu={openActionMenu}
+        isSelected={selectedItems.includes(item.id)}
+        isShared={isShared(item.organizationId)}
+      />
+    )
+  }
 
   return ciphers.length ? (
     <View style={{ flex: 1 }}>
