@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Textarea
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -154,9 +154,7 @@ export const NoteEditScreen = observer(() => {
       >
         {/* Note */}
         <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            fixedLabel
-            textarea
+          <Textarea
             label={translate('common.notes')}
             value={note}
             onChangeText={setNote}

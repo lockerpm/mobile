@@ -2,7 +2,8 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Linking, View } from "react-native"
 import {
-  Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength, CipherInfoCommon
+  Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength,
+  CipherInfoCommon, Textarea
 } from "../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -188,12 +189,10 @@ export const PasswordInfoScreen = observer(() => {
         />
 
         {/* Notes */}
-        <FloatingInput
+        <Textarea
           label={translate('common.notes')}
           value={selectedCipher.notes}
           editable={false}
-          textarea
-          fixedLabel
           copyAble
         />
         {/* Notes end */}
