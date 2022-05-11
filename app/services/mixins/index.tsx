@@ -1,5 +1,4 @@
 import React from 'react'
-import { Dimensions } from 'react-native';
 import { nanoid } from 'nanoid'
 import find from 'lodash/find'
 import ReactNativeBiometrics from 'react-native-biometrics'
@@ -8,7 +7,7 @@ import { useStores } from '../../models'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { load, PushNotiData, remove, StorageKey } from '../../utils/storage'
 import { translate as tl, TxKeyPath } from "../../i18n"
-import { GET_LOGO_URL } from '../../config/constants'
+import { GET_LOGO_URL, MAX_CIPHER_SELECTION } from '../../config/constants'
 import i18n from "i18n-js"
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { GeneralApiProblem } from '../api/api-problem'
@@ -162,10 +161,12 @@ export const MixinsProvider = observer((props: {
       case 'cannot-connect':
         notify('error', translate('error.network_error'))
         break
+
       case 'rejected':
         notify('error', translate('error.invalid_data'))
         break
-      case 'bad-data':
+
+      case 'bad-data': {
         const errorData: {
           details?: {
             [key: string]: string[]
@@ -173,32 +174,37 @@ export const MixinsProvider = observer((props: {
           code: string
           message?: string
         } = problem.data
-        if (errorData.details) {
-          let notified = false
-          Object.keys(errorData.details).forEach((key) => {
-            if (errorData.details[key][0]) {
-              notify('error', errorData.details[key][0])
-              notified = true
-            }
-          })
-          if (!notified) {
-            notify('error', errorData.message || translate('error.invalid_data'))
-          }
-        } else if (errorData.message) {
-          notify('error', errorData.message)
-        } else {
-          notify('error', translate('error.invalid_data'))
+        if (errorData.code === '5001') {
+          notify('error', translate('error.cannot_update_more_at_once', { count: MAX_CIPHER_SELECTION }))
+          break
         }
+
+        let errorMessage = ''
+        if (errorData.details) {
+          for (let key of Object.keys(errorData.details)) {
+            if (errorData.details[key][0]) {
+              if (!errorMessage) {
+                errorMessage = errorData.details[key][0]
+              }
+            }
+          }
+        }
+        notify('error', errorMessage || errorData.message || translate('error.invalid_data'))
         break
+      }
+
       case 'forbidden':
         notify('error', translate('error.forbidden'))
         break
+
       case 'not-found':
         notify('error', translate('error.not_found'))
         break
+
       case 'unauthorized':
         notify('error', translate('error.token_expired'))
         break
+
       default:
         notify('error', translate('error.something_went_wrong'))
     }

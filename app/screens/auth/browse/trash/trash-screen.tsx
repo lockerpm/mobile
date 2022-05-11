@@ -6,6 +6,7 @@ import { SortAction } from "../../home/all-item/sort-action"
 import { useMixins } from "../../../../services/mixins"
 import { BackHandler } from "react-native"
 import { useStores } from "../../../../models"
+import { MAX_CIPHER_SELECTION } from "../../../../config/constants"
 
 
 export const TrashScreen = observer(function TrashScreen() {
@@ -59,8 +60,9 @@ export const TrashScreen = observer(function TrashScreen() {
           setSelectedItems={setSelectedItems}
           setIsLoading={setIsLoading}
           toggleSelectAll={() => {
-            if (selectedItems.length < allItems.length) {
-              setSelectedItems(allItems)
+            const maxLength = Math.min(allItems.length, MAX_CIPHER_SELECTION)
+            if (selectedItems.length < maxLength) {
+              setSelectedItems(allItems.slice(0, maxLength))
             } else {
               setSelectedItems([])
             }

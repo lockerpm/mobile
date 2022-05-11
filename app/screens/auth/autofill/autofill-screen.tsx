@@ -10,6 +10,7 @@ import { RouteProp, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../navigators"
 import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
 import { AutoFillList } from "./autofill-list"
+import { MAX_CIPHER_SELECTION } from "../../../config/constants"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -41,6 +42,24 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
   // If is selecting -> close it instead of exit
   // Quit app on back press
   useEffect(() => {
+    uiStore.setIsSelecting(isSelecting)
+    const checkSelectBeforeLeaving = () => {
+      if (isSelecting) {
+        setIsSelecting(false)
+        setSelectedItems([])
+        return true
+      }
+      BackHandler.exitApp()
+      return false
+    }
+    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    }
+  }, [isSelecting])
+
+  // Suggest save
+  useEffect(() => {
     if (mode === 'item') {
       const check = async () => {
         const id = uiStore.saveLastId;
@@ -53,23 +72,8 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
         }
       }
       check()
-    } else {
-      uiStore.setIsSelecting(isSelecting)
-      const checkSelectBeforeLeaving = () => {
-        if (isSelecting) {
-          setIsSelecting(false)
-          setSelectedItems([])
-          return true
-        }
-        BackHandler.exitApp()
-        return false
-      }
-      BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-      return () => {
-        BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-      }
     }
-  }, [isSelecting])
+  }, [])
 
   // -------------------- RENDER ----------------------------
 
@@ -93,8 +97,9 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
           setSelectedItems={setSelectedItems}
           setIsLoading={setIsLoading}
           toggleSelectAll={() => {
-            if (selectedItems.length < allItems.length) {
-              setSelectedItems(allItems)
+            const maxLength = Math.min(allItems.length, MAX_CIPHER_SELECTION)
+            if (selectedItems.length < maxLength) {
+              setSelectedItems(allItems.slice(0, maxLength))
             } else {
               setSelectedItems([])
             }
