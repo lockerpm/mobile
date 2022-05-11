@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ScrollView, ViewStyle, TextStyle } from "react-native"
+import { View, ScrollView, ViewStyle, TextStyle, TouchableOpacity } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
@@ -36,7 +36,7 @@ export const MenuScreen = observer(() => {
   const { createRandomPasswords } = useTestMixins()
 
   const appVersion = `${getVersion()}.${getBuildNumber()}`
-  const isFreeAccount = user.plan?.alias === PlanType.FREE  
+  const isFreeAccount = user.plan?.alias === PlanType.FREE
   const isPremiumAccount = user.plan?.alias === PlanType.PREMIUM
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
@@ -56,7 +56,7 @@ export const MenuScreen = observer(() => {
       icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
       name: translate('menu.invite'),
       action: () => {
-        if(isFreeAccount || (isPremiumAccount && !user.plan?.is_family)) {
+        if (isFreeAccount || (isPremiumAccount && !user.plan?.is_family)) {
           notify('info', translate("invite_member.info_upgrade"))
           navigation.navigate("payment", { family: true })
         } else {
@@ -258,7 +258,7 @@ export const MenuScreen = observer(() => {
         }
         {/* Invitations end */}
 
-        <View style={[ITEM_CONTAINER, { marginBottom: 15 }]}>
+        <View style={ITEM_CONTAINER}>
           {
             items.map((item, index) => (
               <MenuItem
@@ -267,6 +267,17 @@ export const MenuScreen = observer(() => {
               />
             ))
           }
+        </View>
+
+        <View style={{
+          marginBottom: 20,
+        }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('refer_friend')}>
+            <Image source={require('./refer-friend.png')} style={{
+              width: "100%"
+            }} />
+          </TouchableOpacity>
         </View>
 
         <View style={ITEM_CONTAINER}>
@@ -280,7 +291,7 @@ export const MenuScreen = observer(() => {
           }
         </View>
 
-        <Text style={{marginTop: 10}}> {appVersion}</Text>
+        <Text style={{ marginTop: 10 }}> {appVersion}</Text>
       </ScrollView>
     </Layout>
   )

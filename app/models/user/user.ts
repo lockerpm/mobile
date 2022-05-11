@@ -441,6 +441,12 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.removeFamilyMember(self.apiToken, memberID)
       return res
+    },
+
+    getReferLink: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getReferLink(self.apiToken)
+      return res
     }
   }))
   .actions((self) => ({
