@@ -136,6 +136,7 @@ export const MainNavigator = observer(() => {
 
   let appIsActive = true      // Cache this to compare to old state
   let timeout = null
+  const [batchDecryptionEnded, setBatchDecryptionEnded] = useState(false)
   const [socket, setSocket] = useState(null)
 
   // ------------------ METHODS --------------------
@@ -327,11 +328,13 @@ export const MainNavigator = observer(() => {
 
   // Check network to sync
   useEffect(() => {
-    if (!uiStore.isOffline && user.isLoggedInPw) {
-      handleSync()
-      handleUserDataSync()
+    if (batchDecryptionEnded) {
+      if (!uiStore.isOffline && user.isLoggedInPw) {
+        handleSync()
+        handleUserDataSync()
+      }
     }
-  }, [uiStore.isOffline, user.isLoggedInPw])
+  }, [uiStore.isOffline, user.isLoggedInPw, batchDecryptionEnded])
 
   // Recalculate password health on password update
   useEffect(() => {
@@ -373,6 +376,7 @@ export const MainNavigator = observer(() => {
         case 'ended':
           cipherStore.setIsBatchDecrypting(false)
           syncAutofillData()
+          setBatchDecryptionEnded(true)
           break
       }
     })
