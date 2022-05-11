@@ -10,7 +10,7 @@ import { Alert, BackHandler, Image, View, Text, TouchableOpacity, Linking, AppSt
 import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { IS_IOS } from "../../../../config/constants"
+import { IS_IOS, MAX_CIPHER_SELECTION } from "../../../../config/constants"
 import RNAndroidSettingsTool from "react-native-android-settings-tool"
 import { AutofillServiceEnabled } from "../../../../utils/Autofill"
 
@@ -142,8 +142,9 @@ export const AllItemScreen = observer(() => {
           setSelectedItems={setSelectedItems}
           setIsLoading={setIsLoading}
           toggleSelectAll={() => {
-            if (selectedItems.length < allItems.length) {
-              setSelectedItems(allItems)
+            const maxLength = Math.min(allItems.length, MAX_CIPHER_SELECTION)
+            if (selectedItems.length < maxLength) {
+              setSelectedItems(allItems.slice(0, maxLength))
             } else {
               setSelectedItems([])
             }

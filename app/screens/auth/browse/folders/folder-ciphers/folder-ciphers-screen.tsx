@@ -10,7 +10,7 @@ import { FolderView } from "../../../../../../core/models/view/folderView"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { useMixins } from "../../../../../services/mixins"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
-import { TEAM_CIPHER_EDITOR } from "../../../../../config/constants"
+import { MAX_CIPHER_SELECTION, TEAM_CIPHER_EDITOR } from "../../../../../config/constants"
 import { BackHandler } from "react-native"
 
 type FolderCiphersScreenProp = RouteProp<PrimaryParamList, 'folders__ciphers'>;
@@ -80,8 +80,9 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
           setSelectedItems={setSelectedItems}
           setIsLoading={setIsLoading}
           toggleSelectAll={() => {
-            if (selectedItems.length < allItems.length) {
-              setSelectedItems(allItems)
+            const maxLength = Math.min(allItems.length, MAX_CIPHER_SELECTION)
+            if (selectedItems.length < maxLength) {
+              setSelectedItems(allItems.slice(0, maxLength))
             } else {
               setSelectedItems([])
             }

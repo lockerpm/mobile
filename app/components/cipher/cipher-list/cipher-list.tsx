@@ -16,6 +16,7 @@ import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { CryptoWalletAction } from "../../../screens/auth/browse/crypto-asset/crypto-wallet-action"
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { CipherListItem } from "./cipher-list-item"
+import { MAX_CIPHER_SELECTION } from "../../../config/constants"
 
 
 export interface CipherListProps {
@@ -48,7 +49,7 @@ export const CipherList = observer((props: CipherListProps) => {
     folderId, collectionId, organizationId,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { translate, getTeam } = useMixins()
+  const { translate, getTeam, notify } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, user } = useStores()
@@ -211,6 +212,10 @@ export const CipherList = observer((props: CipherListProps) => {
     }
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
+      if (selected.length === MAX_CIPHER_SELECTION) {
+        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
+        return
+      }
       selected.push(id)
     } else {
       selected = selected.filter(i => i !== id)

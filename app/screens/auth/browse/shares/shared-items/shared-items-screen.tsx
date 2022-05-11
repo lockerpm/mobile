@@ -8,6 +8,7 @@ import { BackHandler } from "react-native"
 import { useStores } from "../../../../../models"
 import { CipherSharedList } from "./cipher-shared-list"
 import { PushNotifier } from "../../../../../utils/push-notification"
+import { MAX_CIPHER_SELECTION } from "../../../../../config/constants"
 
 
 export const SharedItemsScreen = observer(() => {
@@ -72,8 +73,9 @@ export const SharedItemsScreen = observer(() => {
           setSelectedItems={setSelectedItems}
           setIsLoading={setIsLoading}
           toggleSelectAll={() => {
-            if (selectedItems.length < allItems.length) {
-              setSelectedItems(allItems)
+            const maxLength = Math.min(allItems.length, MAX_CIPHER_SELECTION)
+            if (selectedItems.length < maxLength) {
+              setSelectedItems(allItems.slice(0, maxLength))
             } else {
               setSelectedItems([])
             }

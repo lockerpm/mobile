@@ -11,6 +11,7 @@ import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { Text } from "../../../components"
 import { AutoFillItemAction } from "./autofill-item-action"
 import { AutofillListItem } from "./autofill-list-item"
+import { MAX_CIPHER_SELECTION } from "../../../config/constants"
 
 
 interface AutoFillListProps {
@@ -37,7 +38,7 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
     emptyContent, navigation, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { getWebsiteLogo, translate } = useMixins()
+  const { getWebsiteLogo, translate, notify } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { cipherStore } = useStores()
 
@@ -127,6 +128,10 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
     }
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
+      if (selected.length === MAX_CIPHER_SELECTION) {
+        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
+        return
+      }
       selected.push(id)
     } else {
       selected = selected.filter(i => i !== id)
