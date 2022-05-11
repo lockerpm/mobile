@@ -188,6 +188,13 @@ export type RemoveMemberResult = {
     kind: "ok"
 } | GeneralApiProblem
 
+export type GetReferLinkResult = {
+    kind: "ok",
+    data: {
+        referral_link : string
+    }
+} | GeneralApiProblem
+
 export type BillingResult = {
     kind: "ok",
     data: {

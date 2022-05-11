@@ -662,5 +662,10 @@
     "desc": "Looks like you are trying to update an unsynchronized item. Please wait for the synchronization process to finish, or you can manually synchronize your data here",
     "go_back": "Go Back",
     "synchronizing": "Synchronizing..."
+  },
+  "refer_friend": {
+    "title": "Invite friends and get Premium for Free",
+    "desc": "When invited (your friend creates Master Password successfully), both you and your friends will receive 1 month of Locker Premium for Free",
+    "btn": "Share"
   }
 }
