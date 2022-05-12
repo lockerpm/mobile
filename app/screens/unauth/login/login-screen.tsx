@@ -29,6 +29,7 @@ export const LoginScreen = observer(() => {
   // ------------------------------ METHODS -------------------------------
 
   const onLoggedIn = async () => {
+    setIndex(0)
     setIsScreenLoading(true)
     const [userRes, userPwRes] = await Promise.all([
       user.getUser(),

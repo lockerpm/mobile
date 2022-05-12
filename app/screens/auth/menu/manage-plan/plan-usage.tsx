@@ -44,7 +44,6 @@ const ItemStorage = (props: PlanStorageProps) => {
         }
         counting()
     }, [])
-    console.log(cipherCount)
     return (
         <View style={[{ width: '100%', marginVertical: 4 }, style]}>
             <View style={{

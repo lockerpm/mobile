@@ -18,6 +18,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { PendingSharedAction } from "./pending-shared-action"
 import { CryptoWalletAction } from "../../crypto-asset/crypto-wallet-action"
 import { CipherSharedListItem, CipherSharedType } from "./cipher-shared-list-item"
+import { MAX_CIPHER_SELECTION } from "../../../../../config/constants"
 
 
 export interface CipherSharedListProps {
@@ -44,7 +45,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     emptyContent, navigation, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { translate } = useMixins()
+  const { translate, notify } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { cipherStore } = useStores()
   const { newCipher, getCipherInfo } = useCipherHelpersMixins()
@@ -211,6 +212,10 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     }
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
+      if (selected.length === MAX_CIPHER_SELECTION) {
+        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
+        return
+      }
       selected.push(id)
     } else {
       selected = selected.filter(i => i !== id)

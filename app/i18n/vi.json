@@ -156,7 +156,9 @@
         "browser_not_found": "Không tìm thấy trình duyệt! Vui lòng cài đặt một trình duyệt phù hợp",
         "service_configuration_fetch_error": "Không thể tìm nạp cấu hình dịch vụ. Vui lòng thử lại"
       }
-    }
+    },
+    "cannot_select_more": "Không thể chọn nhiều hơn {{count}} mục",
+    "cannot_update_more_at_once": "Không thể thay đổi nhiều hơn {{count}} mục cùng một lúc."
   },
   "success": {
     "done": "Hoàn tất",

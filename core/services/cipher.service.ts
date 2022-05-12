@@ -377,7 +377,6 @@ export class CipherService implements CipherServiceAbstraction {
 
     @sequentialize(() => 'getAllDecrypted')
     async getAllDecrypted(): Promise<CipherView[]> {
-        const t = new DurationTest("getAll decrypted")
         if (this.decryptedCipherCache != null) {
             const userId = await this.userService.getUserId();
             if (this.searchService != null && (this.searchService().indexedEntityId ?? userId) !== userId)
@@ -393,27 +392,13 @@ export class CipherService implements CipherServiceAbstraction {
             throw new Error('No key get cipher.');
         }
 
-
-        // const encKey: SymmetricCryptoKey = await this.cryptoService.getEncKey() 
-       
         const promises: any[] = [];
         const ciphers = await this.getAll();
-
-        // ciphers.forEach(cipher => {
-        //     if (cipher.type == CipherType.Login) {
-        //         promises.push(cipher.decrypt().then(c => decCiphers.push(c)));
-        //     }
-        //     else {
-        //         promises.push(cipher.decrypt().then(c => decCiphers.push(c)));
-        //     }
-            
-        // });
         ciphers.forEach(cipher => {
             promises.push(cipher.decrypt().then(c => decCiphers.push(c)));       
         });
 
         await Promise.all(promises);
-        t.final()
         // PERF: disable local sort -> improve time load
         // decCiphers.sort(this.getLocaleSortingFunction());
         this.decryptedCipherCache = decCiphers;

@@ -8,6 +8,7 @@ import { AuthenticatorAddAction } from "./authenticator-add-action"
 import { OtpList } from "./otp-list"
 import { useStores } from "../../../../models"
 import { BackHandler } from "react-native"
+import { MAX_CIPHER_SELECTION } from "../../../../config/constants"
 
 
 export const AuthenticatorScreen = observer(() => {
@@ -72,8 +73,9 @@ export const AuthenticatorScreen = observer(() => {
           setSelectedItems={setSelectedItems}
           setIsLoading={setIsLoading}
           toggleSelectAll={() => {
-            if (selectedItems.length < allItems.length) {
-              setSelectedItems(allItems)
+            const maxLength = Math.min(allItems.length, MAX_CIPHER_SELECTION)
+            if (selectedItems.length < maxLength) {
+              setSelectedItems(allItems.slice(0, maxLength))
             } else {
               setSelectedItems([])
             }
