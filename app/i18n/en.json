@@ -156,7 +156,9 @@
         "browser_not_found": "Browser not found! Please install a suitable browser",
         "service_configuration_fetch_error": "Could not fetch the service configuration. Please try again"
       }
-    }
+    },
+    "cannot_select_more": "Cannot select more than {{count}} items",
+    "cannot_update_more_at_once": "Cannot update more than {{count}} items at once"
   },
   "success": {
     "done": "Done",

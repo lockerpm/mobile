@@ -12,6 +12,7 @@ import { Text } from "../../../../components"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import { OtpListItem } from "./otp-list-item"
+import { MAX_CIPHER_SELECTION } from "../../../../config/constants"
 
 
 interface Props {
@@ -38,7 +39,7 @@ export const OtpList = observer((props: Props) => {
     navigation, emptyContent, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { translate } = useMixins()
+  const { translate, notify } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { cipherStore, toolStore } = useStores()
 
@@ -124,6 +125,10 @@ export const OtpList = observer((props: Props) => {
     }
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
+      if (selected.length === MAX_CIPHER_SELECTION) {
+        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
+        return
+      }
       selected.push(id)
     } else {
       selected = selected.filter(i => i !== id)

@@ -5,6 +5,7 @@ import { ShareMultipleHeader } from "./items-header"
 import { CipherList, Layout } from "../../../../../components"
 import { SortAction } from "../../../home/all-item/sort-action"
 import { AddAction } from "../../../home/all-item/add-action"
+import { MAX_CIPHER_SELECTION } from "../../../../../config/constants"
 
 
 export const ShareMultipleScreen = observer(() => {
@@ -41,8 +42,9 @@ export const ShareMultipleScreen = observer(() => {
           selectedItems={selectedItems}
           setSelectedItems={setSelectedItems}
           toggleSelectAll={() => {
-            if (selectedItems.length < allItems.length) {
-              setSelectedItems(allItems)
+            const maxLength = Math.min(allItems.length, MAX_CIPHER_SELECTION)
+            if (selectedItems.length < maxLength) {
+              setSelectedItems(allItems.slice(0, maxLength))
             } else {
               setSelectedItems([])
             }
