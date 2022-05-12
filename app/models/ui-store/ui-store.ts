@@ -7,6 +7,8 @@ export const UiStoreModel = types
   .model("UiStore")
   .props({
     // Data
+    isImportLimited: types.maybeNull(types.boolean),
+    isImporting: types.maybeNull(types.boolean),
     isOffline: types.maybeNull(types.boolean),
     isDark: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
@@ -21,12 +23,24 @@ export const UiStoreModel = types
     deepLinkAction: types.maybeNull(types.string),
     deepLinkUrl: types.maybeNull(types.string),
     saveLogin: types.maybeNull(types.frozen<{domain: string, username: string, password: string}>()),
-    saveLastId: types.maybeNull(types.string)
+    saveLastId: types.maybeNull(types.string),
+    importFileName: types.maybeNull(types.string),
+    importCipherProgress: types.frozen<{cipher: number, totalCipher: number}>({cipher: 0, totalCipher: 0}),
+    importFolderProgress: types.frozen<{folder: number, totalFolder: number}>({folder: 0, totalFolder: 0})
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     setIsOffline: (isOffline: boolean) => {
       self.isOffline = isOffline
+    },
+
+    setIsImportLimited: (val: boolean) => {
+      self.isImportLimited = val
+    },
+
+    setIsImporting: (val: boolean | null, fileName?: string) => {
+      self.importFileName = fileName
+      self.isImporting = val
     },
 
     setIsDark: (isDark: boolean) => {
@@ -57,6 +71,13 @@ export const UiStoreModel = types
       self.isFromAutoFillItem = val
     },
 
+    setImportCipherProgress(cipherImported: number, totalCipher: number) {
+      self.importCipherProgress = {cipher: cipherImported, totalCipher: totalCipher}
+    },
+
+    setImportFolderProgress(folderImported: number, totalFolder: number) {
+      self.importFolderProgress = {folder: folderImported, totalFolder: totalFolder}
+    },
 
     setDeepLinkAction(action: 'fill' | 'save' | 'fill_item', data?: any) {
       self.deepLinkAction = action
@@ -67,6 +88,13 @@ export const UiStoreModel = types
       } else {
         self.saveLogin = data 
       }
+    },
+
+
+    clearImportProgress() {
+      self.importCipherProgress = {cipher: 0, totalCipher: 0}
+      self.importFolderProgress = {folder: 0, totalFolder: 0}
+      self.importFileName = null
     },
 
     clearDeepLink() {

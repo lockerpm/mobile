@@ -550,7 +550,16 @@
     "no_data": "Không có dữ liệu",
     "invalid_data_format": "Dữ liệu không đúng định dạng",
     "success": "Nhập dữ liệu thành công! Các mục của bạn sẽ xuất hiện trong thời gian ngắn",
-    "pls_select_right_format": "Yêu cầu phải là tệp {{format}}"
+    "pls_select_right_format": "Yêu cầu phải là tệp {{format}}" , 
+    "limited": "Lượng lưu trữ gói hiện tại đã đạt giới hạn",
+    "imported_free": {
+      "note": "dữ liệu được nhập. Nâng cấp lên gói Premium để lưu trữ không giới hạn",
+      "result": "dữ liệu được nhập",
+      "guild": "Nâng cấp lên gói Premium để lưu trữ không giới hạn"
+    },
+    "imported": "Nhập dữ liệu thành công",
+    "result_btn" : "Quay về trang chủ",
+    "progress": "Đang tiến hành nhập dữ liệu.."
   },
   "crypto_asset": {
     "wallet_name": "Tên ví",
