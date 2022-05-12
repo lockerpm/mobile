@@ -8,8 +8,8 @@ import { commonStyles, fontSize } from "../../../../theme"
 import ProgressBar from "react-native-ui-lib/progressBar"
 import { useCipherToolsMixins } from "../../../../services/mixins/cipher/tools"
 import { CipherType } from "../../../../../core/enums"
+import { FREE_PLAN_LIMIT } from "../../../../config/constants"
 import { PlanType } from "../../../../config/types"
-
 
 
 interface PlanItemUsage {
@@ -26,13 +26,6 @@ interface PlanStorageProps {
     title: string,
 }
 
-const FREE_PLAN_LIMIT = {
-    CRYPTO: 1,
-    IDENTITY: 10,
-    LOGIN: 100,
-    PAYMENT_CARD: 5,
-    NOTE: 50
-}
 
 const ItemStorage = (props: PlanStorageProps) => {
     const { cipherType, style, limits, title, isUnlimited } = props
@@ -41,16 +34,17 @@ const ItemStorage = (props: PlanStorageProps) => {
     const [cipherCount, setCipherCount] = useState(0)
 
     const usagePercentage = cipherCount / limits * 100
-    const backgroundColor = usagePercentage > 80 ? (usagePercentage > 100 ? color.error :  color.warning) : color.primary
+    const backgroundColor = usagePercentage >= 80 ? (usagePercentage >= 100 ? color.error :  color.warning) : color.primary
 
     useEffect(() => {
-        const allCiphers = async () => {
+        const counting = async () => {
             const count = await getCipherCount(cipherType)
+          
             setCipherCount(count)
         }
-        allCiphers()
+        counting()
     }, [])
-
+    console.log(cipherCount)
     return (
         <View style={[{ width: '100%', marginVertical: 4 }, style]}>
             <View style={{
@@ -105,11 +99,11 @@ export const PlanUsage = () => {
             title: translate('manage_plan.usage.note'),
             limits: FREE_PLAN_LIMIT.NOTE,
         },
-        // {
-        //     cipherType: CipherType.TOTP,
-        //     title: "",
-        //     limits: FREE_PLAN_LIMIT.CRYPTO, //-------- ?
-        // },
+        {
+            cipherType: CipherType.CryptoWallet,
+            title: translate('manage_plan.usage.crypto'),
+            limits: FREE_PLAN_LIMIT.CRYPTO, //-------- ?
+        },
     ]
     // -------------------- RENDER ----------------------
 

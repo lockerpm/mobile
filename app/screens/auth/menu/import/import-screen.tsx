@@ -1,12 +1,10 @@
-import React, { useState } from "react"
-import { View } from "react-native"
-import { Layout, Header, Select, Text, Button } from "../../../../components"
+import React, { useEffect, useState } from "react"
+import { View, Image } from "react-native"
+import { Layout, Header, Text, Button, ActionSheet, ActionSheetContent } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
-import { SettingsItem } from "../settings/settings-item"
 import { useCoreService } from "../../../../services/core-service"
-import DocumentPicker from 'react-native-document-picker'
 import RNFS from 'react-native-fs'
 import { CipherType } from "../../../../../core/enums"
 import { Utils } from "../../../../../core/misc/utils"
@@ -14,18 +12,31 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 import { Logger } from "../../../../utils/logger"
+import { PlanType } from "../../../../config/types"
+import { ImportResult } from "./import-result"
+import { ImportProgress } from "./import-progress"
+import { ImportPickFile } from "./import-pick-file"
+
 const DOMParser = require('react-native-html-parser').DOMParser
 
+
+export interface FileData {
+  name: string
+  uri: string
+  type: string
+  size: number
+}
 
 export const ImportScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, notify, color } = useMixins()
   const { importCiphers } = useCipherDataMixins()
   const { importService } = useCoreService()
-  const { uiStore } = useStores()
+  const { uiStore, user } = useStores()
 
   // -------------------- PARAMS --------------------
 
+  const isFreeAccount = user.plan?.alias === PlanType.FREE
   const fileData = {
     name: '',
     uri: '',
@@ -33,11 +44,12 @@ export const ImportScreen = observer(() => {
     size: 0
   }
 
-  const [isLoading, setIsLoading] = useState(false)
   const [format, setFormat] = useState('cystackjson')
-  const [file, setFile] = useState(fileData)
-  const [importedFolderCount, setImportedFolderCount] = useState(0)
-  const [importedCipherCount, setImportedCipherCount] = useState(0)
+  const [file, setFile] = useState<FileData>(fileData)
+  const [importedCount, setImportedCount] = useState(0)
+  const [totalCount, setTotalCount] = useState(0)
+  const [isLimited, setIsLimited] = useState(false)
+  const [showImportResult, setShowImportResult] = useState(false)
 
   // -------------------- COMPUTED --------------------
 
@@ -45,77 +57,16 @@ export const ImportScreen = observer(() => {
     { name: 'CyStack (json)', id: 'cystackjson' },
     { name: 'CyStack (csv)', id: 'cystackcsv' }
   ]
-  const formats = [
-    ...cystackOptions,
-    ...importService.featuredImportOptions,
-    ...(importService.regularImportOptions || []).sort((a, b) => {
-      if (a.name == null && b.name != null) {
-        return -1
-      }
-      if (a.name != null && b.name == null) {
-        return 1
-      }
-      if (a.name == null && b.name == null) {
-        return 0
-      }
-      return a.name.localeCompare(b.name)
-    })
-  ].map(i => ({
-    label: i.name,
-    value: i.id
-  }))
-
   // -------------------- METHODS --------------------
 
-  const getFileName = (file) => {
-    if (file.name) {
-      return file.name
-    }
-    const uriComponents = file.uri.split('/')
-    return uriComponents[uriComponents.length - 1]
-  }
-
-  const pickFile = async () => {
-    try {
-      // Mark as overlay task to prevent lock when return
-      uiStore.setIsPerformOverlayTask(true)
-
-      const targetFormat = formats.find(i => i.value === format)
-      const targetExtension = targetFormat.label.split(' (')[1].split(')')[0]
-
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
-      })
-
-      if (getFileName(res).endsWith(`.${targetExtension}`)) {
-        setFile(res)
-      } else {
-        notify('error', translate('import.pls_select_right_format', { format: targetExtension }))
-      }
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        Logger.error('Import pick file: ' + err)
-        notify('error', translate('error.something_went_wrong'))
-      }
-    }
-  }
-
   const handleImport = async () => {
-    setImportedCipherCount(0)
-    setImportedFolderCount(0)
-    console.log("1")
-    setIsLoading(true)
+    uiStore.setIsImporting(true, file.name)
 
     try {
-      console.log("2")
       const f = cystackOptions.map(e => e.id).includes(format) ? format.replace('cystack', 'bitwarden') : format
       const importer = importService.getImporter(f)
       let content = await RNFS.readFile(file.uri)
-      console.log("3")
       if (format === 'lastpasscsv' && file.type === 'text/html') {
-        console.log("4")
         const parser = new DOMParser()
         const doc = parser.parseFromString(content, 'text/html')
         const pre = doc.querySelector('pre')
@@ -123,31 +74,25 @@ export const ImportScreen = observer(() => {
           content = pre.textContent
         } else {
           notify('error', translate('import.invalid_data_format'))
-          console.log("5")
           setFile(fileData)
-          setIsLoading(false)
+          uiStore.setIsImporting(false)
           return
         }
       }
-      console.log("6")
       let importResult
       try {
         importResult = await importer.parse(content)
-        console.log("7")
       } catch (e) {
-        console.log("8")
         notify('error', translate('import.invalid_data_format'))
         setFile(fileData)
-        setIsLoading(false)
+        uiStore.setIsImporting(false)
         return
       }
-      console.log("9")
       if (importResult.success) {
         if (importResult.folders.length === 0 && importResult.ciphers.length === 0) {
           notify('error', translate('import.no_data'))
           setFile(fileData)
-          setIsLoading(false)
-          console.log("10")
+          uiStore.setIsImporting(false)
           return
         } else if (importResult.ciphers.length > 0) {
           const halfway = Math.floor(importResult.ciphers.length / 2)
@@ -156,22 +101,19 @@ export const ImportScreen = observer(() => {
             badData(importResult.ciphers[halfway]) &&
             badData(importResult.ciphers[last])
           ) {
-            console.log("11")
             notify('error', translate('import.invalid_data_format'))
             setFile(fileData)
-            setIsLoading(false)
+            uiStore.setIsImporting(false)
             return
           }
         }
-        console.log("12")
         try {
-          await importCiphers(importResult, {
-            setImportedCipherCount,
-            setImportedFolderCount
-          })
-          console.log("13")
-          setFile(fileData)
-          setIsLoading(false)
+          await importCiphers(importResult, isFreeAccount)
+          if (!uiStore.isImportLimited) {
+            setFile(fileData)
+          }
+          setShowImportResult(true)
+          uiStore.setIsImporting(uiStore.isImportLimited)
           return
         } catch (error) {
           notify('error', translate('import.invalid_data_format'))
@@ -179,13 +121,11 @@ export const ImportScreen = observer(() => {
       } else {
         notify('error', translate('import.invalid_data_format'))
       }
-    } catch(e) {
-      console.log("14")
+    } catch (e) {
       Logger.error('Handle import: ' + e)
       notify('error', translate('error.something_went_wrong'))
     }
-    console.log("15")
-    setIsLoading(false)
+    uiStore.setIsImporting(false)
   }
 
   const badData = (c) => {
@@ -195,78 +135,106 @@ export const ImportScreen = observer(() => {
 
   // -------------------- EFFECT --------------------
 
+  useEffect(() => {
+    if (uiStore.isImporting) {
+      setImportedCount(uiStore.importCipherProgress.cipher + uiStore.importFolderProgress.folder)
+      setTotalCount(uiStore.importCipherProgress.totalCipher + uiStore.importFolderProgress.totalFolder)
+    }
+  }, [uiStore.importCipherProgress, uiStore.importFolderProgress, uiStore.isImporting])
+
+  useEffect(() => {
+    if (uiStore.isImportLimited) {
+      setIsLimited(true)
+    }
+  }, [uiStore.isImportLimited])
+
+  useEffect(() => {
+    if (showImportResult) {
+      uiStore.setIsImporting(uiStore.isImportLimited)
+    }
+  }, [showImportResult])
+
+  useEffect(() => {
+    return () => {
+      uiStore.setIsImporting(false)
+      uiStore.setIsImportLimited(false)
+    }
+  }, [])
+
   // -------------------- RENDER --------------------
 
   return (
     <Layout
-      isContentOverlayLoading={isLoading}
       header={(
         <Header
           goBack={() => {
             navigation.goBack()
           }}
           title={translate('settings.import')}
-          right={(<View style={{ width: 30 }} />)}
+          right={<View style={{ width: 30 }} />}
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
-      footer={(isLoading || importedFolderCount || importedCipherCount) ? (
-        <Text
-          preset="semibold"
-          text={`Imported ${importedFolderCount} folders, ${importedCipherCount} ciphers`}
-          style={{
-            textAlign: 'center'
-          }}
-        />
-      ) : null}
     >
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background,
         paddingVertical: 20
       }]}>
-        <Select
-          showSearch
-          value={format}
-          onChange={(val: string) => setFormat(val)}
-          options={formats}
-          title={translate('import.format')}
-          renderSelected={({ label }) => (
-            <SettingsItem
-              style={{ width: '100%' }}
-              name={translate('import.format')}
-              right={(
-                <Text text={label} />
-              )}
-            />
-          )}
-        />
+        {showImportResult ? <ImportResult
+          imported={importedCount}
+          total={totalCount}
+        /> : <View>
+          <ImportPickFile format={format}
+            setFormat={setFormat}
+            file={file}
+            setFile={setFile}
+          />
+          <ImportProgress imported={importedCount}
+            total={totalCount}
+            file={file.name}
+          />
+          <Button
+            isLoading={uiStore.isImporting}
+            isDisabled={!file.uri || uiStore.isImporting}
+            text={translate('settings.import')}
+            onPress={handleImport}
+            style={{
+              marginTop: 30,
+              marginBottom: 10
+            }}
+          />
+        </View>}
 
-        <SettingsItem
-          style={{ width: '100%' }}
-          name={translate('import.file')}
-          action={pickFile}
-          right={(
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="middle"
-              text={getFileName(file)}
-              style={{
-                maxWidth: 150
-              }}
-            />
-          )}
-        />
+        <ActionSheet
+          isOpen={isLimited}
+          onClose={() => {
+            setIsLimited(false)
+            setFile(fileData)
+            uiStore.setIsImporting(false)
+          }}>
+          <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
+            <View style={{ alignItems: "center" }}>
+              <Image
+                source={require("./Locker.png")}
+                style={{ height: 60, width: 60 }}
+              />
+              <Text preset="bold" text={translate("import.limited")} style={{ marginBottom: 8 }} />
+              <Text text={`${importedCount}/${totalCount} ` +  translate("import.imported_free.note")} style={{ maxWidth: "90%", textAlign: "center", marginBottom: 16 }} />
 
-        <Button
-          isDisabled={isLoading || !file.uri}
-          text={translate('settings.import')}
-          onPress={handleImport}
-          style={{
-            marginTop: 30,
-            marginBottom: 10
-          }}
-        />
-      </View> 
+              <Button
+                text="Get Unlimited"
+                onPress={() => {
+                  setIsLimited(false)
+                  setFile(fileData)
+                  uiStore.setIsImporting(false)
+                  uiStore.clearImportProgress()
+                  navigation.navigate('payment')
+                }}
+                style={{ marginBottom: 50, width: "90%" }} />
+            </View>
+          </ActionSheetContent>
+        </ActionSheet>
+      </View>
     </Layout>
   )
 })

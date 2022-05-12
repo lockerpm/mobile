@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite"
 import { useMixins } from "../../../../services/mixins"
 import { useNavigation } from "@react-navigation/native"
 import LinearGradient from 'react-native-linear-gradient';
+import { IS_IOS } from "./../../../../config/constants"
 import Feather from 'react-native-vector-icons/Feather'
 
 export const ReferFriendScreen = observer(function ReferFriendScreen() {
@@ -14,6 +15,7 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
     const { translate, color, notifyApiError, copyToClipboard } = useMixins()
 
     const [referLink, setReferLink] = useState<string>(null)
+    const gradientColor = IS_IOS ? ['#F1F2F3', '#D5EBD920', '#26833460'] : ['#FFFFFF', '#D5EBD920', '#26833460']
 
     const onShare = async () => {
         try {
@@ -57,7 +59,7 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
             }}
         >
 
-            <LinearGradient colors={['#F1F2F3', '#D5EBD920', '#26833460']} style={{
+            <LinearGradient colors={gradientColor} style={{
                 height: 280,
                 borderBottomRightRadius: 60,
                 borderBottomLeftRadius: 60,
@@ -66,7 +68,7 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
             }}>
                 <View style={{
                     position: "absolute",
-                    top: 0,
+                    top: IS_IOS ? 0 : 20 ,
                     zIndex: 2,
                     flexDirection: "row",
                     justifyContent: "flex-end",

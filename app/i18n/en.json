@@ -550,7 +550,16 @@
     "no_data": "No data available",
     "invalid_data_format": "Invalid data format",
     "success": "Data imported! Your items will appear shortly",
-    "pls_select_right_format": "Must be a {{format}} file"
+    "pls_select_right_format": "Must be a {{format}} file",
+    "limited": "Your Free Plan Storage is Limited",
+    "imported_free": {
+      "note": "items were imported. Upgrade to Premium to add unlimited items",
+      "result": "items were imported",
+      "guild": "Upgrade to Premium to add unlimited items"
+    },
+    "imported": "Succesfully Imported",
+    "result_btn" : "Back to home",
+    "progress": "Importing your backup data"
   },
   "crypto_asset": {
     "wallet_name": "Wallet Name",

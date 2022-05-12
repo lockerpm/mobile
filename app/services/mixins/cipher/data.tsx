@@ -26,6 +26,8 @@ import { ImportResult } from '../../../../core/models/domain/importResult'
 import { SyncQueue } from '../../../utils/queue'
 import { AppEventType, EventBus } from '../../../utils/event-bus'
 import chunk from 'lodash/chunk'
+import { FREE_PLAN_LIMIT } from '../../../config/constants'
+import { useCipherToolsMixins } from './tools'
 
 
 type GetCiphersParams = {
@@ -36,11 +38,11 @@ type GetCiphersParams = {
 }
 
 const defaultData = {
-  reloadCache: async () => {},
+  reloadCache: async () => { },
   startSyncProcess: async (bumpTimestamp: number) => { return { kind: 'unknown' } },
   getSyncData: async (bumpTimestamp: number) => { return { kind: 'unknown' } },
-  syncOfflineData: async () => {},
-  syncAutofillData: async () => {},
+  syncOfflineData: async () => { },
+  syncAutofillData: async () => { },
 
   getCiphers: async (params: GetCiphersParams) => { return [] },
   getCiphersFromCache: async (params: GetCiphersParams) => { return [] },
@@ -48,19 +50,16 @@ const defaultData = {
   getCipherById: async (id: string) => new CipherView(),
 
   getCollections: async () => { return [] },
-  loadOrganizations: async () => {},
-  loadFolders: async () => {},
-  loadCollections: async () => {},
+  loadOrganizations: async () => { },
+  loadFolders: async () => { },
+  loadCollections: async () => { },
 
   createCipher: async (cipher: CipherView, score: number, collectionIds: string[]) => { return { kind: 'unknown' } },
   updateCipher: async (id: string, cipher: CipherView, score: number, collectionIds: string[]) => { return { kind: 'unknown' } },
   toTrashCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   deleteCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
-  importCiphers: async (importResult: ImportResult, extras: {
-    setImportedFolderCount?: (val: number) => void
-    setImportedCipherCount?: (val: number) => void
-  }) => { return { kind: 'unknown' } },
+  importCiphers: async (importResult: ImportResult, isFree: boolean) => { return { kind: 'unknown' } },
 
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   shareMultipleCiphers: async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
@@ -89,9 +88,9 @@ export const CipherDataMixinsContext = createContext(defaultData)
 
 export const CipherDataMixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
   const { cipherStore, folderStore, uiStore, collectionStore, user } = useStores()
-  const { 
-    userService, 
-    cipherService, 
+  const {
+    userService,
+    cipherService,
     folderService,
     storageService,
     collectionService,
@@ -159,9 +158,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         cipherStore.setSelectedCipher(updatedCipher)
       }
     }
-   
+
     _updateAutofillData()
-    
+
     cipherStore.setLastCacheUpdate()
     if (cipher?.type === CipherType.Login || !!deletedIds) {
       EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
@@ -175,7 +174,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       try {
         cipherStore.setIsSynching(true)
         messagingService.send('syncStarted')
-  
+
         // Sync api
         const res = await cipherStore.syncData()
         if (res.kind !== 'ok') {
@@ -187,10 +186,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         // Start sync
         cipherStore.setLastSync(bumpTimestamp)
         await syncService.setLastSync(new Date(bumpTimestamp))
-  
+
         // Sync service
         const userId = await userService.getUserId()
-  
+
         await syncService.syncProfile(res.data.profile)
         await syncService.syncFolders(userId, res.data.folders)
         await syncService.syncCollections(res.data.collections)
@@ -198,24 +197,24 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await syncService.syncSends(userId, res.data.sends)
         await syncService.syncSettings(userId, res.data.domains)
         await syncService.syncPolicies(res.data.policies)
-        
+
         messagingService.send('syncCompleted', { successfully: true })
-  
+
         // Clear not updated list
         cipherStore.clearNotUpdate()
         folderStore.clearNotUpdate()
         collectionStore.clearNotUpdate()
-  
+
         // Save fingerprint
         const fingerprint = await cryptoService.getFingerprint(userId)
         user.setFingerprint(fingerprint.join('-'))
-  
+
         // Save to shared keychain for autofill service
         await _updateAutofillData()
 
         // Reload password health
         EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
-        
+
         return { kind: 'ok' }
       } catch (e) {
         Logger.error('getSyncData: ' + e)
@@ -235,9 +234,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         const pageSize = 300
         let page = 1
         let cipherIds: string[] = []
-  
+
         cipherStore.setIsSynching(true)
-  
+
         // Sync api
         let res = await cipherStore.syncData(page, pageSize)
         if (res.kind !== 'ok') {
@@ -248,10 +247,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         // Set last sync
         cipherStore.setLastSync(bumpTimestamp)
         await syncService.setLastSync(new Date(bumpTimestamp))
-  
+
         // Sync service with data from first page
         const userId = await userService.getUserId()
-  
+
         await syncService.syncProfile(res.data.profile)
         await syncService.syncFolders(userId, res.data.folders)
         await syncService.syncCollections(res.data.collections)
@@ -259,13 +258,13 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await syncService.syncSends(userId, res.data.sends)
         await syncService.syncSettings(userId, res.data.domains)
         await syncService.syncPolicies(res.data.policies)
-  
+
         cipherIds = res.data.ciphers.map(c => c.id)
-  
+
         // Load all loaded data
         loadOrganizations()
         cipherStore.setLastCacheUpdate()
-  
+
         // Sync other ciphers
         const totalCipherCount = res.data.count.ciphers
         while (page * pageSize < totalCipherCount) {
@@ -279,7 +278,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
           cipherIds = [...cipherIds, ...res.data.ciphers.map(c => c.id)]
           cipherStore.setLastCacheUpdate()
         }
-  
+
         // Clear deleted ciphers
         const deletedIds: string[] = []
         const storageRes: { [id: string]: any } = await storageService.get(`ciphers_${userId}`)
@@ -291,20 +290,20 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         }
         await storageService.save(`ciphers_${userId}`, storageRes)
         await cipherService.csDeleteFromDecryptedCache(deletedIds)
-  
+
         // Load folders
         loadFolders()
         loadCollections()
-  
+
         // Clear not updated list
         cipherStore.clearNotUpdate()
         folderStore.clearNotUpdate()
         collectionStore.clearNotUpdate()
-  
+
         // Save fingerprint
         const fingerprint = await cryptoService.getFingerprint(userId)
         user.setFingerprint(fingerprint.join('-'))
-  
+
         // Save to shared keychain for autofill service
         await _updateAutofillData()
 
@@ -348,7 +347,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         includeExtensions: true
       })
       notSynchedCiphers.push(...notSynchedCiphersDeleted)
-  
+
       notSynchedCiphers.forEach((enc: Cipher) => {
         const cipherReq = new CipherRequest(enc)
         if (!enc.id.startsWith(TEMP_PREFIX)) {
@@ -394,7 +393,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         delete f.id
       }
     })
-    
+
     // Done
     if (ciphers.length || folders.length) {
       await cipherStore.offlineSyncCipher({
@@ -415,7 +414,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     const hashPasswordAutofill = await cryptoService.getAutofillKeyHash()
     const passwordRes = await getCiphers({
       filters: [
-        (c : CipherView) => c.type === CipherType.Login && c.login.username && c.login.password
+        (c: CipherView) => c.type === CipherType.Login && c.login.username && c.login.password
       ],
       searchText: '',
       deleted: false
@@ -484,7 +483,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
             payload.name = cipher.name
             payload.login = data
             await _offlineCreateCipher({
-              cipher: payload, 
+              cipher: payload,
               collectionIds: []
             })
             hasUpdate = true
@@ -552,7 +551,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       let unassignedTeamCiphers = await getEncryptedCiphers({
         deleted: false,
         searchText: '',
-        filters: [(c : CipherView) => !c.collectionIds?.length && !!getTeam(user.teams, c.organizationId).name]
+        filters: [(c: CipherView) => !c.collectionIds?.length && !!getTeam(user.teams, c.organizationId).name]
       })
       unassignedTeamCiphers.forEach((item: CipherView) => {
         const target = res.find(f => f.id === null && f.organizationId === item.organizationId)
@@ -581,7 +580,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   // Get encrypted ciphers
   const getEncryptedCiphers = async (params: GetCiphersParams) => {
     try {
-      const deletedFilter = (c : Cipher) => !!c.deletedDate === params.deleted
+      const deletedFilter = (c: Cipher) => !!c.deletedDate === params.deleted
       const filters = [deletedFilter, ...params.filters]
       if (!params.includeExtensions) {
         filters.unshift((c: Cipher) => c.type !== CipherType.TOTP)
@@ -597,10 +596,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   // Get ciphers
   const getCiphers = async (params: GetCiphersParams) => {
     try {
-      const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
+      const deletedFilter = (c: CipherView) => c.isDeleted === params.deleted
       const filters = [deletedFilter, ...params.filters]
       if (!params.includeExtensions) {
-        filters.unshift((c : CipherView) => ![CipherType.TOTP].includes(c.type))
+        filters.unshift((c: CipherView) => ![CipherType.TOTP].includes(c.type))
       }
       return await searchService.searchCiphers(params.searchText || '', filters, null) || []
     } catch (e) {
@@ -613,10 +612,10 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   // Get ciphers from cache only
   const getCiphersFromCache = async (params: GetCiphersParams) => {
     try {
-      const deletedFilter = (c : CipherView) => c.isDeleted === params.deleted
+      const deletedFilter = (c: CipherView) => c.isDeleted === params.deleted
       const filters = [deletedFilter, ...params.filters]
       if (!params.includeExtensions) {
-        filters.unshift((c : CipherView) => ![CipherType.TOTP].includes(c.type))
+        filters.unshift((c: CipherView) => ![CipherType.TOTP].includes(c.type))
       }
       return await searchService.searchCiphersFromCache(params.searchText || '', filters, null) || []
     } catch (e) {
@@ -650,29 +649,92 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Import
-  const importCiphers = async (importResult: ImportResult, extras: {
-    setImportedFolderCount?: (val: number) => void
-    setImportedCipherCount?: (val: number) => void
-  }) => {
-    const { setImportedCipherCount, setImportedFolderCount } = extras
-
+  const importCiphers = async (importResult: ImportResult, isFree: boolean) => {
     // Offline
     if (uiStore.isOffline) {
-      await _offlineImportCiphers({ importResult })
+      await _offlineImportCiphers({ importResult }, isFree)
       notify('success', translate('import.success') + ' ' + translate('success.will_sync_when_online'))
       return { kind: 'ok' }
     }
     // Online
-
     const request = new ImportCiphersRequest()
-    for (let i = 0; i < importResult.ciphers.length; i++) {
-      const cipher = importResult.ciphers[i]
-      const countDuplicate = await _countDuplicateCipherName(cipher)
-      if (countDuplicate > 0) {
-        cipher.name = `${cipher.name} (${countDuplicate})`
+    uiStore.setImportCipherProgress(0, importResult.ciphers.length)
+    uiStore.setImportFolderProgress(0, importResult.folders.length)
+    if (isFree) {
+      let numberOfImportedCipher = 0
+      let currentLoginCount = await _getCipherCount(CipherType.Login)
+      let currentCardCount = await _getCipherCount(CipherType.Card)
+      let currentIdentityCount = await _getCipherCount(CipherType.Identity)
+      let currentNoteCount = await _getCipherCount(CipherType.SecureNote)
+      let currentCryptoCount = await _getCipherCount(CipherType.CryptoWallet)
+      for (let i = 0; i < importResult.ciphers.length; i++) {
+        const cipher = importResult.ciphers[i]
+
+        if (cipher.type == CipherType.Login) {
+          if (currentLoginCount < FREE_PLAN_LIMIT.LOGIN) {
+            currentLoginCount += 1
+          } else {
+            uiStore.setIsImportLimited(true)
+            continue
+          }
+        }
+        else if (cipher.type == CipherType.SecureNote) {
+          if (currentNoteCount < FREE_PLAN_LIMIT.NOTE) {
+            currentNoteCount += 1
+          } else {
+            uiStore.setIsImportLimited(true)
+            continue
+          }
+        }
+        else if (cipher.type == CipherType.CryptoWallet) {
+          if (currentCryptoCount < FREE_PLAN_LIMIT.CRYPTO) {
+            currentCryptoCount += 1
+          } else {
+            uiStore.setIsImportLimited(true)
+            continue
+          }
+        }
+        else if (cipher.type == CipherType.Card) {
+          if (currentCardCount < FREE_PLAN_LIMIT.PAYMENT_CARD) {
+            currentCardCount += 1
+          } else {
+            uiStore.setIsImportLimited(true)
+            continue
+          }
+          break;
+        }
+        else if (cipher.type == CipherType.Identity) {
+          if (currentIdentityCount < FREE_PLAN_LIMIT.IDENTITY) {
+            currentIdentityCount += 1
+          } else {
+            uiStore.setIsImportLimited(true)
+            continue
+          }
+        }
+
+        const countDuplicate = await _countDuplicateCipherName(cipher)
+        if (countDuplicate > 0) {
+          cipher.name = `${cipher.name} (${countDuplicate})`
+        }
+        const enc = await cipherService.encrypt(cipher)
+        request.ciphers.push(new CipherRequest(enc))
+        numberOfImportedCipher += 1
+        uiStore.setImportCipherProgress(numberOfImportedCipher, importResult.ciphers.length)
       }
-      const enc = await cipherService.encrypt(cipher)
-      request.ciphers.push(new CipherRequest(enc))
+    }
+    else {
+      for (let i = 0; i < importResult.ciphers.length; i++) {
+        const cipher = importResult.ciphers[i]
+        const countDuplicate = await _countDuplicateCipherName(cipher)
+        if (countDuplicate > 0) {
+          cipher.name = `${cipher.name} (${countDuplicate})`
+        }
+        const enc = await cipherService.encrypt(cipher)
+
+        request.ciphers.push(new CipherRequest(enc))
+        uiStore.setImportCipherProgress(i + 1, importResult.ciphers.length)
+      }
+
     }
     if (importResult.folders != null) {
       for (let i = 0; i < importResult.folders.length; i++) {
@@ -683,6 +745,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         }
         const enc = await folderService.encrypt(folder)
         request.folders.push(new FolderRequest(enc))
+        uiStore.setImportCipherProgress(i + 1, importResult.folders.length)
       }
     }
     if (importResult.folderRelationships != null) {
@@ -701,7 +764,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         return res
       }
       importedFolderCount += batch.length
-      setImportedFolderCount && setImportedFolderCount(importedFolderCount)
+      // setImportedFolderCount && setImportedFolderCount(importedFolderCount)
       folderIds = [...folderIds, ...res.data.ids]
     }
 
@@ -722,11 +785,25 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         return res
       }
       importedCipherCount += batch.length
-      setImportedCipherCount && setImportedCipherCount(importedCipherCount)
+      // setImportedCipherCount && setImportedCipherCount(importedCipherCount)
+    }
+    await startSyncProcess(Date.now())
+    if (importedCipherCount != 0) {
+      notify('success', translate('import.success'))
     }
 
-    notify('success', translate('import.success'))
     return { kind: 'ok' }
+  }
+
+  const _getCipherCount = async (type: CipherType) => {
+    const allCiphers = await getEncryptedCiphers({
+      deleted: false,
+      searchText: '',
+      filters: [
+        (c: CipherView) => c.type === type
+      ]
+    })
+    return allCiphers.length
   }
 
   const _offlineImportCiphers = async (payload: {
@@ -734,7 +811,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     isCaching?: boolean
     cipherRequests?: (CipherRequest & { id?: string })[]
     folderRequests?: (FolderRequest & { id?: string })[]
-  }) => {
+  }, isFree: boolean) => {
     const { importResult, isCaching, cipherRequests, folderRequests } = payload
 
     const ciphers = cipherRequests || []
@@ -754,6 +831,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         // @ts-ignore
         cr.id = tempId
         ciphers.push(cr)
+        uiStore.setImportCipherProgress(i + 1, importResult.ciphers.length)
       }
     }
 
@@ -780,6 +858,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
           // @ts-ignore
           fr.id = tempId
           folders.push(fr)
+          uiStore.setImportFolderProgress(i + 1, importResult.folders.length)
         }
       }
     }
@@ -884,19 +963,19 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await _offlineCreateCipher({ cipher, collectionIds })
         notify('success', `${translate('success.cipher_created')} ${translate('success.will_sync_when_online')}`)
         return { kind: 'ok' }
-      } 
+      }
 
       // Online
       const cipherEnc = await cipherService.encrypt(cipher)
       const data = new CipherRequest(cipherEnc)
       const res = await cipherStore.createCipher(data, score, collectionIds)
       if (res.kind === 'ok') {
-        await _offlineCreateCipher({ 
-          cipher, 
-          collectionIds, 
+        await _offlineCreateCipher({
+          cipher,
+          collectionIds,
           cipherRequest: data,
           cipherId: res.data.id
-        }) 
+        })
         notify('success', translate('success.cipher_created'))
       } else {
         notifyApiError(res)
@@ -950,7 +1029,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await _offlineUpdateCipher({ cipher, collectionIds })
         notify('success', `${translate('success.cipher_updated')} ${translate('success.will_sync_when_online')}`)
         return { kind: 'ok' }
-      } 
+      }
 
       // Online
       const cipherEnc = await cipherService.encrypt(cipher)
@@ -958,7 +1037,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       const res = await cipherStore.updateCipher(id, data, score, collectionIds)
       if (res.kind === 'ok') {
         await _offlineUpdateCipher({
-          cipher, 
+          cipher,
           collectionIds,
           isAccepted: true,
           cipherRequest: data
@@ -991,7 +1070,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     const cipherEnc = await cipherService.encrypt(cipher)
     const data = cipherRequest || new CipherRequest(cipherEnc)
     const revisionDate = new Date()
-    
+
     res[cipher.id] = {
       ...res[cipher.id],
       ...data,
@@ -1020,7 +1099,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await _offlineDeleteCiphers(ids)
         notify('success', `${translate('success.cipher_deleted')}`)
         return { kind: 'ok' }
-      } 
+      }
 
       // Online
       const res = await cipherStore.deleteCiphers(ids)
@@ -1063,7 +1142,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await _offlineToTrashCiphers(ids)
         notify('success', `${translate('success.cipher_trashed')} ${translate('success.will_sync_when_online')}`)
         return { kind: 'ok' }
-      } 
+      }
 
       // Online
       const res = await cipherStore.toTrashCiphers(ids)
@@ -1106,7 +1185,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       await _offlineRestoreCiphers(ids)
       notify('success', `${translate('success.cipher_restored')} ${translate('success.will_sync_when_online')}`)
       return { kind: 'ok' }
-    } 
+    }
 
     // Online
     try {
@@ -1438,7 +1517,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await _offlineCreateFolder({ folder })
         notify('success', `${translate('folder.folder_created')} ${translate('success.will_sync_when_online')}`)
         return { kind: 'ok' }
-      } 
+      }
 
       // Online
       const folderEnc = await folderService.encrypt(folder)
@@ -1449,7 +1528,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
           folder,
           folderRequest: payload,
           folderId: res.data.id
-        }) 
+        })
         notify('success', translate('folder.folder_created'))
       } else {
         notifyApiError(res)
@@ -1499,7 +1578,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await _offlineUpdateFolder({ folder })
         notify('success', `${translate('folder.folder_updated')} ${translate('success.will_sync_when_online')}`)
         return { kind: 'ok' }
-      } 
+      }
 
       // Online
       const folderEnc = await folderService.encrypt(folder)
@@ -1510,7 +1589,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
           folder,
           isAccepted: true,
           folderRequest: payload
-        }) 
+        })
         notify('success', translate('folder.folder_updated'))
       } else {
         notifyApiError(res)
@@ -1557,12 +1636,12 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await _offlineDeleteFolder(id)
         notify('success', translate('folder.folder_deleted'))
         return { kind: 'ok' }
-      } 
+      }
 
       // Online
       const res = await folderStore.deleteFolder(id)
       if (res.kind === 'ok') {
-        await _offlineDeleteFolder(id, true) 
+        await _offlineDeleteFolder(id, true)
         notify('success', translate('folder.folder_deleted'))
       } else {
         notifyApiError(res)
@@ -1612,7 +1691,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
           collection,
           collectionRequest: payload,
           collectionId: res.data.id
-        }) 
+        })
         notify('success', translate('folder.folder_created'))
       } else {
         notifyApiError(res)
@@ -1675,7 +1754,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
           collection,
           isAccepted: true,
           collectionRequest: payload
-        }) 
+        })
         notify('success', translate('folder.folder_updated'))
       } else {
         notifyApiError(res)
@@ -1722,12 +1801,12 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         await _offlineDeleteCollection(id)
         notify('success', translate('folder.folder_deleted'))
         return { kind: 'ok' }
-      } 
+      }
 
       // Online
       const res = await collectionStore.deleteCollection(id, teamId)
       if (res.kind === 'ok') {
-        await _offlineDeleteCollection(id, true) 
+        await _offlineDeleteCollection(id, true)
         notify('success', translate('folder.folder_deleted'))
       } else {
         notifyApiError(res)
@@ -1791,7 +1870,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
       // Remove temporary cipher
       for (const _id of Object.keys(res)) {
-        if (_id.startsWith(TEMP_PREFIX) && res[_id].name === cipher.name && res[_id].type === cipher.type ) {
+        if (_id.startsWith(TEMP_PREFIX) && res[_id].name === cipher.name && res[_id].type === cipher.type) {
           delete res[_id]
           cipherStore.removeNotUpdate(_id)
           cipherService.csDeleteFromDecryptedCache([_id])
@@ -1806,7 +1885,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       }
 
       await storageService.save(key, res)
-      
+
       // Decrypt and minimal reload cache
       const c = new Cipher(cipherData, false)
       const hasKey = await cryptoService.hasKey()
