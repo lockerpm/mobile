@@ -98,7 +98,10 @@
     "username": "Tên người dùng",
     "warning": "Cảnh báo",
     "website": "Website",
-    "loading": "Đang giải mã dữ liệu"
+    "loading": "Đang giải mã dữ liệu",
+    "see_all": "Xem tất cả",
+    "collapse": "Thu gọn",
+    "share_with": "Chia sẻ với"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
@@ -225,7 +228,7 @@
   "onBoarding": {
     "no_account": "Chưa có tài khoản?",
     "has_account": "Đã có tài khoản?",
-    "title": "Your daily needs"
+    "title": "Your Digital Vault"
   },
   "login": {
     "title": "Đăng nhập tài khoản",
