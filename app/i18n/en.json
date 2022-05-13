@@ -98,7 +98,10 @@
     "username": "Username",
     "warning": "Warning",
     "website": "Website",
-    "loading": "Decrypting data"
+    "loading": "Decrypting data",
+    "see_all": "See all",
+    "collapse": "Collapse",
+    "share_with": "Shared with"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
@@ -225,7 +228,7 @@
   "onBoarding": {
     "no_account": "Don't have an account?",
     "has_account": "Already have an account?",
-    "title": "Your daily needs"
+    "title": "Your Digital Vault"
   },
   "login": {
     "title": "Sign in to your account",

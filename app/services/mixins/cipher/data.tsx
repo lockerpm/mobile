@@ -787,7 +787,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       importedCipherCount += batch.length
       // setImportedCipherCount && setImportedCipherCount(importedCipherCount)
     }
-    await startSyncProcess(Date.now())
+    // await startSyncProcess(Date.now())
     if (importedCipherCount != 0) {
       notify('success', translate('import.success'))
     }
