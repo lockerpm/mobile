@@ -20,7 +20,7 @@
     "copied_to_clipboard": "Copied to clipboard",
     "country": "Country",
     "create": "Create",
-    "crypto_asset": "Crypto Asset",
+    "crypto_asset": "Crypto Backups",
     "crypto_wallet": "Crypto Backup",
     "data": "Data",
     "delete": "Delete",
@@ -574,7 +574,7 @@
     "choose_type": "Choose your type of asset",
     "choose_type_desc": "Select the method that crypto you want to add",
     "empty": {
-      "title": "Add your first crypto asset",
+      "title": "Add your first crypto backup",
       "desc": "Keep your crypto account/wallet in safe place",
       "btn": "Add Asset"
     },
@@ -595,7 +595,7 @@
     "ads" : "Enjoy all Locker Premium features with Yearly Plan to save up to 75%",
     "cancel_text" : "Recurring billing. Cancel anytime",
     "benefit" : {
-      "locker" : "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Assets",
+      "locker" : "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Backups",
       "web" : "Dark Web Monitoring protects your accounts from massive data breaches",
       "emergency_contact" : "Emergency Contact let trusted accounts access your vault when needed",
       "share_password": "Share Passwords and items securely with your friends and family members"
@@ -640,7 +640,7 @@
       "card": "Payment Cards",
       "identity": "Identities",
       "note": "Secure Note",
-      "crypto": "Crypto assets"
+      "crypto": "Crypto Backups"
     },
     "feature": {
       "title": "Explore your full premium feature",

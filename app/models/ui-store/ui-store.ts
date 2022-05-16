@@ -25,8 +25,7 @@ export const UiStoreModel = types
     saveLogin: types.maybeNull(types.frozen<{domain: string, username: string, password: string}>()),
     saveLastId: types.maybeNull(types.string),
     importFileName: types.maybeNull(types.string),
-    importCipherProgress: types.frozen<{cipher: number, totalCipher: number}>({cipher: 0, totalCipher: 0}),
-    importFolderProgress: types.frozen<{folder: number, totalFolder: number}>({folder: 0, totalFolder: 0})
+    importCipherProgress: types.frozen<{cipher: number, totalCipher: number}>({cipher: 0, totalCipher: 0})
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -75,10 +74,6 @@ export const UiStoreModel = types
       self.importCipherProgress = {cipher: cipherImported, totalCipher: totalCipher}
     },
 
-    setImportFolderProgress(folderImported: number, totalFolder: number) {
-      self.importFolderProgress = {folder: folderImported, totalFolder: totalFolder}
-    },
-
     setDeepLinkAction(action: 'fill' | 'save' | 'fill_item', data?: any) {
       self.deepLinkAction = action
       if (action === 'fill') {
@@ -90,10 +85,8 @@ export const UiStoreModel = types
       }
     },
 
-
     clearImportProgress() {
       self.importCipherProgress = {cipher: 0, totalCipher: 0}
-      self.importFolderProgress = {folder: 0, totalFolder: 0}
       self.importFileName = null
     },
 

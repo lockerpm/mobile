@@ -659,7 +659,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     // Online
     const request = new ImportCiphersRequest()
     uiStore.setImportCipherProgress(0, importResult.ciphers.length)
-    uiStore.setImportFolderProgress(0, importResult.folders.length)
     if (isFree) {
       let numberOfImportedCipher = 0
       let currentLoginCount = await _getCipherCount(CipherType.Login)
@@ -745,7 +744,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         }
         const enc = await folderService.encrypt(folder)
         request.folders.push(new FolderRequest(enc))
-        uiStore.setImportCipherProgress(i + 1, importResult.folders.length)
       }
     }
     if (importResult.folderRelationships != null) {
@@ -858,7 +856,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
           // @ts-ignore
           fr.id = tempId
           folders.push(fr)
-          uiStore.setImportFolderProgress(i + 1, importResult.folders.length)
         }
       }
     }

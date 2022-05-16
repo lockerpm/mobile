@@ -137,10 +137,10 @@ export const ImportScreen = observer(() => {
 
   useEffect(() => {
     if (uiStore.isImporting) {
-      setImportedCount(uiStore.importCipherProgress.cipher + uiStore.importFolderProgress.folder)
-      setTotalCount(uiStore.importCipherProgress.totalCipher + uiStore.importFolderProgress.totalFolder)
+      setImportedCount(uiStore.importCipherProgress.cipher)
+      setTotalCount(uiStore.importCipherProgress.totalCipher)
     }
-  }, [uiStore.importCipherProgress, uiStore.importFolderProgress, uiStore.isImporting])
+  }, [uiStore.importCipherProgress, uiStore.isImporting])
 
   useEffect(() => {
     if (uiStore.isImportLimited) {
@@ -206,7 +206,7 @@ export const ImportScreen = observer(() => {
         </View>}
 
         <ActionSheet
-          isOpen={isLimited}
+          isOpen={isLimited && isFreeAccount}
           onClose={() => {
             setIsLimited(false)
             setFile(fileData)
