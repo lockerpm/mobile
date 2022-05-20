@@ -15,7 +15,7 @@ import {
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
-  CryptoWalletEditScreen, CryptoWalletInfoScreen,
+  CryptoWalletEditScreen, CryptoWalletInfoScreen, WelcomePremiumScreen,
   AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen, 
   PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen, ReferFriendScreen
 } from "../screens"
@@ -117,7 +117,8 @@ export type PrimaryParamList = {
   cryptoWallets__info: undefined
   cryptoWallets__edit: {
     mode: 'add' | 'edit' | 'clone'
-  }
+  },
+  welcome_premium: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -451,6 +452,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="export" component={ExportScreen} />
         <Stack.Screen name="notificationSettings" component={NotificationSettingsScreen} />
 
+        <Stack.Screen name="welcome_premium" component={WelcomePremiumScreen} />
         <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: 'all' }} />
       </Stack.Navigator>
     </UserInactivity>

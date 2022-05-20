@@ -40,7 +40,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const { translate, color, isDark } = useMixins()
   const navigation = useNavigation();
   const route = useRoute<ScreenProp>();
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
 
   // -------------------- STATE ----------------------
   const [subcriptions, setSubcriptions] = useState<Subscription[]>([])
@@ -62,7 +62,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
       await RNIap.initConnection();
       if (!IS_IOS) {
         await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
-      } 
+      }
       else {
         await RNIap.clearTransactionIOS();
       }
@@ -79,7 +79,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
     purchaseUpdateSubscription = purchaseUpdatedListener(
       async (purchase: SubscriptionPurchase) => {
         if (purchase) {
-          
+
           const receipt = purchase.transactionReceipt
           if (receipt) {
             try {
@@ -98,7 +98,8 @@ export const PaymentScreen = observer(function PaymentScreen() {
             if (res.kind === "ok") {
               if (res.data.success) {
                 await user.loadPlan()
-                navigation.navigate("mainTab")
+                uiStore.setShowWelcomePremium(true)
+                navigation.navigate("welcome_premium")
               }
               else {
                 Alert.alert(
@@ -211,7 +212,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
           personal={payIndividual}
           purchase={purchase}
         />
-       {/* { IS_IOS && <Button
+        {/* { IS_IOS && <Button
           preset="link"
           style={{
             marginBottom: 20
