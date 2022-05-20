@@ -7,6 +7,7 @@ export const UiStoreModel = types
   .model("UiStore")
   .props({
     // Data
+    showWelcomePremium: false,
     isImportLimited: types.maybeNull(types.boolean),
     isImporting: types.maybeNull(types.boolean),
     isOffline: types.maybeNull(types.boolean),
@@ -32,6 +33,11 @@ export const UiStoreModel = types
     setIsOffline: (isOffline: boolean) => {
       self.isOffline = isOffline
     },
+
+    setShowWelcomePremium: (val: boolean) => {
+      self.showWelcomePremium = val
+    },
+
 
     setIsImportLimited: (val: boolean) => {
       self.isImportLimited = val

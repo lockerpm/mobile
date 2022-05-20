@@ -103,6 +103,7 @@ export const InitScreen = observer(() => {
     //   navigation.navigate('intro')
     //   return
     // }
+  
 
     // Logged in?
     if (!user.isLoggedIn) {
@@ -114,6 +115,8 @@ export const InitScreen = observer(() => {
       }
       return
     }
+
+
     // Network connected? || Is autofill?
     if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {
 

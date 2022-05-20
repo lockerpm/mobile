@@ -6,6 +6,7 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import NetInfo from "@react-native-community/netinfo"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { PlanType } from "../../../config/types"
 
 export const StartScreen = observer(() => {
   const { user, uiStore } = useStores()
@@ -79,13 +80,20 @@ export const StartScreen = observer(() => {
       return
     }
 
+
     // Show biometric intro
-    if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
-      if (!user.biometricIntroShown && !user.isBiometricUnlock) {
-        const available = await isBiometricAvailable()
-        if (available) {
-          navigation.navigate("biometricUnlockIntro")
-          return
+    if (user.plan?.alias != PlanType.FREE && !uiStore.showWelcomePremium) {
+      uiStore.setShowWelcomePremium(true)
+      navigation.navigate("welcome_premium")
+      return
+    } else {
+      if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
+        if (!user.biometricIntroShown && !user.isBiometricUnlock) {
+          const available = await isBiometricAvailable()
+          if (available) {
+            navigation.navigate("biometricUnlockIntro")
+            return
+          }
         }
       }
     }

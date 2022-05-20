@@ -681,5 +681,17 @@
     "title": "Invite friends and get Premium for Free",
     "desc": "When invited (your friend creates Master Password successfully), both you and your friends will receive 1 month of Locker Premium for Free",
     "btn": "Share"
+  },
+  "welcome_premium": {
+    "title": "Congrats! You’re now experience Locker Premium",
+    "all_features": "Check out all of the super features you have access to!",
+    "features": {
+      "unlimited": "Add unlimited items",
+      "share": "Share passwords and items",
+      "monitor": "Monitor your security",
+      "emergency": "Set up Emergency Contacts",
+      "more": "And a lot more..."
+    },
+    "btn": "Awesome!"
   }
 }

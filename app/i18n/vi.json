@@ -682,5 +682,17 @@
     "title": "Mời bạn bè cùng trải nghiệm Locker Premium",
     "desc": "Khi bạn bè của bạn đăng kí tài khoản và tạo Master Password thành công, bạn và người ấy sẽ nhận được 1 tháng sử dụng Locker Premium miễn phí",
     "btn": "Chia sẻ"
+  },
+  "welcome_premium": {
+    "title": "Chúc mừng! Tài khoản của bạn đã được nâng cấp lên Premium",
+    "all_features": "Trải nghiệm tất các các tính năng nâng cao của Locker!",
+    "features": {
+      "unlimited": "Lưu trữ không giới hạn",
+      "share": "Chia sẻ cho bạn bè",
+      "monitor": "Giám sát bảo mật",
+      "emergency": "Liên hệ khẩn cấp",
+      "more": "Và các tính năng khác..."
+    },
+    "btn": "Tuyệt vời!"
   }
 }
