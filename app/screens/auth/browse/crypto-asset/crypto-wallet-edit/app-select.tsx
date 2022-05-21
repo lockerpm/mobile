@@ -57,7 +57,7 @@ export const AppSelect = (props: Props) => {
         label: a.name,
         value: a.alias
       }))}
-      title={translate('crypto_asset.network')}
+      title={translate('crypto_asset.wallet_app')}
       renderItem={(value, { isSelected }, itemLabel) => (
         <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
           backgroundColor: color.background,

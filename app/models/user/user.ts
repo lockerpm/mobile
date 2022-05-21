@@ -26,6 +26,7 @@ export const UserModel = types
   .props({
     apiToken: types.maybeNull(types.string),
     fcmToken: types.maybeNull(types.string),
+    deviceId: types.maybeNull(types.string),
 
     // ID
     isLoggedIn: types.maybeNull(types.boolean),
@@ -136,8 +137,8 @@ export const UserModel = types
     },
 
     // User settings
-    setDeviceID: (id: string) => {
-      self.environment.api.apisauce.setHeader('device-id', id)
+    setDeviceId: (id: string) => {
+      self.deviceId = id
     },
     setLanguage: (lang: string) => {
       self.language = lang
@@ -250,7 +251,7 @@ export const UserModel = types
 
     login: async (payload: LoginData, isOtp?: boolean) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.login(payload, isOtp)
+      const res = await userApi.login(payload, self.deviceId, isOtp)
       if (res.kind === "ok") {
         if (res.data.token) {
           const pmRes = await userApi.getPMToken(res.data.token, {
