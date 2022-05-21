@@ -680,7 +680,8 @@
   "refer_friend": {
     "title": "Invite friends and get Premium for Free",
     "desc": "When invited (your friend creates Master Password successfully), both you and your friends will receive 1 month of Locker Premium for Free",
-    "btn": "Share"
+    "btn": "Share",
+    "refer_header": "Hey,\nI use Locker Password Manager to manage my passwords. You might find it helpful too.\nYou can try Locker Premium for 1 month with my referral link:\n"
   },
   "welcome_premium": {
     "title": "Congrats! You’re now experience Locker Premium",

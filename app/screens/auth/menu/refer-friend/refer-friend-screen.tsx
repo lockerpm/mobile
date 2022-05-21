@@ -60,7 +60,7 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
         >
 
             <LinearGradient colors={gradientColor} style={{
-                height: 280,
+                height: "40%",
                 borderBottomRightRadius: 60,
                 borderBottomLeftRadius: 60,
                 alignItems: "center",
@@ -68,7 +68,7 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
             }}>
                 <View style={{
                     position: "absolute",
-                    top: IS_IOS ? 0 : 20 ,
+                    top: "10%" ,
                     zIndex: 2,
                     flexDirection: "row",
                     justifyContent: "flex-end",
@@ -101,7 +101,7 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
 
 
                 <TouchableOpacity
-                    onPress={() => copyToClipboard(referLink)}
+                    onPress={() => copyToClipboard(translate("refer_friend.refer_header") + referLink)}
                     style={{
                         borderColor: "black",
                         borderRadius: 4,
