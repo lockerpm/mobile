@@ -15,7 +15,7 @@ target 'CyStackLocker' do
     :hermes_enabled => false
   )
 
-  pod 'lottie-ios'
+  # pod 'lottie-ios'
   
   pod 'GoogleTagManager'
 
