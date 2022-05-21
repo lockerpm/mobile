@@ -51,6 +51,16 @@ export const CryptoWalletAction = observer((props: Props) => {
         action={() => copyToClipboard(data.seed)}
         disabled={!data.seed}
       />
+      {
+        __DEV__ && (
+          <ActionItem
+            name={'(DEBUG) Copy notes'}
+            icon="copy"
+            action={() => copyToClipboard(selectedCipher.notes)}
+            disabled={!data.seed}
+          />
+        )
+      }
     </>
   )
 

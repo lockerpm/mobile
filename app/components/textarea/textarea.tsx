@@ -87,6 +87,7 @@ export const Textarea = (props: Props) => {
           paddingRight: 35 * ((copyAble ? 1 : 0) + (buttonRight ? 1 : 0)),
           textAlignVertical: 'top',
           paddingVertical: 0,
+          minHeight: props.editable === false ? 0 : 50,
           maxHeight: 100
         }, inputStyle]}
         {...rest}

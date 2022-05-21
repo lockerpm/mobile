@@ -210,11 +210,13 @@ export const CryptoWalletInfoScreen = observer(() => {
         />
 
         {/* Seed */}
-        <Textarea
+        <FloatingInput
+          isPassword
+          fixedLabel
+          copyAble
           label={translate('crypto_asset.seed')}
           value={cryptoWalletData.seed}
           editable={false}
-          copyAble
           style={{ marginTop: 20 }}
         />
 
