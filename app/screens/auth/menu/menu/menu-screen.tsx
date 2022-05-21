@@ -53,6 +53,7 @@ export const MenuScreen = observer(() => {
 
   const items: MenuItemProps[] = [
     {
+      family: user.plan?.alias !== PlanType.FAMILY,
       icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
       name: translate('menu.invite'),
       action: () => {
@@ -274,7 +275,7 @@ export const MenuScreen = observer(() => {
         }}>
           <TouchableOpacity
             onPress={() => navigation.navigate('refer_friend')}>
-            <Image source={require('./refer-friend.png')} style={{
+            <Image source={ user.language === "en" ? require('./refer-friend-en.png') : require('./refer-friend-vi.png')} style={{
               width: "100%"
             }} />
           </TouchableOpacity>

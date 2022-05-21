@@ -681,7 +681,8 @@
   "refer_friend": {
     "title": "Mời bạn bè cùng trải nghiệm Locker Premium",
     "desc": "Khi bạn bè của bạn đăng kí tài khoản và tạo Master Password thành công, bạn và người ấy sẽ nhận được 1 tháng sử dụng Locker Premium miễn phí",
-    "btn": "Chia sẻ"
+    "btn": "Chia sẻ",
+    "refer_header": "Xin chào,\nTôi dùng trình quản lý mật khẩu Locker để quản lý mật khẩu của mình. Bạn có thể thấy nó cũng hữu ích đấy!\nHãy trải nghiệm Locker Premium 1 tháng với đường dẫn giới thiệu dưới đây nhé:\n"
   },
   "welcome_premium": {
     "title": "Chúc mừng! Tài khoản của bạn đã được nâng cấp lên Premium",
