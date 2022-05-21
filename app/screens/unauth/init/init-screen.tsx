@@ -74,7 +74,9 @@ export const InitScreen = observer(() => {
 
     // Setup basic data
     user.setLanguage(user.language)
-    user.setDeviceID(DeviceInfo.getUniqueId())
+    if (!user.deviceId) {
+      user.setDeviceId(DeviceInfo.getUniqueId())
+    }
     cipherStore.setIsSynching(false)
 
     // TODO

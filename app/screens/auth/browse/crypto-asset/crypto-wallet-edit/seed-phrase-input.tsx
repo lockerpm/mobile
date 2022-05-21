@@ -19,7 +19,7 @@ export const SeedPhraseInput = (props: Props) => {
   // ---------------- PARAMS ------------------
 
   const [wordCount, setWordCount] = useState(MIN_WORD_COUNT) 
-  const [maxWidth, setMaxWidth] = useState(0) 
+  const [maxWidth, setMaxWidth] = useState(0)
 
   // ---------------- COMPUTED ------------------
 
@@ -29,6 +29,17 @@ export const SeedPhraseInput = (props: Props) => {
       res.push('')
     }
     return res
+  })()
+
+  const lastWordIndex = (() => {
+    let index = words.length - 1
+    while (index > 0) {
+      if (!!words[index]) {
+        return index
+      }
+      index -= 1
+    }
+    return index
   })()
 
   const refs = words.map(() => {
@@ -93,7 +104,7 @@ export const SeedPhraseInput = (props: Props) => {
       }}
     >
       {
-        words.filter((w, index) => !!w.trim() || index < wordCount).map((w, index) => (
+        words.filter((w, index) => !!w.trim() || (index < Math.max(lastWordIndex, wordCount))).map((w, index) => (
           <WordInput
             maxWidth={maxWidth}
             outerRef={refs[index]}
