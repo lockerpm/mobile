@@ -105,8 +105,7 @@ export const InitScreen = observer(() => {
     //   navigation.navigate('intro')
     //   return
     // }
-  
-
+    
     // Logged in?
     if (!user.isLoggedIn) {
       if (!user.introShown && !isAutoFill && !isOnSaveLogin && !isAutoFillItem) {
