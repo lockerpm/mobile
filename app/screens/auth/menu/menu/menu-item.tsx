@@ -44,7 +44,7 @@ export const MenuItem = (props: MenuItemProps) => {
         {
           props.family && (
             <Text
-              text={"Family"}
+              text={"FAMILY"}
               style={{color: color.primary }}
             />
           )

@@ -35,7 +35,7 @@ export const MenuScreen = observer(() => {
   const { lock, logout } = useCipherAuthenticationMixins()
   const { createRandomPasswords } = useTestMixins()
 
-  const appVersion = `${getVersion()}.${getBuildNumber()}`
+  const appVersion = `${getVersion()}`
   const isFreeAccount = user.plan?.alias === PlanType.FREE
   const isPremiumAccount = user.plan?.alias === PlanType.PREMIUM
   const [isLoading, setIsLoading] = useState(false)
@@ -275,7 +275,7 @@ export const MenuScreen = observer(() => {
         }}>
           <TouchableOpacity
             onPress={() => navigation.navigate('refer_friend')}>
-            <Image source={ user.language === "en" ? require('./refer-friend-en.png') : require('./refer-friend-vi.png')} style={{
+            <Image source={user.language === "en" ? require('./refer-friend-en.png') : require('./refer-friend-vi.png')} style={{
               width: "100%"
             }} />
           </TouchableOpacity>
@@ -292,7 +292,22 @@ export const MenuScreen = observer(() => {
           }
         </View>
 
-        <Text style={{ marginTop: 10 }}> {appVersion}</Text>
+        {/*Product of cystack, version */}
+        <View style={{
+          alignItems: "center"
+        }}>
+          <View style={{
+            marginTop: 24,
+            flexDirection: "row"
+          }}>
+            <Text style={{marginBottom: 2}}>{translate('menu.product_of')}</Text>
+            <Image source={require('./cystack.png')} style={{
+              width: 78, height: 22
+            }} />
+          </View>
+          <Text style={{ marginTop: 8 }}>Locker - {appVersion}</Text>
+        </View>
+
       </ScrollView>
     </Layout>
   )

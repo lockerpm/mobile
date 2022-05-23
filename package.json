@@ -30,7 +30,7 @@
     "prod-android-staging": "react-native run-android --variant=stagingrelease --appIdSuffix=staging",
     "dev-ios": "npx react-native run-ios --scheme CyStackLocker",
     "dev-ios-staging": "npx react-native run-ios --scheme CyStackLockerStaging",
-    "prod-apk": "cd android && ./gradlew assembleproductionRelease",
+    "prod-apk": "cd android && ./gradlew assembleProductionRelease",
     "staging-apk": "cd android && ./gradlew assembleStagingRelease"
   },
   "dependencies": {
