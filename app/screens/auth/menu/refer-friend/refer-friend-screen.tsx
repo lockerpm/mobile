@@ -20,7 +20,7 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
     const onShare = async () => {
         try {
             const result = await Share.share({
-                message: referLink,
+                message: translate("refer_friend.refer_header") + referLink,
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {
