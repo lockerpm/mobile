@@ -32,9 +32,11 @@ export const WelcomePremiumScreen = () => {
         <Layout
             style={{
                 // bar style
+   
                 backgroundColor: color.primary
             }}
             containerStyle={{
+               
                 backgroundColor: color.primary
             }}
         >
@@ -48,7 +50,7 @@ export const WelcomePremiumScreen = () => {
                 autoPlay
                 loop
             />
-            <View style={{ zIndex: 1, flex: 1, alignItems: "center" }}>
+            <View style={{ zIndex: 1, flex: 1, alignItems: "center", justifyContent:'center', }}>
                 <Image source={require('./LockerPremium.png')} style={{
                     width: 152,
                     height: 32
@@ -73,6 +75,7 @@ export const WelcomePremiumScreen = () => {
                 }} />
 
                 <View style={{
+                    maxWidth: 650,
                     marginTop: 16,
                     borderRadius: 10,
                     width: "100%",

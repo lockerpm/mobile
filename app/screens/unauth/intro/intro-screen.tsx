@@ -42,16 +42,19 @@ export const IntroScreen = () => {
         style={[commonStyles.SECTION_PADDING, {
           flex: 1,
           justifyContent: "space-around",
+          alignContent: "center",
           alignItems: 'center',
           paddingHorizontal: 37,
-
           flexDirection: orientation == Orientation.LANDSCAPE ? "row" : "column"
         }]}
       >
         <Image
+          key={index}
           source={item.img}
           style={{
-            width: orientation == Orientation.LANDSCAPE ? 250 : "100%"
+            width: orientation == Orientation.LANDSCAPE ? 350 : "100%",
+            maxWidth: 600,
+            alignSelf: "center"
           }}
         />
         <View>
@@ -106,7 +109,7 @@ export const IntroScreen = () => {
     >
       <View style={{ flex: 1, justifyContent: 'center', marginBottom: 10}}>
         {/* Tabs */}
-        <View style={{ flex: 3, minHeight: 300, maxHeight: 500 }}>
+        <View style={{ flex: 3, minHeight: 300}}>
           <TabView
             renderTabBar={() => null}
             navigationState={{ index, routes }}
