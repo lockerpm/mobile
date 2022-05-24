@@ -17,6 +17,7 @@ export const InitScreen = observer(() => {
   const navigation = useNavigation()
   // const theme = Appearance.getColorScheme()
   const { boostrapPushNotifier } = useMixins()
+  
   // ------------------ METHODS ---------------------
 
   const goLockOrCreatePassword = () => {

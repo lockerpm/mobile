@@ -25,7 +25,7 @@ export interface DropdownPickerProps {
   zIndexInverse?: number
 }
 
-export const DropdownPicker = function DropdownPicker(props: DropdownPickerProps) {
+export const DropdownPicker = (props: DropdownPickerProps) => {
   const { 
     style, items, setItems, value, setValue, placeholder, loading, emptyText, 
     multiple, isDisabled, zIndex, zIndexInverse

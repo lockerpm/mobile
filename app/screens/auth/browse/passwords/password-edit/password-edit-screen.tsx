@@ -10,6 +10,7 @@ import {
   FloatingInput,
   CipherOthersInfo,
   PasswordStrength,
+  CustomFieldsEdit
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -19,7 +20,7 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherType } from "../../../../../../core/enums"
-import { CipherView, LoginUriView, LoginView } from "../../../../../../core/models/view"
+import { CipherView, FieldView, LoginUriView, LoginView } from "../../../../../../core/models/view"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 
@@ -49,6 +50,7 @@ export const PasswordEditScreen = observer(() => {
   const [folder, setFolder] = useState(null)
   const [organizationId, setOrganizationId] = useState(null)
   const [collectionIds, setCollectionIds] = useState([])
+  const [fields, setFields] = useState<FieldView[]>([])
 
   // ----------------- EFFECTS ------------------
 
@@ -62,6 +64,7 @@ export const PasswordEditScreen = observer(() => {
       setFolder(selectedCipher.folderId)
       setOrganizationId(mode === "clone" ? null : selectedCipher.organizationId)
       setCollectionIds(selectedCipher.collectionIds)
+      setFields(selectedCipher.fields || [])
     } else {
       setUrl(initialUrl)
     }
@@ -97,6 +100,7 @@ export const PasswordEditScreen = observer(() => {
   }, [navigation])
 
   // ----------------- METHODS ------------------
+
   const handleBack = () => {
     if (onSaveFillService) {
       uiStore.setIsOnSaveLogin(false)
@@ -125,6 +129,7 @@ export const PasswordEditScreen = observer(() => {
       data.uris = [uriView]
     }
 
+    payload.fields = fields
     payload.name = name
     payload.notes = note
     payload.folderId = folder
@@ -289,6 +294,13 @@ export const PasswordEditScreen = observer(() => {
         {/* Web url end */}
       </View>
       {/* Info end */}
+
+      {/* Custom fields */}
+      <CustomFieldsEdit
+        fields={fields}
+        setFields={setFields}
+      />
+      {/* Custom fields end */}
 
       {/* Others */}
       <CipherOthersInfo
