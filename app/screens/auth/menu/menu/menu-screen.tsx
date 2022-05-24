@@ -13,7 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Invitation, InvitationData } from "./invitation"
 import { getBuildNumber, getVersion } from "react-native-device-info"
-
+import { useOrientation } from "../../../../services/mixins/orientation"
 import PlanIcon from './star.svg'
 import InviteIcon from './invite.svg'
 import SettingsIcon from './gear.svg'
@@ -26,6 +26,7 @@ import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
 import { PushNotifier } from "../../../../utils/push-notification"
 import { useTestMixins } from "../../../../services/mixins/test"
+import { ReferFriendTablet } from "../refer-friend/refer-friend.tablet"
 
 
 export const MenuScreen = observer(() => {
@@ -34,12 +35,16 @@ export const MenuScreen = observer(() => {
   const { translate, notify, color, isDark } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { createRandomPasswords } = useTestMixins()
-
+  // const {screenSize} = useOrientation()
+  // cons
   const appVersion = `${getVersion()}`
   const isFreeAccount = user.plan?.alias === PlanType.FREE
   const isPremiumAccount = user.plan?.alias === PlanType.PREMIUM
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
+
+  // user in tablet screen size
+  const [showShareModal, setShowShareModal] = useState(false)
 
   const PLAN_NAME: TextStyle = {
     fontSize: fontSize.small,
@@ -181,6 +186,7 @@ export const MenuScreen = observer(() => {
         <Text preset="largeHeader" text={translate('common.menu')} />
       )}
     >
+      <ReferFriendTablet show={true} onClose={() => setShowShareModal(false)} />
       <ScrollView>
         {/* User info */}
         <Button
@@ -274,12 +280,13 @@ export const MenuScreen = observer(() => {
           marginBottom: 20,
         }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('refer_friend')}>
+            onPress={() => setShowShareModal(true)}>
             <Image source={user.language === "en" ? require('./refer-friend-en.png') : require('./refer-friend-vi.png')} style={{
               width: "100%"
             }} />
           </TouchableOpacity>
         </View>
+
 
         <View style={ITEM_CONTAINER}>
           {
@@ -300,7 +307,7 @@ export const MenuScreen = observer(() => {
             marginTop: 24,
             flexDirection: "row"
           }}>
-            <Text style={{marginBottom: 2}}>{translate('menu.product_of')}</Text>
+            <Text style={{ marginBottom: 2 }}>{translate('menu.product_of')}</Text>
             <Image source={require('./cystack.png')} style={{
               width: 78, height: 22
             }} />
