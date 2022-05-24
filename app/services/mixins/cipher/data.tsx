@@ -27,7 +27,6 @@ import { SyncQueue } from '../../../utils/queue'
 import { AppEventType, EventBus } from '../../../utils/event-bus'
 import chunk from 'lodash/chunk'
 import { FREE_PLAN_LIMIT } from '../../../config/constants'
-import { useCipherToolsMixins } from './tools'
 
 
 type GetCiphersParams = {
