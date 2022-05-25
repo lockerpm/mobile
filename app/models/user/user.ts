@@ -273,8 +273,9 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.socialLogin(payload)
       if (res.kind === "ok") {
-        if (res.data.token) {
-          const pmRes = await userApi.getPMToken(res.data.token, {
+        if (res.data.token || res.data.tmp_token) {
+          const accessToken = res.data.tmp_token || res.data.token
+          const pmRes = await userApi.getPMToken(accessToken, {
             SERVICE_URL: '/',
             SERVICE_SCOPE: 'pwdmanager',
             CLIENT: 'mobile'
