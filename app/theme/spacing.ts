@@ -6,9 +6,11 @@ const spacingNormal = {
     smaller: 8,
     small: 12,
     medium: 16,
+    margin: 20,
     large: 24,
     huge: 32,
-    massive: 64
+    massive: 64,
+
 } 
 
 const spacingTablet = {
@@ -17,6 +19,7 @@ const spacingTablet = {
     smaller: 12,
     small: 16,
     medium: 20,
+    margin: 24,
     large: 28,
     huge: 36,
     massive: 68
