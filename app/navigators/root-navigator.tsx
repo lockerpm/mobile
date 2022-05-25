@@ -34,17 +34,17 @@ import { save, StorageKey } from "../utils/storage"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type RootParamList = {
-  init: undefined,
-  intro: undefined,
-  onBoarding: undefined,
-  lock: undefined,
-  login: undefined,
-  forgotPassword: undefined,
-  signup: undefined,
-  createMasterPassword: undefined,
-  mainStack: undefined,
+  init: undefined
+  intro: undefined
+  onBoarding: undefined
+  lock: undefined
+  login: undefined
+  forgotPassword: undefined
+  signup: undefined
+  createMasterPassword: undefined
+  mainStack: undefined
   countrySelector: {
-    initialId?: string,
+    initialId?: string
   }
 }
 
@@ -58,6 +58,9 @@ const RootStack = observer((props: Props) => {
   const { color, parsePushNotiData } = useMixins()
   const { uiStore, user } = useStores()
 
+  // ------------------- METHODS -------------------
+
+  // Notification
   const handleForegroundNotiPress = async (data: NotifeeNotificationData) => {
     if (!data) {
       return
@@ -75,6 +78,8 @@ const RootStack = observer((props: Props) => {
       })
     }
   }
+
+  // ------------------- EFFECTS -------------------
 
   // Check internet connection
   useEffect(() => {

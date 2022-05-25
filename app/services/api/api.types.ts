@@ -116,6 +116,7 @@ export type SocialLoginResult = {
     kind: "ok"
     data: {
         token: string
+        tmp_token?: string
     }
 } | GeneralApiProblem
 
