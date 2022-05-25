@@ -137,7 +137,7 @@ export const PremiumFeature = () => {
 
 
             {
-                isTablet() ? <View style={ROW_ITEMS}>
+                isTablet ? <View style={ROW_ITEMS}>
                     <PremiumFeatureItem item={item.locker} leftItem={true} />
                     <PremiumFeatureItem item={item.emergencyContact} leftItem={true} />
                     <PremiumFeatureItem item={item.web} leftItem={true} />

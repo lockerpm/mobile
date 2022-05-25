@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { Layout, Text, Button } from "../../../components"
 import { useMixins } from "../../../services/mixins"
-import { commonStyles } from "../../../theme"
+import { commonStyles, spacing } from "../../../theme"
 import { DefaultLogin } from "./default"
 import { MethodSelection } from "./method-selection"
 import { Otp } from "./otp"
@@ -80,7 +80,7 @@ export const LoginScreen = observer(() => {
           <Text
             text={translate("login.no_account")}
             style={{
-              marginRight: 8,
+              marginRight: spacing.smaller,
             }}
           />
           <Button

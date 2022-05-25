@@ -5,7 +5,7 @@ import {Text, Button } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { commonStyles } from "../../../theme"
+import { commonStyles, spacing } from "../../../theme"
 import { useStores } from "../../../models"
 
 
@@ -54,7 +54,7 @@ export const MethodSelection = observer((props: Props) => {
       />
       <Text style={{
         color: color.primary,
-        marginLeft: 10
+        marginLeft: spacing.margin / 2
       }}>
         {title}
       </Text>
@@ -86,7 +86,7 @@ export const MethodSelection = observer((props: Props) => {
       <Text
         preset="black"
         text={translate('login.select_method')}
-        style={{ marginBottom: 20 }}
+        style={{ marginBottom: spacing.margin }}
       />
 
       {
@@ -99,7 +99,7 @@ export const MethodSelection = observer((props: Props) => {
             onPress={() => item.type === 'mail' ? sendEmail(item.data) : onSelect(item.type, item.data)}
             style={{
               width: '100%',
-              marginBottom: 15
+              marginBottom: spacing.margin / 2
             }}
           >
             {

@@ -4,8 +4,8 @@ import { Dimensions } from 'react-native';
 import { isTablet } from 'react-native-device-info';
 
 //Guideline sizes are based on standard ~5" screen mobile device
-const BASEWIDTH = 350;
-const BASEHEIGHT = 680;
+const BASEWIDTH = 380;
+const BASEHEIGHT = 720;
 
 const { width, height } = Dimensions.get("window");
 
