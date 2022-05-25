@@ -130,7 +130,11 @@ export const PricePlan = (props: PricePlanProps) => {
 
   return (
     <View style={CONTAINER}>
-      <Text preset="black" style={{ marginTop: 10, marginBottom: 10 }}>
+      <Text preset="black" style={{
+        marginTop: 10,
+        marginBottom: 10,
+        alignSelf: "center"
+      }}>
         {translate("payment.ads")}
       </Text>
 

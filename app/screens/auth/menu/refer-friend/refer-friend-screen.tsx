@@ -13,7 +13,6 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
     const navigation = useNavigation()
     const { user } = useStores()
     const { translate, color, notifyApiError, copyToClipboard } = useMixins()
-
     const [referLink, setReferLink] = useState<string>(null)
     const gradientColor = IS_IOS ? ['#F1F2F3', '#D5EBD920', '#26833460'] : ['#FFFFFF', '#D5EBD920', '#26833460']
 
@@ -68,7 +67,7 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
             }}>
                 <View style={{
                     position: "absolute",
-                    top: "10%" ,
+                    top: "10%",
                     zIndex: 2,
                     flexDirection: "row",
                     justifyContent: "flex-end",
