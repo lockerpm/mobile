@@ -1,5 +1,5 @@
 import { Platform } from "react-native"
-
+import { Dimensions } from 'react-native';
 /**
  * You can find a list of available fonts on both iOS and Android here:
  * https://github.com/react-native-training/react-native-fonts
@@ -30,13 +30,15 @@ export const typography = {
   code: Platform.select({ ios: "Courier", android: "monospace" }),
 }
 
+
 export const fontSize = {
-  h1: 26,
-  h2: 24,
-  h3: 22,
-  h4: 20,
-  h5: 18,
-  p: 16,
-  small: 14,
-  mini: 10
+  h1: 26 ,
+  h2: 24 ,
+  h3: 22 ,
+  h4: 20 ,
+  h5: 18 ,
+  p: 16 ,
+  small: 14 ,
+  mini: 10 
 }
+

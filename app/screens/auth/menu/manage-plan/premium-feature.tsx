@@ -6,13 +6,13 @@ import { useMixins } from "../../../../services/mixins"
 import { commonStyles } from "../../../../theme"
 import { useStores } from "../../../../models"
 import { PlanType } from "../../../../config/types"
-import { useOrientation, Orientation, AdaptiveUI } from "../../../../services/mixins/orientation"
+import { useAdaptiveLayoutMixins } from "../../../../services/mixins/adaptive-layout"
 
 export const PremiumFeature = () => {
     const { color, translate } = useMixins()
     const { user } = useStores()
     const navigation = useNavigation()
-    const { orientation, screenSize } = useOrientation()
+    const {isPortrait, isTablet} = useAdaptiveLayoutMixins()
     const [modalVisible, setModalVisible] = useState(false);
     const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
 
@@ -21,7 +21,7 @@ export const PremiumFeature = () => {
         if (modalVisible) {
             setModalVisible(false)
         }
-    }, [orientation])
+    }, [isPortrait])
 
     const item = {
         locker: {
@@ -88,7 +88,7 @@ export const PremiumFeature = () => {
                 title={translate('manage_plan.feature.emergency_contact.header')}>
 
                 {
-                    orientation == Orientation.PORTRAIT ?
+                    isPortrait ?
                         <View>
                             <Image style={{ alignSelf: "center", height: 200 }} source={require("./assets/EmergencyContact.png")} />
                             <Text preset="black" style={{ marginTop: 12 }}>{translate('manage_plan.feature.emergency_contact.text')}</Text>
@@ -108,8 +108,6 @@ export const PremiumFeature = () => {
 
                         </View>
                 }
-
-
                 <Button text={translate('manage_plan.feature.emergency_contact.button')} onPress={() => setModalVisible(false)} />
             </Modal>
         )
@@ -139,7 +137,7 @@ export const PremiumFeature = () => {
 
 
             {
-                screenSize === AdaptiveUI.TABLET ? <View style={ROW_ITEMS}>
+                isTablet() ? <View style={ROW_ITEMS}>
                     <PremiumFeatureItem item={item.locker} leftItem={true} />
                     <PremiumFeatureItem item={item.emergencyContact} leftItem={true} />
                     <PremiumFeatureItem item={item.web} leftItem={true} />
