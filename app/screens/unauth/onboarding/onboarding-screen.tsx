@@ -3,16 +3,18 @@ import { observer } from "mobx-react-lite"
 import { BackHandler, View } from "react-native"
 import { AutoImage as Image, Button, Layout, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { commonStyles, fontSize } from "../../../theme"
+import { commonStyles, fontSize, spacing } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
 import { IS_IOS } from "../../../config/constants"
 import { useStores } from "../../../models"
+import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
 
 export const OnboardingScreen = observer(() => {
   const navigation = useNavigation()
   const { translate } = useMixins()
   const { uiStore } = useStores()
+  const {verticalScale} = useAdaptiveLayoutMixins()
 
   // Child components
   const footer = (
@@ -23,14 +25,14 @@ export const OnboardingScreen = observer(() => {
       />
       <View
         style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-          marginTop: 12,
+          marginTop: spacing.medium,
           justifyContent: 'center'
         }]}
       >
         <Text
           text={translate("onBoarding.has_account")}
           style={{
-            marginRight: 8,
+            marginRight: spacing.small,
           }}
         />
         <Button
@@ -73,12 +75,12 @@ export const OnboardingScreen = observer(() => {
       <View style={commonStyles.CENTER_VIEW}>
         <Image
           source={uiStore.isDark ? APP_ICON.textVerticalLight : APP_ICON.textVertical}
-          style={{ height: 112, width: 128 }}
+          style={{ height: verticalScale(112), width: verticalScale(128) }}
         />
         <Text
           preset="header"
           text={translate("onBoarding.title")}
-          style={{ fontSize: fontSize.p, marginTop: 31 }}
+          style={{ fontSize: fontSize.p, marginTop: spacing.huge }}
         />
       </View>
     </Layout>
