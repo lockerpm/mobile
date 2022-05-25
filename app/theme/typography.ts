@@ -1,5 +1,5 @@
 import { Platform } from "react-native"
-import { Dimensions } from 'react-native';
+import { isTablet } from "react-native-device-info"
 /**
  * You can find a list of available fonts on both iOS and Android here:
  * https://github.com/react-native-training/react-native-fonts
@@ -31,7 +31,7 @@ export const typography = {
 }
 
 
-export const fontSize = {
+const fontSizeNormal = {
   h1: 26 ,
   h2: 24 ,
   h3: 22 ,
@@ -42,3 +42,15 @@ export const fontSize = {
   mini: 10 
 }
 
+
+const fontSizeTablet = {
+  h1: 28 ,
+  h2: 26 ,
+  h3: 24 ,
+  h4: 22 ,
+  h5: 20 ,
+  p: 18 ,
+  small: 16 ,
+  mini: 12 
+}
+export const fontSize = isTablet() ? fontSizeTablet : fontSizeNormal

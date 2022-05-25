@@ -99,6 +99,8 @@ export const InitScreen = observer(() => {
     // Check savePassword
     const isOnSaveLogin = await checkOnSaveLogin()
 
+    navigation.navigate('intro')
+      return
     // Testing
     if (__DEV__) {
       // navigation.navigate('createMasterPassword')

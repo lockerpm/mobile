@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { spacing } from "../../theme";
 import { Dimensions } from 'react-native';
+import { isTablet } from 'react-native-device-info';
 
 //Guideline sizes are based on standard ~5" screen mobile device
 const BASEWIDTH = 350;
@@ -19,41 +19,30 @@ export const verticalScale = (size) => {
 // Adaptive layout context data
 
 const defaultData = {
-    spacing,
-    isPortrait: true,
     scale: (size: number) => { return 0 },
     verticalScale: (size: number) => { return 0 },
-    isTablet: () => false
+    isTablet: false,
+    isPortrait: true,
 }
 
 export const AdaptiveLayoutMixinsContext = createContext(defaultData)
 
 export const AdaptiveLayoutMixinsProvider = observer((props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
 
-  
-    var scaleSpacing = spacing
 
-
-    const checkPortrait = () => {
+    const isPortrait = () => {
+        const { width, height } = Dimensions.get("window");
         return height >= width;
     };
 
-    const isTablet = () => {
-        const min = Math.min(width, height)
-        return min > 700
-    }
-
     // State to hold the connection status
     // true if Orientation is PORTRAIT, false if Orientation is LANDSCAPE
-    const [isPortrait, setIsPortrait] = useState<boolean>(checkPortrait());
+    const [portrait, setPortrait] = useState<boolean>(isPortrait());
 
- 
 
     useEffect(() => {
-        Object.keys(spacing).forEach(key => scaleSpacing[key] = scale(spacing[key]))
-
         const callback = () => {
-            setIsPortrait(checkPortrait());
+            setPortrait(isPortrait());
         }
 
         Dimensions.addEventListener('change', callback);
@@ -65,11 +54,10 @@ export const AdaptiveLayoutMixinsProvider = observer((props: { children: boolean
     // -------------------- REGISTER FUNCTIONS ------------------
 
     const data = {
-        spacing: scaleSpacing,
-        isPortrait,
         scale,
         verticalScale,
-        isTablet
+        isTablet: isTablet(),
+        isPortrait: isPortrait(),
     }
 
     return (
