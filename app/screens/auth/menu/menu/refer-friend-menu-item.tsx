@@ -3,16 +3,17 @@ import { View, Image, Dimensions, TouchableOpacity } from "react-native"
 import { Text } from "../../../../components"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
-import { useNavigation } from "@react-navigation/native"
+import { useAdaptiveLayoutMixins } from "../../../../services/mixins/adaptive-layout"
 
 
 
-export const ReferFriendMenuItem = () => {
+export const ReferFriendMenuItem = (props: {onPress: Function}) => {
     const { color, translate } = useMixins()
-    const navigation = useNavigation()
+    const {isTablet} = useAdaptiveLayoutMixins()
+
     return (
         <TouchableOpacity
-        onPress={()=> navigation.navigate('refer_friend')}
+        onPress={()=> props.onPress()}
             style={{
                 marginVertical: 24,
             }}>
@@ -32,7 +33,7 @@ export const ReferFriendMenuItem = () => {
                 <Text preset="bold" style={{
                     color: color.white,
                     maxWidth: Dimensions.get('screen').width - 200
-                }} text={translate('refer_friend.menu_title')} />
+                }} text={isTablet() ? translate('refer_friend.menu_title_tablet') : translate('refer_friend.menu_title')} />
             </View>
             <View style={{
                 backgroundColor: color.primary,
@@ -45,7 +46,7 @@ export const ReferFriendMenuItem = () => {
                 justifyContent: "space-between"
             }}>
 
-                <Text preset="bold" style={{ color: color.white }} text={translate('refer_friend.navigate')} />
+                <Text preset="bold" style={{ color: color.white }} text={isTablet() ? translate('refer_friend.navigate_tablet') : translate('refer_friend.navigate')} />
                 <FontAwesomeIcon
                     name="angle-right"
                     size={18}
