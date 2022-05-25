@@ -35,7 +35,7 @@ export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
         </View>
       )}
     >
-      <View style={{ alignItems: "center" }}>
+      <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
         <Text preset="header" text="Enable Password Autofill" />
 
         <Text text="Get your Locker information right where you need it, from the keyboard" style={{
@@ -43,18 +43,22 @@ export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
           marginBottom: 15,
           textAlign: "center"
         }} />
-      </View>
-      <Image source={require("./IosHint.png")} style={{ width: 335, height: 215 }}></Image>
+        <Image source={require("./IosHint.png")} style={{ width: 335, height: 215 }}></Image>
+        <View>
+          <Text preset="black" text="Step-by-step, in Settings → Passwords:" style={{
+            marginTop: 25,
+            marginBottom: 10,
+          }} />
 
-      <Text preset="black" text="Step-by-step, in Settings → Passwords:"  style={{
-          marginTop: 25,
-          marginBottom: 10,
-        }}/>
-      
-      <Step img={require("./assets/keyboard.png")} text="Tap on Autofill Passwords"/>
-      <Step img={require("./assets/switch.png")} text="Enable Autofill Passwords"/>
-      <Step img={require("./assets/key.png")} text="Important! Tap to disable Keychain"/>
-      <Step img={require("./assets/locker.png")} text="Tap to enable Locker"/>
+          <Step img={require("./assets/keyboard.png")} text="Tap on Autofill Passwords" />
+          <Step img={require("./assets/switch.png")} text="Enable Autofill Passwords" />
+          <Step img={require("./assets/key.png")} text="Important! Tap to disable Keychain" />
+          <Step img={require("./assets/locker.png")} text="Tap to enable Locker" />
+        </View>
+
+      </View>
+
+
     </Layout>
   )
 })

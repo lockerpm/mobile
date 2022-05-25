@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ScrollView, ViewStyle, TextStyle, TouchableOpacity } from "react-native"
+import { View, ScrollView, ViewStyle, TextStyle, Share } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
@@ -12,8 +12,9 @@ import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Invitation, InvitationData } from "./invitation"
-import { getBuildNumber, getVersion } from "react-native-device-info"
-import { useOrientation } from "../../../../services/mixins/orientation"
+import { getVersion } from "react-native-device-info"
+import { ReferFriendMenuItem } from "./refer-friend-menu-item"
+import { useAdaptiveLayoutMixins } from "../../../../services/mixins/adaptive-layout"
 import PlanIcon from './star.svg'
 import InviteIcon from './invite.svg'
 import SettingsIcon from './gear.svg'
@@ -26,25 +27,21 @@ import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
 import { PushNotifier } from "../../../../utils/push-notification"
 import { useTestMixins } from "../../../../services/mixins/test"
-import { ReferFriendTablet } from "../refer-friend/refer-friend.tablet"
 
 
 export const MenuScreen = observer(() => {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { translate, notify, color, isDark } = useMixins()
+  const { translate, notify, color, isDark, notifyApiError } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { createRandomPasswords } = useTestMixins()
-  // const {screenSize} = useOrientation()
-  // cons
+  const {isTablet} = useAdaptiveLayoutMixins()
   const appVersion = `${getVersion()}`
   const isFreeAccount = user.plan?.alias === PlanType.FREE
   const isPremiumAccount = user.plan?.alias === PlanType.PREMIUM
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
-
-  // user in tablet screen size
-  const [showShareModal, setShowShareModal] = useState(false)
+  const [referLink, setReferLink] = useState<string>(null)
 
   const PLAN_NAME: TextStyle = {
     fontSize: fontSize.small,
@@ -55,6 +52,18 @@ export const MenuScreen = observer(() => {
     borderRadius: 10,
     paddingHorizontal: 14,
   }
+
+  useEffect(() => {
+    const getLink = async () => {
+      const res = await user.getReferLink()
+      if (res.kind === "ok") {
+        setReferLink(res.data.referral_link)
+      } else {
+        notifyApiError(res)
+      }
+    }
+    getLink()
+  }, [])
 
   const items: MenuItemProps[] = [
     {
@@ -173,6 +182,16 @@ export const MenuScreen = observer(() => {
     }
   }
 
+  const onShare = async () => {
+    try {
+        const result = await Share.share({
+            message: translate("refer_friend.refer_header") + referLink,
+        });
+    } catch (error) {
+        alert(error.message);
+    }
+};
+
   // -------------- RENDER --------------------
 
 
@@ -186,7 +205,6 @@ export const MenuScreen = observer(() => {
         <Text preset="largeHeader" text={translate('common.menu')} />
       )}
     >
-      <ReferFriendTablet show={true} onClose={() => setShowShareModal(false)} />
       <ScrollView>
         {/* User info */}
         <Button
@@ -276,17 +294,9 @@ export const MenuScreen = observer(() => {
           }
         </View>
 
-        <View style={{
-          marginBottom: 20,
-        }}>
-          <TouchableOpacity
-            onPress={() => setShowShareModal(true)}>
-            <Image source={user.language === "en" ? require('./refer-friend-en.png') : require('./refer-friend-vi.png')} style={{
-              width: "100%"
-            }} />
-          </TouchableOpacity>
-        </View>
-
+        {/*Refer friend */}
+        <ReferFriendMenuItem onPress={isTablet ? (()=> onShare()) : (() => navigation.navigate('refer_friend'))} />
+        
 
         <View style={ITEM_CONTAINER}>
           {
@@ -309,7 +319,7 @@ export const MenuScreen = observer(() => {
           }}>
             <Text style={{ marginBottom: 2 }}>{translate('menu.product_of')}</Text>
             <Image source={require('./cystack.png')} style={{
-              width: 78, height: 22
+              width: 78, height: 24
             }} />
           </View>
           <Text style={{ marginTop: 8 }}>Locker - {appVersion}</Text>
