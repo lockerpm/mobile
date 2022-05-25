@@ -8,6 +8,7 @@ import { commonStyles } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { IS_IOS, IS_PROD } from "../../../config/constants"
+import { GitHubLoginModal } from "./github-login-modal"
 
 
 type Props = {
@@ -30,6 +31,8 @@ export const DefaultLogin = observer((props: Props) => {
   const [username, setUsername] = useState(user.email || '')
   const [password, setPassword] = useState('')
   const passwordRef = useRef(null)
+
+  const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
   // ------------------ Methods ----------------------
 
@@ -120,10 +123,7 @@ export const DefaultLogin = observer((props: Props) => {
       hide: !IS_PROD,
       icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.githubLight : SOCIAL_LOGIN_ICON.github,
       handler: () => {
-        return githubLogin({
-          setIsLoading,
-          onLoggedIn
-        })
+        setShowGitHubLogin(true)
       }
     }
   }
@@ -132,6 +132,18 @@ export const DefaultLogin = observer((props: Props) => {
 
   return (
     <View style={{ alignItems: 'center', paddingTop: '10%' }}>
+      <GitHubLoginModal
+        isOpen={showGitHubLogin}
+        onClose={() => setShowGitHubLogin(false)}
+        onDone={(code) => {
+          githubLogin({
+            setIsLoading,
+            onLoggedIn,
+            code
+          })
+        }}
+      />
+
       <Image 
         source={APP_ICON.iconDark} 
         style={{ height: 63, width: 63, marginBottom: 10, marginTop: 30 }}

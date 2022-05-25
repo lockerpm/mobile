@@ -11,6 +11,7 @@ import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL, IS_PROD } from "../../../config/
 import { Checkbox } from "react-native-ui-lib"
 import countries from '../../../common/countries.json'
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
+import { GitHubLoginModal } from "../login/github-login-modal"
 
 
 export const SignupScreen = observer(() => {
@@ -31,6 +32,8 @@ export const SignupScreen = observer(() => {
   const [phone, setPhone] = useState('')
   const [phonePrefix, setPhonePrefix] = useState('+84')
   const [agreed, setAgreed] = useState(false)
+
+  const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
   // ------------------------------ DATA -------------------------------
 
@@ -78,10 +81,7 @@ export const SignupScreen = observer(() => {
       hide: !IS_PROD,
       icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.githubLight : SOCIAL_LOGIN_ICON.github,
       handler: () => {
-        return githubLogin({
-          setIsLoading,
-          onLoggedIn
-        })
+        setShowGitHubLogin(true)
       }
     }
   }
@@ -170,6 +170,20 @@ export const SignupScreen = observer(() => {
         </View>
       )}
     >
+      {/* Modal */}
+      <GitHubLoginModal
+        isOpen={showGitHubLogin}
+        onClose={() => setShowGitHubLogin(false)}
+        onDone={(code) => {
+          githubLogin({
+            setIsLoading,
+            onLoggedIn,
+            code
+          })
+        }}
+      />
+      {/* Modal end */}
+      
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
       <Image 
         source={APP_ICON.iconDark} 

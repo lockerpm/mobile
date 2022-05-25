@@ -22,7 +22,7 @@ export interface ModalProps {
 /**
  * Describe your component here
  */
-export const Modal = function Modal(props: ModalProps) {
+export const Modal = (props: ModalProps) => {
   const { style, isOpen, children, onClose, onOpen, title, ignoreBackgroundPress } = props
   const { color } = useMixins()
 
