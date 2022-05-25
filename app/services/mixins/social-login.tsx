@@ -3,17 +3,11 @@ import { observer } from 'mobx-react-lite'
 import { useStores } from '../../models'
 import { useMixins } from '.'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
-import { GOOGLE_CLIENT_ID, GITHUB_CONFIG } from '../../config/constants'
+import { GOOGLE_CLIENT_ID } from '../../config/constants'
 import { Logger } from '../../utils/logger'
 import { LoginManager, AccessToken } from "react-native-fbsdk-next"
-import { authorize, logout } from 'react-native-app-auth'
 import { appleAuth } from '@invertase/react-native-apple-authentication'
-import { saveSecure, loadSecure, removeSecure } from '../../utils/storage'
 
-
-enum StorageKeys {
-  GITHUB_ID_TOKEN = 'SOCIAL_LOGIN__GITHUB__ID_TOKEN'
-}
 
 const { createContext, useContext } = React
 
@@ -30,6 +24,7 @@ const defaultData = {
   githubLogin: async (payload: {
     setIsLoading?: (val: boolean) => void
     onLoggedIn: () => void
+    code: string
   }) => null,
   appleLogin: async (payload: {
     setIsLoading?: (val: boolean) => void
@@ -70,7 +65,7 @@ export const SocialLoginMixinsProvider = observer((props: {
       })
     } catch (e) {
       setIsLoading && setIsLoading(false)
-      Logger.error('googleLogin: ' + e)
+      Logger.debug('googleLogin: ' + e)
       switch (e.code) {
         case statusCodes.SIGN_IN_CANCELLED:
           break
@@ -108,7 +103,7 @@ export const SocialLoginMixinsProvider = observer((props: {
       })
     } catch (e) {
       setIsLoading && setIsLoading(false)
-      Logger.error('facebookLogin: ' + e)
+      Logger.debug('facebookLogin: ' + e)
       notify('error', translate('error.could_not_complete'))
     }
   }
@@ -117,47 +112,15 @@ export const SocialLoginMixinsProvider = observer((props: {
   const githubLogin = async (payload: {
     setIsLoading?: (val: boolean) => void
     onLoggedIn: () => void
+    code: string
   }) => {
-    const { setIsLoading, onLoggedIn } = payload
-    try {
-      const res = await authorize(GITHUB_CONFIG)
-      if (!res) {
-        setIsLoading && setIsLoading(false)
-        // notify('error', translate('error.something_went_wrong'))
-        return
-      }
-      saveSecure(StorageKeys.GITHUB_ID_TOKEN, res.idToken)
-      await _handleSocialLogin({
-        provider: 'github',
-        token: res.accessToken,
-        setIsLoading,
-        onLoggedIn
-      })
-    } catch (e) {
-      setIsLoading && setIsLoading(false)
-      Logger.error('githubLogin: ' + e)
-      switch (e.code) {
-        case 'authentication_failed':
-        case 'authentication_error':
-        case 'access_denied':
-          break
-        case 'token_refresh_failed':
-          notify('error', translate('error.social_login.github.token_refresh_failed'))
-          _logoutGitHub()
-          break
-        case 'registration_failed':
-          notify('error', translate('error.social_login.github.registration_failed'))
-          break
-        case 'browser_not_found':
-          notify('error', translate('error.social_login.github.browser_not_found'))
-          break
-        case 'service_configuration_fetch_error':
-          notify('error', translate('error.social_login.github.service_configuration_fetch_error'))
-          break
-        default:
-          notify('error', translate('error.could_not_complete'))
-      }
-    }
+    const { setIsLoading, onLoggedIn, code } = payload
+    await _handleSocialLogin({
+      provider: 'github',
+      code,
+      setIsLoading,
+      onLoggedIn
+    })
   }
 
   // Apple
@@ -179,7 +142,7 @@ export const SocialLoginMixinsProvider = observer((props: {
       })
     } catch (e) {
       setIsLoading && setIsLoading(false)
-      Logger.error('appleLogin: ' + e)
+      Logger.debug('appleLogin: ' + e)
       switch (e.code) {
         case '1001':
           break
@@ -205,16 +168,18 @@ export const SocialLoginMixinsProvider = observer((props: {
 
   const _handleSocialLogin = async (payload: {
     provider: string
-    token: string
+    token?: string
+    code?: string
     setIsLoading?: (val: boolean) => void
     onLoggedIn: () => void
   }) => {
-    const { provider, token, setIsLoading, onLoggedIn } = payload
+    const { provider, token, code, setIsLoading, onLoggedIn } = payload
 
     setIsLoading && setIsLoading(true)
     const loginRes = await user.socialLogin({
       provider: provider,
-      access_token: token
+      access_token: token,
+      code
     })
     setIsLoading && setIsLoading(false)
     if (loginRes.kind !== 'ok') {
@@ -256,18 +221,7 @@ export const SocialLoginMixinsProvider = observer((props: {
   }
 
   const _logoutGitHub = async () => {
-    try {
-      const idToken = await loadSecure(StorageKeys.GITHUB_ID_TOKEN)
-      if (idToken) {
-        await logout(GITHUB_CONFIG, {
-          idToken,
-          postLogoutRedirectUrl: ''
-        })
-        removeSecure(StorageKeys.GITHUB_ID_TOKEN)
-      }
-    } catch (e) {
-      Logger.error('Log out GitHub: ' + e)
-    }
+    // TODO
   }
 
   // -------------------- REGISTER FUNCTIONS ------------------
