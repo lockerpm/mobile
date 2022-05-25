@@ -163,6 +163,8 @@ export const PaymentScreen = observer(function PaymentScreen() {
       <View
         style={[styles.segment, {
           backgroundColor: color.block,
+          maxWidth: 500,
+          alignSelf: "center"
         }]}
       >
         <TouchableOpacity

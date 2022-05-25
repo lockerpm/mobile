@@ -40,21 +40,17 @@ export const PremiumBenefits = (props: { benefitTab: number }) => {
         <View
           key={i}
           style={{
+            marginTop: "5%",
             width: "100%",
-            height: "100%",
+            height: "95%",
             alignItems: 'center',
             flexDirection: "column",
-            justifyContent: "space-between",
+            justifyContent: "space-around",
             padding: 5
           }}
         >
-          <View style={{ height: "80%", width: "100%", justifyContent: 'center', alignItems: "center", flexDirection: "column", }}>
-            <Image key={i} defaultSource={item.img} source={item.img} style={{ height: 180, width: 180 }} />
-          </View>
-
-          <View style={{ height: "20%" }}>
-            <Text preset="black" text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: "90%" }} />
-          </View>
+          <Image key={i} defaultSource={item.img} source={item.img} style={{ maxHeight: "70%" }} resizeMode="contain" />
+          <Text preset="black" text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: "90%" }} />
         </View>
       )
     }
