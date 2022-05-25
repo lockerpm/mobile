@@ -4,12 +4,12 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
 import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
 import { useMixins } from "../../../services/mixins"
-import { commonStyles } from "../../../theme"
+import { commonStyles, spacing } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
+import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
 import { IS_IOS, IS_PROD } from "../../../config/constants"
 import { GitHubLoginModal } from "./github-login-modal"
-
 
 type Props = {
   nextStep: (username: string, password: string, methods: { type: string, data: any }[]) => void
@@ -20,6 +20,7 @@ type Props = {
 
 export const DefaultLogin = observer((props: Props) => {
   const { user, uiStore } = useStores()
+  const {verticalScale} = useAdaptiveLayoutMixins()
   const { translate, notify, notifyApiError, setApiTokens } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
   const { nextStep, onLoggedIn, handleForgot } = props
@@ -146,13 +147,13 @@ export const DefaultLogin = observer((props: Props) => {
 
       <Image 
         source={APP_ICON.iconDark} 
-        style={{ height: 63, width: 63, marginBottom: 10, marginTop: 30 }}
+        style={{ height: 70, width: 70, marginBottom: spacing.small, marginTop: spacing.huge }}
       />
 
       <Text
         preset="header"
         text={translate('login.title')}
-        style={{ marginBottom: 20 }}
+        style={{ marginBottom: spacing.large }}
       />
 
       {/* Username input */}
@@ -161,7 +162,7 @@ export const DefaultLogin = observer((props: Props) => {
         label={translate('login.email_or_username')}
         onChangeText={setUsername}
         value={username}
-        style={{ width: '100%', marginBottom: 10 }}
+        style={{ width: '100%', marginBottom:  spacing.small }}
         onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
       />
       {/* Username input end */}
@@ -182,8 +183,8 @@ export const DefaultLogin = observer((props: Props) => {
       <View style={{ 
         width: '100%', 
         alignItems: 'flex-start',
-        marginTop: 25,
-        marginBottom: 20
+        marginTop: spacing.large,
+        marginBottom: spacing.medium
       }}>
         <Button
           preset="link"
@@ -199,14 +200,14 @@ export const DefaultLogin = observer((props: Props) => {
         onPress={handleLogin}
         style={{
           width: '100%',
-          marginBottom: 20
+          marginBottom: spacing.medium
         }}
       />
 
       <View style={commonStyles.CENTER_VIEW}>
         <Text
           text={IS_PROD ? translate("common.or_login_with") : ""}
-          style={{ marginBottom: 5 }}
+          style={{ marginBottom: spacing.tiny }}
         />
 
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -216,7 +217,7 @@ export const DefaultLogin = observer((props: Props) => {
                 key={index}
                 preset="ghost"
                 onPress={item.handler}
-                style={{ marginHorizontal: 10 }}
+                style={{ marginHorizontal: spacing.smaller }}
               >
                 <item.icon height={40} width={40} />
               </Button>

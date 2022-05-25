@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import {Text, Button, FloatingInput } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { commonStyles, fontSize } from "../../../theme"
+import { commonStyles, fontSize, spacing } from "../../../theme"
 import { Checkbox } from "react-native-ui-lib"
 import { useStores } from "../../../models"
 
@@ -84,7 +84,7 @@ export const Otp = observer((props: Props) => {
         }
         preset="black"
         style={{
-          marginBottom: 10,
+          marginBottom: spacing.margin / 2,
           marginTop: 30
         }}
       />
@@ -104,8 +104,8 @@ export const Otp = observer((props: Props) => {
         label={translate('login.save_device')}
         onValueChange={setSaveDevice}
         style={{
-          marginTop: 20,
-          marginBottom: 20
+          marginTop: spacing.margin,
+          marginBottom: spacing.margin / 2
         }}
         labelStyle={{
           color: color.textBlack,
@@ -120,7 +120,7 @@ export const Otp = observer((props: Props) => {
         onPress={handleAuthenticate}
         style={{
           width: '100%',
-          marginTop: 10
+          marginTop: spacing.margin / 2 
         }}
       />
     </View>

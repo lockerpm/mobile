@@ -52,8 +52,8 @@ export const IntroScreen = () => {
           source={item.img}
           style={{
             flex: 9,
-            maxWidth: "95%",
-            maxHeight: "95%",
+            maxWidth: "80%",
+            maxHeight: "90%",
             alignSelf: "center"
           }}
         />

@@ -33,7 +33,7 @@ export const ReferFriendMenuItem = (props: {onPress: Function}) => {
                 <Text preset="bold" style={{
                     color: color.white,
                     maxWidth: Dimensions.get('screen').width - 200
-                }} text={isTablet() ? translate('refer_friend.menu_title_tablet') : translate('refer_friend.menu_title')} />
+                }} text={isTablet ? translate('refer_friend.menu_title_tablet') : translate('refer_friend.menu_title')} />
             </View>
             <View style={{
                 backgroundColor: color.primary,
@@ -46,7 +46,7 @@ export const ReferFriendMenuItem = (props: {onPress: Function}) => {
                 justifyContent: "space-between"
             }}>
 
-                <Text preset="bold" style={{ color: color.white }} text={isTablet() ? translate('refer_friend.navigate_tablet') : translate('refer_friend.navigate')} />
+                <Text preset="bold" style={{ color: color.white }} text={isTablet ? translate('refer_friend.navigate_tablet') : translate('refer_friend.navigate')} />
                 <FontAwesomeIcon
                     name="angle-right"
                     size={18}

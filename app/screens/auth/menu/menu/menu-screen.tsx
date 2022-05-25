@@ -295,7 +295,7 @@ export const MenuScreen = observer(() => {
         </View>
 
         {/*Refer friend */}
-        <ReferFriendMenuItem onPress={isTablet() ? (()=> onShare()) : (() => navigation.navigate('refer_friend'))} />
+        <ReferFriendMenuItem onPress={isTablet ? (()=> onShare()) : (() => navigation.navigate('refer_friend'))} />
         
 
         <View style={ITEM_CONTAINER}>
@@ -319,7 +319,7 @@ export const MenuScreen = observer(() => {
           }}>
             <Text style={{ marginBottom: 2 }}>{translate('menu.product_of')}</Text>
             <Image source={require('./cystack.png')} style={{
-              width: 78, height: 22
+              width: 78, height: 24
             }} />
           </View>
           <Text style={{ marginTop: 8 }}>Locker - {appVersion}</Text>
