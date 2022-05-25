@@ -680,6 +680,8 @@
     "synchronizing": "Synchronizing..."
   },
   "refer_friend": {
+    "menu_title": "Invite friends and get Premium for Free",
+    "navigate": "Show me how",
     "title": "Invite friends and get Premium for Free",
     "desc": "When invited (your friend creates Master Password successfully), both you and your friends will receive 1 month of Locker Premium for Free",
     "btn": "Share",

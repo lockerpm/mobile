@@ -13,7 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Invitation, InvitationData } from "./invitation"
 import { getBuildNumber, getVersion } from "react-native-device-info"
-import { useOrientation } from "../../../../services/mixins/orientation"
+import { ReferFriendMenuItem } from "./refer-friend-menu-item"
 import PlanIcon from './star.svg'
 import InviteIcon from './invite.svg'
 import SettingsIcon from './gear.svg'
@@ -276,16 +276,8 @@ export const MenuScreen = observer(() => {
           }
         </View>
 
-        <View style={{
-          marginBottom: 20,
-        }}>
-          <TouchableOpacity
-            onPress={() => setShowShareModal(true)}>
-            <Image source={user.language === "en" ? require('./refer-friend-en.png') : require('./refer-friend-vi.png')} style={{
-              width: "100%"
-            }} />
-          </TouchableOpacity>
-        </View>
+        {/*Refer friend */}
+        <ReferFriendMenuItem />
 
 
         <View style={ITEM_CONTAINER}>
