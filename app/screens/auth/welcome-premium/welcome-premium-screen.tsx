@@ -57,7 +57,7 @@ export const WelcomePremiumScreen = () => {
                 }} />
                 <Image source={require('./HighFive.png')} style={{
                     marginTop: 24,
-                    width: 155,
+                    width: 155 ,
                     height: 163
                 }} />
 
