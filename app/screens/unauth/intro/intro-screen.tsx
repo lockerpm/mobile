@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { View, TouchableOpacity } from "react-native"
 import { AutoImage as Image, Text, Layout, Button } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
-import { commonStyles, fontSize } from "../../../theme"
+import { commonStyles, fontSize, spacing } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../services/mixins"
-import { useOrientation, Orientation } from "../../../services/mixins/orientation"
+import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
 
 export const IntroScreen = () => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
-  const orientation = useOrientation()
+  const { isPortrait, isTablet } = useAdaptiveLayoutMixins()
 
   const tabs = [
     {
@@ -44,27 +44,28 @@ export const IntroScreen = () => {
           justifyContent: "space-around",
           alignContent: "center",
           alignItems: 'center',
-          paddingHorizontal: 37,
-          flexDirection: orientation == Orientation.LANDSCAPE ? "row" : "column"
+          flexDirection: isTablet ? "column" : isPortrait ? "column" : "row"
         }]}
       >
         <Image
           key={index}
           source={item.img}
           style={{
-            width: orientation == Orientation.LANDSCAPE ? 350 : "100%",
-            maxWidth: 600,
+            flex: 9,
+            maxWidth: "80%",
+            maxHeight: "90%",
             alignSelf: "center"
           }}
         />
-        <View>
+        {!(!isTablet && !isPortrait) && <View style={{
+          flex: 1,
+        }}>
           <Text preset="header" text={item.title} style={{
+            flex: 2,
             alignSelf: "center",
-            marginTop: 16,
-            marginBottom: 10
           }} />
-          <Text text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: 300 }} />
-        </View>
+          <Text text={item.desc} style={{ textAlign: 'center',  flex: 1}} />
+        </View>}
 
       </View>
     )
@@ -107,9 +108,9 @@ export const IntroScreen = () => {
       footer={footer}
       noScroll
     >
-      <View style={{ flex: 1, justifyContent: 'center', marginBottom: 10}}>
+      <View style={{ flex: 1, justifyContent: 'center', marginBottom: 10 }}>
         {/* Tabs */}
-        <View style={{ flex: 3, minHeight: 300}}>
+        <View style={{ flex: 5, minHeight: 300 }}>
           <TabView
             renderTabBar={() => null}
             navigationState={{ index, routes }}
@@ -125,11 +126,11 @@ export const IntroScreen = () => {
               <TouchableOpacity
                 key={i}
                 style={{
-                  height: 8,
-                  width: 8,
-                  borderRadius: 8,
-                  marginVertical: 15,
-                  marginHorizontal: 4,
+                  height: spacing.smaller,
+                  width: spacing.smaller,
+                  borderRadius: spacing.smaller,
+                  marginVertical: spacing.medium,
+                  marginHorizontal: spacing.tiny,
                   backgroundColor: i === index ? color.primary : color.palette.lightGray
                 }}
                 onPress={() => setIndex(i)}
