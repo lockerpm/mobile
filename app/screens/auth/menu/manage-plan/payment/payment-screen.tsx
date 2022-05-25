@@ -184,7 +184,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
   // Render screen
   return (
     <Layout
-      // isContentLoading={loading}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
       <View style={styles.header}>
@@ -199,11 +198,14 @@ export const PaymentScreen = observer(function PaymentScreen() {
           />
         </TouchableOpacity>
       </View>
+
+
+
       <View style={{ top: 0, height: 310, width: "100%", zIndex: 1, flex: 1 }}>
         <PremiumBenefits benefitTab={route.params.benefitTab} />
       </View>
 
-      <View style={[styles.payment, { backgroundColor: color.background }]}>
+      <View style={[styles.payment,{backgroundColor: color.background}]}>
         <Segment />
         <PricePlan
           onPress={setEnable}
@@ -223,8 +225,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
           </Text>
         </Button>} */}
       </View>
-
-
     </Layout>
   )
 })

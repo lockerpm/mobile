@@ -53,7 +53,7 @@ export const PremiumBenefits = (props: { benefitTab: number }) => {
           </View>
 
           <View style={{ height: "20%" }}>
-            <Text preset="black" text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: "90%"}} />
+            <Text preset="black" text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: "90%" }} />
           </View>
         </View>
       )
