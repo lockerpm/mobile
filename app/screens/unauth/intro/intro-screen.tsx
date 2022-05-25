@@ -5,13 +5,15 @@ import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../services/mixins"
-import { useOrientation, Orientation } from "../../../services/mixins/orientation"
+import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
 
 export const IntroScreen = () => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
-  const {orientation} = useOrientation()
+  const {isPortrait} = useAdaptiveLayoutMixins()
 
+  console.log(isPortrait)
+  
   const tabs = [
     {
       img: require("./intro1.png"),
@@ -45,15 +47,15 @@ export const IntroScreen = () => {
           alignContent: "center",
           alignItems: 'center',
           paddingHorizontal: 37,
-          flexDirection: orientation == Orientation.LANDSCAPE ? "row" : "column"
+          flexDirection: !isPortrait ? "row" : "column"
         }]}
       >
         <Image
           key={index}
           source={item.img}
           style={{
-            width: orientation == Orientation.LANDSCAPE ? 350 : "100%",
-            maxWidth: 600,
+            width: !isPortrait ? 350 : "100%",
+            maxWidth: "100%",
             alignSelf: "center"
           }}
         />

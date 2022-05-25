@@ -683,6 +683,8 @@
   "refer_friend": {
     "menu_title": "Mời thêm bạn và nhận miễn phí gói Premium",
     "navigate": "Mời ngay thôi",
+    "menu_title_tablet": "Mời bạn bè trải nghiệm Locker với 1 tháng Premium miễn phí",
+    "navigate_tablet": "Chia sẻ ngay",
     "title": "Mời bạn bè cùng trải nghiệm Locker Premium",
     "desc": "Khi bạn bè của bạn đăng kí tài khoản và tạo Master Password thành công, bạn và người ấy sẽ nhận được 1 tháng sử dụng Locker Premium miễn phí",
     "btn": "Chia sẻ",
