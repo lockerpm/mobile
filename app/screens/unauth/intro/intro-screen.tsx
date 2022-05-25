@@ -10,7 +10,7 @@ import { useOrientation, Orientation } from "../../../services/mixins/orientatio
 export const IntroScreen = () => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
-  const orientation = useOrientation()
+  const {orientation} = useOrientation()
 
   const tabs = [
     {

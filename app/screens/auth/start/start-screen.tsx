@@ -80,7 +80,6 @@ export const StartScreen = observer(() => {
       return
     }
 
-
     // Show biometric intro
     if (user.plan?.alias != PlanType.FREE && !uiStore.showWelcomePremium) {
       uiStore.setShowWelcomePremium(true)
