@@ -269,7 +269,7 @@ export const UserModel = types
       return res
     },
 
-    socialLogin: async (payload: { provider: string, access_token: string }) => {
+    socialLogin: async (payload: { provider: string, access_token?: string, code?: string }) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.socialLogin(payload)
       if (res.kind === "ok") {
