@@ -7,7 +7,7 @@ import { useStores } from '../../models'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { load, PushNotiData, remove, StorageKey } from '../../utils/storage'
 import { translate as tl, TxKeyPath } from "../../i18n"
-import { GET_LOGO_URL, MAX_CIPHER_SELECTION } from '../../config/constants'
+import { GET_LOGO_URL, MASTER_PW_MIN_LENGTH, MAX_CIPHER_SELECTION } from '../../config/constants'
 import i18n from "i18n-js"
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { GeneralApiProblem } from '../api/api-problem'
@@ -284,10 +284,9 @@ export const MixinsProvider = observer((props: {
     let isValid = true
     let error = ''
 
-    const MIN_LENGTH = 8
-    if (password.length && password.length < MIN_LENGTH) {
+    if (password.length && password.length < MASTER_PW_MIN_LENGTH) {
       isValid = false
-      error = translate('policy.min_password_length', { length: MIN_LENGTH })
+      error = translate('policy.min_password_length', { length: MASTER_PW_MIN_LENGTH })
     }
 
     return {

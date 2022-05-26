@@ -17,7 +17,7 @@ export interface ActionSheetItemProps {
 /**
  * Describe your component here
  */
-export const ActionSheetItem = function ActionSheetItem(props: ActionSheetItemProps) {
+export const ActionSheetItem = (props: ActionSheetItemProps) => {
   const { style, children, onPress, disabled, border } = props
   const { color } = useMixins()
 

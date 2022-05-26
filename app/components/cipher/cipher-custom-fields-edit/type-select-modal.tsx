@@ -1,8 +1,10 @@
-import React, { useState } from "react"
-import { Modal } from "../../modal/modal"
-import { DropdownPicker } from "../../dropdown-picker/dropdown-picker"
-import { Button } from "../../button/button"
+import React from "react"
 import { FieldType } from "../../../../core/enums"
+import { ActionSheet, ActionSheetContent, ActionSheetItem } from "../../action-sheet"
+import { Text } from "../../text/text"
+import { View } from "react-native"
+import { Divider } from "../../divider/divider"
+import { commonStyles } from "../../../theme"
 
 
 interface Props {
@@ -16,58 +18,63 @@ export const TypeSelectModal = (props: Props) => {
   
   // --------------- PARAMS ----------------
 
-  const [type, setType] = useState(FieldType.Text)
-
   // --------------- COMPUTED ----------------
 
-  const types = [
+  const types = [ 
     {
-      value: FieldType.Boolean,
-      label: 'Boolean'
+      value: FieldType.Text,
+      label: 'Text'
     },
     {
       value: FieldType.Hidden,
       label: 'Password'
     },
     {
-      value: FieldType.Text,
-      label: 'Text'
+      value: FieldType.Boolean,
+      label: 'Boolean'
     }
   ]
 
   // --------------- METHODS ----------------
-
-  const handleSelect = async () => {
-    onClose()
-    onSelect(type)
-  }
 
   // --------------- EFFECT ----------------
 
   // --------------- RENDER ----------------
 
   return (
-    <Modal
+    <ActionSheet
       isOpen={isOpen}
       onClose={onClose}
-      title={'What type of custom field do you want to add?'}
     >
-      <DropdownPicker
-        placeholder={'Type'}
-        value={type}
-        items={types}
-        setValue={setType}
-        setItems={() => {}}
-      />
+      <View style={{ width: '100%', paddingHorizontal: 20 }}>
+        <Text
+          preset="semibold"
+          text={'Add new field'}
+        />
+      </View>
 
-      <Button
-        text={'Ok'}
-        onPress={handleSelect}
-        style={{
-          width: '100%',
-          marginTop: 60
-        }}
-      />
-    </Modal>
+      <Divider style={{ marginTop: 10 }} />
+
+      <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
+        {
+          types.map((item) => (
+            <ActionSheetItem
+              key={item.value}
+              onPress={() => {
+                onSelect(item.value)
+                onClose()
+              }}
+            >
+              <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+                <Text
+                  preset="black"
+                  text={item.label}
+                />
+              </View>
+            </ActionSheetItem>
+          ))
+        }
+      </ActionSheetContent>
+    </ActionSheet>
   )
 }

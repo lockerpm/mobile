@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Text } from "../../text/text"
-import { commonStyles, fontSize } from "../../../theme"
+import { commonStyles, fontSize, spacing } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { FieldView } from "../../../../core/models/view"
 import { FieldType } from "../../../../core/enums"
@@ -69,26 +69,15 @@ export const CustomFieldsEdit = observer((props: Props) => {
       {/* Modal end */}
 
       {/* Label */}
-      <View style={[commonStyles.SECTION_PADDING, commonStyles.CENTER_HORIZONTAL_VIEW, {
-        justifyContent: 'space-between'
-      }]}>
+      <View style={commonStyles.SECTION_PADDING}>
         <Text
           text={translate('common.custom_fields').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
-
-        <Button
-          preset="link"
-          onPress={() => {
-            setShowTypeModal(true)
-          }}
-        >
-          <AntDesign name="pluscircleo" size={20} color={color.primary} />
-        </Button>
       </View>
       {/* Label end */}
 
-      {/* Others */}
+      {/* Data */}
       <View
         style={[commonStyles.SECTION_PADDING, {
           backgroundColor: color.background,
@@ -114,8 +103,27 @@ export const CustomFieldsEdit = observer((props: Props) => {
           ))
         }
         {/* List end */}
+
+        <Button
+          preset="link"
+          onPress={() => {
+            setShowTypeModal(true)
+          }}
+          style={{
+            justifyContent: 'flex-start'
+          }}
+        >
+          <AntDesign name="pluscircleo" size={20} color={color.primary} />
+          <Text
+            text={translate('common.add_new_field')}
+            style={{
+              marginLeft: spacing[3],
+              color: color.primary
+            }}
+          />
+        </Button>
       </View>
-      {/* Others end */}
+      {/* Data end */}
     </View>
   )
 })
