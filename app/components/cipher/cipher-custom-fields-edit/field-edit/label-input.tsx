@@ -6,12 +6,11 @@ import { fontSize } from '../../../../theme'
 
 type Props = {
   value: string
-  placeholder: string
   onChange: (val: string) => void
 }
 
 export const LabelInput = (props: Props) => {
-  const { value, onChange, placeholder } = props
+  const { value, onChange } = props
   const { color } = useMixins()
 
   const [isFocus, setIsFocus] = useState(false)
@@ -24,7 +23,6 @@ export const LabelInput = (props: Props) => {
       <TextInput
         value={value}
         onChangeText={onChange}
-        placeholder={placeholder}
         placeholderTextColor={color.text}
         selectionColor={color.primary}
         style={{

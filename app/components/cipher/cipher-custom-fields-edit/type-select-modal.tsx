@@ -5,6 +5,7 @@ import { Text } from "../../text/text"
 import { View } from "react-native"
 import { Divider } from "../../divider/divider"
 import { commonStyles } from "../../../theme"
+import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 
 
 interface Props {
@@ -15,25 +16,16 @@ interface Props {
 
 export const TypeSelectModal = (props: Props) => {
   const { isOpen, onClose, onSelect } = props
+  const { getCustomFieldDataFromType } = useCipherHelpersMixins()
   
   // --------------- PARAMS ----------------
 
   // --------------- COMPUTED ----------------
 
-  const types = [ 
-    {
-      value: FieldType.Text,
-      label: 'Text'
-    },
-    {
-      value: FieldType.Hidden,
-      label: 'Password'
-    },
-    {
-      value: FieldType.Boolean,
-      label: 'Boolean'
-    }
-  ]
+  const types = Object.keys(FieldType).filter(k => isNaN(Number(k))).map(key => {
+    const { label, type } = getCustomFieldDataFromType(FieldType[key])
+    return { label, value: type }
+  })
 
   // --------------- METHODS ----------------
 
