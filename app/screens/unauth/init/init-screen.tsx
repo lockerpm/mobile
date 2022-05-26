@@ -99,15 +99,13 @@ export const InitScreen = observer(() => {
     // Check savePassword
     const isOnSaveLogin = await checkOnSaveLogin()
 
-    navigation.navigate('intro')
-      return
     // Testing
-    if (__DEV__) {
-      // navigation.navigate('createMasterPassword')
-      navigation.navigate('intro')
-      return
-    }
-    
+    // if (__DEV__) {
+    //   // navigation.navigate('createMasterPassword')
+    //   navigation.navigate('intro')
+    //   return
+    // }
+
     // Logged in?
     if (!user.isLoggedIn) {
       if (!user.introShown && !isAutoFill && !isOnSaveLogin && !isAutoFillItem) {

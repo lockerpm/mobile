@@ -101,7 +101,9 @@ export type PrimaryParamList = {
     benefitTab?: 0 | 1 | 2 | 3,
     family?: boolean
   }
-  refer_friend: undefined
+  refer_friend: {
+    referLink: string | null
+  }
   invite_member: undefined
   settings: undefined
   changeMasterPassword: undefined
