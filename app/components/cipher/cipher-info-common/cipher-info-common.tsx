@@ -64,11 +64,12 @@ export const CipherInfoCommon = observer((props: CipherInfoCommonProps) => {
       {
         (cipher.fields || []).map((item, index) => (
           <FloatingInput
+            copyAble
             key={index}
             editable={false}
             isPassword={item.type === FieldType.Hidden}
             label={item.name}
-            value={item.name}
+            value={item.value}
             style={{
               marginTop: 20
             }}

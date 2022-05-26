@@ -118,6 +118,7 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
                         <TextInput
                             placeholder={translate('invite_member.placeholder')}
                             placeholderTextColor={color.text}
+                            selectionColor={color.primary}
                             onChangeText={setEmail}
                             value={email}
                             clearButtonMode="unless-editing"
