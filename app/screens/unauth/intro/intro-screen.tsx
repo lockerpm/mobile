@@ -51,17 +51,17 @@ export const IntroScreen = () => {
           key={index}
           source={item.img}
           style={{
-            flex: 9,
+            flex: 7,
             maxWidth: "80%",
             maxHeight: "90%",
             alignSelf: "center"
           }}
         />
         {!(!isTablet && !isPortrait) && <View style={{
-          flex: 1,
+          flex: 2,
         }}>
           <Text preset="header" text={item.title} style={{
-            flex: 2,
+            flex: 1,
             alignSelf: "center",
           }} />
           <Text text={item.desc} style={{ textAlign: 'center',  flex: 1}} />

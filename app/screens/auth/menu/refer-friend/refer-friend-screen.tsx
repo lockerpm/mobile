@@ -4,22 +4,25 @@ import { Button, Text } from "../../../../components"
 import { useStores } from "../../../../models"
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../../../../services/mixins"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, RouteProp, useRoute } from "@react-navigation/native"
 import LinearGradient from 'react-native-linear-gradient';
 import { IS_IOS } from "./../../../../config/constants"
+import { PrimaryParamList } from "../../../../navigators"
 import Feather from 'react-native-vector-icons/Feather'
+
+type ScreenProp = RouteProp<PrimaryParamList, 'refer_friend'>;
 
 export const ReferFriendScreen = observer(function ReferFriendScreen() {
     const navigation = useNavigation()
+    const route = useRoute<ScreenProp>();
     const { user } = useStores()
-    const { translate, color, notifyApiError, copyToClipboard } = useMixins()
-    const [referLink, setReferLink] = useState<string>(null)
+    const { translate, color, copyToClipboard } = useMixins()
     const gradientColor = IS_IOS ? ['#F1F2F3', '#D5EBD920', '#26833460'] : ['#FFFFFF', '#D5EBD920', '#26833460']
 
     const onShare = async () => {
         try {
             const result = await Share.share({
-                message: translate("refer_friend.refer_header") + referLink,
+                message: translate("refer_friend.refer_header") + route.params.referLink,
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {
@@ -35,18 +38,6 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
             alert(error.message);
         }
     };
-
-    useEffect(() => {
-        const getLink = async () => {
-            const res = await user.getReferLink()
-            if (res.kind === "ok") {
-                setReferLink(res.data.referral_link)
-            } else {
-                notifyApiError(res)
-            }
-        }
-        getLink()
-    }, [])
 
     // ----------------------- RENDER -----------------------
     return (
@@ -100,7 +91,7 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
 
 
                 <TouchableOpacity
-                    onPress={() => copyToClipboard(translate("refer_friend.refer_header") + referLink)}
+                    onPress={() => copyToClipboard(translate("refer_friend.refer_header") + route.params.referLink)}
                     style={{
                         borderColor: "black",
                         borderRadius: 4,
@@ -109,7 +100,7 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
                         flexDirection: "row"
                     }}>
                     <Feather name="link" size={18} />
-                    <Text text={referLink ? referLink : "Plack Holder"} style={{ marginLeft: 8 }} />
+                    <Text text={route.params.referLink ? route.params.referLink : "Plack Holder"} style={{ marginLeft: 8 }} />
                 </TouchableOpacity>
             </View>
 

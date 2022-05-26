@@ -184,7 +184,7 @@ export const MenuScreen = observer(() => {
 
   const onShare = async () => {
     try {
-        const result = await Share.share({
+        await Share.share({
             message: translate("refer_friend.refer_header") + referLink,
         });
     } catch (error) {
@@ -295,7 +295,9 @@ export const MenuScreen = observer(() => {
         </View>
 
         {/*Refer friend */}
-        <ReferFriendMenuItem onPress={isTablet ? (()=> onShare()) : (() => navigation.navigate('refer_friend'))} />
+        <ReferFriendMenuItem onPress={isTablet ? (()=> onShare()) : (() => navigation.navigate('refer_friend', {
+          referLink: referLink
+        }))} />
         
 
         <View style={ITEM_CONTAINER}>
