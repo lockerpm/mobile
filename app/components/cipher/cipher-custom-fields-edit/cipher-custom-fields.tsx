@@ -10,6 +10,7 @@ import { FieldEdit } from "./field-edit"
 import { TypeSelectModal } from "./type-select-modal"
 import { Button } from "../../button/button"
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 
 
 type Props = {
@@ -23,6 +24,7 @@ type Props = {
 export const CustomFieldsEdit = observer((props: Props) => {
   const { fields, setFields } = props
   const { translate, color } = useMixins()
+  const { getCustomFieldDataFromType } = useCipherHelpersMixins()
 
   // -------------- PARAMS --------------
 
@@ -31,8 +33,10 @@ export const CustomFieldsEdit = observer((props: Props) => {
   // -------------- METHODS --------------
 
   const addNewField = (type: FieldType) => {
+    const { label } = getCustomFieldDataFromType(type)
     const newField = new FieldView()
     newField.type = type
+    newField.name = label
     setFields([...fields, newField])
   }
 

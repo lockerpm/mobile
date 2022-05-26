@@ -24,7 +24,7 @@ type Props = {
 
 export const FieldEdit = memo((props: Props) => {
   const { type, name, value, onChange, onDelete } = props
-  const { translate, color } = useMixins()
+  const { color, translate } = useMixins()
 
   return (
     <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -34,9 +34,9 @@ export const FieldEdit = memo((props: Props) => {
         <LabelInput
           value={name}
           onChange={val => onChange({ type, value, name: val })}
-          placeholder={translate('common.name')}
         />
         <TextField
+          type={type}
           value={value}
           onChange={val => onChange({ type, name, value: val })}
           placeholder={translate('common.value')}

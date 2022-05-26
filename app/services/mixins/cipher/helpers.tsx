@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { createContext, useContext } from 'react'
 import { useMixins } from '..'
-import { CipherType, SecureNoteType } from '../../../../core/enums'
+import { CipherType, FieldType, SecureNoteType } from '../../../../core/enums'
 import { CardView, CipherView, IdentityView, LoginUriView, LoginView, SecureNoteView } from '../../../../core/models/view'
 import { BROWSE_ITEMS } from '../../../common/mappings'
 import { toCryptoWalletData } from '../../../utils/crypto'
@@ -13,7 +13,8 @@ const defaultData = {
   newCipher: (type: CipherType) => { return new CipherView() },
   getPasswordStrength: (password: string) => ({ score: 0 }),
   getCipherDescription: (cipher: CipherView) => '',
-  getCipherInfo: (cipher: CipherView) => ({} as { svg?: any, img: any, backup: any, path: string }) 
+  getCipherInfo: (cipher: CipherView) => ({} as { svg?: any, img: any, backup: any, path: string }),
+  getCustomFieldDataFromType: (type: FieldType) => ({ type: FieldType.Text, label: '' })
 }
 
 export const CipherHelpersMixinsContext = createContext(defaultData)
@@ -22,7 +23,7 @@ export const CipherHelpersMixinsProvider = observer((props: { children: boolean 
   const {
     passwordGenerationService
   } = useCoreService()
-  const { getWebsiteLogo } = useMixins()
+  const { getWebsiteLogo, translate } = useMixins()
 
   // ------------------ METHODS ---------------------------
   
@@ -112,6 +113,41 @@ export const CipherHelpersMixinsProvider = observer((props: { children: boolean 
         }
     }
   }
+
+  // Get custom field data from type
+  const getCustomFieldDataFromType = (type: FieldType) => {
+    const res = {
+      type,
+      label: translate('common.name')
+    }
+    switch (type) {
+      case FieldType.Text:
+        res.label = translate('common.text')
+        break
+      case FieldType.Hidden:
+        res.label = translate('common.password')
+        break
+      case FieldType.URL:
+        res.label = 'URL'
+        break
+      case FieldType.Email:
+        res.label = 'Email'
+        break
+      case FieldType.Address:
+        res.label = translate('common.address')
+        break
+      case FieldType.Date:
+        res.label = translate('common.date')
+        break
+      case FieldType.MonthYear:
+        res.label = translate('common.month_year')
+        break
+      case FieldType.Phone:
+        res.label = translate('common.phone')
+        break
+    }
+    return res
+  }
   
   // -------------------- REGISTER FUNCTIONS ------------------
 
@@ -119,7 +155,8 @@ export const CipherHelpersMixinsProvider = observer((props: { children: boolean 
     newCipher,
     getPasswordStrength,
     getCipherDescription,
-    getCipherInfo
+    getCipherInfo,
+    getCustomFieldDataFromType
   }
 
   return (
