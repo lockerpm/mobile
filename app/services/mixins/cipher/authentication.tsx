@@ -299,7 +299,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       await logoutAllServices()
   
       // Reset shared data
-      await saveShared('autofill', '')
+      await saveShared('autofill', '{}')
 
       // Reset push noti data
       await remove(StorageKey.PUSH_NOTI_DATA)

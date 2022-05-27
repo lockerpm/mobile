@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select, CustomFieldsEdit
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -63,6 +63,7 @@ export const IdentityEditScreen = observer(() => {
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
+  const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
 
   // ------------------ EFFECTS -----------------------
 
@@ -112,6 +113,7 @@ export const IdentityEditScreen = observer(() => {
     data.postalCode = zip
     data.country = country
 
+    payload.fields = fields
     payload.name = name
     payload.notes = note
     payload.folderId = folder
@@ -368,6 +370,13 @@ export const IdentityEditScreen = observer(() => {
         }
       </View>
       {/* Address end */}
+
+      {/* Custom fields */}
+      <CustomFieldsEdit
+        fields={fields}
+        setFields={setFields}
+      />
+      {/* Custom fields end */}
 
       {/* Others */}
       <CipherOthersInfo

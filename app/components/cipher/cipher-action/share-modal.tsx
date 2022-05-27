@@ -135,6 +135,7 @@ export const ShareModal = observer((props: Props) => {
           onChangeText={setEmail}
           placeholder={translate('common.email')}
           placeholderTextColor={color.text}
+          selectionColor={color.primary}
           onSubmitEditing={addEmail}
           style={{
             color: color.textBlack,
