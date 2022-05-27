@@ -14,6 +14,8 @@ import { commonStyles, fontSize } from "../../../theme"
 import { FOLDER_IMG } from "../../../common/mappings"
 import { CollectionView } from "../../../../core/models/view/collectionView"
 import { SharedMemberType } from "../../../services/api"
+import { FloatingInput } from "../../floating-input"
+import { FieldType } from "../../../../core/enums"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center"
@@ -27,7 +29,7 @@ export interface CipherInfoCommonProps {
 /**
  * Describe your component here
  */
-export const CipherInfoCommon = observer(function CipherInfoCommon(props: CipherInfoCommonProps) {
+export const CipherInfoCommon = observer((props: CipherInfoCommonProps) => {
   const { style, cipher } = props
   const { getTeam, translate } = useMixins()
   const { user, folderStore, collectionStore, cipherStore } = useStores()
@@ -36,7 +38,8 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
 
   const [showFullShareMember, setShowFullShareMember] = React.useState<boolean>(false)
 
-  // Computed
+  // ------------- COMPUTED ---------------
+
   const collections = (() => {
     return filter(collectionStore.collections, e => cipher.collectionIds && cipher.collectionIds.includes(e.id)) || []
   })()
@@ -53,10 +56,28 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
     return { isShared: false, member: [] }
   })()
 
-
+  // ------------- RENDER ---------------
 
   return (
     <View style={styles}>
+      {/* Custom fields */}
+      {
+        (cipher.fields || []).map((item, index) => (
+          <FloatingInput
+            copyAble
+            key={index}
+            editable={false}
+            isPassword={item.type === FieldType.Hidden}
+            label={item.name}
+            value={item.value}
+            style={{
+              marginTop: 20
+            }}
+          />
+        ))
+      }
+      {/* Custom fields end */}
+
       {/* Owned by */}
       <Text
         text={translate('common.owned_by')}
@@ -70,11 +91,15 @@ export const CipherInfoCommon = observer(function CipherInfoCommon(props: Cipher
           || translate('common.me')
         }
       />
+      {/* Owned by end */}
 
       {/* Shared with */}
-
-      <SharedWith shareMember={shareMember} show={showFullShareMember} setShow={setShowFullShareMember} />
-
+      <SharedWith 
+        shareMember={shareMember} 
+        show={showFullShareMember} 
+        setShow={setShowFullShareMember}
+      />
+      {/* Shared with end */}
 
       {/* Folder */}
       <Text
