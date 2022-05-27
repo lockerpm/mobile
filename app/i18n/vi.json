@@ -542,8 +542,15 @@
       "step_5": "5. Chọn \"Locker\""
     },
     "android": {
+      "btn" : "Mở cài đặt",
+      "other_permission" : {
+        "header" : "Xiaomi Permission",
+        "name_xiaomi": "Hiện thị cửa sổ pop-up khi chạy trong nền",
+        "desc": "Kích hoạt quyền này để cho phép dịch vụ tự động điền của Locker hiện thị giao diện phục vụ người dùng chọn thông tin đăng nhập cho ứng dụng"
+      },
       "android_autofill": {
-        "name": "Android Auto-fill",
+        "header" : "Dịch vụ tự động điền",
+        "name": "Tự động điền mật khẩu",
         "desc": "Dịch vụ tự động điền của Locker sử dụng AutoFill Framework của Android để hỗ trợ điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn"
       }
     }

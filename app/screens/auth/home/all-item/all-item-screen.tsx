@@ -10,8 +10,7 @@ import { Alert, BackHandler, Image, View, Text, TouchableOpacity, Linking, AppSt
 import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { IS_IOS, MAX_CIPHER_SELECTION } from "../../../../config/constants"
-import RNAndroidSettingsTool from "react-native-android-settings-tool"
+import { MAX_CIPHER_SELECTION } from "../../../../config/constants"
 import { AutofillServiceEnabled } from "../../../../utils/Autofill"
 
 export const AllItemScreen = observer(() => {
@@ -204,18 +203,8 @@ export const AllItemScreen = observer(() => {
 
 
 const SuggestEnableAutofill = ({ isShow, onClose }) => {
+  const navigation = useNavigation()
   const { translate } = useMixins()
-  const handleOpenAutofillSetting = () => {
-    if (IS_IOS) {
-      Linking.canOpenURL('app-settings:').then(supported => {
-        if (supported) {
-          Linking.openURL('App-prefs:root=General&path=Passwords')
-        }
-      })
-    } else {
-      RNAndroidSettingsTool.ACTION_REQUEST_SET_AUTOFILL_SERVICE('packge:com.cystack.locker')
-    }
-  }
 
   return isShow && <View
     style={{
@@ -240,7 +229,7 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
       <Text >{translate("all_items.enable_autofill.content")}</Text>
       <TouchableOpacity
         onPress={() => {
-          handleOpenAutofillSetting()
+          navigation.navigate('autofillService')
         }}>
         <Text style={{
           marginTop: 10,

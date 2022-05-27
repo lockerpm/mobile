@@ -542,7 +542,14 @@
       "step_5": "5. Select \"Locker\""
     },
     "android": {
+      "btn" : "Go setting",
+      "other_permission" : {
+        "header" : "Xiaomi Permission",
+        "name_xiaomi": "Display pop-up windows while running in the background",
+        "desc": "Enable this permission to allow Locker's autofill service to display the user interface for selecting credentials for the application."
+      },
       "android_autofill": {
+        "header" : "Autofill Service",
         "name": "Android Auto-fill",
         "desc": "The Locker auto-fill service uses the Android Autofill Framework to assist in filling logins into other apps on your device"
       }
