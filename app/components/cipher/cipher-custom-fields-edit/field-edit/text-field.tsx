@@ -21,6 +21,17 @@ export const TextField = (props: Props) => {
   const [isFocus, setIsFocus] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
 
+  const keyboardType = (() => {
+    switch (type) {
+      case FieldType.Phone:
+        return 'phone-pad'
+      case FieldType.URL:
+        return 'url'
+      default:
+        return 'default'
+    }
+  })()
+
   return (
     <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
       borderBottomWidth: 1,
@@ -33,6 +44,7 @@ export const TextField = (props: Props) => {
         placeholder={placeholder}
         placeholderTextColor={color.text}
         selectionColor={color.primary}
+        keyboardType={keyboardType}
         style={{
           color: color.textBlack,
           fontSize: fontSize.p,
