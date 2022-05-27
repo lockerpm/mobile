@@ -8,6 +8,7 @@ import { Button } from '../../../button/button'
 import { LabelInput } from './label-input'
 import { TextField } from './text-field'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { DateField } from './date-field'
 
 
 type Props = {
@@ -35,12 +36,23 @@ export const FieldEdit = memo((props: Props) => {
           value={name}
           onChange={val => onChange({ type, value, name: val })}
         />
-        <TextField
-          type={type}
-          value={value}
-          onChange={val => onChange({ type, name, value: val })}
-          placeholder={translate('common.value')}
-        />
+        {
+          [FieldType.Date, FieldType.MonthYear].includes(type) ? (
+            <DateField
+              type={type}
+              value={value}
+              onChange={val => onChange({ type, name, value: val })}
+              placeholder={translate('common.value')}
+            />
+          ) : (
+            <TextField
+              type={type}
+              value={value}
+              onChange={val => onChange({ type, name, value: val })}
+              placeholder={translate('common.value')}
+            />  
+          )
+        }
       </View>
 
       <Button

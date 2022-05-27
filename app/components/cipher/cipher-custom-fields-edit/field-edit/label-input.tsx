@@ -28,7 +28,8 @@ export const LabelInput = (props: Props) => {
         style={{
           color: color.text,
           fontSize: fontSize.small,
-          paddingVertical: 0
+          paddingTop: 0,
+          paddingBottom: 4
         }}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
