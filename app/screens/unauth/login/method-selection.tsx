@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import {Text, Button } from "../../../components"
+import {Text, Button, RecaptchaChecker } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -29,12 +29,13 @@ export const MethodSelection = observer((props: Props) => {
   // ------------------ Params -----------------------
 
   const [sendingEmail, setIsSendingEmail] = useState(false)
+  const [recaptchaToken, setRecaptchaToken] = useState('')
 
   // ------------------ Methods ----------------------
 
   const sendEmail = async (data: any) => {
     setIsSendingEmail(true)
-    const res = await user.sendOtpEmail(username, password)
+    const res = await user.sendOtpEmail(username, password, recaptchaToken)
     setIsSendingEmail(false)
     if (res.kind === 'ok') {
       onSelect('mail', data)
@@ -63,6 +64,10 @@ export const MethodSelection = observer((props: Props) => {
 
   return (
     <View>
+      <RecaptchaChecker
+        onTokenLoad={setRecaptchaToken}
+      />
+
       <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
         marginBottom: 30
       }]}>
