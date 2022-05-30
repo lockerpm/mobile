@@ -16,7 +16,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.cystack.locker.autofill.activities.VerifyMasterPasswordActivity;
 import com.cystack.locker.autofill.parser.Parser;
 import com.cystack.locker.RNAutofillServiceAndroid;
 

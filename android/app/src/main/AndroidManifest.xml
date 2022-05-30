@@ -17,14 +17,6 @@
     android:requestLegacyExternalStorage="true"
     android:theme="@style/DeviceCredentialHandlerTheme"
   >
-    <activity
-        android:name=".autofill.activities.VerifyMasterPasswordActivity"
-        android:exported="false" />
-    <activity
-        android:name=".autofill.activities.LoginListActivity"
-        android:exported="false"
-        android:windowSoftInputMode="stateHidden" />
-
     <activity 
       android:name=".MainActivity" 
       android:exported="true"

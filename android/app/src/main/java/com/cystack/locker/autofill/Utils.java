@@ -156,7 +156,7 @@ public class Utils {
 
     public static void InitCredentialsStore(Context context, String id,  String encKey) {
         MMKV.initialize(context);
-        kv = MMKV.mmkvWithID(id, MMKV.MULTI_PROCESS_MODE, "envKey");
+        kv = MMKV.mmkvWithID(id, MMKV.MULTI_PROCESS_MODE, encKey);
     }
 
     public static void SetCredential(String key, AutofillItem value){
