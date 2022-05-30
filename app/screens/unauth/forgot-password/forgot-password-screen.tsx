@@ -8,7 +8,7 @@ import { Step3 } from "./step3"
 import { Step4 } from "./step4"
 
 
-export const ForgotPasswordScreen = observer(function ForgotPasswordScreen() {
+export const ForgotPasswordScreen = observer(() => {
   const navigation = useNavigation()
 
   // ------------------------------ PARAMS -------------------------------

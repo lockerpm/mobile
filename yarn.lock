@@ -14857,6 +14857,11 @@ react-native-reanimated@^2.6.0:
     setimmediate "^1.0.5"
     string-hash-64 "^1.0.3"
 
+react-native-recaptcha-that-works@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-recaptcha-that-works/-/react-native-recaptcha-that-works-1.2.0.tgz#3dae4d94338ad68b19e62068eb315735f9d05e80"
+  integrity sha512-ZlQYem11Lq3U/UEGEIUYkS18tQRPs5bCpjDo3DYU9ET/1H05wuRcDCgzm+jbnu9dUKSO+7xj4InW3y4Vj7urdg==
+
 react-native-redash@^12.0.3:
   version "12.6.1"
   resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-12.6.1.tgz#26ca12ce01eaafc154fe322b506c48ef1a76197f"

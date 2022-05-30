@@ -326,6 +326,7 @@ export type RegisterData = {
     country: string
     phone?: string
     keep_me_updated?: boolean
+    request_code: string
 }
 
 export type SessionLoginData = {
@@ -365,6 +366,7 @@ export type PasswordHintRequestData = {
 export type EmailOtpRequestData = {
     username: string
     password: string
+    request_code: string
 }
 
 export type LoginUri = {

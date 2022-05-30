@@ -3,7 +3,7 @@ import { Linking, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { Layout, AutoImage as Image, Text, FloatingInput, Button } from "../../../components";
+import { Layout, AutoImage as Image, Text, FloatingInput, Button, RecaptchaChecker } from "../../../components";
 import { useMixins } from "../../../services/mixins"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
@@ -32,6 +32,8 @@ export const SignupScreen = observer(() => {
   const [phone, setPhone] = useState('')
   const [phonePrefix, setPhonePrefix] = useState('+84')
   const [agreed, setAgreed] = useState(false)
+
+  const [recaptchaToken, setRecaptchaToken] = useState('')
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
@@ -100,7 +102,8 @@ export const SignupScreen = observer(() => {
       country,
       confirm_password: confirmPassword,
       full_name: fullname,
-      phone: phone ? phonePrefix + ' ' + phone : undefined
+      phone: phone ? phonePrefix + ' ' + phone : undefined,
+      request_code: recaptchaToken
     })
     setIsLoading(false)
     if (res.kind === 'ok') {
@@ -181,6 +184,10 @@ export const SignupScreen = observer(() => {
             code
           })
         }}
+      />
+
+      <RecaptchaChecker
+        onTokenLoad={setRecaptchaToken}
       />
       {/* Modal end */}
       

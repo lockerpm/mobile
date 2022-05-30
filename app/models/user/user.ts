@@ -219,9 +219,9 @@ export const UserModel = types
       return res
     },
 
-    sendOtpEmail: async (username: string, password: string) => {
+    sendOtpEmail: async (username: string, password: string, request_code: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.sendOtpEmail({ username, password })
+      const res = await userApi.sendOtpEmail({ username, password, request_code })
       return res
     },
 
@@ -231,9 +231,9 @@ export const UserModel = types
       return res
     },
 
-    resetPassword: async (username: string, method: string) => {
+    resetPassword: async (username: string, method: string, request_code: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.resetPassword({ username, method })
+      const res = await userApi.resetPassword({ username, method, request_code })
       return res
     },
 

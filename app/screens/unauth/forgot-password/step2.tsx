@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import {Text, Button } from "../../../components"
+import {Text, Button, RecaptchaChecker } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -19,7 +19,7 @@ type Props = {
 }
 
 
-export const Step2 = observer(function Step2(props: Props) {
+export const Step2 = observer((props: Props) => {
   const { user, uiStore } = useStores()
   const { translate, notifyApiError, color } = useMixins()
   const { methods, onSelect, goBack } = props
@@ -27,6 +27,7 @@ export const Step2 = observer(function Step2(props: Props) {
   // ------------------ Params -----------------------
 
   const [sendingEmail, setIsSendingEmail] = useState(false)
+  const [recaptchaToken, setRecaptchaToken] = useState('')
 
   // ------------------ Methods ----------------------
 
@@ -37,7 +38,7 @@ export const Step2 = observer(function Step2(props: Props) {
     }
 
     setIsSendingEmail(true)
-    const res = await user.resetPassword(data[0], 'mail')
+    const res = await user.resetPassword(data[0], 'mail', recaptchaToken)
     setIsSendingEmail(false)
     if (res.kind === 'ok') {
       uiStore.setLockResendOtpResetPasswordTime(Date.now() + 60 * 1000)
@@ -51,6 +52,10 @@ export const Step2 = observer(function Step2(props: Props) {
 
   return (
     <View>
+      <RecaptchaChecker
+        onTokenLoad={setRecaptchaToken}
+      />
+
       <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
         marginBottom: 30
       }]}>
