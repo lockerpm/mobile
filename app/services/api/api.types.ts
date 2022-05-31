@@ -115,6 +115,8 @@ export type GetPMTokenResult = {
 export type SocialLoginResult = {
     kind: "ok"
     data: {
+        is_first?:boolean
+        new_user?: boolean
         token: string
         tmp_token?: string
     }

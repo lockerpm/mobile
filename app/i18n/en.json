@@ -273,7 +273,8 @@
     "has_account": "Already have an account?",
     "terms": "terms",
     "conditions": "conditions",
-    "signup_successful": "A confirmation email has been sent to your address (check your SPAM folder as well)"
+    "signup_successful": "A confirmation email has been sent to your address (check your SPAM folder as well)",
+    "update_pw_successful": "Update success"
   },
   "start": {
     "synching": "Synchronizing...",

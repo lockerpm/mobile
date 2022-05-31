@@ -273,7 +273,8 @@
     "has_account": "Đã có tài khoản?",
     "terms": "điều khoản dịch vụ",
     "conditions": "chính sách bảo mật",
-    "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)."
+    "signup_successful": "Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác).",
+    "update_pw_successful": "Cập nhật thành công"
   },
   "start": {
     "synching": "Đồng bộ hoá dữ liệu...",

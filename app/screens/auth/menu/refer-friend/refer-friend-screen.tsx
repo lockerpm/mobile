@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { View, Share, TouchableOpacity, Image, SafeAreaView } from "react-native"
 import { Button, Text } from "../../../../components"
-import { useStores } from "../../../../models"
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../../../../services/mixins"
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native"
@@ -15,7 +14,6 @@ type ScreenProp = RouteProp<PrimaryParamList, 'refer_friend'>;
 export const ReferFriendScreen = observer(function ReferFriendScreen() {
     const navigation = useNavigation()
     const route = useRoute<ScreenProp>();
-    const { user } = useStores()
     const { translate, color, copyToClipboard } = useMixins()
     const gradientColor = IS_IOS ? ['#F1F2F3', '#D5EBD920', '#26833460'] : ['#FFFFFF', '#D5EBD920', '#26833460']
 
@@ -26,7 +24,6 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {
-                    console.log(result.activityType)
                     // shared with activity type of result.activityType
                 } else {
                     // shared
