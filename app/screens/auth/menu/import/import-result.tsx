@@ -1,22 +1,26 @@
 import React, { useState } from "react"
-import { View, TouchableOpacity } from "react-native"
-import { Text, Button } from "../../../../components"
+import { View, TouchableOpacity, Image } from "react-native"
+import { Text, Button, ActionSheet, ActionSheetContent} from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../services/mixins"
+import { useStores } from "../../../../models"
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { PlanType } from "../../../../config/types"
 
-
-interface ImportResultProps {
+interface Props {
     imported: number
     total: number
     isLimited?: boolean
+    setIsLimited: Function
 }
 
-export const ImportResult = (props: ImportResultProps) => {
+export const ImportResult = (props: Props) => {
     const navigation = useNavigation()
     const { translate, color } = useMixins()
-
-    const isAllImported = props.imported == props.total
+    const {user} = useStores()
+    const {imported, total, isLimited, setIsLimited} = props
+    const isFreeAccount = user.plan?.alias === PlanType.FREE
+    const isAllImported = imported == total
     const [isFree, setIsFree] = useState(true)
 
     return (
@@ -41,16 +45,16 @@ export const ImportResult = (props: ImportResultProps) => {
                     }} />
                 </View>
                 {isAllImported && <Button
-                        text={translate("import.result_btn")}
-                        onPress={() => navigation.navigate("mainTab", {
-                        })}
-                        style={{
-                            width: "100%",
-                            marginHorizontal: 20,
-                            marginTop: 30,
-                            marginBottom: 10
-                        }}
-                    />}
+                    text={translate("import.result_btn")}
+                    onPress={() => navigation.navigate("mainTab", {
+                    })}
+                    style={{
+                        width: "100%",
+                        marginHorizontal: 20,
+                        marginTop: 30,
+                        marginBottom: 10
+                    }}
+                />}
             </View>
 
             {!isAllImported && isFree && <View
@@ -85,6 +89,31 @@ export const ImportResult = (props: ImportResultProps) => {
                 </TouchableOpacity>
 
             </View>}
+
+            <ActionSheet
+                isOpen={isLimited && isFreeAccount}
+                onClose={() => {
+                    setIsLimited(false)
+                }}>
+                <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
+                    <View style={{ alignItems: "center" }}>
+                        <Image
+                            source={require("./Locker.png")}
+                            style={{ height: 60, width: 60 }}
+                        />
+                        <Text preset="bold" text={translate("import.limited")} style={{ marginBottom: 8 }} />
+                        <Text text={`${imported}/${total} ` + translate("import.imported_free.note")} style={{ maxWidth: "90%", textAlign: "center", marginBottom: 16 }} />
+
+                        <Button
+                            text="Get Unlimited"
+                            onPress={() => {
+                                setIsLimited(false)
+                                navigation.navigate('payment')
+                            }}
+                            style={{ marginBottom: 50, width: "90%" }} />
+                    </View>
+                </ActionSheetContent>
+            </ActionSheet>
         </View>
     )
 }

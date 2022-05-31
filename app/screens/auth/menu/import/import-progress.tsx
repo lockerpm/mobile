@@ -3,7 +3,6 @@ import { View, Image } from "react-native"
 import { Text } from "../../../../components"
 import { useMixins } from "../../../../services/mixins"
 import { ProgressBar } from "react-native-ui-lib"
-import { useStores } from "../../../../models"
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
 
@@ -15,8 +14,7 @@ interface ImportProgressProps {
 
 export const ImportProgress = (props: ImportProgressProps) => {
     const { translate, color } = useMixins()
-    const { uiStore } = useStores()
-    return uiStore.isImporting ? (
+    return (
         <View>
             <View style={{ alignItems: "center", marginBottom: 30 }}>
               <Image source={require('./FileArrowUp.png')} style={{ width: 32, height: 32 }} />
@@ -49,5 +47,5 @@ export const ImportProgress = (props: ImportProgressProps) => {
               progress={(props.imported / props.total * 100)}
             />
           </View>
-    ) : null
+    )
 }

@@ -1,6 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
 import { View, } from "react-native"
-import { Select, Text} from "../../../../components"
+import { Select, Text, Button } from "../../../../components"
 import { useMixins } from "../../../../services/mixins"
 import { SettingsItem } from "../settings/settings-item"
 import { useCoreService } from "../../../../services/core-service"
@@ -9,20 +9,20 @@ import { useStores } from "../../../../models"
 import { Logger } from "../../../../utils/logger"
 import { FileData } from "./import-screen"
 
-
-interface ImportPickFileProps {
-    format: string
+interface Props {
+    format: any
     setFormat: Function
     file: FileData
     setFile: Function
+    handleImport: Function
 }
 
-export const ImportPickFile = (props: ImportPickFileProps) => {
+export const ImportPickFile = (props: Props) => {
     const { translate, notify } = useMixins()
     const { importService } = useCoreService()
     const { uiStore } = useStores()
 
-    const {format, setFormat, file, setFile} = props
+    const { format, setFormat, file, setFile, handleImport } = props
 
     // -------------------- COMPUTED --------------------
 
@@ -78,7 +78,6 @@ export const ImportPickFile = (props: ImportPickFileProps) => {
                 notify('error', translate('import.pls_select_right_format', { format: targetExtension }))
             }
 
-
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 // User cancelled the picker, exit any dialogs or menus and move on
@@ -89,8 +88,8 @@ export const ImportPickFile = (props: ImportPickFileProps) => {
         }
     }
 
-
-    return !uiStore.isImporting ? (<View>
+    
+    return (<View>
         <Select
             showSearch
             value={format}
@@ -123,5 +122,15 @@ export const ImportPickFile = (props: ImportPickFileProps) => {
                 />
             )}
         />
-    </View>) : null
+        <Button
+            isLoading={false}
+            isDisabled={!file.uri}
+            text={translate('settings.import')}
+            onPress={() => handleImport()}
+            style={{
+                marginTop: 30,
+                marginBottom: 10
+            }}
+        />
+    </View>)
 }
