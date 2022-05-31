@@ -202,6 +202,17 @@ export const UserModel = types
     },
     setPushNotificationsSetting: (val: boolean) => {
       self.disablePushNotifications = val
+    },
+    
+    // DEV
+    setUserFreePlan: () => {
+      if (__DEV__) {
+        self.plan = {
+          name: "Free",
+          is_family: false,
+          alias: "pm_free"
+        }
+      }
     }
   }))
   .actions((self) => ({

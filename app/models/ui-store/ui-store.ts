@@ -8,8 +8,6 @@ export const UiStoreModel = types
   .props({
     // Data
     showWelcomePremium: false,
-    isImportLimited: types.maybeNull(types.boolean),
-    isImporting: types.maybeNull(types.boolean),
     isOffline: types.maybeNull(types.boolean),
     isDark: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
@@ -25,8 +23,6 @@ export const UiStoreModel = types
     deepLinkUrl: types.maybeNull(types.string),
     saveLogin: types.maybeNull(types.frozen<{domain: string, username: string, password: string}>()),
     saveLastId: types.maybeNull(types.string),
-    importFileName: types.maybeNull(types.string),
-    importCipherProgress: types.frozen<{cipher: number, totalCipher: number}>({cipher: 0, totalCipher: 0})
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -38,15 +34,6 @@ export const UiStoreModel = types
       self.showWelcomePremium = val
     },
 
-
-    setIsImportLimited: (val: boolean) => {
-      self.isImportLimited = val
-    },
-
-    setIsImporting: (val: boolean | null, fileName?: string) => {
-      self.importFileName = fileName
-      self.isImporting = val
-    },
 
     setIsDark: (isDark: boolean) => {
       self.isDark = isDark
@@ -76,10 +63,6 @@ export const UiStoreModel = types
       self.isFromAutoFillItem = val
     },
 
-    setImportCipherProgress(cipherImported: number, totalCipher: number) {
-      self.importCipherProgress = {cipher: cipherImported, totalCipher: totalCipher}
-    },
-
     setDeepLinkAction(action: 'fill' | 'save' | 'fill_item', data?: any) {
       self.deepLinkAction = action
       if (action === 'fill') {
@@ -91,10 +74,6 @@ export const UiStoreModel = types
       }
     },
 
-    clearImportProgress() {
-      self.importCipherProgress = {cipher: 0, totalCipher: 0}
-      self.importFileName = null
-    },
 
     clearDeepLink() {
       self.deepLinkAction = null
