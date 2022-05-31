@@ -15,20 +15,20 @@ const { createContext, useContext } = React
 const defaultData = {
   googleLogin: async (payload: {
     setIsLoading?: (val: boolean) => void
-    onLoggedIn: () => void
+    onLoggedIn: (newUser: boolean, token: string) => void
   }) => null,
   facebookLogin: async (payload: {
     setIsLoading?: (val: boolean) => void
-    onLoggedIn: () => void
+    onLoggedIn: (newUser: boolean, token: string) => void
   }) => null,
   githubLogin: async (payload: {
     setIsLoading?: (val: boolean) => void
-    onLoggedIn: () => void
+    onLoggedIn: (newUser: boolean, token: string) => void
     code: string
   }) => null,
   appleLogin: async (payload: {
     setIsLoading?: (val: boolean) => void
-    onLoggedIn: () => void
+    onLoggedIn: (newUser: boolean, token: string) => void
   }) => null,
   logoutAllServices: async () => null
 }
@@ -48,7 +48,7 @@ export const SocialLoginMixinsProvider = observer((props: {
   // Google
   const googleLogin = async (payload: {
     setIsLoading?: (val: boolean) => void
-    onLoggedIn: () => void
+    onLoggedIn: (newUser: boolean, token: string) => void
   }) => {
     const { setIsLoading, onLoggedIn } = payload
     try {
@@ -81,7 +81,7 @@ export const SocialLoginMixinsProvider = observer((props: {
   // Facebook
   const facebookLogin = async (payload: {
     setIsLoading?: (val: boolean) => void
-    onLoggedIn: () => void
+    onLoggedIn: (newUser: boolean, token: string) => void
   }) => {
     const { setIsLoading, onLoggedIn } = payload
     try {
@@ -111,7 +111,7 @@ export const SocialLoginMixinsProvider = observer((props: {
   // GitHub
   const githubLogin = async (payload: {
     setIsLoading?: (val: boolean) => void
-    onLoggedIn: () => void
+    onLoggedIn: (newUser: boolean, token: string) => void
     code: string
   }) => {
     const { setIsLoading, onLoggedIn, code } = payload
@@ -126,7 +126,7 @@ export const SocialLoginMixinsProvider = observer((props: {
   // Apple
   const appleLogin = async (payload: {
     setIsLoading?: (val: boolean) => void
-    onLoggedIn: () => void
+    onLoggedIn: (newUser: boolean, token: string) => void
   }) => {
     const { setIsLoading, onLoggedIn } = payload
     try {
@@ -171,7 +171,7 @@ export const SocialLoginMixinsProvider = observer((props: {
     token?: string
     code?: string
     setIsLoading?: (val: boolean) => void
-    onLoggedIn: () => void
+    onLoggedIn: (newUser: boolean, token: string) => void
   }) => {
     const { provider, token, code, setIsLoading, onLoggedIn } = payload
 
@@ -181,19 +181,34 @@ export const SocialLoginMixinsProvider = observer((props: {
       access_token: token,
       code
     })
+
     setIsLoading && setIsLoading(false)
     if (loginRes.kind !== 'ok') {
-      if (loginRes.kind === 'bad-data' && loginRes.data.code === '1011') {
-        notify('error', translate('error.social_login.cannot_get_email'))
-      } else {
         notifyApiError(loginRes)
-      }
       await logoutAllServices()
     } else {
-      // @ts-ignore
-      setApiTokens(loginRes.data?.access_token)
-      onLoggedIn()
+      console.log(loginRes.data)
+      const accessToken = loginRes.data.tmp_token || loginRes.data.token
+  
+      setIsLoading && setIsLoading(false)
+
+      const res = await user.getPMToken(accessToken)
+
+      if (res.kind !== 'ok') {
+        if (res.kind === 'bad-data' && res.data.code === '1011') {
+          notify('error', translate('error.social_login.cannot_get_email'))
+        } else {
+          notifyApiError(res)
+        }
+        await logoutAllServices()
+      } else {
+        // @ts-ignore
+        setApiTokens(res.data?.access_token)
+        onLoggedIn(loginRes.data.is_first, loginRes.data.token)
+      }
     }
+
+    
   }
 
   const _logoutGoogle = async () => {

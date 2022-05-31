@@ -245,9 +245,16 @@ export const UserModel = types
 
     setNewPassword: async (new_password: string, token: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.setNewPassword({ new_password, token })
+      const res = await userApi.setNewPassword({ new_password, token})
       return res
     },
+
+    setSocialPassword: async (new_password: string, token: string, username?: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.setPassword({ new_password, token, username })
+      return res
+    },
+
 
     login: async (payload: LoginData, isOtp?: boolean) => {
       const userApi = new UserApi(self.environment.api)
@@ -272,22 +279,22 @@ export const UserModel = types
     socialLogin: async (payload: { provider: string, access_token?: string, code?: string }) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.socialLogin(payload)
-      if (res.kind === "ok") {
-        if (res.data.token || res.data.tmp_token) {
-          const accessToken = res.data.tmp_token || res.data.token
-          const pmRes = await userApi.getPMToken(accessToken, {
-            SERVICE_URL: '/',
-            SERVICE_SCOPE: 'pwdmanager',
-            CLIENT: 'mobile'
-          })
-          if (pmRes.kind === 'ok') {
-            self.setApiToken(pmRes.data.access_token)
-            self.setLoggedIn(true)
-          }
-          return pmRes
-        }
-      }
       return res
+    },
+    
+    getPMToken: async (token: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const pmRes = await userApi.getPMToken(token, {
+        SERVICE_URL: '/',
+        SERVICE_SCOPE: 'pwdmanager',
+        CLIENT: 'mobile'
+      })
+      
+      if (pmRes.kind === 'ok') {
+        self.setApiToken(pmRes.data.access_token)
+        self.setLoggedIn(true)
+      }
+      return pmRes 
     },
 
     register: async (payload: RegisterData) => {
@@ -450,6 +457,7 @@ export const UserModel = types
       const res = await userApi.getReferLink(self.apiToken)
       return res
     }
+
   }))
   .actions((self) => ({
     //receipt: 'receipt_data' for ios, 'purchase_token' for android

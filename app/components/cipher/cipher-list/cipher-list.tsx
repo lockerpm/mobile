@@ -128,7 +128,6 @@ export const CipherList = observer((props: CipherListProps) => {
       return data
     })
 
-    console.log(res)
 
     // Filter
     if (folderId !== undefined) {
