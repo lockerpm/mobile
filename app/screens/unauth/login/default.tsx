@@ -31,6 +31,7 @@ export const DefaultLogin = observer((props: Props) => {
   const [isError, setIsError] = useState(false)
   const [username, setUsername] = useState(user.email || '')
   const [password, setPassword] = useState('')
+
   const passwordRef = useRef(null)
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)

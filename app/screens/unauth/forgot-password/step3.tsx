@@ -15,7 +15,7 @@ type Props = {
 }
 
 
-export const Step3 = observer(function Step3(props: Props) {
+export const Step3 = observer((props: Props) => {
   const { user, uiStore } = useStores()
   const { translate, notify, color, notifyApiError } = useMixins()
   const { goBack, nextStep, username } = props
