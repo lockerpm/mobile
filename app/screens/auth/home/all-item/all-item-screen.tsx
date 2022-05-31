@@ -224,9 +224,9 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
         height: 32,
         marginRight: 16
       }}></Image>
-    <View>
-      <Text>{translate("all_items.enable_autofill.title")}</Text>
-      <Text >{translate("all_items.enable_autofill.content")}</Text>
+    <View style={{marginRight: 60}}>
+      {/* <Text>{translate("all_items.enable_autofill.title")}</Text> */}
+      <Text>{translate("all_items.enable_autofill.content")}</Text>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('autofillService')
@@ -241,8 +241,8 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
     <TouchableOpacity
       style={{
         position: "absolute",
+        top: 20,
         right: 20,
-        top: 20
       }}
       onPress={() => {
         onClose(true)
