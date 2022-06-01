@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react"
+import React from "react"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { BrowseNavigator } from "./browse/browse-navigator"
 import { MenuNavigator } from "./menu/menu-navigator"
-import { View, TouchableOpacity, AppState } from "react-native"
+import { View } from "react-native"
 import { Button, Text } from "../components"
 import { fontSize } from "../theme"
 import { AllItemScreen, ToolsListScreen, AuthenticatorScreen } from "../screens"
@@ -11,7 +11,7 @@ import { useMixins } from "../services/mixins"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useStores } from "../models"
 import { observer } from "mobx-react-lite"
-import Animated, { withSequence, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated'
+import { withSequence, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated'
 import { SharingStatus } from "../config/types"
 import HomeIcon from './icons/home.svg'
 import BrowseIcon from './icons/menu.svg'

@@ -12,6 +12,9 @@ export class AviraCsvImporter extends BaseImporter implements Importer {
             return Promise.resolve(result);
         }
 
+        // CS
+        const existingKeys = ['name', 'website', 'password', 'username', 'secondary_username']
+
         results.forEach(value => {
             const cipher = this.initLoginCipher();
             cipher.name = this.getValueOrDefault(value.name,
@@ -23,8 +26,16 @@ export class AviraCsvImporter extends BaseImporter implements Importer {
                 cipher.login.username = value.secondary_username;
             } else {
                 cipher.login.username = this.getValueOrDefault(value.username);
-                cipher.notes = this.getValueOrDefault(value.secondary_username);
+
+                // CS
+                // cipher.notes = this.getValueOrDefault(value.secondary_username);
+                this.processKvp(cipher, 'secondary_username', value.secondary_username)
             }
+
+            // CS
+            Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, value[k])
+            })
 
             this.cleanupCipher(cipher);
             result.ciphers.push(cipher);
