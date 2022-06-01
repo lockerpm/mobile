@@ -12,6 +12,9 @@ export class BlackBerryCsvImporter extends BaseImporter implements Importer {
             return Promise.resolve(result);
         }
 
+        // CS
+        const existingKeys = ['grouping', 'fav', 'name', 'extra', 'url', 'password', 'username']
+
         results.forEach(value => {
             if (value.grouping === 'list') {
                 return;
@@ -25,6 +28,12 @@ export class BlackBerryCsvImporter extends BaseImporter implements Importer {
                 cipher.login.password = this.getValueOrDefault(value.password);
                 cipher.login.username = this.getValueOrDefault(value.username);
             }
+
+            // CS
+            Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, value[k])
+            })
+            
             this.convertToNoteIfNeeded(cipher);
             this.cleanupCipher(cipher);
             result.ciphers.push(cipher);
