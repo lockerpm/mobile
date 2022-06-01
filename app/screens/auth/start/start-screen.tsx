@@ -81,21 +81,22 @@ export const StartScreen = observer(() => {
     }
 
     // Show biometric intro
-    if (user.plan?.alias != PlanType.FREE && !uiStore.showWelcomePremium) {
+    if (user.plan?.alias !== PlanType.FREE && !uiStore.showWelcomePremium) {
       uiStore.setShowWelcomePremium(true)
       navigation.navigate("welcome_premium")
       return
-    } else {
-      if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
-        if (!user.biometricIntroShown && !user.isBiometricUnlock) {
-          const available = await isBiometricAvailable()
-          if (available) {
-            navigation.navigate("biometricUnlockIntro")
-            return
-          }
+    }
+    
+    if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
+      if (!user.biometricIntroShown && !user.isBiometricUnlock) {
+        const available = await isBiometricAvailable()
+        if (available) {
+          navigation.navigate("biometricUnlockIntro")
+          return
         }
       }
     }
+
 
     // Done -> navigate
     if (uiStore.isFromAutoFill) {
