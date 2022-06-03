@@ -63,6 +63,7 @@ export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
           preset="link"
           isDisabled={isDeleted}
           onPress={() => {
+  
             navigation.navigate('folders__select', {
               mode: 'add',
               initialId: folderId
