@@ -16,31 +16,52 @@ export class AvastJsonImporter extends BaseImporter implements Importer {
         }
 
         if (results.logins != null) {
+            // CS
+            const existingKeys = ['custName', 'note', 'url', 'pwd']
+
             results.logins.forEach((value: any) => {
                 const cipher = this.initLoginCipher();
                 cipher.name = this.getValueOrDefault(value.custName);
                 cipher.notes = this.getValueOrDefault(value.note);
                 cipher.login.uris = this.makeUriArray(value.url);
                 cipher.login.password = this.getValueOrDefault(value.pwd);
-                cipher.login.username = this.getValueOrDefault(value.loginName);
+                cipher.login.username = this.getValueOrDefault(value.custName);
+
+                // CS
+                Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                    this.processKvp(cipher, k, value[k])
+                })
+
                 this.cleanupCipher(cipher);
                 result.ciphers.push(cipher);
             });
         }
 
         if (results.notes != null) {
+            // CS
+            const existingKeys = ['label', 'text']
+
             results.notes.forEach((value: any) => {
                 const cipher = this.initLoginCipher();
                 cipher.type = CipherType.SecureNote;
                 cipher.secureNote.type = SecureNoteType.Generic;
                 cipher.name = this.getValueOrDefault(value.label);
                 cipher.notes = this.getValueOrDefault(value.text);
+
+                // CS
+                Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                    this.processKvp(cipher, k, value[k])
+                })
+
                 this.cleanupCipher(cipher);
                 result.ciphers.push(cipher);
             });
         }
 
         if (results.cards != null) {
+            // CS
+            const existingKeys = ['custName', 'note', 'holderName', 'cardNumber', 'cvv', 'expirationDate']
+
             results.cards.forEach((value: any) => {
                 const cipher = this.initLoginCipher();
                 cipher.type = CipherType.Card;
@@ -58,6 +79,12 @@ export class AvastJsonImporter extends BaseImporter implements Importer {
                         cipher.card.expYear = value.expirationDate.year + '';
                     }
                 }
+
+                // CS
+                Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                    this.processKvp(cipher, k, value[k])
+                })
+                
                 this.cleanupCipher(cipher);
                 result.ciphers.push(cipher);
             });

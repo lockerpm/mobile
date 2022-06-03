@@ -12,12 +12,21 @@ export class AvastCsvImporter extends BaseImporter implements Importer {
             return Promise.resolve(result);
         }
 
+        // CS
+        const existingKeys = ['name', 'web', 'password', 'login']
+
         results.forEach(value => {
             const cipher = this.initLoginCipher();
             cipher.name = this.getValueOrDefault(value.name);
             cipher.login.uris = this.makeUriArray(value.web);
             cipher.login.password = this.getValueOrDefault(value.password);
             cipher.login.username = this.getValueOrDefault(value.login);
+
+            // CS
+            Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, value[k])
+            })
+            
             this.cleanupCipher(cipher);
             result.ciphers.push(cipher);
         });
