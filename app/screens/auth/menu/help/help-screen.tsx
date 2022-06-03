@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native"
 import { commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
-import { PRIVACY_POLICY_URL, TERMS_URL, HELP_CENTER_URL } from "../../../../config/constants"
+import { PRIVACY_POLICY_URL, TERMS_URL, HELP_CENTER_URL, REPORT_VULN} from "../../../../config/constants"
 import { FeedbackModal } from "./feedback-modal"
 
 
@@ -46,6 +46,12 @@ export const HelpScreen = observer(function HelpScreen() {
       name: translate('help.feedback'),
       action: () => {
         setShowFeedback(true)
+      }
+    },
+    {
+      name: translate('help.report_vuln'),
+      action: () => {
+        Linking.openURL(REPORT_VULN)
       }
     }
   ]

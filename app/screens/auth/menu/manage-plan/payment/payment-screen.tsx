@@ -37,7 +37,7 @@ const subSkus = [
 ]
 
 export const PaymentScreen = observer(function PaymentScreen() {
-  const { translate, color, isDark } = useMixins()
+  const { translate, color, isDark, notifyApiError } = useMixins()
   const navigation = useNavigation();
   const route = useRoute<ScreenProp>();
   const { user, uiStore } = useStores()
@@ -110,6 +110,8 @@ export const PaymentScreen = observer(function PaymentScreen() {
                   ]
                 )
               }
+            } else {
+              notifyApiError(res)
             }
             setProcessPayment(false)
           }

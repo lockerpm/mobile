@@ -187,11 +187,8 @@ export const SocialLoginMixinsProvider = observer((props: {
         notifyApiError(loginRes)
       await logoutAllServices()
     } else {
-      console.log(loginRes.data)
       const accessToken = loginRes.data.tmp_token || loginRes.data.token
-  
       setIsLoading && setIsLoading(false)
-
       const res = await user.getPMToken(accessToken)
 
       if (res.kind !== 'ok') {
