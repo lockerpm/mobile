@@ -991,18 +991,21 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
 
   // Check cipher name duplication
   const _countDuplicateCipherName = async (cipher: CipherView) => {
-    const ciphers = await getCiphers({
-      deleted: false,
-      searchText: cipher.name,
-      filters: [(c: CipherView) => c.type === cipher.type && c.name.startsWith(cipher.name)]
-    })
-    let count = 1
-    let name = cipher.name
-    while (ciphers.some((c: CipherView) => c.name === name)) {
-      name = `${cipher.name} (${count})`
-      count += 1
-    }
-    return count - 1
+    // TODO: no more counting duplicate cipher
+    return 0
+
+    // const ciphers = await getCiphers({
+    //   deleted: false,
+    //   searchText: cipher.name,
+    //   filters: [(c: CipherView) => c.type === cipher.type && c.name.startsWith(cipher.name)]
+    // })
+    // let count = 1
+    // let name = cipher.name
+    // while (ciphers.some((c: CipherView) => c.name === name)) {
+    //   name = `${cipher.name} (${count})`
+    //   count += 1
+    // }
+    // return count - 1
   }
 
   // Check folder name duplication
@@ -1022,11 +1025,11 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
     try {
       // Check name duplication
-      // const countDuplicate = await _countDuplicateCipherName(cipher)
-      // if (countDuplicate > 0) {
-      //   notify('error', translate('error.duplicate_cipher_name'))
-      //   return { kind: 'bad-data' }
-      // }
+      const countDuplicate = await _countDuplicateCipherName(cipher)
+      if (countDuplicate > 0) {
+        notify('error', translate('error.duplicate_cipher_name'))
+        return { kind: 'bad-data' }
+      }
 
       // Offline
       if (uiStore.isOffline) {
