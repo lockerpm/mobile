@@ -272,7 +272,6 @@ dependencies {
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation "com.android.billingclient:billing:4.1.0"
     implementation "com.airbnb.android:lottie:5.0.3"
     implementation project(':react-native-fs')
     implementation 'com.google.android.gms:play-services-tagmanager:18.0.1'

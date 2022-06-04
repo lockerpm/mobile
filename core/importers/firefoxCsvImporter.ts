@@ -12,6 +12,9 @@ export class FirefoxCsvImporter extends BaseImporter implements Importer {
             return Promise.resolve(result);
         }
 
+        // CS
+        const existingKeys = ['url', 'username', 'password', 'hostname']
+
         results.filter(value => {
             return value.url !== 'chrome://FirefoxAccounts';
         }).forEach(value => {
@@ -21,6 +24,10 @@ export class FirefoxCsvImporter extends BaseImporter implements Importer {
             cipher.login.username = this.getValueOrDefault(value.username);
             cipher.login.password = this.getValueOrDefault(value.password);
             cipher.login.uris = this.makeUriArray(url);
+            // CS
+            Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, value[k])
+            })
             this.cleanupCipher(cipher);
             result.ciphers.push(cipher);
         });

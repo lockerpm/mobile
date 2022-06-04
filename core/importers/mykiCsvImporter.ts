@@ -23,6 +23,8 @@ export class MykiCsvImporter extends BaseImporter implements Importer {
             const cipher = this.initLoginCipher();
             cipher.name = this.getValueOrDefault(value.nickname, '--');
             cipher.notes = this.getValueOrDefault(value.additionalInfo);
+            // CS
+            const existingKeys = ['nickname', 'additionalInfo']
 
             if (value.url !== undefined) {
                 // Accounts
@@ -30,6 +32,7 @@ export class MykiCsvImporter extends BaseImporter implements Importer {
                 cipher.login.username = this.getValueOrDefault(value.username);
                 cipher.login.password = this.getValueOrDefault(value.password);
                 cipher.login.totp = this.getValueOrDefault(value.twoFactAuthToken);
+                existingKeys.push('url', 'username', 'password', 'twoFactAuthToken')
             } else if (value.cardNumber !== undefined) {
                 // Cards
                 cipher.card = new CardView();
@@ -40,6 +43,7 @@ export class MykiCsvImporter extends BaseImporter implements Importer {
                 cipher.card.expMonth = this.getValueOrDefault(value.exp_month);
                 cipher.card.expYear = this.getValueOrDefault(value.exp_year);
                 cipher.card.code = this.getValueOrDefault(value.cvv);
+                existingKeys.push('cardName', 'cardNumber', 'exp_month', 'exp_year', 'cvv')
             } else if (value.firstName !== undefined) {
                 // Identities
                 cipher.identity = new IdentityView();
@@ -55,6 +59,7 @@ export class MykiCsvImporter extends BaseImporter implements Importer {
                 cipher.identity.city = this.getValueOrDefault(value.city);
                 cipher.identity.country = this.getValueOrDefault(value.country);
                 cipher.identity.postalCode = this.getValueOrDefault(value.zipCode);
+                existingKeys.push('title', 'firstName', 'middleName', 'lastName', 'number', 'email', 'firstAddressLine', 'secondAddressLine', 'city', 'country', 'zipCode')
             } else if (value.content !== undefined) {
                 // Notes
                 cipher.secureNote = new SecureNoteView();
@@ -62,9 +67,14 @@ export class MykiCsvImporter extends BaseImporter implements Importer {
                 cipher.secureNote.type = SecureNoteType.Generic;
                 cipher.name = this.getValueOrDefault(value.title, '--');
                 cipher.notes = this.getValueOrDefault(value.content);
+                existingKeys.push('title', 'content')
             } else {
                 return;
             }
+            // CS
+            Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, value[k])
+            })
 
             this.cleanupCipher(cipher);
             result.ciphers.push(cipher);

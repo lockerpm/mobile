@@ -18,6 +18,7 @@ export class EnpassCsvImporter extends BaseImporter implements Importer {
             return Promise.resolve(result);
         }
 
+
         let firstRow = true;
         results.forEach(value => {
             if (value.length < 2 || (firstRow && (value[0] === 'Title' || value[0] === 'title'))) {

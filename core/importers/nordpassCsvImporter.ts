@@ -55,6 +55,10 @@ export class NordPassCsvImporter extends BaseImporter implements Importer {
             cipher.name = this.getValueOrDefault(record.name, '--');
             cipher.notes = this.getValueOrDefault(record.note);
 
+
+            // CS
+            const existingKeys = ['name', 'note', 'folder']
+
             switch (recordType) {
                 case CipherType.Login:
                     cipher.type = CipherType.Login;
@@ -62,6 +66,7 @@ export class NordPassCsvImporter extends BaseImporter implements Importer {
                     cipher.login.username = this.getValueOrDefault(record.username);
                     cipher.login.password = this.getValueOrDefault(record.password);
                     cipher.login.uris = this.makeUriArray(record.url);
+                    existingKeys.push('username', 'password', 'url')
                     break;
                 case CipherType.Card:
                     cipher.type = CipherType.Card;
@@ -70,8 +75,8 @@ export class NordPassCsvImporter extends BaseImporter implements Importer {
                     cipher.card.code = this.getValueOrDefault(record.cvc);
                     cipher.card.brand = this.getCardBrand(cipher.card.number);
                     this.setCardExpiration(cipher, record.expirydate);
+                    existingKeys.push('cardholdername', 'cardnumber', 'cvc', 'expirydate')
                     break;
-
                 case CipherType.Identity:
                     cipher.type = CipherType.Identity;
 
@@ -87,6 +92,7 @@ export class NordPassCsvImporter extends BaseImporter implements Importer {
                     }
                     cipher.identity.email = this.getValueOrDefault(record.email);
                     cipher.identity.phone = this.getValueOrDefault(record.phone_number);
+                    existingKeys.push('full_name', 'address1', 'address2', 'city', 'state', 'zipcode', 'country', 'email', 'phone_number')
                     break;
                 case CipherType.SecureNote:
                     cipher.type = CipherType.SecureNote;
@@ -96,6 +102,11 @@ export class NordPassCsvImporter extends BaseImporter implements Importer {
                     break;
             }
 
+            // CS
+            Object.keys(record).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, record[k])
+            })
+            
             this.cleanupCipher(cipher);
             result.ciphers.push(cipher);
         });

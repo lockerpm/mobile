@@ -73,6 +73,7 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
 
 
 interface PricePlanProps {
+  freeTrial: boolean
   onPress: React.Dispatch<React.SetStateAction<boolean>>
   purchase: (subID: string) => void
   isEnable: boolean
@@ -137,6 +138,14 @@ export const PricePlan = (props: PricePlanProps) => {
       }}>
         {translate("payment.ads")}
       </Text>
+
+      {props.freeTrial && <Text style={{
+        marginTop: 10,
+        marginBottom: 10,
+        alignSelf: "center"
+      }}>
+        {translate("payment.trial")}
+      </Text>}
 
       <PricePlanItem
         onPress={() => props.onPress(true)}

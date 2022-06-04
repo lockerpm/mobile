@@ -12,6 +12,9 @@ export class MeldiumCsvImporter extends BaseImporter implements Importer {
             return Promise.resolve(result);
         }
 
+        // CS
+        const existingKeys = ['DisplayName', 'Notes', 'UserName', 'Password', 'Url']
+
         results.forEach(value => {
             const cipher = this.initLoginCipher();
             cipher.name = this.getValueOrDefault(value.DisplayName, '--');
@@ -19,9 +22,16 @@ export class MeldiumCsvImporter extends BaseImporter implements Importer {
             cipher.login.username = this.getValueOrDefault(value.UserName);
             cipher.login.password = this.getValueOrDefault(value.Password);
             cipher.login.uris = this.makeUriArray(value.Url);
+
+            // CS
+            Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, value[k])
+            })
+
             this.cleanupCipher(cipher);
             result.ciphers.push(cipher);
         });
+
 
         result.success = true;
         return Promise.resolve(result);
