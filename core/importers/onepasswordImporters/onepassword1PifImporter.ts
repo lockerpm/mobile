@@ -89,6 +89,15 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
 
     private processStandardItem(item: any, cipher: CipherView) {
         cipher.favorite = item.openContents && item.openContents.faveIndex ? true : false;
+
+        // CS
+        if (item.openContents) {
+            const existingKeys = ['faveIndex']
+            Object.keys(item.openContents).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, item.openContents[k])
+            })
+        }
+
         cipher.name = this.getValueOrDefault(item.title);
 
         if (item.typeName === 'securenotes.SecureNote') {
@@ -106,6 +115,12 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
         }
 
         if (item.secureContents != null) {
+            // CS
+            const existingKeys = [
+                'passwordHistory', 'notesPlain', 'password', 'URLs', 'fields', 'sections',
+                'unknown_overview', 'unknown_details'
+            ]
+
             if (item.secureContents.passwordHistory != null) {
                 this.parsePasswordHistory(item.secureContents.passwordHistory, cipher);
             }
@@ -138,6 +153,22 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
                     }
                 });
             }
+
+            // CS
+            if (item.secureContents.unknown_details) {
+                if (item.secureContents.unknown_details.sections != null) {
+                    item.secureContents.unknown_details.sections.forEach((section: any) => {
+                        if (section.fields != null) {
+                            this.parseFields(section.fields, cipher, 'n', 'v', 't');
+                        }
+                    });
+                }
+            }
+
+            // CS
+            Object.keys(item.secureContents).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, item.secureContents[k])
+            })
         }
     }
 
@@ -161,7 +192,7 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
                 return;
             }
 
-            const fieldValue = field[valueKey].toString();
+            let fieldValue = field[valueKey].toString();
             const fieldDesignation = field[designationKey] != null ? field[designationKey].toString() : null;
 
             if (cipher.type === CipherType.Login) {
@@ -241,7 +272,22 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
                 return;
             }
 
-            const fieldType = field.k === 'concealed' ? FieldType.Hidden : FieldType.Text;
+            // CS
+            let fieldType: FieldType
+            if (field.k === 'concealed') {
+                fieldType = FieldType.Hidden
+            } else if (field.k === 'date') {
+                fieldType = FieldType.Date
+                fieldValue += '000'
+            } else if (field.k === 'URL') {
+                fieldType = FieldType.URL
+            } else if (field.k === 'address') {
+                fieldType = FieldType.Address
+            } else {
+                fieldType = FieldType.Text
+            }
+
+            // const fieldType = field.k === 'concealed' ? FieldType.Hidden : FieldType.Text;
             this.processKvp(cipher, fieldName, fieldValue, fieldType);
         });
     }

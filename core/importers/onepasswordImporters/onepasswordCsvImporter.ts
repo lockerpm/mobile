@@ -28,6 +28,7 @@ export abstract class OnePasswordCsvImporter extends BaseImporter implements Imp
         }
 
         results.forEach(value => {
+            console.log(value)
             if (this.isNullOrWhitespace(this.getProp(value, 'title'))) {
                 return;
             }

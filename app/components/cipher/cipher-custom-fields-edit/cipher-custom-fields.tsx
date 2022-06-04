@@ -114,14 +114,15 @@ export const CustomFieldsEdit = observer((props: Props) => {
             setShowTypeModal(true)
           }}
           style={{
-            justifyContent: 'flex-start'
+            justifyContent: 'flex-start',
+            alignItems: 'center'
           }}
         >
           <AntDesign name="pluscircleo" size={20} color={color.primary} />
           <Text
             text={translate('common.add_new_field')}
             style={{
-              marginLeft: spacing[3],
+              marginLeft: spacing.smaller,
               color: color.primary
             }}
           />
