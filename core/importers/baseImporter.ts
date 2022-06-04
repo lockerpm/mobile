@@ -21,6 +21,7 @@ import { FieldType } from '../enums/fieldType';
 import { SecureNoteType } from '../enums/secureNoteType';
 
 import { ConsoleLogService } from '../services/consoleLog.service';
+import moment from 'moment';
 
 // Mobile env
 const DOMParser = require('react-native-html-parser').DOMParser
@@ -326,6 +327,9 @@ export abstract class BaseImporter {
         if (this.isNullOrWhitespace(key)) {
             key = '';
         }
+        if (typeof value === 'object') {
+            value = JSON.stringify(value)
+        }
         if (value.length > 200 || value.trim().search(this.newLineRegex) > -1) {
             if (cipher.notes == null) {
                 cipher.notes = '';
@@ -339,6 +343,15 @@ export abstract class BaseImporter {
             field.type = type;
             field.name = key;
             field.value = value;
+            
+            // CS
+            if (type === FieldType.Date || type === FieldType.MonthYear) {
+                try {
+                    const val = parseInt(value)
+                    field.value = moment(val).format(type === FieldType.MonthYear ? 'MM/YYYY' : 'DD/MM/YYYY')
+                } catch (error) {}
+            }
+
             cipher.fields.push(field);
         }
     }
