@@ -15,6 +15,8 @@ export class EncryptrCsvImporter extends BaseImporter implements Importer {
             result.success = false;
             return Promise.resolve(result);
         }
+        // CS
+        const existingKeys = ['Label', 'Notes', 'Text', 'Username', 'Password', 'Site URL', 'Name on card', 'Card Number', 'CVV', 'Expiry', 'Entry Type']
 
         results.forEach(value => {
             const cipher = this.initLoginCipher();
@@ -50,6 +52,11 @@ export class EncryptrCsvImporter extends BaseImporter implements Importer {
                     }
                 }
             }
+
+            // CS
+            Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, value[k])
+            })
 
             this.convertToNoteIfNeeded(cipher);
             this.cleanupCipher(cipher);

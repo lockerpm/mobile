@@ -31,8 +31,11 @@ export class ButtercupCsvImporter extends BaseImporter implements Importer {
                     if (!processingCustomFields && OfficialProps.indexOf(prop) === -1) {
                         processingCustomFields = true;
                     }
+
+                    // CS
                     if (processingCustomFields) {
                         this.processKvp(cipher, prop, value[prop]);
+                        processingCustomFields = false
                     }
                 }
             }

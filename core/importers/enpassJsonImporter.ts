@@ -30,6 +30,7 @@ export class EnpassJsonImporter extends BaseImporter implements Importer {
             result.folders.push(f);
         });
 
+
         results.items.forEach((item: any) => {
             if (item.folders != null && item.folders.length > 0 && foldersIndexMap.has(item.folders[0])) {
                 result.folderRelationships.push([result.ciphers.length, foldersIndexMap.get(item.folders[0])]);
@@ -64,6 +65,7 @@ export class EnpassJsonImporter extends BaseImporter implements Importer {
 
     private processLogin(cipher: CipherView, fields: any[]) {
         const urls: string[] = [];
+    
         fields.forEach((field: any) => {
             if (this.isNullOrWhitespace(field.value) || field.type === 'section') {
                 return;

@@ -12,6 +12,9 @@ export class SaferPassCsvImporter extends BaseImporter implements Importer {
             return Promise.resolve(result);
         }
 
+        // CS
+        const existingKeys = ['url', 'notes', 'username', 'password']
+
         results.forEach(value => {
             const cipher = this.initLoginCipher();
             cipher.name = this.getValueOrDefault(this.nameFromUrl(value.url), '--');
@@ -19,6 +22,12 @@ export class SaferPassCsvImporter extends BaseImporter implements Importer {
             cipher.login.username = this.getValueOrDefault(value.username);
             cipher.login.password = this.getValueOrDefault(value.password);
             cipher.login.uris = this.makeUriArray(value.url);
+
+            // CS
+            Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, value[k])
+            })
+
             this.cleanupCipher(cipher);
             result.ciphers.push(cipher);
         });

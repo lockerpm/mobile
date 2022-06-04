@@ -12,6 +12,9 @@ export class KeePassXCsvImporter extends BaseImporter implements Importer {
             return Promise.resolve(result);
         }
 
+        // CS
+        const existingKeys = ['Group', 'Notes', 'Title', 'Username', 'Password', 'URL']
+
         results.forEach(value => {
             if (this.isNullOrWhitespace(value.Title)) {
                 return;
@@ -28,6 +31,12 @@ export class KeePassXCsvImporter extends BaseImporter implements Importer {
             cipher.login.username = this.getValueOrDefault(value.Username);
             cipher.login.password = this.getValueOrDefault(value.Password);
             cipher.login.uris = this.makeUriArray(value.URL);
+
+            // CS
+            Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, value[k])
+            })
+            
             this.cleanupCipher(cipher);
             result.ciphers.push(cipher);
         });

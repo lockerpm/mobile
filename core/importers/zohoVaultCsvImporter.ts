@@ -13,6 +13,9 @@ export class ZohoVaultCsvImporter extends BaseImporter implements Importer {
             return Promise.resolve(result);
         }
 
+        // CS
+        const existingKeys = ['ChamberName', 'Favorite', 'Notes', 'Password Name', 'Secret Name', 'Password URL', 'Secret URL', 'SecretData', 'CustomData']
+
         results.forEach(value => {
             if (this.isNullOrWhitespace(value['Password Name']) && this.isNullOrWhitespace(value['Secret Name'])) {
                 return;
@@ -27,6 +30,12 @@ export class ZohoVaultCsvImporter extends BaseImporter implements Importer {
                 this.getValueOrDefault(value['Password URL'], this.getValueOrDefault(value['Secret URL'])));
             this.parseData(cipher, value.SecretData);
             this.parseData(cipher, value.CustomData);
+
+            // CS
+            Object.keys(value).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, value[k])
+            })
+
             this.convertToNoteIfNeeded(cipher);
             this.cleanupCipher(cipher);
             result.ciphers.push(cipher);

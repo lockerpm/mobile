@@ -55,6 +55,10 @@ export class DashlaneJsonImporter extends BaseImporter implements Importer {
     }
 
     private processAuth(results: any[]) {
+
+        // CS
+        const existingKeys = ['title', 'login', 'secondaryLogin', 'email', 'password', 'domain', 'note']
+
         results.forEach((credential: any) => {
             const cipher = this.initLoginCipher();
             cipher.name = this.getValueOrDefault(credential.title);
@@ -71,6 +75,11 @@ export class DashlaneJsonImporter extends BaseImporter implements Importer {
             cipher.login.uris = this.makeUriArray(credential.domain);
             cipher.notes += this.getValueOrDefault(credential.note, '');
 
+            // CS
+            Object.keys(credential).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, credential[k])
+            })
+
             this.convertToNoteIfNeeded(cipher);
             this.cleanupCipher(cipher);
             this.result.ciphers.push(cipher);
@@ -78,6 +87,9 @@ export class DashlaneJsonImporter extends BaseImporter implements Importer {
     }
 
     private processIdentity(results: any[]) {
+        // CS
+        const existingKeys = ['fullName', 'pseudo']
+
         results.forEach((obj: any) => {
             const cipher = new CipherView();
             cipher.identity = new IdentityView();
@@ -94,12 +106,21 @@ export class DashlaneJsonImporter extends BaseImporter implements Importer {
                 cipher.identity.lastName = this.getValueOrDefault(nameParts[2]);
             }
             cipher.identity.username = this.getValueOrDefault(obj.pseudo);
+
+            // CS
+            Object.keys(obj).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, obj[k])
+            })
+
             this.cleanupCipher(cipher);
             this.result.ciphers.push(cipher);
         });
     }
 
     private processAddress(results: any[]) {
+        // CS
+        const existingKeys = ['addressName', 'addressFull', 'city', 'state', 'zipcode', 'country']
+
         results.forEach((obj: any) => {
             const cipher = new CipherView();
             cipher.identity = new IdentityView();
@@ -113,12 +134,19 @@ export class DashlaneJsonImporter extends BaseImporter implements Importer {
             if (cipher.identity.country != null) {
                 cipher.identity.country = cipher.identity.country.toUpperCase();
             }
+            // CS
+            Object.keys(obj).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, obj[k])
+            })
             this.cleanupCipher(cipher);
             this.result.ciphers.push(cipher);
         });
     }
 
     private processCard(results: any[]) {
+        // CS
+        const existingKeys = ['bank', 'cardNumber', 'owner']
+
         results.forEach((obj: any) => {
             const cipher = new CipherView();
             cipher.card = new CardView();
@@ -134,6 +162,10 @@ export class DashlaneJsonImporter extends BaseImporter implements Importer {
                     cipher.name += (' - ' + cipher.card.brand);
                 }
             }
+            // CS
+            Object.keys(obj).filter(k => !existingKeys.includes(k)).forEach(k => {
+                this.processKvp(cipher, k, obj[k])
+            })
             this.cleanupCipher(cipher);
             this.result.ciphers.push(cipher);
         });

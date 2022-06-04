@@ -20,6 +20,7 @@ export class ClipperzHtmlImporter extends BaseImporter implements Importer {
         }
 
         const entries = JSON.parse(textarea.textContent);
+
         entries.forEach((entry: any) => {
             const cipher = this.initLoginCipher();
             if (!this.isNullOrWhitespace(entry.label)) {

@@ -47,6 +47,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const [processPayment, setProcessPayment] = useState<boolean>(false);
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
+  const [eligibleTrial, setEligibleTrial] = useState(false)
 
   // -------------------- EFFECT ----------------------
 
@@ -56,10 +57,25 @@ export const PaymentScreen = observer(function PaymentScreen() {
     }
   }, [])
 
+  useEffect(() => {
+    if (subcriptions.length < 1) return
+    if (IS_IOS) {
+      if (subcriptions[0].introductoryPriceNumberOfPeriodsIOS) {
+        setEligibleTrial(true)
+      }
+    } 
+    // else {
+    //   // TODO
+    //   if (subcriptions[0].freeTrialPeriodAndroid) {
+    //     setEligibleTrial(true)
+    //   }
+    // }
+  }, [subcriptions])
 
   const getSubscription = useCallback(async (): Promise<void> => {
     try {
       await RNIap.initConnection();
+      
       if (!IS_IOS) {
         await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
       }
@@ -70,6 +86,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
       const subscriptions = await RNIap.getSubscriptions(subSkus);
 
       setSubcriptions(subscriptions);
+      console.log(subcriptions)
     } catch (err) {
       Logger.error({ 'initConnection': err })
       Alert.alert('Fail to get in-app-purchase information');
@@ -144,7 +161,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
     if (IS_IOS) {
       RNIap.clearTransactionIOS()
     }
-    RNIap.requestSubscription(productId)
+    RNIap.requestSubscription("locker_pm_family_monthly")
       .catch((error) => {
         setProcessPayment(false)
         if (error.code === 'E_USER_CANCELLED') {
@@ -212,13 +229,14 @@ export const PaymentScreen = observer(function PaymentScreen() {
       <View style={[styles.payment,{backgroundColor: color.background}]}>
         <Segment />
         <PricePlan
+          freeTrial={eligibleTrial}
           onPress={setEnable}
           isProcessPayment={processPayment}
           isEnable={isEnable}
           personal={payIndividual}
           purchase={purchase}
         />
-        {/* { IS_IOS && <Button
+        { IS_IOS && <Button
           preset="link"
           style={{
             marginBottom: 20
@@ -227,7 +245,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
           <Text style={{ fontSize: 18 ,color: "#007AFF" }}>
             Redeem code
           </Text>
-        </Button>} */}
+        </Button>}
       </View>
     </Layout>
   )
