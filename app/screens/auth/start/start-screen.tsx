@@ -56,8 +56,8 @@ export const StartScreen = observer(() => {
         //   user.loadTeams(),
         //   user.loadPlan(),
         // ])
-        user.loadTeams()
-        user.loadPlan()
+        await user.loadTeams()
+        await user.loadPlan()
       }
     }
 

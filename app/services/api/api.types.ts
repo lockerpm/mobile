@@ -511,3 +511,14 @@ export type EditShareCipherData = {
 export type ConfirmShareCipherData = {
     key: string
 }
+
+export type FetchOfferDetailsResult = {
+    kind: "ok",
+    data: {
+        nonce: string,
+        timestamp: number,
+        key_identifier: string,
+        sig: string
+    }
+
+} | GeneralApiProblem

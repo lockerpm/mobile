@@ -59,7 +59,7 @@ export const FieldEdit = memo((props: Props) => {
         preset='link'
         onPress={onDelete}
         style={{
-          marginLeft: spacing[3]
+          marginLeft: spacing.smaller
         }}
       >
         <AntDesign name="minuscircleo" size={20} color={color.error} />

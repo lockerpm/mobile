@@ -611,7 +611,7 @@
     "individual" : "Individual",
     "family": "Family",
     "ads" : "Enjoy all Locker Premium features with Yearly Plan to save up to 75%",
-    "trial": "Start with 2 week free trial",
+    "trial": "Start with 2 weeks free trial",
     "cancel_text" : "Recurring billing. Cancel anytime",
     "benefit" : {
       "locker" : "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Backups",
@@ -625,13 +625,15 @@
           "title": "$4.99/month",
           "subtitle": "Billed monthly",
           "sale": "",
-          "pay_title": "Upgrade now for $4.99"
+          "pay_title": "Upgrade now for $4.99",
+          "discount": "$3.49 for first month"
         },
         "yearly": {
           "title": "$15.49/year",
           "subtitle": "$1.29/month - billed yearly",
           "sale": "Save 75%",
-          "pay_title": "Upgrade now for $15.49"
+          "pay_title": "Upgrade now for $15.49",
+          "discount": "$10.99 for first year"
         }
       },
       "fam": {
@@ -639,13 +641,15 @@
           "title": "$71.99/year/6 people",
           "subtitle": "$5.99 per month/6 people. Billed yearly", 
           "sale": "Save 80%",
-          "pay_title": "Upgrade now for $71.99"
+          "pay_title": "Upgrade now for $71.99",
+          "discount": "$50.99 for first year"
         },
         "monthly": {
           "title": "$9.99/month/6 people",
           "subtitle": "Billed monthly" ,
           "sale": "Save 67%",
-          "pay_title": "Upgrade now for $9.99"
+          "pay_title": "Upgrade now for $9.99",
+          "discount": "$6.99 for first month"
         }
       }
     }
