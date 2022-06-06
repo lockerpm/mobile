@@ -445,6 +445,13 @@ export const UserModel = types
       return res
     },
 
+    getOfferDetailsIOS: async (productIdentifier: string, offerIdentifier: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.fetchOfferDetailsIOS(self.apiToken, productIdentifier, offerIdentifier)
+      return res
+    },
+
+
     getFamilyMember: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getFamilyMember(self.apiToken)

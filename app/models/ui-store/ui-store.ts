@@ -7,6 +7,7 @@ export const UiStoreModel = types
   .model("UiStore")
   .props({
     // Data
+    isTrial: false,
     isOffline: types.maybeNull(types.boolean),
     isDark: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
@@ -30,6 +31,10 @@ export const UiStoreModel = types
   .actions((self) => ({
     setIsOffline: (isOffline: boolean) => {
       self.isOffline = isOffline
+    },
+
+    setIsTrial: (val: boolean) => {
+      self.isTrial = val
     },
 
     setShowWelcomePremium: (val: boolean) => {

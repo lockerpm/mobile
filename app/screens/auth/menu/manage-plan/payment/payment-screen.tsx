@@ -47,7 +47,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const [processPayment, setProcessPayment] = useState<boolean>(false);
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
-  const [eligibleTrial, setEligibleTrial] = useState(false)
 
   // -------------------- EFFECT ----------------------
 
@@ -57,36 +56,20 @@ export const PaymentScreen = observer(function PaymentScreen() {
     }
   }, [])
 
-  useEffect(() => {
-    if (subcriptions.length < 1) return
-    if (IS_IOS) {
-      if (subcriptions[0].introductoryPriceNumberOfPeriodsIOS) {
-        setEligibleTrial(true)
-      }
-    } 
-    // else {
-    //   // TODO
-    //   if (subcriptions[0].freeTrialPeriodAndroid) {
-    //     setEligibleTrial(true)
-    //   }
-    // }
-  }, [subcriptions])
-
   const getSubscription = useCallback(async (): Promise<void> => {
     try {
       await RNIap.initConnection();
-      
+
       if (!IS_IOS) {
         await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
       }
       else {
-        await RNIap.clearTransactionIOS();
+        if (__DEV__) await RNIap.clearTransactionIOS();
       }
 
       const subscriptions = await RNIap.getSubscriptions(subSkus);
 
       setSubcriptions(subscriptions);
-      console.log(subcriptions)
     } catch (err) {
       Logger.error({ 'initConnection': err })
       Alert.alert('Fail to get in-app-purchase information');
@@ -114,6 +97,8 @@ export const PaymentScreen = observer(function PaymentScreen() {
             }
             if (res.kind === "ok") {
               if (res.data.success) {
+                // TODO
+                uiStore.setIsTrial(true)
                 await user.loadPlan()
                 uiStore.setShowWelcomePremium(true)
                 navigation.navigate("welcome_premium")
@@ -152,17 +137,44 @@ export const PaymentScreen = observer(function PaymentScreen() {
       if (purchaseErrorSubscription) {
         purchaseErrorSubscription.remove();
       }
+      RNIap.endConnection();
     };
   }, []);
 
 
-  const purchase = (productId: string): void => {
+  const purchase = async (productId: string) => {
     setProcessPayment(true)
     if (IS_IOS) {
       RNIap.clearTransactionIOS()
     }
-    RNIap.requestSubscription("locker_pm_family_monthly")
+    // const subs = subcriptions.find(subs => subs.productId === productId)
+    // if (subs?.discounts) {
+    //   // console.log(subs.discounts[0].identifier)
+    //   purchaseWithOfferIOS(productId, subs.discounts[0].identifier)
+    // } else {
+    RNIap.requestSubscription(productId)
       .catch((error) => {
+        setProcessPayment(false)
+        if (error.code === 'E_USER_CANCELLED') {
+          Logger.error(JSON.stringify(error))
+        }
+      });
+    // }
+
+  };
+
+  const purchaseWithOfferIOS = async (productId: string, offerId: string) => {
+    if (!IS_IOS) return
+
+    const res = await user.getOfferDetailsIOS(productId, offerId)
+    if (res.kind === "ok") {
+      RNIap.requestPurchaseWithOfferIOS(productId, user.pwd_user_id, {
+        identifier: offerId,
+        keyIdentifier: res.data.key_identifier,
+        nonce: res.data.nonce,
+        signature: res.data.sig,
+        timestamp: res.data.timestamp
+      }).catch((error) => {
         setProcessPayment(false)
         if (error.code === 'E_USER_CANCELLED') {
           return
@@ -170,7 +182,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
           Logger.error(JSON.stringify(error))
         }
       });
-
+    }
   };
 
 
@@ -226,23 +238,23 @@ export const PaymentScreen = observer(function PaymentScreen() {
         <PremiumBenefits benefitTab={route.params.benefitTab} />
       </View>
 
-      <View style={[styles.payment,{backgroundColor: color.background}]}>
+      <View style={[styles.payment, { backgroundColor: color.background }]}>
         <Segment />
         <PricePlan
-          freeTrial={eligibleTrial}
+          subscriptions={subcriptions}
           onPress={setEnable}
           isProcessPayment={processPayment}
           isEnable={isEnable}
           personal={payIndividual}
           purchase={purchase}
         />
-        { IS_IOS && <Button
+        {IS_IOS && <Button
           preset="link"
           style={{
             marginBottom: 20
           }}
           onPress={() => presentCodeRedemptionSheetIOS()}>
-          <Text style={{ fontSize: 18 ,color: "#007AFF" }}>
+          <Text style={{ fontSize: 18, color: "#007AFF" }}>
             Redeem code
           </Text>
         </Button>}

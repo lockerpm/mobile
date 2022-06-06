@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from '../../../models';
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
-const LottieView = require("lottie-react-native");
+import LottieView from "lottie-react-native";
 
 
 export const WelcomePremiumScreen = () => {

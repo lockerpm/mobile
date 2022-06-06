@@ -1,9 +1,12 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { View, TouchableOpacity, ViewStyle } from "react-native"
 import CheckBox from "@react-native-community/checkbox"
 import { Button, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { SKU } from "./price-plan.sku"
+import { Subscription } from "react-native-iap"
+import { IS_IOS } from "../../../../../config/constants"
+import { useStores } from "../../../../../models"
 
 interface PricePlanItemProps {
   onPress: () => void
@@ -73,7 +76,7 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
 
 
 interface PricePlanProps {
-  freeTrial: boolean
+  subscriptions: Subscription[]
   onPress: React.Dispatch<React.SetStateAction<boolean>>
   purchase: (subID: string) => void
   isEnable: boolean
@@ -83,7 +86,7 @@ interface PricePlanProps {
 
 export const PricePlan = (props: PricePlanProps) => {
   const { translate, color } = useMixins()
-
+  const { uiStore } = useStores()
 
   const planText = {
     per: {
@@ -92,14 +95,18 @@ export const PricePlan = (props: PricePlanProps) => {
         title: translate("payment.price.per.monthly.title"),
         subtitle: translate("payment.price.per.monthly.subtitle"),
         onSale: translate("payment.price.per.monthly.sale"),
-        pay_title: translate("payment.price.per.monthly.pay_title")
+        pay_title: translate("payment.price.per.monthly.pay_title"),
+        discount: translate("payment.price.per.monthly.discount")
+
       },
       yearly: {
         subId: SKU.PRE_YEAR,
         title: translate("payment.price.per.yearly.title"),
         subtitle: translate("payment.price.per.yearly.subtitle"),
         onSale: translate("payment.price.per.yearly.sale"),
-        pay_title: translate("payment.price.per.yearly.pay_title")
+        pay_title: translate("payment.price.per.yearly.pay_title"),
+        discount: translate("payment.price.per.yearly.discount")
+
       },
     },
     fam: {
@@ -108,20 +115,48 @@ export const PricePlan = (props: PricePlanProps) => {
         title: translate("payment.price.fam.monthly.title"),
         subtitle: translate("payment.price.fam.monthly.subtitle"),
         onSale: translate("payment.price.fam.monthly.sale"),
-        pay_title: translate("payment.price.fam.monthly.pay_title")
+        pay_title: translate("payment.price.fam.monthly.pay_title"),
+        discount: translate("payment.price.fam.monthly.discount")
       },
       yearly: {
         subId: SKU.FAM_YEAR,
         title: translate("payment.price.fam.yearly.title"),
         subtitle: translate("payment.price.fam.yearly.subtitle"),
         onSale: translate("payment.price.fam.yearly.sale"),
-        pay_title: translate("payment.price.fam.yearly.pay_title")
+        pay_title: translate("payment.price.fam.yearly.pay_title"),
+        discount: translate("payment.price.fam.yearly.discount")
       },
     }
   }
 
   const plan = props.personal ? planText.per : planText.fam
   const billingCycle = props.isEnable ? plan.yearly : plan.monthly
+
+  const [eligibleTrial, setEligibleTrial] = useState(false)
+  const [discount, setDiscount] = useState(false)
+
+
+  useEffect(() => {
+    const subs = props.subscriptions.find(subs => subs.productId === billingCycle.subId)
+    if (IS_IOS) {
+      // if (subs?.discounts) {
+      //   setDiscount(true)
+      // }
+
+      // TODO
+      if (!uiStore.isTrial) {
+        setEligibleTrial(true)
+      }
+    } else {
+      if (subs?.introductoryPrice) {
+        setDiscount(true)
+      }
+      if (subs?.freeTrialPeriodAndroid) {
+        setEligibleTrial(true)
+      }
+    }
+  }, [props.subscriptions])
+
 
   const CONTAINER: ViewStyle = {
     marginLeft: 20,
@@ -139,7 +174,7 @@ export const PricePlan = (props: PricePlanProps) => {
         {translate("payment.ads")}
       </Text>
 
-      {props.freeTrial && <Text style={{
+      {eligibleTrial && <Text style={{
         marginTop: 10,
         marginBottom: 10,
         alignSelf: "center"
@@ -179,9 +214,9 @@ export const PricePlan = (props: PricePlanProps) => {
             {props.isProcessPayment ? "" : billingCycle.pay_title}
           </Text>
           <Text
-            style={{ fontSize: 12, color: color.white }}
+            style={{ fontSize: 12, color: color.white, alignSelf: "center"}}
           >
-            {props.isProcessPayment ? "" : translate("payment.cancel_text")}
+             {props.isProcessPayment ? "" : discount ? billingCycle.discount : translate("payment.cancel_text")}
           </Text>
         </View>
       </Button>
