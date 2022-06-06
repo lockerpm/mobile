@@ -8,15 +8,15 @@ import React, { useEffect, useState } from "react"
 import { AppState } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainTabNavigator } from "./main-tab-navigator"
-import { 
-  SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen, PasswordEditScreen, 
-  PasswordInfoScreen , FolderSelectScreen, PasswordGeneratorScreen,
+import {
+  SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen, PasswordEditScreen,
+  PasswordInfoScreen, FolderSelectScreen, PasswordGeneratorScreen,
   DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
   CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
   CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
   DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
   CryptoWalletEditScreen, CryptoWalletInfoScreen, WelcomePremiumScreen,
-  AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen, 
+  AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen,
   PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen, ReferFriendScreen
 } from "../screens"
 // @ts-ignore
@@ -33,6 +33,7 @@ import { Logger } from "../utils/logger"
 import { SocketEvent, SocketEventType } from "../config/types"
 import { HealthNavigator } from "./tools/health-navigator"
 import { AppEventType, EventBus } from "../utils/event-bus"
+import InAppReview from 'react-native-in-app-review';
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -130,7 +131,7 @@ export const MainNavigator = observer(() => {
   const navigation = useNavigation()
   const { notify, translate, parsePushNotiData } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
-  const { 
+  const {
     getCipherById, syncAutofillData, syncSingleCipher, syncSingleFolder, syncOfflineData, startSyncProcess
   } = useCipherDataMixins()
   const { uiStore, user, cipherStore, toolStore } = useStores()
@@ -148,7 +149,7 @@ export const MainNavigator = observer(() => {
   const handleSync = async () => {
     // Sync offline data
     await syncOfflineData()
-    
+
     // Check if sync is needed
     const lastUpdateRes = await cipherStore.getLastUpdate()
     let bumpTimestamp = 0
@@ -183,9 +184,38 @@ export const MainNavigator = observer(() => {
   // Check invitation
   const handleUserDataSync = () => {
     user.getInvitations()
-    cipherStore.loadSharingInvitations()    
+    cipherStore.loadSharingInvitations()
     cipherStore.loadMyShares()
   }
+
+  // request in app review 
+  const requestInAppReview = () => {
+    if (!InAppReview.isAvailable()) return
+
+    if (uiStore.isShowedAppReview) return
+
+    const currentTime = new Date().getTime()
+
+    // set InAppreview UI display after ~ 6 days  of using this app
+    if (uiStore.inAppReviewShowDate) {
+      if (uiStore.inAppReviewShowDate < currentTime)
+        // trigger UI InAppreview
+        InAppReview.RequestInAppReview()
+          .then((hasFlowFinishedSuccessfully) => {
+            if (hasFlowFinishedSuccessfully) {
+
+              // display ui only 1 time
+              uiStore.setIsShowedAppReview(true)
+            }
+          })
+          .catch((error) => {
+            Logger.error(error);
+          });
+    } else {
+      uiStore.setInAppReviewShowDate(currentTime + 6e8)
+    }
+  }
+
 
   // On app return from background -> lock? + sync autofill data + check push noti navigation
   const _handleAppStateChange = async (nextAppState: string) => {
@@ -235,7 +265,7 @@ export const MainNavigator = observer(() => {
   }
 
   // App inactive trigger
-  const handleInactive = async (isActive : boolean) => {
+  const handleInactive = async (isActive: boolean) => {
     if (!isActive && user.appTimeout && user.appTimeout > 0) {
       if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
         await logout()
@@ -306,6 +336,12 @@ export const MainNavigator = observer(() => {
   }
 
   // ------------------ EFFECT --------------------
+
+  // check app revire 
+  useEffect(() => {
+    requestInAppReview()
+  }, [])
+
 
   // Check device screen on/off
   useEffect(() => {
@@ -389,7 +425,7 @@ export const MainNavigator = observer(() => {
   }, [])
 
   // ------------------ RENDER --------------------
-  
+
   return (
     <UserInactivity
       timeForInactivity={(user.appTimeout && (user.appTimeout > 0)) ? user.appTimeout : 1000}
@@ -413,9 +449,9 @@ export const MainNavigator = observer(() => {
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
-        <Stack.Screen 
-          name="passwordGenerator" 
-          component={PasswordGeneratorScreen} 
+        <Stack.Screen
+          name="passwordGenerator"
+          component={PasswordGeneratorScreen}
           initialParams={{ fromTools: false }}
           options={{
             gestureEnabled: false
@@ -445,7 +481,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="refer_friend" component={ReferFriendScreen} />
         <Stack.Screen name="invite_member" component={InviteMemberScreen} />
         <Stack.Screen name="manage_plan" component={ManagePlanScreen} />
-        <Stack.Screen name="payment" component={PaymentScreen}  initialParams={{ benefitTab: 0 }} />
+        <Stack.Screen name="payment" component={PaymentScreen} initialParams={{ benefitTab: 0 }} />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />

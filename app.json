@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "CyStackLocker",
-    "slug": "CyStackLocker",
+    "name": "Locker",
+    "slug": "Locker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

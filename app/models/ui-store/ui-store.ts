@@ -7,7 +7,6 @@ export const UiStoreModel = types
   .model("UiStore")
   .props({
     // Data
-    showWelcomePremium: false,
     isOffline: types.maybeNull(types.boolean),
     isDark: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
@@ -18,6 +17,9 @@ export const UiStoreModel = types
     isFromAutoFillItem: types.maybeNull(types.boolean),
     isOnSaveLogin: types.maybeNull(types.boolean),
     isFromAutoFill: types.maybeNull(types.boolean),
+    showWelcomePremium: false,
+    isShowedAppReview: false,
+    inAppReviewShowDate: types.maybeNull(types.number),
     selectedCountry: types.maybeNull(types.string),
     deepLinkAction: types.maybeNull(types.string),
     deepLinkUrl: types.maybeNull(types.string),
@@ -32,6 +34,17 @@ export const UiStoreModel = types
 
     setShowWelcomePremium: (val: boolean) => {
       self.showWelcomePremium = val
+    },
+    setIsShowedAppReview: (val: boolean) => {
+      self.isShowedAppReview = val
+    },
+
+    setInAppReviewShowDate: (val: number) => {
+      self.inAppReviewShowDate = val
+    },
+
+    setShowedAppReview: (val: number) => {
+      self.inAppReviewShowDate = val
     },
 
 
