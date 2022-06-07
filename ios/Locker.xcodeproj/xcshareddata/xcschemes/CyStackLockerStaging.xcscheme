@@ -15,9 +15,9 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-                     BuildableName = "CyStackLocker.app"
-                     BlueprintName = "CyStackLocker"
-                     ReferencedContainer = "container:CyStackLocker.xcodeproj">
+                     BuildableName = "Locker.app"
+                     BlueprintName = "Locker"
+                     ReferencedContainer = "container:Locker.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
             </ActionContent>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "CyStackLocker.app"
-               BlueprintName = "CyStackLocker"
-               ReferencedContainer = "container:CyStackLocker.xcodeproj">
+               BuildableName = "Locker.app"
+               BlueprintName = "Locker"
+               ReferencedContainer = "container:Locker.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -51,9 +51,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "CyStackLockerTests.xctest"
-               BlueprintName = "CyStackLockerTests"
-               ReferencedContainer = "container:CyStackLocker.xcodeproj">
+               BuildableName = "LockerTests.xctest"
+               BlueprintName = "LockerTests"
+               ReferencedContainer = "container:Locker.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -73,9 +73,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "CyStackLocker.app"
-            BlueprintName = "CyStackLocker"
-            ReferencedContainer = "container:CyStackLocker.xcodeproj">
+            BuildableName = "Locker.app"
+            BlueprintName = "Locker"
+            ReferencedContainer = "container:Locker.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -90,9 +90,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "CyStackLocker.app"
-            BlueprintName = "CyStackLocker"
-            ReferencedContainer = "container:CyStackLocker.xcodeproj">
+            BuildableName = "Locker.app"
+            BlueprintName = "Locker"
+            ReferencedContainer = "container:Locker.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
