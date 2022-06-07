@@ -626,14 +626,14 @@
           "subtitle": "Billed monthly",
           "sale": "",
           "pay_title": "Upgrade now for $4.99",
-          "discount": "$3.49 for first month"
+          "discount": "Upgrade now for $3.49 (save 30%) for first cycle. Then $4.99/month"
         },
         "yearly": {
           "title": "$15.49/year",
           "subtitle": "$1.29/month - billed yearly",
           "sale": "Save 75%",
           "pay_title": "Upgrade now for $15.49",
-          "discount": "$10.99 for first year"
+          "discount": "Upgrade now for $10.99 (save 30%) for first cycle. Then $15.49/year"
         }
       },
       "fam": {
@@ -642,14 +642,14 @@
           "subtitle": "$5.99 per month/6 people. Billed yearly", 
           "sale": "Save 80%",
           "pay_title": "Upgrade now for $71.99",
-          "discount": "$50.99 for first year"
+          "discount": "Upgrade now for $50.99 (save 30%) for first cycle. Then $71.99/year"
         },
         "monthly": {
           "title": "$9.99/month/6 people",
           "subtitle": "Billed monthly" ,
           "sale": "Save 67%",
           "pay_title": "Upgrade now for $9.99",
-          "discount": "$6.99 for first month"
+          "discount": "Upgrade now for $6.99 (save 30%) for first cycle. Then $9.99/month"
         }
       }
     }
