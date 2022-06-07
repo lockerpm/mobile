@@ -206,7 +206,7 @@ export const PricePlan = (props: PricePlanProps) => {
           props.purchase(billingCycle.subId)
         }}
       >
-        <View style={{ flexDirection: "column", }}>
+        { IS_IOS && <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text
             preset="bold"
             style={{ color: color.white }}
@@ -214,11 +214,19 @@ export const PricePlan = (props: PricePlanProps) => {
             {props.isProcessPayment ? "" : billingCycle.pay_title}
           </Text>
           <Text
-            style={{ fontSize: 12, color: color.white, alignSelf: "center"}}
+            style={{ fontSize: 16, color: color.white, alignSelf: "center"}}
           >
              {props.isProcessPayment ? "" : discount ? billingCycle.discount : translate("payment.cancel_text")}
           </Text>
-        </View>
+        </View>}
+
+        { !IS_IOS && discount && <View style={{ flexDirection: "column", alignItems: "center" }}>
+          <Text
+            style={{ color: color.white, fontWeight: "600", textAlign: "center" }} 
+          >
+            {props.isProcessPayment ? "" : billingCycle.discount}
+          </Text>
+        </View>}
       </Button>
     </View>
   )

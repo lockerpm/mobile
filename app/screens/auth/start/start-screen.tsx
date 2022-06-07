@@ -79,13 +79,6 @@ export const StartScreen = observer(() => {
       navigation.navigate(navigationRequest.path, navigationRequest.params)
       return
     }
-
-    // Show biometric intro
-    if (user.plan?.alias !== PlanType.FREE && !uiStore.showWelcomePremium) {
-      uiStore.setShowWelcomePremium(true)
-      navigation.navigate("welcome_premium")
-      return
-    }
     
     if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
       if (!user.biometricIntroShown && !user.isBiometricUnlock) {
