@@ -198,6 +198,13 @@ export type GetReferLinkResult = {
     }
 } | GeneralApiProblem
 
+export type GetTrialEligibleResult = {
+    kind: "ok",
+    data: {
+        personal_trial_applied : boolean
+    }
+} | GeneralApiProblem
+
 export type BillingResult = {
     kind: "ok",
     data: {

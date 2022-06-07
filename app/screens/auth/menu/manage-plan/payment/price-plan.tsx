@@ -76,6 +76,7 @@ const PricePlanItem = (prop: PricePlanItemProps) => {
 
 
 interface PricePlanProps {
+  isTrial: boolean
   subscriptions: Subscription[]
   onPress: React.Dispatch<React.SetStateAction<boolean>>
   purchase: (subID: string) => void
@@ -86,7 +87,6 @@ interface PricePlanProps {
 
 export const PricePlan = (props: PricePlanProps) => {
   const { translate, color } = useMixins()
-  const { uiStore } = useStores()
 
   const planText = {
     per: {
@@ -132,27 +132,20 @@ export const PricePlan = (props: PricePlanProps) => {
   const plan = props.personal ? planText.per : planText.fam
   const billingCycle = props.isEnable ? plan.yearly : plan.monthly
 
-  const [eligibleTrial, setEligibleTrial] = useState(false)
+
   const [discount, setDiscount] = useState(false)
 
 
+  
   useEffect(() => {
     const subs = props.subscriptions.find(subs => subs.productId === billingCycle.subId)
     if (IS_IOS) {
       // if (subs?.discounts) {
       //   setDiscount(true)
       // }
-
-      // TODO
-      if (!uiStore.isTrial) {
-        setEligibleTrial(true)
-      }
     } else {
       if (subs?.introductoryPrice) {
         setDiscount(true)
-      }
-      if (subs?.freeTrialPeriodAndroid) {
-        setEligibleTrial(true)
       }
     }
   }, [props.subscriptions])
@@ -174,7 +167,7 @@ export const PricePlan = (props: PricePlanProps) => {
         {translate("payment.ads")}
       </Text>
 
-      {eligibleTrial && <Text style={{
+      {props.isTrial && <Text style={{
         marginTop: 10,
         marginBottom: 10,
         alignSelf: "center"
