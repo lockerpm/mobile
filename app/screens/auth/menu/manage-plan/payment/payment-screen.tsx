@@ -47,14 +47,18 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const [processPayment, setProcessPayment] = useState<boolean>(false);
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
+  const [isTrial, setIsTrial] = useState(false)
 
-  // -------------------- EFFECT ----------------------
+  // -------------------- METHOD ----------------------
 
-  useEffect(() => {
-    if (route.params.family) {
-      setPayIndividual(false)
+  const getEligibleTrial = async () => {
+    const res = await user.getTrialEligible()
+    if (res.kind === "ok") {
+      setIsTrial(!res.data.personal_trial_applied)
+    } else {
+      notifyApiError(res)
     }
-  }, [])
+  }
 
   const getSubscription = useCallback(async (): Promise<void> => {
     try {
@@ -97,8 +101,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
             }
             if (res.kind === "ok") {
               if (res.data.success) {
-                // TODO
-                uiStore.setIsTrial(true)
                 await user.loadPlan()
                 uiStore.setShowWelcomePremium(true)
                 navigation.navigate("welcome_premium")
@@ -127,20 +129,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
       },
     );
   }, []);
-
-  useEffect(() => {
-    getSubscription();
-    return (): void => {
-      if (purchaseUpdateSubscription) {
-        purchaseUpdateSubscription.remove();
-      }
-      if (purchaseErrorSubscription) {
-        purchaseErrorSubscription.remove();
-      }
-      RNIap.endConnection();
-    };
-  }, []);
-
 
   const purchase = async (productId: string) => {
     setProcessPayment(true)
@@ -186,7 +174,31 @@ export const PaymentScreen = observer(function PaymentScreen() {
   };
 
 
-  // -------------------- RENDER ----------------------
+  // -------------------- EFFECT ----------------------
+
+
+  useEffect(() => {
+    getSubscription();
+    return (): void => {
+      if (purchaseUpdateSubscription) {
+        purchaseUpdateSubscription.remove();
+      }
+      if (purchaseErrorSubscription) {
+        purchaseErrorSubscription.remove();
+      }
+      RNIap.endConnection();
+    };
+  }, []);
+
+  useEffect(() => {
+    getEligibleTrial()
+
+    if (route.params.family) {
+      setPayIndividual(false)
+    }
+  }, [])
+
+  // ------------------ RENDER ----------------------
 
   // user selects plan segment
   const Segment = () => {
@@ -241,6 +253,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
       <View style={[styles.payment, { backgroundColor: color.background }]}>
         <Segment />
         <PricePlan
+          isTrial={isTrial}
           subscriptions={subcriptions}
           onPress={setEnable}
           isProcessPayment={processPayment}

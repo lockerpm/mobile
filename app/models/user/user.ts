@@ -474,6 +474,12 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getReferLink(self.apiToken)
       return res
+    }, 
+
+    getTrialEligible: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getTrialEligible(self.apiToken)
+      return res
     }
 
   }))

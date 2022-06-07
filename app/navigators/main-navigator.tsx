@@ -221,6 +221,7 @@ export const MainNavigator = observer(() => {
   const _handleAppStateChange = async (nextAppState: string) => {
     Logger.debug(nextAppState)
 
+
     // Ohter state (background/inactive)
     if (nextAppState !== 'active') {
       appIsActive = false
