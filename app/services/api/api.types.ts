@@ -115,7 +115,7 @@ export type GetPMTokenResult = {
 export type SocialLoginResult = {
     kind: "ok"
     data: {
-        is_first?:boolean
+        is_first?: boolean
         new_user?: boolean
         token: string
         tmp_token?: string
@@ -148,7 +148,15 @@ export type GetTeamsResult = {
 
 export type GetPlanResult = {
     kind: 'ok'
-    data: { name: string; alias: string; is_family: boolean},
+    data: {
+        name: string;
+        alias: string;
+        is_family: boolean;
+        cancel_at_period_end: boolean;
+        duration: "monthly" | "yearly";
+        next_billing_time: number
+        payment_method: string
+    },
 } | GeneralApiProblem
 
 export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
@@ -194,14 +202,14 @@ export type RemoveMemberResult = {
 export type GetReferLinkResult = {
     kind: "ok",
     data: {
-        referral_link : string
+        referral_link: string
     }
 } | GeneralApiProblem
 
 export type GetTrialEligibleResult = {
     kind: "ok",
     data: {
-        personal_trial_applied : boolean
+        personal_trial_applied: boolean
     }
 } | GeneralApiProblem
 

@@ -27,6 +27,7 @@ import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
 import { PushNotifier } from "../../../../utils/push-notification"
 import { useTestMixins } from "../../../../services/mixins/test"
+import moment from "moment"
 
 
 export const MenuScreen = observer(() => {
@@ -35,7 +36,7 @@ export const MenuScreen = observer(() => {
   const { translate, notify, color, isDark, notifyApiError } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { createRandomPasswords } = useTestMixins()
-  const {isTablet} = useAdaptiveLayoutMixins()
+  const { isTablet } = useAdaptiveLayoutMixins()
   const appVersion = `${getVersion()}`
   const isFreeAccount = user.plan?.alias === PlanType.FREE
   const isPremiumAccount = user.plan?.alias === PlanType.PREMIUM
@@ -182,22 +183,28 @@ export const MenuScreen = observer(() => {
       node: <Text text="FREE" style={[PLAN_NAME, { color: color.textBlack }]}></Text>,
     },
     "pm_premium": {
-      node: <Text text="PREMIUM" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+      node: <View style={{ flexDirection: "row" }}>
+        <Text text="PREMIUM" style={[PLAN_NAME, { color: color.primary }]}></Text>
+        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).locale('vi').format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 10 }]}></Text>
+      </View>
     },
     "pm_family": {
-      node: <Text text="FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+      node: <View style={{ flexDirection: "row" }}>
+        <Text text="FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>
+        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).locale('vi').format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 10 }]}></Text>
+      </View>,
     }
   }
 
   const onShare = async () => {
     try {
-        await Share.share({
-            message: translate("refer_friend.refer_header") + referLink,
-        });
+      await Share.share({
+        message: translate("refer_friend.refer_header") + referLink,
+      });
     } catch (error) {
-        alert(error.message);
+      alert(error.message);
     }
-};
+  };
 
   // -------------- RENDER --------------------
 
@@ -302,10 +309,10 @@ export const MenuScreen = observer(() => {
         </View>
 
         {/*Refer friend */}
-        <ReferFriendMenuItem onPress={isTablet ? (()=> onShare()) : (() => navigation.navigate('refer_friend', {
+        <ReferFriendMenuItem onPress={isTablet ? (() => onShare()) : (() => navigation.navigate('refer_friend', {
           referLink: referLink
         }))} />
-        
+
 
         <View style={ITEM_CONTAINER}>
           {
