@@ -22,6 +22,9 @@ import { Logger } from "../utils/logger"
 import { PushNotifier } from "../utils/push-notification"
 import { NotifeeNotificationData } from "../utils/push-notification/types"
 import { save, StorageKey } from "../utils/storage"
+import dynamicLinks from '@react-native-firebase/dynamic-links'
+import { setCookiesFromUrl } from "../utils/analytics"
+
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -102,6 +105,15 @@ const RootStack = observer((props: Props) => {
     return () => {
       unsubscribe()
     }
+  }, [])
+
+  // Dynamic links handler
+  useEffect(() => {
+    const unsubscribe = dynamicLinks().onLink((link) => {
+      Logger.debug(`DYNAMIC LINK FORGROUND: ${JSON.stringify(link)}`)
+      setCookiesFromUrl(link.url)
+    })
+    return () => unsubscribe()
   }, [])
 
   // -------------------- RENDER ----------------------
