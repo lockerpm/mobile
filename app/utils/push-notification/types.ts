@@ -13,6 +13,7 @@ export type NewShareData = {
   pwd_user_ids: number[]
   share_type?: CipherType
   count?: number
+  owner_name?: string
 }
 
 export type ConfirmShareData = {

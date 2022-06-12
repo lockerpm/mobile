@@ -24,6 +24,7 @@ import { NotifeeNotificationData } from "../utils/push-notification/types"
 import { save, StorageKey } from "../utils/storage"
 import dynamicLinks from '@react-native-firebase/dynamic-links'
 import { setCookiesFromUrl } from "../utils/analytics"
+import { AppState } from "react-native"
 
 
 /**
@@ -82,6 +83,19 @@ const RootStack = observer((props: Props) => {
     }
   }
 
+  const _handleAppStateChange = async (nextAppState: string) => {
+    Logger.debug(nextAppState)
+
+    // Ohter state (background/inactive)
+    if (nextAppState !== 'active') {
+      return
+    }
+
+    const link = await dynamicLinks().getInitialLink()
+    Logger.debug(`DYNAMIC LINK BACKGROUND: ${JSON.stringify(link)}`)
+    link?.url && setCookiesFromUrl(link.url)
+  }
+
   // ------------------- EFFECTS -------------------
 
   // Check internet connection
@@ -107,13 +121,22 @@ const RootStack = observer((props: Props) => {
     }
   }, [])
 
-  // Dynamic links handler
+  // Dynamic links foreground handler
   useEffect(() => {
     const unsubscribe = dynamicLinks().onLink((link) => {
-      Logger.debug(`DYNAMIC LINK FORGROUND: ${JSON.stringify(link)}`)
-      setCookiesFromUrl(link.url)
+      Logger.debug(`DYNAMIC LINK FOREGROUND: ${JSON.stringify(link)}`)
+      link?.url && setCookiesFromUrl(link.url)
     })
     return () => unsubscribe()
+  }, [])
+
+  // Dynamic links background handler
+  useEffect(() => {
+    _handleAppStateChange('active')
+    AppState.addEventListener("change", _handleAppStateChange)
+    return () => {
+      AppState.removeEventListener("change", _handleAppStateChange)
+    }
   }, [])
 
   // -------------------- RENDER ----------------------
