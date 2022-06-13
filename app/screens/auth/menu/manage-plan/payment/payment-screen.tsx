@@ -22,6 +22,7 @@ import RNIap, {
   presentCodeRedemptionSheetIOS
 } from 'react-native-iap';
 import { PurchaseValidationResult } from "../../../../../services/api"
+import { logPurchase } from "../../../../../utils/analytics"
 
 // control init premium benefit tab
 type ScreenProp = RouteProp<PrimaryParamList, 'payment'>;
@@ -104,6 +105,13 @@ export const PaymentScreen = observer(function PaymentScreen() {
             }
             if (res.kind === "ok") {
               if (res.data.success) {
+                const subscription = subcriptions.find(s => s.productId === purchase.productId)
+                logPurchase({
+                  itemId: purchase.productId,
+                  currency: subscription.currency,
+                  price: subscription.localizedPrice,
+                  itemName: subscription.title
+                })
                 await user.loadPlan()
                 uiStore.setShowWelcomePremium(true)
                 navigation.navigate("welcome_premium")
