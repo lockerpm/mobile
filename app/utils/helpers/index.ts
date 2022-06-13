@@ -1,10 +1,10 @@
 import isEqual from 'lodash/isEqual'
+import moment from 'moment'
 
 
 type ItemProps = {
   [key: string]: any
 }
-
 
 export const shouldRerenderItem = (ignoreProps: string[]) => {
   return (prev: ItemProps, next: ItemProps) => {

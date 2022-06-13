@@ -126,17 +126,19 @@ export const SignupScreen = observer(() => {
     ])
     setIsScreenLoading(false)
     if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
-      if (newUser) {
-        setResetPWToken(token)
-        setAccount(userRes.user)
-        setShowSocialSignedUpModal(true)
-      } else {
+      // TODO
+      
+      // if (newUser) {
+      //   setResetPWToken(token)
+      //   setAccount(userRes.user)
+      //   setShowSocialSignedUpModal(true)
+      // } else {
         if (user.is_pwd_manager) {
           navigation.navigate('lock')
         } else {
           navigation.navigate('createMasterPassword')
         }
-      }
+      // }
     }
   }
 

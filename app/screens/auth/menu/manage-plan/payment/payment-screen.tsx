@@ -76,7 +76,10 @@ export const PaymentScreen = observer(function PaymentScreen() {
       setSubcriptions(subscriptions);
     } catch (err) {
       Logger.error({ 'initConnection': err })
-      Alert.alert('Fail to get in-app-purchase information');
+      Alert.alert('Fail to get in-app-purchase information', "",
+        [
+          { text: "OK", onPress: () => { navigation.goBack() } }
+        ]);
     }
 
 
@@ -109,9 +112,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
                 Alert.alert(
                   translate("manage_plan.verify"),
                   res.data.detail,
-                  [
-                    { text: "OK", onPress: () => { } }
-                  ]
                 )
               }
             } else {
