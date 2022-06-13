@@ -44,7 +44,15 @@ export const UserModel = types
 
     // Others data
     teams: types.array(types.frozen()),
-    plan: types.maybeNull(types.frozen<{ name: string; alias: string, is_family: boolean }>()),
+    plan: types.maybeNull(types.frozen<{
+      name: string;
+      alias: string;
+      is_family: boolean;
+      cancel_at_period_end: boolean;
+      duration: "monthly" | "yearly";
+      next_billing_time: number
+      payment_method: string
+    }>()),
     invitations: types.array(types.frozen()),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
@@ -123,7 +131,15 @@ export const UserModel = types
     setTeams: (teams: object[]) => {
       self.teams = cast(teams)
     },
-    setPlan: (plan: { name: string; alias: string ; is_family: boolean }) => {
+    setPlan: (plan: {
+      name: string;
+      alias: string;
+      is_family: boolean;
+      cancel_at_period_end: boolean;
+      duration: "monthly" | "yearly";
+      next_billing_time: any
+      payment_method: string
+    }) => {
       self.plan = cast(plan)
     },
     setInvitations: (invitations: object[]) => {
@@ -203,14 +219,18 @@ export const UserModel = types
     setPushNotificationsSetting: (val: boolean) => {
       self.disablePushNotifications = val
     },
-    
+
     // DEV
     setUserFreePlan: () => {
       if (__DEV__) {
         self.plan = {
           name: "Free",
           is_family: false,
-          alias: "pm_free"
+          alias: "pm_free",
+          cancel_at_period_end: false,
+          duration: "monthly",
+          next_billing_time: 0,
+          payment_method: "mobile"
         }
       }
     }
@@ -256,7 +276,7 @@ export const UserModel = types
 
     setNewPassword: async (new_password: string, token: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.setNewPassword({ new_password, token})
+      const res = await userApi.setNewPassword({ new_password, token })
       return res
     },
 
@@ -292,7 +312,7 @@ export const UserModel = types
       const res = await userApi.socialLogin(payload)
       return res
     },
-    
+
     getPMToken: async (token: string) => {
       const userApi = new UserApi(self.environment.api)
       const pmRes = await userApi.getPMToken(token, {
@@ -300,12 +320,12 @@ export const UserModel = types
         SERVICE_SCOPE: 'pwdmanager',
         CLIENT: 'mobile'
       })
-      
+
       if (pmRes.kind === 'ok') {
         self.setApiToken(pmRes.data.access_token)
         self.setLoggedIn(true)
       }
-      return pmRes 
+      return pmRes
     },
 
     register: async (payload: RegisterData) => {
@@ -474,7 +494,7 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getReferLink(self.apiToken)
       return res
-    }, 
+    },
 
     getTrialEligible: async () => {
       const userApi = new UserApi(self.environment.api)
