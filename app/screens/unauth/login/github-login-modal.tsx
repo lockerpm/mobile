@@ -2,6 +2,7 @@ import React from 'react'
 import { WebViewModal } from '../../../components'
 import { GITHUB_CONFIG } from '../../../config/constants'
 import { useMixins } from '../../../services/mixins'
+import { getUrlParameterByName } from '../../../utils/helpers'
 
 
 type Props = {
@@ -18,19 +19,10 @@ export const GitHubLoginModal = (props: Props) => {
 
   const onURLChange = (url: string) => {
     if (url.startsWith(GITHUB_CONFIG.redirectUrl)) {
-      const code = getParameterByName('code', url)
+      const code = getUrlParameterByName('code', url)
       onClose()
       onDone(code)
     }
-  }
-
-  const getParameterByName = (name: string, url: string) => {
-    name = name.replace(/[\[\]]/g, '\\$&');
-    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
   return (

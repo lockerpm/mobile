@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef, useCallback } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import {Text, Button, RecaptchaChecker } from "../../../components"
@@ -26,16 +26,21 @@ export const MethodSelection = observer((props: Props) => {
   const { translate, notifyApiError, color } = useMixins()
   const { methods, onSelect, goBack, username, password } = props
 
+  const captchaRef = useRef(null)
+
   // ------------------ Params -----------------------
 
   const [sendingEmail, setIsSendingEmail] = useState(false)
-  const [recaptchaToken, setRecaptchaToken] = useState('')
 
   // ------------------ Methods ----------------------
 
-  const sendEmail = async (data: any) => {
+  const getCaptchaToken = useCallback(async () => {
+    return await captchaRef.current.waitForToken()
+  }, [])
+
+  const sendEmail = async (data: any, captchaToken: string) => {
     setIsSendingEmail(true)
-    const res = await user.sendOtpEmail(username, password, recaptchaToken)
+    const res = await user.sendOtpEmail(username, password, captchaToken)
     setIsSendingEmail(false)
     if (res.kind === 'ok') {
       onSelect('mail', data)
@@ -65,7 +70,7 @@ export const MethodSelection = observer((props: Props) => {
   return (
     <View>
       <RecaptchaChecker
-        onTokenLoad={setRecaptchaToken}
+        ref={captchaRef}
       />
 
       <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -101,7 +106,11 @@ export const MethodSelection = observer((props: Props) => {
             preset="outline"
             isDisabled={item.type === 'mail' && sendingEmail}
             isLoading={item.type === 'mail' && sendingEmail}
-            onPress={() => item.type === 'mail' ? sendEmail(item.data) : onSelect(item.type, item.data)}
+            onPress={
+              () => item.type === 'mail'
+                ? getCaptchaToken().then(token => sendEmail(item.data, token))
+                : onSelect(item.type, item.data)
+            }
             style={{
               width: '100%',
               marginBottom: spacing.margin / 2
