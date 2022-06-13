@@ -1,34 +1,51 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, forwardRef, useImperativeHandle } from 'react'
 import Recaptcha from 'react-native-recaptcha-that-works'
 import { RECAPTCHA_BASE_URL, RECAPTCHA_SITE_KEY } from '../../config/constants'
+import { useMixins } from '../../services/mixins'
 import { Logger } from '../../utils/logger'
 
 
 type Props = {
-  onTokenLoad: (token: string) => void
 }
 
-export const RecaptchaChecker = (props: Props) => {
-  const { onTokenLoad } = props
+export const RecaptchaChecker = forwardRef((props: Props, ref) => {
+  const {} = props
+  const { notify } = useMixins()
+
+  let token = ''
 
   const recaptcha = useRef(null)
 
-  const send = () => {
-    recaptcha.current.open()
+  const waitForToken = () => {
+    return new Promise<string>((resolve) => {
+      token = ''
+      recaptcha.current.open()
+      const interval = setInterval(() => {
+        if (token) {
+          resolve(token)
+          clearInterval(interval)
+        }
+      }, 500)
+    })
   }
 
-  const onVerify = (token: string) => {
+  const onVerify = (t: string) => {
     Logger.debug('Captcha loaded')
-    onTokenLoad(token)
+    token = t
   }
 
   const onExpire = () => {
-    send()
+    notify('error', 'Captcha expired, please close the app and open again.')
   }
 
-  useEffect(() => {
-    send()
-  }, [])
+  const onError = (e: string) => {
+    Logger.error(`RECAPTCHA ERROR: ${e}`)
+  }
+
+  useImperativeHandle(ref, () => ({
+    waitForToken,
+    token
+  }))
 
   return (
     <Recaptcha
@@ -37,7 +54,8 @@ export const RecaptchaChecker = (props: Props) => {
       baseUrl={RECAPTCHA_BASE_URL}
       onVerify={onVerify}
       onExpire={onExpire}
+      onError={onError}
       size="invisible"
     />
   )
-}
+})
