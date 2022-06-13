@@ -17,7 +17,7 @@ import { Invitation, InvitationData } from "./invitation"
 import { getVersion } from "react-native-device-info"
 import { ReferFriendMenuItem } from "./refer-friend-menu-item"
 import { useAdaptiveLayoutMixins } from "../../../../services/mixins/adaptive-layout"
-import Intercom from "@intercom/intercom-react-native"
+import Intercom, { Visibility, IntercomEvents } from "@intercom/intercom-react-native"
 import PlanIcon from './star.svg'
 import InviteIcon from './invite.svg'
 import SettingsIcon from './gear.svg'
@@ -49,7 +49,7 @@ export const MenuScreen = observer(() => {
   const [referLink, setReferLink] = useState<string>(null)
 
   // Intercom service 
-  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(1)
+  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(0)
 
   const PLAN_NAME: TextStyle = {
     fontSize: fontSize.small,
@@ -74,17 +74,38 @@ export const MenuScreen = observer(() => {
   }, [])
 
   useEffect(() => {
-    const getConversationCount = async () => {
+    const setUpCustomerService = async () => {
       try {
-        const res = await Intercom.getUnreadConversationCount()
-        setUnreadConversationCount(res)
+        if (uiStore.isShowIntercomMsgBox && user.isLoggedInPw) {
+          await Intercom.setBottomPadding(100)
+          await Intercom.setLauncherVisibility(Visibility.VISIBLE)
+        } else {
+          await Intercom.setLauncherVisibility(Visibility.GONE)
+          const res = await Intercom.getUnreadConversationCount()
+          setUnreadConversationCount(res)
+        }
       } catch (e) {
         Logger.error(e)
       }
-
     }
-    getConversationCount()
-  }, [])
+    setUpCustomerService()
+
+    return () => {
+      Intercom.hideIntercom()
+    }
+  }, [uiStore.isShowIntercomMsgBox])
+
+  useEffect(() => {
+    const countListener = Intercom.addEventListener(
+      IntercomEvents.IntercomUnreadCountDidChange,
+      (response) => {
+        setUnreadConversationCount(response.count as number);
+      }
+    );
+    return () => {
+      countListener.remove();
+    };
+  }, []);
 
   const items: MenuItemProps[] = [
     {
@@ -335,7 +356,7 @@ export const MenuScreen = observer(() => {
           referLink: referLink
         }))} />
 
-        <View style={ITEM_CONTAINER}>
+        {!uiStore.isShowIntercomMsgBox && <View style={ITEM_CONTAINER}>
           <Button
             preset="link"
             onPress={() => Intercom.displayMessenger()}
@@ -350,7 +371,7 @@ export const MenuScreen = observer(() => {
             <View style={{ flex: 1, flexDirection: "row" }}>
               <Text
                 preset="black"
-                text={"Customer service and support"}
+                text={translate("common.customer_service")}
                 style={{ paddingHorizontal: 10 }}
               />
               {
@@ -375,8 +396,6 @@ export const MenuScreen = observer(() => {
                   </View>
                 )
               }
-
-
             </View>
             <FontAwesome
               name="angle-right"
@@ -384,7 +403,8 @@ export const MenuScreen = observer(() => {
               color={color.textBlack}
             />
           </Button>
-        </View>
+        </View>}
+
 
         <View style={[ITEM_CONTAINER, { marginTop: 24 }]}>
           {

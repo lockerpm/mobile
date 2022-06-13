@@ -49,7 +49,7 @@ export const PremiumBenefits = (props: { benefitTab: number }) => {
             padding: 5
           }}
         >
-          <Image key={i} defaultSource={item.img} source={item.img} style={{ maxHeight: "70%" }} resizeMode="contain" />
+          <Image key={i} defaultSource={item.img} source={item.img} style={{ maxHeight: "60%" }} resizeMode="contain" />
           <Text preset="black" text={item.desc} style={{ textAlign: 'center', lineHeight: 24, maxWidth: "90%" }} />
         </View>
       )
@@ -60,7 +60,7 @@ export const PremiumBenefits = (props: { benefitTab: number }) => {
   return (
     <View style={{ width: "100%" }}>
       {/* Tabs */}
-      <View style={{ height: "100%" }}>
+      <View style={{ height: "100%", paddingBottom: 10 }}>
         <TabView
           renderTabBar={() => null}
           navigationState={{ index, routes }}
