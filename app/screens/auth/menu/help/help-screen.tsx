@@ -42,12 +42,12 @@ export const HelpScreen = observer(function HelpScreen() {
         Linking.openURL(PRIVACY_POLICY_URL)
       }
     },
-    {
-      name: translate('help.feedback'),
-      action: () => {
-        setShowFeedback(true)
-      }
-    },
+    // {
+    //   name: translate('help.feedback'),
+    //   action: () => {
+    //     setShowFeedback(true)
+    //   }
+    // },
     {
       name: translate('help.report_vuln'),
       action: () => {

@@ -7,6 +7,7 @@ export const UiStoreModel = types
   .model("UiStore")
   .props({
     // Data
+    isShowIntercomMsgBox: false,
     isOffline: types.maybeNull(types.boolean),
     isDark: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
@@ -23,13 +24,17 @@ export const UiStoreModel = types
     selectedCountry: types.maybeNull(types.string),
     deepLinkAction: types.maybeNull(types.string),
     deepLinkUrl: types.maybeNull(types.string),
-    saveLogin: types.maybeNull(types.frozen<{domain: string, username: string, password: string}>()),
+    saveLogin: types.maybeNull(types.frozen<{ domain: string, username: string, password: string }>()),
     saveLastId: types.maybeNull(types.string),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     setIsOffline: (isOffline: boolean) => {
       self.isOffline = isOffline
+    },
+
+    setShowIntercomMsgBox: (val: boolean) => {
+      self.isShowIntercomMsgBox = val
     },
 
     setShowWelcomePremium: (val: boolean) => {
@@ -83,7 +88,7 @@ export const UiStoreModel = types
       } else if (action === 'fill_item') {
         self.saveLastId = data || ''
       } else {
-        self.saveLogin = data 
+        self.saveLogin = data
       }
     },
 
@@ -108,7 +113,7 @@ export const UiStoreModel = types
  */
 
 type UiStoreType = Instance<typeof UiStoreModel>
-export interface UiStore extends UiStoreType {}
+export interface UiStore extends UiStoreType { }
 type UiStoreSnapshotType = SnapshotOut<typeof UiStoreModel>
-export interface UiStoreSnapshot extends UiStoreSnapshotType {}
+export interface UiStoreSnapshot extends UiStoreSnapshotType { }
 export const createUiStoreDefaultModel = () => types.optional(UiStoreModel, {})

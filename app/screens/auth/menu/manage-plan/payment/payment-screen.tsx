@@ -239,24 +239,27 @@ export const PaymentScreen = observer(function PaymentScreen() {
     <Layout
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
-      <View style={styles.header}>
-        <Image
-          source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
-          style={{ height: 32, width: 152 }}
-        />
-        <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
+      <View style={{ flex: 1 }}> 
+        <View style={styles.header}>
           <Image
-            source={require("./Cross.png")}
-            style={{ height: 24, width: 24 }}
+            source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
+            style={{ height: 32, width: 152 }}
           />
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
+            <Image
+              source={require("./Cross.png")}
+              style={{ height: 24, width: 24 }}
+            />
+          </TouchableOpacity>
+        </View>
+
+
+
+        <View style={{ top: 0, minHeight: 310, width: "100%", zIndex: 1}}>
+          <PremiumBenefits benefitTab={route.params.benefitTab} />
+        </View>
       </View>
 
-
-
-      <View style={{ top: 0, height: 310, width: "100%", zIndex: 1, flex: 1 }}>
-        <PremiumBenefits benefitTab={route.params.benefitTab} />
-      </View>
 
       <View style={[styles.payment, { backgroundColor: color.background }]}>
         <Segment />
