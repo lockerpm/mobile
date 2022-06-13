@@ -13,6 +13,7 @@ import countries from '../../../common/countries.json'
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { SocialSignedUpModal } from "./social-signup-modal"
 import { GitHubLoginModal } from "../login/github-login-modal"
+import { logRegisterSuccessEvent } from "../../../utils/analytics"
 
 
 export const SignupScreen = observer(() => {
@@ -116,6 +117,7 @@ export const SignupScreen = observer(() => {
     })
     setIsLoading(false)
     if (res.kind === 'ok') {
+      logRegisterSuccessEvent()
       notify('success', translate('signup.signup_successful'), 5000)
       navigation.navigate('login')
     } else {
