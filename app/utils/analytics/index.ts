@@ -51,6 +51,11 @@ export const getUtmCookies = async () => {
   return res
 }
 
+export const logRegisterSuccessEvent = async () => {
+  const cookies = await getUtmCookies()
+  await analytics().logEvent('register_success', cookies)
+} 
+
 export const logCreateMasterPwEvent = async () => {
   const cookies = await getUtmCookies()
   await analytics().logEvent('create_master_pw', cookies)

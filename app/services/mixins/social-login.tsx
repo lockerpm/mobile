@@ -7,6 +7,7 @@ import { GOOGLE_CLIENT_ID } from '../../config/constants'
 import { Logger } from '../../utils/logger'
 import { LoginManager, AccessToken } from "react-native-fbsdk-next"
 import { appleAuth } from '@invertase/react-native-apple-authentication'
+import { logRegisterSuccessEvent } from '../../utils/analytics'
 
 
 const { createContext, useContext } = React
@@ -187,6 +188,9 @@ export const SocialLoginMixinsProvider = observer((props: {
         notifyApiError(loginRes)
       await logoutAllServices()
     } else {
+      if (loginRes.data.is_first) {
+        logRegisterSuccessEvent()
+      }
       const accessToken = loginRes.data.tmp_token || loginRes.data.token
       setIsLoading && setIsLoading(false)
       const res = await user.getPMToken(accessToken)
