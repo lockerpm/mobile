@@ -5,16 +5,19 @@ import { Layout, Text, AutoImage as Image, Button } from "../../../../components
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+import { commonStyles } from "../../../../theme"
 import { PlanType } from "../../../../config/types"
 import { fontSize } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Invitation, InvitationData } from "./invitation"
 import { getVersion } from "react-native-device-info"
 import { ReferFriendMenuItem } from "./refer-friend-menu-item"
 import { useAdaptiveLayoutMixins } from "../../../../services/mixins/adaptive-layout"
+import Intercom from "@intercom/intercom-react-native"
 import PlanIcon from './star.svg'
 import InviteIcon from './invite.svg'
 import SettingsIcon from './gear.svg'
@@ -28,6 +31,7 @@ import LockIconLight from './lock-light.svg'
 import { PushNotifier } from "../../../../utils/push-notification"
 import { useTestMixins } from "../../../../services/mixins/test"
 import moment from "moment"
+import { Logger } from "../../../../utils/logger"
 
 
 export const MenuScreen = observer(() => {
@@ -43,6 +47,9 @@ export const MenuScreen = observer(() => {
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
   const [referLink, setReferLink] = useState<string>(null)
+
+  // Intercom service 
+  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(1)
 
   const PLAN_NAME: TextStyle = {
     fontSize: fontSize.small,
@@ -64,6 +71,19 @@ export const MenuScreen = observer(() => {
       }
     }
     getLink()
+  }, [])
+
+  useEffect(() => {
+    const getConversationCount = async () => {
+      try {
+        const res = await Intercom.getUnreadConversationCount()
+        setUnreadConversationCount(res)
+      } catch (e) {
+        Logger.error(e)
+      }
+
+    }
+    getConversationCount()
   }, [])
 
   const items: MenuItemProps[] = [
@@ -185,13 +205,13 @@ export const MenuScreen = observer(() => {
     "pm_premium": {
       node: <View style={{ flexDirection: "row" }}>
         <Text text="PREMIUM" style={[PLAN_NAME, { color: color.primary }]}></Text>
-        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).locale('vi').format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 10 }]}></Text>
+        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 10 }]}></Text>
       </View>
     },
     "pm_family": {
       node: <View style={{ flexDirection: "row" }}>
         <Text text="FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>
-        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).locale('vi').format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 10 }]}></Text>
+        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 10 }]}></Text>
       </View>,
     }
   }
@@ -308,13 +328,65 @@ export const MenuScreen = observer(() => {
           }
         </View>
 
+
+
         {/*Refer friend */}
         <ReferFriendMenuItem onPress={isTablet ? (() => onShare()) : (() => navigation.navigate('refer_friend', {
           referLink: referLink
         }))} />
 
-
         <View style={ITEM_CONTAINER}>
+          <Button
+            preset="link"
+            onPress={() => Intercom.displayMessenger()}
+            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+              paddingVertical: 16,
+              borderBottomColor: color.line,
+            }]}
+          >
+            <View style={{ width: 25 }}>
+              <AntDesign name={'customerservice'} color={color.textBlack} size={22} />
+            </View>
+            <View style={{ flex: 1, flexDirection: "row" }}>
+              <Text
+                preset="black"
+                text={"Customer service and support"}
+                style={{ paddingHorizontal: 10 }}
+              />
+              {
+                unreadConversationCount > 0 && (
+                  <View
+                    style={{
+                      backgroundColor: color.error,
+                      borderRadius: 20,
+                      minWidth: 17,
+                      height: 17
+                    }}
+                  >
+                    <Text
+                      text={unreadConversationCount.toString()}
+                      style={{
+                        fontSize: 12,
+                        textAlign: 'center',
+                        color: color.white,
+                        lineHeight: 17
+                      }}
+                    />
+                  </View>
+                )
+              }
+
+
+            </View>
+            <FontAwesome
+              name="angle-right"
+              size={18}
+              color={color.textBlack}
+            />
+          </Button>
+        </View>
+
+        <View style={[ITEM_CONTAINER, { marginTop: 24 }]}>
           {
             items2.map((item, index) => (
               <MenuItem

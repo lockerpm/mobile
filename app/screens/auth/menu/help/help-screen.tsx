@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { Linking, View } from "react-native"
 import { Layout, Text, Button, Header } from "../../../../components"
@@ -8,7 +8,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
 import { PRIVACY_POLICY_URL, TERMS_URL, HELP_CENTER_URL, REPORT_VULN} from "../../../../config/constants"
 import { FeedbackModal } from "./feedback-modal"
-
+import { useStores } from "../../../../models"
 
 type Item = {
   name: string
@@ -53,8 +53,12 @@ export const HelpScreen = observer(function HelpScreen() {
       action: () => {
         Linking.openURL(REPORT_VULN)
       }
-    }
+    },
+   
+
   ]
+
+  const {user} = useStores()
 
   return (
     <Layout
@@ -101,6 +105,7 @@ export const HelpScreen = observer(function HelpScreen() {
             </Button>
           ))
         }
+        
       </View>
     </Layout>
   )
