@@ -56,9 +56,25 @@ export const logCreateMasterPwEvent = async () => {
   await analytics().logEvent('create_master_pw', cookies)
 }
 
-export const logPurchase = async () => {
+export const logPurchase = async (params: {
+  itemId: string
+  currency: string
+  price: string
+  itemName: string
+}) => {
+  const { itemId, currency, price, itemName } = params
+  let priceNumber = 0
+  try {
+    priceNumber = parseFloat(price.toString())
+  } catch (error) {}
   const cookies = await getUtmCookies()
   await analytics().logPurchase({
-    ...cookies
+    ...cookies,
+    value: priceNumber || undefined,
+    currency: currency,
+    items: [{
+      item_id: itemId,
+      item_name: itemName
+    }]
   })
 }
