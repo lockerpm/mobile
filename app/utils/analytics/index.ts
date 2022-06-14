@@ -51,6 +51,11 @@ export const getUtmCookies = async () => {
   return res
 }
 
+export const getCookies = async (name: string) => {
+  const cookies = await getUtmCookies()
+  return cookies[name]
+}
+
 export const logRegisterSuccessEvent = async () => {
   const cookies = await getUtmCookies()
   await analytics().logEvent('register_success', cookies)
