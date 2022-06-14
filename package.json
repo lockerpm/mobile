@@ -69,6 +69,7 @@
     "hi-base32": "^0.5.1",
     "https-browserify": "~0.0.0",
     "i18n-js": "3.8.0",
+    "jail-monkey": "^2.7.0",
     "lodash": "^4.17.21",
     "lottie-ios": "3.2.3",
     "lottie-react-native": "^5.1.3",

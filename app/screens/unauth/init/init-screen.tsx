@@ -1,25 +1,38 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Loading } from "../../../components"
+import { Loading, Layout, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { load, StorageKey } from "../../../utils/storage"
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
 import { IS_IOS } from "../../../config/constants"
-import { BackHandler } from "react-native"
+import { BackHandler, View } from "react-native"
 import { useMixins } from "../../../services/mixins"
-
+import JailMonkey from 'jail-monkey'
+import { commonStyles } from "../../../theme"
 
 
 export const InitScreen = observer(() => {
   const { user, cipherStore, uiStore } = useStores()
   const navigation = useNavigation()
   // const theme = Appearance.getColorScheme()
-  const { boostrapPushNotifier } = useMixins()
+  const { boostrapPushNotifier, translate } = useMixins()
   
   // ------------------ METHODS ---------------------
 
+  const [isRooted, setIsRooted] = useState(false)
+
+  // ------------------ METHODS ---------------------
+
+  // Check jailbreak/rooted
+  const checkTrustFall = () => {
+    const trustfall = JailMonkey.isJailBroken()
+    setIsRooted(trustfall)
+    return trustfall
+  }
+
+  // Create master pass or unlock
   const goLockOrCreatePassword = () => {
     if (user.is_pwd_manager) {
       navigation.navigate('lock')
@@ -28,6 +41,7 @@ export const InitScreen = observer(() => {
     }
   }
 
+  // Check if open from autofill to select a list
   const checkAutoFill = async () => {
     if (IS_IOS) return false
 
@@ -42,6 +56,7 @@ export const InitScreen = observer(() => {
     return false
   }
 
+  // Check if open from autofill to select a SINGLE item
   const checkAutoFillItem = async () => {
     if (IS_IOS) return false
 
@@ -56,6 +71,7 @@ export const InitScreen = observer(() => {
     return false
   }
 
+  // Check if open from autofill to save new item
   const checkOnSaveLogin = async () => {
     if (IS_IOS) return false
 
@@ -70,7 +86,12 @@ export const InitScreen = observer(() => {
     return false
   }
 
+  // Mounted
   const mounted = async () => {
+    if (checkTrustFall()) {
+      return
+    }
+
     const connectionState = await NetInfo.fetch()
 
     // Setup basic data
@@ -144,7 +165,6 @@ export const InitScreen = observer(() => {
 
   // ------------------ EFFECTS ---------------------
 
-
   useEffect(() => {
     mounted()
   }, [])
@@ -165,5 +185,19 @@ export const InitScreen = observer(() => {
 
   // ------------------ RENDER ---------------------
 
-  return <Loading />
+  return isRooted ? (
+    <Layout
+      noScroll
+    >
+      <View style={[commonStyles.CENTER_VIEW, commonStyles.SECTION_PADDING]}>
+        <Text
+          preset="black"
+          text={translate('error.rooted_device')}
+          style={{
+            textAlign: 'center'
+          }}
+        />
+      </View>
+    </Layout>
+  ) : <Loading />
 })
