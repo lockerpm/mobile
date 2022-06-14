@@ -7,7 +7,7 @@ import { GOOGLE_CLIENT_ID } from '../../config/constants'
 import { Logger } from '../../utils/logger'
 import { LoginManager, AccessToken } from "react-native-fbsdk-next"
 import { appleAuth } from '@invertase/react-native-apple-authentication'
-import { logRegisterSuccessEvent } from '../../utils/analytics'
+import { getCookies, logRegisterSuccessEvent } from '../../utils/analytics'
 
 
 const { createContext, useContext } = React
@@ -180,7 +180,8 @@ export const SocialLoginMixinsProvider = observer((props: {
     const loginRes = await user.socialLogin({
       provider: provider,
       access_token: token,
-      code
+      code,
+      utm_source: await getCookies('utm_source')
     })
 
     setIsLoading && setIsLoading(false)

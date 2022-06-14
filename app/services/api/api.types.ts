@@ -344,6 +344,14 @@ export type RegisterData = {
     phone?: string
     keep_me_updated?: boolean
     request_code: string
+    utm_source?: string
+}
+
+export type SocialLoginData = {
+    provider: string
+    access_token?: string
+    code?: string
+    utm_source?: string
 }
 
 export type SessionLoginData = {

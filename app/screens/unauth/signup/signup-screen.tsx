@@ -13,7 +13,7 @@ import countries from '../../../common/countries.json'
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { SocialSignedUpModal } from "./social-signup-modal"
 import { GitHubLoginModal } from "../login/github-login-modal"
-import { logRegisterSuccessEvent } from "../../../utils/analytics"
+import { getCookies, logRegisterSuccessEvent } from "../../../utils/analytics"
 
 
 export const SignupScreen = observer(() => {
@@ -113,7 +113,8 @@ export const SignupScreen = observer(() => {
       confirm_password: confirmPassword,
       full_name: fullname,
       phone: phone ? phonePrefix + ' ' + phone : undefined,
-      request_code: captchaToken
+      request_code: captchaToken,
+      utm_source: await getCookies('utm_source')
     })
     setIsLoading(false)
     if (res.kind === 'ok') {

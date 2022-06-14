@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
-import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData } from "../../services/api"
+import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData, SocialLoginData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 import { save, StorageKey, remove } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
@@ -307,7 +307,7 @@ export const UserModel = types
       return res
     },
 
-    socialLogin: async (payload: { provider: string, access_token?: string, code?: string }) => {
+    socialLogin: async (payload: SocialLoginData) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.socialLogin(payload)
       return res
