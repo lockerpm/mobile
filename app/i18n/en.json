@@ -168,7 +168,8 @@
       }
     },
     "cannot_select_more": "Cannot select more than {{count}} items",
-    "cannot_update_more_at_once": "Cannot update more than {{count}} items at once"
+    "cannot_update_more_at_once": "Cannot update more than {{count}} items at once",
+    "rooted_device": "The operating system on your devices has been modified in an unauthorized way, therefore it is not compatible with this application."
   },
   "success": {
     "done": "Done",

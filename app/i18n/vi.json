@@ -168,7 +168,8 @@
       }
     },
     "cannot_select_more": "Không thể chọn nhiều hơn {{count}} mục",
-    "cannot_update_more_at_once": "Không thể thay đổi nhiều hơn {{count}} mục cùng một lúc."
+    "cannot_update_more_at_once": "Không thể thay đổi nhiều hơn {{count}} mục cùng một lúc.",
+    "rooted_device": "Thiết bị của bạn đã bị can thiệp hệ điều hành, vì vậy không tương thích với ứng dụng này."
   },
   "success": {
     "done": "Hoàn tất",
