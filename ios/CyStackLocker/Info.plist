@@ -81,8 +81,6 @@
 	<string>082ae6329b491d0314aa527e2f83179e</string>
 	<key>FacebookDisplayName</key>
 	<string>Locker</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Send photos to support center</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-apps</string>
@@ -108,6 +106,8 @@
 	<string>Authentication</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Send photos to support center</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
