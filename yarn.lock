@@ -1802,6 +1802,11 @@
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
   integrity sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==
 
+"@intercom/intercom-react-native@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@intercom/intercom-react-native/-/intercom-react-native-1.1.1.tgz#e6034a02ed88b2edb458398e5240f2895587fbea"
+  integrity sha512-nP5FSOxlsbGxIaW1L0gM/KqQOTvCz7pvmMlFVep/wNh/ZzpnXM3s5d67FABXJBZy/7uaiMkZ5BJUyaBL62q+uA==
+
 "@invertase/react-native-apple-authentication@^2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@invertase/react-native-apple-authentication/-/react-native-apple-authentication-2.1.5.tgz#a66d7a6185724ccf3c4dab8ecc7448164dc6c0ea"

@@ -1,7 +1,5 @@
 {
   "common": {
-    "open_settings": "Mở cài đặt",
-    "yes": "Đồng ý",
     "accept": "Đồng ý",
     "account": "Tài khoản",
     "authenticate": "Xác thực",
@@ -21,6 +19,7 @@
     "continue": "Tiếp tục",
     "copied_to_clipboard": "Đã sao chép",
     "country": "Quốc gia",
+    "customer_service": "Dịch vụ hỗ trợ khách hàng và phản hồi",
     "create": "Tạo",
     "crypto_asset": "Tài sản crypto",
     "crypto_wallet": "Sao lưu ví Crypto",
@@ -65,6 +64,7 @@
     "options": "Tùy chọn",
     "or_login_with": "Hoặc đăng nhập bằng",
     "organization": "Tổ chức",
+    "open_settings": "Mở cài đặt",
     "other": "Khác",
     "others": "Khác",
     "owned_by": "Sở hữu bởi",
@@ -108,7 +108,8 @@
     "loading": "Đang giải mã dữ liệu",
     "see_all": "Xem tất cả",
     "collapse": "Thu gọn",
-    "share_with": "Chia sẻ với"
+    "share_with": "Chia sẻ với",
+    "yes": "Đồng ý"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
