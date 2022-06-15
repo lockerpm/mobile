@@ -146,7 +146,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 4058
-        versionName "1.21"
+        versionName "1.22"
         
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.cystack.locker'
@@ -239,6 +239,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wallet:19.0.1'
     implementation "com.stripe:stripe-android:19.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:4.4.1")
 
     addUnimodulesDependencies()
 
