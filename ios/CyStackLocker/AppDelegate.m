@@ -26,6 +26,7 @@
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 
+#import <IntercomModule.h>
 
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
@@ -80,6 +81,7 @@ static void InitializeFlipper(UIApplication *application) {
 
   // Set the splash screen to show by default.
   [RNSplashScreen show];
+  [IntercomModule initialize:@"ios_sdk-b3558c685a17ec60d659f373a4cbb6ca9c39e167" withAppId:@"hjus3ol6"];
   
   return YES;
 }

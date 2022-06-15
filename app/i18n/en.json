@@ -1,7 +1,5 @@
 {
   "common": {
-    "open_settings": "Open settings",
-    "yes": "Yes",
     "accept": "Accept",
     "account": "Account",
     "authenticate": "Authenticate",
@@ -21,6 +19,7 @@
     "continue": "Continue",
     "copied_to_clipboard": "Copied to clipboard",
     "country": "Country",
+    "customer_service": "Customer Support & Feedback",
     "create": "Create",
     "crypto_asset": "Crypto Backups",
     "crypto_wallet": "Crypto Backups",
@@ -62,6 +61,7 @@
     "notes": "Notes",
     "nothing_here": "Nothing here",
     "notifications": "Notifications",
+    "open_settings": "Open settings",
     "options": "Options",
     "or_login_with": "Or Log in with",
     "organization": "Organization",
@@ -108,7 +108,8 @@
     "loading": "Decrypting data",
     "see_all": "See all",
     "collapse": "Collapse",
-    "share_with": "Shared with"
+    "share_with": "Shared with",
+    "yes": "Yes"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
