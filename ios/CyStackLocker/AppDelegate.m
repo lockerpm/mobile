@@ -18,6 +18,8 @@
 // Import RNSplashScreen
 #import "RNSplashScreen.h"
 #import <IntercomModule.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <React/RCTLinkingManager.h>
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -49,6 +51,7 @@ static void InitializeFlipper(UIApplication *application) {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [FIRApp configure];
+  [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
   
   #ifdef FB_SONARKIT_ENABLED
     InitializeFlipper(application);
@@ -109,7 +112,14 @@ static void InitializeFlipper(UIApplication *application) {
   if ([self.authorizationFlowManagerDelegate resumeExternalUserAgentFlowWithURL:url]) {
     return YES;
   }
-  return [RCTLinkingManager application:application openURL:url options:options];
+  if ([[FBSDKApplicationDelegate sharedInstance] application:application openURL:url options:options]) {
+    return YES;
+       }
+
+  if ([RCTLinkingManager application:application openURL:url options:options]) {
+    return YES;
+  }
+  return NO;
 }
 
 // ------------ Prevent preview background
