@@ -18,12 +18,20 @@ export const InitScreen = observer(() => {
   const navigation = useNavigation()
   // const theme = Appearance.getColorScheme()
   const { boostrapPushNotifier, translate } = useMixins()
-  
+
   // ------------------ METHODS ---------------------
 
   const [isRooted, setIsRooted] = useState(false)
 
   // ------------------ METHODS ---------------------
+
+  // Handle go back
+  const handleBack = (e) => {
+    e.preventDefault()
+    if (!IS_IOS) {
+      BackHandler.exitApp()
+    }
+  }
 
   // Check jailbreak/rooted
   const checkTrustFall = () => {
@@ -171,14 +179,17 @@ export const InitScreen = observer(() => {
 
   // Back handler
   useEffect(() => {
-    const handleBack = (e) => {
-      e.preventDefault()
-      if (!IS_IOS) {
-        BackHandler.exitApp()
-      }
-    }
     navigation.addListener('beforeRemove', handleBack)
+    const unsubscribe = navigation.addListener('focus', () => {
+      setTimeout(() => {
+        if (uiStore.firstRouteAfterInit) {
+          navigation.navigate(uiStore.firstRouteAfterInit)
+          uiStore.setFirstRouteAfterInit(null)
+        }
+      }, 1000)
+    })
     return () => {
+      unsubscribe()
       navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])

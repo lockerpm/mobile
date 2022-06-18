@@ -29,6 +29,7 @@ const defaultData = {
   lock: async () => {},
   registerLocker: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   changeMasterPassword: async (oldPassword: string, newPassword: string) => { return { kind: 'unknown' } },
+  clearAllData: async (dataOnly?: boolean) => {}
 }
 
 
@@ -44,7 +45,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     collectionService,
     platformUtilsService,
     messagingService,
-    tokenService,
+    tokenService
   } = useCoreService()
   const { notify, translate, notifyApiError } = useMixins()
   const { logoutAllServices } = useSocialLoginMixins()
@@ -286,42 +287,10 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
   // Logout
   const logout = async () => {
     try {
+      await clearAllData()
       await user.updateFCM(null)
-
-      cipherStore.clearStore()
-      collectionStore.clearStore()
-      folderStore.clearStore()
-      toolStore.clearStore()
-  
       await user.logout()
-  
-      // Sign out all social login services
       await logoutAllServices()
-  
-      // Reset shared data
-      await saveShared('autofill', '{}')
-
-      // Reset push noti data
-      await remove(StorageKey.PUSH_NOTI_DATA)
-
-      // TODO: remove this when RSA problem is fixed
-      await removeSecure('decOrgKeys')
-
-      // Clear services
-      await Promise.all([
-        folderService.clearCache(),
-        cipherService.clearCache(),
-        // searchService.clearCache(),
-        collectionService.clearCache()
-      ])
-      const userId = await userService.getUserId()
-      await Promise.all([
-        folderService.clear(userId),
-        cipherService.clear(userId),
-        collectionService.clear(userId),
-        cryptoService.clearKeys(),
-        userService.clear()
-      ])
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       Logger.error('logout: ' + e)
@@ -342,6 +311,40 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     user.lock()
   }
 
+  // Clear all data
+  const clearAllData = async (dataOnly?: boolean) => {
+    cipherStore.clearStore(dataOnly)
+    collectionStore.clearStore(dataOnly)
+    folderStore.clearStore(dataOnly)
+    toolStore.clearStore(dataOnly)
+
+    // Reset shared data
+    await saveShared('autofill', '{}')
+
+    // Reset push noti data
+    await remove(StorageKey.PUSH_NOTI_DATA)
+
+    // TODO: remove this when RSA problem is fixed
+    await removeSecure('decOrgKeys')
+
+    // Clear services
+    await Promise.all([
+      folderService.clearCache(),
+      cipherService.clearCache(),
+      // searchService.clearCache()
+      collectionService.clearCache()
+    ])
+
+    const userId = await userService.getUserId()
+    await Promise.all([
+      folderService.clear(userId),
+      cipherService.clear(userId),
+      collectionService.clear(userId),
+      cryptoService.clearKeys(),
+      userService.clear()
+    ])
+  }
+
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
@@ -353,7 +356,8 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     logout,
     lock,
     registerLocker,
-    changeMasterPassword
+    changeMasterPassword,
+    clearAllData
   }
 
   return (

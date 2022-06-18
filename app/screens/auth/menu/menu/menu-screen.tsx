@@ -36,7 +36,7 @@ import { Logger } from "../../../../utils/logger"
 
 export const MenuScreen = observer(() => {
   const navigation = useNavigation()
-  const { user, uiStore } = useStores()
+  const { user, uiStore, cipherStore } = useStores()
   const { translate, notify, color, isDark, notifyApiError } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { createRandomPasswords } = useTestMixins()
@@ -194,6 +194,15 @@ export const MenuScreen = observer(() => {
           count: 50,
           length: 24
         })
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Invalidate api token',
+      action: () => {
+        user.setApiToken('abc')
+        cipherStore.setApiToken('abc')
       }
     },
     {
