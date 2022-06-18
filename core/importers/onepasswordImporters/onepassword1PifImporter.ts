@@ -209,6 +209,7 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
                         return;
                     }
                 } else if (['password', 'credential'].includes(fieldDesignation)) {
+                    // CS
                     if (this.isNullOrWhitespace(cipher.login.password)) {
                         cipher.login.password = fieldValue;
                         return;
