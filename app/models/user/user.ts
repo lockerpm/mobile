@@ -6,6 +6,7 @@ import { save, StorageKey, remove } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
 import moment from "moment"
+import { omit } from "ramda"
 
 
 export enum AppTimeoutType {
@@ -511,6 +512,7 @@ export const UserModel = types
       return res
     }
   }))
+  .postProcessSnapshot(omit(['isLoggedInPw']))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).
