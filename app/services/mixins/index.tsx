@@ -265,6 +265,8 @@ export const MixinsProvider = observer((props: {
           }
           break
         case PushEvent.SHARE_CONFIRM:
+        case PushEvent.SHARE_ACCEPT:
+        case PushEvent.SHARE_REJECT:
           res.path = 'mainTab'
           res.params = {
             screen: 'browseTab',
