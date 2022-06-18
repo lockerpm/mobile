@@ -7,7 +7,6 @@ import { useMixins } from "../../../services/mixins"
 import { commonStyles, spacing } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
-import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
 import { IS_IOS, IS_PROD } from "../../../config/constants"
 import { GitHubLoginModal } from "./github-login-modal"
 
@@ -20,7 +19,6 @@ type Props = {
 
 export const DefaultLogin = observer((props: Props) => {
   const { user, uiStore } = useStores()
-  const {verticalScale} = useAdaptiveLayoutMixins()
   const { translate, notify, notifyApiError, setApiTokens } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
   const { nextStep, onLoggedIn, handleForgot } = props

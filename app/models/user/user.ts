@@ -7,6 +7,7 @@ import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
 import moment from "moment"
 import { omit } from "ramda"
+import { AppEventType, EventBus } from "../../utils/event-bus"
 
 
 export enum AppTimeoutType {
@@ -244,6 +245,7 @@ export const UserModel = types
       const res = await userApi.getUser(self.apiToken)
       if (res.kind === "ok") {
         if (self.email && res.user.email !== self.email) {
+          EventBus.emit(AppEventType.CLEAR_ALL_DATA, null)
           self.clearSettings()
         }
         self.saveUser(res.user)

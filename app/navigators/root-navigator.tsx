@@ -26,6 +26,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links'
 import { setCookiesFromUrl } from "../utils/analytics"
 import { AppState } from "react-native"
 import { AppEventType, EventBus } from "../utils/event-bus"
+import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 
 
 /**
@@ -61,6 +62,7 @@ type Props = {
 const RootStack = observer((props: Props) => {
   const { navigationRef } = props
   const { color, parsePushNotiData } = useMixins()
+  const { clearAllData } = useCipherAuthenticationMixins()
   const { uiStore, user } = useStores()
 
   // ------------------- METHODS -------------------
@@ -141,6 +143,16 @@ const RootStack = observer((props: Props) => {
     AppState.addEventListener("change", _handleAppStateChange)
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
+    }
+  }, [])
+
+  // Clear user data on signal
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.CLEAR_ALL_DATA, () => {
+      clearAllData(true)
+    })
+    return () => {
+      EventBus.removeListener(listener)
     }
   }, [])
 

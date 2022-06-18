@@ -34,8 +34,10 @@ export const FolderStoreModel = types
       self.lastUpdate = Date.now()
     },
 
-    clearStore: () => {
-      self.apiToken = null
+    clearStore: (dataOnly?: boolean) => {
+      if (!dataOnly) {
+        self.apiToken = null
+      }
       self.folders = cast([])
       self.lastUpdate = null
       self.notSynchedFolders = cast([])
