@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Modal, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { WebView } from 'react-native-webview'
 import { IS_IOS } from '../../config/constants'
 import { useMixins } from '../../services/mixins'
 import { commonStyles } from '../../theme'
+import { AppEventType, EventBus } from '../../utils/event-bus'
 import { Header } from '../header/header'
 import { OverlayLoading } from '../loading/loading'
 
@@ -22,6 +23,15 @@ export const WebViewModal = (props: Props) => {
 
   const insets = useSafeAreaInsets()
 
+  // Close on signal
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
+      onClose()
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [])
 
   return (
     <Modal

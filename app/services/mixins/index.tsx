@@ -18,6 +18,7 @@ import { PushNotifier } from '../../utils/push-notification'
 import { Logger } from '../../utils/logger'
 import { useCoreService } from '../core-service'
 import { NotifeeNotificationData, PushEvent } from '../../utils/push-notification/types'
+import { AppEventType, EventBus } from '../../utils/event-bus'
 
 
 const { createContext, useContext } = React
@@ -234,6 +235,8 @@ export const MixinsProvider = observer((props: {
 
   // Go premium (navigate to payment screen)
   const goPremium = () => {
+    // Close all modals before navigate
+    EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
     if (props.navigationRef.current) {
       props.navigationRef.current.navigate('payment')
     }

@@ -25,6 +25,7 @@ import { save, StorageKey } from "../utils/storage"
 import dynamicLinks from '@react-native-firebase/dynamic-links'
 import { setCookiesFromUrl } from "../utils/analytics"
 import { AppState } from "react-native"
+import { AppEventType, EventBus } from "../utils/event-bus"
 
 
 /**
@@ -75,7 +76,11 @@ const RootStack = observer((props: Props) => {
     })
 
     if (user.isLoggedInPw) {
-      navigationRef.current.navigate(res.path, res.params)
+      // Close all modals before navigate
+      EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
+      if (navigationRef.current) {
+        navigationRef.current.navigate(res.path, res.params)
+      }
     } else {
       save(StorageKey.PUSH_NOTI_DATA, {
         type: data.type

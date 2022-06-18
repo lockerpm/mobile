@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { View, TouchableOpacity, TextInput, Image } from "react-native"
 import { Button, Text } from "../../../../components"
 import { useStores } from "../../../../models"
@@ -9,6 +9,7 @@ import { useMixins } from "../../../../services/mixins"
 import { Member } from "./member"
 import { FAMILY_MEMBER_LIMIT } from "../../../../config/constants"
 import Entypo from 'react-native-vector-icons/Entypo'
+import { AppEventType, EventBus } from "../../../../utils/event-bus"
 
 
 interface InviteProps {
@@ -59,6 +60,18 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
         }
 
     }
+
+    // ----------------------- EFFECTS -----------------------
+
+    // Close on signal
+    useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
+        onClose(false)
+    })
+    return () => {
+        EventBus.removeListener(listener)
+    }
+    }, [])
 
     // ----------------------- RENDER -----------------------
     return (
