@@ -1,10 +1,11 @@
-import * as React from "react"
+import React, { useEffect } from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { flatten } from "ramda"
 import Dialog from "react-native-ui-lib/dialog"
 import { commonStyles } from "../../theme"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useMixins } from "../../services/mixins"
+import { AppEventType, EventBus } from "../../utils/event-bus"
 
 
 export interface ActionSheetProps {
@@ -29,6 +30,16 @@ export const ActionSheet = (props: ActionSheetProps) => {
     borderTopRightRadius: 10
   }
   const styles = flatten([CONTAINER, { paddingBottom: insets.bottom }, style])
+
+  // Close on signal
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
+      onClose()
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [])
 
   return (
     <Dialog
