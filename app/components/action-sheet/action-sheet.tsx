@@ -17,7 +17,7 @@ export interface ActionSheetProps {
 /**
  * Describe your component here
  */
-export const ActionSheet = function ActionSheet(props: ActionSheetProps) {
+export const ActionSheet = (props: ActionSheetProps) => {
   const { style, children, isOpen, onClose } = props
   const insets = useSafeAreaInsets()
   const { color } = useMixins()
