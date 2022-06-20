@@ -2,6 +2,7 @@ import { getUrlParameterByName } from "../helpers"
 import CookieManager from '@react-native-cookies/cookies'
 import moment from 'moment'
 import analytics from '@react-native-firebase/analytics'
+import DeviceInfo from 'react-native-device-info'
 
 
 const COOKIES_URL = 'https://locker.io'
@@ -56,35 +57,47 @@ export const getCookies = async (name: string) => {
   return cookies[name]
 }
 
+// Register success
 export const logRegisterSuccessEvent = async () => {
   const cookies = await getUtmCookies()
-  await analytics().logEvent('register_success', cookies)
+  const device_identifier = DeviceInfo.getUniqueId()
+  await analytics().logEvent('register_success', {
+    ...cookies,
+    device_identifier
+  })
 } 
 
+// Create master pw
 export const logCreateMasterPwEvent = async () => {
   const cookies = await getUtmCookies()
-  await analytics().logEvent('create_master_pw', cookies)
+  const device_identifier = DeviceInfo.getUniqueId()
+  await analytics().logEvent('create_master_pw', {
+    ...cookies,
+    device_identifier
+  })
 }
 
+// TODO: cause error, ignore for now
 export const logPurchase = async (params: {
   itemId: string
   currency: string
   price: string
   itemName: string
 }) => {
-  const { itemId, currency, price, itemName } = params
-  let priceNumber = 0
-  try {
-    priceNumber = parseFloat(price.toString())
-  } catch (error) {}
-  const cookies = await getUtmCookies()
-  await analytics().logPurchase({
-    ...cookies,
-    value: priceNumber || undefined,
-    currency: currency,
-    items: [{
-      item_id: itemId,
-      item_name: itemName
-    }]
-  })
+  return
+  // const { itemId, currency, price, itemName } = params
+  // let priceNumber = 0
+  // try {
+  //   priceNumber = parseFloat(price.toString())
+  // } catch (error) {}
+  // const cookies = await getUtmCookies()
+  // await analytics().logPurchase({
+  //   ...cookies,
+  //   value: priceNumber || undefined,
+  //   currency: currency,
+  //   items: [{
+  //     item_id: itemId,
+  //     item_name: itemName
+  //   }]
+  // })
 }

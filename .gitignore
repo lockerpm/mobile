@@ -87,3 +87,6 @@ app/config/env.*.js
 .env
 app/config/.env.production
 app/config/.env.staging
+
+android/gradle.properties
+android/app/my-upload-key.keystore
