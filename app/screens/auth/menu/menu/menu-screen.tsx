@@ -49,7 +49,7 @@ export const MenuScreen = observer(() => {
   const [referLink, setReferLink] = useState<string>(null)
 
   // Intercom service 
-  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(0)
+  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(1)
 
   const PLAN_NAME: TextStyle = {
     fontSize: fontSize.small,
@@ -82,7 +82,9 @@ export const MenuScreen = observer(() => {
         } else {
           await Intercom.setLauncherVisibility(Visibility.GONE)
           const res = await Intercom.getUnreadConversationCount()
+          console.log(unreadConversationCount)
           setUnreadConversationCount(res)
+             
         }
       } catch (e) {
         Logger.error(e)
@@ -99,6 +101,7 @@ export const MenuScreen = observer(() => {
     const countListener = Intercom.addEventListener(
       IntercomEvents.IntercomUnreadCountDidChange,
       (response) => {
+        console.log(response)
         setUnreadConversationCount(response.count as number);
       }
     );
@@ -115,7 +118,7 @@ export const MenuScreen = observer(() => {
       action: () => {
         if (isFreeAccount || (isPremiumAccount && !user.plan?.is_family)) {
           notify('info', translate("invite_member.info_upgrade"))
-          navigation.navigate("payment", { family: true })
+          navigation.navigate("payment", { family: true, benefitTab: 3 })
         } else {
           navigation.navigate("invite_member")
         }
@@ -365,7 +368,7 @@ export const MenuScreen = observer(() => {
           referLink: referLink
         }))} />
 
-        {!uiStore.isShowIntercomMsgBox && <View style={ITEM_CONTAINER}>
+        { <View style={ITEM_CONTAINER}>
           <Button
             preset="link"
             onPress={() => Intercom.displayMessenger()}

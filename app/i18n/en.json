@@ -61,6 +61,7 @@
     "notes": "Notes",
     "nothing_here": "Nothing here",
     "notifications": "Notifications",
+    "ok": "OK",
     "open_settings": "Open settings",
     "options": "Options",
     "or_login_with": "Or Log in with",
@@ -545,6 +546,10 @@
     "defaultTab": "Start Screen"
   },
   "autofill_service": {
+    "activated" : {
+      "title": "Auto-fill activated!",
+      "content": "Now you can login to applications and websites faster"
+    },
     "ios": {
       "desc": "To enable password autofill on your device, follow these instructions:",
       "step_1": "1. Go to the iOS \"Settings\" app",
@@ -613,7 +618,9 @@
   "payment" : {
     "individual" : "Individual",
     "family": "Family",
+    "family_plan": "Family Plan",
     "ads" : "Enjoy all Locker Premium features with Yearly Plan to save up to 75%",
+    "ads_family" : "Enjoy all Locker Premium Features, for 6 accounts, with discounted prices",
     "trial": "Start with 2 weeks free trial",
     "cancel_text" : "Recurring billing. Cancel anytime",
     "benefit" : {

@@ -136,7 +136,7 @@ export const PricePlan = (props: PricePlanProps) => {
   const [discount, setDiscount] = useState(false)
 
 
-  
+
   useEffect(() => {
     const subs = props.subscriptions.find(subs => subs.productId === billingCycle.subId)
     if (IS_IOS) {
@@ -164,7 +164,7 @@ export const PricePlan = (props: PricePlanProps) => {
         marginBottom: 10,
         alignSelf: "center"
       }}>
-        {translate("payment.ads")}
+        {props.personal ? translate("payment.ads") : translate("payment.ads_family")}
       </Text>
 
       {props.isTrial && <Text style={{
@@ -199,7 +199,7 @@ export const PricePlan = (props: PricePlanProps) => {
           props.purchase(billingCycle.subId)
         }}
       >
-        { IS_IOS && <View style={{ flexDirection: "column", alignItems: "center" }}>
+        {IS_IOS && <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text
             preset="bold"
             style={{ color: color.white }}
@@ -207,15 +207,15 @@ export const PricePlan = (props: PricePlanProps) => {
             {props.isProcessPayment ? "" : billingCycle.pay_title}
           </Text>
           <Text
-            style={{ fontSize: 16, color: color.white, alignSelf: "center"}}
+            style={{ fontSize: 16, color: color.white, alignSelf: "center" }}
           >
-             {props.isProcessPayment ? "" : discount ? billingCycle.discount : translate("payment.cancel_text")}
+            {props.isProcessPayment ? "" : discount ? billingCycle.discount : translate("payment.cancel_text")}
           </Text>
         </View>}
 
-        { !IS_IOS && discount && <View style={{ flexDirection: "column", alignItems: "center" }}>
+        {!IS_IOS && discount && <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text
-            style={{ color: color.white, fontWeight: "600", textAlign: "center" }} 
+            style={{ color: color.white, fontWeight: "600", textAlign: "center" }}
           >
             {props.isProcessPayment ? "" : billingCycle.discount}
           </Text>
