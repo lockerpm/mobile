@@ -138,7 +138,7 @@ For Visual Studio Code users, there is a handy extension that makes it easy to l
 
 Read [e2e setup instructions](./e2e/README.md).
 
-## Previous Boilerplates
+## tttt
 
 - [2018 aka Bowser](https://github.com/infinitered/ignite-bowser)
 - [2017 aka Andross](https://github.com/infinitered/ignite-andross)
