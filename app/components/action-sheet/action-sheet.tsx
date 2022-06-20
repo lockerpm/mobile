@@ -43,6 +43,7 @@ export const ActionSheet = (props: ActionSheetProps) => {
 
   return (
     <Dialog
+      supportedOrientations={['portrait', 'landscape']}
       containerStyle={styles}
       bottom
       width="100%"
@@ -58,7 +59,7 @@ export const ActionSheet = (props: ActionSheetProps) => {
                 borderRadius: 4,
                 width: 50
               }}
-            />  
+            />
           </View>
         </View>
       )}
