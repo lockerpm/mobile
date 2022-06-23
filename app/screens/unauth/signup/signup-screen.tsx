@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import { Linking, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
@@ -13,6 +13,7 @@ import countries from '../../../common/countries.json'
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { SocialSignedUpModal } from "./social-signup-modal"
 import { GitHubLoginModal } from "../login/github-login-modal"
+import { getCookies, logRegisterSuccessEvent } from "../../../utils/analytics"
 
 
 export const SignupScreen = observer(() => {
@@ -20,6 +21,8 @@ export const SignupScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, notify, notifyApiError } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
+
+  const captchaRef = useRef(null)
 
   // ---------------- PARAMS ---------------------
 
@@ -37,7 +40,6 @@ export const SignupScreen = observer(() => {
   const [token, setResetPWToken] = useState("")
   const [account, setAccount] = useState(null)
   const [showSocialSignedUpModal, setShowSocialSignedUpModal] = useState(false)
-  const [recaptchaToken, setRecaptchaToken] = useState('')
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
@@ -98,7 +100,11 @@ export const SignupScreen = observer(() => {
 
   // ---------------- METHODS ---------------------
 
-  const handleRegister = async () => {
+  const getCaptchaToken = useCallback(async () => {
+    return await captchaRef.current.waitForToken()
+  }, [])
+
+  const handleRegister = async (captchaToken: string) => {
     setIsLoading(true)
     const res = await user.register({
       email,
@@ -107,10 +113,12 @@ export const SignupScreen = observer(() => {
       confirm_password: confirmPassword,
       full_name: fullname,
       phone: phone ? phonePrefix + ' ' + phone : undefined,
-      request_code: recaptchaToken
+      request_code: captchaToken,
+      utm_source: await getCookies('utm_source')
     })
     setIsLoading(false)
     if (res.kind === 'ok') {
+      logRegisterSuccessEvent()
       notify('success', translate('signup.signup_successful'), 5000)
       navigation.navigate('login')
     } else {
@@ -126,17 +134,19 @@ export const SignupScreen = observer(() => {
     ])
     setIsScreenLoading(false)
     if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
-      if (newUser) {
-        setResetPWToken(token)
-        setAccount(userRes.user)
-        setShowSocialSignedUpModal(true)
-      } else {
+      // TODO
+      
+      // if (newUser) {
+      //   setResetPWToken(token)
+      //   setAccount(userRes.user)
+      //   setShowSocialSignedUpModal(true)
+      // } else {
         if (user.is_pwd_manager) {
           navigation.navigate('lock')
         } else {
           navigation.navigate('createMasterPassword')
         }
-      }
+      // }
     }
   }
 
@@ -197,7 +207,7 @@ export const SignupScreen = observer(() => {
           }} />
 
         <RecaptchaChecker
-          onTokenLoad={setRecaptchaToken}
+          ref={captchaRef}
         />
         {/* Modal end */}
         <View style={{ alignItems: 'center', paddingTop: '10%' }}>
@@ -327,7 +337,9 @@ export const SignupScreen = observer(() => {
             isLoading={isLoading}
             isDisabled={isLoading || !formValidated}
             text={translate("common.sign_up")}
-            onPress={handleRegister}
+            onPress={() => {
+              getCaptchaToken().then(handleRegister)
+            }}
             style={{
               width: '100%',
               marginTop: 30,

@@ -35,8 +35,10 @@ export const CollectionStoreModel = types
       self.lastUpdate = null
     },
 
-    clearStore: () => {
-      self.apiToken = null
+    clearStore: (dataOnly?: boolean) => {
+      if (!dataOnly) {
+        self.apiToken = null
+      }
       self.collections = cast([])
       self.notSynchedCollections = cast([])
       self.notUpdatedCollections = cast([])

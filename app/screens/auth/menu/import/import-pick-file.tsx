@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { View, } from "react-native"
 import { Select, Text, Button } from "../../../../components"
 import { useMixins } from "../../../../services/mixins"
@@ -27,8 +27,8 @@ export const ImportPickFile = (props: Props) => {
     // -------------------- COMPUTED --------------------
 
     const cystackOptions = [
-        { name: 'CyStack (json)', id: 'cystackjson' },
-        { name: 'CyStack (csv)', id: 'cystackcsv' }
+        { name: 'Locker (json)', id: 'cystackjson' },
+        { name: 'Locker (csv)', id: 'cystackcsv' }
     ]
     const formats = [
         ...cystackOptions,

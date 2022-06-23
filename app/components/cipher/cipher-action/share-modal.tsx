@@ -164,7 +164,7 @@ export const ShareModal = observer((props: Props) => {
             key={index}
             style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
               borderRadius: 8,
-              borderWidth: 0.5,
+              borderWidth: 1,
               borderColor: color.primary,
               backgroundColor: color.lightPrimary,
               paddingLeft: 10,

@@ -224,7 +224,7 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
         height: 32,
         marginRight: 16
       }}></Image>
-    <View style={{marginRight: 60}}>
+    <View style={{marginRight: 80}}>
       {/* <Text>{translate("all_items.enable_autofill.title")}</Text> */}
       <Text>{translate("all_items.enable_autofill.content")}</Text>
       <TouchableOpacity

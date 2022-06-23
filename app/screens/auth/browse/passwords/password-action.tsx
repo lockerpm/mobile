@@ -6,6 +6,7 @@ import { CipherAction } from "../../../../components/cipher/cipher-action/cipher
 import { ActionItem } from "../../../../components/cipher/cipher-action/action-item"
 import { CipherView } from "../../../../../core/models/view"
 import { observer } from "mobx-react-lite"
+import { Logger } from "../../../../utils/logger"
 
 
 type Props = {
@@ -21,12 +22,19 @@ export const PasswordAction = observer((props: Props) => {
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
 
+  const launchWebsiteEffort = () => {
+    Linking.openURL(selectedCipher.login.uri).catch((e) => {
+      Logger.debug({err: e.toString(), effort: "Try to open url with 'https://' prefix"})
+      Linking.openURL("https://" + selectedCipher.login.uri)
+    });
+  }
+
   const renderContent = () => (
     <>
       <ActionItem
         name={translate('password.launch_website')}
         icon="external-link"
-        action={() => Linking.openURL(selectedCipher.login.uri)}
+        action={launchWebsiteEffort}
         disabled={!selectedCipher.login.uri}
       />
 

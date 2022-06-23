@@ -4,7 +4,7 @@ import { IS_IOS } from '../../config/constants'
 import { Logger } from '../logger'
 import { NotifeeNotificationData, PushEvent } from './types';
 import { load, save, StorageKey } from '../storage';
-import { handleNewShare, handleConfirmShare } from './handler';
+import { handleNewShare, handleConfirmShare, handleResponseShare } from './handler';
 
 
 export class PushNotifier {
@@ -42,6 +42,16 @@ export class PushNotifier {
       switch (event) {
         case PushEvent.SHARE_NEW: {
           await handleNewShare(data)
+          break
+        }
+
+        case PushEvent.SHARE_ACCEPT: {
+          await handleResponseShare(data, true)
+          break
+        }
+
+        case PushEvent.SHARE_REJECT: {
+          await handleResponseShare(data, false)
           break
         }
 
@@ -85,6 +95,16 @@ export class PushNotifier {
           break
         }
 
+        case PushEvent.SHARE_ACCEPT: {
+          await handleResponseShare(data, true)
+          break
+        }
+
+        case PushEvent.SHARE_REJECT: {
+          await handleResponseShare(data, false)
+          break
+        }
+
         case PushEvent.SHARE_CONFIRM:
           await handleConfirmShare(data)
           break
@@ -107,13 +127,11 @@ export class PushNotifier {
 
         switch (data.type) {
           case PushEvent.SHARE_NEW:
-            save(StorageKey.PUSH_NOTI_DATA, {
-              type: PushEvent.SHARE_NEW
-            })
-            break
+          case PushEvent.SHARE_ACCEPT:
+          case PushEvent.SHARE_REJECT:
           case PushEvent.SHARE_CONFIRM:
             save(StorageKey.PUSH_NOTI_DATA, {
-              type: PushEvent.SHARE_CONFIRM
+              type: data.type
             })
             break
         } 

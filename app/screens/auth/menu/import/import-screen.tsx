@@ -53,8 +53,8 @@ export const ImportScreen = observer(() => {
   // -------------------- COMPUTED --------------------
 
   const cystackOptions = [
-    { name: 'CyStack (json)', id: 'cystackjson' },
-    { name: 'CyStack (csv)', id: 'cystackcsv' }
+    { name: 'Locker (json)', id: 'cystackjson' },
+    { name: 'Locker (csv)', id: 'cystackcsv' }
   ]
   // -------------------- METHODS --------------------
 

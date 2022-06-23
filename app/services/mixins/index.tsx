@@ -18,6 +18,7 @@ import { PushNotifier } from '../../utils/push-notification'
 import { Logger } from '../../utils/logger'
 import { useCoreService } from '../core-service'
 import { NotifeeNotificationData, PushEvent } from '../../utils/push-notification/types'
+import { AppEventType, EventBus } from '../../utils/event-bus'
 
 
 const { createContext, useContext } = React
@@ -156,9 +157,13 @@ export const MixinsProvider = observer((props: {
   }
 
   // Notify based on api error
-  const notifyApiError = (problem: GeneralApiProblem) => {
+  const notifyApiError = async (problem: GeneralApiProblem) => {
     switch (problem.kind) {
       case 'cannot-connect':
+        notify('error', translate('error.cannot_connect'))
+        break
+
+      case 'network-error':
         notify('error', translate('error.network_error'))
         break
 
@@ -204,6 +209,14 @@ export const MixinsProvider = observer((props: {
       case 'unauthorized':
         notify('error', translate('error.token_expired'))
         break
+      
+      case 'timeout':
+        notify('error', translate('error.network_timeout'))
+        break
+      
+      case 'server':
+        notify('error', translate('error.server_error'))
+        break
 
       default:
         notify('error', translate('error.something_went_wrong'))
@@ -234,6 +247,8 @@ export const MixinsProvider = observer((props: {
 
   // Go premium (navigate to payment screen)
   const goPremium = () => {
+    // Close all modals before navigate
+    EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
     if (props.navigationRef.current) {
       props.navigationRef.current.navigate('payment')
     }
@@ -265,6 +280,8 @@ export const MixinsProvider = observer((props: {
           }
           break
         case PushEvent.SHARE_CONFIRM:
+        case PushEvent.SHARE_ACCEPT:
+        case PushEvent.SHARE_REJECT:
           res.path = 'mainTab'
           res.params = {
             screen: 'browseTab',

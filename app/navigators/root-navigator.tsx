@@ -22,6 +22,12 @@ import { Logger } from "../utils/logger"
 import { PushNotifier } from "../utils/push-notification"
 import { NotifeeNotificationData } from "../utils/push-notification/types"
 import { save, StorageKey } from "../utils/storage"
+import dynamicLinks from '@react-native-firebase/dynamic-links'
+import { setCookiesFromUrl } from "../utils/analytics"
+import { AppState } from "react-native"
+import { AppEventType, EventBus } from "../utils/event-bus"
+import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
+
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -56,6 +62,7 @@ type Props = {
 const RootStack = observer((props: Props) => {
   const { navigationRef } = props
   const { color, parsePushNotiData } = useMixins()
+  const { clearAllData } = useCipherAuthenticationMixins()
   const { uiStore, user } = useStores()
 
   // ------------------- METHODS -------------------
@@ -71,12 +78,29 @@ const RootStack = observer((props: Props) => {
     })
 
     if (user.isLoggedInPw) {
-      navigationRef.current.navigate(res.path, res.params)
+      // Close all modals before navigate
+      EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
+      if (navigationRef.current) {
+        navigationRef.current.navigate(res.path, res.params)
+      }
     } else {
       save(StorageKey.PUSH_NOTI_DATA, {
         type: data.type
       })
     }
+  }
+
+  const _handleAppStateChange = async (nextAppState: string) => {
+    Logger.debug(nextAppState)
+
+    // Ohter state (background/inactive)
+    if (nextAppState !== 'active') {
+      return
+    }
+
+    const link = await dynamicLinks().getInitialLink()
+    Logger.debug(`DYNAMIC LINK BACKGROUND: ${JSON.stringify(link)}`)
+    link?.url && setCookiesFromUrl(link.url)
   }
 
   // ------------------- EFFECTS -------------------
@@ -101,6 +125,34 @@ const RootStack = observer((props: Props) => {
     })
     return () => {
       unsubscribe()
+    }
+  }, [])
+
+  // Dynamic links foreground handler
+  useEffect(() => {
+    const unsubscribe = dynamicLinks().onLink((link) => {
+      Logger.debug(`DYNAMIC LINK FOREGROUND: ${JSON.stringify(link)}`)
+      link?.url && setCookiesFromUrl(link.url)
+    })
+    return () => unsubscribe()
+  }, [])
+
+  // Dynamic links background handler
+  useEffect(() => {
+    _handleAppStateChange('active')
+    AppState.addEventListener("change", _handleAppStateChange)
+    return () => {
+      AppState.removeEventListener("change", _handleAppStateChange)
+    }
+  }, [])
+
+  // Clear user data on signal
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.CLEAR_ALL_DATA, () => {
+      clearAllData(true)
+    })
+    return () => {
+      EventBus.removeListener(listener)
     }
   }, [])
 

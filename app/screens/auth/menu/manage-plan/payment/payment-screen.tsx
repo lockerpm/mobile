@@ -63,7 +63,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const getSubscription = useCallback(async (): Promise<void> => {
     try {
       await RNIap.initConnection();
-
       if (!IS_IOS) {
         await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
       }
@@ -71,12 +70,14 @@ export const PaymentScreen = observer(function PaymentScreen() {
         if (__DEV__) await RNIap.clearTransactionIOS();
       }
 
-      const subscriptions = await RNIap.getSubscriptions(subSkus);
-
-      setSubcriptions(subscriptions);
+      const subs = await RNIap.getSubscriptions(subSkus);
+      setSubcriptions(subs);
     } catch (err) {
       Logger.error({ 'initConnection': err })
-      Alert.alert('Fail to get in-app-purchase information');
+      Alert.alert('Fail to get in-app-purchase information', "",
+        [
+          { text: "OK", onPress: () => { navigation.goBack() } }
+        ]);
     }
 
 
@@ -109,9 +110,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
                 Alert.alert(
                   translate("manage_plan.verify"),
                   res.data.detail,
-                  [
-                    { text: "OK", onPress: () => { } }
-                  ]
                 )
               }
             } else {
@@ -202,7 +200,11 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   // user selects plan segment
   const Segment = () => {
-    return (
+    return route.params.family ? (<Text
+      preset="largeHeader"
+      text={translate("payment.family_plan")}
+      style={{ marginTop: 16, marginLeft: 20 }}
+    />) : (
       <View
         style={[styles.segment, {
           backgroundColor: color.block,
@@ -230,8 +232,10 @@ export const PaymentScreen = observer(function PaymentScreen() {
   return (
     <Layout
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
-    >
-      <View style={styles.header}>
+      header={<View style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+      }}>
         <Image
           source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
           style={{ height: 32, width: 152 }}
@@ -242,11 +246,10 @@ export const PaymentScreen = observer(function PaymentScreen() {
             style={{ height: 24, width: 24 }}
           />
         </TouchableOpacity>
-      </View>
+      </View>}
 
-
-
-      <View style={{ top: 0, height: 310, width: "100%", zIndex: 1, flex: 1 }}>
+    >
+      <View style={{ flex: 1, top: 0, minHeight: 310, width: "100%", zIndex: 1 }}>
         <PremiumBenefits benefitTab={route.params.benefitTab} />
       </View>
 

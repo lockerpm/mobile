@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Button, Header, Layout, Text } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../services/mixins"
-import { NativeModules, Image, View, TouchableOpacity } from "react-native"
+import { NativeModules, Image, View, TouchableOpacity, AppState } from "react-native"
 import { commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import RNAndroidSettingsTool from "react-native-android-settings-tool"
 import { getApiLevel, getManufacturer } from 'react-native-device-info'
 import * as Animatable from 'react-native-animatable';
+import { AutofillServiceEnabled } from "../../../../utils/Autofill"
 import Accordion from 'react-native-collapsible/Accordion';
 
 
@@ -18,6 +19,7 @@ export const AutofillServiceScreen = function AutofillServiceScreen() {
 
 	const { RNManufacturerSettings } = NativeModules
 
+	const [enabled, setEnabled] = useState(false)
 	const [activeSections, setActiveSections] = useState([]);
 	const [contents, setContent] = useState([]);
 	const [api, setApi] = useState(0)
@@ -30,9 +32,29 @@ export const AutofillServiceScreen = function AutofillServiceScreen() {
 		setApi(res)
 	}
 
+	const appState = useRef(AppState.currentState);
+	const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+	// ---------------------------EFFECT-----------------------
+	useEffect(() => {
+		const subscription = AppState.addEventListener("change", nextAppState => {
+			setAppStateVisible(nextAppState);
+		});
+
+		return () => {
+			subscription == null;
+		};
+	}, []);
+
 	useEffect(() => {
 		mounted()
 	}, [])
+
+	useEffect(() => {
+		AutofillServiceEnabled(isActived => {
+			setEnabled(isActived)
+		})
+	}, [appStateVisible])
 
 	useEffect(() => {
 		const contents = [{
@@ -125,27 +147,47 @@ export const AutofillServiceScreen = function AutofillServiceScreen() {
 					backgroundColor: '#fff',
 				}}
 				transition="backgroundColor">
-				<View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
-
-					<Text preset="header" text={section.header} />
-
-					<Image source={section.image} style={{
-						width: 335, height: 227,
-						marginVertical: 16
-					}}></Image>
-
-					<Text text={section.desc} />
-				</View>
-				<Button onPress={section.action} style={{ marginTop: 16 }} text={translate('autofill_service.android.btn')} />
+				<AutofillServiceRender content={section} />
+				{!enabled && <Button onPress={section.action} style={{ marginTop: 16 }} text={translate('autofill_service.android.btn')} />}
 			</Animatable.View>
 		);
 	};
+
+	const AutofillServiceRender = ({ content }) => {
+		return (<View style={{ justifyContent: "center", flex: 1 }}>
+			{
+				enabled && (
+					<View style={{ alignItems: "center" }}>
+						<Image source={require("./autofillActive.png")} style={{ width: 335, height: 215 }}></Image>
+						<View style={{ marginTop: 24 }}>
+							<Text preset="largeHeader" text={translate("autofill_service.activated.title")} style={{ textAlign: "center" }} />
+							<Text preset="black" text={translate("autofill_service.activated.content")} style={{ marginTop: 24, textAlign: "center" }} />
+						</View>
+
+					</View>
+				)
+			}
+			{
+				!enabled && <View style={{ alignItems: "center" }} >
+					<Text preset="header" text={content.header} style={{ marginBottom: 12 }} />
+
+					<Image source={content.image} style={{
+						width: 335, height: 227,
+						marginVertical: 16,
+					}} />
+
+					<Text text={content.desc} />
+				</View>
+			}
+		</View>
+		)
+	}
 	// ----------------- RENDER --------------------
 
 
 	return (
 		<Layout
-			header={(
+			header={!enabled ? (
 				<Header
 					goBack={() => {
 						navigation.goBack()
@@ -153,21 +195,40 @@ export const AutofillServiceScreen = function AutofillServiceScreen() {
 					title={translate('settings.autofill_service')}
 					right={(<View style={{ width: 30 }} />)}
 				/>
+			) : null}
+			footer={(
+				<View>
+					<Button
+						text={enabled ? translate("common.ok") : translate("common.open_settings")}
+						onPress={() => {
+							if (enabled) {
+								navigation.navigate("mainTab", { screen: "homeTab" })
+							} else {
+								RNAndroidSettingsTool.ACTION_REQUEST_SET_AUTOFILL_SERVICE('packge:com.cystack.locker')
+							}
+
+						}}
+					>
+					</Button>
+				</View>
 			)}
-			containerStyle={{
-				backgroundColor: color.block,
-				paddingHorizontal: 0
-			}}
 		>
-			<Accordion
-				activeSections={activeSections}
-				sections={contents}
-				touchableComponent={TouchableOpacity}
-				renderHeader={renderHeader}
-				renderContent={renderContent}
-				duration={200}
-				onChange={setSections}
-			/>
+			{
+				contents.length > 1 &&
+				<Accordion
+					activeSections={activeSections}
+					sections={contents}
+					touchableComponent={TouchableOpacity}
+					renderHeader={renderHeader}
+					renderContent={renderContent}
+					duration={200}
+					onChange={setSections}
+				/>
+			}
+			{
+				contents.length === 1 &&
+				<AutofillServiceRender content={contents[0]} />
+			}
 		</Layout>
 	)
 }

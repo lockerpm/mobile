@@ -105,7 +105,7 @@ export const Otp = observer((props: Props) => {
         onValueChange={setSaveDevice}
         style={{
           marginTop: spacing.margin,
-          marginBottom: spacing.margin / 2
+          marginBottom: spacing.margin
         }}
         labelStyle={{
           color: color.textBlack,

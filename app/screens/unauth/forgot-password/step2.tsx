@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import {Text, Button, RecaptchaChecker } from "../../../components"
@@ -24,21 +24,26 @@ export const Step2 = observer((props: Props) => {
   const { translate, notifyApiError, color } = useMixins()
   const { methods, onSelect, goBack } = props
 
+  const captchaRef = useRef(null)
+
   // ------------------ Params -----------------------
 
   const [sendingEmail, setIsSendingEmail] = useState(false)
-  const [recaptchaToken, setRecaptchaToken] = useState('')
 
   // ------------------ Methods ----------------------
 
-  const sendEmail = async (data: any) => {
+  const getCaptchaToken = useCallback(async () => {
+    return await captchaRef.current.waitForToken()
+  }, [])
+
+  const sendEmail = async (data: any, captchaToken: string) => {
     if (uiStore.lockResendOtpResetPasswordTime) {
       onSelect('mail', data)
       return
     }
 
     setIsSendingEmail(true)
-    const res = await user.resetPassword(data[0], 'mail', recaptchaToken)
+    const res = await user.resetPassword(data[0], 'mail', captchaToken)
     setIsSendingEmail(false)
     if (res.kind === 'ok') {
       uiStore.setLockResendOtpResetPasswordTime(Date.now() + 60 * 1000)
@@ -53,7 +58,7 @@ export const Step2 = observer((props: Props) => {
   return (
     <View>
       <RecaptchaChecker
-        onTokenLoad={setRecaptchaToken}
+        ref={captchaRef}
       />
 
       <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -89,7 +94,11 @@ export const Step2 = observer((props: Props) => {
             preset="outline"
             isDisabled={item.type === 'mail' && sendingEmail}
             isLoading={item.type === 'mail' && sendingEmail}
-            onPress={() => item.type === 'mail' ? sendEmail(item.data) : onSelect(item.type, item.data)}
+            onPress={
+              () => item.type === 'mail' 
+                ? getCaptchaToken().then(token => sendEmail(item.data, token))
+                : onSelect(item.type, item.data)
+            }
             style={{
               width: '100%',
               marginBottom: 15
