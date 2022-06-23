@@ -21,6 +21,7 @@
 #import "RNSplashScreen.h"
 #import <IntercomModule.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBAEMKit/FBAEMKit.h>
 #import <React/RCTLinkingManager.h>
 
 #ifdef FB_SONARKIT_ENABLED
@@ -117,11 +118,14 @@ static void InitializeFlipper(UIApplication *application) {
   }
   if ([[FBSDKApplicationDelegate sharedInstance] application:application openURL:url options:options]) {
     return YES;
-       }
+  }
 
   if ([RCTLinkingManager application:application openURL:url options:options]) {
     return YES;
   }
+  [FBAEMReporter configureWithNetworker:nil appID: @"1260309664112849"];
+  [FBAEMReporter enable];
+  [FBAEMReporter handleURL:url];
   return NO;
 }
 

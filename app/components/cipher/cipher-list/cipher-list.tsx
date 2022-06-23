@@ -225,7 +225,6 @@ export const CipherList = observer((props: CipherListProps) => {
     }
     setSelectedItems(selected)
   }
-
   // ------------------------ RENDER ----------------------------
 
   const renderItem = ({ item }) => {
