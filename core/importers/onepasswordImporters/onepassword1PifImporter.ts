@@ -98,6 +98,12 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
             })
         }
 
+        // CS
+        const existingKeys = [
+            'passwordHistory', 'notesPlain', 'password', 'URLs', 'fields', 'sections',
+            'unknown_overview', 'unknown_details', 'username'
+        ]
+
         cipher.name = this.getValueOrDefault(item.title);
 
         if (item.typeName === 'securenotes.SecureNote') {
@@ -110,17 +116,13 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
         } else if (item.typeName === 'identities.Identity') {
             cipher.type = CipherType.Identity;
             cipher.identity = new IdentityView();
+        } else if (item.typeName === 'wallet.computer.UnixServer') {
+            existingKeys.push('admin_console_url', 'name', 'website', 'url')
         } else {
             cipher.login.uris = this.makeUriArray(item.location);
         }
 
         if (item.secureContents != null) {
-            // CS
-            const existingKeys = [
-                'passwordHistory', 'notesPlain', 'password', 'URLs', 'fields', 'sections',
-                'unknown_overview', 'unknown_details'
-            ]
-
             if (item.secureContents.passwordHistory != null) {
                 this.parsePasswordHistory(item.secureContents.passwordHistory, cipher);
             }
@@ -130,6 +132,9 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
             if (cipher.type === CipherType.Login) {
                 if (!this.isNullOrWhitespace(item.secureContents.password)) {
                     cipher.login.password = item.secureContents.password;
+                }
+                if (!this.isNullOrWhitespace(item.secureContents.username)) {
+                    cipher.login.username = item.secureContents.username;
                 }
                 if (item.secureContents.URLs != null) {
                     const urls: string[] = [];
@@ -196,12 +201,36 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
             const fieldDesignation = field[designationKey] != null ? field[designationKey].toString() : null;
 
             if (cipher.type === CipherType.Login) {
-                if (this.isNullOrWhitespace(cipher.login.username) && fieldDesignation === 'username') {
-                    cipher.login.username = fieldValue;
-                    return;
-                } else if (this.isNullOrWhitespace(cipher.login.password) && fieldDesignation === 'password') {
-                    cipher.login.password = fieldValue;
-                    return;
+                if (fieldDesignation === 'username') {
+                    if (this.isNullOrWhitespace(cipher.login.username)) {
+                        cipher.login.username = fieldValue;
+                        return;
+                    } else if (cipher.login.username = fieldValue) {
+                        return;
+                    }
+                } else if (['password', 'credential'].includes(fieldDesignation)) {
+                    // CS
+                    if (this.isNullOrWhitespace(cipher.login.password)) {
+                        cipher.login.password = fieldValue;
+                        return;
+                    } else if (cipher.login.password === fieldValue) {
+                        return;
+                    }
+                } else if (fieldDesignation === 'website') {
+                    if (!cipher.login.hasUris) {
+                        cipher.login.uris = this.makeUriArray([fieldValue]);
+                        return;
+                    } else if (cipher.login.uri === this.fixUri(fieldValue)) {
+                        return;
+                    }
+                }
+                else if (fieldDesignation === 'url') {
+                    if (!cipher.login.hasUris) {
+                        cipher.login.uris = this.makeUriArray([fieldValue]);
+                        return;
+                    } else if (cipher.login.uri === this.fixUri(fieldValue)) {
+                        return;
+                    }
                 } else if (this.isNullOrWhitespace(cipher.login.totp) && fieldDesignation != null &&
                     fieldDesignation.startsWith('TOTP_')) {
                     cipher.login.totp = fieldValue;

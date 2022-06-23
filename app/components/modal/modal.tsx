@@ -7,6 +7,7 @@ import { Text } from "../text/text"
 import { Button } from "../button/button"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { useMixins } from "../../services/mixins"
+import { AppEventType, EventBus } from "../../utils/event-bus"
 
 
 export interface ModalProps {
@@ -41,6 +42,16 @@ export const Modal = (props: ModalProps) => {
       onOpen && onOpen()
     }
   }, [isOpen])
+
+  // Close on signal
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
+      onClose()
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [])
 
   return (
     <Dialog

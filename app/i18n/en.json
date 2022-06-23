@@ -1,7 +1,5 @@
 {
   "common": {
-    "open_settings": "Open settings",
-    "yes": "Yes",
     "accept": "Accept",
     "account": "Account",
     "authenticate": "Authenticate",
@@ -21,6 +19,7 @@
     "continue": "Continue",
     "copied_to_clipboard": "Copied to clipboard",
     "country": "Country",
+    "customer_service": "Customer Support & Feedback",
     "create": "Create",
     "crypto_asset": "Crypto Backups",
     "crypto_wallet": "Crypto Backups",
@@ -62,6 +61,8 @@
     "notes": "Notes",
     "nothing_here": "Nothing here",
     "notifications": "Notifications",
+    "ok": "OK",
+    "open_settings": "Open settings",
     "options": "Options",
     "or_login_with": "Or Log in with",
     "organization": "Organization",
@@ -108,7 +109,8 @@
     "loading": "Decrypting data",
     "see_all": "See all",
     "collapse": "Collapse",
-    "share_with": "Shared with"
+    "share_with": "Shared with",
+    "yes": "Yes"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
@@ -122,7 +124,6 @@
     "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
     "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
     "biometric_unlock_failed": "Face ID/Touch ID verification failed",
-    "network_error": "Please connect to the internet to use this feature",
     "required_data": "This data is mandatory",
     "session_login_failed": "Session login failed! Please try again",
     "login_failed": "Login failed! Please try again",
@@ -143,7 +144,7 @@
     "no_collection_available": "You don't have access to any team folder.",
     "not_available_offline": "This action is unavailable in offline mode",
     "login_locked": "You have been locked from accessing your account due to the team's policy. Please try again after: ",
-    "duplicate_cipher_name": "Duplicated cipher name! Please choose another name!",
+    "duplicate_cipher_name": "Duplicated item name! Please choose another name!",
     "duplicate_folder_name": "Duplicated folder name! Please choose another name!",
     "not_allowed_to_see_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
     "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
@@ -168,7 +169,12 @@
       }
     },
     "cannot_select_more": "Cannot select more than {{count}} items",
-    "cannot_update_more_at_once": "Cannot update more than {{count}} items at once"
+    "cannot_update_more_at_once": "Cannot update more than {{count}} items at once",
+    "rooted_device": "The operating system on your devices has been modified in an unauthorized way, therefore it is not compatible with this application.",
+    "network_timeout": "Network timeout",
+    "server_error": "Server error",
+    "cannot_connect": "Cannot connect to the server. Please check your internet connection",
+    "network_error": "Network error. Your connection is not secure"
   },
   "success": {
     "done": "Done",
@@ -453,6 +459,7 @@
     "invite_noti" : "Upgrade to Family Plan and invite your friends joining Locker!",
     "fingerprint": "Fingerprint",
     "plan": "Manage Plan",
+    "expired_time": "Expired",
     "invite": "Invite Member",
     "invitation_to_join": "Invitation to join ",
     "invitation_desc": "You've been invited to the {{org}} organization! Join now and start collaborating with your teammates."
@@ -542,6 +549,10 @@
     "defaultTab": "Start Screen"
   },
   "autofill_service": {
+    "activated" : {
+      "title": "Auto-fill activated!",
+      "content": "Now you can login to applications and websites faster"
+    },
     "ios": {
       "desc": "To enable password autofill on your device, follow these instructions:",
       "step_1": "1. Go to the iOS \"Settings\" app",
@@ -610,7 +621,9 @@
   "payment" : {
     "individual" : "Individual",
     "family": "Family",
+    "family_plan": "Family Plan",
     "ads" : "Enjoy all Locker Premium features with Yearly Plan to save up to 75%",
+    "ads_family" : "Enjoy all Locker Premium Features, for 6 accounts, with discounted prices",
     "trial": "Start with 2 weeks free trial",
     "cancel_text" : "Recurring billing. Cancel anytime",
     "benefit" : {

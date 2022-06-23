@@ -348,6 +348,21 @@ export const SettingsScreen = observer(() => {
         />
         {/* Biometric end */}
 
+        {/* Biometric */}
+        <SettingsItem
+          name={translate('common.customer_service')}
+          noCaret
+          right={(
+            <Switch
+              value={uiStore.isShowIntercomMsgBox}
+              onValueChange={uiStore.setShowIntercomMsgBox}
+              trackColor={{ false: color.disabled, true: color.primary }}
+              thumbColor={color.white}
+            />
+          )}
+        />
+        {/* Biometric end */}
+
         {/* Timeout */}
         <Select
           value={settings.timeout.value}

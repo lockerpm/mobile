@@ -1,4 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { omit } from 'ramda'
 
 /**
  * Model description here for TypeScript hints.
@@ -7,29 +8,35 @@ export const UiStoreModel = types
   .model("UiStore")
   .props({
     // Data
-    isOffline: types.maybeNull(types.boolean),
+    isShowIntercomMsgBox: false,
     isDark: types.maybeNull(types.boolean),
-    isSelecting: types.maybeNull(types.boolean),
-    isPerformOverlayTask: types.maybeNull(types.boolean),
     lockResendOtpResetPasswordTime: types.maybeNull(types.number),
+    showWelcomePremium: false,
+    isShowedAppReview: false,
+    inAppReviewShowDate: types.maybeNull(types.number),
 
     // Cache
     isFromAutoFillItem: types.maybeNull(types.boolean),
     isOnSaveLogin: types.maybeNull(types.boolean),
     isFromAutoFill: types.maybeNull(types.boolean),
-    showWelcomePremium: false,
-    isShowedAppReview: false,
-    inAppReviewShowDate: types.maybeNull(types.number),
     selectedCountry: types.maybeNull(types.string),
     deepLinkAction: types.maybeNull(types.string),
     deepLinkUrl: types.maybeNull(types.string),
-    saveLogin: types.maybeNull(types.frozen<{domain: string, username: string, password: string}>()),
+    saveLogin: types.maybeNull(types.frozen<{ domain: string, username: string, password: string }>()),
     saveLastId: types.maybeNull(types.string),
+    firstRouteAfterInit: types.maybeNull(types.string),
+    isOffline: types.maybeNull(types.boolean),
+    isSelecting: types.maybeNull(types.boolean),
+    isPerformOverlayTask: types.maybeNull(types.boolean),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     setIsOffline: (isOffline: boolean) => {
       self.isOffline = isOffline
+    },
+
+    setShowIntercomMsgBox: (val: boolean) => {
+      self.isShowIntercomMsgBox = val
     },
 
     setShowWelcomePremium: (val: boolean) => {
@@ -83,7 +90,7 @@ export const UiStoreModel = types
       } else if (action === 'fill_item') {
         self.saveLastId = data || ''
       } else {
-        self.saveLogin = data 
+        self.saveLogin = data
       }
     },
 
@@ -96,8 +103,25 @@ export const UiStoreModel = types
 
     setLockResendOtpResetPasswordTime(val: number) {
       self.lockResendOtpResetPasswordTime = val
+    },
+
+    setFirstRouteAfterInit(val: string) {
+      self.firstRouteAfterInit = val
     }
-  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  }))
+  .postProcessSnapshot(omit([
+    'firstRouteAfterInit',
+    'isSelecting',
+    'isOffline',
+    'isPerformOverlayTask',
+    'isFromAutoFillItem',
+    'isOnSaveLogin',
+    'selectedCountry',
+    'deepLinkAction',
+    'deepLinkUrl',
+    'saveLogin',
+    'saveLastId'
+  ]))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -108,7 +132,7 @@ export const UiStoreModel = types
  */
 
 type UiStoreType = Instance<typeof UiStoreModel>
-export interface UiStore extends UiStoreType {}
+export interface UiStore extends UiStoreType { }
 type UiStoreSnapshotType = SnapshotOut<typeof UiStoreModel>
-export interface UiStoreSnapshot extends UiStoreSnapshotType {}
+export interface UiStoreSnapshot extends UiStoreSnapshotType { }
 export const createUiStoreDefaultModel = () => types.optional(UiStoreModel, {})

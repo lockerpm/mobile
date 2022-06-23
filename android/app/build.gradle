@@ -145,8 +145,8 @@ android {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4052
-        versionName "1.20"
+        versionCode 4059
+        versionName "1.23"
         
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.cystack.locker'
@@ -239,6 +239,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wallet:19.0.1'
     implementation "com.stripe:stripe-android:19.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:4.4.1")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
 
     addUnimodulesDependencies()
 

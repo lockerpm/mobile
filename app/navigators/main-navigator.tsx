@@ -34,6 +34,7 @@ import { SocketEvent, SocketEventType } from "../config/types"
 import { HealthNavigator } from "./tools/health-navigator"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import InAppReview from 'react-native-in-app-review';
+import Intercom from "@intercom/intercom-react-native"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -337,6 +338,15 @@ export const MainNavigator = observer(() => {
   }
 
   // ------------------ EFFECT --------------------
+ // Intercom support 
+ useEffect(() => {
+  if (user.isLoggedInPw) {
+    Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id }).catch((e) => {
+      Logger.error(e)
+    })
+  } 
+}, [user.isLoggedInPw])
+
 
   // check app revire 
   useEffect(() => {

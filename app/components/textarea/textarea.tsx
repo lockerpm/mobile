@@ -5,6 +5,7 @@ import { Text } from "../text/text"
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../services/mixins"
 import { fontSize } from "../../theme"
+import { ScrollView } from "react-native-gesture-handler"
 
 
 interface Props extends TextInputProps {
@@ -55,6 +56,11 @@ export const Textarea = (props: Props) => {
     height: 30
   }
 
+  const INPUT_CONTENT_CONTAINER = {
+    paddingRight: 35 * ((copyAble ? 1 : 0) + (buttonRight ? 1 : 0)),
+    maxHeight: 100
+  }
+
   return (
     <View style={style}>
       {/* Label */}
@@ -68,30 +74,39 @@ export const Textarea = (props: Props) => {
       {/* Label end */}
 
       {/* Input */}
-      <TextInput
-        multiline
-        ref={outerRef}
-        value={value}
-        autoCapitalize="none"
-        selectionColor={color.primary}
-        onFocus={() => {
-          setIsFocus(true)
-        }}
-        onBlur={() => {
-          setIsFocus(false)
-        }}
-        placeholderTextColor={color.text}
-        style={[{
-          fontSize: fontSize.p,
-          color: color.textBlack,
-          paddingRight: 35 * ((copyAble ? 1 : 0) + (buttonRight ? 1 : 0)),
-          textAlignVertical: 'top',
-          paddingVertical: 0,
-          minHeight: props.editable === false ? 0 : 50,
-          maxHeight: 100
-        }, inputStyle]}
-        {...rest}
-      />
+      {
+        (props.editable === false) ? (
+          <ScrollView style={INPUT_CONTENT_CONTAINER}>
+            <Text
+              preset="black"
+              text={value}
+            />
+          </ScrollView>
+        ) : (
+          <TextInput
+            multiline
+            ref={outerRef}
+            value={value}
+            autoCapitalize="none"
+            selectionColor={color.primary}
+            onFocus={() => {
+              setIsFocus(true)
+            }}
+            onBlur={() => {
+              setIsFocus(false)
+            }}
+            placeholderTextColor={color.text}
+            style={[INPUT_CONTENT_CONTAINER, {
+              fontSize: fontSize.p,
+              color: color.textBlack,
+              textAlignVertical: 'top',
+              paddingVertical: 0,
+              minHeight: 50
+            }, inputStyle]}
+            {...rest}
+          />
+        )
+      }
       {/* Input end */}
 
       <View style={{

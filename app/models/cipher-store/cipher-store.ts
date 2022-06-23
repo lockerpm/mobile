@@ -120,8 +120,10 @@ export const CipherStoreModel = types
       self.notUpdatedCiphers = cast([])
     },
 
-    clearStore: () => {
-      self.apiToken = null
+    clearStore: (dataOnly?: boolean) => {
+      if (!dataOnly) {
+        self.apiToken = null
+      }
       self.generatedPassword = null
       self.selectedCipher = null
       self.selectedFolder = null

@@ -49,17 +49,17 @@
 			<string>com.cystack.lockerapp</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.cystack.locker</string>
+				<string>tagmanager.c.com.cystack.lockerapp</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.cystack.lockerapp</string>
+			<string>Bundle ID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>tagmanager.c.com.cystack.locker</string>
+				<string>com.cystack.lockerapp</string>
 			</array>
 		</dict>
 	</array>
@@ -96,6 +96,8 @@
 	<string>Authentication</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Send photos to support center</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

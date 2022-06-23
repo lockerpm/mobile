@@ -1,7 +1,5 @@
 {
   "common": {
-    "open_settings": "Mở cài đặt",
-    "yes": "Đồng ý",
     "accept": "Đồng ý",
     "account": "Tài khoản",
     "authenticate": "Xác thực",
@@ -21,6 +19,7 @@
     "continue": "Tiếp tục",
     "copied_to_clipboard": "Đã sao chép",
     "country": "Quốc gia",
+    "customer_service": "Dịch vụ hỗ trợ khách hàng và phản hồi",
     "create": "Tạo",
     "crypto_asset": "Tài sản crypto",
     "crypto_wallet": "Sao lưu ví Crypto",
@@ -37,7 +36,7 @@
     "fullname": "Họ và tên",
     "generate": "Tạo mới",
     "help": "Trợ giúp",
-    "home": "Tất cả",
+    "home": "Trang chủ",
     "identity": "Danh tính",
     "item": "mục",
     "item_name": "Tên mục",
@@ -62,9 +61,11 @@
     "notes": "Ghi chú",
     "nothing_here": "Không có dữ liệu",
     "notifications": "Thông báo",
+    "ok": "OK",
     "options": "Tùy chọn",
     "or_login_with": "Hoặc đăng nhập bằng",
     "organization": "Tổ chức",
+    "open_settings": "Mở cài đặt",
     "other": "Khác",
     "others": "Khác",
     "owned_by": "Sở hữu bởi",
@@ -108,7 +109,8 @@
     "loading": "Đang giải mã dữ liệu",
     "see_all": "Xem tất cả",
     "collapse": "Thu gọn",
-    "share_with": "Chia sẻ với"
+    "share_with": "Chia sẻ với",
+    "yes": "Đồng ý"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
@@ -122,7 +124,6 @@
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
     "biometric_unlock_failed": "Xác thực bằng Face ID/Touch ID không thành công",
-    "network_error": "Vui lòng kết nối internet để sử dụng tính năng này",
     "required_data": "Không được để trống thông tin này",
     "session_login_failed": "Đăng nhập phiên không thành công! Vui lòng thử lại",
     "login_failed": "Đăng nhập không thành công! Vui lòng thử lại",
@@ -168,7 +169,12 @@
       }
     },
     "cannot_select_more": "Không thể chọn nhiều hơn {{count}} mục",
-    "cannot_update_more_at_once": "Không thể thay đổi nhiều hơn {{count}} mục cùng một lúc."
+    "cannot_update_more_at_once": "Không thể thay đổi nhiều hơn {{count}} mục cùng một lúc.",
+    "rooted_device": "Thiết bị của bạn đã bị can thiệp hệ điều hành, vì vậy không tương thích với ứng dụng này.",
+    "network_timeout": "Mất quá nhiều thời gian cho kết nối mạng",
+    "server_error": "Máy chủ đã xảy ra lỗi",
+    "cannot_connect": "Không thể kết nối với máy chủ, vui lòng kiểm tra kết nối mạng",
+    "network_error": "Lỗi mạng. Kết nối của bạn không an toàn"
   },
   "success": {
     "done": "Hoàn tất",
@@ -453,6 +459,7 @@
     "invite_noti" : "Nâng cấp lên gói Family để sử dụng Locker tiết kiệm hơn với những người thân!",
     "fingerprint": "Định danh",
     "plan": "Quản lý gói cước",
+    "expired_time": "Hết hạn",
     "invite": "Mời thành viên",
     "invitation_to_join": "Lời mời tham gia ",
     "invitation_desc": "Bạn đã được mời tham gia {{org}}! Tham gia ngay bây giờ và bắt đầu cộng tác với nhóm của bạn."
@@ -542,6 +549,10 @@
     "defaultTab": "Màn hình mặc định"
   },
   "autofill_service": {
+    "activated" : {
+      "title": "Tự động điền đã được kích hoạt",
+      "content": "Bạn có thể đăng nhập vào các ứng dụng và website một cách nhanh cóng và linh hoạt"
+    },
     "ios": {
       "desc": "Để bật tính năng tự động điền mật khẩu trên thiết bị của bạn, hãy làm theo các hướng dẫn sau:",
       "step_1": "1. Mở \"Cài đặt\"",
@@ -610,7 +621,9 @@
   "payment" : {
     "individual" : "Cá nhân",
     "family": "Gia đình",
+    "family_plan": "Gói gia đình",
     "ads" : "Tận hưởng tất cả các tính năng của Locker Premium với gói hàng năm để tiết kiệm đến 75%",
+    "ads_family" : "Tận hưởng tất cả các tinh năng của Locker Premium cho 6 tài khoản với giá ưu đãi",
     "trial": "Bắt đầu với 2 tuần dùng thử miễn phí",
     "cancel_text" : "Thanh toán định kỳ. Hủy bất cứ lúc nào",
     "benefit" : {

@@ -9,6 +9,7 @@ import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
+import { logCreateMasterPwEvent } from "../../../utils/analytics"
 
 
 export const CreateMasterPasswordScreen = observer(() => {
@@ -45,6 +46,7 @@ export const CreateMasterPasswordScreen = observer(() => {
     setIsCreating(true)
     const res = await registerLocker(masterPassword, hint, passwordStrength)
     if (res.kind === 'ok') {
+      logCreateMasterPwEvent()
       const sessionRes = await sessionLogin(masterPassword)
       setIsCreating(false)
       if (sessionRes.kind === 'ok') {

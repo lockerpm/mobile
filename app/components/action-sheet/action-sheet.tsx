@@ -1,10 +1,11 @@
-import * as React from "react"
+import React, { useEffect } from "react"
 import { StyleProp, View, ViewStyle } from "react-native"
 import { flatten } from "ramda"
 import Dialog from "react-native-ui-lib/dialog"
 import { commonStyles } from "../../theme"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useMixins } from "../../services/mixins"
+import { AppEventType, EventBus } from "../../utils/event-bus"
 
 
 export interface ActionSheetProps {
@@ -17,7 +18,7 @@ export interface ActionSheetProps {
 /**
  * Describe your component here
  */
-export const ActionSheet = function ActionSheet(props: ActionSheetProps) {
+export const ActionSheet = (props: ActionSheetProps) => {
   const { style, children, isOpen, onClose } = props
   const insets = useSafeAreaInsets()
   const { color } = useMixins()
@@ -30,8 +31,19 @@ export const ActionSheet = function ActionSheet(props: ActionSheetProps) {
   }
   const styles = flatten([CONTAINER, { paddingBottom: insets.bottom }, style])
 
+  // Close on signal
+  useEffect(() => {
+    const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
+      onClose()
+    })
+    return () => {
+      EventBus.removeListener(listener)
+    }
+  }, [])
+
   return (
     <Dialog
+      supportedOrientations={['portrait', 'landscape']}
       containerStyle={styles}
       bottom
       width="100%"
@@ -47,7 +59,7 @@ export const ActionSheet = function ActionSheet(props: ActionSheetProps) {
                 borderRadius: 4,
                 width: 50
               }}
-            />  
+            />
           </View>
         </View>
       )}

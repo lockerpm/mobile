@@ -99,8 +99,10 @@ export const ToolStoreModel = types
 
     // OTHER
 
-    clearStore: () => {
-      self.apiToken = null
+    clearStore: (dataOnly?: boolean) => {
+      if (!dataOnly) {
+        self.apiToken = null
+      }
 
       self.breachedEmail = null
       self.breaches = cast([])

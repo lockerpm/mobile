@@ -1,10 +1,12 @@
 #import <Firebase.h>
 #import "AppDelegate.h"
+#import "ReactNativeConfig.h"
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
+#import <TrustKit/TrustKit.h>
 
 #if RCT_DEV
 #import <React/RCTDevLoadingView.h>
@@ -17,6 +19,10 @@
 
 // Import RNSplashScreen
 #import "RNSplashScreen.h"
+#import <IntercomModule.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBAEMKit/FBAEMKit.h>
+#import <React/RCTLinkingManager.h>
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -25,7 +31,6 @@
 #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
-
 
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
@@ -48,7 +53,9 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [self initTrustKit];
   [FIRApp configure];
+  [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
   
   #ifdef FB_SONARKIT_ENABLED
     InitializeFlipper(application);
@@ -80,6 +87,7 @@ static void InitializeFlipper(UIApplication *application) {
 
   // Set the splash screen to show by default.
   [RNSplashScreen show];
+  [IntercomModule initialize:@"ios_sdk-b3558c685a17ec60d659f373a4cbb6ca9c39e167" withAppId:@"hjus3ol6"];
   
   return YES;
 }
@@ -108,7 +116,17 @@ static void InitializeFlipper(UIApplication *application) {
   if ([self.authorizationFlowManagerDelegate resumeExternalUserAgentFlowWithURL:url]) {
     return YES;
   }
-  return [RCTLinkingManager application:application openURL:url options:options];
+  if ([[FBSDKApplicationDelegate sharedInstance] application:application openURL:url options:options]) {
+    return YES;
+  }
+
+  if ([RCTLinkingManager application:application openURL:url options:options]) {
+    return YES;
+  }
+  [FBAEMReporter configureWithNetworker:nil appID: @"1260309664112849"];
+  [FBAEMReporter enable];
+  [FBAEMReporter handleURL:url];
+  return NO;
 }
 
 // ------------ Prevent preview background
@@ -136,6 +154,24 @@ static void InitializeFlipper(UIApplication *application) {
         // remove when finished fading
         [colourView removeFromSuperview];
     }];
+}
+
+- (void)initTrustKit {
+     NSDictionary *trustKitConfig =
+     @{
+       kTSKSwizzleNetworkDelegates: @YES,
+       kTSKPinnedDomains : @{
+         [ReactNativeConfig envFor:@"SSL_PINNING_HOST"] : @{
+              kTSKEnforcePinning : @YES,
+              kTSKIncludeSubdomains:@YES, 
+              kTSKPublicKeyHashes : @[
+                  [ReactNativeConfig envFor:@"SSL_PINNING_PUB_KEY_1"],
+                  [ReactNativeConfig envFor:@"SSL_PINNING_PUB_KEY_2"]
+              ]
+         },
+       }
+     };
+    [TrustKit initSharedInstanceWithConfiguration:trustKitConfig];
 }
 
 @end
