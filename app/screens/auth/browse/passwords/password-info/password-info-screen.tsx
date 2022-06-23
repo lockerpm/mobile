@@ -51,7 +51,7 @@ export const PasswordInfoScreen = observer(() => {
             <Button
               preset="link"
               onPress={() => setShowAction(true)}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
@@ -127,8 +127,8 @@ export const PasswordInfoScreen = observer(() => {
 
       {/* Info */}
       <View style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingVertical: 22
+        backgroundColor: color.background,
+        paddingVertical: 22
       }]}>
         {/* Username */}
         <FloatingInput
@@ -171,7 +171,9 @@ export const PasswordInfoScreen = observer(() => {
               isDisabled={!selectedCipher.login.uri}
               preset="link"
               onPress={() => {
-                Linking.openURL(selectedCipher.login.uri)
+                Linking.openURL(selectedCipher.login.uri).catch((e) => {
+                  Linking.openURL("https://" + selectedCipher.login.uri)
+                });
               }}
               style={{
                 alignItems: 'center',

@@ -6,7 +6,6 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import NetInfo from "@react-native-community/netinfo"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { PlanType } from "../../../config/types"
 
 export const StartScreen = observer(() => {
   const { user, uiStore } = useStores()
@@ -79,7 +78,7 @@ export const StartScreen = observer(() => {
       navigation.navigate(navigationRequest.path, navigationRequest.params)
       return
     }
-    
+
     if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
       if (!user.biometricIntroShown && !user.isBiometricUnlock) {
         const available = await isBiometricAvailable()
@@ -107,6 +106,7 @@ export const StartScreen = observer(() => {
   }
 
   // --------------------------- EFFECT ----------------------------
+
 
   // Always move forward
   useEffect(() => {

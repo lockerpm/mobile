@@ -39,6 +39,7 @@ yarn-error.log
 buck-out/
 \.buckd/
 *.keystore
+!my-upload-key.keystore
 !debug.keystore
 
 # fastlane
@@ -81,3 +82,11 @@ web-build/
 # Configurations
 app/config/env.*.js
 !env.js
+
+# Env
+.env
+app/config/.env.production
+app/config/.env.staging
+
+android/gradle.properties
+android/app/my-upload-key.keystore

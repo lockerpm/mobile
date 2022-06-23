@@ -36,7 +36,7 @@
     "fullname": "Họ và tên",
     "generate": "Tạo mới",
     "help": "Trợ giúp",
-    "home": "Tất cả",
+    "home": "Trang chủ",
     "identity": "Danh tính",
     "item": "mục",
     "item_name": "Tên mục",
@@ -61,6 +61,7 @@
     "notes": "Ghi chú",
     "nothing_here": "Không có dữ liệu",
     "notifications": "Thông báo",
+    "ok": "OK",
     "options": "Tùy chọn",
     "or_login_with": "Hoặc đăng nhập bằng",
     "organization": "Tổ chức",
@@ -548,6 +549,10 @@
     "defaultTab": "Màn hình mặc định"
   },
   "autofill_service": {
+    "activated" : {
+      "title": "Tự động điền đã được kích hoạt",
+      "content": "Bạn có thể đăng nhập vào các ứng dụng và website một cách nhanh cóng và linh hoạt"
+    },
     "ios": {
       "desc": "Để bật tính năng tự động điền mật khẩu trên thiết bị của bạn, hãy làm theo các hướng dẫn sau:",
       "step_1": "1. Mở \"Cài đặt\"",
@@ -616,7 +621,9 @@
   "payment" : {
     "individual" : "Cá nhân",
     "family": "Gia đình",
+    "family_plan": "Gói gia đình",
     "ads" : "Tận hưởng tất cả các tính năng của Locker Premium với gói hàng năm để tiết kiệm đến 75%",
+    "ads_family" : "Tận hưởng tất cả các tinh năng của Locker Premium cho 6 tài khoản với giá ưu đãi",
     "trial": "Bắt đầu với 2 tuần dùng thử miễn phí",
     "cancel_text" : "Thanh toán định kỳ. Hủy bất cứ lúc nào",
     "benefit" : {
