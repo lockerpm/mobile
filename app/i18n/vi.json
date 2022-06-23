@@ -123,7 +123,6 @@
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
     "biometric_unlock_failed": "Xác thực bằng Face ID/Touch ID không thành công",
-    "network_error": "Vui lòng kết nối internet để sử dụng tính năng này",
     "required_data": "Không được để trống thông tin này",
     "session_login_failed": "Đăng nhập phiên không thành công! Vui lòng thử lại",
     "login_failed": "Đăng nhập không thành công! Vui lòng thử lại",
@@ -170,7 +169,11 @@
     },
     "cannot_select_more": "Không thể chọn nhiều hơn {{count}} mục",
     "cannot_update_more_at_once": "Không thể thay đổi nhiều hơn {{count}} mục cùng một lúc.",
-    "rooted_device": "Thiết bị của bạn đã bị can thiệp hệ điều hành, vì vậy không tương thích với ứng dụng này."
+    "rooted_device": "Thiết bị của bạn đã bị can thiệp hệ điều hành, vì vậy không tương thích với ứng dụng này.",
+    "network_timeout": "Mất quá nhiều thời gian cho kết nối mạng",
+    "server_error": "Máy chủ đã xảy ra lỗi",
+    "cannot_connect": "Không thể kết nối với máy chủ, vui lòng kiểm tra kết nối mạng",
+    "network_error": "Lỗi mạng. Kết nối của bạn không an toàn"
   },
   "success": {
     "done": "Hoàn tất",

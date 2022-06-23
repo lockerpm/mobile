@@ -240,6 +240,7 @@ dependencies {
     implementation "com.stripe:stripe-android:19.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation("com.squareup.okhttp3:okhttp-urlconnection:4.4.1")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
 
     addUnimodulesDependencies()
 

@@ -16,6 +16,8 @@ target 'Locker' do
   )
 
   # pod 'lottie-ios'
+
+  pod 'TrustKit'
   
   pod 'GoogleTagManager'
 
