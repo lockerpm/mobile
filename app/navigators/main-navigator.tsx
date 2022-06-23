@@ -338,22 +338,14 @@ export const MainNavigator = observer(() => {
   }
 
   // ------------------ EFFECT --------------------
-
-  // Intercom support 
-  useEffect(() => {
-    const intercomLogin = async () => {
-      await Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id }).catch((e) => {
-        Logger.error(e)
-      })
-    }
-    intercomLogin()
-
-    return () => {
-      Intercom.logout().catch((e) => {
-        Logger.error(e)
-      })
-    }
-  }, [])
+ // Intercom support 
+ useEffect(() => {
+  if (user.isLoggedInPw) {
+    Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id }).catch((e) => {
+      Logger.error(e)
+    })
+  } 
+}, [user.isLoggedInPw])
 
 
   // check app revire 

@@ -15,6 +15,7 @@ import { Logger } from '../../../utils/logger'
 import { SymmetricCryptoKey } from '../../../../core/models/domain'
 import { remove, removeSecure, StorageKey } from '../../../utils/storage'
 import { useSocialLoginMixins } from '../social-login'
+import Intercom from '@intercom/intercom-react-native'
 
 
 const { createContext, useContext } = React
@@ -291,6 +292,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       await user.updateFCM(null)
       await user.logout()
       await logoutAllServices()
+      await Intercom.logout()
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       Logger.error('logout: ' + e)

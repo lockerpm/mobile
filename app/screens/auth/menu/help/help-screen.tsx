@@ -9,6 +9,7 @@ import { useMixins } from "../../../../services/mixins"
 import { PRIVACY_POLICY_URL, TERMS_URL, HELP_CENTER_URL, REPORT_VULN} from "../../../../config/constants"
 import { FeedbackModal } from "./feedback-modal"
 import { useStores } from "../../../../models"
+// import {AEMReporterIOS, AppEventsLogger} from 'react-native-fbsdk-next';
 
 type Item = {
   name: string
@@ -43,9 +44,10 @@ export const HelpScreen = observer(function HelpScreen() {
       }
     },
     // {
-    //   name: translate('help.feedback'),
+    //   name: 'Test Event',
     //   action: () => {
-    //     setShowFeedback(true)
+    //     AppEventsLogger.logEvent("fb_mobile_login_complete", 1211);
+    //     AEMReporterIOS.logAEMEvent("fb_mobile_login_complete", 1211, "VND");
     //   }
     // },
     {
