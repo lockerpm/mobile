@@ -162,7 +162,6 @@ export const PricePlan = (props: PricePlanProps) => {
       <Text preset="black" style={{
         marginTop: 10,
         marginBottom: 10,
-        alignSelf: "center"
       }}>
         {props.personal ? translate("payment.ads") : translate("payment.ads_family")}
       </Text>

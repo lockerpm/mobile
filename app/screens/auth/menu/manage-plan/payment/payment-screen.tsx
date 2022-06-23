@@ -22,7 +22,6 @@ import RNIap, {
   presentCodeRedemptionSheetIOS
 } from 'react-native-iap';
 import { PurchaseValidationResult } from "../../../../../services/api"
-// import { logPurchase } from "../../../../../utils/analytics"
 
 // control init premium benefit tab
 type ScreenProp = RouteProp<PrimaryParamList, 'payment'>;
@@ -64,7 +63,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const getSubscription = useCallback(async (): Promise<void> => {
     try {
       await RNIap.initConnection();
-
       if (!IS_IOS) {
         await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
       }
@@ -73,7 +71,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
       }
 
       const subs = await RNIap.getSubscriptions(subSkus);
-      console.log(subs)
       setSubcriptions(subs);
     } catch (err) {
       Logger.error({ 'initConnection': err })
@@ -105,20 +102,6 @@ export const PaymentScreen = observer(function PaymentScreen() {
             }
             if (res.kind === "ok") {
               if (res.data.success) {
-
-                // TODO
-                // console.log(purchase.productId)
-                // const subscription = subcriptions.find(s => {
-                //   console.log(s.productId)
-                //   return s.productId === purchase.productId
-                // }
-                // )
-                // logPurchase({
-                //   itemId: purchase.productId,
-                //   currency: subscription.currency,
-                //   price: subscription.localizedPrice,
-                //   itemName: subscription.title
-                // })
                 await user.loadPlan()
                 uiStore.setShowWelcomePremium(true)
                 navigation.navigate("welcome_premium")
@@ -220,7 +203,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
     return route.params.family ? (<Text
       preset="largeHeader"
       text={translate("payment.family_plan")}
-      style={{ marginTop: 16, marginLeft: 24 }}
+      style={{ marginTop: 16, marginLeft: 20 }}
     />) : (
       <View
         style={[styles.segment, {
@@ -249,26 +232,26 @@ export const PaymentScreen = observer(function PaymentScreen() {
   return (
     <Layout
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
-    >
-      <View style={{ flex: 1 }}>
-        <View style={styles.header}>
+      header={<View style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+      }}>
+        <Image
+          source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
+          style={{ height: 32, width: 152 }}
+        />
+        <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
           <Image
-            source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
-            style={{ height: 32, width: 152 }}
+            source={require("./Cross.png")}
+            style={{ height: 24, width: 24 }}
           />
-          <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
-            <Image
-              source={require("./Cross.png")}
-              style={{ height: 24, width: 24 }}
-            />
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
+      </View>}
 
-        <View style={{ top: 0, minHeight: 310, width: "100%", zIndex: 1 }}>
-          <PremiumBenefits benefitTab={route.params.benefitTab} />
-        </View>
+    >
+      <View style={{ flex: 1, top: 0, minHeight: 310, width: "100%", zIndex: 1 }}>
+        <PremiumBenefits benefitTab={route.params.benefitTab} />
       </View>
-
 
       <View style={[styles.payment, { backgroundColor: color.background }]}>
         <Segment />

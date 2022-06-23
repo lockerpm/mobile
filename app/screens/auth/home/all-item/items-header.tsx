@@ -220,6 +220,7 @@ export const ItemsHeader = observer((props: Props) => {
       initialId: null,
       cipherIds: selectedItems
     })
+    setSelectedItems([])
   }
 
   // ----------------------- RENDER ------------------------

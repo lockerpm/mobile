@@ -73,27 +73,26 @@ export const MenuScreen = observer(() => {
     getLink()
   }, [])
 
+
   useEffect(() => {
     const setUpCustomerService = async () => {
+      await Intercom.hideIntercom()
       try {
-        if (uiStore.isShowIntercomMsgBox && user.isLoggedInPw) {
+        if (uiStore.isShowIntercomMsgBox) {
           await Intercom.setBottomPadding(100)
           await Intercom.setLauncherVisibility(Visibility.VISIBLE)
         } else {
           await Intercom.setLauncherVisibility(Visibility.GONE)
           const res = await Intercom.getUnreadConversationCount()
-          console.log(unreadConversationCount)
           setUnreadConversationCount(res)
-             
         }
       } catch (e) {
         Logger.error(e)
       }
     }
-    setUpCustomerService()
-
+    user.isLoggedInPw && setUpCustomerService()
     return () => {
-      Intercom.hideIntercom()
+
     }
   }, [uiStore.isShowIntercomMsgBox])
 
@@ -101,7 +100,6 @@ export const MenuScreen = observer(() => {
     const countListener = Intercom.addEventListener(
       IntercomEvents.IntercomUnreadCountDidChange,
       (response) => {
-        console.log(response)
         setUnreadConversationCount(response.count as number);
       }
     );
@@ -109,6 +107,7 @@ export const MenuScreen = observer(() => {
       countListener.remove();
     };
   }, []);
+
 
   const items: MenuItemProps[] = [
     {
@@ -368,7 +367,7 @@ export const MenuScreen = observer(() => {
           referLink: referLink
         }))} />
 
-        { <View style={ITEM_CONTAINER}>
+        {<View style={ITEM_CONTAINER}>
           <Button
             preset="link"
             onPress={() => Intercom.displayMessenger()}
