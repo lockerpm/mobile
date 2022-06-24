@@ -12,7 +12,7 @@ import { GitHubLoginModal } from "./github-login-modal"
 
 type Props = {
   nextStep: (username: string, password: string, methods: { type: string, data: any }[]) => void
-  onLoggedIn: () => void
+  onLoggedIn: (newUser: boolean, token: string) => void
   handleForgot: () => void
 }
 
@@ -72,7 +72,7 @@ export const DefaultLogin = observer((props: Props) => {
       } else {
         // @ts-ignore
         setApiTokens(res.data?.access_token)
-        onLoggedIn()
+        onLoggedIn(false, "")
       }
     }
   }

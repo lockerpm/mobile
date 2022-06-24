@@ -8,6 +8,7 @@ import { commonStyles, spacing } from "../../../theme"
 import { DefaultLogin } from "./default"
 import { MethodSelection } from "./method-selection"
 import { Otp } from "./otp"
+import { SocialSignedUpModal } from "../signup/social-signup-modal"
 import { useStores } from "../../../models"
 
 export const LoginScreen = observer(() => {
@@ -26,9 +27,13 @@ export const LoginScreen = observer(() => {
   const [method, setMethod] = useState('')
   const [partialEmail, setPartialEamil] = useState('')
 
+  const [token, setResetPWToken] = useState("")
+  const [account, setAccount] = useState(null)
+  const [showSocialSignedUpModal, setShowSocialSignedUpModal] = useState(false)
+
   // ------------------------------ METHODS -------------------------------
 
-  const onLoggedIn = async () => {
+  const onLoggedIn = async (newUser?: boolean, token?: string) => {
     setIndex(0)
     setIsScreenLoading(true)
     const [userRes, userPwRes] = await Promise.all([
@@ -37,10 +42,16 @@ export const LoginScreen = observer(() => {
     ])
     setIsScreenLoading(false)
     if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
-      if (user.is_pwd_manager) {
-        navigation.navigate('lock')
+      if (newUser) {
+        setResetPWToken(token)
+        setAccount(userRes.user)
+        setShowSocialSignedUpModal(true)
       } else {
-        navigation.navigate('createMasterPassword')
+        if (user.is_pwd_manager) {
+          navigation.navigate('lock')
+        } else {
+          navigation.navigate('createMasterPassword')
+        }
       }
     }
   }
@@ -60,14 +71,22 @@ export const LoginScreen = observer(() => {
 
     navigation.addListener('beforeRemove', handleBack)
 
+    const unsubscribe = navigation.addListener('focus', () => {
+      setResetPWToken("")
+      setAccount(null)
+      setShowSocialSignedUpModal(false)
+    });
+
     return () => {
+      unsubscribe()
       navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
 
+
   // ------------------------------ RENDER -------------------------------
 
-  return (
+  return showSocialSignedUpModal ? <SocialSignedUpModal userRes={account} token={token} /> : (
     <Layout
       isOverlayLoading={isScreenLoading}
       footer={(
@@ -91,6 +110,7 @@ export const LoginScreen = observer(() => {
         </View>
       )}
     >
+
       {
         index === 0 && (
           <DefaultLogin
