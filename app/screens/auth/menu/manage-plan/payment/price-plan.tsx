@@ -6,7 +6,6 @@ import { useMixins } from "../../../../../services/mixins"
 import { SKU } from "./price-plan.sku"
 import { Subscription } from "react-native-iap"
 import { IS_IOS } from "../../../../../config/constants"
-import { useStores } from "../../../../../models"
 
 interface PricePlanItemProps {
   onPress: () => void
@@ -88,6 +87,8 @@ interface PricePlanProps {
 export const PricePlan = (props: PricePlanProps) => {
   const { translate, color } = useMixins()
 
+  const [discount, setDiscount] = useState(false)
+
   const planText = {
     per: {
       monthly: {
@@ -130,10 +131,9 @@ export const PricePlan = (props: PricePlanProps) => {
   }
 
   const plan = props.personal ? planText.per : planText.fam
-  const billingCycle = props.isEnable ? plan.yearly : plan.monthly
-
-
-  const [discount, setDiscount] = useState(false)
+  const billingCycle = props.isEnable ? plan.yearly : plan.monthly  
+  const ads = props.personal ? translate("payment.ads") : translate("payment.ads_family") 
+  const trial = props.isTrial ?  translate("payment.trial") : ""
 
 
 
@@ -163,16 +163,8 @@ export const PricePlan = (props: PricePlanProps) => {
         marginTop: 10,
         marginBottom: 10,
       }}>
-        {props.personal ? translate("payment.ads") : translate("payment.ads_family")}
+        {ads + trial}
       </Text>
-
-      {props.isTrial && <Text style={{
-        marginTop: 10,
-        marginBottom: 10,
-        alignSelf: "center"
-      }}>
-        {translate("payment.trial")}
-      </Text>}
 
       <PricePlanItem
         onPress={() => props.onPress(true)}

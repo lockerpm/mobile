@@ -619,15 +619,30 @@
     "individual" : "Cá nhân",
     "family": "Gia đình",
     "family_plan": "Gói gia đình",
-    "ads" : "Tận hưởng tất cả các tính năng của Locker Premium với gói hàng năm để tiết kiệm đến 75%",
-    "ads_family" : "Tận hưởng tất cả các tinh năng của Locker Premium cho 6 tài khoản với giá ưu đãi",
-    "trial": "Bắt đầu với 2 tuần dùng thử miễn phí",
+    "ads" : "Tận hưởng tất cả các tính năng của Locker Premium với gói hàng năm để tiết kiệm đến 75%. ",
+    "ads_family" : "Tận hưởng tất cả các tinh năng của Locker Premium cho 6 tài khoản với giá ưu đãi. ",
+    "trial": "(Bắt đầu với 2 tuần dùng thử miễn phí)",
     "cancel_text" : "Thanh toán định kỳ. Hủy bất cứ lúc nào",
     "benefit" : {
       "locker" : "Lưu trữ không giới hạn, Ghi chú bảo mật, Thẻ thanh toán, Tài sản tiền điện tử",
       "web" : "Giám sát Dark Web bảo vệ tài khoản của bạn khỏi các vi phạm dữ liệu lớn",
       "emergency_contact" : "Liên hệ khẩn cấp cho phép các tài khoản đáng tin cậy truy cập dữ liệu của bạn",
       "share_password": "Chia sẻ mật khẩu an toàn với bạn bè và thành viên gia đình của bạn"
+    },
+    "family": {
+      "header": "Nâng cấp lên Family",
+      "ads": "Trải nghiệm các tính năng của Locker Premium với bạn bè, người thân với giá tốt nhất",
+      "benefits": {
+        "family": "Bao gồm 6 thành viên trong gói",
+        "storage": "Lưu trữ không giới hạn",
+        "health": "Kiểm tra độ mạnh yếu của mật khẩu",
+        "weak": "Gửi cảnh báo mật khẩu yếu",
+        "scaner": "Trình quét vi phạm dữ liệu",
+        "emergency": "Truy cập khẩn cấp",
+        "share": "Chia sẻ mật khẩu"
+      },
+      "month": "$9.99 / Tháng",
+      "year": "$71.99 / Năm"
     },
     "price" :{
       "per": {
