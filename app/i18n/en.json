@@ -619,15 +619,30 @@
     "individual" : "Individual",
     "family": "Family",
     "family_plan": "Family Plan",
-    "ads" : "Enjoy all Locker Premium features with Yearly Plan to save up to 75%",
-    "ads_family" : "Enjoy all Locker Premium Features, for 6 accounts, with discounted prices",
-    "trial": "Start with 2 weeks free trial",
+    "ads" : "Enjoy all Locker Premium features with Yearly Plan to save up to 75%. ",
+    "ads_family" : "Enjoy all Locker Premium Features, for 6 accounts, with discounted prices. ",
+    "trial": "(Start with 2 weeks free trial)",
     "cancel_text" : "Recurring billing. Cancel anytime",
     "benefit" : {
       "locker" : "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Backups",
       "web" : "Dark Web Monitoring protects your accounts from massive data breaches",
       "emergency_contact" : "Emergency Contact let trusted accounts access your vault when needed",
       "share_password": "Share Passwords and items securely with your friends and family members"
+    },
+    "family": {
+      "header": "Upgrade to Family",
+      "ads": "Enjoy Locker Premium with your friends and family members, with the best price",
+      "benefits": {
+        "family": "Up to 6 members in a shared plan",
+        "storage": "Unlimited storage",
+        "health": "Password health checker",
+        "weak": "Weak password warnings",
+        "scaner": "Data breach scanner",
+        "emergency": "Emergency access",
+        "share": "Secure password sharing"
+      },
+      "month": "$9.99 / Month",
+      "year": "$71.99 / Year"
     },
     "price" :{
       "per": {
