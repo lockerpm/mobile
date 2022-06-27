@@ -1,10 +1,12 @@
 #import <Firebase.h>
 #import "AppDelegate.h"
+#import "ReactNativeConfig.h"
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
+#import <TrustKit/TrustKit.h>
 
 #if RCT_DEV
 #import <React/RCTDevLoadingView.h>
@@ -51,6 +53,7 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [self initTrustKit];
   [FIRApp configure];
   [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
   
@@ -151,6 +154,24 @@ static void InitializeFlipper(UIApplication *application) {
         // remove when finished fading
         [colourView removeFromSuperview];
     }];
+}
+
+- (void)initTrustKit {
+     NSDictionary *trustKitConfig =
+     @{
+       kTSKSwizzleNetworkDelegates: @YES,
+       kTSKPinnedDomains : @{
+         [ReactNativeConfig envFor:@"SSL_PINNING_HOST"] : @{
+              kTSKEnforcePinning : @YES,
+              kTSKIncludeSubdomains:@YES, 
+              kTSKPublicKeyHashes : @[
+                  [ReactNativeConfig envFor:@"SSL_PINNING_PUB_KEY_1"],
+                  [ReactNativeConfig envFor:@"SSL_PINNING_PUB_KEY_2"]
+              ]
+         },
+       }
+     };
+    [TrustKit initSharedInstanceWithConfiguration:trustKitConfig];
 }
 
 @end

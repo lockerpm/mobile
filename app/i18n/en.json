@@ -124,7 +124,6 @@
     "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
     "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
     "biometric_unlock_failed": "Face ID/Touch ID verification failed",
-    "network_error": "Please connect to the internet to use this feature",
     "required_data": "This data is mandatory",
     "session_login_failed": "Session login failed! Please try again",
     "login_failed": "Login failed! Please try again",
@@ -171,7 +170,11 @@
     },
     "cannot_select_more": "Cannot select more than {{count}} items",
     "cannot_update_more_at_once": "Cannot update more than {{count}} items at once",
-    "rooted_device": "The operating system on your devices has been modified in an unauthorized way, therefore it is not compatible with this application."
+    "rooted_device": "The operating system on your devices has been modified in an unauthorized way, therefore it is not compatible with this application.",
+    "network_timeout": "Network timeout",
+    "server_error": "Server error",
+    "cannot_connect": "Cannot connect to the server. Please check your internet connection",
+    "network_error": "Network error. Your connection is not secure"
   },
   "success": {
     "done": "Done",
