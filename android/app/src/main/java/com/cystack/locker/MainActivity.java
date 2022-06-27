@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 
+import com.facebook.react.modules.network.OkHttpClientProvider;
+import com.cystack.locker.CertificatePinningClientFactory;
 
 public class MainActivity extends ReactActivity {
 
@@ -28,6 +30,7 @@ public class MainActivity extends ReactActivity {
     SplashScreen.show(this);  // here
     super.onCreate(savedInstanceState);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+    OkHttpClientProvider.setOkHttpClientFactory(new CertificatePinningClientFactory());
   }
 
   public static class AppActivityDelegate extends ReactActivityDelegate {

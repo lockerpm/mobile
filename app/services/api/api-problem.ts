@@ -10,6 +10,10 @@ export type GeneralApiProblem =
    */
   | { kind: "cannot-connect"; temporary: true }
   /**
+   * Cannot connect to the server due to network error.
+   */
+  | { kind: "network-error"; temporary: true }
+  /**
    * The server experienced a problem. Any 5xx error.
    */
   | { kind: "server" }
@@ -48,7 +52,7 @@ export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProb
     case "CONNECTION_ERROR":
       return { kind: "cannot-connect", temporary: true }
     case "NETWORK_ERROR":
-      return { kind: "cannot-connect", temporary: true }
+      return { kind: "network-error", temporary: true }
     case "TIMEOUT_ERROR":
       return { kind: "timeout", temporary: true }
     case "SERVER_ERROR":
