@@ -70,7 +70,8 @@
     "others": "Others",
     "owned_by": "Owned by",
     "ownership": "Ownership",
-    "password": "Passwords",
+    "password": "Password",
+    "passwords": "Passwords",
     "password_not_match": "Passwords don't match",
     "phone": "Phone",
     "push_notifications": "Push Notifications",
@@ -620,7 +621,7 @@
   },
   "payment" : {
     "individual" : "Individual",
-    "family": "Family",
+    "family_text": "Family",
     "family_plan": "Family Plan",
     "ads" : "Enjoy all Locker Premium features with Yearly Plan to save up to 75%. ",
     "ads_family" : "Enjoy all Locker Premium Features, for 6 accounts, with discounted prices. ",

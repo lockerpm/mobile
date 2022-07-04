@@ -13,6 +13,7 @@ import { useStores } from "../models"
 import { observer } from "mobx-react-lite"
 import { withSequence, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated'
 import { SharingStatus } from "../config/types"
+
 import HomeIcon from './icons/home.svg'
 import BrowseIcon from './icons/menu.svg'
 import ToolsIcon from './icons/settings.svg'
