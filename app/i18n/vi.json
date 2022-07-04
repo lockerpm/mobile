@@ -71,6 +71,7 @@
     "owned_by": "Sở hữu bởi",
     "ownership": "Quyền sở hữu",
     "password": "Mật khẩu",
+    "passwords": "Mật khẩu",
     "password_not_match": "Mật khẩu không khớp",
     "phone": "Điện thoại",
     "push_notifications": "Thông báo đẩy",
@@ -620,7 +621,7 @@
   },
   "payment" : {
     "individual" : "Cá nhân",
-    "family": "Gia đình",
+    "family_text": "Gia đình",
     "family_plan": "Gói gia đình",
     "ads" : "Tận hưởng tất cả các tính năng của Locker Premium với gói hàng năm để tiết kiệm đến 75%. ",
     "ads_family" : "Tận hưởng tất cả các tinh năng của Locker Premium cho 6 tài khoản với giá ưu đãi. ",

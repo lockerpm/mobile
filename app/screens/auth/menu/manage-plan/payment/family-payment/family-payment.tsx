@@ -71,11 +71,13 @@ export const FamilyPayment = (props: Props) => {
                 marginHorizontal: 20
             }]}>
                 {
-                    benefits.map((e) => (
-                        <View style={{
-                            flexDirection: "row",
-                            marginVertical: 6
-                        }}>
+                    benefits.map((e, index) => (
+                        <View
+                            key={String(index)}
+                            style={{
+                                flexDirection: "row",
+                                marginVertical: 6
+                            }}>
                             <AntDesign name="check" size={20} />
                             <Text text={e.text} preset={e.preset ? 'black' : "default"} style={{ marginLeft: 12 }} />
                         </View>

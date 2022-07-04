@@ -134,11 +134,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
     if (IS_IOS) {
       RNIap.clearTransactionIOS()
     }
-    // const subs = subcriptions.find(subs => subs.productId === productId)
-    // if (subs?.discounts) {
-    //   // console.log(subs.discounts[0].identifier)
-    //   purchaseWithOfferIOS(productId, subs.discounts[0].identifier)
-    // } else {
+
     RNIap.requestSubscription(productId)
       .catch((error) => {
         setProcessPayment(false)
@@ -146,31 +142,9 @@ export const PaymentScreen = observer(function PaymentScreen() {
           Logger.debug(JSON.stringify(error))
         }
       });
-    // }
 
   };
 
-  // const purchaseWithOfferIOS = async (productId: string, offerId: string) => {
-  //   if (!IS_IOS) return
-
-  //   const res = await user.getOfferDetailsIOS(productId, offerId)
-  //   if (res.kind === "ok") {
-  //     RNIap.requestPurchaseWithOfferIOS(productId, user.pwd_user_id, {
-  //       identifier: offerId,
-  //       keyIdentifier: res.data.key_identifier,
-  //       nonce: res.data.nonce,
-  //       signature: res.data.sig,
-  //       timestamp: res.data.timestamp
-  //     }).catch((error) => {
-  //       setProcessPayment(false)
-  //       if (error.code === 'E_USER_CANCELLED') {
-  //         return
-  //       } else {
-  //         Logger.error(JSON.stringify(error))
-  //       }
-  //     });
-  //   }
-  // };
 
 
   // -------------------- EFFECT ----------------------
@@ -205,17 +179,18 @@ export const PaymentScreen = observer(function PaymentScreen() {
           alignSelf: "center"
         }]}
       >
-        <TouchableOpacity
+        <Button
+        preset="link"
           onPress={() => setPayIndividual(true)}
           style={[styles.segmentItem, { backgroundColor: payIndividual ? color.background : color.block, left: 0 }, payIndividual && styles.shadow]}
         >
           <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.individual")}</Text>
-        </TouchableOpacity>
+        </Button>
         <TouchableOpacity
           onPress={() => setPayIndividual(false)}
           style={[styles.segmentItem, { backgroundColor: payIndividual ? color.block : color.background, right: 0 }, !payIndividual && styles.shadow]}
         >
-          <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.family")}</Text>
+          <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.family_text")}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -224,7 +199,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   // Render screen
   return (
     <Layout
-      containerStyle={{ backgroundColor: route.params.family? color.background : color.block, paddingHorizontal: 0 }}
+      containerStyle={{ backgroundColor: route.params.family ? color.background : color.block, paddingHorizontal: 0 }}
       header={<View style={{
         flexDirection: "row",
         justifyContent: "space-between",
@@ -261,7 +236,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
             </View>
 
             <View style={[styles.payment, { backgroundColor: color.background }]}>
-              <Segment />
+              <Segment/>
               <PricePlan
                 isTrial={isTrial}
                 subscriptions={subscriptions}
