@@ -45,7 +45,7 @@ export const FolderAction = (props: Props) => {
       // @ts-ignore
       res = await deleteCollection(folder.id, folder.organizationId)
     }
-    
+
     onLoadingChange && onLoadingChange(false)
   }
 
@@ -61,7 +61,7 @@ export const FolderAction = (props: Props) => {
     }
     setNextModal(null)
   }
-  
+
   // ---------------- RENDER -----------------
 
   return (
@@ -119,6 +119,15 @@ export const FolderAction = (props: Props) => {
           <ActionItem
             name={translate('common.rename')}
             icon="edit"
+            action={() => {
+              setNextModal('rename')
+              onClose()
+            }}
+          />
+
+          <ActionItem
+            name={translate('common.share')}
+            icon="share-square-o"
             action={() => {
               setNextModal('rename')
               onClose()
