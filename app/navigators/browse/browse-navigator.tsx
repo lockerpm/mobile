@@ -3,7 +3,8 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { 
   BrowseListScreen , FoldersScreen, CardsScreen, PasswordsScreen, 
   NotesScreen, IdentitiesScreen, SharesScreen, TrashScreen,
-  ShareItemsScreen, SharedItemsScreen, CryptoAssetsScreen
+  ShareItemsScreen, SharedItemsScreen, CryptoAssetsScreen,
+  FolderSharedUsersManagementScreen
 } from "../../screens"
 
 const Stack = createStackNavigator()
@@ -18,6 +19,7 @@ export const BrowseNavigator = () => {
     >
       <Stack.Screen name="browseList" component={BrowseListScreen} />
       <Stack.Screen name="folders" component={FoldersScreen} />
+      <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} />
       <Stack.Screen name="cards" component={CardsScreen} />
       <Stack.Screen name="passwords" component={PasswordsScreen} />
       <Stack.Screen name="notes" component={NotesScreen} />
