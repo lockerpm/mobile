@@ -79,7 +79,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
       },
       ...Object.keys(filteredCollection).map((id) => ({
         id: randomString(),
-        title: getTeam(user.teams, id).name,
+        title: translate('shares.shared_folder'),
         data: getFilteredData(
           filteredCollection[id], 
           true, 

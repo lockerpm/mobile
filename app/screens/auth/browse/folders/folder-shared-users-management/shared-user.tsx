@@ -7,32 +7,27 @@ import { ActionSheet, ActionSheetContent } from "../../../../../components"
 
 
 
-export interface FamilyMemberProp {
+export interface SharedUser {
     id?: number
     email: string
     avatar?: string
-    created_time?: string
-    username?: string
-    full_name?: string
 }
 
-
 interface Props {
-    member: FamilyMemberProp
-    family?: boolean
+    users: SharedUser
     add?: boolean
     onRemove?: (id: string) => Promise<void>
 }
 
 export const SharedUsers = (props: Props) => {
-    const { member, family, add, onRemove } = props
-    const { id, email, avatar, created_time, username, full_name } = member
+    const { users, add, onRemove } = props
+    const { id, email, avatar } = users
     const { color, translate } = useMixins()
 
     const owner = id === null
+
     // ----------------------- PARAMS -----------------------
     const [showSheetModal, setShowSheetModal] = useState<boolean>(false)
-
 
     // ----------------------- RENDER -----------------------
     return (
@@ -76,6 +71,7 @@ export const SharedUsers = (props: Props) => {
                     color={"black"}
                 />
             </TouchableOpacity>}
+
 
             <ActionSheet
                 isOpen={showSheetModal}

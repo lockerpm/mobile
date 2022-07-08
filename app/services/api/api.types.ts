@@ -7,7 +7,7 @@ import { CollectionResponse } from "../../../core/models/response/collectionResp
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { CipherResponse } from "../../../core/models/response/cipherResponse"
-import { AccountRoleText, InvitationStatus, SharingStatus, SharingType } from "../../config/types"
+import { AccountRoleText, InvitationStatus, NotificationCategory, SharingStatus, SharingType } from "../../config/types"
 import { ProfileResponse } from "../../../core/models/response/profileResponse"
 import { ProfileOrganizationResponse } from "../../../core/models/response/profileOrganizationResponse"
 
@@ -213,6 +213,15 @@ export type GetTrialEligibleResult = {
     }
 } | GeneralApiProblem
 
+export type GetNotificationSettings = {
+    kind: "ok",
+    data: NotificationSettingData[]
+} | GeneralApiProblem
+
+export type UpdateNotiSettingsResult = {
+    kind: "ok",
+} | GeneralApiProblem
+
 export type BillingResult = {
     kind: "ok",
     data: {
@@ -288,6 +297,15 @@ export type GetSharingPublicKeyResult = {
     }
 } | GeneralApiProblem
 
+// TODO
+export type ShareFolderResult = {
+    kind: 'ok',
+    data: {
+        id: string
+    }
+} | GeneralApiProblem
+
+
 export type ShareCipherResult = {
     kind: 'ok',
     data: {
@@ -320,6 +338,16 @@ export type ImportFolderResult = {
 } | GeneralApiProblem
 
 // ---------------- Request data --------------------
+export type NotificationSettingData = {
+    category: {
+        id: NotificationCategory
+        mail: boolean
+        name: string
+        notification: boolean
+    }
+    mail: boolean
+    notification: boolean
+}
 
 export type LoginData = {
     username: string
@@ -503,6 +531,21 @@ export type ShareCipherData = {
         key: string
         hide_passwords: boolean
     }[]
+}
+
+export type ShareFolderData = {
+    sharing_key: string
+    members: {
+        username: string
+        role: AccountRoleText
+        key: string
+        hide_passwords: boolean
+    }[]
+    folder: {
+        id: string,
+        name: string,
+        ciphers: any[] // CipherRequest & { id: string }
+    }
 }
 
 export type ShareMultipleCiphersData = {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
+import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
 import { Text } from "../../../../../components/text/text"
 // import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -14,7 +15,8 @@ import { ShareItemAction } from "./share-item-action"
 import { SharedMemberType } from "../../../../../services/api/api.types"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { CipherShareListItem, CipherShareType } from "./cipher-share-list-item"
-
+import { FolderView } from "../../../../../../core/models/view/folderView"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 type Props = {
   emptyContent?: JSX.Element
@@ -34,22 +36,24 @@ export const CipherShareList = observer((props: Props) => {
   const {
     emptyContent, navigation, onLoadingChange, searchText, sortList
   } = props
-  const { translate } = useMixins()
+  const { getTeam, randomString, translate } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { getCipherInfo } = useCipherHelpersMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, collectionStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
 
   const [ciphers, setCiphers] = useState<CipherShareType[]>([])
+  const [shareFolder, setShareFolder] = useState(collectionStore.collections)
   const [showAction, setShowAction] = useState(false)
   const [selectedMember, setSelectedMember] = useState<SharedMemberType>(null)
 
   // ------------------------ COMPUTED ----------------------------
- 
+
   const organizations = cipherStore.organizations
   const allCiphers = ciphers
   const myShares = cipherStore.myShares
+  const collections = collectionStore.collections
 
   // ------------------------ EFFECTS ----------------------------
 
@@ -67,15 +71,54 @@ export const CipherShareList = observer((props: Props) => {
     return myShares.find(s => s.id === id)
   }
 
+  const getFilteredData = (items: any[], teamShared: boolean, editable: boolean) => {
+    const filtered = items.filter((item: FolderView | CollectionView) => {
+      if (searchText) {
+        return item.name && item.name.toLowerCase().includes(searchText.toLowerCase())
+      }
+      return true
+    })
+    if (sortList) {
+      const { orderField, order } = sortList
+      const result = orderBy(
+        filtered,
+        [f => orderField === 'name' ? (f.name && f.name.toLowerCase()) : f.revisionDate],
+        [order]
+      ).map(i => ({ ...i, teamShared, editable })) || []
+      return result
+    }
+    return filtered
+  }
+
   // Get ciphers list
   const loadData = async () => {
     // onLoadingChange && onLoadingChange(true)
-    
+
+    // share folder 
+    const filteredCollection = groupBy(collections, 'organizationId')
+    const shareFolders = filteredCollection.map((id) => ({
+      id: randomString(),
+      title: translate('shares.shared_folder'),
+      data: getFilteredData(
+        filteredCollection[id],
+        true,
+        false,
+      )
+    }))
+    setShareFolder(shareFolders)
+
+
     // Filter
     const filters = [(c: CipherView) => {
       if (!c.organizationId) {
         return false
       }
+
+      // // TODO 
+      // if (collections.some(e => c.collectionIds.includes(e.id))) {
+      //   return false
+      // }
+
       const share = _getShare(c.organizationId)
       const org = _getOrg(c.organizationId)
       return org && org.type === AccountRole.OWNER && share && share.members.length
@@ -184,8 +227,8 @@ export const CipherShareList = observer((props: Props) => {
 
       {/* Cipher list */}
       <FlatList
-        style={{ 
-          paddingHorizontal: 20, 
+        style={{
+          paddingHorizontal: 20,
         }}
         data={allCiphers}
         keyExtractor={(item, index) => item.id.toString() + index.toString()}

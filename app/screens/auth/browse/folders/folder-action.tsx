@@ -10,6 +10,7 @@ import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { GeneralApiProblem } from "../../../../services/api/api-problem"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
+import { useNavigation } from "@react-navigation/native"
 
 
 type Props = {
@@ -21,6 +22,7 @@ type Props = {
 
 
 export const FolderAction = (props: Props) => {
+  const navigation = useNavigation()
   const { isOpen, onClose, folder, onLoadingChange } = props
   const { translate } = useMixins()
   const { deleteCollection, deleteFolder } = useCipherDataMixins()
@@ -129,7 +131,7 @@ export const FolderAction = (props: Props) => {
             name={translate('common.share')}
             icon="share-square-o"
             action={() => {
-              setNextModal('rename')
+              navigation.navigate("shareFolder", { id: folder.id })
               onClose()
             }}
           />
