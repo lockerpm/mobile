@@ -17,7 +17,9 @@ import {
   DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
   CryptoWalletEditScreen, CryptoWalletInfoScreen, WelcomePremiumScreen,
   AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen,
-  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen, ReferFriendScreen
+  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen, 
+  ReferFriendScreen, FolderSharedUsersManagementScreen,
+  PushEmailSettingsScreen, PushNotificationSettingsScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -98,6 +100,9 @@ export type PrimaryParamList = {
     collectionId?: string | null
     organizationId?: string | null
   }
+  shareFolder: {
+    id: string
+  }
   manage_plan: undefined
   payment: {
     benefitTab?: 0 | 1 | 2 | 3,
@@ -117,6 +122,9 @@ export type PrimaryParamList = {
     mode: 'all' | 'item'
   }
   notificationSettings: undefined
+  emailNotiSettings: undefined
+  deviceNotiSettings: undefined
+
   shareMultiple: undefined
   cryptoWallets__info: undefined
   cryptoWallets__edit: {
@@ -485,6 +493,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
+        <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} />
         <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} />
         <Stack.Screen name="cryptoWallets__info" component={CryptoWalletInfoScreen} />
         <Stack.Screen name="cryptoWallets__edit" component={CryptoWalletEditScreen} initialParams={{ mode: 'add' }} />
@@ -500,6 +509,8 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="import" component={ImportScreen} />
         <Stack.Screen name="export" component={ExportScreen} />
         <Stack.Screen name="notificationSettings" component={NotificationSettingsScreen} />
+        <Stack.Screen name="emailNotiSettings" component={PushEmailSettingsScreen} />
+        <Stack.Screen name="deviceNotiSettings" component={PushNotificationSettingsScreen} />
 
         <Stack.Screen name="welcome_premium" component={WelcomePremiumScreen} />
         <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: 'all' }} />

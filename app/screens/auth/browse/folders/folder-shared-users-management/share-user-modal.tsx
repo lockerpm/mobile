@@ -14,12 +14,12 @@ import { AppEventType, EventBus } from "../../../../../utils/event-bus"
 
 interface InviteProps {
     isShow: boolean
-    onClose: React.Dispatch<React.SetStateAction<boolean>>
-    familyMembers?: any
-    setRelad? :any
+    onClose: () => void
+    sharedUsers?: any[]
+    isLoading?: boolean
 }
-export const InviteMemberModal = observer(function InviteMemberModal(props: InviteProps) {
-    const { isShow, onClose, familyMembers, setRelad } = props
+export const ShareUserModal = observer(function ShareUserModal(props: InviteProps) {
+    const { isShow, onClose, sharedUsers, isLoading } = props
     const { user } = useStores()
     const { translate, color, notifyApiError, notify } = useMixins()
 
@@ -33,11 +33,11 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
         const e = email.trim().toLowerCase();
         if (!e) return;
 
-        const unreachLimit = familyMembers.length + emails.length < FAMILY_MEMBER_LIMIT
+        const unreachLimit = sharedUsers.length + emails.length < FAMILY_MEMBER_LIMIT
         if (!unreachLimit) return;
 
         const isOwner = user?.email === e
-        const isIncluded = familyMembers.some(element => element.email === e)
+        const isIncluded = sharedUsers.some(element => element.email === e)
 
         if (!emails.includes(e) && !isOwner && !isIncluded) {
             setEmails([...emails, e])
@@ -49,28 +49,27 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
     }
 
     const addFamilyMember = async (emails?: string[]) => {
-        const res = await user.addFamilyMember(emails)
-        onClose(false)
-        if (res.kind === "ok") {
-            notify("success", translate("invite_member.add_noti"))
-            setEmails([])
-            setRelad(true)
-        } else {
-            notifyApiError(res)
-        }
-
+        // const res = await user.addFamilyMember(emails)
+        // onClose()
+        // if (res.kind === "ok") {
+        //     notify("success", translate("invite_member.add_noti"))
+        //     setEmails([])
+        //     // setRelad(true)
+        // } else {
+        //     notifyApiError(res)
+        // }
     }
 
     // ----------------------- EFFECTS -----------------------
 
     // Close on signal
     useEffect(() => {
-    const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
-        onClose(false)
-    })
-    return () => {
-        EventBus.removeListener(listener)
-    }
+        const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
+            onClose()
+        })
+        return () => {
+            EventBus.removeListener(listener)
+        }
     }, [])
 
     // ----------------------- RENDER -----------------------
@@ -79,17 +78,18 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
             presentationStyle="pageSheet"
             visible={isShow}
             animationType="slide"
-            onRequestClose={() => onClose(!isShow)}
+            onRequestClose={() => onClose()}
         >
             <View style={[commonStyles.SECTION_PADDING, { flex: 1 }]}>
                 <View style={{
+                    marginTop: 10,
                     height: 40,
                     width: "100%",
                     flexDirection: "row",
                     justifyContent: "space-between"
                 }} >
                     <TouchableOpacity
-                        onPress={() => onClose(!isShow)}>
+                        onPress={() => onClose()}>
                         <Image
                             source={require("./cross.png")}
                             style={{ height: 18, width: 18 }} />
@@ -100,16 +100,18 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
                         onPress={() => {
                             addFamilyMember(emails);
                         }}>
-                        <Text style={{
-                            color: (emails.length > 0) ? "#007AFF" : color.block
-                        }}>{translate('invite_member.action')}</Text>
+                        <Text
+                            text="Add"
+                            style={{
+                                color: (emails.length > 0) ? "#007AFF" : color.block
+                            }} />
                     </Button>
                 </View>
-                
-                    <View style={{ marginTop: 12 }}>
-                        <Text preset="header">{translate('invite_member.title')}</Text>
-                    </View>
-                
+
+                <View style={{ marginTop: 8 }}>
+                    <Text preset="header" text="Shared this folder with"/>
+                </View>
+
                 <View style={{
                     borderBottomColor: '#F2F2F5',
                     borderBottomWidth: 1,
@@ -129,7 +131,7 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
                                 style={{ height: 24, width: 24 }} />
                         </TouchableOpacity>
                         <TextInput
-                            placeholder={translate('invite_member.placeholder')}
+                            placeholder={"Add email to share"}
                             placeholderTextColor={color.text}
                             selectionColor={color.primary}
                             onChangeText={setEmail}
@@ -158,7 +160,7 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
                                             marginBottom: 16,
                                             flexDirection: "row",
                                             justifyContent: "space-between",
-                                            paddingVertical: 3
+                                            paddingVertical: 4
                                         }}
                                     >
                                         <Text
@@ -190,11 +192,9 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
                 {
                     email.length > 0 &&
                     <TouchableOpacity onPress={() => addEmailToInviteList(email)}>
-                        <SharedUsers member={{ email: email }} add={true} />
+                        <SharedUsers users={{ email: email }} add={true} />
                     </TouchableOpacity>
                 }
-
-
             </View>
         </Modal >
     )

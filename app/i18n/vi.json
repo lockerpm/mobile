@@ -26,6 +26,7 @@
     "custom_fields": "Trường tuỳ chỉnh",
     "data": "Dữ liệu",
     "date": "Ngày",
+    "done": "Xong",
     "delete": "Xóa",
     "details": "Chi tiết",
     "edit": "Sửa",
@@ -74,7 +75,7 @@
     "passwords": "Mật khẩu",
     "password_not_match": "Mật khẩu không khớp",
     "phone": "Điện thoại",
-    "push_notifications": "Thông báo đẩy",
+    "push_notifications": "Thông báo",
     "regenerate": "Tạo lại",
     "reject": "Từ chối",
     "rename": "Đổi tên",
@@ -387,6 +388,7 @@
     "shares": "Chia sẻ",
     "share_items": "Bạn đã chia sẻ",
     "shared_items": "Được chia sẻ với bạn",
+    "shared_folder": "Thư mục chia sẻ",
     "encrypted_content": "Nội dung mã hoá",
     "empty": {
       "title": "Chia sẻ tài nguyên một cách an toàn",
@@ -751,5 +753,41 @@
       "more": "Và các tính năng khác..."
     },
     "btn": "Tuyệt vời!"
+  },
+  "noti_setting": {
+    "in_app_noti": "Thông báo trên thiết bị",
+    "marketing": "Các email tiếp thị và quản cáo",
+    "tips": "Mẹo và thủ thuật dùng mật khẩu",
+    "breach_scan": "Kết quả quyét vi phạm dữ liệu",
+    "item_sharing": "Chia sẻ dữ liệu",
+    "emergency": "Truy cập khẩn cấp",
+    "email": {
+      "system": {
+        "system": "Email hệ thống",
+        "welcome": "Chào mừng người dùng mới",
+        "payment_success": "Thanh toán thành công",
+        "mp_hint": "Gợi ý mật khẩu chính",
+        "family_remove": "Xoá thành viên gói Family",
+        "family_invite": "Mời thanh viên gói Family",
+        "email_verification": "Xác nhận email",
+        "payment_failed": "Thanh toán thất bại",
+        "account_expired": "Tài khoản thanh toán hết hạn",
+        "downgraded": "Hạ cấp tài khoản",
+        "trial": "Dùng thử tính năng Premium",
+        "premium_upgraded": "Nâng cấp tài khoản Premium"
+      },
+      "master_pw_change": "Thay đổi master password",
+      "login_new_device": "Đăng nhập ở thiết bị mới",
+      "item_sharing": {
+        "new": "Mục mới được chia sẻ",
+        "accept_reject": "Chấp nhận/ từ chối mục được chia sẻ",
+        "edit": "Thay đổi mục được chia sẻ"
+      },
+      "emergency": {
+        "request": "Gửi yêu cầu",
+        "accept_reject": "Chấp nhận/Từ chối truy cập khẩn cấp",
+        "auto": "Chấp nhận tự động"
+      }
+    }
   }
 }

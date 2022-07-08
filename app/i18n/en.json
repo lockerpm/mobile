@@ -26,6 +26,7 @@
     "custom_fields": "Custom Fields",
     "data": "Data",
     "date": "Date",
+    "done": "Done",
     "delete": "Delete",
     "details": "Details",
     "edit": "Edit",
@@ -159,9 +160,7 @@
       "google": {
         "play_service_not_available": "Google Play services are not available or outdated"
       },
-      "facebook": {
-
-      },
+      "facebook": {},
       "github": {
         "token_refresh_failed": "Could not exchange the refresh token. Please try again",
         "registration_failed": "Registration failed. Please try again",
@@ -387,6 +386,7 @@
     "shares": "Shares",
     "share_items": "Your Shares",
     "shared_items": "Shared With You",
+    "shared_folder": "Shared folder",
     "encrypted_content": "Encrypted Content",
     "empty": {
       "title": "Securely share items",
@@ -433,10 +433,10 @@
       "desc": "Create your first item to start building your vault",
       "btn": "Add Item"
     },
-    "enable_autofill" : {
+    "enable_autofill": {
       "title": "Don’t miss a magic of autofill",
       "content": "Let’s enable Autofill to see the magic of login",
-      "btn": "Enable Autofill"      
+      "btn": "Enable Autofill"
     }
   },
   "change_master_pass": {
@@ -457,7 +457,7 @@
   "menu": {
     "product_of": "A product of ",
     "versoin": "Version ",
-    "invite_noti" : "Upgrade to Family Plan and invite your friends joining Locker!",
+    "invite_noti": "Upgrade to Family Plan and invite your friends joining Locker!",
     "fingerprint": "Fingerprint",
     "plan": "Manage Plan",
     "expired_time": "Expired",
@@ -550,7 +550,7 @@
     "defaultTab": "Start Screen"
   },
   "autofill_service": {
-    "activated" : {
+    "activated": {
       "title": "Auto-fill activated!",
       "content": "Now you can login to applications and websites faster"
     },
@@ -563,14 +563,14 @@
       "step_5": "5. Select \"Locker\""
     },
     "android": {
-      "btn" : "Go setting",
-      "other_permission" : {
-        "header" : "Xiaomi Permission",
+      "btn": "Go setting",
+      "other_permission": {
+        "header": "Xiaomi Permission",
         "name_xiaomi": "Display pop-up windows while running in the background",
         "desc": "Enable this permission to allow Locker's autofill service to display the user interface for selecting credentials for the application."
       },
       "android_autofill": {
-        "header" : "Autofill Service",
+        "header": "Autofill Service",
         "name": "Android Auto-fill",
         "desc": "The Locker auto-fill service uses the Android Autofill Framework to assist in filling logins into other apps on your device"
       }
@@ -593,7 +593,7 @@
       "guild": "Upgrade to Premium to add unlimited items"
     },
     "imported": "Succesfully Imported",
-    "result_btn" : "Back to home",
+    "result_btn": "Back to home",
     "progress": "Importing your backup data"
   },
   "crypto_asset": {
@@ -619,18 +619,18 @@
     "network": "Networks",
     "wallet_app": "Wallet App"
   },
-  "payment" : {
-    "individual" : "Individual",
+  "payment": {
+    "individual": "Individual",
     "family_text": "Family",
     "family_plan": "Family Plan",
-    "ads" : "Enjoy all Locker Premium features with Yearly Plan to save up to 75%. ",
-    "ads_family" : "Enjoy all Locker Premium Features, for 6 accounts, with discounted prices. ",
+    "ads": "Enjoy all Locker Premium features with Yearly Plan to save up to 75%. ",
+    "ads_family": "Enjoy all Locker Premium Features, for 6 accounts, with discounted prices. ",
     "trial": "(Start with 2 weeks free trial)",
-    "cancel_text" : "Recurring billing. Cancel anytime",
-    "benefit" : {
-      "locker" : "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Backups",
-      "web" : "Dark Web Monitoring protects your accounts from massive data breaches",
-      "emergency_contact" : "Emergency Contact let trusted accounts access your vault when needed",
+    "cancel_text": "Recurring billing. Cancel anytime",
+    "benefit": {
+      "locker": "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Backups",
+      "web": "Dark Web Monitoring protects your accounts from massive data breaches",
+      "emergency_contact": "Emergency Contact let trusted accounts access your vault when needed",
       "share_password": "Share Passwords and items securely with your friends and family members"
     },
     "family": {
@@ -648,7 +648,7 @@
       "month": "$9.99 / Month",
       "year": "$71.99 / Year"
     },
-    "price" :{
+    "price": {
       "per": {
         "monthly": {
           "title": "$4.99/month",
@@ -668,14 +668,14 @@
       "fam": {
         "yearly": {
           "title": "$71.99/year/6 people",
-          "subtitle": "$5.99 per month/6 people. Billed yearly", 
+          "subtitle": "$5.99 per month/6 people. Billed yearly",
           "sale": "Save 80%",
           "pay_title": "Upgrade now for $71.99",
           "discount": "Upgrade now for $50.99 (save 30%) for first cycle. Then $71.99/year"
         },
         "monthly": {
           "title": "$9.99/month/6 people",
-          "subtitle": "Billed monthly" ,
+          "subtitle": "Billed monthly",
           "sale": "Save 67%",
           "pay_title": "Upgrade now for $9.99",
           "discount": "Upgrade now for $6.99 (save 30%) for first cycle. Then $9.99/month"
@@ -685,7 +685,7 @@
   },
   "manage_plan": {
     "verify": "Purchase Verification",
-    "verify_msg":  "Locker can not verify your purchase",
+    "verify_msg": "Locker can not verify your purchase",
     "usage": {
       "title": "Plan Usage",
       "login": "Passwords",
@@ -698,7 +698,7 @@
       "title": "Explore your full premium feature",
       "locker": "Unlimited items",
       "emergency_contact": {
-        "header" : "Emergency Contact",
+        "header": "Emergency Contact",
         "text": "Add trusted contacts and grant them access to your Locker account in cases of emergency",
         "link": "To add Emergency Contacts, go to Locker Web Vault at: locker.io/vault",
         "button": "Got it"
@@ -710,9 +710,9 @@
       "button": "Increase unlimited with Premium"
     }
   },
-  "invite_member" : {
-    "header" : "Manage member",
-    "info_upgrade" : "Upgrade to Family Plan and invite your friends joining Locker!",
+  "invite_member": {
+    "header": "Manage member",
+    "info_upgrade": "Upgrade to Family Plan and invite your friends joining Locker!",
     "add_noti": "Add members successfully ",
     "delete_noti": "Delete member successfully",
     "confirm": "Are you sure you want to remove this user from Family Plan?",
@@ -750,5 +750,41 @@
       "more": "And a lot more..."
     },
     "btn": "Awesome!"
+  },
+  "noti_setting": {
+    "in_app_noti": "In app notification",
+    "marketing": "Marketing & Promotion emails",
+    "tips": "Password tips & tricks",
+    "breach_scan": "Data breach scanning",
+    "item_sharing": "Item sharing",
+    "emergency": "Emergency access",
+    "email": {
+      "system": {
+        "system": "System email",
+        "welcome": "Welcome Email",
+        "payment_success": "Payment successful",
+        "mp_hint": "Master Password hint",
+        "family_remove": "Family Removed",
+        "family_invite": "Family Invitation",
+        "email_verification": "Email verification",
+        "payment_failed": "Credit card account payment failed",
+        "account_expired": "Bank transfer account expired",
+        "downgraded": "Account downgraded",
+        "trial": "Trial successful",
+        "premium_upgraded": "Premium upgraded"
+      },
+      "master_pw_change": "Master Password Change",
+      "login_new_device": "Login with new devices",
+      "item_sharing": {
+        "new": "New items shared",
+        "accept_reject": "Accept/Reject",
+        "edit": "Edit shared items"
+      },
+      "emergency": {
+        "request": "Request",
+        "accept_reject": "Accept/Reject",
+        "auto": "Auto accept"
+      }
+    }
   }
 }

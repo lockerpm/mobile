@@ -336,6 +336,8 @@ export class CipherApi {
     }
   }
 
+  
+
   // Share cipher
   async shareCipher(token: string, payload: ShareCipherData): Promise<ShareCipherResult> {
     try {
