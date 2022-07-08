@@ -541,6 +541,9 @@ export type ShareFolderData = {
         key: string
         hide_passwords: boolean
     }[]
+} & CollectionActionData
+
+export type CollectionActionData = {
     folder: {
         id: string,
         name: string,

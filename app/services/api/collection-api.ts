@@ -5,7 +5,7 @@ import { detectTempId } from "../../utils/event-bus/helpers"
 import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
-import { EmptyResult, PostCollectionResult } from "./api.types"
+import { CollectionActionData, EmptyResult, PostCollectionResult } from "./api.types"
 
 export class CollectionApi {
   private api: Api
@@ -21,7 +21,7 @@ export class CollectionApi {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/teams/${teamId}/folders`, data)
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/folders`, data)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -42,7 +42,7 @@ export class CollectionApi {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/teams/${teamId}/folders/${id}`, data)
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/sharing/${teamId}/folders/${id}`, data)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -57,13 +57,13 @@ export class CollectionApi {
   }
 
   // Delete collection
-  async deleteCollection(token: string, id: string, teamId: string): Promise<EmptyResult> {
+  async deleteCollection(token: string, id: string, teamId: string, payload: CollectionActionData): Promise<EmptyResult> {
     try {
       detectTempId([id, teamId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/teams/${teamId}/folders/${id}/delete`)
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/folders/${id}/delete`, payload)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -75,4 +75,44 @@ export class CollectionApi {
       return { kind: "bad-data" }
     }
   }
+
+  // stopShare collection
+  async stopShare(token: string, id: string, teamId: string, payload: CollectionActionData): Promise<EmptyResult> {
+    try {
+      detectTempId([id, teamId])
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/folders/${id}/stop`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async addShareMember(token: string, teamId: string, members: any[]): Promise<EmptyResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/members`, {members})
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+  
+
 }

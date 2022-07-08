@@ -60,7 +60,6 @@ const defaultData = {
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   importCiphers: async (payload: { importResult: any, setImportedCount: Function, setTotalCount: Function, setIsLimited: Function, isFreeAccount: boolean }) => { return { kind: 'unknown' } },
 
-  shareFolder: async (folder: FolderView | CollectionView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   shareMultipleCiphers: async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   confirmShareCipher: async (organizationId: string, memberId: string, publicKey: string) => { return { kind: 'unknown' } },
@@ -76,7 +75,7 @@ const defaultData = {
 
   createCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
   updateCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
-  deleteCollection: async (id: string, teamId: string) => { return { kind: 'unknown' } },
+  deleteCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
 
   syncSingleCipher: async (id: string) => { return { kind: 'unknown' } },
   syncSingleFolder: async (id: string) => { return { kind: 'unknown' } },
@@ -1359,87 +1358,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     const key = await cryptoService.rsaEncrypt(orgKey.key, pk.buffer)
     return key.encryptedString
   }
-  //-------------------------------------------------------
-  // Share Folder
-  const shareFolder = async (folder: FolderView | CollectionView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => {
-    if (!folder || !emails.length) {
-      return { kind: 'ok' }
-    }
-
-    const ciphers: CipherView[] = await getCiphers({
-      deleted: false,
-      searchText: '',
-      filters: [(c: CipherView) => c.folderId === folder.id]
-    }) || []
-
-    try {
-      if (ciphers.some(c => c.organizationId)) {
-        return { kind: 'Co item da duoc chia se trong folder' }
-      }
-
-      // Prepare org key
-      let shareKey: [EncString, SymmetricCryptoKey] = await cryptoService.makeShareKey()
-      let orgKey: SymmetricCryptoKey = shareKey[1]
-
-      // Get public keys
-      const members = await Promise.all(emails.map(async (email) => {
-        const publicKeyRes = await cipherStore.getSharingPublicKey(email)
-        let publicKey = ''
-        if (publicKeyRes.kind === 'ok') {
-          publicKey = publicKeyRes.data.public_key
-        }
-        return {
-          username: email,
-          role,
-          hide_passwords: autofillOnly,
-          key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null
-        }
-      }))
-
-      // Prepare cipher..  CipherRequest & { id: string }
-      type ShareCipher = CipherRequest & { id: string }
-      const sharedCiphers: ShareCipher[] = []
-
-      const prepareCipher = async (c: CipherView) => {
-        const cipherEnc = await cipherService.encrypt(c, orgKey)
-        const data = new CipherRequest(cipherEnc)
-        sharedCiphers.push(
-          {
-            id: c.id,
-            ...data
-          },
-        )
-      }
-      await Promise.all(ciphers.map(prepareCipher))
-
-      // Prepare folder name
-      const folderNameEnc = await cryptoService.encrypt(folder.name, orgKey)
-
-      // Send API
-      console.log(sharedCiphers.length)
-
-      const res = await folderStore.shareFolder({
-        sharing_key: shareKey ? shareKey[0].encryptedString : null,
-        members,
-        folder: {
-          id: folder.id,
-          name: folderNameEnc.encryptedString,
-          ciphers: sharedCiphers,
-        }
-      })
-
-      if (res.kind === 'ok') {
-        notify('success', "Folder share success")
-      } else {
-        notifyApiError(res)
-      }
-      return res
-    } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      Logger.error('shareCipher: ' + e)
-      return { kind: 'unknown' }
-    }
-  }
 
   //-------------------------------------------------------
   // Share multiple ciphers
@@ -1954,19 +1872,48 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Delete collection
-  const deleteCollection = async (id: string, teamId: string) => {
+  const deleteCollection = async (collection: CollectionView) => {
     try {
       // Offline
       if (uiStore.isOffline) {
-        await _offlineDeleteCollection(id)
+        await _offlineDeleteCollection(collection.id)
         notify('success', translate('folder.folder_deleted'))
         return { kind: 'ok' }
       }
 
-      // Online
-      const res = await collectionStore.deleteCollection(id, teamId)
+      const personalKey = await cryptoService.getEncKey()
+      const ciphers: CipherView[] = await getCiphers({
+        deleted: false,
+        searchText: '',
+        filters: [(c: CipherView) => c.collectionIds.includes(collection.id)]
+      }) || []
+
+      const data = []
+
+      const prepareCipher = async (c: CipherView) => {
+        const cipherEnc = await cipherService.encrypt(c, personalKey)
+        const requestData = new CipherRequest(cipherEnc)
+        data.push(
+          {
+            id: c.id,
+            ...requestData
+          },
+        )
+      }
+      await Promise.all(ciphers.map(prepareCipher))
+
+      // Prepare folder name
+      const folderNameEnc = await cryptoService.encrypt(collection.name, personalKey)
+
+      const res = await collectionStore.deleteCollection(collection.id, collection.organizationId, {
+        folder: {
+          id: collection.id,
+          name: folderNameEnc.encryptedString,
+          ciphers: data,
+        }
+      })
       if (res.kind === 'ok') {
-        await _offlineDeleteCollection(id, true)
+        await _offlineDeleteCollection(collection.id, true)
         notify('success', translate('folder.folder_deleted'))
       } else {
         notifyApiError(res)
@@ -2172,7 +2119,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     restoreCiphers,
     importCiphers,
 
-    shareFolder,
     shareCipher,
     shareMultipleCiphers,
     confirmShareCipher,

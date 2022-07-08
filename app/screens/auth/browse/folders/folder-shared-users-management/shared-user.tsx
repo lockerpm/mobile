@@ -1,30 +1,52 @@
 import React, { useState } from "react"
-import { View, Image, TouchableOpacity } from "react-native"
-import { Text } from "../../../../../components"
-import Feather from 'react-native-vector-icons/Feather'
+import { View, Image, TouchableOpacity, Alert } from "react-native"
+import { ActionItem, Icon, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { ActionSheet, ActionSheetContent } from "../../../../../components"
+import { SharedMemberType } from "../../../../../services/api"
 
 
-
-export interface SharedUser {
-    id?: number
-    email: string
-    avatar?: string
-}
 
 interface Props {
-    users: SharedUser
-    add?: boolean
-    onRemove?: (id: string) => Promise<void>
+    users: SharedMemberType
 }
 
 export const SharedUsers = (props: Props) => {
-    const { users, add, onRemove } = props
-    const { id, email, avatar } = users
+    const { users } = props
+    const { id, email, avatar, full_name, share_type } = users
     const { color, translate } = useMixins()
 
     const owner = id === null
+    const isEditable = share_type !== "View"
+    const comfirmRemoveSharedUser = async (id: string) => {
+        Alert.alert(
+            "test", "",
+            [
+                {
+                    text: translate("common.yes"),
+                    onPress: () => {
+                        onRemove(id)
+                    },
+                    style: "destructive"
+                },
+                {
+                    text: translate("common.cancel"),
+                    onPress: () => { },
+                    style: "cancel"
+                }
+            ],
+            {
+                cancelable: true
+            }
+        )
+    }
+
+    const onRemove = async (id: string) => {
+
+    }
+    const onEditRole = async (id: string) => {
+
+    }
 
     // ----------------------- PARAMS -----------------------
     const [showSheetModal, setShowSheetModal] = useState<boolean>(false)
@@ -48,51 +70,82 @@ export const SharedUsers = (props: Props) => {
                 style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
             />
 
-            {add && <View style={{ flex: 1, justifyContent: 'center' }}>
+
+            <TouchableOpacity style={{ flex: 1, justifyContent: 'center' }}
+                onPress={() => setShowSheetModal(true)}
+            >
                 <Text
                     preset="black"
-                    text={email}></Text>
-            </View>
-            }
-            {!add && <View style={{ flex: 1, justifyContent: 'center' }}>
+                    text={email}
+                />
                 <Text
                     preset="default"
-                    text={email}
-                    style={{ color: color.text, fontSize: 15 }}
+                    text={!isEditable ? translate('shares.share_type.view') : translate('shares.share_type.edit')}
                 />
-            </View>}
-
-            {!add && <TouchableOpacity
-                onPress={() => setShowSheetModal(true)}
-                style={{ justifyContent: 'center' }}>
-                <Feather
-                    name="more-horizontal"
-                    size={18}
-                    color={"black"}
-                />
-            </TouchableOpacity>}
-
+            </TouchableOpacity>
 
             <ActionSheet
                 isOpen={showSheetModal}
                 onClose={() => setShowSheetModal(false)}>
                 <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
-                    <View style={{ alignItems: "center" }}>
-                        <Image
-                            source={avatar ? { uri: avatar } : require("./avatar.png")}
-                            style={{ height: 40, width: 40, borderRadius: 20 }}
-                        />
-                        <Text style={{ marginVertical: 20 }}>{email}</Text>
-                        <View style={{ borderBottomColor: color.block, borderWidth: 0.4, width: "100%", marginVertical: 2 }}></View>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setShowSheetModal(false)
-                                onRemove(id.toString());
-                            }}
-                            style={{ justifyContent: 'center' }}>
-                            <Text style={{ marginVertical: 20, color: "red" }}>{translate("invite_member.remove")}</Text>
-                        </TouchableOpacity>
+                    <View style={{ paddingHorizontal: 20 }}>
+                        <View style={{ flexDirection: "row", marginBottom: 16 }}>
+                            <Image
+                                source={avatar ? { uri: avatar } : require("./avatar.png")}
+                                style={{ height: 40, width: 40, borderRadius: 20 }}
+                            />
+                            <View style={{ justifyContent: "center", height: 40, marginLeft: 16 }}>
+                                {full_name && <Text preset="black" >{full_name}</Text>}
+                                <Text >{email}</Text>
+                            </View>
+                        </View>
+
                     </View>
+                    <ActionItem
+                        style={{ backgroundColor: !isEditable && color.block }}
+                        action={() => {
+                        }}
+                    >
+                        <View style={{ flexDirection: "row" }}>
+                            <View style={{ justifyContent: "center" }}>
+                                <Icon icon="eye" size={24} />
+                            </View>
+                            <View style={{ marginLeft: 12 }}>
+                                <Text preset="black" text={translate('shares.share_folder.viewer')} />
+                                <Text text={translate('shares.share_folder.viewer_per')} />
+                            </View>
+                        </View>
+                    </ActionItem>
+
+                    <ActionItem
+                        style={{ backgroundColor: isEditable && color.block }}
+                        action={() => {
+                        }}
+                    >
+                        <View style={{ flexDirection: "row" }}>
+                            <View style={{ justifyContent: "center" }}>
+                                <Icon icon="pencil-simple" size={24} />
+                            </View>
+                            <View style={{ marginLeft: 12 }}>
+                                <Text preset="black" text={translate('shares.share_folder.editor')} />
+                                <Text text={translate('shares.share_folder.editor_per')} />
+                            </View>
+                        </View>
+                    </ActionItem>
+
+                    <ActionItem
+                        action={() => {
+                        }}
+                    >
+                        <View style={{ flexDirection: "row" }}>
+                            <View style={{ justifyContent: "center" }}>
+                                <Icon icon="user-minus" size={24} color={color.error} />
+                            </View>
+                            <View style={{ marginLeft: 12 }}>
+                                <Text text={translate('shares.share_folder.remove')} style={{ color: color.error }} />
+                            </View>
+                        </View>
+                    </ActionItem>
                 </ActionSheetContent>
             </ActionSheet>
 
@@ -100,3 +153,4 @@ export const SharedUsers = (props: Props) => {
         </View >
     )
 }
+
