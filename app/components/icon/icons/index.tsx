@@ -19,6 +19,15 @@ import Menu2 from './svg/navigator/menu-2.svg'
 import Menu from './svg/navigator/menu.svg'
 import Settings from './svg/navigator/settings.svg'
 
+import Cross from './svg/common/cross.svg'
+import DefaultAvatar from './svg/common/default-avatar.svg'
+import UserPlus from './svg/common/user-plus.svg'
+import UserMinus from './svg/common/user-minus.svg'
+import Eye from './svg/common/eye.svg'
+import PemcilSimple from './svg/common/pencil-simple.svg'
+import Check from './svg/common/check.svg'
+
+
 Ionicons.loadFont()
 AntDesign.loadFont()
 MaterialCommunityIcons.loadFont()
@@ -38,10 +47,46 @@ type IconType = {
 }
 
 const a: IconType = {
-  
+
+}
+
+const e: IconType = {
+    'eye': {
+        type: 'component',
+        render: (props: IconProps) => <Eye height={props.size} width={props.size} color={props.color} />
+    },
+
 }
 
 const h: IconType = {
+
+}
+
+const c: IconType = {
+    'cross': {
+        type: 'component',
+        render: (props: IconProps) => <Cross height={props.size} width={props.size} color={props.color} />
+    },
+    'check': {
+        type: 'component',
+        render: (props: IconProps) => <Check height={props.size} width={props.size} color={props.color} />
+    },
+
+}
+
+const d: IconType = {
+    'defaule-avatar': {
+        type: 'component',
+        render: (props: IconProps) => <DefaultAvatar height={props.size} width={props.size} color={props.color} />
+    },
+
+}
+
+const p: IconType = {
+    'pencil-simple': {
+        type: 'component',
+        render: (props: IconProps) => <PemcilSimple height={props.size} width={props.size} color={props.color} />
+    },
 
 }
 
@@ -68,12 +113,27 @@ const t: IconType = {
     }
 }
 
+const u: IconType = {
+    'user-plus': {
+        type: 'component',
+        render: (props: IconProps) => <UserPlus height={props.size} width={props.size} color={props.color} />
+    },
+    'user-minus': {
+        type: 'component',
+        render: (props: IconProps) => <UserMinus height={props.size} width={props.size} color={props.color} />
+    }
+
+}
+
 
 export const icons: IconType = {
     ...a,
+    ...c,
+    ...e,
+    ...d,
+    ...p,
     ...t,
-    
-
+    ...u
 }
 
 export type IconTypes = keyof typeof icons

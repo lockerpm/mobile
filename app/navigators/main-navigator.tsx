@@ -101,7 +101,7 @@ export type PrimaryParamList = {
     organizationId?: string | null
   }
   shareFolder: {
-    id: string
+    collectionId: string
   }
   manage_plan: undefined
   payment: {

@@ -27,6 +27,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
   const { folderStore, collectionStore, user, uiStore } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
+
   type SectionType = {
     id: string
     title: string
@@ -44,7 +45,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
     order: 'desc'
   })
   const [sortOption, setSortOption] = useState('last_updated')
-  const [selectedFolder, setSelectedFolder] = useState(new FolderView())
+  const [selectedFolder, setSelectedFolder] = useState<FolderView | CollectionView>(new FolderView())
   const [isLoading, setIsLoading] = useState(false)
   const [sections, setSections] = useState<SectionType>([])
 
@@ -81,8 +82,8 @@ export const FoldersScreen = observer(function FoldersScreen() {
         id: randomString(),
         title: translate('shares.shared_folder'),
         data: getFilteredData(
-          filteredCollection[id], 
-          true, 
+          filteredCollection[id],
+          true,
           TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role) && !uiStore.isOffline
         )
       }))
@@ -108,13 +109,13 @@ export const FoldersScreen = observer(function FoldersScreen() {
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
           searchText={searchText}
-          onSearch={setSearchText} 
-          isSelecting={false} 
-          setIsSelecting={() => {}} 
-          selectedItems={[]} 
-          setSelectedItems={() => {}} 
-          toggleSelectAll={() => {}} 
-          setIsLoading={() => {}}        
+          onSearch={setSearchText}
+          isSelecting={false}
+          setIsSelecting={() => { }}
+          selectedItems={[]}
+          setSelectedItems={() => { }}
+          toggleSelectAll={() => { }}
+          setIsLoading={() => { }}
         />
       )}
       borderBottom
@@ -168,11 +169,11 @@ export const FoldersScreen = observer(function FoldersScreen() {
             renderSectionHeader={({ section }) => (
               <Text
                 text={`${section.title} (${section.data.length})`}
-                style={{ 
-                  fontSize: fontSize.small, 
-                  paddingHorizontal: 20, 
-                  paddingTop: 20, 
-                  backgroundColor: color.background 
+                style={{
+                  fontSize: fontSize.small,
+                  paddingHorizontal: 20,
+                  paddingTop: 20,
+                  backgroundColor: color.background
                 }}
               />
             )}
@@ -203,9 +204,9 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     }
 
                     <View style={{ flex: 1, marginLeft: 12 }}>
-                      <View style={{ 
-                        flexDirection: 'row', 
-                        alignItems: 'center', 
+                      <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         flexWrap: 'wrap'
                       }}>
                         <Text
@@ -238,17 +239,19 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     </View>
 
                     {
-                      (!!item.id && item.editable) && (
+                      // TODO
+                      // (!!item.id && item.editable) && (
+                      !!item.id && (
                         <Button
                           preset="link"
                           onPress={() => {
                             setSelectedFolder(item)
                             setIsActionOpen(true)
                           }}
-                          style={{ 
+                          style={{
                             height: 35,
                             width: 40,
-                            justifyContent: 'flex-end', 
+                            justifyContent: 'flex-end',
                             alignItems: 'center'
                           }}
                         >

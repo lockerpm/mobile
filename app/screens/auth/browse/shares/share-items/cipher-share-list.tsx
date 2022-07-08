@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
-import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
 import { Text } from "../../../../../components/text/text"
 // import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -36,7 +35,7 @@ export const CipherShareList = observer((props: Props) => {
   const {
     emptyContent, navigation, onLoadingChange, searchText, sortList
   } = props
-  const { getTeam, randomString, translate } = useMixins()
+  const {  translate } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, collectionStore } = useStores()
@@ -44,7 +43,6 @@ export const CipherShareList = observer((props: Props) => {
   // ------------------------ PARAMS ----------------------------
 
   const [ciphers, setCiphers] = useState<CipherShareType[]>([])
-  const [shareFolder, setShareFolder] = useState(collectionStore.collections)
   const [showAction, setShowAction] = useState(false)
   const [selectedMember, setSelectedMember] = useState<SharedMemberType>(null)
 
@@ -53,7 +51,6 @@ export const CipherShareList = observer((props: Props) => {
   const organizations = cipherStore.organizations
   const allCiphers = ciphers
   const myShares = cipherStore.myShares
-  const collections = collectionStore.collections
 
   // ------------------------ EFFECTS ----------------------------
 
@@ -71,41 +68,11 @@ export const CipherShareList = observer((props: Props) => {
     return myShares.find(s => s.id === id)
   }
 
-  const getFilteredData = (items: any[], teamShared: boolean, editable: boolean) => {
-    const filtered = items.filter((item: FolderView | CollectionView) => {
-      if (searchText) {
-        return item.name && item.name.toLowerCase().includes(searchText.toLowerCase())
-      }
-      return true
-    })
-    if (sortList) {
-      const { orderField, order } = sortList
-      const result = orderBy(
-        filtered,
-        [f => orderField === 'name' ? (f.name && f.name.toLowerCase()) : f.revisionDate],
-        [order]
-      ).map(i => ({ ...i, teamShared, editable })) || []
-      return result
-    }
-    return filtered
-  }
-
+ 
   // Get ciphers list
   const loadData = async () => {
     // onLoadingChange && onLoadingChange(true)
 
-    // share folder 
-    const filteredCollection = groupBy(collections, 'organizationId')
-    const shareFolders = filteredCollection.map((id) => ({
-      id: randomString(),
-      title: translate('shares.shared_folder'),
-      data: getFilteredData(
-        filteredCollection[id],
-        true,
-        false,
-      )
-    }))
-    setShareFolder(shareFolders)
 
 
     // Filter

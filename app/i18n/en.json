@@ -388,6 +388,18 @@
     "shared_items": "Shared With You",
     "shared_folder": "Shared folder",
     "encrypted_content": "Encrypted Content",
+    "share_folder": {
+      "manage_user": "Manage share",
+      "share_with": "This folder has been shared with",
+      "success": "Share success",
+      "select_member": "Shared this folder with",
+      "add_email": "Add email to share",
+      "viewer": "Viewer",
+      "editor": "Editor",
+      "viewer_per": "Only can View",
+      "editor_per": "Organize, add, and edit",
+      "remove": "Remove from folder"
+    },
     "empty": {
       "title": "Securely share items",
       "desc_share": "Any shared passwords, notes or credit cards will appear here",

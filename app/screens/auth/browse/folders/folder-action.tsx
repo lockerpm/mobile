@@ -10,6 +10,7 @@ import { useMixins } from "../../../../services/mixins"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { GeneralApiProblem } from "../../../../services/api/api-problem"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
+import { AddUserShareFolderModal } from "./folder-shared-users-management/share-user-modal"
 import { useNavigation } from "@react-navigation/native"
 
 
@@ -27,11 +28,14 @@ export const FolderAction = (props: Props) => {
   const { translate } = useMixins()
   const { deleteCollection, deleteFolder } = useCipherDataMixins()
 
+  const isCollection = folder["organizationId"] ? true : false
+
   // ---------------- PARAMS -----------------
 
   const [isRenameOpen, setIsRenameOpen] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [nextModal, setNextModal] = useState<'rename' | 'deleteConfirm' | null>(null)
+  const [showShareModal, setShowShareModal] = useState(false)
 
 
   // ---------------- METHODS -----------------
@@ -45,7 +49,7 @@ export const FolderAction = (props: Props) => {
       res = await deleteFolder(folder.id)
     } else {
       // @ts-ignore
-      res = await deleteCollection(folder.id, folder.organizationId)
+      res = await deleteCollection(folder)
     }
 
     onLoadingChange && onLoadingChange(false)
@@ -69,6 +73,13 @@ export const FolderAction = (props: Props) => {
   return (
     <View>
       {/* Modals / Actions */}
+      <AddUserShareFolderModal
+        isOpen={showShareModal}
+        onClose={() => { setShowShareModal(false) }}
+        folder={folder}
+      />
+
+
 
       <RenameFolderModal
         isOpen={isRenameOpen}
@@ -95,7 +106,7 @@ export const FolderAction = (props: Props) => {
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             {
-              folder instanceof CollectionView ? (
+              isCollection ? (
                 <FOLDER_IMG.share.svg height={30} />
               ) : (
                 <FOLDER_IMG.normal.svg height={30} />
@@ -127,14 +138,25 @@ export const FolderAction = (props: Props) => {
             }}
           />
 
-          <ActionItem
-            name={translate('common.share')}
-            icon="share-square-o"
-            action={() => {
-              navigation.navigate("shareFolder", { id: folder.id })
-              onClose()
-            }}
-          />
+          {
+            isCollection ?
+              <ActionItem
+                name={translate("shares.share_folder.manage_user")}
+                icon="users"
+                action={() => {
+                  navigation.navigate("shareFolder", { collectionId: folder.id })
+                  onClose()
+                }}
+              /> :
+              <ActionItem
+                name={translate('common.share')}
+                icon="share-square-o"
+                action={() => {
+                  setShowShareModal(true)
+                  onClose()
+                }}
+              />
+          }
 
           <ActionItem
             name={translate('folder.delete_folder')}

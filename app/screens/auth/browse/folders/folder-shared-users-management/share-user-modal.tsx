@@ -6,22 +6,28 @@ import { observer } from "mobx-react-lite"
 import { commonStyles } from "../../../../../theme"
 import { Modal } from "react-native-ui-lib"
 import { useMixins } from "../../../../../services/mixins"
-import { SharedUsers } from "./shared-user"
-import { FAMILY_MEMBER_LIMIT } from "../../../../../config/constants"
 import Entypo from 'react-native-vector-icons/Entypo'
 import { AppEventType, EventBus } from "../../../../../utils/event-bus"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { FolderView } from "../../../../../../core/models/view/folderView"
+import { AccountRoleText } from "../../../../../config/types"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
 
 
 interface InviteProps {
-    isShow: boolean
+    isOpen: boolean
+    folder?: FolderView | CollectionView
     onClose: () => void
     sharedUsers?: any[]
     isLoading?: boolean
 }
-export const ShareUserModal = observer(function ShareUserModal(props: InviteProps) {
-    const { isShow, onClose, sharedUsers, isLoading } = props
+
+export const AddUserShareFolderModal = observer(function ShareUserModal(props: InviteProps) {
+    const { isOpen, onClose, sharedUsers, folder } = props
     const { user } = useStores()
-    const { translate, color, notifyApiError, notify } = useMixins()
+    const { translate, color, notify } = useMixins()
+    const { shareFolder, shareFolderAddMember } = useFolderMixins()
+
 
     // ----------------------- PARAMS -----------------------
     const [email, setEmail] = useState<string>("");
@@ -29,35 +35,38 @@ export const ShareUserModal = observer(function ShareUserModal(props: InviteProp
 
 
     // ----------------------- METHODS -----------------------
-    const addEmailToInviteList = (email: string) => {
+    const addEmailToShare = (email: string) => {
         const e = email.trim().toLowerCase();
         if (!e) return;
 
-        const unreachLimit = sharedUsers.length + emails.length < FAMILY_MEMBER_LIMIT
-        if (!unreachLimit) return;
-
         const isOwner = user?.email === e
-        const isIncluded = sharedUsers.some(element => element.email === e)
-
+        const isIncluded = sharedUsers?.some(element => element.email === e)
         if (!emails.includes(e) && !isOwner && !isIncluded) {
             setEmails([...emails, e])
             setEmail("")
         }
     }
-    const removeEmailFromInviteList = (val: string) => {
+
+    const removeEmailFromList = (val: string) => {
         setEmails(emails.filter(e => e !== val))
     }
 
     const addFamilyMember = async (emails?: string[]) => {
-        // const res = await user.addFamilyMember(emails)
-        // onClose()
-        // if (res.kind === "ok") {
-        //     notify("success", translate("invite_member.add_noti"))
-        //     setEmails([])
-        //     // setRelad(true)
-        // } else {
-        //     notifyApiError(res)
-        // }
+        let res
+        if (folder instanceof CollectionView) {
+            res = await shareFolderAddMember(folder, emails, AccountRoleText.MEMBER, false)
+        } else {
+            res = await shareFolder(folder, emails, AccountRoleText.MEMBER, false)
+        }
+
+        onClose()
+        if (res.kind === 'ok' || res.kind === 'unauthorized') {
+            if (res.kind === 'ok') {
+                notify("success", translate("shares.share_folder.success"))
+                setEmails([])
+            }
+        }
+
     }
 
     // ----------------------- EFFECTS -----------------------
@@ -76,7 +85,7 @@ export const ShareUserModal = observer(function ShareUserModal(props: InviteProp
     return (
         <Modal
             presentationStyle="pageSheet"
-            visible={isShow}
+            visible={isOpen}
             animationType="slide"
             onRequestClose={() => onClose()}
         >
@@ -96,20 +105,20 @@ export const ShareUserModal = observer(function ShareUserModal(props: InviteProp
                     </TouchableOpacity>
                     <Button
                         preset="link"
-                        disabled={emails.length < 1}
+                        disabled={emails?.length < 1}
                         onPress={() => {
                             addFamilyMember(emails);
                         }}>
                         <Text
                             text="Add"
                             style={{
-                                color: (emails.length > 0) ? "#007AFF" : color.block
+                                color: (emails?.length > 0) ? color.primary : color.block
                             }} />
                     </Button>
                 </View>
 
                 <View style={{ marginTop: 8 }}>
-                    <Text preset="header" text="Shared this folder with"/>
+                    <Text preset="header" text={translate('shares.share_folder.select_member')} />
                 </View>
 
                 <View style={{
@@ -122,7 +131,7 @@ export const ShareUserModal = observer(function ShareUserModal(props: InviteProp
                     }}>
                         <TouchableOpacity
                             onPress={() => {
-                                addEmailToInviteList(email)
+                                addEmailToShare(email)
                             }}
                             style={{ marginRight: 16, marginVertical: 16 }}
                         >
@@ -131,7 +140,7 @@ export const ShareUserModal = observer(function ShareUserModal(props: InviteProp
                                 style={{ height: 24, width: 24 }} />
                         </TouchableOpacity>
                         <TextInput
-                            placeholder={"Add email to share"}
+                            placeholder={translate('shares.share_folder.add_email')}
                             placeholderTextColor={color.text}
                             selectionColor={color.primary}
                             onChangeText={setEmail}
@@ -139,7 +148,7 @@ export const ShareUserModal = observer(function ShareUserModal(props: InviteProp
                             clearButtonMode="unless-editing"
                             clearTextOnFocus={true}
                             onSubmitEditing={() => {
-                                addEmailToInviteList(email)
+                                addEmailToShare(email)
                             }}
                         >
                         </TextInput>
@@ -169,7 +178,7 @@ export const ShareUserModal = observer(function ShareUserModal(props: InviteProp
                                         />
 
                                         <TouchableOpacity
-                                            onPress={() => removeEmailFromInviteList(e)}
+                                            onPress={() => removeEmailFromList(e)}
                                             style={{
                                                 paddingHorizontal: 12,
                                                 alignItems: 'center'
@@ -190,12 +199,35 @@ export const ShareUserModal = observer(function ShareUserModal(props: InviteProp
                     <Text>{translate('invite_member.select_person')}</Text>
                 </View>
                 {
-                    email.length > 0 &&
-                    <TouchableOpacity onPress={() => addEmailToInviteList(email)}>
-                        <SharedUsers users={{ email: email }} add={true} />
+                    email?.length > 0 &&
+                    <TouchableOpacity onPress={() => addEmailToShare(email)}>
+                        <View
+                            style={
+                                {
+                                    borderBottomColor: color.block,
+                                    borderBottomWidth: 1,
+                                    width: "100%",
+                                    flexDirection: "row",
+                                    marginBottom: 15,
+                                    paddingVertical: 14,
+                                    justifyContent: "flex-start"
+                                }
+                            }>
+                            <Image
+                                source={require("./avatar.png")}
+                                style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
+                            />
+
+                            <View style={{ flex: 1, justifyContent: 'center' }}>
+                                <Text
+                                    preset="black"
+                                    text={email}></Text>
+                            </View>
+                        </View>
                     </TouchableOpacity>
                 }
             </View>
         </Modal >
     )
 })
+
