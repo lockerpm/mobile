@@ -4,29 +4,37 @@ import { ActionItem, Icon, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { ActionSheet, ActionSheetContent } from "../../../../../components"
 import { SharedMemberType } from "../../../../../services/api"
+import { AccountRoleText, SharingStatus } from "../../../../../config/types"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { fontSize } from "../../../../../theme"
 
 
 
 interface Props {
-    users: SharedMemberType
+    reload: boolean,
+    setReload: (val: boolean) => void
+    user: SharedMemberType
+    collection: CollectionView
 }
 
 export const SharedUsers = (props: Props) => {
-    const { users } = props
-    const { id, email, avatar, full_name, share_type } = users
+    const { user, collection, reload, setReload } = props
+    const { id, email, avatar, full_name, role, status } = user
     const { color, translate } = useMixins()
+    const { editShareCipher } = useCipherDataMixins()
+    const { shareFolderRemoveMember } = useFolderMixins()
 
-    const owner = id === null
-    const isEditable = share_type !== "View"
-    const comfirmRemoveSharedUser = async (id: string) => {
+    const isEditable = role === "admin"
+
+    const comfirmRemoveSharedUser = async () => {
         Alert.alert(
-            "test", "",
+            "Unshared for this member", "",
             [
                 {
                     text: translate("common.yes"),
-                    onPress: () => {
-                        onRemove(id)
-                    },
+                    onPress: onRemove,
                     style: "destructive"
                 },
                 {
@@ -41,11 +49,32 @@ export const SharedUsers = (props: Props) => {
         )
     }
 
-    const onRemove = async (id: string) => {
-
+    const onRemove = async () => {
+        let res = await shareFolderRemoveMember(collection, id)
+        if (res.kind === 'ok' || res.kind === 'unauthorized') {
+            setShowSheetModal(false)
+            setReload(!reload)
+        }
     }
-    const onEditRole = async (id: string) => {
 
+    const onEditRole = async (shareType: 'only_fill' | 'edit') => {
+        let role = AccountRoleText.MEMBER
+        let autofillOnly = false
+        switch (shareType) {
+            case 'only_fill':
+                autofillOnly = true
+                break
+            case 'edit':
+                role = AccountRoleText.ADMIN
+                break
+        }
+        const res = await editShareCipher(collection.organizationId, id, role, autofillOnly)
+
+
+        if (res.kind === 'ok' || res.kind === 'unauthorized') {
+            setShowSheetModal(false)
+            setReload(!reload)
+        }
     }
 
     // ----------------------- PARAMS -----------------------
@@ -78,11 +107,41 @@ export const SharedUsers = (props: Props) => {
                     preset="black"
                     text={email}
                 />
-                <Text
-                    preset="default"
-                    text={!isEditable ? translate('shares.share_type.view') : translate('shares.share_type.edit')}
-                />
+                <View style={{ flexDirection: "row" }}>
+                    <Text
+                        preset="default"
+                        text={!isEditable ? translate('shares.share_type.view') : translate('shares.share_type.edit')}
+                    />
+                    {/* Sharing status */}
+                    {
+                        status && (
+                            <View style={{
+                                alignSelf: "center",
+                                marginLeft: 10,
+                                paddingHorizontal: 10,
+                                paddingVertical: 2,
+                                backgroundColor: status === SharingStatus.INVITED
+                                    ? color.warning
+                                    : status === SharingStatus.ACCEPTED
+                                        ? color.info
+                                        : color.primary,
+                                borderRadius: 3,
+                            }}>
+                                <Text
+                                    text={status.toUpperCase()}
+                                    style={{
+                                        fontWeight: 'bold',
+                                        color: color.background,
+                                        fontSize: fontSize.mini
+                                    }}
+                                />
+                            </View>
+                        )
+                    }
+                </View>
             </TouchableOpacity>
+
+
 
             <ActionSheet
                 isOpen={showSheetModal}
@@ -104,6 +163,7 @@ export const SharedUsers = (props: Props) => {
                     <ActionItem
                         style={{ backgroundColor: !isEditable && color.block }}
                         action={() => {
+                            onEditRole('only_fill')
                         }}
                     >
                         <View style={{ flexDirection: "row" }}>
@@ -120,6 +180,7 @@ export const SharedUsers = (props: Props) => {
                     <ActionItem
                         style={{ backgroundColor: isEditable && color.block }}
                         action={() => {
+                            onEditRole('edit')
                         }}
                     >
                         <View style={{ flexDirection: "row" }}>
@@ -135,6 +196,7 @@ export const SharedUsers = (props: Props) => {
 
                     <ActionItem
                         action={() => {
+                            comfirmRemoveSharedUser()
                         }}
                     >
                         <View style={{ flexDirection: "row" }}>

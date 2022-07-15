@@ -1,4 +1,5 @@
 import { ApiResponse } from "apisauce"
+import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CollectionRequest } from "../../../core/models/request/collectionRequest"
 import { CollectionResponse } from "../../../core/models/response/collectionResponse"
 import { detectTempId } from "../../utils/event-bus/helpers"
@@ -95,9 +96,30 @@ export class CollectionApi {
       return { kind: "bad-data" }
     }
   }
+  // remove member collection
+  async removeShareMember(token: string, memberId: string, teamId: string, payload: CollectionActionData): Promise<EmptyResult> {
+    try {
+      detectTempId([teamId])
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/members/${memberId}/stop`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
 
   async addShareMember(token: string, teamId: string, members: any[]): Promise<EmptyResult> {
     try {
+      detectTempId([teamId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
@@ -113,6 +135,24 @@ export class CollectionApi {
       return { kind: "bad-data" }
     }
   }
-  
+
+  async updateShareItem(token: string, id: string, teamId: string, payload: {cipher: CipherRequest & { id: string }}): Promise<EmptyResult> {
+    try {
+      detectTempId([teamId])
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/folders/${id}/items`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
 
 }

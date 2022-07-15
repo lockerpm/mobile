@@ -6,7 +6,7 @@ import { ItemsHeader } from "./items-header"
 import { SortAction } from "./sort-action"
 import { AddAction } from "./add-action"
 import { useMixins } from "../../../../services/mixins"
-import { Alert, BackHandler, Image, View, Text, TouchableOpacity, Linking, AppState } from "react-native"
+import { Alert, BackHandler, Image, View, Text, TouchableOpacity, AppState } from "react-native"
 import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 import AntDesign from 'react-native-vector-icons/AntDesign'

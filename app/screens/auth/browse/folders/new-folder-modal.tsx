@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react"
-import { FloatingInput, Button, Modal, Text, DropdownPicker } from "../../../../components"
+import { FloatingInput, Button, Modal} from "../../../../components"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 import { FolderView } from "../../../../../core/models/view/folderView"
 import { useMixins } from "../../../../services/mixins"
-import { fontSize } from "../../../../theme"
 import { GeneralApiProblem } from "../../../../services/api/api-problem"
 import { CollectionView } from "../../../../../core/models/view/collectionView"
 import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
@@ -40,10 +39,10 @@ export const NewFolderModal = observer((props: Props) => {
     })
   ])
 
-  // --------------- COMPUTED ----------------
+  // --------------- COMPUTED ---------------
 
   const isExisted = (() => {
-    if (!name.trim()) {
+    if (!name.trim() || isLoading ) {
       return false
     }
     if (owner === 'me') {
@@ -55,6 +54,7 @@ export const NewFolderModal = observer((props: Props) => {
   // --------------- METHODS ----------------
 
   const handleCreateFolder = async () => {
+   
     if (!name.trim() || isExisted) {
       return
     }
@@ -74,7 +74,6 @@ export const NewFolderModal = observer((props: Props) => {
     }
 
     setIsLoading(false)
-
     if (res.kind === 'ok') {
       setName('')
       onClose()
@@ -83,6 +82,8 @@ export const NewFolderModal = observer((props: Props) => {
         onClose()
       }
     }
+  
+
   }
 
   // --------------- EFFECT ----------------
@@ -101,29 +102,6 @@ export const NewFolderModal = observer((props: Props) => {
       onClose={onClose}
       title={translate('folder.create_folder')}
     >
-      {/* TODO: temporary disable */}
-      {/* <>
-        <Text
-          text={translate('common.ownership')}
-          style={{
-            marginTop: 20,
-            marginBottom: 10,
-            fontSize: fontSize.small
-          }}
-        />
-
-        <DropdownPicker
-          isDisabled={uiStore.isOffline}
-          placeholder={translate('common.select')}
-          value={owner}
-          items={owners}
-          setValue={setOwner}
-          setItems={setOwners}
-          style={{
-            marginBottom: 20
-          }}
-        />
-      </> */}
 
       <FloatingInput
         persistError

@@ -30,11 +30,12 @@ export const AddUserShareFolderModal = observer(function ShareUserModal(props: I
 
 
     // ----------------------- PARAMS -----------------------
+
     const [email, setEmail] = useState<string>("");
     const [emails, setEmails] = useState<string[]>([]);
 
-
     // ----------------------- METHODS -----------------------
+
     const addEmailToShare = (email: string) => {
         const e = email.trim().toLowerCase();
         if (!e) return;
@@ -51,18 +52,18 @@ export const AddUserShareFolderModal = observer(function ShareUserModal(props: I
         setEmails(emails.filter(e => e !== val))
     }
 
-    const addFamilyMember = async (emails?: string[]) => {
+    const addFolderMember = async (emails?: string[]) => {
         let res
         if (folder instanceof CollectionView) {
-            res = await shareFolderAddMember(folder, emails, AccountRoleText.MEMBER, false)
+            res = await shareFolderAddMember(folder, emails, AccountRoleText.MEMBER, true)
         } else {
-            res = await shareFolder(folder, emails, AccountRoleText.MEMBER, false)
+            res = await shareFolder(folder, emails, AccountRoleText.MEMBER, true)
         }
 
         onClose()
         if (res.kind === 'ok' || res.kind === 'unauthorized') {
             if (res.kind === 'ok') {
-                notify("success", translate("shares.share_folder.success"))
+                notify("success", translate("shares.share_folder.success.shared"))
                 setEmails([])
             }
         }
@@ -107,7 +108,7 @@ export const AddUserShareFolderModal = observer(function ShareUserModal(props: I
                         preset="link"
                         disabled={emails?.length < 1}
                         onPress={() => {
-                            addFamilyMember(emails);
+                            addFolderMember(emails);
                         }}>
                         <Text
                             text="Add"

@@ -160,7 +160,10 @@
       "google": {
         "play_service_not_available": "Google Play services are not available or outdated"
       },
-      "facebook": {},
+      "facebook": {
+
+
+      },
       "github": {
         "token_refresh_failed": "Could not exchange the refresh token. Please try again",
         "registration_failed": "Registration failed. Please try again",
@@ -174,7 +177,8 @@
     "network_timeout": "Network timeout",
     "server_error": "Server error",
     "cannot_connect": "Cannot connect to the server. Please check your internet connection",
-    "network_error": "Network error. Your connection is not secure"
+    "network_error": "Network error. Your connection is not secure",
+    "share_folder": "Can not share this folder"
   },
   "success": {
     "done": "Done",
@@ -389,16 +393,23 @@
     "shared_folder": "Shared folder",
     "encrypted_content": "Encrypted Content",
     "share_folder": {
+      "error_share_item": "Folders with shared items can’t be shared. Remove or stop shared items and try again",
       "manage_user": "Manage share",
       "share_with": "This folder has been shared with",
-      "success": "Share success",
       "select_member": "Shared this folder with",
       "add_email": "Add email to share",
       "viewer": "Viewer",
       "editor": "Editor",
       "viewer_per": "Only can View",
       "editor_per": "Organize, add, and edit",
-      "remove": "Remove from folder"
+      "remove": "Remove from folder",
+      "success": {
+        "shared": "Share success",
+        "add_member": "Add member success",
+        "remove_member": "Remove member success",
+        "stop": "Stop share success",
+        "add_items": "Add items success"
+      }
     },
     "empty": {
       "title": "Securely share items",

@@ -7,7 +7,6 @@ import { useMixins } from "../../../../../services/mixins"
 
 
 export const PremiumBenefits = (props: { benefitTab: number }) => {
-  // console.log(props.benefitTab)
   const { translate, color } = useMixins()
   const tabs = [
     {

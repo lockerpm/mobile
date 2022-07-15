@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { View, ViewStyle } from "react-native"
-import { Button, Header, SearchBar, Text } from "../../../../components"
+import { Button, Header, SearchBar, Text, Icon } from "../../../../components"
 import { commonStyles, fontSize } from "../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -10,12 +10,12 @@ import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 import { ShareModal } from "../../../../components/cipher/cipher-action/share-modal"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
-
 import ConfigIcon from './config.svg'
 import ConfigIconLight from './config-light.svg'
 import PlusIcon from './plus.svg'
 import PlusIconLight from './plus-light.svg'
 import { PlanType } from "../../../../config/types"
+import { AppNotification } from "../../../../services/api"
 
 
 interface Props {
@@ -49,11 +49,11 @@ const BUTTON_RIGHT: ViewStyle = {
 }
 
 export const ItemsHeader = observer((props: Props) => {
-  const { 
+  const {
     openAdd, openSort, onSearch, searchText, setIsLoading, navigation,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll
   } = props
-  const { translate, color, isDark } = useMixins()
+  const { translate, color, isDark, notifyApiError } = useMixins()
   const { toTrashCiphers } = useCipherDataMixins()
   const { user, uiStore } = useStores()
 
@@ -61,12 +61,37 @@ export const ItemsHeader = observer((props: Props) => {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
+  const [notifications, setNotifications] = useState<AppNotification>(null)
 
   // ----------------------- COMPUTED ------------------------
-  
+
   const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
-  
+
   // ----------------------- METHODS ------------------------
+
+  const fetchInAppNotification = async () => {
+    if (navigation.isFocused()) {
+      const res = await user.fetchInAppNoti()
+      if (res.kind === "ok") {
+
+        setNotifications(res.data)
+      } else {
+        notifyApiError(res)
+      }
+    }
+  }
+
+  // ----------------------- EFFECT ------------------------
+
+  // Check online/offline interval
+  useEffect(() => {
+    fetchInAppNotification()
+    const interval = setInterval(fetchInAppNotification, 1000 * 2)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
 
   // Header right
   const renderHeaderRight = () => (
@@ -76,6 +101,34 @@ export const ItemsHeader = observer((props: Props) => {
         marginRight: -8
       }]}
     >
+      {/** In app notification */}
+      <Button
+        preset="link"
+        style={BUTTON_RIGHT}
+        onPress={() => {
+          navigation.navigate('app_list_noti', {
+            notifications
+          })
+        }}
+      >
+
+        {
+          notifications?.unread_count > 0 && <View style={{
+            position: "absolute",
+            top: 5,
+            right: 5,
+            height: 6,
+            width: 6,
+            borderRadius: 3,
+            backgroundColor: color.error
+          }} />
+        }
+
+        <Icon icon="bell" size={24} />
+      </Button>
+      {/** In app notification end*/}
+
+      {/** Sort */}
       <Button
         preset="link"
         style={BUTTON_RIGHT}
@@ -89,7 +142,9 @@ export const ItemsHeader = observer((props: Props) => {
           )
         }
       </Button>
+      {/** Sort end */}
 
+      {/** add */}
       <Button
         preset="link"
         style={BUTTON_RIGHT}
@@ -103,6 +158,7 @@ export const ItemsHeader = observer((props: Props) => {
           )
         }
       </Button>
+      {/** add */}
     </View>
   )
 

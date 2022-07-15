@@ -86,7 +86,6 @@ export const FamilyPayment = (props: Props) => {
 
             </View>
 
-            {/* <Button text="buy now" /> */}
 
             <View style={{ backgroundColor: color.background, marginHorizontal: 20 }}>
                 <Button
@@ -106,6 +105,7 @@ export const FamilyPayment = (props: Props) => {
                     </Text>
                 </Button>
                 <Button
+                    preset="outline"
                     style={{
                         marginVertical: 10,
                     }}

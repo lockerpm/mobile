@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Text, Header, Button } from "../../../../../components"
@@ -28,6 +28,7 @@ export const FolderSelectScreen = observer(() => {
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFolder, setSelectedFolder] = useState(initialId)
+  const isSelectedCollection = useRef(false)
 
   // Methods
 
@@ -49,6 +50,74 @@ export const FolderSelectScreen = observer(() => {
     }
     navigation.goBack()
   }
+
+  // const handleMoveToCollection = async () => {
+    // if (mode === 'move') {
+    //   setIsLoading(true)
+    //   const res = await updateShareItem({
+    //     ids: cipherIds,
+    //     folderId: selectedFolder
+    //   })
+    //   if (res.kind === 'ok') {
+    //     notify('success', translate('folder.item_moved'))
+    //   } else {
+    //     notifyApiError(res)
+    //   }
+    //   setIsLoading(false)
+    // }
+    // navigation.goBack()
+  // }
+
+  const renderItem = (item, index, isCollection: boolean) => (
+    <Button
+      key={index}
+      preset="link"
+      onPress={() => {
+        setSelectedFolder(item.id)
+        isSelectedCollection.current = isCollection
+      }}
+      style={[commonStyles.SECTION_PADDING, {
+        backgroundColor: color.background
+      }]}
+    >
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        <FOLDER_IMG.normal.svg height={30} />
+
+        <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+          flex: 1,
+          marginLeft: 10
+        }]}>
+          <Text
+            preset="black"
+            text={item.name}
+            numberOfLines={2}
+          />
+
+          {
+            ([...folderStore.notSynchedFolders, ...folderStore.notUpdatedFolders].includes(item.id)) && (
+              <View style={{ marginLeft: 10 }}>
+                <MaterialCommunityIconsIcon
+                  name="cloud-off-outline"
+                  size={22}
+                  color={color.textBlack}
+                />
+              </View>
+            )
+          }
+        </View>
+
+        {
+          selectedFolder === item.id && (
+            <IoniconsIcon
+              name="checkmark"
+              size={18}
+              color={color.primary}
+            />
+          )
+        }
+      </View>
+    </Button>
+  )
 
   // Render
   return (
@@ -128,7 +197,7 @@ export const FolderSelectScreen = observer(() => {
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <FOLDER_IMG.add.svg height={30} />
-          <Text 
+          <Text
             preset="black"
             text={translate('folder.new_folder')}
             style={{ flex: 1, marginLeft: 10 }}
@@ -144,55 +213,18 @@ export const FolderSelectScreen = observer(() => {
 
       {/* Other folders */}
       {
-        folderStore.folders.filter(i => i.id).map((item, index) => (
-          <Button
-            key={index}
-            preset="link"
-            onPress={() => setSelectedFolder(item.id)}
-            style={[commonStyles.SECTION_PADDING, {
-              backgroundColor: color.background
-            }]}
-          >
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              <FOLDER_IMG.normal.svg height={30} />
-
-              <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-                flex: 1,
-                marginLeft: 10
-              }]}>
-                <Text
-                  preset="black"
-                  text={item.name}
-                  numberOfLines={2}
-                />
-
-                {
-                  ([...folderStore.notSynchedFolders, ...folderStore.notUpdatedFolders].includes(item.id)) && (
-                    <View style={{ marginLeft: 10 }}>
-                      <MaterialCommunityIconsIcon
-                        name="cloud-off-outline"
-                        size={22}
-                        color={color.textBlack}
-                      />
-                    </View>
-                  )
-                }
-              </View>
-
-              {
-                selectedFolder === item.id && (
-                  <IoniconsIcon
-                    name="checkmark"
-                    size={18}
-                    color={color.primary}
-                  />
-                )
-              }
-            </View>
-          </Button>
-        ))
+        folderStore.folders.filter(i => i.id).map((item, index) => renderItem(item, index, false))
       }
       {/* Other folders end */}
+
+      {/* <View style={{
+        backgroundColor: color.background,
+        marginVertical: 16
+      }}>
+        {
+          collectionStore.collections?.map((item, index) => renderItem(item, index, true))
+        }
+      </View> */}
     </Layout>
   )
 })

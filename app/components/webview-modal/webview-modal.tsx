@@ -63,7 +63,7 @@ export const WebViewModal = (props: Props) => {
             onURLChange && onURLChange(request.url)
 
             // Prevent self deep linking
-            if (request.url.startsWith('com.cystack.locker')) {
+            if (request.url?.startsWith('com.cystack.locker')) {
               return false
             }
         

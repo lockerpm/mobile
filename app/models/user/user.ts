@@ -521,6 +521,17 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.updateNotiSettings(self.apiToken, categoryId, mail, notification)
       return res
+    },
+    fetchInAppNoti: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.fetchInAppNoti(self.apiToken)
+      return res
+    },
+
+    markReadInAppNoti: async (id: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.markReadInappNoti(self.apiToken, id)
+      return res
     }
 
   }))

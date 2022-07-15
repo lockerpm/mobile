@@ -19,7 +19,8 @@ import {
   AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen,
   PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen, 
   ReferFriendScreen, FolderSharedUsersManagementScreen,
-  PushEmailSettingsScreen, PushNotificationSettingsScreen
+  PushEmailSettingsScreen, PushNotificationSettingsScreen,
+  InAppListNotification, InAppNotificationScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -37,6 +38,7 @@ import { HealthNavigator } from "./tools/health-navigator"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import InAppReview from 'react-native-in-app-review';
 import Intercom from "@intercom/intercom-react-native"
+import { AppNotification } from "../services/api"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -131,6 +133,11 @@ export type PrimaryParamList = {
     mode: 'add' | 'edit' | 'clone'
   },
   welcome_premium: undefined
+
+  app_list_noti: {
+    notifications: AppNotification
+  }
+  app_noti: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -467,6 +474,9 @@ export const MainNavigator = observer(() => {
 
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
+
+        <Stack.Screen name="app_list_noti" component={InAppListNotification} />
+        <Stack.Screen name="app_noti" component={InAppNotificationScreen} />
 
         <Stack.Screen
           name="passwordGenerator"
