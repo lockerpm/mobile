@@ -1,5 +1,6 @@
 import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
+import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CollectionRequest } from "../../../core/models/request/collectionRequest"
 import { CollectionView } from "../../../core/models/view/collectionView"
 import { AccountRoleText } from "../../config/types"
@@ -108,6 +109,12 @@ export const CollectionStoreModel = types
       return res
     },
 
+    removeShareMember: async (memberId: string, teamId: string, payload: CollectionActionData) => {
+      const collectionApi = new CollectionApi(self.environment.api)
+      const res = await collectionApi.removeShareMember(self.apiToken, memberId, teamId, payload)
+      return res
+    },
+
     addShareMember: async (teamId: string, members: {
       username: string
       role: AccountRoleText
@@ -119,7 +126,11 @@ export const CollectionStoreModel = types
       return res
     },
 
-
+    updateShareItem: async (id: string, teamId: string, payload: {cipher:  CipherRequest & { id: string }}) => {
+      const collectionApi = new CollectionApi(self.environment.api)
+      const res = await collectionApi.updateShareItem(self.apiToken, id, teamId, payload)
+      return res
+    },
 
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .postProcessSnapshot(omit(['collections']))

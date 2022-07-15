@@ -497,7 +497,7 @@ export class CipherService implements CipherServiceAbstraction {
                             }
                             break;
                         case UriMatchType.StartsWith:
-                            if (url.startsWith(u.uri)) {
+                            if (url?.startsWith(u.uri)) {
                                 return true;
                             }
                             break;

@@ -14,18 +14,18 @@ import { IconProps } from '../icon.props'
 
 
 import Authenticator from './svg/navigator/authenticator.svg'
+import Bell from './svg/common/bell.svg'
+import Check from './svg/common/check.svg'
+import Cross from './svg/common/cross.svg'
+import DefaultAvatar from './svg/common/default-avatar.svg'
 import Home from './svg/navigator/home.svg'
 import Menu2 from './svg/navigator/menu-2.svg'
 import Menu from './svg/navigator/menu.svg'
 import Settings from './svg/navigator/settings.svg'
-
-import Cross from './svg/common/cross.svg'
-import DefaultAvatar from './svg/common/default-avatar.svg'
 import UserPlus from './svg/common/user-plus.svg'
 import UserMinus from './svg/common/user-minus.svg'
 import Eye from './svg/common/eye.svg'
 import PemcilSimple from './svg/common/pencil-simple.svg'
-import Check from './svg/common/check.svg'
 
 
 Ionicons.loadFont()
@@ -48,6 +48,13 @@ type IconType = {
 
 const a: IconType = {
 
+}
+
+const b: IconType = {
+    'bell': {
+        type: 'component',
+        render: (props: IconProps) => <Bell height={props.size} width={props.size} color={props.color} />
+    },
 }
 
 const e: IconType = {
@@ -128,6 +135,7 @@ const u: IconType = {
 
 export const icons: IconType = {
     ...a,
+    ...b,
     ...c,
     ...e,
     ...d,

@@ -160,9 +160,7 @@
       "google": {
         "play_service_not_available": "Các dịch vụ của Google Play không khả dụng"
       },
-      "facebook": {
-
-      },
+      "facebook": {},
       "github": {
         "token_refresh_failed": "Không thể trao đổi token mới. Vui lòng thử lại",
         "registration_failed": "Đăng ký không thành công. Vui lòng thử lại",
@@ -176,7 +174,8 @@
     "network_timeout": "Mất quá nhiều thời gian cho kết nối mạng",
     "server_error": "Máy chủ đã xảy ra lỗi",
     "cannot_connect": "Không thể kết nối với máy chủ, vui lòng kiểm tra kết nối mạng",
-    "network_error": "Lỗi mạng. Kết nối của bạn không an toàn"
+    "network_error": "Lỗi mạng. Kết nối của bạn không an toàn",
+    "share_folder": "Không thể chia sẻ thư mục này"
   },
   "success": {
     "done": "Hoàn tất",
@@ -391,7 +390,23 @@
     "shared_folder": "Thư mục chia sẻ",
     "encrypted_content": "Nội dung mã hoá",
     "share_folder": {
-      "manage_user": "Quản lí chia sẻ"
+      "error_share_item": "Không thể chia sẻ thư mục chứa các mục đã được chia sẻ trước đó. Vui lòng dừng hoặc xóa các mục chia sẻ và thử lại",
+      "manage_user": "Quản lý chia sẻ",
+      "share_with": "Thư mục này được chia sẻ với ",
+      "select_member": "Thêm người dùng vào thư mục được chia sẻ",
+      "add_email": "Thêm email thành viên",
+      "viewer": "Thành viên",
+      "editor": "Quản trị",
+      "viewer_per": "Chỉ được quyền xem thông tin",
+      "editor_per": "Có quyền thanh đổi, sửa dữ liệu",
+      "remove": "Xoá khỏi thư mục",
+      "success": {
+        "shared": "Chia sẻ thư mục thành công",
+        "add_member": "Thêm thành viên thành công",
+        "remove_member": "Xoá thành viên thành công",
+        "stop": "Stop share success",
+        "add_items": "Add items success"
+      }
     },
     "empty": {
       "title": "Chia sẻ tài nguyên một cách an toàn",
@@ -438,10 +453,10 @@
       "desc": "Tạo mật khẩu đầu tiên để bắt đầu xây dựng kho của bạn",
       "btn": "Thêm mục"
     },
-    "enable_autofill" : {
+    "enable_autofill": {
       "title": "Tự động điền chưa được kích hoạt",
       "content": "Khám phá khả năng của tự động điền mật khẩu",
-      "btn": "Kích hoạt tự động điền"      
+      "btn": "Kích hoạt tự động điền"
     }
   },
   "change_master_pass": {
@@ -462,7 +477,7 @@
   "menu": {
     "product_of": "Một sản phẩm của ",
     "versoin": "Phiên bản ",
-    "invite_noti" : "Nâng cấp lên gói Family để sử dụng Locker tiết kiệm hơn với những người thân!",
+    "invite_noti": "Nâng cấp lên gói Family để sử dụng Locker tiết kiệm hơn với những người thân!",
     "fingerprint": "Định danh",
     "plan": "Quản lý gói cước",
     "expired_time": "Hết hạn",
@@ -555,7 +570,7 @@
     "defaultTab": "Màn hình mặc định"
   },
   "autofill_service": {
-    "activated" : {
+    "activated": {
       "title": "Tự động điền đã được kích hoạt",
       "content": "Bạn có thể đăng nhập vào các ứng dụng và website một cách nhanh cóng và linh hoạt"
     },
@@ -568,14 +583,14 @@
       "step_5": "5. Chọn \"Locker\""
     },
     "android": {
-      "btn" : "Mở cài đặt",
-      "other_permission" : {
-        "header" : "Xiaomi Permission",
+      "btn": "Mở cài đặt",
+      "other_permission": {
+        "header": "Xiaomi Permission",
         "name_xiaomi": "Hiện thị cửa sổ pop-up khi chạy trong nền",
         "desc": "Kích hoạt quyền này để cho phép dịch vụ tự động điền của Locker hiện thị giao diện phục vụ người dùng chọn thông tin đăng nhập cho ứng dụng"
       },
       "android_autofill": {
-        "header" : "Dịch vụ tự động điền",
+        "header": "Dịch vụ tự động điền",
         "name": "Tự động điền mật khẩu",
         "desc": "Dịch vụ tự động điền của Locker sử dụng AutoFill Framework của Android để hỗ trợ điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn"
       }
@@ -590,7 +605,7 @@
     "no_data": "Không có dữ liệu",
     "invalid_data_format": "Dữ liệu không đúng định dạng",
     "success": "Nhập dữ liệu thành công! Các mục của bạn sẽ xuất hiện trong thời gian ngắn",
-    "pls_select_right_format": "Yêu cầu phải là tệp {{format}}" , 
+    "pls_select_right_format": "Yêu cầu phải là tệp {{format}}",
     "limited": "Lượng lưu trữ gói hiện tại đã đạt giới hạn",
     "imported_free": {
       "note": "dữ liệu được nhập. Nâng cấp lên gói Premium để lưu trữ không giới hạn",
@@ -598,7 +613,7 @@
       "guild": "Nâng cấp lên gói Premium để lưu trữ không giới hạn"
     },
     "imported": "Nhập dữ liệu thành công",
-    "result_btn" : "Quay về trang chủ",
+    "result_btn": "Quay về trang chủ",
     "progress": "Đang tiến hành nhập dữ liệu.."
   },
   "crypto_asset": {
@@ -624,18 +639,18 @@
     "network": "Mạng Blockchain",
     "wallet_app": "Ví Blockchain"
   },
-  "payment" : {
-    "individual" : "Cá nhân",
+  "payment": {
+    "individual": "Cá nhân",
     "family_text": "Gia đình",
     "family_plan": "Gói gia đình",
-    "ads" : "Tận hưởng tất cả các tính năng của Locker Premium với gói hàng năm để tiết kiệm đến 75%. ",
-    "ads_family" : "Tận hưởng tất cả các tinh năng của Locker Premium cho 6 tài khoản với giá ưu đãi. ",
+    "ads": "Tận hưởng tất cả các tính năng của Locker Premium với gói hàng năm để tiết kiệm đến 75%. ",
+    "ads_family": "Tận hưởng tất cả các tinh năng của Locker Premium cho 6 tài khoản với giá ưu đãi. ",
     "trial": "(Bắt đầu với 2 tuần dùng thử miễn phí)",
-    "cancel_text" : "Thanh toán định kỳ. Hủy bất cứ lúc nào",
-    "benefit" : {
-      "locker" : "Lưu trữ không giới hạn, Ghi chú bảo mật, Thẻ thanh toán, Tài sản tiền điện tử",
-      "web" : "Giám sát Dark Web bảo vệ tài khoản của bạn khỏi các vi phạm dữ liệu lớn",
-      "emergency_contact" : "Liên hệ khẩn cấp cho phép các tài khoản đáng tin cậy truy cập dữ liệu của bạn",
+    "cancel_text": "Thanh toán định kỳ. Hủy bất cứ lúc nào",
+    "benefit": {
+      "locker": "Lưu trữ không giới hạn, Ghi chú bảo mật, Thẻ thanh toán, Tài sản tiền điện tử",
+      "web": "Giám sát Dark Web bảo vệ tài khoản của bạn khỏi các vi phạm dữ liệu lớn",
+      "emergency_contact": "Liên hệ khẩn cấp cho phép các tài khoản đáng tin cậy truy cập dữ liệu của bạn",
       "share_password": "Chia sẻ mật khẩu an toàn với bạn bè và thành viên gia đình của bạn"
     },
     "family": {
@@ -653,7 +668,7 @@
       "month": "$9.99 / Tháng",
       "year": "$71.99 / Năm"
     },
-    "price" :{
+    "price": {
       "per": {
         "monthly": {
           "title": "$4.99/tháng",
@@ -673,14 +688,14 @@
       "fam": {
         "yearly": {
           "title": "$71.99/năm/6 người",
-          "subtitle": "Tận hưởng tất cả các tính năng của Locker, cho 6 người", 
+          "subtitle": "Tận hưởng tất cả các tính năng của Locker, cho 6 người",
           "sale": "Tiết kiệm 80%",
           "pay_title": "Nâng cấp ngay với $71.99",
           "discount": "Nâng cấp ngay với $50.99 cho năm đầu. Sau đó $71.99/năm"
         },
         "monthly": {
           "title": "$9.99/tháng/6 người",
-          "subtitle": "Thanh toán theo tháng" ,
+          "subtitle": "Thanh toán theo tháng",
           "sale": "Tiết kiệm 67%",
           "pay_title": "Nâng cấp ngay với $9.99",
           "discount": "Nâng cấp ngay $6.99 cho tháng đầu. Sau đó $9.99/tháng"
@@ -690,7 +705,7 @@
   },
   "manage_plan": {
     "verify": "Xác nhận",
-    "verify_msg":  "Locker Không thể xác nhận đơn mua hàng của bạn",
+    "verify_msg": "Locker Không thể xác nhận đơn mua hàng của bạn",
     "usage": {
       "title": "Lưu lượng đã sử dụng",
       "login": "Mật khẩu",
@@ -703,22 +718,21 @@
       "title": "Tính năng nâng cao",
       "locker": "Lưu trữ không giới hạn",
       "emergency_contact": {
-        "header" : "Liên hệ khẩn cấp",
+        "header": "Liên hệ khẩn cấp",
         "text": "Tính năng này cho phép bạn lấy lại tài khoản trong trường hợp khẩn cấp",
         "link": "Để sử dụng tính năng, vui lòng truy cập: locker.io/vault",
         "button": "OK"
       },
       "web": "Giám sát lộ dữ liệu",
       "share_password": "Chia sẻ mật khẩu"
-
     },
     "free": {
       "button": "Nâng cấp lên Premium"
     }
   },
-  "invite_member" : {
-    "header" : "Quản lý thành viên",
-    "info_upgrade" : "Nâng cấp lên gói Family và mời bạn bè gia đình sử dụng Locker!",
+  "invite_member": {
+    "header": "Quản lý thành viên",
+    "info_upgrade": "Nâng cấp lên gói Family và mời bạn bè gia đình sử dụng Locker!",
     "add_noti": "Thêm thành viên thành công",
     "delete_noti": "Xoá thành viên thành công",
     "confirm": "Bạn có chắc muốn xoá người dùng này khỏi gói Family Plan?",
@@ -729,7 +743,7 @@
     "select_person": "Chọn email để thêm vào danh sách mời",
     "number_member": "Số lượng ",
     "remove": "Xoá thành viên"
-  }, 
+  },
   "outdated_data": {
     "desc": "Có vẻ như bạn đang cố gắng cập nhật một mục chưa được đồng bộ hóa. Vui lòng đợi quá trình đồng bộ hóa kết thúc hoặc bạn có thể đồng bộ hóa dữ liệu của mình theo cách thủ công tại đây",
     "go_back": "Quay lại",

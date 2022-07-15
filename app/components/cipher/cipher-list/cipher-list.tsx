@@ -79,7 +79,7 @@ export const CipherList = observer((props: CipherListProps) => {
   // ------------------------ EFFECTS ----------------------------
 
   useEffect(() => {
-    
+
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
 
@@ -100,10 +100,10 @@ export const CipherList = observer((props: CipherListProps) => {
     const filters = []
     if (props.cipherType) {
       if (typeof props.cipherType === 'number') {
-        filters.push((c : CipherView) => c.type === props.cipherType)
+        filters.push((c: CipherView) => c.type === props.cipherType)
       } else {
         // @ts-ignore
-        filters.push((c : CipherView) => props.cipherType.includes(c.type))
+        filters.push((c: CipherView) => props.cipherType.includes(c.type))
       }
     }
 
@@ -133,16 +133,17 @@ export const CipherList = observer((props: CipherListProps) => {
     if (folderId !== undefined) {
       res = res.filter(i => i.folderId === folderId)
     }
-    
+
+    // collection
     if (collectionId !== undefined) {
-      if (collectionId === null) {
-        res = res.filter(i => !i.collectionIds.length)
-      } else {
+      if (collectionId !== null) {
         res = res.filter(i => i.collectionIds.includes(collectionId))
       }
-    }
-    if (organizationId === undefined && folderId === null) {
+    } 
+
+    if (organizationId === undefined && collectionId == undefined && folderId === null) {
       res = res.filter(i => !getTeam(user.teams, i.organizationId).name)
+      res = res.filter(i => !i.collectionIds.length)
     }
     if (organizationId !== undefined) {
       if (organizationId === null) {
@@ -171,6 +172,7 @@ export const CipherList = observer((props: CipherListProps) => {
     setCiphers(res)
     setAllItems(res.map(c => c.id))
   }
+
 
   // Handle action menu open
   const openActionMenu = (item: CipherView) => {
@@ -290,8 +292,8 @@ export const CipherList = observer((props: CipherListProps) => {
 
       {/* Cipher list */}
       <FlatList
-        style={{ 
-          paddingHorizontal: 20, 
+        style={{
+          paddingHorizontal: 20,
         }}
         data={ciphers}
         keyExtractor={item => item.id.toString()}

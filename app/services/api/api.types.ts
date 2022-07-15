@@ -222,6 +222,11 @@ export type UpdateNotiSettingsResult = {
     kind: "ok",
 } | GeneralApiProblem
 
+export type FetchInappNotiResult = {
+    kind: "ok",
+    data: AppNotification
+} | GeneralApiProblem
+
 export type BillingResult = {
     kind: "ok",
     data: {
@@ -591,3 +596,21 @@ export type FetchOfferDetailsResult = {
     }
 
 } | GeneralApiProblem
+
+
+export type AppNotification = {
+    count: number
+    unread_count: number
+    results: {
+        description: any
+        id: string
+        metadata: any
+        publish_time: number
+        read: boolean
+        title: {
+            en: string
+            vi: string
+        }
+        type: NotificationCategory
+    }[]
+}

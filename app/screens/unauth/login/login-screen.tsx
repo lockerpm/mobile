@@ -42,16 +42,10 @@ export const LoginScreen = observer(() => {
     ])
     setIsScreenLoading(false)
     if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
-      if (newUser) {
-        setResetPWToken(token)
-        setAccount(userRes.user)
-        setShowSocialSignedUpModal(true)
+      if (user.is_pwd_manager) {
+        navigation.navigate('lock')
       } else {
-        if (user.is_pwd_manager) {
-          navigation.navigate('lock')
-        } else {
-          navigation.navigate('createMasterPassword')
-        }
+        navigation.navigate('createMasterPassword')
       }
     }
   }
@@ -86,7 +80,7 @@ export const LoginScreen = observer(() => {
 
   // ------------------------------ RENDER -------------------------------
 
-  return showSocialSignedUpModal ? <SocialSignedUpModal userRes={account} token={token} /> : (
+  return (
     <Layout
       isOverlayLoading={isScreenLoading}
       footer={(

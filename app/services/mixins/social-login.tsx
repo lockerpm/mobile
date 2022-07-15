@@ -184,8 +184,6 @@ export const SocialLoginMixinsProvider = observer((props: {
       utm_source: await getCookies('utm_source')
     })
 
-    console.log(loginRes);
-    
     setIsLoading && setIsLoading(false)
     if (loginRes.kind !== 'ok') {
         notifyApiError(loginRes)

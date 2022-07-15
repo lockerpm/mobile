@@ -12,6 +12,8 @@ import { GeneralApiProblem } from "../../../../services/api/api-problem"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 import { AddUserShareFolderModal } from "./folder-shared-users-management/share-user-modal"
 import { useNavigation } from "@react-navigation/native"
+import { useStores } from "../../../../models"
+import { AccountRole, AccountRoleText } from "../../../../config/types"
 
 
 type Props = {
@@ -23,12 +25,28 @@ type Props = {
 
 
 export const FolderAction = (props: Props) => {
-  const navigation = useNavigation()
   const { isOpen, onClose, folder, onLoadingChange } = props
-  const { translate } = useMixins()
+  if (!folder) return null
+
+  const navigation = useNavigation()
+  const { cipherStore, user } = useStores()
+
+  const { translate, getTeam } = useMixins()
   const { deleteCollection, deleteFolder } = useCipherDataMixins()
 
-  const isCollection = folder["organizationId"] ? true : false
+  const organizationId = folder && folder["organizationId"]
+  const isCollection = organizationId ? true : false
+
+  // Computed
+  const organizations = cipherStore.organizations
+  const teamRole = getTeam(user.teams, organizationId).role
+  const shareRole = getTeam(organizations, organizationId).type
+  const isOwner = shareRole === AccountRole.OWNER
+  const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
+  const editable = !organizationId
+    || (teamRole && teamRole !== AccountRoleText.MEMBER)
+    || (shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER)
+
 
   // ---------------- PARAMS -----------------
 
@@ -118,7 +136,7 @@ export const FolderAction = (props: Props) => {
             }}>
               <Text
                 preset="semibold"
-                text={folder.name}
+                text={folder?.name}
                 numberOfLines={2}
               />
             </View>
@@ -128,7 +146,7 @@ export const FolderAction = (props: Props) => {
 
         <Divider style={{ marginTop: 10 }} />
 
-        <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
+        {editable && < ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
           <ActionItem
             name={translate('common.rename')}
             icon="edit"
@@ -140,15 +158,16 @@ export const FolderAction = (props: Props) => {
 
           {
             isCollection ?
-              <ActionItem
+              isOwner && <ActionItem
                 name={translate("shares.share_folder.manage_user")}
                 icon="users"
                 action={() => {
-                  navigation.navigate("shareFolder", { collectionId: folder.id })
+                  navigation.navigate("shareFolder", { collectionId: folder?.id })
                   onClose()
                 }}
               /> :
               <ActionItem
+                isPremium
                 name={translate('common.share')}
                 icon="share-square-o"
                 action={() => {
@@ -158,17 +177,20 @@ export const FolderAction = (props: Props) => {
               />
           }
 
-          <ActionItem
-            name={translate('folder.delete_folder')}
-            icon="trash"
-            textColor={color.error}
-            action={() => {
-              setNextModal('deleteConfirm')
-              onClose()
-            }}
-          />
+          {
+            isOwner && < ActionItem
+              name={translate('folder.delete_folder')}
+              icon="trash"
+              textColor={color.error}
+              action={() => {
+                setNextModal('deleteConfirm')
+                onClose()
+              }}
+            />
+          }
         </ActionSheetContent>
+        }
       </ActionSheet>
-    </View>
+    </View >
   )
 }
