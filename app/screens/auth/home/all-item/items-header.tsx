@@ -86,7 +86,7 @@ export const ItemsHeader = observer((props: Props) => {
   // Check online/offline interval
   useEffect(() => {
     fetchInAppNotification()
-    const interval = setInterval(fetchInAppNotification, 1000 * 2)
+    const interval = setInterval(fetchInAppNotification, 1000 * 30)
     return () => {
       clearInterval(interval)
     }

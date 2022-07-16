@@ -14,6 +14,7 @@ import { AddUserShareFolderModal } from "./folder-shared-users-management/share-
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
 import { AccountRole, AccountRoleText } from "../../../../config/types"
+import { useFolderMixins } from "../../../../services/mixins/folder"
 
 
 type Props = {
@@ -33,6 +34,7 @@ export const FolderAction = (props: Props) => {
 
   const { translate, getTeam } = useMixins()
   const { deleteCollection, deleteFolder } = useCipherDataMixins()
+  const { stopShareFolder } = useFolderMixins()
 
   const organizationId = folder && folder["organizationId"]
   const isCollection = organizationId ? true : false
@@ -52,7 +54,7 @@ export const FolderAction = (props: Props) => {
 
   const [isRenameOpen, setIsRenameOpen] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [nextModal, setNextModal] = useState<'rename' | 'deleteConfirm' | null>(null)
+  const [nextModal, setNextModal] = useState<'rename' | 'deleteConfirm' | 'share' | null>(null)
   const [showShareModal, setShowShareModal] = useState(false)
 
 
@@ -82,10 +84,13 @@ export const FolderAction = (props: Props) => {
       case 'deleteConfirm':
         setShowConfirmModal(true)
         break
+      case 'share':
+        setShowShareModal(true)
+        break
     }
     setNextModal(null)
   }
-
+  console.log(showShareModal)
   // ---------------- RENDER -----------------
 
   return (
@@ -171,10 +176,23 @@ export const FolderAction = (props: Props) => {
                 name={translate('common.share')}
                 icon="share-square-o"
                 action={() => {
-                  setShowShareModal(true)
+                  setNextModal('share')
                   onClose()
                 }}
               />
+          }
+          {
+            isOwner && isCollection && < ActionItem
+              name={translate('shares.stop_sharing')}
+              icon="stop-circle"
+              textColor={color.textBlack}
+              action={() => {
+
+                // @ts-ignore
+                stopShareFolder(folder)
+                onClose()
+              }}
+            />
           }
 
           {
