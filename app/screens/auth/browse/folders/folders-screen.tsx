@@ -23,7 +23,7 @@ import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
-  const { getTeam, randomString, translate, color } = useMixins()
+  const { getTeam, translate, color } = useMixins()
   const { folderStore, collectionStore, user, uiStore } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
@@ -72,21 +72,27 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   const loadSections = () => {
     const filteredCollection = groupBy(collections, 'organizationId')
+    const sharedFolders = []
+    Object.keys(filteredCollection).map((id) => {
+      const temp = getFilteredData(
+        filteredCollection[id],
+        true,
+        TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role) && !uiStore.isOffline
+      )
+      sharedFolders.push(...temp)
+    })
+
     const data = [
       {
-        id: randomString(),
+        id: "folder",
         title: translate('common.me'),
         data: getFilteredData(folders, false, true),
       },
-      ...Object.keys(filteredCollection).map((id) => ({
-        id: randomString(),
+      {
+        id: "collection",
         title: translate('shares.shared_folder'),
-        data: getFilteredData(
-          filteredCollection[id],
-          true,
-          TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role) && !uiStore.isOffline
-        )
-      }))
+        data: sharedFolders
+      },
     ]
     setSections(data)
   }
@@ -95,6 +101,11 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   useEffect(() => {
     loadSections()
+  }, [folderStore.lastUpdate, collectionStore.lastUpdate])
+
+
+  useEffect(() => {
+    // ??? 
   }, [folderStore.lastUpdate, collectionStore.lastUpdate])
 
   // ------------------- RENDER ---------------------
@@ -166,7 +177,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
           <SectionList
             sections={sections}
             keyExtractor={item => item.id}
-            renderSectionHeader={({ section }) => (
+            renderSectionHeader={({ section }) => section.data.length > 0 && (
               <Text
                 text={`${section.title} (${section.data.length})`}
                 style={{
@@ -178,7 +189,9 @@ export const FoldersScreen = observer(function FoldersScreen() {
               />
             )}
             renderItem={({ item }) => (
-              <View style={{ paddingHorizontal: 20 }}>
+              <View
+                style={{ paddingHorizontal: 20 }}
+              >
                 <Button
                   preset="link"
                   onPress={() => {

@@ -122,7 +122,8 @@ export const CipherShareList = observer((props: Props) => {
         let shareType = ''
         switch (m.role) {
           case AccountRoleText.MEMBER:
-            shareType = !m.hide_passwords ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
+            // shareType = !m.hide_passwords ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
+            shareType = translate('shares.share_type.view')
             break
           case AccountRoleText.ADMIN:
             shareType = translate('shares.share_type.edit')

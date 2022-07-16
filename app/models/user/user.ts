@@ -269,7 +269,7 @@ export const UserModel = types
       return res
     },
 
-    resetPassword: async (username: string, method: string, request_code: string) => {
+    resetPassword: async (username: string, method: string, request_code?: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.resetPassword({ username, method, request_code })
       return res

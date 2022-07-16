@@ -19,6 +19,7 @@ const defaultData = {
     shareFolderAddMember: async (collection: CollectionView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
     shareFolderRemoveMember: async (collection: CollectionView, memberID: string) => { return { kind: 'unknown' } },
     shareFolderAddItem: async (collection: CollectionView, cipher: CipherView) => { return { kind: 'unknown' } },
+    shareFolderAddMultipleItems: async (collection: CollectionView, cipherIds: string[]) => { return { kind: 'unknown' } },
     shareFolderRemoveItem: async (collection: CollectionView, cipher: CipherView) => { return { kind: 'unknown' } },
     stopShareFolder: async (collection: CollectionView) => { return { kind: 'unknown' } },
 }
@@ -118,8 +119,8 @@ export const FolderMixinsProvider = observer((props: { children: boolean | React
             })
 
             if (res.kind === 'ok') {
+                notify('success', translate('shares.share_folder.success.shared'))
                 await reloadCache()
-                notify('success',  translate('shares.share_folder.success.shared'))
             } else {
                 notifyApiError(res)
             }
@@ -233,6 +234,33 @@ export const FolderMixinsProvider = observer((props: { children: boolean | React
         }
     }
 
+    const shareFolderAddMultipleItems = async (collection: CollectionView, cipherIds: string[]) => {
+        if (!collection) return { kind: 'unknown' }
+
+        try {
+            const ciphers: CipherView[] = await getCiphers({
+                deleted: false,
+                searchText: '',
+                filters: [(c: CipherView) => cipherIds.includes(c.id)]
+            }) || []
+
+            if (ciphers.some(c => c.organizationId)) {
+                notify('error', translate('error.share_folder_move_item'))
+                return { kind: 'unknown' }
+            }
+
+            await Promise.all(ciphers.map(async (cipher) => {
+                await shareFolderAddItem(collection, cipher)
+            }))
+
+            return { kind: 'ok' }
+        } catch (e) {
+            notify('error', translate('error.something_went_wrong'))
+            Logger.error('shareCipher: ' + e)
+            return { kind: 'unknown' }
+        }
+    }
+
     const shareFolderRemoveItem = async (collection: CollectionView, cipher: CipherView) => {
         try {
             const personalKey = await cryptoService.getEncKey()
@@ -326,6 +354,7 @@ export const FolderMixinsProvider = observer((props: { children: boolean | React
         shareFolderAddMember,
         shareFolderRemoveMember,
         shareFolderAddItem,
+        shareFolderAddMultipleItems,
         shareFolderRemoveItem,
         stopShareFolder
     }

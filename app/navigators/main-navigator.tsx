@@ -17,7 +17,7 @@ import {
   DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
   CryptoWalletEditScreen, CryptoWalletInfoScreen, WelcomePremiumScreen,
   AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen,
-  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen, 
+  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen,
   ReferFriendScreen, FolderSharedUsersManagementScreen,
   PushEmailSettingsScreen, PushNotificationSettingsScreen,
   InAppListNotification, InAppNotificationScreen
@@ -173,7 +173,8 @@ export const MainNavigator = observer(() => {
       return
     }
     if (lastUpdateRes.kind === 'ok') {
-      bumpTimestamp = lastUpdateRes.data.revision_date * 1000
+      bumpTimestamp = (lastUpdateRes.data.revision_date - new Date().getTimezoneOffset() * 60) * 1000
+      console.log(bumpTimestamp, cipherStore.lastSync)
       if (bumpTimestamp <= cipherStore.lastSync) {
         return
       }
@@ -353,14 +354,14 @@ export const MainNavigator = observer(() => {
   }
 
   // ------------------ EFFECT --------------------
- // Intercom support 
- useEffect(() => {
-  if (user.isLoggedInPw) {
-    Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id }).catch((e) => {
-      Logger.error(e)
-    })
-  } 
-}, [user.isLoggedInPw])
+  // Intercom support 
+  useEffect(() => {
+    if (user.isLoggedInPw) {
+      Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id }).catch((e) => {
+        Logger.error(e)
+      })
+    }
+  }, [user.isLoggedInPw])
 
 
   // check app revire 

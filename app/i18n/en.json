@@ -178,7 +178,8 @@
     "server_error": "Server error",
     "cannot_connect": "Cannot connect to the server. Please check your internet connection",
     "network_error": "Network error. Your connection is not secure",
-    "share_folder": "Can not share this folder"
+    "share_folder": "Can not share this folder",
+    "share_folder_move_item": "This item is being shared. Stop sharing and try again"
   },
   "success": {
     "done": "Done",
@@ -394,7 +395,7 @@
     "encrypted_content": "Encrypted Content",
     "share_folder": {
       "error_share_item": "Folders with shared items can’t be shared. Remove or stop shared items and try again",
-      "manage_user": "Manage share",
+      "manage_user": "Manage Share",
       "share_with": "This folder has been shared with",
       "select_member": "Shared this folder with",
       "add_email": "Add email to share",

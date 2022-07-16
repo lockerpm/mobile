@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react"
-import { View, TouchableOpacity, TextInput, Image } from "react-native"
+import { View, TouchableOpacity, TextInput, Image, Modal } from "react-native"
 import { Button, Text } from "../../../../../components"
 import { useStores } from "../../../../../models"
-import { observer } from "mobx-react-lite"
 import { commonStyles } from "../../../../../theme"
-import { Modal } from "react-native-ui-lib"
 import { useMixins } from "../../../../../services/mixins"
 import Entypo from 'react-native-vector-icons/Entypo'
 import { AppEventType, EventBus } from "../../../../../utils/event-bus"
@@ -22,7 +20,7 @@ interface InviteProps {
     isLoading?: boolean
 }
 
-export const AddUserShareFolderModal = observer(function ShareUserModal(props: InviteProps) {
+export const AddUserShareFolderModal = (props: InviteProps) => {
     const { isOpen, onClose, sharedUsers, folder } = props
     const { user } = useStores()
     const { translate, color, notify } = useMixins()
@@ -111,7 +109,7 @@ export const AddUserShareFolderModal = observer(function ShareUserModal(props: I
                             addFolderMember(emails);
                         }}>
                         <Text
-                            text="Add"
+                            text={translate('common.done')}
                             style={{
                                 color: (emails?.length > 0) ? color.primary : color.block
                             }} />
@@ -150,6 +148,9 @@ export const AddUserShareFolderModal = observer(function ShareUserModal(props: I
                             clearTextOnFocus={true}
                             onSubmitEditing={() => {
                                 addEmailToShare(email)
+                            }}
+                            style={{
+                                color: color.textBlack
                             }}
                         >
                         </TextInput>
@@ -230,5 +231,5 @@ export const AddUserShareFolderModal = observer(function ShareUserModal(props: I
             </View>
         </Modal >
     )
-})
+}
 

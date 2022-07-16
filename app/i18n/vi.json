@@ -175,7 +175,8 @@
     "server_error": "Máy chủ đã xảy ra lỗi",
     "cannot_connect": "Không thể kết nối với máy chủ, vui lòng kiểm tra kết nối mạng",
     "network_error": "Lỗi mạng. Kết nối của bạn không an toàn",
-    "share_folder": "Không thể chia sẻ thư mục này"
+    "share_folder": "Không thể chia sẻ thư mục này",
+    "share_folder_move_item": "Mục này đang được chia sẻ. Ngừng chia sẻ và thử lại sau"
   },
   "success": {
     "done": "Hoàn tất",

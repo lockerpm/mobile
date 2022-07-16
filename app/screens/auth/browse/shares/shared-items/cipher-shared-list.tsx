@@ -84,11 +84,12 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
     let shareType = ''
     if (i.role === AccountRoleText.MEMBER) {
-      if (i.hide_passwords) {
-        shareType = translate('shares.share_type.only_fill')
-      } else {
-        shareType = translate('shares.share_type.view')
-      }
+      // if (i.hide_passwords) {
+      //   shareType = translate('shares.share_type.only_fill')
+      // } else {
+      //   shareType = translate('shares.share_type.view')
+      // }
+      shareType = translate('shares.share_type.view')
     }
     if (i.role === AccountRoleText.ADMIN) {
       shareType = translate('shares.share_type.edit')

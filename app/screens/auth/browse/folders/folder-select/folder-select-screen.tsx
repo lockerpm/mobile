@@ -13,6 +13,8 @@ import { FOLDER_IMG } from "../../../../../common/mappings"
 import { useStores } from "../../../../../models"
 import { useMixins } from "../../../../../services/mixins"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { AccountRole } from "../../../../../config/types"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
 
 
 type FolderSelectScreenProp = RouteProp<PrimaryParamList, 'folders__select'>;
@@ -22,17 +24,26 @@ export const FolderSelectScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<FolderSelectScreenProp>()
   const { mode, initialId, cipherIds = [] } = route.params
-  const { folderStore, cipherStore } = useStores()
-  const { notify, translate, notifyApiError, color } = useMixins()
-
+  const { folderStore, cipherStore, collectionStore } = useStores()
+  const { notify, translate, notifyApiError, color, getTeam } = useMixins()
+  const { shareFolderAddMultipleItems } = useFolderMixins()
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFolder, setSelectedFolder] = useState(initialId)
   const isSelectedCollection = useRef(false)
 
-  // Methods
+  const organizations = cipherStore.organizations
 
+
+  // Methods
   const handleMove = async () => {
+    if (isSelectedCollection.current) {
+      await handleMoveToCollection()
+    } else {
+      await handleMoveFolder()
+    }
+  }
+  const handleMoveFolder = async () => {
     if (mode === 'move') {
       setIsLoading(true)
       const res = await cipherStore.moveToFolder({
@@ -51,22 +62,20 @@ export const FolderSelectScreen = observer(() => {
     navigation.goBack()
   }
 
-  // const handleMoveToCollection = async () => {
-    // if (mode === 'move') {
-    //   setIsLoading(true)
-    //   const res = await updateShareItem({
-    //     ids: cipherIds,
-    //     folderId: selectedFolder
-    //   })
-    //   if (res.kind === 'ok') {
-    //     notify('success', translate('folder.item_moved'))
-    //   } else {
-    //     notifyApiError(res)
-    //   }
-    //   setIsLoading(false)
-    // }
-    // navigation.goBack()
-  // }
+  const handleMoveToCollection = async () => {
+    if (mode === 'move') {
+      setIsLoading(true)
+      const res = await shareFolderAddMultipleItems(
+        collectionStore.collections.find(c => c.id === selectedFolder),
+        cipherIds
+      )
+      if (res.kind === 'ok') {
+        notify('success', translate('folder.item_moved'))
+      } 
+      setIsLoading(false)
+    }
+    navigation.goBack()
+  }
 
   const renderItem = (item, index, isCollection: boolean) => (
     <Button
@@ -81,7 +90,10 @@ export const FolderSelectScreen = observer(() => {
       }]}
     >
       <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-        <FOLDER_IMG.normal.svg height={30} />
+        {
+          !isCollection ? <FOLDER_IMG.normal.svg height={30} />
+            : <FOLDER_IMG.share.svg height={30} />
+        }
 
         <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
           flex: 1,
@@ -217,14 +229,19 @@ export const FolderSelectScreen = observer(() => {
       }
       {/* Other folders end */}
 
-      {/* <View style={{
+      <View style={{
         backgroundColor: color.background,
         marginVertical: 16
       }}>
         {
-          collectionStore.collections?.map((item, index) => renderItem(item, index, true))
+          collectionStore.collections?.filter(item => {
+            const shareRole = getTeam(organizations, item.organizationId).type
+            return shareRole === AccountRole.OWNER
+          }).map((item, index) =>
+            renderItem(item, index, true)
+          )
         }
-      </View> */}
+      </View>
     </Layout>
   )
 })

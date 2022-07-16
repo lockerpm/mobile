@@ -116,7 +116,7 @@ export const FamilyPayment = (props: Props) => {
                 >
                     <Text
                         preset="bold"
-                        style={{ color: color.white }}
+                        style={{ color: color.primary }}
                     >
                         {props.isProcessPayment ? "" : translate('payment.family.year')}
                     </Text>
