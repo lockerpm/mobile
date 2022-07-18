@@ -11,7 +11,7 @@ import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 interface Props {
   isOpen?: boolean
   onClose?: () => void
-  cipherId: string
+  cipherId?: string
   organizationId: string
 }
 
@@ -24,7 +24,7 @@ export const LeaveShareModal = (props: Props) => {
 
   const handleLeave = async () => {
     setIsLoading(true)
-    const res = await leaveShare(cipherId, organizationId)
+    const res = await leaveShare(organizationId, cipherId)
     if (res.kind === 'ok') {
       setIsLoading(false)
       onClose()

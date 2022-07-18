@@ -7,7 +7,6 @@ import { SharedMemberType } from "../../../../../services/api"
 import { AccountRoleText, SharingStatus } from "../../../../../config/types"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
-import { useFolderMixins } from "../../../../../services/mixins/folder"
 import { fontSize } from "../../../../../theme"
 
 
@@ -17,45 +16,17 @@ interface Props {
     setReload: (val: boolean) => void
     user: SharedMemberType
     collection: CollectionView
+    onRemove: (collection: CollectionView, id: string) => void
 }
 
 export const SharedUsers = (props: Props) => {
-    const { user, collection, reload, setReload } = props
+    const { user, collection, reload, setReload, onRemove } = props
     const { id, email, avatar, full_name, role, status } = user
     const { color, translate } = useMixins()
     const { editShareCipher } = useCipherDataMixins()
-    const { shareFolderRemoveMember } = useFolderMixins()
+
 
     const isEditable = role === "admin"
-
-    const comfirmRemoveSharedUser = async () => {
-        Alert.alert(
-            "Unshared for this member", "",
-            [
-                {
-                    text: translate("common.yes"),
-                    onPress: onRemove,
-                    style: "destructive"
-                },
-                {
-                    text: translate("common.cancel"),
-                    onPress: () => { },
-                    style: "cancel"
-                }
-            ],
-            {
-                cancelable: true
-            }
-        )
-    }
-
-    const onRemove = async () => {
-        let res = await shareFolderRemoveMember(collection, id)
-        if (res.kind === 'ok' || res.kind === 'unauthorized') {
-            setShowSheetModal(false)
-            setReload(!reload)
-        }
-    }
 
     const onEditRole = async (shareType: 'only_fill' | 'edit') => {
         let role = AccountRoleText.MEMBER
@@ -196,7 +167,8 @@ export const SharedUsers = (props: Props) => {
 
                     <ActionItem
                         action={() => {
-                            comfirmRemoveSharedUser()
+                            onRemove(collection, id)
+                            setShowSheetModal(false)
                         }}
                     >
                         <View style={{ flexDirection: "row" }}>

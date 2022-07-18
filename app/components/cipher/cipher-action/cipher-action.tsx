@@ -272,7 +272,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
           }
 
           {
-            isShared && (
+            isShared && !isInFolderShare && (
               <ActionItem
                 disabled={uiStore.isOffline}
                 name={translate('shares.leave')}
@@ -285,20 +285,6 @@ export const CipherAction = observer((props: CipherActionProps) => {
               />
             )
           }
-          {/* {
-            isInFolderShare && (
-              <ActionItem
-                disabled={uiStore.isOffline}
-                name={translate('shares.leave')}
-                icon="sign-out"
-                textColor={color.error}
-                action={() => {
-                  setNextModal('leaveConfirm')
-                  onClose()
-                }}
-              />
-            )
-          } */}
         </ActionSheetContent>
       </ActionSheet>
       {/* Actionsheet end */}

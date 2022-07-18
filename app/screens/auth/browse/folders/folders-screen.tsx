@@ -24,7 +24,7 @@ import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
   const { getTeam, translate, color } = useMixins()
-  const { folderStore, collectionStore, user, uiStore } = useStores()
+  const { folderStore, collectionStore, user, uiStore, cipherStore } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
 
@@ -101,12 +101,12 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   useEffect(() => {
     loadSections()
-  }, [folderStore.lastUpdate, collectionStore.lastUpdate])
+  }, [folderStore.lastUpdate, collectionStore.lastUpdate, cipherStore.lastSync])
 
 
   useEffect(() => {
-    // ??? 
-  }, [folderStore.lastUpdate, collectionStore.lastUpdate])
+    // ??
+  }, [folderStore.lastUpdate, collectionStore.lastUpdate,])
 
   // ------------------- RENDER ---------------------
 

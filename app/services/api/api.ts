@@ -50,4 +50,3 @@ export class Api {
     })
   }
 }
-console.log()

@@ -401,6 +401,7 @@
       "viewer_per": "Chỉ được quyền xem thông tin",
       "editor_per": "Có quyền thanh đổi, sửa dữ liệu",
       "remove": "Xoá khỏi thư mục",
+      "no_shared_users": "Thư mục này chưa được chia sẻ với bất kì người dùng nào",
       "success": {
         "shared": "Chia sẻ thư mục thành công",
         "add_member": "Thêm thành viên thành công",
