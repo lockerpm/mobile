@@ -42,7 +42,7 @@ export const PushEmailSettingsScreen = observer(function PushEmailSettingsScreen
   }, [])
 
   useEffect(() => {
-    user.notificationSettings.forEach(e => {
+    user.notificationSettings?.forEach(e => {
       switch (e.category.id) {
         case NotificationCategory.ITEM_SHARE:
           settings[NotificationCategory.ITEM_SHARE] = { noti: e.notification, mail: e.mail }
