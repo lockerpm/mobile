@@ -11,6 +11,7 @@ import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { commonStyles } from "../../../../../theme"
 import { SharedMemberType } from "../../../../../services/api"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
 
 
 type ShareFolderScreenProp = RouteProp<PrimaryParamList, 'shareFolder'>;
@@ -21,6 +22,7 @@ export const FolderSharedUsersManagementScreen = observer(function FolderSharedU
     const { cipherStore, collectionStore } = useStores()
     const route = useRoute<ShareFolderScreenProp>()
     const { translate, notifyApiError } = useMixins()
+    const { shareFolderRemoveMember } = useFolderMixins()
     const collection: CollectionView = collectionStore.collections.find(c => c.id === route.params.collectionId)
     // ----------------------- PARAMS -----------------------
 
@@ -39,7 +41,20 @@ export const FolderSharedUsersManagementScreen = observer(function FolderSharedU
         const share = cipherStore.myShares.find(s => s.id === collection.organizationId)
         if (share && share.members.length > 0) {
             setSharedUsers(share.members)
+            return share.members.length 
+        } 
+        return 0
+    }
+
+    const onRemove = async (collection: CollectionView, id: string) => {
+        let res = await shareFolderRemoveMember(collection, id)
+        if (res.kind === 'ok' || res.kind === 'unauthorized') {
+            const sharedUserCount = await getSharedUsers()
+            if (sharedUserCount === 0) {
+                navigation.goBack()
+            }
         }
+        
     }
 
     // ----------------------- EFFECT -----------------------
@@ -91,12 +106,18 @@ export const FolderSharedUsersManagementScreen = observer(function FolderSharedU
                 scrollEnabled={true}
                 data={sharedUsers}
                 keyExtractor={(_, index) => String(index)}
+                ListEmptyComponent={() => (
+                    <View>
+                        <Text text={translate('shares.share_folder.no_shared_users')}/>
+                    </View>
+                )}
                 renderItem={({ item }) => (
                     <SharedUsers
                         reload={reload}
                         setReload={setReload}
                         user={item}
                         collection={collection}
+                        onRemove={onRemove}
                     />
                 )}
             />

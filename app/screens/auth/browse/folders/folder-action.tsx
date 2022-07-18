@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
 import { AccountRole, AccountRoleText } from "../../../../config/types"
 import { useFolderMixins } from "../../../../services/mixins/folder"
+import { LeaveShareModal } from "../../../../components/cipher/cipher-action/leave-share-modal"
 
 
 type Props = {
@@ -30,7 +31,7 @@ export const FolderAction = (props: Props) => {
   if (!folder) return null
 
   const navigation = useNavigation()
-  const { cipherStore, user } = useStores()
+  const { cipherStore, user, uiStore } = useStores()
 
   const { translate, getTeam } = useMixins()
   const { deleteCollection, deleteFolder } = useCipherDataMixins()
@@ -54,7 +55,8 @@ export const FolderAction = (props: Props) => {
 
   const [isRenameOpen, setIsRenameOpen] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [nextModal, setNextModal] = useState<'rename' | 'deleteConfirm' | 'share' | null>(null)
+  const [showConfirmLeaveModal, setShowConfirmLeaveModal] = useState(false)
+  const [nextModal, setNextModal] = useState<'rename' | 'deleteConfirm' | 'share' | 'leaveConfirm' | null>(null)
   const [showShareModal, setShowShareModal] = useState(false)
 
 
@@ -87,10 +89,12 @@ export const FolderAction = (props: Props) => {
       case 'share':
         setShowShareModal(true)
         break
+      case 'leaveConfirm':
+        setShowConfirmLeaveModal(true)
+        break
     }
     setNextModal(null)
   }
-  console.log(showShareModal)
   // ---------------- RENDER -----------------
 
   return (
@@ -102,7 +106,15 @@ export const FolderAction = (props: Props) => {
         folder={folder}
       />
 
-
+      {
+        isShared && (
+          <LeaveShareModal
+            isOpen={showConfirmLeaveModal}
+            onClose={() => setShowConfirmLeaveModal(false)}
+            organizationId={organizationId}
+          />
+        )
+      }
 
       <RenameFolderModal
         isOpen={isRenameOpen}
@@ -196,6 +208,19 @@ export const FolderAction = (props: Props) => {
           }
 
           {
+            isShared && <ActionItem
+              disabled={uiStore.isOffline}
+              name={translate('shares.leave')}
+              icon="sign-out"
+              textColor={color.error}
+              action={() => {
+                setNextModal('leaveConfirm')
+                onClose()
+              }}
+            />
+          }
+
+          {
             isOwner && < ActionItem
               name={translate('folder.delete_folder')}
               icon="trash"
@@ -207,6 +232,21 @@ export const FolderAction = (props: Props) => {
             />
           }
         </ActionSheetContent>
+        }
+
+        {
+          !editable && isShared && < ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
+            <ActionItem
+              disabled={uiStore.isOffline}
+              name={translate('shares.leave')}
+              icon="sign-out"
+              textColor={color.error}
+              action={() => {
+                setNextModal('leaveConfirm')
+                onClose()
+              }}
+            />
+          </ActionSheetContent>
         }
       </ActionSheet>
     </View >

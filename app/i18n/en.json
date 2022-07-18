@@ -404,6 +404,7 @@
       "viewer_per": "Only can View",
       "editor_per": "Organize, add, and edit",
       "remove": "Remove from folder",
+      "no_shared_users": "Hasn't been shared with any users yet",
       "success": {
         "shared": "Share success",
         "add_member": "Add member success",

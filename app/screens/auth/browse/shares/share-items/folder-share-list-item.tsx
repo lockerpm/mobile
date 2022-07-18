@@ -21,9 +21,7 @@ export const CollectionListItem = (props: Prop) => {
     const { item, openActionMenu, navigation } = props
     const { color, getTeam } = useMixins()
     const { cipherStore } = useStores()
-    const organizations = cipherStore.organizations
-    const viewOnly = getTeam(organizations, item.organizationId).type === AccountRole.MEMBER
-
+    
     return (
         <Button
             preset="link"
@@ -52,18 +50,16 @@ export const CollectionListItem = (props: Prop) => {
                                 text={item.name}
                                 numberOfLines={1}
                             />
-                            {
-                                !viewOnly && <Button
-                                    preset="link"
-                                    onPress={() => openActionMenu(item)}
-                                >
-                                    <IoniconsIcon
-                                        name="ellipsis-horizontal"
-                                        size={18}
-                                        color={color.textBlack}
-                                    />
-                                </Button>
-                            }
+                            <Button
+                                preset="link"
+                                onPress={() => openActionMenu(item)}
+                            >
+                                <IoniconsIcon
+                                    name="ellipsis-horizontal"
+                                    size={18}
+                                    color={color.textBlack}
+                                />
+                            </Button>
                         </View>
 
                     </View>

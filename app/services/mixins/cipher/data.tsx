@@ -65,7 +65,7 @@ const defaultData = {
   confirmShareCipher: async (organizationId: string, memberId: string, publicKey: string) => { return { kind: 'unknown' } },
   stopShareCipher: async (cipher: CipherView, memberId: string) => { return { kind: 'unknown' } },
   editShareCipher: async (organizationId: string, memberId: string, role: AccountRoleText, onlyFill: boolean) => { return { kind: 'unknown' } },
-  leaveShare: async (id: string, organizationId: string) => { return { kind: 'unknown' } },
+  leaveShare: async (organizationId: string, id?: string ) => { return { kind: 'unknown' } },
   acceptShareInvitation: async (id: string) => { return { kind: 'unknown' } },
   rejectShareInvitation: async (id: string) => { return { kind: 'unknown' } },
 
@@ -1549,13 +1549,15 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Leave share
-  const leaveShare = async (id: string, organizationId: string) => {
+  const leaveShare = async (organizationId: string, id?: string,) => {
     const apiRes = await cipherStore.leaveShare(organizationId)
     if (apiRes.kind !== 'ok') {
       notifyApiError(apiRes)
       return apiRes
     }
-    await cipherService.delete(id)
+    if (id) {
+      await cipherService.delete(id)
+    }
     await minimalReloadCache({})
     cipherStore.setOrganizations(cipherStore.organizations.filter(o => o.id !== organizationId))
     return apiRes
