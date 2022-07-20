@@ -47,7 +47,8 @@ export const CipherSharedListItem = memo((props: Prop) => {
     if (org) {
       switch (org.type) {
         case AccountRole.MEMBER:
-          shareType = item.viewPassword ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
+          // shareType = item.viewPassword ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
+          shareType = translate('shares.share_type.view')
           break
         case AccountRole.ADMIN:
           shareType = translate('shares.share_type.edit')

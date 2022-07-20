@@ -23,10 +23,11 @@ import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation()
-  const { getTeam, randomString, translate, color } = useMixins()
-  const { folderStore, collectionStore, user, uiStore } = useStores()
+  const { getTeam, translate, color } = useMixins()
+  const { folderStore, collectionStore, user, uiStore, cipherStore } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
+
   type SectionType = {
     id: string
     title: string
@@ -44,7 +45,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
     order: 'desc'
   })
   const [sortOption, setSortOption] = useState('last_updated')
-  const [selectedFolder, setSelectedFolder] = useState(new FolderView())
+  const [selectedFolder, setSelectedFolder] = useState<FolderView | CollectionView>(new FolderView())
   const [isLoading, setIsLoading] = useState(false)
   const [sections, setSections] = useState<SectionType>([])
 
@@ -71,21 +72,27 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   const loadSections = () => {
     const filteredCollection = groupBy(collections, 'organizationId')
+    const sharedFolders = []
+    Object.keys(filteredCollection).map((id) => {
+      const temp = getFilteredData(
+        filteredCollection[id],
+        true,
+        TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role) && !uiStore.isOffline
+      )
+      sharedFolders.push(...temp)
+    })
+
     const data = [
       {
-        id: randomString(),
+        id: "folder",
         title: translate('common.me'),
         data: getFilteredData(folders, false, true),
       },
-      ...Object.keys(filteredCollection).map((id) => ({
-        id: randomString(),
-        title: getTeam(user.teams, id).name,
-        data: getFilteredData(
-          filteredCollection[id], 
-          true, 
-          TEAM_COLLECTION_EDITOR.includes(getTeam(user.teams, id).role) && !uiStore.isOffline
-        )
-      }))
+      {
+        id: "collection",
+        title: translate('shares.shared_folder'),
+        data: sharedFolders
+      },
     ]
     setSections(data)
   }
@@ -94,7 +101,12 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   useEffect(() => {
     loadSections()
-  }, [folderStore.lastUpdate, collectionStore.lastUpdate])
+  }, [folderStore.lastUpdate, collectionStore.lastUpdate, cipherStore.lastSync])
+
+
+  useEffect(() => {
+    // ??
+  }, [folderStore.lastUpdate, collectionStore.lastUpdate,])
 
   // ------------------- RENDER ---------------------
 
@@ -108,13 +120,13 @@ export const FoldersScreen = observer(function FoldersScreen() {
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}
           searchText={searchText}
-          onSearch={setSearchText} 
-          isSelecting={false} 
-          setIsSelecting={() => {}} 
-          selectedItems={[]} 
-          setSelectedItems={() => {}} 
-          toggleSelectAll={() => {}} 
-          setIsLoading={() => {}}        
+          onSearch={setSearchText}
+          isSelecting={false}
+          setIsSelecting={() => { }}
+          selectedItems={[]}
+          setSelectedItems={() => { }}
+          toggleSelectAll={() => { }}
+          setIsLoading={() => { }}
         />
       )}
       borderBottom
@@ -165,19 +177,21 @@ export const FoldersScreen = observer(function FoldersScreen() {
           <SectionList
             sections={sections}
             keyExtractor={item => item.id}
-            renderSectionHeader={({ section }) => (
+            renderSectionHeader={({ section }) => section.data.length > 0 && (
               <Text
                 text={`${section.title} (${section.data.length})`}
-                style={{ 
-                  fontSize: fontSize.small, 
-                  paddingHorizontal: 20, 
-                  paddingTop: 20, 
-                  backgroundColor: color.background 
+                style={{
+                  fontSize: fontSize.small,
+                  paddingHorizontal: 20,
+                  paddingTop: 20,
+                  backgroundColor: color.background
                 }}
               />
             )}
             renderItem={({ item }) => (
-              <View style={{ paddingHorizontal: 20 }}>
+              <View
+                style={{ paddingHorizontal: 20 }}
+              >
                 <Button
                   preset="link"
                   onPress={() => {
@@ -203,9 +217,9 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     }
 
                     <View style={{ flex: 1, marginLeft: 12 }}>
-                      <View style={{ 
-                        flexDirection: 'row', 
-                        alignItems: 'center', 
+                      <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         flexWrap: 'wrap'
                       }}>
                         <Text
@@ -238,17 +252,19 @@ export const FoldersScreen = observer(function FoldersScreen() {
                     </View>
 
                     {
-                      (!!item.id && item.editable) && (
+                      // TODO
+                      // (!!item.id && item.editable) && (
+                      !!item.id && (
                         <Button
                           preset="link"
                           onPress={() => {
                             setSelectedFolder(item)
                             setIsActionOpen(true)
                           }}
-                          style={{ 
+                          style={{
                             height: 35,
                             width: 40,
-                            justifyContent: 'flex-end', 
+                            justifyContent: 'flex-end',
                             alignItems: 'center'
                           }}
                         >

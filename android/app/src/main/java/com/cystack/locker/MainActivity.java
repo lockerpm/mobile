@@ -30,7 +30,9 @@ public class MainActivity extends ReactActivity {
     SplashScreen.show(this);  // here
     super.onCreate(savedInstanceState);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-    OkHttpClientProvider.setOkHttpClientFactory(new CertificatePinningClientFactory());
+    if (BuildConfig.IS_PROD.equals('1')) {
+      OkHttpClientProvider.setOkHttpClientFactory(new CertificatePinningClientFactory());
+    }
   }
 
   public static class AppActivityDelegate extends ReactActivityDelegate {

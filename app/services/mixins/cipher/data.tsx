@@ -65,7 +65,7 @@ const defaultData = {
   confirmShareCipher: async (organizationId: string, memberId: string, publicKey: string) => { return { kind: 'unknown' } },
   stopShareCipher: async (cipher: CipherView, memberId: string) => { return { kind: 'unknown' } },
   editShareCipher: async (organizationId: string, memberId: string, role: AccountRoleText, onlyFill: boolean) => { return { kind: 'unknown' } },
-  leaveShare: async (id: string, organizationId: string) => { return { kind: 'unknown' } },
+  leaveShare: async (organizationId: string, id?: string ) => { return { kind: 'unknown' } },
   acceptShareInvitation: async (id: string) => { return { kind: 'unknown' } },
   rejectShareInvitation: async (id: string) => { return { kind: 'unknown' } },
 
@@ -75,7 +75,7 @@ const defaultData = {
 
   createCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
   updateCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
-  deleteCollection: async (id: string, teamId: string) => { return { kind: 'unknown' } },
+  deleteCollection: async (collection: CollectionView) => { return { kind: 'unknown' } },
 
   syncSingleCipher: async (id: string) => { return { kind: 'unknown' } },
   syncSingleFolder: async (id: string) => { return { kind: 'unknown' } },
@@ -521,7 +521,9 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
         const ciphers = await getEncryptedCiphers({
           deleted: false,
           searchText: '',
-          filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name))]
+          // filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name))]
+          // exclude share folder item
+          filters: [(c: CipherView) => (c.collectionIds.length === 0) && (c.folderId ? c.folderId === f.id : (!f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name)))]
         })
         f.cipherCount = ciphers ? ciphers.length : 0
       }
@@ -1295,6 +1297,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await minimalReloadCache({})
   }
 
+
+
   // Share cipher
   const shareCipher = async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => {
     try {
@@ -1355,6 +1359,7 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     return key.encryptedString
   }
 
+  //-------------------------------------------------------
   // Share multiple ciphers
   const shareMultipleCiphers = async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => {
     if (!ids.length) {
@@ -1544,13 +1549,15 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Leave share
-  const leaveShare = async (id: string, organizationId: string) => {
+  const leaveShare = async (organizationId: string, id?: string,) => {
     const apiRes = await cipherStore.leaveShare(organizationId)
     if (apiRes.kind !== 'ok') {
       notifyApiError(apiRes)
       return apiRes
     }
-    await cipherService.delete(id)
+    if (id) {
+      await cipherService.delete(id)
+    }
     await minimalReloadCache({})
     cipherStore.setOrganizations(cipherStore.organizations.filter(o => o.id !== organizationId))
     return apiRes
@@ -1867,19 +1874,48 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
   }
 
   // Delete collection
-  const deleteCollection = async (id: string, teamId: string) => {
+  const deleteCollection = async (collection: CollectionView) => {
     try {
       // Offline
       if (uiStore.isOffline) {
-        await _offlineDeleteCollection(id)
+        await _offlineDeleteCollection(collection.id)
         notify('success', translate('folder.folder_deleted'))
         return { kind: 'ok' }
       }
 
-      // Online
-      const res = await collectionStore.deleteCollection(id, teamId)
+      const personalKey = await cryptoService.getEncKey()
+      const ciphers: CipherView[] = await getCiphers({
+        deleted: false,
+        searchText: '',
+        filters: [(c: CipherView) => c.collectionIds.includes(collection.id)]
+      }) || []
+
+      const data = []
+
+      const prepareCipher = async (c: CipherView) => {
+        const cipherEnc = await cipherService.encrypt(c, personalKey)
+        const requestData = new CipherRequest(cipherEnc)
+        data.push(
+          {
+            id: c.id,
+            ...requestData
+          },
+        )
+      }
+      await Promise.all(ciphers.map(prepareCipher))
+
+      // Prepare folder name
+      const folderNameEnc = await cryptoService.encrypt(collection.name, personalKey)
+
+      const res = await collectionStore.deleteCollection(collection.id, collection.organizationId, {
+        folder: {
+          id: collection.id,
+          name: folderNameEnc.encryptedString,
+          ciphers: data,
+        }
+      })
       if (res.kind === 'ok') {
-        await _offlineDeleteCollection(id, true)
+        await _offlineDeleteCollection(collection.id, true)
         notify('success', translate('folder.folder_deleted'))
       } else {
         notifyApiError(res)

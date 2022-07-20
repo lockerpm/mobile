@@ -1,12 +1,12 @@
 import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
-import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData, SocialLoginData } from "../../services/api"
+import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData, SocialLoginData, NotificationSettingData } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 import { save, StorageKey, remove } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
 import moment from "moment"
-import { omit } from "ramda"
+import { any, omit } from "ramda"
 import { AppEventType, EventBus } from "../../utils/event-bus"
 
 
@@ -65,6 +65,7 @@ export const UserModel = types
     appTimeout: types.optional(types.number, AppTimeoutType.APP_CLOSE),
     appTimeoutAction: types.optional(types.string, TimeoutActionType.LOCK),
     defaultTab: types.optional(types.string, 'homeTab'),
+    notificationSettings: types.maybeNull(types.frozen<NotificationSettingData[]>()),
     disablePushNotifications: types.maybeNull(types.boolean)
   })
   .extend(withEnvironment)
@@ -221,6 +222,9 @@ export const UserModel = types
     setPushNotificationsSetting: (val: boolean) => {
       self.disablePushNotifications = val
     },
+    setNotificationSettings: (val: NotificationSettingData[]) => {
+      self.notificationSettings = val
+    },
 
     // DEV
     setUserFreePlan: () => {
@@ -265,7 +269,7 @@ export const UserModel = types
       return res
     },
 
-    resetPassword: async (username: string, method: string, request_code: string) => {
+    resetPassword: async (username: string, method: string, request_code?: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.resetPassword({ username, method, request_code })
       return res
@@ -502,6 +506,31 @@ export const UserModel = types
     getTrialEligible: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getTrialEligible(self.apiToken)
+      return res
+    },
+
+    getNotificationSettings: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getNotificationSettings(self.apiToken)
+      if (res.kind === "ok") {
+        self.setNotificationSettings(res.data)
+      }
+      return res
+    },
+    updateNotiSettings: async (categoryId: string, mail: boolean, notification: boolean) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.updateNotiSettings(self.apiToken, categoryId, mail, notification)
+      return res
+    },
+    fetchInAppNoti: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.fetchInAppNoti(self.apiToken)
+      return res
+    },
+
+    markReadInAppNoti: async (id: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.markReadInappNoti(self.apiToken, id)
       return res
     }
 

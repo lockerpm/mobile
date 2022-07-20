@@ -3,10 +3,10 @@ import { omit } from "ramda"
 import { Organization } from "../../../core/models/domain/organization"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CipherView } from "../../../core/models/view"
-import { 
+import {
   ConfirmShareCipherData, EditShareCipherData, ImportCipherData, ImportCipherWithFolderData, ImportFolderData, MoveFolderData,
   MyShareType, ShareCipherData, ShareMultipleCiphersData, SharingInvitationType,
-  StopShareCipherData 
+  StopShareCipherData
 } from "../../services/api"
 import { CipherApi } from "../../services/api/cipher-api"
 import { withEnvironment } from "../extensions/with-environment"
@@ -323,7 +323,7 @@ export const CipherStoreModel = types
     },
   }))
   .postProcessSnapshot(omit([
-    'generatedPassword', 
+    'generatedPassword',
     'selectedCipher',
     'selectedFolder',
     'isSynching',
@@ -343,7 +343,7 @@ export const CipherStoreModel = types
  */
 
 type CipherStoreType = Instance<typeof CipherStoreModel>
-export interface CipherStore extends CipherStoreType {}
+export interface CipherStore extends CipherStoreType { }
 type CipherStoreSnapshotType = SnapshotOut<typeof CipherStoreModel>
-export interface CipherStoreSnapshot extends CipherStoreSnapshotType {}
+export interface CipherStoreSnapshot extends CipherStoreSnapshotType { }
 export const createCipherStoreDefaultModel = () => types.optional(CipherStoreModel, {})
