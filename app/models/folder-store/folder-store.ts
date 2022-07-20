@@ -2,6 +2,7 @@ import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { omit } from "ramda"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { FolderView } from "../../../core/models/view/folderView"
+import { ShareFolderData } from "../../services/api"
 import { FolderApi } from "../../services/api/folder-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -103,6 +104,11 @@ export const FolderStoreModel = types
     deleteFolder: async (id: string) => {
       const folderApi = new FolderApi(self.environment.api)
       const res = await folderApi.deleteFolder(self.apiToken, id)
+      return res
+    },
+    shareFolder: async (payload: ShareFolderData) => {
+      const cipherApi = new FolderApi(self.environment.api)
+      const res = await cipherApi.shareFolder(self.apiToken, payload)
       return res
     },
   }))

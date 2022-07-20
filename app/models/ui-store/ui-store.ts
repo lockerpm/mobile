@@ -14,6 +14,7 @@ export const UiStoreModel = types
     showWelcomePremium: false,
     isShowedAppReview: false,
     inAppReviewShowDate: types.maybeNull(types.number),
+    inAppNotiUnreadCount:  types.maybeNull(types.number),
 
     // Cache
     isFromAutoFillItem: types.maybeNull(types.boolean),

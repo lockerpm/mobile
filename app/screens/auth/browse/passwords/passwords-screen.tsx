@@ -49,7 +49,7 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header={translate('common.password')}
+          header={translate('common.passwords')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
             navigation.navigate('passwords__edit', { mode: 'add' })

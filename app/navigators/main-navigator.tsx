@@ -17,7 +17,10 @@ import {
   DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
   CryptoWalletEditScreen, CryptoWalletInfoScreen, WelcomePremiumScreen,
   AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen,
-  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen, ReferFriendScreen
+  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen,
+  ReferFriendScreen, FolderSharedUsersManagementScreen,
+  PushEmailSettingsScreen, PushNotificationSettingsScreen,
+  InAppListNotification, InAppNotificationScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -35,6 +38,7 @@ import { HealthNavigator } from "./tools/health-navigator"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import InAppReview from 'react-native-in-app-review';
 import Intercom from "@intercom/intercom-react-native"
+import { AppNotification } from "../services/api"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -98,6 +102,9 @@ export type PrimaryParamList = {
     collectionId?: string | null
     organizationId?: string | null
   }
+  shareFolder: {
+    collectionId: string
+  }
   manage_plan: undefined
   payment: {
     benefitTab?: 0 | 1 | 2 | 3,
@@ -117,12 +124,20 @@ export type PrimaryParamList = {
     mode: 'all' | 'item'
   }
   notificationSettings: undefined
+  emailNotiSettings: undefined
+  deviceNotiSettings: undefined
+
   shareMultiple: undefined
   cryptoWallets__info: undefined
   cryptoWallets__edit: {
     mode: 'add' | 'edit' | 'clone'
   },
   welcome_premium: undefined
+
+  app_list_noti: {
+    notifications: AppNotification
+  }
+  app_noti: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -158,7 +173,8 @@ export const MainNavigator = observer(() => {
       return
     }
     if (lastUpdateRes.kind === 'ok') {
-      bumpTimestamp = lastUpdateRes.data.revision_date * 1000
+      bumpTimestamp = (lastUpdateRes.data.revision_date - new Date().getTimezoneOffset() * 60) * 1000
+      console.log(bumpTimestamp, cipherStore.lastSync)
       if (bumpTimestamp <= cipherStore.lastSync) {
         return
       }
@@ -338,14 +354,14 @@ export const MainNavigator = observer(() => {
   }
 
   // ------------------ EFFECT --------------------
- // Intercom support 
- useEffect(() => {
-  if (user.isLoggedInPw) {
-    Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id }).catch((e) => {
-      Logger.error(e)
-    })
-  } 
-}, [user.isLoggedInPw])
+  // Intercom support 
+  useEffect(() => {
+    if (user.isLoggedInPw) {
+      Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id }).catch((e) => {
+        Logger.error(e)
+      })
+    }
+  }, [user.isLoggedInPw])
 
 
   // check app revire 
@@ -460,6 +476,9 @@ export const MainNavigator = observer(() => {
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
+        <Stack.Screen name="app_list_noti" component={InAppListNotification} />
+        <Stack.Screen name="app_noti" component={InAppNotificationScreen} />
+
         <Stack.Screen
           name="passwordGenerator"
           component={PasswordGeneratorScreen}
@@ -485,6 +504,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
+        <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} />
         <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} />
         <Stack.Screen name="cryptoWallets__info" component={CryptoWalletInfoScreen} />
         <Stack.Screen name="cryptoWallets__edit" component={CryptoWalletEditScreen} initialParams={{ mode: 'add' }} />
@@ -500,6 +520,8 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="import" component={ImportScreen} />
         <Stack.Screen name="export" component={ExportScreen} />
         <Stack.Screen name="notificationSettings" component={NotificationSettingsScreen} />
+        <Stack.Screen name="emailNotiSettings" component={PushEmailSettingsScreen} />
+        <Stack.Screen name="deviceNotiSettings" component={PushNotificationSettingsScreen} />
 
         <Stack.Screen name="welcome_premium" component={WelcomePremiumScreen} />
         <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: 'all' }} />

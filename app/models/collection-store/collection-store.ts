@@ -1,7 +1,10 @@
 import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
+import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CollectionRequest } from "../../../core/models/request/collectionRequest"
 import { CollectionView } from "../../../core/models/view/collectionView"
+import { AccountRoleText } from "../../config/types"
+import { CollectionActionData } from "../../services/api"
 import { CollectionApi } from "../../services/api/collection-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -94,11 +97,41 @@ export const CollectionStoreModel = types
       return res
     },
 
-    deleteCollection: async (id: string, teamId: string) => {
+    deleteCollection: async (id: string, teamId: string, payload: CollectionActionData) => {
       const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.deleteCollection(self.apiToken, id, teamId)
+      const res = await collectionApi.deleteCollection(self.apiToken, id, teamId, payload)
       return res
     },
+
+    stopShare: async (id: string, teamId: string, payload: CollectionActionData) => {
+      const collectionApi = new CollectionApi(self.environment.api)
+      const res = await collectionApi.stopShare(self.apiToken, id, teamId, payload)
+      return res
+    },
+
+    removeShareMember: async (memberId: string, teamId: string, payload: CollectionActionData) => {
+      const collectionApi = new CollectionApi(self.environment.api)
+      const res = await collectionApi.removeShareMember(self.apiToken, memberId, teamId, payload)
+      return res
+    },
+
+    addShareMember: async (teamId: string, members: {
+      username: string
+      role: AccountRoleText
+      key: string
+      hide_passwords: boolean
+    }[]) => {
+      const collectionApi = new CollectionApi(self.environment.api)
+      const res = await collectionApi.addShareMember(self.apiToken, teamId, members)
+      return res
+    },
+
+    updateShareItem: async (id: string, teamId: string, payload: {cipher:  CipherRequest & { id: string }}) => {
+      const collectionApi = new CollectionApi(self.environment.api)
+      const res = await collectionApi.updateShareItem(self.apiToken, id, teamId, payload)
+      return res
+    },
+
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .postProcessSnapshot(omit(['collections']))
 
@@ -111,7 +144,7 @@ export const CollectionStoreModel = types
  */
 
 type CollectionStoreType = Instance<typeof CollectionStoreModel>
-export interface CollectionStore extends CollectionStoreType {}
+export interface CollectionStore extends CollectionStoreType { }
 type CollectionStoreSnapshotType = SnapshotOut<typeof CollectionStoreModel>
-export interface CollectionStoreSnapshot extends CollectionStoreSnapshotType {}
+export interface CollectionStoreSnapshot extends CollectionStoreSnapshotType { }
 export const createCollectionStoreDefaultModel = () => types.optional(CollectionStoreModel, {})

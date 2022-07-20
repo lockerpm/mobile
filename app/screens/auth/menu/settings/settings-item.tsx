@@ -1,11 +1,13 @@
 import React from 'react'
-import { StyleProp, ViewStyle, View, ActivityIndicator } from 'react-native'
+import { StyleProp, ViewStyle, View, ActivityIndicator, ColorValue, Switch, TextStyle } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { Button, Text } from '../../../../components'
 import { useMixins } from '../../../../services/mixins'
-import { commonStyles } from '../../../../theme'
+import { commonStyles, fontSize } from '../../../../theme'
 
-export type SettingsItemProps = {
+
+
+type SettingsItemProps = {
   style?: StyleProp<ViewStyle>
   name: string
   right?: JSX.Element
@@ -16,6 +18,7 @@ export type SettingsItemProps = {
   disabled?: boolean
   isLoading?: boolean
 }
+
 
 export const SettingsItem = (props: SettingsItemProps) => {
   const { color } = useMixins()
@@ -72,6 +75,72 @@ export const SettingsItem = (props: SettingsItemProps) => {
           />
         )
       }
+    </View>
+  )
+}
+
+
+interface SettingSwipeItemProps extends SettingsItemProps {
+  value: boolean
+  onValueChange: (val: boolean) => void
+  trackColor?: {
+    false: ColorValue,
+    true: ColorValue
+  }
+  thumbColor?: ColorValue
+}
+
+export const SettingSwipeItem = (props: SettingSwipeItemProps) => {
+  const { name, value, onValueChange, trackColor, thumbColor, ...others } = props
+  const { color } = useMixins()
+
+  return <SettingsItem
+    name={name}
+    {...others}
+    right={(
+      <Switch
+        value={value}
+        onValueChange={onValueChange}
+        trackColor={trackColor ? trackColor : { false: color.disabled, true: color.primary }}
+        thumbColor={thumbColor ? thumbColor : color.white}
+      />
+    )}
+  />
+}
+
+
+interface WrapperProps {
+  title?: string
+  children: React.ReactNode,
+}
+
+
+export const SectionWrapperItem = (props: WrapperProps) => {
+  const { title, children } = props
+  const { color } = useMixins()
+
+  const SECTION_TITLE: TextStyle = {
+    fontSize: fontSize.small,
+    marginHorizontal: 20,
+    marginBottom: 12,
+  }
+
+  return (
+    <View>
+      {
+        title && <Text
+          text={title}
+          style={[SECTION_TITLE, {
+            marginTop: 15,
+          }]}
+        />
+      }
+      <View style={[commonStyles.GRAY_SCREEN_SECTION, {
+        backgroundColor: color.background,
+        marginTop: !title ? 15 : 0,
+      }]}>
+        {children}
+      </View>
     </View>
   )
 }

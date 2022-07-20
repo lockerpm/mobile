@@ -6,7 +6,6 @@ import { useMixins } from "../../../../../services/mixins"
 import { SKU } from "./price-plan.sku"
 import { Subscription } from "react-native-iap"
 import { IS_IOS } from "../../../../../config/constants"
-import { useStores } from "../../../../../models"
 
 interface PricePlanItemProps {
   onPress: () => void
@@ -88,6 +87,8 @@ interface PricePlanProps {
 export const PricePlan = (props: PricePlanProps) => {
   const { translate, color } = useMixins()
 
+  const [discount, setDiscount] = useState(false)
+
   const planText = {
     per: {
       monthly: {
@@ -131,23 +132,22 @@ export const PricePlan = (props: PricePlanProps) => {
 
   const plan = props.personal ? planText.per : planText.fam
   const billingCycle = props.isEnable ? plan.yearly : plan.monthly
-
-
-  const [discount, setDiscount] = useState(false)
+  const ads = props.personal ? translate("payment.ads") : translate("payment.ads_family")
+  const trial = props.isTrial ? translate("payment.trial") : ""
 
 
 
   useEffect(() => {
     const subs = props.subscriptions.find(subs => subs.productId === billingCycle.subId)
-    if (IS_IOS) {
-      // if (subs?.discounts) {
-      //   setDiscount(true)
-      // }
-    } else {
-      if (subs?.introductoryPrice) {
-        setDiscount(true)
-      }
-    }
+    // if (IS_IOS) {
+    //   if (subs?.discounts) {
+    //     setDiscount(true)
+    //   }
+    // } else {
+    //   if (subs?.introductoryPrice) {
+    //     setDiscount(true)
+    //   }
+    // }
   }, [props.subscriptions])
 
 
@@ -163,16 +163,8 @@ export const PricePlan = (props: PricePlanProps) => {
         marginTop: 10,
         marginBottom: 10,
       }}>
-        {props.personal ? translate("payment.ads") : translate("payment.ads_family")}
+        {ads + trial}
       </Text>
-
-      {props.isTrial && <Text style={{
-        marginTop: 10,
-        marginBottom: 10,
-        alignSelf: "center"
-      }}>
-        {translate("payment.trial")}
-      </Text>}
 
       <PricePlanItem
         onPress={() => props.onPress(true)}
@@ -198,7 +190,7 @@ export const PricePlan = (props: PricePlanProps) => {
           props.purchase(billingCycle.subId)
         }}
       >
-        {IS_IOS && <View style={{ flexDirection: "column", alignItems: "center" }}>
+        <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text
             preset="bold"
             style={{ color: color.white }}
@@ -208,17 +200,10 @@ export const PricePlan = (props: PricePlanProps) => {
           <Text
             style={{ fontSize: 16, color: color.white, alignSelf: "center" }}
           >
-            {props.isProcessPayment ? "" : discount ? billingCycle.discount : translate("payment.cancel_text")}
+            {props.isProcessPayment ? "" : translate("payment.cancel_text")}
           </Text>
-        </View>}
+        </View>
 
-        {!IS_IOS && discount && <View style={{ flexDirection: "column", alignItems: "center" }}>
-          <Text
-            style={{ color: color.white, fontWeight: "600", textAlign: "center" }}
-          >
-            {props.isProcessPayment ? "" : billingCycle.discount}
-          </Text>
-        </View>}
       </Button>
     </View>
   )

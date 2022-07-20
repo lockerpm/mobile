@@ -5,7 +5,7 @@ import { detectTempId } from "../../utils/event-bus/helpers"
 import { Logger } from "../../utils/logger"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
-import { EmptyResult, GetFolderResult, PostFolderResult } from "./api.types"
+import { EmptyResult, GetFolderResult, PostFolderResult, ShareFolderData, ShareFolderResult } from "./api.types"
 
 export class FolderApi {
   private api: Api
@@ -96,4 +96,26 @@ export class FolderApi {
       return { kind: "bad-data" }
     }
   }
+  
+  // Share Folder
+  async shareFolder(token: string, payload: ShareFolderData): Promise<ShareFolderResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/sharing`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const data = response.data
+
+      return { kind: "ok", data }
+    } catch (e) {
+      Logger.error('Share Folder: ' + e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
 }

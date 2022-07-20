@@ -11,6 +11,7 @@ import { PricePlan } from "./price-plan"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { Logger } from "../../../../../utils/logger"
+import { FamilyPayment } from "./family-payment/family-payment"
 
 import RNIap, {
   PurchaseError,
@@ -43,7 +44,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const { user, uiStore } = useStores()
 
   // -------------------- STATE ----------------------
-  const [subcriptions, setSubcriptions] = useState<Subscription[]>([])
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [processPayment, setProcessPayment] = useState<boolean>(false);
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
@@ -71,7 +72,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
       }
 
       const subs = await RNIap.getSubscriptions(subSkus);
-      setSubcriptions(subs);
+      setSubscriptions(subs);
     } catch (err) {
       Logger.error({ 'initConnection': err })
       Alert.alert('Fail to get in-app-purchase information', "",
@@ -133,43 +134,17 @@ export const PaymentScreen = observer(function PaymentScreen() {
     if (IS_IOS) {
       RNIap.clearTransactionIOS()
     }
-    // const subs = subcriptions.find(subs => subs.productId === productId)
-    // if (subs?.discounts) {
-    //   // console.log(subs.discounts[0].identifier)
-    //   purchaseWithOfferIOS(productId, subs.discounts[0].identifier)
-    // } else {
+
     RNIap.requestSubscription(productId)
       .catch((error) => {
         setProcessPayment(false)
-        if (error.code === 'E_USER_CANCELLED') {
-          Logger.error(JSON.stringify(error))
+        if (error.code !== 'E_USER_CANCELLED') {
+          Logger.debug(JSON.stringify(error))
         }
       });
-    // }
 
   };
 
-  const purchaseWithOfferIOS = async (productId: string, offerId: string) => {
-    if (!IS_IOS) return
-
-    const res = await user.getOfferDetailsIOS(productId, offerId)
-    if (res.kind === "ok") {
-      RNIap.requestPurchaseWithOfferIOS(productId, user.pwd_user_id, {
-        identifier: offerId,
-        keyIdentifier: res.data.key_identifier,
-        nonce: res.data.nonce,
-        signature: res.data.sig,
-        timestamp: res.data.timestamp
-      }).catch((error) => {
-        setProcessPayment(false)
-        if (error.code === 'E_USER_CANCELLED') {
-          return
-        } else {
-          Logger.error(JSON.stringify(error))
-        }
-      });
-    }
-  };
 
 
   // -------------------- EFFECT ----------------------
@@ -190,21 +165,13 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   useEffect(() => {
     getEligibleTrial()
-
-    if (route.params.family) {
-      setPayIndividual(false)
-    }
   }, [])
 
   // ------------------ RENDER ----------------------
 
   // user selects plan segment
   const Segment = () => {
-    return route.params.family ? (<Text
-      preset="largeHeader"
-      text={translate("payment.family_plan")}
-      style={{ marginTop: 16, marginLeft: 20 }}
-    />) : (
+    return (
       <View
         style={[styles.segment, {
           backgroundColor: color.block,
@@ -212,17 +179,18 @@ export const PaymentScreen = observer(function PaymentScreen() {
           alignSelf: "center"
         }]}
       >
-        <TouchableOpacity
+        <Button
+        preset="link"
           onPress={() => setPayIndividual(true)}
           style={[styles.segmentItem, { backgroundColor: payIndividual ? color.background : color.block, left: 0 }, payIndividual && styles.shadow]}
         >
           <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.individual")}</Text>
-        </TouchableOpacity>
+        </Button>
         <TouchableOpacity
           onPress={() => setPayIndividual(false)}
           style={[styles.segmentItem, { backgroundColor: payIndividual ? color.block : color.background, right: 0 }, !payIndividual && styles.shadow]}
         >
-          <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.family")}</Text>
+          <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.family_text")}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -231,7 +199,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
   // Render screen
   return (
     <Layout
-      containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
+      containerStyle={{ backgroundColor: route.params.family ? color.background : color.block, paddingHorizontal: 0 }}
       header={<View style={{
         flexDirection: "row",
         justifyContent: "space-between",
@@ -249,32 +217,47 @@ export const PaymentScreen = observer(function PaymentScreen() {
       </View>}
 
     >
-      <View style={{ flex: 1, top: 0, minHeight: 310, width: "100%", zIndex: 1 }}>
-        <PremiumBenefits benefitTab={route.params.benefitTab} />
-      </View>
+      {
+        route.params.family && (
+          <FamilyPayment
+            isTrial={isTrial}
+            subscriptions={subscriptions}
+            onPress={setEnable}
+            isProcessPayment={processPayment}
+            isEnable={isEnable}
+            purchase={purchase} />
+        )
+      }
+      {
+        !route.params.family && (
+          <View>
+            <View style={{ flex: 1, top: 0, minHeight: 310, width: "100%", zIndex: 1 }}>
+              <PremiumBenefits benefitTab={route.params.benefitTab} />
+            </View>
 
-      <View style={[styles.payment, { backgroundColor: color.background }]}>
-        <Segment />
-        <PricePlan
-          isTrial={isTrial}
-          subscriptions={subcriptions}
-          onPress={setEnable}
-          isProcessPayment={processPayment}
-          isEnable={isEnable}
-          personal={payIndividual}
-          purchase={purchase}
-        />
-        {IS_IOS && <Button
-          preset="link"
-          style={{
-            marginBottom: 20
-          }}
-          onPress={() => presentCodeRedemptionSheetIOS()}>
-          <Text style={{ fontSize: 18, color: "#007AFF" }}>
-            Redeem code
-          </Text>
-        </Button>}
-      </View>
+            <View style={[styles.payment, { backgroundColor: color.background }]}>
+              <Segment/>
+              <PricePlan
+                isTrial={isTrial}
+                subscriptions={subscriptions}
+                onPress={setEnable}
+                isProcessPayment={processPayment}
+                isEnable={isEnable}
+                personal={payIndividual}
+                purchase={purchase}
+              />
+              {IS_IOS && <Button
+                preset="link"
+                style={{
+                  marginBottom: 20
+                }}
+                onPress={() => presentCodeRedemptionSheetIOS()}>
+                <Text style={{ fontSize: 18, color: "#007AFF" }}>
+                  Redeem code
+                </Text>
+              </Button>}
+            </View>
+          </View>)}
     </Layout>
   )
 })
