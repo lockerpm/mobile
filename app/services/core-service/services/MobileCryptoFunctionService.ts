@@ -36,7 +36,7 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     outputByteSize: number, algorithm: 'sha256' | 'sha512'): Promise<ArrayBuffer> {
     const saltBuf = this.toArrayBuffer(salt);
     const prk = await this.hmac(ikm, saltBuf, algorithm);
-    console.log(`-------- HKDF ---------`)
+    // console.log(`-------- HKDF ---------`)
     return this.hkdfExpand(prk, info, outputByteSize, algorithm);
   }
 

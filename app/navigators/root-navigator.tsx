@@ -27,6 +27,7 @@ import { setCookiesFromUrl } from "../utils/analytics"
 import { AppState } from "react-native"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
+import { getUrlParameterByName } from "../utils/helpers"
 
 
 /**
@@ -61,11 +62,56 @@ type Props = {
 }
 const RootStack = observer((props: Props) => {
   const { navigationRef } = props
-  const { color, parsePushNotiData } = useMixins()
-  const { clearAllData } = useCipherAuthenticationMixins()
+  const { color, parsePushNotiData, setApiTokens } = useMixins()
+  const { clearAllData, logout } = useCipherAuthenticationMixins()
   const { uiStore, user } = useStores()
 
   // ------------------- METHODS -------------------
+
+  // Handle dynamic link
+  const handleDynamicLink = async (url: string) => {
+    // Set UTM
+    setCookiesFromUrl(url)
+
+    // Redirect
+    const WHITELIST_HOSTS = [
+      'https://locker.io',
+      'https://id.locker.io'
+    ]
+    const host = WHITELIST_HOSTS.find(h => url.startsWith(h))
+    if (host) {
+      const path = url.split(host)[1]
+
+      // Register
+      if (path.startsWith('/register')) {
+        navigationRef.current.navigate('signup')
+        return
+      }
+
+      // Authenticate
+      if (path.startsWith('/authenticate')) {
+        const token = getUrlParameterByName('token', url)
+        if (token) {
+          if (user.isLoggedIn) {
+            await logout()
+          }
+          navigationRef.current.navigate('onBoarding')
+          setApiTokens(token)
+          const [userRes, userPwRes] = await Promise.all([
+            user.getUser(),
+            user.getUserPw()
+          ])
+          if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
+            if (user.is_pwd_manager) {
+              navigationRef.current.navigate('lock')
+            } else {
+              navigationRef.current.navigate('createMasterPassword')
+            }
+          }
+        }
+      }
+    }
+  }
 
   // Notification
   const handleForegroundNotiPress = async (data: NotifeeNotificationData) => {
@@ -90,6 +136,7 @@ const RootStack = observer((props: Props) => {
     }
   }
 
+  // App state change
   const _handleAppStateChange = async (nextAppState: string) => {
     Logger.debug(nextAppState)
 
@@ -100,7 +147,7 @@ const RootStack = observer((props: Props) => {
 
     const link = await dynamicLinks().getInitialLink()
     Logger.debug(`DYNAMIC LINK BACKGROUND: ${JSON.stringify(link)}`)
-    link?.url && setCookiesFromUrl(link.url)
+    link?.url && handleDynamicLink(link.url)
   }
 
   // ------------------- EFFECTS -------------------
@@ -132,7 +179,7 @@ const RootStack = observer((props: Props) => {
   useEffect(() => {
     const unsubscribe = dynamicLinks().onLink((link) => {
       Logger.debug(`DYNAMIC LINK FOREGROUND: ${JSON.stringify(link)}`)
-      link?.url && setCookiesFromUrl(link.url)
+      link?.url && handleDynamicLink(link.url)
     })
     return () => unsubscribe()
   }, [])
