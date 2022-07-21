@@ -5,6 +5,10 @@ import analytics from '@react-native-firebase/analytics'
 import DeviceInfo from 'react-native-device-info'
 
 
+const WHITELIST_HOSTS = [
+  'https://locker.io',
+  'https://id.locker.io'
+]
 const COOKIES_URL = 'https://locker.io'
 const TAGS = [
   'utm_source',
@@ -16,7 +20,7 @@ const TAGS = [
 
 
 export const setCookiesFromUrl = (url: string) => {
-  if (!url || !url.startsWith(COOKIES_URL)) {
+  if (!url || !WHITELIST_HOSTS.some(host => url.startsWith(host))) {
     return
   }
   const values = TAGS.map(t => '')

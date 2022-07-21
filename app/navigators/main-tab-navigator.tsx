@@ -11,7 +11,6 @@ import { useMixins } from "../services/mixins"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useStores } from "../models"
 import { observer } from "mobx-react-lite"
-import { withSequence, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated'
 import { SharingStatus } from "../config/types"
 
 import HomeIcon from './icons/home.svg'
@@ -29,23 +28,6 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
   const { user, uiStore, cipherStore } = useStores()
 
   const insets = useSafeAreaInsets()
- 
-  
-  
-  // @ts-ignore
-  const spin = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          rotate: withRepeat(
-            withSequence(withTiming('360deg', { duration: 0 }), withTiming('0deg', { duration: 1000 })),
-            -1,
-            false
-          )
-        }
-      ]
-    }
-  })
   
   const mappings = {
     homeTab: {
