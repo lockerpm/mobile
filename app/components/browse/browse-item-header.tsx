@@ -95,6 +95,8 @@ export const BrowseItemHeader = observer((props: BrowseItemHeaderProps) => {
       initialId: null,
       cipherIds: selectedItems
     })
+    setIsSelecting(false)
+    setSelectedItems([])
   }
 
   const handleRestore = async () => {

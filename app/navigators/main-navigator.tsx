@@ -174,7 +174,6 @@ export const MainNavigator = observer(() => {
     }
     if (lastUpdateRes.kind === 'ok') {
       bumpTimestamp = (lastUpdateRes.data.revision_date - new Date().getTimezoneOffset() * 60) * 1000
-      console.log(bumpTimestamp, cipherStore.lastSync)
       if (bumpTimestamp <= cipherStore.lastSync) {
         return
       }

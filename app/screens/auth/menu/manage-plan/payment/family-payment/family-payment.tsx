@@ -89,6 +89,7 @@ export const FamilyPayment = (props: Props) => {
 
             <View style={{ backgroundColor: color.background, marginHorizontal: 20 }}>
                 <Button
+                   preset="outline"
                     style={{
                         marginVertical: 10,
                     }}
@@ -99,13 +100,12 @@ export const FamilyPayment = (props: Props) => {
                 >
                     <Text
                         preset="bold"
-                        style={{ color: color.white }}
+                        style={{ color: color.primary }}
                     >
                         {props.isProcessPayment ? "" : translate('payment.family.month')}
                     </Text>
                 </Button>
                 <Button
-                    preset="outline"
                     style={{
                         marginVertical: 10,
                     }}
@@ -116,7 +116,7 @@ export const FamilyPayment = (props: Props) => {
                 >
                     <Text
                         preset="bold"
-                        style={{ color: color.primary }}
+                        style={{ color: color.white }}
                     >
                         {props.isProcessPayment ? "" : translate('payment.family.year')}
                     </Text>
