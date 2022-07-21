@@ -23,7 +23,6 @@ import { PushNotifier } from "../utils/push-notification"
 import { NotifeeNotificationData } from "../utils/push-notification/types"
 import { save, StorageKey } from "../utils/storage"
 import dynamicLinks from '@react-native-firebase/dynamic-links'
-import { setCookiesFromUrl } from "../utils/analytics"
 import { AppState } from "react-native"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
@@ -62,7 +61,7 @@ type Props = {
 const RootStack = observer((props: Props) => {
   const { navigationRef } = props
   const { color, parsePushNotiData } = useMixins()
-  const { clearAllData } = useCipherAuthenticationMixins()
+  const { clearAllData, handleDynamicLink } = useCipherAuthenticationMixins()
   const { uiStore, user } = useStores()
 
   // ------------------- METHODS -------------------
@@ -90,6 +89,7 @@ const RootStack = observer((props: Props) => {
     }
   }
 
+  // App state change
   const _handleAppStateChange = async (nextAppState: string) => {
     Logger.debug(nextAppState)
 
@@ -100,7 +100,7 @@ const RootStack = observer((props: Props) => {
 
     const link = await dynamicLinks().getInitialLink()
     Logger.debug(`DYNAMIC LINK BACKGROUND: ${JSON.stringify(link)}`)
-    link?.url && setCookiesFromUrl(link.url)
+    link?.url && handleDynamicLink(link.url, navigationRef.current)
   }
 
   // ------------------- EFFECTS -------------------
@@ -132,14 +132,13 @@ const RootStack = observer((props: Props) => {
   useEffect(() => {
     const unsubscribe = dynamicLinks().onLink((link) => {
       Logger.debug(`DYNAMIC LINK FOREGROUND: ${JSON.stringify(link)}`)
-      link?.url && setCookiesFromUrl(link.url)
+      link?.url && handleDynamicLink(link.url, navigationRef.current)
     })
     return () => unsubscribe()
   }, [])
 
   // Dynamic links background handler
   useEffect(() => {
-    _handleAppStateChange('active')
     AppState.addEventListener("change", _handleAppStateChange)
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange)
