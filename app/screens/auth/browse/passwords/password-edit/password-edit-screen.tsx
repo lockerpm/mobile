@@ -66,7 +66,7 @@ export const PasswordEditScreen = observer(() => {
       setCollectionIds(selectedCipher.collectionIds)
       setFields(selectedCipher.fields || [])
     } else {
-      setUrl(initialUrl)
+      setUrl(initialUrl || "https://")
     }
   }, [])
 
