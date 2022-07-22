@@ -188,6 +188,7 @@ export const InitScreen = observer(() => {
 
   // ------------------ EFFECTS ---------------------
 
+  // NOTE: dont change this effect to navigation onFocus or it will mess up handleDynamicLink
   useEffect(() => {
     mounted()
   }, [])

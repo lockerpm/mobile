@@ -354,7 +354,8 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     // Redirect
     const WHITELIST_HOSTS = [
       'https://locker.io',
-      'https://id.locker.io'
+      'https://id.locker.io',
+      'https://staging.locker.io'
     ]
     const host = WHITELIST_HOSTS.find(h => url.startsWith(h))
     if (host) {
@@ -370,10 +371,21 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       if (path.startsWith('/authenticate')) {
         const token = getUrlParameterByName('token', url)
         if (token) {
+          const tempUserRes = await user.getUser({
+            customToken: token,
+            dontSetData: true
+          })
+
+          // Ignore if token is not valid or current user is correct
+          if (tempUserRes.kind !== 'ok' || tempUserRes.user.email === user.email) {
+            return false
+          }
+
+          // Logout if current user is not correct
           if (user.isLoggedIn) {
             await logout()
           }
-          navigation?.navigate('onBoarding')
+          navigation?.navigate('init')
           setApiTokens(token)
           const [userRes, userPwRes] = await Promise.all([
             user.getUser(),
