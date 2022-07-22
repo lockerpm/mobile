@@ -6,7 +6,7 @@ import { save, StorageKey, remove } from "../../utils/storage"
 import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from 'react-native-device-info'
 import moment from "moment"
-import { any, omit } from "ramda"
+import { omit } from "ramda"
 import { AppEventType, EventBus } from "../../utils/event-bus"
 
 
@@ -244,10 +244,13 @@ export const UserModel = types
   .actions((self) => ({
     // -------------------- ID ------------------------
 
-    getUser: async () => {
+    getUser: async (options?: {
+      customToken?: string,
+      dontSetData?: boolean
+    }) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getUser(self.apiToken)
-      if (res.kind === "ok") {
+      const res = await userApi.getUser(options?.customToken || self.apiToken)
+      if (res.kind === "ok" && !options?.dontSetData) {
         if (self.email && res.user.email !== self.email) {
           EventBus.emit(AppEventType.CLEAR_ALL_DATA, null)
           self.clearSettings()

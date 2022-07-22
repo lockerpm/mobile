@@ -3,11 +3,13 @@ import CookieManager from '@react-native-cookies/cookies'
 import moment from 'moment'
 import analytics from '@react-native-firebase/analytics'
 import DeviceInfo from 'react-native-device-info'
+import { Logger } from "../logger"
 
 
 const WHITELIST_HOSTS = [
   'https://locker.io',
-  'https://id.locker.io'
+  'https://id.locker.io',
+  'https://staging.locker.io'
 ]
 const COOKIES_URL = 'https://locker.io'
 const TAGS = [
@@ -33,6 +35,7 @@ export const setCookiesFromUrl = (url: string) => {
     }
   })
   if (hasChange) {
+    Logger.debug(`Set cookies: ${JSON.stringify(values)}`)
     const now = moment()
     now.add(30, 'days')
     TAGS.forEach((t, index) => {
