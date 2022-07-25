@@ -94,9 +94,9 @@ export const CipherInfoCommon = observer((props: CipherInfoCommonProps) => {
       {/* Owned by end */}
 
       {/* Shared with */}
-      <SharedWith 
-        shareMember={shareMember} 
-        show={showFullShareMember} 
+      <SharedWith
+        shareMember={shareMember}
+        show={showFullShareMember}
         setShow={setShowFullShareMember}
       />
       {/* Shared with end */}
@@ -107,26 +107,25 @@ export const CipherInfoCommon = observer((props: CipherInfoCommonProps) => {
         style={{ fontSize: fontSize.small, marginTop: 20, marginBottom: 10 }}
       />
       {
-        collections.map((c: CollectionView) => (
-          (
-            <View
-              key={c.id}
-              style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-                marginBottom: 10
-              }]}
-            >
-              <FOLDER_IMG.share.svg height={30} />
-              <Text
-                preset="black"
-                text={c.name || translate('folder.unassigned')}
-                style={{ marginLeft: 10 }}
-              />
-            </View>
-          )
-        ))
-      }
-      {
-        (!cipher.organizationId || !!folder.name || getTeam(user.teams, cipher.organizationId)) && (
+        collections.length > 0 ? (
+          collections.map((c: CollectionView) => (
+            (
+              <View
+                key={c.id}
+                style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+                  marginBottom: 10
+                }]}
+              >
+                <FOLDER_IMG.share.svg height={30} />
+                <Text
+                  preset="black"
+                  text={c.name || translate('folder.unassigned')}
+                  style={{ marginLeft: 10 }}
+                />
+              </View>
+            )
+          ))
+        ) : (!cipher.organizationId || !!folder.name || getTeam(user.teams, cipher.organizationId)) && (
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             <FOLDER_IMG.normal.svg height={30} />
             <Text
@@ -138,6 +137,7 @@ export const CipherInfoCommon = observer((props: CipherInfoCommonProps) => {
           </View>
         )
       }
+
     </View>
   )
 })

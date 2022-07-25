@@ -47,7 +47,7 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     svgIcon: FolderIcon
   },
   password: {
-    label: 'common.password',
+    label: 'common.passwords',
     icon: require('./images/vault/password.png'),
     routeName: 'passwords',
     addable: true

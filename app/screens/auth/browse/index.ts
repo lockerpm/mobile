@@ -10,6 +10,7 @@ export * from "./shares/share-multiple/share-multiple-screen"
 export * from "./trash/trash-screen"
 export * from "./browse-list/browse-list-screen"
 export * from "./crypto-asset/crypto-assets-screen"
+export * from "./folders/folder-shared-users-management/folder-shared-users-management-screen"
 
 // Inner screens
 export * from "./passwords/password-edit/password-edit-screen"

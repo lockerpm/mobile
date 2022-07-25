@@ -124,6 +124,7 @@ export const ShareItemAction = observer((props: Props) => {
 
           <ActionItem
             name={translate('common.details')}
+            icon="list-alt"
             action={() => {
               goToDetail(selectedCipher)
               onClose()
@@ -146,6 +147,7 @@ export const ShareItemAction = observer((props: Props) => {
           <ActionItem
             disabled={uiStore.isOffline}
             name={translate('common.edit')}
+            icon="edit"
             action={() => {
               setNextModal('edit')
               onClose()
@@ -154,6 +156,7 @@ export const ShareItemAction = observer((props: Props) => {
 
           <ActionItem
             disabled={uiStore.isOffline}
+            icon="stop-circle"
             name={translate('shares.stop_sharing')}
             action={handleStopShare}
           />

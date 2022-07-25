@@ -48,12 +48,13 @@ export const CipherAction = observer((props: CipherActionProps) => {
   // Computed
 
   const organizations = cipherStore.organizations
-  const teamRole = getTeam(user.teams, selectedCipher.organizationId).role 
+  const teamRole = getTeam(user.teams, selectedCipher.organizationId).role
   const shareRole = getTeam(organizations, selectedCipher.organizationId).type
   const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
+  const isInFolderShare = selectedCipher.collectionIds?.length > 0
   // const isOwner = shareRole === AccountRole.ADMIN
-  const editable = !selectedCipher.organizationId 
-    || (teamRole && teamRole !== AccountRoleText.MEMBER )
+  const editable = !selectedCipher.organizationId
+    || (teamRole && teamRole !== AccountRoleText.MEMBER)
     || (shareRole === AccountRole.ADMIN || shareRole === AccountRole.OWNER)
 
   const cipherMapper = (() => {
@@ -171,7 +172,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
         <Divider style={{ marginTop: 10 }} />
 
         <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
-          { children }
+          {children}
 
           <Divider style={{ marginVertical: 5 }} />
 
@@ -197,7 +198,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
                   }}
                 />
 
-                <ActionItem
+                {!isInFolderShare && <ActionItem
                   disabled={uiStore.isOffline && !!selectedCipher.organizationId}
                   name={translate('folder.move_to_folder')}
                   icon="folder-o"
@@ -209,7 +210,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
                       cipherIds: [selectedCipher.id]
                     })
                   }}
-                />
+                />}
 
                 {/* TODO: team feature -> temporary disabled */}
                 {/* {
@@ -239,7 +240,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
                 />
 
                 {
-                  !isShared && (
+                 !isInFolderShare && (
                     <ActionItem
                       isPremium
                       onClose={onClose}
@@ -254,22 +255,24 @@ export const CipherAction = observer((props: CipherActionProps) => {
                   )
                 }
 
-                <ActionItem
-                  disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-                  name={translate('trash.to_trash')}
-                  icon="trash"
-                  textColor={color.error}
-                  action={() => {
-                    setNextModal('trashConfirm')
-                    onClose()
-                  }}
-                />
+                {
+                  !isInFolderShare && <ActionItem
+                    disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+                    name={translate('trash.to_trash')}
+                    icon="trash"
+                    textColor={color.error}
+                    action={() => {
+                      setNextModal('trashConfirm')
+                      onClose()
+                    }}
+                  />
+                }
               </View>
             )
           }
 
           {
-            isShared && (
+            isShared && !isInFolderShare && (
               <ActionItem
                 disabled={uiStore.isOffline}
                 name={translate('shares.leave')}

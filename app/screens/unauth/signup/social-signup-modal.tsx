@@ -10,7 +10,7 @@ import {  commonStyles} from "../../../theme"
 type Props = {
   userRes: any
   token?: string
-  onDone?: (code: string) => void
+  onDone?: () => void
 }
 
 export const SocialSignedUpModal = (props: Props) => {

@@ -67,3 +67,12 @@ export enum InvitationStatus {
   REJECTED = "rejected",
   CONFIRMED = "confirmed"
 }
+
+export enum NotificationCategory {
+  ITEM_SHARE = "item_sharing",
+  EMERGENCY = "emergency_access",
+  DATA_BREACH = "data_breach",
+  PW_TIPS = "password_tip_trick",
+  MARKETING = "marketing",
+  OTHER = "other"
+}
