@@ -20,7 +20,7 @@ import {
   PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen,
   ReferFriendScreen, FolderSharedUsersManagementScreen,
   PushEmailSettingsScreen, PushNotificationSettingsScreen,
-  InAppListNotification, InAppNotificationScreen
+  InAppListNotification, InAppNotificationScreen, DeleteScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -126,6 +126,7 @@ export type PrimaryParamList = {
   notificationSettings: undefined
   emailNotiSettings: undefined
   deviceNotiSettings: undefined
+  deleteAccount: undefined
 
   shareMultiple: undefined
   cryptoWallets__info: undefined
@@ -520,6 +521,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
         <Stack.Screen name="import" component={ImportScreen} />
         <Stack.Screen name="export" component={ExportScreen} />
+        <Stack.Screen name="deleteAccount" component={DeleteScreen} />
         <Stack.Screen name="notificationSettings" component={NotificationSettingsScreen} />
         <Stack.Screen name="emailNotiSettings" component={PushEmailSettingsScreen} />
         <Stack.Screen name="deviceNotiSettings" component={PushNotificationSettingsScreen} />

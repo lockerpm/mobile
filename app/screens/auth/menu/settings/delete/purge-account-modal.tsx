@@ -1,11 +1,11 @@
 import React, { useState } from "react"
-import { FloatingInput, Button, Modal, Text } from "../../../../components"
+import { FloatingInput, Button, Modal, Text } from "../../../../../components"
 import { observer } from "mobx-react-lite"
-import { useMixins } from "../../../../services/mixins"
+import { useMixins } from "../../../../../services/mixins"
 import { View } from "react-native"
-import { useStores } from "../../../../models"
-import { useCoreService } from "../../../../services/core-service"
-import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+import { useStores } from "../../../../../models"
+import { useCoreService } from "../../../../../services/core-service"
+import { useCipherAuthenticationMixins } from "../../../../../services/mixins/cipher/authentication"
 
 interface Props {
   isOpen?: boolean,
