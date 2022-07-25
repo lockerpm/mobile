@@ -45,7 +45,7 @@ const defaultData = {
   goPremium: () => {},
   parsePushNotiData: async (params?: {
     notifeeData?: NotifeeNotificationData
-  }) => ({ path: '', params: {} }),
+  }) => ({ path: '', params: {}, tempParams: {} }),
   validateMasterPassword: (password: string) => ({ isValid: true, error: '' })
 }
 
@@ -261,7 +261,8 @@ export const MixinsProvider = observer((props: {
     const { notifeeData } = params || {}
     const res = {
       path: '',
-      params: {}
+      params: {},
+      tempParams: {}
     }
     let data: PushNotiData | NotifeeNotificationData = notifeeData
     if (!data) {
@@ -278,6 +279,9 @@ export const MixinsProvider = observer((props: {
               screen: 'sharedItems'
             }
           }
+          res.tempParams = {
+            screen: 'browseTab',
+          }
           break
         case PushEvent.SHARE_CONFIRM:
         case PushEvent.SHARE_ACCEPT:
@@ -288,6 +292,9 @@ export const MixinsProvider = observer((props: {
             params: {
               screen: 'shareItems'
             }
+          }
+          res.tempParams = {
+            screen: 'browseTab',
           }
           break
       }

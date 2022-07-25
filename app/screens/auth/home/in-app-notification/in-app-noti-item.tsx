@@ -42,6 +42,9 @@ export const NotiListItem = (props: Props) => {
           await markRead()
           navigation.navigate('mainTab', {
             screen: 'browseTab',
+          })
+          navigation.navigate('mainTab', {
+            screen: 'browseTab',
             params: {
               screen: 'sharedItems'
             }
