@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { TextStyle, View, Switch } from "react-native"
+import { TextStyle, View, Switch, Linking } from "react-native"
 import { Layout, Text, Header, Select } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../theme"
@@ -53,7 +53,7 @@ export const SettingsScreen = observer(() => {
     }
 
     user.setBiometricUnlock(true)
-    
+
     // Update autofill settings
     await updateAutofillFaceIdSetting(true)
 
@@ -88,7 +88,7 @@ export const SettingsScreen = observer(() => {
         navigation.dispatch(e.data.action)
         return
       }
-      
+
       if (isBacking) {
         isBacking = false
         navigation.dispatch(e.data.action)
@@ -173,7 +173,7 @@ export const SettingsScreen = observer(() => {
     biometric: {
       value: user.isBiometricUnlock,
       onChage: (isActive: boolean) => {
-        if (isActive){
+        if (isActive) {
           enableBiometric()
         } else {
           user.setBiometricUnlock(false)
@@ -295,6 +295,7 @@ export const SettingsScreen = observer(() => {
         /> */}
         {/* Theme end */}
 
+
         {/* Default tab */}
         <Select
           value={settings.defaultTab.value}
@@ -313,6 +314,16 @@ export const SettingsScreen = observer(() => {
           )}
         />
         {/* Default tab end */}
+
+        {/* Delete tab */}
+        <SettingsItem
+          noBorder
+          style={{ width: '100%' }}
+          name={translate('common.delete')}
+          action={() => navigation.navigate("deleteAccount")}
+        />
+        {/* Delete end */}
+
       </View>
       {/* Account end */}
 
@@ -347,6 +358,8 @@ export const SettingsScreen = observer(() => {
           )}
         />
         {/* Biometric end */}
+
+
 
         {/* Biometric */}
         <SettingsItem
