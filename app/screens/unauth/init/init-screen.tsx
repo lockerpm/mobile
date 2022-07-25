@@ -11,6 +11,9 @@ import { BackHandler, View } from "react-native"
 import { useMixins } from "../../../services/mixins"
 import JailMonkey from 'jail-monkey'
 import { commonStyles } from "../../../theme"
+import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
+import dynamicLinks from '@react-native-firebase/dynamic-links'
+import { Logger } from "../../../utils/logger"
 
 
 export const InitScreen = observer(() => {
@@ -18,6 +21,7 @@ export const InitScreen = observer(() => {
   const navigation = useNavigation()
   // const theme = Appearance.getColorScheme()
   const { boostrapPushNotifier, translate } = useMixins()
+  const { handleDynamicLink } = useCipherAuthenticationMixins()
 
   // ------------------ METHODS ---------------------
 
@@ -136,6 +140,18 @@ export const InitScreen = observer(() => {
     //   return
     // }
 
+    // Check dynamic link
+    const link = await dynamicLinks().getInitialLink()
+    if (link) {
+      Logger.debug(`DYNAMIC LINK INIT: ${JSON.stringify(link)}`)
+      if (link.url) {
+        const isNavigated = await handleDynamicLink(link.url, navigation)
+        if (isNavigated) {
+          return
+        }
+      }
+    }
+
     // Logged in?
     if (!user.isLoggedIn) {
       if (!user.introShown && !isAutoFill && !isOnSaveLogin && !isAutoFillItem) {
@@ -150,7 +166,6 @@ export const InitScreen = observer(() => {
 
     // Network connected? || Is autofill?
     if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {
-
       goLockOrCreatePassword()
       return
     }
@@ -173,6 +188,7 @@ export const InitScreen = observer(() => {
 
   // ------------------ EFFECTS ---------------------
 
+  // NOTE: dont change this effect to navigation onFocus or it will mess up handleDynamicLink
   useEffect(() => {
     mounted()
   }, [])

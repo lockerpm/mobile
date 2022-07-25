@@ -8,6 +8,7 @@ import { commonStyles, spacing } from "../../../theme"
 import { DefaultLogin } from "./default"
 import { MethodSelection } from "./method-selection"
 import { Otp } from "./otp"
+import { SocialSignedUpModal } from "../signup/social-signup-modal"
 import { useStores } from "../../../models"
 
 export const LoginScreen = observer(() => {
@@ -26,9 +27,13 @@ export const LoginScreen = observer(() => {
   const [method, setMethod] = useState('')
   const [partialEmail, setPartialEamil] = useState('')
 
+  const [token, setResetPWToken] = useState("")
+  const [account, setAccount] = useState(null)
+  const [showSocialSignedUpModal, setShowSocialSignedUpModal] = useState(false)
+
   // ------------------------------ METHODS -------------------------------
 
-  const onLoggedIn = async () => {
+  const onLoggedIn = async (newUser?: boolean, token?: string) => {
     setIndex(0)
     setIsScreenLoading(true)
     const [userRes, userPwRes] = await Promise.all([
@@ -60,10 +65,18 @@ export const LoginScreen = observer(() => {
 
     navigation.addListener('beforeRemove', handleBack)
 
+    const unsubscribe = navigation.addListener('focus', () => {
+      setResetPWToken("")
+      setAccount(null)
+      setShowSocialSignedUpModal(false)
+    });
+
     return () => {
+      unsubscribe()
       navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
+
 
   // ------------------------------ RENDER -------------------------------
 
@@ -91,6 +104,7 @@ export const LoginScreen = observer(() => {
         </View>
       )}
     >
+
       {
         index === 0 && (
           <DefaultLogin

@@ -7,7 +7,6 @@ import { useCoreService } from '../../core-service'
 import { delay } from '../../../utils/delay'
 import { saveShared } from '../../../utils/keychain'
 import { observer } from 'mobx-react-lite'
-import { color, colorDark } from '../../../theme'
 import moment from 'moment'
 import DeviceInfo from 'react-native-device-info'
 import { useMixins } from '..'
@@ -16,6 +15,8 @@ import { SymmetricCryptoKey } from '../../../../core/models/domain'
 import { remove, removeSecure, StorageKey } from '../../../utils/storage'
 import { useSocialLoginMixins } from '../social-login'
 import Intercom from '@intercom/intercom-react-native'
+import { setCookiesFromUrl } from '../../../utils/analytics'
+import { getUrlParameterByName } from '../../../utils/helpers'
 
 
 const { createContext, useContext } = React
@@ -30,7 +31,8 @@ const defaultData = {
   lock: async () => {},
   registerLocker: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   changeMasterPassword: async (oldPassword: string, newPassword: string) => { return { kind: 'unknown' } },
-  clearAllData: async (dataOnly?: boolean) => {}
+  clearAllData: async (dataOnly?: boolean) => {},
+  handleDynamicLink: async (url: string, navigation?: any) => false
 }
 
 
@@ -48,16 +50,13 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     messagingService,
     tokenService
   } = useCoreService()
-  const { notify, translate, notifyApiError } = useMixins()
+  const { notify, translate, notifyApiError, setApiTokens } = useMixins()
   const { logoutAllServices } = useSocialLoginMixins()
 
   // TODO: don't know why, but crash if comment this line
   const { syncAutofillData } = useCipherDataMixins()
 
   // ------------------------ DATA -------------------------
-
-  const isDark = uiStore.isDark
-  const themeColor = isDark ? colorDark : color
 
   // -------------------- AUTHENTICATION --------------------
 
@@ -347,19 +346,76 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     ])
   }
 
+  // Handle dynamic link
+  const handleDynamicLink = async (url: string, navigation?: any) => {
+    // Set UTM
+    setCookiesFromUrl(url)
+
+    // Redirect
+    const WHITELIST_HOSTS = [
+      'https://locker.io',
+      'https://id.locker.io',
+      'https://staging.locker.io'
+    ]
+    const host = WHITELIST_HOSTS.find(h => url.startsWith(h))
+    if (host) {
+      const path = url.split(host)[1]
+
+      // Register
+      if (path.startsWith('/register')) {
+        navigation?.navigate('signup')
+        return !!navigation
+      }
+
+      // Authenticate
+      if (path.startsWith('/authenticate')) {
+        const token = getUrlParameterByName('token', url)
+        if (token) {
+          const tempUserRes = await user.getUser({
+            customToken: token,
+            dontSetData: true
+          })
+
+          // Ignore if token is not valid or current user is correct
+          if (tempUserRes.kind !== 'ok' || tempUserRes.user.email === user.email) {
+            return false
+          }
+
+          // Logout if current user is not correct
+          if (user.isLoggedIn) {
+            await logout()
+          }
+          navigation?.navigate('init')
+          setApiTokens(token)
+          const [userRes, userPwRes] = await Promise.all([
+            user.getUser(),
+            user.getUserPw()
+          ])
+          if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
+            if (user.is_pwd_manager) {
+              navigation?.navigate('lock')
+            } else {
+              navigation?.navigate('createMasterPassword')
+            }
+            return !!navigation
+          }
+        }
+      }
+    }
+    return false
+  }
+
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
-    color: themeColor,
-    isDark,
-
     sessionLogin,
     biometricLogin,
     logout,
     lock,
     registerLocker,
     changeMasterPassword,
-    clearAllData
+    clearAllData,
+    handleDynamicLink
   }
 
   return (

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react"
-import { View, FlatList } from "react-native"
+import { View, FlatList, SectionList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
 import { Text } from "../../../../../components/text/text"
-// import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
@@ -14,7 +13,9 @@ import { ShareItemAction } from "./share-item-action"
 import { SharedMemberType } from "../../../../../services/api/api.types"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { CipherShareListItem, CipherShareType } from "./cipher-share-list-item"
-
+import { FolderAction } from "../../folders/folder-action"
+import { CollectionListItem } from './folder-share-list-item'
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 type Props = {
   emptyContent?: JSX.Element
@@ -37,16 +38,18 @@ export const CipherShareList = observer((props: Props) => {
   const { translate } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { getCipherInfo } = useCipherHelpersMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, collectionStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
 
   const [ciphers, setCiphers] = useState<CipherShareType[]>([])
   const [showAction, setShowAction] = useState(false)
+  const [showCollectionAction, setShowCollectionAction] = useState(false)
+  const [selectedCollection, setSelectedCollection] = useState<CollectionView>(null)
   const [selectedMember, setSelectedMember] = useState<SharedMemberType>(null)
 
   // ------------------------ COMPUTED ----------------------------
- 
+
   const organizations = cipherStore.organizations
   const allCiphers = ciphers
   const myShares = cipherStore.myShares
@@ -67,15 +70,24 @@ export const CipherShareList = observer((props: Props) => {
     return myShares.find(s => s.id === id)
   }
 
+
   // Get ciphers list
   const loadData = async () => {
     // onLoadingChange && onLoadingChange(true)
-    
+
+
+
     // Filter
     const filters = [(c: CipherView) => {
       if (!c.organizationId) {
         return false
       }
+
+      // // TODO 
+      // if (collections.some(e => c.collectionIds.includes(e.id))) {
+      //   return false
+      // }
+
       const share = _getShare(c.organizationId)
       const org = _getOrg(c.organizationId)
       return org && org.type === AccountRole.OWNER && share && share.members.length
@@ -110,7 +122,8 @@ export const CipherShareList = observer((props: Props) => {
         let shareType = ''
         switch (m.role) {
           case AccountRoleText.MEMBER:
-            shareType = !m.hide_passwords ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
+            // shareType = !m.hide_passwords ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
+            shareType = translate('shares.share_type.view')
             break
           case AccountRoleText.ADMIN:
             shareType = translate('shares.share_type.edit')
@@ -146,11 +159,16 @@ export const CipherShareList = observer((props: Props) => {
   }
 
   // Handle action menu open
-  const openActionMenu = (item: CipherShareType) => {
+  const openCipherActionMenu = (item: CipherShareType) => {
     cipherStore.setSelectedCipher(item)
     setSelectedMember(item.member)
     setShowAction(true)
   }
+  const openCollectionActionMenu = (item: CollectionView) => {
+    setSelectedCollection(item)
+    setShowCollectionAction(true)
+  }
+
 
   // Go to detail
   const goToDetail = (item: CipherShareType) => {
@@ -159,14 +177,18 @@ export const CipherShareList = observer((props: Props) => {
     navigation.navigate(`${cipherInfo.path}__info`)
   }
 
+  const DATA = [
+    {
+      type: 2,
+      data: [...collectionStore.collections]
+    },
+    {
+      type: 1,
+      data: [...allCiphers.filter(c => !c.collectionIds?.length)]
+    }
+  ];
   // ------------------------ RENDER ----------------------------
 
-  const renderItem = ({ item }) => (
-    <CipherShareListItem
-      item={item}
-      openActionMenu={openActionMenu}
-    />
-  )
 
   return allCiphers.length ? (
     <View style={{ flex: 1 }}>
@@ -180,23 +202,45 @@ export const CipherShareList = observer((props: Props) => {
         goToDetail={goToDetail}
       />
 
-      {/* Action menus end */}
-
-      {/* Cipher list */}
-      <FlatList
-        style={{ 
-          paddingHorizontal: 20, 
-        }}
-        data={allCiphers}
-        keyExtractor={(item, index) => item.id.toString() + index.toString()}
-        renderItem={renderItem}
-        getItemLayout={(data, index) => ({
-          length: 71,
-          offset: 71 * index,
-          index
-        })}
+      <FolderAction
+        isOpen={showCollectionAction}
+        onClose={() => setShowCollectionAction(false)}
+        onLoadingChange={onLoadingChange}
+        folder={selectedCollection}
       />
-      {/* Cipher list end */}
+      
+
+      {/* Action menus end */}
+      <SectionList
+        style={{
+          paddingHorizontal: 20,
+        }}
+        sections={DATA || []}
+        keyExtractor={(item, index) => String(index)}
+        renderItem={({ item, index, section }) => (
+          <View>
+            {
+              section.type === 1 && (
+                <CipherShareListItem
+                  item={item}
+                  openActionMenu={openCipherActionMenu}
+                />
+              )
+            }
+            {
+              section.type === 2 && (
+                <CollectionListItem
+                  item={item}
+                  openActionMenu={openCollectionActionMenu}
+                  navigation={navigation}
+                />
+              )
+            }
+          </View>
+        )}
+      />
+
+
     </View>
   ) : (
     emptyContent && !searchText.trim() ? (

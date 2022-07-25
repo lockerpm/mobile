@@ -116,7 +116,6 @@ export const MenuScreen = observer(() => {
       name: translate('menu.invite'),
       action: () => {
         if (isFreeAccount || (isPremiumAccount && !user.plan?.is_family)) {
-          notify('info', translate("invite_member.info_upgrade"))
           navigation.navigate("payment", { family: true, benefitTab: 3 })
         } else {
           navigation.navigate("invite_member")

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, FlatList } from "react-native"
+import { View, FlatList, SectionList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
 import { Text } from "../../../../../components/text/text"
@@ -19,6 +19,9 @@ import { PendingSharedAction } from "./pending-shared-action"
 import { CryptoWalletAction } from "../../crypto-asset/crypto-wallet-action"
 import { CipherSharedListItem, CipherSharedType } from "./cipher-shared-list-item"
 import { MAX_CIPHER_SELECTION } from "../../../../../config/constants"
+import { CollectionListItem } from "../share-items/folder-share-list-item"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { FolderAction } from "../../folders/folder-action"
 
 
 export interface CipherSharedListProps {
@@ -45,12 +48,14 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     emptyContent, navigation, onLoadingChange, searchText, sortList,
     isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
   } = props
-  const { translate, notify } = useMixins()
+  const { translate, notify, getTeam } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, collectionStore, user } = useStores()
   const { newCipher, getCipherInfo } = useCipherHelpersMixins()
 
   // ------------------------ PARAMS ----------------------------
+  const [showCollectionAction, setShowCollectionAction] = useState(false)
+  const [selectedCollection, setSelectedCollection] = useState<CollectionView>(null)
 
   const [ciphers, setCiphers] = useState<CipherSharedType[]>([])
   const [showPasswordAction, setShowPasswordAction] = useState(false)
@@ -63,8 +68,9 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const [checkedItem, setCheckedItem] = useState('')
 
   // ------------------------ COMPUTED ----------------------------
- 
+
   const organizations = cipherStore.organizations
+
   const pendingCiphers = cipherStore.sharingInvitations.map(i => {
     const cipher: CipherSharedType = newCipher(i.cipher_type)
     const cipherInfo = getCipherInfo(cipher)
@@ -78,11 +84,12 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
     let shareType = ''
     if (i.role === AccountRoleText.MEMBER) {
-      if (i.hide_passwords) {
-        shareType = translate('shares.share_type.only_fill')
-      } else {
-        shareType = translate('shares.share_type.view')
-      }
+      // if (i.hide_passwords) {
+      //   shareType = translate('shares.share_type.only_fill')
+      // } else {
+      //   shareType = translate('shares.share_type.view')
+      // }
+      shareType = translate('shares.share_type.view')
     }
     if (i.role === AccountRoleText.ADMIN) {
       shareType = translate('shares.share_type.edit')
@@ -92,6 +99,18 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   })
 
   const allCiphers = !!searchText.trim() || isSelecting ? ciphers : [...pendingCiphers, ...ciphers]
+
+
+
+  const sharedCollection = collectionStore.collections.filter(i => {
+    // Computed
+    const teamRole = getTeam(user.teams, i.organizationId).role
+    const shareRole = getTeam(organizations, i.organizationId).type
+    const isMember = !i.organizationId
+      || (teamRole && teamRole !== AccountRoleText.OWNER)
+      || (shareRole === AccountRole.ADMIN || shareRole === AccountRole.MEMBER)
+    return isMember && i.name?.includes(searchText.toLowerCase())
+  })
 
   // ------------------------ EFFECTS ----------------------------
 
@@ -115,7 +134,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   // Get ciphers list
   const loadData = async () => {
     // onLoadingChange && onLoadingChange(true)
-    
+
     // Filter
     const filters = [(c: CipherView) => {
       if (!c.organizationId) {
@@ -194,16 +213,11 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     }
   }
 
-  // Go to detail
-  // const goToDetail = (item: ListItem) => {
-  //   cipherStore.setSelectedCipher(item)
-  //   if (item.isShared) {
-  //     setShowPendingAction(true)
-  //     return
-  //   }
-  //   const cipherInfo = getCipherInfo(item)
-  //   navigation.navigate(`${cipherInfo.path}__info`)
-  // }
+  // Handle open collection menu
+  const openCollectionActionMenu = (item: CollectionView) => {
+    setSelectedCollection(item)
+    setShowCollectionAction(true)
+  }
 
   // Toggle item selection
   const toggleItemSelection = (id: string) => {
@@ -223,18 +237,18 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     setSelectedItems(selected)
   }
 
-  // ------------------------ RENDER ----------------------------
+  const DATA = [
+    {
+      type: 2,
+      data: [...sharedCollection]
+    },
+    {
+      type: 1,
+      data: [...allCiphers.filter(c => !c.collectionIds?.length)]
+    }
+  ];
 
-  const renderItem = ({ item }) => (
-    <CipherSharedListItem 
-      item={item}
-      isSelecting={isSelecting}
-      toggleItemSelection={setCheckedItem}
-      openActionMenu={openActionMenu}
-      isSelected={selectedItems.includes(item.id)}
-      org={_getOrg(item)}
-    />
-  )
+  // ------------------------ RENDER ----------------------------
 
   return allCiphers.length ? (
     <View style={{ flex: 1 }}>
@@ -281,23 +295,48 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         onLoadingChange={onLoadingChange}
       />
 
+      <FolderAction
+        isOpen={showCollectionAction}
+        onClose={() => setShowCollectionAction(false)}
+        onLoadingChange={onLoadingChange}
+        folder={selectedCollection}
+      />
       {/* Action menus end */}
 
-      {/* Cipher list */}
-      <FlatList
-        style={{ 
-          paddingHorizontal: 20, 
+
+      <SectionList
+        style={{
+          paddingHorizontal: 20,
         }}
-        data={allCiphers}
-        keyExtractor={item => item.id.toString()}
-        renderItem={renderItem}
-        getItemLayout={(data, index) => ({
-          length: 71,
-          offset: 71 * index,
-          index
-        })}
+        sections={DATA || []}
+        keyExtractor={(item, index) => String(index)}
+        renderItem={({ item, index, section }) => (
+          <View>
+            {
+              section.type === 1 && (
+                <CipherSharedListItem
+                  item={item}
+                  isSelecting={isSelecting}
+                  toggleItemSelection={setCheckedItem}
+                  openActionMenu={openActionMenu}
+                  isSelected={selectedItems.includes(item.id)}
+                  org={_getOrg(item)}
+                />
+              )
+            }
+            {
+              section.type === 2 && (
+                <CollectionListItem
+                  item={item}
+                  openActionMenu={openCollectionActionMenu}
+                  navigation={navigation}
+                />
+              )
+            }
+          </View>
+        )}
       />
-      {/* Cipher list end */}
+
     </View>
   ) : (
     emptyContent && !searchText.trim() ? (

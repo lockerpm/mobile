@@ -75,6 +75,8 @@ export const StartScreen = observer(() => {
     // Parse push noti data
     const navigationRequest = await parsePushNotiData()
     if (navigationRequest.path) {
+      // handle navigate browse
+      navigationRequest.tempParams && navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
       navigation.navigate(navigationRequest.path, navigationRequest.params)
       return
     }

@@ -11,5 +11,5 @@ export const palette = {
   lightGreen: '#e9f3eb',
   danger: '#F54F64',
   warning: '#FF9900',
-  blue: '#3379b7'
+  blue: '#3379b7',
 }

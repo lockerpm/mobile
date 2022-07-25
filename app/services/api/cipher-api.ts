@@ -307,7 +307,6 @@ export class CipherApi {
         if (problem) return problem
       }
       const data = response.data
-
       return { kind: "ok", data }
     } catch (e) {
       Logger.error('Get last update: ' + e.message)
@@ -335,6 +334,8 @@ export class CipherApi {
       return { kind: "bad-data" }
     }
   }
+
+  
 
   // Share cipher
   async shareCipher(token: string, payload: ShareCipherData): Promise<ShareCipherResult> {
