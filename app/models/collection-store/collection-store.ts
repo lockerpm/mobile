@@ -35,7 +35,6 @@ export const CollectionStoreModel = types
 
     setLastUpdate: () => {
       self.lastUpdate = Date.now()
-      self.lastUpdate = null
     },
 
     clearStore: (dataOnly?: boolean) => {
