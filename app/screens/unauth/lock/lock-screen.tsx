@@ -86,7 +86,7 @@ export const LockScreen = observer(() => {
   }
 
   // Detect biometric type
-  const dectectbiometryType = async () => {
+  const detectbiometryType = async () => {
     const { biometryType } = await ReactNativeBiometrics.isSensorAvailable()
     if (biometryType === ReactNativeBiometrics.TouchID) {
       setBiometryType('touchid')
@@ -182,7 +182,7 @@ export const LockScreen = observer(() => {
       !__DEV__ && handleUnlockBiometric()
     }
 
-    dectectbiometryType()
+    detectbiometryType()
   }, [])
 
   // ---------------------- RENDER -------------------------

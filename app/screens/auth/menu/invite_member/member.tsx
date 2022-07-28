@@ -78,7 +78,7 @@ export const Member = (props: MemberProps) => {
                 <Feather
                     name="more-horizontal"
                     size={18}
-                    color={"black"}
+                    color={color.textBlack}
                 />
             </TouchableOpacity>}
 
@@ -99,7 +99,7 @@ export const Member = (props: MemberProps) => {
                                 onRemove(id.toString());
                             }}
                             style={{ justifyContent: 'center' }}>
-                            <Text style={{ marginVertical: 20, color: "red" }}>{translate("invite_member.remove")}</Text>
+                            <Text style={{ marginVertical: 20, color: color.error }}>{translate("invite_member.remove")}</Text>
                         </TouchableOpacity>
                     </View>
                 </ActionSheetContent>

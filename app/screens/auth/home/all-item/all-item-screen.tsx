@@ -249,7 +249,6 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
       }}>
       <AntDesign name="close" size={20} color={"black"} />
     </TouchableOpacity>
-
   </View>
 
 }

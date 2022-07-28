@@ -111,7 +111,6 @@ export const ItemsHeader = observer((props: Props) => {
           })
         }}
       >
-
         {
           notifications?.unread_count > 0 && <View style={{
             position: "absolute",
@@ -123,8 +122,7 @@ export const ItemsHeader = observer((props: Props) => {
             backgroundColor: color.error
           }} />
         }
-
-        <Icon icon="bell" size={24} />
+        <Icon icon="bell" size={24} color={color.textBlack} />
       </Button>
       {/** In app notification end*/}
 

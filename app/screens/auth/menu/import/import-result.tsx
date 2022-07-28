@@ -69,8 +69,8 @@ export const ImportResult = (props: Props) => {
                     paddingHorizontal: 20,
                     width: "100%",
                 }}>
-                <View>
-                    <Text preset="bold" text={translate("import.imported_free.guild")} />
+                <View style={{marginRight: 36}}>
+                    <Text text={translate("import.imported_free.guild")} style={{color: "black"}} />
                     <TouchableOpacity
                         onPress={() => {
                             navigation.navigate('payment')
@@ -99,7 +99,7 @@ export const ImportResult = (props: Props) => {
                     <View style={{ alignItems: "center" }}>
                         <Image
                             source={require("./Locker.png")}
-                            style={{ height: 60, width: 60 }}
+                            style={{ height: 60, width: 60, marginBottom: 12 }}
                         />
                         <Text preset="bold" text={translate("import.limited")} style={{ marginBottom: 8 }} />
                         <Text text={`${imported}/${total} ` + translate("import.imported_free.note")} style={{ maxWidth: "90%", textAlign: "center", marginBottom: 16 }} />
