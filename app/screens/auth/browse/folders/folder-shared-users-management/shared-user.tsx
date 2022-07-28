@@ -139,7 +139,7 @@ export const SharedUsers = (props: Props) => {
                     >
                         <View style={{ flexDirection: "row" }}>
                             <View style={{ justifyContent: "center" }}>
-                                <Icon icon="eye" size={24} />
+                                <Icon icon="eye" size={24} color={color.textBlack}/>
                             </View>
                             <View style={{ marginLeft: 12 }}>
                                 <Text preset="black" text={translate('shares.share_folder.viewer')} />
@@ -156,7 +156,7 @@ export const SharedUsers = (props: Props) => {
                     >
                         <View style={{ flexDirection: "row" }}>
                             <View style={{ justifyContent: "center" }}>
-                                <Icon icon="pencil-simple" size={24} />
+                                <Icon icon="pencil-simple" size={24} color={color.textBlack} />
                             </View>
                             <View style={{ marginLeft: 12 }}>
                                 <Text preset="black" text={translate('shares.share_folder.editor')} />

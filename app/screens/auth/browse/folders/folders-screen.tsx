@@ -104,10 +104,6 @@ export const FoldersScreen = observer(function FoldersScreen() {
   }, [folderStore.lastUpdate, collectionStore.lastUpdate, cipherStore.lastSync])
 
 
-  useEffect(() => {
-    // ??
-  }, [folderStore.lastUpdate, collectionStore.lastUpdate,])
-
   // ------------------- RENDER ---------------------
 
   return (

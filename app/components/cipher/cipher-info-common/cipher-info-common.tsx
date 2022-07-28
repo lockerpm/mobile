@@ -143,7 +143,7 @@ export const CipherInfoCommon = observer((props: CipherInfoCommonProps) => {
 })
 
 const SharedWith = ({ shareMember, show, setShow }) => {
-  const { translate } = useMixins()
+  const { translate, color } = useMixins()
 
   return shareMember.isShared && (<View>
     <Text
@@ -182,7 +182,7 @@ const SharedWith = ({ shareMember, show, setShow }) => {
       <Button preset="link"
         style={{ marginTop: 10 }}
         text={!show ? translate('common.see_all') : translate('common.collapse')}
-        textStyle={{ color: "blue" }}
+        textStyle={{ color: color.primary }}
         onPress={() => setShow(!show)}
       />
     </View>

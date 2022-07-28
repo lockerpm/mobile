@@ -252,7 +252,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
                   marginBottom: 20
                 }}
                 onPress={() => presentCodeRedemptionSheetIOS()}>
-                <Text style={{ fontSize: 18, color: "#007AFF" }}>
+                <Text style={{ fontSize: 18, color: color.primary }}>
                   Redeem code
                 </Text>
               </Button>}

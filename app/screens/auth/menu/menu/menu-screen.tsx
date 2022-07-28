@@ -200,6 +200,14 @@ export const MenuScreen = observer(() => {
     {
       debug: true,
       icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Open welcome premium screen',
+      action: () => {
+        navigation.navigate("welcome_premium")
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: '(DEBUG) Invalidate api token',
       action: () => {
         user.setApiToken('abc')

@@ -197,9 +197,7 @@ export const FolderAction = (props: Props) => {
             isOwner && isCollection && < ActionItem
               name={translate('shares.stop_sharing')}
               icon="stop-circle"
-              textColor={color.textBlack}
               action={() => {
-
                 // @ts-ignore
                 stopShareFolder(folder)
                 onClose()

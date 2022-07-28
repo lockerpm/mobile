@@ -113,11 +113,7 @@ export const InitScreen = observer(() => {
     }
     cipherStore.setIsSynching(false)
 
-    // TODO
-    // if (uiStore.isDark === null) {
-    //   uiStore.setIsDark(theme === 'dark')
-    // }
-    uiStore.setIsDark(false)
+    // uiStore.setIsDark(false)
 
     // Reload FCM
     if (connectionState.isConnected) {
