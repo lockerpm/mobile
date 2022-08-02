@@ -110,7 +110,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header={translate('common.folder')}
+          header={translate('common.folders')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}

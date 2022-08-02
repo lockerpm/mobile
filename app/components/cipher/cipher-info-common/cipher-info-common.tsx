@@ -103,7 +103,7 @@ export const CipherInfoCommon = observer((props: CipherInfoCommonProps) => {
 
       {/* Folder */}
       <Text
-        text={translate('common.folder')}
+        text={translate('common.folders')}
         style={{ fontSize: fontSize.small, marginTop: 20, marginBottom: 10 }}
       />
       {

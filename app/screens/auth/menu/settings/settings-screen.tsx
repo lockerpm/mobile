@@ -278,8 +278,7 @@ export const SettingsScreen = observer(() => {
         {/* Language end */}
 
         {/* Theme */}
-        {
-          !IS_PROD && <Select
+        <Select
           value={settings.theme.value}
           onChange={settings.theme.onChange}
           options={settings.theme.options}
@@ -293,7 +292,7 @@ export const SettingsScreen = observer(() => {
               )}
             />
           )}
-        />}
+        />
         {/* Theme end */}
 
 

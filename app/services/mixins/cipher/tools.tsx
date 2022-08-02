@@ -11,9 +11,9 @@ import { useCipherDataMixins } from './data'
 
 
 const defaultData = {
-  loadPasswordsHealth: async () => {},
-  getCipherCount: async (type: CipherType):Promise<number> => {return 0},
-  checkLoginIdExist: async (id: string):Promise<boolean> => {return false}
+  loadPasswordsHealth: async () => { },
+  getCipherCount: async (type: CipherType, deleted?: boolean, share?: boolean ): Promise<number> => { return 0 },
+  checkLoginIdExist: async (id: string): Promise<boolean> => { return false }
 }
 
 export const CipherToolsMixinsContext = createContext(defaultData)
@@ -26,7 +26,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
     auditService
   } = useCoreService()
   const { translate, notify } = useMixins()
-  
+
   // ----------------------------- METHODS ---------------------------
 
   const checkLoginIdExist = async (id: string) => {
@@ -37,18 +37,35 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
         (c: CipherView) => c.type === CipherType.Login
       ]
     })
-    const res = allLogins.some( e  => e.id === id)
+    const res = allLogins.some(e => e.id === id)
     return res
   }
 
-  const getCipherCount = async (type: CipherType) => {
-    const allCiphers = await getEncryptedCiphers({
+  const getCipherCount = async (type: CipherType, deleted?: boolean, share?: boolean) => {
+    let searchConfig = {
       deleted: false,
       searchText: '',
       filters: [
         (c: CipherView) => c.type === type
       ]
-    })
+    }
+    if (deleted) {
+      searchConfig = {
+        deleted: true,
+        searchText: '',
+        filters: []
+      }
+    }
+    if (share) {
+      searchConfig = {
+        deleted: false,
+        searchText: '',
+        filters: [
+          (c: CipherView) => c.organizationId !== null
+        ]
+      }
+    }
+    const allCiphers = await getEncryptedCiphers(searchConfig)
     return allCiphers.length
   }
 
@@ -59,24 +76,24 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
         return
       }
 
-      
+
       if (cipherStore.isSynching || cipherStore.isBatchDecrypting) {
         toolStore.setDataLoading(true)
         return
       }
-      
+
       toolStore.setDataLoading(false)
       toolStore.setLoadingHealth(true)
       toolStore.setLastHealthCheck()
-      
+
       const passwordStrengthCache = new Map()
       const passwordStrengthMap = new Map()
       const passwordUseMap = new Map()
       const exposedPasswordMap = new Map()
-  
+
       const exposedPasswordCiphers = []
       const promises = []
-  
+
       const allCiphers = await getCiphers({
         deleted: false,
         searchText: '',
@@ -89,18 +106,18 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       const getCacheKey = (c: CipherView) => {
         return c.login.password + '_____' + (isUserNameNotEmpty(c) ? c.login.username : '')
       }
-  
+
       allCiphers.forEach((c: CipherView) => {
         const hasUserName = isUserNameNotEmpty(c)
         const cacheKey = getCacheKey(c)
-  
+
         // Check password used
         if (passwordUseMap.has(c.login.password)) {
           passwordUseMap.set(c.login.password, passwordUseMap.get(c.login.password) + 1)
         } else {
           passwordUseMap.set(c.login.password, 1)
         }
-  
+
         // Check password strength
         if (!passwordStrengthCache.has(cacheKey)) {
           // Compare password with username as well
@@ -116,7 +133,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
             }
           }
           const result = passwordGenerationService.passwordStrength(
-            c.login.password, 
+            c.login.password,
             // TODO: disable for now
             // userInput.length > 0 ? userInput : null
           )
@@ -127,7 +144,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
           passwordStrengthMap.set(c.id, score)
           weakPasswordCiphers.push(c)
         }
-  
+
         // Check exposed password
         const promise = auditService.passwordLeaked(c.login.password).then(exposedCount => {
           if (exposedCount > 0) {
@@ -137,9 +154,9 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
         })
         promises.push(promise)
       })
-  
+
       await Promise.all(promises)
-  
+
       // Result
       weakPasswordCiphers.sort((a, b) => {
         return passwordStrengthCache.get(getCacheKey(a)) - passwordStrengthCache.get(getCacheKey(b))
@@ -147,7 +164,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       const reusedPasswordCiphers = allCiphers.filter((c: CipherView) => (
         passwordUseMap.has(c.login.password) && passwordUseMap.get(c.login.password) > 1
       ))
-  
+
       toolStore.setWeakPasswords(weakPasswordCiphers)
       toolStore.setPasswordStrengthMap(passwordStrengthMap)
       toolStore.setReusedPasswords(reusedPasswordCiphers)
@@ -161,7 +178,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       toolStore.setLoadingHealth(false)
     }
   }
-  
+
   // -------------------- REGISTER FUNCTIONS ------------------
 
   const data = {
