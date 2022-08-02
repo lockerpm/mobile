@@ -41,7 +41,7 @@ type BrowseItemContainer = {
 
 export const BROWSE_ITEMS: BrowseItemContainer = {
   folder: {
-    label: 'common.folder',
+    label: 'common.folders',
     icon: require('./images/vault/folder.png'),
     routeName: 'folders',
     svgIcon: FolderIcon
