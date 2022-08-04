@@ -153,6 +153,10 @@
     "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
     "not_available_for_free": "This feature is not available for free account!",
     "could_not_complete": "The operation couldn't be completed. Please try again",
+    "relay_add": "Failed to add",
+    "relay_save": "Failed to save",
+    "relay_email_limit": "You have reached the limit of 5/5 email aliases",
+    "relay_email_duplicate": "This address is already taken. Please choose another",
     "social_login": {
       "cannot_get_email": "Cannot retrieve public email from this account",
       "apple": {
@@ -162,7 +166,6 @@
         "play_service_not_available": "Google Play services are not available or outdated"
       },
       "facebook": {
-
 
       },
       "github": {
@@ -197,6 +200,23 @@
     "share_invitaion_accepted": "Done! The shared item will be decrypted shortly",
     "sync_success": "Data synchronized!",
     "will_sync_when_online": "Your data will be synced when there is an internet connection."
+  },
+  "private_relay": {
+    "title": "Private Relay",
+    "tool": "Hide your email from online service providers",
+    "root_email": "Your root email",
+    "desc" : {
+      "one": "All emails to your alias addresses will be forwarded to your root email",
+      "two": "You can create up to 5 alias addresses for your use",
+      "three": "You have one customizable alias"
+    },
+    "copy": "Copy alias",
+    "edit": "Edit alias",
+    "edit_modal": {
+      "titel": "Edit Alias Address",
+      "current": "Current Address",
+      "new": "New Address"
+    }
   },
   "policy": {
     "min_password_length": "Minimum password length is {{length}}",

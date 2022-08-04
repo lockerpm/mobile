@@ -20,7 +20,8 @@ import {
   PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen,
   ReferFriendScreen, FolderSharedUsersManagementScreen,
   PushEmailSettingsScreen, PushNotificationSettingsScreen,
-  InAppListNotification, InAppNotificationScreen, DeleteScreen
+  InAppListNotification, InAppNotificationScreen, DeleteScreen,
+  PrivateRelay
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -64,6 +65,7 @@ export type PrimaryParamList = {
   start: undefined
   switchDevice: undefined
   biometricUnlockIntro: undefined
+  privateRelay: undefined
   passwordGenerator: {
     fromTools?: boolean
   }
@@ -489,6 +491,7 @@ export const MainNavigator = observer(() => {
             gestureEnabled: false
           }}
         />
+        <Stack.Screen name="privateRelay" component={PrivateRelay} />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} initialParams={{ mode: 'add' }} />
 

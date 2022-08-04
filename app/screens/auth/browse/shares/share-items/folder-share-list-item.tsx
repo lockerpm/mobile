@@ -6,8 +6,6 @@ import { Button, Text } from "../../../../../components"
 import { commonStyles } from "../../../../../theme"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { FOLDER_IMG } from "../../../../../common/mappings"
-import { useStores } from "../../../../../models"
-import { AccountRole } from "../../../../../config/types"
 
 
 type Prop = {
@@ -19,8 +17,7 @@ type Prop = {
 
 export const CollectionListItem = (props: Prop) => {
     const { item, openActionMenu, navigation } = props
-    const { color, getTeam } = useMixins()
-    const { cipherStore } = useStores()
+    const { color } = useMixins()
     
     return (
         <Button
