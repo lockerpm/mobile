@@ -11,6 +11,7 @@ import TrashIcon from './images/vault/trash.svg'
 import CryptoWalletIcon from './images/vault/crypto-wallet.svg'
 import DataBreachScannerIcon from './images/vault/data-breach-scanner.svg'
 import PasswordGeneratorIcon from './images/vault/password-generator.svg'
+import PrivateRelay from './images/vault/private-relay.svg'
 import PasswordHealthIcon from './images/vault/password-health.svg'
 import AuthenticatorIcon from './images/vault/authenticator.svg'
 import FFolderIcon from './images/folder/folder.svg'
@@ -105,6 +106,7 @@ type ToolsItem = {
 type ToolsItemContainer = {
   passwordGenerator: ToolsItem,
   authenticator: ToolsItem,
+  privateRelay: ToolsItem,
   passwordHealth: ToolsItem,
   dataBreachScanner: ToolsItem
 }
@@ -116,6 +118,13 @@ export const TOOLS_ITEMS: ToolsItemContainer = {
     icon: require('./images/vault/password-generator.png'),
     routeName: 'passwordGenerator',
     svgIcon: PasswordGeneratorIcon
+  },
+  privateRelay: {
+    label: 'private_relay.title',
+    desc: 'private_relay.tool',
+    icon: require('./images/vault/private-relay.png'),
+    routeName: 'privateRelay',
+    svgIcon: PrivateRelay
   },
   authenticator: {
     label: 'authenticator.title',
