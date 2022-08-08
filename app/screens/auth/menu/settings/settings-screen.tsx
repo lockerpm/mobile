@@ -9,7 +9,7 @@ import { SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { AutofillDataType, loadShared, saveShared } from "../../../../utils/keychain"
-import { IS_IOS, IS_PROD } from "../../../../config/constants"
+import { IS_IOS } from "../../../../config/constants"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 import moment from 'moment'
 

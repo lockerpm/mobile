@@ -3,7 +3,7 @@ import { Linking, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { Layout, AutoImage as Image, Text, FloatingInput, Button, RecaptchaChecker } from "../../../components";
+import { Layout, AutoImage as Image, Text, FloatingInput, Button, RecaptchaChecker, LanguagePicker } from "../../../components";
 import { useMixins } from "../../../services/mixins"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
@@ -189,6 +189,7 @@ export const SignupScreen = observer(() => {
         </View>
       )}
     >
+      <LanguagePicker />
       {/* Modal */}
       <GitHubLoginModal
         isOpen={showGitHubLogin}

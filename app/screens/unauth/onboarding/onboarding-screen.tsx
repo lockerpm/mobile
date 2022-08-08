@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { BackHandler, View } from "react-native"
-import { AutoImage as Image, Button, Layout, Text } from "../../../components"
+import { AutoImage as Image, Button, LanguagePicker, Layout, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize, spacing } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
@@ -14,7 +14,7 @@ export const OnboardingScreen = observer(() => {
   const navigation = useNavigation()
   const { translate } = useMixins()
   const { uiStore } = useStores()
-  const {verticalScale} = useAdaptiveLayoutMixins()
+  const { verticalScale } = useAdaptiveLayoutMixins()
 
   // Child components
   const footer = (
@@ -72,6 +72,7 @@ export const OnboardingScreen = observer(() => {
       noScroll
       footer={footer}
     >
+      <LanguagePicker />
       <View style={commonStyles.CENTER_VIEW}>
         <Image
           source={uiStore.isDark ? APP_ICON.textVerticalLight : APP_ICON.textVertical}
