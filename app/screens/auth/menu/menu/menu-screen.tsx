@@ -87,7 +87,7 @@ export const MenuScreen = observer(() => {
           setUnreadConversationCount(res)
         }
       } catch (e) {
-        Logger.error(e, false)
+        Logger.error(e)
       }
     }
     user.isLoggedInPw && setUpCustomerService()
