@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { View, TextInput } from 'react-native'
+import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import { Button, Text } from '../../../../../components'
 import { useMixins } from '../../../../../services/mixins'
 import { fontSize } from '../../../../../theme'
@@ -8,17 +8,19 @@ import Feather from 'react-native-vector-icons/Feather'
 
 type Props = {
   seed: string
-  setSeed: (val: string) => void
+  setSeed?: (val: string) => void
+  disableEdit?: boolean
+  hideSeedPhrase?: boolean
 }
 
 export const SeedPhraseInput = (props: Props) => {
-  const { seed, setSeed } = props
+  const { seed, setSeed, disableEdit, hideSeedPhrase } = props
   const MAX_WORD_COUNT = 24
   const MIN_WORD_COUNT = 12
 
   // ---------------- PARAMS ------------------
 
-  const [wordCount, setWordCount] = useState(MIN_WORD_COUNT) 
+  const [wordCount, setWordCount] = useState(MIN_WORD_COUNT)
   const [maxWidth, setMaxWidth] = useState(0)
 
   // ---------------- COMPUTED ------------------
@@ -60,7 +62,7 @@ export const SeedPhraseInput = (props: Props) => {
         }
       })
     }
-    
+
     setSeed(res.join(' '))
     if (ws.length > 1 && index + ws.length - 1 < MAX_WORD_COUNT) {
       if (index + ws.length > wordCount) {
@@ -94,7 +96,7 @@ export const SeedPhraseInput = (props: Props) => {
     <View
       onLayout={(e) => {
         const { width } = e.nativeEvent.layout
-        setMaxWidth((width - 24) / 3)
+        setMaxWidth((width - 20) / 3)
       }}
       style={{
         flexDirection: 'row',
@@ -106,11 +108,13 @@ export const SeedPhraseInput = (props: Props) => {
       {
         words.filter((w, index) => !!w.trim() || (index < Math.max(lastWordIndex, wordCount))).map((w, index) => (
           <WordInput
+            disableEdit={disableEdit}
             maxWidth={maxWidth}
             outerRef={refs[index]}
             key={index}
             index={index}
             value={w}
+            hideSeedPhrase={hideSeedPhrase}
             onChange={(val: string) => {
               handleChange(val, index)
             }}
@@ -122,7 +126,7 @@ export const SeedPhraseInput = (props: Props) => {
       }
 
       {
-        (wordCount < MAX_WORD_COUNT) && (
+        (wordCount < MAX_WORD_COUNT) && !disableEdit && (
           <AddWordBtn
             maxWidth={maxWidth}
             onPress={() => {
@@ -146,28 +150,31 @@ type InputProps = {
   onChange: (val: string) => void
   onEmpty: () => void
   maxWidth?: number
+  disableEdit?: boolean
+  hideSeedPhrase?: boolean
 }
 
 export const WordInput = (props: InputProps) => {
-  const { value, onChange, index, outerRef, maxWidth, onEmpty } = props
-  const { color } = useMixins()
+  const { value, onChange, index, outerRef, maxWidth, onEmpty, disableEdit, hideSeedPhrase } = props
+  const { color, copyToClipboard } = useMixins()
 
   const [isFocused, setIsFocused] = useState(false)
 
   return (
-    <View style={{
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      borderRadius: 16,
-      borderWidth: 1,
-      borderColor: isFocused ? color.primary : color.line,
-      minWidth: 100,
-      maxWidth: maxWidth || undefined,
-      marginHorizontal: 4,
-      paddingHorizontal: 12,
-      marginBottom: 8
-    }}>
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 16,
+        borderWidth: 1,
+        borderColor: isFocused ? color.primary : color.line,
+        minWidth: 100,
+        maxWidth: maxWidth || undefined,
+        marginHorizontal: 4,
+        paddingHorizontal: 12,
+        marginBottom: 8
+      }}>
       <Text
         preset='black'
         text={`${index + 1}.`}
@@ -176,12 +183,14 @@ export const WordInput = (props: InputProps) => {
         selectTextOnFocus
         ref={outerRef}
         value={value}
+        secureTextEntry={hideSeedPhrase}
         onChangeText={onChange}
         onKeyPress={({ nativeEvent }) => {
           if (nativeEvent.key === 'Backspace' && !value) {
             onEmpty()
           }
         }}
+
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         selectionColor={color.primary}
@@ -193,6 +202,12 @@ export const WordInput = (props: InputProps) => {
           paddingVertical: 0
         }}
       />
+      {
+        disableEdit && <TouchableOpacity
+          style={[StyleSheet.absoluteFillObject, { zIndex: 200 }]}
+          onPress={() => copyToClipboard(value)}
+        />
+      }
     </View>
   )
 }
@@ -212,7 +227,7 @@ export const AddWordBtn = (props: BtnProps) => {
     <Button
       preset='link'
       onPress={onPress}
-      style= {{
+      style={{
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
