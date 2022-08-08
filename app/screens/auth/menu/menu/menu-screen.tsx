@@ -90,10 +90,7 @@ export const MenuScreen = observer(() => {
         Logger.error(e)
       }
     }
-    user.isLoggedInPw && setUpCustomerService()
-    return () => {
-
-    }
+    user.isLoggedInPw && navigation.isFocused() && setUpCustomerService()
   }, [uiStore.isShowIntercomMsgBox])
 
   useEffect(() => {
