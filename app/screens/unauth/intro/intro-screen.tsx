@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { View, TouchableOpacity } from "react-native"
-import { AutoImage as Image, Text, Layout, Button } from "../../../components"
+import { AutoImage as Image, Text, Layout, Button, LanguagePicker } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize, spacing } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
@@ -64,7 +64,7 @@ export const IntroScreen = () => {
             flex: 1,
             alignSelf: "center",
           }} />
-          <Text text={item.desc} style={{ textAlign: 'center',  flex: 1}} />
+          <Text text={item.desc} style={{ textAlign: 'center', flex: 1 }} />
         </View>}
 
       </View>
@@ -108,6 +108,7 @@ export const IntroScreen = () => {
       footer={footer}
       noScroll
     >
+      <LanguagePicker />
       <View style={{ flex: 1, justifyContent: 'center', marginBottom: 10 }}>
         {/* Tabs */}
         <View style={{ flex: 5, minHeight: 300 }}>

@@ -14,7 +14,7 @@ export const UiStoreModel = types
     showWelcomePremium: false,
     isShowedAppReview: false,
     inAppReviewShowDate: types.maybeNull(types.number),
-    inAppNotiUnreadCount:  types.maybeNull(types.number),
+    inAppNotiUnreadCount: types.maybeNull(types.number),
 
     // Cache
     isFromAutoFillItem: types.maybeNull(types.boolean),
@@ -95,7 +95,6 @@ export const UiStoreModel = types
       }
     },
 
-
     clearDeepLink() {
       self.deepLinkAction = null
       self.deepLinkUrl = null
@@ -121,7 +120,7 @@ export const UiStoreModel = types
     'deepLinkAction',
     'deepLinkUrl',
     'saveLogin',
-    'saveLastId'
+    'saveLastId',
   ]))
 
 /**

@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
-import { Layout, Text, Button } from "../../../components"
+import { Layout, Text, Button, LanguagePicker } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import { commonStyles, spacing } from "../../../theme"
 import { DefaultLogin } from "./default"
 import { MethodSelection } from "./method-selection"
 import { Otp } from "./otp"
-import { SocialSignedUpModal } from "../signup/social-signup-modal"
 import { useStores } from "../../../models"
 
 export const LoginScreen = observer(() => {
@@ -26,10 +25,6 @@ export const LoginScreen = observer(() => {
   })
   const [method, setMethod] = useState('')
   const [partialEmail, setPartialEamil] = useState('')
-
-  const [token, setResetPWToken] = useState("")
-  const [account, setAccount] = useState(null)
-  const [showSocialSignedUpModal, setShowSocialSignedUpModal] = useState(false)
 
   // ------------------------------ METHODS -------------------------------
 
@@ -65,14 +60,7 @@ export const LoginScreen = observer(() => {
 
     navigation.addListener('beforeRemove', handleBack)
 
-    const unsubscribe = navigation.addListener('focus', () => {
-      setResetPWToken("")
-      setAccount(null)
-      setShowSocialSignedUpModal(false)
-    });
-
     return () => {
-      unsubscribe()
       navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
@@ -104,7 +92,7 @@ export const LoginScreen = observer(() => {
         </View>
       )}
     >
-
+      <LanguagePicker />
       {
         index === 0 && (
           <DefaultLogin

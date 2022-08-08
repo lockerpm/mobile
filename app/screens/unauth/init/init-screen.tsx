@@ -103,11 +103,12 @@ export const InitScreen = observer(() => {
     if (checkTrustFall()) {
       return
     }
-    
+
     const connectionState = await NetInfo.fetch()
 
     // Setup basic data
     user.setLanguage(user.language)
+
     if (!user.deviceId) {
       user.setDeviceId(DeviceInfo.getUniqueId())
     }
