@@ -36,7 +36,6 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
     outputByteSize: number, algorithm: 'sha256' | 'sha512'): Promise<ArrayBuffer> {
     const saltBuf = this.toArrayBuffer(salt);
     const prk = await this.hmac(ikm, saltBuf, algorithm);
-    // console.log(`-------- HKDF ---------`)
     return this.hkdfExpand(prk, info, outputByteSize, algorithm);
   }
 
@@ -45,7 +44,6 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
   async hkdfExpand(prk: ArrayBuffer, info: string | ArrayBuffer, outputByteSize: number,
     algorithm: 'sha256' | 'sha512'): Promise<ArrayBuffer> {
     const hashLen = algorithm === 'sha256' ? 32 : 64;
-    // console.log(`-------- HKDF expand ---------`)
     if (outputByteSize > 255 * hashLen) {
       throw new Error('outputByteSize is too large.');
     }
@@ -267,7 +265,6 @@ export class MobileCryptoFunctionService implements CryptoFunctionService {
 
   // TODO: replaced in react-native-crypto shim -> ignore
   randomBytes(length: number): Promise<ArrayBuffer> {
-    // console.log(`-------- Randombytes ---------`)
     return new Promise<ArrayBuffer>((resolve, reject) => {
       crypto.randomBytes(length, (error, bytes) => {
         if (error != null) {

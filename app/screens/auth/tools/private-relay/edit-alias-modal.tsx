@@ -32,7 +32,6 @@ export const EditAliasModal = observer((props: Props) => {
   const handleEdit = async () => {
     setIsLoading(true)
     const res = await toolStore.updateRelayAddress(item.id, newAddress.toLowerCase())
-    console.log(res)
     if (res.kind === "ok") {
       onClose()
       onEdit()

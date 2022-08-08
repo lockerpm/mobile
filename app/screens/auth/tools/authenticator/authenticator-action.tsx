@@ -110,7 +110,6 @@ export const AuthenticatorAction = observer((props: Props) => {
                 name={'(DEBUG) Log note'}
                 icon="copy"
                 action={() => {
-                  console.log(otp)
                   console.log(cipher.notes)
                 }}
               />

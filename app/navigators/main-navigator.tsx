@@ -228,7 +228,7 @@ export const MainNavigator = observer(() => {
             }
           })
           .catch((error) => {
-            Logger.error(error);
+            Logger.error(error, false);
           });
     } else {
       uiStore.setInAppReviewShowDate(currentTime + 6e8)
@@ -361,8 +361,8 @@ export const MainNavigator = observer(() => {
   // Intercom support 
   useEffect(() => {
     if (user.isLoggedInPw) {
-      Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id }).catch((e) => {
-        Logger.error(e)
+      Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id }).catch((error) => {
+        Logger.error(error)
       })
     }
   }, [user.isLoggedInPw])

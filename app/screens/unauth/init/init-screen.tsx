@@ -103,7 +103,7 @@ export const InitScreen = observer(() => {
     if (checkTrustFall()) {
       return
     }
-
+    
     const connectionState = await NetInfo.fetch()
 
     // Setup basic data
