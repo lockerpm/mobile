@@ -228,7 +228,7 @@ export const MainNavigator = observer(() => {
             }
           })
           .catch((error) => {
-            Logger.error(error, false);
+            Logger.error(error);
           });
     } else {
       uiStore.setInAppReviewShowDate(currentTime + 6e8)
