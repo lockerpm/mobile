@@ -14,6 +14,7 @@ import { useMixins } from "../../../../../services/mixins"
 import { toCryptoWalletData } from "../../../../../utils/crypto"
 import { CHAIN_LIST } from "../../../../../utils/crypto/chainlist"
 import { WALLET_APP_LIST } from "../../../../../utils/crypto/applist"
+import { SeedPhraseInfo } from "./seed-phrase-info"
 
 
 export const CryptoWalletInfoScreen = observer(() => {
@@ -47,7 +48,7 @@ export const CryptoWalletInfoScreen = observer(() => {
             <Button
               preset="link"
               onPress={() => setShowAction(true)}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
@@ -128,8 +129,8 @@ export const CryptoWalletInfoScreen = observer(() => {
 
       {/* Info */}
       <View style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingVertical: 22
+        backgroundColor: color.background,
+        paddingVertical: 22
       }]}>
         {/* App */}
         <View>
@@ -210,15 +211,13 @@ export const CryptoWalletInfoScreen = observer(() => {
         />
 
         {/* Seed */}
-        <FloatingInput
-          isPassword
-          fixedLabel
-          copyAble
-          label={translate('crypto_asset.seed')}
-          value={cryptoWalletData.seed}
-          editable={false}
-          style={{ marginTop: 20 }}
-        />
+        <View style={{ marginTop: 30 }}>
+          <SeedPhraseInfo
+            seed={cryptoWalletData.seed}
+          />
+        </View>
+        {/* Seed */}
+
 
         {/* Networks */}
         <View style={{ marginTop: 20 }}>
