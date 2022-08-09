@@ -320,7 +320,10 @@ export const SettingsScreen = observer(() => {
           noBorder
           style={{ width: '100%' }}
           name={translate('common.delete')}
-          action={() => navigation.navigate("deleteAccount")}
+          action={() => {
+            Linking.openURL("https://locker.io/settings/account")
+            // navigation.navigate("deleteAccount")
+          }}
         />
         {/* Delete end */}
 
