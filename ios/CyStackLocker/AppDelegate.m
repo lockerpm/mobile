@@ -162,7 +162,7 @@ static void InitializeFlipper(UIApplication *application) {
 - (void)initTrustKit {
      NSDictionary *trustKitConfig =
      @{
-       kTSKSwizzleNetworkDelegates: @YES,
+       kTSKSwizzleNetworkDelegates: @NO,
        kTSKPinnedDomains : @{
          [ReactNativeConfig envFor:@"SSL_PINNING_HOST"] : @{
               kTSKEnforcePinning : @YES,
