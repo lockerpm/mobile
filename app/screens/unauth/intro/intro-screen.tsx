@@ -6,8 +6,9 @@ import { commonStyles, fontSize, spacing } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../services/mixins"
 import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
+import { observer } from "mobx-react-lite"
 
-export const IntroScreen = () => {
+export const IntroScreen = observer(() => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
   const { isPortrait, isTablet } = useAdaptiveLayoutMixins()
@@ -95,7 +96,7 @@ export const IntroScreen = () => {
       noScroll
     >
       <LanguagePicker />
-      <View style={{ alignItems: "flex-end", top: 20, right: 20}}>
+      <View style={{ position: "absolute", top: 16, right: 20, zIndex: 11 }}>
         <Button
           text={translate('common.skip').toUpperCase()}
           textStyle={{ fontSize: fontSize.p }}
@@ -137,4 +138,4 @@ export const IntroScreen = () => {
       </View>
     </Layout>
   )
-}
+})
