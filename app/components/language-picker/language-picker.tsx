@@ -22,7 +22,7 @@ export const LanguagePicker = observer(() => {
         left: 20,
         top: 16
     }
-
+ 
     const languages: {
         label: "vi" | "en",
         text: string,

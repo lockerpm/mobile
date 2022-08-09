@@ -159,7 +159,7 @@ export const InitScreen = observer(() => {
       }
       return
     }
-
+   
 
     // Network connected? || Is autofill?
     if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {

@@ -96,28 +96,7 @@ export const LockScreen = observer(() => {
   }
 
   // ---------------------- COMPONENTS -------------------------
-
-  const header = (
-    <View style={{ alignItems: "flex-end" }}>
-
-      {isAutofillAnroid ?
-        <Button
-          text={translate('common.cancel').toUpperCase()}
-          textStyle={{ fontSize: fontSize.p }}
-          preset="link"
-          onPress={() => BackHandler.exitApp()}
-        />
-        :
-        <Button
-          text={translate('common.logout').toUpperCase()}
-          textStyle={{ fontSize: fontSize.p }}
-          preset="link"
-          onPress={handleLogout}
-        />
-      }
-    </View>
-  )
-
+  
   const footer = (
     <Button
       isLoading={isSendingHint}
@@ -190,12 +169,26 @@ export const LockScreen = observer(() => {
   return (
     <Layout
       isOverlayLoading={isScreenLoading}
-      header={header}
       footer={footer}
     >
-      <LanguagePicker 
-      
-      />
+      <LanguagePicker />
+      <View style={{ alignItems: "flex-end", marginTop: 8 }}>
+        {isAutofillAnroid ?
+          <Button
+            text={translate('common.cancel').toUpperCase()}
+            textStyle={{ fontSize: fontSize.p }}
+            preset="link"
+            onPress={() => BackHandler.exitApp()}
+          />
+          :
+          <Button
+            text={translate('common.logout').toUpperCase()}
+            textStyle={{ fontSize: fontSize.p }}
+            preset="link"
+            onPress={handleLogout}
+          />
+        }
+      </View>
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
         <Image source={APP_ICON.iconDark} style={{ height: 63, width: 63 }} />
 

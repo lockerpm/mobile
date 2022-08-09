@@ -72,19 +72,6 @@ export const IntroScreen = () => {
   })
   const renderScene = SceneMap(map)
 
-  // Header
-  const header = (
-    <View style={{ alignItems: "flex-end" }}>
-      <Button
-        text={translate('common.skip').toUpperCase()}
-        textStyle={{ fontSize: fontSize.p }}
-        preset="link"
-        onPress={() => navigation.navigate("onBoarding")}
-      >
-      </Button>
-    </View>
-  )
-
   // Footer
   const footer = (
     <View>
@@ -104,11 +91,19 @@ export const IntroScreen = () => {
 
   return (
     <Layout
-      header={header}
       footer={footer}
       noScroll
     >
       <LanguagePicker />
+      <View style={{ alignItems: "flex-end", top: 20, right: 20}}>
+        <Button
+          text={translate('common.skip').toUpperCase()}
+          textStyle={{ fontSize: fontSize.p }}
+          preset="link"
+          onPress={() => navigation.navigate("onBoarding")}
+        >
+        </Button>
+      </View>
       <View style={{ flex: 1, justifyContent: 'center', marginBottom: 10 }}>
         {/* Tabs */}
         <View style={{ flex: 5, minHeight: 300 }}>
