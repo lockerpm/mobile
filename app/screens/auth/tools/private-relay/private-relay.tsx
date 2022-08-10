@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { TouchableOpacity, View } from "react-native"
+import { Animated, TouchableOpacity, View } from "react-native"
 import { Layout, Header, Text, AutoImage as Imgae, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles } from "../../../../theme"
@@ -131,7 +131,7 @@ export const PrivateRelay = observer(() => {
           </View>
 
           {
-            showDesc && <View style={{ marginTop: 8 }}>
+            showDesc && <Animated.View style={{ marginTop: 8 }}>
               {
                 rootEmailDesc.map((item, index) => (
                   <View key={index} style={{ flexDirection: "row", marginRight: 16, marginVertical: 2 }}>
@@ -140,7 +140,7 @@ export const PrivateRelay = observer(() => {
                   </View>
                 ))
               }
-            </View>
+            </Animated.View>
           }
         </TouchableOpacity>
       </View>

@@ -54,7 +54,7 @@ static void InitializeFlipper(UIApplication *application) {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   if ([[ReactNativeConfig envFor:@"IS_PROD"] isEqualToString: @"1"]) {
-    [self initTrustKit];
+    // [self initTrustKit];
   }
 
   [FIRApp configure];
@@ -162,7 +162,7 @@ static void InitializeFlipper(UIApplication *application) {
 - (void)initTrustKit {
      NSDictionary *trustKitConfig =
      @{
-       kTSKSwizzleNetworkDelegates: @YES,
+       kTSKSwizzleNetworkDelegates: @NO,
        kTSKPinnedDomains : @{
          [ReactNativeConfig envFor:@"SSL_PINNING_HOST"] : @{
               kTSKEnforcePinning : @YES,

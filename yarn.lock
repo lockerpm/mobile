@@ -14878,6 +14878,11 @@ react-native-app-auth@^6.4.3:
     invariant "2.2.4"
     react-native-base64 "0.0.2"
 
+react-native-appsflyer@^6.8.0:
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/react-native-appsflyer/-/react-native-appsflyer-6.8.0.tgz#a21f54d2110e965b16be0bbe4ff820e2596e1de8"
+  integrity sha512-cOHr5JLGgCYieNnLetNGoCCIHBS7o9HTaDm+LGqbkVTRO6SOF/RsJHYe4Se4ace3IIXypIvfiHGirGuNigLbjQ==
+
 react-native-base64@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/react-native-base64/-/react-native-base64-0.0.2.tgz#c28463c2c6779ac3ec5fdd12979ebc8c5f9b410a"

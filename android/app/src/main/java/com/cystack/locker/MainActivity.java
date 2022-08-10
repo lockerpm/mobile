@@ -13,6 +13,7 @@ import com.facebook.react.ReactActivityDelegate;
 
 import com.facebook.react.modules.network.OkHttpClientProvider;
 import com.cystack.locker.CertificatePinningClientFactory;
+import android.util.Log;
 
 public class MainActivity extends ReactActivity {
 
@@ -30,8 +31,9 @@ public class MainActivity extends ReactActivity {
     SplashScreen.show(this);  // here
     super.onCreate(savedInstanceState);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-    if (BuildConfig.IS_PROD.equals('1')) {
-      OkHttpClientProvider.setOkHttpClientFactory(new CertificatePinningClientFactory());
+
+    if (BuildConfig.IS_PROD.equals("1")) {
+      // OkHttpClientProvider.setOkHttpClientFactory(new CertificatePinningClientFactory());
     }
   }
 

@@ -49,7 +49,7 @@ export const AliasItem = (props: Props) => {
 
   return (
     <View style={{ marginVertical: 16 }}>
-    
+
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
         <View>
           <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
@@ -74,7 +74,7 @@ export const AliasItem = (props: Props) => {
             <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
               <View>
                 <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
-                <Text text={item.created_time.toString()} />
+                <Text text={moment.unix(item.created_time).format("MMMM d, YYYY")} />
               </View>
             </View>
           </View>
