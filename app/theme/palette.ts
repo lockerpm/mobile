@@ -12,4 +12,5 @@ export const palette = {
   danger: '#F54F64',
   warning: '#FF9900',
   blue: '#3379b7',
+  orange: '#FF9800',
 }

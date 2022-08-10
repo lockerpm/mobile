@@ -33,6 +33,7 @@ export const color = {
   warning: palette.warning,
   info: palette.blue,
   white: palette.white,
+  orange: palette.orange,
 
   /**
    * Storybook background for Text stories, or any stories where

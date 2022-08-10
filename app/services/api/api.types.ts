@@ -7,7 +7,7 @@ import { CollectionResponse } from "../../../core/models/response/collectionResp
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { CipherResponse } from "../../../core/models/response/cipherResponse"
-import { AccountRoleText, InvitationStatus, NotificationCategory, SharingStatus, SharingType } from "../../config/types"
+import { AccountRoleText, EmergencyAccessStatus, EmergencyAccessType, InvitationStatus, NotificationCategory, SharingStatus, SharingType } from "../../config/types"
 import { ProfileResponse } from "../../../core/models/response/profileResponse"
 import { ProfileOrganizationResponse } from "../../../core/models/response/profileOrganizationResponse"
 
@@ -140,10 +140,7 @@ export type GetOrganizationResult = { kind: "ok", data: ProfileOrganizationRespo
 export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
 export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | GeneralApiProblem
 export type GetProfileResult = { kind: "ok", data: ProfileResponse } | GeneralApiProblem
-
-export type GetTeamsResult = {
-  kind: 'ok', teams: object[]
-} | GeneralApiProblem
+export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
 
 export type GetPlanResult = {
   kind: 'ok'
@@ -259,27 +256,12 @@ export type CheckBreachResult = {
   }[]
 } | GeneralApiProblem
 
-export type GetPolicyResult = {
-  kind: 'ok',
-  data: PolicyType
-} | GeneralApiProblem
+export type GetPolicyResult = { kind: 'ok', data: PolicyType } | GeneralApiProblem
+export type GetLastUpdateResult = { kind: 'ok', data: { revision_date: number } } | GeneralApiProblem
 
-export type GetLastUpdateResult = {
-  kind: 'ok',
-  data: {
-    revision_date: number
-  }
-} | GeneralApiProblem
-
-export type GetSharingPublicKeyResult = {
-  kind: 'ok',
-  data: {
-    public_key: string
-  }
-} | GeneralApiProblem
-
+export type GetSharingPublicKeyResult = { kind: 'ok', data: { public_key: string } } | GeneralApiProblem
 // TODO
-export type ShareFolderResult = { kind: 'ok',  data: {id: string}} | GeneralApiProblem
+export type ShareFolderResult = { kind: 'ok', data: { id: string } } | GeneralApiProblem
 export type ShareCipherResult = {
   kind: 'ok',
   data: {
@@ -287,18 +269,10 @@ export type ShareCipherResult = {
   }
 } | GeneralApiProblem
 
-export type GetShareInvitationsResult = { kind: 'ok', data: SharingInvitationType[]} | GeneralApiProblem
-export type GetMySharesResult = { kind: 'ok', data: MyShareType[]} | GeneralApiProblem
-
-export type PostCipherResult = {
-  kind: 'ok',
-  data: {
-    id: string      // cipher id
-  }
-} | GeneralApiProblem
-
-export type ImportFolderResult = { kind: 'ok', data: {ids: string[] }} | GeneralApiProblem
-
+export type GetShareInvitationsResult = { kind: 'ok', data: SharingInvitationType[] } | GeneralApiProblem
+export type GetMySharesResult = { kind: 'ok', data: MyShareType[] } | GeneralApiProblem
+export type PostCipherResult = { kind: 'ok', data: { id: string } } | GeneralApiProblem
+export type ImportFolderResult = { kind: 'ok', data: { ids: string[] } } | GeneralApiProblem
 export type FetchOfferDetailsResult = {
   kind: "ok",
   data: {
@@ -310,10 +284,11 @@ export type FetchOfferDetailsResult = {
 
 } | GeneralApiProblem
 
-export type FetchRelayListAddressesResult = {kind: "ok", data: RelayAddresses} | GeneralApiProblem
-export type GenerateRelayNewAddressResult = {kind: "ok", data: RelayAddress} | GeneralApiProblem
-
-// ---------------- Request data --------------------
+export type FetchRelayListAddressesResult = { kind: "ok", data: RelayAddresses } | GeneralApiProblem
+export type GenerateRelayNewAddressResult = { kind: "ok", data: RelayAddress } | GeneralApiProblem
+export type TrustedResult = { kind: "ok", data: TrustedContact[] } | GeneralApiProblem
+export type EAInviteResult = { kind: "ok", data: { is: string } } | GeneralApiProblem
+// ---------------- data --------------------
 export type NotificationSettingData = {
   category: {
     id: NotificationCategory
@@ -596,4 +571,22 @@ export type RelayAddresses = {
   next: {}
   previous: {}
   results: RelayAddress[]
+}
+
+export type TrustedContact = {
+  avatar: string
+  creation_date: number
+  email: string
+  full_name: string
+  grantor_pwd_user_id?: string
+  grantee_pwd_user_id?: string
+  id: string
+  key_encrypted: string
+  last_notification_date: number | null
+  object: string
+  recovery_initiated_date: number | null
+  revision_date: number
+  status: EmergencyAccessStatus
+  type: EmergencyAccessType
+  wait_time_days: number
 }

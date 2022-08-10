@@ -8,6 +8,7 @@ import DeviceInfo from 'react-native-device-info'
 import moment from "moment"
 import { omit } from "ramda"
 import { AppEventType, EventBus } from "../../utils/event-bus"
+import { EmergencyAccessType } from "../../config/types"
 
 
 export enum AppTimeoutType {
@@ -253,7 +254,7 @@ export const UserModel = types
       const res = await userApi.getUser(options?.customToken || self.apiToken)
       if (res.kind === "ok" && !options?.dontSetData) {
         if (self.email && res.user.email !== self.email) {
-          
+
           EventBus.emit(AppEventType.CLEAR_ALL_DATA, null)
           self.clearSettings()
         }
@@ -515,6 +516,7 @@ export const UserModel = types
       return res
     },
 
+    // NOTIFICATION SETTING
     getNotificationSettings: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getNotificationSettings(self.apiToken)
@@ -538,6 +540,39 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.markReadInappNoti(self.apiToken, id)
       return res
+    },
+
+    // EMERGENCY ACCESS
+    inviteEA: async (email: string, key: string, type: EmergencyAccessType, waitTime: number) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EAInvite(self.apiToken, email, key, type, waitTime)
+      return res
+    },
+    trustedEA: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EATrusted(self.apiToken)
+      return res
+    },
+    grantedEA: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EAGranted(self.apiToken)
+      return res
+    },
+    actionEA: async (id: string, action: "accept" | "initiate" | "comfirm" | "reject") => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EAAction(self.apiToken, id, action)
+      if (res.kind === "ok") {
+        return true
+      }
+      return false
+    },
+    removeEA: async (id: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EARemove(self.apiToken, id)
+      if (res.kind === "ok") {
+        return true
+      }
+      return false
     }
 
   }))

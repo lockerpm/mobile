@@ -120,7 +120,7 @@ export const SectionWrapperItem = (props: WrapperProps) => {
   const { color } = useMixins()
 
   const SECTION_TITLE: TextStyle = {
-    fontSize: fontSize.small,
+    fontSize: fontSize.p,
     marginHorizontal: 20,
     marginBottom: 12,
   }
@@ -130,14 +130,11 @@ export const SectionWrapperItem = (props: WrapperProps) => {
       {
         title && <Text
           text={title}
-          style={[SECTION_TITLE, {
-            marginTop: 15,
-          }]}
+          style={SECTION_TITLE}
         />
       }
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background,
-        marginTop: !title ? 15 : 0,
       }]}>
         {children}
       </View>

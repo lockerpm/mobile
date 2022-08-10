@@ -76,3 +76,15 @@ export enum NotificationCategory {
   MARKETING = "marketing",
   OTHER = "other"
 }
+
+export enum EmergencyAccessStatus {
+  INVITED = "invited",
+  CONFIRMED = "confirmed",
+  RECOVERY_INITIATED = "recovery_initiated",
+  RECOVERY_APPROVED = "recovery_approved"
+}
+
+export enum EmergencyAccessType {
+  TAKEOVER = "takeover",
+  VIEW = "view"
+}

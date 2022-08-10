@@ -33,7 +33,7 @@ export const colorDark = {
   warning: palette.warning,
   info: palette.blue,
   white: '#FDFDFD',
-
+  orange: palette.orange,
   /**
    * Storybook background for Text stories, or any stories where
    * the text color is color.text, which is white by default, and does not show
