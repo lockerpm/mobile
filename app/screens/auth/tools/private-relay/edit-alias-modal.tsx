@@ -17,7 +17,7 @@ interface Props {
 
 export const EditAliasModal = observer((props: Props) => {
   const { isOpen, onClose, item, onEdit } = props
-  const { translate, color, notifyApiError } = useMixins()
+  const { translate, color } = useMixins()
   const { toolStore } = useStores()
   // --------------- PARAMS ----------------
 

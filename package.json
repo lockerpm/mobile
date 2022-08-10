@@ -93,6 +93,7 @@
     "react-native": "0.64.2",
     "react-native-android-settings-tool": "^1.0.4",
     "react-native-app-auth": "^6.4.3",
+    "react-native-appsflyer": "^6.8.0",
     "react-native-biometrics": "^2.1.4",
     "react-native-camera": "^4.2.1",
     "react-native-collapsible": "^1.6.0",

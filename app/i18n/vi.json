@@ -200,11 +200,11 @@
     "will_sync_when_online": "Dữ liệu của bạn sẽ được đồng bộ khi có kết nối internet."
   },
   "private_relay": {
-    "title": "Dịch vụ ẩn email",
+    "title": "Email ẩn danh",
     "tool": "Ẩn địa chỉ email của bạn khỏi các nhà cung cấp dịch vụ trực tuyến",
     "root_email": "Địa chỉ email gốc của bạn",
     "desc" : {
-      "one": "Tất cả email gửi đến đỉa chỉ email bí danh sẽ được chuyển tiếp đế địa chỉ email gốc",
+      "one": "Tất cả email gửi đến địa chỉ email bí danh sẽ được chuyển tiếp đến địa chỉ email gốc",
       "two": "Bạn có thể tạo tối đa 5 email bí danh",
       "three": "Bạn có thể sửa đổi 1 bí danh theo ý bạn"
     },
