@@ -340,6 +340,14 @@ export const SettingsScreen = observer(() => {
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background
       }]}>
+        {/* Emergency Access */}
+        <SettingsItem
+          name={"Emergency Access"}
+          action={() => navigation.navigate('emergencyAccess')}
+        />
+        {/* Emergency Access*/}
+
+
         {/* Autofill */}
         <SettingsItem
           name={translate('settings.autofill_service')}

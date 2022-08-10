@@ -21,7 +21,7 @@ import {
   ReferFriendScreen, FolderSharedUsersManagementScreen,
   PushEmailSettingsScreen, PushNotificationSettingsScreen,
   InAppListNotification, InAppNotificationScreen, DeleteScreen,
-  PrivateRelay
+  PrivateRelay, EmergencyAccessNavigator
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -141,6 +141,8 @@ export type PrimaryParamList = {
     notifications: AppNotification
   }
   app_noti: undefined
+
+  emergencyAccess: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -482,7 +484,7 @@ export const MainNavigator = observer(() => {
 
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
         <Stack.Screen name="healthStack" component={HealthNavigator} />
-
+        <Stack.Screen name="emergencyAccess" component={EmergencyAccessNavigator} />
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
