@@ -21,6 +21,10 @@ export const Contact = (props: Props) => {
 
   const [showAction, setShowAcction] = useState(false)
 
+  const isInvited = trustedContact.status === EmergencyAccessStatus.INVITED
+  const isConfirm = trustedContact.status === EmergencyAccessStatus.CONFIRMED
+  const isApproved = trustedContact.status === EmergencyAccessStatus.RECOVERY_APPROVED
+
   // ----------------------- METHODS -----------------------
 
   // ----------------------- RENDER -----------------------
@@ -64,9 +68,9 @@ export const Contact = (props: Props) => {
               marginLeft: 10,
               paddingHorizontal: 10,
               paddingVertical: 2,
-              backgroundColor: trustedContact.status === EmergencyAccessStatus.INVITED
+              backgroundColor: isInvited
                 ? color.warning
-                : trustedContact.status === EmergencyAccessStatus.CONFIRMED
+                : isConfirm || isApproved
                   ? color.primary
                   : color.textBlack,
               borderRadius: 3,

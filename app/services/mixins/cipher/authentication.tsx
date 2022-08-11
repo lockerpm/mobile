@@ -25,13 +25,14 @@ const { createContext, useContext } = React
 // Mixins data
 const defaultData = {
   // Methods
-  sessionLogin: async (masterPassword : string) => { return { kind: 'unknown' } },
+  sessionLogin: async (masterPassword: string) => { return { kind: 'unknown' } },
   biometricLogin: async () => { return { kind: 'unknown' } },
-  logout: async () => {},
-  lock: async () => {},
+  logout: async () => { },
+  lock: async () => { },
   registerLocker: async (masterPassword: string, hint: string, passwordStrength: number) => { return { kind: 'unknown' } },
   changeMasterPassword: async (oldPassword: string, newPassword: string) => { return { kind: 'unknown' } },
-  clearAllData: async (dataOnly?: boolean) => {},
+  updateNewMasterPasswordEA: async (newPassword: string, key: any) => { return { kind: 'unknown' } },
+  clearAllData: async (dataOnly?: boolean) => { },
   handleDynamicLink: async (url: string, navigation?: any) => false
 }
 
@@ -117,7 +118,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
       const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
-      
+
       // Offline compare
       if (uiStore.isOffline) {
         const storedKeyHash = await cryptoService.getKeyHash()
@@ -125,7 +126,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
           const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
           if (passwordValid) {
             messagingService.send('loggedIn')
-  
+
             // Fake set key
             await cryptoService.setKey(key)
             return { kind: 'ok' }
@@ -143,7 +144,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
   }
 
   // Biometric login
-  const biometricLogin =  async (): Promise<{ kind: string }> => {
+  const biometricLogin = async (): Promise<{ kind: string }> => {
     try {
       // await delay(200)
       const { available } = await ReactNativeBiometrics.isSensorAvailable()
@@ -175,7 +176,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
         await cryptoService.setKey(storedKey)
         return { kind: 'ok' }
       }
-      
+
       // Online login
       const key = await cryptoService.getKey()
       const keyHash = await cryptoService.getKeyHash()
@@ -227,16 +228,40 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
       await cryptoService.setEncKey(encKey[1].encryptedString)
       await cryptoService.setEncPrivateKey(keys[1].encryptedString)
 
-  
+
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(masterPassword, key.keyB64)
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
-      
+
 
       // Success
       notify('success', translate('success.master_password_updated'))
 
       await delay(500)
 
+      return { kind: 'ok' }
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      return { kind: 'bad-data' }
+    }
+  }
+
+  // Change master password
+  const updateNewMasterPasswordEA = async (newPassword: string, key: any): Promise<{ kind: string }> => {
+    try {
+      const keyHash = await cryptoService.hashPassword(newPassword, key)
+      // Send API
+      // const res = await user.changeMasterPassword({
+
+      //   new_master_password_hash: keyHash,
+      //   master_password_hash: oldKeyHash
+      // })
+      // if (res.kind !== 'ok') {
+      //   notifyApiError(res)
+      //   return { kind: 'bad-data' }
+      // }
+
+      // Setup service
+      notify('success', translate('success.master_password_updated'))
       return { kind: 'ok' }
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
@@ -414,6 +439,7 @@ export const CipherAuthenticationMixinsProvider = observer((props: { children: b
     lock,
     registerLocker,
     changeMasterPassword,
+    updateNewMasterPasswordEA,
     clearAllData,
     handleDynamicLink
   }

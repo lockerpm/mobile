@@ -2,21 +2,20 @@ import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from 'lodash/orderBy'
-import { Text } from "../../text/text"
-import { CipherType } from "../../../../core/enums"
-import { useMixins } from "../../../services/mixins"
-import { useStores } from "../../../models"
-import { CipherView } from "../../../../core/models/view"
-import { PasswordAction } from "../../../screens/auth/browse/passwords/password-action"
-import { CardAction } from "../../../screens/auth/browse/cards/card-action"
-import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
-import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
-import { DeletedAction } from "../cipher-action/deleted-action"
-import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { CryptoWalletAction } from "../../../screens/auth/browse/crypto-asset/crypto-wallet-action"
-import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
-import { CipherListItem } from "./cipher-list-item"
-import { MAX_CIPHER_SELECTION } from "../../../config/constants"
+import { Text } from "../../../../../../components"
+import { useMixins } from "../../../../../../services/mixins"
+import { useCipherDataMixins } from "../../../../../../services/mixins/cipher/data"
+import { useCipherHelpersMixins } from "../../../../../../services/mixins/cipher/helpers"
+import { useStores } from "../../../../../../models"
+import { CipherView } from "../../../../../../../core/models/view"
+import { CipherType } from "../../../../../../../core/enums"
+import { CipherListItem } from "../../../../../../components/cipher/cipher-list/cipher-list-item"
+import { PasswordAction } from "../../../../browse/passwords/password-action"
+import { CardAction } from "../../../../browse/cards/card-action"
+import { IdentityAction } from "../../../../browse/identities/identity-action"
+import { NoteAction } from "../../../../browse/notes/note-action"
+import { CryptoWalletAction } from "../../../../browse/crypto-asset/crypto-wallet-action"
+import { DeletedAction } from "../../../../../../components/cipher/cipher-action/deleted-action"
 
 
 export interface CipherListProps {
@@ -24,20 +23,10 @@ export interface CipherListProps {
   navigation: any
   searchText?: string
   onLoadingChange?: Function
-  cipherType?: CipherType | CipherType[]
-  deleted?: boolean
   sortList?: {
     orderField: string
     order: string
   },
-  folderId?: string
-  collectionId?: string
-  organizationId?: string
-  isSelecting: boolean
-  setIsSelecting: Function
-  selectedItems: string[]
-  setSelectedItems: Function
-  setAllItems: Function
 }
 
 /**
@@ -45,9 +34,7 @@ export interface CipherListProps {
  */
 export const CipherList = observer((props: CipherListProps) => {
   const {
-    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList,
-    folderId, collectionId, organizationId,
-    isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
+    emptyContent, navigation, onLoadingChange, searchText, sortList,
   } = props
   const { translate, getTeam, notify } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
@@ -85,10 +72,9 @@ export const CipherList = observer((props: CipherListProps) => {
 
   useEffect(() => {
     if (checkedItem) {
-      toggleItemSelection(checkedItem)
       setCheckedItem(null)
     }
-  }, [checkedItem, selectedItems])
+  }, [checkedItem])
 
   // ------------------------ METHODS ----------------------------
 
@@ -97,90 +83,78 @@ export const CipherList = observer((props: CipherListProps) => {
     // onLoadingChange && onLoadingChange(true)
     // const t = new DurationTest("load")
     // Filter
-    const filters = []
-    if (props.cipherType) {
-      if (typeof props.cipherType === 'number') {
-        filters.push((c: CipherView) => c.type === props.cipherType)
-      } else {
-        // @ts-ignore
-        filters.push((c: CipherView) => props.cipherType.includes(c.type))
-      }
-    }
+
 
     // Search
-    const searchRes = await getCiphersFromCache({
-      filters,
-      searchText,
-      deleted
-    })
+    // const searchRes = await getCiphersFromCache({
+    //   filters,
+    //   searchText,
+    //   deleted
+    // })
 
-    // Add image
-    let res = searchRes.map((c: CipherView) => {
-      const cipherInfo = getCipherInfo(c)
-      const data = {
-        ...c,
-        logo: cipherInfo.backup,
-        imgLogo: cipherInfo.img,
-        svg: cipherInfo.svg,
-        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
-        isDeleted: c.isDeleted
-      }
-      return data
-    })
+    // // Add image
+    // let res = searchRes.map((c: CipherView) => {
+    //   const cipherInfo = getCipherInfo(c)
+    //   const data = {
+    //     ...c,
+    //     logo: cipherInfo.backup,
+    //     imgLogo: cipherInfo.img,
+    //     svg: cipherInfo.svg,
+    //     notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
+    //     isDeleted: c.isDeleted
+    //   }
+    //   return data
+    // })
 
 
-    // Filter
-    if (folderId !== undefined) {
-      res = res.filter(i => i.folderId === folderId)
-    }
+    // // Filter
+    // if (folderId !== undefined) {
+    //   res = res.filter(i => i.folderId === folderId)
+    // }
 
-    // collection
-    if (collectionId !== undefined) {
-      if (collectionId !== null) {
-        res = res.filter(i => i.collectionIds.includes(collectionId))
-      }
-    }
+    // // collection
+    // if (collectionId !== undefined) {
+    //   if (collectionId !== null) {
+    //     res = res.filter(i => i.collectionIds.includes(collectionId))
+    //   }
+    // }
 
-    if (organizationId === undefined && collectionId == undefined && folderId === null) {
-      res = res.filter(i => !getTeam(user.teams, i.organizationId).name)
-      res = res.filter(i => !i.collectionIds.length)
-    }
-    if (organizationId !== undefined) {
-      if (organizationId === null) {
-        res = res.filter(i => !!i.organizationId)
-      } else {
-        res = res.filter(i => i.organizationId === organizationId)
-      }
-    }
+    // if (organizationId === undefined && collectionId == undefined && folderId === null) {
+    //   res = res.filter(i => !getTeam(user.teams, i.organizationId).name)
+    //   res = res.filter(i => !i.collectionIds.length)
+    // }
+    // if (organizationId !== undefined) {
+    //   if (organizationId === null) {
+    //     res = res.filter(i => !!i.organizationId)
+    //   } else {
+    //     res = res.filter(i => i.organizationId === organizationId)
+    //   }
+    // }
 
-    // Sort
-    if (sortList) {
-      const { orderField, order } = sortList
-      res = orderBy(
-        res,
-        [c => orderField === 'name' ? (c.name && c.name.toLowerCase()) : c.revisionDate],
-        [order]
-      ) || []
-    }
+    // // Sort
+    // if (sortList) {
+    //   const { orderField, order } = sortList
+    //   res = orderBy(
+    //     res,
+    //     [c => orderField === 'name' ? (c.name && c.name.toLowerCase()) : c.revisionDate],
+    //     [order]
+    //   ) || []
+    // }
 
-    // Delay loading
-    setTimeout(() => {
-      onLoadingChange && onLoadingChange(false)
-    }, 50)
-    // t.final()
-    // Done
-    setCiphers(res)
-    setAllItems(res.map(c => c.id))
+    // // Delay loading
+    // setTimeout(() => {
+    //   onLoadingChange && onLoadingChange(false)
+    // }, 50)
+    // // t.final()
+    // // Done
+    // setCiphers(res)
+    // setAllItems(res.map(c => c.id))
   }
 
 
   // Handle action menu open
   const openActionMenu = (item: CipherView) => {
     cipherStore.setSelectedCipher(item)
-    if (deleted) {
-      setShowDeletedAction(true)
-      return
-    }
 
     switch (item.type) {
       case CipherType.Login:
@@ -210,34 +184,17 @@ export const CipherList = observer((props: CipherListProps) => {
   //   navigation.navigate(`${cipherInfo.path}__info`)
   // }
 
-  // Toggle item selection
-  const toggleItemSelection = (id: string) => {
-    if (!isSelecting) {
-      setIsSelecting(true)
-    }
-    let selected = [...selectedItems]
-    if (!selected.includes(id)) {
-      if (selected.length === MAX_CIPHER_SELECTION) {
-        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
-        return
-      }
-      selected.push(id)
-    } else {
-      selected = selected.filter(i => i !== id)
-    }
-    setSelectedItems(selected)
-  }
   // ------------------------ RENDER ----------------------------
 
   const renderItem = ({ item }) => {
     return (
       <CipherListItem
         item={item}
-        isSelecting={isSelecting}
+        isSelecting={false}
         toggleItemSelection={setCheckedItem}
         openActionMenu={openActionMenu}
-        isSelected={selectedItems.includes(item.id)}
-        isShared={isShared(item.organizationId)}
+        isSelected={false}
+        isShared={false}
       />
     )
   }

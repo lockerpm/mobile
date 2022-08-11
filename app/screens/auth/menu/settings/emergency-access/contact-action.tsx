@@ -4,8 +4,9 @@ import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Divide
 import { useMixins } from "../../../../../services/mixins"
 import { TrustedContact } from "../../../../../services/api"
 import { fontSize } from "../../../../../theme"
-import { EmergencyAccessStatus } from "../../../../../config/types"
+import { EmergencyAccessStatus, EmergencyAccessType } from "../../../../../config/types"
 import { useStores } from "../../../../../models"
+import { useNavigation } from "@react-navigation/native"
 
 interface Props {
   isYourTrusted: boolean
@@ -18,20 +19,32 @@ interface Props {
 export const ContactAction = (props: Props) => {
   const { isShow, onClose, trustedContact, setOnAction, isYourTrusted } = props
   const { translate, color } = useMixins()
+  const navigation = useNavigation()
   const { user } = useStores()
 
   // ----------------------- PARAMS -----------------------
 
+  const isViewType = trustedContact.type === EmergencyAccessType.VIEW
+  const isInvited = trustedContact.status === EmergencyAccessStatus.INVITED
+  const isConfirm = trustedContact.status === EmergencyAccessStatus.CONFIRMED
+  const isApproved = trustedContact.status === EmergencyAccessStatus.RECOVERY_APPROVED
+  const isInintiated = trustedContact.status === EmergencyAccessStatus.RECOVERY_INITIATED
+
   // ----------------------- METHODS -----------------------
 
-  const handleAction = async (action: "accept" | "initiate" | "comfirm" | "reject" | "remove") => {
-    let res = false
-    if (action === "remove") {
-      res = await user.removeEA(trustedContact.id)
-    } else {
-      res = await user.actionEA(trustedContact.id, action)
-    }
+  const handleYourTrustAction = async (action: "reject" | "approve") => {
+    let res = await user.yourTrustedActionEA(trustedContact.id, action)
+    res && setOnAction()
+    onClose()
+  }
+  const handleTrustedYouAction = async (action: "accept" | "initiate") => {
+    let res = await user.trustedYouActionEA(trustedContact.id, action)
+    res && setOnAction()
+    onClose()
+  }
 
+  const handleRemoveAction = async () => {
+    let res = await user.removeEA(trustedContact.id)
     res && setOnAction()
     onClose()
   }
@@ -61,85 +74,96 @@ export const ContactAction = (props: Props) => {
       </View>
     </View>
   )
+
+  const YourTrustedAction = () => (
+    <ActionSheetContent >
+      {isInintiated && <>
+        <ActionItem
+          name="Accept"
+          action={() => {
+            handleYourTrustAction('approve')
+          }}
+        />
+        <Divider />
+        <ActionItem
+          name="Reject"
+          action={() => {
+            handleYourTrustAction('reject')
+          }}
+        />
+        <Divider />
+      </>}
+      <ActionItem
+        name="Remove"
+        action={() => {
+          handleRemoveAction()
+        }}
+        textColor={color.error}
+      />
+    </ActionSheetContent>
+  )
+
+  const TrustYouAction = () => (
+    <ActionSheetContent >
+      {
+        isApproved && <>
+          <ActionItem
+            name={isViewType ? "View their vault" : "Take over their vault"}
+            action={() => {
+              onClose()
+              navigation.navigate(isViewType ? "viewEA" : "takeoverEA", {
+                trusted: trustedContact
+              })
+            }}
+          />
+          <Divider />
+        </>
+      }
+
+      {
+        isConfirm && <>
+          <ActionItem
+            name={isViewType ? "Request to view" : "Request to takeover"}
+            action={() => {
+              handleTrustedYouAction('initiate')
+            }}
+          />
+          <Divider />
+        </>
+      }
+      {
+        isInvited && <>
+          <ActionItem
+            name="Accept"
+            action={() => {
+              handleTrustedYouAction('accept')
+            }}
+          />
+          <Divider />
+        </>
+      }
+
+      <ActionItem
+        name="Remove"
+        action={() => {
+          handleRemoveAction()
+        }}
+        textColor={color.error}
+      />
+    </ActionSheetContent>
+  )
   return (
     <ActionSheet
       isOpen={isShow}
       onClose={onClose}>
       <Avatar />
       <Divider />
-      <ActionSheetContent >
-        <ActionItem
-          name="Accept request"
-          action={() => {
-            handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Decline request"
-          action={() => {
-            handleAction('reject')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Take over their vault"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="View their vault"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Cancel request"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Request to view"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Request to takeover"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Accept"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Decline"
-          action={() => {
-            // handleAction('remove')
-          }}
-          textColor={color.error}
-        />
-        <Divider />
-        <ActionItem
-          name="Remove contact"
-          action={() => {
-            handleAction('remove')
-          }}
-          textColor={color.error}
-        />
-      </ActionSheetContent>
+      {
+        isYourTrusted && <YourTrustedAction />
+      }
+      {
+        !isYourTrusted && <TrustYouAction />
+      }
     </ActionSheet>
   )
 }
