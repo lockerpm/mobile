@@ -61,7 +61,10 @@ export const YourTrustedContactScreen = observer(function YourTrustedContactScre
     >
       <AddTrustedContactModal
         isShow={isShowAddModal}
-        onClose={() => setIsShowAddModal(false)}
+        onClose={() => {
+          setIsShowAddModal(false)
+          setOnAction(!onAction)
+        }}
       />
       <SectionWrapperItem>
         {
