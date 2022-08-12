@@ -46,7 +46,7 @@ const defaultData = {
   parsePushNotiData: async (params?: {
     notifeeData?: NotifeeNotificationData
   }) => ({ path: '', params: {}, tempParams: {} }),
-  validateMasterPassword: (password: string) => ({ isValid: true, error: '' })
+  validateMasterPassword: (password: string) => ({ isValid: true, error: '' }),
 }
 
 

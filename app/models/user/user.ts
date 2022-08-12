@@ -558,13 +558,36 @@ export const UserModel = types
       const res = await userApi.EAGranted(self.apiToken)
       return res
     },
-    actionEA: async (id: string, action: "accept" | "initiate" | "comfirm" | "reject") => {
+    yourTrustedActionEA: async (id: string, action: "reject" | "approve") => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.EAAction(self.apiToken, id, action)
+      const res = await userApi.EAyourTrustedAction(self.apiToken, id, action)
       if (res.kind === "ok") {
         return true
       }
       return false
+    },
+    trustedYouActionEA: async (id: string, action: "accept" | "initiate") => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EATrustedYouAction(self.apiToken, id, action)
+      if (res.kind === "ok") {
+        return true
+      }
+      return false
+    },
+    takeoverEA: async (id: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EATakeover(self.apiToken, id)
+      return res
+    },
+    passwordEA: async (id: string, key: string, newMasterPwHash: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EAPassword(self.apiToken, id, key, newMasterPwHash)
+      return res
+    },
+    viewEA: async (id: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EAView(self.apiToken, id)
+      return res
     },
     removeEA: async (id: string) => {
       const userApi = new UserApi(self.environment.api)

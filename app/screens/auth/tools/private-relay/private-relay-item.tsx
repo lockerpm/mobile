@@ -31,6 +31,7 @@ export const AliasItem = (props: Props) => {
     }
   }
 
+  console.log(item.created_time)
   const handleActionSheetClose = () => {
     setIsOpen(false)
 
@@ -53,7 +54,7 @@ export const AliasItem = (props: Props) => {
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
         <View>
           <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
-          <Text text={moment.unix(item.created_time).format("MMMM d, YYYY")} />
+          <Text text={moment.unix(item.created_time).format("MMMM DD, YYYY")} />
         </View>
         <Button
           preset="link"

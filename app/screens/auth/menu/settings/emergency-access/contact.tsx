@@ -24,8 +24,19 @@ export const Contact = (props: Props) => {
   const [showAction, setShowAcction] = useState(false)
   const [isShowRequestModal, setShowRequestModal] = useState(false)
 
+  const isInvited = trustedContact.status === EmergencyAccessStatus.INVITED
+  const isConfirm = trustedContact.status === EmergencyAccessStatus.CONFIRMED
+  const isApproved = trustedContact.status === EmergencyAccessStatus.RECOVERY_APPROVED
+
   // ----------------------- METHODS -----------------------
 
+  const approveInitiateEA = async () => {
+    const res = await user.trustedYouActionEA(trustedContact.id, "initiate")
+    if (res) {
+      setOnAction()
+      setShowRequestModal(false)
+    }
+  }
   // ----------------------- RENDER -----------------------
 
   const RequestAccessModal = () => (
@@ -49,9 +60,7 @@ export const Contact = (props: Props) => {
         />
         <Button
           text={"Approve"}
-          onPress={() => {
-            user.actionEA(trustedContact.id, "initiate")
-          }}
+          onPress={approveInitiateEA}
         />
       </View>
     </Modal>
@@ -81,10 +90,18 @@ export const Contact = (props: Props) => {
           style={{ height: 40, width: 40, borderRadius: 20, marginRight: 12 }}
         />
         <View style={{ justifyContent: "space-between" }}>
-          <Text
-            preset="black"
-            text={trustedContact.full_name}
-          />
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }} >
+            <Text
+              preset="black"
+              text={trustedContact.full_name}
+            />
+            <Text
+              preset="black"
+              text={trustedContact.type}
+              style={{}}
+            />
+          </View>
+
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text
               text={trustedContact.email}
@@ -97,9 +114,9 @@ export const Contact = (props: Props) => {
               marginLeft: 10,
               paddingHorizontal: 10,
               paddingVertical: 2,
-              backgroundColor: trustedContact.status === EmergencyAccessStatus.INVITED
+              backgroundColor: isInvited
                 ? color.warning
-                : trustedContact.status === EmergencyAccessStatus.CONFIRMED
+                : isConfirm || isApproved
                   ? color.primary
                   : color.textBlack,
               borderRadius: 3,
@@ -117,10 +134,7 @@ export const Contact = (props: Props) => {
           </View>
         </View>
       </View>
-      <Text
-        preset="black"
-        text={trustedContact.type}
-      />
+
     </TouchableOpacity >
   )
 }
