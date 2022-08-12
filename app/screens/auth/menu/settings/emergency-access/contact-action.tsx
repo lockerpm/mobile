@@ -1,6 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
 import { View } from "react-native"
-import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Divider, Text } from "../../../../../components"
+import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Button, Divider, Modal, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { TrustedContact } from "../../../../../services/api"
 import { fontSize } from "../../../../../theme"
@@ -13,11 +13,13 @@ interface Props {
   onClose: () => void
   trustedContact: TrustedContact
   setOnAction: () => void
+  showRequestModal: () => void
 }
 
 export const ContactAction = (props: Props) => {
-  const { isShow, onClose, trustedContact, setOnAction, isYourTrusted } = props
-  const { translate, color } = useMixins()
+  const { isShow, onClose, trustedContact, setOnAction, isYourTrusted, showRequestModal } = props
+  const actionProps = { trustedContact, setOnAction, onClose }
+  // const { translate, color } = useMixins()
   const { user } = useStores()
 
   // ----------------------- PARAMS -----------------------
@@ -61,85 +63,148 @@ export const ContactAction = (props: Props) => {
       </View>
     </View>
   )
+
+
   return (
     <ActionSheet
       isOpen={isShow}
       onClose={onClose}>
       <Avatar />
       <Divider />
-      <ActionSheetContent >
-        <ActionItem
-          name="Accept request"
-          action={() => {
-            handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Decline request"
-          action={() => {
-            handleAction('reject')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Take over their vault"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="View their vault"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Cancel request"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Request to view"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Request to takeover"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Accept"
-          action={() => {
-            // handleAction('accept')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name="Decline"
-          action={() => {
-            // handleAction('remove')
-          }}
-          textColor={color.error}
-        />
-        <Divider />
-        <ActionItem
-          name="Remove contact"
-          action={() => {
-            handleAction('remove')
-          }}
-          textColor={color.error}
-        />
-      </ActionSheetContent>
+      {
+        isYourTrusted && <YourTrustActionContent {...actionProps} />
+      }
+      {
+        !isYourTrusted && <GrantedActionContent {...actionProps} showRequestModal={showRequestModal} />
+      }
     </ActionSheet>
+  )
+}
+
+interface ActionProps {
+  onClose: () => void
+  trustedContact: TrustedContact
+  setOnAction: () => void
+  showRequestModal?: () => void
+}
+const GrantedActionContent = (props: ActionProps) => {
+  const { onClose, trustedContact, setOnAction, showRequestModal } = props
+  const { user } = useStores()
+  const { translate, color } = useMixins()
+
+
+  const handleAction = async (action: "accept" | "initiate" | "comfirm" | "reject" | "remove") => {
+    let res = false
+    if (action === "remove") {
+      res = await user.removeEA(trustedContact.id)
+    } else {
+      res = await user.actionEA(trustedContact.id, action)
+    }
+
+    res && setOnAction()
+    onClose()
+  }
+
+
+  return (
+    <ActionSheetContent >
+      <ActionItem
+        name="Take over their vault"
+        action={() => {
+          // handleAction('accept')
+        }}
+      />
+      <Divider />
+      <ActionItem
+        name="View their vault"
+        action={() => {
+          // handleAction('accept')
+        }}
+      />
+      <Divider />
+      <ActionItem
+        name="Request to view"
+        action={() => {
+          onClose()
+          showRequestModal()
+        }}
+      />
+      <Divider />
+      <ActionItem
+        name="Request to takeover"
+        action={() => {
+          onClose()
+          showRequestModal()
+        }}
+      />
+      <Divider />
+      <ActionItem
+        name="Accept"
+        action={() => {
+          handleAction('accept')
+        }}
+      />
+      <Divider />
+      <ActionItem
+        name="Decline request"
+        action={() => {
+          handleAction('reject')
+        }}
+      />
+      <Divider />
+      <ActionItem
+        name="Remove"
+        action={() => {
+          handleAction('remove')
+        }}
+        textColor={color.error}
+      />
+      <Divider />
+    </ActionSheetContent>
+  )
+}
+
+const YourTrustActionContent = (props: ActionProps) => {
+  const { onClose, trustedContact, setOnAction } = props
+  const { user } = useStores()
+  const { translate, color } = useMixins()
+
+
+  const handleAction = async (action: "accept" | "initiate" | "comfirm" | "reject" | "remove") => {
+    let res = false
+    if (action === "remove") {
+      res = await user.removeEA(trustedContact.id)
+    } else {
+      res = await user.actionEA(trustedContact.id, action)
+    }
+
+    res && setOnAction()
+    onClose()
+  }
+
+  return (
+    <ActionSheetContent >
+      <ActionItem
+        name="Accept request"
+        action={() => {
+          handleAction('accept')
+        }}
+      />
+      <Divider />
+      <ActionItem
+        name="Decline request"
+        action={() => {
+          handleAction('reject')
+        }}
+      />
+      <Divider />
+      <ActionItem
+        name="Remove contact"
+        action={() => {
+          handleAction('remove')
+        }}
+        textColor={color.error}
+      />
+    </ActionSheetContent>
   )
 }

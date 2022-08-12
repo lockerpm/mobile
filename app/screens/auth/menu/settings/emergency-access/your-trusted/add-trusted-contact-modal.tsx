@@ -13,6 +13,7 @@ import { EmergencyAccessType } from "../../../../../../config/types"
 interface InviteProps {
   isShow: boolean
   onClose: () => void
+  onAction: () => void
 }
 export const AddTrustedContactModal = observer(function AddTrustedContactModal(props: InviteProps) {
   const { isShow, onClose } = props
@@ -61,10 +62,10 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
   // ----------------------- METHODS -----------------------
   const onAdd = async () => {
     if (!email.includes("@")) return
-    const publicKey = await cipherStore.getSharingPublicKey(email)
+    const publicKey = await cipherStore.getSharingPublicKey(email.toLowerCase())
     if (publicKey.kind === "ok") {
       const right = accessRight ? EmergencyAccessType.TAKEOVER : EmergencyAccessType.VIEW
-      const res = await user.inviteEA(email, publicKey.data.public_key, right, waitTime)
+      const res = await user.inviteEA(email.toLowerCase(), publicKey.data.public_key, right, waitTime)
       if (res.kind === "ok") {
         onClose()
       } else {
