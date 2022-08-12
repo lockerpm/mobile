@@ -20,7 +20,7 @@ import { FolderData } from '../../../../core/models/data/folderData'
 import { Logger } from '../../../utils/logger'
 import { Cipher, EncString, SymmetricCryptoKey } from '../../../../core/models/domain'
 import { Utils } from '../../core-service/utils'
-import { AccountRoleText } from '../../../config/types'
+import { AccountRoleText, EmergencyAccessType } from '../../../config/types'
 import { OrganizationData } from '../../../../core/models/data/organizationData'
 import { ImportResult } from '../../../../core/models/domain/importResult'
 import { SyncQueue } from '../../../utils/queue'
@@ -43,6 +43,7 @@ const defaultData = {
   syncOfflineData: async () => { },
   syncAutofillData: async () => { },
 
+  getEncKeyFromDecryptedKey: async (encrypt_key: string) => { return null },
   getCiphers: async (params: GetCiphersParams) => { return [] },
   getCiphersFromCache: async (params: GetCiphersParams) => { return [] },
   getEncryptedCiphers: async (params: GetCiphersParams) => { return [] },
@@ -60,12 +61,13 @@ const defaultData = {
   restoreCiphers: async (ids: string[]) => { return { kind: 'unknown' } },
   importCiphers: async (payload: { importResult: any, setImportedCount: Function, setTotalCount: Function, setIsLimited: Function, isFreeAccount: boolean }) => { return { kind: 'unknown' } },
 
+  inviteEA: async (email: string, type: EmergencyAccessType, waitTime: number) => { return { kind: 'unknown' } },
   shareCipher: async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   shareMultipleCiphers: async (ids: string[], emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
   confirmShareCipher: async (organizationId: string, memberId: string, publicKey: string) => { return { kind: 'unknown' } },
   stopShareCipher: async (cipher: CipherView, memberId: string) => { return { kind: 'unknown' } },
   editShareCipher: async (organizationId: string, memberId: string, role: AccountRoleText, onlyFill: boolean) => { return { kind: 'unknown' } },
-  leaveShare: async (organizationId: string, id?: string ) => { return { kind: 'unknown' } },
+  leaveShare: async (organizationId: string, id?: string) => { return { kind: 'unknown' } },
   acceptShareInvitation: async (id: string) => { return { kind: 'unknown' } },
   rejectShareInvitation: async (id: string) => { return { kind: 'unknown' } },
 
@@ -577,6 +579,11 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
       notify('error', translate('error.something_went_wrong'))
       Logger.error('loadCollections: ' + e)
     }
+  }
+
+  const getEncKeyFromDecryptedKey = async (encrypt_key: string) => {
+    const keyBuffer = await cryptoService.rsaDecrypt(encrypt_key)
+    return new SymmetricCryptoKey(keyBuffer)
   }
 
   // Get encrypted ciphers
@@ -1298,7 +1305,23 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     await minimalReloadCache({})
   }
 
+  // Change master password
+  const inviteEA = async (email: string, type: EmergencyAccessType, waitTime: number): Promise<{ kind: string }> => {
+    try {
+      const publicKeyRes = await cipherStore.getSharingPublicKey(email)
+      if (publicKeyRes.kind !== "ok") return { kind: "bad-data" }
 
+      const encKey = await cryptoService.getEncKey()
+      const key = await _generateMemberKey(publicKeyRes.data.public_key, encKey)
+      console.log(key)
+      const res = await user.inviteEA(email, key, type, waitTime)
+      if (res.kind !== "ok") return { kind: 'bad-data' }
+      return { kind: 'ok' }
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      return { kind: 'bad-data' }
+    }
+  }
 
   // Share cipher
   const shareCipher = async (cipher: CipherView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => {
@@ -2105,7 +2128,6 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     getSyncData,
     syncOfflineData,
     syncAutofillData,
-
     getCiphers,
     getCiphersFromCache,
     getEncryptedCiphers,
@@ -2122,6 +2144,8 @@ export const CipherDataMixinsProvider = observer((props: { children: boolean | R
     restoreCiphers,
     importCiphers,
 
+    getEncKeyFromDecryptedKey,
+    inviteEA,
     shareCipher,
     shareMultipleCiphers,
     confirmShareCipher,

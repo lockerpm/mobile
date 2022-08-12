@@ -5,7 +5,7 @@ import { Layout, Text, Header, Select } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../theme"
 import { AppTimeoutType, TimeoutActionType, useStores } from "../../../../models"
-import { SettingsItem } from "./settings-item"
+import { SectionWrapperItem, SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { AutofillDataType, loadShared, saveShared } from "../../../../utils/keychain"
@@ -315,17 +315,7 @@ export const SettingsScreen = observer(() => {
         />
         {/* Default tab end */}
 
-        {/* Delete tab */}
-        <SettingsItem
-          noBorder
-          style={{ width: '100%' }}
-          name={translate('common.delete')}
-          action={() => {
-            Linking.openURL("https://locker.io/settings/account")
-            // navigation.navigate("deleteAccount")
-          }}
-        />
-        {/* Delete end */}
+
 
       </View>
       {/* Account end */}
@@ -464,6 +454,29 @@ export const SettingsScreen = observer(() => {
         {/* Export end */}
       </View>
       {/* Import/Export end */}
+
+
+
+      <Text
+        text={"translate('common.dang')".toUpperCase()}
+        style={[SECTION_TITLE, {
+          marginTop: 15,
+        }]}
+      />
+      <SectionWrapperItem >
+        {/* Delete tab */}
+        <SettingsItem
+          noBorder
+          color="red"
+          style={{ width: '100%' }}
+          name={translate('settings.delete_account')}
+          action={() => {
+            Linking.openURL("https://locker.io/settings/account")
+            // navigation.navigate("deleteAccount")
+          }}
+        />
+        {/* Delete end */}
+      </SectionWrapperItem>
     </Layout>
   )
 })

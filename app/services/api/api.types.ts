@@ -288,6 +288,21 @@ export type FetchRelayListAddressesResult = { kind: "ok", data: RelayAddresses }
 export type GenerateRelayNewAddressResult = { kind: "ok", data: RelayAddress } | GeneralApiProblem
 export type TrustedResult = { kind: "ok", data: TrustedContact[] } | GeneralApiProblem
 export type EAInviteResult = { kind: "ok", data: { is: string } } | GeneralApiProblem
+export type EATakeoverResult = {
+  kind: "ok",
+  data: {
+    kdf: number,
+    kdf_iterations: number,
+    key_encrypted: string
+  }
+} | GeneralApiProblem
+export type EAViewResult = {
+  kind: "ok",
+  data: {
+    ciphers: CipherResponse[],
+    key_encrypted: string
+  }
+} | GeneralApiProblem
 // ---------------- data --------------------
 export type NotificationSettingData = {
   category: {

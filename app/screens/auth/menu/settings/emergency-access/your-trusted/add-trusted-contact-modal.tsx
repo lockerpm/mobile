@@ -8,6 +8,7 @@ import { useMixins } from "../../../../../../services/mixins"
 import { AppEventType, EventBus } from "../../../../../../utils/event-bus"
 import CheckBox from "@react-native-community/checkbox"
 import { EmergencyAccessType } from "../../../../../../config/types"
+import { useCipherDataMixins } from "../../../../../../services/mixins/cipher/data"
 
 
 interface InviteProps {
@@ -17,8 +18,9 @@ interface InviteProps {
 }
 export const AddTrustedContactModal = observer(function AddTrustedContactModal(props: InviteProps) {
   const { isShow, onClose } = props
-  const { user, cipherStore } = useStores()
+  // const { user, cipherStore } = useStores()
   const { translate, color } = useMixins()
+  const { inviteEA } = useCipherDataMixins()
 
   // ----------------------- PARAMS -----------------------
   const [email, setEmail] = useState<string>("");
@@ -62,19 +64,10 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
   // ----------------------- METHODS -----------------------
   const onAdd = async () => {
     if (!email.includes("@")) return
-    const publicKey = await cipherStore.getSharingPublicKey(email.toLowerCase())
-    if (publicKey.kind === "ok") {
-      const right = accessRight ? EmergencyAccessType.TAKEOVER : EmergencyAccessType.VIEW
-      const res = await user.inviteEA(email.toLowerCase(), publicKey.data.public_key, right, waitTime)
-      if (res.kind === "ok") {
-        onClose()
-      } else {
-        //
-      }
-    } else {
-      //
+    const res = await inviteEA(email.toLowerCase(), accessRight ? EmergencyAccessType.TAKEOVER : EmergencyAccessType.VIEW, waitTime)
+    if (res.kind === "ok") {
+      onClose()
     }
-    onClose()
   }
 
   // ----------------------- EFFECTS -----------------------

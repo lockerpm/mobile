@@ -4,8 +4,9 @@ import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Button
 import { useMixins } from "../../../../../services/mixins"
 import { TrustedContact } from "../../../../../services/api"
 import { fontSize } from "../../../../../theme"
-import { EmergencyAccessStatus } from "../../../../../config/types"
+import { EmergencyAccessStatus, EmergencyAccessType } from "../../../../../config/types"
 import { useStores } from "../../../../../models"
+import { useNavigation } from "@react-navigation/native"
 
 interface Props {
   isYourTrusted: boolean
@@ -17,23 +18,34 @@ interface Props {
 }
 
 export const ContactAction = (props: Props) => {
-  const { isShow, onClose, trustedContact, setOnAction, isYourTrusted, showRequestModal } = props
-  const actionProps = { trustedContact, setOnAction, onClose }
-  // const { translate, color } = useMixins()
+  const { isShow, onClose, trustedContact, setOnAction, isYourTrusted, showRequestModal} = props
+  const { translate, color } = useMixins()
   const { user } = useStores()
+  const navigation = useNavigation()
 
   // ----------------------- PARAMS -----------------------
 
+  const isViewType = trustedContact.type === EmergencyAccessType.VIEW
+  const isInvited = trustedContact.status === EmergencyAccessStatus.INVITED
+  const isConfirm = trustedContact.status === EmergencyAccessStatus.CONFIRMED
+  const isApproved = trustedContact.status === EmergencyAccessStatus.RECOVERY_APPROVED
+  const isInintiated = trustedContact.status === EmergencyAccessStatus.RECOVERY_INITIATED
+
   // ----------------------- METHODS -----------------------
 
-  const handleAction = async (action: "accept" | "initiate" | "comfirm" | "reject" | "remove") => {
-    let res = false
-    if (action === "remove") {
-      res = await user.removeEA(trustedContact.id)
-    } else {
-      res = await user.actionEA(trustedContact.id, action)
-    }
+  const handleYourTrustAction = async (action: "reject" | "approve") => {
+    let res = await user.yourTrustedActionEA(trustedContact.id, action)
+    res && setOnAction()
+    onClose()
+  }
+  const handleTrustedYouAction = async (action: "accept" | "initiate") => {
+    let res = await user.trustedYouActionEA(trustedContact.id, action)
+    res && setOnAction()
+    onClose()
+  }
 
+  const handleRemoveAction = async () => {
+    let res = await user.removeEA(trustedContact.id)
     res && setOnAction()
     onClose()
   }
@@ -63,6 +75,84 @@ export const ContactAction = (props: Props) => {
       </View>
     </View>
   )
+  const YourTrustedAction = () => (
+    <ActionSheetContent >
+      {isInintiated && <>
+        <ActionItem
+          name="Accept"
+          action={() => {
+            handleYourTrustAction('approve')
+          }}
+        />
+        <Divider />
+        <ActionItem
+          name="Reject"
+          action={() => {
+            handleYourTrustAction('reject')
+          }}
+        />
+        <Divider />
+      </>}
+      <ActionItem
+        name="Remove"
+        action={() => {
+          handleRemoveAction()
+        }}
+        textColor={color.error}
+      />
+    </ActionSheetContent>
+  )
+
+  const TrustYouAction = () => (
+    <ActionSheetContent >
+      {
+        isApproved && <>
+          <ActionItem
+            name={isViewType ? "View their vault" : "Take over their vault"}
+            action={() => {
+              onClose()
+              navigation.navigate(isViewType ? "viewEA" : "takeoverEA", {
+                trusted: trustedContact
+              })
+            }}
+          />
+          <Divider />
+        </>
+      }
+
+      {
+        isConfirm && <>
+          <ActionItem
+            name={isViewType ? "Request to view" : "Request to takeover"}
+            action={() => {
+              onClose()
+              showRequestModal()
+            }}
+          />
+          <Divider />
+        </>
+      }
+      {
+        isInvited && <>
+          <ActionItem
+            name="Accept"
+            action={() => {
+              handleTrustedYouAction('accept')
+            }}
+          />
+          <Divider />
+        </>
+      }
+
+      <ActionItem
+        name="Remove"
+        action={() => {
+          handleRemoveAction()
+        }}
+        textColor={color.error}
+      />
+    </ActionSheetContent>
+  )
 
 
   return (
@@ -72,139 +162,12 @@ export const ContactAction = (props: Props) => {
       <Avatar />
       <Divider />
       {
-        isYourTrusted && <YourTrustActionContent {...actionProps} />
+        isYourTrusted && <YourTrustedAction />
       }
       {
-        !isYourTrusted && <GrantedActionContent {...actionProps} showRequestModal={showRequestModal} />
+        !isYourTrusted && <TrustYouAction />
       }
+
     </ActionSheet>
-  )
-}
-
-interface ActionProps {
-  onClose: () => void
-  trustedContact: TrustedContact
-  setOnAction: () => void
-  showRequestModal?: () => void
-}
-const GrantedActionContent = (props: ActionProps) => {
-  const { onClose, trustedContact, setOnAction, showRequestModal } = props
-  const { user } = useStores()
-  const { translate, color } = useMixins()
-
-
-  const handleAction = async (action: "accept" | "initiate" | "comfirm" | "reject" | "remove") => {
-    let res = false
-    if (action === "remove") {
-      res = await user.removeEA(trustedContact.id)
-    } else {
-      res = await user.actionEA(trustedContact.id, action)
-    }
-
-    res && setOnAction()
-    onClose()
-  }
-
-
-  return (
-    <ActionSheetContent >
-      <ActionItem
-        name="Take over their vault"
-        action={() => {
-          // handleAction('accept')
-        }}
-      />
-      <Divider />
-      <ActionItem
-        name="View their vault"
-        action={() => {
-          // handleAction('accept')
-        }}
-      />
-      <Divider />
-      <ActionItem
-        name="Request to view"
-        action={() => {
-          onClose()
-          showRequestModal()
-        }}
-      />
-      <Divider />
-      <ActionItem
-        name="Request to takeover"
-        action={() => {
-          onClose()
-          showRequestModal()
-        }}
-      />
-      <Divider />
-      <ActionItem
-        name="Accept"
-        action={() => {
-          handleAction('accept')
-        }}
-      />
-      <Divider />
-      <ActionItem
-        name="Decline request"
-        action={() => {
-          handleAction('reject')
-        }}
-      />
-      <Divider />
-      <ActionItem
-        name="Remove"
-        action={() => {
-          handleAction('remove')
-        }}
-        textColor={color.error}
-      />
-      <Divider />
-    </ActionSheetContent>
-  )
-}
-
-const YourTrustActionContent = (props: ActionProps) => {
-  const { onClose, trustedContact, setOnAction } = props
-  const { user } = useStores()
-  const { translate, color } = useMixins()
-
-
-  const handleAction = async (action: "accept" | "initiate" | "comfirm" | "reject" | "remove") => {
-    let res = false
-    if (action === "remove") {
-      res = await user.removeEA(trustedContact.id)
-    } else {
-      res = await user.actionEA(trustedContact.id, action)
-    }
-
-    res && setOnAction()
-    onClose()
-  }
-
-  return (
-    <ActionSheetContent >
-      <ActionItem
-        name="Accept request"
-        action={() => {
-          handleAction('accept')
-        }}
-      />
-      <Divider />
-      <ActionItem
-        name="Decline request"
-        action={() => {
-          handleAction('reject')
-        }}
-      />
-      <Divider />
-      <ActionItem
-        name="Remove contact"
-        action={() => {
-          handleAction('remove')
-        }}
-        textColor={color.error}
-      />
-    </ActionSheetContent>
   )
 }
