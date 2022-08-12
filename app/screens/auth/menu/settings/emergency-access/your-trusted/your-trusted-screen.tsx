@@ -60,6 +60,7 @@ export const YourTrustedContactScreen = observer(function YourTrustedContactScre
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
       <AddTrustedContactModal
+        onAction={() => { setOnAction(!onAction) }}
         isShow={isShowAddModal}
         onClose={() => setIsShowAddModal(false)}
       />

@@ -44,7 +44,7 @@ export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScre
           goBack={() => {
             navigation.goBack()
           }}
-          title={"Your trusted contacts"}
+          title={"Contacts that trusted you"}
           right={(<View style={{ width: 30 }} />)}
         />
       )}
