@@ -48,7 +48,7 @@ export const MenuScreen = observer(() => {
   const [referLink, setReferLink] = useState<string>(null)
 
   // Intercom service 
-  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(1)
+  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(0)
 
   const PLAN_NAME: TextStyle = {
     fontSize: fontSize.small,
