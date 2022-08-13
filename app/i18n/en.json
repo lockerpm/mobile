@@ -232,6 +232,7 @@
     "view": "View",
     "takeover": "Take over",
     "invited": "Invited",
+    "resent": "Resend invitation",
     "recovery_approved": "Recovery approved",
     "confirm": "Confirmed",
     "recovery_initiated": "Recovery initiated",
@@ -265,7 +266,9 @@
     "change_master_pass": {
       "title": "Reset Master Password"
     },
-    "view_user_vault": "You are now viewing {{name}}'s vault items"
+    "view_user_vault": "You are now viewing {{name}}'s vault items",
+    "pending_trusted": "{{count}} pending request{{s}}",
+    "pending_grant": "{{count}} pending invitation{{s}}"
   },
   "policy": {
     "min_password_length": "Minimum password length is {{length}}",

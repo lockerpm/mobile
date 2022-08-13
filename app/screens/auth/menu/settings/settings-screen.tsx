@@ -332,7 +332,7 @@ export const SettingsScreen = observer(() => {
       }]}>
         {/* Emergency Access */}
         <SettingsItem
-          name={"Emergency Access"}
+          name={translate('emergency_access.title')}
           action={() => navigation.navigate('emergencyAccess')}
         />
         {/* Emergency Access*/}

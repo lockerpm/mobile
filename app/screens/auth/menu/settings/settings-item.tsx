@@ -17,6 +17,8 @@ type SettingsItemProps = {
   noBorder?: boolean
   disabled?: boolean
   isLoading?: boolean
+  status?: string
+  numberChildItems?: number
 }
 
 
@@ -35,22 +37,36 @@ export const SettingsItem = (props: SettingsItemProps) => {
         paddingVertical: 16
       }, props.style]}
     >
-      <Text
-        preset="black"
-        text={props.name}
-        style={{ color: props.color || color.textBlack }}
-      />
-      {
-        props.isLoading ? (
-          <ActivityIndicator size="small" color={color.primary} />
-        ) : props.right || !props.noCaret && (
-          <FontAwesomeIcon
-            name="angle-right"
-            size={18}
-            color={props.color || color.textBlack}
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        <Text
+          preset="black"
+          text={props.name}
+          style={{ color: props.color || color.textBlack }}
+        />
+        <Text
+          text={props.status}
+          style={{ color: color.warning, marginLeft: 8 }}
+        />
+      </View>
+
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        {
+          !!props.numberChildItems && < Text
+            text={String(props.numberChildItems)}
           />
-        )
-      }
+        }
+        {
+          props.isLoading ? (
+            <ActivityIndicator size="small" color={color.primary} />
+          ) : props.right || !props.noCaret && (
+            <FontAwesomeIcon
+              name="angle-right"
+              size={18}
+              color={props.color || color.textBlack}
+            />
+          )
+        }
+      </View>
     </Button>
   ) : (
     <View

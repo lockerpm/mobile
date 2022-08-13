@@ -103,7 +103,7 @@ export const YourTrustedContactScreen = () => {
           keyExtractor={(item, index) => String(index)}
           renderItem={({ item }) => (
             <Contact
-              isYourTrusted={false}
+              isYourTrusted={true}
               setOnAction={() => { setOnAction(!onAction) }}
               trustedContact={item}
             />

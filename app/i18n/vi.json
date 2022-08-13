@@ -232,6 +232,7 @@
     "view": "Xem",
     "takeover": "Chiếm quyền",
     "invited": "Đã Mời",
+    "resent": "Gửi lại lời mời",
     "recovery_approved": "Đã Duyệt",
     "confirm": "Đã Xác Nhận",
     "recovery_initiated": "Đã yêu cầu",
@@ -265,7 +266,9 @@
     "change_master_pass": {
       "title": "Đăt lại mật khẩu chính"
     },
-    "view_user_vault": "Bạn đang xem tất cả các mục trong kho của {{name}}"
+    "view_user_vault": "Bạn đang xem tất cả các mục trong kho của {{name}}",
+    "pending_trusted": "{{count}} yêu cầu",
+    "pending_grant": "{{count}} lời mời"
   },
   "policy": {
     "min_password_length": "Mật khẩu phải chứa ít nhất {{length}} ký tự",

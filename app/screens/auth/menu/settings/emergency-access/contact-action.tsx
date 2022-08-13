@@ -33,7 +33,7 @@ export const ContactAction = (props: Props) => {
 
   // ----------------------- METHODS -----------------------
 
-  const handleYourTrustAction = async (action: "reject" | "approve") => {
+  const handleYourTrustAction = async (action: "reject" | "approve" | "reinvite") => {
     let res = await user.yourTrustedActionEA(trustedContact.id, action)
     res && setOnAction()
     onClose()
@@ -89,6 +89,15 @@ export const ContactAction = (props: Props) => {
           name={translate('common.reject')}
           action={() => {
             handleYourTrustAction('reject')
+          }}
+        />
+        <Divider />
+      </>}
+      {isInvited && <>
+        <ActionItem
+          name={translate('emergency_access.resent')}
+          action={() => {
+            handleYourTrustAction('reinvite')
           }}
         />
         <Divider />
