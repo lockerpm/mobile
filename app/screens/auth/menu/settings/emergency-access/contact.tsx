@@ -28,6 +28,19 @@ export const Contact = (props: Props) => {
   const isConfirm = trustedContact.status === EmergencyAccessStatus.CONFIRMED
   const isApproved = trustedContact.status === EmergencyAccessStatus.RECOVERY_APPROVED
 
+
+  const status = (() => {
+    switch (trustedContact.status) {
+      case EmergencyAccessStatus.INVITED:
+        return translate('emergency_access.invited')
+      case EmergencyAccessStatus.CONFIRMED:
+        return translate('emergency_access.confirm')
+      case EmergencyAccessStatus.RECOVERY_APPROVED:
+        return translate('emergency_access.recovery_approved')
+      case EmergencyAccessStatus.RECOVERY_INITIATED:
+        return translate('emergency_access.recovery_initiated')
+    }
+  })()
   // ----------------------- METHODS -----------------------
 
   const approveInitiateEA = async () => {
@@ -46,20 +59,20 @@ export const Contact = (props: Props) => {
       title={trustedContact.full_name}
     >
       <Text preset="black"
-        text={`Are you sure you want to request emergency access? You will be provided access after 1 day(s) or whenever the user manually approves the request`}
+        text={translate('emergency_access.rq_noti', { waitTime: trustedContact.wait_time_days })}
         style={{ lineHeight: 20 }}
       />
 
       <View style={{ flexDirection: "row", justifyContent: "flex-end", marginTop: 12 }}>
         <Button
           preset="outlinePlain"
-          text={"No"}
+          text={translate('common.cancel')}
           onPress={() => { setShowRequestModal(false) }}
           style={{ marginRight: 12 }}
 
         />
         <Button
-          text={"Approve"}
+          text={translate('common.yes')}
           onPress={approveInitiateEA}
         />
       </View>
@@ -84,12 +97,12 @@ export const Contact = (props: Props) => {
         showRequestModal={() => setShowRequestModal(true)}
       />
 
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
         <Image
           source={{ uri: trustedContact.avatar }}
           style={{ height: 40, width: 40, borderRadius: 20, marginRight: 12 }}
         />
-        <View style={{ justifyContent: "space-between" }}>
+        <View style={{ justifyContent: "space-between", flex: 1}}>
           <View style={{ flexDirection: "row", justifyContent: "space-between" }} >
             <Text
               preset="black"
@@ -97,7 +110,7 @@ export const Contact = (props: Props) => {
             />
             <Text
               preset="black"
-              text={trustedContact.type}
+              text={trustedContact.type === "view" ? translate('emergency_access.view') : translate('emergency_access.takeover')}
               style={{}}
             />
           </View>
@@ -110,10 +123,13 @@ export const Contact = (props: Props) => {
 
             {/** Status */}
             <View style={{
+              position: "absolute",
+              zIndex: 2,
+              right: 0,
+              paddingLeft: 10,
               alignSelf: "center",
               marginLeft: 10,
-              paddingHorizontal: 10,
-              paddingVertical: 2,
+              paddingHorizontal: 5,
               backgroundColor: isInvited
                 ? color.warning
                 : isConfirm || isApproved
@@ -122,11 +138,11 @@ export const Contact = (props: Props) => {
               borderRadius: 3,
             }}>
               <Text
-                text={trustedContact.status.toUpperCase()}
+                text={status}
                 style={{
                   fontWeight: 'bold',
                   color: color.background,
-                  fontSize: fontSize.mini
+                  fontSize: fontSize.small
                 }}
               />
             </View>

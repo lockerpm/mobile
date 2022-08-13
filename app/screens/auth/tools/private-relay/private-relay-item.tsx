@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { View } from "react-native"
 import { Text, Button, ActionSheet, Divider, ActionSheetContent, ActionItem } from "../../../../components"
 import { commonStyles } from "../../../../theme"
@@ -30,8 +30,6 @@ export const AliasItem = (props: Props) => {
       deleteRelayAddress(item.id)
     }
   }
-
-  console.log(item.created_time)
   const handleActionSheetClose = () => {
     setIsOpen(false)
 
@@ -54,11 +52,14 @@ export const AliasItem = (props: Props) => {
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
         <View>
           <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
-          <Text text={moment.unix(item.created_time).format("MMMM DD, YYYY")} />
+          <Text text={moment.unix(item.created_time).format("DD/MM/YYYY")} />
         </View>
         <Button
           preset="link"
-          onPress={() => { setIsOpen(true) }}
+          onPress={() => { 
+            setIsOpen(true) 
+            setNextModal(null)
+          }}
         >
           <IoniconsIcon
             name="ellipsis-horizontal"
@@ -75,7 +76,7 @@ export const AliasItem = (props: Props) => {
             <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
               <View>
                 <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
-                <Text text={moment.unix(item.created_time).format("MMMM d, YYYY")} />
+                <Text text={moment.unix(item.created_time).format("DD/MM/YYYY")} />
               </View>
             </View>
           </View>

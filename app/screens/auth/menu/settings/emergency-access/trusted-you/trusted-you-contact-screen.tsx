@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Layout, Header, Button } from "../../../../../../components"
+import { Layout, Header, Text } from "../../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { SectionWrapperItem } from "../../settings-item"
 import { useMixins } from "../../../../../../services/mixins"
@@ -8,6 +8,7 @@ import { TrustedContact } from "../../../../../../services/api"
 import { useStores } from "../../../../../../models"
 import { Contact } from "../contact"
 import { View } from "react-native"
+import { FlatList } from "react-native-gesture-handler"
 
 
 
@@ -37,30 +38,38 @@ export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScre
   }, [onAction])
   // ----------------------- RENDER -----------------------
 
+
   return (
     <Layout
+      noScroll
       header={(
         <Header
           goBack={() => {
             navigation.goBack()
           }}
-          title={"Contacts that trusted you"}
+          title={translate('emergency_access.trust_you')}
           right={(<View style={{ width: 30 }} />)}
         />
       )}
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
       <SectionWrapperItem>
-        {
-          trustedContacts.map((item) => (
+        <FlatList
+          ListEmptyComponent={<View style={{
+            alignItems: "center"
+          }}>
+            <Text text={"No data"} style={{ textAlign: "center" }} />
+          </View>}
+          data={trustedContacts}
+          keyExtractor={(item, index) => String(index)}
+          renderItem={({ item }) => (
             <Contact
               isYourTrusted={false}
               setOnAction={() => { setOnAction(!onAction) }}
-              key={item.id}
               trustedContact={item}
             />
-          ))
-        }
+          )}
+        />
       </SectionWrapperItem>
     </Layout>
   )

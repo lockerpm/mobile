@@ -555,7 +555,10 @@ export type AppNotification = {
   results: {
     description: any
     id: string
-    metadata: any
+    metadata: {
+      is_grantee?: boolean
+      is_grantor?: boolean
+    }
     publish_time: number
     read: boolean
     title: {

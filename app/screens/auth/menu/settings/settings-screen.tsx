@@ -360,23 +360,6 @@ export const SettingsScreen = observer(() => {
         />
         {/* Biometric end */}
 
-
-
-        {/* Biometric */}
-        <SettingsItem
-          name={translate('common.customer_service')}
-          noCaret
-          right={(
-            <Switch
-              value={uiStore.isShowIntercomMsgBox}
-              onValueChange={uiStore.setShowIntercomMsgBox}
-              trackColor={{ false: color.disabled, true: color.primary }}
-              thumbColor={color.white}
-            />
-          )}
-        />
-        {/* Biometric end */}
-
         {/* Timeout */}
         <Select
           value={settings.timeout.value}
@@ -458,7 +441,7 @@ export const SettingsScreen = observer(() => {
 
 
       <Text
-        text={"translate('common.dang')".toUpperCase()}
+        text={translate('settings.danger_zone').toUpperCase()}
         style={[SECTION_TITLE, {
           marginTop: 15,
         }]}
@@ -467,7 +450,7 @@ export const SettingsScreen = observer(() => {
         {/* Delete tab */}
         <SettingsItem
           noBorder
-          color="red"
+          color={color.error}
           style={{ width: '100%' }}
           name={translate('settings.delete_account')}
           action={() => {

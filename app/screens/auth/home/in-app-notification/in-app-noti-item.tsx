@@ -52,8 +52,17 @@ export const NotiListItem = (props: Props) => {
         }
         break
       case NotificationCategory.EMERGENCY:
+        title = translate('noti_setting.emergency')
         source = require('./assets/emergency.png')
-        onPress = () => { }
+        onPress = () => {
+          const { is_grantor } = metadata
+          if (is_grantor === undefined) {
+            navigation.navigate('emergencyAccess')
+          } else {
+            navigation.navigate(is_grantor ? 'yourTrustedContact' : 'contactsTrustedYou')
+          }
+
+        }
         break
       case NotificationCategory.DATA_BREACH:
         source = require('./assets/breach-scan.png')

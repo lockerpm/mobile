@@ -79,6 +79,7 @@
     "push_notifications": "Thông báo",
     "regenerate": "Tạo lại",
     "reject": "Từ chối",
+    "remove": "Xoá",
     "rename": "Đổi tên",
     "restore": "Khôi phục",
     "save": "Lưu",
@@ -203,18 +204,68 @@
     "title": "Email ẩn danh",
     "tool": "Ẩn địa chỉ email của bạn khỏi các nhà cung cấp dịch vụ trực tuyến",
     "root_email": "Địa chỉ email gốc của bạn",
-    "desc" : {
-      "one": "Tất cả email gửi đến địa chỉ email bí danh sẽ được chuyển tiếp đến địa chỉ email gốc",
-      "two": "Bạn có thể tạo tối đa 5 email bí danh",
-      "three": "Bạn có thể sửa đổi 1 bí danh theo ý bạn"
+    "btn": "Thêm",
+    "label": "Your alias addresses",
+    "desc": {
+      "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
+      "two": "Bạn có thể tạo và dùng tối đa 05 email ẩn danh tại một thời điểm",
+      "three": "Bạn có thể sửa đổi 01 email ẩn danh theo ý bạn"
     },
-    "copy": "Sao chép",
-    "edit": "Thay đổi địa chỉ email",
+    "copy": "Copy alias",
+    "edit": "Sửa địa chỉ email",
     "edit_modal": {
       "titel": "Thay đổi địa chỉ email",
       "current": "Email hiện tại",
       "new": "Địa chỉ email mới"
-    }
+    },
+    "error": {
+      "taken": "Địa chỉ email này đã tồn tại",
+      "minimum": "Địa chỉ email yêu cầu ít nhất 6 ký tự",
+      "not_valid": "Địa chỉ email này không hợp lệ"
+    },
+    "edit_warning" : "Địa chỉ Email bí danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email bí danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email bí danh này"
+  },
+  "emergency_access": {
+    "title": "Liên hệ khẩn cấp",
+    "des": "Tính năng này cấp cho phép chủ sở hữu tài khoản Locker khác khả năng truy cập vào kho tiền của bạn trong một số tình huống khẩn cấp.",
+    "label": "{{pending}} YÊU CẦU ĐANG CHỜ",
+    "view": "Xem",
+    "takeover": "Chiếm quyền",
+    "invited": "Đã Mời",
+    "recovery_approved": "Đã Duyệt",
+    "confirm": "Đã Xác Nhận",
+    "recovery_initiated": "Đã yêu cầu",
+    "your_trust": "Liên hệ khẩn cấp đáng tin cậy",
+    "trust_you": "Những liên hệ đã thêm bạn",
+    "rq_view": "Yêu cầu Xem",
+    "rq_takeover": "Yêu cầu Chiếm quyền",
+    "rq_noti": "Bạn có chắc chắn muốn yêu cầu truy cập khẩn cấp? Bạn sẽ tự động được cấp quyền truy cập sau {{waitTime}} ngày hoặc khi người kia đồng ý yêu cầu của bạn.",
+    "add_trust": "Thêm liên hệ khẩn cấp",
+    "add": {
+      "email": "Địa chỉ email",
+      "view": "Có thể xem tất cả mục trong kho của bạn",
+      "takeover": "Có thể đặt lại Mật khẩu chính của bạn",
+      "wait_time": "Thời gian chờ",
+      "text": "Thời gian cần thiết trước khi tự động cấp quyền truy cập",
+      "day": "ngày",
+      "days": "ngày"
+    },
+    "view_vault": "Xem kho dữ liệu",
+    "takeover_vault": "Chiếm quyền kho dữ liệu",
+    "free_guild": "Bạn đang dùng tài khoản Free. Nâng cấp lên Premium để thêm Liên hệ khẩn cấp",
+    "reset_master_pw": "Đặt lại Mật khẩu chính",
+    "reset_pw": "Đặt lại mật khẩu Locker",
+    "reset_master_pw_user": "Đặt lại mật khẩu chính cho {{name}}",
+    "reset_pw_user": "Đặt lại mật khẩu Locker cho {{name}}",
+    "change_pw": {
+      "title": "Đặt lại mật khẩu",
+      "new": "Mật khẩu mới",
+      "confirm": "Xác nhận mật khẩu"
+    },
+    "change_master_pass": {
+      "title": "Đăt lại mật khẩu chính"
+    },
+    "view_user_vault": "Bạn đang xem tất cả các mục trong kho của {{name}}"
   },
   "policy": {
     "min_password_length": "Mật khẩu phải chứa ít nhất {{length}} ký tự",
@@ -596,7 +647,7 @@
   "autofill_service": {
     "activated": {
       "title": "Tự động điền đã được kích hoạt",
-      "content": "Bạn có thể đăng nhập vào các ứng dụng và website một cách nhanh cóng và linh hoạt"
+      "content": "Bạn có thể đăng nhập vào các ứng dụng và website một cách nhanh chóng và linh hoạt"
     },
     "ios": {
       "desc": "Để bật tính năng tự động điền mật khẩu trên thiết bị của bạn, hãy làm theo các hướng dẫn sau:",

@@ -21,7 +21,8 @@ import {
   ReferFriendScreen, FolderSharedUsersManagementScreen,
   PushEmailSettingsScreen, PushNotificationSettingsScreen,
   InAppListNotification, InAppNotificationScreen, DeleteScreen,
-  PrivateRelay, EmergencyAccessNavigator
+  PrivateRelay, EmergencyAccessScreen, YourTrustedContactScreen, ContactsTrustedYouScreen, 
+  ViewEAScreen, TakeoverEAScreen
 } from "../screens"
 // @ts-ignore
 import { AutofillServiceScreen } from "../screens"
@@ -39,7 +40,7 @@ import { HealthNavigator } from "./tools/health-navigator"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import InAppReview from 'react-native-in-app-review';
 import Intercom from "@intercom/intercom-react-native"
-import { AppNotification } from "../services/api"
+import { AppNotification, TrustedContact } from "../services/api"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -143,6 +144,15 @@ export type PrimaryParamList = {
   app_noti: undefined
 
   emergencyAccess: undefined
+  yourTrustedContact: undefined
+  contactsTrustedYou: undefined
+  viewEA: { 
+    trusted: TrustedContact
+  }
+  takeoverEA: {
+    trusted: TrustedContact
+    reset_pw: boolean
+  }
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -484,7 +494,6 @@ export const MainNavigator = observer(() => {
 
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
         <Stack.Screen name="healthStack" component={HealthNavigator} />
-        <Stack.Screen name="emergencyAccess" component={EmergencyAccessNavigator} />
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
@@ -539,6 +548,12 @@ export const MainNavigator = observer(() => {
 
         <Stack.Screen name="welcome_premium" component={WelcomePremiumScreen} />
         <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: 'all' }} />
+
+        <Stack.Screen name="emergencyAccess" component={EmergencyAccessScreen} />
+        <Stack.Screen name="yourTrustedContact" component={YourTrustedContactScreen} />
+        <Stack.Screen name="contactsTrustedYou" component={ContactsTrustedYouScreen} />
+        <Stack.Screen name="viewEA" component={ViewEAScreen} />
+        <Stack.Screen name="takeoverEA" component={TakeoverEAScreen} />
       </Stack.Navigator>
     </UserInactivity>
   )

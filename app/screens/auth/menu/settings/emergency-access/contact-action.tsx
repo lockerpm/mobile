@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import React from "react"
 import { View } from "react-native"
-import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Button, Divider, Modal, Text } from "../../../../../components"
+import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Divider, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { TrustedContact } from "../../../../../services/api"
 import { fontSize } from "../../../../../theme"
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const ContactAction = (props: Props) => {
-  const { isShow, onClose, trustedContact, setOnAction, isYourTrusted, showRequestModal} = props
+  const { isShow, onClose, trustedContact, setOnAction, isYourTrusted, showRequestModal } = props
   const { translate, color } = useMixins()
   const { user } = useStores()
   const navigation = useNavigation()
@@ -79,14 +79,14 @@ export const ContactAction = (props: Props) => {
     <ActionSheetContent >
       {isInintiated && <>
         <ActionItem
-          name="Accept"
+          name={translate('common.accept')}
           action={() => {
             handleYourTrustAction('approve')
           }}
         />
         <Divider />
         <ActionItem
-          name="Reject"
+          name={translate('common.reject')}
           action={() => {
             handleYourTrustAction('reject')
           }}
@@ -94,7 +94,7 @@ export const ContactAction = (props: Props) => {
         <Divider />
       </>}
       <ActionItem
-        name="Remove"
+        name={translate('common.remove')}
         action={() => {
           handleRemoveAction()
         }}
@@ -106,9 +106,9 @@ export const ContactAction = (props: Props) => {
   const TrustYouAction = () => (
     <ActionSheetContent >
       {
-        isApproved && <>
+        isApproved && isViewType && <>
           <ActionItem
-            name={isViewType ? "View their vault" : "Take over their vault"}
+            name={translate('emergency_access.view_vault')}
             action={() => {
               onClose()
               navigation.navigate(isViewType ? "viewEA" : "takeoverEA", {
@@ -119,11 +119,37 @@ export const ContactAction = (props: Props) => {
           <Divider />
         </>
       }
+      {
+        isApproved && !isViewType && <>
+          {/* <ActionItem
+            name={translate('emergency_access.reset_pw')}
+            action={() => {
+              onClose()
+              navigation.navigate("takeoverEA", {
+                trusted: trustedContact,
+                reset_pw: true
+              })
+            }}
+          />
+          <Divider /> */}
+          <ActionItem
+            name={translate('emergency_access.reset_master_pw')}
+            action={() => {
+              onClose()
+              navigation.navigate("takeoverEA", {
+                trusted: trustedContact,
+                reset_pw: false
+              })
+            }}
+          />
+          <Divider />
+        </>
+      }
 
       {
         isConfirm && <>
           <ActionItem
-            name={isViewType ? "Request to view" : "Request to takeover"}
+            name={isViewType ? translate('emergency_access.rq_view') : translate('emergency_access.rq_takeover')}
             action={() => {
               onClose()
               showRequestModal()
@@ -135,7 +161,7 @@ export const ContactAction = (props: Props) => {
       {
         isInvited && <>
           <ActionItem
-            name="Accept"
+            name={translate('common.accept')}
             action={() => {
               handleTrustedYouAction('accept')
             }}
@@ -145,7 +171,7 @@ export const ContactAction = (props: Props) => {
       }
 
       <ActionItem
-        name="Remove"
+        name={translate('common.remove')}
         action={() => {
           handleRemoveAction()
         }}

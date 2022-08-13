@@ -99,6 +99,14 @@ export const EditAliasModal = observer((props: Props) => {
             fontSize: fontSize.small
           }}
         />
+        {/* <Text
+          text={translate('private_relay.edit_warning', {alias: item.full_address})}
+          style={{
+            marginTop: 4,
+            marginBottom: 4,
+            fontSize: 12
+          }}
+        /> */}
         <View style={{
           borderWidth: 1,
           flexDirection: "row",
