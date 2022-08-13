@@ -76,7 +76,7 @@ export const PrivateRelay = observer(() => {
                 color: alias.length >= 5 ? color.block : color.primary
               }}
               preset="link"
-              text={translate('common.add')}
+              text={translate('private_relay.btn')}
               onPress={() => {
                 generateRelayNewAddress()
               }}
@@ -145,8 +145,13 @@ export const PrivateRelay = observer(() => {
         </TouchableOpacity>
       </View>
       {/* Root email end */}
-
-
+      <Text
+        text={translate('private_relay.label') + ` (${alias.length}/5)`}
+        style={{
+          marginLeft: 20,
+          marginVertical: 4
+        }}
+      />
       {/* emails */}
       <View
         style={[commonStyles.SECTION_PADDING, {
@@ -154,6 +159,7 @@ export const PrivateRelay = observer(() => {
           backgroundColor: color.background
         }]}
       >
+
         {
           alias.map((item, index) => (
             <AliasItem

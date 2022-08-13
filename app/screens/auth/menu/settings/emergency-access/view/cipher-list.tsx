@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Text } from "../../../../../../components"
 import { useMixins } from "../../../../../../services/mixins"
 import { useStores } from "../../../../../../models"
 import { CipherView } from "../../../../../../../core/models/view"
@@ -12,7 +11,6 @@ import { CardAction } from "../../../../browse/cards/card-action"
 import { IdentityAction } from "../../../../browse/identities/identity-action"
 import { NoteAction } from "../../../../browse/notes/note-action"
 import { CryptoWalletAction } from "../../../../browse/crypto-asset/crypto-wallet-action"
-import { DeletedAction } from "../../../../../../components/cipher/cipher-action/deleted-action"
 
 
 export interface CipherListProps {
@@ -40,7 +38,6 @@ export const CipherList = observer((props: CipherListProps) => {
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
-  const [showDeletedAction, setShowDeletedAction] = useState(false)
 
   const [checkedItem, setCheckedItem] = useState('')
 
@@ -113,6 +110,7 @@ export const CipherList = observer((props: CipherListProps) => {
         onClose={() => setShowPasswordAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
+        isEmergencyView={true}
       />
 
       <CardAction
@@ -120,6 +118,7 @@ export const CipherList = observer((props: CipherListProps) => {
         onClose={() => setShowCardAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
+        isEmergencyView={true}
       />
 
       <IdentityAction
@@ -127,6 +126,7 @@ export const CipherList = observer((props: CipherListProps) => {
         onClose={() => setShowIdentityAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
+        isEmergencyView={true}
       />
 
       <NoteAction
@@ -134,6 +134,7 @@ export const CipherList = observer((props: CipherListProps) => {
         onClose={() => setShowNoteAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
+        isEmergencyView={true}
       />
 
       <CryptoWalletAction
@@ -141,13 +142,7 @@ export const CipherList = observer((props: CipherListProps) => {
         onClose={() => setShowCryptoWalletAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
-      />
-
-      <DeletedAction
-        isOpen={showDeletedAction}
-        onClose={() => setShowDeletedAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
+        isEmergencyView={true}
       />
 
       {/* Action menus end */}
@@ -169,18 +164,9 @@ export const CipherList = observer((props: CipherListProps) => {
       {/* Cipher list end */}
     </View>
   ) : (
-    emptyContent && !searchText.trim() ? (
+    emptyContent && (
       <View style={{ paddingHorizontal: 20 }}>
         {emptyContent}
-      </View>
-    ) : (
-      <View style={{ paddingHorizontal: 20 }}>
-        <Text
-          text={translate('error.no_results_found') + ` '${searchText}'`}
-          style={{
-            textAlign: 'center'
-          }}
-        />
       </View>
     )
   )

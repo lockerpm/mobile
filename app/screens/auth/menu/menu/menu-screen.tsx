@@ -17,7 +17,7 @@ import { Invitation, InvitationData } from "./invitation"
 import { getVersion } from "react-native-device-info"
 import { ReferFriendMenuItem } from "./refer-friend-menu-item"
 import { useAdaptiveLayoutMixins } from "../../../../services/mixins/adaptive-layout"
-import Intercom, { Visibility, IntercomEvents } from "@intercom/intercom-react-native"
+import Intercom, { IntercomEvents } from "@intercom/intercom-react-native"
 import PlanIcon from './star.svg'
 import InviteIcon from './invite.svg'
 import SettingsIcon from './gear.svg'
@@ -31,7 +31,6 @@ import LockIconLight from './lock-light.svg'
 import { PushNotifier } from "../../../../utils/push-notification"
 import { useTestMixins } from "../../../../services/mixins/test"
 import moment from "moment"
-import { Logger } from "../../../../utils/logger"
 
 
 export const MenuScreen = observer(() => {
@@ -72,26 +71,6 @@ export const MenuScreen = observer(() => {
     }
     getLink()
   }, [])
-
-
-  useEffect(() => {
-    const setUpCustomerService = async () => {
-      await Intercom.hideIntercom()
-      try {
-        if (uiStore.isShowIntercomMsgBox) {
-          await Intercom.setBottomPadding(100)
-          await Intercom.setLauncherVisibility(Visibility.VISIBLE)
-        } else {
-          await Intercom.setLauncherVisibility(Visibility.GONE)
-          const res = await Intercom.getUnreadConversationCount()
-          setUnreadConversationCount(res)
-        }
-      } catch (e) {
-        Logger.error(e)
-      }
-    }
-    user.isLoggedInPw && navigation.isFocused() && setUpCustomerService()
-  }, [uiStore.isShowIntercomMsgBox])
 
   useEffect(() => {
     const countListener = Intercom.addEventListener(

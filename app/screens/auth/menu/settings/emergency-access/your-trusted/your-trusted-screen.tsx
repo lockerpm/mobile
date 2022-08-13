@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { Layout, Header, Button } from "../../../../../../components"
+import { Layout, Header, Button, Text } from "../../../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { SectionWrapperItem } from "../../settings-item"
 import { useMixins } from "../../../../../../services/mixins"
@@ -8,14 +7,17 @@ import { AddTrustedContactModal } from "./add-trusted-contact-modal"
 import { TrustedContact } from "../../../../../../services/api"
 import { useStores } from "../../../../../../models"
 import { Contact } from "../contact"
+import { FlatList, View } from "react-native"
+import { PlanType } from "../../../../../../config/types"
 
 
 
 
-export const YourTrustedContactScreen = observer(function YourTrustedContactScreen() {
+export const YourTrustedContactScreen = () => {
   const navigation = useNavigation()
   const { translate, color, notifyApiError } = useMixins()
   const { user } = useStores()
+  const isFree = user.plan.alias === PlanType.FREE
 
   // ----------------------- PARAMS -----------------------
   const [isShowAddModal, setIsShowAddModal] = useState(false)
@@ -40,16 +42,43 @@ export const YourTrustedContactScreen = observer(function YourTrustedContactScre
 
   // ----------------------- RENDER -----------------------
 
+  const ListEmpty = () => (
+    <View >
+      {
+        isFree && (
+          <View style={{
+            alignItems: "center"
+          }}>
+            <Text text={translate('emergency_access.free_guild')} style={{ textAlign: "center" }} />
+            {/* <Button text={translate('common.upgrade')} style={{ maxWidth: 150, marginTop: 20 }} /> */}
+          </View>
+        )
+      }
+      {
+        !isFree && (
+          <View style={{
+            alignItems: "center"
+          }}>
+            <Text text={"No data"} style={{ textAlign: "center" }} />
+            {/* <Button text={translate('common.upgrade')} style={{ maxWidth: 150, marginTop: 20 }} /> */}
+          </View>
+        )
+      }
+    </View>
+  )
+
   return (
     <Layout
+      noScroll
       header={(
         <Header
           goBack={() => {
             navigation.goBack()
           }}
-          title={"Your trusted contacts"}
+          title={translate('emergency_access.your_trust')}
           right={(
             <Button
+              isDisabled={isFree}
               onPress={() => setIsShowAddModal(true)}
               preset="link"
               text={translate('common.add')}
@@ -68,19 +97,20 @@ export const YourTrustedContactScreen = observer(function YourTrustedContactScre
         }}
       />
       <SectionWrapperItem>
-        {
-          trustedContacts.map((item) => (
+        <FlatList
+          ListEmptyComponent={<ListEmpty />}
+          data={trustedContacts}
+          keyExtractor={(item, index) => String(index)}
+          renderItem={({ item }) => (
             <Contact
-              isYourTrusted={true}
+              isYourTrusted={false}
               setOnAction={() => { setOnAction(!onAction) }}
-              key={item.id}
               trustedContact={item}
             />
-          ))
-        }
-
+          )}
+        />
       </SectionWrapperItem>
     </Layout>
   )
-})
+}
 

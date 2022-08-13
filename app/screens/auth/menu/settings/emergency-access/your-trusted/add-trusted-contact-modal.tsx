@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { View, TouchableOpacity, TextInput, Modal } from "react-native"
 import { Button, Divider, Header, Icon, Layout, Text } from "../../../../../../components"
-import { useStores } from "../../../../../../models"
 import { observer } from "mobx-react-lite"
 import { commonStyles, fontSize } from "../../../../../../theme"
 import { useMixins } from "../../../../../../services/mixins"
@@ -31,34 +30,34 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
     {
       value: !accessRight,
       action: () => { setAccessRight(!accessRight) },
-      text: "View: They can view all your vault items"
+      text:  translate("emergency_access.add.view")
     },
     {
       value: accessRight,
       action: () => { setAccessRight(!accessRight) },
-      text: "Takeover: They can reset your Master Password"
+      text: translate("emergency_access.add.takeover")
     }
   ]
   const time = [
     {
       value: 1,
-      text: "1 day"
+      text: "1 " + translate("emergency_access.add.day")
     },
     {
       value: 3,
-      text: "3 days"
+      text: "3 " + translate("emergency_access.add.day")
     },
     {
       value: 7,
-      text: "7 days"
+      text: "7 " + translate("emergency_access.add.day")
     },
     {
       value: 14,
-      text: "14 days"
+      text: "14 " + translate("emergency_access.add.day")
     },
     {
       value: 30,
-      text: "30 days"
+      text: "30 " + translate("emergency_access.add.day")
     }
   ]
   // ----------------------- METHODS -----------------------
@@ -99,7 +98,7 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
                 <Icon icon={"cross"} size={18} color={color.textBlack} />
               </TouchableOpacity>
             )}
-            title={"Add trusted contact"}
+            title={translate("emergency_access.add_trust")}
             right={(
               <Button
                 isDisabled={!email}
@@ -111,7 +110,7 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
           />
         )}
       >
-        <Text preset="semibold" text="Email address" />
+        <Text preset="semibold" text={translate("emergency_access.add.email")} />
         <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
           borderColor: color.line,
           backgroundColor: color.background,
@@ -135,8 +134,6 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
             }}
           />
         </View>
-
-        <Text preset="semibold" text="Email address" style={{ marginTop: 16 }} />
 
         {
           role.map((item, index) => (
@@ -165,9 +162,9 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
           ))
         }
 
-        <Text preset="semibold" text="Wait time" style={{ marginTop: 16 }} />
+        <Text preset="semibold" text={translate("emergency_access.add.wait_time")} style={{ marginTop: 16 }} />
         <Text
-          text="If you failed to respond to emergency requests from this person before “wait time”, their requests will be approved automatically"
+          text={translate("emergency_access.add.text")}
           style={{ marginTop: 8, fontSize: fontSize.small }}
         />
 
@@ -199,10 +196,10 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
           ))
         }
 
-        <Text
+        {/* <Text
           text="* if they don’t have Locker account, they will be invited to created an account. Then you have to confirm again when they are done creating account to confirm them as your emergency contact"
           style={{ marginTop: 20, fontSize: 12 }}
-        />
+        /> */}
       </Layout>
     </Modal >
   )

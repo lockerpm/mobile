@@ -8,7 +8,6 @@ export const UiStoreModel = types
   .model("UiStore")
   .props({
     // Data
-    isShowIntercomMsgBox: false,
     isDark: types.maybeNull(types.boolean),
     lockResendOtpResetPasswordTime: types.maybeNull(types.number),
     showWelcomePremium: false,
@@ -34,10 +33,6 @@ export const UiStoreModel = types
   .actions((self) => ({
     setIsOffline: (isOffline: boolean) => {
       self.isOffline = isOffline
-    },
-
-    setShowIntercomMsgBox: (val: boolean) => {
-      self.isShowIntercomMsgBox = val
     },
 
     setShowWelcomePremium: (val: boolean) => {

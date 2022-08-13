@@ -1,25 +1,23 @@
 import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { Layout, BrowseItemEmptyContent, Header } from "../../../../../../components"
+import { Layout, Header, Text } from "../../../../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import orderBy from 'lodash/orderBy'
 // import { ItemsHeader } from "./items-header"
 // import { SortAction } from "./sort-action"
 import { useMixins } from "../../../../../../services/mixins"
 import { useStores } from "../../../../../../models"
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { EmergencyAccessParamList } from "../emergency-access-screen"
 import { View } from "react-native"
 import { TrustedContact } from "../../../../../../services/api"
 import { CipherList } from "./cipher-list"
-import { CipherResponse } from "../../../../../../../core/models/response/cipherResponse"
 import { CipherData } from "../../../../../../../core/models/data/cipherData"
 import { Cipher } from "../../../../../../../core/models/domain"
 import { CipherView } from "../../../../../../../core/models/view"
 import { useCipherHelpersMixins } from "../../../../../../services/mixins/cipher/helpers"
 import { useCipherDataMixins } from "../../../../../../services/mixins/cipher/data"
+import { PrimaryParamList } from "../../../../../../navigators"
 
-type ViewScreenProp = RouteProp<EmergencyAccessParamList, "viewEA">
+type ViewScreenProp = RouteProp<PrimaryParamList, "viewEA">
 
 export const ViewEAScreen = observer(() => {
   const navigation = useNavigation()
@@ -60,7 +58,7 @@ export const ViewEAScreen = observer(() => {
           decCiphers.push(c)
         }))
       })
-      
+
       await Promise.all(promises)
       let res = decCiphers.map((c: CipherView) => {
         const cipherInfo = getCipherInfo(c)
@@ -89,7 +87,7 @@ export const ViewEAScreen = observer(() => {
 
       setCiphers(res)
     } catch (e) {
-      console.log(e)
+      //
     }
   }
 
@@ -107,7 +105,7 @@ export const ViewEAScreen = observer(() => {
       header={(
         <Header
           goBack={() => navigation.goBack()}
-          title={"View EA"}
+          title={translate('emergency_access.view')}
           right={(<View style={{ width: 30 }} />)}
         />
       )}
@@ -124,13 +122,19 @@ export const ViewEAScreen = observer(() => {
         }}
         value={sortOption}
       /> */}
+      <Text
+        text={translate('emergency_access.view_user_vault', { name: trustContact.full_name })}
+        style={{ marginLeft: 20 }}
+      />
 
       <CipherList
         ciphers={ciphers}
         navigation={navigation}
         onLoadingChange={setIsLoading}
         searchText={searchText}
-      // emptyContent={}
+        emptyContent={<View>
+          <Text text="No data" />
+        </View>}
       />
     </Layout>
   )

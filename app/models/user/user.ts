@@ -249,7 +249,6 @@ export const UserModel = types
       customToken?: string,
       dontSetData?: boolean
     }) => {
-      console.log(self.language)
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser(options?.customToken || self.apiToken)
       if (res.kind === "ok" && !options?.dontSetData) {
@@ -258,7 +257,6 @@ export const UserModel = types
           EventBus.emit(AppEventType.CLEAR_ALL_DATA, null)
           self.clearSettings()
         }
-        console.log(res.user)
         self.saveUser(res.user)
       }
       return res
