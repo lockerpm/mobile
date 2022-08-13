@@ -556,7 +556,7 @@ export const UserModel = types
       const res = await userApi.EAGranted(self.apiToken)
       return res
     },
-    yourTrustedActionEA: async (id: string, action: "reject" | "approve") => {
+    yourTrustedActionEA: async (id: string, action: "reject" | "approve" | "reinvite") => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAyourTrustedAction(self.apiToken, id, action)
       if (res.kind === "ok") {
