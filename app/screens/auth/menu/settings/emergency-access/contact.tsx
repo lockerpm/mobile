@@ -91,10 +91,15 @@ export const Contact = (props: Props) => {
       <ContactAction
         isYourTrusted={isYourTrusted}
         isShow={showAction}
-        onClose={() => setShowAcction(false)}
+        onClose={(val?: string) => {
+          setShowAcction(false)
+          if (val === "rq_modal"){
+            setShowRequestModal(true)
+          }
+        }}
         trustedContact={trustedContact}
         setOnAction={setOnAction}
-        showRequestModal={() => setShowRequestModal(true)}
+        // showRequestModal={() => setShowRequestModal(true)}
       />
 
       <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>

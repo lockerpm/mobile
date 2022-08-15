@@ -190,7 +190,7 @@ export const LockScreen = observer(() => {
         }
       </View>
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
-        <Image source={APP_ICON.iconDark} style={{ height: 63, width: 63 }} />
+        <Image source={APP_ICON.icon} style={{ height: 63, width: 63 }} />
 
         <Text
           preset="header"
