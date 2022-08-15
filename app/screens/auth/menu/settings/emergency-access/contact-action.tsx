@@ -11,14 +11,14 @@ import { useNavigation } from "@react-navigation/native"
 interface Props {
   isYourTrusted: boolean
   isShow: boolean
-  onClose: () => void
+  onClose: (val?: string) => void
   trustedContact: TrustedContact
   setOnAction: () => void
-  showRequestModal: () => void
+  showRequestModal?: () => void
 }
 
 export const ContactAction = (props: Props) => {
-  const { isShow, onClose, trustedContact, setOnAction, isYourTrusted, showRequestModal } = props
+  const { isShow, onClose, trustedContact, setOnAction, isYourTrusted } = props
   const { translate, color } = useMixins()
   const { user } = useStores()
   const navigation = useNavigation()
@@ -160,8 +160,9 @@ export const ContactAction = (props: Props) => {
           <ActionItem
             name={isViewType ? translate('emergency_access.rq_view') : translate('emergency_access.rq_takeover')}
             action={() => {
-              onClose()
-              showRequestModal()
+              // onClose("rq_modal")
+              // showRequestModal()
+              handleTrustedYouAction('initiate')
             }}
           />
           <Divider />
