@@ -46,7 +46,7 @@ export const SeedPhraseInfo = (props: Props) => {
             style={BUTTON}
           >
             <Icon
-              name={"eye"}
+              name={showPassword ? "eye-slash" : "eye"}
               size={18}
               color={color.text}
             />
