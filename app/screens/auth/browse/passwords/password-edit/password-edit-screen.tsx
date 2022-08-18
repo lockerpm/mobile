@@ -24,8 +24,6 @@ import { CipherType } from '../../../../../../core/enums'
 import { CipherView, FieldView, LoginUriView, LoginView } from '../../../../../../core/models/view'
 import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
 import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
-import { PasswordPolicy } from '../../../../../config/types/api'
-import { PolicyType } from '../../../../../config/types'
 
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>
 
@@ -33,9 +31,9 @@ export const PasswordEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<PasswordEditScreenProp>()
   const { mode, initialUrl } = route.params
-  const { translate, color, notifyApiError } = useMixins()
+  const { translate, color } = useMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
-  const { getPasswordStrength, newCipher } = useCipherHelpersMixins()
+  const { getPasswordStrength, newCipher, checkPasswordPolicy } = useCipherHelpersMixins()
   const { cipherStore, uiStore, user } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
   const onSaveFillService = uiStore.isOnSaveLogin
@@ -44,7 +42,6 @@ export const PasswordEditScreen = observer(() => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [showViolationModal, setShowViolationModal] = useState(false)
-  const [policy, setPolicy] = useState<PasswordPolicy>(null)
   const [violations, setViolations] = useState<string[]>([])
   const [pendingPayload, setPendingPayload] = useState<{
     item: CipherView
@@ -63,13 +60,6 @@ export const PasswordEditScreen = observer(() => {
   const [fields, setFields] = useState<FieldView[]>([])
 
   // ----------------- EFFECTS ------------------
-
-  // Mounted
-  useEffect(() => {
-    if (!uiStore.isOffline && user.teams.length) {
-      getPolicy(user.teams[0].id)
-    }
-  }, [])
 
   // Set initial data
   useEffect(() => {
@@ -131,58 +121,6 @@ export const PasswordEditScreen = observer(() => {
     }
   }
 
-  // Get policy
-  const getPolicy = async (organizationId: string) => {
-    setIsLoading(true)
-    const res = await user.getTeamPolicy(organizationId, PolicyType.PASSWORD_REQ)
-    if (res.kind === 'ok') {
-      setPolicy(res.data as PasswordPolicy)
-    } else {
-      notifyApiError(res)
-      setPolicy(null)
-    }
-    setIsLoading(false)
-  }
-
-  // Check policy
-  const checkPolicy = (cipher: CipherView) => {
-    const res = []
-    if (policy && policy.enabled) {
-      if (policy.config.min_length && cipher.login.password.length < policy.config.min_length) {
-        res.push(translate('policy.min_password_length', { length: policy.config.min_length }))
-      }
-      if (policy.config.require_special_character) {
-        const reg = /(?=.*[!@#$%^&*])/
-        const check = reg.test(cipher.login.password)
-        if (!check) {
-          res.push(translate('policy.requires_special'))
-        }
-      }
-      if (policy.config.require_lower_case) {
-        const reg = /[a-z]/
-        const check = reg.test(cipher.login.password)
-        if (!check) {
-          res.push(translate('policy.requires_lowercase'))
-        }
-      }
-      if (policy.config.require_upper_case) {
-        const reg = /[A-Z]/
-        const check = reg.test(cipher.login.password)
-        if (!check) {
-          res.push(translate('policy.requires_uppercase'))
-        }
-      }
-      if (policy.config.require_digit) {
-        const reg = /[1-9]/
-        const check = reg.test(cipher.login.password)
-        if (!check) {
-          res.push(translate('policy.requires_number'))
-        }
-      }
-    }
-    return res
-  }
-
   // Prepare to save password
   const preparePassword = async () => {
     let payload: CipherView
@@ -211,7 +149,8 @@ export const PasswordEditScreen = observer(() => {
     const passwordStrength = getPasswordStrength(password).score
 
     // Violate team's policy
-    const violatedItems = checkPolicy(payload)
+    setIsLoading(true)
+    const violatedItems = await checkPasswordPolicy(password)
     if (violatedItems.length) {
       setPendingPayload({
         item: payload,
@@ -219,6 +158,7 @@ export const PasswordEditScreen = observer(() => {
       })
       setViolations(violatedItems)
       setShowViolationModal(true)
+      setIsLoading(false)
       return
     }
 
@@ -412,11 +352,12 @@ export const PasswordEditScreen = observer(() => {
           setShowViolationModal(false)
         }}
         violations={violations}
-        teamName={user.teams[0]?.name}
+        teamName={user.teams.length && user.teams[0]?.name}
         onConfirm={() => {
           setShowViolationModal(false)
           handleSave(pendingPayload.item, pendingPayload.strength)
         }}
+        confirmText="Use this password anyway"
       />
       {/* Violations modal end */}
     </Layout>

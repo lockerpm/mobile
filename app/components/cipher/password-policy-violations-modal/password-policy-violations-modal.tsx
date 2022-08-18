@@ -10,10 +10,11 @@ interface Props {
   onConfirm: () => void
   teamName: string
   violations: string[]
+  confirmText: string
 }
 
 export const PasswordPolicyViolationsModal = observer((props: Props) => {
-  const { isOpen, onClose, onConfirm, violations, teamName } = props
+  const { isOpen, onClose, onConfirm, violations, teamName, confirmText } = props
 
   // --------------- PARAMS ----------------
 
@@ -48,7 +49,7 @@ export const PasswordPolicyViolationsModal = observer((props: Props) => {
       ))}
 
       <Button
-        text="Use this password anyway"
+        text={confirmText}
         onPress={onConfirm}
         style={{
           width: '100%',
