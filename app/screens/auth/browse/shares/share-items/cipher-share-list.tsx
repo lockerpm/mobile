@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react"
-import { View, FlatList, SectionList } from "react-native"
-import { observer } from "mobx-react-lite"
+import React, { useState, useEffect } from 'react'
+import { View, FlatList, SectionList } from 'react-native'
+import { observer } from 'mobx-react-lite'
 import orderBy from 'lodash/orderBy'
-import { Text } from "../../../../../components/text/text"
-import { useMixins } from "../../../../../services/mixins"
-import { useStores } from "../../../../../models"
-import { CipherView } from "../../../../../../core/models/view"
-import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { AccountRole, AccountRoleText } from "../../../../../config/types"
-import { Organization } from "../../../../../../core/models/domain/organization"
-import { ShareItemAction } from "./share-item-action"
-import { SharedMemberType } from "../../../../../services/api/api.types"
-import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
-import { CipherShareListItem, CipherShareType } from "./cipher-share-list-item"
-import { FolderAction } from "../../folders/folder-action"
+import { Text } from '../../../../../components/text/text'
+import { useMixins } from '../../../../../services/mixins'
+import { useStores } from '../../../../../models'
+import { CipherView } from '../../../../../../core/models/view'
+import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
+import { AccountRole, AccountRoleText } from '../../../../../config/types'
+import { Organization } from '../../../../../../core/models/domain/organization'
+import { ShareItemAction } from './share-item-action'
+import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
+import { CipherShareListItem, CipherShareType } from './cipher-share-list-item'
+import { FolderAction } from '../../folders/folder-action'
 import { CollectionListItem } from './folder-share-list-item'
-import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { CollectionView } from '../../../../../../core/models/view/collectionView'
+import { SharedMemberType } from '../../../../../config/types/api'
 
 type Props = {
   emptyContent?: JSX.Element
@@ -32,9 +32,7 @@ type Props = {
  * Describe your component here
  */
 export const CipherShareList = observer((props: Props) => {
-  const {
-    emptyContent, navigation, onLoadingChange, searchText, sortList
-  } = props
+  const { emptyContent, navigation, onLoadingChange, searchText, sortList } = props
   const { translate } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
   const { getCipherInfo } = useCipherHelpersMixins()
@@ -58,7 +56,13 @@ export const CipherShareList = observer((props: Props) => {
 
   useEffect(() => {
     loadData()
-  }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList, JSON.stringify(cipherStore.myShares)])
+  }, [
+    searchText,
+    cipherStore.lastSync,
+    cipherStore.lastCacheUpdate,
+    sortList,
+    JSON.stringify(cipherStore.myShares),
+  ])
 
   // ------------------------ METHODS ----------------------------
 
@@ -67,37 +71,36 @@ export const CipherShareList = observer((props: Props) => {
   }
 
   const _getShare = (id: string) => {
-    return myShares.find(s => s.id === id)
+    return myShares.find((s) => s.id === id)
   }
-
 
   // Get ciphers list
   const loadData = async () => {
     // onLoadingChange && onLoadingChange(true)
 
-
-
     // Filter
-    const filters = [(c: CipherView) => {
-      if (!c.organizationId) {
-        return false
-      }
+    const filters = [
+      (c: CipherView) => {
+        if (!c.organizationId) {
+          return false
+        }
 
-      // // TODO 
-      // if (collections.some(e => c.collectionIds.includes(e.id))) {
-      //   return false
-      // }
+        // // TODO
+        // if (collections.some(e => c.collectionIds.includes(e.id))) {
+        //   return false
+        // }
 
-      const share = _getShare(c.organizationId)
-      const org = _getOrg(c.organizationId)
-      return org && org.type === AccountRole.OWNER && share && share.members.length
-    }]
+        const share = _getShare(c.organizationId)
+        const org = _getOrg(c.organizationId)
+        return org && org.type === AccountRole.OWNER && share && share.members.length
+      },
+    ]
 
     // Search
     const searchRes = await getCiphersFromCache({
       filters,
       searchText,
-      deleted: false
+      deleted: false,
     })
     let res: CipherShareType[] = []
 
@@ -111,14 +114,16 @@ export const CipherShareList = observer((props: Props) => {
         logo: cipherInfo.backup,
         imgLogo: cipherInfo.img,
         svg: cipherInfo.svg,
-        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
+        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
+          c.id
+        ),
         description: '',
-        status: null
+        status: null,
       }
 
       // Display for each sharing member
       const share = _getShare(c.organizationId)
-      share.members.forEach(m => {
+      share.members.forEach((m) => {
         let shareType = ''
         switch (m.role) {
           case AccountRoleText.MEMBER:
@@ -142,11 +147,12 @@ export const CipherShareList = observer((props: Props) => {
     // Sort
     if (sortList) {
       const { orderField, order } = sortList
-      res = orderBy(
-        res,
-        [c => orderField === 'name' ? (c.name && c.name.toLowerCase()) : c.revisionDate],
-        [order]
-      ) || []
+      res =
+        orderBy(
+          res,
+          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order]
+        ) || []
     }
 
     // Delay loading
@@ -169,7 +175,6 @@ export const CipherShareList = observer((props: Props) => {
     setShowCollectionAction(true)
   }
 
-
   // Go to detail
   const goToDetail = (item: CipherShareType) => {
     cipherStore.setSelectedCipher(item)
@@ -180,15 +185,14 @@ export const CipherShareList = observer((props: Props) => {
   const DATA = [
     {
       type: 2,
-      data: [...collectionStore.collections]
+      data: [...collectionStore.collections],
     },
     {
       type: 1,
-      data: [...allCiphers.filter(c => !c.collectionIds?.length)]
-    }
-  ];
+      data: [...allCiphers.filter((c) => !c.collectionIds?.length)],
+    },
+  ]
   // ------------------------ RENDER ----------------------------
-
 
   return allCiphers.length ? (
     <View style={{ flex: 1 }}>
@@ -208,7 +212,6 @@ export const CipherShareList = observer((props: Props) => {
         onLoadingChange={onLoadingChange}
         folder={selectedCollection}
       />
-      
 
       {/* Action menus end */}
       <SectionList
@@ -219,43 +222,30 @@ export const CipherShareList = observer((props: Props) => {
         keyExtractor={(item, index) => String(index)}
         renderItem={({ item, index, section }) => (
           <View>
-            {
-              section.type === 1 && (
-                <CipherShareListItem
-                  item={item}
-                  openActionMenu={openCipherActionMenu}
-                />
-              )
-            }
-            {
-              section.type === 2 && (
-                <CollectionListItem
-                  item={item}
-                  openActionMenu={openCollectionActionMenu}
-                  navigation={navigation}
-                />
-              )
-            }
+            {section.type === 1 && (
+              <CipherShareListItem item={item} openActionMenu={openCipherActionMenu} />
+            )}
+            {section.type === 2 && (
+              <CollectionListItem
+                item={item}
+                openActionMenu={openCollectionActionMenu}
+                navigation={navigation}
+              />
+            )}
           </View>
         )}
       />
-
-
     </View>
+  ) : emptyContent && !searchText.trim() ? (
+    <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
   ) : (
-    emptyContent && !searchText.trim() ? (
-      <View style={{ paddingHorizontal: 20 }}>
-        {emptyContent}
-      </View>
-    ) : (
-      <View style={{ paddingHorizontal: 20 }}>
-        <Text
-          text={translate('error.no_results_found') + ` '${searchText}'`}
-          style={{
-            textAlign: 'center'
-          }}
-        />
-      </View>
-    )
+    <View style={{ paddingHorizontal: 20 }}>
+      <Text
+        text={translate('error.no_results_found') + ` '${searchText}'`}
+        style={{
+          textAlign: 'center',
+        }}
+      />
+    </View>
   )
 })

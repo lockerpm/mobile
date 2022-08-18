@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { useMixins } from "../../../../services/mixins"
-import { Button, Modal, Text } from "../../../../components"
-import { fontSize } from "../../../../theme"
-import { TextInput, View } from "react-native"
-import { RelayAddress } from "../../../../services/api"
-import { useStores } from "../../../../models"
-
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useMixins } from '../../../../services/mixins'
+import { Button, Modal, Text } from '../../../../components'
+import { fontSize } from '../../../../theme'
+import { TextInput, View } from 'react-native'
+import { useStores } from '../../../../models'
+import { RelayAddress } from '../../../../config/types/api'
 
 interface Props {
-  isOpen?: boolean,
+  isOpen?: boolean
   onClose?: () => void
   item: RelayAddress
   onEdit: () => void
@@ -22,8 +21,8 @@ export const EditAliasModal = observer((props: Props) => {
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)
-  const [newAddress, setNewAddress] = useState("")
-  const [updateError, setUpdateError] = useState("")
+  const [newAddress, setNewAddress] = useState('')
+  const [updateError, setUpdateError] = useState('')
 
   // --------------- COMPUTED ----------------
 
@@ -32,11 +31,11 @@ export const EditAliasModal = observer((props: Props) => {
   const handleEdit = async () => {
     setIsLoading(true)
     const res = await toolStore.updateRelayAddress(item.id, newAddress.toLowerCase())
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       onClose()
       onEdit()
     } else {
-      if (res.kind === "bad-data") {
+      if (res.kind === 'bad-data') {
         const errorData: {
           details?: {
             [key: string]: string[]
@@ -46,7 +45,7 @@ export const EditAliasModal = observer((props: Props) => {
         } = res.data
         let errorMessage = ''
         if (errorData.details) {
-          for (let key of Object.keys(errorData.details)) {
+          for (const key of Object.keys(errorData.details)) {
             if (errorData.details[key][0]) {
               if (!errorMessage) {
                 errorMessage = errorData.details[key][0]
@@ -64,39 +63,32 @@ export const EditAliasModal = observer((props: Props) => {
   // --------------- EFFECT ----------------'
 
   useEffect(() => {
-    setUpdateError("")
-    setNewAddress("")
+    setUpdateError('')
+    setNewAddress('')
   }, [isOpen])
 
   // --------------- RENDER ----------------
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={translate('private_relay.edit_modal.titel')}
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title={translate('private_relay.edit_modal.titel')}>
       <View>
         <Text
           text={translate('private_relay.edit_modal.current')}
           style={{
             marginTop: 10,
             marginBottom: 4,
-            fontSize: fontSize.small
+            fontSize: fontSize.small,
           }}
         />
 
-        <Text
-          preset="black"
-          text={item.full_address}
-        />
+        <Text preset="black" text={item.full_address} />
 
         <Text
           text={translate('private_relay.edit_modal.new')}
           style={{
             marginTop: 24,
             marginBottom: 4,
-            fontSize: fontSize.small
+            fontSize: fontSize.small,
           }}
         />
         {/* <Text
@@ -107,24 +99,26 @@ export const EditAliasModal = observer((props: Props) => {
             fontSize: 12
           }}
         /> */}
-        <View style={{
-          borderWidth: 1,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: 44,
-          borderColor: color.line,
-          borderRadius: 8,
-          paddingRight: 12,
-          paddingLeft: 12,
-        }}>
+        <View
+          style={{
+            borderWidth: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: 44,
+            borderColor: color.line,
+            borderRadius: 8,
+            paddingRight: 12,
+            paddingLeft: 12,
+          }}
+        >
           <TextInput
             value={newAddress}
             onChangeText={(text: string) => {
               setNewAddress(text)
-              if (updateError !== "") setUpdateError("")
+              if (updateError !== '') setUpdateError('')
             }}
-            placeholder={"... "}
+            placeholder={'... '}
             placeholderTextColor={color.text}
             selectionColor={color.primary}
             style={{
@@ -133,10 +127,13 @@ export const EditAliasModal = observer((props: Props) => {
               fontSize: fontSize.p,
             }}
           />
-          <Text text={item.full_address.replace(item.address, "")} style={{
-            marginLeft: 2,
-            right: 0
-          }} />
+          <Text
+            text={item.full_address.replace(item.address, '')}
+            style={{
+              marginLeft: 2,
+              right: 0,
+            }}
+          />
         </View>
       </View>
 

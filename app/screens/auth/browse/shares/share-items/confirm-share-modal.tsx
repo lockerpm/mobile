@@ -1,18 +1,17 @@
-import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
-import { SharedMemberType } from "../../../../../services/api/api.types"
-import { useStores } from "../../../../../models"
-import { useMixins } from "../../../../../services/mixins"
-import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { Button, Modal, Text } from "../../../../../components"
-import { fontSize } from "../../../../../theme"
-import { useCoreService } from "../../../../../services/core-service"
-import { Utils } from "../../../../../../core/misc/utils"
-import { View } from "react-native"
-
+import React, { useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useStores } from '../../../../../models'
+import { useMixins } from '../../../../../services/mixins'
+import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
+import { Button, Modal, Text } from '../../../../../components'
+import { fontSize } from '../../../../../theme'
+import { useCoreService } from '../../../../../services/core-service'
+import { Utils } from '../../../../../../core/misc/utils'
+import { View } from 'react-native'
+import { SharedMemberType } from '../../../../../config/types/api'
 
 interface Props {
-  isOpen?: boolean,
+  isOpen?: boolean
   onClose?: () => void
   member: SharedMemberType
   organizationId: string
@@ -83,12 +82,14 @@ export const ConfirmShareModal = observer((props: Props) => {
         }}
       />
 
-      <View style={{
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        borderRadius: 5,
-        backgroundColor: color.block
-      }}>
+      <View
+        style={{
+          paddingHorizontal: 15,
+          paddingVertical: 10,
+          borderRadius: 5,
+          backgroundColor: color.block,
+        }}
+      >
         <Text
           text={fingerprint}
           style={{
@@ -102,7 +103,7 @@ export const ConfirmShareModal = observer((props: Props) => {
         style={{
           marginTop: 20,
           marginBottom: 10,
-          fontSize: fontSize.small
+          fontSize: fontSize.small,
         }}
       />
 
@@ -113,7 +114,7 @@ export const ConfirmShareModal = observer((props: Props) => {
         onPress={handleConfirmShare}
         style={{
           width: '100%',
-          marginTop: 20
+          marginTop: 20,
         }}
       />
     </Modal>

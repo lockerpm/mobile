@@ -1,17 +1,16 @@
-import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
-import { SharedMemberType } from "../../../../../services/api/api.types"
-import { useStores } from "../../../../../models"
-import { useMixins } from "../../../../../services/mixins"
-import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { CipherView } from "../../../../../../core/models/view"
-import { AccountRoleText } from "../../../../../config/types"
-import { Button, DropdownPicker, Modal, Text } from "../../../../../components"
-import { fontSize } from "../../../../../theme"
-
+import React, { useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useStores } from '../../../../../models'
+import { useMixins } from '../../../../../services/mixins'
+import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
+import { CipherView } from '../../../../../../core/models/view'
+import { AccountRoleText } from '../../../../../config/types'
+import { Button, DropdownPicker, Modal, Text } from '../../../../../components'
+import { fontSize } from '../../../../../theme'
+import { SharedMemberType } from '../../../../../config/types/api'
 
 interface Props {
-  isOpen?: boolean,
+  isOpen?: boolean
   onClose?: () => void
   member: SharedMemberType
 }
@@ -30,12 +29,12 @@ export const EditShareModal = observer((props: Props) => {
     // },
     {
       label: translate('shares.share_type.view'),
-      value: 'view'
+      value: 'view',
     },
     {
       label: translate('shares.share_type.edit'),
-      value: 'edit'
-    }
+      value: 'edit',
+    },
   ]
 
   // --------------- PARAMS ----------------
@@ -99,21 +98,18 @@ export const EditShareModal = observer((props: Props) => {
         style={{
           marginTop: 20,
           marginBottom: 10,
-          fontSize: fontSize.small
+          fontSize: fontSize.small,
         }}
       />
 
-      <Text
-        preset="black"
-        text={`${member?.full_name} (${member?.email})`}
-      />
+      <Text preset="black" text={`${member?.full_name} (${member?.email})`} />
 
       <Text
         text={translate('shares.share_type.label')}
         style={{
           marginTop: 20,
           marginBottom: 10,
-          fontSize: fontSize.small
+          fontSize: fontSize.small,
         }}
       />
 
@@ -126,7 +122,7 @@ export const EditShareModal = observer((props: Props) => {
         setValue={setShareType}
         setItems={() => {}}
         style={{
-          marginBottom: 20
+          marginBottom: 20,
         }}
       />
 
@@ -137,7 +133,7 @@ export const EditShareModal = observer((props: Props) => {
         onPress={handleEditShare}
         style={{
           width: '100%',
-          marginTop: 30
+          marginTop: 30,
         }}
       />
     </Modal>
