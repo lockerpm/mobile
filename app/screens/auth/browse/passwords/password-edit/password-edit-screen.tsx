@@ -35,8 +35,20 @@ export const PasswordEditScreen = observer(() => {
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { getPasswordStrength, newCipher, checkPasswordPolicy } = useCipherHelpersMixins()
   const { cipherStore, uiStore, user } = useStores()
+
+  // ----------------- COMPUTED ------------------
+
   const selectedCipher: CipherView = cipherStore.cipherView
   const onSaveFillService = uiStore.isOnSaveLogin
+  const isOwner = (() => {
+    if (!selectedCipher.organizationId) {
+      return true
+    }
+    const org = cipherStore.myShares.find(
+      (s) => s.organization_id === selectedCipher.organizationId
+    )
+    return !!org
+  })()
 
   // ----------------- PARAMS ------------------
 
@@ -149,17 +161,19 @@ export const PasswordEditScreen = observer(() => {
     const passwordStrength = getPasswordStrength(password).score
 
     // Violate team's policy
-    setIsLoading(true)
-    const violatedItems = await checkPasswordPolicy(password)
-    if (violatedItems.length) {
-      setPendingPayload({
-        item: payload,
-        strength: passwordStrength,
-      })
-      setViolations(violatedItems)
-      setShowViolationModal(true)
-      setIsLoading(false)
-      return
+    if (isOwner) {
+      setIsLoading(true)
+      const violatedItems = await checkPasswordPolicy(password)
+      if (violatedItems.length) {
+        setPendingPayload({
+          item: payload,
+          strength: passwordStrength,
+        })
+        setViolations(violatedItems)
+        setShowViolationModal(true)
+        setIsLoading(false)
+        return
+      }
     }
 
     // Ok
@@ -357,7 +371,7 @@ export const PasswordEditScreen = observer(() => {
           setShowViolationModal(false)
           handleSave(pendingPayload.item, pendingPayload.strength)
         }}
-        confirmText="Use this password anyway"
+        confirmText={translate('policy.password_violation_modal.use_anyway')}
       />
       {/* Violations modal end */}
     </Layout>

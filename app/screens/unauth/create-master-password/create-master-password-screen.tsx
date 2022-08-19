@@ -278,7 +278,7 @@ export const CreateMasterPasswordScreen = observer(() => {
           onConfirm={() => {
             setShowViolationModal(false)
           }}
-          confirmText="Okay..."
+          confirmText="OK"
         />
         {/* Violations modal end */}
       </View>
