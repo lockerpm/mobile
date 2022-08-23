@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../../../../services/mixins"
 import { Button, Modal, Text } from "../../../../components"
-import { fontSize } from "../../../../theme"
+import { commonStyles, fontSize } from "../../../../theme"
 import { TextInput, View } from "react-native"
 import { RelayAddress } from "../../../../services/api"
 import { useStores } from "../../../../models"
@@ -24,6 +24,7 @@ export const EditAliasModal = observer((props: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [newAddress, setNewAddress] = useState("")
   const [updateError, setUpdateError] = useState("")
+  const [isConfirm, setIsConfirm] = useState(false)
 
   // --------------- COMPUTED ----------------
 
@@ -70,12 +71,8 @@ export const EditAliasModal = observer((props: Props) => {
 
   // --------------- RENDER ----------------
 
-  return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={translate('private_relay.edit_modal.titel')}
-    >
+  const renderEdit = () => (
+    <>
       <View>
         <Text
           text={translate('private_relay.edit_modal.current')}
@@ -99,14 +96,7 @@ export const EditAliasModal = observer((props: Props) => {
             fontSize: fontSize.small
           }}
         />
-        {/* <Text
-          text={translate('private_relay.edit_warning', {alias: item.full_address})}
-          style={{
-            marginTop: 4,
-            marginBottom: 4,
-            fontSize: 12
-          }}
-        /> */}
+
         <View style={{
           borderWidth: 1,
           flexDirection: "row",
@@ -152,11 +142,62 @@ export const EditAliasModal = observer((props: Props) => {
         text={translate('common.save')}
         isDisabled={isLoading || !newAddress}
         isLoading={isLoading}
-        onPress={handleEdit}
+        onPress={() => setIsConfirm(true)}
         style={{
           width: '100%',
         }}
       />
+    </>
+  )
+
+  const renderConfirmEdit = () => (
+    <>
+      <Text
+        text={translate('private_relay.edit_warning', { alias: item.full_address })}
+        style={{
+          marginTop: 4,
+          marginBottom: 4,
+        }}
+      />
+      <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginTop: 12, justifyContent: "flex-end" }]}>
+        <Button
+          preset="outlinePlain"
+          text={translate('common.cancel')}
+          onPress={() => {
+            setIsConfirm(false)
+            onClose()
+          }}
+          style={{
+            width: 100,
+          }}
+        />
+        <Button
+          text={translate('common.save')}
+          isLoading={isLoading}
+          onPress={handleEdit}
+          style={{
+            width: 100,
+            marginLeft: 12
+          }}
+        />
+      </View>
+
+    </>
+  )
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={!isConfirm ? translate('private_relay.edit_modal.titel') : translate('private_relay.edit_modal.confirm_title')}
+    >
+      {
+        !isConfirm && renderEdit()
+      }
+      {
+        isConfirm && renderConfirmEdit()
+      }
+
     </Modal>
   )
 })

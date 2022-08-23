@@ -2,13 +2,13 @@ import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messag
 import notifee, { Notification, EventType, Event, AndroidLaunchActivityFlag } from '@notifee/react-native'
 import { IS_IOS } from '../../config/constants'
 import { Logger } from '../logger'
-import { NotifeeNotificationData, PushEvent } from './types';
+import { NotifeeNotificationData, PushEvent, EmergencyAccessData } from './types';
 import { load, save, StorageKey } from '../storage';
 import { handleNewShare, handleConfirmShare, handleResponseShare } from './handler';
 
 
 export class PushNotifier {
-  constructor () {}
+  constructor() { }
 
   // Request permission
   static async getPermission() {
@@ -39,26 +39,42 @@ export class PushNotifier {
       Logger.debug('Firebase: FOREGROUND HANDLER')
 
       const { event, data } = message.data
+      console.log(message.data)
       switch (event) {
         case PushEvent.SHARE_NEW: {
           await handleNewShare(data)
           break
         }
-
         case PushEvent.SHARE_ACCEPT: {
           await handleResponseShare(data, true)
           break
         }
-
         case PushEvent.SHARE_REJECT: {
           await handleResponseShare(data, false)
           break
         }
-
-        case PushEvent.SHARE_CONFIRM:
+        case PushEvent.SHARE_CONFIRM: {
           await handleConfirmShare(data)
           break
-
+        }
+        case PushEvent.EMERGENCY_INVITE: {
+          break
+        }
+        case PushEvent.EMERGENCY_ACCEPT_INVITATION: {
+          break
+        }
+        case PushEvent.EMERGENCY_REJECT_INVITATION: {
+          break
+        }
+        case PushEvent.EMERGENCY_INITIATE: {
+          break
+        }
+        case PushEvent.EMERGENCY_APPROVE_REQUEST: {
+          break
+        }
+        case PushEvent.EMERGENCY_REJECT_REQUEST: {
+          break
+        }
         default:
           Logger.debug('Unknow FCM event: ' + JSON.stringify(message))
       }
@@ -86,29 +102,44 @@ export class PushNotifier {
       if (!currentUser) {
         return
       }
-      
-      const { event, data } = message.data
 
+      const { event, data } = message.data
+      console.log(message.data)
       switch (event) {
         case PushEvent.SHARE_NEW: {
           await handleNewShare(data)
           break
         }
-
         case PushEvent.SHARE_ACCEPT: {
           await handleResponseShare(data, true)
           break
         }
-
         case PushEvent.SHARE_REJECT: {
           await handleResponseShare(data, false)
           break
         }
-
-        case PushEvent.SHARE_CONFIRM:
+        case PushEvent.SHARE_CONFIRM: {
           await handleConfirmShare(data)
           break
-          
+        }
+        case PushEvent.EMERGENCY_INVITE: {
+          break
+        }
+        case PushEvent.EMERGENCY_ACCEPT_INVITATION: {
+          break
+        }
+        case PushEvent.EMERGENCY_REJECT_INVITATION: {
+          break
+        }
+        case PushEvent.EMERGENCY_INITIATE: {
+          break
+        }
+        case PushEvent.EMERGENCY_APPROVE_REQUEST: {
+          break
+        }
+        case PushEvent.EMERGENCY_REJECT_REQUEST: {
+          break
+        }
         default:
           Logger.debug('Unknow FCM event: ' + JSON.stringify(message))
       }
@@ -130,12 +161,18 @@ export class PushNotifier {
           case PushEvent.SHARE_ACCEPT:
           case PushEvent.SHARE_REJECT:
           case PushEvent.SHARE_CONFIRM:
+          case PushEvent.EMERGENCY_INVITE:
+          case PushEvent.EMERGENCY_ACCEPT_INVITATION:
+          case PushEvent.EMERGENCY_REJECT_INVITATION:
+          case PushEvent.EMERGENCY_INITIATE:
+          case PushEvent.EMERGENCY_APPROVE_REQUEST:
+          case PushEvent.EMERGENCY_REJECT_REQUEST:
             save(StorageKey.PUSH_NOTI_DATA, {
               type: data.type
             })
             break
-        } 
-      }      
+        }
+      }
     })
   }
 
