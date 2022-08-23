@@ -201,7 +201,7 @@
     "will_sync_when_online": "Your data will be synced when there is an internet connection"
   },
   "private_relay": {
-    "title": "Email Alias",
+    "title": "Locker Private Email",
     "tool": "Hide your email from online service providers",
     "root_email": "Your root email",
     "btn": "New alias",
@@ -216,7 +216,8 @@
     "edit_modal": {
       "titel": "Edit Alias Address",
       "current": "Current Address",
-      "new": "New Address"
+      "new": "New Address",
+      "confirm_title": "Confirm Edit Alias"
     },
     "error": {
       "taken": "This address is already taken",

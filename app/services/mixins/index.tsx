@@ -299,6 +299,17 @@ export const MixinsProvider = observer((props: {
             screen: 'browseTab',
           }
           break
+
+        case PushEvent.EMERGENCY_INVITE:
+        case PushEvent.EMERGENCY_REJECT_REQUEST:
+        case PushEvent.EMERGENCY_APPROVE_REQUEST:
+          res.path = 'contactsTrustedYou' 
+          break
+        case PushEvent.EMERGENCY_INITIATE:
+        case PushEvent.EMERGENCY_ACCEPT_INVITATION:
+        case PushEvent.EMERGENCY_REJECT_INVITATION:
+          res.path = 'yourTrustedContact'
+          break
       }
     }
     await remove(StorageKey.PUSH_NOTI_DATA)

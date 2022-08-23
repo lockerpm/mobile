@@ -123,6 +123,22 @@ export const handleResponseShare = async (data: string, accepted: boolean) => {
   }
 }
 
+const handleInviteEA = async () => {
+
+}
+
+const handleIviteresponseEA = async () => {
+
+}
+
+const handleRequestEA = async () => {
+
+}
+
+const handleRequestEAResponse = async () => {
+  
+}
+
 
 // ------------------ PRIVATE --------------------
 

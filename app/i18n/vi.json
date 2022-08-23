@@ -216,7 +216,8 @@
     "edit_modal": {
       "titel": "Thay đổi địa chỉ email",
       "current": "Email hiện tại",
-      "new": "Địa chỉ email mới"
+      "new": "Địa chỉ email mới",
+      "confirm_title": "Xác nhận thay đổi dịa chỉ"
     },
     "error": {
       "taken": "Địa chỉ email này đã tồn tại",
