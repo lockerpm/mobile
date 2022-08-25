@@ -224,7 +224,7 @@
       "minimum": "Địa chỉ email yêu cầu ít nhất 6 ký tự",
       "not_valid": "Địa chỉ email này không hợp lệ"
     },
-    "edit_warning" : "Địa chỉ Email bí danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email bí danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email bí danh này"
+    "edit_warning": "Địa chỉ Email bí danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email bí danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email bí danh này"
   },
   "emergency_access": {
     "title": "Liên hệ khẩn cấp",
@@ -279,7 +279,12 @@
     "requires_uppercase": "Phải chứa chữ cái in hoa (ABC)",
     "requires_special": "Phải chứa ký tự đặc biệt (@#!$%)",
     "requires_number": "Phải chứa ký tự số (0 1 2 3)",
-    "avoid_ambiguous": "Tránh các ký tự không rõ ràng (O vs 0, l vs I,...)"
+    "avoid_ambiguous": "Tránh các ký tự không rõ ràng (O vs 0, l vs I,...)",
+    "password_violation_modal": {
+      "title": "Chính sách bị vi phạm",
+      "desc": "Mật khẩu của bạn đã vi phạm các chính sách sau của",
+      "use_anyway": "Vẫn sử dụng mật khẩu này"
+    }
   },
   "password_strength": {
     "very_weak": "Rất yếu",

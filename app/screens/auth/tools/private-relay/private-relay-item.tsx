@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from "react"
-import { View } from "react-native"
-import { Text, Button, ActionSheet, Divider, ActionSheetContent, ActionItem } from "../../../../components"
-import { commonStyles } from "../../../../theme"
-import { useMixins } from "../../../../services/mixins"
+import React, { useEffect, useState } from 'react'
+import { View } from 'react-native'
+import {
+  Text,
+  Button,
+  ActionSheet,
+  Divider,
+  ActionSheetContent,
+  ActionItem,
+} from '../../../../components'
+import { commonStyles } from '../../../../theme'
+import { useMixins } from '../../../../services/mixins'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { RelayAddress } from "../../../../services/api"
-import moment from "moment"
-import { useStores } from "../../../../models"
-
+import moment from 'moment'
+import { useStores } from '../../../../models'
+import { RelayAddress } from '../../../../config/types/api'
 
 interface Props {
   item: RelayAddress
@@ -22,11 +28,11 @@ export const AliasItem = (props: Props) => {
   const { toolStore } = useStores()
 
   const [isOpen, setIsOpen] = useState(false)
-  const [nextModal, setNextModal] = useState<"copy" | "edit" | "remove" | null>(null)
+  const [nextModal, setNextModal] = useState<'copy' | 'edit' | 'remove' | null>(null)
 
   const handleRemove = async () => {
     const res = await toolStore.deleteRelayAddress(item.id)
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       deleteRelayAddress(item.id)
     }
   }
@@ -34,13 +40,13 @@ export const AliasItem = (props: Props) => {
     setIsOpen(false)
 
     switch (nextModal) {
-      case "copy":
+      case 'copy':
         copyToClipboard(item.full_address)
         break
-      case "edit":
+      case 'edit':
         setShowEditModal()
         break
-      case "remove":
+      case 'remove':
         handleRemove()
         break
     }
@@ -48,35 +54,27 @@ export const AliasItem = (props: Props) => {
 
   return (
     <View style={{ marginVertical: 16 }}>
-
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <View>
           <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
-          <Text text={moment.unix(item.created_time).format("DD/MM/YYYY")} />
+          <Text text={moment.unix(item.created_time).format('DD/MM/YYYY')} />
         </View>
         <Button
           preset="link"
-          onPress={() => { 
-            setIsOpen(true) 
+          onPress={() => {
+            setIsOpen(true)
             setNextModal(null)
           }}
         >
-          <IoniconsIcon
-            name="ellipsis-horizontal"
-            size={18}
-            color={color.textBlack}
-          />
+          <IoniconsIcon name="ellipsis-horizontal" size={18} color={color.textBlack} />
         </Button>
-        <ActionSheet
-          isOpen={isOpen}
-          onClose={handleActionSheetClose}
-        >
+        <ActionSheet isOpen={isOpen} onClose={handleActionSheetClose}>
           {/* Info */}
           <View style={{ width: '100%', paddingHorizontal: 20 }}>
             <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
               <View>
                 <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
-                <Text text={moment.unix(item.created_time).format("DD/MM/YYYY")} />
+                <Text text={moment.unix(item.created_time).format('DD/MM/YYYY')} />
               </View>
             </View>
           </View>
@@ -88,29 +86,30 @@ export const AliasItem = (props: Props) => {
               name={translate('private_relay.copy')}
               icon="copy"
               action={() => {
-                setNextModal("copy")
+                setNextModal('copy')
                 setIsOpen(false)
               }}
             />
             <Divider />
-            {index === 0 && <>
-              <ActionItem
-                name={translate('private_relay.edit')}
-                icon="edit"
-                action={() => {
-                  setNextModal("edit")
-                  setIsOpen(false)
-                }}
-              />
-              <Divider />
-            </>
-            }
+            {index === 0 && (
+              <>
+                <ActionItem
+                  name={translate('private_relay.edit')}
+                  icon="edit"
+                  action={() => {
+                    setNextModal('edit')
+                    setIsOpen(false)
+                  }}
+                />
+                <Divider />
+              </>
+            )}
             <ActionItem
               name={translate('common.delete')}
               icon="trash"
               textColor={color.error}
               action={() => {
-                setNextModal("remove")
+                setNextModal('remove')
                 setIsOpen(false)
               }}
             />

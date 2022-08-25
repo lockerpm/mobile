@@ -1,16 +1,23 @@
-import React, { useState } from "react"
-import { View } from "react-native"
-import { Layout, Button, Header, FloatingInput, PasswordStrength, Text } from "../../../../../../components"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { commonStyles } from "../../../../../../theme"
-import { useMixins } from "../../../../../../services/mixins"
-import { useCipherHelpersMixins } from "../../../../../../services/mixins/cipher/helpers"
-import { useCipherAuthenticationMixins } from "../../../../../../services/mixins/cipher/authentication"
-import { observer } from "mobx-react-lite"
-import { TrustedContact } from "../../../../../../services/api"
-import { PrimaryParamList } from "../../../../../../navigators"
+import React, { useState } from 'react'
+import { View } from 'react-native'
+import {
+  Layout,
+  Button,
+  Header,
+  FloatingInput,
+  PasswordStrength,
+  Text,
+} from '../../../../../../components'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { commonStyles } from '../../../../../../theme'
+import { useMixins } from '../../../../../../services/mixins'
+import { useCipherHelpersMixins } from '../../../../../../services/mixins/cipher/helpers'
+import { useCipherAuthenticationMixins } from '../../../../../../services/mixins/cipher/authentication'
+import { observer } from 'mobx-react-lite'
+import { PrimaryParamList } from '../../../../../../navigators'
+import { TrustedContact } from '../../../../../../config/types/api'
 
-type TakeoverScreenProp = RouteProp<PrimaryParamList, "takeoverEA">
+type TakeoverScreenProp = RouteProp<PrimaryParamList, 'takeoverEA'>
 
 export const TakeoverEAScreen = observer(() => {
   const navigation = useNavigation()
@@ -31,7 +38,7 @@ export const TakeoverEAScreen = observer(() => {
 
   // -------------- COMPUTED --------------
 
-  const isError = !!newPass && !!confirm && (newPass !== confirm)
+  const isError = !!newPass && !!confirm && newPass !== confirm
   const masterPasswordError = validateMasterPassword(newPass).error
   const isReady = !masterPasswordError && !isError && !!newPass && !!confirm
 
@@ -40,28 +47,33 @@ export const TakeoverEAScreen = observer(() => {
   const handleChangeMasterPW = async () => {
     // fetch enc key
     const res = await updateNewMasterPasswordEA(newPass, trustContact.email, trustContact.id)
-    if (res.kind !== "ok") return
+    if (res.kind !== 'ok') return
     navigation.goBack()
   }
 
   const handleChangePW = async () => {
     // fetch enc key
     const res = await updateNewMasterPasswordEA(newPass, trustContact.email, trustContact.id)
-    if (res.kind !== "ok") return
+    if (res.kind !== 'ok') return
     navigation.goBack()
   }
-
 
   // -------------- EFFECT --------------
 
   // -------------- RENDER --------------
   const renderResetMasterPW = () => (
-    <View style={[commonStyles.GRAY_SCREEN_SECTION, {
-      paddingVertical: 16,
-      backgroundColor: color.background
-    }]}>
-
-      <Text text={translate('emergency_access.reset_master_pw_user', { name: trustContact.full_name })} />
+    <View
+      style={[
+        commonStyles.GRAY_SCREEN_SECTION,
+        {
+          paddingVertical: 16,
+          backgroundColor: color.background,
+        },
+      ]}
+    >
+      <Text
+        text={translate('emergency_access.reset_master_pw_user', { name: trustContact.full_name })}
+      />
 
       <FloatingInput
         isPassword
@@ -76,11 +88,7 @@ export const TakeoverEAScreen = observer(() => {
         }}
       />
 
-      {
-        !!newPass && (
-          <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />
-        )
-      }
+      {!!newPass && <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />}
 
       <FloatingInput
         isPassword
@@ -101,11 +109,15 @@ export const TakeoverEAScreen = observer(() => {
     </View>
   )
   const renderResetLockerPW = () => (
-    <View style={[commonStyles.GRAY_SCREEN_SECTION, {
-      paddingVertical: 16,
-      backgroundColor: color.background
-    }]}>
-
+    <View
+      style={[
+        commonStyles.GRAY_SCREEN_SECTION,
+        {
+          paddingVertical: 16,
+          backgroundColor: color.background,
+        },
+      ]}
+    >
       <Text text={translate('emergency_access.reset_pw_user', { name: trustContact.full_name })} />
 
       <FloatingInput
@@ -121,11 +133,7 @@ export const TakeoverEAScreen = observer(() => {
         }}
       />
 
-      {
-        !!newPass && (
-          <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />
-        )
-      }
+      {!!newPass && <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />}
 
       <FloatingInput
         isPassword
@@ -148,21 +156,21 @@ export const TakeoverEAScreen = observer(() => {
 
   return (
     <Layout
-      header={(
+      header={
         <Header
           goBack={() => navigation.goBack()}
-          title={resetPW ? translate('emergency_access.change_pw.title') : translate('change_master_pass.title')}
-          right={(<View style={{ width: 30 }} />)}
+          title={
+            resetPW
+              ? translate('emergency_access.change_pw.title')
+              : translate('change_master_pass.title')
+          }
+          right={<View style={{ width: 30 }} />}
         />
-      )}
+      }
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
-      {
-        resetPW && renderResetLockerPW()
-      }
-      {
-        !resetPW && renderResetMasterPW()
-      }
+      {resetPW && renderResetLockerPW()}
+      {!resetPW && renderResetMasterPW()}
     </Layout>
   )
 })

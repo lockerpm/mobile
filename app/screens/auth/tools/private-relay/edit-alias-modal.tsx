@@ -4,12 +4,12 @@ import { useMixins } from "../../../../services/mixins"
 import { Button, Modal, Text } from "../../../../components"
 import { commonStyles, fontSize } from "../../../../theme"
 import { TextInput, View } from "react-native"
-import { RelayAddress } from "../../../../services/api"
+import { RelayAddress } from '../../../../config/types/api'
 import { useStores } from "../../../../models"
 
 
 interface Props {
-  isOpen?: boolean,
+  isOpen?: boolean
   onClose?: () => void
   item: RelayAddress
   onEdit: () => void
@@ -33,11 +33,11 @@ export const EditAliasModal = observer((props: Props) => {
   const handleEdit = async () => {
     setIsLoading(true)
     const res = await toolStore.updateRelayAddress(item.id, newAddress.toLowerCase())
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       onClose()
       onEdit()
     } else {
-      if (res.kind === "bad-data") {
+      if (res.kind === 'bad-data') {
         const errorData: {
           details?: {
             [key: string]: string[]
@@ -47,7 +47,7 @@ export const EditAliasModal = observer((props: Props) => {
         } = res.data
         let errorMessage = ''
         if (errorData.details) {
-          for (let key of Object.keys(errorData.details)) {
+          for (const key of Object.keys(errorData.details)) {
             if (errorData.details[key][0]) {
               if (!errorMessage) {
                 errorMessage = errorData.details[key][0]
@@ -65,8 +65,8 @@ export const EditAliasModal = observer((props: Props) => {
   // --------------- EFFECT ----------------'
 
   useEffect(() => {
-    setUpdateError("")
-    setNewAddress("")
+    setUpdateError('')
+    setNewAddress('')
   }, [isOpen])
 
   // --------------- RENDER ----------------

@@ -1,21 +1,28 @@
-import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
-import { omit } from "ramda"
-import { Organization } from "../../../core/models/domain/organization"
-import { CipherRequest } from "../../../core/models/request/cipherRequest"
-import { CipherView } from "../../../core/models/view"
+import { cast, Instance, SnapshotOut, types } from 'mobx-state-tree'
+import { omit } from 'ramda'
+import { Organization } from '../../../core/models/domain/organization'
+import { CipherRequest } from '../../../core/models/request/cipherRequest'
+import { CipherView } from '../../../core/models/view'
+import { MyShareType, SharingInvitationType } from '../../config/types/api'
 import {
-  ConfirmShareCipherData, EditShareCipherData, ImportCipherData, ImportCipherWithFolderData, ImportFolderData, MoveFolderData,
-  MyShareType, ShareCipherData, ShareMultipleCiphersData, SharingInvitationType,
-  StopShareCipherData
-} from "../../services/api"
-import { CipherApi } from "../../services/api/cipher-api"
-import { withEnvironment } from "../extensions/with-environment"
+  ConfirmShareCipherData,
+  EditShareCipherData,
+  ImportCipherData,
+  ImportCipherWithFolderData,
+  ImportFolderData,
+  MoveFolderData,
+  ShareCipherData,
+  ShareMultipleCiphersData,
+  StopShareCipherData,
+} from '../../services/api'
+import { CipherApi } from '../../services/api/cipher-api'
+import { withEnvironment } from '../extensions/with-environment'
 
 /**
  * Model description here for TypeScript hints.
  */
 export const CipherStoreModel = types
-  .model("CipherStore")
+  .model('CipherStore')
   .props({
     apiToken: types.maybeNull(types.string),
 
@@ -26,8 +33,8 @@ export const CipherStoreModel = types
     isBatchDecrypting: types.maybeNull(types.boolean),
 
     // Data
-    notSynchedCiphers: types.array(types.string),         // Create in offline mode
-    notUpdatedCiphers: types.array(types.string),         // Create in online mode but somehow not update yet
+    notSynchedCiphers: types.array(types.string), // Create in offline mode
+    notUpdatedCiphers: types.array(types.string), // Create in online mode but somehow not update yet
     lastSync: types.maybeNull(types.number),
     lastCacheUpdate: types.maybeNull(types.number),
     sharingInvitations: types.array(types.frozen<SharingInvitationType>()),
@@ -37,13 +44,13 @@ export const CipherStoreModel = types
     // Selector
     generatedPassword: types.maybeNull(types.string),
     selectedCipher: types.maybeNull(types.frozen()),
-    selectedFolder: types.maybeNull(types.string)
+    selectedFolder: types.maybeNull(types.string),
   })
   .extend(withEnvironment)
   .views((self) => ({
     get cipherView() {
       return self.selectedCipher || new CipherView()
-    }
+    },
   }))
   .actions((self) => ({
     setApiToken: (token: string) => {
@@ -96,7 +103,7 @@ export const CipherStoreModel = types
 
     removeNotSync: (id: string) => {
       if (!self.notSynchedCiphers.includes(id)) {
-        self.notSynchedCiphers = cast(self.notSynchedCiphers.filter(i => i !== id))
+        self.notSynchedCiphers = cast(self.notSynchedCiphers.filter((i) => i !== id))
       }
     },
 
@@ -112,7 +119,7 @@ export const CipherStoreModel = types
 
     removeNotUpdate: (id: string) => {
       if (self.notUpdatedCiphers.includes(id)) {
-        self.notUpdatedCiphers = cast(self.notUpdatedCiphers.filter(i => i !== id))
+        self.notUpdatedCiphers = cast(self.notUpdatedCiphers.filter((i) => i !== id))
       }
     },
 
@@ -155,9 +162,9 @@ export const CipherStoreModel = types
 
     setOrganizations: (data: Organization[]) => {
       self.organizations = cast(data)
-    }
+    },
   }))
-  .actions(self => ({
+  .actions((self) => ({
     syncData: async (page?: number, size?: number) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.syncData(self.apiToken, page, size)
@@ -200,13 +207,23 @@ export const CipherStoreModel = types
       return res
     },
 
-    updateCipher: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
+    updateCipher: async (
+      id: string,
+      data: CipherRequest,
+      score: number,
+      collectionIds: string[]
+    ) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.putCipher(self.apiToken, id, data, score, collectionIds)
       return res
     },
 
-    shareCipherToTeam: async (id: string, data: CipherRequest, score: number, collectionIds: string[]) => {
+    shareCipherToTeam: async (
+      id: string,
+      data: CipherRequest,
+      score: number,
+      collectionIds: string[]
+    ) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.shareCipherToTeam(self.apiToken, id, data, score, collectionIds)
       return res
@@ -260,21 +277,38 @@ export const CipherStoreModel = types
       return res
     },
 
-    stopShareCipher: async (organizationId: string, memberId: string, payload: StopShareCipherData) => {
+    stopShareCipher: async (
+      organizationId: string,
+      memberId: string,
+      payload: StopShareCipherData
+    ) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.stopShareCipher(self.apiToken, organizationId, memberId, payload)
       return res
     },
 
-    editShareCipher: async (organizationId: string, memberId: string, payload: EditShareCipherData) => {
+    editShareCipher: async (
+      organizationId: string,
+      memberId: string,
+      payload: EditShareCipherData
+    ) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.editShareCipher(self.apiToken, organizationId, memberId, payload)
       return res
     },
 
-    confirmShareCipher: async (organizationId: string, memberId: string, payload: ConfirmShareCipherData) => {
+    confirmShareCipher: async (
+      organizationId: string,
+      memberId: string,
+      payload: ConfirmShareCipherData
+    ) => {
       const cipherApi = new CipherApi(self.environment.api)
-      const res = await cipherApi.confirmShareCipher(self.apiToken, organizationId, memberId, payload)
+      const res = await cipherApi.confirmShareCipher(
+        self.apiToken,
+        organizationId,
+        memberId,
+        payload
+      )
       return res
     },
 
@@ -305,7 +339,7 @@ export const CipherStoreModel = types
     respondShare: async (id: string, accepted: boolean) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.respondShareInvitation(self.apiToken, id, {
-        status: accepted ? 'accept' : 'reject'
+        status: accepted ? 'accept' : 'reject',
       })
       return res
     },
@@ -322,17 +356,19 @@ export const CipherStoreModel = types
       return res
     },
   }))
-  .postProcessSnapshot(omit([
-    'generatedPassword',
-    'selectedCipher',
-    'selectedFolder',
-    'isSynching',
-    'isSynchingOffline',
-    'isSynchingAutofill',
-    'isBatchDecrypting',
-    'organizations',
-    'lastUpdate'
-  ]))
+  .postProcessSnapshot(
+    omit([
+      'generatedPassword',
+      'selectedCipher',
+      'selectedFolder',
+      'isSynching',
+      'isSynchingOffline',
+      'isSynchingAutofill',
+      'isBatchDecrypting',
+      'organizations',
+      'lastUpdate',
+    ])
+  )
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -343,7 +379,7 @@ export const CipherStoreModel = types
  */
 
 type CipherStoreType = Instance<typeof CipherStoreModel>
-export interface CipherStore extends CipherStoreType { }
+export interface CipherStore extends CipherStoreType {}
 type CipherStoreSnapshotType = SnapshotOut<typeof CipherStoreModel>
-export interface CipherStoreSnapshot extends CipherStoreSnapshotType { }
+export interface CipherStoreSnapshot extends CipherStoreSnapshotType {}
 export const createCipherStoreDefaultModel = () => types.optional(CipherStoreModel, {})

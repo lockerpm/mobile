@@ -1,308 +1,309 @@
-import { GeneralApiProblem } from "./api-problem"
-import { UserSnapshot } from "../../models/user/user"
-import { DeviceType } from "../../../core/enums"
-import { SyncResponse } from "../../../core/models/response/syncResponse"
-import { FolderResponse } from "../../../core/models/response/folderResponse"
-import { CollectionResponse } from "../../../core/models/response/collectionResponse"
-import { CipherRequest } from "../../../core/models/request/cipherRequest"
-import { FolderRequest } from "../../../core/models/request/folderRequest"
-import { CipherResponse } from "../../../core/models/response/cipherResponse"
-import { AccountRoleText, EmergencyAccessStatus, EmergencyAccessType, InvitationStatus, NotificationCategory, SharingStatus, SharingType } from "../../config/types"
-import { ProfileResponse } from "../../../core/models/response/profileResponse"
-import { ProfileOrganizationResponse } from "../../../core/models/response/profileOrganizationResponse"
-
-type SessionSnapshot = {
-  access_token: string
-  refresh_token: string
-  key: string
-  private_key: string
-}
-
-export type PolicyType = {
-  avoid_ambiguous_character: boolean
-  block_mobile: boolean
-  failed_login_attempts: number | null
-  failed_login_block_time: number | null
-  failed_login_duration: number | null
-  failed_login_owner_email: boolean
-  ip_allow: string[]
-  ip_block: string[]
-  max_password_length: number | null
-  min_password_length: number | null
-  password_composition: boolean
-  require_digit: boolean
-  require_lower_case: boolean
-  require_special_character: boolean
-  require_upper_case: boolean
-  team: {
-    id: string
-    name: string
-  }
-}
-
-export type SharingInvitationType = {
-  access_time: number
-  cipher_type: number
-  id: string
-  item_type: string
-  owner: {
-    email: string
-    full_name: string
-  }
-  role: AccountRoleText
-  share_type: SharingType
-  status: SharingStatus
-  hide_passwords: boolean
-  team: {
-    id: string
-    name: string
-    organization_id: string
-  }
-}
-
-export type SharedMemberType = {
-  access_time: string
-  avatar: string
-  email: string
-  full_name: string
-  hide_passwords: boolean
-  id: string
-  pwd_user_id: string
-  role: AccountRoleText
-  share_type: SharingType
-  status: SharingStatus
-  username: string
-}
-
-export type MyShareType = {
-  id: string
-  description: string
-  name: string
-  organization_id: string
-  members: SharedMemberType[]
-}
+import { GeneralApiProblem } from './api-problem'
+import { UserSnapshot } from '../../models/user/user'
+import { DeviceType } from '../../../core/enums'
+import { SyncResponse } from '../../../core/models/response/syncResponse'
+import { FolderResponse } from '../../../core/models/response/folderResponse'
+import { CollectionResponse } from '../../../core/models/response/collectionResponse'
+import { CipherRequest } from '../../../core/models/request/cipherRequest'
+import { FolderRequest } from '../../../core/models/request/folderRequest'
+import { CipherResponse } from '../../../core/models/response/cipherResponse'
+import { AccountRoleText, InvitationStatus, NotificationCategory } from '../../config/types'
+import { ProfileResponse } from '../../../core/models/response/profileResponse'
+import { ProfileOrganizationResponse } from '../../../core/models/response/profileOrganizationResponse'
+import {
+  MyShareType,
+  TeamPolicies,
+  RelayAddress,
+  SessionSnapshot,
+  SharingInvitationType,
+  TrustedContact,
+  UserTeam,
+  PasswordPolicy,
+  MasterPasswordPolicy,
+  BlockFailedLoginPolicy,
+  PasswordlessPolicy,
+} from '../../config/types/api'
 
 // ------------------ Response ------------------------
 
-export type LoginResult = {
-  kind: "ok"
-  data: {
-    token?: string
-    is_factor2?: boolean
-    methods?: {
-      type: string
-      data: any
-    }[]
-  }
-} | GeneralApiProblem
-
-export type GetPMTokenResult = {
-  kind: "ok"
-  data: {
-    url: string
-    access_token: string
-
-    // Clone data here to hide error
-    // These data actually not exists
-    is_factor2?: boolean
-    methods?: {
-      type: string
-      data: any
-    }[]
-  }
-} | GeneralApiProblem
-
-export type SocialLoginResult = {
-  kind: "ok"
-  data: {
-    is_first?: boolean
-    new_user?: boolean
-    token: string
-    tmp_token?: string
-  }
-} | GeneralApiProblem
-
-export type AccountRecoveryResult = {
-  kind: "ok"
-  data: {
-    type: string
-    data: any
-  }[]
-} | GeneralApiProblem
-
-export type SessionLoginResult = { kind: "ok"; data: SessionSnapshot } | GeneralApiProblem
-export type GetUserResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
-export type EmptyResult = { kind: "ok" } | GeneralApiProblem
-export type SyncResult = { kind: "ok", data: SyncResponse & { count?: { ciphers: number } } } | GeneralApiProblem
-export type GetCipherResult = { kind: "ok", data: CipherResponse } | GeneralApiProblem
-export type GetFolderResult = { kind: "ok", data: FolderResponse } | GeneralApiProblem
-export type GetOrganizationResult = { kind: "ok", data: ProfileOrganizationResponse } | GeneralApiProblem
-export type PostFolderResult = { kind: 'ok', data: FolderResponse } | GeneralApiProblem
-export type PostCollectionResult = { kind: 'ok', data: CollectionResponse } | GeneralApiProblem
-export type GetProfileResult = { kind: "ok", data: ProfileResponse } | GeneralApiProblem
-export type GetTeamsResult = { kind: 'ok', teams: object[] } | GeneralApiProblem
-
-export type GetPlanResult = {
-  kind: 'ok'
-  data: {
-    name: string;
-    alias: string;
-    is_family: boolean;
-    cancel_at_period_end: boolean;
-    duration: "monthly" | "yearly";
-    next_billing_time: number
-    payment_method: string
-  },
-} | GeneralApiProblem
-
-export type EmailOtpResult = { kind: "ok"; success: boolean } | GeneralApiProblem
-export type ResetPasswordResult = { kind: "ok"; success: boolean } | GeneralApiProblem
-
-export type ResetPasswordWithCodeResult = {
-  kind: "ok"
-  data: {
-    reset_password_url: string
-  }
-} | GeneralApiProblem
-
-export type PurchaseValidationResult = {
-  kind: "ok",
-  data: {
-    success: boolean,
-    detail: string
-  }
-
-} | GeneralApiProblem
-
-export type FamilyMemberResult = {
-  kind: "ok",
-  data: {
-    id: number
-    email: string
-    avatar?: string
-    created_time?: string
-    username?: string
-    full_name?: string
-  }[]
-} | GeneralApiProblem
-
-export type AddMemberResult = { kind: "ok", data: any } | GeneralApiProblem
-export type RemoveMemberResult = { kind: "ok" } | GeneralApiProblem
-export type GetReferLinkResult = { kind: "ok", data: { referral_link: string } } | GeneralApiProblem
-
-export type GetTrialEligibleResult = {
-  kind: "ok",
-  data: {
-    personal_trial_applied: boolean
-  }
-} | GeneralApiProblem
-
-export type GetNotificationSettings = { kind: "ok", data: NotificationSettingData[] } | GeneralApiProblem
-export type UpdateNotiSettingsResult = { kind: "ok" } | GeneralApiProblem
-export type FetchInappNotiResult = { kind: "ok", data: AppNotification } | GeneralApiProblem
-
-export type BillingResult = {
-  kind: "ok",
-  data: {
-    id: number
-    created_time: number
-    currency: "VNP" | "USD"
-    description: string,
-    discount: number,
-    duration: "monthly" | "yearly"
-    failure_reason?: string
-    payment_id: string
-    payment_method: string
-    plan: string
-    status: string
-    total_price: number
-    transaction_type: string
-  }[]
-} | GeneralApiProblem
-
-export type GetInvitationsResult = {
-  kind: "ok"
-  data: {
-    access_time: number
-    id: string
-    role: AccountRoleText
-    status: InvitationStatus
-    team: {
-      id: string
-      name: string
-      organization_id: string
+export type LoginResult =
+  | {
+      kind: 'ok'
+      data: {
+        token?: string
+        is_factor2?: boolean
+        methods?: {
+          type: string
+          data: any
+        }[]
+      }
     }
-  }[]
-} | GeneralApiProblem
+  | GeneralApiProblem
 
-export type CheckBreachResult = {
-  kind: "ok"
-  data: {
-    added_date: string
-    breach_date: string
-    data_clases: string[]
-    description: string
-    domain: string
-    is_fabricated: boolean
-    is_retired: boolean
-    is_sensitive: boolean
-    is_spam_list: boolean
-    is_verified: boolean
-    logo_path: string
-    modified_date: string
-    name: string
-    pwn_count: number
-    title: string
-  }[]
-} | GeneralApiProblem
+export type GetPMTokenResult =
+  | {
+      kind: 'ok'
+      data: {
+        url: string
+        access_token: string
 
-export type GetPolicyResult = { kind: 'ok', data: PolicyType } | GeneralApiProblem
-export type GetLastUpdateResult = { kind: 'ok', data: { revision_date: number } } | GeneralApiProblem
+        // Clone data here to hide error
+        // These data actually not exists
+        is_factor2?: boolean
+        methods?: {
+          type: string
+          data: any
+        }[]
+      }
+    }
+  | GeneralApiProblem
 
-export type GetSharingPublicKeyResult = { kind: 'ok', data: { public_key: string } } | GeneralApiProblem
+export type SocialLoginResult =
+  | {
+      kind: 'ok'
+      data: {
+        is_first?: boolean
+        new_user?: boolean
+        token: string
+        tmp_token?: string
+      }
+    }
+  | GeneralApiProblem
+
+export type AccountRecoveryResult =
+  | {
+      kind: 'ok'
+      data: {
+        type: string
+        data: any
+      }[]
+    }
+  | GeneralApiProblem
+
+export type SessionLoginResult = { kind: 'ok'; data: SessionSnapshot } | GeneralApiProblem
+export type GetUserResult = { kind: 'ok'; user: UserSnapshot } | GeneralApiProblem
+export type EmptyResult = { kind: 'ok' } | GeneralApiProblem
+export type SyncResult =
+  | { kind: 'ok'; data: SyncResponse & { count?: { ciphers: number } } }
+  | GeneralApiProblem
+export type GetCipherResult = { kind: 'ok'; data: CipherResponse } | GeneralApiProblem
+export type GetFolderResult = { kind: 'ok'; data: FolderResponse } | GeneralApiProblem
+export type GetOrganizationResult =
+  | { kind: 'ok'; data: ProfileOrganizationResponse }
+  | GeneralApiProblem
+export type PostFolderResult = { kind: 'ok'; data: FolderResponse } | GeneralApiProblem
+export type PostCollectionResult = { kind: 'ok'; data: CollectionResponse } | GeneralApiProblem
+export type GetProfileResult = { kind: 'ok'; data: ProfileResponse } | GeneralApiProblem
+export type GetTeamsResult = { kind: 'ok'; teams: UserTeam[] } | GeneralApiProblem
+
+export type GetPlanResult =
+  | {
+      kind: 'ok'
+      data: {
+        name: string
+        alias: string
+        is_family: boolean
+        cancel_at_period_end: boolean
+        duration: 'monthly' | 'yearly'
+        next_billing_time: number
+        payment_method: string
+      }
+    }
+  | GeneralApiProblem
+
+export type EmailOtpResult = { kind: 'ok'; success: boolean } | GeneralApiProblem
+export type ResetPasswordResult = { kind: 'ok'; success: boolean } | GeneralApiProblem
+
+export type ResetPasswordWithCodeResult =
+  | {
+      kind: 'ok'
+      data: {
+        reset_password_url: string
+      }
+    }
+  | GeneralApiProblem
+
+export type PurchaseValidationResult =
+  | {
+      kind: 'ok'
+      data: {
+        success: boolean
+        detail: string
+      }
+    }
+  | GeneralApiProblem
+
+export type FamilyMemberResult =
+  | {
+      kind: 'ok'
+      data: {
+        id: number
+        email: string
+        avatar?: string
+        created_time?: string
+        username?: string
+        full_name?: string
+      }[]
+    }
+  | GeneralApiProblem
+
+export type AddMemberResult = { kind: 'ok'; data: any } | GeneralApiProblem
+export type RemoveMemberResult = { kind: 'ok' } | GeneralApiProblem
+export type GetReferLinkResult = { kind: 'ok'; data: { referral_link: string } } | GeneralApiProblem
+
+export type GetTrialEligibleResult =
+  | {
+      kind: 'ok'
+      data: {
+        personal_trial_applied: boolean
+      }
+    }
+  | GeneralApiProblem
+
+export type GetNotificationSettings =
+  | { kind: 'ok'; data: NotificationSettingData[] }
+  | GeneralApiProblem
+export type UpdateNotiSettingsResult = { kind: 'ok' } | GeneralApiProblem
+export type FetchInappNotiResult = { kind: 'ok'; data: AppNotification } | GeneralApiProblem
+
+export type BillingResult =
+  | {
+      kind: 'ok'
+      data: {
+        id: number
+        created_time: number
+        currency: 'VNP' | 'USD'
+        description: string
+        discount: number
+        duration: 'monthly' | 'yearly'
+        failure_reason?: string
+        payment_id: string
+        payment_method: string
+        plan: string
+        status: string
+        total_price: number
+        transaction_type: string
+      }[]
+    }
+  | GeneralApiProblem
+
+export type GetInvitationsResult =
+  | {
+      kind: 'ok'
+      data: {
+        access_time: number
+        id: string
+        role: AccountRoleText
+        status: InvitationStatus
+        team: {
+          id: string
+          name: string
+          organization_id: string
+        }
+      }[]
+    }
+  | GeneralApiProblem
+
+export type CheckBreachResult =
+  | {
+      kind: 'ok'
+      data: {
+        added_date: string
+        breach_date: string
+        data_clases: string[]
+        description: string
+        domain: string
+        is_fabricated: boolean
+        is_retired: boolean
+        is_sensitive: boolean
+        is_spam_list: boolean
+        is_verified: boolean
+        logo_path: string
+        modified_date: string
+        name: string
+        pwn_count: number
+        title: string
+      }[]
+    }
+  | GeneralApiProblem
+
+export type GetTeamPoliciesResult = { kind: 'ok'; data: TeamPolicies } | GeneralApiProblem
+export type GetTeamPolicyResult =
+  | {
+      kind: 'ok'
+      data: PasswordPolicy | MasterPasswordPolicy | BlockFailedLoginPolicy | PasswordlessPolicy
+    }
+  | GeneralApiProblem
+
+export type GetLastUpdateResult =
+  | { kind: 'ok'; data: { revision_date: number } }
+  | GeneralApiProblem
+
+export type GetSharingPublicKeyResult =
+  | { kind: 'ok'; data: { public_key: string } }
+  | GeneralApiProblem
 // TODO
-export type ShareFolderResult = { kind: 'ok', data: { id: string } } | GeneralApiProblem
-export type ShareCipherResult = {
-  kind: 'ok',
-  data: {
-    id: string      // organizationId
-  }
-} | GeneralApiProblem
+export type ShareFolderResult = { kind: 'ok'; data: { id: string } } | GeneralApiProblem
+export type ShareCipherResult =
+  | {
+      kind: 'ok'
+      data: {
+        id: string // organizationId
+      }
+    }
+  | GeneralApiProblem
 
-export type GetShareInvitationsResult = { kind: 'ok', data: SharingInvitationType[] } | GeneralApiProblem
-export type GetMySharesResult = { kind: 'ok', data: MyShareType[] } | GeneralApiProblem
-export type PostCipherResult = { kind: 'ok', data: { id: string } } | GeneralApiProblem
-export type ImportFolderResult = { kind: 'ok', data: { ids: string[] } } | GeneralApiProblem
-export type FetchOfferDetailsResult = {
-  kind: "ok",
-  data: {
-    nonce: string,
-    timestamp: number,
-    key_identifier: string,
-    sig: string
-  }
+export type GetShareInvitationsResult =
+  | { kind: 'ok'; data: SharingInvitationType[] }
+  | GeneralApiProblem
+export type GetMySharesResult = { kind: 'ok'; data: MyShareType[] } | GeneralApiProblem
+export type PostCipherResult = { kind: 'ok'; data: { id: string } } | GeneralApiProblem
+export type ImportFolderResult = { kind: 'ok'; data: { ids: string[] } } | GeneralApiProblem
+export type FetchOfferDetailsResult =
+  | {
+      kind: 'ok'
+      data: {
+        nonce: string
+        timestamp: number
+        key_identifier: string
+        sig: string
+      }
+    }
+  | GeneralApiProblem
 
-} | GeneralApiProblem
-
-export type FetchRelayListAddressesResult = { kind: "ok", data: RelayAddresses } | GeneralApiProblem
-export type GenerateRelayNewAddressResult = { kind: "ok", data: RelayAddress } | GeneralApiProblem
-export type TrustedResult = { kind: "ok", data: TrustedContact[] } | GeneralApiProblem
-export type EAInviteResult = { kind: "ok", data: { is: string } } | GeneralApiProblem
-export type EATakeoverResult = {
-  kind: "ok",
-  data: {
-    kdf: number,
-    kdf_iterations: number,
-    key_encrypted: string
-  }
-} | GeneralApiProblem
-export type EAViewResult = {
-  kind: "ok",
-  data: {
-    ciphers: CipherResponse[],
-    key_encrypted: string
-  }
-} | GeneralApiProblem
+export type FetchRelayListAddressesResult =
+  | {
+      kind: 'ok'
+      data: {
+        count: number
+        next: string | null
+        previous: string | null
+        results: RelayAddress[]
+      }
+    }
+  | GeneralApiProblem
+export type GenerateRelayNewAddressResult = { kind: 'ok'; data: RelayAddress } | GeneralApiProblem
+export type TrustedResult = { kind: 'ok'; data: TrustedContact[] } | GeneralApiProblem
+export type EAInviteResult = { kind: 'ok'; data: { is: string } } | GeneralApiProblem
+export type EATakeoverResult =
+  | {
+      kind: 'ok'
+      data: {
+        kdf: number
+        kdf_iterations: number
+        key_encrypted: string
+      }
+    }
+  | GeneralApiProblem
+export type EAViewResult =
+  | {
+      kind: 'ok'
+      data: {
+        ciphers: CipherResponse[]
+        key_encrypted: string
+      }
+    }
+  | GeneralApiProblem
 // ---------------- data --------------------
 export type NotificationSettingData = {
   category: {
@@ -357,24 +358,24 @@ export type SessionLoginData = {
 }
 
 export type RegisterLockerData = {
-  name: string,
-  email: string,
-  master_password_hash: string,
-  master_password_hint: string,
-  key: string,
-  kdf: number,
-  kdf_iterations: number,
-  reference_data: string,
+  name: string
+  email: string
+  master_password_hash: string
+  master_password_hint: string
+  key: string
+  kdf: number
+  kdf_iterations: number
+  reference_data: string
   keys: {
-    public_key: string,
+    public_key: string
     encrypted_private_key: string
-  },
+  }
   score: number
 }
 
 export type ChangePasswordData = {
-  key: string,
-  new_master_password_hash: string,
+  key: string
+  new_master_password_hash: string
   master_password_hash: string
 }
 
@@ -389,70 +390,70 @@ export type EmailOtpRequestData = {
 }
 
 export type LoginUri = {
-  match: string | null,
-  response: string | null,
+  match: string | null
+  response: string | null
   uri: string | null
 }
 
 export type MoveFolderData = {
-  ids: string[],
+  ids: string[]
   folderId: string
 }
 
 export type CipherData = {
-  collectionIds: string[] | null,
-  organizationId: string | null,
-  folderId: string | null,
-  favorite: boolean,
+  collectionIds: string[] | null
+  organizationId: string | null
+  folderId: string | null
+  favorite: boolean
   fields: {
-    name: string,
-    response: string | null,
-    types: number | null,
+    name: string
+    response: string | null
+    types: number | null
     value: string
-  },
-  score: number | 0,
-  name: string,
-  notes: string | null,
-  type: number,
+  }
+  score: number | 0
+  name: string
+  notes: string | null
+  type: number
   login: {
-    username: string | null,
-    password: string | null,
-    totp: string | null,
-    response: string | null,
+    username: string | null
+    password: string | null
+    totp: string | null
+    response: string | null
     uris: LoginUri[] | null
-  } | null,
+  } | null
   secureNote: {
-    type: number,
+    type: number
     response: string | null
-  } | null,
+  } | null
   card: {
-    brand: string | null,
-    cardholderName: string | null,
-    code: string | null,
-    expMonth: string | null,
-    expYear: string | null,
-    number: string | null,
+    brand: string | null
+    cardholderName: string | null
+    code: string | null
+    expMonth: string | null
+    expYear: string | null
+    number: string | null
     response: string | null
-  } | null,
+  } | null
   identity: {
-    address1: string | null,
-    address2: string | null,
-    address3: string | null,
-    city: string | null,
-    company: string | null,
-    country: string | null,
-    email: string | null,
-    firstName: string | null,
-    middleName: string | null,
-    lastName: string | null,
-    licenseNumber: string | null,
-    postalCode: string | null,
-    phone: string | null,
-    passportNumber: string | null,
-    response: string | null,
-    ssn: string | null,
-    state: string | null,
-    title: string | null,
+    address1: string | null
+    address2: string | null
+    address3: string | null
+    city: string | null
+    company: string | null
+    country: string | null
+    email: string | null
+    firstName: string | null
+    middleName: string | null
+    lastName: string | null
+    licenseNumber: string | null
+    postalCode: string | null
+    phone: string | null
+    passportNumber: string | null
+    response: string | null
+    ssn: string | null
+    state: string | null
+    title: string | null
     username: string | null
   } | null
 }
@@ -475,7 +476,7 @@ export type ImportFolderData = {
 }
 
 export type FeedbackData = {
-  type: 'feedback' | 'support',
+  type: 'feedback' | 'support'
   description: string
 }
 
@@ -511,8 +512,8 @@ export type ShareFolderData = {
 
 export type CollectionActionData = {
   folder: {
-    id: string,
-    name: string,
+    id: string
+    name: string
     ciphers: any[] // CipherRequest & { id: string }
   }
 }
@@ -547,8 +548,6 @@ export type ConfirmShareCipherData = {
   key: string
 }
 
-
-
 export type AppNotification = {
   count: number
   unread_count: number
@@ -567,44 +566,4 @@ export type AppNotification = {
     }
     type: NotificationCategory
   }[]
-}
-
-export type RelayAddress = {
-  address: string
-  created_time: number
-  description: string
-  domain: string
-  enabled: boolean
-  full_address: string
-  id: number
-  num_blocked: number
-  num_forwarded: number
-  num_replied: number
-  num_spam: number
-  updated_time: null
-}
-
-export type RelayAddresses = {
-  count: number
-  next: {}
-  previous: {}
-  results: RelayAddress[]
-}
-
-export type TrustedContact = {
-  avatar: string
-  creation_date: number
-  email: string
-  full_name: string
-  grantor_pwd_user_id?: string
-  grantee_pwd_user_id?: string
-  id: string
-  key_encrypted: string
-  last_notification_date: number | null
-  object: string
-  recovery_initiated_date: number | null
-  revision_date: number
-  status: EmergencyAccessStatus
-  type: EmergencyAccessType
-  wait_time_days: number
 }

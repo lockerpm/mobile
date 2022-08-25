@@ -1,31 +1,19 @@
-import { getUrlParameterByName } from "../helpers"
+import { getUrlParameterByName } from '../helpers'
 import CookieManager from '@react-native-cookies/cookies'
 import moment from 'moment'
 import analytics from '@react-native-firebase/analytics'
 import DeviceInfo from 'react-native-device-info'
-import { Logger } from "../logger"
+import { Logger } from '../logger'
 
-
-const WHITELIST_HOSTS = [
-  'https://locker.io',
-  'https://id.locker.io',
-  'https://staging.locker.io'
-]
+const WHITELIST_HOSTS = ['https://locker.io', 'https://id.locker.io', 'https://staging.locker.io']
 const COOKIES_URL = 'https://locker.io'
-const TAGS = [
-  'utm_source',
-  'utm_medium',
-  'utm_campaign',
-  'utm_term',
-  'utm_content'
-]
-
+const TAGS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
 
 export const setCookiesFromUrl = (url: string) => {
-  if (!url || !WHITELIST_HOSTS.some(host => url.startsWith(host))) {
+  if (!url || !WHITELIST_HOSTS.some((host) => url.startsWith(host))) {
     return
   }
-  const values = TAGS.map(t => '')
+  const values = TAGS.map((t) => '')
   let hasChange = false
   TAGS.forEach((t, index) => {
     const val = getUrlParameterByName(t, url)
@@ -42,7 +30,7 @@ export const setCookiesFromUrl = (url: string) => {
       CookieManager.set(COOKIES_URL, {
         name: t,
         value: values[index],
-        expires: now.toISOString(true)
+        expires: now.toISOString(true),
       })
     })
   }
@@ -51,7 +39,7 @@ export const setCookiesFromUrl = (url: string) => {
 export const getUtmCookies = async () => {
   const cookies = await CookieManager.get(COOKIES_URL)
   const res = {}
-  Object.keys(cookies).forEach(k => {
+  Object.keys(cookies).forEach((k) => {
     if (TAGS.includes(k)) {
       res[k] = cookies[k].value
     }
@@ -70,9 +58,9 @@ export const logRegisterSuccessEvent = async () => {
   const device_identifier = DeviceInfo.getUniqueId()
   await analytics().logEvent('register_success', {
     ...cookies,
-    device_identifier
+    device_identifier,
   })
-} 
+}
 
 // Create master pw
 export const logCreateMasterPwEvent = async () => {
@@ -80,7 +68,7 @@ export const logCreateMasterPwEvent = async () => {
   const device_identifier = DeviceInfo.getUniqueId()
   await analytics().logEvent('create_master_pw', {
     ...cookies,
-    device_identifier
+    device_identifier,
   })
 }
 
@@ -91,7 +79,6 @@ export const logPurchase = async (params: {
   price: string
   itemName: string
 }) => {
-  return
   // const { itemId, currency, price, itemName } = params
   // let priceNumber = 0
   // try {
