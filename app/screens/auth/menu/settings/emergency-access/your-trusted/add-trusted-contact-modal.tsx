@@ -30,7 +30,7 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
     {
       value: !accessRight,
       action: () => { setAccessRight(!accessRight) },
-      text:  translate("emergency_access.add.view")
+      text: translate("emergency_access.add.view")
     },
     {
       value: accessRight,
@@ -80,6 +80,14 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
       EventBus.removeListener(listener)
     }
   }, [])
+  
+  useEffect(() => {
+    if (!isShow) {
+      setEmail("")
+      setAccessRight(false)
+      setWaitTime(1)
+    }
+  }, [isShow])
 
   // ----------------------- RENDER -----------------------
   return (

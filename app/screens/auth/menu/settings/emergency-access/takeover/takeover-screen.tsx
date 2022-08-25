@@ -53,7 +53,7 @@ export const TakeoverEAScreen = observer(() => {
 
   const handleChangePW = async () => {
     // fetch enc key
-    const res = await updateNewMasterPasswordEA(newPass, trustContact.email, trustContact.id)
+    const res = await updateNewMasterPasswordEA(newPass, trustContact.email, trustContact.id, true)
     if (res.kind !== 'ok') return
     navigation.goBack()
   }
@@ -71,9 +71,9 @@ export const TakeoverEAScreen = observer(() => {
         },
       ]}
     >
-      <Text
-        text={translate('emergency_access.reset_master_pw_user', { name: trustContact.full_name })}
-      />
+      <Text text={translate('emergency_access.reset_master_pw_user', { name: " " })} />
+      <Text preset="bold" text={trustContact.full_name} />
+
 
       <FloatingInput
         isPassword
@@ -118,7 +118,8 @@ export const TakeoverEAScreen = observer(() => {
         },
       ]}
     >
-      <Text text={translate('emergency_access.reset_pw_user', { name: trustContact.full_name })} />
+      <Text text={translate('emergency_access.reset_pw_user', { name: " " })} />
+      <Text preset="bold" text={trustContact.full_name} />
 
       <FloatingInput
         isPassword

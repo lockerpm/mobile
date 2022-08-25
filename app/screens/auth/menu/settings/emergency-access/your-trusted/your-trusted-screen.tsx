@@ -72,7 +72,7 @@ export const YourTrustedContactScreen = () => {
           goBack={() => {
             navigation.goBack()
           }}
-          title={translate('emergency_access.your_trust')}
+          title={translate('emergency_access.title')}
           right={
             <Button
               isDisabled={isFree}

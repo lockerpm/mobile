@@ -114,6 +114,7 @@ export const SettingsScreen = observer(() => {
       value: user.language || 'en',
       onChange: (lang: string) => {
         user.setLanguage(lang)
+        user.changeLanguage()
       },
       options: [
         {
@@ -335,7 +336,6 @@ export const SettingsScreen = observer(() => {
           name={translate('emergency_access.title')}
           action={() => navigation.navigate('emergencyAccess')}
         />
-        {/* Emergency Access*/}
 
 
         {/* Autofill */}

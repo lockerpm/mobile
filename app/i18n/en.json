@@ -79,7 +79,7 @@
     "push_notifications": "Push Notifications",
     "regenerate": "Regenerate",
     "reject": "Reject",
-    "remove": "remove",
+    "remove": "Remove",
     "rename": "Rename",
     "restore": "Restore",
     "save": "Save",
@@ -238,7 +238,7 @@
     "confirm": "Confirmed",
     "recovery_initiated": "Recovery initiated",
     "your_trust": "Your trusted contacts",
-    "trust_you": "Contacts That Trusted You",
+    "trust_you": "Contacts that trusted you",
     "rq_view": "Request to View",
     "rq_takeover": "Request to Take over",
     "rq_noti": "Are you sure you want to request emergency access? You will be provided access after {{waitTime}} day(s) or whenever the user manually approves the request",
@@ -268,8 +268,8 @@
       "title": "Reset Master Password"
     },
     "view_user_vault": "You are now viewing {{name}}'s vault items",
-    "pending_trusted": "{{count}} pending request{{s}}",
-    "pending_grant": "{{count}} pending invitation{{s}}"
+    "pending_trusted": "{{count}} request{{s}}",
+    "pending_grant": "{{count}} invitation{{s}}"
   },
   "policy": {
     "min_password_length": "Minimum password length is {{length}}",
