@@ -1,12 +1,19 @@
-import React from "react"
-import { View } from "react-native"
-import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Divider, Text } from "../../../../../components"
-import { useMixins } from "../../../../../services/mixins"
-import { TrustedContact } from "../../../../../services/api"
-import { fontSize } from "../../../../../theme"
-import { EmergencyAccessStatus, EmergencyAccessType } from "../../../../../config/types"
-import { useStores } from "../../../../../models"
-import { useNavigation } from "@react-navigation/native"
+import React from 'react'
+import { View } from 'react-native'
+import {
+  ActionItem,
+  ActionSheet,
+  ActionSheetContent,
+  AutoImage as Image,
+  Divider,
+  Text,
+} from '../../../../../components'
+import { useMixins } from '../../../../../services/mixins'
+import { fontSize } from '../../../../../theme'
+import { EmergencyAccessStatus, EmergencyAccessType } from '../../../../../config/types'
+import { useStores } from '../../../../../models'
+import { useNavigation } from '@react-navigation/native'
+import { TrustedContact } from '../../../../../config/types/api'
 
 interface Props {
   isYourTrusted: boolean
@@ -33,19 +40,19 @@ export const ContactAction = (props: Props) => {
 
   // ----------------------- METHODS -----------------------
 
-  const handleYourTrustAction = async (action: "reject" | "approve" | "reinvite") => {
-    let res = await user.yourTrustedActionEA(trustedContact.id, action)
+  const handleYourTrustAction = async (action: 'reject' | 'approve' | 'reinvite') => {
+    const res = await user.yourTrustedActionEA(trustedContact.id, action)
     res && setOnAction()
     onClose()
   }
-  const handleTrustedYouAction = async (action: "accept" | "initiate") => {
-    let res = await user.trustedYouActionEA(trustedContact.id, action)
+  const handleTrustedYouAction = async (action: 'accept' | 'initiate') => {
+    const res = await user.trustedYouActionEA(trustedContact.id, action)
     res && setOnAction()
     onClose()
   }
 
   const handleRemoveAction = async () => {
-    let res = await user.removeEA(trustedContact.id)
+    const res = await user.removeEA(trustedContact.id)
     res && setOnAction()
     onClose()
   }
@@ -53,55 +60,55 @@ export const ContactAction = (props: Props) => {
   // ----------------------- RENDER -----------------------
 
   const Avatar = () => (
-    <View style={{
-      flexDirection: "row",
-      alignItems: "center",
-      marginBottom: 16,
-      marginHorizontal: 20
-    }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 16,
+        marginHorizontal: 20,
+      }}
+    >
       <Image
         source={{ uri: trustedContact.avatar }}
         style={{ height: 40, width: 40, borderRadius: 20, marginRight: 12 }}
       />
-      <View style={{ justifyContent: "space-between" }}>
-        <Text
-          preset="black"
-          text={trustedContact.full_name}
-        />
-        <Text
-          text={trustedContact.email}
-          style={{ fontSize: fontSize.small }}
-        />
+      <View style={{ justifyContent: 'space-between' }}>
+        <Text preset="black" text={trustedContact.full_name} />
+        <Text text={trustedContact.email} style={{ fontSize: fontSize.small }} />
       </View>
     </View>
   )
   const YourTrustedAction = () => (
-    <ActionSheetContent >
-      {isInintiated && <>
-        <ActionItem
-          name={translate('common.accept')}
-          action={() => {
-            handleYourTrustAction('approve')
-          }}
-        />
-        <Divider />
-        <ActionItem
-          name={translate('common.reject')}
-          action={() => {
-            handleYourTrustAction('reject')
-          }}
-        />
-        <Divider />
-      </>}
-      {isInvited && <>
-        <ActionItem
-          name={translate('emergency_access.resent')}
-          action={() => {
-            handleYourTrustAction('reinvite')
-          }}
-        />
-        <Divider />
-      </>}
+    <ActionSheetContent>
+      {isInintiated && (
+        <>
+          <ActionItem
+            name={translate('common.accept')}
+            action={() => {
+              handleYourTrustAction('approve')
+            }}
+          />
+          <Divider />
+          <ActionItem
+            name={translate('common.reject')}
+            action={() => {
+              handleYourTrustAction('reject')
+            }}
+          />
+          <Divider />
+        </>
+      )}
+      {isInvited && (
+        <>
+          <ActionItem
+            name={translate('emergency_access.resent')}
+            action={() => {
+              handleYourTrustAction('reinvite')
+            }}
+          />
+          <Divider />
+        </>
+      )}
       <ActionItem
         name={translate('common.remove')}
         action={() => {
@@ -113,23 +120,23 @@ export const ContactAction = (props: Props) => {
   )
 
   const TrustYouAction = () => (
-    <ActionSheetContent >
-      {
-        isApproved && isViewType && <>
+    <ActionSheetContent>
+      {isApproved && isViewType && (
+        <>
           <ActionItem
             name={translate('emergency_access.view_vault')}
             action={() => {
               onClose()
-              navigation.navigate(isViewType ? "viewEA" : "takeoverEA", {
-                trusted: trustedContact
+              navigation.navigate(isViewType ? 'viewEA' : 'takeoverEA', {
+                trusted: trustedContact,
               })
             }}
           />
           <Divider />
         </>
-      }
-      {
-        isApproved && !isViewType && <>
+      )}
+      {isApproved && !isViewType && (
+        <>
           {/* <ActionItem
             name={translate('emergency_access.reset_pw')}
             action={() => {
@@ -145,20 +152,24 @@ export const ContactAction = (props: Props) => {
             name={translate('emergency_access.reset_master_pw')}
             action={() => {
               onClose()
-              navigation.navigate("takeoverEA", {
+              navigation.navigate('takeoverEA', {
                 trusted: trustedContact,
-                reset_pw: false
+                reset_pw: false,
               })
             }}
           />
           <Divider />
         </>
-      }
+      )}
 
-      {
-        isConfirm && <>
+      {isConfirm && (
+        <>
           <ActionItem
-            name={isViewType ? translate('emergency_access.rq_view') : translate('emergency_access.rq_takeover')}
+            name={
+              isViewType
+                ? translate('emergency_access.rq_view')
+                : translate('emergency_access.rq_takeover')
+            }
             action={() => {
               // onClose("rq_modal")
               // showRequestModal()
@@ -167,9 +178,9 @@ export const ContactAction = (props: Props) => {
           />
           <Divider />
         </>
-      }
-      {
-        isInvited && <>
+      )}
+      {isInvited && (
+        <>
           <ActionItem
             name={translate('common.accept')}
             action={() => {
@@ -178,7 +189,7 @@ export const ContactAction = (props: Props) => {
           />
           <Divider />
         </>
-      }
+      )}
 
       <ActionItem
         name={translate('common.remove')}
@@ -190,20 +201,12 @@ export const ContactAction = (props: Props) => {
     </ActionSheetContent>
   )
 
-
   return (
-    <ActionSheet
-      isOpen={isShow}
-      onClose={onClose}>
+    <ActionSheet isOpen={isShow} onClose={onClose}>
       <Avatar />
       <Divider />
-      {
-        isYourTrusted && <YourTrustedAction />
-      }
-      {
-        !isYourTrusted && <TrustYouAction />
-      }
-
+      {isYourTrusted && <YourTrustedAction />}
+      {!isYourTrusted && <TrustYouAction />}
     </ActionSheet>
   )
 }

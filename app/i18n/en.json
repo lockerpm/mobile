@@ -279,7 +279,12 @@
     "requires_uppercase": "Requires uppercase letters (ABC)",
     "requires_special": "Requires special characters (@#!$%)",
     "requires_number": "Requires digits (0 1 2 3)",
-    "avoid_ambiguous": "Avoid ambiguous characters (O vs 0, l vs I, etc)"
+    "avoid_ambiguous": "Avoid ambiguous characters (O vs 0, l vs I, etc)",
+    "password_violation_modal": {
+      "title": "Policy violated",
+      "desc": "Your password violated the following policies of",
+      "use_anyway": "Use this password anyway"
+    }
   },
   "password_strength": {
     "very_weak": "Very weak",

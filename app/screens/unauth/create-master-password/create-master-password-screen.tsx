@@ -1,25 +1,34 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { Alert, View } from "react-native"
-import { AutoImage as Image, Button, Layout, Text, FloatingInput, PasswordStrength } from "../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../../models"
-import { fontSize } from "../../../theme"
-import { useMixins } from "../../../services/mixins"
-import { APP_ICON } from "../../../common/mappings"
-import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
-import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
-import { logCreateMasterPwEvent } from "../../../utils/analytics"
-
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { Alert, View } from 'react-native'
+import {
+  AutoImage as Image,
+  Button,
+  Layout,
+  Text,
+  FloatingInput,
+  PasswordStrength,
+  PasswordPolicyViolationsModal,
+} from '../../../components'
+import { useNavigation } from '@react-navigation/native'
+import { useStores } from '../../../models'
+import { fontSize } from '../../../theme'
+import { useMixins } from '../../../services/mixins'
+import { APP_ICON } from '../../../common/mappings'
+import { useCipherHelpersMixins } from '../../../services/mixins/cipher/helpers'
+import { useCipherAuthenticationMixins } from '../../../services/mixins/cipher/authentication'
+import { logCreateMasterPwEvent } from '../../../utils/analytics'
+import { PolicyType } from '../../../config/types'
 
 export const CreateMasterPasswordScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, color, validateMasterPassword } = useMixins()
-  const { getPasswordStrength } = useCipherHelpersMixins()
+  const { getPasswordStrength, checkPasswordPolicy } = useCipherHelpersMixins()
   const { logout, registerLocker, sessionLogin } = useCipherAuthenticationMixins()
   const { user } = useStores()
 
-  // Params
+  // -------------- PARAMS ------------------
+
   const [masterPassword, setMasterPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [hint, setHint] = useState('')
@@ -29,12 +38,18 @@ export const CreateMasterPasswordScreen = observer(() => {
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
 
-  const isError = !!masterPassword && !!confirmPassword && (masterPassword !== confirmPassword)
+  const [showViolationModal, setShowViolationModal] = useState(false)
+  const [violations, setViolations] = useState<string[]>([])
+
+  // -------------- COMPUTED ------------------
+
+  const isError = !!masterPassword && !!confirmPassword && masterPassword !== confirmPassword
   const masterPasswordError = validateMasterPassword(masterPassword).error
   const isReady = !masterPasswordError && !isError && !!masterPassword && !!confirmPassword
 
-  // Methods
+  // -------------- METHODS ------------------
 
+  // Logout
   const handleLogout = async () => {
     setIsScreenLoading(true)
     await logout()
@@ -42,6 +57,29 @@ export const CreateMasterPasswordScreen = observer(() => {
     navigation.navigate('login')
   }
 
+  // Load teams to check master password policy
+  const loadUserTeams = async () => {
+    setIsScreenLoading(true)
+    await user.loadTeams()
+    setIsScreenLoading(false)
+  }
+
+  // Prepare to create master pass
+  const prepareToCreate = async () => {
+    setIsCreating(true)
+
+    const violatedItems = await checkPasswordPolicy(masterPassword, PolicyType.MASTER_PASSWORD_REQ)
+    if (violatedItems.length) {
+      setViolations(violatedItems)
+      setShowViolationModal(true)
+      setIsCreating(false)
+      return
+    }
+
+    handleCreate()
+  }
+
+  // Confirm master pass
   const handleCreate = async () => {
     setIsCreating(true)
     const res = await registerLocker(masterPassword, hint, passwordStrength)
@@ -61,6 +99,12 @@ export const CreateMasterPasswordScreen = observer(() => {
 
   // -------------- EFFECT ------------------
 
+  // Mounted
+  useEffect(() => {
+    loadUserTeams()
+  }, [])
+
+  // Back handler
   useEffect(() => {
     const handleBack = (e) => {
       if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
@@ -70,25 +114,23 @@ export const CreateMasterPasswordScreen = observer(() => {
 
       e.preventDefault()
 
-      Alert.alert(
-        translate('alert.logout') + user.email + '?',
-        '',
-        [
-          { 
-            text: translate('common.cancel'), 
-            style: 'cancel', 
-            onPress: () => {}
+      Alert.alert(translate('alert.logout') + user.email + '?', '', [
+        {
+          text: translate('common.cancel'),
+          style: 'cancel',
+          onPress: () => {
+            // Do nothing
           },
-          {
-            text: translate('common.logout'),
-            style: 'destructive',
-            onPress: async () => {
-              await logout()
-              navigation.navigate('login')
-            }
+        },
+        {
+          text: translate('common.logout'),
+          style: 'destructive',
+          onPress: async () => {
+            await logout()
+            navigation.navigate('login')
           },
-        ]
-      )
+        },
+      ])
     }
 
     navigation.addListener('beforeRemove', handleBack)
@@ -98,21 +140,21 @@ export const CreateMasterPasswordScreen = observer(() => {
     }
   }, [navigation])
 
-  // Render
+  // -------------- RENDER ------------------
+
   return (
     <Layout
       isOverlayLoading={isScreenLoading}
-      header={(
-        <View style={{ alignItems: "flex-end" }}>
+      header={
+        <View style={{ alignItems: 'flex-end' }}>
           <Button
             text={translate('common.logout').toUpperCase()}
             textStyle={{ fontSize: fontSize.p }}
             preset="link"
             onPress={handleLogout}
-          >
-          </Button>
+          ></Button>
         </View>
-      )}
+      }
     >
       <View style={{ alignItems: 'center' }}>
         <Image source={APP_ICON.icon} style={{ height: 63, width: 63 }} />
@@ -120,12 +162,12 @@ export const CreateMasterPasswordScreen = observer(() => {
         <Text
           preset="header"
           style={{ marginBottom: 10, marginTop: 25 }}
-          text={translate("create_master_pass.title")}
+          text={translate('create_master_pass.title')}
         />
 
         <Text
           style={{ textAlign: 'center', fontSize: fontSize.small, lineHeight: 21 }}
-          text={translate("create_master_pass.desc")}
+          text={translate('create_master_pass.desc')}
         />
 
         {/* Current user */}
@@ -137,28 +179,26 @@ export const CreateMasterPasswordScreen = observer(() => {
             backgroundColor: color.block,
             flexDirection: 'row',
             alignItems: 'center',
-            padding: 4
+            padding: 4,
           }}
         >
-          {
-            !!user.avatar && (
-              <View style={{ borderRadius: 14, overflow: 'hidden' }}>
-                <Image
-                  source={{ uri: user.avatar }}
-                  style={{
-                    height: 28,
-                    width: 28,
-                    backgroundColor: color.white
-                  }}
-                />
-              </View>
-            )
-          }
+          {!!user.avatar && (
+            <View style={{ borderRadius: 14, overflow: 'hidden' }}>
+              <Image
+                source={{ uri: user.avatar }}
+                style={{
+                  height: 28,
+                  width: 28,
+                  backgroundColor: color.white,
+                }}
+              />
+            </View>
+          )}
           <Text
             style={{
               fontSize: fontSize.small,
               color: color.title,
-              marginHorizontal: 10
+              marginHorizontal: 10,
             }}
           >
             {user.email}
@@ -181,11 +221,9 @@ export const CreateMasterPasswordScreen = observer(() => {
           style={{ width: '100%' }}
         />
 
-        {
-          !!masterPassword && (
-            <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />
-          )
-        }
+        {!!masterPassword && (
+          <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />
+        )}
         {/* Master pass input end */}
 
         {/* Master pass confirm */}
@@ -209,21 +247,40 @@ export const CreateMasterPasswordScreen = observer(() => {
         />
         {/* Hint end */}
 
-        <Button
-          isDisabled={isCreating || !isReady}
-          isLoading={isCreating}
-          text={translate('create_master_pass.btn')}
-          onPress={handleCreate}
-          style={{
-            width: '100%',
-            marginVertical: 20
-          }}
-        />
+        {/* Bottom */}
+        <>
+          <Button
+            isDisabled={isCreating || !isReady}
+            isLoading={isCreating}
+            text={translate('create_master_pass.btn')}
+            onPress={prepareToCreate}
+            style={{
+              width: '100%',
+              marginVertical: 20,
+            }}
+          />
 
-        <Text
-          style={{ textAlign: 'center', fontSize: fontSize.small, lineHeight: 21 }}
-          text={translate("create_master_pass.note")}
+          <Text
+            style={{ textAlign: 'center', fontSize: fontSize.small, lineHeight: 21 }}
+            text={translate('create_master_pass.note')}
+          />
+        </>
+        {/* Bottom end */}
+
+        {/* Violations modal */}
+        <PasswordPolicyViolationsModal
+          isOpen={showViolationModal}
+          onClose={() => {
+            setShowViolationModal(false)
+          }}
+          violations={violations}
+          teamName={user.teams.length && user.teams[0]?.name}
+          onConfirm={() => {
+            setShowViolationModal(false)
+          }}
+          confirmText="OK"
         />
+        {/* Violations modal end */}
       </View>
     </Layout>
   )

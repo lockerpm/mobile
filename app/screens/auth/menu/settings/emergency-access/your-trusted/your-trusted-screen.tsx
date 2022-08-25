@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react"
-import { Layout, Header, Button, Text } from "../../../../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { SectionWrapperItem } from "../../settings-item"
-import { useMixins } from "../../../../../../services/mixins"
-import { AddTrustedContactModal } from "./add-trusted-contact-modal"
-import { TrustedContact } from "../../../../../../services/api"
-import { useStores } from "../../../../../../models"
-import { Contact } from "../contact"
-import { FlatList, View } from "react-native"
-import { PlanType } from "../../../../../../config/types"
-
-
-
+import React, { useEffect, useState } from 'react'
+import { Layout, Header, Button, Text } from '../../../../../../components'
+import { useNavigation } from '@react-navigation/native'
+import { SectionWrapperItem } from '../../settings-item'
+import { useMixins } from '../../../../../../services/mixins'
+import { AddTrustedContactModal } from './add-trusted-contact-modal'
+import { useStores } from '../../../../../../models'
+import { Contact } from '../contact'
+import { FlatList, View } from 'react-native'
+import { PlanType } from '../../../../../../config/types'
+import { TrustedContact } from '../../../../../../config/types/api'
 
 export const YourTrustedContactScreen = () => {
   const navigation = useNavigation()
@@ -27,7 +24,7 @@ export const YourTrustedContactScreen = () => {
 
   const trusted = async () => {
     const res = await user.trustedEA()
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       setTrustedContacts(res.data)
       // console.log(res.data)
     } else {
@@ -43,53 +40,55 @@ export const YourTrustedContactScreen = () => {
   // ----------------------- RENDER -----------------------
 
   const ListEmpty = () => (
-    <View >
-      {
-        isFree && (
-          <View style={{
-            alignItems: "center"
-          }}>
-            <Text text={translate('emergency_access.free_guild')} style={{ textAlign: "center" }} />
-            {/* <Button text={translate('common.upgrade')} style={{ maxWidth: 150, marginTop: 20 }} /> */}
-          </View>
-        )
-      }
-      {
-        !isFree && (
-          <View style={{
-            alignItems: "center"
-          }}>
-            <Text text={"No data"} style={{ textAlign: "center" }} />
-            {/* <Button text={translate('common.upgrade')} style={{ maxWidth: 150, marginTop: 20 }} /> */}
-          </View>
-        )
-      }
+    <View>
+      {isFree && (
+        <View
+          style={{
+            alignItems: 'center',
+          }}
+        >
+          <Text text={translate('emergency_access.free_guild')} style={{ textAlign: 'center' }} />
+          {/* <Button text={translate('common.upgrade')} style={{ maxWidth: 150, marginTop: 20 }} /> */}
+        </View>
+      )}
+      {!isFree && (
+        <View
+          style={{
+            alignItems: 'center',
+          }}
+        >
+          <Text text={'No data'} style={{ textAlign: 'center' }} />
+          {/* <Button text={translate('common.upgrade')} style={{ maxWidth: 150, marginTop: 20 }} /> */}
+        </View>
+      )}
     </View>
   )
 
   return (
     <Layout
       noScroll
-      header={(
+      header={
         <Header
           goBack={() => {
             navigation.goBack()
           }}
           title={translate('emergency_access.your_trust')}
-          right={(
+          right={
             <Button
               isDisabled={isFree}
               onPress={() => setIsShowAddModal(true)}
               preset="link"
               text={translate('common.add')}
-            />)
+            />
           }
         />
-      )}
+      }
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
       <AddTrustedContactModal
-        onAction={() => { setOnAction(!onAction) }}
+        onAction={() => {
+          setOnAction(!onAction)
+        }}
         isShow={isShowAddModal}
         onClose={() => {
           setIsShowAddModal(false)
@@ -104,7 +103,9 @@ export const YourTrustedContactScreen = () => {
           renderItem={({ item }) => (
             <Contact
               isYourTrusted={true}
-              setOnAction={() => { setOnAction(!onAction) }}
+              setOnAction={() => {
+                setOnAction(!onAction)
+              }}
               trustedContact={item}
             />
           )}
@@ -113,4 +114,3 @@ export const YourTrustedContactScreen = () => {
     </Layout>
   )
 }
-

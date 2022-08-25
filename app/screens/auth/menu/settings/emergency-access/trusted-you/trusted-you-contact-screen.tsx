@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { Layout, Header, Text } from "../../../../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { SectionWrapperItem } from "../../settings-item"
-import { useMixins } from "../../../../../../services/mixins"
-import { TrustedContact } from "../../../../../../services/api"
-import { useStores } from "../../../../../../models"
-import { Contact } from "../contact"
-import { View } from "react-native"
-import { FlatList } from "react-native-gesture-handler"
-
-
-
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { Layout, Header, Text } from '../../../../../../components'
+import { useNavigation } from '@react-navigation/native'
+import { SectionWrapperItem } from '../../settings-item'
+import { useMixins } from '../../../../../../services/mixins'
+import { useStores } from '../../../../../../models'
+import { Contact } from '../contact'
+import { View } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
+import { TrustedContact } from '../../../../../../config/types/api'
 
 export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScreen() {
   const navigation = useNavigation()
@@ -24,7 +21,7 @@ export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScre
 
   const granted = async () => {
     const res = await user.grantedEA()
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       setTrustedContacts(res.data)
       // console.log(res.data)
     } else {
@@ -38,34 +35,39 @@ export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScre
   }, [onAction])
   // ----------------------- RENDER -----------------------
 
-
   return (
     <Layout
       noScroll
-      header={(
+      header={
         <Header
           goBack={() => {
             navigation.goBack()
           }}
           title={translate('emergency_access.trust_you')}
-          right={(<View style={{ width: 30 }} />)}
+          right={<View style={{ width: 30 }} />}
         />
-      )}
+      }
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
       <SectionWrapperItem>
         <FlatList
-          ListEmptyComponent={<View style={{
-            alignItems: "center"
-          }}>
-            <Text text={"No data"} style={{ textAlign: "center" }} />
-          </View>}
+          ListEmptyComponent={
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text text={'No data'} style={{ textAlign: 'center' }} />
+            </View>
+          }
           data={trustedContacts}
           keyExtractor={(item, index) => String(index)}
           renderItem={({ item }) => (
             <Contact
               isYourTrusted={false}
-              setOnAction={() => { setOnAction(!onAction) }}
+              setOnAction={() => {
+                setOnAction(!onAction)
+              }}
               trustedContact={item}
             />
           )}
@@ -74,4 +76,3 @@ export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScre
     </Layout>
   )
 })
-

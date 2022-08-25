@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { Loading, Layout, Text } from "../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../../models"
-import { load, StorageKey } from "../../../utils/storage"
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { Loading, Layout, Text } from '../../../components'
+import { useNavigation } from '@react-navigation/native'
+import { useStores } from '../../../models'
+import { load, StorageKey } from '../../../utils/storage'
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
-import { IS_IOS } from "../../../config/constants"
-import { BackHandler, View } from "react-native"
-import { useMixins } from "../../../services/mixins"
+import { IS_IOS } from '../../../config/constants'
+import { BackHandler, View } from 'react-native'
+import { useMixins } from '../../../services/mixins'
 import JailMonkey from 'jail-monkey'
-import { commonStyles } from "../../../theme"
-import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
+import { commonStyles } from '../../../theme'
+import { useCipherAuthenticationMixins } from '../../../services/mixins/cipher/authentication'
 import dynamicLinks from '@react-native-firebase/dynamic-links'
-import { Logger } from "../../../utils/logger"
-
+import { Logger } from '../../../utils/logger'
 
 export const InitScreen = observer(() => {
   const { user, cipherStore, uiStore } = useStores()
@@ -89,7 +88,11 @@ export const InitScreen = observer(() => {
 
     const loginData = await load(StorageKey.APP_FROM_AUTOFILL_ON_SAVE_REQUEST)
     if (loginData && loginData.enabled) {
-      uiStore.setDeepLinkAction('save', { domain: loginData.domain, username: loginData.username, password: loginData.password })
+      uiStore.setDeepLinkAction('save', {
+        domain: loginData.domain,
+        username: loginData.username,
+        password: loginData.password,
+      })
       uiStore.setIsOnSaveLogin(true)
       return true
     }
@@ -159,7 +162,6 @@ export const InitScreen = observer(() => {
       }
       return
     }
-   
 
     // Network connected? || Is autofill?
     if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {
@@ -172,10 +174,7 @@ export const InitScreen = observer(() => {
       navigation.navigate('login')
       return
     }
-    const [userRes, userPwRes] = await Promise.all([
-      user.getUser(),
-      user.getUserPw()
-    ])
+    const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
     if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
       goLockOrCreatePassword()
     } else {
@@ -210,18 +209,18 @@ export const InitScreen = observer(() => {
   // ------------------ RENDER ---------------------
 
   return isRooted ? (
-    <Layout
-      noScroll
-    >
+    <Layout noScroll>
       <View style={[commonStyles.CENTER_VIEW, commonStyles.SECTION_PADDING]}>
         <Text
           preset="black"
           text={translate('error.rooted_device')}
           style={{
-            textAlign: 'center'
+            textAlign: 'center',
           }}
         />
       </View>
     </Layout>
-  ) : <Loading />
+  ) : (
+    <Loading />
+  )
 })

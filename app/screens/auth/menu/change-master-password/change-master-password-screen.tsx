@@ -1,18 +1,28 @@
-import React, { useState } from "react"
-import { View } from "react-native"
-import { Layout, Button, Header, FloatingInput, PasswordStrength } from "../../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { commonStyles } from "../../../../theme"
-import { useMixins } from "../../../../services/mixins"
-import { useCipherHelpersMixins } from "../../../../services/mixins/cipher/helpers"
-import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+import React, { useState } from 'react'
+import { View } from 'react-native'
+import {
+  Layout,
+  Button,
+  Header,
+  FloatingInput,
+  PasswordStrength,
+  PasswordPolicyViolationsModal,
+} from '../../../../components'
+import { useNavigation } from '@react-navigation/native'
+import { commonStyles } from '../../../../theme'
+import { useMixins } from '../../../../services/mixins'
+import { useCipherHelpersMixins } from '../../../../services/mixins/cipher/helpers'
+import { useCipherAuthenticationMixins } from '../../../../services/mixins/cipher/authentication'
+import { PolicyType } from '../../../../config/types'
+import { observer } from 'mobx-react-lite'
+import { useStores } from '../../../../models'
 
-
-export const ChangeMasterPasswordScreen = () => {
+export const ChangeMasterPasswordScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, color, validateMasterPassword } = useMixins()
-  const { getPasswordStrength } = useCipherHelpersMixins()
+  const { getPasswordStrength, checkPasswordPolicy } = useCipherHelpersMixins()
   const { changeMasterPassword } = useCipherAuthenticationMixins()
+  const { user } = useStores()
 
   // -------------- PARAMS --------------
 
@@ -22,13 +32,30 @@ export const ChangeMasterPasswordScreen = () => {
   const [newPass, setNewPass] = useState('')
   const [confirm, setConfirm] = useState('')
 
+  const [showViolationModal, setShowViolationModal] = useState(false)
+  const [violations, setViolations] = useState<string[]>([])
+
   // -------------- COMPUTED --------------
 
-  const isError = !!newPass && !!confirm && (newPass !== confirm)
+  const isError = !!newPass && !!confirm && newPass !== confirm
   const masterPasswordError = validateMasterPassword(newPass).error
   const isReady = !masterPasswordError && !isError && !!current && !!newPass && !!confirm
 
   // -------------- METHODS --------------
+
+  const preparePassword = async () => {
+    setIsLoading(true)
+
+    const violatedItems = await checkPasswordPolicy(newPass, PolicyType.MASTER_PASSWORD_REQ)
+    if (violatedItems.length) {
+      setViolations(violatedItems)
+      setShowViolationModal(true)
+      setIsLoading(false)
+      return
+    }
+
+    handleChangePassword()
+  }
 
   const handleChangePassword = async () => {
     setIsLoading(true)
@@ -43,19 +70,24 @@ export const ChangeMasterPasswordScreen = () => {
 
   return (
     <Layout
-      header={(
+      header={
         <Header
           goBack={() => navigation.goBack()}
           title={translate('change_master_pass.title')}
-          right={(<View style={{ width: 30 }} />)}
+          right={<View style={{ width: 30 }} />}
         />
-      )}
+      }
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
-      <View style={[commonStyles.GRAY_SCREEN_SECTION, { 
-        paddingVertical: 16,
-        backgroundColor: color.background
-      }]}>
+      <View
+        style={[
+          commonStyles.GRAY_SCREEN_SECTION,
+          {
+            paddingVertical: 16,
+            backgroundColor: color.background,
+          },
+        ]}
+      >
         <FloatingInput
           isPassword
           label={translate('change_master_pass.current')}
@@ -77,11 +109,7 @@ export const ChangeMasterPasswordScreen = () => {
           }}
         />
 
-        {
-          !!newPass && (
-            <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />
-          )
-        }
+        {!!newPass && <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />}
 
         <FloatingInput
           isPassword
@@ -96,10 +124,25 @@ export const ChangeMasterPasswordScreen = () => {
         <Button
           isLoading={isLoading}
           isDisabled={isLoading || !isReady}
-          onPress={handleChangePassword}
+          onPress={preparePassword}
           text={translate('common.save')}
         />
       </View>
+
+      {/* Violations modal */}
+      <PasswordPolicyViolationsModal
+        isOpen={showViolationModal}
+        onClose={() => {
+          setShowViolationModal(false)
+        }}
+        violations={violations}
+        teamName={user.teams.length && user.teams[0]?.name}
+        onConfirm={() => {
+          setShowViolationModal(false)
+        }}
+        confirmText="Okay..."
+      />
+      {/* Violations modal end */}
     </Layout>
   )
-}
+})
