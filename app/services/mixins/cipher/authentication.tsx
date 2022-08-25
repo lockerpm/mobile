@@ -37,7 +37,7 @@ const defaultData = {
   changeMasterPassword: async (oldPassword: string, newPassword: string) => {
     return { kind: 'unknown' }
   },
-  updateNewMasterPasswordEA: async (newPassword: string, email: string, eaID: string) => {
+  updateNewMasterPasswordEA: async (newPassword: string, email: string, eaID: string, lockerPassword?: boolean) => {
     return { kind: 'unknown' }
   },
   clearAllData: async (dataOnly?: boolean) => null,
@@ -276,23 +276,33 @@ export const CipherAuthenticationMixinsProvider = observer(
     const updateNewMasterPasswordEA = async (
       newPassword: string,
       email: string,
-      eaID: string
+      eaID: string,
+      lockerPassword?: boolean
     ): Promise<{ kind: string }> => {
       try {
-        const fetchKeyRes = await user.takeoverEA(eaID)
+        let payload = {}
+        if (lockerPassword) {
+          payload = {
+            new_password: newPassword
+          }
+        } else {
+          const fetchKeyRes = await user.takeoverEA(eaID)
+          if (fetchKeyRes.kind !== "ok") return { kind: 'bad-data' }
+          const { key_encrypted, kdf, kdf_iterations } = fetchKeyRes.data
+          const oldKeyBuffer = await cryptoService.rsaDecrypt(key_encrypted)
+          const oldEncKey = new SymmetricCryptoKey(oldKeyBuffer)
 
-        if (fetchKeyRes.kind !== 'ok') return { kind: 'bad-data' }
-        const { key_encrypted, kdf, kdf_iterations } = fetchKeyRes.data
+          const key = await cryptoService.makeKey(newPassword, email, kdf, kdf_iterations)
+          const masterPasswordHash = await cryptoService.hashPassword(newPassword, key)
+          const encKey = await cryptoService.remakeEncKey(key, oldEncKey)
+          payload = {
+            key: encKey[1].encryptedString,
+            new_master_password_hash: masterPasswordHash
+          }
+        }
 
-        const oldKeyBuffer = await cryptoService.rsaDecrypt(key_encrypted)
-        const oldEncKey = new SymmetricCryptoKey(oldKeyBuffer)
-
-        const key = await cryptoService.makeKey(newPassword, email, kdf, kdf_iterations)
-        const masterPasswordHash = await cryptoService.hashPassword(newPassword, key)
-
-        const encKey = await cryptoService.remakeEncKey(key, oldEncKey)
         // Send API
-        const res = await user.passwordEA(eaID, encKey[1].encryptedString, masterPasswordHash)
+        const res = await user.passwordEA(eaID, payload)
         if (res.kind !== 'ok') {
           notifyApiError(res)
           return { kind: 'bad-data' }

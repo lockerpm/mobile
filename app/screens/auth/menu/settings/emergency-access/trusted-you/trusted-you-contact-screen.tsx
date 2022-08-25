@@ -51,6 +51,7 @@ export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScre
     >
       <SectionWrapperItem>
         <FlatList
+          showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View
               style={{

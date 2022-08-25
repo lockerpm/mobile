@@ -22,7 +22,7 @@ export const EmergencyAccessScreen = () => {
   })()
 
   const pendingInvite = (() => {
-    return grant.filter((e) => e.status === EmergencyAccessStatus.RECOVERY_INITIATED).length
+    return grant.filter((e) => e.status === EmergencyAccessStatus.INVITED).length
   })()
   // ----------------------- METHODS -----------------------
 

@@ -45,7 +45,7 @@ export const SettingsItem = (props: SettingsItemProps) => {
         />
         <Text
           text={props.status}
-          style={{ color: color.warning, marginLeft: 8 }}
+          style={{ color: color.warning, marginLeft: 8, fontSize: fontSize.small }}
         />
       </View>
 

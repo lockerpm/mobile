@@ -5,9 +5,8 @@ import { Layout, Text, AutoImage as Image, Button } from "../../../../components
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
-import { commonStyles } from "../../../../theme"
 import { PlanType } from "../../../../config/types"
-import { fontSize } from "../../../../theme"
+import { fontSize, commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -344,8 +343,6 @@ export const MenuScreen = observer(() => {
         </View>
 
 
-
-        {/*Refer friend */}
         <ReferFriendMenuItem onPress={isTablet ? (() => onShare()) : (() => navigation.navigate('refer_friend', {
           referLink: referLink
         }))} />
@@ -410,8 +407,7 @@ export const MenuScreen = observer(() => {
             ))
           }
         </View>
-
-        {/*Product of cystack, version */}
+        
         <View style={{
           alignItems: "center"
         }}>

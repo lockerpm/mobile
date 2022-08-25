@@ -64,6 +64,7 @@ export const LanguagePicker = observer(() => {
                             key={index}
                             onPress={() => {
                                 user.setLanguage(item.label)
+                                user.setMobileChangeLanguage(true)
                                 setIsSelecting(!isSelecting)
                             }}
                             style={[commonStyles.CENTER_HORIZONTAL_VIEW, {

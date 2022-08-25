@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { Dimensions, TouchableOpacity, View } from 'react-native'
 import { AutoImage as Image, Button, Modal, Text } from '../../../../../components'
 import { useMixins } from '../../../../../services/mixins'
 import { fontSize } from '../../../../../theme'
@@ -97,7 +97,7 @@ export const Contact = (props: Props) => {
         }}
         trustedContact={trustedContact}
         setOnAction={setOnAction}
-        // showRequestModal={() => setShowRequestModal(true)}
+      // showRequestModal={() => setShowRequestModal(true)}
       />
 
       <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
@@ -107,7 +107,10 @@ export const Contact = (props: Props) => {
         />
         <View style={{ justifyContent: 'space-between', flex: 1 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text preset="black" text={trustedContact.full_name} />
+            <Text
+              style={{ maxWidth: Dimensions.get('screen').width - 200 }}
+              preset="black"
+              text={trustedContact.full_name} />
             <Text
               preset="black"
               text={
@@ -128,26 +131,29 @@ export const Contact = (props: Props) => {
                 position: 'absolute',
                 zIndex: 2,
                 right: 0,
-                paddingLeft: 10,
-                alignSelf: 'center',
-                marginLeft: 10,
-                paddingHorizontal: 5,
-                backgroundColor: isInvited
-                  ? color.warning
-                  : isConfirm || isApproved
-                  ? color.primary
-                  : color.textBlack,
+                backgroundColor: color.background,
+                paddingLeft: 5,
                 borderRadius: 3,
               }}
             >
-              <Text
-                text={status}
-                style={{
-                  fontWeight: 'bold',
-                  color: color.background,
-                  fontSize: fontSize.small,
-                }}
-              />
+              <View style={{
+                backgroundColor: isInvited
+                  ? color.warning
+                  : isConfirm || isApproved
+                    ? color.primary
+                    : color.textBlack,
+                paddingHorizontal: 5,
+              }}>
+                <Text
+                  text={status}
+                  style={{
+                    fontWeight: 'bold',
+                    color: color.background,
+                    fontSize: fontSize.small
+                  }}
+                />
+              </View>
+
             </View>
             {/** Status */}
           </View>

@@ -77,6 +77,9 @@ export const UserModel = types
     defaultTab: types.optional(types.string, 'homeTab'),
     notificationSettings: types.maybeNull(types.frozen<NotificationSettingData[]>()),
     disablePushNotifications: types.maybeNull(types.boolean),
+
+    // cache
+    isMobileLangChange: types.maybeNull(types.boolean)
   })
   .extend(withEnvironment)
   .actions((self) => ({
@@ -162,6 +165,10 @@ export const UserModel = types
     },
     setBiometricIntroShown: (val: boolean) => {
       self.biometricIntroShown = val
+    },
+
+    setMobileChangeLanguage: (val: boolean) => {
+      self.isMobileLangChange = val
     },
 
     // User settings
@@ -263,6 +270,14 @@ export const UserModel = types
           EventBus.emit(AppEventType.CLEAR_ALL_DATA, null)
           self.clearSettings()
         }
+        if (self.language !== res.user.language) {
+          if (self.isMobileLangChange) {
+            await userApi.setUserLanguage(self.apiToken, self.language)
+          } else {
+            self.setLanguage(res.user.language)
+          }
+        }
+
         self.saveUser(res.user)
       }
       return res
@@ -430,6 +445,12 @@ export const UserModel = types
       return res
     },
 
+    changeLanguage: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.setUserLanguage(self.apiToken, self.language)
+      return res
+    },
+
     lock: () => {
       self.setLoggedInPw(false)
     },
@@ -485,16 +506,6 @@ export const UserModel = types
     getBillingDocuments: async (page: number) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getBillingDocuments(self.apiToken, page)
-      return res
-    },
-
-    getOfferDetailsIOS: async (productIdentifier: string, offerIdentifier: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.fetchOfferDetailsIOS(
-        self.apiToken,
-        productIdentifier,
-        offerIdentifier
-      )
       return res
     },
 
@@ -591,9 +602,9 @@ export const UserModel = types
       const res = await userApi.EATakeover(self.apiToken, id)
       return res
     },
-    passwordEA: async (id: string, key: string, newMasterPwHash: string) => {
+    passwordEA: async (id: string, payload: any) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.EAPassword(self.apiToken, id, key, newMasterPwHash)
+      const res = await userApi.EAPassword(self.apiToken, id, payload)
       return res
     },
     viewEA: async (id: string) => {
@@ -611,7 +622,6 @@ export const UserModel = types
     },
   }))
   .actions((self) => ({
-    // receipt: 'receipt_data' for ios, 'purchase_token' for android
     purchaseValidation: async (
       receipt?: string,
       subscriptionId?: string,
@@ -627,7 +637,11 @@ export const UserModel = types
       return res
     },
   }))
-  .postProcessSnapshot(omit(['isLoggedInPw']))
+  .postProcessSnapshot(omit([
+    'isLoggedInPw',
+    'isMobileLangChange'
+  ]))
+
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -638,7 +652,7 @@ export const UserModel = types
  */
 
 type UserType = Instance<typeof UserModel>
-export interface User extends UserType {}
+export interface User extends UserType { }
 type UserSnapshotType = SnapshotOut<typeof UserModel>
-export interface UserSnapshot extends UserSnapshotType {}
+export interface UserSnapshot extends UserSnapshotType { }
 export const createUserDefaultModel = () => types.optional(UserModel, {})
