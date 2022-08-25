@@ -157,6 +157,7 @@ export const UserModel = types
     }) => {
       self.plan = cast(plan)
     },
+    // eslint-disable-next-line @typescript-eslint/ban-types
     setInvitations: (invitations: object[]) => {
       self.invitations = cast(invitations)
     },
