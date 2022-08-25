@@ -155,7 +155,7 @@ export const PrivateRelay = observer(() => {
         text={translate('private_relay.label') + ` (${alias.length}/5)`}
         style={{
           marginLeft: 20,
-          marginVertical: 4,
+          marginVertical: 12,
         }}
       />
       {/* emails */}
@@ -163,7 +163,6 @@ export const PrivateRelay = observer(() => {
         style={[
           commonStyles.SECTION_PADDING,
           {
-            marginTop: 10,
             backgroundColor: color.background,
           },
         ]}

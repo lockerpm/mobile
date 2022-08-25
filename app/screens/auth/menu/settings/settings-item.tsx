@@ -13,7 +13,7 @@ type SettingsItemProps = {
   right?: JSX.Element
   noCaret?: boolean
   color?: string
-  action?: Function
+  action?: () => void
   noBorder?: boolean
   disabled?: boolean
   isLoading?: boolean
@@ -117,8 +117,8 @@ export const SettingSwipeItem = (props: SettingSwipeItemProps) => {
       <Switch
         value={value}
         onValueChange={onValueChange}
-        trackColor={trackColor ? trackColor : { false: color.disabled, true: color.primary }}
-        thumbColor={thumbColor ? thumbColor : color.white}
+        trackColor={{ false: color.disabled, true: color.primary }}
+        thumbColor={color.white}
       />
     )}
   />
