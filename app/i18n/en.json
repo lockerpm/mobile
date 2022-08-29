@@ -16,6 +16,7 @@
     "change_ownership": "Change Ownership",
     "clone": "Clone",
     "confirm": "Confirm",
+    "confirmation": "Confirmation",
     "continue": "Continue",
     "copied_to_clipboard": "Copied to clipboard",
     "country": "Country",
@@ -224,7 +225,7 @@
       "minimum": "Ensure this field has at least 6 characters",
       "not_valid": "This address is not valid"
     },
-    "edit_warning": "Once you delete this alias, it cannot be recovered. Locker Relay will no longer forward messages sent to {{alias}}, including messages that allow you to reset lost passwords. If you use this email alias to log in to sites, you should update your login with a different email address beore you delete this one."
+    "edit_warning": "Once you delete this alias, it cannot be recovered. Locker Relay will no longer forward messages sent to {{alias}}, including messages that allow you to reset lost passwords. If you use this email alias to log in to sites, you should update your login with a different email address before you delete this one."
   },
   "emergency_access": {
     "title": "Emergency Access",
@@ -245,6 +246,7 @@
     "add_trust": "Add Trusted Contact",
     "add": {
       "email": "Email address",
+      "exist_error": "The emergency email already exists",
       "view": "View: They can view all your vault items",
       "takeover": "Takeover: They can reset your Master Password",
       "wait_time": "Wait time",
@@ -751,6 +753,12 @@
       },
       "month": "$9.99 / Month",
       "year": "$71.99 / Year"
+    },
+    "premium": {
+      "header": "Upgrade to Premium",
+      "ads": "Enjoy Locker Premium with advanced features",
+      "month": "$4.99 / Month",
+      "year": "$15.49 / Year"
     },
     "price": {
       "per": {

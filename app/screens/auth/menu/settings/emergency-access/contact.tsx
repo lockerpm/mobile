@@ -55,7 +55,7 @@ export const Contact = (props: Props) => {
     <Modal
       isOpen={isShowRequestModal}
       onClose={() => setShowRequestModal(false)}
-      title={trustedContact.full_name}
+      title={translate('common.confirmation')}
     >
       <Text
         preset="black"
@@ -97,7 +97,6 @@ export const Contact = (props: Props) => {
         }}
         trustedContact={trustedContact}
         setOnAction={setOnAction}
-      // showRequestModal={() => setShowRequestModal(true)}
       />
 
       <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>

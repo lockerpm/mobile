@@ -1429,9 +1429,20 @@ export const CipherDataMixinsProvider = observer(
 
         const encKey = await cryptoService.getEncKey()
         const key = await _generateMemberKey(publicKeyRes.data.public_key, encKey)
-        console.log(key)
         const res = await user.inviteEA(email, key, type, waitTime)
-        if (res.kind !== 'ok') return { kind: 'bad-data' }
+        if (res.kind !== 'ok') {
+          if (res.kind === 'bad-data') {
+            const errorData: {
+              email?: string[]
+              code: string
+              message?: string
+            } = res.data
+            if (errorData.code === '0004') {
+              return { kind: 'exist-data' }
+            }
+          }
+          return { kind: 'bad-data' }
+        }
         return { kind: 'ok' }
       } catch (e) {
         notify('error', translate('error.something_went_wrong'))

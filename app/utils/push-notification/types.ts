@@ -36,6 +36,10 @@ export type ConfirmShareData = {
 }
 
 export type EmergencyAccessData = {
+  id?: string
+  type?: string
+  grantee_name?: string
+  grantor_name?: string
   is_grantor?: boolean
   is_grantee?: boolean
 }

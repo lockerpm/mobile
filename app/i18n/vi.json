@@ -16,6 +16,7 @@
     "change_ownership": "Thay đổi quyền sở hữu",
     "clone": "Tạo bản sao",
     "confirm": "Xác nhận",
+    "confirmation": "Xác nhận",
     "continue": "Tiếp tục",
     "copied_to_clipboard": "Đã sao chép",
     "country": "Quốc gia",
@@ -245,6 +246,7 @@
     "add_trust": "Thêm liên hệ khẩn cấp",
     "add": {
       "email": "Địa chỉ email",
+      "exist_error": "Địa chỉ liên hệ khẩn cấp đã được thêm trước đó",
       "view": "Có thể xem tất cả mục trong kho của bạn",
       "takeover": "Có thể đặt lại Mật khẩu chính của bạn",
       "wait_time": "Thời gian chờ",
