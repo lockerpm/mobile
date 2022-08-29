@@ -23,6 +23,7 @@ import RNIap, {
   presentCodeRedemptionSheetIOS
 } from 'react-native-iap';
 import { PurchaseValidationResult } from "../../../../../services/api"
+import { PremiumPayment } from "./premium-payment/premium-payment"
 
 // control init premium benefit tab
 type ScreenProp = RouteProp<PrimaryParamList, 'payment'>;
@@ -180,7 +181,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
         }]}
       >
         <Button
-        preset="link"
+          preset="link"
           onPress={() => setPayIndividual(true)}
           style={[styles.segmentItem, { backgroundColor: payIndividual ? color.background : color.block, left: 0 }, payIndividual && styles.shadow]}
         >
@@ -199,23 +200,27 @@ export const PaymentScreen = observer(function PaymentScreen() {
   // Render screen
   return (
     <Layout
-      containerStyle={{ backgroundColor: route.params.family ? color.background : color.block, paddingHorizontal: 0 }}
-      header={<View style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-      }}>
-        <Image
-          source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
-          style={{ height: 32, width: 152 }}
-        />
-        <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
+      containerStyle={{
+        backgroundColor: route.params.family || route.params.premium ? color.background : color.block, 
+        paddingHorizontal: 0
+      }}
+      header={
+        <View style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}>
           <Image
-            source={require("./Cross.png")}
-            style={{ height: 24, width: 24 }}
+            source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
+            style={{ height: 32, width: 152 }}
           />
-        </TouchableOpacity>
-      </View>}
-
+          <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
+            <Image
+              source={require("./Cross.png")}
+              style={{ height: 24, width: 24 }}
+            />
+          </TouchableOpacity>
+        </View>
+      }
     >
       {
         route.params.family && (
@@ -229,14 +234,25 @@ export const PaymentScreen = observer(function PaymentScreen() {
         )
       }
       {
-        !route.params.family && (
+        route.params.premium && (
+          <PremiumPayment
+            isTrial={isTrial}
+            subscriptions={subscriptions}
+            onPress={setEnable}
+            isProcessPayment={processPayment}
+            isEnable={isEnable}
+            purchase={purchase} />
+        )
+      }
+      {
+        !route.params.family && !route.params.premium && (
           <View>
             <View style={{ flex: 1, top: 0, minHeight: 310, width: "100%", zIndex: 1 }}>
               <PremiumBenefits benefitTab={route.params.benefitTab} />
             </View>
 
             <View style={[styles.payment, { backgroundColor: color.background }]}>
-              <Segment/>
+              <Segment />
               <PricePlan
                 isTrial={isTrial}
                 subscriptions={subscriptions}

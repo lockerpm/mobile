@@ -19,14 +19,10 @@ interface Props {
     isProcessPayment: boolean
 }
 
-export const FamilyPayment = (props: Props) => {
+export const PremiumPayment = (props: Props) => {
     const { translate, color } = useMixins()
 
     const benefits = [
-        {
-            preset: 'black',
-            text: translate('payment.family.benefits.family')
-        },
         {
             text: translate('payment.family.benefits.storage')
         },
@@ -56,8 +52,8 @@ export const FamilyPayment = (props: Props) => {
                     width: 200,
                     height: 200,
                 }} />
-                <Text preset="header" text={translate('payment.family.header')} />
-                <Text preset="black" text={translate('payment.family.ads')} style={{
+                <Text preset="header" text={translate('payment.premium.header')} />
+                <Text preset="black" text={translate('payment.premium.ads')} style={{
                     textAlign: "center",
                     marginTop: 8,
                     marginHorizontal: 20
@@ -79,7 +75,7 @@ export const FamilyPayment = (props: Props) => {
                                 marginVertical: 6
                             }}>
                             <AntDesign name="check" size={20} />
-                            <Text text={e.text} preset={e.preset ? 'black' : "default"} style={{ marginLeft: 12 }} />
+                            <Text text={e.text} preset={'black'} style={{ marginLeft: 12 }} />
                         </View>
                     ))
                 }
@@ -95,14 +91,14 @@ export const FamilyPayment = (props: Props) => {
                     }}
                     isLoading={props.isProcessPayment}
                     onPress={() => {
-                        props.purchase(SKU.FAM_MON)
+                        props.purchase(SKU.PRE_MON)
                     }}
                 >
                     <Text
                         preset="bold"
                         style={{ color: color.primary }}
                     >
-                        {props.isProcessPayment ? "" : translate('payment.family.month')}
+                        {props.isProcessPayment ? "" : translate('payment.premium.month')}
                     </Text>
                 </Button>
                 <Button
@@ -111,14 +107,14 @@ export const FamilyPayment = (props: Props) => {
                     }}
                     isLoading={props.isProcessPayment}
                     onPress={() => {
-                        props.purchase(SKU.FAM_YEAR)
+                        props.purchase(SKU.PRE_YEAR)
                     }}
                 >
                     <Text
                         preset="bold"
                         style={{ color: color.white }}
                     >
-                        {props.isProcessPayment ? "" : translate('payment.family.year')}
+                        {props.isProcessPayment ? "" : translate('payment.premium.year')}
                     </Text>
                 </Button>
 

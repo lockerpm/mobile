@@ -147,6 +147,7 @@ export type PrimaryParamList = {
   payment: {
     benefitTab?: 0 | 1 | 2 | 3
     family?: boolean
+    premium?: boolean
   }
   refer_friend: {
     referLink: string | null

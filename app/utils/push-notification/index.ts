@@ -4,11 +4,10 @@ import { IS_IOS } from '../../config/constants'
 import { Logger } from '../logger'
 import { NotifeeNotificationData, PushEvent, EmergencyAccessData } from './types';
 import { load, save, StorageKey } from '../storage';
-import { handleNewShare, handleConfirmShare, handleResponseShare } from './handler';
+import { handleNewShare, handleConfirmShare, handleResponseShare, handleInviteEA, handleIviteResponseEA, handleRequestEA, handleRequestEAResponseEA } from './handler';
 
 
 export class PushNotifier {
-  constructor() { }
 
   // Request permission
   static async getPermission() {
@@ -39,7 +38,6 @@ export class PushNotifier {
       Logger.debug('Firebase: FOREGROUND HANDLER')
 
       const { event, data } = message.data
-      console.log(message.data)
       switch (event) {
         case PushEvent.SHARE_NEW: {
           await handleNewShare(data)
@@ -58,21 +56,27 @@ export class PushNotifier {
           break
         }
         case PushEvent.EMERGENCY_INVITE: {
+          await handleInviteEA(data)
           break
         }
         case PushEvent.EMERGENCY_ACCEPT_INVITATION: {
+          await handleIviteResponseEA(data, true)
           break
         }
         case PushEvent.EMERGENCY_REJECT_INVITATION: {
+          await handleIviteResponseEA(data, false)
           break
         }
         case PushEvent.EMERGENCY_INITIATE: {
+          await handleRequestEA(data)
           break
         }
         case PushEvent.EMERGENCY_APPROVE_REQUEST: {
+          await handleRequestEAResponseEA(data, true)
           break
         }
         case PushEvent.EMERGENCY_REJECT_REQUEST: {
+          await handleRequestEAResponseEA(data, false)
           break
         }
         default:
@@ -104,7 +108,6 @@ export class PushNotifier {
       }
 
       const { event, data } = message.data
-      console.log(message.data)
       switch (event) {
         case PushEvent.SHARE_NEW: {
           await handleNewShare(data)
@@ -123,21 +126,27 @@ export class PushNotifier {
           break
         }
         case PushEvent.EMERGENCY_INVITE: {
+          await handleInviteEA(data)
           break
         }
         case PushEvent.EMERGENCY_ACCEPT_INVITATION: {
+          await handleIviteResponseEA(data, true)
           break
         }
         case PushEvent.EMERGENCY_REJECT_INVITATION: {
+          await handleIviteResponseEA(data, false)
           break
         }
         case PushEvent.EMERGENCY_INITIATE: {
+          await handleRequestEA(data)
           break
         }
         case PushEvent.EMERGENCY_APPROVE_REQUEST: {
+          await handleRequestEAResponseEA(data, true)
           break
         }
         case PushEvent.EMERGENCY_REJECT_REQUEST: {
+          await handleRequestEAResponseEA(data, false)
           break
         }
         default:
