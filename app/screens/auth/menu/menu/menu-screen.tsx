@@ -219,13 +219,13 @@ export const MenuScreen = observer(() => {
     "pm_premium": {
       node: <View style={{ flexDirection: "row" }}>
         <Text text="PREMIUM" style={[PLAN_NAME, { color: color.primary }]}></Text>
-        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 10 }]}></Text>
+        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 8 }]}></Text>
       </View>
     },
     "pm_family": {
       node: <View style={{ flexDirection: "row" }}>
         <Text text="FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>
-        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 10 }]}></Text>
+        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 8 }]}></Text>
       </View>,
     }
   }

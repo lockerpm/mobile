@@ -34,7 +34,18 @@ class LoginListViewController: UIViewController {
     self.tableView.delegate = self
     self.tableView.dataSource = self
     
-    filterCredentials = credentials
+    self.searchBar.text = delegate.uri
+    
+    var initCredentials: [AutofillData] = []
+
+    // get matches credentiral username
+    for credential in credentials {
+      if (isMatchCredentials(credential: credential, searchPattern: delegate.uri)) {
+        initCredentials.append(credential)
+      }
+    }
+
+    filterCredentials = initCredentials
   }
   
   @IBAction func cancel(_ sender: AnyObject?) {
@@ -83,16 +94,27 @@ extension LoginListViewController: UISearchBarDelegate {
 }
 
 
+
 extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
-  
   // section 0 contain credentials for the uri, section 1 for all others
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    
     return self.filterCredentials.count
 
   }
 
+  func tableView(_ tableView: UITableView, titleForHeaderInSection
+                              section: Int) -> String? {
+    if (self.credentials?.count == 0){
+      return "No data"
+    } else if (self.filterCredentials.count == 0) {
+      return "No data matches \(self.searchBar.text!)"
+    } else {
+      return nil
+    }
+  }
+
   func numberOfSections(in tableView: UITableView) -> Int {
+
     return 1
   }
   

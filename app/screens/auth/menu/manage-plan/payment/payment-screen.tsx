@@ -96,7 +96,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
               Logger.error({ 'ackErr': ackErr });
             }
 
-            var res: PurchaseValidationResult;
+            let res: PurchaseValidationResult;
             if (IS_IOS) {
               res = await user.purchaseValidation(purchase.transactionReceipt, purchase.productId, purchase.originalTransactionIdentifierIOS)
             } else {
@@ -180,13 +180,13 @@ export const PaymentScreen = observer(function PaymentScreen() {
           alignSelf: "center"
         }]}
       >
-        <Button
-          preset="link"
+        <TouchableOpacity
           onPress={() => setPayIndividual(true)}
           style={[styles.segmentItem, { backgroundColor: payIndividual ? color.background : color.block, left: 0 }, payIndividual && styles.shadow]}
         >
           <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.individual")}</Text>
-        </Button>
+        </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => setPayIndividual(false)}
           style={[styles.segmentItem, { backgroundColor: payIndividual ? color.block : color.background, right: 0 }, !payIndividual && styles.shadow]}
