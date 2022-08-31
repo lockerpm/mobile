@@ -78,7 +78,7 @@ export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
           >
             <View>
               <Text
-                text={translate('common.folder')}
+                text={translate('common.folders')}
                 style={{ fontSize: fontSize.small, marginBottom: 5 }}
               />
               <Text

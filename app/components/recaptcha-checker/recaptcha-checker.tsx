@@ -4,7 +4,6 @@ import { RECAPTCHA_BASE_URL, RECAPTCHA_SITE_KEY } from '../../config/constants'
 import { useMixins } from '../../services/mixins'
 import { Logger } from '../../utils/logger'
 
-
 type Props = {
 }
 

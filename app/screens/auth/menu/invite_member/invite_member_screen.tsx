@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite"
 import { commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { useNavigation } from "@react-navigation/native"
-import {PlanType} from "../../../../config/types"
+import { PlanType } from "../../../../config/types"
 import { FamilyMemberProp, Member } from "./member"
 import { InviteMemberModal } from "./invite-modal"
 import { FAMILY_MEMBER_LIMIT } from "../../../../config/constants"
@@ -14,14 +14,14 @@ import { FAMILY_MEMBER_LIMIT } from "../../../../config/constants"
 export const InviteMemberScreen = observer(function InviteMemberScreen() {
     const navigation = useNavigation()
     const { user } = useStores()
-    const { translate, color, notifyApiError, notify} = useMixins()
+    const { translate, color, notifyApiError, notify } = useMixins()
 
     // ----------------------- PARAMS -----------------------
     const [reload, setRelad] = useState<boolean>(true);
     const [familyMembers, setFamilyMembers] = useState<FamilyMemberProp[]>([]);
     const [showInviteMemberModal, setShowInviteMemberModal] = useState(false)
 
-    const isFamilyAccount =  user.plan?.alias === PlanType.FAMILY
+    const isFamilyAccount = user.plan?.alias === PlanType.FAMILY
 
     // ----------------------- METHODS -----------------------
     const getFamilyMember = async () => {
@@ -86,14 +86,14 @@ export const InviteMemberScreen = observer(function InviteMemberScreen() {
             )}
             containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
         >
-            <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
+            <View style={[commonStyles.SECTION_PADDING, { flex: 1, backgroundColor: color.background }]}>
                 <View>
                     <InviteMemberModal
                         isShow={showInviteMemberModal}
                         onClose={setShowInviteMemberModal}
-                        familyMembers={familyMembers} 
-                        setRelad={setRelad}/>
-                        
+                        familyMembers={familyMembers}
+                        setRelad={setRelad} />
+
                     <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
                         <Text
                             preset="bold"
@@ -101,13 +101,13 @@ export const InviteMemberScreen = observer(function InviteMemberScreen() {
                         >
                             {translate('invite_member.number_member')} ({familyMembers?.length} / 6)
                         </Text>
-                        {isFamilyAccount &&<Button
+                        {isFamilyAccount && <Button
                             preset="link"
                             disabled={familyMembers?.length >= FAMILY_MEMBER_LIMIT}
                             onPress={() => {
                                 setShowInviteMemberModal(true);
                             }}>
-                            <Text style={{ color: familyMembers?.length < FAMILY_MEMBER_LIMIT ?"#007AFF" : color.background }}>
+                            <Text style={{ color: familyMembers?.length < FAMILY_MEMBER_LIMIT ? color.primary : color.background }}>
                                 {translate('invite_member.action')}
                             </Text>
                         </Button>}

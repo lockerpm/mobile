@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { View, TouchableOpacity, TextInput, Image, Modal } from "react-native"
-import { Button, Text } from "../../../../components"
+import { Button, Icon, Text } from "../../../../components"
 import { useStores } from "../../../../models"
 import { observer } from "mobx-react-lite"
 import { commonStyles } from "../../../../theme"
@@ -16,7 +16,7 @@ interface InviteProps {
     isShow: boolean
     onClose: React.Dispatch<React.SetStateAction<boolean>>
     familyMembers?: any
-    setRelad? :any
+    setRelad?: any
 }
 export const InviteMemberModal = observer(function InviteMemberModal(props: InviteProps) {
     const { isShow, onClose, familyMembers, setRelad } = props
@@ -65,12 +65,12 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
 
     // Close on signal
     useEffect(() => {
-    const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
-        onClose(false)
-    })
-    return () => {
-        EventBus.removeListener(listener)
-    }
+        const listener = EventBus.createListener(AppEventType.CLOSE_ALL_MODALS, () => {
+            onClose(false)
+        })
+        return () => {
+            EventBus.removeListener(listener)
+        }
     }, [])
 
     // ----------------------- RENDER -----------------------
@@ -81,7 +81,7 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
             animationType="slide"
             onRequestClose={() => onClose(!isShow)}
         >
-            <View style={[commonStyles.SECTION_PADDING, { flex: 1 }]}>
+            <View style={[commonStyles.SECTION_PADDING, { flex: 1, backgroundColor: color.background }]}>
                 <View style={{
                     height: 40,
                     width: "100%",
@@ -90,9 +90,7 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
                 }} >
                     <TouchableOpacity
                         onPress={() => onClose(!isShow)}>
-                        <Image
-                            source={require("./cross.png")}
-                            style={{ height: 18, width: 18 }} />
+                        <Icon icon={"cross"} size={18} color={color.textBlack} />
                     </TouchableOpacity>
                     <Button
                         preset="link"
@@ -101,15 +99,15 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
                             addFamilyMember(emails);
                         }}>
                         <Text style={{
-                            color: (emails.length > 0) ? "#007AFF" : color.block
+                            color: (emails.length > 0) ? color.primary : color.block
                         }}>{translate('invite_member.action')}</Text>
                     </Button>
                 </View>
-                
-                    <View style={{ marginTop: 12 }}>
-                        <Text preset="header">{translate('invite_member.title')}</Text>
-                    </View>
-                
+
+                <View style={{ marginTop: 12 }}>
+                    <Text preset="header">{translate('invite_member.title')}</Text>
+                </View>
+
                 <View style={{
                     borderBottomColor: '#F2F2F5',
                     borderBottomWidth: 1,
@@ -124,14 +122,13 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
                             }}
                             style={{ marginRight: 16, marginVertical: 16 }}
                         >
-                            <Image
-                                source={require("./userPlus.png")}
-                                style={{ height: 24, width: 24 }} />
+                            <Icon icon={"user-plus"} size={24} color={color.textBlack} />
                         </TouchableOpacity>
                         <TextInput
                             placeholder={translate('invite_member.placeholder')}
                             placeholderTextColor={color.text}
                             selectionColor={color.primary}
+                            style={{color: color.textBlack}}
                             onChangeText={setEmail}
                             value={email}
                             clearButtonMode="unless-editing"

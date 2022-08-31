@@ -113,7 +113,7 @@ export class FolderApi {
 
       return { kind: "ok", data }
     } catch (e) {
-      Logger.error('Share Folder: ' + e.message)
+      Logger.error(e.message)
       return { kind: "bad-data" }
     }
   }

@@ -37,7 +37,7 @@ export const PremiumFeature = () => {
             desc: translate('manage_plan.feature.emergency_contact.header'),
             action: () => {
                 isFreeAccount ? navigation.navigate("payment", { benefitTab: 2 })
-                    : setModalVisible(true)
+                    : navigation.navigate('yourTrustedContact')
             }
         },
         web: {

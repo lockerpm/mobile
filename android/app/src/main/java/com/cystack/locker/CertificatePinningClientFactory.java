@@ -20,6 +20,7 @@ public class CertificatePinningClientFactory implements OkHttpClientFactory {
         String certificatePublicKey2 = "sha256/" + BuildConfig.SSL_PINNING_PUB_KEY_2;
         OkHttpClient.Builder clientBuilder = OkHttpClientProvider.createClientBuilder();
 
+
         CertificatePinner certificatePinner = new CertificatePinner.Builder()
             .add(hostName, certificatePublicKey1)
             .add(hostName, certificatePublicKey2)               

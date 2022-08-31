@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { View, TouchableOpacity, TextInput, Image, Modal } from "react-native"
-import { Button, Text } from "../../../../../components"
+import { Button, Text, Icon } from "../../../../../components"
 import { useStores } from "../../../../../models"
 import { commonStyles } from "../../../../../theme"
 import { useMixins } from "../../../../../services/mixins"
@@ -88,7 +88,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
             animationType="slide"
             onRequestClose={() => onClose()}
         >
-            <View style={[commonStyles.SECTION_PADDING, { flex: 1 }]}>
+            <View style={[commonStyles.SECTION_PADDING, { flex: 1, backgroundColor: color.background }]}>
                 <View style={{
                     marginTop: 10,
                     height: 40,
@@ -98,9 +98,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
                 }} >
                     <TouchableOpacity
                         onPress={() => onClose()}>
-                        <Image
-                            source={require("./cross.png")}
-                            style={{ height: 18, width: 18 }} />
+                        <Icon icon="cross" size={18} color={color.textBlack} />
                     </TouchableOpacity>
                     <Button
                         preset="link"
@@ -134,9 +132,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
                             }}
                             style={{ marginRight: 16, marginVertical: 16 }}
                         >
-                            <Image
-                                source={require("./userPlus.png")}
-                                style={{ height: 24, width: 24 }} />
+                            <Icon icon="user-plus" size={24} color={color.textBlack} />
                         </TouchableOpacity>
                         <TextInput
                             placeholder={translate('shares.share_folder.add_email')}

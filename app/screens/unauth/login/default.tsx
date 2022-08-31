@@ -145,7 +145,7 @@ export const DefaultLogin = observer((props: Props) => {
       />
 
       <Image 
-        source={APP_ICON.iconDark} 
+        source={APP_ICON.icon} 
         style={{ height: 70, width: 70, marginBottom: spacing.small, marginTop: spacing.huge }}
       />
 

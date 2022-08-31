@@ -1,30 +1,38 @@
-import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
-import { setLang } from "../../i18n"
-import { ChangePasswordData, RegisterLockerData, SessionLoginData, LoginData, RegisterData, SocialLoginData, NotificationSettingData } from "../../services/api"
-import { UserApi } from "../../services/api/user-api"
-import { save, StorageKey, remove } from "../../utils/storage"
-import { withEnvironment } from "../extensions/with-environment"
+import { Instance, SnapshotOut, types, cast } from 'mobx-state-tree'
+import { setLang } from '../../i18n'
+import {
+  ChangePasswordData,
+  RegisterLockerData,
+  SessionLoginData,
+  LoginData,
+  RegisterData,
+  SocialLoginData,
+  NotificationSettingData,
+} from '../../services/api'
+import { UserApi } from '../../services/api/user-api'
+import { save, StorageKey, remove } from '../../utils/storage'
+import { withEnvironment } from '../extensions/with-environment'
 import DeviceInfo from 'react-native-device-info'
-import moment from "moment"
-import { omit } from "ramda"
-import { AppEventType, EventBus } from "../../utils/event-bus"
-
+import moment from 'moment'
+import { omit } from 'ramda'
+import { AppEventType, EventBus } from '../../utils/event-bus'
+import { EmergencyAccessType, PolicyType } from '../../config/types'
+import { UserTeam } from '../../config/types/api'
 
 export enum AppTimeoutType {
   SCREEN_OFF = -1,
-  APP_CLOSE = 0
+  APP_CLOSE = 0,
 }
 export enum TimeoutActionType {
   LOCK = 'lock',
-  LOGOUT = 'logout'
+  LOGOUT = 'logout',
 }
-
 
 /**
  * Model description here for TypeScript hints.
  */
 export const UserModel = types
-  .model("User")
+  .model('User')
   .props({
     apiToken: types.maybeNull(types.string),
     fcmToken: types.maybeNull(types.string),
@@ -45,16 +53,18 @@ export const UserModel = types
     fingerprint: types.maybeNull(types.string),
 
     // Others data
-    teams: types.array(types.frozen()),
-    plan: types.maybeNull(types.frozen<{
-      name: string;
-      alias: string;
-      is_family: boolean;
-      cancel_at_period_end: boolean;
-      duration: "monthly" | "yearly";
-      next_billing_time: number
-      payment_method: string
-    }>()),
+    teams: types.array(types.frozen<UserTeam>()),
+    plan: types.maybeNull(
+      types.frozen<{
+        name: string
+        alias: string
+        is_family: boolean
+        cancel_at_period_end: boolean
+        duration: 'monthly' | 'yearly'
+        next_billing_time: number
+        payment_method: string
+      }>()
+    ),
     invitations: types.array(types.frozen()),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
@@ -66,10 +76,12 @@ export const UserModel = types
     appTimeoutAction: types.optional(types.string, TimeoutActionType.LOCK),
     defaultTab: types.optional(types.string, 'homeTab'),
     notificationSettings: types.maybeNull(types.frozen<NotificationSettingData[]>()),
-    disablePushNotifications: types.maybeNull(types.boolean)
+    disablePushNotifications: types.maybeNull(types.boolean),
+
+    // cache
+    isMobileLangChange: types.maybeNull(types.boolean)
   })
   .extend(withEnvironment)
-  .views((self) => ({}))
   .actions((self) => ({
     // Token
     setApiToken: (token: string) => {
@@ -93,7 +105,7 @@ export const UserModel = types
       self.default_team_id = userSnapshot.default_team_id
       save(StorageKey.APP_CURRENT_USER, {
         language: self.language,
-        pwd_user_id: self.pwd_user_id
+        pwd_user_id: self.pwd_user_id,
       })
     },
     clearUser: () => {
@@ -131,20 +143,21 @@ export const UserModel = types
     },
 
     // Others data
-    setTeams: (teams: object[]) => {
+    setTeams: (teams: UserTeam[]) => {
       self.teams = cast(teams)
     },
     setPlan: (plan: {
-      name: string;
-      alias: string;
-      is_family: boolean;
-      cancel_at_period_end: boolean;
-      duration: "monthly" | "yearly";
+      name: string
+      alias: string
+      is_family: boolean
+      cancel_at_period_end: boolean
+      duration: 'monthly' | 'yearly'
       next_billing_time: any
       payment_method: string
     }) => {
       self.plan = cast(plan)
     },
+    // eslint-disable-next-line @typescript-eslint/ban-types
     setInvitations: (invitations: object[]) => {
       self.invitations = cast(invitations)
     },
@@ -153,6 +166,10 @@ export const UserModel = types
     },
     setBiometricIntroShown: (val: boolean) => {
       self.biometricIntroShown = val
+    },
+
+    setMobileChangeLanguage: (val: boolean) => {
+      self.isMobileLangChange = val
     },
 
     // User settings
@@ -165,7 +182,9 @@ export const UserModel = types
       switch (lang) {
         case 'vi':
           moment.locale('vi', {
-            months: 'tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12'.split('_'),
+            months: 'tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12'.split(
+              '_'
+            ),
             monthsShort: 'Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12'.split('_'),
             relativeTime: {
               future: '%s tới',
@@ -180,7 +199,7 @@ export const UserModel = types
               M: '1 tháng',
               MM: '%d tháng',
               y: '1 năm',
-              yy: '%d năm'
+              yy: '%d năm',
             },
             longDateFormat: {
               LT: 'HH:mm',
@@ -192,11 +211,11 @@ export const UserModel = types
               l: 'DD/M/YYYY',
               ll: 'D MMM YYYY',
               lll: 'D MMM YYYY HH:mm',
-              llll: 'ddd, D MMM YYYY HH:mm'
+              llll: 'ddd, D MMM YYYY HH:mm',
             },
             week: {
-              dow: 1 // Monday is the first day of the week.
-            }
+              dow: 1, // Monday is the first day of the week.
+            },
           })
           break
         default:
@@ -204,7 +223,7 @@ export const UserModel = types
       }
       save(StorageKey.APP_CURRENT_USER, {
         language: lang,
-        pwd_user_id: self.pwd_user_id
+        pwd_user_id: self.pwd_user_id,
       })
     },
     setBiometricUnlock: (isActive: boolean) => {
@@ -230,31 +249,36 @@ export const UserModel = types
     setUserFreePlan: () => {
       if (__DEV__) {
         self.plan = {
-          name: "Free",
+          name: 'Free',
           is_family: false,
-          alias: "pm_free",
+          alias: 'pm_free',
           cancel_at_period_end: false,
-          duration: "monthly",
+          duration: 'monthly',
           next_billing_time: 0,
-          payment_method: "mobile"
+          payment_method: 'mobile',
         }
       }
-    }
+    },
   }))
   .actions((self) => ({
     // -------------------- ID ------------------------
 
-    getUser: async (options?: {
-      customToken?: string,
-      dontSetData?: boolean
-    }) => {
+    getUser: async (options?: { customToken?: string; dontSetData?: boolean }) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser(options?.customToken || self.apiToken)
-      if (res.kind === "ok" && !options?.dontSetData) {
+      if (res.kind === 'ok' && !options?.dontSetData) {
         if (self.email && res.user.email !== self.email) {
           EventBus.emit(AppEventType.CLEAR_ALL_DATA, null)
           self.clearSettings()
         }
+        if (self.language !== res.user.language) {
+          if (self.isMobileLangChange) {
+            await userApi.setUserLanguage(self.apiToken, self.language)
+          } else {
+            self.setLanguage(res.user.language)
+          }
+        }
+
         self.saveUser(res.user)
       }
       return res
@@ -296,16 +320,15 @@ export const UserModel = types
       return res
     },
 
-
     login: async (payload: LoginData, isOtp?: boolean) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.login(payload, self.deviceId, isOtp)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         if (res.data.token) {
           const pmRes = await userApi.getPMToken(res.data.token, {
             SERVICE_URL: '/',
             SERVICE_SCOPE: 'pwdmanager',
-            CLIENT: 'mobile'
+            CLIENT: 'mobile',
           })
           if (pmRes.kind === 'ok') {
             self.setApiToken(pmRes.data.access_token)
@@ -328,7 +351,7 @@ export const UserModel = types
       const pmRes = await userApi.getPMToken(token, {
         SERVICE_URL: '/',
         SERVICE_SCOPE: 'pwdmanager',
-        CLIENT: 'mobile'
+        CLIENT: 'mobile',
       })
 
       if (pmRes.kind === 'ok') {
@@ -396,7 +419,7 @@ export const UserModel = types
     getUserPw: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUserPw(self.apiToken)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         self.saveUserPw(res.user)
       }
       return res
@@ -405,7 +428,7 @@ export const UserModel = types
     sessionLogin: async (payload: SessionLoginData) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.sessionLogin(self.apiToken, payload)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         self.setLoggedInPw(true)
       }
       return res
@@ -423,6 +446,12 @@ export const UserModel = types
       return res
     },
 
+    changeLanguage: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.setUserLanguage(self.apiToken, self.language)
+      return res
+    },
+
     lock: () => {
       self.setLoggedInPw(false)
     },
@@ -430,7 +459,7 @@ export const UserModel = types
     loadTeams: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getTeams(self.apiToken)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         self.setTeams(res.teams)
       }
       return res
@@ -439,15 +468,21 @@ export const UserModel = types
     loadPlan: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getPlan(self.apiToken)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         self.setPlan(res.data)
       }
       return res
     },
 
-    getPolicy: async (organizationId: string) => {
+    getTeamPolicies: async (organizationId: string) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.getPolicy(self.apiToken, organizationId)
+      const res = await userApi.getTeamPolicies(self.apiToken, organizationId)
+      return res
+    },
+
+    getTeamPolicy: async (organizationId: string, policyType: PolicyType) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.getTeamPolicy(self.apiToken, organizationId, policyType)
       return res
     },
 
@@ -455,7 +490,7 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.sendFeedback(self.apiToken, {
         type: 'feedback',
-        description
+        description,
       })
       return res
     },
@@ -464,7 +499,7 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.updateFCM(self.apiToken, {
         fcm_id: token,
-        device_identifier: DeviceInfo.getUniqueId()
+        device_identifier: DeviceInfo.getUniqueId(),
       })
       return res
     },
@@ -474,13 +509,6 @@ export const UserModel = types
       const res = await userApi.getBillingDocuments(self.apiToken, page)
       return res
     },
-
-    getOfferDetailsIOS: async (productIdentifier: string, offerIdentifier: string) => {
-      const userApi = new UserApi(self.environment.api)
-      const res = await userApi.fetchOfferDetailsIOS(self.apiToken, productIdentifier, offerIdentifier)
-      return res
-    },
-
 
     getFamilyMember: async () => {
       const userApi = new UserApi(self.environment.api)
@@ -512,10 +540,11 @@ export const UserModel = types
       return res
     },
 
+    // NOTIFICATION SETTING
     getNotificationSettings: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getNotificationSettings(self.apiToken)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         self.setNotificationSettings(res.data)
       }
       return res
@@ -535,18 +564,85 @@ export const UserModel = types
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.markReadInappNoti(self.apiToken, id)
       return res
-    }
+    },
 
+    // EMERGENCY ACCESS
+    inviteEA: async (email: string, key: string, type: EmergencyAccessType, waitTime: number) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EAInvite(self.apiToken, email, key, type, waitTime)
+      return res
+    },
+    trustedEA: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EATrusted(self.apiToken)
+      return res
+    },
+    grantedEA: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EAGranted(self.apiToken)
+      return res
+    },
+    yourTrustedActionEA: async (id: string, action: 'reject' | 'approve' | 'reinvite') => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EAyourTrustedAction(self.apiToken, id, action)
+      if (res.kind === 'ok') {
+        return true
+      }
+      return false
+    },
+    trustedYouActionEA: async (id: string, action: 'accept' | 'initiate') => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EATrustedYouAction(self.apiToken, id, action)
+      if (res.kind === 'ok') {
+        return true
+      }
+      return false
+    },
+    takeoverEA: async (id: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EATakeover(self.apiToken, id)
+      return res
+    },
+    passwordEA: async (id: string, payload: any) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EAPassword(self.apiToken, id, payload)
+      return res
+    },
+    viewEA: async (id: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EAView(self.apiToken, id)
+      return res
+    },
+    removeEA: async (id: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EARemove(self.apiToken, id)
+      if (res.kind === 'ok') {
+        return true
+      }
+      return false
+    },
   }))
   .actions((self) => ({
-    //receipt: 'receipt_data' for ios, 'purchase_token' for android
-    purchaseValidation: async (receipt?: string, subscriptionId?: string, originalTransactionIdentifierIOS?: string) => {
+    purchaseValidation: async (
+      receipt?: string,
+      subscriptionId?: string,
+      originalTransactionIdentifierIOS?: string
+    ) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.purchaseValidation(self.apiToken, receipt, subscriptionId, originalTransactionIdentifierIOS)
+      const res = await userApi.purchaseValidation(
+        self.apiToken,
+        receipt,
+        subscriptionId,
+        originalTransactionIdentifierIOS
+      )
       return res
-    }
+    },
   }))
-  .postProcessSnapshot(omit(['isLoggedInPw']))
+  .postProcessSnapshot(omit([
+    'isLoggedInPw',
+    'isMobileLangChange'
+  ]))
+
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

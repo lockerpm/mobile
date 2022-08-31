@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="IlT-a8-mfU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="IlT-a8-mfU">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -184,16 +184,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F76-pU-sgw">
-                                                    <rect key="frame" x="72" y="7" width="237" height="20.5"/>
+                                                    <rect key="frame" x="72" y="7" width="247" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" name="title"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IPd-gT-lCD">
-                                                    <rect key="frame" x="325" y="0.0" width="50" height="50"/>
+                                                    <rect key="frame" x="335" y="0.0" width="40" height="40"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="50" id="YXk-d4-Ywo"/>
-                                                        <constraint firstAttribute="height" constant="50" id="bjH-H7-pDs"/>
+                                                        <constraint firstAttribute="width" constant="40" id="Wwr-GA-1dM"/>
+                                                        <constraint firstAttribute="height" constant="40" id="Ykb-AY-E3z"/>
                                                     </constraints>
                                                     <color key="tintColor" name="text"/>
                                                     <state key="normal" title="Button"/>
@@ -202,7 +202,7 @@
                                                     </buttonConfiguration>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zdC-rG-Xmh">
-                                                    <rect key="frame" x="72" y="32.5" width="237" height="10.5"/>
+                                                    <rect key="frame" x="72" y="32.5" width="247" height="10.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" red="0.58380502460000006" green="0.58380502460000006" blue="0.58380502460000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="highlightedColor" name="text"/>
@@ -225,7 +225,6 @@
                                                 <constraint firstItem="HIH-M5-VHw" firstAttribute="leading" secondItem="0T2-1h-LTw" secondAttribute="leading" constant="16" id="IzX-oX-evl"/>
                                                 <constraint firstItem="IPd-gT-lCD" firstAttribute="top" secondItem="0T2-1h-LTw" secondAttribute="top" id="Myg-tf-eIh"/>
                                                 <constraint firstItem="IPd-gT-lCD" firstAttribute="leading" secondItem="F76-pU-sgw" secondAttribute="trailing" constant="16" id="RvN-jC-JkC"/>
-                                                <constraint firstAttribute="bottom" secondItem="IPd-gT-lCD" secondAttribute="bottom" id="VE3-dL-PqP"/>
                                                 <constraint firstItem="HIH-M5-VHw" firstAttribute="top" secondItem="0T2-1h-LTw" secondAttribute="top" constant="5" id="Vel-L0-gc9"/>
                                                 <constraint firstItem="F76-pU-sgw" firstAttribute="top" secondItem="0T2-1h-LTw" secondAttribute="top" constant="7" id="bU9-VN-IFQ"/>
                                                 <constraint firstAttribute="bottom" secondItem="HIH-M5-VHw" secondAttribute="bottom" constant="6" id="mLy-se-af9"/>

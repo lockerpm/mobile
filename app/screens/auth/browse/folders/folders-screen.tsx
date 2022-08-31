@@ -26,7 +26,6 @@ export const FoldersScreen = observer(function FoldersScreen() {
   const { getTeam, translate, color } = useMixins()
   const { folderStore, collectionStore, user, uiStore, cipherStore } = useStores()
   const folders: FolderView[] = folderStore.folders
-  const collections: CollectionView[] = collectionStore.collections
 
   type SectionType = {
     id: string
@@ -71,7 +70,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
   }
 
   const loadSections = () => {
-    const filteredCollection = groupBy(collections, 'organizationId')
+    const filteredCollection = groupBy(collectionStore.collections, 'organizationId')
     const sharedFolders = []
     Object.keys(filteredCollection).map((id) => {
       const temp = getFilteredData(
@@ -104,10 +103,6 @@ export const FoldersScreen = observer(function FoldersScreen() {
   }, [folderStore.lastUpdate, collectionStore.lastUpdate, cipherStore.lastSync])
 
 
-  useEffect(() => {
-    // ??
-  }, [folderStore.lastUpdate, collectionStore.lastUpdate,])
-
   // ------------------- RENDER ---------------------
 
   return (
@@ -115,7 +110,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header={translate('common.folder')}
+          header={translate('common.folders')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
           navigation={navigation}

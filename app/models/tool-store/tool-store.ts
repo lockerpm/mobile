@@ -107,7 +107,7 @@ export const ToolStoreModel = types
       self.breachedEmail = null
       self.breaches = cast([])
       self.selectedBreach = null
-      
+
       self.isLoadingHealth = false
       self.lastHealthCheck = null
       self.weakPasswords = cast([])
@@ -137,6 +137,31 @@ export const ToolStoreModel = types
 
     // ----------------- API -------------------
 
+    // PRIVATE RELAY 
+    fetchRelayListAddresses: async () => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.fetchRelayListAddresses(self.apiToken)
+      return res
+    },
+
+    generateRelayNewAddress: async () => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.generateRelayNewAddress(self.apiToken)
+      return res
+    },
+
+    updateRelayAddress: async (addressId: number, address: string) => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.updateRelayAddress(self.apiToken, addressId, address)
+      return res
+    },
+
+    deleteRelayAddress: async (addressId: number) => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.deleteRelayAddress(self.apiToken, addressId)
+      return res
+    },
+
     checkBreaches: async (email: string) => {
       const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.checkBreaches(self.apiToken, email)
@@ -146,9 +171,9 @@ export const ToolStoreModel = types
   .postProcessSnapshot(omit([
     'isLoadingHealth',
     'lastHealthCheck',
-    'weakPasswords', 
-    'reusedPasswords', 
-    'passwordUseMap', 
+    'weakPasswords',
+    'reusedPasswords',
+    'passwordUseMap',
     'exposedPasswordMap'
   ]))
 
@@ -161,7 +186,7 @@ export const ToolStoreModel = types
  */
 
 type ToolStoreType = Instance<typeof ToolStoreModel>
-export interface ToolStore extends ToolStoreType {}
+export interface ToolStore extends ToolStoreType { }
 type ToolStoreSnapshotType = SnapshotOut<typeof ToolStoreModel>
-export interface ToolStoreSnapshot extends ToolStoreSnapshotType {}
+export interface ToolStoreSnapshot extends ToolStoreSnapshotType { }
 export const createToolStoreDefaultModel = () => types.optional(ToolStoreModel, {})

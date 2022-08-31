@@ -139,7 +139,7 @@ export const CipherList = observer((props: CipherListProps) => {
       if (collectionId !== null) {
         res = res.filter(i => i.collectionIds.includes(collectionId))
       }
-    } 
+    }
 
     if (organizationId === undefined && collectionId == undefined && folderId === null) {
       res = res.filter(i => !getTeam(user.teams, i.organizationId).name)

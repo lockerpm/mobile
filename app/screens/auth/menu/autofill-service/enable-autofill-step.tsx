@@ -1,5 +1,7 @@
 import React from "react";
-import { View, Image, Text} from "react-native";
+import { Text } from "../../../../components";
+import { View, Image } from "react-native";
+
 
 
 interface StepProps {
@@ -13,12 +15,12 @@ export const Step = (props: StepProps) => {
             paddingVertical: 8,
             flexDirection: "row"
         }}>
-            <Image source={props.img} style={{width: 24, height: 24}}/>
-            <Text style={{
+            <Image source={props.img} style={{ width: 24, height: 24 }} />
+            <Text text={props.text} preset="black" style={{
                 alignSelf: "center",
                 marginLeft: 16,
                 fontSize: 16
-            }}>{props.text}</Text>
+            }} />
         </View>
     )
 }

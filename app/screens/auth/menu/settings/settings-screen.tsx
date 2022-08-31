@@ -5,7 +5,7 @@ import { Layout, Text, Header, Select } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../theme"
 import { AppTimeoutType, TimeoutActionType, useStores } from "../../../../models"
-import { SettingsItem } from "./settings-item"
+import { SectionWrapperItem, SettingsItem } from "./settings-item"
 import { useMixins } from "../../../../services/mixins"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { AutofillDataType, loadShared, saveShared } from "../../../../utils/keychain"
@@ -114,6 +114,7 @@ export const SettingsScreen = observer(() => {
       value: user.language || 'en',
       onChange: (lang: string) => {
         user.setLanguage(lang)
+        user.changeLanguage()
       },
       options: [
         {
@@ -278,7 +279,7 @@ export const SettingsScreen = observer(() => {
         {/* Language end */}
 
         {/* Theme */}
-        {/* <Select
+        <Select
           value={settings.theme.value}
           onChange={settings.theme.onChange}
           options={settings.theme.options}
@@ -292,7 +293,7 @@ export const SettingsScreen = observer(() => {
               )}
             />
           )}
-        /> */}
+        />
         {/* Theme end */}
 
 
@@ -315,17 +316,7 @@ export const SettingsScreen = observer(() => {
         />
         {/* Default tab end */}
 
-        {/* Delete tab */}
-        <SettingsItem
-          noBorder
-          style={{ width: '100%' }}
-          name={translate('common.delete')}
-          action={() => {
-            Linking.openURL("https://locker.io/settings/account")
-            // navigation.navigate("deleteAccount")
-          }}
-        />
-        {/* Delete end */}
+
 
       </View>
       {/* Account end */}
@@ -340,6 +331,13 @@ export const SettingsScreen = observer(() => {
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background
       }]}>
+        {/* Emergency Access */}
+        <SettingsItem
+          name={translate('emergency_access.title')}
+          action={() => navigation.navigate('emergencyAccess')}
+        />
+
+
         {/* Autofill */}
         <SettingsItem
           name={translate('settings.autofill_service')}
@@ -355,23 +353,6 @@ export const SettingsScreen = observer(() => {
             <Switch
               value={settings.biometric.value}
               onValueChange={settings.biometric.onChage}
-              trackColor={{ false: color.disabled, true: color.primary }}
-              thumbColor={color.white}
-            />
-          )}
-        />
-        {/* Biometric end */}
-
-
-
-        {/* Biometric */}
-        <SettingsItem
-          name={translate('common.customer_service')}
-          noCaret
-          right={(
-            <Switch
-              value={uiStore.isShowIntercomMsgBox}
-              onValueChange={uiStore.setShowIntercomMsgBox}
               trackColor={{ false: color.disabled, true: color.primary }}
               thumbColor={color.white}
             />
@@ -456,6 +437,29 @@ export const SettingsScreen = observer(() => {
         {/* Export end */}
       </View>
       {/* Import/Export end */}
+
+
+
+      <Text
+        text={translate('settings.danger_zone').toUpperCase()}
+        style={[SECTION_TITLE, {
+          marginTop: 15,
+        }]}
+      />
+      <SectionWrapperItem >
+        {/* Delete tab */}
+        <SettingsItem
+          noBorder
+          color={color.error}
+          style={{ width: '100%' }}
+          name={translate('settings.delete_account')}
+          action={() => {
+            Linking.openURL("https://locker.io/settings/account")
+            // navigation.navigate("deleteAccount")
+          }}
+        />
+        {/* Delete end */}
+      </SectionWrapperItem>
     </Layout>
   )
 })

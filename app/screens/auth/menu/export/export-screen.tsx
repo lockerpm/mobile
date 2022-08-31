@@ -7,9 +7,10 @@ import { useMixins } from "../../../../services/mixins"
 import { SettingsItem } from "../settings/settings-item"
 import { ConfirmPassModal } from "./confirm-pass-modal"
 import { useCoreService } from "../../../../services/core-service"
+import { observer } from "mobx-react-lite"
 
 
-export const ExportScreen = () => {
+export const ExportScreen = observer(() => {
   const navigation = useNavigation()
   const { translate, notify, color } = useMixins()
   const { platformUtilsService, exportService } = useCoreService()
@@ -126,4 +127,4 @@ export const ExportScreen = () => {
       </View> 
     </Layout>
   )
-}
+})

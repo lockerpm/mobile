@@ -90,14 +90,14 @@ export const ReferFriendScreen = observer(function ReferFriendScreen() {
                 <TouchableOpacity
                     onPress={() => copyToClipboard(translate("refer_friend.refer_header") + route.params.referLink)}
                     style={{
-                        borderColor: "black",
+                        borderColor: color.textBlack,
                         borderRadius: 4,
                         borderWidth: 0.2,
                         padding: 10,
                         flexDirection: "row"
                     }}>
-                    <Feather name="link" size={18} />
-                    <Text text={route.params.referLink ? route.params.referLink : "Plack Holder"} style={{ marginLeft: 8 }} />
+                    <Feather name="link" size={18} color={color.textBlack}/>
+                    <Text preset="black" text={route.params.referLink ? route.params.referLink : "Plack Holder"} style={{ marginLeft: 8 }} />
                 </TouchableOpacity>
             </View>
 

@@ -30,23 +30,23 @@ const defaultData = {
   isDark: false,
 
   // Methods
-  setApiTokens: (token: string) => {},
+  setApiTokens: (token: string) => { },
   getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getAllOrganizations: async () => [],
   getTeam: (teams: object[], orgId: string) => ({ name: '', role: '', type: 0 }),
-  copyToClipboard: (text: string) => {},
+  copyToClipboard: (text: string) => { },
   getRouteName: async () => { return '' },
   isBiometricAvailable: async () => { return false },
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => { return '' },
-  notifyApiError: (problem: GeneralApiProblem) => {},
-  notify: (type : 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => {},
+  notifyApiError: (problem: GeneralApiProblem) => { },
+  notify: (type: 'error' | 'success' | 'warning' | 'info', text: string, duration?: undefined | number) => { },
   randomString: () => '',
   boostrapPushNotifier: async () => true,
-  goPremium: () => {},
+  goPremium: () => { },
   parsePushNotiData: async (params?: {
     notifeeData?: NotifeeNotificationData
   }) => ({ path: '', params: {}, tempParams: {} }),
-  validateMasterPassword: (password: string) => ({ isValid: true, error: '' })
+  validateMasterPassword: (password: string) => ({ isValid: true, error: '' }),
 }
 
 
@@ -88,7 +88,7 @@ export const MixinsProvider = observer((props: {
 
   // Alert message
   const notify = (
-    type : 'error' | 'success' | 'info',
+    type: 'error' | 'success' | 'info',
     text: null | string,
     duration?: undefined | number
   ) => {
@@ -153,6 +153,8 @@ export const MixinsProvider = observer((props: {
     // Dummy to force rerender
     // @ts-ignore
     const abc = user.language
+    // @ts-ignore
+    const abcd = uiStore.tempLanguage
     return tl(tx, options)
   }
 
@@ -209,11 +211,11 @@ export const MixinsProvider = observer((props: {
       case 'unauthorized':
         notify('error', translate('error.token_expired'))
         break
-      
+
       case 'timeout':
         notify('error', translate('error.network_timeout'))
         break
-      
+
       case 'server':
         notify('error', translate('error.server_error'))
         break
@@ -266,7 +268,7 @@ export const MixinsProvider = observer((props: {
     }
     let data: PushNotiData | NotifeeNotificationData = notifeeData
     if (!data) {
-      data = await load(StorageKey.PUSH_NOTI_DATA) 
+      data = await load(StorageKey.PUSH_NOTI_DATA)
     }
 
     if (data) {
@@ -296,6 +298,17 @@ export const MixinsProvider = observer((props: {
           res.tempParams = {
             screen: 'browseTab',
           }
+          break
+
+        case PushEvent.EMERGENCY_INVITE:
+        case PushEvent.EMERGENCY_REJECT_REQUEST:
+        case PushEvent.EMERGENCY_APPROVE_REQUEST:
+          res.path = 'contactsTrustedYou' 
+          break
+        case PushEvent.EMERGENCY_INITIATE:
+        case PushEvent.EMERGENCY_ACCEPT_INVITATION:
+        case PushEvent.EMERGENCY_REJECT_INVITATION:
+          res.path = 'yourTrustedContact'
           break
       }
     }
