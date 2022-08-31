@@ -5,14 +5,15 @@ import { SettingsItem, SectionWrapperItem } from '../settings-item'
 import { useMixins } from '../../../../../services/mixins'
 import { useNavigation } from '@react-navigation/native'
 import { useStores } from '../../../../../models'
-import { EmergencyAccessStatus } from '../../../../../config/types'
+import { EmergencyAccessStatus, PlanType } from '../../../../../config/types'
 import { TrustedContact } from '../../../../../config/types/api'
 
 export const EmergencyAccessScreen = () => {
   const navigation = useNavigation()
   const { translate, color, notifyApiError } = useMixins()
   const { user } = useStores()
-
+  const isFree = user.plan.alias === PlanType.FREE
+  
   // ----------------------- PARAMS -----------------------
   const [grant, setGrant] = useState<TrustedContact[]>([])
   const [trusted, setTrusted] = useState<TrustedContact[]>([])
@@ -64,7 +65,9 @@ export const EmergencyAccessScreen = () => {
         {/* Push notifications */}
         <SettingsItem
           name={translate('emergency_access.your_trust')}
-          action={() => navigation.navigate('yourTrustedContact')}
+          action={() => {
+            isFree ? navigation.navigate('payment', { premium: true }) : navigation.navigate('yourTrustedContact')
+          }}
           status={
             pendingRequest > 0
               ? translate('emergency_access.pending_trusted', {

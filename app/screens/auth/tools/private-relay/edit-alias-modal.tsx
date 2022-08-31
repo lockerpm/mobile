@@ -56,6 +56,7 @@ export const EditAliasModal = observer((props: Props) => {
           }
         }
         setUpdateError(errorMessage)
+        setIsConfirm(false)
       }
     }
 
@@ -67,6 +68,7 @@ export const EditAliasModal = observer((props: Props) => {
   useEffect(() => {
     setUpdateError('')
     setNewAddress('')
+    setIsConfirm(false)
   }, [isOpen])
 
   // --------------- RENDER ----------------
@@ -130,17 +132,15 @@ export const EditAliasModal = observer((props: Props) => {
         </View>
       </View>
 
-      <View style={{ height: 40 }}>
-        <Text
-          numberOfLines={2}
-          text={updateError}
-          style={{ color: color.error, fontSize: fontSize.small }}
-        />
-      </View>
+      <Text
+        numberOfLines={2}
+        text={updateError}
+        style={{ color: color.error, fontSize: fontSize.small, marginVertical: 8 }}
+      />
 
       <Button
         text={translate('common.save')}
-        isDisabled={isLoading || !newAddress}
+        isDisabled={isLoading || !newAddress || updateError !== ""}
         isLoading={isLoading}
         onPress={() => setIsConfirm(true)}
         style={{

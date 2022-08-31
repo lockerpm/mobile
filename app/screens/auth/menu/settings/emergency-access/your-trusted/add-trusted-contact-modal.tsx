@@ -25,7 +25,7 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
   const [email, setEmail] = useState<string>("");
   const [accessRight, setAccessRight] = useState(false) // false for view, true for takeover
   const [waitTime, setWaitTime] = useState(1)
-
+  const [emailError, setEmailError] = useState("")
   const role = [
     {
       value: !accessRight,
@@ -67,6 +67,12 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
     if (res.kind === "ok") {
       onClose()
     }
+    if (res.kind === 'exist-data') {
+      setEmailError(translate('emergency_access.add.exist_error'))
+    }
+    if (res.kind === 'bad-data') {
+      setEmailError(translate('error.invalid_data'))
+    }
   }
 
   // ----------------------- EFFECTS -----------------------
@@ -80,7 +86,7 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
       EventBus.removeListener(listener)
     }
   }, [])
-  
+
   useEffect(() => {
     if (!isShow) {
       setEmail("")
@@ -89,10 +95,14 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
     }
   }, [isShow])
 
+  useEffect(() => {
+    setEmailError("")
+  }, [email])
+
   // ----------------------- RENDER -----------------------
   return (
     <Modal
-      presentationStyle="fullScreen"
+      presentationStyle="pageSheet"
       visible={isShow}
       animationType="slide"
       onRequestClose={() => onClose()}
@@ -119,29 +129,33 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
         )}
       >
         <Text preset="semibold" text={translate("emergency_access.add.email")} />
-        <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-          borderColor: color.line,
-          backgroundColor: color.background,
-          borderWidth: 1,
-          borderRadius: 8,
-          paddingLeft: 16,
-          marginBottom: 10,
-          marginTop: 12
-        }]}>
-          <TextInput
-            value={email}
-            onChangeText={setEmail}
-            placeholder={"email@gmail.com"}
-            placeholderTextColor={color.text}
-            selectionColor={color.primary}
-            style={{
-              height: 44,
-              color: color.textBlack,
-              fontSize: fontSize.p,
-              flex: 1
-            }}
-          />
+        <View>
+          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+            borderColor: emailError !== "" ? color.error : color.line,
+            backgroundColor: color.background,
+            borderWidth: 1,
+            borderRadius: 8,
+            paddingLeft: 16,
+            marginBottom: 10,
+            marginTop: 12
+          }]}>
+            <TextInput
+              value={email}
+              onChangeText={setEmail}
+              placeholder={"email@gmail.com"}
+              placeholderTextColor={color.text}
+              selectionColor={color.primary}
+              style={{
+                height: 44,
+                color: color.textBlack,
+                fontSize: fontSize.p,
+                flex: 1
+              }}
+            />
+          </View>
+          <Text text={emailError} style={{ color: color.error, fontSize: fontSize.small }} />
         </View>
+
 
         {
           role.map((item, index) => (

@@ -47,8 +47,15 @@ export const YourTrustedContactScreen = () => {
             alignItems: 'center',
           }}
         >
-          <Text text={translate('emergency_access.free_guild')} style={{ textAlign: 'center' }} />
-          {/* <Button text={translate('common.upgrade')} style={{ maxWidth: 150, marginTop: 20 }} /> */}
+          <Text
+            text={translate('emergency_access.free_guild')}
+            style={{ textAlign: 'center' }}
+          />
+          {/* <Button
+            onPress={() => navigation.navigate('payment', { premium: true })}
+            text={translate('common.upgrade')}
+            style={{ maxWidth: 150, marginTop: 20 }}
+          /> */}
         </View>
       )}
       {!isFree && (

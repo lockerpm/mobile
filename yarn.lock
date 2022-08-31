@@ -15030,7 +15030,7 @@ react-native-html-parser@^0.1.0:
   resolved "https://registry.yarnpkg.com/react-native-html-parser/-/react-native-html-parser-0.1.0.tgz#c35de1dc325562da26e68befa423bac34505ba48"
   integrity sha512-G5d0pk7TA9YgjVJhLRf2zMOOf1HXd8ItM9JYsTS2pXoEfSRfMfRU5iTj03LGwvHU2NT9kc18NDJeLgZY6+Bbvg==
 
-react-native-iap@^8.0.10:
+react-native-iap@8.0.10:
   version "8.0.10"
   resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-8.0.10.tgz#4157f90712ccb69a0b1c376f424318280574638a"
   integrity sha512-2UqQe7bCzEAoM+U6Ouo8X6bM6aNAjNDFdVCv2vMvbo4WKuIN00DPumrjDVqP6015OC/qtjWvi/SvFuxZim2jSQ==
