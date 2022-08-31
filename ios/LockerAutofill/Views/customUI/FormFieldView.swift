@@ -135,7 +135,8 @@ extension FormFieldView: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         unSelect()
-        return true
+        self.textField.resignFirstResponder()
+        return false
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {

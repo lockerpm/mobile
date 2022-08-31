@@ -1,7 +1,7 @@
 import { PushNotifier } from "."
 import { CipherType } from "../../../core/enums"
 import { load, StorageKey } from "../storage"
-import { ConfirmShareData, NewShareData, PushEvent, ResponseShareData } from "./types"
+import { ConfirmShareData, NewShareData, PushEvent, ResponseShareData, EmergencyAccessData } from "./types"
 
 
 // New share
@@ -123,22 +123,85 @@ export const handleResponseShare = async (data: string, accepted: boolean) => {
   }
 }
 
-const handleInviteEA = async () => {
+export const handleInviteEA = async (data: string) => {
+  const eaData: EmergencyAccessData = JSON.parse(data)
+  const { language } = await _getCurrentUser()
+  const isVn = language === 'vi'
 
+  const user = eaData.grantee_name || eaData.grantor_name
+
+  PushNotifier._notify({
+    id: `ea_invite`,
+    title: 'Locker',
+    body: isVn ? `${user} đã thêm bạn làm Liên hệ khẩn cấp` : `${user} has invited you to be emergency access contact`,
+    data: {
+      type: PushEvent.EMERGENCY_INVITE
+    }
+  })
 }
 
-const handleIviteresponseEA = async () => {
+export const handleIviteResponseEA = async (data: string, response: boolean) => {
+  const eaData: EmergencyAccessData = JSON.parse(data)
+  const { language } = await _getCurrentUser()
+  const isVn = language === 'vi'
 
+  const user = eaData.grantee_name
+
+  const acceptText = isVn ? `${user} đã chấp nhận trở thành Liên hệ khẩn cấp của bạn` : `${user} has been accepted your emergency access invitation`
+  const rejectText = isVn ? `${user} đã từ chối trở thành Liên hệ khẩn cấp của bạn` : `${user} has been rejected your emergency access invitation`
+
+  PushNotifier._notify({
+    id: `ea_invite_response`,
+    title: 'Locker',
+    body: response ? acceptText : rejectText,
+    data: {
+      type: PushEvent.EMERGENCY_ACCEPT_INVITATION
+    }
+  })
 }
 
-const handleRequestEA = async () => {
+export const handleRequestEA = async (data: string) => {
+  const eaData: EmergencyAccessData = JSON.parse(data)
+  const { language } = await _getCurrentUser()
+  const isVn = language === 'vi'
 
+  const view = isVn ? "Xem" : "View"
+  const takeOver = isVn ? "Chiếm quyền" : "Takeover"
+  const user = eaData.grantee_name
+  const type = eaData.type.toLowerCase() === "view" ? view : takeOver
+
+  PushNotifier._notify({
+    id: `ea_request`,
+    title: 'Locker',
+    body: isVn ? `${user} đã yêu cầu ${type} tài khoản Locker của bạn ${type}` : `${user} has requested to ${type} your Locker account`,
+    data: {
+      type: PushEvent.EMERGENCY_INITIATE
+    }
+  })
 }
 
-const handleRequestEAResponse = async () => {
-  
-}
+export const handleRequestEAResponseEA = async (data: string, response: boolean) => {
+  const eaData: EmergencyAccessData = JSON.parse(data)
+  const { language } = await _getCurrentUser()
+  const isVn = language === 'vi'
 
+  const view = isVn ? "Xem" : "View"
+  const takeOver = isVn ? "Chiếm quyền" : "Takeover"
+  const type = eaData.type.toLowerCase() === "view" ? view : takeOver
+  const user = eaData.grantor_name
+
+  const acceptText = isVn ? `${user} đã chấp nhận yêu cầu ${type} tài khoản Locker của bạn` : `${user} approved your request to ${type} their Locker account`
+  const rejectText = isVn ? `${user} đã từ chối yêu cầu ${type} tài khoản Locker của bạn` : `${user} has rejected your request to ${type} their Locker account`
+
+  PushNotifier._notify({
+    id: `ea_rq_response`,
+    title: 'Locker',
+    body: response ? acceptText : rejectText,
+    data: {
+      type: PushEvent.EMERGENCY_APPROVE_REQUEST
+    }
+  })
+}
 
 // ------------------ PRIVATE --------------------
 
@@ -147,7 +210,7 @@ const _getCurrentUser = async () => {
   if (!currentUser) {
     return {}
   }
-  
+
   const { language, pwd_user_id } = currentUser
   return { language, pwd_user_id }
 }

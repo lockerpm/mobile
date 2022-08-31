@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { View, TouchableOpacity, ViewStyle } from "react-native"
 import CheckBox from "@react-native-community/checkbox"
 import { Button, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import { SKU } from "./price-plan.sku"
 import { Subscription } from "react-native-iap"
-import { IS_IOS } from "../../../../../config/constants"
 
 interface PricePlanItemProps {
   onPress: () => void
@@ -87,8 +86,6 @@ interface PricePlanProps {
 export const PricePlan = (props: PricePlanProps) => {
   const { translate, color } = useMixins()
 
-  const [discount, setDiscount] = useState(false)
-
   const planText = {
     per: {
       monthly: {
@@ -134,21 +131,6 @@ export const PricePlan = (props: PricePlanProps) => {
   const billingCycle = props.isEnable ? plan.yearly : plan.monthly
   const ads = props.personal ? translate("payment.ads") : translate("payment.ads_family")
   const trial = props.isTrial ? translate("payment.trial") : ""
-
-
-
-  useEffect(() => {
-    const subs = props.subscriptions.find(subs => subs.productId === billingCycle.subId)
-    // if (IS_IOS) {
-    //   if (subs?.discounts) {
-    //     setDiscount(true)
-    //   }
-    // } else {
-    //   if (subs?.introductoryPrice) {
-    //     setDiscount(true)
-    //   }
-    // }
-  }, [props.subscriptions])
 
 
   const CONTAINER: ViewStyle = {

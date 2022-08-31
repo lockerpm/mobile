@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import {
   ActionItem,
@@ -21,7 +21,6 @@ interface Props {
   onClose: (val?: string) => void
   trustedContact: TrustedContact
   setOnAction: () => void
-  showRequestModal?: () => void
 }
 
 export const ContactAction = (props: Props) => {
@@ -29,6 +28,8 @@ export const ContactAction = (props: Props) => {
   const { translate, color } = useMixins()
   const { user } = useStores()
   const navigation = useNavigation()
+
+  const [nextModal, setNextModal] = useState<'rq_modal' | null>(null)
 
   // ----------------------- PARAMS -----------------------
 
@@ -56,6 +57,7 @@ export const ContactAction = (props: Props) => {
     res && setOnAction()
     onClose()
   }
+
 
   // ----------------------- RENDER -----------------------
 
@@ -171,9 +173,9 @@ export const ContactAction = (props: Props) => {
                 : translate('emergency_access.rq_takeover')
             }
             action={() => {
-              // onClose("rq_modal")
-              // showRequestModal()
-              handleTrustedYouAction('initiate')
+              setNextModal("rq_modal")
+              onClose()
+              // handleTrustedYouAction('initiate')
             }}
           />
           <Divider />
@@ -202,7 +204,10 @@ export const ContactAction = (props: Props) => {
   )
 
   return (
-    <ActionSheet isOpen={isShow} onClose={onClose}>
+    <ActionSheet isOpen={isShow} onClose={() => {
+      setNextModal(null)
+      onClose(nextModal)
+    }}>
       <Avatar />
       <Divider />
       {isYourTrusted && <YourTrustedAction />}

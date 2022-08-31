@@ -16,6 +16,7 @@
     "change_ownership": "Thay đổi quyền sở hữu",
     "clone": "Tạo bản sao",
     "confirm": "Xác nhận",
+    "confirmation": "Xác nhận",
     "continue": "Tiếp tục",
     "copied_to_clipboard": "Đã sao chép",
     "country": "Quốc gia",
@@ -154,10 +155,10 @@
     "not_allowed_to_copy_pw": "Không thể thực hiện hành động này! Mật khẩu này chỉ có thể sử dụng cho tính năng Tự động điền!",
     "not_available_for_free": "Tính năng này không khả dụng đối với tài khoản miễn phí!",
     "could_not_complete": "Không thể thực hiện hành động. Vui lòng thử lại",
-    "relay_add": "Thêm bí danh không thành công",
+    "relay_add": "Thêm email không thành công",
     "relay_save": "Lưu không thành công",
-    "relay_email_limit": "Bạn chỉ có thể tạo tối đa 5 email bí danh.",
-    "relay_email_duplicate": "Email này đã tồn tại, vui chọn bí danh khác",
+    "relay_email_limit": "Bạn chỉ có thể tạo tối đa 5 email ẩn danh",
+    "relay_email_duplicate": "Địa chỉ email này đã tồn tại",
     "social_login": {
       "cannot_get_email": "Không thể truy xuất email từ tài khoản này",
       "apple": {
@@ -224,7 +225,7 @@
       "minimum": "Địa chỉ email yêu cầu ít nhất 6 ký tự",
       "not_valid": "Địa chỉ email này không hợp lệ"
     },
-    "edit_warning": "Địa chỉ Email bí danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email bí danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email bí danh này"
+    "edit_warning": "Địa chỉ Email ẩn danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email ẩn danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email ẩn danh này"
   },
   "emergency_access": {
     "title": "Liên hệ khẩn cấp",
@@ -245,6 +246,7 @@
     "add_trust": "Thêm liên hệ khẩn cấp",
     "add": {
       "email": "Địa chỉ email",
+      "exist_error": "Địa chỉ liên hệ khẩn cấp đã được thêm trước đó",
       "view": "Có thể xem tất cả mục trong kho của bạn",
       "takeover": "Có thể đặt lại Mật khẩu chính của bạn",
       "wait_time": "Thời gian chờ",

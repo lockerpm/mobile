@@ -106,7 +106,7 @@ type ToolsItem = {
 type ToolsItemContainer = {
   passwordGenerator: ToolsItem,
   authenticator: ToolsItem,
-  privateRelay: ToolsItem,
+  // privateRelay: ToolsItem,
   passwordHealth: ToolsItem,
   dataBreachScanner: ToolsItem
 }
@@ -119,13 +119,13 @@ export const TOOLS_ITEMS: ToolsItemContainer = {
     routeName: 'passwordGenerator',
     svgIcon: PasswordGeneratorIcon
   },
-  privateRelay: {
-    label: 'private_relay.title',
-    desc: 'private_relay.tool',
-    icon: require('./images/vault/private-relay.png'),
-    routeName: 'privateRelay',
-    svgIcon: PrivateRelay
-  },
+  // privateRelay: {
+  //   label: 'private_relay.title',
+  //   desc: 'private_relay.tool',
+  //   icon: require('./images/vault/private-relay.png'),
+  //   routeName: 'privateRelay',
+  //   svgIcon: PrivateRelay
+  // },
   authenticator: {
     label: 'authenticator.title',
     desc: 'authenticator.desc',
