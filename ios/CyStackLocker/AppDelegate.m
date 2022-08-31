@@ -54,7 +54,7 @@ static void InitializeFlipper(UIApplication *application) {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   if ([[ReactNativeConfig envFor:@"IS_PROD"] isEqualToString: @"1"]) {
-    [self initTrustKit];
+    // [self initTrustKit];
   }
 
   [FIRApp configure];

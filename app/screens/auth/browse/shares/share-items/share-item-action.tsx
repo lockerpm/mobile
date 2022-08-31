@@ -1,17 +1,24 @@
-import React, { useState } from "react"
-import { View } from "react-native"
-import { observer } from "mobx-react-lite"
-import { useMixins } from "../../../../../services/mixins"
-import { useStores } from "../../../../../models"
-import { CipherView } from "../../../../../../core/models/view"
-import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Divider, Text } from "../../../../../components"
-import { commonStyles } from "../../../../../theme"
-import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { SharedMemberType } from "../../../../../services/api/api.types"
-import { EditShareModal } from "./edit-share-modal"
-import { SharingStatus } from "../../../../../config/types"
-import { ConfirmShareModal } from "./confirm-share-modal"
-import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import React, { useState } from 'react'
+import { View } from 'react-native'
+import { observer } from 'mobx-react-lite'
+import { useMixins } from '../../../../../services/mixins'
+import { useStores } from '../../../../../models'
+import { CipherView } from '../../../../../../core/models/view'
+import {
+  ActionItem,
+  ActionSheet,
+  ActionSheetContent,
+  AutoImage as Image,
+  Divider,
+  Text,
+} from '../../../../../components'
+import { commonStyles } from '../../../../../theme'
+import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
+import { EditShareModal } from './edit-share-modal'
+import { SharingStatus } from '../../../../../config/types'
+import { ConfirmShareModal } from './confirm-share-modal'
+import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
+import { SharedMemberType } from '../../../../../config/types/api'
 
 type Props = {
   isOpen: boolean
@@ -90,30 +97,21 @@ export const ShareItemAction = observer((props: Props) => {
       {/* Modals end */}
 
       {/* Actionsheet */}
-      <ActionSheet
-        isOpen={isOpen}
-        onClose={handleActionSheetClose}
-      >
+      <ActionSheet isOpen={isOpen} onClose={handleActionSheetClose}>
         {/* Cipher info */}
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-            {
-              cipherMapper.svg ? (
-                <cipherMapper.svg height={40} width={40} />
-              ) : (
-                <Image
-                  source={cipherMapper.img}
-                  backupSource={cipherMapper.backup}
-                  style={{ height: 40, width: 40, borderRadius: 8 }}
-                />
-              )
-            }
-            <View style={{ marginLeft: 10, flex: 1 }}>
-              <Text
-                preset="semibold"
-                text={selectedCipher.name}
-                numberOfLines={2}
+            {cipherMapper.svg ? (
+              <cipherMapper.svg height={40} width={40} />
+            ) : (
+              <Image
+                source={cipherMapper.img}
+                backupSource={cipherMapper.backup}
+                style={{ height: 40, width: 40, borderRadius: 8 }}
               />
+            )}
+            <View style={{ marginLeft: 10, flex: 1 }}>
+              <Text preset="semibold" text={selectedCipher.name} numberOfLines={2} />
             </View>
           </View>
         </View>
@@ -131,18 +129,16 @@ export const ShareItemAction = observer((props: Props) => {
             }}
           />
 
-          {
-            member?.status === SharingStatus.ACCEPTED && (
-              <ActionItem
-                disabled={uiStore.isOffline}
-                name={translate('common.confirm')}
-                action={() => {
-                  setNextModal('confirm')
-                  onClose()
-                }}
-              />
-            )
-          }
+          {member?.status === SharingStatus.ACCEPTED && (
+            <ActionItem
+              disabled={uiStore.isOffline}
+              name={translate('common.confirm')}
+              action={() => {
+                setNextModal('confirm')
+                onClose()
+              }}
+            />
+          )}
 
           <ActionItem
             disabled={uiStore.isOffline}

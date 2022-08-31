@@ -60,7 +60,6 @@ const apiService = new ApiService(
   tokenService,
   platformUtilsService,
   (expired: boolean) => {
-    console.log('apiService logout callback')
     return new Promise((resolve) => {
       resolve(null)
     })
@@ -110,11 +109,9 @@ const vaultTimeoutService = new VaultTimeoutService(
   userService,
   tokenService,
   () => {
-    console.log('Vault timeout locked callback')
     return Promise.resolve(null)
   },
   () => {
-    console.log('Vault timeout logged out callback')
     return Promise.resolve(null)
   }
 )
@@ -152,7 +149,6 @@ const syncService = new SyncService(
   policyService,
   sendService,
   (expired: boolean) => {
-    console.log('apiService logout callback')
     return new Promise((resolve) => {
       resolve(null)
     })

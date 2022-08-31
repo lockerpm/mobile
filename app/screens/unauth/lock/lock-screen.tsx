@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, BackHandler, View } from "react-native"
-import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
+import { AutoImage as Image, Button, Layout, Text, FloatingInput, LanguagePicker } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { commonStyles, fontSize } from "../../../theme"
@@ -86,7 +86,7 @@ export const LockScreen = observer(() => {
   }
 
   // Detect biometric type
-  const dectectbiometryType = async () => {
+  const detectbiometryType = async () => {
     const { biometryType } = await ReactNativeBiometrics.isSensorAvailable()
     if (biometryType === ReactNativeBiometrics.TouchID) {
       setBiometryType('touchid')
@@ -96,28 +96,7 @@ export const LockScreen = observer(() => {
   }
 
   // ---------------------- COMPONENTS -------------------------
-
-  const header = (
-    <View style={{ alignItems: "flex-end" }}>
-
-      {isAutofillAnroid ?
-        <Button
-          text={translate('common.cancel').toUpperCase()}
-          textStyle={{ fontSize: fontSize.p }}
-          preset="link"
-          onPress={() => BackHandler.exitApp()}
-        />
-        :
-        <Button
-          text={translate('common.logout').toUpperCase()}
-          textStyle={{ fontSize: fontSize.p }}
-          preset="link"
-          onPress={handleLogout}
-        />
-        }
-    </View>
-  )
-
+  
   const footer = (
     <Button
       isLoading={isSendingHint}
@@ -182,7 +161,7 @@ export const LockScreen = observer(() => {
       !__DEV__ && handleUnlockBiometric()
     }
 
-    dectectbiometryType()
+    detectbiometryType()
   }, [])
 
   // ---------------------- RENDER -------------------------
@@ -190,11 +169,28 @@ export const LockScreen = observer(() => {
   return (
     <Layout
       isOverlayLoading={isScreenLoading}
-      header={header}
       footer={footer}
     >
+      <LanguagePicker />
+      <View style={{ alignItems: "flex-end", marginTop: 8 }}>
+        {isAutofillAnroid ?
+          <Button
+            text={translate('common.cancel').toUpperCase()}
+            textStyle={{ fontSize: fontSize.p }}
+            preset="link"
+            onPress={() => BackHandler.exitApp()}
+          />
+          :
+          <Button
+            text={translate('common.logout').toUpperCase()}
+            textStyle={{ fontSize: fontSize.p }}
+            preset="link"
+            onPress={handleLogout}
+          />
+        }
+      </View>
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
-        <Image source={APP_ICON.iconDark} style={{ height: 63, width: 63 }} />
+        <Image source={APP_ICON.icon} style={{ height: 63, width: 63 }} />
 
         <Text
           preset="header"

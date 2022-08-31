@@ -25,13 +25,14 @@ export interface CipherActionProps {
   onClose?: () => void,
   navigation: any,
   onLoadingChange?: Function
+  isEmergencyView?: boolean
 }
 
 /**
  * Describe your component here
  */
 export const CipherAction = observer((props: CipherActionProps) => {
-  const { navigation, isOpen, onClose, children } = props
+  const { navigation, isOpen, onClose, children, isEmergencyView } = props
 
   const [showConfirmTrashModal, setShowConfirmTrashModal] = useState(false)
   const [showConfirmLeaveModal, setShowConfirmLeaveModal] = useState(false)
@@ -46,7 +47,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
   const selectedCipher: CipherView = cipherStore.cipherView
 
   // Computed
-
+  const emergencyView = isEmergencyView === undefined ? false : isEmergencyView
   const organizations = cipherStore.organizations
   const teamRole = getTeam(user.teams, selectedCipher.organizationId).role
   const shareRole = getTeam(organizations, selectedCipher.organizationId).type
@@ -187,7 +188,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
           />
 
           {
-            editable && (
+            editable && !emergencyView && (
               <View>
                 <ActionItem
                   name={translate('common.clone')}

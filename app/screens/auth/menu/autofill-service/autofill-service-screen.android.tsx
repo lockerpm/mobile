@@ -144,7 +144,7 @@ export const AutofillServiceScreen = function AutofillServiceScreen() {
 				style={{
 					padding: 20,
 					marginBottom: 16,
-					backgroundColor: '#fff',
+					backgroundColor: color.background,
 				}}
 				transition="backgroundColor">
 				<AutofillServiceRender content={section} />

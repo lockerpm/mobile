@@ -55,16 +55,6 @@ export async function saveString(key: string, value: string): Promise<boolean> {
  */
 export function load(key: string): Promise<any | null> {
   return new Promise((resolve, reject) => {
-    // AsyncStorage.getItem(key, (err, res) => {
-    //   if (err) {
-    //     if (__DEV__) {
-    //       console.log(err)
-    //     }
-    //     resolve(err)
-    //   } else {
-    //     resolve(JSON.parse(res))
-    //   }
-    // })
     const res = storage.getString(key)
     resolve(res ? JSON.parse(res) : null)
   })
@@ -78,10 +68,6 @@ export function load(key: string): Promise<any | null> {
  */
 export async function save(key: string, value: any): Promise<boolean> {
   try {
-    // if (__DEV__) {
-    //   console.log(`Saving to ASYNC STORAGE key ${key}`)
-    // }
-    // await AsyncStorage.setItem(key, JSON.stringify(value))
     await Promise.resolve(storage.set(key, JSON.stringify(value)))
     return true
   } catch {
@@ -96,10 +82,6 @@ export async function save(key: string, value: any): Promise<boolean> {
  */
 export async function remove(key: string): Promise<void> {
   try {
-    // if (__DEV__) {
-    //   console.log(`Removing from ASYNC STORAGE key ${key}`)
-    // }
-    // await AsyncStorage.removeItem(key)
     await Promise.resolve(storage.delete(key))
   } catch {}
 }

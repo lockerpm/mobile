@@ -5,9 +5,8 @@ import { Layout, Text, AutoImage as Image, Button } from "../../../../components
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
-import { commonStyles } from "../../../../theme"
 import { PlanType } from "../../../../config/types"
-import { fontSize } from "../../../../theme"
+import { fontSize, commonStyles } from "../../../../theme"
 import { useMixins } from "../../../../services/mixins"
 import { MenuItem, MenuItemProps } from "./menu-item"
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -17,7 +16,7 @@ import { Invitation, InvitationData } from "./invitation"
 import { getVersion } from "react-native-device-info"
 import { ReferFriendMenuItem } from "./refer-friend-menu-item"
 import { useAdaptiveLayoutMixins } from "../../../../services/mixins/adaptive-layout"
-import Intercom, { Visibility, IntercomEvents } from "@intercom/intercom-react-native"
+import Intercom, { IntercomEvents } from "@intercom/intercom-react-native"
 import PlanIcon from './star.svg'
 import InviteIcon from './invite.svg'
 import SettingsIcon from './gear.svg'
@@ -31,7 +30,6 @@ import LockIconLight from './lock-light.svg'
 import { PushNotifier } from "../../../../utils/push-notification"
 import { useTestMixins } from "../../../../services/mixins/test"
 import moment from "moment"
-import { Logger } from "../../../../utils/logger"
 
 
 export const MenuScreen = observer(() => {
@@ -49,7 +47,7 @@ export const MenuScreen = observer(() => {
   const [referLink, setReferLink] = useState<string>(null)
 
   // Intercom service 
-  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(1)
+  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(0)
 
   const PLAN_NAME: TextStyle = {
     fontSize: fontSize.small,
@@ -72,29 +70,6 @@ export const MenuScreen = observer(() => {
     }
     getLink()
   }, [])
-
-
-  useEffect(() => {
-    const setUpCustomerService = async () => {
-      await Intercom.hideIntercom()
-      try {
-        if (uiStore.isShowIntercomMsgBox) {
-          await Intercom.setBottomPadding(100)
-          await Intercom.setLauncherVisibility(Visibility.VISIBLE)
-        } else {
-          await Intercom.setLauncherVisibility(Visibility.GONE)
-          const res = await Intercom.getUnreadConversationCount()
-          setUnreadConversationCount(res)
-        }
-      } catch (e) {
-        Logger.error(e)
-      }
-    }
-    user.isLoggedInPw && setUpCustomerService()
-    return () => {
-
-    }
-  }, [uiStore.isShowIntercomMsgBox])
 
   useEffect(() => {
     const countListener = Intercom.addEventListener(
@@ -200,6 +175,14 @@ export const MenuScreen = observer(() => {
     {
       debug: true,
       icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Open welcome premium screen',
+      action: () => {
+        navigation.navigate("welcome_premium")
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: '(DEBUG) Invalidate api token',
       action: () => {
         user.setApiToken('abc')
@@ -236,13 +219,13 @@ export const MenuScreen = observer(() => {
     "pm_premium": {
       node: <View style={{ flexDirection: "row" }}>
         <Text text="PREMIUM" style={[PLAN_NAME, { color: color.primary }]}></Text>
-        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 10 }]}></Text>
+        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 8 }]}></Text>
       </View>
     },
     "pm_family": {
       node: <View style={{ flexDirection: "row" }}>
         <Text text="FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>
-        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 10 }]}></Text>
+        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 8 }]}></Text>
       </View>,
     }
   }
@@ -360,8 +343,6 @@ export const MenuScreen = observer(() => {
         </View>
 
 
-
-        {/*Refer friend */}
         <ReferFriendMenuItem onPress={isTablet ? (() => onShare()) : (() => navigation.navigate('refer_friend', {
           referLink: referLink
         }))} />
@@ -426,8 +407,7 @@ export const MenuScreen = observer(() => {
             ))
           }
         </View>
-
-        {/*Product of cystack, version */}
+        
         <View style={{
           alignItems: "center"
         }}>

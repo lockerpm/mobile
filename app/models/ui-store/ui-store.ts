@@ -8,13 +8,12 @@ export const UiStoreModel = types
   .model("UiStore")
   .props({
     // Data
-    isShowIntercomMsgBox: false,
     isDark: types.maybeNull(types.boolean),
     lockResendOtpResetPasswordTime: types.maybeNull(types.number),
     showWelcomePremium: false,
     isShowedAppReview: false,
     inAppReviewShowDate: types.maybeNull(types.number),
-    inAppNotiUnreadCount:  types.maybeNull(types.number),
+    inAppNotiUnreadCount: types.maybeNull(types.number),
 
     // Cache
     isFromAutoFillItem: types.maybeNull(types.boolean),
@@ -34,10 +33,6 @@ export const UiStoreModel = types
   .actions((self) => ({
     setIsOffline: (isOffline: boolean) => {
       self.isOffline = isOffline
-    },
-
-    setShowIntercomMsgBox: (val: boolean) => {
-      self.isShowIntercomMsgBox = val
     },
 
     setShowWelcomePremium: (val: boolean) => {
@@ -95,7 +90,6 @@ export const UiStoreModel = types
       }
     },
 
-
     clearDeepLink() {
       self.deepLinkAction = null
       self.deepLinkUrl = null
@@ -121,7 +115,7 @@ export const UiStoreModel = types
     'deepLinkAction',
     'deepLinkUrl',
     'saveLogin',
-    'saveLastId'
+    'saveLastId',
   ]))
 
 /**

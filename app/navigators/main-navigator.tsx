@@ -4,41 +4,78 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React, { useEffect, useState } from "react"
-import { AppState } from "react-native"
-import { createStackNavigator } from "@react-navigation/stack"
-import { MainTabNavigator } from "./main-tab-navigator"
+import React, { useEffect, useState } from 'react'
+import { AppState } from 'react-native'
+import { createStackNavigator } from '@react-navigation/stack'
+import { MainTabNavigator } from './main-tab-navigator'
 import {
-  SwitchDeviceScreen, StartScreen, BiometricUnlockIntroScreen, PasswordEditScreen,
-  PasswordInfoScreen, FolderSelectScreen, PasswordGeneratorScreen,
-  DataBreachScannerScreen, NoteEditScreen, CardEditScreen, IdentityEditScreen,
-  CountrySelectorScreen, SettingsScreen, ChangeMasterPasswordScreen, HelpScreen,
-  CardInfoScreen, IdentityInfoScreen, NoteInfoScreen, FolderCiphersScreen, DataBreachDetailScreen,
-  DataBreachListScreen, ImportScreen, ExportScreen, QRScannerScreen, AuthenticatorEditScreen,
-  CryptoWalletEditScreen, CryptoWalletInfoScreen, WelcomePremiumScreen,
-  AutoFillScreen, NotificationSettingsScreen, ShareMultipleScreen,
-  PaymentScreen, ManagePlanScreen, InviteMemberScreen, DataOutdatedScreen,
-  ReferFriendScreen, FolderSharedUsersManagementScreen,
-  PushEmailSettingsScreen, PushNotificationSettingsScreen,
-  InAppListNotification, InAppNotificationScreen, DeleteScreen
-} from "../screens"
-// @ts-ignore
-import { AutofillServiceScreen } from "../screens"
-import UserInactivity from "react-native-user-inactivity"
-import { useMixins } from "../services/mixins"
-import { useNavigation } from "@react-navigation/native"
-import { AppTimeoutType, TimeoutActionType, useStores } from "../models"
-import { observer } from "mobx-react-lite"
-import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
-import { useCipherDataMixins } from "../services/mixins/cipher/data"
-import { IS_IOS, WS_URL } from "../config/constants"
-import { Logger } from "../utils/logger"
-import { SocketEvent, SocketEventType } from "../config/types"
-import { HealthNavigator } from "./tools/health-navigator"
-import { AppEventType, EventBus } from "../utils/event-bus"
-import InAppReview from 'react-native-in-app-review';
-import Intercom from "@intercom/intercom-react-native"
-import { AppNotification } from "../services/api"
+  SwitchDeviceScreen,
+  StartScreen,
+  BiometricUnlockIntroScreen,
+  PasswordEditScreen,
+  PasswordInfoScreen,
+  FolderSelectScreen,
+  PasswordGeneratorScreen,
+  DataBreachScannerScreen,
+  NoteEditScreen,
+  CardEditScreen,
+  IdentityEditScreen,
+  CountrySelectorScreen,
+  SettingsScreen,
+  ChangeMasterPasswordScreen,
+  HelpScreen,
+  CardInfoScreen,
+  IdentityInfoScreen,
+  NoteInfoScreen,
+  FolderCiphersScreen,
+  DataBreachDetailScreen,
+  DataBreachListScreen,
+  ImportScreen,
+  ExportScreen,
+  QRScannerScreen,
+  AuthenticatorEditScreen,
+  CryptoWalletEditScreen,
+  CryptoWalletInfoScreen,
+  WelcomePremiumScreen,
+  AutoFillScreen,
+  NotificationSettingsScreen,
+  ShareMultipleScreen,
+  PaymentScreen,
+  ManagePlanScreen,
+  InviteMemberScreen,
+  DataOutdatedScreen,
+  ReferFriendScreen,
+  FolderSharedUsersManagementScreen,
+  PushEmailSettingsScreen,
+  PushNotificationSettingsScreen,
+  InAppListNotification,
+  InAppNotificationScreen,
+  DeleteScreen,
+  PrivateRelay,
+  EmergencyAccessScreen,
+  YourTrustedContactScreen,
+  ContactsTrustedYouScreen,
+  ViewEAScreen,
+  TakeoverEAScreen,
+  // @ts-ignore
+  AutofillServiceScreen,
+} from '../screens'
+import UserInactivity from 'react-native-user-inactivity'
+import { useMixins } from '../services/mixins'
+import { useNavigation } from '@react-navigation/native'
+import { AppTimeoutType, TimeoutActionType, useStores } from '../models'
+import { observer } from 'mobx-react-lite'
+import { useCipherAuthenticationMixins } from '../services/mixins/cipher/authentication'
+import { useCipherDataMixins } from '../services/mixins/cipher/data'
+import { IS_IOS, WS_URL } from '../config/constants'
+import { Logger } from '../utils/logger'
+import { SocketEvent, SocketEventType } from '../config/types'
+import { HealthNavigator } from './tools/health-navigator'
+import { AppEventType, EventBus } from '../utils/event-bus'
+import InAppReview from 'react-native-in-app-review'
+import Intercom from '@intercom/intercom-react-native'
+import { AppNotification } from '../services/api'
+import { TrustedContact } from '../config/types/api'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -64,6 +101,7 @@ export type PrimaryParamList = {
   start: undefined
   switchDevice: undefined
   biometricUnlockIntro: undefined
+  privateRelay: undefined
   passwordGenerator: {
     fromTools?: boolean
   }
@@ -93,8 +131,8 @@ export type PrimaryParamList = {
     mode: 'add' | 'edit' | 'clone'
   }
   folders__select: {
-    mode: 'add' | 'move',
-    initialId?: string,
+    mode: 'add' | 'move'
+    initialId?: string
     cipherIds?: string[]
   }
   folders__ciphers: {
@@ -107,8 +145,9 @@ export type PrimaryParamList = {
   }
   manage_plan: undefined
   payment: {
-    benefitTab?: 0 | 1 | 2 | 3,
+    benefitTab?: 0 | 1 | 2 | 3
     family?: boolean
+    premium?: boolean
   }
   refer_friend: {
     referLink: string | null
@@ -132,13 +171,24 @@ export type PrimaryParamList = {
   cryptoWallets__info: undefined
   cryptoWallets__edit: {
     mode: 'add' | 'edit' | 'clone'
-  },
+  }
   welcome_premium: undefined
 
   app_list_noti: {
     notifications: AppNotification
   }
   app_noti: undefined
+
+  emergencyAccess: undefined
+  yourTrustedContact: undefined
+  contactsTrustedYou: undefined
+  viewEA: {
+    trusted: TrustedContact
+  }
+  takeoverEA: {
+    trusted: TrustedContact
+    reset_pw: boolean
+  }
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -149,13 +199,18 @@ export const MainNavigator = observer(() => {
   const { notify, translate, parsePushNotiData } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const {
-    getCipherById, syncAutofillData, syncSingleCipher, syncSingleFolder, syncOfflineData, startSyncProcess
+    getCipherById,
+    syncAutofillData,
+    syncSingleCipher,
+    syncSingleFolder,
+    syncOfflineData,
+    startSyncProcess,
   } = useCipherDataMixins()
   const { uiStore, user, cipherStore, toolStore } = useStores()
 
   // ------------------ PARAMS --------------------
 
-  let appIsActive = true      // Cache this to compare to old state
+  let appIsActive = true // Cache this to compare to old state
   let timeout = null
   const [batchDecryptionEnded, setBatchDecryptionEnded] = useState(false)
   const [socket, setSocket] = useState(null)
@@ -174,7 +229,8 @@ export const MainNavigator = observer(() => {
       return
     }
     if (lastUpdateRes.kind === 'ok') {
-      bumpTimestamp = (lastUpdateRes.data.revision_date - new Date().getTimezoneOffset() * 60) * 1000
+      bumpTimestamp =
+        (lastUpdateRes.data.revision_date - new Date().getTimezoneOffset() * 60) * 1000
       if (bumpTimestamp <= cipherStore.lastSync) {
         return
       }
@@ -205,7 +261,7 @@ export const MainNavigator = observer(() => {
     cipherStore.loadMyShares()
   }
 
-  // request in app review 
+  // request in app review
   const requestInAppReview = () => {
     if (!InAppReview.isAvailable()) return
 
@@ -220,24 +276,21 @@ export const MainNavigator = observer(() => {
         InAppReview.RequestInAppReview()
           .then((hasFlowFinishedSuccessfully) => {
             if (hasFlowFinishedSuccessfully) {
-
               // display ui only 1 time
               uiStore.setIsShowedAppReview(true)
             }
           })
           .catch((error) => {
-            Logger.error(error);
-          });
+            Logger.error(error)
+          })
     } else {
       uiStore.setInAppReviewShowDate(currentTime + 6e8)
     }
   }
 
-
   // On app return from background -> lock? + sync autofill data + check push noti navigation
   const _handleAppStateChange = async (nextAppState: string) => {
     Logger.debug(nextAppState)
-
 
     // Ohter state (background/inactive)
     if (nextAppState !== 'active') {
@@ -277,9 +330,9 @@ export const MainNavigator = observer(() => {
       const navigationRequest = await parsePushNotiData()
       if (navigationRequest.path) {
         // handle navigate browse
-        navigationRequest.tempParams && navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
+        navigationRequest.tempParams &&
+          navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
         navigation.navigate(navigationRequest.path, navigationRequest.params)
-        return
       }
     }
   }
@@ -356,27 +409,31 @@ export const MainNavigator = observer(() => {
   }
 
   // ------------------ EFFECT --------------------
-  // Intercom support 
+  // Intercom support
   useEffect(() => {
-    if (user.isLoggedInPw) {
-      Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id }).catch((e) => {
-        Logger.error(e)
-      })
+    const registerIntercomUser = async () => {
+      if (user.isLoggedInPw) {
+        try {
+          await Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id })
+          Intercom.updateUser({ name: user.full_name || user.username })
+        } catch (error) {
+          Logger.error(error)
+        }
+      }
     }
+    registerIntercomUser()
   }, [user.isLoggedInPw])
 
-
-  // check app revire 
+  // check app revire
   useEffect(() => {
     requestInAppReview()
   }, [])
 
-
   // Check device screen on/off
   useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange)
+    AppState.addEventListener('change', _handleAppStateChange)
     return () => {
-      AppState.removeEventListener("change", _handleAppStateChange)
+      AppState.removeEventListener('change', _handleAppStateChange)
       clearTimeout(timeout)
     }
   }, [timeout])
@@ -457,13 +514,13 @@ export const MainNavigator = observer(() => {
 
   return (
     <UserInactivity
-      timeForInactivity={(user.appTimeout && (user.appTimeout > 0)) ? user.appTimeout : 1000}
+      timeForInactivity={user.appTimeout && user.appTimeout > 0 ? user.appTimeout : 1000}
       onAction={handleInactive}
     >
       <Stack.Navigator
         initialRouteName="start"
         screenOptions={{
-          headerShown: false
+          headerShown: false,
         }}
       >
         <Stack.Screen name="start" component={StartScreen} />
@@ -474,7 +531,6 @@ export const MainNavigator = observer(() => {
 
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
         <Stack.Screen name="healthStack" component={HealthNavigator} />
-
         {/* Inner screens */}
         <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
 
@@ -486,30 +542,59 @@ export const MainNavigator = observer(() => {
           component={PasswordGeneratorScreen}
           initialParams={{ fromTools: false }}
           options={{
-            gestureEnabled: false
+            gestureEnabled: false,
           }}
         />
+        <Stack.Screen name="privateRelay" component={PrivateRelay} />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
-        <Stack.Screen name="authenticator__edit" component={AuthenticatorEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen
+          name="authenticator__edit"
+          component={AuthenticatorEditScreen}
+          initialParams={{ mode: 'add' }}
+        />
 
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
         <Stack.Screen name="dataBreachList" component={DataBreachListScreen} />
         <Stack.Screen name="dataBreachDetail" component={DataBreachDetailScreen} />
 
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
-        <Stack.Screen name="passwords__edit" component={PasswordEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen
+          name="passwords__edit"
+          component={PasswordEditScreen}
+          initialParams={{ mode: 'add' }}
+        />
         <Stack.Screen name="notes__info" component={NoteInfoScreen} />
-        <Stack.Screen name="notes__edit" component={NoteEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen
+          name="notes__edit"
+          component={NoteEditScreen}
+          initialParams={{ mode: 'add' }}
+        />
         <Stack.Screen name="cards__info" component={CardInfoScreen} />
-        <Stack.Screen name="cards__edit" component={CardEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen
+          name="cards__edit"
+          component={CardEditScreen}
+          initialParams={{ mode: 'add' }}
+        />
         <Stack.Screen name="identities__info" component={IdentityInfoScreen} />
-        <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
-        <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen
+          name="identities__edit"
+          component={IdentityEditScreen}
+          initialParams={{ mode: 'add' }}
+        />
+        <Stack.Screen
+          name="folders__select"
+          component={FolderSelectScreen}
+          initialParams={{ mode: 'add' }}
+        />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
         <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} />
         <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} />
         <Stack.Screen name="cryptoWallets__info" component={CryptoWalletInfoScreen} />
-        <Stack.Screen name="cryptoWallets__edit" component={CryptoWalletEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen
+          name="cryptoWallets__edit"
+          component={CryptoWalletEditScreen}
+          initialParams={{ mode: 'add' }}
+        />
 
         <Stack.Screen name="refer_friend" component={ReferFriendScreen} />
         <Stack.Screen name="invite_member" component={InviteMemberScreen} />
@@ -528,6 +613,12 @@ export const MainNavigator = observer(() => {
 
         <Stack.Screen name="welcome_premium" component={WelcomePremiumScreen} />
         <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: 'all' }} />
+
+        <Stack.Screen name="emergencyAccess" component={EmergencyAccessScreen} />
+        <Stack.Screen name="yourTrustedContact" component={YourTrustedContactScreen} />
+        <Stack.Screen name="contactsTrustedYou" component={ContactsTrustedYouScreen} />
+        <Stack.Screen name="viewEA" component={ViewEAScreen} />
+        <Stack.Screen name="takeoverEA" component={TakeoverEAScreen} />
       </Stack.Navigator>
     </UserInactivity>
   )

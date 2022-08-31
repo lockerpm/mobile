@@ -1,13 +1,14 @@
 import React, { useState } from "react"
 import { View, TouchableOpacity } from "react-native"
-import { AutoImage as Image, Text, Layout, Button } from "../../../components"
+import { AutoImage as Image, Text, Layout, Button, LanguagePicker } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize, spacing } from "../../../theme"
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { useMixins } from "../../../services/mixins"
 import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
+import { observer } from "mobx-react-lite"
 
-export const IntroScreen = () => {
+export const IntroScreen = observer(() => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
   const { isPortrait, isTablet } = useAdaptiveLayoutMixins()
@@ -64,26 +65,13 @@ export const IntroScreen = () => {
             flex: 1,
             alignSelf: "center",
           }} />
-          <Text text={item.desc} style={{ textAlign: 'center',  flex: 1}} />
+          <Text text={item.desc} style={{ textAlign: 'center', flex: 1 }} />
         </View>}
 
       </View>
     )
   })
   const renderScene = SceneMap(map)
-
-  // Header
-  const header = (
-    <View style={{ alignItems: "flex-end" }}>
-      <Button
-        text={translate('common.skip').toUpperCase()}
-        textStyle={{ fontSize: fontSize.p }}
-        preset="link"
-        onPress={() => navigation.navigate("onBoarding")}
-      >
-      </Button>
-    </View>
-  )
 
   // Footer
   const footer = (
@@ -104,10 +92,19 @@ export const IntroScreen = () => {
 
   return (
     <Layout
-      header={header}
       footer={footer}
       noScroll
     >
+      <LanguagePicker />
+      <View style={{ position: "absolute", top: 16, right: 20, zIndex: 11 }}>
+        <Button
+          text={translate('common.skip').toUpperCase()}
+          textStyle={{ fontSize: fontSize.p }}
+          preset="link"
+          onPress={() => navigation.navigate("onBoarding")}
+        >
+        </Button>
+      </View>
       <View style={{ flex: 1, justifyContent: 'center', marginBottom: 10 }}>
         {/* Tabs */}
         <View style={{ flex: 5, minHeight: 300 }}>
@@ -141,4 +138,4 @@ export const IntroScreen = () => {
       </View>
     </Layout>
   )
-}
+})

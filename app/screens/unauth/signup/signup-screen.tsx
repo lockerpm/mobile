@@ -3,7 +3,7 @@ import { Linking, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { Layout, AutoImage as Image, Text, FloatingInput, Button, RecaptchaChecker } from "../../../components";
+import { Layout, AutoImage as Image, Text, FloatingInput, Button, RecaptchaChecker, LanguagePicker } from "../../../components";
 import { useMixins } from "../../../services/mixins"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
@@ -11,7 +11,6 @@ import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL, IS_PROD } from "../../../config/
 import { Checkbox } from "react-native-ui-lib"
 import countries from '../../../common/countries.json'
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
-import { SocialSignedUpModal } from "./social-signup-modal"
 import { GitHubLoginModal } from "../login/github-login-modal"
 import { getCookies, logRegisterSuccessEvent } from "../../../utils/analytics"
 
@@ -36,10 +35,6 @@ export const SignupScreen = observer(() => {
   const [phone, setPhone] = useState('')
   const [phonePrefix, setPhonePrefix] = useState('+84')
   const [agreed, setAgreed] = useState(false)
-
-  const [token, setResetPWToken] = useState("")
-  const [account, setAccount] = useState(null)
-  const [showSocialSignedUpModal, setShowSocialSignedUpModal] = useState(false)
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
@@ -154,9 +149,6 @@ export const SignupScreen = observer(() => {
         }
         uiStore.setSelectedCountry(null)
       }
-      setResetPWToken("")
-      setAccount(null)
-      setShowSocialSignedUpModal(false)
     });
 
     return unsubscribe
@@ -189,6 +181,7 @@ export const SignupScreen = observer(() => {
         </View>
       )}
     >
+      <LanguagePicker />
       {/* Modal */}
       <GitHubLoginModal
         isOpen={showGitHubLogin}
@@ -207,7 +200,7 @@ export const SignupScreen = observer(() => {
       {/* Modal end */}
       <View style={{ alignItems: 'center', paddingTop: '10%' }}>
         <Image
-          source={APP_ICON.iconDark}
+          source={APP_ICON.icon}
           style={{ height: 63, width: 63, marginBottom: 10, marginTop: 30 }}
         />
 

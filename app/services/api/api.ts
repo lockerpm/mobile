@@ -1,7 +1,6 @@
 import { ApisauceInstance, create } from "apisauce"
 import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_PROD } from "../../config/constants"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
-
 /**
  * Manages all requests to the API.
  */
@@ -39,7 +38,6 @@ export class Api {
     "CF-Access-Client-Id": CF_ACCESS_CLIENT_ID,
     "CF-Access-Client-Secret": CF_ACCESS_CLIENT_SECRET
   }
-
 
   setup() {
     // construct the apisauce instance

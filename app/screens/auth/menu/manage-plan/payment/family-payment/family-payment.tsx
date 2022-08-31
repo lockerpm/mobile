@@ -52,7 +52,7 @@ export const FamilyPayment = (props: Props) => {
             <View style={{
                 alignItems: "center"
             }}>
-                <Image source={require('./security.png')} style={{
+                <Image source={require('../security.png')} style={{
                     width: 200,
                     height: 200,
                 }} />

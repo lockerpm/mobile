@@ -13,10 +13,12 @@ type SettingsItemProps = {
   right?: JSX.Element
   noCaret?: boolean
   color?: string
-  action?: Function
+  action?: () => void
   noBorder?: boolean
   disabled?: boolean
   isLoading?: boolean
+  status?: string
+  numberChildItems?: number
 }
 
 
@@ -35,22 +37,36 @@ export const SettingsItem = (props: SettingsItemProps) => {
         paddingVertical: 16
       }, props.style]}
     >
-      <Text
-        preset="black"
-        text={props.name}
-        style={{ color: props.color || color.textBlack }}
-      />
-      {
-        props.isLoading ? (
-          <ActivityIndicator size="small" color={color.primary} />
-        ) : props.right || !props.noCaret && (
-          <FontAwesomeIcon
-            name="angle-right"
-            size={18}
-            color={props.color || color.textBlack}
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        <Text
+          preset="black"
+          text={props.name}
+          style={{ color: props.color || color.textBlack }}
+        />
+        <Text
+          text={props.status}
+          style={{ color: color.warning, marginLeft: 8, fontSize: fontSize.small }}
+        />
+      </View>
+
+      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+        {
+          !!props.numberChildItems && < Text
+            text={String(props.numberChildItems)}
           />
-        )
-      }
+        }
+        {
+          props.isLoading ? (
+            <ActivityIndicator size="small" color={color.primary} />
+          ) : props.right || !props.noCaret && (
+            <FontAwesomeIcon
+              name="angle-right"
+              size={18}
+              color={props.color || color.textBlack}
+            />
+          )
+        }
+      </View>
     </Button>
   ) : (
     <View
@@ -101,8 +117,8 @@ export const SettingSwipeItem = (props: SettingSwipeItemProps) => {
       <Switch
         value={value}
         onValueChange={onValueChange}
-        trackColor={trackColor ? trackColor : { false: color.disabled, true: color.primary }}
-        thumbColor={thumbColor ? thumbColor : color.white}
+        trackColor={{ false: color.disabled, true: color.primary }}
+        thumbColor={color.white}
       />
     )}
   />
@@ -120,7 +136,7 @@ export const SectionWrapperItem = (props: WrapperProps) => {
   const { color } = useMixins()
 
   const SECTION_TITLE: TextStyle = {
-    fontSize: fontSize.small,
+    fontSize: fontSize.p,
     marginHorizontal: 20,
     marginBottom: 12,
   }
@@ -130,14 +146,11 @@ export const SectionWrapperItem = (props: WrapperProps) => {
       {
         title && <Text
           text={title}
-          style={[SECTION_TITLE, {
-            marginTop: 15,
-          }]}
+          style={SECTION_TITLE}
         />
       }
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background,
-        marginTop: !title ? 15 : 0,
       }]}>
         {children}
       </View>
