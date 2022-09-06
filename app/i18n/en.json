@@ -121,6 +121,12 @@
     "is_offline": "Locker is currently in offline mode."
   },
   "alert": {
+    "update": {
+      "title": "Update App?",
+      "content": "A new version of Locker is available! Click to update Locker version {{version}} ",
+      "later": "Later",
+      "now": "Update now"
+    },
     "lock_app": "Lock the application?",
     "logout": "Log out from "
   },
