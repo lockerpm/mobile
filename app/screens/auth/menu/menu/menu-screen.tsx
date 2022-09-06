@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ScrollView, ViewStyle, TextStyle, Share } from "react-native"
+import { View, ScrollView, ViewStyle, TextStyle, Share, Dimensions } from "react-native"
 import { Layout, Text, AutoImage as Image, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../../models"
@@ -211,21 +211,21 @@ export const MenuScreen = observer(() => {
       noBorder: true
     }
   ]
-
+  const isSmallWidth = Dimensions.get("screen").width < 390
   const item3 = {
     "pm_free": {
       node: <Text text="FREE" style={[PLAN_NAME, { color: color.textBlack }]}></Text>,
     },
     "pm_premium": {
-      node: <View style={{ flexDirection: "row" }}>
+      node: <View style={{ flexDirection: isSmallWidth ? "column" : "row"  }}>
         <Text text="PREMIUM" style={[PLAN_NAME, { color: color.primary }]}></Text>
-        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 8 }]}></Text>
+        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: isSmallWidth ? 0 : 8 }]}></Text>
       </View>
     },
     "pm_family": {
-      node: <View style={{ flexDirection: "row" }}>
+      node: <View style={{ flexDirection: isSmallWidth ? "column" : "row"  }}>
         <Text text="FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>
-        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: 8 }]}></Text>
+        <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: isSmallWidth ? 0 : 8 }]}></Text>
       </View>,
     }
   }
