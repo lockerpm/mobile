@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Linking, View } from "react-native"
 import { Layout, Text, Button, Header } from "../../../../components"
@@ -6,11 +6,9 @@ import { useNavigation } from "@react-navigation/native"
 import { commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
-import { PRIVACY_POLICY_URL, TERMS_URL, HELP_CENTER_URL, REPORT_VULN} from "../../../../config/constants"
+import { PRIVACY_POLICY_URL, TERMS_URL, HELP_CENTER_URL, REPORT_VULN } from "../../../../config/constants"
 import { FeedbackModal } from "./feedback-modal"
-import { useStores } from "../../../../models"
 import { Logger } from "../../../../utils/logger"
-// import {AEMReporterIOS, AppEventsLogger} from 'react-native-fbsdk-next';
 
 type Item = {
   name: string
@@ -24,7 +22,7 @@ export const HelpScreen = observer(function HelpScreen() {
   const { translate, color } = useMixins()
 
   const [showFeedback, setShowFeedback] = useState(false)
-  
+
   const items: Item[] = [
     {
       name: translate('help.help_center'),
@@ -105,7 +103,7 @@ export const HelpScreen = observer(function HelpScreen() {
             </Button>
           ))
         }
-        
+
       </View>
     </Layout>
   )
