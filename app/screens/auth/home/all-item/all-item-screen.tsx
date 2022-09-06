@@ -172,10 +172,10 @@ export const AllItemScreen = observer(() => {
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
       />
-      <SuggestEnableAutofill
+      {/* <SuggestEnableAutofill
         isShow={isShowAutofillSuggest && !isAutofillEnabled}
         onClose={() => setShowAutofillSuggest(false)}
-      />
+      /> */}
 
       <CipherList
         navigation={navigation}

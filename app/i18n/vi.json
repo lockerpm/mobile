@@ -123,7 +123,7 @@
   "alert": {
     "update": {
       "title": "Cập nhật ứng dụng?",
-      "content": "Locker {{version}} đã có mặt tại của hàng CH play. Cập nhật ngay",
+      "content": "Locker {{version}} đã có mặt tại của hàng CH play. Cập nhật ngay!",
       "later": "Sau",
       "now": "Cập nhật"
     },
