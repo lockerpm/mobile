@@ -157,11 +157,11 @@ export const LockScreen = observer(() => {
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    if (user.isBiometricUnlock) {
-      !__DEV__ && handleUnlockBiometric()
-    }
-
     detectbiometryType()
+
+    if (user.isBiometricUnlock) {
+      handleUnlockBiometric()
+    }
   }, [])
 
   // ---------------------- RENDER -------------------------
@@ -265,7 +265,7 @@ export const LockScreen = observer(() => {
         />
 
         <Button
-          isLoading={isBioUnlocking}
+          // isLoading={isBioUnlocking}
           isDisabled={isBioUnlocking}
           preset="ghost"
           onPress={handleUnlockBiometric}
