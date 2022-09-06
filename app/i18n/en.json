@@ -123,7 +123,7 @@
   "alert": {
     "update": {
       "title": "Update App?",
-      "content": "A new version of Locker is available! Click to update Locker version {{version}} ",
+      "content": "A new version of Locker is available! Click to update Locker version {{version}}.",
       "later": "Later",
       "now": "Update now"
     },
