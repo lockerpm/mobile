@@ -31,7 +31,9 @@ public class Field implements Parcelable {
         this.autofillId = node.getAutofillId();
         this.hint = node.getHint();
         this.entry = node.getIdEntry();
-        this.text = node.getText().toString();
+        if (node.getText() != null) {
+            this.text = node.getText().toString();
+        }
         this.inputType = node.getInputType();
         this.autofillType = node.getAutofillType();
         this.hints = node.getAutofillHints();
