@@ -56,7 +56,7 @@ export const ImportPickFile = (props: Props) => {
         if (file.name) {
             return file.name
         }
-        const uriComponents = file.uri.split('/')
+        const uriComponents = file?.uri?.split('/')
         return uriComponents[uriComponents.length - 1]
     }
 
@@ -66,7 +66,7 @@ export const ImportPickFile = (props: Props) => {
             uiStore.setIsPerformOverlayTask(true)
 
             const targetFormat = formats.find(i => i.value === format)
-            const targetExtension = targetFormat.label.split(' (')[1].split(')')[0]
+            const targetExtension = targetFormat.label?.split(' (')[1]?.split(')')[0]
 
             const res = await DocumentPicker.pickSingle({
                 type: [DocumentPicker.types.allFiles],
