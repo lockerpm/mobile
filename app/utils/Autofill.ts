@@ -16,7 +16,9 @@ export const AutofillServiceEnabled: (callback: (a: boolean, androidNotSupport?:
     // AutofillManager class added in API level 26
     // https://developer.android.com/reference/android/view/autofill/AutofillManager
     // crash on Android lower version
-    callback(false, true)
+
+    // eslint-disable-next-line node/no-callback-literal
+    return callback(false, true)
   }
   return RNAutofillServiceAndroid.isAutofillServiceActived(callback)
 }
