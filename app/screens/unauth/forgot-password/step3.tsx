@@ -40,7 +40,7 @@ export const Step3 = observer((props: Props) => {
       setIsError(true)
       notify('error', translate('error.invalid_authorization_code'))
     } else {
-      const urlArray = res.data.reset_password_url.split('/')
+      const urlArray = res.data.reset_password_url?.split('/')
       nextStep(urlArray[urlArray.length - 1])
     }
   }

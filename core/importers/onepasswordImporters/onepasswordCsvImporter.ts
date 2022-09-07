@@ -273,7 +273,7 @@ export abstract class OnePasswordCsvImporter extends BaseImporter implements Imp
 
     protected setLoginUris(context: CipherImportContext) {
         if ((context.cipher.login.uris == null || context.cipher.login.uris.length === 0) && context.lowerProperty === 'urls') {
-            const urls = context.importRecord[context.property].split(this.newLineRegex);
+            const urls = context.importRecord[context.property]?.split(this.newLineRegex);
             context.cipher.login.uris = this.makeUriArray(urls);
             return true;
         } else if ((context.lowerProperty === 'url')) {

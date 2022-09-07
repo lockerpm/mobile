@@ -551,7 +551,7 @@ export class CryptoService implements CryptoServiceAbstraction {
         } else if (headerPieces.length === 2) {
             try {
                 encType = parseInt(headerPieces[0], null);
-                encPieces = headerPieces[1].split('|');
+                encPieces = headerPieces[1]?.split('|');
             } catch (e) { }
         }
 

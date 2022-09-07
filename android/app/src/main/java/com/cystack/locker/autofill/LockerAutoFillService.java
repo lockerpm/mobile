@@ -25,8 +25,9 @@ import java.util.List;
 import com.facebook.react.bridge.ReactApplicationContext;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class LockerAutoFillService extends AutofillService{
+public class LockerAutoFillService extends AutofillService {
     private static final String TAG = "Locker_Service";
+    private boolean readyToStart = false;
 
     @Override
     public void onConnected() {
@@ -36,14 +37,16 @@ public class LockerAutoFillService extends AutofillService{
         ReactApplicationContext reactContext = new ReactApplicationContext(getApplicationContext());
         AutofillDataKeychain keyStore = new AutofillDataKeychain(reactContext);
         if (keyStore.loginedLocker) {
-            Utils.InitCredentialsStore(getBaseContext(), keyStore.email , keyStore.hashMassterPass); 
+            this.readyToStart = true;
+            Utils.InitCredentialsStore(getBaseContext(), keyStore.email, keyStore.hashMassterPass);
         } else {
-            Utils.RemoveAllCredential(); 
+            Utils.RemoveAllCredential();
         }
     }
 
     @Override
-    public void onFillRequest(@NonNull FillRequest request, @NonNull CancellationSignal cancellationSignal, @NonNull FillCallback callback) {
+    public void onFillRequest(@NonNull FillRequest request, @NonNull CancellationSignal cancellationSignal,
+            @NonNull FillCallback callback) {
         Log.d(TAG, "onFillRequest()");
 
         // Find fillable fields
@@ -52,7 +55,7 @@ public class LockerAutoFillService extends AutofillService{
         ArrayList<Field> fields = (ArrayList<Field>) parseResult.getFillable();
         String domain = parseResult.getDomain();
 
-        if ( fields == null || fields.isEmpty() || Utils.BlacklistedUris.contains(domain)) {
+        if (fields == null || fields.isEmpty() || Utils.BlacklistedUris.contains(domain) || !this.readyToStart) {
             Log.d(TAG, "No autofill hints found");
             callback.onSuccess(null);
             return;
@@ -61,7 +64,6 @@ public class LockerAutoFillService extends AutofillService{
         Log.d(TAG, "Domain: " + domain);
         Log.d(TAG, "autofillable fields:" + fields.size());
 
-       
         // Create response...
         FillResponse.Builder response = Utils.BuildFillResponse(fields, request, domain, this);
 
