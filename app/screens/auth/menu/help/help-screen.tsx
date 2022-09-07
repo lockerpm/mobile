@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Linking, View } from "react-native"
 import { Layout, Text, Button, Header } from "../../../../components"
@@ -6,10 +6,9 @@ import { useNavigation } from "@react-navigation/native"
 import { commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
-import { PRIVACY_POLICY_URL, TERMS_URL, HELP_CENTER_URL, REPORT_VULN} from "../../../../config/constants"
+import { PRIVACY_POLICY_URL, TERMS_URL, HELP_CENTER_URL, REPORT_VULN } from "../../../../config/constants"
 import { FeedbackModal } from "./feedback-modal"
-import { useStores } from "../../../../models"
-// import {AEMReporterIOS, AppEventsLogger} from 'react-native-fbsdk-next';
+import { Logger } from "../../../../utils/logger"
 
 type Item = {
   name: string
@@ -23,44 +22,41 @@ export const HelpScreen = observer(function HelpScreen() {
   const { translate, color } = useMixins()
 
   const [showFeedback, setShowFeedback] = useState(false)
-  
+
   const items: Item[] = [
     {
       name: translate('help.help_center'),
       action: () => {
-        Linking.openURL(HELP_CENTER_URL)
+        Linking.canOpenURL(HELP_CENTER_URL).then((val) => {
+          if (val) Linking.openURL(HELP_CENTER_URL)
+        }).catch(e => Logger.error(e))
       }
     },
     {
       name: translate('help.terms'),
       action: () => {
-        Linking.openURL(TERMS_URL)
+        Linking.canOpenURL(TERMS_URL).then((val) => {
+          if (val) Linking.openURL(TERMS_URL)
+        }).catch(e => Logger.error(e))
       }
     },
     {
       name: translate('help.policy'),
       action: () => {
-        Linking.openURL(PRIVACY_POLICY_URL)
+        Linking.canOpenURL(PRIVACY_POLICY_URL).then((val) => {
+          if (val) Linking.openURL(PRIVACY_POLICY_URL)
+        }).catch(e => Logger.error(e))
       }
     },
-    // {
-    //   name: 'Test Event',
-    //   action: () => {
-    //     AppEventsLogger.logEvent("fb_mobile_login_complete", 1211);
-    //     AEMReporterIOS.logAEMEvent("fb_mobile_login_complete", 1211, "VND");
-    //   }
-    // },
     {
       name: translate('help.report_vuln'),
       action: () => {
-        Linking.openURL(REPORT_VULN)
+        Linking.canOpenURL(REPORT_VULN).then((val) => {
+          if (val) Linking.openURL(REPORT_VULN)
+        }).catch(e => Logger.error(e))
       }
     },
-   
-
   ]
-
-  const {user} = useStores()
 
   return (
     <Layout
@@ -107,7 +103,7 @@ export const HelpScreen = observer(function HelpScreen() {
             </Button>
           ))
         }
-        
+
       </View>
     </Layout>
   )

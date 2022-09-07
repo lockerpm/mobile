@@ -121,6 +121,12 @@
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
   },
   "alert": {
+    "update": {
+      "title": "Cập nhật ứng dụng?",
+      "content": "Locker {{version}} đã có mặt tại của hàng CH play. Cập nhật ngay!",
+      "later": "Sau",
+      "now": "Cập nhật"
+    },
     "lock_app": "Khoá Locker?",
     "logout": "Đăng xuất khỏi "
   },

@@ -210,6 +210,7 @@ export const MenuScreen = observer(() => {
       },
       noBorder: true
     }
+
   ]
   const isSmallWidth = Dimensions.get("screen").width < 390
   const item3 = {
@@ -407,7 +408,7 @@ export const MenuScreen = observer(() => {
             ))
           }
         </View>
-        
+
         <View style={{
           alignItems: "center"
         }}>

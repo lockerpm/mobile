@@ -13,6 +13,7 @@ import countries from '../../../common/countries.json'
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { GitHubLoginModal } from "../login/github-login-modal"
 import { getCookies, logRegisterSuccessEvent } from "../../../utils/analytics"
+import { Logger } from "../../../utils/logger"
 
 
 export const SignupScreen = observer(() => {
@@ -306,7 +307,11 @@ export const SignupScreen = observer(() => {
               <Button
                 preset="link"
                 text={translate('signup.terms')}
-                onPress={() => Linking.openURL(TERMS_URL)}
+                onPress={() => {
+                  Linking.canOpenURL(TERMS_URL).then((val) => {
+                    if (val) Linking.openURL(TERMS_URL)
+                  }).catch(e => Logger.error(e))
+                }}
               />
               <Text
                 text={' ' + translate('common.and') + ' '}
@@ -314,7 +319,11 @@ export const SignupScreen = observer(() => {
               <Button
                 preset="link"
                 text={translate('signup.conditions')}
-                onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}
+                onPress={() => {
+                  Linking.canOpenURL(PRIVACY_POLICY_URL).then((val) => {
+                    if (val) Linking.openURL(PRIVACY_POLICY_URL)
+                  }).catch(e => Logger.error(e))
+                }}
               />
             </View>
           </Button>

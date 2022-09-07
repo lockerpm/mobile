@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef  } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { observer } from "mobx-react-lite"
 import { CipherList, Layout, BrowseItemEmptyContent } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
@@ -118,8 +118,11 @@ export const AllItemScreen = observer(() => {
 
   useEffect(() => {
     if (!isLoading) {
-      AutofillServiceEnabled(isActived => {
+      AutofillServiceEnabled((isActived, androidNotSupport) => {
         setIsAutofillEnabled(isActived)
+        if (androidNotSupport) {
+          setShowAutofillSuggest(false)
+        }
       })
     }
   }, [appStateVisible, isLoading])
@@ -224,7 +227,7 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
         height: 32,
         marginRight: 16
       }}></Image>
-    <View style={{marginRight: 80}}>
+    <View style={{ marginRight: 80 }}>
       {/* <Text>{translate("all_items.enable_autofill.title")}</Text> */}
       <Text>{translate("all_items.enable_autofill.content")}</Text>
       <TouchableOpacity
