@@ -141,7 +141,7 @@ export const CipherList = observer((props: CipherListProps) => {
       }
     }
 
-    if (organizationId === undefined && collectionId == undefined && folderId === null) {
+    if (organizationId === undefined && collectionId === undefined && folderId === null) {
       res = res.filter(i => !getTeam(user.teams, i.organizationId).name)
       res = res.filter(i => !i.collectionIds.length)
     }
@@ -199,7 +199,7 @@ export const CipherList = observer((props: CipherListProps) => {
         setShowCryptoWalletAction(true)
         break
       default:
-        return
+        break
     }
   }
 

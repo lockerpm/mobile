@@ -19,11 +19,15 @@ import { useCipherHelpersMixins } from '../../../services/mixins/cipher/helpers'
 import { useCipherAuthenticationMixins } from '../../../services/mixins/cipher/authentication'
 import { logCreateMasterPwEvent } from '../../../utils/analytics'
 import { PolicyType } from '../../../config/types'
+import { CipherView, LoginUriView, LoginView } from '../../../../core/models/view'
+import { CipherType } from '../../../../core/enums'
+import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
 
 export const CreateMasterPasswordScreen = observer(() => {
   const navigation = useNavigation()
-  const { translate, color, validateMasterPassword } = useMixins()
-  const { getPasswordStrength, checkPasswordPolicy } = useCipherHelpersMixins()
+  const { translate, color, validateMasterPassword, notify } = useMixins()
+  const { createCipher } = useCipherDataMixins()
+  const { getPasswordStrength, checkPasswordPolicy, newCipher } = useCipherHelpersMixins()
   const { logout, registerLocker, sessionLogin } = useCipherAuthenticationMixins()
   const { user } = useStores()
 
@@ -85,15 +89,39 @@ export const CreateMasterPasswordScreen = observer(() => {
     const res = await registerLocker(masterPassword, hint, passwordStrength)
     if (res.kind === 'ok') {
       logCreateMasterPwEvent()
+
       const sessionRes = await sessionLogin(masterPassword)
       setIsCreating(false)
+
       if (sessionRes.kind === 'ok') {
+        // TODO
+        createMasterPassword()
         navigation.navigate('mainStack')
       } else {
         navigation.navigate('lock')
       }
     } else {
       setIsCreating(false)
+    }
+  }
+
+  // Prepare to save password
+  const createMasterPassword = async () => {
+    const payload: CipherView = newCipher(CipherType.MasterPassword)
+
+    const data = new LoginView()
+    data.username = "Master Password"
+    data.password = masterPassword
+    const uriView = new LoginUriView()
+    uriView.uri = "https://locker.io/lock"
+    data.uris = [uriView]
+
+    payload.name = "Locker Password Manager"
+    payload.login = data
+
+    const res = await createCipher(payload, passwordStrength, [])
+    if (res.kind !== 'ok') {
+      notify("error", translate("error.master_password"))
     }
   }
 

@@ -131,6 +131,7 @@
     "logout": "Đăng xuất khỏi "
   },
   "error": {
+    "master_password": "Không thể tự động tạo Siêu Mật Khẩu tự động",
     "not_supported": "Không hỗ trợ",
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
