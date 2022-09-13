@@ -131,6 +131,7 @@
     "logout": "Log out from "
   },
   "error": {
+    "master_password": "Cannot auto create Master Password item",
     "not_supported": "Not supported",
     "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
     "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
