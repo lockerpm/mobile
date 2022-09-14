@@ -462,6 +462,8 @@
     }
   },
   "password": {
+    "locker_master_password": "Mật khẩu chủ Locker",
+    "master_password_note": "Đây là Mật Khẩu Chủ Locker của bạn. Mật khẩu này sẽ tự động thay đổi khi bạn thay đổi Mật Khẩu Chủ trong phần Cài Đặt. Chúng tôi tạo ra mục này để bạn xem lại khi quên Mật Khẩu Chủ. Đừng lo, việc tái tạo Mật Khẩu chủ diễn ra ngay tại thiết bị của bạn, đội ngũ Locker vẫn không thể xem, sửa, can thiệp tới mật khẩu chủ của bạn.",
     "login_details": "Thông tin đăng nhập",
     "username": "Email / Tên người dùng",
     "website_url": "Địa chỉ website",

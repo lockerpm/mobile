@@ -72,6 +72,7 @@ export class Cipher extends Domain {
         this.reprompt = obj.reprompt;
 
         switch (this.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 this.login = new Login(obj.login, alreadyEncrypted);
                 break;
@@ -120,6 +121,7 @@ export class Cipher extends Domain {
             }, this.organizationId, encKey);
 
             switch (this.type) {
+                case CipherType.MasterPassword:
                 case CipherType.Login:
                     model.login = await this.login.decrypt(this.organizationId, encKey);
                     break;
@@ -203,6 +205,7 @@ export class Cipher extends Domain {
         });
 
         switch (c.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 c.login = this.login.toLoginData();
                 break;

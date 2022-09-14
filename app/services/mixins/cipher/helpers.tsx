@@ -63,6 +63,7 @@ export const CipherHelpersMixinsProvider = observer(
     // Get cipher description
     const getCipherDescription = (item: CipherView) => {
       switch (item.type) {
+        case CipherType.MasterPassword:
         case CipherType.Login:
           return item.login.username
         case CipherType.Card:
@@ -84,6 +85,7 @@ export const CipherHelpersMixinsProvider = observer(
     // Get cipher logo
     const getCipherInfo = (item: CipherView) => {
       switch (item.type) {
+        case CipherType.MasterPassword:
         case CipherType.Login:
           return {
             img: item.login.uri ? getWebsiteLogo(item.login.uri) : BROWSE_ITEMS.password.icon,

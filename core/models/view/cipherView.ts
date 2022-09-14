@@ -59,6 +59,7 @@ export class CipherView implements View {
 
     get subTitle(): string {
         switch (this.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 return this.login.subTitle;
             case CipherType.SecureNote:

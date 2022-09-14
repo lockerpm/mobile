@@ -51,6 +51,7 @@ export class Cipher {
         }
 
         switch (req.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 view.login = Login.toView(req.login);
                 break;
@@ -86,6 +87,7 @@ export class Cipher {
         }
 
         switch (req.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 domain.login = Login.toDomain(req.login);
                 break;
@@ -145,6 +147,7 @@ export class Cipher {
         }
 
         switch (o.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 this.login = new Login(o.login);
                 break;

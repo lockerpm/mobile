@@ -97,7 +97,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       const allCiphers = await getCiphers({
         deleted: false,
         searchText: '',
-        filters: [(c: CipherView) => c.type === CipherType.Login && c.login.password]
+        filters: [(c: CipherView) => (c.type === CipherType.Login || c.type === CipherType.MasterPassword) && c.login.password]
       })
       const weakPasswordCiphers = []
       const isUserNameNotEmpty = (c: CipherView) => {

@@ -462,6 +462,8 @@
     }
   },
   "password": {
+    "locker_master_password": "Locker Master Password",
+    "master_password_note": "This is your Locker Master Password. It will change accordingly as you change your Master Password. We created this item for you so you don't forget your Master Password. Don't worry, this operation happens within your device and we still can't see or edit your Master Password from our server. Have fun using Locker.",
     "login_details": "Login Details",
     "username": "Email or Username",
     "website_url": "Website",

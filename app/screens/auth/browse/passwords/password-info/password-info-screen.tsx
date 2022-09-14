@@ -17,6 +17,7 @@ import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { CipherView } from "../../../../../../core/models/view"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { CipherType } from "../../../../../../core/enums"
 
 
 export const PasswordInfoScreen = observer(() => {
@@ -30,7 +31,8 @@ export const PasswordInfoScreen = observer(() => {
   const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ COMPUTED --------------------
-
+  
+  const lockerMasterPassword = selectedCipher?.type === CipherType.MasterPassword
   const passwordStrength = getPasswordStrength(selectedCipher.login.password)
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
@@ -47,7 +49,7 @@ export const PasswordInfoScreen = observer(() => {
       header={(
         <Header
           goBack={() => navigation.goBack()}
-          right={(
+          right={ !lockerMasterPassword && (
             <Button
               preset="link"
               onPress={() => setShowAction(true)}
@@ -106,9 +108,9 @@ export const PasswordInfoScreen = observer(() => {
           />
           <Text
             preset="header"
+            text={lockerMasterPassword ? translate('password.locker_master_password') : selectedCipher.name}
             style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
           >
-            {selectedCipher.name}
             {
               notSync && (
                 <View style={{ paddingLeft: 10 }}>
@@ -131,13 +133,16 @@ export const PasswordInfoScreen = observer(() => {
         paddingVertical: 22
       }]}>
         {/* Username */}
-        <FloatingInput
-          fixedLabel
-          copyAble
-          label={translate('password.username')}
-          value={selectedCipher.login.username}
-          editable={false}
-        />
+        {
+          !lockerMasterPassword && <FloatingInput
+            fixedLabel
+            copyAble
+            label={translate('password.username')}
+            value={selectedCipher.login.username}
+            editable={false}
+            style={{ marginBottom: 20 }}
+          />
+        }
 
         {/* Password */}
         <FloatingInput
@@ -149,7 +154,7 @@ export const PasswordInfoScreen = observer(() => {
           label={translate('common.password')}
           value={selectedCipher.login.password}
           editable={false}
-          style={{ marginVertical: 20 }}
+          style={{ marginBottom: 20 }}
         />
 
         {/* Password strength */}
@@ -190,18 +195,32 @@ export const PasswordInfoScreen = observer(() => {
           )}
         />
 
-        {/* Notes */}
-        <Textarea
-          label={translate('common.notes')}
-          value={selectedCipher.notes}
-          editable={false}
-          copyAble
-        />
-        {/* Notes end */}
+        {
+          !lockerMasterPassword && <>
+            {/* Notes */}
+            <Textarea
+              label={translate('common.notes')}
+              value={selectedCipher.notes}
+              editable={false}
+              copyAble
+            />
+            {/* Notes end */}
 
-        {/* Others common info */}
-        <CipherInfoCommon cipher={selectedCipher} />
-        {/* Others common info end */}
+            {/* Others common info */}
+            <CipherInfoCommon cipher={selectedCipher} />
+            {/* Others common info end */}
+          </>
+        }
+
+        {
+          lockerMasterPassword && <>
+            {/* Notes */}
+            <Text text={translate('common.notes')} style={{ marginBottom: 12 }} />
+            <Text preset="black" text={translate('password.master_password_note')} />
+            {/* Notes end */}
+
+          </>
+        }
       </View>
       {/* Info end */}
     </Layout>

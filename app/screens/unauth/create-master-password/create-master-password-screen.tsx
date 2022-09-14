@@ -91,18 +91,17 @@ export const CreateMasterPasswordScreen = observer(() => {
       logCreateMasterPwEvent()
 
       const sessionRes = await sessionLogin(masterPassword)
-      setIsCreating(false)
 
       if (sessionRes.kind === 'ok') {
-        // TODO
-        createMasterPassword()
+        await createMasterPassword()
+        setIsCreating(false)
+
         navigation.navigate('mainStack')
       } else {
         navigation.navigate('lock')
       }
-    } else {
-      setIsCreating(false)
-    }
+    } 
+    setIsCreating(false)
   }
 
   // Prepare to save password
@@ -110,16 +109,17 @@ export const CreateMasterPasswordScreen = observer(() => {
     const payload: CipherView = newCipher(CipherType.MasterPassword)
 
     const data = new LoginView()
-    data.username = "Master Password"
+    data.username = "locker.io"
     data.password = masterPassword
+
     const uriView = new LoginUriView()
-    uriView.uri = "https://locker.io/lock"
+    uriView.uri = "https://locker.io"
     data.uris = [uriView]
 
-    payload.name = "Locker Password Manager"
+    payload.name = "Locker Master Password"
     payload.login = data
 
-    const res = await createCipher(payload, passwordStrength, [])
+    const res = await createCipher(payload, passwordStrength, [], true)
     if (res.kind !== 'ok') {
       notify("error", translate("error.master_password"))
     }
