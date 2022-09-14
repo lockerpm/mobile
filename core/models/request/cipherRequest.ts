@@ -43,6 +43,7 @@ export class CipherRequest {
         this.reprompt = cipher.reprompt;
 
         switch (this.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 this.login = new LoginApi();
                 this.login.uris = null;

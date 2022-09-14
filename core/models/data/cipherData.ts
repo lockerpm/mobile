@@ -58,6 +58,7 @@ export class CipherData {
         this.reprompt = response.reprompt;
 
         switch (this.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 this.login = new LoginData(response.login);
                 break;

@@ -71,10 +71,10 @@ const defaultData = {
   loadFolders: async () => null,
   loadCollections: async () => null,
 
-  createCipher: async (cipher: CipherView, score: number, collectionIds: string[]) => {
+  createCipher: async (cipher: CipherView, score: number, collectionIds: string[], silent?: boolean) => {
     return { kind: 'unknown' }
   },
-  updateCipher: async (id: string, cipher: CipherView, score: number, collectionIds: string[]) => {
+  updateCipher: async (id: string, cipher: CipherView, score: number, collectionIds: string[], silent?: boolean) => {
     return { kind: 'unknown' }
   },
   toTrashCiphers: async (ids: string[]) => {
@@ -238,7 +238,7 @@ export const CipherDataMixinsProvider = observer(
       _updateAutofillData()
 
       cipherStore.setLastCacheUpdate()
-      if (cipher?.type === CipherType.Login || !!deletedIds) {
+      if (cipher?.type === CipherType.Login || cipher?.type === CipherType.MasterPassword || !!deletedIds) {
         EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
       }
     }
@@ -258,7 +258,8 @@ export const CipherDataMixinsProvider = observer(
             messagingService.send('syncCompleted', { successfully: false })
             return res
           }
-
+          console.log("getSyncData")
+          console.log(res.data.ciphers)
           // Start sync
           cipherStore.setLastSync(bumpTimestamp)
           await syncService.setLastSync(new Date(bumpTimestamp))
@@ -320,6 +321,8 @@ export const CipherDataMixinsProvider = observer(
             return res
           }
 
+          console.log("Sync process")
+          console.log(res.data.ciphers)
           // Set last sync
           cipherStore.setLastSync(bumpTimestamp)
           await syncService.setLastSync(new Date(bumpTimestamp))
@@ -1125,7 +1128,7 @@ export const CipherDataMixinsProvider = observer(
     // ----------------------- CIPHER ---------------------------
 
     // Create
-    const createCipher = async (cipher: CipherView, score: number, collectionIds: string[]) => {
+    const createCipher = async (cipher: CipherView, score: number, collectionIds: string[], silent?: boolean) => {
       try {
         // Check name duplication
         const countDuplicate = await _countDuplicateCipherName(cipher)
@@ -1145,13 +1148,10 @@ export const CipherDataMixinsProvider = observer(
         }
 
         // Online
-        console.log(1)
         const cipherEnc = await cipherService.encrypt(cipher)
-        console.log(2)
         const data = new CipherRequest(cipherEnc)
-        console.log(3)
+        console.log(data)
         const res = await cipherStore.createCipher(data, score, collectionIds)
-        console.log(4)
         if (res.kind === 'ok') {
           await _offlineCreateCipher({
             cipher,
@@ -1159,12 +1159,10 @@ export const CipherDataMixinsProvider = observer(
             cipherRequest: data,
             cipherId: res.data.id,
           })
-          console.log(5)
-          notify('success', translate('success.cipher_created'))
+          !silent && notify('success', translate('success.cipher_created'))
         } else {
           notifyApiError(res)
         }
-        console.log(6)
         return res
       } catch (e) {
         notify('error', translate('error.something_went_wrong'))
@@ -1211,7 +1209,8 @@ export const CipherDataMixinsProvider = observer(
       id: string,
       cipher: CipherView,
       score: number,
-      collectionIds: string[]
+      collectionIds: string[],
+      silent?: boolean
     ) => {
       try {
         // Offline
@@ -1235,7 +1234,7 @@ export const CipherDataMixinsProvider = observer(
             isAccepted: true,
             cipherRequest: data,
           })
-          notify('success', translate('success.cipher_updated'))
+          !silent && notify('success', translate('success.cipher_updated'))
         } else {
           notifyApiError(res)
         }
@@ -1261,6 +1260,7 @@ export const CipherDataMixinsProvider = observer(
       const res = (await storageService.get(key)) || {}
 
       const cipherEnc = await cipherService.encrypt(cipher)
+      console.log(cipherEnc)
       const data = cipherRequest || new CipherRequest(cipherEnc)
       const revisionDate = new Date()
 
