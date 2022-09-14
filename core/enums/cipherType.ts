@@ -5,5 +5,5 @@ export enum CipherType {
     Identity = 4,
     TOTP = 5,
     CryptoWallet = 7,
-    MasterPassword = 10,
+    MasterPassword = 8,
 }
