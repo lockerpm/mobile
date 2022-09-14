@@ -183,6 +183,7 @@ export const CipherList = observer((props: CipherListProps) => {
     }
 
     switch (item.type) {
+      case CipherType.MasterPassword:
       case CipherType.Login:
         setShowPasswordAction(true)
         break

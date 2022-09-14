@@ -108,7 +108,7 @@ export class CipherService implements CipherServiceAbstraction {
             if (originalCipher != null) {
                 const existingCipher = await originalCipher.decrypt();
                 model.passwordHistory = existingCipher.passwordHistory || [];
-                if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
+                if ((model.type === CipherType.Login && existingCipher.type === CipherType.Login) || (model.type === CipherType.MasterPassword && existingCipher.type === CipherType.MasterPassword)) {
                     if (existingCipher.login.password != null && existingCipher.login.password !== '' &&
                         existingCipher.login.password !== model.login.password) {
                         const ph = new PasswordHistoryView();
@@ -459,7 +459,7 @@ export class CipherService implements CipherServiceAbstraction {
                 return true;
             }
 
-            if (url != null && cipher.type === CipherType.Login && cipher.login.uris != null) {
+            if (url != null && (cipher.type === CipherType.Login || cipher.type === CipherType.MasterPassword) && cipher.login.uris != null) {
                 for (let i = 0; i < cipher.login.uris.length; i++) {
                     const u = cipher.login.uris[i];
                     if (u.uri == null) {
@@ -1125,6 +1125,7 @@ export class CipherService implements CipherServiceAbstraction {
 
     private async encryptCipherData(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
         switch (cipher.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 cipher.login = new Login();
                 cipher.login.passwordRevisionDate = model.login.passwordRevisionDate;

@@ -193,6 +193,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       return
     }
     switch (item.type) {
+      case CipherType.MasterPassword:
       case CipherType.Login:
         setShowPasswordAction(true)
         break

@@ -1145,9 +1145,13 @@ export const CipherDataMixinsProvider = observer(
         }
 
         // Online
+        console.log(1)
         const cipherEnc = await cipherService.encrypt(cipher)
+        console.log(2)
         const data = new CipherRequest(cipherEnc)
+        console.log(3)
         const res = await cipherStore.createCipher(data, score, collectionIds)
+        console.log(4)
         if (res.kind === 'ok') {
           await _offlineCreateCipher({
             cipher,
@@ -1155,10 +1159,12 @@ export const CipherDataMixinsProvider = observer(
             cipherRequest: data,
             cipherId: res.data.id,
           })
+          console.log(5)
           notify('success', translate('success.cipher_created'))
         } else {
           notifyApiError(res)
         }
+        console.log(6)
         return res
       } catch (e) {
         notify('error', translate('error.something_went_wrong'))

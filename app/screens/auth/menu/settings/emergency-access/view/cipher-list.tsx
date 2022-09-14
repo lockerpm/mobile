@@ -59,6 +59,7 @@ export const CipherList = observer((props: CipherListProps) => {
     cipherStore.setSelectedCipher(item)
 
     switch (item.type) {
+      case CipherType.MasterPassword:
       case CipherType.Login:
         setShowPasswordAction(true)
         break
