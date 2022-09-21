@@ -71,7 +71,6 @@ export class CipherApi {
     try {
       detectTempId(collectionIds)
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      console.log(data)
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post('/cystack_platform/pm/ciphers/vaults', {
         ...data,

@@ -12,6 +12,7 @@ export type SessionSnapshot = {
   refresh_token: string
   key: string
   private_key: string
+  has_no_master_pw_item: boolean
 }
 
 export type PasswordPolicy = {

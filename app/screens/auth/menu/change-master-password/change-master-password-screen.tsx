@@ -16,15 +16,11 @@ import { useCipherAuthenticationMixins } from '../../../../services/mixins/ciphe
 import { PolicyType } from '../../../../config/types'
 import { observer } from 'mobx-react-lite'
 import { useStores } from '../../../../models'
-import { CipherView, LoginUriView, LoginView } from '../../../../../core/models/view'
-import { useCipherDataMixins } from '../../../../services/mixins/cipher/data'
-import { CipherType } from '../../../../../core/enums'
 
 export const ChangeMasterPasswordScreen = observer(() => {
   const navigation = useNavigation()
-  const { translate, color, validateMasterPassword, notify } = useMixins()
+  const { translate, color, validateMasterPassword } = useMixins()
   const { getPasswordStrength, checkPasswordPolicy } = useCipherHelpersMixins()
-  const { updateCipher, getCiphersFromCache } = useCipherDataMixins()
   const { changeMasterPassword } = useCipherAuthenticationMixins()
   const { user } = useStores()
 
@@ -47,33 +43,6 @@ export const ChangeMasterPasswordScreen = observer(() => {
 
   // -------------- METHODS --------------
 
-  // Prepare to save password
-  const updateMasterPassword = async () => {
-    const ciphers = await getCiphersFromCache({
-      deleted: false,
-      searchText: '',
-      filters: [(c: CipherView) => c.type === CipherType.MasterPassword]
-    })
-
-    if (ciphers?.length === 0) return
-    const payload: CipherView = { ...ciphers[0] }
-
-    const uriView = new LoginUriView()
-    uriView.uri = "https://locker.io"
-    const data = new LoginView()
-    
-    data.username = "locker.io"
-    data.password = newPass
-    data.uris = [uriView]
-
-    payload.login = data
-    const res = await updateCipher(payload.id, payload, passwordStrength, [], true)
-    if (res.kind !== 'ok') {
-      notify("error", translate("error.master_password"))
-    }
-  }
-
-
   const preparePassword = async () => {
     setIsLoading(true)
 
@@ -90,7 +59,6 @@ export const ChangeMasterPasswordScreen = observer(() => {
 
   const handleChangePassword = async () => {
     setIsLoading(true)
-    await updateMasterPassword()
     const res = await changeMasterPassword(current, newPass)
     if (res.kind === 'ok') {
       navigation.navigate('login')

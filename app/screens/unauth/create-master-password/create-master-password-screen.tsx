@@ -90,12 +90,10 @@ export const CreateMasterPasswordScreen = observer(() => {
     if (res.kind === 'ok') {
       logCreateMasterPwEvent()
 
-      const sessionRes = await sessionLogin(masterPassword)
+      const sessionRes = await sessionLogin(masterPassword, createMasterPasswordItem)
 
       if (sessionRes.kind === 'ok') {
-        await createMasterPassword()
         setIsCreating(false)
-
         navigation.navigate('mainStack')
       } else {
         navigation.navigate('lock')
@@ -105,7 +103,7 @@ export const CreateMasterPasswordScreen = observer(() => {
   }
 
   // Prepare to save password
-  const createMasterPassword = async () => {
+  const createMasterPasswordItem = async () => {
     const payload: CipherView = newCipher(CipherType.MasterPassword)
 
     const data = new LoginView()
