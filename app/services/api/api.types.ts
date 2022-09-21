@@ -377,6 +377,7 @@ export type ChangePasswordData = {
   key: string
   new_master_password_hash: string
   master_password_hash: string
+  master_password_cipher: CipherRequest
 }
 
 export type PasswordHintRequestData = {

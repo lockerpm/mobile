@@ -258,8 +258,6 @@ export const CipherDataMixinsProvider = observer(
             messagingService.send('syncCompleted', { successfully: false })
             return res
           }
-          console.log("getSyncData")
-          console.log(res.data.ciphers)
           // Start sync
           cipherStore.setLastSync(bumpTimestamp)
           await syncService.setLastSync(new Date(bumpTimestamp))
@@ -321,8 +319,6 @@ export const CipherDataMixinsProvider = observer(
             return res
           }
 
-          console.log("Sync process")
-          console.log(res.data.ciphers)
           // Set last sync
           cipherStore.setLastSync(bumpTimestamp)
           await syncService.setLastSync(new Date(bumpTimestamp))
@@ -1150,7 +1146,6 @@ export const CipherDataMixinsProvider = observer(
         // Online
         const cipherEnc = await cipherService.encrypt(cipher)
         const data = new CipherRequest(cipherEnc)
-        console.log(data)
         const res = await cipherStore.createCipher(data, score, collectionIds)
         if (res.kind === 'ok') {
           await _offlineCreateCipher({
@@ -1260,7 +1255,6 @@ export const CipherDataMixinsProvider = observer(
       const res = (await storageService.get(key)) || {}
 
       const cipherEnc = await cipherService.encrypt(cipher)
-      console.log(cipherEnc)
       const data = cipherRequest || new CipherRequest(cipherEnc)
       const revisionDate = new Date()
 
