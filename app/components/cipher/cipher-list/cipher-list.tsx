@@ -23,7 +23,7 @@ export interface CipherListProps {
   emptyContent?: JSX.Element
   navigation: any
   searchText?: string
-  onLoadingChange?: Function
+  onLoadingChange?: (val: boolean) => void
   cipherType?: CipherType | CipherType[]
   deleted?: boolean
   sortList?: {
@@ -34,7 +34,7 @@ export interface CipherListProps {
   collectionId?: string
   organizationId?: string
   isSelecting: boolean
-  setIsSelecting: Function
+  setIsSelecting: (val: boolean) => void
   selectedItems: string[]
   setSelectedItems: Function
   setAllItems: Function

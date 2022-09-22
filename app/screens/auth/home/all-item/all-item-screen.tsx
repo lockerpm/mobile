@@ -46,6 +46,7 @@ export const AllItemScreen = observer(() => {
     });
 
     return () => {
+      // eslint-disable-next-line no-unused-expressions
       subscription == null;
     };
   }, []);
@@ -67,7 +68,7 @@ export const AllItemScreen = observer(() => {
           {
             text: translate('common.cancel'),
             style: 'cancel',
-            onPress: () => { }
+            onPress: () => null
           },
           {
             text: translate('common.lock'),
