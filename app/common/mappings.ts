@@ -1,8 +1,6 @@
 import { ImageSourcePropType, ImageURISource } from "react-native"
 import { TxKeyPath } from "../i18n"
-
 // ---------------- Svg icons---------------------
-
 import FolderIcon from './images/vault/folder.svg'
 import NoteIcon from './images/vault/note.svg'
 import IdentityIcon from './images/vault/identity.svg'
@@ -183,4 +181,11 @@ export const SOCIAL_LOGIN_ICON = {
   githubLight: GitHubLight,
   apple: Apple,
   appleLight: AppleLight
+}
+
+
+export const APP_INTRO = {
+  intro1: require('./images/intro/intro1.png'),
+  intro2: require('./images/intro/intro2.png'),
+  intro3: require('./images/intro/intro3.png')
 }

@@ -11,13 +11,19 @@ import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommun
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 import { IS_IOS } from "../../../config/constants"
 import ReactNativeBiometrics from 'react-native-biometrics'
+import { CipherView, LoginUriView, LoginView } from "../../../../core/models/view"
+import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
+import { CipherType } from "../../../../core/enums"
+import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 
 
 export const LockScreen = observer(() => {
   const navigation = useNavigation()
+  const { user, uiStore } = useStores()
   const { notify, translate, notifyApiError, color } = useMixins()
   const { logout, sessionLogin, biometricLogin } = useCipherAuthenticationMixins()
-  const { user, uiStore } = useStores()
+  const { createCipher } = useCipherDataMixins()
+  const { getPasswordStrength, checkPasswordPolicy, newCipher } = useCipherHelpersMixins()
 
   const isAutofillAnroid = uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
 
@@ -40,11 +46,32 @@ export const LockScreen = observer(() => {
     navigation.navigate('login')
   }
 
+  // Prepare to save password
+  const createMasterPasswordItem = async () => {
+    const payload: CipherView = newCipher(CipherType.MasterPassword)
+
+    const data = new LoginView()
+    data.username = "locker.io"
+    data.password = masterPassword
+
+    const uriView = new LoginUriView()
+    uriView.uri = "https://locker.io"
+    data.uris = [uriView]
+
+    payload.name = "Locker Master Password"
+    payload.login = data
+
+    const res = await createCipher(payload, 1, [], true)
+    if (res.kind !== 'ok') {
+      notify("error", translate("error.master_password"))
+    }
+  }
+
   const handleUnlock = async () => {
     if (masterPassword) {
       setIsError(false)
       setIsUnlocking(true)
-      const res = await sessionLogin(masterPassword)
+      const res = await sessionLogin(masterPassword, createMasterPasswordItem)
       setIsUnlocking(false)
       if (res.kind === 'ok') {
         setMasterPassword('')
@@ -96,7 +123,7 @@ export const LockScreen = observer(() => {
   }
 
   // ---------------------- COMPONENTS -------------------------
-  
+
   const footer = (
     <Button
       isLoading={isSendingHint}
@@ -134,7 +161,7 @@ export const LockScreen = observer(() => {
           {
             text: translate('common.cancel'),
             style: 'cancel',
-            onPress: () => { }
+            onPress: () => null
           },
           {
             text: translate('common.logout'),
