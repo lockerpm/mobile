@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import { KdfType } from '../../../../core/enums/kdfType'
-import { useStores } from '../../../models'
+import { createCipherStoreDefaultModel, useStores } from '../../../models'
 import { useCipherDataMixins } from './data'
 import { useCoreService } from '../../core-service'
 import { delay } from '../../../utils/delay'
@@ -66,7 +66,7 @@ export const CipherAuthenticationMixinsProvider = observer(
     const { logoutAllServices } = useSocialLoginMixins()
 
     // TODO: don't know why, but crash if comment this line
-    const { syncAutofillData } = useCipherDataMixins()
+    const { syncAutofillData, createCipher } = useCipherDataMixins()
 
     // ------------------------ DATA -------------------------
 
@@ -133,7 +133,7 @@ export const CipherAuthenticationMixinsProvider = observer(
         // await syncAutofillData();
       }
 
-      if (res.data.has_no_master_pw_item) {
+      if (res.data.has_no_master_pw_item && createMasterPasswordItem !== undefined) {
         await createMasterPasswordItem()
       }
       return { kind: 'ok' }
@@ -324,7 +324,7 @@ export const CipherAuthenticationMixinsProvider = observer(
     }
 
 
-    const _createMasterPwItem = async (newPassword: string) => {
+    const _createMasterPwItem = (newPassword: string) => {
       const cipher = new CipherView()
       cipher.type = CipherType.Login
       const loginData = new LoginView()
@@ -340,7 +340,7 @@ export const CipherAuthenticationMixinsProvider = observer(
 
     const _createMasterPwItemRequest = async (newPassword: string) => {
       try {
-        const cipher = await _createMasterPwItem(newPassword)
+        const cipher = _createMasterPwItem(newPassword)
         const cipherEnc = await cipherService.encrypt(cipher)
         const data = new CipherRequest(cipherEnc)
         data.type = CipherType.MasterPassword
