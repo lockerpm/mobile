@@ -608,6 +608,11 @@ export const UserModel = types
       const res = await userApi.EAPassword(self.apiToken, id, payload)
       return res
     },
+    lockerPasswordEA: async (id: string, newPass: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.EALockerPassword(self.apiToken, id, newPass)
+      return res
+    },
     viewEA: async (id: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAView(self.apiToken, id)

@@ -258,6 +258,7 @@ export const CipherDataMixinsProvider = observer(
             messagingService.send('syncCompleted', { successfully: false })
             return res
           }
+
           // Start sync
           cipherStore.setLastSync(bumpTimestamp)
           await syncService.setLastSync(new Date(bumpTimestamp))

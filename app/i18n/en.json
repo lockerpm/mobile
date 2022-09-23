@@ -198,6 +198,7 @@
     "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation",
     "invitation_rejected": "Invitation rejected",
     "master_password_updated": "Master password is updated",
+    "locker_password_updated": "Locker password is updated",
     "biometric_enabled": "Face ID/Touch ID unlocking is enabled",
     "cipher_created": "New item created!",
     "cipher_deleted": "Item deleted!",

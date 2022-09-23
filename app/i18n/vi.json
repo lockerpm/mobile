@@ -198,6 +198,7 @@
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
     "invitation_rejected": "Đã từ chối lời mời",
     "master_password_updated": "Mật khẩu chính đã được cập nhật",
+    "locker_password_updated": "Mật khẩu Locker đã được cập nhật",
     "biometric_enabled": "Mở khóa bằng Face ID/Touch ID đã được kích hoạt",
     "cipher_created": "Thêm mới thành công",
     "cipher_deleted": "Xóa thành công",
