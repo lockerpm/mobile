@@ -139,7 +139,7 @@ export const ContactAction = (props: Props) => {
       )}
       {isApproved && !isViewType && (
         <>
-          {/* <ActionItem
+          <ActionItem
             name={translate('emergency_access.reset_pw')}
             action={() => {
               onClose()
@@ -149,7 +149,7 @@ export const ContactAction = (props: Props) => {
               })
             }}
           />
-          <Divider /> */}
+          <Divider />
           <ActionItem
             name={translate('emergency_access.reset_master_pw')}
             action={() => {

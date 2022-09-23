@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import { KdfType } from '../../../../core/enums/kdfType'
-import { createCipherStoreDefaultModel, useStores } from '../../../models'
+import {  useStores } from '../../../models'
 import { useCipherDataMixins } from './data'
 import { useCoreService } from '../../core-service'
 import { delay } from '../../../utils/delay'
@@ -66,7 +66,7 @@ export const CipherAuthenticationMixinsProvider = observer(
     const { logoutAllServices } = useSocialLoginMixins()
 
     // TODO: don't know why, but crash if comment this line
-    const { syncAutofillData, createCipher } = useCipherDataMixins()
+    const { syncAutofillData } = useCipherDataMixins()
 
     // ------------------------ DATA -------------------------
 
@@ -287,11 +287,15 @@ export const CipherAuthenticationMixinsProvider = observer(
       lockerPassword?: boolean
     ): Promise<{ kind: string }> => {
       try {
-        let payload = {}
         if (lockerPassword) {
-          payload = {
-            new_password: newPassword
+          const res = await user.lockerPasswordEA(eaID, newPassword)
+          if (res.kind !== 'ok') {
+            notifyApiError(res)
+            return { kind: 'bad-data' }
           }
+          // Setup service
+          notify('success', translate('success.locker_password_updated'))
+
         } else {
           const fetchKeyRes = await user.takeoverEA(eaID)
           if (fetchKeyRes.kind !== "ok") return { kind: 'bad-data' }
@@ -300,22 +304,31 @@ export const CipherAuthenticationMixinsProvider = observer(
           const oldEncKey = new SymmetricCryptoKey(oldKeyBuffer)
 
           const key = await cryptoService.makeKey(newPassword, email, kdf, kdf_iterations)
+
+
           const masterPasswordHash = await cryptoService.hashPassword(newPassword, key)
           const encKey = await cryptoService.remakeEncKey(key, oldEncKey)
-          payload = {
+
+          // Update Master Password item
+          const cipher = _createMasterPwItem(newPassword)
+          const cipherEnc = await cipherService.encrypt(cipher, encKey[0])
+          const data = new CipherRequest(cipherEnc)
+          data.type = CipherType.MasterPassword
+
+          const payload = {
             key: encKey[1].encryptedString,
-            new_master_password_hash: masterPasswordHash
+            new_master_password_hash: masterPasswordHash,
+            master_password_cipher: data
           }
+          const res = await user.passwordEA(eaID, payload)
+          if (res.kind !== 'ok') {
+            notifyApiError(res)
+            return { kind: 'bad-data' }
+          }
+          // Setup service
+          notify('success', translate('success.master_password_updated'))
         }
 
-        // Send API
-        const res = await user.passwordEA(eaID, payload)
-        if (res.kind !== 'ok') {
-          notifyApiError(res)
-          return { kind: 'bad-data' }
-        }
-        // Setup service
-        notify('success', translate('success.master_password_updated'))
         return { kind: 'ok' }
       } catch (e) {
         notify('error', translate('error.something_went_wrong'))
