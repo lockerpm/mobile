@@ -28,6 +28,7 @@ export const UiStoreModel = types
     isOffline: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
     isPerformOverlayTask: types.maybeNull(types.boolean),
+    // hasNoMasterPwItem: 
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
