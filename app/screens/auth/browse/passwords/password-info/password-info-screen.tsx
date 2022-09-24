@@ -108,7 +108,7 @@ export const PasswordInfoScreen = observer(() => {
           />
           <Text
             preset="header"
-            text={lockerMasterPassword ? translate('password.locker_master_password') : selectedCipher.name}
+            text={selectedCipher.name}
             style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
           >
             {

@@ -2144,6 +2144,8 @@ export const CipherDataMixinsProvider = observer(
         if (cipherRes.kind !== 'ok') {
           if (cipherRes.kind === 'not-found' || cipherRes.kind === 'forbidden') {
             await _offlineDeleteCiphers([id], true)
+
+            // TODO
             cipherStore.setLastSync()
           } else {
             notifyApiError(cipherRes)
