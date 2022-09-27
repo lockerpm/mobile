@@ -85,21 +85,21 @@ export const CreateMasterPasswordScreen = observer(() => {
 
   // Confirm master pass
   const handleCreate = async () => {
-    setIsCreating(true)
-    const res = await registerLocker(masterPassword, hint, passwordStrength)
-    if (res.kind === 'ok') {
-      logCreateMasterPwEvent()
+    // setIsCreating(true)
+    // const res = await registerLocker(masterPassword, hint, passwordStrength)
+    // if (res.kind === 'ok') {
+    //   logCreateMasterPwEvent()
 
-      const sessionRes = await sessionLogin(masterPassword, createMasterPasswordItem)
+    //   const sessionRes = await sessionLogin(masterPassword, createMasterPasswordItem)
 
-      if (sessionRes.kind === 'ok') {
-        setIsCreating(false)
-        navigation.navigate('mainStack')
-      } else {
-        navigation.navigate('lock')
-      }
-    } 
-    setIsCreating(false)
+    //   if (sessionRes.kind === 'ok') {
+    //     setIsCreating(false)
+    //     navigation.navigate('mainStack')
+    //   } else {
+    //     navigation.navigate('lock')
+    //   }
+    // } 
+    // setIsCreating(false)
   }
 
   // Prepare to save password
