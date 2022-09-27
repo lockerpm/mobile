@@ -31,14 +31,12 @@ export const EmergencyAccessScreen = () => {
     const resTrusted = await user.trustedEA()
     if (resTrusted.kind === 'ok') {
       setTrusted(resTrusted.data)
-      // console.log(res.data)
     } else {
       notifyApiError(resTrusted)
     }
     const resGrant = await user.grantedEA()
     if (resGrant.kind === 'ok') {
       setGrant(resGrant.data)
-      // console.log(res.data)
     } else {
       notifyApiError(resGrant)
     }
