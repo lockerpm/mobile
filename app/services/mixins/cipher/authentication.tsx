@@ -134,7 +134,7 @@ export const CipherAuthenticationMixinsProvider = observer(
       }
 
       if (res.data.has_no_master_pw_item && createMasterPasswordItem !== undefined) {
-        console.log(":aashjdbhjasbdhjasd")
+        uiStore.setHasNoMasterPwItem(true)
         await createMasterPasswordItem()
       }
       return { kind: 'ok' }
