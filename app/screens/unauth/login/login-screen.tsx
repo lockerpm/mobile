@@ -37,11 +37,11 @@ export const LoginScreen = observer(() => {
     ])
     setIsScreenLoading(false)
     if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
-      // if (user.is_pwd_manager) {
-      //   navigation.navigate('lock')
-      // } else {
+      if (user.is_pwd_manager) {
+        navigation.navigate('lock')
+      } else {
         navigation.navigate('createMasterPassword')
-      // }
+      }
     }
   }
 

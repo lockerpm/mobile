@@ -18,13 +18,14 @@ export interface ModalProps {
   onOpen?: () => void
   title?: string
   ignoreBackgroundPress?: boolean
+  disableHeader?: boolean   // remove close button 
 }
 
 /**
  * Describe your component here
  */
 export const Modal = (props: ModalProps) => {
-  const { style, isOpen, children, onClose, onOpen, title, ignoreBackgroundPress } = props
+  const { style, isOpen, children, onClose, onOpen, title, ignoreBackgroundPress, disableHeader } = props
   const { color } = useMixins()
 
   const CONTAINER: ViewStyle = {
@@ -63,33 +64,35 @@ export const Modal = (props: ModalProps) => {
       supportedOrientations={['portrait', 'landscape']}
       ignoreBackgroundPress={ignoreBackgroundPress}
     >
-      <View 
-        style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-          justifyContent: 'space-between',
-          width: '100%',
-          marginBottom: 10
-        }]}
-      >
-        <Text
-          preset="header"
-          text={title}
-          numberOfLines={2}
-          style={{
-            fontSize: fontSize.h4
-          }}
-        />
-
-        <Button
-          preset="link"
-          onPress={onClose}
+      {
+        !disableHeader && <View
+          style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+            justifyContent: 'space-between',
+            width: '100%',
+            marginBottom: 10
+          }]}
         >
-          <IoniconsIcon
-            name="close"
-            size={22}
-            color={color.text}
+          <Text
+            preset="header"
+            text={title}
+            numberOfLines={2}
+            style={{
+              fontSize: fontSize.h4
+            }}
           />
-        </Button>
-      </View>
+
+          <Button
+            preset="link"
+            onPress={onClose}
+          >
+            <IoniconsIcon
+              name="close"
+              size={22}
+              color={color.text}
+            />
+          </Button>
+        </View>
+      }
       {children}
     </Dialog>
   )
