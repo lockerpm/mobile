@@ -274,7 +274,7 @@ export const PasswordEditScreen = observer(() => {
         <View style={{ flex: 1 }}>
           <FloatingInput
             label={translate('password.username')}
-            value={username}
+            value={username} 
             onChangeText={setUsername}
           />
         </View>
@@ -334,6 +334,12 @@ export const PasswordEditScreen = observer(() => {
             label={translate('password.website_url')}
             value={url}
             onChangeText={setUrl}
+            onBlur={() => {
+              if (mode === 'add' && !name) {
+                const genName = url.replace('https://', '')
+                setName(genName)
+              }
+            }}
           />
         </View>
         {/* Web url end */}
