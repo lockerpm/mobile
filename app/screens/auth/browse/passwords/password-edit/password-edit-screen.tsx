@@ -97,6 +97,7 @@ export const PasswordEditScreen = observer(() => {
       setUsername(saveData.username)
       setPassword(saveData.password)
       setUrl(saveData.domain)
+      setName(saveData.domain?.replace('https://', ''))
     }
   }, [])
 
