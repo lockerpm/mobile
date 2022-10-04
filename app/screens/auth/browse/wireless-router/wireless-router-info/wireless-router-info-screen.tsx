@@ -11,13 +11,16 @@ import { CipherView } from "../../../../../../core/models/view"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { useMixins } from "../../../../../services/mixins"
+import { toWirelessRouterData } from "../wireless-router.type"
 
 
 export const WirelessRouterInfoScreen = observer(() => {
   const navigation = useNavigation()
-  const { cipherStore } = useStores()
-  const selectedCipher: CipherView = cipherStore.cipherView
   const { translate, color } = useMixins()
+  const { cipherStore } = useStores()
+
+  const selectedCipher: CipherView = cipherStore.cipherView
+  const wirelessRouterData = toWirelessRouterData(selectedCipher.notes)
 
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
@@ -26,72 +29,28 @@ export const WirelessRouterInfoScreen = observer(() => {
 
   const textFields = [
     {
-      label: translate('identity.title'),
-      value: selectedCipher.identity.title
+      label: translate('wireless_router.device_name'),
+      value: wirelessRouterData.deviceName,
     },
     {
-      label: translate('identity.first_name'),
-      value: selectedCipher.identity.firstName
+      label: translate('wireless_router.router_ip_address'),
+      value: wirelessRouterData.ipAddress,
     },
     {
-      label: translate('identity.last_name'),
-      value: selectedCipher.identity.lastName
+      label: translate('wireless_router.admin_username'),
+      value: wirelessRouterData.adminUsername,
     },
     {
-      label: translate('identity.username'),
-      value: selectedCipher.identity.username
+      label: translate('wireless_router.admin_password'),
+      value: wirelessRouterData.adminPassword,
     },
     {
-      label: translate('identity.email'),
-      value: selectedCipher.identity.email
+      label: translate('wireless_router.wifi_ssid'),
+      value: wirelessRouterData.wifiSSID,
     },
     {
-      label: translate('identity.company'),
-      value: selectedCipher.identity.company
-    },
-    {
-      label: translate('identity.phone'),
-      value: selectedCipher.identity.phone
-    },
-    {
-      label: translate('identity.ssn'),
-      value: selectedCipher.identity.ssn
-    },
-    {
-      label: translate('identity.passport'),
-      value: selectedCipher.identity.passportNumber
-    },
-    {
-      label: translate('identity.license'),
-      value: selectedCipher.identity.licenseNumber
-    },
-    {
-      label: translate('identity.address') + ' 1',
-      value: selectedCipher.identity.address1
-    },
-    {
-      label: translate('identity.address') + ' 2',
-      value: selectedCipher.identity.address2
-    },
-    // {
-    //   label: translate('identity.address') + ' 3',
-    //   value: selectedCipher.identity.address3
-    // },
-    {
-      label: translate('identity.city'),
-      value: selectedCipher.identity.city
-    },
-    {
-      label: translate('identity.state'),
-      value: selectedCipher.identity.state
-    },
-    {
-      label: translate('identity.zip'),
-      value: selectedCipher.identity.postalCode
-    },
-    {
-      label: translate('identity.country'),
-      value: selectedCipher.identity.country
+      label: translate('wireless_router.wifi_pw'),
+      value: wirelessRouterData.wifiPassword,
     }
   ]
 
@@ -196,16 +155,6 @@ export const WirelessRouterInfoScreen = observer(() => {
             />
           ))
         }
-
-        {/* Notes */}
-        <Textarea
-          label={translate('common.notes')}
-          value={selectedCipher.notes}
-          editable={false}
-          copyAble
-          style={{ marginTop: 10 }}
-        />
-        {/* Notes end */}
 
         {/* Others common info */}
         <CipherInfoCommon cipher={selectedCipher} />

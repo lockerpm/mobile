@@ -155,7 +155,7 @@ export const ApiCipherInfoScreen = observer(() => {
         {/* Notes */}
         <Textarea
           label={translate('common.notes')}
-          value={selectedCipher.notes}
+          value={apiCipherData.notes}
           editable={false}
           copyAble
           style={{ marginTop: 10 }}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select, CustomFieldsEdit
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -10,10 +10,11 @@ import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
-import { CipherView, IdentityView } from "../../../../../../core/models/view"
+import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { DatabaseData, toDatabaseData } from "../database.typs"
 
 
 type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'databases__edit'>;
@@ -31,40 +32,31 @@ export const DatabaseEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
-  const { translate, color } = useMixins()
-  const { createCipher, updateCipher } = useCipherDataMixins()
-  const { newCipher } = useCipherHelpersMixins()
+
   const { cipherStore } = useStores()
+  const { translate, color } = useMixins()
+  const { newCipher } = useCipherHelpersMixins()
+  const { createCipher, updateCipher } = useCipherDataMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
-
+  const databaseData = toDatabaseData(selectedCipher.notes)
   // ------------------ PARAMS -----------------------
-
-  const [isLoading, setIsLoading] = useState(false)
 
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  const [title, setTitle] = useState(mode !== 'add' ? selectedCipher.identity.title : '')
-  const [firstName, setFirstName] = useState(mode !== 'add' ? selectedCipher.identity.firstName : '')
-  const [lastName, setLastName] = useState(mode !== 'add' ? selectedCipher.identity.lastName : '')
-  const [username, setUsername] = useState(mode !== 'add' ? selectedCipher.identity.username : '')
-  const [email, setEmail] = useState(mode !== 'add' ? selectedCipher.identity.email : '')
-  const [phone, setPhone] = useState(mode !== 'add' ? selectedCipher.identity.phone : '')
-  const [company, setCompany] = useState(mode !== 'add' ? selectedCipher.identity.company : '')
-  const [ssn, setSsn] = useState(mode !== 'add' ? selectedCipher.identity.ssn : '')
-  const [passport, setPassport] = useState(mode !== 'add' ? selectedCipher.identity.passportNumber : '')
-  const [license, setLicense] = useState(mode !== 'add' ? selectedCipher.identity.licenseNumber : '')
-  const [address1, setAddress1] = useState(mode !== 'add' ? selectedCipher.identity.address1 : '')
-  const [address2, setAddress2] = useState(mode !== 'add' ? selectedCipher.identity.address2 : '')
-  // const [address3, setAddress3] = useState(mode !== 'add' ? selectedCipher.identity.address3 : '')
-  const [city, setCity] = useState(mode !== 'add' ? selectedCipher.identity.city : '')
-  const [state, setState] = useState(mode !== 'add' ? selectedCipher.identity.state : '')
-  const [zip, setZip] = useState(mode !== 'add' ? selectedCipher.identity.postalCode : '')
-  const [country, setCountry] = useState(mode !== 'add' ? selectedCipher.identity.country : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+
+  const [host, setHost] = useState(mode !== 'add' ? databaseData.host : '')
+  const [port, setPort] = useState(mode !== 'add' ? databaseData.port : '')
+  const [username, setUsername] = useState(mode !== 'add' ? databaseData.username : '')
+  const [password, setPassword] = useState(mode !== 'add' ? databaseData.password : '')
+  const [defaults, setDefault] = useState(mode !== 'add' ? databaseData.default : '')
+  const [note, setNote] = useState(mode !== 'add' ? databaseData.notes : '')
+
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+
+  const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ EFFECTS -----------------------
 
@@ -89,37 +81,31 @@ export const DatabaseEditScreen = observer(() => {
     setIsLoading(true)
     let payload: CipherView
     if (mode === 'add') {
-      payload = newCipher(CipherType.Identity)
+      payload = newCipher(CipherType.Database)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
-    const data = new IdentityView()
-    data.title = title
-    data.firstName = firstName
-    data.lastName = lastName
-    data.username = username
-    data.email = email
-    data.company = company
-    data.phone = phone
-    data.ssn = ssn
-    data.passportNumber = passport
-    data.licenseNumber = license
-    data.address1 = address1
-    data.address2 = address2
-    // data.address3 = address3
-    data.city = city
-    data.state = state
-    data.postalCode = zip
-    data.country = country
+    const databaseData: DatabaseData = {
+      host,
+      port,
+      username,
+      password,
+      default: defaults,
+      notes: note,
+    }
 
     payload.fields = fields
     payload.name = name
-    payload.notes = note
+    payload.notes = JSON.stringify(databaseData)
     payload.folderId = folder
-    payload.identity = data
     payload.organizationId = organizationId
+    payload.secureNote = {
+      // @ts-ignore
+      response: null,
+      type: 0
+    }
 
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
@@ -136,114 +122,32 @@ export const DatabaseEditScreen = observer(() => {
 
   // ----------------- RENDER ----------------------
 
-  const contactDetails: InputItem[] = [
+  const databaseDetails: InputItem[] = [
     {
-      label: translate('identity.first_name'),
-      value: firstName,
-      setter: setFirstName
+      label: translate('database.host'),
+      value: host,
+      setter: setHost
     },
     {
-      label: translate('identity.last_name'),
-      value: lastName,
-      setter: setLastName
+      label: translate('database.port'),
+      value: port,
+      setter: setPort
     },
     {
-      label: translate('identity.username'),
+      label: translate('common.username'),
       value: username,
       setter: setUsername
     },
     {
-      label: translate('identity.email'),
-      value: email,
-      setter: setEmail,
+      label: translate('common.password'),
+      value: password,
+      setter: setPassword,
       type: 'email-address'
     },
     {
-      label: translate('identity.company'),
-      value: company,
-      setter: setCompany
-    },
-    {
-      label: translate('identity.phone'),
-      value: phone,
-      setter: setPhone,
-      type: 'numeric'
-    },
-    {
-      label: translate('identity.ssn'),
-      value: ssn,
-      setter: setSsn,
-      type: 'numeric'
-    },
-    {
-      label: translate('identity.passport'),
-      value: passport,
-      setter: setPassport,
-      type: 'numeric'
-    },
-    {
-      label: translate('identity.license'),
-      value: license,
-      setter: setLicense,
-      type: 'numeric'
-    }
-  ]
-
-  const addressDetails: InputItem[] = [
-    {
-      label: translate('identity.address') + ' 1',
-      value: address1,
-      setter: setAddress1
-    },
-    {
-      label: translate('identity.address') + ' 2',
-      value: address2,
-      setter: setAddress2
-    },
-    // {
-    //   label: translate('identity.address') + ' 3',
-    //   value: address3,
-    //   setter: setAddress3
-    // },
-    {
-      label: translate('identity.city'),
-      value: city,
-      setter: setCity
-    },
-    {
-      label: translate('identity.state'),
-      value: state,
-      setter: setState
-    },
-    {
-      label: translate('identity.zip'),
-      value: zip,
-      setter: setZip,
-      type: 'numeric'
-    },
-    {
-      label: translate('identity.country'),
-      value: country,
-      setter: setCountry
-    },
-  ]
-
-  const TITLES = [
-    {
-      label: 'mr',
-      value: 'mr'
-    },
-    {
-      label: 'mrs',
-      value: 'mrs'
-    },
-    {
-      label: 'ms',
-      value: 'ms'
-    },
-    {
-      label: 'dr',
-      value: 'dr'
+      label: translate('database.default'),
+      value: defaults,
+      setter: setDefault
     }
   ]
 
@@ -258,7 +162,7 @@ export const DatabaseEditScreen = observer(() => {
         <Header
           title={
             mode === 'add'
-              ? `${translate('common.add')} ${translate('common.identity')}`
+              ? `${translate('common.add')} ${translate('common.database')}`
               : translate('common.edit')
           }
           goBack={() => navigation.goBack()}
@@ -269,7 +173,7 @@ export const DatabaseEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
@@ -302,7 +206,7 @@ export const DatabaseEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('identity.personal_info').toUpperCase()}
+          text={translate('common.database').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
@@ -314,63 +218,21 @@ export const DatabaseEditScreen = observer(() => {
           paddingBottom: 32
         }]}
       >
-        <Select
-          floating
-          placeholder={translate('identity.title')}
-          value={title}
-          options={TITLES}
-          onChange={val => setTitle(val.toString())}
-        />
-
         {
-          contactDetails.map((item, index) => (
-            <FloatingInput
+          databaseDetails.map((e, index) => (
+            <View
               key={index}
-              isRequired={item.isRequired}
-              keyboardType={item.type || 'default'}
-              label={item.label}
-              value={item.value}
-              onChangeText={(text) => item.setter(text)}
-              style={{
-                marginTop: 20
-              }}
-            />
+              style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
+              <FloatingInput
+                label={e.label}
+                value={e.value}
+                onChangeText={e.setter}
+              />
+            </View>
           ))
         }
       </View>
       {/* Info end */}
-
-      <View style={commonStyles.SECTION_PADDING}>
-        <Text
-          text={translate('identity.address_details').toUpperCase()}
-          style={{ fontSize: fontSize.small }}
-        />
-      </View>
-
-      {/* Address */}
-      <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
-      >
-        {
-          addressDetails.map((item, index) => (
-            <FloatingInput
-              key={index}
-              isRequired={item.isRequired}
-              keyboardType={item.type || 'default'}
-              label={item.label}
-              value={item.value}
-              onChangeText={(text) => item.setter(text)}
-              style={{
-                marginTop: index !== 0 ? 20 : 0
-              }}
-            />
-          ))
-        }
-      </View>
-      {/* Address end */}
 
       {/* Custom fields */}
       <CustomFieldsEdit

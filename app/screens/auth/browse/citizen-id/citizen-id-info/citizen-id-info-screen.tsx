@@ -12,6 +12,7 @@ import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { useMixins } from "../../../../../services/mixins"
 import { toCitizenIdData } from "../citizen-id.type"
+import { CitizenIDAction } from "../citizen-id-action"
 
 
 export const CitizenIDInfoScreen = observer(() => {
@@ -21,7 +22,7 @@ export const CitizenIDInfoScreen = observer(() => {
 
   const selectedCipher: CipherView = cipherStore.cipherView
   const citizenIdData = toCitizenIdData(selectedCipher.notes)
-  
+
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
   const [showAction, setShowAction] = useState(false)
@@ -89,7 +90,7 @@ export const CitizenIDInfoScreen = observer(() => {
             <Button
               preset="link"
               onPress={() => setShowAction(true)}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
@@ -116,13 +117,12 @@ export const CitizenIDInfoScreen = observer(() => {
             onLoadingChange={setIsLoading}
           />
         ) : (
-          null
-        //   <IdentityAction
-        //     navigation={navigation}
-        //     isOpen={showAction}
-        //     onClose={() => setShowAction(false)}
-        //     onLoadingChange={setIsLoading}
-        //   />
+          <CitizenIDAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
+          />
         )
       }
       {/* Actions end */}
@@ -159,8 +159,8 @@ export const CitizenIDInfoScreen = observer(() => {
 
       {/* Info */}
       <View style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingVertical: 22
+        backgroundColor: color.background,
+        paddingVertical: 22
       }]}>
         {
           textFields.map((item, index) => (
@@ -179,7 +179,7 @@ export const CitizenIDInfoScreen = observer(() => {
         {/* Notes */}
         <Textarea
           label={translate('common.notes')}
-          value={selectedCipher.notes}
+          value={citizenIdData.notes}
           editable={false}
           copyAble
           style={{ marginTop: 10 }}

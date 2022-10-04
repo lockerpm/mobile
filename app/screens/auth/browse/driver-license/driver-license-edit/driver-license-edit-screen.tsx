@@ -14,6 +14,7 @@ import { CipherView, IdentityView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { DriverLicenseData, toDriverLicenseData } from "../driver-license.type"
 
 
 type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'driverLicenses__edit'>;
@@ -31,40 +32,37 @@ export const DriverLicenseEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
-  const { translate, color } = useMixins()
-  const { createCipher, updateCipher } = useCipherDataMixins()
-  const { newCipher } = useCipherHelpersMixins()
+
   const { cipherStore } = useStores()
+  const { translate, color } = useMixins()
+  const { newCipher } = useCipherHelpersMixins()
+  const { createCipher, updateCipher } = useCipherDataMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const driverLicenseData = toDriverLicenseData(selectedCipher.notes)
 
   // ------------------ PARAMS -----------------------
 
-  const [isLoading, setIsLoading] = useState(false)
-
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  const [title, setTitle] = useState(mode !== 'add' ? selectedCipher.identity.title : '')
-  const [firstName, setFirstName] = useState(mode !== 'add' ? selectedCipher.identity.firstName : '')
-  const [lastName, setLastName] = useState(mode !== 'add' ? selectedCipher.identity.lastName : '')
-  const [username, setUsername] = useState(mode !== 'add' ? selectedCipher.identity.username : '')
-  const [email, setEmail] = useState(mode !== 'add' ? selectedCipher.identity.email : '')
-  const [phone, setPhone] = useState(mode !== 'add' ? selectedCipher.identity.phone : '')
-  const [company, setCompany] = useState(mode !== 'add' ? selectedCipher.identity.company : '')
-  const [ssn, setSsn] = useState(mode !== 'add' ? selectedCipher.identity.ssn : '')
-  const [passport, setPassport] = useState(mode !== 'add' ? selectedCipher.identity.passportNumber : '')
-  const [license, setLicense] = useState(mode !== 'add' ? selectedCipher.identity.licenseNumber : '')
-  const [address1, setAddress1] = useState(mode !== 'add' ? selectedCipher.identity.address1 : '')
-  const [address2, setAddress2] = useState(mode !== 'add' ? selectedCipher.identity.address2 : '')
-  // const [address3, setAddress3] = useState(mode !== 'add' ? selectedCipher.identity.address3 : '')
-  const [city, setCity] = useState(mode !== 'add' ? selectedCipher.identity.city : '')
-  const [state, setState] = useState(mode !== 'add' ? selectedCipher.identity.state : '')
-  const [zip, setZip] = useState(mode !== 'add' ? selectedCipher.identity.postalCode : '')
-  const [country, setCountry] = useState(mode !== 'add' ? selectedCipher.identity.country : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+
+  const [idNO, setIdNo] = useState(mode !== 'add' ? driverLicenseData.idNO : '')
+  const [fullName, setFullName] = useState(mode !== 'add' ? driverLicenseData.fullName : '')
+  const [dob, setDob] = useState(mode !== 'add' ? driverLicenseData.dob : '')
+  const [address, setAddress] = useState(mode !== 'add' ? driverLicenseData.address : '')
+  const [nationality, setNationality] = useState(mode !== 'add' ? driverLicenseData.nationality : '')
+  const [classId, setClass] = useState(mode !== 'add' ? driverLicenseData.class : '')
+  const [validUntil, setValidUntil] = useState(mode !== 'add' ? driverLicenseData.validUntil : '')
+  const [vehicleClass, setVehicleClass] = useState(mode !== 'add' ? driverLicenseData.vehicleClass : '')
+  const [beginningDate, setBeginningDate] = useState(mode !== 'add' ? driverLicenseData.beginningDate : '')
+  const [issuedBy, setIssuedBy] = useState(mode !== 'add' ? driverLicenseData.issuedBy : '')
+  const [note, setNote] = useState(mode !== 'add' ? driverLicenseData.notes : '')
+
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+
+  const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ EFFECTS -----------------------
 
@@ -89,37 +87,36 @@ export const DriverLicenseEditScreen = observer(() => {
     setIsLoading(true)
     let payload: CipherView
     if (mode === 'add') {
-      payload = newCipher(CipherType.Identity)
+      payload = newCipher(CipherType.DriverLicense)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
-    const data = new IdentityView()
-    data.title = title
-    data.firstName = firstName
-    data.lastName = lastName
-    data.username = username
-    data.email = email
-    data.company = company
-    data.phone = phone
-    data.ssn = ssn
-    data.passportNumber = passport
-    data.licenseNumber = license
-    data.address1 = address1
-    data.address2 = address2
-    // data.address3 = address3
-    data.city = city
-    data.state = state
-    data.postalCode = zip
-    data.country = country
+    const driverLicenseData: DriverLicenseData = {
+      idNO,
+      fullName,
+      dob,
+      address,
+      nationality,
+      class: classId,
+      validUntil,
+      vehicleClass,
+      beginningDate,
+      issuedBy,
+      notes: note,
+    }
 
     payload.fields = fields
     payload.name = name
-    payload.notes = note
+    payload.notes = JSON.stringify(driverLicenseData)
     payload.folderId = folder
-    payload.identity = data
     payload.organizationId = organizationId
+    payload.secureNote = {
+      // @ts-ignore
+      response: null,
+      type: 0
+    }
 
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
@@ -136,114 +133,56 @@ export const DriverLicenseEditScreen = observer(() => {
 
   // ----------------- RENDER ----------------------
 
-  const contactDetails: InputItem[] = [
+  const driverLicenseDetails: InputItem[] = [
     {
-      label: translate('identity.first_name'),
-      value: firstName,
-      setter: setFirstName
+      label: translate('driver_license.no'),
+      value: idNO,
+      setter: setIdNo
     },
     {
-      label: translate('identity.last_name'),
-      value: lastName,
-      setter: setLastName
+      label: translate('common.fullname'),
+      value: fullName,
+      setter: setFullName
     },
     {
-      label: translate('identity.username'),
-      value: username,
-      setter: setUsername
+      label: translate('common.dob'),
+      value: dob,
+      setter: setDob
     },
     {
-      label: translate('identity.email'),
-      value: email,
-      setter: setEmail,
-      type: 'email-address'
+      label: translate('common.address'),
+      value: address,
+      setter: setAddress,
     },
     {
-      label: translate('identity.company'),
-      value: company,
-      setter: setCompany
+      label: translate('common.nationality'),
+      value: nationality,
+      setter: setNationality
     },
     {
-      label: translate('identity.phone'),
-      value: phone,
-      setter: setPhone,
-      type: 'numeric'
+      label: translate('driver_license.class'),
+      value: classId,
+      setter: setClass
     },
     {
-      label: translate('identity.ssn'),
-      value: ssn,
-      setter: setSsn,
-      type: 'numeric'
+      label: translate('driver_license.valid_until'),
+      value: validUntil,
+      setter: setValidUntil
     },
     {
-      label: translate('identity.passport'),
-      value: passport,
-      setter: setPassport,
-      type: 'numeric'
+      label: translate('driver_license.vehicle_class'),
+      value: vehicleClass,
+      setter: setVehicleClass
     },
     {
-      label: translate('identity.license'),
-      value: license,
-      setter: setLicense,
-      type: 'numeric'
-    }
-  ]
-
-  const addressDetails: InputItem[] = [
-    {
-      label: translate('identity.address') + ' 1',
-      value: address1,
-      setter: setAddress1
+      label: translate('driver_license.beginning_date'),
+      value: beginningDate,
+      setter: setBeginningDate
     },
     {
-      label: translate('identity.address') + ' 2',
-      value: address2,
-      setter: setAddress2
-    },
-    // {
-    //   label: translate('identity.address') + ' 3',
-    //   value: address3,
-    //   setter: setAddress3
-    // },
-    {
-      label: translate('identity.city'),
-      value: city,
-      setter: setCity
-    },
-    {
-      label: translate('identity.state'),
-      value: state,
-      setter: setState
-    },
-    {
-      label: translate('identity.zip'),
-      value: zip,
-      setter: setZip,
-      type: 'numeric'
-    },
-    {
-      label: translate('identity.country'),
-      value: country,
-      setter: setCountry
-    },
-  ]
-
-  const TITLES = [
-    {
-      label: 'mr',
-      value: 'mr'
-    },
-    {
-      label: 'mrs',
-      value: 'mrs'
-    },
-    {
-      label: 'ms',
-      value: 'ms'
-    },
-    {
-      label: 'dr',
-      value: 'dr'
+      label: translate('driver_license.issued_by'),
+      value: issuedBy,
+      setter: setIssuedBy
     }
   ]
 
@@ -258,7 +197,7 @@ export const DriverLicenseEditScreen = observer(() => {
         <Header
           title={
             mode === 'add'
-              ? `${translate('common.add')} ${translate('common.identity')}`
+              ? `${translate('common.add')} ${translate('common.driver_license')}`
               : translate('common.edit')
           }
           goBack={() => navigation.goBack()}
@@ -269,7 +208,7 @@ export const DriverLicenseEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
@@ -302,7 +241,7 @@ export const DriverLicenseEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('identity.personal_info').toUpperCase()}
+          text={translate('common.driver_license').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
@@ -314,63 +253,22 @@ export const DriverLicenseEditScreen = observer(() => {
           paddingBottom: 32
         }]}
       >
-        <Select
-          floating
-          placeholder={translate('identity.title')}
-          value={title}
-          options={TITLES}
-          onChange={val => setTitle(val.toString())}
-        />
-
         {
-          contactDetails.map((item, index) => (
-            <FloatingInput
-              key={index}
-              isRequired={item.isRequired}
-              keyboardType={item.type || 'default'}
-              label={item.label}
-              value={item.value}
-              onChangeText={(text) => item.setter(text)}
-              style={{
-                marginTop: 20
-              }}
-            />
+          driverLicenseDetails.map((e,index) => (
+          <View 
+            key={index}
+            style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
+              <FloatingInput
+                label={e.label}
+                value={e.value}
+                onChangeText={e.setter}
+              />
+            </View>
           ))
         }
       </View>
       {/* Info end */}
 
-      <View style={commonStyles.SECTION_PADDING}>
-        <Text
-          text={translate('identity.address_details').toUpperCase()}
-          style={{ fontSize: fontSize.small }}
-        />
-      </View>
-
-      {/* Address */}
-      <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
-      >
-        {
-          addressDetails.map((item, index) => (
-            <FloatingInput
-              key={index}
-              isRequired={item.isRequired}
-              keyboardType={item.type || 'default'}
-              label={item.label}
-              value={item.value}
-              onChangeText={(text) => item.setter(text)}
-              style={{
-                marginTop: index !== 0 ? 20 : 0
-              }}
-            />
-          ))
-        }
-      </View>
-      {/* Address end */}
 
       {/* Custom fields */}
       <CustomFieldsEdit
