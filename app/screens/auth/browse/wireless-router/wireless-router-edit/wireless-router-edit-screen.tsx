@@ -14,6 +14,7 @@ import { CipherView, IdentityView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { toWirelessRouterData, WirelessRouterData } from "../wireless-router.type"
 
 
 type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'wirelessRouters__edit'>;
@@ -31,40 +32,32 @@ export const WirelessRouterEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
-  const { translate, color } = useMixins()
-  const { createCipher, updateCipher } = useCipherDataMixins()
-  const { newCipher } = useCipherHelpersMixins()
+
   const { cipherStore } = useStores()
+  const { translate, color } = useMixins()
+  const { newCipher } = useCipherHelpersMixins()
+  const { createCipher, updateCipher } = useCipherDataMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const wirelessRouterData = toWirelessRouterData(selectedCipher.notes)
 
   // ------------------ PARAMS -----------------------
 
-  const [isLoading, setIsLoading] = useState(false)
-
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  const [title, setTitle] = useState(mode !== 'add' ? selectedCipher.identity.title : '')
-  const [firstName, setFirstName] = useState(mode !== 'add' ? selectedCipher.identity.firstName : '')
-  const [lastName, setLastName] = useState(mode !== 'add' ? selectedCipher.identity.lastName : '')
-  const [username, setUsername] = useState(mode !== 'add' ? selectedCipher.identity.username : '')
-  const [email, setEmail] = useState(mode !== 'add' ? selectedCipher.identity.email : '')
-  const [phone, setPhone] = useState(mode !== 'add' ? selectedCipher.identity.phone : '')
-  const [company, setCompany] = useState(mode !== 'add' ? selectedCipher.identity.company : '')
-  const [ssn, setSsn] = useState(mode !== 'add' ? selectedCipher.identity.ssn : '')
-  const [passport, setPassport] = useState(mode !== 'add' ? selectedCipher.identity.passportNumber : '')
-  const [license, setLicense] = useState(mode !== 'add' ? selectedCipher.identity.licenseNumber : '')
-  const [address1, setAddress1] = useState(mode !== 'add' ? selectedCipher.identity.address1 : '')
-  const [address2, setAddress2] = useState(mode !== 'add' ? selectedCipher.identity.address2 : '')
-  // const [address3, setAddress3] = useState(mode !== 'add' ? selectedCipher.identity.address3 : '')
-  const [city, setCity] = useState(mode !== 'add' ? selectedCipher.identity.city : '')
-  const [state, setState] = useState(mode !== 'add' ? selectedCipher.identity.state : '')
-  const [zip, setZip] = useState(mode !== 'add' ? selectedCipher.identity.postalCode : '')
-  const [country, setCountry] = useState(mode !== 'add' ? selectedCipher.identity.country : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+
+  const [deviceName, setDeviceName] = useState(mode !== 'add' ? wirelessRouterData.deviceName : '')
+  const [ipAddress, setIpAddress] = useState(mode !== 'add' ? wirelessRouterData.ipAddress : '')
+  const [adminUsername, setAdminUsername] = useState(mode !== 'add' ? wirelessRouterData.adminUsername : '')
+  const [adminPassword, setAdminPassword] = useState(mode !== 'add' ? wirelessRouterData.adminPassword : '')
+  const [wifiSSID, setWifiSSID] = useState(mode !== 'add' ? wirelessRouterData.wifiSSID : '')
+  const [wifiPassword, setWifiPassword] = useState(mode !== 'add' ? wirelessRouterData.wifiPassword : '')
+  
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+  
+  const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ EFFECTS -----------------------
 
@@ -89,37 +82,31 @@ export const WirelessRouterEditScreen = observer(() => {
     setIsLoading(true)
     let payload: CipherView
     if (mode === 'add') {
-      payload = newCipher(CipherType.Identity)
+      payload = newCipher(CipherType.WirelessRouter)
     } else {
       // @ts-ignore
       payload = {...selectedCipher}
     }
 
-    const data = new IdentityView()
-    data.title = title
-    data.firstName = firstName
-    data.lastName = lastName
-    data.username = username
-    data.email = email
-    data.company = company
-    data.phone = phone
-    data.ssn = ssn
-    data.passportNumber = passport
-    data.licenseNumber = license
-    data.address1 = address1
-    data.address2 = address2
-    // data.address3 = address3
-    data.city = city
-    data.state = state
-    data.postalCode = zip
-    data.country = country
+    const wirelessRouterData: WirelessRouterData = {
+      deviceName,
+      ipAddress,
+      adminUsername,
+      adminPassword,
+      wifiSSID,
+      wifiPassword,
+    }
 
     payload.fields = fields
     payload.name = name
-    payload.notes = note
+    payload.notes = JSON.stringify(wirelessRouterData)
     payload.folderId = folder
-    payload.identity = data
     payload.organizationId = organizationId
+    payload.secureNote = {
+      // @ts-ignore
+      response: null,
+      type: 0
+    }
 
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
@@ -136,114 +123,36 @@ export const WirelessRouterEditScreen = observer(() => {
 
   // ----------------- RENDER ----------------------
 
-  const contactDetails: InputItem[] = [
+  const wirelessRouterDetails: InputItem[] = [
     {
-      label: translate('identity.first_name'),
-      value: firstName,
-      setter: setFirstName
+      label: translate('wireless_router.device_name'),
+      value: deviceName,
+      setter: setDeviceName
     },
     {
-      label: translate('identity.last_name'),
-      value: lastName,
-      setter: setLastName
+      label: translate('wireless_router.router_ip_address'),
+      value: ipAddress,
+      setter: setIpAddress
     },
     {
-      label: translate('identity.username'),
-      value: username,
-      setter: setUsername
+      label: translate('wireless_router.admin_username'),
+      value: adminUsername,
+      setter: setAdminUsername
     },
     {
-      label: translate('identity.email'),
-      value: email,
-      setter: setEmail,
-      type: 'email-address'
+      label: translate('wireless_router.admin_password'),
+      value: adminPassword,
+      setter: setAdminPassword
     },
     {
-      label: translate('identity.company'),
-      value: company,
-      setter: setCompany
+      label: translate('wireless_router.wifi_ssid'),
+      value: wifiSSID,
+      setter: setWifiSSID
     },
     {
-      label: translate('identity.phone'),
-      value: phone,
-      setter: setPhone,
-      type: 'numeric'
-    },
-    {
-      label: translate('identity.ssn'),
-      value: ssn,
-      setter: setSsn,
-      type: 'numeric'
-    },
-    {
-      label: translate('identity.passport'),
-      value: passport,
-      setter: setPassport,
-      type: 'numeric'
-    },
-    {
-      label: translate('identity.license'),
-      value: license,
-      setter: setLicense,
-      type: 'numeric'
-    }
-  ]
-
-  const addressDetails: InputItem[] = [
-    {
-      label: translate('identity.address') + ' 1',
-      value: address1,
-      setter: setAddress1
-    },
-    {
-      label: translate('identity.address') + ' 2',
-      value: address2,
-      setter: setAddress2
-    },
-    // {
-    //   label: translate('identity.address') + ' 3',
-    //   value: address3,
-    //   setter: setAddress3
-    // },
-    {
-      label: translate('identity.city'),
-      value: city,
-      setter: setCity
-    },
-    {
-      label: translate('identity.state'),
-      value: state,
-      setter: setState
-    },
-    {
-      label: translate('identity.zip'),
-      value: zip,
-      setter: setZip,
-      type: 'numeric'
-    },
-    {
-      label: translate('identity.country'),
-      value: country,
-      setter: setCountry
-    },
-  ]
-
-  const TITLES = [
-    {
-      label: 'mr',
-      value: 'mr'
-    },
-    {
-      label: 'mrs',
-      value: 'mrs'
-    },
-    {
-      label: 'ms',
-      value: 'ms'
-    },
-    {
-      label: 'dr',
-      value: 'dr'
+      label: translate('wireless_router.wifi_pw'),
+      value: wifiPassword,
+      setter: setWifiPassword
     }
   ]
 
@@ -258,7 +167,7 @@ export const WirelessRouterEditScreen = observer(() => {
         <Header
           title={
             mode === 'add'
-              ? `${translate('common.add')} ${translate('common.identity')}`
+              ? `${translate('common.add')} ${translate('common.wireless_router')}`
               : translate('common.edit')
           }
           goBack={() => navigation.goBack()}
@@ -314,63 +223,21 @@ export const WirelessRouterEditScreen = observer(() => {
           paddingBottom: 32
         }]}
       >
-        <Select
-          floating
-          placeholder={translate('identity.title')}
-          value={title}
-          options={TITLES}
-          onChange={val => setTitle(val.toString())}
-        />
-
         {
-          contactDetails.map((item, index) => (
-            <FloatingInput
+          wirelessRouterDetails.map((e, index) => (
+            <View
               key={index}
-              isRequired={item.isRequired}
-              keyboardType={item.type || 'default'}
-              label={item.label}
-              value={item.value}
-              onChangeText={(text) => item.setter(text)}
-              style={{
-                marginTop: 20
-              }}
-            />
+              style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
+              <FloatingInput
+                label={e.label}
+                value={e.value}
+                onChangeText={e.setter}
+              />
+            </View>
           ))
         }
       </View>
       {/* Info end */}
-
-      <View style={commonStyles.SECTION_PADDING}>
-        <Text
-          text={translate('identity.address_details').toUpperCase()}
-          style={{ fontSize: fontSize.small }}
-        />
-      </View>
-
-      {/* Address */}
-      <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
-      >
-        {
-          addressDetails.map((item, index) => (
-            <FloatingInput
-              key={index}
-              isRequired={item.isRequired}
-              keyboardType={item.type || 'default'}
-              label={item.label}
-              value={item.value}
-              onChangeText={(text) => item.setter(text)}
-              style={{
-                marginTop: index !== 0 ? 20 : 0
-              }}
-            />
-          ))
-        }
-      </View>
-      {/* Address end */}
 
       {/* Custom fields */}
       <CustomFieldsEdit
@@ -383,8 +250,6 @@ export const WirelessRouterEditScreen = observer(() => {
       <CipherOthersInfo
         navigation={navigation}
         hasNote
-        note={note}
-        onChangeNote={setNote}
         folderId={folder}
         organizationId={organizationId}
         setOrganizationId={setOrganizationId}

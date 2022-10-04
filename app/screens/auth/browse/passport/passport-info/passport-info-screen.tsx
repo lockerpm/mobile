@@ -11,13 +11,16 @@ import { CipherView } from "../../../../../../core/models/view"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { useMixins } from "../../../../../services/mixins"
+import { toPassportData } from "../passport.type"
 
 
 export const PassportInfoScreen = observer(() => {
   const navigation = useNavigation()
-  const { cipherStore } = useStores()
-  const selectedCipher: CipherView = cipherStore.cipherView
   const { translate, color } = useMixins()
+  const { cipherStore } = useStores()
+
+  const selectedCipher: CipherView = cipherStore.cipherView
+  const passportData = toPassportData(selectedCipher.notes)
 
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
@@ -26,72 +29,48 @@ export const PassportInfoScreen = observer(() => {
 
   const textFields = [
     {
-      label: translate('identity.title'),
-      value: selectedCipher.identity.title
+      label: translate('passport.passport_id'),
+      value: passportData.passportID
     },
     {
-      label: translate('identity.first_name'),
-      value: selectedCipher.identity.firstName
+      label: translate('passport.type'),
+      value: passportData.type
     },
     {
-      label: translate('identity.last_name'),
-      value: selectedCipher.identity.lastName
+      label: translate('passport.code'),
+      value: passportData.code
     },
     {
-      label: translate('identity.username'),
-      value: selectedCipher.identity.username
+      label: translate('common.fullname'),
+      value: passportData.fullName,
     },
     {
-      label: translate('identity.email'),
-      value: selectedCipher.identity.email
+      label: translate('common.dob'),
+      value: passportData.dob,
     },
     {
-      label: translate('identity.company'),
-      value: selectedCipher.identity.company
+      label: translate('passport.sex'),
+      value: passportData.sex,
     },
     {
-      label: translate('identity.phone'),
-      value: selectedCipher.identity.phone
+      label: translate('common.nationality'),
+      value: passportData.nationality,
     },
     {
-      label: translate('identity.ssn'),
-      value: selectedCipher.identity.ssn
+      label: translate('passport.id_number'),
+      value: passportData.idNumber,
     },
     {
-      label: translate('identity.passport'),
-      value: selectedCipher.identity.passportNumber
+      label: translate('passport.date_of_issue'),
+      value: passportData.dateOfIssue,
     },
     {
-      label: translate('identity.license'),
-      value: selectedCipher.identity.licenseNumber
+      label: translate('passport.date_of_expiry'),
+      value: passportData.dateOfExpiry,
     },
     {
-      label: translate('identity.address') + ' 1',
-      value: selectedCipher.identity.address1
-    },
-    {
-      label: translate('identity.address') + ' 2',
-      value: selectedCipher.identity.address2
-    },
-    // {
-    //   label: translate('identity.address') + ' 3',
-    //   value: selectedCipher.identity.address3
-    // },
-    {
-      label: translate('identity.city'),
-      value: selectedCipher.identity.city
-    },
-    {
-      label: translate('identity.state'),
-      value: selectedCipher.identity.state
-    },
-    {
-      label: translate('identity.zip'),
-      value: selectedCipher.identity.postalCode
-    },
-    {
-      label: translate('identity.country'),
-      value: selectedCipher.identity.country
+      label: translate('passport.place_of_issue'),
+      value: passportData.placeOfIssue,
     }
   ]
 
@@ -200,7 +179,7 @@ export const PassportInfoScreen = observer(() => {
         {/* Notes */}
         <Textarea
           label={translate('common.notes')}
-          value={selectedCipher.notes}
+          value={passportData.notes}
           editable={false}
           copyAble
           style={{ marginTop: 10 }}

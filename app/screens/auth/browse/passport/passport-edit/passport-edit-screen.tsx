@@ -10,10 +10,11 @@ import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
-import { CipherView, IdentityView } from "../../../../../../core/models/view"
+import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { PassportData, toPassportData } from "../passport.type"
 
 
 type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'passports__edit'>;
@@ -31,40 +32,38 @@ export const PassportEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
-  const { translate, color } = useMixins()
-  const { createCipher, updateCipher } = useCipherDataMixins()
-  const { newCipher } = useCipherHelpersMixins()
+
   const { cipherStore } = useStores()
+  const { translate, color } = useMixins()
+  const { newCipher } = useCipherHelpersMixins()
+  const { createCipher, updateCipher } = useCipherDataMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const passportData = toPassportData(selectedCipher.notes)
 
   // ------------------ PARAMS -----------------------
 
-  const [isLoading, setIsLoading] = useState(false)
-
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  const [title, setTitle] = useState(mode !== 'add' ? selectedCipher.identity.title : '')
-  const [firstName, setFirstName] = useState(mode !== 'add' ? selectedCipher.identity.firstName : '')
-  const [lastName, setLastName] = useState(mode !== 'add' ? selectedCipher.identity.lastName : '')
-  const [username, setUsername] = useState(mode !== 'add' ? selectedCipher.identity.username : '')
-  const [email, setEmail] = useState(mode !== 'add' ? selectedCipher.identity.email : '')
-  const [phone, setPhone] = useState(mode !== 'add' ? selectedCipher.identity.phone : '')
-  const [company, setCompany] = useState(mode !== 'add' ? selectedCipher.identity.company : '')
-  const [ssn, setSsn] = useState(mode !== 'add' ? selectedCipher.identity.ssn : '')
-  const [passport, setPassport] = useState(mode !== 'add' ? selectedCipher.identity.passportNumber : '')
-  const [license, setLicense] = useState(mode !== 'add' ? selectedCipher.identity.licenseNumber : '')
-  const [address1, setAddress1] = useState(mode !== 'add' ? selectedCipher.identity.address1 : '')
-  const [address2, setAddress2] = useState(mode !== 'add' ? selectedCipher.identity.address2 : '')
-  // const [address3, setAddress3] = useState(mode !== 'add' ? selectedCipher.identity.address3 : '')
-  const [city, setCity] = useState(mode !== 'add' ? selectedCipher.identity.city : '')
-  const [state, setState] = useState(mode !== 'add' ? selectedCipher.identity.state : '')
-  const [zip, setZip] = useState(mode !== 'add' ? selectedCipher.identity.postalCode : '')
-  const [country, setCountry] = useState(mode !== 'add' ? selectedCipher.identity.country : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+
+  const [passportID, setPassportID] = useState(mode !== 'add' ? passportData.passportID : '')
+  const [type, setType] = useState(mode !== 'add' ? passportData.type : '')
+  const [code, setCode] = useState(mode !== 'add' ? passportData.code : '')
+  const [fullName, setFullName] = useState(mode !== 'add' ? passportData.fullName : '')
+  const [dob, setDob] = useState(mode !== 'add' ? passportData.dob : '')
+  const [sex, setSex] = useState(mode !== 'add' ? passportData.sex : '')
+  const [nationality, setNationality] = useState(mode !== 'add' ? passportData.nationality : '')
+  const [idNumber, setIdNumber] = useState(mode !== 'add' ? passportData.idNumber : '')
+  const [dateOfIssue, setDateOfIssue] = useState(mode !== 'add' ? passportData.dateOfIssue : '')
+  const [dateOfExpiry, setDateOfExpiry] = useState(mode !== 'add' ? passportData.dateOfExpiry : '')
+  const [placeOfIssue, setPlaceOfIssue] = useState(mode !== 'add' ? passportData.placeOfIssue : '')
+  const [note, setNote] = useState(mode !== 'add' ? passportData.notes : '')
+
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+
+  const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ EFFECTS -----------------------
 
@@ -92,34 +91,34 @@ export const PassportEditScreen = observer(() => {
       payload = newCipher(CipherType.Identity)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
-    const data = new IdentityView()
-    data.title = title
-    data.firstName = firstName
-    data.lastName = lastName
-    data.username = username
-    data.email = email
-    data.company = company
-    data.phone = phone
-    data.ssn = ssn
-    data.passportNumber = passport
-    data.licenseNumber = license
-    data.address1 = address1
-    data.address2 = address2
-    // data.address3 = address3
-    data.city = city
-    data.state = state
-    data.postalCode = zip
-    data.country = country
+    const passportData: PassportData = {
+      passportID,
+      type,
+      code,
+      fullName,
+      dob,
+      sex,
+      nationality,
+      idNumber,
+      dateOfIssue,
+      dateOfExpiry,
+      placeOfIssue,
+      notes: note,
+    }
 
     payload.fields = fields
     payload.name = name
-    payload.notes = note
+    payload.notes = JSON.stringify(passportData)
     payload.folderId = folder
-    payload.identity = data
     payload.organizationId = organizationId
+    payload.secureNote = {
+      // @ts-ignore
+      response: null,
+      type: 0
+    }
 
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
@@ -136,114 +135,61 @@ export const PassportEditScreen = observer(() => {
 
   // ----------------- RENDER ----------------------
 
-  const contactDetails: InputItem[] = [
+  const passportDetails: InputItem[] = [
     {
-      label: translate('identity.first_name'),
-      value: firstName,
-      setter: setFirstName
+      label: translate('passport.passport_id'),
+      value: passportID,
+      setter: setPassportID
     },
     {
-      label: translate('identity.last_name'),
-      value: lastName,
-      setter: setLastName
+      label: translate('passport.type'),
+      value: type,
+      setter: setType
     },
     {
-      label: translate('identity.username'),
-      value: username,
-      setter: setUsername
+      label: translate('passport.code'),
+      value: code,
+      setter: setCode
     },
     {
-      label: translate('identity.email'),
-      value: email,
-      setter: setEmail,
-      type: 'email-address'
+      label: translate('common.fullname'),
+      value: fullName,
+      setter: setFullName,
     },
     {
-      label: translate('identity.company'),
-      value: company,
-      setter: setCompany
+      label: translate('common.dob'),
+      value: dob,
+      setter: setDob
     },
     {
-      label: translate('identity.phone'),
-      value: phone,
-      setter: setPhone,
-      type: 'numeric'
+      label: translate('passport.sex'),
+      value: sex,
+      setter: setSex
     },
     {
-      label: translate('identity.ssn'),
-      value: ssn,
-      setter: setSsn,
-      type: 'numeric'
+      label: translate('common.nationality'),
+      value: nationality,
+      setter: setNationality
     },
     {
-      label: translate('identity.passport'),
-      value: passport,
-      setter: setPassport,
-      type: 'numeric'
+      label: translate('passport.id_number'),
+      value: idNumber,
+      setter: setIdNumber
     },
     {
-      label: translate('identity.license'),
-      value: license,
-      setter: setLicense,
-      type: 'numeric'
-    }
-  ]
-
-  const addressDetails: InputItem[] = [
-    {
-      label: translate('identity.address') + ' 1',
-      value: address1,
-      setter: setAddress1
+      label: translate('passport.date_of_issue'),
+      value: dateOfIssue,
+      setter: setDateOfIssue
     },
     {
-      label: translate('identity.address') + ' 2',
-      value: address2,
-      setter: setAddress2
-    },
-    // {
-    //   label: translate('identity.address') + ' 3',
-    //   value: address3,
-    //   setter: setAddress3
-    // },
-    {
-      label: translate('identity.city'),
-      value: city,
-      setter: setCity
+      label: translate('passport.date_of_expiry'),
+      value: dateOfExpiry,
+      setter: setDateOfExpiry
     },
     {
-      label: translate('identity.state'),
-      value: state,
-      setter: setState
-    },
-    {
-      label: translate('identity.zip'),
-      value: zip,
-      setter: setZip,
-      type: 'numeric'
-    },
-    {
-      label: translate('identity.country'),
-      value: country,
-      setter: setCountry
-    },
-  ]
-
-  const TITLES = [
-    {
-      label: 'mr',
-      value: 'mr'
-    },
-    {
-      label: 'mrs',
-      value: 'mrs'
-    },
-    {
-      label: 'ms',
-      value: 'ms'
-    },
-    {
-      label: 'dr',
-      value: 'dr'
+      label: translate('passport.place_of_issue'),
+      value: placeOfIssue,
+      setter: setPlaceOfIssue
     }
   ]
 
@@ -258,7 +204,7 @@ export const PassportEditScreen = observer(() => {
         <Header
           title={
             mode === 'add'
-              ? `${translate('common.add')} ${translate('common.identity')}`
+              ? `${translate('common.add')} ${translate('common.passport')}`
               : translate('common.edit')
           }
           goBack={() => navigation.goBack()}
@@ -269,7 +215,7 @@ export const PassportEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
@@ -302,7 +248,7 @@ export const PassportEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('identity.personal_info').toUpperCase()}
+          text={translate('common.passport').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
@@ -314,27 +260,17 @@ export const PassportEditScreen = observer(() => {
           paddingBottom: 32
         }]}
       >
-        <Select
-          floating
-          placeholder={translate('identity.title')}
-          value={title}
-          options={TITLES}
-          onChange={val => setTitle(val.toString())}
-        />
-
         {
-          contactDetails.map((item, index) => (
-            <FloatingInput
+          passportDetails.map((e, index) => (
+            <View
               key={index}
-              isRequired={item.isRequired}
-              keyboardType={item.type || 'default'}
-              label={item.label}
-              value={item.value}
-              onChangeText={(text) => item.setter(text)}
-              style={{
-                marginTop: 20
-              }}
-            />
+              style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
+              <FloatingInput
+                label={e.label}
+                value={e.value}
+                onChangeText={e.setter}
+              />
+            </View>
           ))
         }
       </View>
@@ -346,31 +282,6 @@ export const PassportEditScreen = observer(() => {
           style={{ fontSize: fontSize.small }}
         />
       </View>
-
-      {/* Address */}
-      <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
-      >
-        {
-          addressDetails.map((item, index) => (
-            <FloatingInput
-              key={index}
-              isRequired={item.isRequired}
-              keyboardType={item.type || 'default'}
-              label={item.label}
-              value={item.value}
-              onChangeText={(text) => item.setter(text)}
-              style={{
-                marginTop: index !== 0 ? 20 : 0
-              }}
-            />
-          ))
-        }
-      </View>
-      {/* Address end */}
 
       {/* Custom fields */}
       <CustomFieldsEdit

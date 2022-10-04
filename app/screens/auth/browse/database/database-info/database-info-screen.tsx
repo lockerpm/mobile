@@ -11,13 +11,17 @@ import { CipherView } from "../../../../../../core/models/view"
 import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { useMixins } from "../../../../../services/mixins"
+import { toDatabaseData } from "../database.typs"
+import { DatabaseAction } from "../database-action"
 
 
 export const DatabaseInfoScreen = observer(() => {
   const navigation = useNavigation()
-  const { cipherStore } = useStores()
-  const selectedCipher: CipherView = cipherStore.cipherView
   const { translate, color } = useMixins()
+  const { cipherStore } = useStores()
+
+  const selectedCipher: CipherView = cipherStore.cipherView
+  const databaseData = toDatabaseData(selectedCipher.notes)
 
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
 
@@ -26,72 +30,24 @@ export const DatabaseInfoScreen = observer(() => {
 
   const textFields = [
     {
-      label: translate('identity.title'),
-      value: selectedCipher.identity.title
+      label: translate('database.host'),
+      value: databaseData.host
     },
     {
-      label: translate('identity.first_name'),
-      value: selectedCipher.identity.firstName
+      label: translate('database.port'),
+      value: databaseData.port
     },
     {
-      label: translate('identity.last_name'),
-      value: selectedCipher.identity.lastName
+      label: translate('common.username'),
+      value: databaseData.username
     },
     {
-      label: translate('identity.username'),
-      value: selectedCipher.identity.username
+      label: translate('common.password'),
+      value: databaseData.password
     },
     {
-      label: translate('identity.email'),
-      value: selectedCipher.identity.email
-    },
-    {
-      label: translate('identity.company'),
-      value: selectedCipher.identity.company
-    },
-    {
-      label: translate('identity.phone'),
-      value: selectedCipher.identity.phone
-    },
-    {
-      label: translate('identity.ssn'),
-      value: selectedCipher.identity.ssn
-    },
-    {
-      label: translate('identity.passport'),
-      value: selectedCipher.identity.passportNumber
-    },
-    {
-      label: translate('identity.license'),
-      value: selectedCipher.identity.licenseNumber
-    },
-    {
-      label: translate('identity.address') + ' 1',
-      value: selectedCipher.identity.address1
-    },
-    {
-      label: translate('identity.address') + ' 2',
-      value: selectedCipher.identity.address2
-    },
-    // {
-    //   label: translate('identity.address') + ' 3',
-    //   value: selectedCipher.identity.address3
-    // },
-    {
-      label: translate('identity.city'),
-      value: selectedCipher.identity.city
-    },
-    {
-      label: translate('identity.state'),
-      value: selectedCipher.identity.state
-    },
-    {
-      label: translate('identity.zip'),
-      value: selectedCipher.identity.postalCode
-    },
-    {
-      label: translate('identity.country'),
-      value: selectedCipher.identity.country
+      label: translate('database.default'),
+      value: databaseData.default
     }
   ]
 
@@ -137,13 +93,12 @@ export const DatabaseInfoScreen = observer(() => {
             onLoadingChange={setIsLoading}
           />
         ) : (
-          null
-        //   <IdentityAction
-        //     navigation={navigation}
-        //     isOpen={showAction}
-        //     onClose={() => setShowAction(false)}
-        //     onLoadingChange={setIsLoading}
-        //   />
+          <DatabaseAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
+          />
         )
       }
       {/* Actions end */}
@@ -200,7 +155,7 @@ export const DatabaseInfoScreen = observer(() => {
         {/* Notes */}
         <Textarea
           label={translate('common.notes')}
-          value={selectedCipher.notes}
+          value={databaseData.notes}
           editable={false}
           copyAble
           style={{ marginTop: 10 }}
