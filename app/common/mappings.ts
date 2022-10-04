@@ -89,7 +89,65 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     icon: require('./images/vault/trash.png'),
     routeName: 'trash',
     svgIcon: TrashIcon
-  }
+  },
+
+  // TODO
+  driverLicense: {
+    label: 'common.driver_license',
+    icon: require('./images/vault/crypto-wallet.png'),
+    routeName: 'driverLicenses',
+    svgIcon: CryptoWalletIcon,
+    addable: true
+  },
+  citizenID: {
+    label: 'common.citizen_id',
+    icon: require('./images/vault/crypto-wallet.png'),
+    routeName: 'citizenIDs',
+    svgIcon: CryptoWalletIcon,
+    addable: true
+  },
+  passport: {
+    label: 'common.passport',
+    icon: require('./images/vault/crypto-wallet.png'),
+    routeName: 'passports',
+    svgIcon: CryptoWalletIcon,
+    addable: true
+  },
+  socialSecurityNumber: {
+    label: 'common.social_security_number',
+    icon: require('./images/vault/crypto-wallet.png'),
+    routeName: 'socialSecurityNumbers',
+    svgIcon: CryptoWalletIcon,
+    addable: true
+  },
+  wirelessRouter: {
+    label: 'common.wireless_router',
+    icon: require('./images/vault/crypto-wallet.png'),
+    routeName: 'wirelessRouters',
+    svgIcon: CryptoWalletIcon,
+    addable: true
+  },
+  server: {
+    label: 'common.server',
+    icon: require('./images/vault/crypto-wallet.png'),
+    routeName: 'servers',
+    svgIcon: CryptoWalletIcon,
+    addable: true
+  },
+  apiCipher: {
+    label: 'common.api_cipher',
+    icon: require('./images/vault/crypto-wallet.png'),
+    routeName: 'apiCiphers',
+    svgIcon: CryptoWalletIcon,
+    addable: true
+  },
+  database: {
+    label: 'common.database',
+    icon: require('./images/vault/crypto-wallet.png'),
+    routeName: 'databases',
+    svgIcon: CryptoWalletIcon,
+    addable: true
+  },
 }
 
 type ToolsItem = {

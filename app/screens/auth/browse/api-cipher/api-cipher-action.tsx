@@ -4,7 +4,7 @@ import { ActionItem } from "../../../../components/cipher/cipher-action/action-i
 import { CipherAction } from "../../../../components/cipher/cipher-action/cipher-action"
 import { useStores } from "../../../../models"
 import { useMixins } from "../../../../services/mixins"
-import { toCryptoWalletData } from "../../../../utils/crypto"
+import { toApiCipherData } from "./api-cipher.type"
 
 
 type Props = {
@@ -16,49 +16,50 @@ type Props = {
 }
 
 
-export const CryptoWalletAction = observer((props: Props) => {
+export const ApiCipherAction = observer((props: Props) => {
   const { copyToClipboard, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
-  const data = toCryptoWalletData(selectedCipher.notes)
+  const data = toApiCipherData(selectedCipher.notes)
 
   const renderContent = () => (
     <>
       <ActionItem
-        name={translate('crypto_asset.copy_address')}
+        name={translate('API.url')}
         icon="copy"
-        action={() => copyToClipboard(data.address)}
-        disabled={!data.address}
+        action={() => copyToClipboard(data.url)}
+        disabled={!data.url}
       />
 
       <ActionItem
-        name={translate('crypto_asset.copy_password')}
+        name={translate('API.header')}
         icon="copy"
-        action={() => copyToClipboard(data.password)}
-        disabled={!data.password}
+        action={() => copyToClipboard(data.header)}
+        disabled={!data.header}
       />
 
       <ActionItem
-        name={translate('crypto_asset.copy_private_key')}
+        name={translate('API.body_data')}
         icon="copy"
-        action={() => copyToClipboard(data.privateKey)}
-        disabled={!data.privateKey}
+        action={() => copyToClipboard(data.bodyData)}
+        disabled={!data.bodyData}
       />
-      
+
       <ActionItem
-        name={translate('crypto_asset.copy_seed')}
+        name={translate('API.response')}
         icon="copy"
-        action={() => copyToClipboard(data.seed)}
-        disabled={!data.seed}
+        action={() => copyToClipboard(data.response)}
+        disabled={!data.response}
       />
+
       {
         __DEV__ && (
           <ActionItem
             name={'(DEBUG) Copy notes'}
             icon="copy"
             action={() => copyToClipboard(selectedCipher.notes)}
-            disabled={!data.seed}
+            disabled={!data.notes}
           />
         )
       }
