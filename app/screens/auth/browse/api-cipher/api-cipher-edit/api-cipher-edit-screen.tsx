@@ -8,46 +8,49 @@ import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import { useStores } from "../../../../../models"
 import { useMixins } from "../../../../../services/mixins"
+import { useStores } from "../../../../../models"
 import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
-import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { CryptoWalletData, toCryptoWalletData } from "../../../../../utils/crypto"
-import { SeedPhraseInput } from "./seed-phrase-input"
-import { ChainSelect } from "./chain-select"
-import { AppSelect } from "./app-select"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { toApiCipherData, ApiCipherData, API_METHODS } from "../api-cipher.type"
 
 
-type NoteEditScreenProp = RouteProp<PrimaryParamList, 'cryptoWallets__edit'>;
+type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'apiCiphers__edit'>;
+
+type InputItem = {
+  label: string,
+  value: string,
+  setter: (val: string) => void,
+  isRequired?: boolean,
+  type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
+}
 
 
-export const CryptoWalletEditScreen = observer(() => {
+export const ApiCipherEditScreen = observer(() => {
   const navigation = useNavigation()
-  const route = useRoute<NoteEditScreenProp>()
+  const route = useRoute<IdentityEditScreenProp>()
+  const { mode } = route.params
+
   const { cipherStore } = useStores()
   const { translate, color } = useMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
-
   const selectedCipher: CipherView = cipherStore.cipherView
-  const cryptoWalletData = toCryptoWalletData(selectedCipher.notes)
-  const { mode } = route.params
+  const apiCipherData = toApiCipherData(selectedCipher.notes)
+  // ------------------ PARAMS -----------------------
 
-  // ------------------------- PARAMS ------------------------------------
-
+  // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
 
-  const [walletApp, setWalletApp] = useState(mode !== 'add' ? cryptoWalletData.walletApp : { alias: null, name: null })
-  const [username, setUsername] = useState(mode !== 'add' ? cryptoWalletData.username : '')
-  const [password, setPassword] = useState(mode !== 'add' ? cryptoWalletData.password : '')
-  const [address, setAddress] = useState(mode !== 'add' ? cryptoWalletData.address : '')
-  const [privateKey, setPrivateKey] = useState(mode !== 'add' ? cryptoWalletData.privateKey : '')
-  const [seed, setSeed] = useState(mode !== 'add' ? cryptoWalletData.seed : '           ')
-  const [networks, setNetworks] = useState<{ alias: string; name: string }[]>(mode !== 'add' ? cryptoWalletData.networks : [])
-  const [note, setNote] = useState(mode !== 'add' ? cryptoWalletData.notes : '')
-  
+  const [url, setUrl] = useState(mode !== 'add' ? apiCipherData.url : '')
+  const [method, setMethod] = useState(mode !== 'add' ? apiCipherData.method : API_METHODS.GET)
+  const [header, setHeader] = useState(mode !== 'add' ? apiCipherData.header : '')
+  const [bodyData, setBodyData] = useState(mode !== 'add' ? apiCipherData.bodyData : '')
+  const [response, setResponse] = useState(mode !== 'add' ? apiCipherData.response : '')
+  const [note, setNote] = useState(mode !== 'add' ? apiCipherData.notes : '')
+
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
@@ -55,17 +58,10 @@ export const CryptoWalletEditScreen = observer(() => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  // -------------------------- COMPUTED ------------------------------
-
-  // -------------------------- EFFECTS ------------------------------
+  // ------------------ EFFECTS -----------------------
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      if (cipherStore.generatedPassword) {
-        setPassword(cipherStore.generatedPassword)
-        cipherStore.setGeneratedPassword('')
-      }
-
       if (cipherStore.selectedFolder) {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
@@ -79,32 +75,30 @@ export const CryptoWalletEditScreen = observer(() => {
     return unsubscribe
   }, [navigation])
 
-  // -------------------------- METHODS ------------------------------
+  // ----------------- METHODS ----------------------
 
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
     if (mode === 'add') {
-      payload = newCipher(CipherType.CryptoWallet)
+      payload = newCipher(CipherType.APICipher)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
-    const cryptoData: CryptoWalletData = {
-      seed,
+    const apiCipherData: ApiCipherData = {
+      url,
+      method,
+      header,
+      bodyData,
+      response,
       notes: note,
-      password,
-      address,
-      walletApp,
-      username,
-      privateKey,
-      networks
     }
 
     payload.fields = fields
     payload.name = name
-    payload.notes = JSON.stringify(cryptoData)
+    payload.notes = JSON.stringify(apiCipherData)
     payload.folderId = folder
     payload.organizationId = organizationId
     payload.secureNote = {
@@ -126,7 +120,34 @@ export const CryptoWalletEditScreen = observer(() => {
     }
   }
 
-  // -------------------------- RENDER ------------------------------
+  // ----------------- RENDER ----------------------
+  const apiCipherDatas: InputItem[] = [
+    {
+      label: translate('API.url'),
+      value: url,
+      setter: setUrl
+    },
+    {
+      label: translate('API.method'),
+      value: method,
+      setter: setMethod
+    },
+    {
+      label: translate('API.header'),
+      value: header,
+      setter: setHeader
+    },
+    {
+      label: translate('API.body_data'),
+      value: bodyData,
+      setter: setBodyData
+    },
+    {
+      label: translate('API.response'),
+      value: response,
+      setter: setResponse
+    }
+  ]
 
   return (
     <Layout
@@ -139,7 +160,7 @@ export const CryptoWalletEditScreen = observer(() => {
         <Header
           title={
             mode === 'add'
-              ? `${translate('common.add')} ${translate('common.crypto_wallet')}`
+              ? `${translate('common.add')} ${translate('common.api_cipher')}`
               : translate('common.edit')
           }
           goBack={() => navigation.goBack()}
@@ -150,7 +171,7 @@ export const CryptoWalletEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
@@ -168,7 +189,7 @@ export const CryptoWalletEditScreen = observer(() => {
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <BROWSE_ITEMS.cryptoWallet.svgIcon height={40} width={40} />
+          <BROWSE_ITEMS.identity.svgIcon height={40} width={40} />
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
@@ -183,7 +204,7 @@ export const CryptoWalletEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('common.details').toUpperCase()}
+          text={translate('common.api_cipher').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
@@ -195,80 +216,19 @@ export const CryptoWalletEditScreen = observer(() => {
           paddingBottom: 32
         }]}
       >
-        {/* App */}
-        <View style={{ flex: 1 }}>
-          <AppSelect
-            alias={walletApp.alias}
-            onChange={(alias: string, appName: string) => {
-              setWalletApp({ alias, name: appName })
-            }}
-          />
-        </View>
-        {/* App end */}
-
-        {/* Username */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            label={translate('common.username')}
-            value={username}
-            onChangeText={setUsername}
-          />
-        </View>
-        {/* Username end */}
-
-        {/* Password */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            isPassword
-            label={translate('common.password') + ' / PIN'}
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View>
-        {/* Password end */}
-
-        {/* Address */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            label={translate('crypto_asset.wallet_address')}
-            value={address}
-            onChangeText={setAddress}
-          />
-        </View>
-        {/* Address end */}
-
-        {/* Private key */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <FloatingInput
-            isPassword
-            label={translate('crypto_asset.private_key')}
-            value={privateKey}
-            onChangeText={setPrivateKey}
-          />
-        </View>
-        {/* Private key end */}
-
-        {/* Seed */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <Text
-            text={translate('crypto_asset.seed')}
-            style={{ fontSize: fontSize.small }}
-          />
-          <SeedPhraseInput
-            seed={seed}
-            setSeed={setSeed}
-          />
-        </View>
-        {/* Seed end */}
-
-        {/* Network */}
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <ChainSelect
-            selected={networks}
-            onChange={setNetworks}
-          />
-        </View>
-        {/* Network end */}
+        {
+          apiCipherDatas.map((e,index) => (
+          <View 
+            key={index}
+            style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
+              <FloatingInput
+                label={e.label}
+                value={e.value}
+                onChangeText={e.setter}
+              />
+            </View>
+          ))
+        }
       </View>
       {/* Info end */}
 
@@ -282,15 +242,15 @@ export const CryptoWalletEditScreen = observer(() => {
       {/* Others */}
       <CipherOthersInfo
         navigation={navigation}
+        hasNote
+        note={note}
+        onChangeNote={setNote}
         folderId={folder}
         organizationId={organizationId}
         setOrganizationId={setOrganizationId}
         collectionIds={collectionIds}
         setCollectionIds={setCollectionIds}
         isDeleted={selectedCipher.isDeleted}
-        hasNote
-        note={note}
-        onChangeNote={setNote}
       />
       {/* Others end */}
     </Layout>

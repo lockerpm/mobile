@@ -14,6 +14,23 @@ import {
   BiometricUnlockIntroScreen,
   PasswordEditScreen,
   PasswordInfoScreen,
+  ApiCipherEditScreen,
+  ApiCipherInfoScreen,
+  CitizenIDEditScreen,
+  CitizenIDInfoScreen,
+  DatabaseEditScreen,
+  DatabaseInfoScreen,
+  DriverLicenseEditScreen,
+  DriverLicenseInfoScreen,
+  PassportEditScreen,
+  PassportInfoScreen,
+  ServerEditScreen,
+  ServerInfoScreen,
+  SocialSecurityNumberEditScreen,
+  SocialSecurityNumberInfoScreen,
+  WirelessRouterEditScreen,
+  WirelessRouterInfoScreen,
+
   FolderSelectScreen,
   PasswordGeneratorScreen,
   DataBreachScannerScreen,
@@ -128,6 +145,38 @@ export type PrimaryParamList = {
   }
   identities__info: undefined
   identities__edit: {
+    mode: 'add' | 'edit' | 'clone'
+  }
+  driverLicenses__info: undefined
+  driverLicenses__edit: {
+    mode: 'add' | 'edit' | 'clone'
+  }
+  citizenIDs__info: undefined
+  citizenIDs__edit: {
+    mode: 'add' | 'edit' | 'clone'
+  }
+  passports__info: undefined
+  passports__edit: {
+    mode: 'add' | 'edit' | 'clone'
+  }
+  socialSecurityNumbers__info: undefined
+  socialSecurityNumbers__edit: {
+    mode: 'add' | 'edit' | 'clone'
+  }
+  wirelessRouters__info: undefined
+  wirelessRouters__edit: {
+    mode: 'add' | 'edit' | 'clone'
+  }
+  servers__info: undefined
+  servers__edit: {
+    mode: 'add' | 'edit' | 'clone'
+  }
+  apiCiphers__info: undefined
+  apiCiphers__edit: {
+    mode: 'add' | 'edit' | 'clone'
+  }
+  databases__info: undefined
+  databases__edit: {
     mode: 'add' | 'edit' | 'clone'
   }
   folders__select: {
@@ -558,43 +607,35 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="dataBreachDetail" component={DataBreachDetailScreen} />
 
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
-        <Stack.Screen
-          name="passwords__edit"
-          component={PasswordEditScreen}
-          initialParams={{ mode: 'add' }}
-        />
+        <Stack.Screen name="passwords__edit" component={PasswordEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="notes__info" component={NoteInfoScreen} />
-        <Stack.Screen
-          name="notes__edit"
-          component={NoteEditScreen}
-          initialParams={{ mode: 'add' }}
-        />
+        <Stack.Screen name="notes__edit" component={NoteEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="cards__info" component={CardInfoScreen} />
-        <Stack.Screen
-          name="cards__edit"
-          component={CardEditScreen}
-          initialParams={{ mode: 'add' }}
-        />
+        <Stack.Screen name="cards__edit" component={CardEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="identities__info" component={IdentityInfoScreen} />
-        <Stack.Screen
-          name="identities__edit"
-          component={IdentityEditScreen}
-          initialParams={{ mode: 'add' }}
-        />
-        <Stack.Screen
-          name="folders__select"
-          component={FolderSelectScreen}
-          initialParams={{ mode: 'add' }}
-        />
+        <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="driverLicenses__info" component={DriverLicenseInfoScreen} />
+        <Stack.Screen name="driverLicenses__edit" component={DriverLicenseEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="citizenIDs__info" component={CitizenIDInfoScreen} />
+        <Stack.Screen name="citizenIDs__edit" component={CitizenIDEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="passports__info" component={PassportInfoScreen} />
+        <Stack.Screen name="passports__edit" component={PassportEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="socialSecurityNumbers__info" component={SocialSecurityNumberInfoScreen} />
+        <Stack.Screen name="socialSecurityNumbers__edit" component={SocialSecurityNumberEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="wirelessRouters__info" component={WirelessRouterInfoScreen} />
+        <Stack.Screen name="wirelessRouters__edit" component={WirelessRouterEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="servers__info" component={ServerInfoScreen} />
+        <Stack.Screen name="servers__edit" component={ServerEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="apiCiphers__info" component={ApiCipherInfoScreen} />
+        <Stack.Screen name="apiCiphers__edit" component={ApiCipherEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="databases__info" component={DatabaseInfoScreen} />
+        <Stack.Screen name="databases__edit" component={DatabaseEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
         <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} />
         <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} />
         <Stack.Screen name="cryptoWallets__info" component={CryptoWalletInfoScreen} />
-        <Stack.Screen
-          name="cryptoWallets__edit"
-          component={CryptoWalletEditScreen}
-          initialParams={{ mode: 'add' }}
-        />
+        <Stack.Screen name="cryptoWallets__edit" component={CryptoWalletEditScreen} initialParams={{ mode: 'add' }} />
 
         <Stack.Screen name="refer_friend" component={ReferFriendScreen} />
         <Stack.Screen name="invite_member" component={InviteMemberScreen} />

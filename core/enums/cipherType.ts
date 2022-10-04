@@ -6,4 +6,12 @@ export enum CipherType {
     TOTP = 5,
     CryptoWallet = 7,
     MasterPassword = 8,
+    DriverLicense = 9,
+    CitizenID = 10,
+    Passport = 11,
+    SocialSecurityNumber = 12,
+    WirelessRouter = 13,
+    Server = 14,
+    APICipher = 15,
+    Database = 16,
 }
