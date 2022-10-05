@@ -14,6 +14,14 @@ import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
 import { DeletedAction } from "../cipher-action/deleted-action"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { CryptoWalletAction } from "../../../screens/auth/browse/crypto-asset/crypto-wallet-action"
+import { DriverLicenseAction } from "../../../screens/auth/browse/driver-license/driver-license-action"
+import { CitizenIDAction } from "../../../screens/auth/browse/citizen-id/citizen-id-action"
+import { PassportAction } from "../../../screens/auth/browse/passport/passport-action"
+import { SocialSecurityNumberAction } from "../../../screens/auth/browse/social-security-number/social-security-number-action"
+import { ApiCipherAction } from "../../../screens/auth/browse/api-cipher/api-cipher-action"
+import { ServerAction } from "../../../screens/auth/browse/server/server-action"
+import { DatabaseAction } from "../../../screens/auth/browse/database/database-action"
+import { WirelessRouterAction } from "../../../screens/auth/browse/wireless-router/wireless-router-action"
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { CipherListItem } from "./cipher-list-item"
 import { MAX_CIPHER_SELECTION } from "../../../config/constants"
@@ -62,6 +70,16 @@ export const CipherList = observer((props: CipherListProps) => {
   const [showCardAction, setShowCardAction] = useState(false)
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showDeletedAction, setShowDeletedAction] = useState(false)
+
+  const [showDriverLicenseAction, setShowDriverLicenseAction] = useState(false)
+  const [showCitizenIDAction, setShowCitizenIDAction] = useState(false)
+  const [showPassportAction, setShowPassportAction] = useState(false)
+  const [showSocialNumberAction, setShowSocialNumberAction] = useState(false)
+  const [showWirelessRouterAction, setShowWirelessRouterAction] = useState(false)
+  const [showServerAction, setShowServerAction] = useState(false)
+  const [showApiAction, setShowApiAction] = useState(false)
+  const [showDataBaseAction, setShowDatabaseAction] = useState(false)
+
   const [ciphers, setCiphers] = useState([])
 
   const [checkedItem, setCheckedItem] = useState('')
@@ -199,6 +217,30 @@ export const CipherList = observer((props: CipherListProps) => {
       case CipherType.CryptoWallet:
         setShowCryptoWalletAction(true)
         break
+      case CipherType.DriverLicense:
+        setShowDriverLicenseAction(true)
+        break
+      case CipherType.CitizenID:
+        setShowCitizenIDAction(true)
+        break
+      case CipherType.Passport:
+        setShowPassportAction(true)
+        break
+      case CipherType.SocialSecurityNumber:
+        setShowSocialNumberAction(true)
+        break
+      case CipherType.WirelessRouter:
+        setShowWirelessRouterAction(true)
+        break
+      case CipherType.Server:
+        setShowWirelessRouterAction(true)
+        break
+      case CipherType.APICipher:
+        setShowApiAction(true)
+        break
+      case CipherType.Database:
+        setShowDatabaseAction(true)
+        break
       default:
         break
     }
@@ -289,6 +331,62 @@ export const CipherList = observer((props: CipherListProps) => {
         onLoadingChange={onLoadingChange}
       />
 
+      {/* Other types */}
+      <DriverLicenseAction
+        isOpen={showDriverLicenseAction}
+        onClose={() => setShowDriverLicenseAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <CitizenIDAction
+        isOpen={showCitizenIDAction}
+        onClose={() => setShowCitizenIDAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <PassportAction
+        isOpen={showPassportAction}
+        onClose={() => setShowPassportAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <SocialSecurityNumberAction
+        isOpen={showSocialNumberAction}
+        onClose={() => setShowSocialNumberAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <WirelessRouterAction
+        isOpen={showWirelessRouterAction}
+        onClose={() => setShowWirelessRouterAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <ServerAction
+        isOpen={showServerAction}
+        onClose={() => setShowServerAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <ApiCipherAction
+        isOpen={showApiAction}
+        onClose={() => setShowApiAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <DatabaseAction
+        isOpen={showDataBaseAction}
+        onClose={() => setShowDatabaseAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
       {/* Action menus end */}
 
       {/* Cipher list */}

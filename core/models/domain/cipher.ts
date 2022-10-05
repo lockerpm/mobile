@@ -78,6 +78,14 @@ export class Cipher extends Domain {
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.DriverLicense:
+            case CipherType.CitizenID:
+            case CipherType.Passport:
+            case CipherType.SocialSecurityNumber:
+            case CipherType.WirelessRouter:
+            case CipherType.Server:
+            case CipherType.APICipher:
+            case CipherType.Database:
             case CipherType.CryptoWallet:
                 this.secureNote = new SecureNote(obj.secureNote, alreadyEncrypted);
                 break;
@@ -127,6 +135,14 @@ export class Cipher extends Domain {
                     break;
                 case CipherType.SecureNote:
                 case CipherType.TOTP:
+                case CipherType.DriverLicense:
+                case CipherType.CitizenID:
+                case CipherType.Passport:
+                case CipherType.SocialSecurityNumber:
+                case CipherType.WirelessRouter:
+                case CipherType.Server:
+                case CipherType.APICipher:
+                case CipherType.Database:
                 case CipherType.CryptoWallet:
                     model.secureNote = await this.secureNote.decrypt(this.organizationId, encKey);
                     break;
@@ -211,6 +227,14 @@ export class Cipher extends Domain {
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.DriverLicense:
+            case CipherType.CitizenID:
+            case CipherType.Passport:
+            case CipherType.SocialSecurityNumber:
+            case CipherType.WirelessRouter:
+            case CipherType.Server:
+            case CipherType.APICipher:
+            case CipherType.Database:
             case CipherType.CryptoWallet:
                 c.secureNote = this.secureNote.toSecureNoteData();
                 break;
