@@ -12,6 +12,7 @@ import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { useMixins } from "../../../../../services/mixins"
 import { toServerData } from "../server.type"
+import { ServerAction } from "../server-action"
 
 
 export const ServerInfoScreen = observer(() => {
@@ -92,13 +93,12 @@ export const ServerInfoScreen = observer(() => {
             onLoadingChange={setIsLoading}
           />
         ) : (
-          null
-        //   <IdentityAction
-        //     navigation={navigation}
-        //     isOpen={showAction}
-        //     onClose={() => setShowAction(false)}
-        //     onLoadingChange={setIsLoading}
-        //   />
+          <ServerAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
+          />
         )
       }
       {/* Actions end */}

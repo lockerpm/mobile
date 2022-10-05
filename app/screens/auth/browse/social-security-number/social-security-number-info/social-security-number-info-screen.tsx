@@ -12,6 +12,7 @@ import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { useMixins } from "../../../../../services/mixins"
 import { toSocialSecurityNumberData } from "../social-security-number.type"
+import { SocialSecurityNumberAction } from "../social-security-number-action"
 
 
 export const SocialSecurityNumberInfoScreen = observer(() => {
@@ -88,13 +89,12 @@ export const SocialSecurityNumberInfoScreen = observer(() => {
             onLoadingChange={setIsLoading}
           />
         ) : (
-          null
-        //   <IdentityAction
-        //     navigation={navigation}
-        //     isOpen={showAction}
-        //     onClose={() => setShowAction(false)}
-        //     onLoadingChange={setIsLoading}
-        //   />
+          <SocialSecurityNumberAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
+          />
         )
       }
       {/* Actions end */}

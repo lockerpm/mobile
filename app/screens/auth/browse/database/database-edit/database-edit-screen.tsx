@@ -17,7 +17,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { DatabaseData, toDatabaseData } from "../database.typs"
 
 
-type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'databases__edit'>;
+type DatabaseEditScreenProp = RouteProp<PrimaryParamList, 'databases__edit'>;
 
 type InputItem = {
   label: string,
@@ -30,7 +30,7 @@ type InputItem = {
 
 export const DatabaseEditScreen = observer(() => {
   const navigation = useNavigation()
-  const route = useRoute<IdentityEditScreenProp>()
+  const route = useRoute<DatabaseEditScreenProp>()
   const { mode } = route.params
 
   const { cipherStore } = useStores()

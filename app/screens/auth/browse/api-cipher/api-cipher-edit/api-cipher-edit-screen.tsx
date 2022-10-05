@@ -17,7 +17,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { toApiCipherData, ApiCipherData, API_METHODS } from "../api-cipher.type"
 
 
-type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'apiCiphers__edit'>;
+type ApiCipherEditScreenProp = RouteProp<PrimaryParamList, 'apiCiphers__edit'>;
 
 type InputItem = {
   label: string,
@@ -30,7 +30,7 @@ type InputItem = {
 
 export const ApiCipherEditScreen = observer(() => {
   const navigation = useNavigation()
-  const route = useRoute<IdentityEditScreenProp>()
+  const route = useRoute<ApiCipherEditScreenProp>()
   const { mode } = route.params
 
   const { cipherStore } = useStores()

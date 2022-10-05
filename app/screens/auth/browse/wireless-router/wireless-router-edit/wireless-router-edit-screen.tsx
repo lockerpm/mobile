@@ -17,7 +17,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { toWirelessRouterData, WirelessRouterData } from "../wireless-router.type"
 
 
-type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'wirelessRouters__edit'>;
+type EditScreenProp = RouteProp<PrimaryParamList, 'wirelessRouters__edit'>;
 
 type InputItem = {
   label: string,
@@ -30,7 +30,7 @@ type InputItem = {
 
 export const WirelessRouterEditScreen = observer(() => {
   const navigation = useNavigation()
-  const route = useRoute<IdentityEditScreenProp>()
+  const route = useRoute<EditScreenProp>()
   const { mode } = route.params
 
   const { cipherStore } = useStores()
@@ -211,7 +211,7 @@ export const WirelessRouterEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('identity.personal_info').toUpperCase()}
+          text={translate('common.wireless_router').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>

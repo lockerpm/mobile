@@ -17,7 +17,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { CitizenIdData, toCitizenIdData } from "../citizen-id.type"
 
 
-type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'citizenIDs__edit'>;
+type CitizenIDEditScreenProp = RouteProp<PrimaryParamList, 'citizenIDs__edit'>;
 
 type InputItem = {
   label: string,
@@ -30,7 +30,7 @@ type InputItem = {
 
 export const CitizenIDEditScreen = observer(() => {
   const navigation = useNavigation()
-  const route = useRoute<IdentityEditScreenProp>()
+  const route = useRoute<CitizenIDEditScreenProp>()
   const { mode } = route.params
 
   const { cipherStore } = useStores()
@@ -248,7 +248,7 @@ export const CitizenIDEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('identity.personal_info').toUpperCase()}
+          text={translate('common.citizen_id').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>

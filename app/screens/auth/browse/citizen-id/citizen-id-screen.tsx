@@ -49,10 +49,10 @@ export const CitizenIDScreen = observer(() => {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header={translate('common.driver_license')}
+          header={translate('common.citizen_id')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
-            navigation.navigate('driverLicenses__edit', { mode: 'add' })
+            navigation.navigate('citizenIDs__edit', { mode: 'add' })
           }}
           onSearch={setSearchText}
           searchText={searchText}
@@ -90,7 +90,7 @@ export const CitizenIDScreen = observer(() => {
         navigation={navigation}
         onLoadingChange={setIsLoading}
         searchText={searchText}
-        cipherType={CipherType.DriverLicense}
+        cipherType={CipherType.CitizenID}
         sortList={sortList}
         isSelecting={isSelecting}
         setIsSelecting={setIsSelecting}
@@ -105,7 +105,7 @@ export const CitizenIDScreen = observer(() => {
             desc={translate('all_items.empty.desc')}
             buttonText={translate('all_items.empty.btn')}
             addItem={() => {
-              navigation.navigate('driverLicenses__edit', { mode: 'add' })
+              navigation.navigate('citizenIDs__edit', { mode: 'add' })
             }}
           />
         )}

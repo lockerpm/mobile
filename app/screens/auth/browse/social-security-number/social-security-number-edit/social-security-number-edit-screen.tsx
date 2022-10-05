@@ -17,7 +17,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { SocialSecurityNumberData, toSocialSecurityNumberData } from "../social-security-number.type"
 
 
-type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'socialSecurityNumbers__edit'>;
+type EditScreenProp = RouteProp<PrimaryParamList, 'socialSecurityNumbers__edit'>;
 
 type InputItem = {
   label: string,
@@ -30,7 +30,7 @@ type InputItem = {
 
 export const SocialSecurityNumberEditScreen = observer(() => {
   const navigation = useNavigation()
-  const route = useRoute<IdentityEditScreenProp>()
+  const route = useRoute<EditScreenProp>()
   const { mode } = route.params
 
   const { cipherStore } = useStores()
@@ -200,7 +200,7 @@ export const SocialSecurityNumberEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('identity.personal_info').toUpperCase()}
+          text={translate('common.social_security_number').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
