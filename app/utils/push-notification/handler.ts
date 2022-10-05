@@ -44,6 +44,32 @@ export const handleNewShare = async (data: string) => {
     case CipherType.SecureNote:
       typeName = isVn ? 'ghi chú' : 'note'
       break
+    // case CipherType.DriverLicense:
+    //   typeName = isVn ? 'goi' : 'note'
+    //   break
+    // case CipherType.CitizenID:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Passport:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.SocialSecurityNumber:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.WirelessRouter:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Server:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.APICipher:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Database:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    default: 
+      typeName = isVn ? 'mục' : 'item'
   }
 
   PushNotifier._notify({
@@ -100,6 +126,32 @@ export const handleResponseShare = async (data: string, accepted: boolean) => {
     case CipherType.SecureNote:
       typeName = isVn ? 'ghi chú' : 'note'
       break
+    // case CipherType.DriverLicense:
+    //   typeName = isVn ? 'goi' : 'note'
+    //   break
+    // case CipherType.CitizenID:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Passport:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.SocialSecurityNumber:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.WirelessRouter:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Server:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.APICipher:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Database:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    default: 
+    typeName = isVn ? 'mục' : 'item'
   }
 
   if (accepted) {

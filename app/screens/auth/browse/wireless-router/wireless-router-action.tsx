@@ -16,7 +16,7 @@ type Props = {
 }
 
 
-export const DatabaseAction = observer((props: Props) => {
+export const WirelessRouterAction = observer((props: Props) => {
   const { copyToClipboard, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
