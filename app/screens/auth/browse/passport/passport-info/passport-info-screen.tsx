@@ -12,6 +12,7 @@ import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { useMixins } from "../../../../../services/mixins"
 import { toPassportData } from "../passport.type"
+import { PassportAction } from "../passport-action"
 
 
 export const PassportInfoScreen = observer(() => {
@@ -116,13 +117,12 @@ export const PassportInfoScreen = observer(() => {
             onLoadingChange={setIsLoading}
           />
         ) : (
-          null
-        //   <IdentityAction
-        //     navigation={navigation}
-        //     isOpen={showAction}
-        //     onClose={() => setShowAction(false)}
-        //     onLoadingChange={setIsLoading}
-        //   />
+          <PassportAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
+          />
         )
       }
       {/* Actions end */}

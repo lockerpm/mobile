@@ -17,7 +17,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { PassportData, toPassportData } from "../passport.type"
 
 
-type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'passports__edit'>;
+type PassportEditScreenProp = RouteProp<PrimaryParamList, 'passports__edit'>;
 
 type InputItem = {
   label: string,
@@ -30,7 +30,7 @@ type InputItem = {
 
 export const PassportEditScreen = observer(() => {
   const navigation = useNavigation()
-  const route = useRoute<IdentityEditScreenProp>()
+  const route = useRoute<PassportEditScreenProp>()
   const { mode } = route.params
 
   const { cipherStore } = useStores()
@@ -88,7 +88,7 @@ export const PassportEditScreen = observer(() => {
     setIsLoading(true)
     let payload: CipherView
     if (mode === 'add') {
-      payload = newCipher(CipherType.Identity)
+      payload = newCipher(CipherType.Passport)
     } else {
       // @ts-ignore
       payload = { ...selectedCipher }
@@ -275,13 +275,6 @@ export const PassportEditScreen = observer(() => {
         }
       </View>
       {/* Info end */}
-
-      <View style={commonStyles.SECTION_PADDING}>
-        <Text
-          text={translate('identity.address_details').toUpperCase()}
-          style={{ fontSize: fontSize.small }}
-        />
-      </View>
 
       {/* Custom fields */}
       <CustomFieldsEdit

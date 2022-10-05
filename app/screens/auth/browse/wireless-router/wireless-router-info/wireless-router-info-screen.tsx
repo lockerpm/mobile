@@ -12,6 +12,7 @@ import { useStores } from "../../../../../models"
 import { DeletedAction } from "../../../../../components/cipher/cipher-action/deleted-action"
 import { useMixins } from "../../../../../services/mixins"
 import { toWirelessRouterData } from "../wireless-router.type"
+import { WirelessRouterAction } from "../wireless-router-action"
 
 
 export const WirelessRouterInfoScreen = observer(() => {
@@ -96,13 +97,12 @@ export const WirelessRouterInfoScreen = observer(() => {
             onLoadingChange={setIsLoading}
           />
         ) : (
-          null
-        //   <IdentityAction
-        //     navigation={navigation}
-        //     isOpen={showAction}
-        //     onClose={() => setShowAction(false)}
-        //     onLoadingChange={setIsLoading}
-        //   />
+          <WirelessRouterAction
+            navigation={navigation}
+            isOpen={showAction}
+            onClose={() => setShowAction(false)}
+            onLoadingChange={setIsLoading}
+          />
         )
       }
       {/* Actions end */}

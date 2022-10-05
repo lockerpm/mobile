@@ -33,10 +33,6 @@ export const CitizenIDAction = observer((props: Props) => {
       value: citizenIdData.fullName
     },
     {
-      label: translate('common.dob'),
-      value: citizenIdData.dob
-    },
-    {
       label: translate('citizen_id.place_of_origin'),
       value: citizenIdData.placeOfOrigin
     },

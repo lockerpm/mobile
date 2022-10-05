@@ -17,7 +17,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { DriverLicenseData, toDriverLicenseData } from "../driver-license.type"
 
 
-type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'driverLicenses__edit'>;
+type DriverLicenseEditScreenProp = RouteProp<PrimaryParamList, 'driverLicenses__edit'>;
 
 type InputItem = {
   label: string,
@@ -30,7 +30,7 @@ type InputItem = {
 
 export const DriverLicenseEditScreen = observer(() => {
   const navigation = useNavigation()
-  const route = useRoute<IdentityEditScreenProp>()
+  const route = useRoute<DriverLicenseEditScreenProp>()
   const { mode } = route.params
 
   const { cipherStore } = useStores()

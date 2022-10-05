@@ -17,7 +17,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { ServerData, toServerData } from "../server.type"
 
 
-type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'servers__edit'>;
+type ServerEditScreenProp = RouteProp<PrimaryParamList, 'servers__edit'>;
 
 type InputItem = {
   label: string,
@@ -30,7 +30,7 @@ type InputItem = {
 
 export const ServerEditScreen = observer(() => {
   const navigation = useNavigation()
-  const route = useRoute<IdentityEditScreenProp>()
+  const route = useRoute<ServerEditScreenProp>()
   const { mode } = route.params
 
   const { cipherStore } = useStores()
@@ -45,12 +45,12 @@ export const ServerEditScreen = observer(() => {
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
 
-  const [host, setHost] = useState(mode !== 'add' ? selectedCipher.identity.title : '')
-  const [publicKey, setPublicKey] = useState(mode !== 'add' ? selectedCipher.identity.firstName : '')
-  const [privateKey, setPrivateKey] = useState(mode !== 'add' ? selectedCipher.identity.lastName : '')
-  const [username, setUsername] = useState(mode !== 'add' ? selectedCipher.identity.username : '')
-  const [password, setPasspord] = useState(mode !== 'add' ? selectedCipher.identity.email : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+  const [host, setHost] = useState(mode !== 'add' ? serverData.host : '')
+  const [publicKey, setPublicKey] = useState(mode !== 'add' ? serverData.publicKey : '')
+  const [privateKey, setPrivateKey] = useState(mode !== 'add' ? serverData.privateKey : '')
+  const [username, setUsername] = useState(mode !== 'add' ? serverData.username : '')
+  const [password, setPasspord] = useState(mode !== 'add' ? serverData.password : '')
+  const [note, setNote] = useState(mode !== 'add' ? serverData.notes : '')
   
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
@@ -82,7 +82,7 @@ export const ServerEditScreen = observer(() => {
     setIsLoading(true)
     let payload: CipherView
     if (mode === 'add') {
-      payload = newCipher(CipherType.Identity)
+      payload = newCipher(CipherType.Server)
     } else {
       // @ts-ignore
       payload = {...selectedCipher}
