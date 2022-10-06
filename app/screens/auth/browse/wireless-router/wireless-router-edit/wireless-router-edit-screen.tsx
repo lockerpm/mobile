@@ -196,7 +196,7 @@ export const WirelessRouterEditScreen = observer(() => {
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <BROWSE_ITEMS.wireless_router.svgIcon height={40} width={40} />
+          <BROWSE_ITEMS.wirelessRouter.svgIcon height={40} width={40} />
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
