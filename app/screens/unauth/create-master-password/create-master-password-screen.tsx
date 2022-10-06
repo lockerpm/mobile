@@ -22,6 +22,7 @@ import { PolicyType } from '../../../config/types'
 import { CipherView, LoginUriView, LoginView } from '../../../../core/models/view'
 import { CipherType } from '../../../../core/enums'
 import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
+import { ConfirmCreateMPModal } from './confirm-create-mp-modal'
 
 export const CreateMasterPasswordScreen = observer(() => {
   const navigation = useNavigation()
@@ -43,6 +44,7 @@ export const CreateMasterPasswordScreen = observer(() => {
   const [isCreating, setIsCreating] = useState(false)
 
   const [showViolationModal, setShowViolationModal] = useState(false)
+  const [showConfirmCreateModal, setShowConfirmCreateModal] = useState<boolean>(false)
   const [violations, setViolations] = useState<string[]>([])
 
   // -------------- COMPUTED ------------------
@@ -86,6 +88,8 @@ export const CreateMasterPasswordScreen = observer(() => {
   // Confirm master pass
   const handleCreate = async () => {
     setIsCreating(true)
+    setShowConfirmCreateModal(false)
+
     const res = await registerLocker(masterPassword, hint, passwordStrength)
     if (res.kind === 'ok') {
       logCreateMasterPwEvent()
@@ -279,7 +283,7 @@ export const CreateMasterPasswordScreen = observer(() => {
             isDisabled={isCreating || !isReady}
             isLoading={isCreating}
             text={translate('create_master_pass.btn')}
-            onPress={prepareToCreate}
+            onPress={() => setShowConfirmCreateModal(true)}
             style={{
               width: '100%',
               marginVertical: 20,
@@ -292,6 +296,15 @@ export const CreateMasterPasswordScreen = observer(() => {
           />
         </>
         {/* Bottom end */}
+
+
+        {/* Confirm create password modal */}
+        <ConfirmCreateMPModal
+          isCreating={isCreating}
+          isOpen={showConfirmCreateModal}
+          onClose={() => setShowConfirmCreateModal(false)}
+          onNext={() => prepareToCreate()}
+        />
 
         {/* Violations modal */}
         <PasswordPolicyViolationsModal

@@ -23,7 +23,6 @@ export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScre
     const res = await user.grantedEA()
     if (res.kind === 'ok') {
       setTrustedContacts(res.data)
-      // console.log(res.data)
     } else {
       notifyApiError(res)
     }
