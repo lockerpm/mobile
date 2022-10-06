@@ -28,10 +28,14 @@ export const UiStoreModel = types
     isOffline: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
     isPerformOverlayTask: types.maybeNull(types.boolean),
-    // hasNoMasterPwItem: 
+    hasNoMasterPwItem: types.maybeNull(types.boolean)
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setHasNoMasterPwItem: (val: boolean) => {
+      self.hasNoMasterPwItem = val
+    },
+
     setIsOffline: (isOffline: boolean) => {
       self.isOffline = isOffline
     },
@@ -117,6 +121,7 @@ export const UiStoreModel = types
     'deepLinkUrl',
     'saveLogin',
     'saveLastId',
+    'hasNoMasterPwItem'
   ]))
 
 /**

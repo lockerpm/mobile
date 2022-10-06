@@ -219,6 +219,7 @@ export const CipherDataMixinsProvider = observer(
     // Reload offline cache of a single cipher only
     const minimalReloadCache = async (payload: { cipher?: CipherView; deletedIds?: string[] }) => {
       Logger.debug('minimal reload cache')
+
       const { cipher, deletedIds } = payload
       if (cipher) {
         cipherService.csUpdateDecryptedCache([cipher])
@@ -234,11 +235,14 @@ export const CipherDataMixinsProvider = observer(
           cipherStore.setSelectedCipher(updatedCipher)
         }
       }
-
       _updateAutofillData()
-
+      if (uiStore.hasNoMasterPwItem) {
+        startSyncProcess(Date.now())
+        uiStore.setHasNoMasterPwItem(false)
+      }
       cipherStore.setLastCacheUpdate()
-      if (cipher?.type === CipherType.Login || cipher?.type === CipherType.MasterPassword || !!deletedIds) {
+
+      if (cipher?.type === CipherType.Login || !!deletedIds) {
         EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
       }
     }
@@ -2148,8 +2152,6 @@ export const CipherDataMixinsProvider = observer(
         if (cipherRes.kind !== 'ok') {
           if (cipherRes.kind === 'not-found' || cipherRes.kind === 'forbidden') {
             await _offlineDeleteCiphers([id], true)
-
-            // TODO
             cipherStore.setLastSync()
           } else {
             notifyApiError(cipherRes)
@@ -2157,7 +2159,6 @@ export const CipherDataMixinsProvider = observer(
           }
           return cipherRes
         }
-
         cipherStore.setLastSync()
 
         // Create/Update

@@ -30,6 +30,7 @@ export interface WixFloatingInputProps extends TextInputProps {
   lockCopy?: boolean
   persistError?: boolean
   hidePassword?: boolean
+  onBlur?: () => void 
 }
 
 /**
@@ -37,7 +38,7 @@ export interface WixFloatingInputProps extends TextInputProps {
  */
 export const WixFloatingInput = (props: WixFloatingInputProps) => {
   const {
-    outerRef, style, inputStyle, label, isPassword, value, placeholder,
+    outerRef, style, inputStyle, label, isPassword, value, placeholder, onBlur,
     editable = true, disabled, buttonRight, onChangeText, copyAble, lockCopy, textarea,
     maskType, maskOptions, isRequired, persistError, hidePassword,
     ...rest
@@ -112,6 +113,7 @@ export const WixFloatingInput = (props: WixFloatingInputProps) => {
         }}
         onBlur={() => {
           setIsFocus(false)
+          onBlur && onBlur()
         }}
         {...rest}
       />
