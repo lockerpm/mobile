@@ -131,7 +131,7 @@ export const DriverLicenseInfoScreen = observer(() => {
           paddingBottom: 30,
           marginBottom: 10
         }]}>
-          <BROWSE_ITEMS.driver_license.svgIcon height={55} width={55} />
+          <BROWSE_ITEMS.driverLicense.svgIcon height={55} width={55} />
           <Text
             preset="header"
             style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}

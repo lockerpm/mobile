@@ -226,7 +226,7 @@ export const DriverLicenseEditScreen = observer(() => {
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <BROWSE_ITEMS.driver_license.svgIcon height={40} width={40} />
+          <BROWSE_ITEMS.driverLicense.svgIcon height={40} width={40} />
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired

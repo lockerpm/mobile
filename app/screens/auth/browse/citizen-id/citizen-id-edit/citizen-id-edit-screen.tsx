@@ -233,7 +233,7 @@ export const CitizenIDEditScreen = observer(() => {
         style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <BROWSE_ITEMS.citizen_id.svgIcon height={40} width={40} />
+          <BROWSE_ITEMS.citizenID.svgIcon height={40} width={40} />
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
