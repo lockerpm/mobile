@@ -312,6 +312,13 @@
     "btn": "Create Password",
     "note": "Note: Locker cannot view, store, or re-issue Master Password in case you forget or lose it."
   },
+  "confirm_create_master_pass" : {
+    "title": "Important",
+    "desc": "By processing, you understand that Locker CANNOT see, retrieve, or re-issue your Master Password in case you forget it. Your Master Password is only yours to keep.",
+    "link": "You can learn more about Master Password here.",
+    "next_btn": "I understand. Let’s get started!",
+    "back_btn": "Go back, I want to change my Master Password"
+  },
   "intro": {
     "item_1": {
       "title": "Security & Privacy",

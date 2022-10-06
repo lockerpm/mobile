@@ -32,7 +32,7 @@
     "details": "Chi tiết",
     "edit": "Sửa",
     "email": "Email",
-    "enter_master_pass": "Nhập mật khẩu chính",
+    "enter_master_pass": "Nhập Master Password",
     "faceid_unlocking": "Mở khóa bằng Face ID",
     "folder": "Thư mục",
     "folders": "Thư mục",
@@ -50,7 +50,7 @@
     "lock": "Khóa",
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
-    "master_pass": "Mật khẩu chính",
+    "master_pass": "Master Password",
     "max": "Tối đa",
     "minute": "phút",
     "minutes": "phút",
@@ -197,7 +197,7 @@
     "done": "Hoàn tất",
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
     "invitation_rejected": "Đã từ chối lời mời",
-    "master_password_updated": "Mật khẩu chính đã được cập nhật",
+    "master_password_updated": "Master Password đã được cập nhật",
     "locker_password_updated": "Mật khẩu Locker đã được cập nhật",
     "biometric_enabled": "Mở khóa bằng Face ID/Touch ID đã được kích hoạt",
     "cipher_created": "Thêm mới thành công",
@@ -257,7 +257,7 @@
       "email": "Địa chỉ email",
       "exist_error": "Địa chỉ liên hệ khẩn cấp đã được thêm trước đó",
       "view": "Có thể xem tất cả mục trong kho của bạn",
-      "takeover": "Có thể đặt lại Mật khẩu chính của bạn",
+      "takeover": "Có thể đặt lại Master Password của bạn",
       "wait_time": "Thời gian chờ",
       "text": "Thời gian cần thiết trước khi tự động cấp quyền truy cập",
       "day": "ngày",
@@ -266,9 +266,9 @@
     "view_vault": "Xem kho dữ liệu",
     "takeover_vault": "Chiếm quyền kho dữ liệu",
     "free_guild": "Bạn đang dùng tài khoản Free. Nâng cấp lên Premium để thêm Liên hệ khẩn cấp",
-    "reset_master_pw": "Đặt lại Mật khẩu chính",
+    "reset_master_pw": "Đặt lại Master Password",
     "reset_pw": "Đặt lại mật khẩu Locker",
-    "reset_master_pw_user": "Đặt lại mật khẩu chính cho {{name}}",
+    "reset_master_pw_user": "Đặt lại Master Password cho {{name}}",
     "reset_pw_user": "Đặt lại mật khẩu Locker cho {{name}}",
     "change_pw": {
       "title": "Đặt lại mật khẩu",
@@ -276,7 +276,7 @@
       "confirm": "Xác nhận mật khẩu"
     },
     "change_master_pass": {
-      "title": "Đăt lại mật khẩu chính"
+      "title": "Đăt lại Master Password"
     },
     "view_user_vault": "Bạn đang xem tất cả các mục trong kho của {{name}}",
     "pending_trusted": "{{count}} yêu cầu",
@@ -305,12 +305,19 @@
     "strong": "Mạnh"
   },
   "create_master_pass": {
-    "title": "Tạo mật khẩu chính",
+    "title": "Tạo Master Password",
     "desc": "Master Password là mật khẩu mở khóa Locker của bạn. Đây là mật khẩu duy nhất bạn cần nhớ để truy cập tất cả các mật khẩu khác được lưu trữ trong Locker. Vui lòng không chia sẻ mật khẩu này với bất kỳ ai.",
-    "confirm_master_pass": "Xác nhận mật khẩu chính",
+    "confirm_master_pass": "Xác nhận Master Password",
     "hint": "Gợi ý (không bắt buộc)",
     "btn": "Tạo mật khẩu",
     "note": "Lưu ý: Locker không thể xem, không thể lưu trữ, cũng như không thể cấp lại Master Password trong trường hợp bạn quên hoặc đánh mất."
+  },
+  "confirm_create_master_pass": {
+    "title": "Quan trọng",
+    "desc": "By processing, you understand that Locker CANNOT see, retrieve, or re-issue your Master Password in case you forget it. Your Master Password is only yours to keep",
+    "link": "You can learn more about Master Password here.",
+    "next_btn": "I understand. Let’s get started!",
+    "back_btn": "I want to change my Master Password"
   },
   "intro": {
     "item_1": {
@@ -327,10 +334,10 @@
     }
   },
   "lock": {
-    "master_pass_changed": "Mật khẩu chính đã thay đổi. Vui lòng đăng nhập bằng mật khẩu mới",
-    "hint_sent": "Gợi ý mật khẩu chính đã được gửi. Vui lòng kiểm tra email của bạn để được hướng dẫn",
+    "master_pass_changed": "Master Password đã thay đổi. Vui lòng đăng nhập bằng mật khẩu mới",
+    "hint_sent": "Gợi ý Master Password đã được gửi. Vui lòng kiểm tra email của bạn để được hướng dẫn",
     "title": "Chào mừng trở lại!",
-    "desc": "Nhập mật khẩu chính của bạn để đăng nhập",
+    "desc": "Nhập Master Password của bạn để đăng nhập",
     "get_hint": "Nhận gợi ý"
   },
   "onBoarding": {
@@ -464,8 +471,8 @@
     }
   },
   "password": {
-    "locker_master_password": "Mật khẩu chính Locker",
-    "master_password_note": "Đây là mật khẩu chính Locker của bạn. Mật khẩu này sẽ tự động thay đổi khi bạn thay đổi mật khẩu chính trong phần Cài Đặt. Chúng tôi tạo ra mục này để bạn xem lại khi quên mật khẩu chính. Đừng lo, việc tái tạo mật khẩu chính diễn ra ngay tại thiết bị của bạn, đội ngũ Locker vẫn không thể xem, sửa, can thiệp tới mật khẩu chính của bạn.",
+    "locker_master_password": "Master Password Locker",
+    "master_password_note": "Đây là Master Password Locker của bạn. Mật khẩu này sẽ tự động thay đổi khi bạn thay đổi Master Password trong phần Cài Đặt. Chúng tôi tạo ra mục này để bạn xem lại khi quên Master Password. Đừng lo, việc tái tạo Master Password diễn ra ngay tại thiết bị của bạn, đội ngũ Locker vẫn không thể xem, sửa, can thiệp tới Master Password của bạn.",
     "login_details": "Thông tin đăng nhập",
     "username": "Email / Tên người dùng",
     "website_url": "Địa chỉ website",
@@ -557,7 +564,7 @@
     }
   },
   "change_master_pass": {
-    "title": "Thay đổi mật khẩu chính",
+    "title": "Thay đổi Master Password",
     "current": "Mật khẩu hiện tại",
     "new": "Mật khẩu mới",
     "confirm": "Xác nhận mật khẩu mới"
@@ -641,7 +648,7 @@
   },
   "settings": {
     "autofill_service": "Tự động điền (Auto-fill)",
-    "change_master_pass": "Thay đổi mật khẩu chính",
+    "change_master_pass": "Thay đổi Master Password",
     "danger_zone": "Khu vực nguy hiểm",
     "deauthorize_sessions": "Vô hiệu hóa tất cả các phiên",
     "deauthorize_sessions_desc": "Bạn lo lắng rằng tài khoản của mình đang được đăng nhập trên một thiết bị khác? Xác nhận để vô hiệu hoá tất cả các máy tính hoặc thiết bị mà bạn đã sử dụng trước đó. Bước bảo mật này được khuyến nghị nếu trước đây bạn đã sử dụng máy tính công cộng hoặc vô tình lưu mật khẩu trên thiết bị không phải của bạn.",
@@ -880,7 +887,7 @@
         "system": "Email hệ thống",
         "welcome": "Chào mừng người dùng mới",
         "payment_success": "Thanh toán thành công",
-        "mp_hint": "Gợi ý mật khẩu chính",
+        "mp_hint": "Gợi ý Master Password",
         "family_remove": "Xoá thành viên gói Family",
         "family_invite": "Mời thanh viên gói Family",
         "email_verification": "Xác nhận email",
