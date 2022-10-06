@@ -189,7 +189,7 @@ export const CipherHelpersMixinsProvider = observer(
           return {
             img: BROWSE_ITEMS.socialSecurityNumber.icon,
             backup: BROWSE_ITEMS.socialSecurityNumber.icon,
-            svg: BROWSE_ITEMS.nsocialSecurityNumberote.svgIcon,
+            svg: BROWSE_ITEMS.socialSecurityNumber.svgIcon,
             path: 'socialSecurityNumbers',
           }
         case CipherType.WirelessRouter:

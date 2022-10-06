@@ -41,7 +41,6 @@
     "@react-native-clipboard/clipboard": "^1.8.2",
     "@react-native-community/blur": "^3.6.0",
     "@react-native-community/checkbox": "^0.5.12",
-    "@react-native-community/datetimepicker": "^3.5.2",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/netinfo": "^6.0.2",
     "@react-native-cookies/cookies": "^6.2.1",

@@ -135,7 +135,7 @@ export const PassportInfoScreen = observer(() => {
           paddingBottom: 30,
           marginBottom: 10
         }]}>
-          <BROWSE_ITEMS.identity.svgIcon height={55} width={55} />
+          <BROWSE_ITEMS.passport.svgIcon height={55} width={55} />
           <Text
             preset="header"
             style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
