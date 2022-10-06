@@ -115,13 +115,6 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     svgIcon: CitizenIDIcon,
     addable: true
   },
-  passport: {
-    label: 'common.passport',
-    icon: require('./images/vault/passport.png'),
-    routeName: 'passports',
-    svgIcon: PassportIcon,
-    addable: true
-  },
   socialSecurityNumber: {
     label: 'common.social_security_number',
     icon: require('./images/vault/social-security-number.png'),
@@ -141,6 +134,13 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     icon: require('./images/vault/server.png'),
     routeName: 'servers',
     svgIcon: ServerIcon,
+    addable: true
+  },
+  passport: {
+    label: 'common.passport',
+    icon: require('./images/vault/passport.png'),
+    routeName: 'passports',
+    svgIcon: PassportIcon,
     addable: true
   },
   apiCipher: {
