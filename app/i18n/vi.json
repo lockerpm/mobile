@@ -314,10 +314,10 @@
   },
   "confirm_create_master_pass": {
     "title": "Quan trọng",
-    "desc": "By processing, you understand that Locker CANNOT see, retrieve, or re-issue your Master Password in case you forget it. Your Master Password is only yours to keep",
-    "link": "You can learn more about Master Password here.",
-    "next_btn": "I understand. Let’s get started!",
-    "back_btn": "I want to change my Master Password"
+    "desc": "Khi tiếp tục, bạn đã hiểu rằng đội ngũ Locker không thể nhìn, thay đổi, hoặc cấp lại Master Password của bạn trong trường hợp bạn quên Master Password. Bạn là người duy nhất sở hữu Master Password.",
+    "link": "Xem thêm.",
+    "next_btn": "Tôi đã hiểu",
+    "back_btn": "Tôi muốn thay đổi Master Password"
   },
   "intro": {
     "item_1": {

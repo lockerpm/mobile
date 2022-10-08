@@ -43,6 +43,7 @@ export const ConfirmCreateMPModal = observer((props: Props) => {
       <Button
         isDisabled={isCreating}
         isLoading={isCreating}
+        textStyle={{textAlign: "center"}}
         text={translate('confirm_create_master_pass.next_btn')}
         onPress={onNext}
         style={{ marginVertical: 16 }}
