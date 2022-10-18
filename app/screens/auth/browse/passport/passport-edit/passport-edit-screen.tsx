@@ -15,7 +15,8 @@ import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { PassportData, toPassportData } from "../passport.type"
-
+import { GEN } from "../../../../../config/constants"
+import countries from '../../../../../common/countries.json'
 
 type PassportEditScreenProp = RouteProp<PrimaryParamList, 'passports__edit'>;
 
@@ -23,7 +24,13 @@ type InputItem = {
   label: string,
   value: string,
   setter: (val: string) => void,
+  onTouchStart?: () => void,
+  isSelect?: boolean,
+  options?: { label: string, value: string | number | null }[],
   isRequired?: boolean,
+  isDateTime?: boolean,
+  placeholder?: string,
+  isDisableEdit?: boolean,
   type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
 }
 
@@ -50,8 +57,8 @@ export const PassportEditScreen = observer(() => {
   const [code, setCode] = useState(mode !== 'add' ? passportData.code : '')
   const [fullName, setFullName] = useState(mode !== 'add' ? passportData.fullName : '')
   const [dob, setDob] = useState(mode !== 'add' ? passportData.dob : '')
-  const [sex, setSex] = useState(mode !== 'add' ? passportData.sex : '')
-  const [nationality, setNationality] = useState(mode !== 'add' ? passportData.nationality : '')
+  const [sex, setSex] = useState(mode !== 'add' ? passportData.sex : GEN.MALE)
+  const [nationality, setNationality] = useState(mode !== 'add' ? passportData.nationality : 'vn')
   const [idNumber, setIdNumber] = useState(mode !== 'add' ? passportData.idNumber : '')
   const [dateOfIssue, setDateOfIssue] = useState(mode !== 'add' ? passportData.dateOfIssue : '')
   const [dateOfExpiry, setDateOfExpiry] = useState(mode !== 'add' ? passportData.dateOfExpiry : '')
@@ -132,14 +139,19 @@ export const PassportEditScreen = observer(() => {
       navigation.goBack()
     }
   }
-
+  const GENDER = [
+    { label: translate('common.male'), value: GEN.MALE },
+    { label: translate('common.female'), value: GEN.FEMALE },
+    { label: translate('common.other'), value: GEN.OTHER },
+  ]
   // ----------------- RENDER ----------------------
 
   const passportDetails: InputItem[] = [
     {
       label: translate('passport.passport_id'),
       value: passportID,
-      setter: setPassportID
+      setter: setPassportID,
+      isRequired: true
     },
     {
       label: translate('passport.type'),
@@ -159,17 +171,25 @@ export const PassportEditScreen = observer(() => {
     {
       label: translate('common.dob'),
       value: dob,
-      setter: setDob
+      setter: setDob,
+      isDateTime: true,
+      placeholder: 'dd/mm/yyyy'
     },
     {
       label: translate('passport.sex'),
       value: sex,
-      setter: setSex
+      setter: setSex,
+      isSelect: true,
+      options: GENDER
     },
     {
       label: translate('common.nationality'),
-      value: nationality,
-      setter: setNationality
+      value: countries[nationality?.toUpperCase()] ? countries[nationality?.toUpperCase()].country_name : '',
+      setter: setNationality,
+      isDisableEdit: true,
+      onTouchStart: () => {
+        navigation.navigate('countrySelector', { initialId: nationality })
+      }
     },
     {
       label: translate('passport.id_number'),
@@ -179,12 +199,16 @@ export const PassportEditScreen = observer(() => {
     {
       label: translate('passport.date_of_issue'),
       value: dateOfIssue,
-      setter: setDateOfIssue
+      setter: setDateOfIssue,
+      isDateTime: true,
+      placeholder: 'dd/mm/yyyy'
     },
     {
       label: translate('passport.date_of_expiry'),
       value: dateOfExpiry,
-      setter: setDateOfExpiry
+      setter: setDateOfExpiry,
+      isDateTime: true,
+      placeholder: 'dd/mm/yyyy'
     },
     {
       label: translate('passport.place_of_issue'),
@@ -261,15 +285,32 @@ export const PassportEditScreen = observer(() => {
         }]}
       >
         {
-          passportDetails.map((e, index) => (
-            <View
-              key={index}
-              style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
-              <FloatingInput
-                label={e.label}
-                value={e.value}
-                onChangeText={e.setter}
-              />
+          passportDetails.map((item, index) => (
+            <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
+              {
+                item.isSelect ? (
+                  <Select
+                    floating
+                    placeholder={item.label}
+                    value={item.value}
+                    options={item.options}
+                    onChange={val => item.setter(val)}
+                  />
+                ) : (
+                  <FloatingInput
+                    editable={item.isDisableEdit}
+                    isDateTime={item.isDateTime}
+                    isRequired={item.isRequired}
+                    label={item.label}
+                    value={item.value}
+                    onChangeText={(text) => {
+                      item.setter(text)
+                    }}
+                    onTouchStart={item.onTouchStart}
+                    placeholder={item.placeholder}
+                  />
+                )
+              }
             </View>
           ))
         }
