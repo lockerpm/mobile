@@ -248,7 +248,25 @@
       "minimum": "Ensure this field has at least 6 characters",
       "not_valid": "This address is not valid"
     },
-    "edit_warning": "Once you delete this alias, it cannot be recovered. Locker Relay will no longer forward messages sent to {{alias}}, including messages that allow you to reset lost passwords. If you use this email alias to log in to sites, you should update your login with a different email address before you delete this one."
+    "edit_warning": "Once you delete this alias, it cannot be recovered. Locker Relay will no longer forward messages sent to {{alias}}, including messages that allow you to reset lost passwords. If you use this email alias to log in to sites, you should update your login with a different email address before you delete this one.",
+    "manage_subdomain": {
+      "your_subdomain": "Your subdomain",
+      "desc": {
+        "one": "Custom sub-domain allows you to create custom email domain",
+        "two": "You can create one (editable) subdomain"
+      },
+      "manage": "Manage",
+      "title": "Manage Subdomain",
+      "num_alias": "Number of email aliases",
+      "block_email": "Blocked emails",
+      "forwarded_email": "forwarded_email",
+      "create_date": "Created date",
+      "use_subdomain": "Use subdomain to generate future aliases",
+      "edit_btn": "Edit Subdomain",
+      "new": "New subdomain",
+      "edit_note": "*Current sub-domain will be permanently deleted when you change to a new sub-domain. All email aliases created from your current sub-domain will also be then deleted when you perform this action"
+    },
+    "statistic": "See statistics"
   },
   "emergency_access": {
     "title": "Emergency Access",

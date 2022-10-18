@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
 import {
   Text,
@@ -16,6 +16,8 @@ import { useStores } from '../../../../models'
 import { RelayAddress } from '../../../../config/types/api'
 
 interface Props {
+  isFreeAccount: boolean
+  navigation: any
   item: RelayAddress
   index: number
   deleteRelayAddress: (id: number) => void
@@ -23,7 +25,7 @@ interface Props {
 }
 
 export const AliasItem = (props: Props) => {
-  const { item, index, deleteRelayAddress, setShowEditModal } = props
+  const { item, index, deleteRelayAddress, setShowEditModal, isFreeAccount, navigation } = props
   const { color, translate, copyToClipboard } = useMixins()
   const { toolStore } = useStores()
 
@@ -104,13 +106,25 @@ export const AliasItem = (props: Props) => {
                 <Divider />
               </>
             )}
+            {!isFreeAccount && (
+              <>
+                <ActionItem
+                  name={"See statistics"}
+                  icon="file-o"
+                  action={() => {
+                    navigation.navigate("aliasStatistic")
+                    setIsOpen(false)
+                  }}
+                />
+                <Divider />
+              </>
+            )}
             <ActionItem
               name={translate('common.delete')}
               icon="trash"
               textColor={color.error}
               action={() => {
                 setNextModal('remove')
-                setIsOpen(false)
               }}
             />
           </ActionSheetContent>

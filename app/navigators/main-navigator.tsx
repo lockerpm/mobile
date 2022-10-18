@@ -69,6 +69,7 @@ import {
   InAppNotificationScreen,
   DeleteScreen,
   PrivateRelay,
+  ManageSubdomainScreen,
   EmergencyAccessScreen,
   YourTrustedContactScreen,
   ContactsTrustedYouScreen,
@@ -76,6 +77,7 @@ import {
   TakeoverEAScreen,
   // @ts-ignore
   AutofillServiceScreen,
+  AliasStatisticScreen,
 } from '../screens'
 import UserInactivity from 'react-native-user-inactivity'
 import { useMixins } from '../services/mixins'
@@ -119,6 +121,8 @@ export type PrimaryParamList = {
   switchDevice: undefined
   biometricUnlockIntro: undefined
   privateRelay: undefined
+  manageSubdomain: undefined
+  aliasStatistic: undefined
   passwordGenerator: {
     fromTools?: boolean
   }
@@ -595,7 +599,10 @@ export const MainNavigator = observer(() => {
             gestureEnabled: false,
           }}
         />
+        
         <Stack.Screen name="privateRelay" component={PrivateRelay} />
+        <Stack.Screen name="manageSubdomain" component={ManageSubdomainScreen} />
+        <Stack.Screen name="aliasStatistic" component={AliasStatisticScreen} />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen
           name="authenticator__edit"
