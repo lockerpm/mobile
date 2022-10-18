@@ -248,7 +248,25 @@
       "minimum": "Địa chỉ email yêu cầu ít nhất 6 ký tự",
       "not_valid": "Địa chỉ email này không hợp lệ"
     },
-    "edit_warning": "Địa chỉ Email ẩn danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email ẩn danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email ẩn danh này"
+    "edit_warning": "Địa chỉ Email ẩn danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email ẩn danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email ẩn danh này",
+    "manage_subdomain": {
+      "your_subdomain": "Your subdomain",
+      "desc": {
+        "one": "Custom sub-domain allows you to create custom email domain",
+        "two": "You can create one (editable) subdomain"
+      },
+      "manage": "Manage",
+      "title": "Manage Subdomain",
+      "num_alias": "Number of email aliases",
+      "block_email": "Blocked emails",
+      "forwarded_email": "forwarded_email",
+      "create_date": "Created date",
+      "use_subdomain": "Use subdomain to generate future aliases",
+      "edit_btn": "Edit Subdomain",
+      "new": "New subdomain",
+      "edit_note": "*Current sub-domain will be permanently deleted when you change to a new sub-domain. All email aliases created from your current sub-domain will also be then deleted when you perform this action"
+    },
+    "statistic": "See statistics"
   },
   "emergency_access": {
     "title": "Liên hệ khẩn cấp",
