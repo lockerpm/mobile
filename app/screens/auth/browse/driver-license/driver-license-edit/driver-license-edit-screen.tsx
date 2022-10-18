@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select, CustomFieldsEdit
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -10,12 +10,12 @@ import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
-import { CipherView, IdentityView } from "../../../../../../core/models/view"
+import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { DriverLicenseData, toDriverLicenseData } from "../driver-license.type"
-
+import countries from '../../../../../common/countries.json'
 
 type DriverLicenseEditScreenProp = RouteProp<PrimaryParamList, 'driverLicenses__edit'>;
 
@@ -23,7 +23,11 @@ type InputItem = {
   label: string,
   value: string,
   setter: (val: string) => void,
+  onTouchStart?: () => void,
   isRequired?: boolean,
+  isDateTime?: boolean,
+  placeholder?: string,
+  isDisableEdit?: boolean,
   type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
 }
 
@@ -33,7 +37,7 @@ export const DriverLicenseEditScreen = observer(() => {
   const route = useRoute<DriverLicenseEditScreenProp>()
   const { mode } = route.params
 
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const { translate, color } = useMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
@@ -49,7 +53,7 @@ export const DriverLicenseEditScreen = observer(() => {
   const [fullName, setFullName] = useState(mode !== 'add' ? driverLicenseData.fullName : '')
   const [dob, setDob] = useState(mode !== 'add' ? driverLicenseData.dob : '')
   const [address, setAddress] = useState(mode !== 'add' ? driverLicenseData.address : '')
-  const [nationality, setNationality] = useState(mode !== 'add' ? driverLicenseData.nationality : '')
+  const [nationality, setNationality] = useState(mode !== 'add' ? driverLicenseData.nationality : 'vn')
   const [classId, setClass] = useState(mode !== 'add' ? driverLicenseData.class : '')
   const [validUntil, setValidUntil] = useState(mode !== 'add' ? driverLicenseData.validUntil : '')
   const [vehicleClass, setVehicleClass] = useState(mode !== 'add' ? driverLicenseData.vehicleClass : '')
@@ -75,6 +79,14 @@ export const DriverLicenseEditScreen = observer(() => {
           setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
+      }
+      if (uiStore.selectedCountry) {
+        const item = countries[uiStore.selectedCountry]
+
+        if (item) {
+          setNationality(uiStore.selectedCountry.toLowerCase())
+        }
+        uiStore.setSelectedCountry(null)
       }
     });
 
@@ -137,7 +149,8 @@ export const DriverLicenseEditScreen = observer(() => {
     {
       label: translate('driver_license.no'),
       value: idNO,
-      setter: setIdNo
+      setter: setIdNo,
+      isRequired: true
     },
     {
       label: translate('common.fullname'),
@@ -147,7 +160,9 @@ export const DriverLicenseEditScreen = observer(() => {
     {
       label: translate('common.dob'),
       value: dob,
-      setter: setDob
+      setter: setDob,
+      isDateTime: true,
+      placeholder: 'dd/mm/yyyy'
     },
     {
       label: translate('common.address'),
@@ -156,8 +171,12 @@ export const DriverLicenseEditScreen = observer(() => {
     },
     {
       label: translate('common.nationality'),
-      value: nationality,
-      setter: setNationality
+      value: countries[nationality?.toUpperCase()] ? countries[nationality?.toUpperCase()].country_name : '',
+      setter: setNationality,
+      isDisableEdit: true,
+      onTouchStart: () => {
+        navigation.navigate('countrySelector', { initialId: nationality })
+      }
     },
     {
       label: translate('driver_license.class'),
@@ -167,7 +186,9 @@ export const DriverLicenseEditScreen = observer(() => {
     {
       label: translate('driver_license.valid_until'),
       value: validUntil,
-      setter: setValidUntil
+      setter: setValidUntil,
+      isDateTime: true,
+      placeholder: 'dd/mm/yyyy'
     },
     {
       label: translate('driver_license.vehicle_class'),
@@ -177,7 +198,9 @@ export const DriverLicenseEditScreen = observer(() => {
     {
       label: translate('driver_license.beginning_date'),
       value: beginningDate,
-      setter: setBeginningDate
+      setter: setBeginningDate,
+      isDateTime: true,
+      placeholder: 'dd/mm/yyyy'
     },
     {
       label: translate('driver_license.issued_by'),
@@ -254,14 +277,21 @@ export const DriverLicenseEditScreen = observer(() => {
         }]}
       >
         {
-          driverLicenseDetails.map((e,index) => (
-          <View 
-            key={index}
-            style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
+          driverLicenseDetails.map((item, index) => (
+            <View
+              key={index}
+              style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
               <FloatingInput
-                label={e.label}
-                value={e.value}
-                onChangeText={e.setter}
+                editable={item.isDisableEdit}
+                isDateTime={item.isDateTime}
+                isRequired={item.isRequired}
+                label={item.label}
+                value={item.value}
+                onChangeText={(text) => {
+                  item.setter(text)
+                }}
+                onTouchStart={item.onTouchStart}
+                placeholder={item.placeholder}
               />
             </View>
           ))

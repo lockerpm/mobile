@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select, CustomFieldsEdit
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -10,12 +10,12 @@ import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
-import { CipherView, IdentityView } from "../../../../../../core/models/view"
+import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { SocialSecurityNumberData, toSocialSecurityNumberData } from "../social-security-number.type"
-
+import countries from '../../../../../common/countries.json'
 
 type EditScreenProp = RouteProp<PrimaryParamList, 'socialSecurityNumbers__edit'>;
 
@@ -23,7 +23,11 @@ type InputItem = {
   label: string,
   value: string,
   setter: (val: string) => void,
+  onTouchStart?: () => void,
   isRequired?: boolean,
+  isDateTime?: boolean,
+  placeholder?: string,
+  isDisableEdit?: boolean,
   type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
 }
 
@@ -33,7 +37,7 @@ export const SocialSecurityNumberEditScreen = observer(() => {
   const route = useRoute<EditScreenProp>()
   const { mode } = route.params
 
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const { translate, color } = useMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
@@ -48,7 +52,7 @@ export const SocialSecurityNumberEditScreen = observer(() => {
   const [fullName, setFullName] = useState(mode !== 'add' ? socialSecurityNumberData.fullName : '')
   const [socialSecurityNumber, setSocialSecurityNumber] = useState(mode !== 'add' ? socialSecurityNumberData.socialSecurityNumber : '')
   const [dateOfIssue, setDateOfIssue] = useState(mode !== 'add' ? socialSecurityNumberData.dateOfIssue : '')
-  const [contry, setContry] = useState(mode !== 'add' ? socialSecurityNumberData.contry : '')
+  const [contry, setContry] = useState(mode !== 'add' ? socialSecurityNumberData.contry : 'vn')
   const [note, setNote] = useState(mode !== 'add' ? socialSecurityNumberData.notes : '')
  
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
@@ -69,6 +73,14 @@ export const SocialSecurityNumberEditScreen = observer(() => {
           setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
+      }
+      if (uiStore.selectedCountry) {
+        const item = countries[uiStore.selectedCountry]
+
+        if (item) {
+          setContry(uiStore.selectedCountry.toLowerCase())
+        }
+        uiStore.setSelectedCountry(null)
       }
     });
 
@@ -130,17 +142,24 @@ export const SocialSecurityNumberEditScreen = observer(() => {
     {
       label: translate('common.social_security_number'),
       value: socialSecurityNumber,
-      setter: setSocialSecurityNumber
+      setter: setSocialSecurityNumber,
+      isRequired: true
     },
     {
       label: translate('passport.date_of_issue'),
       value: dateOfIssue,
-      setter: setDateOfIssue
+      setter: setDateOfIssue,
+      isDateTime: true,
+      placeholder: 'dd/mm/yyyy'
     },
     {
       label: translate('common.nationality'),
-      value: contry,
+      value: countries[contry?.toUpperCase()] ? countries[contry?.toUpperCase()].country_name : '',
       setter: setContry,
+      isDisableEdit: true,
+      onTouchStart: () => {
+        navigation.navigate('countrySelector', { initialId: contry })
+      }
     }
   ]
 

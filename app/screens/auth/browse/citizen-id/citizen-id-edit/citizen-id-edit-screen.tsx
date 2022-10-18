@@ -55,7 +55,7 @@ export const CitizenIDEditScreen = observer(() => {
   const [fullName, setFullName] = useState(mode !== 'add' ? citizenIdData.fullName : '')
   const [dob, setDob] = useState(mode !== 'add' ? citizenIdData.dob : '')
   const [sex, setSex] = useState(mode !== 'add' ? citizenIdData.sex : GEN.MALE)
-  const [nationality, setNationality] = useState(mode !== 'add' ? citizenIdData.nationality : 'VN')
+  const [nationality, setNationality] = useState(mode !== 'add' ? citizenIdData.nationality : 'vn')
   const [placeOfOrigin, setPlaceOfOrigin] = useState(mode !== 'add' ? citizenIdData.placeOfOrigin : '')
   const [placeOfResidence, setPlaceOfResidence] = useState(mode !== 'add' ? citizenIdData.placeOfResidence : '')
   const [expiryDate, setExpiryDate] = useState(mode !== 'add' ? citizenIdData.expiryDate : '')
@@ -85,8 +85,9 @@ export const CitizenIDEditScreen = observer(() => {
       }
       if (uiStore.selectedCountry) {
         const item = countries[uiStore.selectedCountry]
+        
         if (item) {
-          setNationality(uiStore.selectedCountry)
+          setNationality(uiStore.selectedCountry.toLowerCase())
         }
         uiStore.setSelectedCountry(null)
       }
@@ -181,7 +182,7 @@ export const CitizenIDEditScreen = observer(() => {
     },
     {
       label: translate('common.nationality'),
-      value: countries[nationality] ? countries[nationality].country_name : '',
+      value: countries[nationality?.toUpperCase()] ? countries[nationality?.toUpperCase()].country_name : '',
       setter: setNationality,
       isDisableEdit: true,
       onTouchStart: () => {
