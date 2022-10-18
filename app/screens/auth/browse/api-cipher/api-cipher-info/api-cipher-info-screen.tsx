@@ -31,22 +31,23 @@ export const ApiCipherInfoScreen = observer(() => {
   const textFields = [
     {
       label: translate('API.url'),
-      value: apiCipherData.url
+      value: apiCipherData.url,
+      isRequired: true
     },
     {
-      label: translate('identity.first_name'),
-      value: apiCipherData.method
+      label: translate('API.method'),
+      value: apiCipherData.method.toUpperCase()
     },
     {
-      label: translate('identity.last_name'),
+      label: translate('API.header'),
       value: apiCipherData.header
     },
     {
-      label: translate('identity.username'),
+      label: translate('API.body_data'),
       value: apiCipherData.bodyData
     },
     {
-      label: translate('identity.email'),
+      label: translate('API.response'),
       value: apiCipherData.response
     }
   ]

@@ -34,6 +34,7 @@
     "email": "Email",
     "enter_master_pass": "Nhập Master Password",
     "faceid_unlocking": "Mở khóa bằng Face ID",
+    "female": "Nữ",
     "folder": "Thư mục",
     "folders": "Thư mục",
     "fullname": "Họ và tên",
@@ -50,6 +51,7 @@
     "lock": "Khóa",
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
+    "male": "Nam",
     "master_pass": "Master Password",
     "max": "Tối đa",
     "minute": "phút",
@@ -126,12 +128,14 @@
     "api_cipher": "API",
     "database": "Database",
     "dob": "Ngày sinh",
-    "nationality": "Quốc tịch"
+    "nationality": "Quốc tịch",
+    "invalid_date": "Ngày không hợp lệ"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
   },
   "alert": {
+    "enterprise_lock": "Tài khoản của bạn bị tạm khóa do gói cước Locker cho doanh nghiệp đã hết hạn",
     "update": {
       "title": "Cập nhật ứng dụng?",
       "content": "Locker {{version}} đã có mặt tại của hàng CH play. Cập nhật ngay!",

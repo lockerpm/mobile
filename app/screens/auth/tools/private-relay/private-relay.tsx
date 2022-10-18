@@ -11,6 +11,9 @@ import { AliasItem } from './private-relay-item'
 import { useStores } from '../../../../models'
 import { EditAliasModal } from './edit-alias-modal'
 import { RelayAddress } from '../../../../config/types/api'
+import { PlanType } from '../../../../config/types'
+
+const FREE_PLAM_ALIAS_LIMIT = 5
 
 export const PrivateRelay = observer(() => {
   const navigation = useNavigation()
@@ -20,6 +23,11 @@ export const PrivateRelay = observer(() => {
   const [alias, setAlias] = useState<RelayAddress[]>([])
   const [showDesc, setShowDesc] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
+
+
+  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
+  const isReachLimit = isFreeAccount && alias.length >= FREE_PLAM_ALIAS_LIMIT
+  const suffixitle = isFreeAccount ? ` (${alias.length}/5)` : ` (${alias.length})`
 
   const rootEmailDesc = [
     translate('private_relay.desc.one'),
@@ -31,7 +39,7 @@ export const PrivateRelay = observer(() => {
     const res = await toolStore.fetchRelayListAddresses()
     if (res.kind === 'ok') {
       setShowDesc(res.data.count === 0)
-      setAlias(res.data.results)
+      setAlias(res.data.results.reverse())
     }
   }
 
@@ -39,7 +47,7 @@ export const PrivateRelay = observer(() => {
     const res = await toolStore.generateRelayNewAddress()
     if (res.kind === 'ok') {
       const newList = [...alias]
-      newList.push(res.data)
+      newList.unshift(res.data)
       setAlias(newList)
     }
   }
@@ -70,9 +78,9 @@ export const PrivateRelay = observer(() => {
           goBack={() => navigation.goBack()}
           right={
             <Button
-              disabled={alias.length >= 5}
+              disabled={isReachLimit}
               textStyle={{
-                color: alias.length >= 5 ? color.block : color.primary,
+                color: isReachLimit ? color.block : color.primary,
               }}
               preset="link"
               text={translate('private_relay.btn')}
@@ -152,7 +160,7 @@ export const PrivateRelay = observer(() => {
       </View>
       {/* Root email end */}
       <Text
-        text={translate('private_relay.label') + ` (${alias.length}/5)`}
+        text={translate('private_relay.label') + suffixitle}
         style={{
           marginLeft: 20,
           marginVertical: 12,

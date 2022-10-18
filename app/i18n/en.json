@@ -34,6 +34,7 @@
     "email": "Email",
     "enter_master_pass": "Enter master password",
     "faceid_unlocking": "Unlock with Face ID",
+    "female": "Female",
     "folder": "Folder",
     "folders": "Folders",
     "fullname": "Full name",
@@ -50,6 +51,7 @@
     "lock": "Lock",
     "login": "Login",
     "logout": "Log Out",
+    "male": "Male",
     "master_pass": "Master Password",
     "max": "Max",
     "minute": "minute",
@@ -126,12 +128,14 @@
     "api_cipher": "API",
     "database": "Database",
     "dob": "Date of birth",
-    "nationality": "Nationality"
+    "nationality": "Nationality",
+    "invalid_date": "Invalid date"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
   },
   "alert": {
+    "enterprise_lock": "Your account is suspended due to the expiration of Locker for business plan",
     "update": {
       "title": "Update App?",
       "content": "A new version of Locker is available! Click to update Locker version {{version}}.",
