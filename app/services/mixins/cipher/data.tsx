@@ -777,6 +777,10 @@ export const CipherDataMixinsProvider = observer(
         let currentIdentityCount = await _getCipherCount(CipherType.Identity)
         let currentNoteCount = await _getCipherCount(CipherType.SecureNote)
         let currentCryptoCount = await _getCipherCount(CipherType.CryptoWallet)
+        
+        // TODO
+        // unlimited for other cipher types
+
         for (let i = 0; i < importResult.ciphers.length; i++) {
           const cipher = importResult.ciphers[i]
 

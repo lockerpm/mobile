@@ -34,6 +34,7 @@
     "email": "Email",
     "enter_master_pass": "Nhập Master Password",
     "faceid_unlocking": "Mở khóa bằng Face ID",
+    "female": "Nữ",
     "folder": "Thư mục",
     "folders": "Thư mục",
     "fullname": "Họ và tên",
@@ -50,6 +51,7 @@
     "lock": "Khóa",
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
+    "male": "Nam",
     "master_pass": "Master Password",
     "max": "Tối đa",
     "minute": "phút",
@@ -116,12 +118,24 @@
     "see_all": "Xem tất cả",
     "collapse": "Thu gọn",
     "share_with": "Chia sẻ với",
-    "yes": "Đồng ý"
+    "yes": "Đồng ý",
+    "driver_license": "Giấy phép lái xe",
+    "citizen_id": "Căn cước công dân",
+    "passport": "Hộ chiếu",
+    "social_security_number": "Số bảo hiểm xã hội",
+    "wireless_router": "Wireless Router",
+    "server": "Server",
+    "api_cipher": "API",
+    "database": "Database",
+    "dob": "Ngày sinh",
+    "nationality": "Quốc tịch",
+    "invalid_date": "Ngày không hợp lệ"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
   },
   "alert": {
+    "enterprise_lock": "Tài khoản của bạn bị tạm khóa do gói cước Locker cho doanh nghiệp đã hết hạn",
     "update": {
       "title": "Cập nhật ứng dụng?",
       "content": "Locker {{version}} đã có mặt tại của hàng CH play. Cập nhật ngay!",
@@ -461,6 +475,59 @@
       "desc": "Lưu địa chỉ và chi tiết liên hệ của bạn để điền vào các mẫu đăng ký một cách nhanh chóng",
       "btn": "Thêm danh tính"
     }
+  },
+  "driver_license": {
+    "no": "Số giấy phép",
+    "class": "Hạng",
+    "valid_until": "Thời hạn",
+    "vehicle_class": "Loại phương tiện",
+    "beginning_date": "Ngày bắt đầu",
+    "issued_by": "Đơn vị cấp phép"
+  },
+  "citizen_id": {
+    "id_no": "Số căn cước",
+    "sex": "Giới tính",
+    "place_of_origin": "Quê quán",
+    "place_of_residence": "Địa chỉ thường trú",
+    "expiry_date": "Có giá trị đến",
+    "personal_id": "Đặc điểm nhận dạng",
+    "date_of_issue": "Cấp ngày",
+    "issued_by": "Đơn vị cấp căn cước"
+  },
+  "passport": {
+    "passport_id": "Số hộ chiếu",
+    "type": "Loại",
+    "code": "Mã số",
+    "sex": "Giới tính",
+    "id_number": "Số CMND/CCCD",
+    "date_of_issue": "Ngày cấp",
+    "date_of_expiry": "Ngày hết hạn",
+    "place_of_issue": "Nơi cấp"
+  },
+  "wireless_router": {
+    "device_name": "Tên thiết bị",
+    "router_ip_address": "Địa chỉ IP của router",
+    "wifi_ssid": "Tên WIFI",
+    "wifi_pw": "Mật khẩu WIFI",
+    "admin_username": "Tên đăng nhập Admin",
+    "admin_password": "Mật khẩu Admin"
+  },
+  "server": {
+    "host": "Host (IP/tên miền)",
+    "public_key": "Khoá công khai",
+    "private_key": "Khoá bí mật"
+  },
+  "API": {
+    "url": "URL",
+    "method": "Method",
+    "header": "Header",
+    "body_data": "Body Data",
+    "response": "Response"
+  },
+  "database": {
+    "host": "Host (IP/domain)",
+    "port": "Cổng",
+    "default": "CSDL mặc định"
   },
   "note": {
     "copy_note": "Sao chép ghi chú",

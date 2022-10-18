@@ -22,13 +22,21 @@ import { MAX_CIPHER_SELECTION } from "../../../../../config/constants"
 import { CollectionListItem } from "../share-items/folder-share-list-item"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { FolderAction } from "../../folders/folder-action"
+import { DriverLicenseAction } from "../../driver-license/driver-license-action"
+import { CitizenIDAction } from "../../citizen-id/citizen-id-action"
+import { PassportAction } from "../../passport/passport-action"
+import { SocialSecurityNumberAction } from "../../social-security-number/social-security-number-action"
+import { WirelessRouterAction } from "../../wireless-router/wireless-router-action"
+import { ServerAction } from "../../server/server-action"
+import { ApiCipherAction } from "../../api-cipher/api-cipher-action"
+import { DatabaseAction } from "../../database/database-action"
 
 
 export interface CipherSharedListProps {
   emptyContent?: JSX.Element
   navigation: any
   searchText?: string
-  onLoadingChange?: Function
+  onLoadingChange?: (val: boolean) => void
   sortList?: {
     orderField: string
     order: string
@@ -64,6 +72,16 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const [showCardAction, setShowCardAction] = useState(false)
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showPendingAction, setShowPendingAction] = useState(false)
+
+  const [showDriverLicenseAction, setShowDriverLicenseAction] = useState(false)
+  const [showCitizenIDAction, setShowCitizenIDAction] = useState(false)
+  const [showPassportAction, setShowPassportAction] = useState(false)
+  const [showSocialNumberAction, setShowSocialNumberAction] = useState(false)
+  const [showWirelessRouterAction, setShowWirelessRouterAction] = useState(false)
+  const [showServerAction, setShowServerAction] = useState(false)
+  const [showApiAction, setShowApiAction] = useState(false)
+  const [showDataBaseAction, setShowDatabaseAction] = useState(false)
+
 
   const [checkedItem, setCheckedItem] = useState('')
 
@@ -209,8 +227,31 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       case CipherType.CryptoWallet:
         setShowCryptoWalletAction(true)
         break
+      case CipherType.DriverLicense:
+        setShowDriverLicenseAction(true)
+        break
+      case CipherType.CitizenID:
+        setShowCitizenIDAction(true)
+        break
+      case CipherType.Passport:
+        setShowPassportAction(true)
+        break
+      case CipherType.SocialSecurityNumber:
+        setShowSocialNumberAction(true)
+        break
+      case CipherType.WirelessRouter:
+        setShowWirelessRouterAction(true)
+        break
+      case CipherType.Server:
+        setShowWirelessRouterAction(true)
+        break
+      case CipherType.APICipher:
+        setShowApiAction(true)
+        break
+      case CipherType.Database:
+        setShowDatabaseAction(true)
+        break
       default:
-        return
     }
   }
 
@@ -301,6 +342,63 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         onClose={() => setShowCollectionAction(false)}
         onLoadingChange={onLoadingChange}
         folder={selectedCollection}
+      />
+
+      {/* Other types */}
+      <DriverLicenseAction
+        isOpen={showDriverLicenseAction}
+        onClose={() => setShowDriverLicenseAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <CitizenIDAction
+        isOpen={showCitizenIDAction}
+        onClose={() => setShowCitizenIDAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <PassportAction
+        isOpen={showPassportAction}
+        onClose={() => setShowPassportAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <SocialSecurityNumberAction
+        isOpen={showSocialNumberAction}
+        onClose={() => setShowSocialNumberAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <WirelessRouterAction
+        isOpen={showWirelessRouterAction}
+        onClose={() => setShowWirelessRouterAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <ServerAction
+        isOpen={showServerAction}
+        onClose={() => setShowServerAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <ApiCipherAction
+        isOpen={showApiAction}
+        onClose={() => setShowApiAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
+      />
+
+      <DatabaseAction
+        isOpen={showDataBaseAction}
+        onClose={() => setShowDatabaseAction(false)}
+        navigation={navigation}
+        onLoadingChange={onLoadingChange}
       />
       {/* Action menus end */}
 

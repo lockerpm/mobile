@@ -101,7 +101,7 @@ export const PlanUsage = () => {
         {
             cipherType: CipherType.CryptoWallet,
             title: translate('manage_plan.usage.crypto'),
-            limits: FREE_PLAN_LIMIT.CRYPTO, //-------- ?
+            limits: FREE_PLAN_LIMIT.CRYPTO,
         },
     ]
     // -------------------- RENDER ----------------------
