@@ -46,8 +46,8 @@ export const CryptoWalletEditScreen = observer(() => {
   const [privateKey, setPrivateKey] = useState(mode !== 'add' ? cryptoWalletData.privateKey : '')
   const [seed, setSeed] = useState(mode !== 'add' ? cryptoWalletData.seed : '           ')
   const [networks, setNetworks] = useState<{ alias: string; name: string }[]>(mode !== 'add' ? cryptoWalletData.networks : [])
-
   const [note, setNote] = useState(mode !== 'add' ? cryptoWalletData.notes : '')
+  
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])

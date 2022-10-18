@@ -300,8 +300,7 @@ export class CipherService implements CipherServiceAbstraction {
             return firstBatch
         }
         const userId = await this.userService.getUserId();
-        if (this.searchService != null && (this.searchService().indexedEntityId ?? userId) !== userId)
-        {
+        if (this.searchService != null && (this.searchService().indexedEntityId ?? userId) !== userId) {
             await this.searchService().indexCiphers(userId, this.decryptedCipherCache);
         }
         return this.decryptedCipherCache;
@@ -374,8 +373,7 @@ export class CipherService implements CipherServiceAbstraction {
     async getAllDecrypted(): Promise<CipherView[]> {
         if (this.decryptedCipherCache != null) {
             const userId = await this.userService.getUserId();
-            if (this.searchService != null && (this.searchService().indexedEntityId ?? userId) !== userId)
-            {
+            if (this.searchService != null && (this.searchService().indexedEntityId ?? userId) !== userId) {
                 await this.searchService().indexCiphers(userId, this.decryptedCipherCache);
             }
             return this.decryptedCipherCache;
@@ -390,7 +388,7 @@ export class CipherService implements CipherServiceAbstraction {
         const promises: any[] = [];
         const ciphers = await this.getAll();
         ciphers.forEach(cipher => {
-            promises.push(cipher.decrypt().then(c => decCiphers.push(c)));       
+            promises.push(cipher.decrypt().then(c => decCiphers.push(c)));
         });
 
         await Promise.all(promises);
@@ -1150,6 +1148,14 @@ export class CipherService implements CipherServiceAbstraction {
                 return;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.DriverLicense:
+            case CipherType.CitizenID:
+            case CipherType.Passport:
+            case CipherType.SocialSecurityNumber:
+            case CipherType.WirelessRouter:
+            case CipherType.Server:
+            case CipherType.APICipher:
+            case CipherType.Database:
             case CipherType.CryptoWallet:
                 cipher.secureNote = new SecureNote();
                 cipher.secureNote.type = model.secureNote.type;
@@ -1252,7 +1258,7 @@ export class CipherService implements CipherServiceAbstraction {
                 decCiphers.push(cipher);
             }
         }
-        
+
         decCiphers.sort(this.getLocaleSortingFunction());
         this.decryptedCipherCache = decCiphers;
     }

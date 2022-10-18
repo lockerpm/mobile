@@ -34,6 +34,7 @@
     "email": "Email",
     "enter_master_pass": "Enter master password",
     "faceid_unlocking": "Unlock with Face ID",
+    "female": "Female",
     "folder": "Folder",
     "folders": "Folders",
     "fullname": "Full name",
@@ -50,6 +51,7 @@
     "lock": "Lock",
     "login": "Login",
     "logout": "Log Out",
+    "male": "Male",
     "master_pass": "Master Password",
     "max": "Max",
     "minute": "minute",
@@ -116,12 +118,24 @@
     "see_all": "See all",
     "collapse": "Collapse",
     "share_with": "Shared with",
-    "yes": "Yes"
+    "yes": "Yes",
+    "driver_license": "Driver License",
+    "citizen_id": "Citizen ID",
+    "passport": "Passport",
+    "social_security_number": "Social Security Number",
+    "wireless_router": "Wireless Router",
+    "server": "Server",
+    "api_cipher": "API",
+    "database": "Database",
+    "dob": "Date of birth",
+    "nationality": "Nationality",
+    "invalid_date": "Invalid date"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
   },
   "alert": {
+    "enterprise_lock": "Your account is suspended due to the expiration of Locker for business plan",
     "update": {
       "title": "Update App?",
       "content": "A new version of Locker is available! Click to update Locker version {{version}}.",
@@ -461,6 +475,59 @@
       "desc": "Save your address and contact details to fill out registration forms quickly",
       "btn": "Add Identity"
     }
+  },
+  "driver_license": {
+    "no": "No",
+    "class": "Class",
+    "valid_until": "Valid until",
+    "vehicle_class": "Vehicle class",
+    "beginning_date": "Beginning date",
+    "issued_by": "Issued by"
+  },
+  "citizen_id": {
+    "id_no": "ID no",
+    "sex": "Sex",
+    "place_of_origin": "Place of origin",
+    "place_of_residence": "Place of residence",
+    "expiry_date": "Expiry date",
+    "personal_id": "Personal identification",
+    "date_of_issue": "Date of issue",
+    "issued_by": "Issued by"
+  },
+  "passport": {
+    "passport_id": "Passport ID",
+    "type": "Type",
+    "code": "Code",
+    "sex": "Sex",
+    "id_number": "ID number",
+    "date_of_issue": "Date of issue",
+    "date_of_expiry": "Date of expiry",
+    "place_of_issue": "Place of issue"
+  },
+  "wireless_router": {
+    "device_name": "Device name",
+    "router_ip_address": "Router IP address",
+    "wifi_ssid": "Wifi SSID",
+    "wifi_pw": "Wifi password",
+    "admin_username": "Admin ID",
+    "admin_password": "Admin password"
+  },
+  "server": {
+    "host": "Host (IP/domain)",
+    "public_key": "Public key",
+    "private_key": "Private Key"
+  },
+  "API": {
+    "url": "URL",
+    "method": "Method",
+    "header": "Header",
+    "body_data": "Body Data",
+    "response": "Response"
+  },
+  "database": {
+    "host": "Host (IP/domain)",
+    "port": "Port",
+    "default": "Default database"
   },
   "note": {
     "copy_note": "Copy Notes",

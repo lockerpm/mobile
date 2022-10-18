@@ -9,8 +9,8 @@ import NetInfo from "@react-native-community/netinfo"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
-import { 
-  IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen, 
+import {
+  IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen,
   CreateMasterPasswordScreen, ForgotPasswordScreen, CountrySelectorScreen
 } from "../screens"
 import { useStores } from "../models"
@@ -26,6 +26,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links'
 import { AppState } from "react-native"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
+import { TestScreen } from "../screens/test-screen"
 
 
 /**
@@ -51,6 +52,7 @@ export type RootParamList = {
   countrySelector: {
     initialId?: string
   }
+  test: undefined
 }
 
 const Stack = createStackNavigator<RootParamList>()
@@ -182,6 +184,7 @@ const RootStack = observer((props: Props) => {
           gestureEnabled: false
         }}
       />
+      <Stack.Screen name="test" component={TestScreen} />
     </Stack.Navigator>
   )
 })

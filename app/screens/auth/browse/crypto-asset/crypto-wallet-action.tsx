@@ -11,7 +11,7 @@ type Props = {
   isOpen?: boolean
   onClose?: () => void
   navigation: any
-  onLoadingChange?: Function
+  onLoadingChange?: (val: boolean) => void
   isEmergencyView?: boolean
 }
 

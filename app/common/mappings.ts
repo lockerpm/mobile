@@ -16,6 +16,15 @@ import FFolderIcon from './images/folder/folder.svg'
 import FFolderShareIcon from './images/folder/folder-share.svg'
 import FFolderAddIcon from './images/folder/folder-add.svg'
 
+import DriverLicenseIcon from './images/vault/driver-license.svg'
+import CitizenIDIcon from './images/vault/citizen-id.svg'
+import PassportIcon from './images/vault/passport.svg'
+import SocialSecurituNumberIcon from './images/vault/social-security-number.svg'
+import WirelessIcon from './images/vault/wireless-router.svg'
+import ServerIcon from './images/vault/server.svg'
+import ApiCipherIcon from './images/vault/api-cipher.svg'
+import DatabaseIcon from './images/vault/database.svg'
+
 import GitHub from './images/icons/github.svg'
 import GitHubLight from './images/icons/github-light.svg'
 import Facebook from './images/icons/facebook.svg'
@@ -89,7 +98,65 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     icon: require('./images/vault/trash.png'),
     routeName: 'trash',
     svgIcon: TrashIcon
-  }
+  },
+
+  // TODO
+  driverLicense: {
+    label: 'common.driver_license',
+    icon: require('./images/vault/driver-license.png'),
+    routeName: 'driverLicenses',
+    svgIcon: DriverLicenseIcon,
+    addable: true
+  },
+  citizenID: {
+    label: 'common.citizen_id',
+    icon: require('./images/vault/citizen-id.png'),
+    routeName: 'citizenIDs',
+    svgIcon: CitizenIDIcon,
+    addable: true
+  },
+  socialSecurityNumber: {
+    label: 'common.social_security_number',
+    icon: require('./images/vault/social-security-number.png'),
+    routeName: 'socialSecurityNumbers',
+    svgIcon: SocialSecurituNumberIcon,
+    addable: true
+  },
+  wirelessRouter: {
+    label: 'common.wireless_router',
+    icon: require('./images/vault/wireless-router.png'),
+    routeName: 'wirelessRouters',
+    svgIcon: WirelessIcon,
+    addable: true
+  },
+  server: {
+    label: 'common.server',
+    icon: require('./images/vault/server.png'),
+    routeName: 'servers',
+    svgIcon: ServerIcon,
+    addable: true
+  },
+  passport: {
+    label: 'common.passport',
+    icon: require('./images/vault/passport.png'),
+    routeName: 'passports',
+    svgIcon: PassportIcon,
+    addable: true
+  },
+  apiCipher: {
+    label: 'common.api_cipher',
+    icon: require('./images/vault/api-cipher.png'),
+    routeName: 'apiCiphers',
+    svgIcon: ApiCipherIcon,
+    addable: true
+  },
+  database: {
+    label: 'common.database',
+    icon: require('./images/vault/database.png'),
+    routeName: 'databases',
+    svgIcon: DatabaseIcon,
+    addable: true
+  },
 }
 
 type ToolsItem = {

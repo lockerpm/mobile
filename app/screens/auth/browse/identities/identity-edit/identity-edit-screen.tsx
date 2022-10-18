@@ -20,7 +20,7 @@ type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'identities__edit'>;
 type InputItem = {
   label: string,
   value: string,
-  setter: Function,
+  setter: (val: string) => void,
   isRequired?: boolean,
   type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
 }

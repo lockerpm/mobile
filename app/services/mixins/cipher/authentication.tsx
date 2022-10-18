@@ -27,7 +27,7 @@ const { createContext, useContext } = React
 const defaultData = {
   // Methods
   sessionLogin: async (masterPassword: string, createMasterPasswordItem?: () => Promise<void>) => {
-    return { kind: 'unknown' }
+    return { kind: 'unknown', data: {} }
   },
   biometricLogin: async () => {
     return { kind: 'unknown' }
@@ -104,6 +104,8 @@ export const CipherAuthenticationMixinsProvider = observer(
                 .duration(res.data.wait, 'seconds')
                 .humanize()}`
             )
+          } else if (res.data.code === '1009') {
+            return { kind: 'enterprise-lock' }
           } else {
             notifyApiError(res)
           }
