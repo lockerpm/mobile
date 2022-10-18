@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit, Select
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -22,9 +22,11 @@ type ApiCipherEditScreenProp = RouteProp<PrimaryParamList, 'apiCiphers__edit'>;
 type InputItem = {
   label: string,
   value: string,
-  setter: (val: string) => void,
+  setter: (val: API_METHODS | string) => void,
   isRequired?: boolean,
   type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
+  isSelect?: boolean,
+  options?: { label: string, value: string | number | null }[]
 }
 
 
@@ -120,17 +122,30 @@ export const ApiCipherEditScreen = observer(() => {
     }
   }
 
+  const METHODS = [
+    { label: 'GET', value: API_METHODS.GET },
+    { label: 'POST', value: API_METHODS.POST },
+    { label: 'PUT', value: API_METHODS.PUT },
+    { label: 'DELETE', value: API_METHODS.DELETE },
+    { label: 'PATCH', value: API_METHODS.PATCH },
+    { label: 'OPTIONS', value: API_METHODS.OPTIONS },
+  ]
+
   // ----------------- RENDER ----------------------
   const apiCipherDatas: InputItem[] = [
     {
       label: translate('API.url'),
       value: url,
-      setter: setUrl
+      setter: setUrl,
+      isRequired: true
     },
     {
       label: translate('API.method'),
       value: method,
-      setter: setMethod
+      // @ts-ignore
+      setter: setMethod, // ?
+      isSelect: true,
+      options: METHODS
     },
     {
       label: translate('API.header'),
@@ -217,15 +232,28 @@ export const ApiCipherEditScreen = observer(() => {
         }]}
       >
         {
-          apiCipherDatas.map((e,index) => (
-          <View 
-            key={index}
-            style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
-              <FloatingInput
-                label={e.label}
-                value={e.value}
-                onChangeText={e.setter}
-              />
+          apiCipherDatas.map((e, index) => (
+            <View
+              key={index}
+              style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
+              {
+                e.isSelect ? (
+                  <Select
+                    floating
+                    placeholder={e.label}
+                    value={e.value}
+                    options={e.options}
+                    onChange={val => e.setter(val)}
+                  />
+                ) : (
+                  <FloatingInput
+                    isRequired={e.isRequired}
+                    label={e.label}
+                    value={e.value}
+                    onChangeText={e.setter}
+                  />
+                )
+              }
             </View>
           ))
         }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit, Select
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -15,7 +15,8 @@ import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { CitizenIdData, toCitizenIdData } from "../citizen-id.type"
-
+import { GEN } from "../../../../../config/constants"
+import countries from '../../../../../common/countries.json'
 
 type CitizenIDEditScreenProp = RouteProp<PrimaryParamList, 'citizenIDs__edit'>;
 
@@ -23,7 +24,13 @@ type InputItem = {
   label: string,
   value: string,
   setter: (val: string) => void,
+  onTouchStart?: () => void,
   isRequired?: boolean,
+  isDateTime?: boolean,
+  isSelect?: boolean,
+  options?: { label: string, value: string | number | null }[],
+  placeholder?: string,
+  isDisableEdit?: boolean,
   type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
 }
 
@@ -33,7 +40,7 @@ export const CitizenIDEditScreen = observer(() => {
   const route = useRoute<CitizenIDEditScreenProp>()
   const { mode } = route.params
 
-  const { cipherStore } = useStores()
+  const { cipherStore, uiStore } = useStores()
   const { translate, color } = useMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { newCipher } = useCipherHelpersMixins()
@@ -47,8 +54,8 @@ export const CitizenIDEditScreen = observer(() => {
   const [idNo, setID] = useState(mode !== 'add' ? citizenIdData.idNo : '')
   const [fullName, setFullName] = useState(mode !== 'add' ? citizenIdData.fullName : '')
   const [dob, setDob] = useState(mode !== 'add' ? citizenIdData.dob : '')
-  const [sex, setSex] = useState(mode !== 'add' ? citizenIdData.sex : '')
-  const [nationality, setNationality] = useState(mode !== 'add' ? citizenIdData.nationality : '')
+  const [sex, setSex] = useState(mode !== 'add' ? citizenIdData.sex : GEN.MALE)
+  const [nationality, setNationality] = useState(mode !== 'add' ? citizenIdData.nationality : 'VN')
   const [placeOfOrigin, setPlaceOfOrigin] = useState(mode !== 'add' ? citizenIdData.placeOfOrigin : '')
   const [placeOfResidence, setPlaceOfResidence] = useState(mode !== 'add' ? citizenIdData.placeOfResidence : '')
   const [expiryDate, setExpiryDate] = useState(mode !== 'add' ? citizenIdData.expiryDate : '')
@@ -75,6 +82,13 @@ export const CitizenIDEditScreen = observer(() => {
           setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
+      }
+      if (uiStore.selectedCountry) {
+        const item = countries[uiStore.selectedCountry]
+        if (item) {
+          setNationality(uiStore.selectedCountry)
+        }
+        uiStore.setSelectedCountry(null)
       }
     });
 
@@ -132,13 +146,19 @@ export const CitizenIDEditScreen = observer(() => {
     }
   }
 
+  const GENDER = [
+    { label: translate('common.male'), value: GEN.MALE },
+    { label: translate('common.female'), value: GEN.FEMALE },
+    { label: translate('common.other'), value: GEN.OTHER },
+  ]
   // ----------------- RENDER ----------------------
 
   const citizenIDDetails: InputItem[] = [
     {
       label: translate('citizen_id.id_no'),
       value: idNo,
-      setter: setID
+      setter: setID,
+      isRequired: true
     },
     {
       label: translate('common.fullname'),
@@ -148,17 +168,25 @@ export const CitizenIDEditScreen = observer(() => {
     {
       label: translate('common.dob'),
       value: dob,
-      setter: setDob
+      setter: setDob,
+      isDateTime: true,
+      placeholder: 'dd/mm/yyyy'
     },
     {
       label: translate('citizen_id.sex'),
       value: sex,
       setter: setSex,
+      isSelect: true,
+      options: GENDER
     },
     {
       label: translate('common.nationality'),
-      value: nationality,
-      setter: setNationality
+      value: countries[nationality] ? countries[nationality].country_name : '',
+      setter: setNationality,
+      isDisableEdit: true,
+      onTouchStart: () => {
+        navigation.navigate('countrySelector', { initialId: nationality })
+      }
     },
     {
       label: translate('citizen_id.place_of_origin'),
@@ -173,7 +201,9 @@ export const CitizenIDEditScreen = observer(() => {
     {
       label: translate('citizen_id.expiry_date'),
       value: expiryDate,
-      setter: setExpiryDate
+      setter: setExpiryDate,
+      isDateTime: true,
+      placeholder: 'dd/mm/yyyy'
     },
     {
       label: translate('citizen_id.personal_id'),
@@ -183,7 +213,9 @@ export const CitizenIDEditScreen = observer(() => {
     {
       label: translate('citizen_id.date_of_issue'),
       value: dateOfIssue,
-      setter: setDateOfIssue
+      setter: setDateOfIssue,
+      isDateTime: true,
+      placeholder: 'dd/mm/yyyy'
     },
     {
       label: translate('citizen_id.issued_by'),
@@ -262,17 +294,32 @@ export const CitizenIDEditScreen = observer(() => {
       >
         {
           citizenIDDetails.map((item, index) => (
-            <FloatingInput
-              key={index}
-              isRequired={item.isRequired}
-              keyboardType={item.type || 'default'}
-              label={item.label}
-              value={item.value}
-              onChangeText={(text) => item.setter(text)}
-              style={{
-                marginTop: index === 0 ? 0 : 20
-              }}
-            />
+            <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
+              {
+                item.isSelect ? (
+                  <Select
+                    floating
+                    placeholder={item.label}
+                    value={item.value}
+                    options={item.options}
+                    onChange={val => item.setter(val)}
+                  />
+                ) : (
+                  <FloatingInput
+                    editable={item.isDisableEdit}
+                    isDateTime={item.isDateTime}
+                    isRequired={item.isRequired}
+                    label={item.label}
+                    value={item.value}
+                    onChangeText={(text) => {
+                      item.setter(text)
+                    }}
+                    onTouchStart={item.onTouchStart}
+                    placeholder={item.placeholder}
+                  />
+                )
+              }
+            </View>
           ))
         }
       </View>

@@ -183,7 +183,7 @@ export const handleInviteEA = async (data: string) => {
   const user = eaData.grantee_name || eaData.grantor_name
 
   PushNotifier._notify({
-    id: `ea_invite`,
+    id: `emergency_access_notification`,
     title: 'Locker',
     body: isVn ? `${user} đã thêm bạn làm Liên hệ khẩn cấp` : `${user} has invited you to be emergency access contact`,
     data: {
@@ -203,7 +203,7 @@ export const handleIviteResponseEA = async (data: string, response: boolean) => 
   const rejectText = isVn ? `${user} đã từ chối trở thành Liên hệ khẩn cấp của bạn` : `${user} has been rejected your emergency access invitation`
 
   PushNotifier._notify({
-    id: `ea_invite_response`,
+    id: `emergency_access_notification`,
     title: 'Locker',
     body: response ? acceptText : rejectText,
     data: {
@@ -223,7 +223,7 @@ export const handleRequestEA = async (data: string) => {
   const type = eaData.type.toLowerCase() === "view" ? view : takeOver
 
   PushNotifier._notify({
-    id: `ea_request`,
+    id: `emergency_access_notification`,
     title: 'Locker',
     body: isVn ? `${user} đã yêu cầu ${type} tài khoản Locker của bạn ${type}` : `${user} has requested to ${type} your Locker account`,
     data: {
@@ -246,7 +246,7 @@ export const handleRequestEAResponseEA = async (data: string, response: boolean)
   const rejectText = isVn ? `${user} đã từ chối yêu cầu ${type} tài khoản Locker của bạn` : `${user} has rejected your request to ${type} their Locker account`
 
   PushNotifier._notify({
-    id: `ea_rq_response`,
+    id: `emergency_access_notification`,
     title: 'Locker',
     body: response ? acceptText : rejectText,
     data: {

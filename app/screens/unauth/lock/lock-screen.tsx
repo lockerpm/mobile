@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, BackHandler, View } from "react-native"
-import { AutoImage as Image, Button, Layout, Text, FloatingInput, LanguagePicker } from "../../../components"
+import { AutoImage as Image, Button, Layout, Text, FloatingInput, LanguagePicker, Modal } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { commonStyles, fontSize } from "../../../theme"
@@ -28,7 +28,7 @@ export const LockScreen = observer(() => {
   const isAutofillAnroid = uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
 
   // ---------------------- PARAMS -------------------------
-
+  const [showEnterpriseLock, setShowEnterpriseLock] = useState(false)
   const [masterPassword, setMasterPassword] = useState('')
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
@@ -60,8 +60,8 @@ export const LockScreen = observer(() => {
 
     payload.name = "Locker Master Password"
     payload.login = data
-
-    const res = await createCipher(payload, 1, [], true)
+    const pwStrength = getPasswordStrength(masterPassword)
+    const res = await createCipher(payload, pwStrength.score, [], true)
     if (res.kind !== 'ok') {
       notify("error", translate("error.master_password"))
     }
@@ -78,6 +78,18 @@ export const LockScreen = observer(() => {
         navigation.navigate('mainStack', { screen: 'start' })
       } else if (res.kind === 'unauthorized') {
         navigation.navigate('login')
+      } else if (res.kind === 'enterprise-lock') {
+        Alert.alert(
+          translate('alert.enterprise_lock'),
+          '',
+          [
+            {
+              text: translate('common.ok'),
+              style: 'cancel',
+              onPress: () => null
+            }
+          ]
+        )
       } else {
         setIsError(true)
       }
