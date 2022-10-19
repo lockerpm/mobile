@@ -27,23 +27,23 @@ export const ManageSubdomainScreen = observer(() => {
 
   const data = [
     {
-      label: "Your subdomain",
+      label: translate('private_relay.manage_subdomain.your_subdomain'),
       data: subdomain
     },
     {
-      label: "Number of email aliases",
+      label:translate('private_relay.manage_subdomain.num_alias'),
       data: numberAlias
     },
     {
-      label: "Blocked emails",
+      label:translate('private_relay.manage_subdomain.block_email'),
       data: blockEmails
     },
     {
-      label: "Forwarded emails",
+      label: translate('private_relay.manage_subdomain.forwarded_email'),
       data: forwardEmails
     },
     {
-      label: "Created date",
+      label: translate('private_relay.manage_subdomain.create_date'),
       data: createDate
     }
   ]
@@ -57,7 +57,7 @@ export const ManageSubdomainScreen = observer(() => {
     <Layout
       header={
         <Header
-          title={"Manage Subdomain"}
+          title={translate('private_relay.manage_subdomain.title')}
           goBack={() => navigation.goBack()}
           right={(
             <View style={{ width: 30 }} />
@@ -94,7 +94,7 @@ export const ManageSubdomainScreen = observer(() => {
         justifyContent: "space-between",
         marginTop: 22,
       }}>
-        <Text text={"Use subdomain to generate future aliases"} />
+        <Text text={translate('private_relay.manage_subdomain.use_subdomain')} />
         <Switch
           value={enableSubdomain}
           onValueChange={setEnableSubdomain}
@@ -106,7 +106,7 @@ export const ManageSubdomainScreen = observer(() => {
 
       <Button
         style={{ marginTop: 30 }}
-        text='Edit subdomain'
+        text={translate('private_relay.manage_subdomain.edit_btn')}
         onPress={() => setShowEditModal(true)}
       />
     </Layout >

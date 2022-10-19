@@ -24,7 +24,7 @@ export const PrivateRelay = observer(() => {
   const [showDesc, setShowDesc] = useState(false)
   const [showSubdomainDesc, setShowSubdomainDesc] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
-
+  const [subdomain, setSubdomain] = useState<{ id: number, subdomain: string }>(null)
 
   const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
   const isReachLimit = isFreeAccount && alias.length >= FREE_PLAM_ALIAS_LIMIT
@@ -40,15 +40,14 @@ export const PrivateRelay = observer(() => {
     const res = await toolStore.fetchRelayListAddresses()
     if (res.kind === 'ok') {
       setShowDesc(res.data.count === 0)
-      setAlias(res.data.results.reverse())
+      setAlias(res.data.results)
     }
   }
 
   const generateRelayNewAddress = async () => {
     const res = await toolStore.generateRelayNewAddress()
     if (res.kind === 'ok') {
-      const newList = [...alias]
-      newList.unshift(res.data)
+      const newList = [...alias, res.data]
       setAlias(newList)
     }
   }
@@ -195,7 +194,7 @@ export const PrivateRelay = observer(() => {
                 }}
               />
               <View style={{ marginLeft: 8 }}>
-                <Text text={"Your subdomain"} />
+                <Text text={translate('private_relay.manage_subdomain.your_subdomain')} />
                 <Text preset="semibold" text={"viktor-agency.maily.org"} />
               </View>
             </View>
@@ -208,15 +207,15 @@ export const PrivateRelay = observer(() => {
                 style={{ flexDirection: 'row', marginRight: 16, marginVertical: 2 }}
               >
                 <Entypo name="dot-single" size={16} />
-                <Text text={"Custom sub-domain allows you to create custom email domain"} />
+                <Text text={translate('private_relay.manage_subdomain.desc.one')} />
               </View>
               <View
                 style={{ flexDirection: 'row', marginRight: 16, marginVertical: 2 }}
               >
                 <Entypo name="dot-single" size={16} />
-                <Text text={"You can create one (editable) subdomain"} />
+                <Text text={translate('private_relay.manage_subdomain.desc.two')} />
               </View>
-              <Button text='Manage' style={{ marginTop: 24 }} onPress={() => navigation.navigate('manageSubdomain')} />
+              <Button text={translate('private_relay.manage_subdomain.manage')} style={{ marginTop: 24 }} onPress={() => navigation.navigate('manageSubdomain')} />
             </Animated.View>
           )}
         </TouchableOpacity>

@@ -162,6 +162,42 @@ export const ToolStoreModel = types
       return res
     },
 
+    configRelayAddress: async (id: number, address: string, enabled: boolean, blockSpam: boolean) => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.configRelayAddress(self.apiToken, id, address, enabled, blockSpam)
+      return res
+    },
+
+    fetchSubdomain: async () => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.fetchSubdomain(self.apiToken)
+      return res
+    },
+
+    createSubdomain: async (subdomain: string) => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.createSubdomain(self.apiToken, subdomain)
+      return res
+    },
+
+    editSubdomain: async (id: number,  subdomain: string) => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.editSubdomain(self.apiToken,id, subdomain)
+      return res
+    },
+
+    useSubdomain: async (useSubdomain: boolean) => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.useSubdomain(self.apiToken, useSubdomain)
+      return res
+    },
+
+    fetchUseSubdomain: async () => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.fetchUseSubdomain(self.apiToken)
+      return res
+    },
+
     checkBreaches: async (email: string) => {
       const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.checkBreaches(self.apiToken, email)

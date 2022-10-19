@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import {  View } from 'react-native'
+import { View } from 'react-native'
 import { Layout, Header, Text, Divider } from '../../../../../components'
 import { useNavigation } from '@react-navigation/native'
-// import { useMixins } from '../../../../../services/mixins'
+import { useMixins } from '../../../../../services/mixins'
 
 export const AliasStatisticScreen = observer(() => {
   const navigation = useNavigation()
-//   const { translate, color } = useMixins()
+  const { translate, color } = useMixins()
 
   const [alias, setAlias] = useState("asdasdasd")
   const [blockEmails, setBlockEmails] = useState("asd")
@@ -20,19 +20,19 @@ export const AliasStatisticScreen = observer(() => {
 
   const data = [
     {
-      label: "Email alias",
+      label: translate('private_relay.title'),
       data: alias
     },
     {
-      label: "Blocked emails",
+      label: translate('private_relay.manage_subdomain.block_email'),
       data: blockEmails
     },
     {
-      label: "Forwarded emails",
+      label: translate('private_relay.manage_subdomain.forwarded_email'),
       data: forwardEmails
     },
     {
-      label: "Created date",
+      label: translate('private_relay.manage_subdomain.create_date'),
       data: createDate
     }
   ]
@@ -70,7 +70,7 @@ export const AliasStatisticScreen = observer(() => {
           <Divider />
         </View>
       ))}
-     
+
     </Layout >
   )
 })
