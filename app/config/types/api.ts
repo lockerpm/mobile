@@ -132,6 +132,8 @@ export type RelayAddress = {
   num_replied: number
   num_spam: number
   updated_time: null
+  subdomain: string
+  block_spam: boolean
 }
 
 export type TrustedContact = {

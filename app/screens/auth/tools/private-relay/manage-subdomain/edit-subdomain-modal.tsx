@@ -21,12 +21,12 @@ export const EditSubdomainModal = (props: Props) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={"Edit subdomain"}
+      title={translate('private_relay.manage_subdomain.edit_btn')}
     >
       <View>
         <Text preset='bold' text={subdomain}  style={{ marginTop: 32}} />
 
-        <Text text={"New Subdomain"} style={{ marginTop: 16 }} />
+        <Text text={translate('private_relay.manage_subdomain.new')} style={{ marginTop: 16 }} />
         <View style={{
           borderWidth: 1,
           flexDirection: "row",
@@ -61,17 +61,17 @@ export const EditSubdomainModal = (props: Props) => {
 
         <Text
           style={{ marginTop: 16 }}
-          text='*Current sub-domain will be permanently deleted when you change to a new sub-domain. All email aliases created from your current sub-domain will also be then deleted when you perform this action'
+          text={translate('private_relay.manage_subdomain.edit_note')}
         />
         <Button
           style={{ marginTop: 16 }}
-          text='Confirm'
+          text={translate('common.confirm')}
           onPress={() => null}
         />
         <Button
           preset='outlinePlain'
           style={{ marginTop: 16 }}
-          text='Cancel'
+          text={translate('common.cancel')}
           onPress={onClose}
         />
       </View>

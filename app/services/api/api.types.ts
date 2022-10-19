@@ -83,6 +83,7 @@ export type AccountRecoveryResult =
 export type SessionLoginResult = { kind: 'ok'; data: SessionSnapshot } | GeneralApiProblem
 export type GetUserResult = { kind: 'ok'; user: UserSnapshot } | GeneralApiProblem
 export type EmptyResult = { kind: 'ok' } | GeneralApiProblem
+export type BooleanResult = { kind: 'ok', data: boolean } | GeneralApiProblem
 export type SyncResult =
   | { kind: 'ok'; data: SyncResponse & { count?: { ciphers: number } } }
   | GeneralApiProblem
@@ -280,6 +281,24 @@ export type FetchRelayListAddressesResult =
         previous: string | null
         results: RelayAddress[]
       }
+    }
+  | GeneralApiProblem
+  export type CreateRelaySubdomainResult =
+  | {
+      kind: 'ok'
+      data: {
+        id: number,
+        subdomain: string
+      }
+    }
+  | GeneralApiProblem
+  export type FetchRelayListSubdomainResult =
+  | {
+      kind: 'ok'
+      data: {
+        id: number,
+        subdomain: string
+      }[]
     }
   | GeneralApiProblem
 export type GenerateRelayNewAddressResult = { kind: 'ok'; data: RelayAddress } | GeneralApiProblem
