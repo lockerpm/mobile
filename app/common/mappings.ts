@@ -252,7 +252,11 @@ export const SOCIAL_LOGIN_ICON = {
 
 
 export const APP_INTRO = {
-  intro1: require('./images/intro/intro1.png'),
-  intro2: require('./images/intro/intro2.png'),
-  intro3: require('./images/intro/intro3.png')
+  // intro1: require('./images/intro/intro1.png'),
+  // intro2: require('./images/intro/intro2.png'),
+  // intro3: require('./images/intro/intro3.png'),
+  autofill: require('./images/intro/autofill.png'),
+  security: require('./images/intro/security.png'),
+  sync: require('./images/intro/sync.png'),
+  otp: require('./images/intro/otp.png'),
 }

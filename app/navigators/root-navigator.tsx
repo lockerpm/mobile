@@ -41,7 +41,9 @@ import { TestScreen } from "../screens/test-screen"
  */
 export type RootParamList = {
   init: undefined
-  intro: undefined
+  intro: {
+    preview?: boolean
+  }
   onBoarding: undefined
   lock: undefined
   login: undefined

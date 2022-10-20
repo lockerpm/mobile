@@ -1,17 +1,20 @@
 import React, { useState, useRef } from "react"
 import { View, Dimensions, Animated, TouchableOpacity } from "react-native"
 import { AutoImage as Image, Text, Layout, Button, LanguagePicker } from "../../../components"
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { fontSize, spacing } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
 import { observer } from "mobx-react-lite"
 import { APP_INTRO } from "../../../common/mappings"
+import { RootParamList } from "../../../navigators"
 
+type IntroScreenProp = RouteProp<RootParamList, "intro">
 
 export const IntroScreen = observer(() => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
+  const route = useRoute<IntroScreenProp>()
   const { isPortrait } = useAdaptiveLayoutMixins()
   const { width, height } = Dimensions.get('screen')
 
@@ -19,24 +22,33 @@ export const IntroScreen = observer(() => {
 
   const [index, setIndex] = useState(0)
 
+  // ------------------ CONPUTED ---------------------
+
+  const isPreview = route.params?.preview
+
   // ------------------ DATA ---------------------
 
   const flastListRef = useRef(null)
   const tabs = [
     {
-      img: APP_INTRO.intro1,
-      title: translate('intro.item_1.title'),
-      desc: translate('intro.item_1.desc')
+      img: APP_INTRO.security,
+      title: translate('intro.security.title'),
+      desc: translate('intro.security.desc')
     },
     {
-      img: APP_INTRO.intro2,
-      title: translate('intro.item_2.title'),
-      desc: translate('intro.item_2.desc')
+      img: APP_INTRO.sync,
+      title: translate('intro.sync.title'),
+      desc: translate('intro.sync.desc')
     },
     {
-      img: APP_INTRO.intro3,
-      title: translate('intro.item_3.title'),
-      desc: translate('intro.item_3.desc')
+      img: APP_INTRO.autofill,
+      title: translate('intro.autofill.title'),
+      desc: translate('intro.autofill.desc')
+    },
+    {
+      img: APP_INTRO.otp,
+      title: translate('intro.otp.title'),
+      desc: translate('intro.otp.desc')
     }
   ]
 
@@ -58,10 +70,14 @@ export const IntroScreen = observer(() => {
       noScroll
       footer={
         <Button
-          text={index === 2 ? translate("common.get_start") : translate("common.next")}
+          text={index === 3 ? translate("common.get_start") : translate("common.next")}
           onPress={() => {
-            if (index === 2) {
-              navigation.navigate("onBoarding")
+            if (index === 3) {
+              if (isPreview) {
+                navigation.goBack()
+              } else {
+                navigation.navigate("onBoarding")
+              }
             } else {
               scrollTo(index + 1)
             }
@@ -74,7 +90,13 @@ export const IntroScreen = observer(() => {
         text={translate('common.skip').toUpperCase()}
         textStyle={{ fontSize: fontSize.p }}
         preset="link"
-        onPress={() => navigation.navigate("onBoarding")}
+        onPress={() => {
+          if (isPreview) {
+            navigation.navigate("mainStack", {screen: "menu"})
+          } else {
+            navigation.navigate("onBoarding")
+          }
+        }}
         style={{ position: "absolute", top: 16, right: 20, zIndex: 11 }}
       >
       </Button>
@@ -85,7 +107,7 @@ export const IntroScreen = observer(() => {
         ref={flastListRef}
         // @ts-ignore
         onViewableItemsChanged={onViewableItemsChanged.current}
-        contentContainerStyle={{ height: height * 0.6 }}
+        contentContainerStyle={{ height: height * 0.7 }}
         keyExtractor={(_, index) => `intro${index}`}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -102,18 +124,16 @@ export const IntroScreen = observer(() => {
           <View style={{
             width: width,
             alignItems: "center",
-            justifyContent: "flex-end"
+            justifyContent: "space-between"
           }}>
-            <Image
-              source={item.img}
-              resizeMode="contain"
-              style={{
-                maxWidth: 300,
-                maxHeight: 300
-              }}
-            />
+            <View />
             {
-              isPortrait && <View style={{ maxWidth: width * 0.8 }} >
+              isPortrait && <View style={{
+                maxWidth: width * 0.9,
+                marginBottom: 16,
+                marginTop: "10%"
+              }}
+              >
                 <Text preset="header" text={item.title} style={{
                   alignSelf: "center",
                   marginBottom: 10,
@@ -123,6 +143,15 @@ export const IntroScreen = observer(() => {
                 }} />
               </View>
             }
+
+            <Image
+              source={item.img}
+              resizeMode="contain"
+              style={{
+                width: Math.min(width, 400),
+                maxHeight: Math.min(width, 400)
+              }}
+            />
           </View>
         )}
       />
