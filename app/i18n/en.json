@@ -352,17 +352,21 @@
     "back_btn": "Go back, I want to change my Master Password"
   },
   "intro": {
-    "item_1": {
+    "security": {
       "title": "Security & Privacy",
       "desc": "Your vault is protected with world-class security."
     },
-    "item_2": {
+    "sync": {
       "title": "Unlimited Sync",
       "desc": "You can access your Locker's data from any devices."
     },
-    "item_3": {
+    "autofill": {
       "title": "Auto-fill",
       "desc": "Fill your credentials automatically across applications and websites."
+    },
+    "otp": {
+      "title": "In-app OTP",
+      "desc": "Increase your account security with OTP integrated in Locker."
     }
   },
   "lock": {

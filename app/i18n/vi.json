@@ -352,17 +352,21 @@
     "back_btn": "Tôi muốn thay đổi Master Password"
   },
   "intro": {
-    "item_1": {
+    "security": {
       "title": "Bảo mật & Riêng tư",
       "desc": "Kho của bạn được bảo vệ với bảo mật đẳng cấp thế giới."
     },
-    "item_2": {
+    "sync": {
       "title": "Đồng bộ hóa không giới hạn",
       "desc": "Bạn có thể truy cập dữ liệu của Locker từ bất kỳ thiết bị nào."
     },
-    "item_3": {
+    "autofill": {
       "title": "Tự động điền",
       "desc": "Tự động điền thông tin đăng nhập của bạn trên các ứng dụng và trang web."
+    },
+    "otp": {
+      "title": "OTP tích hợp trong ứng dụng",
+      "desc": "Nâng cao bảo mật cho các tài khoản của bạn với tính năng OTP được tích hợp trong ứng dụng."
     }
   },
   "lock": {

@@ -119,15 +119,8 @@ export const MenuScreen = observer(() => {
     {
       debug: true,
       icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
-      name: "(DEBUG) Go Free Plan",
-      action: () => user.setUserFreePlan(),
-      noBorder: true
-    },
-    {
-      debug: true,
-      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
-      name: "(DEBUG) Refer friend",
-      action: () => navigation.navigate('refer_friend'),
+      name: "(DEBUG) Open Onboard",
+      action: () => navigation.navigate('intro', {preview: true}),
       noBorder: true
     },
     {
@@ -180,15 +173,15 @@ export const MenuScreen = observer(() => {
         navigation.navigate("welcome_premium")
       }
     },
-    {
-      debug: true,
-      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) Invalidate api token',
-      action: () => {
-        user.setApiToken('abc')
-        cipherStore.setApiToken('abc')
-      }
-    },
+    // {
+    //   debug: true,
+    //   icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+    //   name: '(DEBUG) Invalidate api token',
+    //   action: () => {
+    //     user.setApiToken('abc')
+    //     cipherStore.setApiToken('abc')
+    //   }
+    // },
     {
       icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: translate('common.lock'),
