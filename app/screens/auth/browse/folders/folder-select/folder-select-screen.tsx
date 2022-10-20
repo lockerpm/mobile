@@ -2,9 +2,8 @@ import React, { useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { Layout, Text, Header, Button } from "../../../../../components"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
-import { RouteProp } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'

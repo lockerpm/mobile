@@ -639,7 +639,9 @@
     "first_updated": "Cũ nhất",
     "empty": {
       "title": "Thêm mật khẩu đầu tiên của bạn",
+      "title_2": "Thêm mục đầu tiên của bạn",
       "desc": "Tạo mật khẩu đầu tiên để bắt đầu xây dựng kho của bạn",
+      "desc_2": "Tạo mật khẩu đầu tiên để bắt đầu xây dựng kho của bạn",
       "btn": "Thêm mục"
     },
     "enable_autofill": {

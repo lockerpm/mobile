@@ -639,7 +639,9 @@
     "first_updated": "First Updated",
     "empty": {
       "title": "Add your first item",
+      "title_2": "Add your first item",
       "desc": "Create your first item to start building your vault",
+      "desc_2": "Create your first item to start building your vault",
       "btn": "Add Item"
     },
     "enable_autofill": {

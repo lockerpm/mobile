@@ -101,8 +101,8 @@ export const WirelessRouterScreen = observer(() => {
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
             imgStyle={{ height: 55, width: 55 }}
-            title={translate('all_items.empty.title')}
-            desc={translate('all_items.empty.desc')}
+            title={translate('all_items.empty.title_2')}
+            desc={translate('all_items.empty.desc_2')}
             buttonText={translate('all_items.empty.btn')}
             addItem={() => {
               navigation.navigate('wirelessRouters__edit', { mode: 'add' })

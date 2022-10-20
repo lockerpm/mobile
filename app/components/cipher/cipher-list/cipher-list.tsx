@@ -181,6 +181,10 @@ export const CipherList = observer((props: CipherListProps) => {
       ) || []
     }
 
+    // if (searchText) {
+    //   res.sort((a, b) => a.name.toLocaleLowerCase().includes(searchText.trim().toLocaleLowerCase()) ? -1 : 0)
+    // }
+
     // Delay loading
     setTimeout(() => {
       onLoadingChange && onLoadingChange(false)
