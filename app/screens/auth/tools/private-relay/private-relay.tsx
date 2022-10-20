@@ -10,8 +10,9 @@ import { useMixins } from '../../../../services/mixins'
 import { AliasItem } from './private-relay-item'
 import { useStores } from '../../../../models'
 import { EditAliasModal } from './edit-alias-modal'
-import { RelayAddress } from '../../../../config/types/api'
+import { RelayAddress, SubdomainData } from '../../../../config/types/api'
 import { PlanType } from '../../../../config/types'
+import { CreateSubdomainModal } from './manage-subdomain/create-subdomain-modal'
 
 const FREE_PLAM_ALIAS_LIMIT = 5
 
@@ -22,9 +23,13 @@ export const PrivateRelay = observer(() => {
 
   const [alias, setAlias] = useState<RelayAddress[]>([])
   const [showDesc, setShowDesc] = useState(false)
-  const [showSubdomainDesc, setShowSubdomainDesc] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
-  const [subdomain, setSubdomain] = useState<{ id: number, subdomain: string }>(null)
+  const [showConfigModal, setShowConfigModal] = useState(false)
+
+  // subdomain
+  const [showCreateSubdomainModal, setShowCreateSubdomainModal] = useState(false)
+  const [showSubdomainDesc, setShowSubdomainDesc] = useState(false)
+  const [subdomain, setSubdomain] = useState<SubdomainData>(null)
 
   const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
   const isReachLimit = isFreeAccount && alias.length >= FREE_PLAM_ALIAS_LIMIT
@@ -35,6 +40,18 @@ export const PrivateRelay = observer(() => {
     translate('private_relay.desc.two'),
     translate('private_relay.desc.three'),
   ]
+
+  const fetchRelayDomain = async () => {
+    const res = await toolStore.fetchSubdomain()
+    if (res.kind === 'ok') {
+      if (res.data.length === 0) {
+        setSubdomain(null)
+      }
+      else {
+        setSubdomain(res.data[0])
+      }
+    }
+  }
 
   const fetchRelayListAddressed = async () => {
     const res = await toolStore.fetchRelayListAddresses()
@@ -63,6 +80,8 @@ export const PrivateRelay = observer(() => {
 
   useEffect(() => {
     fetchRelayListAddressed()
+    const unsubscribe = navigation.addListener("focus", fetchRelayDomain)
+    return unsubscribe
   }, [])
 
   // Render
@@ -92,6 +111,12 @@ export const PrivateRelay = observer(() => {
         />
       }
     >
+      <CreateSubdomainModal
+        isOpen={showCreateSubdomainModal}
+        onClose={() => setShowCreateSubdomainModal(false)}
+        setSubdomain={setSubdomain}
+      />
+
       {alias.length > 0 && (
         <EditAliasModal
           item={alias[0]}
@@ -102,6 +127,7 @@ export const PrivateRelay = observer(() => {
           onEdit={onEdit}
         />
       )}
+
       {/* Root email start */}
       <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <TouchableOpacity
@@ -161,7 +187,7 @@ export const PrivateRelay = observer(() => {
       {/* Root email end */}
 
       {/* Subdomain start */}
-      <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
+      {!isFreeAccount && <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
@@ -193,9 +219,18 @@ export const PrivateRelay = observer(() => {
                   height: 36,
                 }}
               />
-              <View style={{ marginLeft: 8 }}>
-                <Text text={translate('private_relay.manage_subdomain.your_subdomain')} />
-                <Text preset="semibold" text={"viktor-agency.maily.org"} />
+              <View style={{ marginLeft: 8, justifyContent: "center" }}>
+                {
+                  !subdomain && (<>
+                    <Text text={"Ban chưa có subdomain"} />
+                  </>)
+                }
+                {
+                  subdomain !== null && (<>
+                    <Text text={translate('private_relay.manage_subdomain.your_subdomain')} />
+                    <Text preset="semibold" text={subdomain.subdomain} />
+                  </>)
+                }
               </View>
             </View>
             <EvilIcons name={showDesc ? 'chevron-up' : 'chevron-down'} size={24} />
@@ -215,11 +250,22 @@ export const PrivateRelay = observer(() => {
                 <Entypo name="dot-single" size={16} />
                 <Text text={translate('private_relay.manage_subdomain.desc.two')} />
               </View>
-              <Button text={translate('private_relay.manage_subdomain.manage')} style={{ marginTop: 24 }} onPress={() => navigation.navigate('manageSubdomain')} />
+              {
+                subdomain !== null && <Button
+                  text={translate('private_relay.manage_subdomain.manage')}
+                  style={{ marginTop: 24 }}
+                  onPress={() => navigation.navigate('manageSubdomain', { subdomain })} />
+              }
+              {
+                !subdomain && <Button
+                  text={translate('common.create')}
+                  style={{ marginTop: 24 }}
+                  onPress={() => setShowCreateSubdomainModal(true)} />
+              }
             </Animated.View>
           )}
         </TouchableOpacity>
-      </View>
+      </View>}
       {/* Root email end */}
 
 
@@ -248,6 +294,7 @@ export const PrivateRelay = observer(() => {
             item={item}
             deleteRelayAddress={deleteRelayAddress}
             setShowEditModal={() => setShowEditModal(true)}
+            setShowConfigModal={() => setShowConfigModal(true)}
           />
         ))}
       </View>

@@ -94,7 +94,7 @@ import { AppEventType, EventBus } from '../utils/event-bus'
 import InAppReview from 'react-native-in-app-review'
 import Intercom from '@intercom/intercom-react-native'
 import { AppNotification } from '../services/api'
-import { TrustedContact } from '../config/types/api'
+import { RelayAddress, SubdomainData, TrustedContact } from '../config/types/api'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -121,8 +121,12 @@ export type PrimaryParamList = {
   switchDevice: undefined
   biometricUnlockIntro: undefined
   privateRelay: undefined
-  manageSubdomain: undefined
-  aliasStatistic: undefined
+  manageSubdomain: {
+    subdomain: SubdomainData
+  }
+  aliasStatistic: {
+    alias: RelayAddress
+  }
   passwordGenerator: {
     fromTools?: boolean
   }

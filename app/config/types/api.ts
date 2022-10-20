@@ -118,6 +118,14 @@ export type UserTeam = {
   locker: boolean
   organization_id: string
 }
+export type SubdomainData = {
+  id: number,
+  subdomain: string
+  created_time: number,
+  num_alias: number,
+  num_spam: number,
+  num_forwarded: number
+}
 
 export type RelayAddress = {
   address: string

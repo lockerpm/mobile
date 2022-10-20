@@ -1,21 +1,39 @@
 import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { Animated, TextInput, TouchableOpacity, View } from 'react-native'
+import { TextInput, View } from 'react-native'
 import { Button, Modal, Text } from '../../../../../components'
 import { useMixins } from '../../../../../services/mixins'
 import { fontSize } from '../../../../../theme'
+import { SubdomainData } from '../../../../../config/types/api'
+import { useStores } from '../../../../../models'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  subdomain: string
+  subdomain: SubdomainData
+  setSubdomain: (subdomain: SubdomainData) => void
 }
 
 export const EditSubdomainModal = (props: Props) => {
-  const { isOpen, onClose, subdomain } = props
+  const { isOpen, onClose, subdomain, setSubdomain } = props
   const { translate, color } = useMixins()
+  const {toolStore} = useStores()
 
   const [domain, setDomain] = useState("")
+
+  const handleUpdateSubdomain =async () => {
+    const res = await toolStore.editSubdomain(subdomain.id, domain.trim())
+    if (res.kind === 'ok') {
+      setSubdomain({
+        ...subdomain,
+        subdomain: domain
+      })
+      onClose()
+    }
+  }
+
+  useEffect(() => {
+    setDomain("")
+  }, [isOpen])
 
   return (
     <Modal
@@ -24,7 +42,7 @@ export const EditSubdomainModal = (props: Props) => {
       title={translate('private_relay.manage_subdomain.edit_btn')}
     >
       <View>
-        <Text preset='bold' text={subdomain}  style={{ marginTop: 32}} />
+        <Text preset='bold' text={`@${subdomain.subdomain}.maily.org`} style={{ marginTop: 32 }} />
 
         <Text text={translate('private_relay.manage_subdomain.new')} style={{ marginTop: 16 }} />
         <View style={{
@@ -42,7 +60,7 @@ export const EditSubdomainModal = (props: Props) => {
           <TextInput
             value={domain}
             onChangeText={(text: string) => {
-              setDomain(text)
+              setDomain(text.toLowerCase())
             }}
             placeholder={"... "}
             placeholderTextColor={color.text}
@@ -64,9 +82,10 @@ export const EditSubdomainModal = (props: Props) => {
           text={translate('private_relay.manage_subdomain.edit_note')}
         />
         <Button
+          isDisabled={!domain}
           style={{ marginTop: 16 }}
           text={translate('common.confirm')}
-          onPress={() => null}
+          onPress={handleUpdateSubdomain}
         />
         <Button
           preset='outlinePlain'

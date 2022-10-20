@@ -22,6 +22,7 @@ import {
   MasterPasswordPolicy,
   BlockFailedLoginPolicy,
   PasswordlessPolicy,
+  SubdomainData,
 } from '../../config/types/api'
 
 // ------------------ Response ------------------------
@@ -286,19 +287,13 @@ export type FetchRelayListAddressesResult =
   export type CreateRelaySubdomainResult =
   | {
       kind: 'ok'
-      data: {
-        id: number,
-        subdomain: string
-      }
+      data: SubdomainData
     }
   | GeneralApiProblem
   export type FetchRelayListSubdomainResult =
   | {
       kind: 'ok'
-      data: {
-        id: number,
-        subdomain: string
-      }[]
+      data: SubdomainData[]
     }
   | GeneralApiProblem
 export type GenerateRelayNewAddressResult = { kind: 'ok'; data: RelayAddress } | GeneralApiProblem
