@@ -124,7 +124,6 @@ export const ItemsHeader = observer((props: Props) => {
         }
         <Icon icon="bell" size={24} color={color.textBlack} />
       </Button>
-      {/** In app notification end*/}
 
       {/** Sort */}
       <Button

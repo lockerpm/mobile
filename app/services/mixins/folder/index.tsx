@@ -18,6 +18,7 @@ const defaultData = {
     shareFolder: async (folder: FolderView | CollectionView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
     shareFolderAddMember: async (collection: CollectionView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => { return { kind: 'unknown' } },
     shareFolderRemoveMember: async (collection: CollectionView, memberID: string) => { return { kind: 'unknown' } },
+    shareFolderCreateItem: async (collection: CollectionView) => { return { kind: 'unknown' } },
     shareFolderAddItem: async (collection: CollectionView, cipher: CipherView) => { return { kind: 'unknown' } },
     shareFolderAddMultipleItems: async (collection: CollectionView, cipherIds: string[]) => { return { kind: 'unknown' } },
     shareFolderRemoveItem: async (collection: CollectionView, cipher: CipherView) => { return { kind: 'unknown' } },
@@ -43,7 +44,6 @@ export const FolderMixinsProvider = observer((props: { children: boolean | React
         return key.encryptedString
     }
 
-    //-------------------------------------------------------
     // Share Folder
     const shareFolder = async (folder: FolderView, emails: string[], role: AccountRoleText, autofillOnly: boolean) => {
         if (!folder || !emails.length) {
@@ -71,8 +71,8 @@ export const FolderMixinsProvider = observer((props: { children: boolean | React
                 return { kind: 'ok' }
             }
             // Prepare org key
-            let shareKey: [EncString, SymmetricCryptoKey] = await cryptoService.makeShareKey()
-            let orgKey: SymmetricCryptoKey = shareKey[1]
+            const shareKey: [EncString, SymmetricCryptoKey] = await cryptoService.makeShareKey()
+            const orgKey: SymmetricCryptoKey = shareKey[1]
 
             // Get public keys
             const members = await Promise.all(emails.map(async (email) => {
@@ -138,7 +138,7 @@ export const FolderMixinsProvider = observer((props: { children: boolean | React
         }
 
         try {
-            let orgKey: SymmetricCryptoKey = await cryptoService.getOrgKey(collection.organizationId)
+            const orgKey: SymmetricCryptoKey = await cryptoService.getOrgKey(collection.organizationId)
 
             // Get public keys
             const members = await Promise.all(emails.map(async (email) => {
@@ -204,9 +204,10 @@ export const FolderMixinsProvider = observer((props: { children: boolean | React
             return { kind: 'unknown' }
         }
     }
+
     const shareFolderAddItem = async (collection: CollectionView, cipher: CipherView) => {
         try {
-            let orgKey: SymmetricCryptoKey = await cryptoService.getOrgKey(collection.organizationId)
+            const orgKey: SymmetricCryptoKey = await cryptoService.getOrgKey(collection.organizationId)
 
             const cipherEnc = await cipherService.encrypt(cipher, orgKey)
             const requestData = new CipherRequest(cipherEnc)
