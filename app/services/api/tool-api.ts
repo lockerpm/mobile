@@ -193,9 +193,9 @@ export class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/relay/subdomains}`,
+        `/cystack_platform/relay/subdomains`,
         {
-          subdomain
+          subdomain: subdomain
         }
       )
       // the typical ways to die when calling an api

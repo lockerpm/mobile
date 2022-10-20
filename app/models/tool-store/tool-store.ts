@@ -180,9 +180,9 @@ export const ToolStoreModel = types
       return res
     },
 
-    editSubdomain: async (id: number,  subdomain: string) => {
+    editSubdomain: async (id: number, subdomain: string) => {
       const toolApi = new ToolApi(self.environment.api)
-      const res = await toolApi.editSubdomain(self.apiToken,id, subdomain)
+      const res = await toolApi.editSubdomain(self.apiToken, id, subdomain)
       return res
     },
 

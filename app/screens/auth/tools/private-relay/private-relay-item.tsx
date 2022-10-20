@@ -22,15 +22,16 @@ interface Props {
   index: number
   deleteRelayAddress: (id: number) => void
   setShowEditModal: () => void
+  setShowConfigModal: () => void
 }
 
 export const AliasItem = (props: Props) => {
-  const { item, index, deleteRelayAddress, setShowEditModal, isFreeAccount, navigation } = props
+  const { item, index, deleteRelayAddress, setShowConfigModal, setShowEditModal, isFreeAccount, navigation } = props
   const { color, translate, copyToClipboard } = useMixins()
   const { toolStore } = useStores()
 
   const [isOpen, setIsOpen] = useState(false)
-  const [nextModal, setNextModal] = useState<'copy' | 'edit' | 'remove' | null>(null)
+  const [nextModal, setNextModal] = useState<'copy' | 'edit' | 'remove' | 'config' | null>(null)
 
   const handleRemove = async () => {
     const res = await toolStore.deleteRelayAddress(item.id)
@@ -47,6 +48,9 @@ export const AliasItem = (props: Props) => {
         break
       case 'edit':
         setShowEditModal()
+        break
+      case 'config':
+        setShowConfigModal()
         break
       case 'remove':
         handleRemove()
@@ -109,10 +113,23 @@ export const AliasItem = (props: Props) => {
             {!isFreeAccount && (
               <>
                 <ActionItem
-                  name={"See statistics"}
+                  name={"Statistics"}
                   icon="file-o"
                   action={() => {
-                    navigation.navigate("aliasStatistic")
+                    navigation.navigate("aliasStatistic", { alias: item })
+                    setIsOpen(false)
+                  }}
+                />
+                <Divider />
+              </>
+            )}
+            {!isFreeAccount && (
+              <>
+                <ActionItem
+                  name={"Config"}
+                  icon="file-o"
+                  action={() => {
+                    setNextModal('config')
                     setIsOpen(false)
                   }}
                 />
@@ -125,6 +142,7 @@ export const AliasItem = (props: Props) => {
               textColor={color.error}
               action={() => {
                 setNextModal('remove')
+                setIsOpen(false)
               }}
             />
           </ActionSheetContent>
