@@ -266,7 +266,17 @@
       "new": "New subdomain",
       "edit_note": "*Current sub-domain will be permanently deleted when you change to a new sub-domain. All email aliases created from your current sub-domain will also be then deleted when you perform this action"
     },
-    "statistic": "See statistics"
+    "statistic": "Statistics",
+    "config": "Configuration",
+    "no_subdomain": "Create your own subdomain",
+    "config_modal": {
+      "title": "Configuration",
+      "enable":  "Forward all emails to your root email address",
+      "block": "Block all upcoming emails",
+      "block_spam": "Block spam and promotion emails only",
+      "note": "*When you make changes to these settings, the statistics for this alias address will be reset."
+    }
+
   },
   "emergency_access": {
     "title": "Emergency Access",

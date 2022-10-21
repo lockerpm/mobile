@@ -113,7 +113,10 @@ export const ManageSubdomainScreen = observer(() => {
         justifyContent: "space-between",
         marginTop: 22,
       }}>
-        <Text text={translate('private_relay.manage_subdomain.use_subdomain')} />
+        <Text 
+        text={translate('private_relay.manage_subdomain.use_subdomain')} 
+        style={{maxWidth: "85%"}}
+        />
         <Switch
           value={useSubdomain}
           onValueChange={setUseSubdomain}
