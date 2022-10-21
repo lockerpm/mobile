@@ -23,12 +23,11 @@ export const LockScreen = observer(() => {
   const { notify, translate, notifyApiError, color } = useMixins()
   const { logout, sessionLogin, biometricLogin } = useCipherAuthenticationMixins()
   const { createCipher } = useCipherDataMixins()
-  const { getPasswordStrength, checkPasswordPolicy, newCipher } = useCipherHelpersMixins()
+  const { getPasswordStrength, newCipher } = useCipherHelpersMixins()
 
   const isAutofillAnroid = uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
 
   // ---------------------- PARAMS -------------------------
-  const [showEnterpriseLock, setShowEnterpriseLock] = useState(false)
   const [masterPassword, setMasterPassword] = useState('')
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
@@ -81,6 +80,18 @@ export const LockScreen = observer(() => {
       } else if (res.kind === 'enterprise-lock') {
         Alert.alert(
           translate('alert.enterprise_lock'),
+          '',
+          [
+            {
+              text: translate('common.ok'),
+              style: 'cancel',
+              onPress: () => null
+            }
+          ]
+        )
+      } else if (res.kind === 'enterprise-system-lock') {
+        Alert.alert(
+          translate('alert.enterprise_system_lock'),
           '',
           [
             {

@@ -68,6 +68,7 @@ export const PrivateRelay = observer(() => {
     if (res.kind === 'ok') {
       const newList = [...alias, res.data]
       setAlias(newList)
+      fetchRelayDomain()
     }
   }
 
@@ -76,8 +77,9 @@ export const PrivateRelay = observer(() => {
     setAlias(newList)
   }
 
-  const onEdit = () => {
+  const onMount = () => {
     fetchRelayListAddressed()
+    fetchRelayDomain()
   }
 
   useEffect(() => {
@@ -85,7 +87,7 @@ export const PrivateRelay = observer(() => {
   }, [selectedItem])
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", fetchRelayDomain)
+    const unsubscribe = navigation.addListener("focus", onMount)
     return unsubscribe
   }, [])
 
@@ -138,7 +140,7 @@ export const PrivateRelay = observer(() => {
           onClose={() => {
             setShowEditModal(false)
           }}
-          onEdit={onEdit}
+          onEdit={fetchRelayListAddressed}
         />
       </>
       )}
@@ -243,7 +245,7 @@ export const PrivateRelay = observer(() => {
                 {
                   subdomain !== null && (<>
                     <Text text={translate('private_relay.manage_subdomain.your_subdomain')} />
-                    <Text preset="semibold" text={subdomain.subdomain} />
+                    <Text preset="semibold" text={`@${subdomain.subdomain}.maily.org`} />
                   </>)
                 }
               </View>

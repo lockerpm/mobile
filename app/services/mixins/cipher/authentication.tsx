@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import { KdfType } from '../../../../core/enums/kdfType'
-import {  useStores } from '../../../models'
+import { useStores } from '../../../models'
 import { useCipherDataMixins } from './data'
 import { useCoreService } from '../../core-service'
 import { delay } from '../../../utils/delay'
@@ -20,6 +20,7 @@ import { getUrlParameterByName } from '../../../utils/helpers'
 import { CipherView, LoginUriView, LoginView } from '../../../../core/models/view'
 import { CipherType } from '../../../../core/enums'
 import { CipherRequest } from '../../../../core/models/request/cipherRequest'
+import { Alert } from 'react-native'
 
 const { createContext, useContext } = React
 
@@ -106,6 +107,8 @@ export const CipherAuthenticationMixinsProvider = observer(
             )
           } else if (res.data.code === '1009') {
             return { kind: 'enterprise-lock' }
+          } else if (res.data.code === '1010') {
+            return { kind: 'enterprise-system-lock' }
           } else {
             notifyApiError(res)
           }

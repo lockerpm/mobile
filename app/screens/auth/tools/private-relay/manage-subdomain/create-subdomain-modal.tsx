@@ -22,7 +22,14 @@ export const CreateSubdomainModal = (props: Props) => {
   const handleCreateSubdomain = async () => {
     const res = await toolStore.createSubdomain(subdomain) 
     if (res.kind === 'ok') {
-      props.setSubdomain(res.data)
+      const data :SubdomainData = {
+        ...res.data,
+        num_alias: 0,
+        num_forwarded: 0,
+        num_spam: 0,
+        created_time: Date.now()
+      }
+      props.setSubdomain(data)
       onClose()
     } else {
       notifyApiError(res)
