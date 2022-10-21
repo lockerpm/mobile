@@ -113,7 +113,7 @@ export const AliasItem = (props: Props) => {
             {!isFreeAccount && (
               <>
                 <ActionItem
-                  name={"Statistics"}
+                  name={translate('private_relay.statistic')}
                   icon="file-o"
                   action={() => {
                     navigation.navigate("aliasStatistic", { alias: item })
@@ -126,8 +126,8 @@ export const AliasItem = (props: Props) => {
             {!isFreeAccount && (
               <>
                 <ActionItem
-                  name={"Config"}
-                  icon="file-o"
+                  name={translate('private_relay.config')}
+                  icon="gear"
                   action={() => {
                     setNextModal('config')
                     setIsOpen(false)

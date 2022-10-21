@@ -13,6 +13,7 @@ import { EditAliasModal } from './edit-alias-modal'
 import { RelayAddress, SubdomainData } from '../../../../config/types/api'
 import { PlanType } from '../../../../config/types'
 import { CreateSubdomainModal } from './manage-subdomain/create-subdomain-modal'
+import { ConfigAliasModal } from './config-alias-modal'
 
 const FREE_PLAM_ALIAS_LIMIT = 5
 
@@ -25,6 +26,7 @@ export const PrivateRelay = observer(() => {
   const [showDesc, setShowDesc] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showConfigModal, setShowConfigModal] = useState(false)
+  const [selectedItem, setSelectedItem] = useState<RelayAddress>(null)
 
   // subdomain
   const [showCreateSubdomainModal, setShowCreateSubdomainModal] = useState(false)
@@ -80,9 +82,13 @@ export const PrivateRelay = observer(() => {
 
   useEffect(() => {
     fetchRelayListAddressed()
+  }, [selectedItem])
+
+  useEffect(() => {
     const unsubscribe = navigation.addListener("focus", fetchRelayDomain)
     return unsubscribe
   }, [])
+
 
   // Render
   return (
@@ -117,7 +123,15 @@ export const PrivateRelay = observer(() => {
         setSubdomain={setSubdomain}
       />
 
-      {alias.length > 0 && (
+      {alias.length > 0 && (<>
+        {!!selectedItem && <ConfigAliasModal
+          item={selectedItem}
+          isOpen={showConfigModal}
+          onClose={() => {
+            setShowConfigModal(false)
+            setSelectedItem(null)
+          }}
+        />}
         <EditAliasModal
           item={alias[0]}
           isOpen={showEditModal}
@@ -126,6 +140,7 @@ export const PrivateRelay = observer(() => {
           }}
           onEdit={onEdit}
         />
+      </>
       )}
 
       {/* Root email start */}
@@ -294,7 +309,10 @@ export const PrivateRelay = observer(() => {
             item={item}
             deleteRelayAddress={deleteRelayAddress}
             setShowEditModal={() => setShowEditModal(true)}
-            setShowConfigModal={() => setShowConfigModal(true)}
+            setShowConfigModal={() => {
+              setShowConfigModal(true)
+              setSelectedItem(item)
+            }}
           />
         ))}
       </View>
