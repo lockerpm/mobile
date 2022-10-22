@@ -15,7 +15,7 @@ export const ReferFriendMenuItem = (props: {onPress: Function}) => {
         <TouchableOpacity
         onPress={()=> props.onPress()}
             style={{
-                marginVertical: 24,
+                marginTop: 24,
             }}>
             <View style={{
                 paddingHorizontal: 16,

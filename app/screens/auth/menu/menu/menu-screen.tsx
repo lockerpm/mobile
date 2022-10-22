@@ -96,11 +96,13 @@ export const MenuScreen = observer(() => {
           navigation.navigate("invite_member")
         }
       },
+      hide: user.pwd_user_type === "enterprise"
     },
     {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
       action: () => navigation.navigate('payment'),
+      hide: user.pwd_user_type === "enterprise"
     },
     {
       icon: isDark ? <SettingsIconLight height={22} /> : <SettingsIcon height={22} />,
@@ -120,7 +122,7 @@ export const MenuScreen = observer(() => {
       debug: true,
       icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
       name: "(DEBUG) Open Onboard",
-      action: () => navigation.navigate('intro', {preview: true}),
+      action: () => navigation.navigate('intro', { preview: true }),
       noBorder: true
     },
     {
@@ -211,13 +213,13 @@ export const MenuScreen = observer(() => {
       node: <Text text="FREE" style={[PLAN_NAME, { color: color.textBlack }]}></Text>,
     },
     "pm_premium": {
-      node: <View style={{ flexDirection: isSmallWidth ? "column" : "row"  }}>
+      node: <View style={{ flexDirection: isSmallWidth ? "column" : "row" }}>
         <Text text="PREMIUM" style={[PLAN_NAME, { color: color.primary }]}></Text>
         <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: isSmallWidth ? 0 : 8 }]}></Text>
       </View>
     },
     "pm_family": {
-      node: <View style={{ flexDirection: isSmallWidth ? "column" : "row"  }}>
+      node: <View style={{ flexDirection: isSmallWidth ? "column" : "row" }}>
         <Text text="FAMILY" style={[PLAN_NAME, { color: color.primary }]}></Text>
         <Text text={translate("menu.expired_time") + ": " + moment(user.plan?.next_billing_time * 1000).format("DD MMMM YYYY")} style={[PLAN_NAME, { marginLeft: isSmallWidth ? 0 : 8 }]}></Text>
       </View>,
@@ -269,7 +271,25 @@ export const MenuScreen = observer(() => {
               text={user.email}
             />
             {
-              user.plan && item3[user.plan.alias]?.node
+              user.pwd_user_type !== "enterprise" && user.plan && item3[user.plan.alias]?.node
+            }
+            {
+              user.pwd_user_type === "enterprise" && user.enterprise && <View style={{
+                flexDirection: "row",
+                marginTop: 5,
+                alignItems: "center"
+              }}>
+                <Text
+                  preset="black"
+                  text={translate('common.enterprise') + ":"}
+                  style={{ marginRight: 8 }}
+                />
+                <Text
+                  text={user.enterprise.name}
+                  style={{ color: color.primary }}
+                />
+              </View>
+
             }
           </View>
           <FontAwesome
@@ -337,11 +357,13 @@ export const MenuScreen = observer(() => {
         </View>
 
 
-        <ReferFriendMenuItem onPress={isTablet ? (() => onShare()) : (() => navigation.navigate('refer_friend', {
-          referLink: referLink
-        }))} />
+        {
+          user.pwd_user_type !== "enterprise" && <ReferFriendMenuItem onPress={isTablet ? (() => onShare()) : (() => navigation.navigate('refer_friend', {
+            referLink: referLink
+          }))} />
+        }
 
-        {<View style={ITEM_CONTAINER}>
+        <View style={[ITEM_CONTAINER, { marginTop: 24}]}>
           <Button
             preset="link"
             onPress={() => Intercom.displayMessenger()}
@@ -388,7 +410,7 @@ export const MenuScreen = observer(() => {
               color={color.textBlack}
             />
           </Button>
-        </View>}
+        </View>
 
 
         <View style={[ITEM_CONTAINER, { marginTop: 24 }]}>

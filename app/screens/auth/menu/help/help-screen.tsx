@@ -25,6 +25,10 @@ export const HelpScreen = observer(function HelpScreen() {
 
   const items: Item[] = [
     {
+      name: translate('help.tutorial'),
+      action: () => navigation.navigate('intro', {preview: true})
+    },
+    {
       name: translate('help.help_center'),
       action: () => {
         Linking.canOpenURL(HELP_CENTER_URL).then((val) => {

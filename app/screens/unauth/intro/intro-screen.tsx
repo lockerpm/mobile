@@ -74,7 +74,7 @@ export const IntroScreen = observer(() => {
           onPress={() => {
             if (index === 3) {
               if (isPreview) {
-                navigation.goBack()
+                navigation.navigate("mainStack", {screen: "help"})
               } else {
                 navigation.navigate("onBoarding")
               }
@@ -92,7 +92,7 @@ export const IntroScreen = observer(() => {
         preset="link"
         onPress={() => {
           if (isPreview) {
-            navigation.navigate("mainStack", {screen: "menu"})
+            navigation.navigate("mainStack", {screen: "help"})
           } else {
             navigation.navigate("onBoarding")
           }

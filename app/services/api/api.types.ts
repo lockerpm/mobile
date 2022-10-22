@@ -23,6 +23,7 @@ import {
   BlockFailedLoginPolicy,
   PasswordlessPolicy,
   SubdomainData,
+  Enterprise,
 } from '../../config/types/api'
 
 // ------------------ Response ------------------------
@@ -83,6 +84,7 @@ export type AccountRecoveryResult =
 
 export type SessionLoginResult = { kind: 'ok'; data: SessionSnapshot } | GeneralApiProblem
 export type GetUserResult = { kind: 'ok'; user: UserSnapshot } | GeneralApiProblem
+export type GetEnterpriseResult = { kind: 'ok'; data: Enterprise[] } | GeneralApiProblem
 export type EmptyResult = { kind: 'ok' } | GeneralApiProblem
 export type BooleanResult = { kind: 'ok', data: boolean } | GeneralApiProblem
 export type SyncResult =

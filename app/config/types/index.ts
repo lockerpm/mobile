@@ -5,6 +5,11 @@ export class AccountRole {
   static MEMBER = 2
 }
 
+export enum AccountType {
+  PERSONAL = "personal",
+  ENTERPRISE = "enterprise"
+}
+
 export enum AccountRoleText {
   OWNER = 'owner',
   ADMIN = 'admin',

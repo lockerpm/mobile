@@ -111,7 +111,7 @@ export const ConfigAliasModal = observer((props: Props) => {
                   value={item.value}
                   onValueChange={item.onChange}
                 />
-                <Text preset="black" text={item.title} />
+                <Text preset="black" text={item.title} style={{maxWidth: "85%"}}/>
               </>
             </TouchableOpacity>
             <Divider />

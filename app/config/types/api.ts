@@ -106,6 +106,17 @@ export type MyShareType = {
   organization_id: string
   members: SharedMemberType[]
 }
+export type Enterprise = {
+  creation_date: number
+  description: string
+  id: string
+  is_default: boolean
+  locked: boolean
+  name: string
+  organization_id: string
+  revision_date: null
+  role: string
+}
 
 export type UserTeam = {
   id: string
