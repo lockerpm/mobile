@@ -45,8 +45,6 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
 
   const hasAddPermission = !collectionId || TEAM_CIPHER_EDITOR.includes(getTeam(user.teams, folder.organizationId).role)
 
-  console.log(user.teams)
-
   // Close select before leave
   useEffect(() => {
     uiStore.setIsSelecting(isSelecting)

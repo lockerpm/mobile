@@ -37,10 +37,16 @@ export const PrivateRelay = observer(() => {
   const isReachLimit = isFreeAccount && alias.length >= FREE_PLAM_ALIAS_LIMIT
   const suffixitle = isFreeAccount ? ` (${alias.length}/5)` : ` (${alias.length})`
 
-  const rootEmailDesc = [
+  
+
+  const rootEmailDesc = isFreeAccount ? [
     translate('private_relay.desc.one'),
     translate('private_relay.desc.two'),
     translate('private_relay.desc.three'),
+  ] : [
+    translate('private_relay.desc_premium.one'),
+    translate('private_relay.desc_premium.two'),
+    translate('private_relay.desc_premium.three'),
   ]
 
   const fetchRelayDomain = async () => {
@@ -179,7 +185,7 @@ export const PrivateRelay = observer(() => {
                 }}
               />
               <View style={{ marginLeft: 8 }}>
-                <Text text={translate('private_relay.root_email')} />
+                <Text text={translate('private_relay.root_email') + ":"} />
                 <Text preset="semibold" text={user.email} />
               </View>
             </View>
@@ -239,13 +245,13 @@ export const PrivateRelay = observer(() => {
               <View style={{ marginLeft: 8, justifyContent: "center" }}>
                 {
                   !subdomain && (<>
-                    <Text text={"Ban chưa có subdomain"} />
+                    <Text text={translate('private_relay.no_subdomain')} />
                   </>)
                 }
                 {
                   subdomain !== null && (<>
-                    <Text text={translate('private_relay.manage_subdomain.your_subdomain')} />
-                    <Text preset="semibold" text={`@${subdomain.subdomain}.maily.org`} />
+                    <Text text={translate('private_relay.manage_subdomain.your_subdomain') + ":"} />
+                    <Text preset="semibold" text={`${subdomain.subdomain}.maily.org`} />
                   </>)
                 }
               </View>

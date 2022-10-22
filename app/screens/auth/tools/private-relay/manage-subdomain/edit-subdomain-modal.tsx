@@ -16,23 +16,47 @@ interface Props {
 export const EditSubdomainModal = (props: Props) => {
   const { isOpen, onClose, subdomain, setSubdomain } = props
   const { translate, color } = useMixins()
-  const {toolStore} = useStores()
+  const { toolStore } = useStores()
 
+  const [isLoading, setIsLoading] = useState(false)
   const [domain, setDomain] = useState("")
+  const [updateError, setUpdateError] = useState("")
 
-  const handleUpdateSubdomain =async () => {
+  const handleUpdateSubdomain = async () => {
+    setIsLoading(true)
     const res = await toolStore.editSubdomain(subdomain.id, domain.trim())
+    setIsLoading(false)
     if (res.kind === 'ok') {
       setSubdomain({
         ...subdomain,
         subdomain: domain
       })
       onClose()
+    } else if (res.kind === 'bad-data') {
+      const errorData: {
+        details?: {
+          [key: string]: string[]
+        }
+        code: string
+        message?: string
+      } = res.data
+      let errorMessage = ''
+      if (errorData.details) {
+        for (const key of Object.keys(errorData.details)) {
+          if (errorData.details[key][0]) {
+            if (!errorMessage) {
+              errorMessage = errorData.details[key][0]
+            }
+          }
+        }
+      }
+      setUpdateError(errorMessage)
     }
   }
 
   useEffect(() => {
-    setDomain("")
+    setUpdateError('')
+    setDomain('')
   }, [isOpen])
 
   return (
@@ -61,6 +85,7 @@ export const EditSubdomainModal = (props: Props) => {
             value={domain}
             onChangeText={(text: string) => {
               setDomain(text.toLowerCase())
+              if (updateError !== "") setUpdateError("")
             }}
             placeholder={"... "}
             placeholderTextColor={color.text}
@@ -77,14 +102,21 @@ export const EditSubdomainModal = (props: Props) => {
           }} />
         </View>
 
+        {!!updateError && <Text
+          numberOfLines={2}
+          text={updateError}
+          style={{ color: color.error, fontSize: fontSize.small, marginVertical: 8 }}
+        />}
+
         <Text
           style={{ marginTop: 16 }}
           text={translate('private_relay.manage_subdomain.edit_note')}
         />
         <Button
+          isLoading={isLoading}
           isDisabled={!domain}
           style={{ marginTop: 16 }}
-          text={translate('common.confirm')}
+          text={isLoading ? "" : translate('common.confirm')}
           onPress={handleUpdateSubdomain}
         />
         <Button

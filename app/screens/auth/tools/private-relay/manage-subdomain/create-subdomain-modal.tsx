@@ -1,4 +1,4 @@
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 import { TextInput, View } from 'react-native'
 import { Button, Modal, Text } from '../../../../../components'
 import { useMixins } from '../../../../../services/mixins'
@@ -15,14 +15,15 @@ interface Props {
 export const CreateSubdomainModal = (props: Props) => {
   const { isOpen, onClose } = props
   const { translate, color, notifyApiError } = useMixins()
-  const { toolStore} = useStores()
-
+  const { toolStore } = useStores()
+  const [isLoading, setIsLoading] = useState(false)
   const [subdomain, setSubdomain] = useState("")
 
   const handleCreateSubdomain = async () => {
-    const res = await toolStore.createSubdomain(subdomain) 
+    setIsLoading(true)
+    const res = await toolStore.createSubdomain(subdomain)
     if (res.kind === 'ok') {
-      const data :SubdomainData = {
+      const data: SubdomainData = {
         ...res.data,
         num_alias: 0,
         num_forwarded: 0,
@@ -34,6 +35,7 @@ export const CreateSubdomainModal = (props: Props) => {
     } else {
       notifyApiError(res)
     }
+    setIsLoading(false)
   }
 
   return (
@@ -82,9 +84,10 @@ export const CreateSubdomainModal = (props: Props) => {
             onPress={onClose}
           />
           <Button
+            isLoading={isLoading}
             isDisabled={!subdomain}
             style={{ marginTop: 16 }}
-            text={translate('common.confirm')}
+            text={isLoading ? "" : translate('common.confirm')}
             onPress={handleCreateSubdomain}
           />
         </View>

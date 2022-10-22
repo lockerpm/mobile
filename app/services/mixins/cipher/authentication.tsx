@@ -20,7 +20,6 @@ import { getUrlParameterByName } from '../../../utils/helpers'
 import { CipherView, LoginUriView, LoginView } from '../../../../core/models/view'
 import { CipherType } from '../../../../core/enums'
 import { CipherRequest } from '../../../../core/models/request/cipherRequest'
-import { Alert } from 'react-native'
 
 const { createContext, useContext } = React
 

@@ -32,6 +32,7 @@
     "details": "Chi tiết",
     "edit": "Sửa",
     "email": "Email",
+    "enterprise": "Doanh nghiệp",
     "enter_master_pass": "Nhập Master Password",
     "faceid_unlocking": "Mở khóa bằng Face ID",
     "female": "Nữ",
@@ -235,6 +236,11 @@
       "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
       "two": "Bạn có thể tạo và dùng tối đa 05 email ẩn danh tại một thời điểm",
       "three": "Bạn có thể sửa đổi 01 email ẩn danh theo ý bạn"
+    },
+    "desc_premium": {
+      "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
+      "two": "Bạn có thể trả lời người gửi thông quan email ẩn danh",
+      "three": "Bạn có thể sửa đổi một email ẩn danh và tên miền phụ theo ý bạn"
     },
     "copy": "Sao chép email",
     "edit": "Sửa địa chỉ email",
@@ -672,6 +678,7 @@
     "confirm": "Xác nhận mật khẩu mới"
   },
   "help": {
+    "tutorial": "Mở hướng dẫn",
     "help_center": "Trung tâm trợ giúp",
     "terms": "Điều khoản dịch vụ",
     "policy": "Chính sách bảo mật",

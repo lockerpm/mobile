@@ -10,7 +10,6 @@ export const TestScreen = observer(() => {
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
-    console.log(event.timeStamp)
     // setShow(false);
     setDate(currentDate);
   };

@@ -16,8 +16,8 @@ import DeviceInfo from 'react-native-device-info'
 import moment from 'moment'
 import { omit } from 'ramda'
 import { AppEventType, EventBus } from '../../utils/event-bus'
-import { EmergencyAccessType, PolicyType } from '../../config/types'
-import { UserTeam } from '../../config/types/api'
+import { AccountType, EmergencyAccessType, PolicyType } from '../../config/types'
+import { Enterprise, UserTeam } from '../../config/types/api'
 
 export enum AppTimeoutType {
   SCREEN_OFF = -1,
@@ -48,11 +48,13 @@ export const UserModel = types
     // PM
     isLoggedInPw: types.maybeNull(types.boolean),
     pwd_user_id: types.maybeNull(types.string),
+    pwd_user_type: types.maybeNull(types.string),
     is_pwd_manager: types.maybeNull(types.boolean),
     default_team_id: types.maybeNull(types.string),
     fingerprint: types.maybeNull(types.string),
 
     // Others data
+    enterprise: types.maybeNull(types.frozen<Enterprise>()),
     teams: types.array(types.frozen<UserTeam>()),
     plan: types.maybeNull(
       types.frozen<{
@@ -103,10 +105,14 @@ export const UserModel = types
       self.pwd_user_id = userSnapshot.pwd_user_id
       self.is_pwd_manager = userSnapshot.is_pwd_manager
       self.default_team_id = userSnapshot.default_team_id
+      self.pwd_user_type = userSnapshot.pwd_user_type
       save(StorageKey.APP_CURRENT_USER, {
         language: self.language,
         pwd_user_id: self.pwd_user_id,
       })
+    },
+    saveEnterprise: (enterprise: Enterprise[]) => {
+      self.enterprise = enterprise[0]
     },
     clearUser: () => {
       self.isLoggedIn = false
@@ -120,6 +126,7 @@ export const UserModel = types
       self.is_pwd_manager = false
       self.default_team_id = ''
       self.teams = cast([])
+      self.enterprise = null
       self.invitations = cast([])
       self.plan = null
       self.fingerprint = ''
@@ -421,6 +428,12 @@ export const UserModel = types
       const res = await userApi.getUserPw(self.apiToken)
       if (res.kind === 'ok') {
         self.saveUserPw(res.user)
+        if (res.user.pwd_user_type === AccountType.ENTERPRISE) {
+          const _res = await userApi.getEnterprise(self.apiToken)
+          if (_res.kind === 'ok') {
+            self.saveEnterprise(_res.data)
+          }
+        }
       }
       return res
     },
@@ -466,6 +479,18 @@ export const UserModel = types
     },
 
     loadPlan: async () => {
+      if (self.pwd_user_type === "enterprise") {
+        self.setPlan({
+          name: 'Premium',
+          is_family: false,
+          alias: 'pm_premium',
+          cancel_at_period_end: false,
+          duration: 'monthly',
+          next_billing_time: 0,
+          payment_method: 'mobile',
+        })
+        return null
+      }
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.getPlan(self.apiToken)
       if (res.kind === 'ok') {

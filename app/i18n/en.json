@@ -32,6 +32,7 @@
     "details": "Details",
     "edit": "Edit",
     "email": "Email",
+    "enterprise": "Enterprise",
     "enter_master_pass": "Enter master password",
     "faceid_unlocking": "Unlock with Face ID",
     "female": "Female",
@@ -235,6 +236,11 @@
       "one": "All emails to your alias addresses will be forwarded to your root email",
       "two": "You can create and use up to 05 concurrent alias addresses",
       "three": "You have 01 customizable alias"
+    },
+    "desc_premium": {
+      "one": "All emails to your alias addresses will be forwarded to your root email",
+      "two": "You can reply to sender address via Locker Private Email aliases",
+      "three": "You have one customizable alias and one subdomain"
     },
     "copy": "Copy alias",
     "edit": "Edit alias address",
@@ -672,6 +678,7 @@
     "confirm": "Confirm Master Password"
   },
   "help": {
+    "tutorial": "Open tutorial",
     "help_center": "Help Center",
     "terms": "Terms of Service",
     "policy": "Privacy Policy",
