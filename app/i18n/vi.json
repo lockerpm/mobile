@@ -656,6 +656,7 @@
     }
   },
   "all_items": {
+    "most_relevant": "Liên quan nhất",
     "last_updated": "Mới nhất",
     "first_updated": "Cũ nhất",
     "empty": {

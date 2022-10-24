@@ -97,7 +97,6 @@ export const CipherList = observer((props: CipherListProps) => {
   // ------------------------ EFFECTS ----------------------------
 
   useEffect(() => {
-
     loadData()
   }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
 

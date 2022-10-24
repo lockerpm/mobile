@@ -656,6 +656,7 @@
     }
   },
   "all_items": {
+    "most_relevant": "Most Relevant",
     "last_updated": "Last Updated",
     "first_updated": "First Updated",
     "empty": {

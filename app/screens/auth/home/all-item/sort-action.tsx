@@ -37,6 +37,11 @@ export const SortAction = (props: Props) => {
 
   const nameOptions = [
     {
+      label: translate('all_items.most_relevant'),
+      value: 'most_relevant',
+      sort: null
+    },
+    {
       label: 'A - Z',
       value: 'az',
       sort: {
