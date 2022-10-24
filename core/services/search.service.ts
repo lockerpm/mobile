@@ -125,9 +125,11 @@ export class SearchService implements SearchServiceAbstraction {
 
         const index = this.getIndexForSearch();
         if (index == null) {
+            console.log("searchCiphersBasic")
             // Fall back to basic search if index is not available
             return this.searchCiphersBasic(ciphers, query);
         }
+        console.log("----------")
 
         const ciphersMap = new Map<string, CipherView>();
         ciphers.forEach(c => ciphersMap.set(c.id, c));
