@@ -25,7 +25,7 @@ export interface CipherActionProps {
   isOpen?: boolean,
   onClose?: () => void,
   navigation: any,
-  onLoadingChange?: Function
+  onLoadingChange?: (val: boolean) => void
   isEmergencyView?: boolean
 }
 
@@ -54,6 +54,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
   const organizations = cipherStore.organizations
   const teamRole = getTeam(user.teams, selectedCipher.organizationId).role
   const shareRole = getTeam(organizations, selectedCipher.organizationId).type
+
   const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
   const isInFolderShare = selectedCipher.collectionIds?.length > 0
   // const isOwner = shareRole === AccountRole.ADMIN

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select, CustomFieldsEdit
+  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo,  CustomFieldsEdit
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -10,11 +10,13 @@ import { PrimaryParamList } from "../../../../../navigators/main-navigator"
 import { BROWSE_ITEMS } from "../../../../../common/mappings"
 import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
-import { CipherView, IdentityView } from "../../../../../../core/models/view"
+import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { ServerData, toServerData } from "../server.type"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 
 type ServerEditScreenProp = RouteProp<PrimaryParamList, 'servers__edit'>;
@@ -35,9 +37,11 @@ export const ServerEditScreen = observer(() => {
 
   const { cipherStore } = useStores()
   const { translate, color } = useMixins()
+  const { shareFolderAddItem } = useFolderMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const selectedCollection: CollectionView = route.params.collection
   const serverData = toServerData(selectedCipher.notes)
 
   // ------------------ PARAMS -----------------------
@@ -51,12 +55,12 @@ export const ServerEditScreen = observer(() => {
   const [username, setUsername] = useState(mode !== 'add' ? serverData.username : '')
   const [password, setPasspord] = useState(mode !== 'add' ? serverData.password : '')
   const [note, setNote] = useState(mode !== 'add' ? serverData.notes : '')
-  
+
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
-  
+
   const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ EFFECTS -----------------------
@@ -67,7 +71,8 @@ export const ServerEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -85,7 +90,7 @@ export const ServerEditScreen = observer(() => {
       payload = newCipher(CipherType.Server)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
     const serverData: ServerData = {
@@ -107,7 +112,7 @@ export const ServerEditScreen = observer(() => {
       response: null,
       type: 0
     }
-    
+
     let res = { kind: 'unknown' }
     if (['add', 'clone'].includes(mode)) {
       res = await createCipher(payload, 0, collectionIds)
@@ -115,10 +120,15 @@ export const ServerEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    setIsLoading(false)
     if (res.kind === 'ok') {
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
+
       navigation.goBack()
     }
+    setIsLoading(false)
+
   }
 
   // ----------------- RENDER ----------------------
@@ -173,7 +183,7 @@ export const ServerEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10

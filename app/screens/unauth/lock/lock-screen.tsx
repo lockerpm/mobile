@@ -79,8 +79,8 @@ export const LockScreen = observer(() => {
         navigation.navigate('login')
       } else if (res.kind === 'enterprise-lock') {
         Alert.alert(
-          translate('alert.enterprise_lock'),
           '',
+          translate('alert.enterprise_lock'),
           [
             {
               text: translate('common.ok'),
@@ -91,8 +91,8 @@ export const LockScreen = observer(() => {
         )
       } else if (res.kind === 'enterprise-system-lock') {
         Alert.alert(
-          translate('alert.enterprise_system_lock'),
           '',
+          translate('alert.enterprise_system_lock'),
           [
             {
               text: translate('common.ok'),

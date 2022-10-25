@@ -15,6 +15,8 @@ import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { toApiCipherData, ApiCipherData, API_METHODS } from "../api-cipher.type"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
 
 
 type ApiCipherEditScreenProp = RouteProp<PrimaryParamList, 'apiCiphers__edit'>;
@@ -37,9 +39,11 @@ export const ApiCipherEditScreen = observer(() => {
 
   const { cipherStore } = useStores()
   const { translate, color } = useMixins()
+  const { shareFolderAddItem } = useFolderMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const selectedCollection: CollectionView = route.params.collection
   const apiCipherData = toApiCipherData(selectedCipher.notes)
   // ------------------ PARAMS -----------------------
 
@@ -68,7 +72,8 @@ export const ApiCipherEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -116,10 +121,14 @@ export const ApiCipherEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    setIsLoading(false)
     if (res.kind === 'ok') {
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
+
       navigation.goBack()
     }
+    setIsLoading(false)
   }
 
   const METHODS = [

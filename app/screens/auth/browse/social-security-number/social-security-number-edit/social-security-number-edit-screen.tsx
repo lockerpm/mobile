@@ -16,6 +16,8 @@ import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { SocialSecurityNumberData, toSocialSecurityNumberData } from "../social-security-number.type"
 import countries from '../../../../../common/countries.json'
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
 
 type EditScreenProp = RouteProp<PrimaryParamList, 'socialSecurityNumbers__edit'>;
 
@@ -39,22 +41,24 @@ export const SocialSecurityNumberEditScreen = observer(() => {
 
   const { cipherStore, uiStore } = useStores()
   const { translate, color } = useMixins()
+  const { shareFolderAddItem } = useFolderMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
   const socialSecurityNumberData = toSocialSecurityNumberData(selectedCipher.notes)
 
   // ------------------ PARAMS -----------------------
+  const selectedCollection: CollectionView = route.params.collection
 
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  
+
   const [fullName, setFullName] = useState(mode !== 'add' ? socialSecurityNumberData.fullName : '')
   const [socialSecurityNumber, setSocialSecurityNumber] = useState(mode !== 'add' ? socialSecurityNumberData.socialSecurityNumber : '')
   const [dateOfIssue, setDateOfIssue] = useState(mode !== 'add' ? socialSecurityNumberData.dateOfIssue : '')
   const [contry, setContry] = useState(mode !== 'add' ? socialSecurityNumberData.contry : 'vn')
   const [note, setNote] = useState(mode !== 'add' ? socialSecurityNumberData.notes : '')
- 
+
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
@@ -70,7 +74,8 @@ export const SocialSecurityNumberEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -96,7 +101,7 @@ export const SocialSecurityNumberEditScreen = observer(() => {
       payload = newCipher(CipherType.SocialSecurityNumber)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
     const socialSecurityNumberData: SocialSecurityNumberData = {
@@ -127,8 +132,13 @@ export const SocialSecurityNumberEditScreen = observer(() => {
 
     setIsLoading(false)
     if (res.kind === 'ok') {
+
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
       navigation.goBack()
     }
+    setIsLoading(false)
   }
 
   // ----------------- RENDER ----------------------
@@ -186,7 +196,7 @@ export const SocialSecurityNumberEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10

@@ -15,6 +15,8 @@ import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { toWirelessRouterData, WirelessRouterData } from "../wireless-router.type"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
 
 
 type EditScreenProp = RouteProp<PrimaryParamList, 'wirelessRouters__edit'>;
@@ -35,13 +37,15 @@ export const WirelessRouterEditScreen = observer(() => {
 
   const { cipherStore } = useStores()
   const { translate, color } = useMixins()
+
+  const { shareFolderAddItem } = useFolderMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
   const wirelessRouterData = toWirelessRouterData(selectedCipher.notes)
 
   // ------------------ PARAMS -----------------------
-
+  const selectedCollection: CollectionView = route.params.collection
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
 
@@ -51,12 +55,12 @@ export const WirelessRouterEditScreen = observer(() => {
   const [adminPassword, setAdminPassword] = useState(mode !== 'add' ? wirelessRouterData.adminPassword : '')
   const [wifiSSID, setWifiSSID] = useState(mode !== 'add' ? wirelessRouterData.wifiSSID : '')
   const [wifiPassword, setWifiPassword] = useState(mode !== 'add' ? wirelessRouterData.wifiPassword : '')
-  
+
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
-  
+
   const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ EFFECTS -----------------------
@@ -67,7 +71,8 @@ export const WirelessRouterEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -85,7 +90,7 @@ export const WirelessRouterEditScreen = observer(() => {
       payload = newCipher(CipherType.WirelessRouter)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
     const wirelessRouterData: WirelessRouterData = {
@@ -115,10 +120,13 @@ export const WirelessRouterEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    setIsLoading(false)
     if (res.kind === 'ok') {
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
       navigation.goBack()
     }
+    setIsLoading(false)
   }
 
   // ----------------- RENDER ----------------------
@@ -178,7 +186,7 @@ export const WirelessRouterEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10

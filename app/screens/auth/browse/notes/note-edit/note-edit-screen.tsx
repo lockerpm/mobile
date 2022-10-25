@@ -14,6 +14,8 @@ import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, 'notes__edit'>;
@@ -26,6 +28,8 @@ export const NoteEditScreen = observer(() => {
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
   const { translate, color } = useMixins()
+
+  const { shareFolderAddItem } = useFolderMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
 
@@ -40,6 +44,7 @@ export const NoteEditScreen = observer(() => {
   // Params
   const [isLoading, setIsLoading] = useState(false)
 
+  const selectedCollection: CollectionView = route.params.collection
   // Watchers
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -47,7 +52,8 @@ export const NoteEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -64,7 +70,7 @@ export const NoteEditScreen = observer(() => {
       payload = newCipher(CipherType.SecureNote)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
     payload.fields = fields
@@ -80,10 +86,14 @@ export const NoteEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    setIsLoading(false)
     if (res.kind === 'ok') {
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
+
       navigation.goBack()
     }
+    setIsLoading(false)
   }
 
   // Render
@@ -109,7 +119,7 @@ export const NoteEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10

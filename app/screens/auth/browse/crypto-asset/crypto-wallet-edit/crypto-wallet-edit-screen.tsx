@@ -18,6 +18,8 @@ import { CryptoWalletData, toCryptoWalletData } from "../../../../../utils/crypt
 import { SeedPhraseInput } from "./seed-phrase-input"
 import { ChainSelect } from "./chain-select"
 import { AppSelect } from "./app-select"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
 
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, 'cryptoWallets__edit'>;
@@ -28,10 +30,12 @@ export const CryptoWalletEditScreen = observer(() => {
   const route = useRoute<NoteEditScreenProp>()
   const { cipherStore } = useStores()
   const { translate, color } = useMixins()
+  const { shareFolderAddItem } = useFolderMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
 
   const selectedCipher: CipherView = cipherStore.cipherView
+  const selectedCollection: CollectionView = route.params.collection
   const cryptoWalletData = toCryptoWalletData(selectedCipher.notes)
   const { mode } = route.params
 
@@ -47,7 +51,7 @@ export const CryptoWalletEditScreen = observer(() => {
   const [seed, setSeed] = useState(mode !== 'add' ? cryptoWalletData.seed : '           ')
   const [networks, setNetworks] = useState<{ alias: string; name: string }[]>(mode !== 'add' ? cryptoWalletData.networks : [])
   const [note, setNote] = useState(mode !== 'add' ? cryptoWalletData.notes : '')
-  
+
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
@@ -70,7 +74,8 @@ export const CryptoWalletEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -88,7 +93,7 @@ export const CryptoWalletEditScreen = observer(() => {
       payload = newCipher(CipherType.CryptoWallet)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
     const cryptoData: CryptoWalletData = {
@@ -119,11 +124,15 @@ export const CryptoWalletEditScreen = observer(() => {
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
-
-    setIsLoading(false)
     if (res.kind === 'ok') {
+
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
       navigation.goBack()
     }
+    setIsLoading(false)
+
   }
 
   // -------------------------- RENDER ------------------------------
@@ -150,7 +159,7 @@ export const CryptoWalletEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
