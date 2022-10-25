@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from "../../../components"
-import { useNavigation , RouteProp, useRoute } from "@react-navigation/native"
+import { useNavigation, RouteProp, useRoute } from "@react-navigation/native"
 import { SortAction } from "../home/all-item/sort-action"
 import { useMixins } from "../../../services/mixins"
 import { BackHandler, NativeModules } from "react-native"
@@ -56,6 +56,22 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
       BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
     }
   }, [isSelecting])
+
+  useEffect(() => {
+    // set Most relevant by defalt when users search
+    if (searchText) {
+      if (searchText.trim().length === 1) {
+        setSortList(null)
+        setSortOption("most_relevant")
+      }
+    } else {
+      setSortList({
+        orderField: 'revisionDate',
+        order: 'desc'
+      })
+      setSortOption("last_updated")
+    }
+  }, [searchText]);
 
   // Suggest save
   useEffect(() => {
