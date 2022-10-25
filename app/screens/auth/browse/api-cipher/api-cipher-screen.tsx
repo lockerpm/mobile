@@ -44,6 +44,22 @@ export const ApiCiphersScreen = observer(() => {
     }
   }, [isSelecting])
 
+  useEffect(() => {
+    // set Most relevant by defalt when users search
+    if (searchText) {
+      if (searchText.trim().length === 1) {
+        setSortList(null)
+        setSortOption("most_relevant")
+      }
+    } else {
+      setSortList({
+        orderField: 'revisionDate',
+        order: 'desc'
+      })
+      setSortOption("last_updated")
+    }
+  }, [searchText]);
+
   return (
     <Layout
       isContentOverlayLoading={isLoading}

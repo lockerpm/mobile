@@ -50,6 +50,7 @@ export const AuthenticatorScreen = observer(() => {
     }
   }, [isSelecting])
 
+
   // -------------------- RENDER ----------------------
 
   return (
@@ -94,7 +95,7 @@ export const AuthenticatorScreen = observer(() => {
         value={sortOption}
       />
 
-      <AuthenticatorAddAction 
+      <AuthenticatorAddAction
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}

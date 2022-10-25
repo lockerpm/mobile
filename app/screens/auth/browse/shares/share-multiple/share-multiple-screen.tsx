@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { ShareMultipleHeader } from "./items-header"
@@ -26,6 +26,22 @@ export const ShareMultipleScreen = observer(() => {
   const [allItems, setAllItems] = useState([])
 
   // -------------- EFFECT ------------------
+
+  useEffect(() => {
+    // set Most relevant by defalt when users search
+    if (searchText) {
+      if (searchText.trim().length === 1) {
+        setSortList(null)
+        setSortOption("most_relevant")
+      }
+    } else {
+      setSortList({
+        orderField: 'revisionDate',
+        order: 'desc'
+      })
+      setSortOption("last_updated")
+    }
+  }, [searchText]);
 
   // -------------- RENDER ------------------
 
@@ -76,7 +92,7 @@ export const ShareMultipleScreen = observer(() => {
         searchText={searchText}
         sortList={sortList}
         isSelecting={true}
-        setIsSelecting={() => {}}
+        setIsSelecting={() => { }}
         selectedItems={selectedItems}
         setSelectedItems={setSelectedItems}
         setAllItems={setAllItems}
