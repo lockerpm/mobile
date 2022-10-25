@@ -6,16 +6,18 @@ import { View } from "react-native"
 import { useStores } from "../../../../../models"
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../../../../../services/mixins"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 interface Props {
   isOpen: boolean,
   onClose: () => void,
   navigation: any,
   defaultFolder?: string
+  collection?: CollectionView
 }
 
 export const AddAction = observer((props: Props) => {
-  const { isOpen, onClose, navigation, defaultFolder } = props
+  const { isOpen, onClose, navigation, defaultFolder, collection } = props
   const { color } = useMixins()
   const { cipherStore } = useStores()
 
@@ -45,7 +47,8 @@ export const AddAction = observer((props: Props) => {
                   }
                   onClose()
                   navigation.navigate(`${item.routeName}__edit`, {
-                    mode: 'add'
+                    mode: 'add',
+                    collection: collection
                   })
                 }}
               >

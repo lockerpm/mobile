@@ -16,6 +16,8 @@ import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { DriverLicenseData, toDriverLicenseData } from "../driver-license.type"
 import countries from '../../../../../common/countries.json'
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
 
 type DriverLicenseEditScreenProp = RouteProp<PrimaryParamList, 'driverLicenses__edit'>;
 
@@ -39,11 +41,14 @@ export const DriverLicenseEditScreen = observer(() => {
 
   const { cipherStore, uiStore } = useStores()
   const { translate, color } = useMixins()
+  const { shareFolderAddItem } = useFolderMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
-  const driverLicenseData = toDriverLicenseData(selectedCipher.notes)
+  const selectedCollection: CollectionView = route.params.collection
 
+
+  const driverLicenseData = toDriverLicenseData(selectedCipher.notes)
   // ------------------ PARAMS -----------------------
 
   // Forms
@@ -76,7 +81,8 @@ export const DriverLicenseEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -136,11 +142,15 @@ export const DriverLicenseEditScreen = observer(() => {
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
-
-    setIsLoading(false)
     if (res.kind === 'ok') {
+
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
       navigation.goBack()
     }
+    setIsLoading(false)
+
   }
 
   // ----------------- RENDER ----------------------

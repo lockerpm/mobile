@@ -95,6 +95,7 @@ import InAppReview from 'react-native-in-app-review'
 import Intercom from '@intercom/intercom-react-native'
 import { AppNotification } from '../services/api'
 import { RelayAddress, SubdomainData, TrustedContact } from '../config/types/api'
+import { CollectionView } from '../../core/models/view/collectionView'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -142,50 +143,62 @@ export type PrimaryParamList = {
   passwords__edit: {
     mode: 'add' | 'edit' | 'clone'
     initialUrl?: string
+    collection?: CollectionView
   }
   notes__info: undefined
   notes__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   cards__info: undefined
   cards__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   identities__info: undefined
   identities__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   driverLicenses__info: undefined
   driverLicenses__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   citizenIDs__info: undefined
   citizenIDs__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   passports__info: undefined
   passports__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   socialSecurityNumbers__info: undefined
   socialSecurityNumbers__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   wirelessRouters__info: undefined
   wirelessRouters__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   servers__info: undefined
   servers__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   apiCiphers__info: undefined
   apiCiphers__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   databases__info: undefined
   databases__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   folders__select: {
     mode: 'add' | 'move'
@@ -228,6 +241,7 @@ export type PrimaryParamList = {
   cryptoWallets__info: undefined
   cryptoWallets__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   welcome_premium: undefined
 

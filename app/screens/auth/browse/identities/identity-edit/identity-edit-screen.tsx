@@ -14,6 +14,8 @@ import { CipherView, IdentityView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 
 type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'identities__edit'>;
@@ -31,11 +33,12 @@ export const IdentityEditScreen = observer(() => {
   const route = useRoute<IdentityEditScreenProp>()
   const { mode } = route.params
   const { translate, color } = useMixins()
+  const { shareFolderAddItem } = useFolderMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-
+  const selectedCollection: CollectionView = route.params.collection
   // ------------------ PARAMS -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
@@ -73,7 +76,8 @@ export const IdentityEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -91,7 +95,7 @@ export const IdentityEditScreen = observer(() => {
       payload = newCipher(CipherType.Identity)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
     const data = new IdentityView()
@@ -127,10 +131,14 @@ export const IdentityEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    setIsLoading(false)
     if (res.kind === 'ok') {
+
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
       navigation.goBack()
     }
+    setIsLoading(false)
   }
 
   // ----------------- RENDER ----------------------
@@ -268,7 +276,7 @@ export const IdentityEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10

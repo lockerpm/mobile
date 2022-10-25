@@ -142,7 +142,7 @@ export const BrowseListScreen = observer(() => {
                 item.svgIcon ? (
                   <item.svgIcon height={40} width={40} />
                 ) : (
-                  <Image source={item.icon} style={{ height: 40, width: 40 }} />
+                  <Image source={item?.icon} style={{ height: 40, width: 40 }} />
                 )
               }
               <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flex: 1, paddingHorizontal: 10 }]}>

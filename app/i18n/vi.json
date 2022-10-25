@@ -239,7 +239,7 @@
     },
     "desc_premium": {
       "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
-      "two": "Bạn có thể trả lời người gửi thông quan email ẩn danh",
+      "two": "Bạn có thể trả lời người gửi thông qua email ẩn danh",
       "three": "Bạn có thể sửa đổi một email ẩn danh và tên miền phụ theo ý bạn"
     },
     "copy": "Sao chép email",

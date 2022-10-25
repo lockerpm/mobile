@@ -15,6 +15,8 @@ import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { DatabaseData, toDatabaseData } from "../database.typs"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 
 type DatabaseEditScreenProp = RouteProp<PrimaryParamList, 'databases__edit'>;
@@ -35,9 +37,11 @@ export const DatabaseEditScreen = observer(() => {
 
   const { cipherStore } = useStores()
   const { translate, color } = useMixins()
+  const { shareFolderAddItem } = useFolderMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
+  const selectedCollection: CollectionView = route.params.collection
   const databaseData = toDatabaseData(selectedCipher.notes)
   // ------------------ PARAMS -----------------------
 
@@ -66,7 +70,8 @@ export const DatabaseEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -114,10 +119,13 @@ export const DatabaseEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    setIsLoading(false)
     if (res.kind === 'ok') {
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
       navigation.goBack()
     }
+    setIsLoading(false)
   }
 
   // ----------------- RENDER ----------------------

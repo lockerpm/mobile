@@ -24,6 +24,8 @@ import { CipherType } from '../../../../../../core/enums'
 import { CipherView, FieldView, LoginUriView, LoginView } from '../../../../../../core/models/view'
 import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
 import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
+import { CollectionView } from '../../../../../../core/models/view/collectionView'
+import { useFolderMixins } from '../../../../../services/mixins/folder'
 
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>
 
@@ -32,11 +34,14 @@ export const PasswordEditScreen = observer(() => {
   const route = useRoute<PasswordEditScreenProp>()
   const { mode, initialUrl } = route.params
   const { translate, color } = useMixins()
+  
+  const { shareFolderAddItem } = useFolderMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { getPasswordStrength, newCipher, checkPasswordPolicy } = useCipherHelpersMixins()
   const { cipherStore, uiStore, user } = useStores()
 
   // ----------------- COMPUTED ------------------
+  const selectedCollection: CollectionView = route.params.collection
 
   const selectedCipher: CipherView = cipherStore.cipherView
   const onSaveFillService = uiStore.isOnSaveLogin
@@ -113,7 +118,8 @@ export const PasswordEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -190,10 +196,15 @@ export const PasswordEditScreen = observer(() => {
     } else {
       res = await updateCipher(payload.id, payload, passwordStrength, collectionIds)
     }
-    setIsLoading(false)
     if (res.kind === 'ok') {
+
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+
+      setIsLoading(false)
       handleBack()
     }
+    setIsLoading(false)
   }
 
   // ----------------- RENDER ------------------
@@ -275,7 +286,7 @@ export const PasswordEditScreen = observer(() => {
         <View style={{ flex: 1 }}>
           <FloatingInput
             label={translate('password.username')}
-            value={username} 
+            value={username}
             onChangeText={setUsername}
           />
         </View>

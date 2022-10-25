@@ -17,6 +17,8 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { CitizenIdData, toCitizenIdData } from "../citizen-id.type"
 import { GEN } from "../../../../../config/constants"
 import countries from '../../../../../common/countries.json'
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
 
 type CitizenIDEditScreenProp = RouteProp<PrimaryParamList, 'citizenIDs__edit'>;
 
@@ -42,11 +44,14 @@ export const CitizenIDEditScreen = observer(() => {
 
   const { cipherStore, uiStore } = useStores()
   const { translate, color } = useMixins()
+  const { shareFolderAddItem } = useFolderMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { newCipher } = useCipherHelpersMixins()
   const selectedCipher: CipherView = cipherStore.cipherView
   const citizenIdData = toCitizenIdData(selectedCipher.notes)
+
   // ------------------ PARAMS -----------------------
+  const selectedCollection: CollectionView = route.params.collection
 
   // Forms
   const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
@@ -79,13 +84,14 @@ export const CitizenIDEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
       if (uiStore.selectedCountry) {
         const item = countries[uiStore.selectedCountry]
-        
+
         if (item) {
           setNationality(uiStore.selectedCountry.toLowerCase())
         }
@@ -141,10 +147,13 @@ export const CitizenIDEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    setIsLoading(false)
     if (res.kind === 'ok') {
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
       navigation.goBack()
     }
+    setIsLoading(false)
   }
 
   const GENDER = [

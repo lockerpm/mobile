@@ -16,6 +16,8 @@ import { CipherType } from "../../../../../../core/enums"
 import { CARD_BRANDS } from "../constants"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 
 type CardEditScreenProp = RouteProp<PrimaryParamList, 'cards__edit'>;
@@ -39,11 +41,13 @@ export const CardEditScreen = observer(() => {
   const route = useRoute<CardEditScreenProp>()
   const { mode } = route.params
   const { translate, color } = useMixins()
+
+  const { shareFolderAddItem } = useFolderMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-
+  const selectedCollection: CollectionView = route.params.collection
   // Params
 
   const [isLoading, setIsLoading] = useState(false)
@@ -70,7 +74,8 @@ export const CardEditScreen = observer(() => {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
-          setFolder(cipherStore.selectedFolder)
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
         }
         cipherStore.setSelectedFolder(null)
       }
@@ -88,7 +93,7 @@ export const CardEditScreen = observer(() => {
       payload = newCipher(CipherType.Card)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
     const data = new CardView()
@@ -116,10 +121,14 @@ export const CardEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    setIsLoading(false)
     if (res.kind === 'ok') {
+
+      // create item in shared folder
+      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
+      setIsLoading(false)
       navigation.goBack()
     }
+    setIsLoading(false)
   }
 
   // Render
@@ -192,7 +201,7 @@ export const CardEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
@@ -268,7 +277,7 @@ export const CardEditScreen = observer(() => {
                   />
                 )
               }
-              
+
             </View>
           ))
         }
