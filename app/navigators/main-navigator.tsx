@@ -134,7 +134,9 @@ export type PrimaryParamList = {
   authenticator__edit: {
     mode: 'add' | 'edit'
   }
-  qrScanner: undefined
+  qrScanner: {
+    totpCount?: number
+  }
   dataBreachScanner: undefined
   dataBreachList: undefined
   dataBreachDetail: undefined
@@ -617,7 +619,7 @@ export const MainNavigator = observer(() => {
             gestureEnabled: false,
           }}
         />
-        
+
         <Stack.Screen name="privateRelay" component={PrivateRelay} />
         <Stack.Screen name="manageSubdomain" component={ManageSubdomainScreen} />
         <Stack.Screen name="aliasStatistic" component={AliasStatisticScreen} />

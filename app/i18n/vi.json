@@ -723,7 +723,8 @@
       "desc": "Thêm một lớp bảo mật bổ sung mỗi khi đăng nhập",
       "btn": "Bắt đầu"
     },
-    "secret_key": "Mã khoá"
+    "secret_key": "Mã khoá",
+    "limited_import": "Bạn đã nhập {{imported}}/{{total}} mã TOTP{{s}}, nâng cấp lên Premium để lưu trữ không giới hạn"
   },
   "pass_health": {
     "title": "Mức độ bảo mật của mật khẩu",

@@ -88,9 +88,9 @@ const defaultData = {
   },
   importCiphers: async (payload: {
     importResult: any
-    setImportedCount: Function
-    setTotalCount: Function
-    setIsLimited: Function
+    setImportedCount: (val: number) => void
+    setTotalCount: (val: number) => void
+    setIsLimited: (val: boolean) => void
     isFreeAccount: boolean
   }) => {
     return { kind: 'unknown' }
@@ -914,9 +914,9 @@ export const CipherDataMixinsProvider = observer(
 
     const _offlineImportCiphers = async (payload: {
       importResult: ImportResult
-      setImportedCount: Function
-      setTotalCount: Function
-      setIsLimited: Function
+      setImportedCount: (val: number) => void
+      setTotalCount: (val: number) => void
+      setIsLimited: (val: boolean) => void
       isFreeAccount: boolean
       isCaching?: boolean
       cipherRequests?: (CipherRequest & { id?: string })[]

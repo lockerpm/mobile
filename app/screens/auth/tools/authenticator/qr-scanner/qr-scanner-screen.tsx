@@ -9,15 +9,27 @@ import { parseOTPUri, getTOTP, beautifyName, decodeGoogleAuthenticatorImport } f
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers";
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data";
 import { Logger } from "../../../../../utils/logger";
+import { useStores } from "../../../../../models";
+import { PlanType } from "../../../../../config/types";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { PrimaryParamList } from "../../../../../navigators";
 
+
+type QRScannerScreenProp = RouteProp<PrimaryParamList, 'qrScanner'>;
 
 export const QRScannerScreen = function QRScannerScreen() {
   const navigation = useNavigation()
+  const { user } = useStores()
+  const route = useRoute<QRScannerScreenProp>()
   const { translate, notify, color } = useMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, importCiphers } = useCipherDataMixins()
-  
+
   const [isLoading, setIsLoading] = useState(false)
+
+  // --------------------------COMPUTED-------------------------
+  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
+  const totpCount = route.params.totpCount || 0
 
   const onSuccess = async (e) => {
     if (e.data.startsWith('otpauth-migration://')) {
@@ -50,17 +62,22 @@ export const QRScannerScreen = function QRScannerScreen() {
   const handleGoogleAuthenticatorImport = async (uri: string) => {
     try {
       setIsLoading(true)
+      console.log(uri)
       const otps = decodeGoogleAuthenticatorImport(uri)
+
+      console.log(otps)
       const ciphers = otps.map((otp) => {
         const payload = newCipher(CipherType.TOTP)
         payload.name = beautifyName(otp.account)
         payload.notes = `otpauth://totp/${encodeURIComponent(otp.account)}`
-          + `?secret=${otp.secret}` 
+          + `?secret=${otp.secret}`
           + `&issuer=${encodeURIComponent(otp.account)}`
           + `&algorithm=${otp.algorithm.toLowerCase().split('-').join('')}`
           + `&digits=${otp.digits}&period=${otp.period}`
         return payload
       })
+
+      console.log(ciphers)
 
       if (!ciphers.length) {
         notify('error', translate('authenticator.invalid_qr'))
@@ -68,10 +85,19 @@ export const QRScannerScreen = function QRScannerScreen() {
       }
 
       await importCiphers({
-        ciphers,
-        folders: [],
-        folderRelationships: []
+        importResult: { ciphers },
+        setImportedCount: () => null,
+        setTotalCount: () => null,
+        setIsLimited: () => null,
+        isFreeAccount
       } as any)
+      if (isFreeAccount && ciphers.length > totpCount) {
+        notify('error', translate('authenticator.limited_import', {
+          imported: ciphers.length - totpCount,
+          total: ciphers.length,
+          s: (ciphers.length - totpCount ) > 1 ? 's' : ''
+        }))
+      }
     } catch (e) {
       Logger.error('Import google qr: ' + e)
       notify('error', translate('authenticator.invalid_qr'))
