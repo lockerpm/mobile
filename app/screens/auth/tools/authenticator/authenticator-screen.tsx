@@ -99,6 +99,7 @@ export const AuthenticatorScreen = observer(() => {
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
+        allItemsLength={allItems?.length || 0}
       />
       {/* Actions end */}
 

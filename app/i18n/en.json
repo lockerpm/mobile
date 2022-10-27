@@ -723,7 +723,8 @@
       "desc": "Add an additional layer of security when signing in",
       "btn": "Get Started"
     },
-    "secret_key": "Secret key"
+    "secret_key": "Secret key",
+    "limited_import": "You have imported {{imported}}/{{total}} item{{s}}, please upgrade to Premium for unlimited storage"
   },
   "pass_health": {
     "title": "Password Health",
