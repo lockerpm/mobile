@@ -199,8 +199,8 @@ export const handleIviteResponseEA = async (data: string, response: boolean) => 
 
   const user = eaData.grantee_name
 
-  const acceptText = isVn ? `${user} đã chấp nhận trở thành Liên hệ khẩn cấp của bạn` : `${user} has been accepted your emergency access invitation`
-  const rejectText = isVn ? `${user} đã từ chối trở thành Liên hệ khẩn cấp của bạn` : `${user} has been rejected your emergency access invitation`
+  const acceptText = isVn ? `${user} đã chấp nhận trở thành Liên hệ khẩn cấp của bạn` : `${user} has accepted your emergency access invitation`
+  const rejectText = isVn ? `${user} đã từ chối trở thành Liên hệ khẩn cấp của bạn` : `${user} has rejected your emergency access invitation`
 
   PushNotifier._notify({
     id: `emergency_access_notification`,
