@@ -355,6 +355,7 @@ export type RegisterData = {
   phone?: string
   keep_me_updated?: boolean
   request_code: string
+  scope: string
   utm_source?: string
 }
 
@@ -362,6 +363,7 @@ export type SocialLoginData = {
   provider: string
   access_token?: string
   code?: string
+  scope?: string,
   utm_source?: string
 }
 

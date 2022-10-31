@@ -110,6 +110,7 @@ export const SignupScreen = observer(() => {
       full_name: fullname,
       phone: phone ? phonePrefix + ' ' + phone : undefined,
       request_code: captchaToken,
+      scope: 'pwdmanager',
       utm_source: await getCookies('utm_source')
     })
     setIsLoading(false)
