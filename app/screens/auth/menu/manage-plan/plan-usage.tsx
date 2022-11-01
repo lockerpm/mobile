@@ -44,6 +44,7 @@ const ItemStorage = (props: PlanStorageProps) => {
         }
         counting()
     }, [])
+
     return (
         <View style={[{ width: '100%', marginVertical: 4 }, style]}>
             <View style={{
@@ -131,7 +132,7 @@ export const PlanUsage = () => {
                             borderRadius: 3
                         }}>
                             <Text
-                                text= {user.plan?.name.toUpperCase()}
+                                text= {user.pwd_user_type === "enterprise" ? translate('common.enterprise') : user.plan?.name.toUpperCase()}
                                 style={{
                                     fontWeight: 'bold',
                                     color: color.background,
