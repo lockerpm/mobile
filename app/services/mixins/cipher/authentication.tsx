@@ -529,6 +529,18 @@ export const CipherAuthenticationMixinsProvider = observer(
             }
           }
         }
+
+        // emergencyAccess
+        if (path.startsWith('/settings/security')) {
+          uiStore.setIsDeeplinkEmergencyAccess(true)
+          return false
+        }
+
+        // emergencyAccess
+        if (path.startsWith('/shares')) {
+          uiStore.setIsDeeplinkShares(true)
+          return false
+        }
       }
       return false
     }
