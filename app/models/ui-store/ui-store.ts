@@ -16,6 +16,8 @@ export const UiStoreModel = types
     inAppNotiUnreadCount: types.maybeNull(types.number),
 
     // Cache
+    isDeeplinkShares: types.maybeNull(types.boolean),
+    isDeeplinkEmergencyAccess: types.maybeNull(types.boolean),
     isFromAutoFillItem: types.maybeNull(types.boolean),
     isOnSaveLogin: types.maybeNull(types.boolean),
     isFromAutoFill: types.maybeNull(types.boolean),
@@ -76,6 +78,14 @@ export const UiStoreModel = types
       self.isFromAutoFill = val
     },
 
+    setIsDeeplinkEmergencyAccess(val: boolean) {
+      self.isDeeplinkEmergencyAccess = val
+    },
+
+    setIsDeeplinkShares(val: boolean) {
+      self.isDeeplinkShares = val
+    },
+
     setIsOnSaveLogin(val: boolean) {
       self.isOnSaveLogin = val
     },
@@ -121,7 +131,9 @@ export const UiStoreModel = types
     'deepLinkUrl',
     'saveLogin',
     'saveLastId',
-    'hasNoMasterPwItem'
+    'hasNoMasterPwItem',
+    'isDeeplinkShares',
+    'isDeeplinkEmergencyAccess'
   ]))
 
 /**

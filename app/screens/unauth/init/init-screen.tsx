@@ -173,6 +173,7 @@ export const InitScreen = observer(() => {
     const link = await dynamicLinks().getInitialLink()
     if (link) {
       Logger.debug(`DYNAMIC LINK INIT: ${JSON.stringify(link)}`)
+      console.log("-----------------------------------------------------------")
       if (link.url) {
         const isNavigated = await handleDynamicLink(link.url, navigation)
         if (isNavigated) {

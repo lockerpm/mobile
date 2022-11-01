@@ -93,7 +93,15 @@ export const StartScreen = observer(() => {
 
 
     // Done -> navigate
-    if (uiStore.isFromAutoFill) {
+    if (uiStore.isDeeplinkEmergencyAccess) {
+      uiStore.setIsDeeplinkEmergencyAccess(false)
+      navigation?.navigate('mainTab', {screen: 'menuTab'})
+      navigation.navigate('emergencyAccess')
+    } else if (uiStore.isDeeplinkShares) {
+      uiStore.setIsDeeplinkShares(false)
+      navigation?.navigate('mainTab', {screen: 'browseTab'})
+      navigation?.navigate('mainTab', {screen: 'browseTab', params: {screen: 'shares'}})
+    } else if (uiStore.isFromAutoFill) {
       uiStore.setIsFromAutoFill(false)
       navigation.navigate("autofill")
     } else if (uiStore.isFromAutoFillItem) {
