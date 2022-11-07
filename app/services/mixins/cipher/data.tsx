@@ -430,7 +430,7 @@ export const CipherDataMixinsProvider = observer(
 
         notSynchedCiphers.forEach((enc: Cipher) => {
           const cipherReq = new CipherRequest(enc)
-          if (!enc.id.startsWith(TEMP_PREFIX)) {
+          if (!enc.id?.startsWith(TEMP_PREFIX)) {
             // @ts-ignore
             cipherReq.id = enc.id
           }
@@ -462,7 +462,7 @@ export const CipherDataMixinsProvider = observer(
 
       // Prepare relationship
       folders.forEach((f, fIndex) => {
-        if (f.id.startsWith(TEMP_PREFIX)) {
+        if (f.id?.startsWith(TEMP_PREFIX)) {
           ciphers.forEach((c, cIndex) => {
             if (c.folderId === f.id) {
               c.folderId = null

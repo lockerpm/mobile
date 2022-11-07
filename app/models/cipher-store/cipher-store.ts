@@ -45,6 +45,7 @@ export const CipherStoreModel = types
     generatedPassword: types.maybeNull(types.string),
     selectedCipher: types.maybeNull(types.frozen()),
     selectedFolder: types.maybeNull(types.string),
+    selectedCollection: types.maybeNull(types.string),
   })
   .extend(withEnvironment)
   .views((self) => ({
@@ -69,6 +70,10 @@ export const CipherStoreModel = types
 
     setSelectedFolder: (folderId: string) => {
       self.selectedFolder = folderId
+    },
+
+    setSelectedCollection: (collectionId: string) => {
+      self.selectedCollection = collectionId
     },
 
     setIsSynching: (val: boolean) => {
@@ -134,6 +139,7 @@ export const CipherStoreModel = types
       self.generatedPassword = null
       self.selectedCipher = null
       self.selectedFolder = null
+      self.selectedCollection = null
       self.notSynchedCiphers = cast([])
       self.notUpdatedCiphers = cast([])
       self.isSynching = false
@@ -150,6 +156,7 @@ export const CipherStoreModel = types
       self.generatedPassword = null
       self.selectedCipher = null
       self.selectedFolder = null
+      self.selectedCollection = null
     },
 
     setSharingInvitations: (data: SharingInvitationType[]) => {
@@ -361,6 +368,7 @@ export const CipherStoreModel = types
       'generatedPassword',
       'selectedCipher',
       'selectedFolder',
+      'selectedCollection',
       'isSynching',
       'isSynchingOffline',
       'isSynchingAutofill',

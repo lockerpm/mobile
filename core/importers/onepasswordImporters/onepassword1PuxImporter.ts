@@ -379,7 +379,7 @@ export class OnePassword1PuxImporter extends BaseImporter implements Importer {
     if (
       this.isNullOrWhitespace(cipher.login.totp) &&
       field.id != null &&
-      field.id.startsWith("TOTP_")
+      field.id?.startsWith("TOTP_")
     ) {
       cipher.login.totp = fieldValue;
       return true;

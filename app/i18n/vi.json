@@ -647,7 +647,7 @@
     "delete_item": "Xóa",
     "delete_desc": "Mục này sẽ bị mất và bạn sẽ không thể khôi phục được nữa.",
     "to_trash": "Đưa vào thùng rác",
-    "to_trash_desc": "Mục này sẽ được chuyển vào thùng rác nơi bạn có thể khôi phục hoặc xóa vĩnh viễn.",
+    "to_trash_desc": "Mục này sẽ được chuyển vào thùng rác và sẽ tự động xoá trong 30 ngày.",
     "perma_delete": "Xóa vĩnh viễn",
     "perma_delete_desc": "Bạn có chắc chắn muốn xóa vĩnh viễn mục này không?",
     "empty": {
