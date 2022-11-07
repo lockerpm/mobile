@@ -647,7 +647,7 @@
     "delete_item": "Delete Item",
     "delete_desc": "This item will be lost and you will no longer be able to restore it.",
     "to_trash": "Move to Trash",
-    "to_trash_desc": "This item will be moved to trash where you can restore or permanently delete it.",
+    "to_trash_desc": "This item will be moved to trash. Trash items will be permanently deleted after 30 days.",
     "perma_delete": "Permanently Delete",
     "perma_delete_desc": "Are you sure you want to permanently delete this item?",
     "empty": {

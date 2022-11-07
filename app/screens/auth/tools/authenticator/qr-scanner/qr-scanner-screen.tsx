@@ -62,10 +62,8 @@ export const QRScannerScreen = function QRScannerScreen() {
   const handleGoogleAuthenticatorImport = async (uri: string) => {
     try {
       setIsLoading(true)
-      console.log(uri)
       const otps = decodeGoogleAuthenticatorImport(uri)
 
-      console.log(otps)
       const ciphers = otps.map((otp) => {
         const payload = newCipher(CipherType.TOTP)
         payload.name = beautifyName(otp.account)
@@ -76,8 +74,6 @@ export const QRScannerScreen = function QRScannerScreen() {
           + `&digits=${otp.digits}&period=${otp.period}`
         return payload
       })
-
-      console.log(ciphers)
 
       if (!ciphers.length) {
         notify('error', translate('authenticator.invalid_qr'))

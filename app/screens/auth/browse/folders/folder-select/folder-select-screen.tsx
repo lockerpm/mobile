@@ -72,6 +72,8 @@ export const FolderSelectScreen = observer(() => {
         notify('success', translate('folder.item_moved'))
       } 
       setIsLoading(false)
+    } else {
+      cipherStore.setSelectedCollection(selectedFolder)
     }
     navigation.goBack()
   }

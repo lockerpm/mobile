@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { BackHandler, View } from 'react-native'
+import find from 'lodash/find'
 import {
   AutoImage as Image,
   Text,
@@ -34,11 +35,11 @@ export const PasswordEditScreen = observer(() => {
   const route = useRoute<PasswordEditScreenProp>()
   const { mode, initialUrl } = route.params
   const { translate, color } = useMixins()
-  
-  const { shareFolderAddItem } = useFolderMixins()
+
+  const { shareFolderAddItem, shareFolderRemoveItem } = useFolderMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { getPasswordStrength, newCipher, checkPasswordPolicy } = useCipherHelpersMixins()
-  const { cipherStore, uiStore, user } = useStores()
+  const { cipherStore, uiStore, user, collectionStore } = useStores()
 
   // ----------------- COMPUTED ------------------
   const selectedCollection: CollectionView = route.params.collection
@@ -72,12 +73,12 @@ export const PasswordEditScreen = observer(() => {
   const [url, setUrl] = useState('')
   const [note, setNote] = useState('')
   const [folder, setFolder] = useState(null)
+  const [collection, setCollection] = useState(null)
   const [organizationId, setOrganizationId] = useState(null)
   const [collectionIds, setCollectionIds] = useState([])
   const [fields, setFields] = useState<FieldView[]>([])
 
   // ----------------- EFFECTS ------------------
-
   // Set initial data
   useEffect(() => {
     if (mode !== 'add') {
@@ -87,6 +88,7 @@ export const PasswordEditScreen = observer(() => {
       setUrl(selectedCipher.login.uri)
       setNote(selectedCipher.notes)
       setFolder(selectedCipher.folderId)
+      setCollection(selectedCipher.collectionIds.length > 0 ? selectedCipher.collectionIds[0] : null)
       setOrganizationId(mode === 'clone' ? null : selectedCipher.organizationId)
       setCollectionIds(selectedCipher.collectionIds)
       setFields(selectedCipher.fields || [])
@@ -117,11 +119,22 @@ export const PasswordEditScreen = observer(() => {
       if (cipherStore.selectedFolder) {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
-        } else {
+        }
+        else {
           if (!selectedCollection)
             setFolder(cipherStore.selectedFolder)
         }
+        setCollection(null)
+        setCollectionIds([])
+        setOrganizationId(null)
         cipherStore.setSelectedFolder(null)
+      }
+
+      if (cipherStore.selectedCollection) {
+        if (!selectedCollection)
+          setCollection(cipherStore.selectedCollection)
+        setFolder(null)
+        cipherStore.setSelectedCollection(null)
       }
     })
 
@@ -191,16 +204,21 @@ export const PasswordEditScreen = observer(() => {
   const handleSave = async (payload: CipherView, passwordStrength: number) => {
     setIsLoading(true)
     let res = { kind: 'unknown' }
+
     if (['add', 'clone'].includes(mode)) {
       res = await createCipher(payload, passwordStrength, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, passwordStrength, collectionIds)
     }
     if (res.kind === 'ok') {
+      if (selectedCollection) {
+        await shareFolderAddItem(selectedCollection, payload)
+      }
 
-      // create item in shared folder
-      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
-
+      if (collection) {
+        const collectionView = find(collectionStore.collections, e => e.id === collection) || {}
+        await shareFolderAddItem(collectionView, payload)
+      }
       setIsLoading(false)
       handleBack()
     }
@@ -369,6 +387,7 @@ export const PasswordEditScreen = observer(() => {
         note={note}
         onChangeNote={setNote}
         folderId={folder}
+        collectionId={collection}
         organizationId={organizationId}
         setOrganizationId={setOrganizationId}
         collectionIds={collectionIds}

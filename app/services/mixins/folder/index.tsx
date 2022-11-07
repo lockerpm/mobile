@@ -275,11 +275,11 @@ export const FolderMixinsProvider = observer((props: { children: boolean | React
                 }
             }
 
-            const res = await collectionStore.updateShareItem(collection.id, collection.organizationId, payload)
+            const res = await collectionStore.removeShareItem(collection.id, collection.organizationId, payload)
 
             if (res.kind === 'ok') {
                 await reloadCache()
-                notify('success', "Remove Item success")
+                notify('success', "Remove shared item  success")
             } else {
                 notifyApiError(res)
             }

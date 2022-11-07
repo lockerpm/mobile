@@ -131,6 +131,12 @@ export const CollectionStoreModel = types
       return res
     },
 
+    removeShareItem: async (id: string, teamId: string, payload: {cipher:  CipherRequest & { id: string }}) => {
+      const collectionApi = new CollectionApi(self.environment.api)
+      const res = await collectionApi.removeShareItem(self.apiToken, id, teamId, payload)
+      return res
+    },
+
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .postProcessSnapshot(omit(['collections']))
 
