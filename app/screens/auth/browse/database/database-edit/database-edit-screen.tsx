@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
+import find from 'lodash/find'
 import {
   Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit
 } from "../../../../../components"
@@ -35,7 +36,7 @@ export const DatabaseEditScreen = observer(() => {
   const route = useRoute<DatabaseEditScreenProp>()
   const { mode } = route.params
 
-  const { cipherStore } = useStores()
+  const { cipherStore, collectionStore } = useStores()
   const { translate, color } = useMixins()
   const { shareFolderAddItem } = useFolderMixins()
   const { newCipher } = useCipherHelpersMixins()
@@ -58,6 +59,7 @@ export const DatabaseEditScreen = observer(() => {
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
+  const [collection, setCollection] = useState(mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null)
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
 
   const [isLoading, setIsLoading] = useState(false)
@@ -69,11 +71,22 @@ export const DatabaseEditScreen = observer(() => {
       if (cipherStore.selectedFolder) {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
-        } else {
+        }
+        else {
           if (!selectedCollection)
             setFolder(cipherStore.selectedFolder)
         }
+        setCollection(null)
+        setCollectionIds([])
+        setOrganizationId(null)
         cipherStore.setSelectedFolder(null)
+      }
+
+      if (cipherStore.selectedCollection) {
+        if (!selectedCollection)
+          setCollection(cipherStore.selectedCollection)
+        setFolder(null)
+        cipherStore.setSelectedCollection(null)
       }
     });
 
@@ -120,9 +133,16 @@ export const DatabaseEditScreen = observer(() => {
     }
 
     if (res.kind === 'ok') {
-      // create item in shared folder
-      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
-      setIsLoading(false)
+
+      // for shared folder
+      if (selectedCollection) {
+        await shareFolderAddItem(selectedCollection, payload)
+      }
+
+      if (collection) {
+        const collectionView = find(collectionStore.collections, e => e.id === collection) || {}
+        await shareFolderAddItem(collectionView, payload)
+      }
       navigation.goBack()
     }
     setIsLoading(false)
@@ -256,6 +276,7 @@ export const DatabaseEditScreen = observer(() => {
         note={note}
         onChangeNote={setNote}
         folderId={folder}
+        collectionId={collection}
         organizationId={organizationId}
         setOrganizationId={setOrganizationId}
         collectionIds={collectionIds}

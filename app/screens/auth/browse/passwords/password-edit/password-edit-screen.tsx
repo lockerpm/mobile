@@ -36,7 +36,7 @@ export const PasswordEditScreen = observer(() => {
   const { mode, initialUrl } = route.params
   const { translate, color } = useMixins()
 
-  const { shareFolderAddItem, shareFolderRemoveItem } = useFolderMixins()
+  const { shareFolderAddItem } = useFolderMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { getPasswordStrength, newCipher, checkPasswordPolicy } = useCipherHelpersMixins()
   const { cipherStore, uiStore, user, collectionStore } = useStores()
@@ -211,6 +211,8 @@ export const PasswordEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, passwordStrength, collectionIds)
     }
     if (res.kind === 'ok') {
+
+      // for shared folder
       if (selectedCollection) {
         await shareFolderAddItem(selectedCollection, payload)
       }

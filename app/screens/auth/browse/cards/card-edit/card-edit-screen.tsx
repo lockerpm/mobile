@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
+import find from 'lodash/find'
 import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select, CustomFieldsEdit
 } from "../../../../../components"
@@ -45,7 +46,7 @@ export const CardEditScreen = observer(() => {
   const { shareFolderAddItem } = useFolderMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { newCipher } = useCipherHelpersMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, collectionStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
   const selectedCollection: CollectionView = route.params.collection
   // Params
@@ -64,6 +65,7 @@ export const CardEditScreen = observer(() => {
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
+  const [collection, setCollection] = useState(mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null)
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
 
   // Watchers
@@ -73,11 +75,22 @@ export const CardEditScreen = observer(() => {
       if (cipherStore.selectedFolder) {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
-        } else {
+        }
+        else {
           if (!selectedCollection)
             setFolder(cipherStore.selectedFolder)
         }
+        setCollection(null)
+        setCollectionIds([])
+        setOrganizationId(null)
         cipherStore.setSelectedFolder(null)
+      }
+
+      if (cipherStore.selectedCollection) {
+        if (!selectedCollection)
+          setCollection(cipherStore.selectedCollection)
+        setFolder(null)
+        cipherStore.setSelectedCollection(null)
       }
     });
 
@@ -122,10 +135,15 @@ export const CardEditScreen = observer(() => {
     }
 
     if (res.kind === 'ok') {
+      // for shared folder
+      if (selectedCollection) {
+        await shareFolderAddItem(selectedCollection, payload)
+      }
 
-      // create item in shared folder
-      !!selectedCollection && await shareFolderAddItem(selectedCollection, payload)
-      setIsLoading(false)
+      if (collection) {
+        const collectionView = find(collectionStore.collections, e => e.id === collection) || {}
+        await shareFolderAddItem(collectionView, payload)
+      }
       navigation.goBack()
     }
     setIsLoading(false)
@@ -298,6 +316,7 @@ export const CardEditScreen = observer(() => {
         note={note}
         onChangeNote={setNote}
         folderId={folder}
+        collectionId={collection}
         organizationId={organizationId}
         setOrganizationId={setOrganizationId}
         collectionIds={collectionIds}
