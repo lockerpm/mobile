@@ -47,7 +47,7 @@
     "@react-native-cookies/cookies": "^6.2.1",
     "@react-native-firebase/analytics": "^14.1.0",
     "@react-native-firebase/app": "^14.1.0",
-    "@react-native-firebase/dynamic-links": "^14.11.0",
+    "@react-native-firebase/dynamic-links": "^14.1.0",
     "@react-native-firebase/messaging": "^14.1.0",
     "@react-native-google-signin/google-signin": "^7.0.1",
     "@react-native-picker/picker": "^1.16.7",
