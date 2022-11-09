@@ -106,6 +106,7 @@
     "react-native-dropdown-picker": "^5.1.28",
     "react-native-event-listeners": "^1.0.7",
     "react-native-fbsdk-next": "7.3.3",
+    "react-native-flurry-sdk": "^8.0.0",
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-html-parser": "^0.1.0",

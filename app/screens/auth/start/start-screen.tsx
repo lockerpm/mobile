@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Loading } from "../../../components"
+import Flurry from 'react-native-flurry-sdk'
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
@@ -60,6 +61,9 @@ export const StartScreen = observer(() => {
       }
     }
 
+    // Log user id
+    Flurry.setUserId(user.pwd_user_id)
+
     // Load folders and collections
     setMsg(translate("start.decrypting"))
     Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
@@ -90,17 +94,17 @@ export const StartScreen = observer(() => {
         }
       }
     }
-    
+
 
     // Done -> navigate
     if (uiStore.isDeeplinkEmergencyAccess) {
       uiStore.setIsDeeplinkEmergencyAccess(false)
-      navigation?.navigate('mainTab', {screen: 'menuTab'})
+      navigation?.navigate('mainTab', { screen: 'menuTab' })
       navigation.navigate('emergencyAccess')
     } else if (uiStore.isDeeplinkShares) {
       uiStore.setIsDeeplinkShares(false)
-      navigation?.navigate('mainTab', {screen: 'browseTab'})
-      navigation?.navigate('mainTab', {screen: 'browseTab', params: {screen: 'shares'}})
+      navigation?.navigate('mainTab', { screen: 'browseTab' })
+      navigation?.navigate('mainTab', { screen: 'browseTab', params: { screen: 'shares' } })
     } else if (uiStore.isFromAutoFill) {
       uiStore.setIsFromAutoFill(false)
       navigation.navigate("autofill")
