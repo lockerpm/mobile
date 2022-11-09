@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import { BackHandler } from "react-native"
 import { PartialState, NavigationState, NavigationContainerRef } from "@react-navigation/native"
+import Flurry from 'react-native-flurry-sdk'
 
 export const RootNavigation = {
   navigate(name: string) {
@@ -99,8 +100,9 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
     const currentRouteName = getActiveRouteName(state)
 
     if (previousRouteName !== currentRouteName) {
-      // track screens.
-      // __DEV__ && console.tron.log(currentRouteName)
+      if (!__DEV__) {
+        Flurry.logEvent(currentRouteName, true)
+      }
     }
 
     // Save the current route name for later comparision
