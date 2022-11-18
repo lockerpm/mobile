@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@intercom/intercom-react-native": "1.1.1",
-    "@invertase/react-native-apple-authentication": "^2.1.5",
+    "@invertase/react-native-apple-authentication": "2.1.5",
     "@notifee/react-native": "^4.0.1",
     "@react-native-async-storage/async-storage": "^1.14.1",
     "@react-native-clipboard/clipboard": "^1.8.2",
