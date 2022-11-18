@@ -136,8 +136,8 @@
     "is_offline": "Locker is currently in offline mode."
   },
   "alert": {
-    "enterprise_lock": "The account is locked by the enterprise. Please contact your enterprise admin to unblock account",
-    "enterprise_system_lock": "The account is locked because the Enterprise plan is expired. Please contract your enterprise admin to unblock account",
+    "enterprise_lock": "The account is locked by the enterprise. Please contact your enterprise admin to unblock account.",
+    "enterprise_system_lock": "The account is locked because the Enterprise plan is expired. Please contact your enterprise admin to unblock account.",
     "update": {
       "title": "Update App?",
       "content": "A new version of Locker is available! Click to update Locker version {{version}}.",
