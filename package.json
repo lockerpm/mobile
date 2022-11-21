@@ -136,7 +136,7 @@
     "react-native-table-component": "^1.2.1",
     "react-native-tcp": "^4.0.0",
     "react-native-toast-message": "^2.0.2",
-    "react-native-udp": "2.1.0",
+    "react-native-udp": "4.1.5",
     "react-native-ui-lib": "^5.30.0",
     "react-native-unimodules": "0.12.0",
     "react-native-user-inactivity": "^1.2.0",

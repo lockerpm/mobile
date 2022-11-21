@@ -10,6 +10,12 @@ export enum AccountType {
   ENTERPRISE = "enterprise"
 }
 
+export enum EnterpriseGroupRoleText {
+  PRIMARY_ADMIN = 'primary_admin',
+  ADMIN = 'admin',
+  MEMBER = 'member'
+}
+
 export enum AccountRoleText {
   OWNER = 'owner',
   ADMIN = 'admin',

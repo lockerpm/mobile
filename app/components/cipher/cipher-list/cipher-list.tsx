@@ -89,7 +89,7 @@ export const CipherList = observer((props: CipherListProps) => {
   const isShared = (organizationId: string) => {
     const share = cipherStore.myShares.find(s => s.id === organizationId)
     if (share) {
-      return share.members.length > 0
+      return share.members.length > 0 || share.groups.length > 0
     }
     return !!organizationId
   }

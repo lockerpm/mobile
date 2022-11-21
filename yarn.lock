@@ -6090,7 +6090,7 @@ buffer@^4.3.0, buffer@^4.9.1:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-buffer@^5.0.0, buffer@^5.2.0:
+buffer@^5.0.0, buffer@^5.2.0, buffer@^5.6.0:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.7.1.tgz#ba62e7c13133053582197160851a8f648e99eed0"
   integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
@@ -8302,7 +8302,7 @@ events@^1.0.2:
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
   integrity sha1-nr23Y1rQmccNzEwqH1AEKI6L2SQ=
 
-events@^3.0.0:
+events@^3.0.0, events@^3.1.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
@@ -10603,7 +10603,7 @@ isobject@^4.0.0:
 isomorphic-fetch@^2.1.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
-  integrity sha1-YRrhrPFPXoH3KVB0coGf6XM1WKk=
+  integrity sha512-9c4TNAKYXM5PRyVcwUZrF3W09nQ+sO7+jydgs4ZGW9dhsLG2VOlISJABombdQqQRXCwuYG3sYV/puGf5rp0qmA==
   dependencies:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
@@ -15275,16 +15275,13 @@ react-native-toast-message@^2.0.2:
   resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.0.2.tgz#68f2396735e2f4ca9e290ca6a63d03d601a4a140"
   integrity sha512-jjHRgK4o388WTfikoJ2D/EWtnrXKOW8YvpSBMENRG/QwK9C6SUWZ2zas/lpP634IMUbS1VuKwtQqpNXoJIAHwg==
 
-react-native-udp@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-udp/-/react-native-udp-2.1.0.tgz#d6704da39df280034e6a34be46c41b9b55bbfc23"
-  integrity sha1-1nBNo53ygANOajS+RsQbm1W7/CM=
+react-native-udp@4.1.5:
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-udp/-/react-native-udp-4.1.5.tgz#bd164fa6280fd61c3b19f89e0aff2d2d058c262b"
+  integrity sha512-+4Jt0sbuq7lozbiUY6YtEE7KQIcp/xEnTsU44YaIUHE84wKP5STDBe0Vac6sKDdn/gKVV44RUBobzXnOLKcqFA==
   dependencies:
-    base64-js "0.0.8"
-    events "^1.0.2"
-    inherits "^2.0.1"
-    ip-regex "^1.0.3"
-    util "^0.10.3"
+    buffer "^5.6.0"
+    events "^3.1.0"
 
 react-native-ui-lib@^5.30.0:
   version "5.30.2"

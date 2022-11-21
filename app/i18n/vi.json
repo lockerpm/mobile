@@ -641,7 +641,8 @@
       "verify_fingerprint": "Xác minh Fingerprint",
       "verification_desc": "Để đảm bảo tính minh bạch của khóa mã hóa, vui lòng xác minh Fingerprint trước khi tiếp tục.",
       "fingerprint_desc": "'Fingerprint' là cụm từ duy nhất của mỗi tài khoản, dùng để xác minh khóa công khai với người dùng khác trong trường hợp chia sẻ và tham gia vào một tổ chức."
-    }
+    },
+    "suggestion": "Người dùng hoặc nhóm trong doanh nghiệp"
   },
   "trash": {
     "delete_item": "Xóa",

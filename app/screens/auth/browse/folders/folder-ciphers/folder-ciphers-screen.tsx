@@ -90,7 +90,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header={folder.name || translate('folder.unassigned')}
+          header={folder?.name || translate('folder.unassigned')}
           openSort={() => setIsSortOpen(true)}
           openAdd={hasAddFolderPermission || hasAddCollectionPermission ? () => setIsAddOpen(true) : undefined}
           navigation={navigation}

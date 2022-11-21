@@ -1,23 +1,22 @@
 import React, { useState } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
-import { ActionItem, Icon, Text, ActionSheet, ActionSheetContent } from '../../../../../components'
-import { useMixins } from '../../../../../services/mixins'
-import { AccountRoleText, SharingStatus } from '../../../../../config/types'
-import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
-import { CollectionView } from '../../../../../../core/models/view/collectionView'
-import { fontSize } from '../../../../../theme'
-import { SharedGroupType, SharedMemberType } from '../../../../../config/types/api'
+import { ActionItem, Icon, Text, ActionSheet, ActionSheetContent } from '../../../components'
+import { useMixins } from '../../../services/mixins'
+import { AccountRoleText, SharingStatus } from '../../../config/types'
+import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
+import { fontSize } from '../../../theme'
+import { SharedGroupType, SharedMemberType } from '../../../config/types/api'
 
 interface Props {
   reload: boolean
   setReload: (val: boolean) => void
   item?: (SharedMemberType | SharedGroupType) & { type: string }
-  collection: CollectionView
-  onRemove: (collection: CollectionView, id: string, isGroup?: boolean) => void
+  organizationId: string
+  onRemove: ( id: string, isGroup?: boolean) => void
 }
 
 export const SharedUsers = (props: Props) => {
-  const { item, collection, reload, setReload, onRemove } = props
+  const { item, organizationId, reload, setReload, onRemove } = props
 
   const { color, translate } = useMixins()
   const { editShareCipher } = useCipherDataMixins()
@@ -35,7 +34,7 @@ export const SharedUsers = (props: Props) => {
         role = AccountRoleText.ADMIN
         break
     }
-    const res = await editShareCipher(collection.organizationId, item.id, role, autofillOnly, item.type === 'group')
+    const res = await editShareCipher(organizationId, item.id, role, autofillOnly, item.type === 'group')
     if (res.kind === 'ok' || res.kind === 'unauthorized') {
       setShowSheetModal(false)
       setReload(!reload)
@@ -59,7 +58,7 @@ export const SharedUsers = (props: Props) => {
       }}
     >
       <Image
-        source={item['avatar'] ? { uri: item['avatar'] } : require('./group.png')}
+        source={item['avatar'] ? { uri: item['avatar'] } : require('./assets/group.png')}
         style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
       />
 
@@ -112,7 +111,7 @@ export const SharedUsers = (props: Props) => {
           <View style={{ paddingHorizontal: 20 }}>
             <View style={{ flexDirection: 'row', marginBottom: 16 }}>
               <Image
-                source={item['avatar'] ? { uri: item['avatar'] } : require('./group.png')}
+                source={item['avatar'] ? { uri: item['avatar'] } : require('./assets/group.png')}
                 style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
               />
 
@@ -158,7 +157,7 @@ export const SharedUsers = (props: Props) => {
 
           <ActionItem
             action={() => {
-              onRemove(collection, item.id, item.type === 'group')
+              onRemove(item.id, item.type === 'group')
               setShowSheetModal(false)
             }}
           >
@@ -168,7 +167,7 @@ export const SharedUsers = (props: Props) => {
               </View>
               <View style={{ marginLeft: 12 }}>
                 <Text
-                  text={translate('shares.share_folder.remove')}
+                  text={translate('common.remove')}
                   style={{ color: color.error }}
                 />
               </View>

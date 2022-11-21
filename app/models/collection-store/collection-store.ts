@@ -108,9 +108,9 @@ export const CollectionStoreModel = types
       return res
     },
 
-    removeShareMember: async (memberId: string, teamId: string, payload: CollectionActionData) => {
+    removeShareMember: async (memberId: string, teamId: string, payload: CollectionActionData, isGroup?: boolean) => {
       const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.removeShareMember(self.apiToken, memberId, teamId, payload)
+      const res = await collectionApi.removeShareMember(self.apiToken, memberId, teamId, payload, isGroup)
       return res
     },
 
@@ -125,13 +125,13 @@ export const CollectionStoreModel = types
       return res
     },
 
-    updateShareItem: async (id: string, teamId: string, payload: {cipher:  CipherRequest & { id: string }}) => {
+    updateShareItem: async (id: string, teamId: string, payload: { cipher: CipherRequest & { id: string } }) => {
       const collectionApi = new CollectionApi(self.environment.api)
       const res = await collectionApi.updateShareItem(self.apiToken, id, teamId, payload)
       return res
     },
 
-    removeShareItem: async (id: string, teamId: string, payload: {cipher:  CipherRequest & { id: string }}) => {
+    removeShareItem: async (id: string, teamId: string, payload: { cipher: CipherRequest & { id: string } }) => {
       const collectionApi = new CollectionApi(self.environment.api)
       const res = await collectionApi.removeShareItem(self.apiToken, id, teamId, payload)
       return res

@@ -641,7 +641,8 @@
       "verify_fingerprint": "Verify fingerprint phrase",
       "verification_desc": "To ensure the integrity of your encryption keys, please verify the user's fingerprint phrase before continuing.",
       "fingerprint_desc": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
-    }
+    },
+    "suggestion": "Users or groups in Enterprise"
   },
   "trash": {
     "delete_item": "Delete Item",
