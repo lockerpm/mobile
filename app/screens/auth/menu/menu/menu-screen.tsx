@@ -34,7 +34,7 @@ import moment from "moment"
 
 export const MenuScreen = observer(() => {
   const navigation = useNavigation()
-  const { user, uiStore, cipherStore } = useStores()
+  const { user, uiStore, enterpriseStore } = useStores()
   const { translate, notify, color, isDark, notifyApiError } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { createRandomPasswords } = useTestMixins()
@@ -173,6 +173,23 @@ export const MenuScreen = observer(() => {
       name: '(DEBUG) Open welcome premium screen',
       action: () => {
         navigation.navigate("welcome_premium")
+      }
+    },
+
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) list member',
+      action: () => {
+        enterpriseStore.getListUserGroups()
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) list group',
+      action: () => {
+        enterpriseStore.getListGroupMembers("b8f24e82-6359-479d-ba65-991a7b1cde4d")
       }
     },
     // {

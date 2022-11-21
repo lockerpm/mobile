@@ -84,6 +84,11 @@ export const UserModel = types
     isMobileLangChange: types.maybeNull(types.boolean)
   })
   .extend(withEnvironment)
+  .views((self) => ({
+    get isEnterprise() {
+      return self.pwd_user_type === "enterprise" && self.enterprise
+    },
+  })) 
   .actions((self) => ({
     // Token
     setApiToken: (token: string) => {

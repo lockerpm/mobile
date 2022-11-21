@@ -86,7 +86,7 @@ import { AppTimeoutType, TimeoutActionType, useStores } from '../models'
 import { observer } from 'mobx-react-lite'
 import { useCipherAuthenticationMixins } from '../services/mixins/cipher/authentication'
 import { useCipherDataMixins } from '../services/mixins/cipher/data'
-import { IS_IOS, WS_URL } from '../config/constants'
+import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, IS_PROD, WS_URL } from '../config/constants'
 import { Logger } from '../utils/logger'
 import { SocketEvent, SocketEventType } from '../config/types'
 import { HealthNavigator } from './tools/health-navigator'
@@ -96,6 +96,7 @@ import Intercom from '@intercom/intercom-react-native'
 import { AppNotification } from '../services/api'
 import { RelayAddress, SubdomainData, TrustedContact } from '../config/types/api'
 import { CollectionView } from '../../core/models/view/collectionView'
+import { CipherView } from '../../core/models/view'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -238,7 +239,6 @@ export type PrimaryParamList = {
   emailNotiSettings: undefined
   deviceNotiSettings: undefined
   deleteAccount: undefined
-
   shareMultiple: undefined
   cryptoWallets__info: undefined
   cryptoWallets__edit: {
@@ -425,7 +425,14 @@ export const MainNavigator = observer(() => {
 
   // Web socket
   const generateSocket = () => {
-    const ws = new WebSocket(`${WS_URL}?token=${user.apiToken}`)
+    // Note: using undocumented param (https://stackoverflow.com/questions/37246446/sending-cookies-with-react-native-websockets)
+    // @ts-ignore
+    const ws = new WebSocket(`${WS_URL}?token=${user.apiToken}`, [],  {
+      headers: {
+        'CF-Access-Client-Id': CF_ACCESS_CLIENT_ID,
+        'CF-Access-Client-Secret': CF_ACCESS_CLIENT_SECRET,
+      },
+    })
     ws.onopen = () => {
       Logger.debug('SOCKET OPEN')
     }

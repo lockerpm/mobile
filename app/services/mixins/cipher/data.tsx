@@ -103,7 +103,8 @@ const defaultData = {
     cipher: CipherView,
     emails: string[],
     role: AccountRoleText,
-    autofillOnly: boolean
+    autofillOnly: boolean,
+    groups?: { id: string, name: string }[]
   ) => {
     return { kind: 'unknown' }
   },
@@ -111,7 +112,8 @@ const defaultData = {
     ids: string[],
     emails: string[],
     role: AccountRoleText,
-    autofillOnly: boolean
+    autofillOnly: boolean,
+    groups?: { id: string, name: string }[]
   ) => {
     return { kind: 'unknown' }
   },
@@ -125,7 +127,8 @@ const defaultData = {
     organizationId: string,
     memberId: string,
     role: AccountRoleText,
-    onlyFill: boolean
+    onlyFill: boolean,
+    isGroup?: boolean
   ) => {
     return { kind: 'unknown' }
   },
@@ -177,7 +180,7 @@ export const CipherDataMixinsContext = createContext(defaultData)
 
 export const CipherDataMixinsProvider = observer(
   (props: { children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal }) => {
-    const { cipherStore, folderStore, uiStore, collectionStore, user } = useStores()
+    const { cipherStore, folderStore, uiStore, collectionStore, user, enterpriseStore } = useStores()
     const {
       userService,
       cipherService,
@@ -777,7 +780,7 @@ export const CipherDataMixinsProvider = observer(
         let currentIdentityCount = await _getCipherCount(CipherType.Identity)
         let currentNoteCount = await _getCipherCount(CipherType.SecureNote)
         let currentCryptoCount = await _getCipherCount(CipherType.CryptoWallet)
-        
+
         // TODO
         // unlimited for other cipher types
 
@@ -1459,12 +1462,35 @@ export const CipherDataMixinsProvider = observer(
       }
     }
 
+    const _shareFolderToGroups = async (orgKey: SymmetricCryptoKey, groups: { id: string, name: string }[]) => {
+      return await Promise.all(groups.map(async (group) => {
+        const groupMemberRes = await enterpriseStore.getListGroupMembers(group.id)
+        if (groupMemberRes.kind !== "ok") {
+          return null
+        }
+        const members = await Promise.all(groupMemberRes.data.members
+          ?.filter(e => e.email !== user.email)
+          ?.map(async (member) => {
+            return {
+              username: member.email,
+              key: member.public_key ? await _generateMemberKey(member.public_key, orgKey) : null
+            }
+          }))
+        return {
+          id: group.id,
+          role: "member",
+          members
+        }
+      }))
+    }
+
     // Share cipher
     const shareCipher = async (
       cipher: CipherView,
       emails: string[],
       role: AccountRoleText,
-      autofillOnly: boolean
+      autofillOnly: boolean,
+      groups?: { id: string, name: string }[]
     ) => {
       try {
         // Prepare org key
@@ -1498,6 +1524,11 @@ export const CipherDataMixinsProvider = observer(
           })
         )
 
+        // prepare for share to groups
+        let groupsPayload = []
+        if (groups) {
+          groupsPayload = await _shareFolderToGroups(orgKey, groups)
+        }
         // Send API
         const res = await cipherStore.shareCipher({
           members,
@@ -1506,6 +1537,7 @@ export const CipherDataMixinsProvider = observer(
             ...data,
           },
           sharing_key: shareKey ? shareKey[0].encryptedString : null,
+          groups: groupsPayload
         })
         if (res.kind === 'ok') {
           notify('success', translate('success.cipher_shared'))
@@ -1532,7 +1564,8 @@ export const CipherDataMixinsProvider = observer(
       ids: string[],
       emails: string[],
       role: AccountRoleText,
-      autofillOnly: boolean
+      autofillOnly: boolean,
+      groups?: { id: string, name: string }[]
     ) => {
       if (!ids.length) {
         return { kind: 'ok' }
@@ -1555,6 +1588,14 @@ export const CipherDataMixinsProvider = observer(
             role: AccountRoleText
             key: string
             hide_passwords: boolean
+          }[]
+          groups?: {
+            id: string
+            role: string
+            members: {
+              username: string
+              key: string
+            }[]
           }[]
         }[] = []
 
@@ -1599,12 +1640,20 @@ export const CipherDataMixinsProvider = observer(
               }
             })
           )
+
+          // prepare for share to groups
+          let groupsPayload = []
+          if (groups) {
+            groupsPayload = await _shareFolderToGroups(_orgKey, groups)
+          }
+
           sharedCiphers.push({
             cipher: {
               id: c.id,
               ...data,
             },
             members: mem,
+            groups: groupsPayload
           })
         }
 
@@ -1697,16 +1746,25 @@ export const CipherDataMixinsProvider = observer(
     // Edit share cipher
     const editShareCipher = async (
       organizationId: string,
-      memberId: string,
+      itemId: string,
       role: AccountRoleText,
-      onlyFill: boolean
+      onlyFill: boolean,
+      isGroup?: boolean
     ) => {
       try {
         // Send API
-        const res = await cipherStore.editShareCipher(organizationId, memberId, {
-          role,
-          hide_passwords: onlyFill,
-        })
+        let res;
+        if (!isGroup) {
+          res = await cipherStore.editShareCipher(organizationId, itemId, {
+            role,
+            hide_passwords: onlyFill,
+          })
+        } else {
+          res = await enterpriseStore.editShareCipher(organizationId, itemId, {
+            role,
+          })
+        }
+
         if (res.kind === 'ok') {
           notify('success', translate('success.done'))
 
@@ -1715,11 +1773,16 @@ export const CipherDataMixinsProvider = observer(
           for (const share of myShares) {
             if (share.id === organizationId) {
               for (const member of share.members) {
-                if (member.id === memberId) {
+                if (member.id === itemId) {
                   member.role = role
                   member.hide_passwords = onlyFill
                 }
               }
+              // for (const group of share.groups) {
+              //   if (group.id === itemId) {
+              //     group.role = role
+              //   }
+              // }
             }
           }
           cipherStore.setMyShares(myShares)

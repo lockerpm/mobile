@@ -140,7 +140,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    
     defaultConfig {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion

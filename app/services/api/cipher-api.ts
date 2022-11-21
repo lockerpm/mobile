@@ -474,7 +474,6 @@ export class CipherApi {
         if (problem) return problem
       }
       const data = response.data
-
       return { kind: "ok", data }
     } catch (e) {
       Logger.error('Get my shares: ' + e.message)

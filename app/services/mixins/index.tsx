@@ -56,7 +56,7 @@ export const MixinsProvider = observer((props: {
   children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal
   navigationRef?: any
 }) => {
-  const { uiStore, user, cipherStore, collectionStore, folderStore, toolStore } = useStores()
+  const { uiStore, user, cipherStore, collectionStore, folderStore, toolStore, enterpriseStore } = useStores()
   const insets = useSafeAreaInsets()
   const { userService } = useCoreService()
 
@@ -74,6 +74,7 @@ export const MixinsProvider = observer((props: {
     collectionStore.setApiToken(token)
     folderStore.setApiToken(token)
     toolStore.setApiToken(token)
+    enterpriseStore.setApiToken(token)
   }
 
   // Get current route name

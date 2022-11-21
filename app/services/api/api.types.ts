@@ -7,7 +7,7 @@ import { CollectionResponse } from '../../../core/models/response/collectionResp
 import { CipherRequest } from '../../../core/models/request/cipherRequest'
 import { FolderRequest } from '../../../core/models/request/folderRequest'
 import { CipherResponse } from '../../../core/models/response/cipherResponse'
-import { AccountRoleText, InvitationStatus, NotificationCategory } from '../../config/types'
+import { AccountRoleText, EnterpriseGroupRoleText, InvitationStatus, NotificationCategory } from '../../config/types'
 import { ProfileResponse } from '../../../core/models/response/profileResponse'
 import { ProfileOrganizationResponse } from '../../../core/models/response/profileOrganizationResponse'
 import {
@@ -30,56 +30,56 @@ import {
 
 export type LoginResult =
   | {
-      kind: 'ok'
-      data: {
-        token?: string
-        is_factor2?: boolean
-        methods?: {
-          type: string
-          data: any
-        }[]
-      }
-    }
-  | GeneralApiProblem
-
-export type GetPMTokenResult =
-  | {
-      kind: 'ok'
-      data: {
-        url: string
-        access_token: string
-
-        // Clone data here to hide error
-        // These data actually not exists
-        is_factor2?: boolean
-        methods?: {
-          type: string
-          data: any
-        }[]
-      }
-    }
-  | GeneralApiProblem
-
-export type SocialLoginResult =
-  | {
-      kind: 'ok'
-      data: {
-        is_first?: boolean
-        new_user?: boolean
-        token: string
-        tmp_token?: string
-      }
-    }
-  | GeneralApiProblem
-
-export type AccountRecoveryResult =
-  | {
-      kind: 'ok'
-      data: {
+    kind: 'ok'
+    data: {
+      token?: string
+      is_factor2?: boolean
+      methods?: {
         type: string
         data: any
       }[]
     }
+  }
+  | GeneralApiProblem
+
+export type GetPMTokenResult =
+  | {
+    kind: 'ok'
+    data: {
+      url: string
+      access_token: string
+
+      // Clone data here to hide error
+      // These data actually not exists
+      is_factor2?: boolean
+      methods?: {
+        type: string
+        data: any
+      }[]
+    }
+  }
+  | GeneralApiProblem
+
+export type SocialLoginResult =
+  | {
+    kind: 'ok'
+    data: {
+      is_first?: boolean
+      new_user?: boolean
+      token: string
+      tmp_token?: string
+    }
+  }
+  | GeneralApiProblem
+
+export type AccountRecoveryResult =
+  | {
+    kind: 'ok'
+    data: {
+      type: string
+      data: any
+    }[]
+  }
   | GeneralApiProblem
 
 export type SessionLoginResult = { kind: 'ok'; data: SessionSnapshot } | GeneralApiProblem
@@ -102,17 +102,17 @@ export type GetTeamsResult = { kind: 'ok'; teams: UserTeam[] } | GeneralApiProbl
 
 export type GetPlanResult =
   | {
-      kind: 'ok'
-      data: {
-        name: string
-        alias: string
-        is_family: boolean
-        cancel_at_period_end: boolean
-        duration: 'monthly' | 'yearly'
-        next_billing_time: number
-        payment_method: string
-      }
+    kind: 'ok'
+    data: {
+      name: string
+      alias: string
+      is_family: boolean
+      cancel_at_period_end: boolean
+      duration: 'monthly' | 'yearly'
+      next_billing_time: number
+      payment_method: string
     }
+  }
   | GeneralApiProblem
 
 export type EmailOtpResult = { kind: 'ok'; success: boolean } | GeneralApiProblem
@@ -120,35 +120,35 @@ export type ResetPasswordResult = { kind: 'ok'; success: boolean } | GeneralApiP
 
 export type ResetPasswordWithCodeResult =
   | {
-      kind: 'ok'
-      data: {
-        reset_password_url: string
-      }
+    kind: 'ok'
+    data: {
+      reset_password_url: string
     }
+  }
   | GeneralApiProblem
 
 export type PurchaseValidationResult =
   | {
-      kind: 'ok'
-      data: {
-        success: boolean
-        detail: string
-      }
+    kind: 'ok'
+    data: {
+      success: boolean
+      detail: string
     }
+  }
   | GeneralApiProblem
 
 export type FamilyMemberResult =
   | {
-      kind: 'ok'
-      data: {
-        id: number
-        email: string
-        avatar?: string
-        created_time?: string
-        username?: string
-        full_name?: string
-      }[]
-    }
+    kind: 'ok'
+    data: {
+      id: number
+      email: string
+      avatar?: string
+      created_time?: string
+      username?: string
+      full_name?: string
+    }[]
+  }
   | GeneralApiProblem
 
 export type AddMemberResult = { kind: 'ok'; data: any } | GeneralApiProblem
@@ -157,11 +157,11 @@ export type GetReferLinkResult = { kind: 'ok'; data: { referral_link: string } }
 
 export type GetTrialEligibleResult =
   | {
-      kind: 'ok'
-      data: {
-        personal_trial_applied: boolean
-      }
+    kind: 'ok'
+    data: {
+      personal_trial_applied: boolean
     }
+  }
   | GeneralApiProblem
 
 export type GetNotificationSettings =
@@ -172,71 +172,71 @@ export type FetchInappNotiResult = { kind: 'ok'; data: AppNotification } | Gener
 
 export type BillingResult =
   | {
-      kind: 'ok'
-      data: {
-        id: number
-        created_time: number
-        currency: 'VNP' | 'USD'
-        description: string
-        discount: number
-        duration: 'monthly' | 'yearly'
-        failure_reason?: string
-        payment_id: string
-        payment_method: string
-        plan: string
-        status: string
-        total_price: number
-        transaction_type: string
-      }[]
-    }
+    kind: 'ok'
+    data: {
+      id: number
+      created_time: number
+      currency: 'VNP' | 'USD'
+      description: string
+      discount: number
+      duration: 'monthly' | 'yearly'
+      failure_reason?: string
+      payment_id: string
+      payment_method: string
+      plan: string
+      status: string
+      total_price: number
+      transaction_type: string
+    }[]
+  }
   | GeneralApiProblem
 
 export type GetInvitationsResult =
   | {
-      kind: 'ok'
-      data: {
-        access_time: number
+    kind: 'ok'
+    data: {
+      access_time: number
+      id: string
+      role: AccountRoleText
+      status: InvitationStatus
+      team: {
         id: string
-        role: AccountRoleText
-        status: InvitationStatus
-        team: {
-          id: string
-          name: string
-          organization_id: string
-        }
-      }[]
-    }
+        name: string
+        organization_id: string
+      }
+    }[]
+  }
   | GeneralApiProblem
 
 export type CheckBreachResult =
   | {
-      kind: 'ok'
-      data: {
-        added_date: string
-        breach_date: string
-        data_clases: string[]
-        description: string
-        domain: string
-        is_fabricated: boolean
-        is_retired: boolean
-        is_sensitive: boolean
-        is_spam_list: boolean
-        is_verified: boolean
-        logo_path: string
-        modified_date: string
-        name: string
-        pwn_count: number
-        title: string
-      }[]
-    }
+    kind: 'ok'
+    data: {
+      added_date: string
+      breach_date: string
+      data_clases: string[]
+      description: string
+      domain: string
+      is_fabricated: boolean
+      is_retired: boolean
+      is_sensitive: boolean
+      is_spam_list: boolean
+      is_verified: boolean
+      logo_path: string
+      modified_date: string
+      name: string
+      pwn_count: number
+      title: string
+    }[]
+  }
   | GeneralApiProblem
 
 export type GetTeamPoliciesResult = { kind: 'ok'; data: TeamPolicies } | GeneralApiProblem
 export type GetTeamPolicyResult =
   | {
-      kind: 'ok'
-      data: PasswordPolicy | MasterPasswordPolicy | BlockFailedLoginPolicy | PasswordlessPolicy
-    }
+    kind: 'ok'
+    data: PasswordPolicy | MasterPasswordPolicy | BlockFailedLoginPolicy | PasswordlessPolicy
+  }
   | GeneralApiProblem
 
 export type GetLastUpdateResult =
@@ -250,11 +250,11 @@ export type GetSharingPublicKeyResult =
 export type ShareFolderResult = { kind: 'ok'; data: { id: string } } | GeneralApiProblem
 export type ShareCipherResult =
   | {
-      kind: 'ok'
-      data: {
-        id: string // organizationId
-      }
+    kind: 'ok'
+    data: {
+      id: string // organizationId
     }
+  }
   | GeneralApiProblem
 
 export type GetShareInvitationsResult =
@@ -265,62 +265,72 @@ export type PostCipherResult = { kind: 'ok'; data: { id: string } } | GeneralApi
 export type ImportFolderResult = { kind: 'ok'; data: { ids: string[] } } | GeneralApiProblem
 export type FetchOfferDetailsResult =
   | {
-      kind: 'ok'
-      data: {
-        nonce: string
-        timestamp: number
-        key_identifier: string
-        sig: string
-      }
+    kind: 'ok'
+    data: {
+      nonce: string
+      timestamp: number
+      key_identifier: string
+      sig: string
     }
+  }
   | GeneralApiProblem
 
 export type FetchRelayListAddressesResult =
   | {
-      kind: 'ok'
-      data: {
-        count: number
-        next: string | null
-        previous: string | null
-        results: RelayAddress[]
-      }
+    kind: 'ok'
+    data: {
+      count: number
+      next: string | null
+      previous: string | null
+      results: RelayAddress[]
     }
+  }
   | GeneralApiProblem
-  export type CreateRelaySubdomainResult =
+export type CreateRelaySubdomainResult =
   | {
-      kind: 'ok'
-      data: SubdomainData
-    }
+    kind: 'ok'
+    data: SubdomainData
+  }
   | GeneralApiProblem
-  export type FetchRelayListSubdomainResult =
+export type FetchRelayListSubdomainResult =
   | {
-      kind: 'ok'
-      data: SubdomainData[]
-    }
+    kind: 'ok'
+    data: SubdomainData[]
+  }
   | GeneralApiProblem
 export type GenerateRelayNewAddressResult = { kind: 'ok'; data: RelayAddress } | GeneralApiProblem
 export type TrustedResult = { kind: 'ok'; data: TrustedContact[] } | GeneralApiProblem
 export type EAInviteResult = { kind: 'ok'; data: { is: string } } | GeneralApiProblem
 export type EATakeoverResult =
   | {
-      kind: 'ok'
-      data: {
-        kdf: number
-        kdf_iterations: number
-        key_encrypted: string
-      }
+    kind: 'ok'
+    data: {
+      kdf: number
+      kdf_iterations: number
+      key_encrypted: string
     }
+  }
   | GeneralApiProblem
 export type EAViewResult =
   | {
-      kind: 'ok'
-      data: {
-        ciphers: CipherResponse[]
-        key_encrypted: string
-      }
+    kind: 'ok'
+    data: {
+      ciphers: CipherResponse[]
+      key_encrypted: string
     }
+  }
   | GeneralApiProblem
+
+export type EnterpriseGroupsResult = { kind: 'ok'; data: GroupData[] } | GeneralApiProblem
+export type EnterpriseGroupsMemebersResult = { kind: 'ok'; data: GroupData & { members: GroupMemberData[] } } | GeneralApiProblem
+export type EnterpriseSearchGroupResult = {
+  kind: 'ok'; data: {
+    groups: GroupData[]
+    members: GroupMemberData[]
+  }
+} | GeneralApiProblem
 // ---------------- data --------------------
+
 export type NotificationSettingData = {
   category: {
     id: NotificationCategory
@@ -517,6 +527,14 @@ export type ShareCipherData = {
     key: string
     hide_passwords: boolean
   }[]
+  groups?: {
+    id: string
+    role: string
+    members: {
+      username: string
+      key: string
+    }[]
+  }[]
 }
 
 export type ShareFolderData = {
@@ -526,6 +544,14 @@ export type ShareFolderData = {
     role: AccountRoleText
     key: string
     hide_passwords: boolean
+  }[]
+  groups?: {
+    id: string
+    role: string
+    members: {
+      username: string
+      key: string
+    }[]
   }[]
 } & CollectionActionData
 
@@ -546,6 +572,14 @@ export type ShareMultipleCiphersData = {
       key: string
       hide_passwords: boolean
     }[]
+    groups?: {
+      id: string
+      role: string
+      members: {
+        username: string
+        key: string
+      }[]
+    }[]
   }[]
   sharing_key: string
 }
@@ -560,7 +594,7 @@ export type StopShareCipherData = {
 
 export type EditShareCipherData = {
   role: AccountRoleText
-  hide_passwords: boolean
+  hide_passwords?: boolean
 }
 
 export type ConfirmShareCipherData = {
@@ -585,4 +619,26 @@ export type AppNotification = {
     }
     type: NotificationCategory
   }[]
+}
+
+// ---------------------- ENTERPRISE --------------------------
+
+export type GroupData = {
+  creation_date: number
+  enterprise_id?: string
+  id: string
+  name: string
+  revision_date: number
+}
+
+export type GroupMemberData = {
+  avatar: string
+  domain_id: string | null
+  email: string
+  full_name: string
+  is_activated: boolean
+  public_key: string
+  role: EnterpriseGroupRoleText
+  status: string
+  username: string
 }

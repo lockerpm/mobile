@@ -99,12 +99,21 @@ export type SharedMemberType = {
   username: string
 }
 
+export type SharedGroupType = {
+  access_time: number
+  id: string
+  name: string
+  role: AccountRoleText
+  share_type: SharingType
+}
+
 export type MyShareType = {
   id: string
   description: string
   name: string
   organization_id: string
   members: SharedMemberType[]
+  groups: SharedGroupType[]
 }
 export type Enterprise = {
   creation_date: number
