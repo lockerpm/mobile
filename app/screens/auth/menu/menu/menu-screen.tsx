@@ -136,9 +136,25 @@ export const MenuScreen = observer(() => {
     {
       debug: true,
       icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) Show toast',
+      name: '(DEBUG) Show toast success',
+      action: () => {
+        notify('success', 'Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)')
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Show toast error',
       action: () => {
         notify('error', 'Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)')
+      }
+    },
+    {
+      debug: true,
+      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
+      name: '(DEBUG) Show toast info',
+      action: () => {
+        notify('info', 'Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)')
       }
     },
     {

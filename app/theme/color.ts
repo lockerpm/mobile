@@ -19,6 +19,7 @@ export const color = {
    * can cause older Android devices to slow down due to the excessive compositing required
    * by their under-powered GPUs.
    */
+  toastBackground: 'rgba(22, 22, 22, 0.9)',
   transparent: "rgba(0, 0, 0, 0)",
   background: palette.white,
   disabled: palette.gray,

@@ -143,7 +143,7 @@ export const InitScreen = observer(() => {
     // }
 
     // Check App update
-    VersionCheck.needUpdate()
+    !__DEV__ && VersionCheck.needUpdate()
       .then(async res => {
         if (res.isNeeded) {
           Alert.alert(

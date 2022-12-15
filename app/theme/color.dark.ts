@@ -19,6 +19,7 @@ export const colorDark = {
    * can cause older Android devices to slow down due to the excessive compositing required
    * by their under-powered GPUs.
    */
+  toastBackground: 'rgba(100, 100, 100, 1)',
   transparent: "rgba(0, 0, 0, 0)",
   background: '#131313',
   disabled: palette.gray,
