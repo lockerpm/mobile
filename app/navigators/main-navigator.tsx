@@ -78,6 +78,7 @@ import {
   // @ts-ignore
   AutofillServiceScreen,
   AliasStatisticScreen,
+  EnterpriseInvitedScreen,
 } from '../screens'
 import UserInactivity from 'react-native-user-inactivity'
 import { useMixins } from '../services/mixins'
@@ -86,7 +87,7 @@ import { AppTimeoutType, TimeoutActionType, useStores } from '../models'
 import { observer } from 'mobx-react-lite'
 import { useCipherAuthenticationMixins } from '../services/mixins/cipher/authentication'
 import { useCipherDataMixins } from '../services/mixins/cipher/data'
-import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, IS_PROD, WS_URL } from '../config/constants'
+import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from '../config/constants'
 import { Logger } from '../utils/logger'
 import { SocketEvent, SocketEventType } from '../config/types'
 import { HealthNavigator } from './tools/health-navigator'
@@ -96,7 +97,7 @@ import Intercom from '@intercom/intercom-react-native'
 import { AppNotification } from '../services/api'
 import { RelayAddress, SubdomainData, TrustedContact } from '../config/types/api'
 import { CollectionView } from '../../core/models/view/collectionView'
-import { CipherView } from '../../core/models/view'
+
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -120,6 +121,8 @@ export type PrimaryParamList = {
 
   // Others
   start: undefined
+
+  enterpriseInvited: undefined
   switchDevice: undefined
   biometricUnlockIntro: undefined
   privateRelay: undefined
@@ -605,6 +608,7 @@ export const MainNavigator = observer(() => {
         }}
       >
         <Stack.Screen name="start" component={StartScreen} />
+        <Stack.Screen name="enterpriseInvited" component={EnterpriseInvitedScreen} />
         <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
 

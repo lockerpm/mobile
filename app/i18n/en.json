@@ -30,6 +30,7 @@
     "done": "Done",
     "delete": "Delete",
     "details": "Details",
+    "decline": "Decline",
     "edit": "Edit",
     "email": "Email",
     "enterprise": "Enterprise",
@@ -1028,5 +1029,26 @@
         "auto": "Auto accept"
       }
     }
+  },
+  "enterprise_invitation": {
+    "invited": "You are invited to Locker Business",
+    "org": "Organization",
+    "invited_by": "Invited by",
+    "accept_note": "If you accept this invitation, your account will be upgraded to Business User plan. Admins can perform certain actions to your account such as applying policies, locking, or disabling your account.",
+    "decline_note": "If you do not wish to join this organization, simply click “Decline”. You won’t be asked again.",
+    "enterprise_note": {
+      "note": "Don’t worry. You will still be able to use your personal vault. However, {{name}} can control certain aspects of your accounts, such as:",
+      "note_1": "Activate, deactivate, disable your account",
+      "note_2": "Add you to their groups",
+      "note_3": "Apply password policies to your account"
+    },
+    "data" : "All your vault data remains the same. {{mame}} can’t see your data or your Master Password.",
+    "request_access": "You have to Request access from {{mame}} in order to continue using your Locker account.",
+    "domain": {
+      "join_org": "Join Organization",
+      "managed_by": "This account is managed by: "
+    },
+    "btn_request": "Request to join",
+    "btn_requested": "Requested"
   }
 }

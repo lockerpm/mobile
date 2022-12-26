@@ -9,7 +9,7 @@ import NetInfo from "@react-native-community/netinfo"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 
 export const StartScreen = observer(() => {
-  const { user, uiStore } = useStores()
+  const { user, uiStore, enterpriseStore } = useStores()
   const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
   const {
     loadFolders,
@@ -114,6 +114,8 @@ export const StartScreen = observer(() => {
     } else if (uiStore.isOnSaveLogin) {
       // uiStore.setIsOnSaveLogin(false)
       navigation.navigate("passwords__edit", { mode: 'add' })
+    } else if (!!enterpriseStore.isEnterpriseInvitations) {
+      navigation.navigate("enterpriseInvited")
     } else {
       navigation.navigate("mainTab", { screen: user.defaultTab })
     }

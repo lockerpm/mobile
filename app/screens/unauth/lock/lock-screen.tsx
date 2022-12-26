@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, BackHandler, View } from "react-native"
-import { AutoImage as Image, Button, Layout, Text, FloatingInput, LanguagePicker, Modal } from "../../../components"
+import { AutoImage as Image, Button, Layout, Text, FloatingInput, LanguagePicker } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { commonStyles, fontSize } from "../../../theme"
@@ -15,17 +15,18 @@ import { CipherView, LoginUriView, LoginView } from "../../../../core/models/vie
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { CipherType } from "../../../../core/enums"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { EnterpriseInvitation } from "../../../services/api"
+import { EnterpriseInvitationModal } from "./enterprise-invitation-modal"
 
 
 export const LockScreen = observer(() => {
   const navigation = useNavigation()
-  const { user, uiStore } = useStores()
+  const { user, uiStore, enterpriseStore } = useStores()
   const { notify, translate, notifyApiError, color } = useMixins()
   const { logout, sessionLogin, biometricLogin } = useCipherAuthenticationMixins()
   const { createCipher } = useCipherDataMixins()
   const { getPasswordStrength, newCipher } = useCipherHelpersMixins()
 
-  const isAutofillAnroid = uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
 
   // ---------------------- PARAMS -------------------------
   const [masterPassword, setMasterPassword] = useState('')
@@ -35,6 +36,21 @@ export const LockScreen = observer(() => {
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
   const [biometryType, setBiometryType] = useState<'faceid' | 'touchid' | 'biometric'>('biometric')
+
+  // enterprise invitaion param
+  const [isShowedInvitationPopup, setIsShowedInvitaionPopup] = useState(false)
+  const [isShowInvitation, setIsShowInvitation] = useState(false)
+
+  const [enterpeiseInvitations, setEnterpriseInvitations] = useState<EnterpriseInvitation[]>([])
+
+  // ---------------------- METHODS -------------------------
+
+  const isAutofillAnroid = uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
+
+  const showInvitation = (() => {
+    if (enterpeiseInvitations.length === 0) return false
+    return enterpeiseInvitations.some(e => e.domain !== null)
+  })()
 
   // ---------------------- METHODS -------------------------
 
@@ -67,6 +83,10 @@ export const LockScreen = observer(() => {
   }
 
   const handleUnlock = async () => {
+    if (showInvitation) {
+      setIsShowInvitation(true)
+      return
+    }
     if (masterPassword) {
       setIsError(false)
       setIsUnlocking(true)
@@ -114,7 +134,10 @@ export const LockScreen = observer(() => {
       notify('error', translate('error.biometric_not_enable'))
       return
     }
-
+    if (showInvitation) {
+      setIsShowInvitation(true)
+      return
+    }
     setIsBioUnlocking(true)
     const res = await biometricLogin()
     setIsBioUnlocking(false)
@@ -145,6 +168,10 @@ export const LockScreen = observer(() => {
     }
   }
 
+  const fetchEnterpriseInvitation = async () => {
+    const res = await enterpriseStore.invitations()
+    setEnterpriseInvitations(res)
+  }
   // ---------------------- COMPONENTS -------------------------
 
   const footer = (
@@ -161,6 +188,24 @@ export const LockScreen = observer(() => {
   )
 
   // -------------- EFFECT ------------------
+  // enterprise invitations
+  useEffect(() => {
+    if (isShowedInvitationPopup) {
+      fetchEnterpriseInvitation()
+      setIsShowedInvitaionPopup(false)
+    }
+  }, [isShowedInvitationPopup])
+
+  // Auto trigger face id / touch id + detect biometry type
+  useEffect(() => {
+    fetchEnterpriseInvitation()
+
+    detectbiometryType()
+
+    if (user.isBiometricUnlock) {
+      handleUnlockBiometric()
+    }
+  }, [])
 
   // Handle back press
   useEffect(() => {
@@ -205,14 +250,7 @@ export const LockScreen = observer(() => {
     }
   }, [navigation])
 
-  // Auto trigger face id / touch id + detect biometry type
-  useEffect(() => {
-    detectbiometryType()
 
-    if (user.isBiometricUnlock) {
-      handleUnlockBiometric()
-    }
-  }, [])
 
   // ---------------------- RENDER -------------------------
 
@@ -221,6 +259,15 @@ export const LockScreen = observer(() => {
       isOverlayLoading={isScreenLoading}
       footer={footer}
     >
+
+      <EnterpriseInvitationModal
+        isOpen={isShowInvitation}
+        enterpeiseInvitations={enterpeiseInvitations}
+        onClose={() => {
+          setIsShowedInvitaionPopup(true)
+          setIsShowInvitation(false)
+        }}
+      />
       <LanguagePicker />
       <View style={{ alignItems: "flex-end", marginTop: 8 }}>
         {isAutofillAnroid ?

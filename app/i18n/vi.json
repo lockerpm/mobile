@@ -30,6 +30,7 @@
     "done": "Xong",
     "delete": "Xóa",
     "details": "Chi tiết",
+    "decline": "Từ chối",
     "edit": "Sửa",
     "email": "Email",
     "enterprise": "Doanh nghiệp",
@@ -278,12 +279,11 @@
     "no_subdomain": "Tạo tên miền của riêng bạn",
     "config_modal": {
       "title": "Tuỳ chỉnh",
-      "enable":  "Chuyển tiếp tất cả email tới địa chỉ email gốc",
+      "enable": "Chuyển tiếp tất cả email tới địa chỉ email gốc",
       "block": "Chặn tất cả email đến",
       "block_spam": "Chỉ chặn email spam và quảng cáo",
       "note": "*Khi bạn thực hiện thay đổi, số liệu trong báo cáo cho địa chỉ này sẽ được tính lại."
     }
-
   },
   "emergency_access": {
     "title": "Liên hệ khẩn cấp",
@@ -1022,5 +1022,26 @@
         "auto": "Chấp nhận tự động"
       }
     }
+  },
+  "enterprise_invitation": {
+    "invited": "Bạn có lời mời tham gia vào doanh nghiệp",
+    "org": "Doanh nghiệp",
+    "invited_by": "Được mời bởi",
+    "accept_note": "Nếu bạn chấp nhận lời mời này, tài khoản của bạn sẽ nâng cấp lên Premium. Ngoài ra quản trị viên có thể thực hiện một số hành động như áp dụng các chính sách, khoá, vô hiệu hoá tài khoản của bạn.",
+    "decline_note": "Bạn có thể từ chôi nếu bạn không muốn tham gia vào doanh nghiệp này",
+    "enterprise_note": {
+      "note": "Bạn vẫn tiếp tục sử dụng tài khoản như tài khoản cá nhân. Tuy nhiên {{name} có thể kiểm soát một vài thông tin như:",
+      "note_1": "Kích hoạt, vô hiệu hoá tài khoản",
+      "note_2": "Thêm bạn vào nhóm",
+      "note_3": "Áp dụng các chính sách về mật khẩu"
+    },
+    "data": "Tài khoản của bạn vẫn được bảo mật. {{name}} không thể thấy được dữ liệu cũng như Master Password của bạn.",
+    "request_access": " Bạn bắt buộc phải yêu cầu tham gia vào {{name}} để tiếp tục sử dụng tài khoản Locker",
+    "domain": {
+      "join_org": "Tham gia doanh nghiệp",
+      "managed_by": "Tên miền này được quản lý bởi: "
+    },
+    "btn_request": "Gửi yêu cầu tham gia",
+    "btn_requested": "Đã gửi yêu cầu"
   }
 }
