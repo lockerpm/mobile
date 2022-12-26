@@ -15,6 +15,10 @@ export enum EnterpriseGroupRoleText {
   ADMIN = 'admin',
   MEMBER = 'member'
 }
+export enum EnterpriseInvitationStatus {
+  INVITED = 'invited',
+  REQUESTED = 'requested',
+}
 
 export enum AccountRoleText {
   OWNER = 'owner',

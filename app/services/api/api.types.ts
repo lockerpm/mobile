@@ -7,7 +7,7 @@ import { CollectionResponse } from '../../../core/models/response/collectionResp
 import { CipherRequest } from '../../../core/models/request/cipherRequest'
 import { FolderRequest } from '../../../core/models/request/folderRequest'
 import { CipherResponse } from '../../../core/models/response/cipherResponse'
-import { AccountRoleText, EnterpriseGroupRoleText, InvitationStatus, NotificationCategory } from '../../config/types'
+import { AccountRole, AccountRoleText, EnterpriseGroupRoleText, EnterpriseInvitationStatus, InvitationStatus, NotificationCategory } from '../../config/types'
 import { ProfileResponse } from '../../../core/models/response/profileResponse'
 import { ProfileOrganizationResponse } from '../../../core/models/response/profileOrganizationResponse'
 import {
@@ -329,6 +329,9 @@ export type EnterpriseSearchGroupResult = {
     members: GroupMemberData[]
   }
 } | GeneralApiProblem
+export type EnterpriseInvitationResult = {
+  kind: 'ok'; data: EnterpriseInvitation[]
+} | GeneralApiProblem
 // ---------------- data --------------------
 
 export type NotificationSettingData = {
@@ -641,4 +644,25 @@ export type GroupMemberData = {
   role: EnterpriseGroupRoleText
   status: string
   username: string
+}
+
+export type EnterpriseInvitationByDomain = {
+  auto_approve: boolean,
+  domain: string,
+  id: number
+}
+
+
+export type EnterpriseInvitation = {
+  access_time: number
+  domain: EnterpriseInvitationByDomain
+  enterprise: {
+    id: string
+    name: string
+  },
+  id: string
+  owner: string
+  owner_email: string
+  role: AccountRoleText
+  status: EnterpriseInvitationStatus
 }
