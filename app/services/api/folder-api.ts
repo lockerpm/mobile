@@ -101,7 +101,6 @@ export class FolderApi {
   async shareFolder(token: string, payload: ShareFolderData): Promise<ShareFolderResult> {
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      console.log(token, payload, "=========")
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/sharing`, payload)

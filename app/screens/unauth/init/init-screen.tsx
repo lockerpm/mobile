@@ -6,7 +6,7 @@ import { useStores } from '../../../models'
 import { load, StorageKey } from '../../../utils/storage'
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
-import { IS_IOS } from '../../../config/constants'
+import { IS_IOS, IS_PROD } from '../../../config/constants'
 import { Alert, BackHandler, Linking, View } from 'react-native'
 import { useMixins } from '../../../services/mixins'
 import JailMonkey from 'jail-monkey'
@@ -143,7 +143,7 @@ export const InitScreen = observer(() => {
     // }
 
     // Check App update
-    !__DEV__ && VersionCheck.needUpdate()
+    !__DEV__ && IS_PROD && VersionCheck.needUpdate()
       .then(async res => {
         if (res.isNeeded) {
           Alert.alert(
