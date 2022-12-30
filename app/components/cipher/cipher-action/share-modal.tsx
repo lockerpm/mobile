@@ -86,7 +86,6 @@ export const ShareModal = observer((props: Props) => {
     if (res.kind !== 'ok') {
       notifyApiError(res)
     }
-    // console.log(cipherStore.myShares[0]['groups'])
     const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
     if (share) {
       if (share.members.length > 0)
@@ -187,9 +186,10 @@ export const ShareModal = observer((props: Props) => {
   }, [email])
 
   useEffect(() => {
-    getSharedUsers()
     if (!isOpen) {
       reset()
+    } else {
+      getSharedUsers()
     }
   }, [isOpen])
 

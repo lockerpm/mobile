@@ -22,7 +22,6 @@ export class EnterpriseApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      // console.log(response.data)
       return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error(e.message)
@@ -41,7 +40,6 @@ export class EnterpriseApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      // console.log(response.data)
       return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error(e.message)
@@ -61,7 +59,6 @@ export class EnterpriseApi {
         if (problem) return problem
       }
 
-      // console.log(response.data)
       return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error(e.message)
@@ -81,7 +78,6 @@ export class EnterpriseApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      console.log(payload)
       return { kind: "ok" }
     } catch (e) {
       Logger.error('Edit share cipher: ' + e.message)
@@ -123,7 +119,6 @@ export class EnterpriseApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      console.log(response.data)
       return { kind: "ok" }
     } catch (e) {
       Logger.error(e.message)
