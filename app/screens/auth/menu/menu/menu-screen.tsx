@@ -28,7 +28,6 @@ import SettingsIconLight from './gear-light.svg'
 import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
 import { PushNotifier } from "../../../../utils/push-notification"
-import { useTestMixins } from "../../../../services/mixins/test"
 import moment from "moment"
 
 
@@ -37,7 +36,6 @@ export const MenuScreen = observer(() => {
   const { user, uiStore, enterpriseStore } = useStores()
   const { translate, notify, color, isDark, notifyApiError } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
-  const { createRandomPasswords } = useTestMixins()
   const { isTablet } = useAdaptiveLayoutMixins()
   const appVersion = `${getVersion()}`
   const isFreeAccount = user.plan?.alias === PlanType.FREE
@@ -169,17 +167,6 @@ export const MenuScreen = observer(() => {
           data: {
             type: 'new_share_item'
           }
-        })
-      }
-    },
-    {
-      debug: true,
-      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) Generate 50 random passwords',
-      action: () => {
-        createRandomPasswords({
-          count: 50,
-          length: 24
         })
       }
     },
