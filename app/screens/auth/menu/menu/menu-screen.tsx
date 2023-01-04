@@ -27,13 +27,12 @@ import InviteIconLight from './invite-light.svg'
 import SettingsIconLight from './gear-light.svg'
 import HelpIconLight from './question-light.svg'
 import LockIconLight from './lock-light.svg'
-import { PushNotifier } from "../../../../utils/push-notification"
 import moment from "moment"
 
 
 export const MenuScreen = observer(() => {
   const navigation = useNavigation()
-  const { user, uiStore, enterpriseStore } = useStores()
+  const { user } = useStores()
   const { translate, notify, color, isDark, notifyApiError } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { isTablet } = useAdaptiveLayoutMixins()
@@ -117,94 +116,6 @@ export const MenuScreen = observer(() => {
 
   const items2: MenuItemProps[] = [
     {
-      debug: true,
-      icon: isDark ? <InviteIconLight height={22} /> : <InviteIcon height={22} />,
-      name: "(DEBUG) Open Onboard",
-      action: () => navigation.navigate('intro', { preview: true }),
-      noBorder: true
-    },
-    {
-      debug: true,
-      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) ' + (uiStore.isOffline ? 'Go online' : 'Go offline'),
-      action: () => {
-        uiStore.setIsOffline(!uiStore.isOffline)
-      }
-    },
-    {
-      debug: true,
-      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) Show toast success',
-      action: () => {
-        notify('success', 'Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)')
-      }
-    },
-    {
-      debug: true,
-      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) Show toast error',
-      action: () => {
-        notify('error', 'Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)')
-      }
-    },
-    {
-      debug: true,
-      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) Show toast info',
-      action: () => {
-        notify('info', 'Email xác nhận đã được gửi đến địa chỉ mail của bạn (hãy kiểm tra cả trong hòm thư rác)')
-      }
-    },
-    {
-      debug: true,
-      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) Show push notification',
-      action: () => {
-        PushNotifier._notify({
-          id: `share_new`,
-          title: 'Locker',
-          body: `You have a new shared test`,
-          data: {
-            type: 'new_share_item'
-          }
-        })
-      }
-    },
-    {
-      debug: true,
-      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) Open welcome premium screen',
-      action: () => {
-        navigation.navigate("welcome_premium")
-      }
-    },
-
-    {
-      debug: true,
-      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) list member',
-      action: () => {
-        enterpriseStore.getListUserGroups()
-      }
-    },
-    {
-      debug: true,
-      icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-      name: '(DEBUG) list group',
-      action: () => {
-        enterpriseStore.getListGroupMembers("b8f24e82-6359-479d-ba65-991a7b1cde4d")
-      }
-    },
-    // {
-    //   debug: true,
-    //   icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
-    //   name: '(DEBUG) Invalidate api token',
-    //   action: () => {
-    //     user.setApiToken('abc')
-    //     cipherStore.setApiToken('abc')
-    //   }
-    // },
-    {
       icon: isDark ? <LockIconLight height={22} /> : <LockIcon height={22} />,
       name: translate('common.lock'),
       action: async () => {
@@ -225,7 +136,6 @@ export const MenuScreen = observer(() => {
       },
       noBorder: true
     }
-
   ]
   const isSmallWidth = Dimensions.get("screen").width < 390
   const item3 = {
