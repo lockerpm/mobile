@@ -44,6 +44,23 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
     }
   }, [isSelecting])
 
+
+  useEffect(() => {
+    // set Most relevant by defalt when users search
+    if (searchText) {
+      if (searchText.trim().length === 1) {
+        setSortList(null)
+        setSortOption("most_relevant")
+      }
+    } else {
+      setSortList({
+        orderField: 'revisionDate',
+        order: 'desc'
+      })
+      setSortOption("last_updated")
+    }
+  }, [searchText]);
+
   return (
     <Layout
       isContentOverlayLoading={isLoading}
@@ -90,7 +107,7 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
         navigation={navigation}
         onLoadingChange={setIsLoading}
         searchText={searchText}
-        cipherType={CipherType.Login}
+        cipherType={[CipherType.Login, CipherType.MasterPassword]}
         sortList={sortList}
         isSelecting={isSelecting}
         setIsSelecting={setIsSelecting}

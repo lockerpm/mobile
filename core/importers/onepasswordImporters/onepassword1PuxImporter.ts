@@ -96,7 +96,7 @@ export class OnePassword1PuxImporter extends BaseImporter implements Importer {
         this.processSections(category, item.details.sections, cipher);
 
         if (!this.isNullOrWhitespace(item.details.notesPlain)) {
-          cipher.notes = item.details.notesPlain.split(this.newLineRegex).join("\n") + "\n";
+          cipher.notes = item.details.notesPlain?.split(this.newLineRegex).join("\n") + "\n";
         }
 
         this.convertToNoteIfNeeded(cipher);
@@ -379,7 +379,7 @@ export class OnePassword1PuxImporter extends BaseImporter implements Importer {
     if (
       this.isNullOrWhitespace(cipher.login.totp) &&
       field.id != null &&
-      field.id.startsWith("TOTP_")
+      field.id?.startsWith("TOTP_")
     ) {
       cipher.login.totp = fieldValue;
       return true;

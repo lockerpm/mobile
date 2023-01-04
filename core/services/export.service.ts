@@ -73,7 +73,7 @@ export class ExportService implements ExportServiceAbstraction {
         }));
 
         promises.push(this.cipherService.getAllDecrypted().then(ciphers => {
-            decCiphers = ciphers ? ciphers.filter(f => f.deletedDate == null) : [];
+            decCiphers = ciphers ? ciphers.filter(f => f.deletedDate == null || f.type !== CipherType.MasterPassword) : [];
         }));
 
         await Promise.all(promises);
@@ -362,6 +362,30 @@ export class ExportService implements ExportServiceAbstraction {
             case CipherType.SecureNote:
                 cipher.type = 'note';
                 break;
+            case CipherType.DriverLicense:
+                cipher.type = 'driver-license'
+                break
+            case CipherType.CitizenID:
+                cipher.type = 'citizen-id'
+                break
+            case CipherType.Passport:
+                cipher.type = 'passport'
+                break
+            case CipherType.SocialSecurityNumber:
+                cipher.type = 'social-security-number'
+                break
+            case CipherType.WirelessRouter:
+                cipher.type = 'wireless-router'
+                break
+            case CipherType.Server:
+                cipher.type = 'server'
+                break
+            case CipherType.APICipher:
+                cipher.type = 'api-cipher'
+                break
+            case CipherType.Database:
+                cipher.type = 'database'
+                break
             case CipherType.CryptoWallet:
                 cipher.type = 'crypto-wallet'
                 break

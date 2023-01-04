@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef  } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { observer } from "mobx-react-lite"
 import { CipherList, Layout, BrowseItemEmptyContent } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
@@ -39,16 +39,33 @@ export const AllItemScreen = observer(() => {
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   // -------------- EFFECT ------------------
-
   useEffect(() => {
     const subscription = AppState.addEventListener("change", nextAppState => {
       setAppStateVisible(nextAppState);
     });
 
     return () => {
+      // eslint-disable-next-line no-unused-expressions
       subscription == null;
     };
   }, []);
+
+  useEffect(() => {
+    // set Most relevant by defalt when users search
+    if (searchText) {
+      if (searchText.trim().length === 1) {
+        setSortList(null)
+        setSortOption("most_relevant")
+      }
+    } else {
+      setSortList({
+        orderField: 'revisionDate',
+        order: 'desc'
+      })
+      setSortOption("last_updated")
+    }
+  }, [searchText]);
+
 
   // Navigation event listener
   useEffect(() => {
@@ -67,7 +84,7 @@ export const AllItemScreen = observer(() => {
           {
             text: translate('common.cancel'),
             style: 'cancel',
-            onPress: () => { }
+            onPress: () => null
           },
           {
             text: translate('common.lock'),
@@ -118,11 +135,15 @@ export const AllItemScreen = observer(() => {
 
   useEffect(() => {
     if (!isLoading) {
-      AutofillServiceEnabled(isActived => {
+      AutofillServiceEnabled((isActived, androidNotSupport) => {
         setIsAutofillEnabled(isActived)
+        if (androidNotSupport) {
+          setShowAutofillSuggest(false)
+        }
       })
     }
   }, [appStateVisible, isLoading])
+
   // -------------- RENDER ------------------
 
   return (
@@ -224,7 +245,7 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
         height: 32,
         marginRight: 16
       }}></Image>
-    <View style={{marginRight: 80}}>
+    <View style={{ marginRight: 80 }}>
       {/* <Text>{translate("all_items.enable_autofill.title")}</Text> */}
       <Text>{translate("all_items.enable_autofill.content")}</Text>
       <TouchableOpacity
@@ -250,5 +271,4 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
       <AntDesign name="close" size={20} color={"black"} />
     </TouchableOpacity>
   </View>
-
 }

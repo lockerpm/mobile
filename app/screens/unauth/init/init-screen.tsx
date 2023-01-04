@@ -6,14 +6,16 @@ import { useStores } from '../../../models'
 import { load, StorageKey } from '../../../utils/storage'
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
-import { IS_IOS } from '../../../config/constants'
-import { BackHandler, View } from 'react-native'
+import { IS_IOS, IS_PROD } from '../../../config/constants'
+import { Alert, BackHandler, Linking, View } from 'react-native'
 import { useMixins } from '../../../services/mixins'
 import JailMonkey from 'jail-monkey'
 import { commonStyles } from '../../../theme'
 import { useCipherAuthenticationMixins } from '../../../services/mixins/cipher/authentication'
 import dynamicLinks from '@react-native-firebase/dynamic-links'
 import { Logger } from '../../../utils/logger'
+import VersionCheck from 'react-native-version-check';
+
 
 export const InitScreen = observer(() => {
   const { user, cipherStore, uiStore } = useStores()
@@ -139,6 +141,33 @@ export const InitScreen = observer(() => {
     //   navigation.navigate('intro')
     //   return
     // }
+
+    // Check App update
+    !__DEV__ && IS_PROD && VersionCheck.needUpdate()
+      .then(async res => {
+        if (res.isNeeded) {
+          Alert.alert(
+            translate('alert.update.title'),
+            translate('alert.update.content', { version: res.latestVersion }),
+            [
+              {
+                text: translate('alert.update.later'),
+                style: 'cancel',
+                onPress: () => null
+              },
+              {
+                text: translate('alert.update.now'),
+                style: 'destructive',
+                onPress: async () => {
+                  Linking.openURL(res.storeUrl);  // open store if update is needed.
+                }
+              },
+            ]
+          )
+        }
+      }).catch(e => {
+        Logger.error(e)
+      });
 
     // Check dynamic link
     const link = await dynamicLinks().getInitialLink()

@@ -10,6 +10,7 @@ import { Checkbox } from "react-native-ui-lib"
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 // import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import isEqual from 'lodash/isEqual'
+import { CipherType } from "../../../../core/enums"
 
 
 type Prop = {
@@ -26,18 +27,23 @@ export const CipherListItem = memo((props: Prop) => {
   const { color } = useMixins()
   const { getCipherDescription } = useCipherHelpersMixins()
 
+  // Disable toggleItemSelection for master password item
+  const isMasterPwItem = item.type === CipherType.MasterPassword
+
   return (
     <Button
       preset="link"
       onPress={() => {
         if (isSelecting) {
-          toggleItemSelection(item.id)
+          !isMasterPwItem && toggleItemSelection(item.id)
         } else {
           // goToDetail(item)
           openActionMenu(item)
         }
       }}
-      onLongPress={() => toggleItemSelection(item.id)}
+      onLongPress={() => {
+        !isMasterPwItem && toggleItemSelection(item.id)
+      }}
       style={{
         borderBottomColor: color.line,
         borderBottomWidth: 0.5,
@@ -66,7 +72,7 @@ export const CipherListItem = memo((props: Prop) => {
 
         <View style={{ flex: 1, marginLeft: 12 }}>
           {/* Name */}
-          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+          <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             <View style={{ flex: 1 }}>
               <Text
                 preset="semibold"
@@ -119,7 +125,7 @@ export const CipherListItem = memo((props: Prop) => {
         </View>
 
         {
-          isSelecting ? (
+          isSelecting && !isMasterPwItem ? (
             <Checkbox
               value={isSelected}
               color={color.primary}

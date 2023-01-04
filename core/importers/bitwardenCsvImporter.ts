@@ -99,6 +99,47 @@ export class BitwardenCsvImporter extends BaseImporter implements Importer {
                     cipher.secureNote = new SecureNoteView();
                     cipher.secureNote.type = SecureNoteType.Generic;
                     break;
+                case 'driver-license':
+                    cipher.type = CipherType.DriverLicense;
+                    cipher.secureNote = new SecureNoteView();
+                    cipher.secureNote.type = SecureNoteType.Generic;
+                    break;
+                case 'citizen-id':
+                    cipher.type = CipherType.CitizenID;
+                    cipher.secureNote = new SecureNoteView();
+                    cipher.secureNote.type = SecureNoteType.Generic;
+                    break;
+                case 'passport':
+                    cipher.type = CipherType.Passport;
+                    cipher.secureNote = new SecureNoteView();
+                    cipher.secureNote.type = SecureNoteType.Generic;
+                    break;
+                case 'social-security-number':
+                    cipher.type = CipherType.SocialSecurityNumber;
+                    cipher.secureNote = new SecureNoteView();
+                    cipher.secureNote.type = SecureNoteType.Generic;
+                    break;
+                case 'wireless-router':
+                    cipher.type = CipherType.WirelessRouter;
+                    cipher.secureNote = new SecureNoteView();
+                    cipher.secureNote.type = SecureNoteType.Generic;
+                    break;
+                case 'server':
+                    cipher.type = CipherType.Server;
+                    cipher.secureNote = new SecureNoteView();
+                    cipher.secureNote.type = SecureNoteType.Generic;
+                    break;
+                case 'api-cipher':
+                    cipher.type = CipherType.APICipher;
+                    cipher.secureNote = new SecureNoteView();
+                    cipher.secureNote.type = SecureNoteType.Generic;
+                    break;
+                case 'database':
+                    cipher.type = CipherType.Database;
+                    cipher.secureNote = new SecureNoteView();
+                    cipher.secureNote.type = SecureNoteType.Generic;
+                    break;
+
                 case 'crypto-wallet':
                     cipher.type = CipherType.CryptoWallet;
                     cipher.secureNote = new SecureNoteView();

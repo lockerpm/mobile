@@ -26,7 +26,7 @@ export const SeedPhraseInput = (props: Props) => {
   // ---------------- COMPUTED ------------------
 
   const words = (() => {
-    const res = seed.split(' ').map(w => w ? w.trim() : '')
+    const res = seed?.split(' ')?.map(w => w ? w.trim() : '')
     while (res.length < MAX_WORD_COUNT) {
       res.push('')
     }
@@ -52,11 +52,11 @@ export const SeedPhraseInput = (props: Props) => {
 
   const handleChange = (val: string, index: number) => {
     const res = [...words]
-    const ws = val.trim().split(' ')
+    const ws = val.trim()?.split(' ')
     if (val === '') {
       res[index] = ''
     } else {
-      ws.forEach((w, i) => {
+      ws?.forEach((w, i) => {
         if (w.trim() && index + i < MAX_WORD_COUNT) {
           res[index + i] = w.trim()
         }

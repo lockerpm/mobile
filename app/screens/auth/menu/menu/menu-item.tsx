@@ -4,7 +4,6 @@ import { Button, Text } from "../../../../components"
 import { commonStyles } from "../../../../theme"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
-import { PlanType } from "../../../../../core/enums/planType"
 
 export type MenuItemProps = {
   icon: React.ReactNode,

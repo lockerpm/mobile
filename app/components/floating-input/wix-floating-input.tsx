@@ -8,6 +8,7 @@ import { useMixins } from "../../services/mixins"
 import TextField from 'react-native-ui-lib/textField'
 import { MaskService, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
 import { translate } from "../../i18n"
+import moment from "moment"
 
 
 export interface WixFloatingInputProps extends TextInputProps {
@@ -30,6 +31,8 @@ export interface WixFloatingInputProps extends TextInputProps {
   lockCopy?: boolean
   persistError?: boolean
   hidePassword?: boolean
+  isDateTime?: boolean
+  onBlur?: () => void
 }
 
 /**
@@ -37,9 +40,9 @@ export interface WixFloatingInputProps extends TextInputProps {
  */
 export const WixFloatingInput = (props: WixFloatingInputProps) => {
   const {
-    outerRef, style, inputStyle, label, isPassword, value, placeholder,
+    outerRef, style, inputStyle, label, isPassword, value, placeholder, onBlur,
     editable = true, disabled, buttonRight, onChangeText, copyAble, lockCopy, textarea,
-    maskType, maskOptions, isRequired, persistError, hidePassword,
+    maskType, maskOptions, isRequired, persistError, hidePassword, isDateTime,
     ...rest
   } = props
 
@@ -47,9 +50,10 @@ export const WixFloatingInput = (props: WixFloatingInputProps) => {
   const [showPassword, setShowPassword] = useState(false)
   const [firstFocused, setFirstFocused] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
+  const [isDateInvalid, setIsDateInvalid] = useState(false)
 
-  const isInvalid = props.isInvalid || (isRequired && firstFocused && !value.trim())
-  const errorText = props.errorText || ((isRequired && firstFocused && !value.trim()) ? translate('error.required_data') : '')
+  const isInvalid = props.isInvalid || (isRequired && firstFocused && !value.trim()) || isDateInvalid
+  const errorText = props.errorText || ((isRequired && firstFocused && !value.trim()) ? translate('error.required_data') : '') || isDateInvalid && translate('common.invalid_date')
 
   const BUTTON_CONTAINER: ViewStyle = {
     position: 'absolute',
@@ -74,6 +78,18 @@ export const WixFloatingInput = (props: WixFloatingInputProps) => {
     return text
   }
 
+  const validateDateTime = (text: string) => {
+    if (text === "") {
+      setIsDateInvalid(false)
+      return
+    }
+    if (moment(text, 'MM/DD/YYYY', true).isValid()) {
+      setIsDateInvalid(false)
+      return
+    }
+    setIsDateInvalid(true)
+  }
+
   return (
     <View style={style}>
       {/* Input */}
@@ -93,9 +109,9 @@ export const WixFloatingInput = (props: WixFloatingInputProps) => {
         selectionColor={color.primary}
         transformer={validateMask}
         onChangeText={onChangeText}
-        underlineColor={{ 
-          focus: persistError && isInvalid ? color.error : color.primary, 
-          default: isInvalid ? color.error : color.disabled 
+        underlineColor={{
+          focus: persistError && isInvalid ? color.error : color.primary,
+          default: isInvalid ? color.error : color.disabled
         }}
         style={[{
           fontSize: fontSize.p,
@@ -112,6 +128,8 @@ export const WixFloatingInput = (props: WixFloatingInputProps) => {
         }}
         onBlur={() => {
           setIsFocus(false)
+          isDateTime && validateDateTime(value)
+          onBlur && onBlur()
         }}
         {...rest}
       />

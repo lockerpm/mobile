@@ -6,6 +6,7 @@ interface Props {
   isOpen?: boolean,
   onClose?: () => void,
   navigation?: any
+  allItemsLength?: number
 }
 
 export const AuthenticatorAddAction = (props: Props) => {
@@ -22,7 +23,7 @@ export const AuthenticatorAddAction = (props: Props) => {
           icon="qrcode"
           action={() => {
             props.onClose && props.onClose()
-            props.navigation && props.navigation.navigate('qrScanner')
+            props.navigation && props.navigation.navigate('qrScanner', {totpCount: props.allItemsLength})
           }}
         />
         <ActionItem

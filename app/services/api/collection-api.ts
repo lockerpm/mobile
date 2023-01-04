@@ -96,14 +96,22 @@ export class CollectionApi {
       return { kind: "bad-data" }
     }
   }
+
   // remove member collection
-  async removeShareMember(token: string, memberId: string, teamId: string, payload: CollectionActionData): Promise<EmptyResult> {
+  async removeShareMember(token: string, memberId: string, teamId: string, payload: CollectionActionData, isGroup?: boolean): Promise<EmptyResult> {
     try {
       detectTempId([teamId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/members/${memberId}/stop`, payload)
+      let response: ApiResponse<any>;
+
+      if (!isGroup) {
+        response = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/members/${memberId}/stop`, payload)
+      } else {
+        response =await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/groups/${memberId}/stop`, payload)
+      }
+      
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -123,7 +131,7 @@ export class CollectionApi {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/members`, {members})
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/members`, { members })
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -136,13 +144,32 @@ export class CollectionApi {
     }
   }
 
-  async updateShareItem(token: string, id: string, teamId: string, payload: {cipher: CipherRequest & { id: string }}): Promise<EmptyResult> {
+  async updateShareItem(token: string, id: string, teamId: string, payload: { cipher: CipherRequest & { id: string } }): Promise<EmptyResult> {
     try {
       detectTempId([teamId])
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/sharing/${teamId}/folders/${id}/items`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async removeShareItem(token: string, id: string, teamId: string, payload: { cipher: CipherRequest & { id: string } }): Promise<EmptyResult> {
+    try {
+      detectTempId([teamId])
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/sharing/${teamId}/folders/${id}/items`, payload)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)

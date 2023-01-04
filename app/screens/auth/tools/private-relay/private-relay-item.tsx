@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
 import {
   Text,
@@ -16,19 +16,22 @@ import { useStores } from '../../../../models'
 import { RelayAddress } from '../../../../config/types/api'
 
 interface Props {
+  isFreeAccount: boolean
+  navigation: any
   item: RelayAddress
   index: number
   deleteRelayAddress: (id: number) => void
   setShowEditModal: () => void
+  setShowConfigModal: () => void
 }
 
 export const AliasItem = (props: Props) => {
-  const { item, index, deleteRelayAddress, setShowEditModal } = props
+  const { item, index, deleteRelayAddress, setShowConfigModal, setShowEditModal, isFreeAccount, navigation } = props
   const { color, translate, copyToClipboard } = useMixins()
   const { toolStore } = useStores()
 
   const [isOpen, setIsOpen] = useState(false)
-  const [nextModal, setNextModal] = useState<'copy' | 'edit' | 'remove' | null>(null)
+  const [nextModal, setNextModal] = useState<'copy' | 'edit' | 'remove' | 'config' | null>(null)
 
   const handleRemove = async () => {
     const res = await toolStore.deleteRelayAddress(item.id)
@@ -45,6 +48,9 @@ export const AliasItem = (props: Props) => {
         break
       case 'edit':
         setShowEditModal()
+        break
+      case 'config':
+        setShowConfigModal()
         break
       case 'remove':
         handleRemove()
@@ -98,6 +104,32 @@ export const AliasItem = (props: Props) => {
                   icon="edit"
                   action={() => {
                     setNextModal('edit')
+                    setIsOpen(false)
+                  }}
+                />
+                <Divider />
+              </>
+            )}
+            {!isFreeAccount && (
+              <>
+                <ActionItem
+                  name={translate('private_relay.statistic')}
+                  icon="file-o"
+                  action={() => {
+                    navigation.navigate("aliasStatistic", { alias: item })
+                    setIsOpen(false)
+                  }}
+                />
+                <Divider />
+              </>
+            )}
+            {!isFreeAccount && (
+              <>
+                <ActionItem
+                  name={translate('private_relay.config')}
+                  icon="gear"
+                  action={() => {
+                    setNextModal('config')
                     setIsOpen(false)
                   }}
                 />

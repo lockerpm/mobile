@@ -12,6 +12,7 @@ import { useMixins } from "../../../../../services/mixins"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { MAX_CIPHER_SELECTION, TEAM_CIPHER_EDITOR } from "../../../../../config/constants"
 import { BackHandler } from "react-native"
+import { AccountRole } from "../../../../../config/types"
 
 type FolderCiphersScreenProp = RouteProp<PrimaryParamList, 'folders__ciphers'>;
 
@@ -19,7 +20,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
   const navigation = useNavigation()
   const route = useRoute<FolderCiphersScreenProp>()
   const { folderId, collectionId, organizationId } = route.params
-  const { folderStore, collectionStore, user, uiStore } = useStores()
+  const { folderStore, collectionStore, user, uiStore, cipherStore } = useStores()
   const folders: FolderView[] = folderStore.folders
   const collections: CollectionView[] = collectionStore.collections
   const { translate, getTeam } = useMixins()
@@ -43,7 +44,11 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
     return find(folders, e => e.id === folderId) || find(collections, e => e.id === collectionId)
   })()
 
-  const hasAddPermission = !collectionId || TEAM_CIPHER_EDITOR.includes(getTeam(user.teams, folder.organizationId).role)
+  const hasAddFolderPermission = !collectionId || TEAM_CIPHER_EDITOR.includes(getTeam(user.teams, folder?.organizationId).role)
+
+  const organizations = cipherStore.organizations
+  const hasAddCollectionPermission = getTeam(organizations, organizationId).type === AccountRole.OWNER
+  const isSharedFolder = !!collectionId 
 
   // Close select before leave
   useEffect(() => {
@@ -62,15 +67,32 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
     }
   }, [isSelecting])
 
+
+  useEffect(() => {
+    // set Most relevant by defalt when users search
+    if (searchText) {
+      if (searchText.trim().length === 1) {
+        setSortList(null)
+        setSortOption("most_relevant")
+      }
+    } else {
+      setSortList({
+        orderField: 'revisionDate',
+        order: 'desc'
+      })
+      setSortOption("last_updated")
+    }
+  }, [searchText]);
+
   // Render
   return (
     <Layout
       isContentOverlayLoading={isLoading}
       header={(
         <BrowseItemHeader
-          header={folder.name || translate('folder.unassigned')}
+          header={folder?.name || translate('folder.unassigned')}
           openSort={() => setIsSortOpen(true)}
-          openAdd={hasAddPermission ? () => setIsAddOpen(true) : undefined}
+          openAdd={hasAddFolderPermission || hasAddCollectionPermission ? () => setIsAddOpen(true) : undefined}
           navigation={navigation}
           searchText={searchText}
           onSearch={setSearchText}
@@ -102,6 +124,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
       />
 
       <AddAction
+        collection={isSharedFolder ? folder : undefined}
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
@@ -131,7 +154,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
             title={translate('all_items.empty.title')}
             desc={translate('all_items.empty.desc')}
             buttonText={translate('all_items.empty.btn')}
-            addItem={hasAddPermission ? () => {
+            addItem={hasAddFolderPermission || hasAddCollectionPermission ? () => {
               setIsAddOpen(true)
             } : undefined}
           />

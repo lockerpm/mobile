@@ -14,6 +14,23 @@ import {
   BiometricUnlockIntroScreen,
   PasswordEditScreen,
   PasswordInfoScreen,
+  ApiCipherEditScreen,
+  ApiCipherInfoScreen,
+  CitizenIDEditScreen,
+  CitizenIDInfoScreen,
+  DatabaseEditScreen,
+  DatabaseInfoScreen,
+  DriverLicenseEditScreen,
+  DriverLicenseInfoScreen,
+  PassportEditScreen,
+  PassportInfoScreen,
+  ServerEditScreen,
+  ServerInfoScreen,
+  SocialSecurityNumberEditScreen,
+  SocialSecurityNumberInfoScreen,
+  WirelessRouterEditScreen,
+  WirelessRouterInfoScreen,
+
   FolderSelectScreen,
   PasswordGeneratorScreen,
   DataBreachScannerScreen,
@@ -52,6 +69,7 @@ import {
   InAppNotificationScreen,
   DeleteScreen,
   PrivateRelay,
+  ManageSubdomainScreen,
   EmergencyAccessScreen,
   YourTrustedContactScreen,
   ContactsTrustedYouScreen,
@@ -59,6 +77,8 @@ import {
   TakeoverEAScreen,
   // @ts-ignore
   AutofillServiceScreen,
+  AliasStatisticScreen,
+  EnterpriseInvitedScreen,
 } from '../screens'
 import UserInactivity from 'react-native-user-inactivity'
 import { useMixins } from '../services/mixins'
@@ -67,7 +87,7 @@ import { AppTimeoutType, TimeoutActionType, useStores } from '../models'
 import { observer } from 'mobx-react-lite'
 import { useCipherAuthenticationMixins } from '../services/mixins/cipher/authentication'
 import { useCipherDataMixins } from '../services/mixins/cipher/data'
-import { IS_IOS, WS_URL } from '../config/constants'
+import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from '../config/constants'
 import { Logger } from '../utils/logger'
 import { SocketEvent, SocketEventType } from '../config/types'
 import { HealthNavigator } from './tools/health-navigator'
@@ -75,7 +95,9 @@ import { AppEventType, EventBus } from '../utils/event-bus'
 import InAppReview from 'react-native-in-app-review'
 import Intercom from '@intercom/intercom-react-native'
 import { AppNotification } from '../services/api'
-import { TrustedContact } from '../config/types/api'
+import { RelayAddress, SubdomainData, TrustedContact } from '../config/types/api'
+import { CollectionView } from '../../core/models/view/collectionView'
+
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -99,16 +121,26 @@ export type PrimaryParamList = {
 
   // Others
   start: undefined
+
+  enterpriseInvited: undefined
   switchDevice: undefined
   biometricUnlockIntro: undefined
   privateRelay: undefined
+  manageSubdomain: {
+    subdomain: SubdomainData
+  }
+  aliasStatistic: {
+    alias: RelayAddress
+  }
   passwordGenerator: {
     fromTools?: boolean
   }
   authenticator__edit: {
     mode: 'add' | 'edit'
   }
-  qrScanner: undefined
+  qrScanner: {
+    totpCount?: number
+  }
   dataBreachScanner: undefined
   dataBreachList: undefined
   dataBreachDetail: undefined
@@ -117,18 +149,62 @@ export type PrimaryParamList = {
   passwords__edit: {
     mode: 'add' | 'edit' | 'clone'
     initialUrl?: string
+    collection?: CollectionView
   }
   notes__info: undefined
   notes__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   cards__info: undefined
   cards__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   identities__info: undefined
   identities__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
+  }
+  driverLicenses__info: undefined
+  driverLicenses__edit: {
+    mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
+  }
+  citizenIDs__info: undefined
+  citizenIDs__edit: {
+    mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
+  }
+  passports__info: undefined
+  passports__edit: {
+    mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
+  }
+  socialSecurityNumbers__info: undefined
+  socialSecurityNumbers__edit: {
+    mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
+  }
+  wirelessRouters__info: undefined
+  wirelessRouters__edit: {
+    mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
+  }
+  servers__info: undefined
+  servers__edit: {
+    mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
+  }
+  apiCiphers__info: undefined
+  apiCiphers__edit: {
+    mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
+  }
+  databases__info: undefined
+  databases__edit: {
+    mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   folders__select: {
     mode: 'add' | 'move'
@@ -166,11 +242,11 @@ export type PrimaryParamList = {
   emailNotiSettings: undefined
   deviceNotiSettings: undefined
   deleteAccount: undefined
-
   shareMultiple: undefined
   cryptoWallets__info: undefined
   cryptoWallets__edit: {
     mode: 'add' | 'edit' | 'clone'
+    collection?: CollectionView
   }
   welcome_premium: undefined
 
@@ -352,7 +428,14 @@ export const MainNavigator = observer(() => {
 
   // Web socket
   const generateSocket = () => {
-    const ws = new WebSocket(`${WS_URL}?token=${user.apiToken}`)
+    // Note: using undocumented param (https://stackoverflow.com/questions/37246446/sending-cookies-with-react-native-websockets)
+    // @ts-ignore
+    const ws = new WebSocket(`${WS_URL}?token=${user.apiToken}`, [],  {
+      headers: {
+        'CF-Access-Client-Id': CF_ACCESS_CLIENT_ID,
+        'CF-Access-Client-Secret': CF_ACCESS_CLIENT_SECRET,
+      },
+    })
     ws.onopen = () => {
       Logger.debug('SOCKET OPEN')
     }
@@ -461,6 +544,7 @@ export const MainNavigator = observer(() => {
     }
   }, [uiStore.isOffline, user.isLoggedInPw, batchDecryptionEnded])
 
+
   // Recalculate password health on password update
   useEffect(() => {
     const listener = EventBus.createListener(AppEventType.PASSWORD_UPDATE, () => {
@@ -524,6 +608,7 @@ export const MainNavigator = observer(() => {
         }}
       >
         <Stack.Screen name="start" component={StartScreen} />
+        <Stack.Screen name="enterpriseInvited" component={EnterpriseInvitedScreen} />
         <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
 
@@ -545,7 +630,10 @@ export const MainNavigator = observer(() => {
             gestureEnabled: false,
           }}
         />
+
         <Stack.Screen name="privateRelay" component={PrivateRelay} />
+        <Stack.Screen name="manageSubdomain" component={ManageSubdomainScreen} />
+        <Stack.Screen name="aliasStatistic" component={AliasStatisticScreen} />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen
           name="authenticator__edit"
@@ -558,43 +646,35 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="dataBreachDetail" component={DataBreachDetailScreen} />
 
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
-        <Stack.Screen
-          name="passwords__edit"
-          component={PasswordEditScreen}
-          initialParams={{ mode: 'add' }}
-        />
+        <Stack.Screen name="passwords__edit" component={PasswordEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="notes__info" component={NoteInfoScreen} />
-        <Stack.Screen
-          name="notes__edit"
-          component={NoteEditScreen}
-          initialParams={{ mode: 'add' }}
-        />
+        <Stack.Screen name="notes__edit" component={NoteEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="cards__info" component={CardInfoScreen} />
-        <Stack.Screen
-          name="cards__edit"
-          component={CardEditScreen}
-          initialParams={{ mode: 'add' }}
-        />
+        <Stack.Screen name="cards__edit" component={CardEditScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="identities__info" component={IdentityInfoScreen} />
-        <Stack.Screen
-          name="identities__edit"
-          component={IdentityEditScreen}
-          initialParams={{ mode: 'add' }}
-        />
-        <Stack.Screen
-          name="folders__select"
-          component={FolderSelectScreen}
-          initialParams={{ mode: 'add' }}
-        />
+        <Stack.Screen name="identities__edit" component={IdentityEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="driverLicenses__info" component={DriverLicenseInfoScreen} />
+        <Stack.Screen name="driverLicenses__edit" component={DriverLicenseEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="citizenIDs__info" component={CitizenIDInfoScreen} />
+        <Stack.Screen name="citizenIDs__edit" component={CitizenIDEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="passports__info" component={PassportInfoScreen} />
+        <Stack.Screen name="passports__edit" component={PassportEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="socialSecurityNumbers__info" component={SocialSecurityNumberInfoScreen} />
+        <Stack.Screen name="socialSecurityNumbers__edit" component={SocialSecurityNumberEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="wirelessRouters__info" component={WirelessRouterInfoScreen} />
+        <Stack.Screen name="wirelessRouters__edit" component={WirelessRouterEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="servers__info" component={ServerInfoScreen} />
+        <Stack.Screen name="servers__edit" component={ServerEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="apiCiphers__info" component={ApiCipherInfoScreen} />
+        <Stack.Screen name="apiCiphers__edit" component={ApiCipherEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="databases__info" component={DatabaseInfoScreen} />
+        <Stack.Screen name="databases__edit" component={DatabaseEditScreen} initialParams={{ mode: 'add' }} />
+        <Stack.Screen name="folders__select" component={FolderSelectScreen} initialParams={{ mode: 'add' }} />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
         <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} />
         <Stack.Screen name="shareMultiple" component={ShareMultipleScreen} />
         <Stack.Screen name="cryptoWallets__info" component={CryptoWalletInfoScreen} />
-        <Stack.Screen
-          name="cryptoWallets__edit"
-          component={CryptoWalletEditScreen}
-          initialParams={{ mode: 'add' }}
-        />
+        <Stack.Screen name="cryptoWallets__edit" component={CryptoWalletEditScreen} initialParams={{ mode: 'add' }} />
 
         <Stack.Screen name="refer_friend" component={ReferFriendScreen} />
         <Stack.Screen name="invite_member" component={InviteMemberScreen} />

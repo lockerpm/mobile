@@ -140,13 +140,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    
     defaultConfig {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4084
-        versionName "1.25"
+        versionCode 4095
+        versionName "1.28"
         
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.cystack.locker'
@@ -264,6 +264,7 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
     implementation 'com.google.android.play:core:1.10.3'
     implementation 'com.tencent:mmkv:1.2.13'
     implementation "androidx.autofill:autofill:1.1.0"

@@ -1,6 +1,6 @@
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { View } from "react-native"
+import { Dimensions, View } from "react-native"
 import { fontSize } from "../../theme"
 import { BaseToast, BaseToastProps } from 'react-native-toast-message'
 import { useMixins } from '../../services/mixins'
@@ -12,9 +12,9 @@ export const InfoToast = (props: BaseToastProps) => {
   return (
     <BaseToast
       {...props}
-      style={{ 
+      style={{
         borderLeftColor: color.textBlack,
-        backgroundColor: isDark ? color.block : color.background
+        backgroundColor: isDark ? color.block : color.background,
       }}
       text2Style={{
         color: color.textBlack,
@@ -34,12 +34,16 @@ export const SuccessToast = (props: BaseToastProps) => {
   return (
     <BaseToast
       {...props}
-      style={{ 
-        borderLeftColor: color.primary,
-        backgroundColor: isDark ? color.block : color.background
+      style={{
+        borderLeftWidth: 0,
+        borderRadius: 8,
+        height: undefined,
+        width: Dimensions.get("screen").width - 40,
+        backgroundColor: color.toastBackground,
+        paddingVertical: 10,
       }}
       text2Style={{
-        color: color.primary,
+        color: isDark? color.primary : color.white,
         fontSize: fontSize.small
       }}
       text2NumberOfLines={0}
@@ -69,12 +73,16 @@ export const ErrorToast = (props: BaseToastProps) => {
   return (
     <BaseToast
       {...props}
-      style={{ 
-        borderLeftColor: color.error,
-        backgroundColor: isDark ? color.block : color.background
+      style={{
+        borderLeftWidth: 0,
+        borderRadius: 8,
+        height: undefined,
+        width: Dimensions.get("screen").width - 40,
+        backgroundColor: color.toastBackground,
+        paddingVertical: 10,
       }}
       text2Style={{
-        color: color.error,
+        color: isDark? color.error : color.white,
         fontSize: fontSize.small
       }}
       text2NumberOfLines={0}

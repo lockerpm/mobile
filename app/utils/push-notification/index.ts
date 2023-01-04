@@ -36,6 +36,7 @@ export class PushNotifier {
     // Firebase
     messaging().onMessage(async (message: FirebaseMessagingTypes.RemoteMessage) => {
       Logger.debug('Firebase: FOREGROUND HANDLER')
+      Logger.debug(message.data)
 
       const { event, data } = message.data
       switch (event) {
@@ -101,7 +102,7 @@ export class PushNotifier {
     // Firebase
     messaging().setBackgroundMessageHandler(async (message: FirebaseMessagingTypes.RemoteMessage) => {
       Logger.debug('Firebase: BACKGROUND HANDLER')
-
+      Logger.debug(message.data)
       const currentUser = await load(StorageKey.APP_CURRENT_USER)
       if (!currentUser) {
         return

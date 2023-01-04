@@ -1,140 +1,179 @@
-import React, { useState } from "react"
-import { View, TouchableOpacity } from "react-native"
+import React, { useState, useRef } from "react"
+import { View, Dimensions, Animated, TouchableOpacity } from "react-native"
 import { AutoImage as Image, Text, Layout, Button, LanguagePicker } from "../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { commonStyles, fontSize, spacing } from "../../../theme"
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { fontSize, spacing } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
 import { observer } from "mobx-react-lite"
+import { APP_INTRO } from "../../../common/mappings"
+import { RootParamList } from "../../../navigators"
+
+type IntroScreenProp = RouteProp<RootParamList, "intro">
 
 export const IntroScreen = observer(() => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
-  const { isPortrait, isTablet } = useAdaptiveLayoutMixins()
+  const route = useRoute<IntroScreenProp>()
+  const { isPortrait } = useAdaptiveLayoutMixins()
+  const { width, height } = Dimensions.get('screen')
 
-  const tabs = [
-    {
-      img: require("./intro1.png"),
-      title: translate('intro.item_1.title'),
-      desc: translate('intro.item_1.desc')
-    },
-    {
-      img: require("./intro2.png"),
-      title: translate('intro.item_2.title'),
-      desc: translate('intro.item_2.desc')
-    },
-    {
-      img: require("./intro3.png"),
-      title: translate('intro.item_3.title'),
-      desc: translate('intro.item_3.desc')
-    }
-  ]
-  const map = {}
+  // ------------------ PARAMS ---------------------
 
   const [index, setIndex] = useState(0)
-  const [routes] = useState(tabs.map((item, index) => ({
-    key: index.toString()
-  })))
 
-  tabs.forEach((item, index) => {
-    map[index.toString()] = () => (
-      <View
-        style={[commonStyles.SECTION_PADDING, {
-          flex: 1,
-          justifyContent: "space-around",
-          alignContent: "center",
-          alignItems: 'center',
-          flexDirection: isTablet ? "column" : isPortrait ? "column" : "row"
-        }]}
-      >
-        <Image
-          key={index}
-          source={item.img}
-          style={{
-            flex: 7,
-            maxWidth: "80%",
-            maxHeight: "90%",
-            alignSelf: "center"
-          }}
-        />
-        {!(!isTablet && !isPortrait) && <View style={{
-          flex: 2,
-        }}>
-          <Text preset="header" text={item.title} style={{
-            flex: 1,
-            alignSelf: "center",
-          }} />
-          <Text text={item.desc} style={{ textAlign: 'center', flex: 1 }} />
-        </View>}
+  // ------------------ CONPUTED ---------------------
 
-      </View>
-    )
+  const isPreview = route.params?.preview
+
+  // ------------------ DATA ---------------------
+
+  const flastListRef = useRef(null)
+  const tabs = [
+    {
+      img: APP_INTRO.security,
+      title: translate('intro.security.title'),
+      desc: translate('intro.security.desc')
+    },
+    {
+      img: APP_INTRO.sync,
+      title: translate('intro.sync.title'),
+      desc: translate('intro.sync.desc')
+    },
+    {
+      img: APP_INTRO.autofill,
+      title: translate('intro.autofill.title'),
+      desc: translate('intro.autofill.desc')
+    },
+    {
+      img: APP_INTRO.otp,
+      title: translate('intro.otp.title'),
+      desc: translate('intro.otp.desc')
+    }
+  ]
+
+  // ------------------ METHODS ---------------------
+
+  const onViewableItemsChanged = useRef(({ viewableItems, _ }) => {
+    setIndex(viewableItems[0].index)
   })
-  const renderScene = SceneMap(map)
 
-  // Footer
-  const footer = (
-    <View>
-      <Button
-        text={translate("common.continue")}
-        onPress={() => {
-          if (index === routes.length - 1) {
-            navigation.navigate("onBoarding")
-          } else {
-            setIndex((index + 1) % routes.length)
-          }
-        }}
-      >
-      </Button>
-    </View>
-  )
+  const scrollTo = (index: number) => {
+    setIndex(index)
+    flastListRef.current?.scrollToIndex({ Animated: false, index })
+  }
+
+  // ------------------ RENDER ---------------------
 
   return (
     <Layout
-      footer={footer}
       noScroll
+      footer={
+        <Button
+          text={index === 3 ? translate("common.get_start") : translate("common.next")}
+          onPress={() => {
+            if (index === 3) {
+              if (isPreview) {
+                navigation.navigate("mainStack", {screen: "help"})
+              } else {
+                navigation.navigate("onBoarding")
+              }
+            } else {
+              scrollTo(index + 1)
+            }
+          }}
+        />
+      }
     >
       <LanguagePicker />
-      <View style={{ position: "absolute", top: 16, right: 20, zIndex: 11 }}>
-        <Button
-          text={translate('common.skip').toUpperCase()}
-          textStyle={{ fontSize: fontSize.p }}
-          preset="link"
-          onPress={() => navigation.navigate("onBoarding")}
-        >
-        </Button>
-      </View>
-      <View style={{ flex: 1, justifyContent: 'center', marginBottom: 10 }}>
-        {/* Tabs */}
-        <View style={{ flex: 5, minHeight: 300 }}>
-          <TabView
-            renderTabBar={() => null}
-            navigationState={{ index, routes }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-          />
-        </View>
-
-        {/* Bullets */}
-        <View style={{ flexDirection: 'row', justifyContent: 'center', flex: 1 }}>
-          {
-            routes.map((item, i) =>
-              <TouchableOpacity
-                key={i}
-                style={{
-                  height: spacing.smaller,
-                  width: spacing.smaller,
-                  borderRadius: spacing.smaller,
-                  marginVertical: spacing.medium,
-                  marginHorizontal: spacing.tiny,
-                  backgroundColor: i === index ? color.primary : color.palette.lightGray
-                }}
-                onPress={() => setIndex(i)}
-              />
-            )
+      <Button
+        text={translate('common.skip').toUpperCase()}
+        textStyle={{ fontSize: fontSize.p }}
+        preset="link"
+        onPress={() => {
+          if (isPreview) {
+            navigation.navigate("mainStack", {screen: "help"})
+          } else {
+            navigation.navigate("onBoarding")
           }
-        </View>
+        }}
+        style={{ position: "absolute", top: 16, right: 20, zIndex: 11 }}
+      >
+      </Button>
+
+      {/** Intro */}
+      <Animated.FlatList
+        data={tabs}
+        ref={flastListRef}
+        // @ts-ignore
+        onViewableItemsChanged={onViewableItemsChanged.current}
+        contentContainerStyle={{ height: height * 0.7 }}
+        keyExtractor={(_, index) => `intro${index}`}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={width}
+        decelerationRate="fast"
+        viewabilityConfig={{
+          waitForInteraction: true,
+          viewAreaCoveragePercentThreshold: 50
+        }}
+        getItemLayout={(data, index) => (
+          { length: width, offset: width * index, index }
+        )}
+        renderItem={({ item }) => (
+          <View style={{
+            width: width,
+            alignItems: "center",
+            justifyContent: "space-between"
+          }}>
+            <View />
+            {
+              isPortrait && <View style={{
+                maxWidth: width * 0.9,
+                marginBottom: 16,
+                marginTop: "10%"
+              }}
+              >
+                <Text preset="header" text={item.title} style={{
+                  alignSelf: "center",
+                  marginBottom: 10,
+                }} />
+                <Text text={item.desc} style={{
+                  textAlign: "center"
+                }} />
+              </View>
+            }
+
+            <Image
+              source={item.img}
+              resizeMode="contain"
+              style={{
+                width: Math.min(width, 400),
+                maxHeight: Math.min(width, 400)
+              }}
+            />
+          </View>
+        )}
+      />
+
+      {/* Bullets */}
+      <View style={{ flexDirection: 'row', justifyContent: 'center', flex: 1 }}>
+        {
+          tabs.map((item, i) =>
+            <TouchableOpacity
+              key={i}
+              style={{
+                height: 8,
+                width: 8,
+                borderRadius: 8,
+                marginVertical: spacing.medium,
+                marginHorizontal: spacing.tiny,
+                backgroundColor: i === index ? color.primary : color.line
+              }}
+              onPress={() => setIndex(i)}
+            />
+          )
+        }
       </View>
     </Layout>
   )

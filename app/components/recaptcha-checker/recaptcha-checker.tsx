@@ -12,7 +12,6 @@ export const RecaptchaChecker = forwardRef((props: Props, ref) => {
   const { notify } = useMixins()
 
   let token = ''
-
   const recaptcha = useRef(null)
 
   const waitForToken = () => {

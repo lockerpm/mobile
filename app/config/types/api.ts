@@ -12,6 +12,7 @@ export type SessionSnapshot = {
   refresh_token: string
   key: string
   private_key: string
+  has_no_master_pw_item: boolean
 }
 
 export type PasswordPolicy = {
@@ -98,12 +99,32 @@ export type SharedMemberType = {
   username: string
 }
 
+export type SharedGroupType = {
+  access_time: number
+  id: string
+  name: string
+  role: AccountRoleText
+  share_type: SharingType
+}
+
 export type MyShareType = {
   id: string
   description: string
   name: string
   organization_id: string
   members: SharedMemberType[]
+  groups: SharedGroupType[]
+}
+export type Enterprise = {
+  creation_date: number
+  description: string
+  id: string
+  is_default: boolean
+  locked: boolean
+  name: string
+  organization_id: string
+  revision_date: null
+  role: string
 }
 
 export type UserTeam = {
@@ -116,6 +137,14 @@ export type UserTeam = {
   is_business: boolean
   locker: boolean
   organization_id: string
+}
+export type SubdomainData = {
+  id: number,
+  subdomain: string
+  created_time: number,
+  num_alias: number,
+  num_spam: number,
+  num_forwarded: number
 }
 
 export type RelayAddress = {
@@ -131,6 +160,8 @@ export type RelayAddress = {
   num_replied: number
   num_spam: number
   updated_time: null
+  subdomain: string
+  block_spam: boolean
 }
 
 export type TrustedContact = {

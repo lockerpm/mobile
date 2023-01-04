@@ -43,6 +43,7 @@ export class CipherRequest {
         this.reprompt = cipher.reprompt;
 
         switch (this.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 this.login = new LoginApi();
                 this.login.uris = null;
@@ -64,6 +65,14 @@ export class CipherRequest {
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.DriverLicense:
+            case CipherType.CitizenID:
+            case CipherType.Passport:
+            case CipherType.SocialSecurityNumber:
+            case CipherType.WirelessRouter:
+            case CipherType.Server:
+            case CipherType.APICipher:
+            case CipherType.Database:
             case CipherType.CryptoWallet:
                 this.secureNote = new SecureNoteApi();
                 this.secureNote.type = cipher.secureNote.type;

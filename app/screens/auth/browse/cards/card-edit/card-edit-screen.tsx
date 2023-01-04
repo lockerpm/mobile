@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
+import find from 'lodash/find'
 import {
   AutoImage as Image, Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Select, CustomFieldsEdit
 } from "../../../../../components"
@@ -16,6 +17,8 @@ import { CipherType } from "../../../../../../core/enums"
 import { CARD_BRANDS } from "../constants"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 
 type CardEditScreenProp = RouteProp<PrimaryParamList, 'cards__edit'>;
@@ -39,11 +42,13 @@ export const CardEditScreen = observer(() => {
   const route = useRoute<CardEditScreenProp>()
   const { mode } = route.params
   const { translate, color } = useMixins()
+
+  const { shareFolderAddItem } = useFolderMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
   const { newCipher } = useCipherHelpersMixins()
-  const { cipherStore } = useStores()
+  const { cipherStore, collectionStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-
+  const selectedCollection: CollectionView = route.params.collection
   // Params
 
   const [isLoading, setIsLoading] = useState(false)
@@ -60,6 +65,7 @@ export const CardEditScreen = observer(() => {
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
+  const [collection, setCollection] = useState(mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null)
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
 
   // Watchers
@@ -69,10 +75,22 @@ export const CardEditScreen = observer(() => {
       if (cipherStore.selectedFolder) {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
-        } else {
-          setFolder(cipherStore.selectedFolder)
         }
+        else {
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
+        }
+        setCollection(null)
+        setCollectionIds([])
+        setOrganizationId(null)
         cipherStore.setSelectedFolder(null)
+      }
+
+      if (cipherStore.selectedCollection) {
+        if (!selectedCollection)
+          setCollection(cipherStore.selectedCollection)
+        setFolder(null)
+        cipherStore.setSelectedCollection(null)
       }
     });
 
@@ -88,7 +106,7 @@ export const CardEditScreen = observer(() => {
       payload = newCipher(CipherType.Card)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
     const data = new CardView()
@@ -116,10 +134,19 @@ export const CardEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    setIsLoading(false)
     if (res.kind === 'ok') {
+      // for shared folder
+      if (selectedCollection) {
+        await shareFolderAddItem(selectedCollection, payload)
+      }
+
+      if (collection) {
+        const collectionView = find(collectionStore.collections, e => e.id === collection) || {}
+        await shareFolderAddItem(collectionView, payload)
+      }
       navigation.goBack()
     }
+    setIsLoading(false)
   }
 
   // Render
@@ -192,7 +219,7 @@ export const CardEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
@@ -268,7 +295,7 @@ export const CardEditScreen = observer(() => {
                   />
                 )
               }
-              
+
             </View>
           ))
         }
@@ -289,6 +316,7 @@ export const CardEditScreen = observer(() => {
         note={note}
         onChangeNote={setNote}
         folderId={folder}
+        collectionId={collection}
         organizationId={organizationId}
         setOrganizationId={setOrganizationId}
         collectionIds={collectionIds}

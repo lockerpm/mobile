@@ -6,23 +6,23 @@ import { AccountRoleText, SharingStatus } from '../../../../../config/types'
 import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
 import { CollectionView } from '../../../../../../core/models/view/collectionView'
 import { fontSize } from '../../../../../theme'
-import { SharedMemberType } from '../../../../../config/types/api'
+import { SharedGroupType, SharedMemberType } from '../../../../../config/types/api'
 
 interface Props {
   reload: boolean
   setReload: (val: boolean) => void
-  user: SharedMemberType
+  item?: (SharedMemberType | SharedGroupType) & { type: string }
   collection: CollectionView
-  onRemove: (collection: CollectionView, id: string) => void
+  onRemove: (collection: CollectionView, id: string, isGroup?: boolean) => void
 }
 
 export const SharedUsers = (props: Props) => {
-  const { user, collection, reload, setReload, onRemove } = props
-  const { id, email, avatar, full_name, role, status } = user
+  const { item, collection, reload, setReload, onRemove } = props
+
   const { color, translate } = useMixins()
   const { editShareCipher } = useCipherDataMixins()
 
-  const isEditable = role === 'admin'
+  const isEditable = item.role === 'admin'
 
   const onEditRole = async (shareType: 'only_fill' | 'edit') => {
     let role = AccountRoleText.MEMBER
@@ -35,8 +35,7 @@ export const SharedUsers = (props: Props) => {
         role = AccountRoleText.ADMIN
         break
     }
-    const res = await editShareCipher(collection.organizationId, id, role, autofillOnly)
-
+    const res = await editShareCipher(collection.organizationId, item.id, role, autofillOnly, item.type === 'group')
     if (res.kind === 'ok' || res.kind === 'unauthorized') {
       setShowSheetModal(false)
       setReload(!reload)
@@ -60,7 +59,7 @@ export const SharedUsers = (props: Props) => {
       }}
     >
       <Image
-        source={avatar ? { uri: avatar } : require('./avatar.png')}
+        source={item['avatar'] ? { uri: item['avatar'] } : require('./group.png')}
         style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
       />
 
@@ -68,7 +67,7 @@ export const SharedUsers = (props: Props) => {
         style={{ flex: 1, justifyContent: 'center' }}
         onPress={() => setShowSheetModal(true)}
       >
-        <Text preset="black" text={email} />
+        <Text preset="black" text={item['email'] || item['name']} />
         <View style={{ flexDirection: 'row' }}>
           <Text
             preset="default"
@@ -79,7 +78,7 @@ export const SharedUsers = (props: Props) => {
             }
           />
           {/* Sharing status */}
-          {status && (
+          {item['status'] && (
             <View
               style={{
                 alignSelf: 'center',
@@ -87,16 +86,16 @@ export const SharedUsers = (props: Props) => {
                 paddingHorizontal: 10,
                 paddingVertical: 2,
                 backgroundColor:
-                  status === SharingStatus.INVITED
+                  item['status'] === SharingStatus.INVITED
                     ? color.warning
-                    : status === SharingStatus.ACCEPTED
-                    ? color.info
-                    : color.primary,
+                    : item['status'] === SharingStatus.ACCEPTED
+                      ? color.info
+                      : color.primary,
                 borderRadius: 3,
               }}
             >
               <Text
-                text={status.toUpperCase()}
+                text={item['status'].toUpperCase()}
                 style={{
                   fontWeight: 'bold',
                   color: color.background,
@@ -113,12 +112,13 @@ export const SharedUsers = (props: Props) => {
           <View style={{ paddingHorizontal: 20 }}>
             <View style={{ flexDirection: 'row', marginBottom: 16 }}>
               <Image
-                source={avatar ? { uri: avatar } : require('./avatar.png')}
-                style={{ height: 40, width: 40, borderRadius: 20 }}
+                source={item['avatar'] ? { uri: item['avatar'] } : require('./group.png')}
+                style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
               />
+
               <View style={{ justifyContent: 'center', height: 40, marginLeft: 16 }}>
-                {full_name && <Text preset="black">{full_name}</Text>}
-                <Text>{email}</Text>
+                {item['full_name'] && <Text preset="black">{item['full_name']}</Text>}
+                <Text preset={!!item['name'] ? "black" : "default"}>{item['email'] || item['name']}</Text>
               </View>
             </View>
           </View>
@@ -158,7 +158,7 @@ export const SharedUsers = (props: Props) => {
 
           <ActionItem
             action={() => {
-              onRemove(collection, id)
+              onRemove(collection, item.id, item.type === 'group')
               setShowSheetModal(false)
             }}
           >
