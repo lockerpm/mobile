@@ -70,6 +70,8 @@
         android:resource="@xml/autofill_service_configuration"
       />
     </service>
+    
+    <meta-data android:name="io.sentry.anr.enable" android:value="false" />
     <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
   </application>
 </manifest>

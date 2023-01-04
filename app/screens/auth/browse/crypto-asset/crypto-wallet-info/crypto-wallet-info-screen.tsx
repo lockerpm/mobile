@@ -93,7 +93,7 @@ export const CryptoWalletInfoScreen = observer(() => {
           marginBottom: 10
         }]}>
           {
-            !!selectedApp ? (
+            selectedApp ? (
               <Image
                 source={selectedApp.logo}
                 style={{

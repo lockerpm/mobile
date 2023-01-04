@@ -30,14 +30,18 @@
     "done": "Xong",
     "delete": "Xóa",
     "details": "Chi tiết",
+    "decline": "Từ chối",
     "edit": "Sửa",
     "email": "Email",
-    "enter_master_pass": "Nhập mật khẩu chính",
+    "enterprise": "Doanh nghiệp",
+    "enter_master_pass": "Nhập Master Password",
     "faceid_unlocking": "Mở khóa bằng Face ID",
+    "female": "Nữ",
     "folder": "Thư mục",
     "folders": "Thư mục",
     "fullname": "Họ và tên",
     "generate": "Tạo mới",
+    "get_start": "Bắt đầu",
     "help": "Trợ giúp",
     "home": "Trang chủ",
     "identity": "Danh tính",
@@ -49,7 +53,8 @@
     "lock": "Khóa",
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
-    "master_pass": "Mật khẩu chính",
+    "male": "Nam",
+    "master_pass": "Master Password",
     "max": "Tối đa",
     "minute": "phút",
     "minutes": "phút",
@@ -115,16 +120,36 @@
     "see_all": "Xem tất cả",
     "collapse": "Thu gọn",
     "share_with": "Chia sẻ với",
-    "yes": "Đồng ý"
+    "yes": "Đồng ý",
+    "driver_license": "Giấy phép lái xe",
+    "citizen_id": "Căn cước công dân",
+    "passport": "Hộ chiếu",
+    "social_security_number": "Số bảo hiểm xã hội",
+    "wireless_router": "Wireless Router",
+    "server": "Server",
+    "api_cipher": "API",
+    "database": "Database",
+    "dob": "Ngày sinh",
+    "nationality": "Quốc tịch",
+    "invalid_date": "Ngày không hợp lệ"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
   },
   "alert": {
+    "enterprise_lock": "Tài khoản đã bị khóa bởi doanh nghiệp. Vui lòng liên hệ quản trị viên của bạn để mở khóa tài khoản",
+    "enterprise_system_lock": "Tài khoản đã bị khóa bởi gói doanh nghiệp đã hết hạn. Vui lòng liên hệ quản trị viên của bạn để mở khóa tài khoản",
+    "update": {
+      "title": "Cập nhật ứng dụng?",
+      "content": "Locker {{version}} đã có mặt tại của hàng CH play. Cập nhật ngay!",
+      "later": "Sau",
+      "now": "Cập nhật"
+    },
     "lock_app": "Khoá Locker?",
     "logout": "Đăng xuất khỏi "
   },
   "error": {
+    "master_password": "Không thể tự động tạo Siêu Mật Khẩu tự động",
     "not_supported": "Không hỗ trợ",
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
@@ -189,7 +214,8 @@
     "done": "Hoàn tất",
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
     "invitation_rejected": "Đã từ chối lời mời",
-    "master_password_updated": "Mật khẩu chính đã được cập nhật",
+    "master_password_updated": "Master Password đã được cập nhật",
+    "locker_password_updated": "Mật khẩu Locker đã được cập nhật",
     "biometric_enabled": "Mở khóa bằng Face ID/Touch ID đã được kích hoạt",
     "cipher_created": "Thêm mới thành công",
     "cipher_deleted": "Xóa thành công",
@@ -206,13 +232,18 @@
     "tool": "Ẩn địa chỉ email của bạn khỏi các nhà cung cấp dịch vụ trực tuyến",
     "root_email": "Địa chỉ email gốc của bạn",
     "btn": "Thêm",
-    "label": "Your alias addresses",
+    "label": "Địa chỉ email ẩn danh",
     "desc": {
       "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
       "two": "Bạn có thể tạo và dùng tối đa 05 email ẩn danh tại một thời điểm",
       "three": "Bạn có thể sửa đổi 01 email ẩn danh theo ý bạn"
     },
-    "copy": "Copy alias",
+    "desc_premium": {
+      "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
+      "two": "Bạn có thể trả lời người gửi thông qua email ẩn danh",
+      "three": "Bạn có thể sửa đổi một email ẩn danh và tên miền phụ theo ý bạn"
+    },
+    "copy": "Sao chép email",
     "edit": "Sửa địa chỉ email",
     "edit_modal": {
       "titel": "Thay đổi địa chỉ email",
@@ -225,7 +256,34 @@
       "minimum": "Địa chỉ email yêu cầu ít nhất 6 ký tự",
       "not_valid": "Địa chỉ email này không hợp lệ"
     },
-    "edit_warning": "Địa chỉ Email ẩn danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email ẩn danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email ẩn danh này"
+    "edit_warning": "Địa chỉ Email ẩn danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email ẩn danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email ẩn danh này",
+    "manage_subdomain": {
+      "your_subdomain": "Tên miền phụ",
+      "desc": {
+        "one": "Tên miền phụ cho phép tạo địa chỉ email tùy chỉnh theo thương hiệu của bạn",
+        "two": "Bạn có thể tạo một tên miền phụ"
+      },
+      "manage": "Quản lý",
+      "title": "Quản lý tên miền phụ",
+      "num_alias": "Số email được tạo bởi tên miền",
+      "block_email": "Số email bị chặn",
+      "forwarded_email": "Số email được chuyển tiếp",
+      "create_date": "Ngày tạo",
+      "use_subdomain": "Sử dụng tên miền này để tạo các địa chỉ mới",
+      "edit_btn": "Thay đổi tên miền phụ",
+      "new": "Tạo mới tên miền phụ",
+      "edit_note": "*Tên miền hiện tại sẽ bị xóa vĩnh viễn khi bạn thay đổi sang một tên miền mới. Tất cả địa chỉ email gắn với tên miền hiện tại sẽ bị xóa khi bạn thực hiện hành động này"
+    },
+    "statistic": "Báo cáo",
+    "config": "Tuỳ chỉnh",
+    "no_subdomain": "Tạo tên miền của riêng bạn",
+    "config_modal": {
+      "title": "Tuỳ chỉnh",
+      "enable": "Chuyển tiếp tất cả email tới địa chỉ email gốc",
+      "block": "Chặn tất cả email đến",
+      "block_spam": "Chỉ chặn email spam và quảng cáo",
+      "note": "*Khi bạn thực hiện thay đổi, số liệu trong báo cáo cho địa chỉ này sẽ được tính lại."
+    }
   },
   "emergency_access": {
     "title": "Liên hệ khẩn cấp",
@@ -248,7 +306,7 @@
       "email": "Địa chỉ email",
       "exist_error": "Địa chỉ liên hệ khẩn cấp đã được thêm trước đó",
       "view": "Có thể xem tất cả mục trong kho của bạn",
-      "takeover": "Có thể đặt lại Mật khẩu chính của bạn",
+      "takeover": "Có thể đặt lại Master Password của bạn",
       "wait_time": "Thời gian chờ",
       "text": "Thời gian cần thiết trước khi tự động cấp quyền truy cập",
       "day": "ngày",
@@ -257,9 +315,9 @@
     "view_vault": "Xem kho dữ liệu",
     "takeover_vault": "Chiếm quyền kho dữ liệu",
     "free_guild": "Bạn đang dùng tài khoản Free. Nâng cấp lên Premium để thêm Liên hệ khẩn cấp",
-    "reset_master_pw": "Đặt lại Mật khẩu chính",
+    "reset_master_pw": "Đặt lại Master Password",
     "reset_pw": "Đặt lại mật khẩu Locker",
-    "reset_master_pw_user": "Đặt lại mật khẩu chính cho {{name}}",
+    "reset_master_pw_user": "Đặt lại Master Password cho {{name}}",
     "reset_pw_user": "Đặt lại mật khẩu Locker cho {{name}}",
     "change_pw": {
       "title": "Đặt lại mật khẩu",
@@ -267,7 +325,7 @@
       "confirm": "Xác nhận mật khẩu"
     },
     "change_master_pass": {
-      "title": "Đăt lại mật khẩu chính"
+      "title": "Đăt lại Master Password"
     },
     "view_user_vault": "Bạn đang xem tất cả các mục trong kho của {{name}}",
     "pending_trusted": "{{count}} yêu cầu",
@@ -296,32 +354,43 @@
     "strong": "Mạnh"
   },
   "create_master_pass": {
-    "title": "Tạo mật khẩu chính",
+    "title": "Tạo Master Password",
     "desc": "Master Password là mật khẩu mở khóa Locker của bạn. Đây là mật khẩu duy nhất bạn cần nhớ để truy cập tất cả các mật khẩu khác được lưu trữ trong Locker. Vui lòng không chia sẻ mật khẩu này với bất kỳ ai.",
-    "confirm_master_pass": "Xác nhận mật khẩu chính",
+    "confirm_master_pass": "Xác nhận Master Password",
     "hint": "Gợi ý (không bắt buộc)",
     "btn": "Tạo mật khẩu",
     "note": "Lưu ý: Locker không thể xem, không thể lưu trữ, cũng như không thể cấp lại Master Password trong trường hợp bạn quên hoặc đánh mất."
   },
+  "confirm_create_master_pass": {
+    "title": "Quan trọng",
+    "desc": "Khi tiếp tục, bạn đã hiểu rằng đội ngũ Locker không thể nhìn, thay đổi, hoặc cấp lại Master Password của bạn trong trường hợp bạn quên Master Password. Bạn là người duy nhất sở hữu Master Password.",
+    "link": "Xem thêm.",
+    "next_btn": "Tôi đã hiểu",
+    "back_btn": "Tôi muốn thay đổi Master Password"
+  },
   "intro": {
-    "item_1": {
+    "security": {
       "title": "Bảo mật & Riêng tư",
       "desc": "Kho của bạn được bảo vệ với bảo mật đẳng cấp thế giới."
     },
-    "item_2": {
+    "sync": {
       "title": "Đồng bộ hóa không giới hạn",
       "desc": "Bạn có thể truy cập dữ liệu của Locker từ bất kỳ thiết bị nào."
     },
-    "item_3": {
+    "autofill": {
       "title": "Tự động điền",
       "desc": "Tự động điền thông tin đăng nhập của bạn trên các ứng dụng và trang web."
+    },
+    "otp": {
+      "title": "OTP tích hợp trong ứng dụng",
+      "desc": "Nâng cao bảo mật cho các tài khoản của bạn với tính năng OTP được tích hợp trong ứng dụng."
     }
   },
   "lock": {
-    "master_pass_changed": "Mật khẩu chính đã thay đổi. Vui lòng đăng nhập bằng mật khẩu mới",
-    "hint_sent": "Gợi ý mật khẩu chính đã được gửi. Vui lòng kiểm tra email của bạn để được hướng dẫn",
+    "master_pass_changed": "Master Password đã thay đổi. Vui lòng đăng nhập bằng mật khẩu mới",
+    "hint_sent": "Gợi ý Master Password đã được gửi. Vui lòng kiểm tra email của bạn để được hướng dẫn",
     "title": "Chào mừng trở lại!",
-    "desc": "Nhập mật khẩu chính của bạn để đăng nhập",
+    "desc": "Nhập Master Password của bạn để đăng nhập",
     "get_hint": "Nhận gợi ý"
   },
   "onBoarding": {
@@ -446,6 +515,59 @@
       "btn": "Thêm danh tính"
     }
   },
+  "driver_license": {
+    "no": "Số giấy phép",
+    "class": "Hạng",
+    "valid_until": "Thời hạn",
+    "vehicle_class": "Loại phương tiện",
+    "beginning_date": "Ngày bắt đầu",
+    "issued_by": "Đơn vị cấp phép"
+  },
+  "citizen_id": {
+    "id_no": "Số căn cước",
+    "sex": "Giới tính",
+    "place_of_origin": "Quê quán",
+    "place_of_residence": "Địa chỉ thường trú",
+    "expiry_date": "Có giá trị đến",
+    "personal_id": "Đặc điểm nhận dạng",
+    "date_of_issue": "Cấp ngày",
+    "issued_by": "Đơn vị cấp căn cước"
+  },
+  "passport": {
+    "passport_id": "Số hộ chiếu",
+    "type": "Loại",
+    "code": "Mã số",
+    "sex": "Giới tính",
+    "id_number": "Số CMND/CCCD",
+    "date_of_issue": "Ngày cấp",
+    "date_of_expiry": "Ngày hết hạn",
+    "place_of_issue": "Nơi cấp"
+  },
+  "wireless_router": {
+    "device_name": "Tên thiết bị",
+    "router_ip_address": "Địa chỉ IP của router",
+    "wifi_ssid": "Tên WIFI",
+    "wifi_pw": "Mật khẩu WIFI",
+    "admin_username": "Tên đăng nhập Admin",
+    "admin_password": "Mật khẩu Admin"
+  },
+  "server": {
+    "host": "Host (IP/tên miền)",
+    "public_key": "Khoá công khai",
+    "private_key": "Khoá bí mật"
+  },
+  "API": {
+    "url": "URL",
+    "method": "Method",
+    "header": "Header",
+    "body_data": "Body Data",
+    "response": "Response"
+  },
+  "database": {
+    "host": "Host (IP/domain)",
+    "port": "Cổng",
+    "default": "CSDL mặc định"
+  },
   "note": {
     "copy_note": "Sao chép ghi chú",
     "empty": {
@@ -455,6 +577,8 @@
     }
   },
   "password": {
+    "locker_master_password": "Master Password Locker",
+    "master_password_note": "Đây là Master Password Locker của bạn. Mật khẩu này sẽ tự động thay đổi khi bạn thay đổi Master Password trong phần Cài Đặt. Chúng tôi tạo ra mục này để bạn xem lại khi quên Master Password. Đừng lo, việc tái tạo Master Password diễn ra ngay tại thiết bị của bạn, đội ngũ Locker vẫn không thể xem, sửa, can thiệp tới Master Password của bạn.",
     "login_details": "Thông tin đăng nhập",
     "username": "Email / Tên người dùng",
     "website_url": "Địa chỉ website",
@@ -517,13 +641,14 @@
       "verify_fingerprint": "Xác minh Fingerprint",
       "verification_desc": "Để đảm bảo tính minh bạch của khóa mã hóa, vui lòng xác minh Fingerprint trước khi tiếp tục.",
       "fingerprint_desc": "'Fingerprint' là cụm từ duy nhất của mỗi tài khoản, dùng để xác minh khóa công khai với người dùng khác trong trường hợp chia sẻ và tham gia vào một tổ chức."
-    }
+    },
+    "suggestion": "Người dùng hoặc nhóm trong doanh nghiệp"
   },
   "trash": {
     "delete_item": "Xóa",
     "delete_desc": "Mục này sẽ bị mất và bạn sẽ không thể khôi phục được nữa.",
     "to_trash": "Đưa vào thùng rác",
-    "to_trash_desc": "Mục này sẽ được chuyển vào thùng rác nơi bạn có thể khôi phục hoặc xóa vĩnh viễn.",
+    "to_trash_desc": "Mục này sẽ được chuyển vào thùng rác và sẽ tự động xoá trong 30 ngày.",
     "perma_delete": "Xóa vĩnh viễn",
     "perma_delete_desc": "Bạn có chắc chắn muốn xóa vĩnh viễn mục này không?",
     "empty": {
@@ -532,11 +657,14 @@
     }
   },
   "all_items": {
+    "most_relevant": "Liên quan nhất",
     "last_updated": "Mới nhất",
     "first_updated": "Cũ nhất",
     "empty": {
       "title": "Thêm mật khẩu đầu tiên của bạn",
+      "title_2": "Thêm mục đầu tiên của bạn",
       "desc": "Tạo mật khẩu đầu tiên để bắt đầu xây dựng kho của bạn",
+      "desc_2": "Tạo mật khẩu đầu tiên để bắt đầu xây dựng kho của bạn",
       "btn": "Thêm mục"
     },
     "enable_autofill": {
@@ -546,12 +674,13 @@
     }
   },
   "change_master_pass": {
-    "title": "Thay đổi mật khẩu chính",
+    "title": "Thay đổi Master Password",
     "current": "Mật khẩu hiện tại",
     "new": "Mật khẩu mới",
     "confirm": "Xác nhận mật khẩu mới"
   },
   "help": {
+    "tutorial": "Mở hướng dẫn",
     "help_center": "Trung tâm trợ giúp",
     "terms": "Điều khoản dịch vụ",
     "policy": "Chính sách bảo mật",
@@ -595,7 +724,8 @@
       "desc": "Thêm một lớp bảo mật bổ sung mỗi khi đăng nhập",
       "btn": "Bắt đầu"
     },
-    "secret_key": "Mã khoá"
+    "secret_key": "Mã khoá",
+    "limited_import": "Bạn đã nhập {{imported}}/{{total}} mã TOTP{{s}}, nâng cấp lên Premium để lưu trữ không giới hạn"
   },
   "pass_health": {
     "title": "Mức độ bảo mật của mật khẩu",
@@ -630,7 +760,7 @@
   },
   "settings": {
     "autofill_service": "Tự động điền (Auto-fill)",
-    "change_master_pass": "Thay đổi mật khẩu chính",
+    "change_master_pass": "Thay đổi Master Password",
     "danger_zone": "Khu vực nguy hiểm",
     "deauthorize_sessions": "Vô hiệu hóa tất cả các phiên",
     "deauthorize_sessions_desc": "Bạn lo lắng rằng tài khoản của mình đang được đăng nhập trên một thiết bị khác? Xác nhận để vô hiệu hoá tất cả các máy tính hoặc thiết bị mà bạn đã sử dụng trước đó. Bước bảo mật này được khuyến nghị nếu trước đây bạn đã sử dụng máy tính công cộng hoặc vô tình lưu mật khẩu trên thiết bị không phải của bạn.",
@@ -869,7 +999,7 @@
         "system": "Email hệ thống",
         "welcome": "Chào mừng người dùng mới",
         "payment_success": "Thanh toán thành công",
-        "mp_hint": "Gợi ý mật khẩu chính",
+        "mp_hint": "Gợi ý Master Password",
         "family_remove": "Xoá thành viên gói Family",
         "family_invite": "Mời thanh viên gói Family",
         "email_verification": "Xác nhận email",
@@ -892,5 +1022,26 @@
         "auto": "Chấp nhận tự động"
       }
     }
+  },
+  "enterprise_invitation": {
+    "invited": "Bạn có lời mời tham gia vào doanh nghiệp",
+    "org": "Doanh nghiệp",
+    "invited_by": "Được mời bởi",
+    "accept_note": "Nếu bạn chấp nhận lời mời này, tài khoản của bạn sẽ nâng cấp lên Premium. Ngoài ra quản trị viên có thể thực hiện một số hành động như áp dụng các chính sách, khoá, vô hiệu hoá tài khoản của bạn.",
+    "decline_note": "Bạn có thể từ chôi nếu bạn không muốn tham gia vào doanh nghiệp này",
+    "enterprise_note": {
+      "note": "Bạn vẫn tiếp tục sử dụng tài khoản như tài khoản cá nhân. Tuy nhiên {{name} có thể kiểm soát một vài thông tin như:",
+      "note_1": "Kích hoạt, vô hiệu hoá tài khoản",
+      "note_2": "Thêm bạn vào nhóm",
+      "note_3": "Áp dụng các chính sách về mật khẩu"
+    },
+    "data": "Tài khoản của bạn vẫn được bảo mật. {{name}} không thể thấy được dữ liệu cũng như Master Password của bạn.",
+    "request_access": " Bạn bắt buộc phải yêu cầu tham gia vào {{name}} để tiếp tục sử dụng tài khoản Locker",
+    "domain": {
+      "join_org": "Tham gia doanh nghiệp",
+      "managed_by": "Tên miền này được quản lý bởi: "
+    },
+    "btn_request": "Gửi yêu cầu tham gia",
+    "btn_requested": "Đã gửi yêu cầu"
   }
 }

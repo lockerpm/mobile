@@ -7,6 +7,7 @@ import { ActionItem } from "../../../../components/cipher/cipher-action/action-i
 import { CipherView } from "../../../../../core/models/view"
 import { observer } from "mobx-react-lite"
 import { Logger } from "../../../../utils/logger"
+import { CipherType } from "../../../../../core/enums"
 
 
 type Props = {
@@ -22,10 +23,10 @@ export const PasswordAction = observer((props: Props) => {
   const { copyToClipboard, translate } = useMixins()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-
+  const lockerMasterPassword = selectedCipher?.type === CipherType.MasterPassword
   const launchWebsiteEffort = () => {
     Linking.openURL(selectedCipher.login.uri).catch((e) => {
-      Logger.debug({err: e.toString(), effort: "Try to open url with 'https://' prefix"})
+      Logger.debug({ err: e.toString(), effort: "Try to open url with 'https://' prefix" })
       Linking.openURL("https://" + selectedCipher.login.uri)
     });
   }
@@ -39,12 +40,14 @@ export const PasswordAction = observer((props: Props) => {
         disabled={!selectedCipher.login.uri}
       />
 
-      <ActionItem
-        name={translate('password.copy_username')}
-        icon="copy"
-        action={() => copyToClipboard(selectedCipher.login.username)}
-        disabled={!selectedCipher.login.username}
-      />
+      {
+        !lockerMasterPassword && <ActionItem
+          name={translate('password.copy_username')}
+          icon="copy"
+          action={() => copyToClipboard(selectedCipher.login.username)}
+          disabled={!selectedCipher.login.username}
+        />
+      }
 
       <ActionItem
         name={translate('password.copy_password')}

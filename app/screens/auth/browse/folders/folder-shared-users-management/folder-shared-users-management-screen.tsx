@@ -11,7 +11,7 @@ import { PrimaryParamList } from '../../../../../navigators/main-navigator'
 import { CollectionView } from '../../../../../../core/models/view/collectionView'
 import { commonStyles } from '../../../../../theme'
 import { useFolderMixins } from '../../../../../services/mixins/folder'
-import { SharedMemberType } from '../../../../../config/types/api'
+import { SharedGroupType, SharedMemberType } from '../../../../../config/types/api'
 
 type ShareFolderScreenProp = RouteProp<PrimaryParamList, 'shareFolder'>
 
@@ -31,6 +31,25 @@ export const FolderSharedUsersManagementScreen = observer(
     const [sharedUsers, setSharedUsers] = useState<SharedMemberType[]>([])
     const [showSelectUserModal, setShowSelectUserModal] = useState(false)
 
+    const [sharedGroups, setSharedGroups] = useState<SharedGroupType[]>([])
+
+    const data = (() => {
+      const data = []
+      sharedGroups.forEach(e => {
+        data.push({
+          type: 'group',
+          ...e
+        })
+      })
+      sharedUsers.forEach(e => {
+        data.push({
+          type: 'user',
+          ...e
+        })
+      })
+      return data
+    })()
+
     // ----------------------- METHODS -----------------------
 
     const getSharedUsers = async () => {
@@ -38,17 +57,21 @@ export const FolderSharedUsersManagementScreen = observer(
       if (res.kind !== 'ok') {
         notifyApiError(res)
       }
-
       const share = cipherStore.myShares.find((s) => s.id === collection.organizationId)
-      if (share && share.members.length > 0) {
-        setSharedUsers(share.members)
-        return share.members.length
+      if (share) {
+        if (share.members.length > 0)
+          setSharedUsers(share.members)
+
+        if (share.groups.length > 0)
+          setSharedGroups(share.groups)
+
+        return share.members?.length + share.groups?.length
       }
       return 0
     }
 
-    const onRemove = async (collection: CollectionView, id: string) => {
-      const res = await shareFolderRemoveMember(collection, id)
+    const onRemove = async (collection: CollectionView, id: string, isGroup?: boolean) => {
+      const res = await shareFolderRemoveMember(collection, id, isGroup)
       if (res.kind === 'ok' || res.kind === 'unauthorized') {
         const sharedUserCount = await getSharedUsers()
         if (sharedUserCount === 0) {
@@ -71,7 +94,7 @@ export const FolderSharedUsersManagementScreen = observer(
             goBack={() => {
               navigation.goBack()
             }}
-            title={'Manage members'}
+            title={translate('shares.share_folder.manage_user')}
             right={<View style={{ width: 30 }} />}
           />
         }
@@ -99,10 +122,11 @@ export const FolderSharedUsersManagementScreen = observer(
             />
           </View>
         </View>
+
         <FlatList
           style={commonStyles.SECTION_PADDING}
           scrollEnabled={true}
-          data={sharedUsers}
+          data={data}
           keyExtractor={(_, index) => String(index)}
           ListEmptyComponent={() => (
             <View>
@@ -113,7 +137,7 @@ export const FolderSharedUsersManagementScreen = observer(
             <SharedUsers
               reload={reload}
               setReload={setReload}
-              user={item}
+              item={item}
               collection={collection}
               onRemove={onRemove}
             />

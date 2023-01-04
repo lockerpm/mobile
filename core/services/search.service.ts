@@ -61,7 +61,7 @@ export class SearchService implements SearchServiceAbstraction {
         });
         builder.field('notes');
         builder.field('login.username', {
-            extractor: (c: CipherView) => c.type === CipherType.Login && c.login != null ? c.login.username : null,
+            extractor: (c: CipherView) => (c.type === CipherType.Login || c.type === CipherType.MasterPassword) && c.login != null ? c.login.username : null,
         });
         builder.field('login.uris', { boost: 2, extractor: (c: CipherView) => this.uriExtractor(c) });
         builder.field('fields', { extractor: (c: CipherView) => this.fieldExtractor(c, false) });
@@ -175,7 +175,6 @@ export class SearchService implements SearchServiceAbstraction {
         } else if (filter != null) {
             ciphers = ciphers.filter(filter as (cipher: Cipher) => boolean);
         }
-
         return ciphers
     }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Loading } from "../../../components"
+import Flurry from 'react-native-flurry-sdk'
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
@@ -8,7 +9,7 @@ import NetInfo from "@react-native-community/netinfo"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 
 export const StartScreen = observer(() => {
-  const { user, uiStore } = useStores()
+  const { user, uiStore, enterpriseStore } = useStores()
   const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
   const {
     loadFolders,
@@ -60,6 +61,9 @@ export const StartScreen = observer(() => {
       }
     }
 
+    // Log user id
+    Flurry.setUserId(user.pwd_user_id)
+
     // Load folders and collections
     setMsg(translate("start.decrypting"))
     Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
@@ -93,7 +97,15 @@ export const StartScreen = observer(() => {
 
 
     // Done -> navigate
-    if (uiStore.isFromAutoFill) {
+    if (uiStore.isDeeplinkEmergencyAccess) {
+      uiStore.setIsDeeplinkEmergencyAccess(false)
+      navigation?.navigate('mainTab', { screen: 'menuTab' })
+      navigation.navigate('emergencyAccess')
+    } else if (uiStore.isDeeplinkShares) {
+      uiStore.setIsDeeplinkShares(false)
+      navigation?.navigate('mainTab', { screen: 'browseTab' })
+      navigation?.navigate('mainTab', { screen: 'browseTab', params: { screen: 'shares' } })
+    } else if (uiStore.isFromAutoFill) {
       uiStore.setIsFromAutoFill(false)
       navigation.navigate("autofill")
     } else if (uiStore.isFromAutoFillItem) {
@@ -102,6 +114,8 @@ export const StartScreen = observer(() => {
     } else if (uiStore.isOnSaveLogin) {
       // uiStore.setIsOnSaveLogin(false)
       navigation.navigate("passwords__edit", { mode: 'add' })
+    } else if (!!enterpriseStore.isEnterpriseInvitations) {
+      navigation.navigate("enterpriseInvited")
     } else {
       navigation.navigate("mainTab", { screen: user.defaultTab })
     }

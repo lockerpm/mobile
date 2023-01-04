@@ -57,6 +57,30 @@ export const BrowseListScreen = observer(() => {
         case "identity":
           total = await getCipherCount(CipherType.Identity)
           break
+        case "driverLicense":
+          total = await getCipherCount(CipherType.DriverLicense)
+          break
+        case "citizenID":
+          total = await getCipherCount(CipherType.CitizenID)
+          break
+        case "passport":
+          total = await getCipherCount(CipherType.Passport)
+          break
+        case "socialSecurityNumber":
+          total = await getCipherCount(CipherType.SocialSecurityNumber)
+          break
+        case "wirelessRouter":
+          total = await getCipherCount(CipherType.WirelessRouter)
+          break
+        case "server":
+          total = await getCipherCount(CipherType.Server)
+          break
+        case "apiCipher":
+          total = await getCipherCount(CipherType.APICipher)
+          break
+        case "database":
+          total = await getCipherCount(CipherType.Database)
+          break
         case "shares":
           total = await getCipherCount(CipherType.Login, false, true)
           break
@@ -118,7 +142,7 @@ export const BrowseListScreen = observer(() => {
                 item.svgIcon ? (
                   <item.svgIcon height={40} width={40} />
                 ) : (
-                  <Image source={item.icon} style={{ height: 40, width: 40 }} />
+                  <Image source={item?.icon} style={{ height: 40, width: 40 }} />
                 )
               }
               <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flex: 1, paddingHorizontal: 10 }]}>

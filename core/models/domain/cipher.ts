@@ -72,11 +72,20 @@ export class Cipher extends Domain {
         this.reprompt = obj.reprompt;
 
         switch (this.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 this.login = new Login(obj.login, alreadyEncrypted);
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.DriverLicense:
+            case CipherType.CitizenID:
+            case CipherType.Passport:
+            case CipherType.SocialSecurityNumber:
+            case CipherType.WirelessRouter:
+            case CipherType.Server:
+            case CipherType.APICipher:
+            case CipherType.Database:
             case CipherType.CryptoWallet:
                 this.secureNote = new SecureNote(obj.secureNote, alreadyEncrypted);
                 break;
@@ -120,11 +129,20 @@ export class Cipher extends Domain {
             }, this.organizationId, encKey);
 
             switch (this.type) {
+                case CipherType.MasterPassword:
                 case CipherType.Login:
                     model.login = await this.login.decrypt(this.organizationId, encKey);
                     break;
                 case CipherType.SecureNote:
                 case CipherType.TOTP:
+                case CipherType.DriverLicense:
+                case CipherType.CitizenID:
+                case CipherType.Passport:
+                case CipherType.SocialSecurityNumber:
+                case CipherType.WirelessRouter:
+                case CipherType.Server:
+                case CipherType.APICipher:
+                case CipherType.Database:
                 case CipherType.CryptoWallet:
                     model.secureNote = await this.secureNote.decrypt(this.organizationId, encKey);
                     break;
@@ -203,11 +221,20 @@ export class Cipher extends Domain {
         });
 
         switch (c.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 c.login = this.login.toLoginData();
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.DriverLicense:
+            case CipherType.CitizenID:
+            case CipherType.Passport:
+            case CipherType.SocialSecurityNumber:
+            case CipherType.WirelessRouter:
+            case CipherType.Server:
+            case CipherType.APICipher:
+            case CipherType.Database:
             case CipherType.CryptoWallet:
                 c.secureNote = this.secureNote.toSecureNoteData();
                 break;

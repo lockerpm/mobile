@@ -29,7 +29,13 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     SplashScreen.show(this);  // here
-    super.onCreate(savedInstanceState);
+
+    //RuntimeException android.app.ActivityThread in performLaunchActivity
+    // Unhandled
+    // Unable to start activity ComponentInfo{com.cystack.locker/com.cystack.locker.MainActivity}: androidx.fragment.app.Fragment$k
+    //https://github.com/software-mansion/react-native-screens/issues/17#issuecomment-424704067
+    super.onCreate(null);
+
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
     if (BuildConfig.IS_PROD.equals("1")) {

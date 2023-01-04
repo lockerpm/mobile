@@ -19,11 +19,16 @@ import { useCipherHelpersMixins } from '../../../services/mixins/cipher/helpers'
 import { useCipherAuthenticationMixins } from '../../../services/mixins/cipher/authentication'
 import { logCreateMasterPwEvent } from '../../../utils/analytics'
 import { PolicyType } from '../../../config/types'
+import { CipherView, LoginUriView, LoginView } from '../../../../core/models/view'
+import { CipherType } from '../../../../core/enums'
+import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
+import { ConfirmCreateMPModal } from './confirm-create-mp-modal'
 
 export const CreateMasterPasswordScreen = observer(() => {
   const navigation = useNavigation()
-  const { translate, color, validateMasterPassword } = useMixins()
-  const { getPasswordStrength, checkPasswordPolicy } = useCipherHelpersMixins()
+  const { translate, color, validateMasterPassword, notify } = useMixins()
+  const { createCipher } = useCipherDataMixins()
+  const { getPasswordStrength, checkPasswordPolicy, newCipher } = useCipherHelpersMixins()
   const { logout, registerLocker, sessionLogin } = useCipherAuthenticationMixins()
   const { user } = useStores()
 
@@ -39,6 +44,7 @@ export const CreateMasterPasswordScreen = observer(() => {
   const [isCreating, setIsCreating] = useState(false)
 
   const [showViolationModal, setShowViolationModal] = useState(false)
+  const [showConfirmCreateModal, setShowConfirmCreateModal] = useState<boolean>(false)
   const [violations, setViolations] = useState<string[]>([])
 
   // -------------- COMPUTED ------------------
@@ -82,18 +88,42 @@ export const CreateMasterPasswordScreen = observer(() => {
   // Confirm master pass
   const handleCreate = async () => {
     setIsCreating(true)
+    setShowConfirmCreateModal(false)
+
     const res = await registerLocker(masterPassword, hint, passwordStrength)
     if (res.kind === 'ok') {
       logCreateMasterPwEvent()
-      const sessionRes = await sessionLogin(masterPassword)
-      setIsCreating(false)
+
+      const sessionRes = await sessionLogin(masterPassword, createMasterPasswordItem)
+
       if (sessionRes.kind === 'ok') {
+        setIsCreating(false)
         navigation.navigate('mainStack')
       } else {
         navigation.navigate('lock')
       }
-    } else {
-      setIsCreating(false)
+    } 
+    setIsCreating(false)
+  }
+
+  // Prepare to save password
+  const createMasterPasswordItem = async () => {
+    const payload: CipherView = newCipher(CipherType.MasterPassword)
+
+    const data = new LoginView()
+    data.username = "locker.io"
+    data.password = masterPassword
+
+    const uriView = new LoginUriView()
+    uriView.uri = "https://locker.io"
+    data.uris = [uriView]
+
+    payload.name = "Locker Master Password"
+    payload.login = data
+
+    const res = await createCipher(payload, passwordStrength, [], true)
+    if (res.kind !== 'ok') {
+      notify("error", translate("error.master_password"))
     }
   }
 
@@ -253,7 +283,7 @@ export const CreateMasterPasswordScreen = observer(() => {
             isDisabled={isCreating || !isReady}
             isLoading={isCreating}
             text={translate('create_master_pass.btn')}
-            onPress={prepareToCreate}
+            onPress={() => setShowConfirmCreateModal(true)}
             style={{
               width: '100%',
               marginVertical: 20,
@@ -266,6 +296,15 @@ export const CreateMasterPasswordScreen = observer(() => {
           />
         </>
         {/* Bottom end */}
+
+
+        {/* Confirm create password modal */}
+        <ConfirmCreateMPModal
+          isCreating={isCreating}
+          isOpen={showConfirmCreateModal}
+          onClose={() => setShowConfirmCreateModal(false)}
+          onNext={() => prepareToCreate()}
+        />
 
         {/* Violations modal */}
         <PasswordPolicyViolationsModal

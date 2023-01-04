@@ -23,7 +23,7 @@ export const CollectionListItem = (props: Prop) => {
         <Button
             preset="link"
             onPress={() => {
-                navigation.navigate('folders__ciphers', { collectionId: item.id })
+                navigation.navigate('folders__ciphers', { collectionId: item.id, organizationId: item.organizationId })
             }}
             style={{
                 borderBottomColor: color.line,
@@ -40,7 +40,7 @@ export const CollectionListItem = (props: Prop) => {
                 {/* Share folder avatar end */}
 
                 <View style={{ flex: 1, marginLeft: 12 }}>
-                    <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+                    <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
                         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
                             <Text
                                 preset="semibold"

@@ -26,7 +26,6 @@ export const YourTrustedContactScreen = () => {
     const res = await user.trustedEA()
     if (res.kind === 'ok') {
       setTrustedContacts(res.data)
-      // console.log(res.data)
     } else {
       notifyApiError(res)
     }

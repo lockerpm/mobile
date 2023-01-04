@@ -51,11 +51,20 @@ export class Cipher {
         }
 
         switch (req.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 view.login = Login.toView(req.login);
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.DriverLicense:
+            case CipherType.CitizenID:
+            case CipherType.Passport:
+            case CipherType.SocialSecurityNumber:
+            case CipherType.WirelessRouter:
+            case CipherType.Server:
+            case CipherType.APICipher:
+            case CipherType.Database:
             case CipherType.CryptoWallet:
                 view.secureNote = SecureNote.toView(req.secureNote);
                 break;
@@ -86,11 +95,20 @@ export class Cipher {
         }
 
         switch (req.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 domain.login = Login.toDomain(req.login);
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.DriverLicense:
+            case CipherType.CitizenID:
+            case CipherType.Passport:
+            case CipherType.SocialSecurityNumber:
+            case CipherType.WirelessRouter:
+            case CipherType.Server:
+            case CipherType.APICipher:
+            case CipherType.Database:
             case CipherType.CryptoWallet:
                 domain.secureNote = SecureNote.toDomain(req.secureNote);
                 break;
@@ -145,11 +163,20 @@ export class Cipher {
         }
 
         switch (o.type) {
+            case CipherType.MasterPassword:
             case CipherType.Login:
                 this.login = new Login(o.login);
                 break;
             case CipherType.SecureNote:
             case CipherType.TOTP:
+            case CipherType.DriverLicense:
+            case CipherType.CitizenID:
+            case CipherType.Passport:
+            case CipherType.SocialSecurityNumber:
+            case CipherType.WirelessRouter:
+            case CipherType.Server:
+            case CipherType.APICipher:
+            case CipherType.Database:
             case CipherType.CryptoWallet:
                 this.secureNote = new SecureNote(o.secureNote);
                 break;

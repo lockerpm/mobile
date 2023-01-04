@@ -19,6 +19,7 @@ export const color = {
    * can cause older Android devices to slow down due to the excessive compositing required
    * by their under-powered GPUs.
    */
+  toastBackground: 'rgba(22, 22, 22, 0.9)',
   transparent: "rgba(0, 0, 0, 0)",
   background: palette.white,
   disabled: palette.gray,
@@ -34,17 +35,4 @@ export const color = {
   info: palette.blue,
   white: palette.white,
   orange: palette.orange,
-
-  /**
-   * Storybook background for Text stories, or any stories where
-   * the text color is color.text, which is white by default, and does not show
-   * in Stories against the default white background
-   */
-  storybookDarkBg: palette.black,
-
-  /**
-   * Storybook text color for stories that display Text components against the
-   * white background
-   */
-  storybookTextColor: palette.black,
 }

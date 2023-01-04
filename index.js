@@ -10,9 +10,22 @@
 import './shim.js'
 import App from "./app/app.tsx"
 import { AppRegistry } from "react-native"
+import Flurry from 'react-native-flurry-sdk';
+import {FLURRY_ANDROID_API_KEY, FLURRY_IOS_API_KEY} from './app/config/constants'
 import { PushNotifier } from './app/utils/push-notification'
 
 PushNotifier.setupBackgroundHandler()
+
+// Init Flurry once as early as possible recommended in index.js.
+// For each platform (Android, iOS) where the app runs you need to acquire a unique Flurry API Key.
+// i.e., you need two API keys if you are going to release the app on both Android and iOS platforms.
+// If you are building for TV platforms, you will need two API keys for Android TV and tvOS.
+
+// new Flurry.Builder()
+//   .withCrashReporting(true)
+//   .withLogEnabled(true)
+//   .withLogLevel(Flurry.LogLevel.DEBUG)
+//   .build(FLURRY_ANDROID_API_KEY, FLURRY_IOS_API_KEY);
 
 AppRegistry.registerComponent("CyStackLocker", () => App)
 export default App

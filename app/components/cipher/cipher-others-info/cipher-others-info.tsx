@@ -18,6 +18,7 @@ export interface CipherOthersInfoProps {
   note?: string
   onChangeNote?: Function
   folderId?: string
+  collectionId?: string
   organizationId: string
   setOrganizationId: Function
   collectionIds: string[]
@@ -29,11 +30,11 @@ export interface CipherOthersInfoProps {
  * Describe your component here
  */
 export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
-  const { 
-    navigation, hasNote, note, onChangeNote, folderId = null, isDeleted,
+  const {
+    navigation, hasNote, note, onChangeNote, folderId = null, isDeleted, collectionId,
     organizationId, collectionIds, setOrganizationId, setCollectionIds
   } = props
-  const { folderStore, user, uiStore } = useStores()
+  const { folderStore, collectionStore } = useStores()
   const { translate, getTeam, color } = useMixins()
 
   const [showOwnershipSelectionModal, setShowOwnershipSelectionModal] = useState(false)
@@ -42,6 +43,10 @@ export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
     return folderId ? find(folderStore.folders, e => e.id === folderId) || {} : {}
   })()
 
+  const collection = (() => {
+    return collectionId ? find(collectionStore.collections, e => e.id === collectionId) || {} : {}
+  })()
+  
   return (
     <View>
       <View style={commonStyles.SECTION_PADDING}>
@@ -63,10 +68,10 @@ export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
           preset="link"
           isDisabled={isDeleted}
           onPress={() => {
-  
+
             navigation.navigate('folders__select', {
               mode: 'add',
-              initialId: folderId
+              initialId: folderId || collectionId
             })
           }}
         >
@@ -83,7 +88,7 @@ export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
               />
               <Text
                 preset="black"
-                text={folder.name || translate('common.none')}
+                text={folder?.name || collection?.name || translate('common.none')}
                 numberOfLines={2}
               />
             </View>

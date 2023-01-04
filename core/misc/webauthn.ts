@@ -65,7 +65,7 @@ export class WebAuthn {
             return;
         }
 
-        const parts: string[] = event.data.split('|');
+        const parts: string[] = event.data?.split('|');
         if (parts[0] === 'success' && this.successCallback) {
             this.successCallback(parts[1]);
         } else if (parts[0] === 'error' && this.errorCallback) {

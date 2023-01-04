@@ -14,6 +14,14 @@ import { BROWSE_ITEMS } from '../../../common/mappings'
 import { PolicyType } from '../../../config/types'
 import { MasterPasswordPolicy, PasswordPolicy } from '../../../config/types/api'
 import { useStores } from '../../../models'
+import { toApiCipherData } from '../../../screens/auth/browse/api-cipher/api-cipher.type'
+import { toCitizenIdData } from '../../../screens/auth/browse/citizen-id/citizen-id.type'
+import { toDatabaseData } from '../../../screens/auth/browse/database/database.typs'
+import { toDriverLicenseData } from '../../../screens/auth/browse/driver-license/driver-license.type'
+import { toPassportData } from '../../../screens/auth/browse/passport/passport.type'
+import { toServerData } from '../../../screens/auth/browse/server/server.type'
+import { toSocialSecurityNumberData } from '../../../screens/auth/browse/social-security-number/social-security-number.type'
+import { toWirelessRouterData } from '../../../screens/auth/browse/wireless-router/wireless-router.type'
 import { toCryptoWalletData } from '../../../utils/crypto'
 import { WALLET_APP_LIST } from '../../../utils/crypto/applist'
 import { useCoreService } from '../../core-service'
@@ -63,6 +71,7 @@ export const CipherHelpersMixinsProvider = observer(
     // Get cipher description
     const getCipherDescription = (item: CipherView) => {
       switch (item.type) {
+        case CipherType.MasterPassword:
         case CipherType.Login:
           return item.login.username
         case CipherType.Card:
@@ -73,9 +82,40 @@ export const CipherHelpersMixinsProvider = observer(
           return item.identity.fullName
         case CipherType.CryptoWallet: {
           const walletData = toCryptoWalletData(item.notes)
-          return `${walletData.username}${walletData.username ? ', ' : ''}${
-            walletData.networks.length
-          } networks`
+          return `${walletData.username}${walletData.username ? ', ' : ''}${walletData.networks.length
+            } networks`
+        }
+        case CipherType.DriverLicense: {
+          const driverLicenseData = toDriverLicenseData(item.notes)
+          return driverLicenseData.fullName
+        }
+        case CipherType.CitizenID: {
+          const citizenIDData = toCitizenIdData(item.notes)
+          return citizenIDData.fullName
+        }
+        case CipherType.Passport: {
+          const passportData = toPassportData(item.notes)
+          return passportData.fullName
+        }
+        case CipherType.SocialSecurityNumber: {
+          const socialSecurityNumberData = toSocialSecurityNumberData(item.notes)
+          return socialSecurityNumberData.fullName
+        }
+        case CipherType.WirelessRouter: {
+          const wirelessData = toWirelessRouterData(item.notes)
+          return wirelessData.deviceName
+        }
+        case CipherType.Server: {
+          const serverData = toServerData(item.notes)
+          return serverData.host
+        }
+        case CipherType.APICipher: {
+          const apiData = toApiCipherData(item.notes)
+          return apiData.url
+        }
+        case CipherType.Database: {
+          const databaseData = toDatabaseData(item.notes)
+          return databaseData.host
         }
       }
       return ''
@@ -84,6 +124,7 @@ export const CipherHelpersMixinsProvider = observer(
     // Get cipher logo
     const getCipherInfo = (item: CipherView) => {
       switch (item.type) {
+        case CipherType.MasterPassword:
         case CipherType.Login:
           return {
             img: item.login.uri ? getWebsiteLogo(item.login.uri) : BROWSE_ITEMS.password.icon,
@@ -123,6 +164,62 @@ export const CipherHelpersMixinsProvider = observer(
             path: 'cryptoWallets',
           }
         }
+        case CipherType.DriverLicense:
+          return {
+            img: BROWSE_ITEMS.driverLicense.icon,
+            backup: BROWSE_ITEMS.driverLicense.icon,
+            svg: BROWSE_ITEMS.driverLicense.svgIcon,
+            path: 'driverLicenses',
+          }
+        case CipherType.CitizenID:
+          return {
+            img: BROWSE_ITEMS.citizenID.icon,
+            backup: BROWSE_ITEMS.citizenID.icon,
+            svg: BROWSE_ITEMS.citizenID.svgIcon,
+            path: 'citizenIDs',
+          }
+        case CipherType.Passport:
+          return {
+            img: BROWSE_ITEMS.passport.icon,
+            backup: BROWSE_ITEMS.passport.icon,
+            svg: BROWSE_ITEMS.passport.svgIcon,
+            path: 'passports',
+          }
+        case CipherType.SocialSecurityNumber:
+          return {
+            img: BROWSE_ITEMS.socialSecurityNumber.icon,
+            backup: BROWSE_ITEMS.socialSecurityNumber.icon,
+            svg: BROWSE_ITEMS.socialSecurityNumber.svgIcon,
+            path: 'socialSecurityNumbers',
+          }
+        case CipherType.WirelessRouter:
+          return {
+            img: BROWSE_ITEMS.wirelessRouter.icon,
+            backup: BROWSE_ITEMS.wirelessRouter.icon,
+            svg: BROWSE_ITEMS.wirelessRouter.svgIcon,
+            path: 'wirelessRouters',
+          }
+        case CipherType.Server:
+          return {
+            img: BROWSE_ITEMS.server.icon,
+            backup: BROWSE_ITEMS.server.icon,
+            svg: BROWSE_ITEMS.server.svgIcon,
+            path: 'servers',
+          }
+        case CipherType.APICipher:
+          return {
+            img: BROWSE_ITEMS.apiCipher.icon,
+            backup: BROWSE_ITEMS.apiCipher.icon,
+            svg: BROWSE_ITEMS.apiCipher.svgIcon,
+            path: 'apiCiphers',
+          }
+        case CipherType.Database:
+          return {
+            img: BROWSE_ITEMS.database.icon,
+            backup: BROWSE_ITEMS.database.icon,
+            svg: BROWSE_ITEMS.database.svgIcon,
+            path: 'databases',
+          }
         default:
           return {
             img: BROWSE_ITEMS.password.icon,

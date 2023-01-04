@@ -181,6 +181,7 @@ export const SocialLoginMixinsProvider = observer((props: {
       provider: provider,
       access_token: token,
       code,
+      scope: 'pwdmanager',
       utm_source: await getCookies('utm_source')
     })
 

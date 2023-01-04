@@ -30,14 +30,18 @@
     "done": "Done",
     "delete": "Delete",
     "details": "Details",
+    "decline": "Decline",
     "edit": "Edit",
     "email": "Email",
+    "enterprise": "Enterprise",
     "enter_master_pass": "Enter master password",
     "faceid_unlocking": "Unlock with Face ID",
+    "female": "Female",
     "folder": "Folder",
     "folders": "Folders",
     "fullname": "Full name",
     "generate": "Generate",
+    "get_start": "Get started",
     "help": "Help",
     "home": "Home",
     "identity": "Identities",
@@ -49,6 +53,7 @@
     "lock": "Lock",
     "login": "Login",
     "logout": "Log Out",
+    "male": "Male",
     "master_pass": "Master Password",
     "max": "Max",
     "minute": "minute",
@@ -115,16 +120,36 @@
     "see_all": "See all",
     "collapse": "Collapse",
     "share_with": "Shared with",
-    "yes": "Yes"
+    "yes": "Yes",
+    "driver_license": "Driver License",
+    "citizen_id": "Citizen ID",
+    "passport": "Passport",
+    "social_security_number": "Social Security Number",
+    "wireless_router": "Wireless Router",
+    "server": "Server",
+    "api_cipher": "API",
+    "database": "Database",
+    "dob": "Date of birth",
+    "nationality": "Nationality",
+    "invalid_date": "Invalid date"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
   },
   "alert": {
+    "enterprise_lock": "The account is locked by the enterprise. Please contact your enterprise admin to unblock account.",
+    "enterprise_system_lock": "The account is locked because the Enterprise plan is expired. Please contact your enterprise admin to unblock account.",
+    "update": {
+      "title": "Update App?",
+      "content": "A new version of Locker is available! Click to update Locker version {{version}}.",
+      "later": "Later",
+      "now": "Update now"
+    },
     "lock_app": "Lock the application?",
     "logout": "Log out from "
   },
   "error": {
+    "master_password": "Cannot auto create Master Password item",
     "not_supported": "Not supported",
     "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
     "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
@@ -190,6 +215,7 @@
     "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation",
     "invitation_rejected": "Invitation rejected",
     "master_password_updated": "Master password is updated",
+    "locker_password_updated": "Locker password is updated",
     "biometric_enabled": "Face ID/Touch ID unlocking is enabled",
     "cipher_created": "New item created!",
     "cipher_deleted": "Item deleted!",
@@ -212,6 +238,11 @@
       "two": "You can create and use up to 05 concurrent alias addresses",
       "three": "You have 01 customizable alias"
     },
+    "desc_premium": {
+      "one": "All emails to your alias addresses will be forwarded to your root email",
+      "two": "You can reply to sender address via Locker Private Email aliases",
+      "three": "You have one customizable alias and one subdomain"
+    },
     "copy": "Copy alias",
     "edit": "Edit alias address",
     "edit_modal": {
@@ -225,7 +256,35 @@
       "minimum": "Ensure this field has at least 6 characters",
       "not_valid": "This address is not valid"
     },
-    "edit_warning": "Once you delete this alias, it cannot be recovered. Locker Relay will no longer forward messages sent to {{alias}}, including messages that allow you to reset lost passwords. If you use this email alias to log in to sites, you should update your login with a different email address before you delete this one."
+    "edit_warning": "Once you delete this alias, it cannot be recovered. Locker Relay will no longer forward messages sent to {{alias}}, including messages that allow you to reset lost passwords. If you use this email alias to log in to sites, you should update your login with a different email address before you delete this one.",
+    "manage_subdomain": {
+      "your_subdomain": "Your subdomain",
+      "desc": {
+        "one": "Custom sub-domain allows you to create custom email domain",
+        "two": "You can create one (editable) subdomain"
+      },
+      "manage": "Manage",
+      "title": "Manage Subdomain",
+      "num_alias": "Number of email aliases",
+      "block_email": "Blocked emails",
+      "forwarded_email": "forwarded_email",
+      "create_date": "Created date",
+      "use_subdomain": "Use subdomain to generate future aliases",
+      "edit_btn": "Edit Subdomain",
+      "new": "New subdomain",
+      "edit_note": "*Current sub-domain will be permanently deleted when you change to a new sub-domain. All email aliases created from your current sub-domain will also be then deleted when you perform this action"
+    },
+    "statistic": "Statistics",
+    "config": "Configuration",
+    "no_subdomain": "Create your own subdomain",
+    "config_modal": {
+      "title": "Configuration",
+      "enable":  "Forward all emails to your root email address",
+      "block": "Block all upcoming emails",
+      "block_spam": "Block spam and promotion emails only",
+      "note": "*When you make changes to these settings, the statistics for this alias address will be reset."
+    }
+
   },
   "emergency_access": {
     "title": "Emergency Access",
@@ -303,18 +362,29 @@
     "btn": "Create Password",
     "note": "Note: Locker cannot view, store, or re-issue Master Password in case you forget or lose it."
   },
+  "confirm_create_master_pass" : {
+    "title": "Important",
+    "desc": "By processing, you understand that Locker CANNOT see, retrieve, or re-issue your Master Password in case you forget it. Your Master Password is only yours to keep.",
+    "link": "You can learn more about Master Password here.",
+    "next_btn": "I understand. Let’s get started!",
+    "back_btn": "Go back, I want to change my Master Password"
+  },
   "intro": {
-    "item_1": {
+    "security": {
       "title": "Security & Privacy",
       "desc": "Your vault is protected with world-class security."
     },
-    "item_2": {
+    "sync": {
       "title": "Unlimited Sync",
       "desc": "You can access your Locker's data from any devices."
     },
-    "item_3": {
+    "autofill": {
       "title": "Auto-fill",
       "desc": "Fill your credentials automatically across applications and websites."
+    },
+    "otp": {
+      "title": "In-app OTP",
+      "desc": "Increase your account security with OTP integrated in Locker."
     }
   },
   "lock": {
@@ -446,6 +516,59 @@
       "btn": "Add Identity"
     }
   },
+  "driver_license": {
+    "no": "No",
+    "class": "Class",
+    "valid_until": "Valid until",
+    "vehicle_class": "Vehicle class",
+    "beginning_date": "Beginning date",
+    "issued_by": "Issued by"
+  },
+  "citizen_id": {
+    "id_no": "ID no",
+    "sex": "Sex",
+    "place_of_origin": "Place of origin",
+    "place_of_residence": "Place of residence",
+    "expiry_date": "Expiry date",
+    "personal_id": "Personal identification",
+    "date_of_issue": "Date of issue",
+    "issued_by": "Issued by"
+  },
+  "passport": {
+    "passport_id": "Passport ID",
+    "type": "Type",
+    "code": "Code",
+    "sex": "Sex",
+    "id_number": "ID number",
+    "date_of_issue": "Date of issue",
+    "date_of_expiry": "Date of expiry",
+    "place_of_issue": "Place of issue"
+  },
+  "wireless_router": {
+    "device_name": "Device name",
+    "router_ip_address": "Router IP address",
+    "wifi_ssid": "Wifi SSID",
+    "wifi_pw": "Wifi password",
+    "admin_username": "Admin ID",
+    "admin_password": "Admin password"
+  },
+  "server": {
+    "host": "Host (IP/domain)",
+    "public_key": "Public key",
+    "private_key": "Private Key"
+  },
+  "API": {
+    "url": "URL",
+    "method": "Method",
+    "header": "Header",
+    "body_data": "Body Data",
+    "response": "Response"
+  },
+  "database": {
+    "host": "Host (IP/domain)",
+    "port": "Port",
+    "default": "Default database"
+  },
   "note": {
     "copy_note": "Copy Notes",
     "empty": {
@@ -455,6 +578,8 @@
     }
   },
   "password": {
+    "locker_master_password": "Locker Master Password",
+    "master_password_note": "This is your Locker Master Password. It will change accordingly as you change your Master Password. We created this item for you so you don't forget your Master Password. Don't worry, this operation happens within your device and we still can't see or edit your Master Password from our server. Have fun using Locker.",
     "login_details": "Login Details",
     "username": "Email or Username",
     "website_url": "Website",
@@ -517,13 +642,14 @@
       "verify_fingerprint": "Verify fingerprint phrase",
       "verification_desc": "To ensure the integrity of your encryption keys, please verify the user's fingerprint phrase before continuing.",
       "fingerprint_desc": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
-    }
+    },
+    "suggestion": "Users or groups in Enterprise"
   },
   "trash": {
     "delete_item": "Delete Item",
     "delete_desc": "This item will be lost and you will no longer be able to restore it.",
     "to_trash": "Move to Trash",
-    "to_trash_desc": "This item will be moved to trash where you can restore or permanently delete it.",
+    "to_trash_desc": "This item will be moved to trash. Trash items will be permanently deleted after 30 days.",
     "perma_delete": "Permanently Delete",
     "perma_delete_desc": "Are you sure you want to permanently delete this item?",
     "empty": {
@@ -532,11 +658,14 @@
     }
   },
   "all_items": {
+    "most_relevant": "Most Relevant",
     "last_updated": "Last Updated",
     "first_updated": "First Updated",
     "empty": {
       "title": "Add your first item",
+      "title_2": "Add your first item",
       "desc": "Create your first item to start building your vault",
+      "desc_2": "Create your first item to start building your vault",
       "btn": "Add Item"
     },
     "enable_autofill": {
@@ -552,6 +681,7 @@
     "confirm": "Confirm Master Password"
   },
   "help": {
+    "tutorial": "Open tutorial",
     "help_center": "Help Center",
     "terms": "Terms of Service",
     "policy": "Privacy Policy",
@@ -595,7 +725,8 @@
       "desc": "Add an additional layer of security when signing in",
       "btn": "Get Started"
     },
-    "secret_key": "Secret key"
+    "secret_key": "Secret key",
+    "limited_import": "You have imported {{imported}}/{{total}} item{{s}}, please upgrade to Premium for unlimited storage"
   },
   "pass_health": {
     "title": "Password Health",
@@ -898,5 +1029,26 @@
         "auto": "Auto accept"
       }
     }
+  },
+  "enterprise_invitation": {
+    "invited": "You are invited to Locker Business",
+    "org": "Organization",
+    "invited_by": "Invited by",
+    "accept_note": "If you accept this invitation, your account will be upgraded to Business User plan. Admins can perform certain actions to your account such as applying policies, locking, or disabling your account.",
+    "decline_note": "If you do not wish to join this organization, simply click “Decline”. You won’t be asked again.",
+    "enterprise_note": {
+      "note": "Don’t worry. You will still be able to use your personal vault. However, {{name}} can control certain aspects of your accounts, such as:",
+      "note_1": "Activate, deactivate, disable your account",
+      "note_2": "Add you to their groups",
+      "note_3": "Apply password policies to your account"
+    },
+    "data" : "All your vault data remains the same. {{mame}} can’t see your data or your Master Password.",
+    "request_access": "You have to Request access from {{mame}} in order to continue using your Locker account.",
+    "domain": {
+      "join_org": "Join Organization",
+      "managed_by": "This account is managed by: "
+    },
+    "btn_request": "Request to join",
+    "btn_requested": "Requested"
   }
 }

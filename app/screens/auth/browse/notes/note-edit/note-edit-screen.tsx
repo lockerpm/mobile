@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
+import find from 'lodash/find'
 import {
   Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, Textarea, CustomFieldsEdit
 } from "../../../../../components"
@@ -14,6 +15,8 @@ import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, 'notes__edit'>;
@@ -23,9 +26,11 @@ export const NoteEditScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<NoteEditScreenProp>()
   const { mode } = route.params
-  const { cipherStore } = useStores()
+  const { cipherStore, collectionStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
   const { translate, color } = useMixins()
+
+  const { shareFolderAddItem } = useFolderMixins()
   const { newCipher } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
 
@@ -35,21 +40,35 @@ export const NoteEditScreen = observer(() => {
   const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
   const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
+  const [collection, setCollection] = useState(mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null)
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
 
   // Params
   const [isLoading, setIsLoading] = useState(false)
 
+  const selectedCollection: CollectionView = route.params.collection
   // Watchers
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (cipherStore.selectedFolder) {
         if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
-        } else {
-          setFolder(cipherStore.selectedFolder)
         }
+        else {
+          if (!selectedCollection)
+            setFolder(cipherStore.selectedFolder)
+        }
+        setCollection(null)
+        setCollectionIds([])
+        setOrganizationId(null)
         cipherStore.setSelectedFolder(null)
+      }
+
+      if (cipherStore.selectedCollection) {
+        if (!selectedCollection)
+          setCollection(cipherStore.selectedCollection)
+        setFolder(null)
+        cipherStore.setSelectedCollection(null)
       }
     });
 
@@ -64,7 +83,7 @@ export const NoteEditScreen = observer(() => {
       payload = newCipher(CipherType.SecureNote)
     } else {
       // @ts-ignore
-      payload = {...selectedCipher}
+      payload = { ...selectedCipher }
     }
 
     payload.fields = fields
@@ -80,10 +99,19 @@ export const NoteEditScreen = observer(() => {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    setIsLoading(false)
     if (res.kind === 'ok') {
+      // for shared folder
+      if (selectedCollection) {
+        await shareFolderAddItem(selectedCollection, payload)
+      }
+
+      if (collection) {
+        const collectionView = find(collectionStore.collections, e => e.id === collection) || {}
+        await shareFolderAddItem(collectionView, payload)
+      }
       navigation.goBack()
     }
+    setIsLoading(false)
   }
 
   // Render
@@ -109,7 +137,7 @@ export const NoteEditScreen = observer(() => {
               isDisabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{ 
+              style={{
                 height: 35,
                 alignItems: 'center',
                 paddingLeft: 10
@@ -177,6 +205,7 @@ export const NoteEditScreen = observer(() => {
       <CipherOthersInfo
         navigation={navigation}
         folderId={folder}
+        collectionId={collection}
         organizationId={organizationId}
         setOrganizationId={setOrganizationId}
         collectionIds={collectionIds}

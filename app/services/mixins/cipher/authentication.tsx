@@ -17,14 +17,17 @@ import { useSocialLoginMixins } from '../social-login'
 import Intercom from '@intercom/intercom-react-native'
 import { setCookiesFromUrl } from '../../../utils/analytics'
 import { getUrlParameterByName } from '../../../utils/helpers'
+import { CipherView, LoginUriView, LoginView } from '../../../../core/models/view'
+import { CipherType } from '../../../../core/enums'
+import { CipherRequest } from '../../../../core/models/request/cipherRequest'
 
 const { createContext, useContext } = React
 
 // Mixins data
 const defaultData = {
   // Methods
-  sessionLogin: async (masterPassword: string) => {
-    return { kind: 'unknown' }
+  sessionLogin: async (masterPassword: string, createMasterPasswordItem?: () => Promise<void>) => {
+    return { kind: 'unknown', data: {} }
   },
   biometricLogin: async () => {
     return { kind: 'unknown' }
@@ -75,7 +78,8 @@ export const CipherAuthenticationMixinsProvider = observer(
       keyHash: string,
       kdf: number,
       kdfIterations: number,
-      masterPassword?: string
+      masterPassword?: string,
+      createMasterPasswordItem?: () => Promise<void>
     ) => {
       // Session login API
       const res = await user.sessionLogin({
@@ -100,6 +104,10 @@ export const CipherAuthenticationMixinsProvider = observer(
                 .duration(res.data.wait, 'seconds')
                 .humanize()}`
             )
+          } else if (res.data.code === '1009') {
+            return { kind: 'enterprise-lock' }
+          } else if (res.data.code === '1010') {
+            return { kind: 'enterprise-system-lock' }
           } else {
             notifyApiError(res)
           }
@@ -129,11 +137,15 @@ export const CipherAuthenticationMixinsProvider = observer(
         // await syncAutofillData();
       }
 
+      if (res.data.has_no_master_pw_item && createMasterPasswordItem !== undefined) {
+        uiStore.setHasNoMasterPwItem(true)
+        await createMasterPasswordItem()
+      }
       return { kind: 'ok' }
     }
 
     // Session login
-    const sessionLogin = async (masterPassword: string): Promise<{ kind: string }> => {
+    const sessionLogin = async (masterPassword: string, createMasterPasswordItem?: () => Promise<void>): Promise<{ kind: string }> => {
       try {
         await delay(200)
 
@@ -158,7 +170,7 @@ export const CipherAuthenticationMixinsProvider = observer(
 
         // Online session login
         const keyHash = await cryptoService.hashPassword(masterPassword, key)
-        return _loginUsingApi(key, keyHash, kdf, kdfIterations, masterPassword)
+        return _loginUsingApi(key, keyHash, kdf, kdfIterations, masterPassword, createMasterPasswordItem)
       } catch (e) {
         notify('error', translate('error.session_login_failed'))
         return { kind: 'bad-data' }
@@ -280,11 +292,15 @@ export const CipherAuthenticationMixinsProvider = observer(
       lockerPassword?: boolean
     ): Promise<{ kind: string }> => {
       try {
-        let payload = {}
         if (lockerPassword) {
-          payload = {
-            new_password: newPassword
+          const res = await user.lockerPasswordEA(eaID, newPassword)
+          if (res.kind !== 'ok') {
+            notifyApiError(res)
+            return { kind: 'bad-data' }
           }
+          // Setup service
+          notify('success', translate('success.locker_password_updated'))
+
         } else {
           const fetchKeyRes = await user.takeoverEA(eaID)
           if (fetchKeyRes.kind !== "ok") return { kind: 'bad-data' }
@@ -293,26 +309,62 @@ export const CipherAuthenticationMixinsProvider = observer(
           const oldEncKey = new SymmetricCryptoKey(oldKeyBuffer)
 
           const key = await cryptoService.makeKey(newPassword, email, kdf, kdf_iterations)
+
+
           const masterPasswordHash = await cryptoService.hashPassword(newPassword, key)
           const encKey = await cryptoService.remakeEncKey(key, oldEncKey)
-          payload = {
+
+          // Update Master Password item
+          const cipher = _createMasterPwItem(newPassword)
+          const cipherEnc = await cipherService.encrypt(cipher, encKey[0])
+          const data = new CipherRequest(cipherEnc)
+          data.type = CipherType.MasterPassword
+
+          const payload = {
             key: encKey[1].encryptedString,
-            new_master_password_hash: masterPasswordHash
+            new_master_password_hash: masterPasswordHash,
+            master_password_cipher: data
           }
+          const res = await user.passwordEA(eaID, payload)
+          if (res.kind !== 'ok') {
+            notifyApiError(res)
+            return { kind: 'bad-data' }
+          }
+          // Setup service
+          notify('success', translate('success.master_password_updated'))
         }
 
-        // Send API
-        const res = await user.passwordEA(eaID, payload)
-        if (res.kind !== 'ok') {
-          notifyApiError(res)
-          return { kind: 'bad-data' }
-        }
-        // Setup service
-        notify('success', translate('success.master_password_updated'))
         return { kind: 'ok' }
       } catch (e) {
         notify('error', translate('error.something_went_wrong'))
         return { kind: 'bad-data' }
+      }
+    }
+
+
+    const _createMasterPwItem = (newPassword: string) => {
+      const cipher = new CipherView()
+      cipher.type = CipherType.Login
+      const loginData = new LoginView()
+      loginData.username = 'locker.io'
+      loginData.password = newPassword
+      const uriView = new LoginUriView()
+      uriView.uri = 'https://locker.io'
+      loginData.uris = [uriView]
+      cipher.login = loginData
+      cipher.name = 'Locker Master Password'
+      return cipher
+    }
+
+    const _createMasterPwItemRequest = async (newPassword: string) => {
+      try {
+        const cipher = _createMasterPwItem(newPassword)
+        const cipherEnc = await cipherService.encrypt(cipher)
+        const data = new CipherRequest(cipherEnc)
+        data.type = CipherType.MasterPassword
+        return data
+      } catch (e) {
+        return null
       }
     }
 
@@ -322,6 +374,9 @@ export const CipherAuthenticationMixinsProvider = observer(
       newPassword: string
     ): Promise<{ kind: string }> => {
       try {
+        // createMasterPwItem
+        const data = await _createMasterPwItemRequest(newPassword)
+
         await delay(200)
         const kdf = KdfType.PBKDF2_SHA256
         const kdfIterations = 100000
@@ -342,6 +397,7 @@ export const CipherAuthenticationMixinsProvider = observer(
           key: encKey[1].encryptedString,
           new_master_password_hash: keyHash,
           master_password_hash: oldKeyHash,
+          master_password_cipher: data
         })
         if (res.kind !== 'ok') {
           notifyApiError(res)
@@ -472,6 +528,18 @@ export const CipherAuthenticationMixinsProvider = observer(
               return !!navigation
             }
           }
+        }
+
+        // emergencyAccess
+        if (path.startsWith('/settings/security')) {
+          uiStore.setIsDeeplinkEmergencyAccess(true)
+          return false
+        }
+
+        // emergencyAccess
+        if (path.startsWith('/shares')) {
+          uiStore.setIsDeeplinkShares(true)
+          return false
         }
       }
       return false

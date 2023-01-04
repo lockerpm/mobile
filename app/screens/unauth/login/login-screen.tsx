@@ -92,7 +92,9 @@ export const LoginScreen = observer(() => {
         </View>
       )}
     >
-      <LanguagePicker />
+      {
+        index === 0 && <LanguagePicker />
+      }
       {
         index === 0 && (
           <DefaultLogin

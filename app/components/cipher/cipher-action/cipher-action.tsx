@@ -18,13 +18,14 @@ import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { AccountRole, AccountRoleText } from "../../../config/types"
 import { LeaveShareModal } from "./leave-share-modal"
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
+import { CipherType } from "../../../../core/enums"
 
 export interface CipherActionProps {
   children?: React.ReactNode,
   isOpen?: boolean,
   onClose?: () => void,
   navigation: any,
-  onLoadingChange?: Function
+  onLoadingChange?: (val: boolean) => void
   isEmergencyView?: boolean
 }
 
@@ -47,10 +48,13 @@ export const CipherAction = observer((props: CipherActionProps) => {
   const selectedCipher: CipherView = cipherStore.cipherView
 
   // Computed
+
+  const lockerMasterPassword = selectedCipher.type === CipherType.MasterPassword
   const emergencyView = isEmergencyView === undefined ? false : isEmergencyView
   const organizations = cipherStore.organizations
   const teamRole = getTeam(user.teams, selectedCipher.organizationId).role
   const shareRole = getTeam(organizations, selectedCipher.organizationId).type
+
   const isShared = shareRole === AccountRole.MEMBER || shareRole === AccountRole.ADMIN
   const isInFolderShare = selectedCipher.collectionIds?.length > 0
   // const isOwner = shareRole === AccountRole.ADMIN
@@ -190,16 +194,18 @@ export const CipherAction = observer((props: CipherActionProps) => {
           {
             editable && !emergencyView && (
               <View>
-                <ActionItem
-                  name={translate('common.clone')}
-                  icon="clone"
-                  action={() => {
-                    onClose()
-                    navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'clone' })
-                  }}
-                />
+                {
+                  !lockerMasterPassword && <ActionItem
+                    name={translate('common.clone')}
+                    icon="clone"
+                    action={() => {
+                      onClose()
+                      navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'clone' })
+                    }}
+                  />
+                }
 
-                {!isInFolderShare && <ActionItem
+                {!isInFolderShare && !lockerMasterPassword && <ActionItem
                   disabled={uiStore.isOffline && !!selectedCipher.organizationId}
                   name={translate('folder.move_to_folder')}
                   icon="folder-o"
@@ -230,18 +236,20 @@ export const CipherAction = observer((props: CipherActionProps) => {
 
                 <Divider style={{ marginVertical: 5 }} />
 
-                <ActionItem
-                  disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-                  name={translate('common.edit')}
-                  icon="edit"
-                  action={() => {
-                    onClose()
-                    navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'edit' })
-                  }}
-                />
+                {
+                  !lockerMasterPassword && <ActionItem
+                    disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+                    name={translate('common.edit')}
+                    icon="edit"
+                    action={() => {
+                      onClose()
+                      navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'edit' })
+                    }}
+                  />
+                }
 
                 {
-                 !isInFolderShare && (
+                  !lockerMasterPassword && !isInFolderShare && (
                     <ActionItem
                       isPremium
                       onClose={onClose}
@@ -257,7 +265,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
                 }
 
                 {
-                  !isInFolderShare && <ActionItem
+                  !lockerMasterPassword && !isInFolderShare && <ActionItem
                     disabled={uiStore.isOffline && !!selectedCipher.organizationId}
                     name={translate('trash.to_trash')}
                     icon="trash"

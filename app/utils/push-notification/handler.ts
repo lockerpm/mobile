@@ -44,6 +44,32 @@ export const handleNewShare = async (data: string) => {
     case CipherType.SecureNote:
       typeName = isVn ? 'ghi chú' : 'note'
       break
+    // case CipherType.DriverLicense:
+    //   typeName = isVn ? 'goi' : 'note'
+    //   break
+    // case CipherType.CitizenID:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Passport:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.SocialSecurityNumber:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.WirelessRouter:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Server:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.APICipher:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Database:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    default: 
+      typeName = isVn ? 'mục' : 'item'
   }
 
   PushNotifier._notify({
@@ -100,6 +126,32 @@ export const handleResponseShare = async (data: string, accepted: boolean) => {
     case CipherType.SecureNote:
       typeName = isVn ? 'ghi chú' : 'note'
       break
+    // case CipherType.DriverLicense:
+    //   typeName = isVn ? 'goi' : 'note'
+    //   break
+    // case CipherType.CitizenID:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Passport:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.SocialSecurityNumber:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.WirelessRouter:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Server:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.APICipher:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    // case CipherType.Database:
+    //   typeName = isVn ? 'ghi chú' : 'note'
+    //   break
+    default: 
+    typeName = isVn ? 'mục' : 'item'
   }
 
   if (accepted) {
@@ -131,7 +183,7 @@ export const handleInviteEA = async (data: string) => {
   const user = eaData.grantee_name || eaData.grantor_name
 
   PushNotifier._notify({
-    id: `ea_invite`,
+    id: `emergency_access_notification`,
     title: 'Locker',
     body: isVn ? `${user} đã thêm bạn làm Liên hệ khẩn cấp` : `${user} has invited you to be emergency access contact`,
     data: {
@@ -147,11 +199,11 @@ export const handleIviteResponseEA = async (data: string, response: boolean) => 
 
   const user = eaData.grantee_name
 
-  const acceptText = isVn ? `${user} đã chấp nhận trở thành Liên hệ khẩn cấp của bạn` : `${user} has been accepted your emergency access invitation`
-  const rejectText = isVn ? `${user} đã từ chối trở thành Liên hệ khẩn cấp của bạn` : `${user} has been rejected your emergency access invitation`
+  const acceptText = isVn ? `${user} đã chấp nhận trở thành Liên hệ khẩn cấp của bạn` : `${user} has accepted your emergency access invitation`
+  const rejectText = isVn ? `${user} đã từ chối trở thành Liên hệ khẩn cấp của bạn` : `${user} has rejected your emergency access invitation`
 
   PushNotifier._notify({
-    id: `ea_invite_response`,
+    id: `emergency_access_notification`,
     title: 'Locker',
     body: response ? acceptText : rejectText,
     data: {
@@ -171,7 +223,7 @@ export const handleRequestEA = async (data: string) => {
   const type = eaData.type.toLowerCase() === "view" ? view : takeOver
 
   PushNotifier._notify({
-    id: `ea_request`,
+    id: `emergency_access_notification`,
     title: 'Locker',
     body: isVn ? `${user} đã yêu cầu ${type} tài khoản Locker của bạn ${type}` : `${user} has requested to ${type} your Locker account`,
     data: {
@@ -194,7 +246,7 @@ export const handleRequestEAResponseEA = async (data: string, response: boolean)
   const rejectText = isVn ? `${user} đã từ chối yêu cầu ${type} tài khoản Locker của bạn` : `${user} has rejected your request to ${type} their Locker account`
 
   PushNotifier._notify({
-    id: `ea_rq_response`,
+    id: `emergency_access_notification`,
     title: 'Locker',
     body: response ? acceptText : rejectText,
     data: {
