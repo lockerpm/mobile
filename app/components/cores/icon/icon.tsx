@@ -1,6 +1,7 @@
 import * as React from "react"
 import { ComponentType } from "react"
 import {
+  ColorValue,
   Image,
   ImageStyle,
   StyleProp,
@@ -10,7 +11,7 @@ import {
   ViewStyle,
 } from "react-native"
 
-type IconTypes = keyof typeof imgIconRegistry
+export type IconTypes = keyof typeof iconRegistry
 
 interface IconProps extends TouchableOpacityProps {
   /**
@@ -22,6 +23,11 @@ interface IconProps extends TouchableOpacityProps {
    * An optional size for the icon. If not provided, the icon will be sized to the icon's resolution.
    */
   size?: number
+
+  /**
+   * An option tint color for the icon 
+   */
+  color?: ColorValue
 
   /**
    * Style overrides for the icon image
@@ -43,9 +49,10 @@ interface IconProps extends TouchableOpacityProps {
  * A component to render a registered icon.
  * It is wrapped in a <TouchableOpacity /> if `onPress` is provided, otherwise a <View />.
  */
-export function ImageIcon(props: IconProps) {
+export function Icon(props: IconProps) {
   const {
     icon,
+    color,
     size,
     style: $imageStyleOverride,
     containerStyle: $containerStyleOverride,
@@ -66,26 +73,18 @@ export function ImageIcon(props: IconProps) {
       <Image
         style={[
           $imageStyle,
-          // color && { tintColor: color },
+          color && { tintColor: color },
           size && { width: size, height: size },
           $imageStyleOverride,
         ]}
-        source={imgIconRegistry[icon]}
+        source={iconRegistry[icon]}
       />
     </Wrapper>
   )
 }
 
-/**
- * Colorful image icon
- */
-export const imgIconRegistry = {
-  desktop: require('../../../../assets/icon/desktop.png'),
-  identification: require('../../../../assets/icon/identification.png'),
-  mobile: require('../../../../assets/icon/mobile.png'),
-  password: require('../../../../assets/icon/password.png'),
-  wallet: require('../../../../assets/icon/wallet.png'),
-  wand: require('../../../../assets/icon/wand.png'),
+export const iconRegistry = {
+  'caret-left': require('../../../../assets/icon/arrow/CaretLeft.png'),
 }
 
 const $imageStyle: ImageStyle = {
