@@ -30,6 +30,19 @@ export const typography = {
   code: Platform.select({ ios: "Courier", android: "monospace" }),
 }
 
+export const fontSizes = {
+  '5xl': 48,
+  '4xl': 32,
+  '3xl': 28,
+  '2xl': 24,
+  'xl': 20,
+  large: 18,
+  medium: 16,
+  base: 14,
+  small: 12,
+  'sx': 10,
+}
+
 
 const fontSizeNormal = {
   h1: 26 ,

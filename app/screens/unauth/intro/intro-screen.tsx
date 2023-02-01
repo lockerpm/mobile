@@ -9,12 +9,20 @@ import { observer } from "mobx-react-lite"
 import { APP_INTRO } from "../../../common/mappings"
 import { RootParamList } from "../../../navigators"
 
-type IntroScreenProp = RouteProp<RootParamList, "intro">
+const SCREEN_IMAGE = {
+  AUTH_BLANK: require('../../../../assets/img/onboard/auth-blank.png'),
+  AUTH_LOCKERIO : require('../../../../assets/img/onboard/auth-lockerio.png'),
+  AUTH_WEBSITE: require('../../../../assets/img/onboard/auth-website.png'),
+  AUTOFILL_WEB: require('../../../../assets/img/onboard/autofill-web.png'),
+  HOME_APP: require('../../../../assets/img/onboard/home-app.png'),
+  HOME_MOBILE: require('../../../../assets/img/onboard/home-mobile.png'),
+  HOME_WEB: require('../../../../assets/img/onboard/home-web.png'),
+}
 
 export const IntroScreen = observer(() => {
   const { translate, color } = useMixins()
   const navigation = useNavigation()
-  const route = useRoute<IntroScreenProp>()
+  const route = useRoute<RouteProp<RootParamList, "intro">>()
   const { isPortrait } = useAdaptiveLayoutMixins()
   const { width, height } = Dimensions.get('screen')
 
