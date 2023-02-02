@@ -15,11 +15,11 @@ const AnimatedPath = Animated.createAnimatedComponent(Path)
 
 interface Props {
   style?: StyleProp<ViewStyle>
-  color: Color 
+  color: Color
 }
 
-export const Wave = ({ style ,color }: Props) => {
-  const {width, height} = Dimensions.get("window")
+export const Wave = ({ style, color }: Props) => {
+  const { width, height } = Dimensions.get("window")
   const progress = useSharedValue(0)
   useEffect(() => {
     progress.value = withRepeat(
@@ -48,19 +48,45 @@ export const Wave = ({ style ,color }: Props) => {
     }
   })
 
+  const data2 = useDerivedValue(() => {
+    const m = mix.bind(null, 1 - progress.value)
+    return {
+      from: {
+        x: m(-0.3, -1),
+        y: m(0, 0.3),
+      },
+      c1: { x: m(-0.1, 0.5), y: m(0.2, 1) },
+      c2: { x: m(0.6, 0.5), y: m(0.1, 0) },
+      to: { x: m(0.8, 2), y: m(0.4, 0.5) },
+    }
+  })
+
+  const path2 = useAnimatedProps(() => {
+    const { from, c1, c2, to } = data2.value
+    return {
+      d: `M ${from.x} ${from.y} C ${c1.x} ${c1.y} ${c2.x} ${c2.y} ${to.x} ${to.y} L 1 2 L 0 2 Z`,
+    }
+  })
+
   return (
     <View
       style={[
         {
           width: width,
-          height:height,
+          height: height,
           justifyContent: "flex-end",
           alignItems: "center",
         },
         style,
       ]}
     >
-      <Svg width={width} height={height - 120} style={{ backgroundColor: "transparent" }} viewBox="0 0 1 1">
+      <Svg
+        width={width}
+        height={height - 120}
+        style={{ backgroundColor: "transparent" }}
+        viewBox="0 0 1 1"
+      >
+        <AnimatedPath fill={"#f2ffe6"} animatedProps={path2} />
         <AnimatedPath fill={color} animatedProps={path1} />
       </Svg>
     </View>
