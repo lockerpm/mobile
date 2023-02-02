@@ -12,16 +12,19 @@ interface Props {
   animIndex: Animated.SharedValue<number>
   scrollTo: (index: number) => void
   index: number
+  goStart: ()=> void
 }
 const INTRO_LENGTH = 4
 
-export const AnimatedFooter = observer(({ animIndex, scrollTo, index }: Props) => {
+export const AnimatedFooter = observer(({ animIndex, scrollTo, index, goStart }: Props) => {
   const { color, translate } = useMixins()
   const insert = useSafeAreaInsets()
 
   const goNext = () => {
     if (index < INTRO_LENGTH - 1) {
       scrollTo(index + 1)
+    } else {
+      goStart()
     }
   }
   const goBack = () => {

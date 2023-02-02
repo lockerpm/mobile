@@ -103,8 +103,10 @@ const AnimatedTitleContent = ({ index, intro, animIndex }: ContentProps) => {
         $contentStyle,
       ]}
     >
-      <Text preset="bold" text={intro.title} size="2xl" style={$centerText} />
-      <Text preset="label" text={intro.desc} style={$centerText} />
+      <Text preset="bold" text={intro.title} size="2xl" style={$centerText}/>
+
+
+      <Text preset="label" text={intro.desc} style={[$centerText, {marginTop: 4}]} />
     </Animated.View>
   )
 }

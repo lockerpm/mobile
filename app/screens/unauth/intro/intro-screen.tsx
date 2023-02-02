@@ -9,9 +9,9 @@ import { AnimatedFooter } from "./animated-footer/animated-footer"
 import { Screen } from "../../../components/cores/screen/screen"
 import { Wave } from "./wave"
 import { Intro1, Intro2, Intro3, Intro4 } from "./intro/intro"
+import { Icon } from "../../../components/cores"
 
 const SCREEN_WIDTH = Dimensions.get("screen").width
-const SCREEN_HEIGHT = Dimensions.get("screen").height
 
 export const IntroScreen = observer(() => {
   const navigation = useNavigation()
@@ -28,6 +28,10 @@ export const IntroScreen = observer(() => {
   const scrollHandler = useAnimatedScrollHandler((event) => {
     animIndex.value = event.contentOffset.x / SCREEN_WIDTH
   })
+
+  const goStart= () => {
+    navigation.navigate('onBoarding')
+  }
 
   const scrollTo = (index: number) => {
     scrollViewRef.current?.scrollTo({
@@ -53,7 +57,19 @@ export const IntroScreen = observer(() => {
         justifyContent: "space-between",
       }}
     >
-      <LanguagePicker />
+      {isPreview ? (
+        <Icon
+          onPress={() => {
+            navigation.goBack()
+          }}
+          icon="arrow-left"
+          size={24}
+          style={{ zIndex: 10, position: "absolute", left: 20, top: 16 }}
+        />
+      ) : (
+        <LanguagePicker />
+      )}
+
       <Wave color={"#Dbf5dd"} style={StyleSheet.absoluteFill} />
 
       <Animated.ScrollView
@@ -71,11 +87,11 @@ export const IntroScreen = observer(() => {
         scrollEventThrottle={16}
       >
         <Intro1 onView={index === 0} />
-        <Intro2 onView={index === 1}/>
-        <Intro3 onView={index === 2}/>
-        <Intro4 onView={index === 3}/>
+        <Intro2 onView={index === 1} />
+        <Intro3 onView={index === 2} />
+        <Intro4 onView={index === 3} />
       </Animated.ScrollView>
-      <AnimatedFooter animIndex={animIndex} index={index} scrollTo={scrollTo} />
+      <AnimatedFooter animIndex={animIndex} index={index} scrollTo={scrollTo} goStart={goStart} />
     </Screen>
   )
 })
