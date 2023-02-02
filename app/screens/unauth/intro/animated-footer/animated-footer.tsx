@@ -35,7 +35,7 @@ export const AnimatedFooter = observer(({ animIndex, scrollTo, index }: Props) =
   return (
     <Animated.View
       style={{
-        height: "30%",
+        height: "35%",
         paddingHorizontal: 26,
         paddingBottom: insert.bottom + 10,
       }}

@@ -71,9 +71,9 @@ export const IntroScreen = observer(() => {
         scrollEventThrottle={16}
       >
         <Intro1 onView={index === 0} />
-        <Intro2 />
-        <Intro3 />
-        <Intro4 />
+        <Intro2 onView={index === 1}/>
+        <Intro3 onView={index === 2}/>
+        <Intro4 onView={index === 3}/>
       </Animated.ScrollView>
       <AnimatedFooter animIndex={animIndex} index={index} scrollTo={scrollTo} />
     </Screen>

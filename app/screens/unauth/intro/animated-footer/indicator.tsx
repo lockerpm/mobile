@@ -17,7 +17,7 @@ export const AnimatedTabIndicator = ({ val, animIndex, onPress }: ContentProps) 
   const { color } = useMixins()
   const $contentStyle = useAnimatedStyle(() => {
     return {
-      width: interpolate(animIndex.value, [val - 1, val, val + 1], [8, 24, 8], Extrapolate.CLAMP),
+      width: interpolate(animIndex.value, [val - 1, val, val + 1], [8, 20, 8], Extrapolate.CLAMP),
       backgroundColor: interpolateColor(
         animIndex.value,
         [val - 1, val, val + 1],
