@@ -169,46 +169,48 @@ export const InitScreen = observer(() => {
         Logger.error(e)
       });
 
-    // Check dynamic link
-    const link = await dynamicLinks().getInitialLink()
-    if (link) {
-      Logger.debug(`DYNAMIC LINK INIT: ${JSON.stringify(link)}`)
-      if (link.url) {
-        const isNavigated = await handleDynamicLink(link.url, navigation)
-        if (isNavigated) {
-          return
-        }
-      }
-    }
+      navigation.navigate('intro')
 
-    // Logged in?
-    if (!user.isLoggedIn) {
-      if (!user.introShown && !isAutoFill && !isOnSaveLogin && !isAutoFillItem) {
-        user.setIntroShown(true)
-        navigation.navigate('intro')
-      } else {
-        navigation.navigate('onBoarding')
-      }
-      return
-    }
+    // // Check dynamic link
+    // const link = await dynamicLinks().getInitialLink()
+    // if (link) {
+    //   Logger.debug(`DYNAMIC LINK INIT: ${JSON.stringify(link)}`)
+    //   if (link.url) {
+    //     const isNavigated = await handleDynamicLink(link.url, navigation)
+    //     if (isNavigated) {
+    //       return
+    //     }
+    //   }
+    // }
 
-    // Network connected? || Is autofill?
-    if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {
-      goLockOrCreatePassword()
-      return
-    }
+    // // Logged in?
+    // if (!user.isLoggedIn) {
+    //   if (!user.introShown && !isAutoFill && !isOnSaveLogin && !isAutoFillItem) {
+    //     user.setIntroShown(true)
+    //     navigation.navigate('intro')
+    //   } else {
+    //     navigation.navigate('onBoarding')
+    //   }
+    //   return
+    // }
 
-    // Session validated?
-    if (!user.isLoggedIn) {
-      navigation.navigate('login')
-      return
-    }
-    const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-    if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
-      goLockOrCreatePassword()
-    } else {
-      navigation.navigate('login')
-    }
+    // // Network connected? || Is autofill?
+    // if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {
+    //   goLockOrCreatePassword()
+    //   return
+    // }
+
+    // // Session validated?
+    // if (!user.isLoggedIn) {
+    //   navigation.navigate('login')
+    //   return
+    // }
+    // const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
+    // if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
+    //   goLockOrCreatePassword()
+    // } else {
+    //   navigation.navigate('login')
+    // }
   }
 
   // ------------------ EFFECTS ---------------------
