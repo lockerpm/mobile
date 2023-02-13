@@ -1,15 +1,15 @@
 import React, { useRef, useState } from "react"
 import { Dimensions, StyleSheet } from "react-native"
-import { LanguagePicker } from "../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { RootParamList } from "../../../navigators"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { AnimatedFooter } from "./animated-footer/animated-footer"
-import { Screen } from "../../../components/cores/screen/screen"
-import { Wave } from "./wave"
 import { Intro1, Intro2, Intro3, Intro4 } from "./intro/intro"
-import { Icon } from "../../../components/cores"
+import { Icon, Screen } from "../../../components/cores"
+import { LanguagePicker } from "../../../components/utils"
+
+import { AnimatedFooter } from "./animated-footer/animated-footer"
+import { Wave } from "./wave"
 
 const SCREEN_WIDTH = Dimensions.get("screen").width
 

@@ -46,15 +46,6 @@ export interface HeaderProps {
    */
   title?: TextProps['text']
   /**
-   * Title text which is looked up via i18n.
-   */
-  titleTx?: TextProps['tx']
-  /**
-   * Optional options to pass to i18n. Useful for interpolation
-   * as well as explicitly setting locale or translation fallbacks.
-   */
-  titleTxOptions?: TextProps['txOptions']
-  /**
    * Icon that should appear on the left.
    * Can be used with `onLeftPress`.
    */
@@ -73,22 +64,11 @@ export interface HeaderProps {
    * An optional color for the left text
    */
   leftTextColor?: ColorValue
-
-  /**
-   * Left action text text which is looked up via i18n.
-   * Can be used with `onLeftPress`. Overrides `leftIcon`.
-   */
-  leftTx?: TextProps['tx']
   /**
    * Left action custom ReactElement if the built in action props don't suffice.
    * Overrides `leftIcon`, `leftTx` and `leftText`.
    */
   LeftActionComponent?: ReactElement
-  /**
-   * Optional options to pass to i18n. Useful for interpolation
-   * as well as explicitly setting locale or translation fallbacks.
-   */
-  leftTxOptions?: TextProps['txOptions']
   /**
    * What happens when you press the left icon or text action.
    */
@@ -113,20 +93,10 @@ export interface HeaderProps {
    */
   rightTextColor?: ColorValue
   /**
-   * Right action text text which is looked up via i18n.
-   * Can be used with `onRightPress`. Overrides `rightIcon`.
-   */
-  rightTx?: TextProps['tx']
-  /**
    * Right action custom ReactElement if the built in action props don't suffice.
    * Overrides `rightIcon`, `rightTx` and `rightText`.
    */
   RightActionComponent?: ReactElement
-  /**
-   * Optional options to pass to i18n. Useful for interpolation
-   * as well as explicitly setting locale or translation fallbacks.
-   */
-  rightTxOptions?: TextProps['txOptions']
   /**
    * What happens when you press the right icon or text action.
    */
@@ -148,8 +118,6 @@ interface HeaderActionProps {
   iconColor?: ColorValue
   text?: TextProps['text']
   textColor?: ColorValue
-  tx?: TextProps['tx']
-  txOptions?: TextProps['txOptions']
   onPress?: TouchableOpacityProps['onPress']
   ActionComponent?: ReactElement
 }
@@ -169,8 +137,6 @@ export const Header = observer((props: HeaderProps) => {
     leftIconColor = colors.textBlack,
     leftText,
     leftTextColor,
-    leftTx,
-    leftTxOptions,
     onLeftPress,
     onRightPress,
     RightActionComponent,
@@ -178,12 +144,8 @@ export const Header = observer((props: HeaderProps) => {
     rightIconColor = colors.textBlack,
     rightText,
     rightTextColor,
-    rightTx,
-    rightTxOptions,
     title,
     titleMode = 'center',
-    titleTx,
-    titleTxOptions,
     titleContainerStyle: $titleContainerStyleOverride,
     style: $styleOverride,
     titleStyle: $titleStyleOverride,
@@ -192,19 +154,17 @@ export const Header = observer((props: HeaderProps) => {
     childrenContainerStyle: $childrenContainerStyle,
   } = props
 
-  const titleContent = titleTx || title
+  const titleContent =  title
 
   return (
     <View style={[$container, { backgroundColor }, $containerStyleOverride]}>
       <View style={[$wrapper, $styleOverride]}>
         <HeaderAction
-          tx={leftTx}
           text={leftText}
           textColor={leftTextColor}
           icon={leftIcon}
           iconColor={leftIconColor}
           onPress={onLeftPress}
-          txOptions={leftTxOptions}
           backgroundColor={backgroundColor}
           ActionComponent={LeftActionComponent}
         />
@@ -219,8 +179,6 @@ export const Header = observer((props: HeaderProps) => {
             pointerEvents="none"
           >
             <Text
-              tx={titleTx}
-              txOptions={titleTxOptions}
               size="medium"
               text={title}
               style={[$title, $titleStyleOverride]}
@@ -233,13 +191,11 @@ export const Header = observer((props: HeaderProps) => {
         )}
 
         <HeaderAction
-          tx={rightTx}
           text={rightText}
           textColor={rightTextColor}
           icon={rightIcon}
           iconColor={rightIconColor}
           onPress={onRightPress}
-          txOptions={rightTxOptions}
           backgroundColor={backgroundColor}
           ActionComponent={RightActionComponent}
         />
@@ -254,14 +210,12 @@ function HeaderAction(props: HeaderActionProps) {
     icon,
     text,
     textColor,
-    tx,
-    txOptions,
     onPress,
     ActionComponent,
     iconColor,
   } = props
 
-  const content = tx || text
+  const content =  text
 
   if (ActionComponent) return ActionComponent
 
@@ -275,9 +229,7 @@ function HeaderAction(props: HeaderActionProps) {
       >
         <Text
           preset='bold'
-          txOptions={txOptions}
           color={textColor}
-          tx={tx}
           size="medium"
           text={text}
         />
