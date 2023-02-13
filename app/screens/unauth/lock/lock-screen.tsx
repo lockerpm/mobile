@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, BackHandler, View } from "react-native"
-import { AutoImage as Image, Button, Layout, Text, FloatingInput, LanguagePicker } from "../../../components"
+import { AutoImage as Image, Button, Layout, Text, FloatingInput } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { commonStyles, fontSize } from "../../../theme"
@@ -17,6 +17,7 @@ import { CipherType } from "../../../../core/enums"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { EnterpriseInvitation } from "../../../services/api"
 import { EnterpriseInvitationModal } from "./enterprise-invitation-modal"
+import { LanguagePicker } from "../../../components/utils"
 
 
 export const LockScreen = observer(() => {

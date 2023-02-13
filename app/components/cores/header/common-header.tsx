@@ -1,6 +1,6 @@
 import React from 'react'
 import { ColorValue } from 'react-native'
-import { Header } from '..'
+import { Header } from './header'
 
 interface Props {
   navigation: any

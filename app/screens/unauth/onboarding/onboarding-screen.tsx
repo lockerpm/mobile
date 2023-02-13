@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { BackHandler, View } from "react-native"
-import { AutoImage as Image, Button, LanguagePicker, Layout, Text } from "../../../components"
+import { AutoImage as Image, Button, Layout, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize, spacing } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
@@ -9,6 +9,7 @@ import { APP_ICON } from "../../../common/mappings"
 import { IS_IOS } from "../../../config/constants"
 import { useStores } from "../../../models"
 import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
+import { LanguagePicker } from "../../../components/utils"
 
 export const OnboardingScreen = observer(() => {
   const navigation = useNavigation()

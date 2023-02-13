@@ -11,7 +11,6 @@ import { useStores } from "../../models"
 
 import BackIcon from './arrow-left.svg'
 import BackIconLight from './arrow-left-light.svg'
-import { LanguagePicker } from "../language-picker/language-picker"
 
 const CONTAINER: ViewStyle = {
   flexDirection: 'row',

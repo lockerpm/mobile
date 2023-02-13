@@ -86,6 +86,8 @@ export function Icon(props: IconProps) {
 export const iconRegistry = {
   'caret-left': require('../../../../assets/icon/arrow/CaretLeft.png'),
   'arrow-left': require('../../../../assets/icon/arrow/ArrowLeft.png'),
+  'eye': require('../../../../assets/icon/common/eye.png'),
+  'eye-slash': require('../../../../assets/icon/common/eye-slash.png'),
 }
 
 const $imageStyle: ImageStyle = {

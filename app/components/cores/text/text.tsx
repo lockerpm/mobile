@@ -1,4 +1,3 @@
-import i18n from 'i18n-js'
 import React from 'react'
 import {
   ColorValue,
@@ -7,7 +6,6 @@ import {
   TextProps as RNTextProps,
   TextStyle,
 } from 'react-native'
-import { TxKeyPath } from '../../../i18n'
 import { useMixins } from '../../../services/mixins'
 import { fontSizes, typography } from '../../../theme'
 
@@ -44,15 +42,6 @@ export interface TextProps extends RNTextProps {
    * The text to display if not using `tx` or nested components.
    */
   text?: string
-  /**
-   * Optional options to pass to i18n. Useful for interpolation
-   * as well as explicitly setting locale or translation fallbacks.
-   */
-  txOptions?: i18n.TranslateOptions
-  /**
-   * Text which is looked up via i18n.
-   */
-  tx?: TxKeyPath
 }
 
 /**
@@ -63,8 +52,6 @@ export const Text = (props: TextProps) => {
   const {
     weight,
     size,
-    tx,
-    txOptions,
     text,
     children,
     style: $styleOverride,
@@ -89,8 +76,7 @@ export const Text = (props: TextProps) => {
     label: [$baseStyle,  { color: themeColor.text }],
   }
 
-  const i18nText = tx && translate(tx, txOptions)
-  const content = i18nText || text || children
+  const content =  text || children
   const preset: Presets = $presetStyles[props.preset] ? props.preset : 'default'
 
   const $textColor: StyleProp<TextStyle> = [
