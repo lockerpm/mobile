@@ -6,12 +6,15 @@ import {
   TextProps as RNTextProps,
   TextStyle,
 } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { useMixins } from '../../../services/mixins'
 import { fontSizes, typography } from '../../../theme'
 
 type Presets = 'default' | 'bold' | 'label'
 type Sizes = keyof typeof fontSizes
 type Weights = keyof typeof typography.secondary
+
+const AnimatedText = Animated.createAnimatedComponent(RNText)
 
 export interface TextProps extends RNTextProps {
   /**
@@ -59,7 +62,7 @@ export const Text = (props: TextProps) => {
     ...rest
   } = props
 
-  const { color: themeColor, translate } = useMixins()
+  const { color: themeColor } = useMixins()
 
   const $baseStyle: StyleProp<TextStyle> = [{  
     fontFamily: typography.primary,
@@ -90,9 +93,9 @@ export const Text = (props: TextProps) => {
   ]
 
   return (
-    <RNText {...rest} style={$styles}>
+    <AnimatedText {...rest} style={$styles}>
       {content}
-    </RNText>
+    </AnimatedText>
   )
 }
 
