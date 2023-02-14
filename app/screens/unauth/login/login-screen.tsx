@@ -7,8 +7,8 @@ import { LanguagePicker } from "../../../components/utils"
 import { useMixins } from "../../../services/mixins"
 import { commonStyles, spacing } from "../../../theme"
 import { DefaultLogin } from "./default"
-import { MethodSelection } from "./method-selection"
-import { Otp } from "./otp"
+import { MethodSelection } from "./2fa/method-selection"
+import { Otp } from "./2fa/otp"
 import { useStores } from "../../../models"
 
 export const LoginScreen = observer(() => {
@@ -70,13 +70,12 @@ export const LoginScreen = observer(() => {
       isOverlayLoading={isScreenLoading}
       footer={
         <View
-          style={[
-            commonStyles.CENTER_HORIZONTAL_VIEW,
-            {
-              marginTop: 12,
-              justifyContent: "center",
-            },
-          ]}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: 12,
+            justifyContent: "center",
+          }}
         >
           <Text
             text={translate("login.no_account")}

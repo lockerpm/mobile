@@ -17,33 +17,6 @@ export const OnboardingScreen = observer(() => {
   const { uiStore } = useStores()
   const { verticalScale } = useAdaptiveLayoutMixins()
 
-  // Child components
-  const footer = (
-    <View>
-      <Button
-        text={translate("common.sign_up")}
-        onPress={() => navigation.navigate("signup")}
-      />
-      <View
-        style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-          marginTop: spacing.medium,
-          justifyContent: 'center'
-        }]}
-      >
-        <Text
-          text={translate("onBoarding.has_account")}
-          style={{
-            marginRight: spacing.small,
-          }}
-        />
-        <Button
-          preset="link"
-          text={translate("common.login")}
-          onPress={() => navigation.navigate("login")}
-        />
-      </View>
-    </View>
-  )
 
   // -------------- EFFECT ------------------
 
@@ -71,7 +44,30 @@ export const OnboardingScreen = observer(() => {
   return (
     <Layout
       noScroll
-      footer={footer}
+      footer={<View>
+        <Button
+          text={translate("common.sign_up")}
+          onPress={() => navigation.navigate("signup")}
+        />
+        <View
+          style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+            marginTop: spacing.medium,
+            justifyContent: 'center'
+          }]}
+        >
+          <Text
+            text={translate("onBoarding.has_account")}
+            style={{
+              marginRight: spacing.small,
+            }}
+          />
+          <Button
+            preset="link"
+            text={translate("common.login")}
+            onPress={() => navigation.navigate("login")}
+          />
+        </View>
+      </View>}
     >
       <LanguagePicker />
       <View style={commonStyles.CENTER_VIEW}>
