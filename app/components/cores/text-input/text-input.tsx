@@ -17,7 +17,7 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import Animated, {
+import {
   interpolate,
   interpolateColor,
   useAnimatedStyle,

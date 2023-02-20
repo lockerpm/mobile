@@ -11,24 +11,24 @@ import { IS_IOS, IS_PROD } from "../../../config/constants"
 import { GitHubLoginModal } from "./github-login-modal"
 
 type Props = {
-  nextStep: (username: string, password: string, methods: { type: string, data: any }[]) => void
+  enterpriseLogin: boolean
+  nextStep: (username: string, password: string, methods: { type: string; data: any }[]) => void
   onLoggedIn: (newUser: boolean, token: string) => void
   handleForgot: () => void
 }
-
 
 export const DefaultLogin = observer((props: Props) => {
   const { user, uiStore } = useStores()
   const { translate, notify, notifyApiError, setApiTokens } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
-  const { nextStep, onLoggedIn, handleForgot } = props
+  const { nextStep, onLoggedIn, handleForgot, enterpriseLogin } = props
 
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [username, setUsername] = useState(user.email || '')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState(user.email || "")
+  const [password, setPassword] = useState("")
 
   const passwordRef = useRef(null)
 
@@ -42,31 +42,31 @@ export const DefaultLogin = observer((props: Props) => {
     const payload = { username, password }
     const res = await user.login(payload)
     setIsLoading(false)
-    if (res.kind !== 'ok') {
+    if (res.kind !== "ok") {
       setIsError(true)
-      if (res.kind === 'unauthorized' && res.data) {
+      if (res.kind === "unauthorized" && res.data) {
         const errorData: {
           code: string
           message: string
         } = res.data
         switch (errorData.code) {
-          case '1001': {
-            notify('error', translate('error.wrong_username_or_password'))
+          case "1001": {
+            notify("error", translate("error.wrong_username_or_password"))
             break
           }
-          case '1003': {
-            notify('error', translate('error.account_not_activated'))
+          case "1003": {
+            notify("error", translate("error.account_not_activated"))
             break
           }
           default: {
-            notify('error', errorData.message)
+            notify("error", errorData.message)
           }
         }
       } else {
         notifyApiError(res)
       }
     } else {
-      setPassword('')
+      setPassword("")
       if (res.data.is_factor2) {
         nextStep(username, password, res.data.methods)
       } else {
@@ -92,9 +92,9 @@ export const DefaultLogin = observer((props: Props) => {
       handler: () => {
         return appleLogin({
           setIsLoading,
-          onLoggedIn
+          onLoggedIn,
         })
-      }
+      },
     },
 
     google: {
@@ -103,9 +103,9 @@ export const DefaultLogin = observer((props: Props) => {
       handler: () => {
         return googleLogin({
           setIsLoading,
-          onLoggedIn
+          onLoggedIn,
         })
-      }
+      },
     },
 
     facebook: {
@@ -114,9 +114,9 @@ export const DefaultLogin = observer((props: Props) => {
       handler: () => {
         return facebookLogin({
           setIsLoading,
-          onLoggedIn
+          onLoggedIn,
         })
-      }
+      },
     },
 
     github: {
@@ -124,14 +124,14 @@ export const DefaultLogin = observer((props: Props) => {
       icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.githubLight : SOCIAL_LOGIN_ICON.github,
       handler: () => {
         setShowGitHubLogin(true)
-      }
-    }
+      },
+    },
   }
 
   // ------------------------------ RENDER -------------------------------
 
   return (
-    <View style={{ alignItems: 'center', paddingTop: '10%' }}>
+    <View style={{ alignItems: "center", paddingTop: "10%" }}>
       <GitHubLoginModal
         isOpen={showGitHubLogin}
         onClose={() => setShowGitHubLogin(false)}
@@ -139,57 +139,57 @@ export const DefaultLogin = observer((props: Props) => {
           githubLogin({
             setIsLoading,
             onLoggedIn,
-            code
+            code,
           })
         }}
       />
 
-      <Image 
-        source={APP_ICON.icon} 
+      <Image
+        source={APP_ICON.icon}
         style={{ height: 70, width: 70, marginBottom: spacing.small, marginTop: spacing.huge }}
       />
 
       <Text
         preset="header"
-        text={translate('login.title')}
+        text={translate("login.title")}
         style={{ marginBottom: spacing.large }}
       />
 
       {/* Username input */}
       <FloatingInput
         isInvalid={isError}
-        label={translate('login.email_or_username')}
+        label={translate("login.email_or_username")}
         onChangeText={setUsername}
         value={username}
-        style={{ width: '100%', marginBottom:  spacing.small }}
+        style={{ width: "100%", marginBottom: spacing.small }}
         onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
       />
       {/* Username input end */}
 
       {/* Password input */}
-      <FloatingInput
-        outerRef={passwordRef}
-        isPassword
-        isInvalid={isError}
-        label={translate('common.password')}
-        onChangeText={setPassword}
-        value={password}
-        style={{ width: '100%' }}
-        onSubmitEditing={handleLogin}
-      />
+      {!enterpriseLogin && (
+        <FloatingInput
+          outerRef={passwordRef}
+          isPassword
+          isInvalid={isError}
+          label={translate("common.password")}
+          onChangeText={setPassword}
+          value={password}
+          style={{ width: "100%" }}
+          onSubmitEditing={handleLogin}
+        />
+      )}
       {/* Password input end */}
 
-      <View style={{ 
-        width: '100%', 
-        alignItems: 'flex-start',
-        marginTop: spacing.large,
-        marginBottom: spacing.medium
-      }}>
-        <Button
-          preset="link"
-          text={translate("login.forgot_password")}
-          onPress={handleForgot}
-        />
+      <View
+        style={{
+          width: "100%",
+          alignItems: "flex-start",
+          marginTop: spacing.large,
+          marginBottom: spacing.medium,
+        }}
+      >
+        <Button preset="link" text={translate("login.forgot_password")} onPress={handleForgot} />
       </View>
 
       <Button
@@ -198,8 +198,8 @@ export const DefaultLogin = observer((props: Props) => {
         text={translate("common.login")}
         onPress={handleLogin}
         style={{
-          width: '100%',
-          marginBottom: spacing.medium
+          width: "100%",
+          marginBottom: spacing.medium,
         }}
       />
 
@@ -210,8 +210,9 @@ export const DefaultLogin = observer((props: Props) => {
         />
 
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          {
-            Object.values(SOCIAL_LOGIN).filter(item => !item.hide).map((item, index) => (
+          {Object.values(SOCIAL_LOGIN)
+            .filter((item) => !item.hide)
+            .map((item, index) => (
               <Button
                 key={index}
                 preset="ghost"
@@ -220,8 +221,7 @@ export const DefaultLogin = observer((props: Props) => {
               >
                 <item.icon height={40} width={40} />
               </Button>
-            ))
-          }
+            ))}
         </View>
       </View>
     </View>
