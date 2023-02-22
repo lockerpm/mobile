@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import find from 'lodash/find'
+import find from "lodash/find"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit
+  Text,
+  Layout,
+  Button,
+  Header,
+  FloatingInput,
+  CipherOthersInfo,
+  CustomFieldsEdit,
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -15,25 +21,27 @@ import { CipherView } from "../../../../../../core/models/view"
 import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
-import { SocialSecurityNumberData, toSocialSecurityNumberData } from "../social-security-number.type"
-import countries from '../../../../../common/countries.json'
+import {
+  SocialSecurityNumberData,
+  toSocialSecurityNumberData,
+} from "../social-security-number.type"
+import countries from "../../../../../common/countries.json"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
 
-type EditScreenProp = RouteProp<PrimaryParamList, 'socialSecurityNumbers__edit'>;
+type EditScreenProp = RouteProp<PrimaryParamList, "socialSecurityNumbers__edit">
 
 type InputItem = {
-  label: string,
-  value: string,
-  setter: (val: string) => void,
-  onTouchStart?: () => void,
-  isRequired?: boolean,
-  isDateTime?: boolean,
-  placeholder?: string,
-  isDisableEdit?: boolean,
-  type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
+  label: string
+  value: string
+  setter: (val: string) => void
+  onTouchStart?: () => void
+  isRequired?: boolean
+  isDateTime?: boolean
+  placeholder?: string
+  isDisableEdit?: boolean
+  type?: "default" | "email-address" | "numeric" | "phone-pad" | "number-pad" | "decimal-pad"
 }
-
 
 export const SocialSecurityNumberEditScreen = observer(() => {
   const navigation = useNavigation()
@@ -50,35 +58,51 @@ export const SocialSecurityNumberEditScreen = observer(() => {
 
   // ------------------ PARAMS -----------------------
   const selectedCollection: CollectionView = route.params.collection
-
+  const isOwner = (() => {
+    if (!selectedCipher.organizationId) {
+      return true
+    }
+    const org = cipherStore.myShares.find(
+      (s) => s.organization_id === selectedCipher.organizationId,
+    )
+    return !!org
+  })()
   // Forms
-  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
 
-  const [fullName, setFullName] = useState(mode !== 'add' ? socialSecurityNumberData.fullName : '')
-  const [socialSecurityNumber, setSocialSecurityNumber] = useState(mode !== 'add' ? socialSecurityNumberData.socialSecurityNumber : '')
-  const [dateOfIssue, setDateOfIssue] = useState(mode !== 'add' ? socialSecurityNumberData.dateOfIssue : '')
-  const [contry, setContry] = useState(mode !== 'add' ? socialSecurityNumberData.contry : 'vn')
-  const [note, setNote] = useState(mode !== 'add' ? socialSecurityNumberData.notes : '')
+  const [fullName, setFullName] = useState(mode !== "add" ? socialSecurityNumberData.fullName : "")
+  const [socialSecurityNumber, setSocialSecurityNumber] = useState(
+    mode !== "add" ? socialSecurityNumberData.socialSecurityNumber : "",
+  )
+  const [dateOfIssue, setDateOfIssue] = useState(
+    mode !== "add" ? socialSecurityNumberData.dateOfIssue : "",
+  )
+  const [contry, setContry] = useState(mode !== "add" ? socialSecurityNumberData.contry : "vn")
+  const [note, setNote] = useState(mode !== "add" ? socialSecurityNumberData.notes : "")
 
-  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
-  const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
-  const [collection, setCollection] = useState(mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null)
-  const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+  const [folder, setFolder] = useState(mode !== "add" ? selectedCipher.folderId : null)
+  const [organizationId, setOrganizationId] = useState(
+    mode === "edit" ? selectedCipher.organizationId : null,
+  )
+  const [collectionIds, setCollectionIds] = useState(
+    mode !== "add" ? selectedCipher.collectionIds : [],
+  )
+  const [collection, setCollection] = useState(
+    mode !== "add" && collectionIds.length > 0 ? collectionIds[0] : null,
+  )
+  const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
 
   const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ EFFECTS -----------------------
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === 'unassigned') {
+        if (cipherStore.selectedFolder === "unassigned") {
           setFolder(null)
-        }
-        else {
-          if (!selectedCollection)
-            setFolder(cipherStore.selectedFolder)
+        } else {
+          if (!selectedCollection) setFolder(cipherStore.selectedFolder)
         }
         setCollection(null)
         setCollectionIds([])
@@ -87,8 +111,7 @@ export const SocialSecurityNumberEditScreen = observer(() => {
       }
 
       if (cipherStore.selectedCollection) {
-        if (!selectedCollection)
-          setCollection(cipherStore.selectedCollection)
+        if (!selectedCollection) setCollection(cipherStore.selectedCollection)
         setFolder(null)
         cipherStore.setSelectedCollection(null)
       }
@@ -101,7 +124,7 @@ export const SocialSecurityNumberEditScreen = observer(() => {
         }
         uiStore.setSelectedCountry(null)
       }
-    });
+    })
 
     return unsubscribe
   }, [navigation])
@@ -111,7 +134,7 @@ export const SocialSecurityNumberEditScreen = observer(() => {
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
-    if (mode === 'add') {
+    if (mode === "add") {
       payload = newCipher(CipherType.SocialSecurityNumber)
     } else {
       // @ts-ignore
@@ -134,28 +157,30 @@ export const SocialSecurityNumberEditScreen = observer(() => {
     payload.secureNote = {
       // @ts-ignore
       response: null,
-      type: 0
+      type: 0,
     }
 
-    let res = { kind: 'unknown' }
-    if (['add', 'clone'].includes(mode)) {
+    let res = { kind: "unknown" }
+    if (["add", "clone"].includes(mode)) {
       res = await createCipher(payload, 0, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
     setIsLoading(false)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
+      if (isOwner) {
+        // for shared folder
+        if (selectedCollection) {
+          await shareFolderAddItem(selectedCollection, payload)
+        }
 
-      // for shared folder
-      if (selectedCollection) {
-        await shareFolderAddItem(selectedCollection, payload)
+        if (collection) {
+          const collectionView = find(collectionStore.collections, (e) => e.id === collection) || {}
+          await shareFolderAddItem(collectionView, payload)
+        }
       }
 
-      if (collection) {
-        const collectionView = find(collectionStore.collections, e => e.id === collection) || {}
-        await shareFolderAddItem(collectionView, payload)
-      }
       navigation.goBack()
     }
     setIsLoading(false)
@@ -165,80 +190,77 @@ export const SocialSecurityNumberEditScreen = observer(() => {
 
   const socialSecurityNumberDetails: InputItem[] = [
     {
-      label: translate('common.fullname'),
+      label: translate("common.fullname"),
       value: fullName,
-      setter: setFullName
+      setter: setFullName,
     },
     {
-      label: translate('common.social_security_number'),
+      label: translate("common.social_security_number"),
       value: socialSecurityNumber,
       setter: setSocialSecurityNumber,
-      isRequired: true
+      isRequired: true,
     },
     {
-      label: translate('passport.date_of_issue'),
+      label: translate("passport.date_of_issue"),
       value: dateOfIssue,
       setter: setDateOfIssue,
       isDateTime: true,
-      placeholder: 'dd/mm/yyyy'
+      placeholder: "dd/mm/yyyy",
     },
     {
-      label: translate('common.nationality'),
-      value: countries[contry?.toUpperCase()] ? countries[contry?.toUpperCase()].country_name : '',
+      label: translate("common.nationality"),
+      value: countries[contry?.toUpperCase()] ? countries[contry?.toUpperCase()].country_name : "",
       setter: setContry,
       isDisableEdit: true,
       onTouchStart: () => {
-        navigation.navigate('countrySelector', { initialId: contry })
-      }
-    }
+        navigation.navigate("countrySelector", { initialId: contry })
+      },
+    },
   ]
-
 
   return (
     <Layout
       isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
-        paddingHorizontal: 0
+        paddingHorizontal: 0,
       }}
-      header={(
+      header={
         <Header
           title={
-            mode === 'add'
-              ? `${translate('common.add')} ${translate('common.social_security_number')}`
-              : translate('common.edit')
+            mode === "add"
+              ? `${translate("common.add")} ${translate("common.social_security_number")}`
+              : translate("common.edit")
           }
           goBack={() => navigation.goBack()}
-          goBackText={translate('common.cancel')}
-          right={(
+          goBackText={translate("common.cancel")}
+          right={
             <Button
               preset="link"
               isDisabled={isLoading || !name.trim()}
-              text={translate('common.save')}
+              text={translate("common.save")}
               onPress={handleSave}
               style={{
                 height: 35,
-                alignItems: 'center',
-                paddingLeft: 10
+                alignItems: "center",
+                paddingLeft: 10,
               }}
               textStyle={{
-                fontSize: fontSize.p
+                fontSize: fontSize.p,
               }}
             />
-          )}
+          }
         />
-      )}
+      }
     >
       {/* Name */}
-      <View
-        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
-      >
+      <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <BROWSE_ITEMS.socialSecurityNumber.svgIcon height={40} width={40} />
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
-              label={translate('common.item_name')}
+              label={translate("common.item_name")}
               value={name}
               onChangeText={setName}
             />
@@ -249,43 +271,36 @@ export const SocialSecurityNumberEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('common.social_security_number').toUpperCase()}
+          text={translate("common.social_security_number").toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
 
       {/* Info */}
       <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
+        style={[
+          commonStyles.SECTION_PADDING,
+          {
+            backgroundColor: color.background,
+            paddingBottom: 32,
+          },
+        ]}
       >
-        {
-          socialSecurityNumberDetails.map((e, index) => (
-            <View
-              key={index}
-              style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
-              <FloatingInput
-                label={e.label}
-                value={e.value}
-                onChangeText={e.setter}
-              />
-            </View>
-          ))
-        }
+        {socialSecurityNumberDetails.map((e, index) => (
+          <View key={index} style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
+            <FloatingInput label={e.label} value={e.value} onChangeText={e.setter} />
+          </View>
+        ))}
       </View>
       {/* Info end */}
 
       {/* Custom fields */}
-      <CustomFieldsEdit
-        fields={fields}
-        setFields={setFields}
-      />
+      <CustomFieldsEdit fields={fields} setFields={setFields} />
       {/* Custom fields end */}
 
       {/* Others */}
       <CipherOthersInfo
+        isOwner={isOwner}
         navigation={navigation}
         hasNote
         note={note}

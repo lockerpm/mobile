@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import find from 'lodash/find'
+import find from "lodash/find"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo,  CustomFieldsEdit
+  Text,
+  Layout,
+  Button,
+  Header,
+  FloatingInput,
+  CipherOthersInfo,
+  CustomFieldsEdit,
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -19,17 +25,15 @@ import { ServerData, toServerData } from "../server.type"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 
-
-type ServerEditScreenProp = RouteProp<PrimaryParamList, 'servers__edit'>;
+type ServerEditScreenProp = RouteProp<PrimaryParamList, "servers__edit">
 
 type InputItem = {
-  label: string,
-  value: string,
-  setter: (val: string) => void,
-  isRequired?: boolean,
-  type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
+  label: string
+  value: string
+  setter: (val: string) => void
+  isRequired?: boolean
+  type?: "default" | "email-address" | "numeric" | "phone-pad" | "number-pad" | "decimal-pad"
 }
-
 
 export const ServerEditScreen = observer(() => {
   const navigation = useNavigation()
@@ -46,36 +50,48 @@ export const ServerEditScreen = observer(() => {
   const serverData = toServerData(selectedCipher.notes)
 
   // ------------------ PARAMS -----------------------
-
+  const isOwner = (() => {
+    if (!selectedCipher.organizationId) {
+      return true
+    }
+    const org = cipherStore.myShares.find(
+      (s) => s.organization_id === selectedCipher.organizationId,
+    )
+    return !!org
+  })()
   // Forms
-  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
 
-  const [host, setHost] = useState(mode !== 'add' ? serverData.host : '')
-  const [publicKey, setPublicKey] = useState(mode !== 'add' ? serverData.publicKey : '')
-  const [privateKey, setPrivateKey] = useState(mode !== 'add' ? serverData.privateKey : '')
-  const [username, setUsername] = useState(mode !== 'add' ? serverData.username : '')
-  const [password, setPasspord] = useState(mode !== 'add' ? serverData.password : '')
-  const [note, setNote] = useState(mode !== 'add' ? serverData.notes : '')
+  const [host, setHost] = useState(mode !== "add" ? serverData.host : "")
+  const [publicKey, setPublicKey] = useState(mode !== "add" ? serverData.publicKey : "")
+  const [privateKey, setPrivateKey] = useState(mode !== "add" ? serverData.privateKey : "")
+  const [username, setUsername] = useState(mode !== "add" ? serverData.username : "")
+  const [password, setPasspord] = useState(mode !== "add" ? serverData.password : "")
+  const [note, setNote] = useState(mode !== "add" ? serverData.notes : "")
 
-  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
-  const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
-  const [collection, setCollection] = useState(mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null)
-  const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+  const [folder, setFolder] = useState(mode !== "add" ? selectedCipher.folderId : null)
+  const [organizationId, setOrganizationId] = useState(
+    mode === "edit" ? selectedCipher.organizationId : null,
+  )
+  const [collectionIds, setCollectionIds] = useState(
+    mode !== "add" ? selectedCipher.collectionIds : [],
+  )
+  const [collection, setCollection] = useState(
+    mode !== "add" && collectionIds.length > 0 ? collectionIds[0] : null,
+  )
+  const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
 
   const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ EFFECTS -----------------------
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === 'unassigned') {
+        if (cipherStore.selectedFolder === "unassigned") {
           setFolder(null)
-        }
-        else {
-          if (!selectedCollection)
-            setFolder(cipherStore.selectedFolder)
+        } else {
+          if (!selectedCollection) setFolder(cipherStore.selectedFolder)
         }
         setCollection(null)
         setCollectionIds([])
@@ -84,12 +100,11 @@ export const ServerEditScreen = observer(() => {
       }
 
       if (cipherStore.selectedCollection) {
-        if (!selectedCollection)
-          setCollection(cipherStore.selectedCollection)
+        if (!selectedCollection) setCollection(cipherStore.selectedCollection)
         setFolder(null)
         cipherStore.setSelectedCollection(null)
       }
-    });
+    })
 
     return unsubscribe
   }, [navigation])
@@ -99,7 +114,7 @@ export const ServerEditScreen = observer(() => {
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
-    if (mode === 'add') {
+    if (mode === "add") {
       payload = newCipher(CipherType.Server)
     } else {
       // @ts-ignore
@@ -123,60 +138,63 @@ export const ServerEditScreen = observer(() => {
     payload.secureNote = {
       // @ts-ignore
       response: null,
-      type: 0
+      type: 0,
     }
 
-    let res = { kind: 'unknown' }
-    if (['add', 'clone'].includes(mode)) {
+    let res = { kind: "unknown" }
+    if (["add", "clone"].includes(mode)) {
       res = await createCipher(payload, 0, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    if (res.kind === 'ok') {
-      // for shared folder
-      if (selectedCollection) {
-        await shareFolderAddItem(selectedCollection, payload)
+    if (res.kind === "ok") {
+      if (isOwner) {
+        // for shared folder
+
+        if (selectedCollection) {
+          await shareFolderAddItem(selectedCollection, payload)
+        }
+
+        if (collection) {
+          const collectionView = find(collectionStore.collections, (e) => e.id === collection) || {}
+          await shareFolderAddItem(collectionView, payload)
+        }
       }
 
-      if (collection) {
-        const collectionView = find(collectionStore.collections, e => e.id === collection) || {}
-        await shareFolderAddItem(collectionView, payload)
-      }
       navigation.goBack()
     }
     setIsLoading(false)
-
   }
 
   // ----------------- RENDER ----------------------
 
   const serverDetails: InputItem[] = [
     {
-      label: translate('server.host'),
+      label: translate("server.host"),
       value: host,
-      setter: setHost
+      setter: setHost,
     },
     {
-      label: translate('server.public_key'),
+      label: translate("server.public_key"),
       value: publicKey,
-      setter: setPublicKey
+      setter: setPublicKey,
     },
     {
-      label: translate('server.private_key'),
+      label: translate("server.private_key"),
       value: privateKey,
-      setter: setPrivateKey
+      setter: setPrivateKey,
     },
     {
-      label: translate('common.username'),
+      label: translate("common.username"),
       value: username,
       setter: setUsername,
     },
     {
-      label: translate('common.password'),
+      label: translate("common.password"),
       value: password,
-      setter: setPasspord
-    }
+      setter: setPasspord,
+    },
   ]
 
   return (
@@ -184,46 +202,44 @@ export const ServerEditScreen = observer(() => {
       isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
-        paddingHorizontal: 0
+        paddingHorizontal: 0,
       }}
-      header={(
+      header={
         <Header
           title={
-            mode === 'add'
-              ? `${translate('common.add')} ${translate('common.server')}`
-              : translate('common.edit')
+            mode === "add"
+              ? `${translate("common.add")} ${translate("common.server")}`
+              : translate("common.edit")
           }
           goBack={() => navigation.goBack()}
-          goBackText={translate('common.cancel')}
-          right={(
+          goBackText={translate("common.cancel")}
+          right={
             <Button
               preset="link"
               isDisabled={isLoading || !name.trim()}
-              text={translate('common.save')}
+              text={translate("common.save")}
               onPress={handleSave}
               style={{
                 height: 35,
-                alignItems: 'center',
-                paddingLeft: 10
+                alignItems: "center",
+                paddingLeft: 10,
               }}
               textStyle={{
-                fontSize: fontSize.p
+                fontSize: fontSize.p,
               }}
             />
-          )}
+          }
         />
-      )}
+      }
     >
       {/* Name */}
-      <View
-        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
-      >
+      <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <BROWSE_ITEMS.server.svgIcon height={40} width={40} />
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
-              label={translate('common.item_name')}
+              label={translate("common.item_name")}
               value={name}
               onChangeText={setName}
             />
@@ -234,43 +250,36 @@ export const ServerEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('common.server').toUpperCase()}
+          text={translate("common.server").toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
 
       {/* Info */}
       <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
+        style={[
+          commonStyles.SECTION_PADDING,
+          {
+            backgroundColor: color.background,
+            paddingBottom: 32,
+          },
+        ]}
       >
-        {
-          serverDetails.map((e, index) => (
-            <View
-              key={index}
-              style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
-              <FloatingInput
-                label={e.label}
-                value={e.value}
-                onChangeText={e.setter}
-              />
-            </View>
-          ))
-        }
+        {serverDetails.map((e, index) => (
+          <View key={index} style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
+            <FloatingInput label={e.label} value={e.value} onChangeText={e.setter} />
+          </View>
+        ))}
       </View>
       {/* Info end */}
 
       {/* Custom fields */}
-      <CustomFieldsEdit
-        fields={fields}
-        setFields={setFields}
-      />
+      <CustomFieldsEdit fields={fields} setFields={setFields} />
       {/* Custom fields end */}
 
       {/* Others */}
       <CipherOthersInfo
+        isOwner={isOwner}
         navigation={navigation}
         hasNote
         note={note}

@@ -3,14 +3,13 @@ import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Button } from "../../button/button"
 import { Text } from "../../text/text"
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import find from 'lodash/find'
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
+import find from "lodash/find"
 import { useStores } from "../../../models"
 import { commonStyles, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { OwnershipSelectionModal } from "../cipher-action/ownership-selection-modal"
 import { Textarea } from "../../textarea/textarea"
-
 
 export interface CipherOthersInfoProps {
   navigation: any
@@ -24,6 +23,7 @@ export interface CipherOthersInfoProps {
   collectionIds: string[]
   setCollectionIds: Function
   isDeleted?: boolean
+  isOwner: boolean
 }
 
 /**
@@ -31,74 +31,87 @@ export interface CipherOthersInfoProps {
  */
 export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
   const {
-    navigation, hasNote, note, onChangeNote, folderId = null, isDeleted, collectionId,
-    organizationId, collectionIds, setOrganizationId, setCollectionIds
+    navigation,
+    hasNote,
+    note,
+    onChangeNote,
+    folderId = null,
+    isDeleted,
+    collectionId,
+    organizationId,
+    collectionIds,
+    setOrganizationId,
+    setCollectionIds,
+    isOwner
   } = props
   const { folderStore, collectionStore } = useStores()
-  const { translate, getTeam, color } = useMixins()
+  const { translate, color } = useMixins()
 
   const [showOwnershipSelectionModal, setShowOwnershipSelectionModal] = useState(false)
 
   const folder = (() => {
-    return folderId ? find(folderStore.folders, e => e.id === folderId) || {} : {}
+    return folderId ? find(folderStore.folders, (e) => e.id === folderId) || {} : {}
   })()
 
   const collection = (() => {
-    return collectionId ? find(collectionStore.collections, e => e.id === collectionId) || {} : {}
+    return collectionId ? find(collectionStore.collections, (e) => e.id === collectionId) || {} : {}
   })()
-  
+
   return (
     <View>
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('common.others').toUpperCase()}
+          text={translate("common.others").toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
 
       {/* Others */}
       <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
+        style={[
+          commonStyles.SECTION_PADDING,
+          {
+            backgroundColor: color.background,
+            paddingBottom: 32,
+          },
+        ]}
       >
         {/* Folder */}
-        <Button
-          preset="link"
-          isDisabled={isDeleted}
-          onPress={() => {
-
-            navigation.navigate('folders__select', {
-              mode: 'add',
-              initialId: folderId || collectionId
-            })
-          }}
-        >
-          <View
-            style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-              justifyContent: 'space-between',
-              width: '100%'
-            }]}
+        {isOwner && (
+          <Button
+            preset="link"
+            isDisabled={isDeleted}
+            onPress={() => {
+              navigation.navigate("folders__select", {
+                mode: "add",
+                initialId: folderId || collectionId,
+              })
+            }}
           >
-            <View>
-              <Text
-                text={translate('common.folders')}
-                style={{ fontSize: fontSize.small, marginBottom: 5 }}
-              />
-              <Text
-                preset="black"
-                text={folder?.name || collection?.name || translate('common.none')}
-                numberOfLines={2}
-              />
+            <View
+              style={[
+                commonStyles.CENTER_HORIZONTAL_VIEW,
+                {
+                  justifyContent: "space-between",
+                  width: "100%",
+                },
+              ]}
+            >
+              <View>
+                <Text
+                  text={translate("common.folders")}
+                  style={{ fontSize: fontSize.small, marginBottom: 5 }}
+                />
+                <Text
+                  preset="black"
+                  text={folder?.name || collection?.name || translate("common.none")}
+                  numberOfLines={2}
+                />
+              </View>
+              <FontAwesomeIcon name="angle-right" size={20} color={color.text} />
             </View>
-            <FontAwesomeIcon
-              name="angle-right"
-              size={20}
-              color={color.text}
-            />
-          </View>
-        </Button>
+          </Button>
+        )}
         {/* Folder end */}
 
         {/* TODO: temporary disable */}
@@ -139,17 +152,15 @@ export const CipherOthersInfo = observer((props: CipherOthersInfoProps) => {
         {/* Ownership end */}
 
         {/* Note */}
-        {
-          hasNote && (
-            <View style={{ flex: 1, marginTop: 20 }}>
-              <Textarea
-                label={translate('common.notes')}
-                value={note}
-                onChangeText={(text) => onChangeNote(text)}
-              />
-            </View>
-          )
-        }
+        {hasNote && (
+          <View style={{ flex: 1, marginTop: 20 }}>
+            <Textarea
+              label={translate("common.notes")}
+              value={note}
+              onChangeText={(text) => onChangeNote(text)}
+            />
+          </View>
+        )}
         {/* Note end */}
       </View>
       {/* Others end */}
