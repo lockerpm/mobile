@@ -101,9 +101,6 @@ export const DefaultLogin = observer((props: Props) => {
             data: res.data[0],
             email: username
           })
-        } else {
-          // TODO
-          // navigation.navigate("createMasterPassword")
         }
       }
     }
