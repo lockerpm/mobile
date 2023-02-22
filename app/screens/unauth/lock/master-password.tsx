@@ -7,20 +7,31 @@ import { useStores } from "../../../models"
 import { commonStyles, fontSize } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
-import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 import { IS_IOS } from "../../../config/constants"
-import ReactNativeBiometrics from 'react-native-biometrics'
+import ReactNativeBiometrics from "react-native-biometrics"
 import { CipherView, LoginUriView, LoginView } from "../../../../core/models/view"
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { CipherType } from "../../../../core/enums"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { EnterpriseInvitation } from "../../../services/api"
+import { EnterpriseInvitation, OnPremisePreloginData } from "../../../services/api"
 import { EnterpriseInvitationModal } from "./enterprise-invitation-modal"
 import { LanguagePicker } from "../../../components/utils"
 
+interface Props {
+  onPremiseData?: {
+    type?: "individual" | "onPremise"
+    // onpremise data
+    data?: OnPremisePreloginData
+    email?: string
+  }
+  masterPassword: string
+  setMasterPassword: (val: string) => void
+}
 
-export const LockByMasterPassword = observer(() => {
+export const LockByMasterPassword = observer((props: Props) => {
+  const { masterPassword, setMasterPassword, onPremiseData } = props
   const navigation = useNavigation()
   const { user, uiStore, enterpriseStore } = useStores()
   const { notify, translate, notifyApiError, color } = useMixins()
@@ -28,15 +39,13 @@ export const LockByMasterPassword = observer(() => {
   const { createCipher } = useCipherDataMixins()
   const { getPasswordStrength, newCipher } = useCipherHelpersMixins()
 
-
   // ---------------------- PARAMS -------------------------
-  const [masterPassword, setMasterPassword] = useState('')
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isBioUnlocking, setIsBioUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [biometryType, setBiometryType] = useState<'faceid' | 'touchid' | 'biometric'>('biometric')
+  const [biometryType, setBiometryType] = useState<"faceid" | "touchid" | "biometric">("biometric")
 
   // enterprise invitaion param
   const [isShowedInvitationPopup, setIsShowedInvitaionPopup] = useState(false)
@@ -46,11 +55,12 @@ export const LockByMasterPassword = observer(() => {
 
   // ---------------------- METHODS -------------------------
 
-  const isAutofillAnroid = uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
+  const isAutofillAnroid =
+    uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
 
   const showInvitation = (() => {
     if (enterpeiseInvitations.length === 0) return false
-    return enterpeiseInvitations.some(e => e.domain !== null)
+    return enterpeiseInvitations.some((e) => e.domain !== null)
   })()
 
   // ---------------------- METHODS -------------------------
@@ -59,7 +69,7 @@ export const LockByMasterPassword = observer(() => {
     setIsScreenLoading(true)
     await logout()
     setIsScreenLoading(false)
-    navigation.navigate('login')
+    navigation.navigate("login")
   }
 
   // Prepare to save password
@@ -78,7 +88,7 @@ export const LockByMasterPassword = observer(() => {
     payload.login = data
     const pwStrength = getPasswordStrength(masterPassword)
     const res = await createCipher(payload, pwStrength.score, [], true)
-    if (res.kind !== 'ok') {
+    if (res.kind !== "ok") {
       notify("error", translate("error.master_password"))
     }
   }
@@ -91,37 +101,33 @@ export const LockByMasterPassword = observer(() => {
     if (masterPassword) {
       setIsError(false)
       setIsUnlocking(true)
-      const res = await sessionLogin(masterPassword, createMasterPasswordItem)
+      const res = await sessionLogin(
+        masterPassword,
+        createMasterPasswordItem,
+        onPremiseData.type === "onPremise",
+      )
       setIsUnlocking(false)
-      if (res.kind === 'ok') {
-        setMasterPassword('')
-        navigation.navigate('mainStack', { screen: 'start' })
-      } else if (res.kind === 'unauthorized') {
-        navigation.navigate('login')
-      } else if (res.kind === 'enterprise-lock') {
-        Alert.alert(
-          '',
-          translate('alert.enterprise_lock'),
-          [
-            {
-              text: translate('common.ok'),
-              style: 'cancel',
-              onPress: () => null
-            }
-          ]
-        )
-      } else if (res.kind === 'enterprise-system-lock') {
-        Alert.alert(
-          '',
-          translate('alert.enterprise_system_lock'),
-          [
-            {
-              text: translate('common.ok'),
-              style: 'cancel',
-              onPress: () => null
-            }
-          ]
-        )
+      if (res.kind === "ok") {
+        setMasterPassword("")
+        navigation.navigate("mainStack", { screen: "start" })
+      } else if (res.kind === "unauthorized") {
+        navigation.navigate("login")
+      } else if (res.kind === "enterprise-lock") {
+        Alert.alert("", translate("alert.enterprise_lock"), [
+          {
+            text: translate("common.ok"),
+            style: "cancel",
+            onPress: () => null,
+          },
+        ])
+      } else if (res.kind === "enterprise-system-lock") {
+        Alert.alert("", translate("alert.enterprise_system_lock"), [
+          {
+            text: translate("common.ok"),
+            style: "cancel",
+            onPress: () => null,
+          },
+        ])
       } else {
         setIsError(true)
       }
@@ -132,7 +138,7 @@ export const LockByMasterPassword = observer(() => {
 
   const handleUnlockBiometric = async () => {
     if (!user.isBiometricUnlock) {
-      notify('error', translate('error.biometric_not_enable'))
+      notify("error", translate("error.biometric_not_enable"))
       return
     }
     if (showInvitation) {
@@ -142,9 +148,9 @@ export const LockByMasterPassword = observer(() => {
     setIsBioUnlocking(true)
     const res = await biometricLogin()
     setIsBioUnlocking(false)
-    if (res.kind === 'ok') {
-      setMasterPassword('')
-      navigation.navigate('mainStack', { screen: 'start' })
+    if (res.kind === "ok") {
+      setMasterPassword("")
+      navigation.navigate("mainStack", { screen: "start" })
     }
   }
 
@@ -152,8 +158,8 @@ export const LockByMasterPassword = observer(() => {
     setIsSendingHint(true)
     const res = await user.sendPasswordHint(user.email)
     setIsSendingHint(false)
-    if (res.kind === 'ok') {
-      notify('success', translate('lock.hint_sent'), 5000)
+    if (res.kind === "ok") {
+      notify("success", translate("lock.hint_sent"), 5000)
     } else {
       notifyApiError(res)
     }
@@ -163,9 +169,9 @@ export const LockByMasterPassword = observer(() => {
   const detectbiometryType = async () => {
     const { biometryType } = await ReactNativeBiometrics.isSensorAvailable()
     if (biometryType === ReactNativeBiometrics.TouchID) {
-      setBiometryType('touchid')
+      setBiometryType("touchid")
     } else if (biometryType === ReactNativeBiometrics.FaceID) {
-      setBiometryType('faceid')
+      setBiometryType("faceid")
     }
   }
 
@@ -183,7 +189,7 @@ export const LockByMasterPassword = observer(() => {
       text={translate("lock.get_hint")}
       onPress={handleGetHint}
       style={{
-        width: '100%'
+        width: "100%",
       }}
     />
   )
@@ -191,15 +197,19 @@ export const LockByMasterPassword = observer(() => {
   // -------------- EFFECT ------------------
   // enterprise invitations
   useEffect(() => {
-    if (isShowedInvitationPopup) {
-      fetchEnterpriseInvitation()
-      setIsShowedInvitaionPopup(false)
+    if (onPremiseData?.type !== "onPremise") {
+      if (isShowedInvitationPopup) {
+        fetchEnterpriseInvitation()
+        setIsShowedInvitaionPopup(false)
+      }
     }
   }, [isShowedInvitationPopup])
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    fetchEnterpriseInvitation()
+    if (onPremiseData?.type !== "onPremise") {
+      fetchEnterpriseInvitation()
+    }
 
     detectbiometryType()
 
@@ -211,7 +221,7 @@ export const LockByMasterPassword = observer(() => {
   // Handle back press
   useEffect(() => {
     const handleBack = (e) => {
-      if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
+      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
         navigation.dispatch(e.data.action)
         return
       }
@@ -223,44 +233,34 @@ export const LockByMasterPassword = observer(() => {
         return
       }
 
-      Alert.alert(
-        translate('alert.logout') + user.email + '?',
-        '',
-        [
-          {
-            text: translate('common.cancel'),
-            style: 'cancel',
-            onPress: () => null
+      Alert.alert(translate("alert.logout") + user.email + "?", "", [
+        {
+          text: translate("common.cancel"),
+          style: "cancel",
+          onPress: () => null,
+        },
+        {
+          text: translate("common.logout"),
+          style: "destructive",
+          onPress: async () => {
+            await logout()
+            navigation.navigate("login")
           },
-          {
-            text: translate('common.logout'),
-            style: 'destructive',
-            onPress: async () => {
-              await logout()
-              navigation.navigate('login')
-            }
-          },
-        ]
-      )
+        },
+      ])
     }
 
-    navigation.addListener('beforeRemove', handleBack)
+    navigation.addListener("beforeRemove", handleBack)
 
     return () => {
-      navigation.removeListener('beforeRemove', handleBack)
+      navigation.removeListener("beforeRemove", handleBack)
     }
   }, [navigation])
-
-
 
   // ---------------------- RENDER -------------------------
 
   return (
-    <Layout
-      isOverlayLoading={isScreenLoading}
-      footer={footer}
-    >
-
+    <Layout isOverlayLoading={isScreenLoading} footer={footer}>
       <EnterpriseInvitationModal
         isOpen={isShowInvitation}
         enterpeiseInvitations={enterpeiseInvitations}
@@ -271,35 +271,28 @@ export const LockByMasterPassword = observer(() => {
       />
       <LanguagePicker />
       <View style={{ alignItems: "flex-end", marginTop: 8 }}>
-        {isAutofillAnroid ?
+        {isAutofillAnroid ? (
           <Button
-            text={translate('common.cancel').toUpperCase()}
+            text={translate("common.cancel").toUpperCase()}
             textStyle={{ fontSize: fontSize.p }}
             preset="link"
             onPress={() => BackHandler.exitApp()}
           />
-          :
+        ) : (
           <Button
-            text={translate('common.logout').toUpperCase()}
+            text={translate("common.logout").toUpperCase()}
             textStyle={{ fontSize: fontSize.p }}
             preset="link"
             onPress={handleLogout}
           />
-        }
+        )}
       </View>
-      <View style={{ alignItems: 'center', paddingTop: '10%' }}>
+      <View style={{ alignItems: "center", paddingTop: "10%" }}>
         <Image source={APP_ICON.icon} style={{ height: 63, width: 63 }} />
 
-        <Text
-          preset="header"
-          style={{ marginBottom: 10, marginTop: 25 }}
-          tx={"lock.title"}
-        />
+        <Text preset="header" style={{ marginBottom: 10, marginTop: 25 }} tx={"lock.title"} />
 
-        <Text
-          style={{ textAlign: 'center' }}
-          tx={"lock.desc"}
-        />
+        <Text style={{ textAlign: "center" }} tx={"lock.desc"} />
 
         {/* Current user */}
         <View
@@ -308,33 +301,43 @@ export const LockByMasterPassword = observer(() => {
             marginBottom: 16,
             borderRadius: 20,
             backgroundColor: color.block,
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: 4
+            flexDirection: "row",
+            alignItems: "center",
+            padding: 4,
           }}
         >
-          {
-            !!user.avatar && (
-              <View style={{ borderRadius: 14, overflow: 'hidden' }}>
-                <Image
-                  source={{ uri: user.avatar }}
-                  style={{
-                    height: 28,
-                    width: 28,
-                    backgroundColor: color.white
-                  }}
-                />
-              </View>
-            )
-          }
+          {!!user.avatar && (
+            <View style={{ borderRadius: 14, overflow: "hidden" }}>
+              <Image
+                source={{ uri: user.avatar }}
+                style={{
+                  height: 28,
+                  width: 28,
+                  backgroundColor: color.white,
+                }}
+              />
+            </View>
+          )}
+          {!!props.onPremiseData?.data?.avatar && (
+            <View style={{ borderRadius: 14, overflow: "hidden" }}>
+              <Image
+                source={{ uri: props.onPremiseData?.data.avatar }}
+                style={{
+                  height: 28,
+                  width: 28,
+                  backgroundColor: color.white,
+                }}
+              />
+            </View>
+          )}
           <Text
             style={{
               fontSize: fontSize.small,
               color: color.title,
-              marginHorizontal: 10
+              marginHorizontal: 10,
             }}
           >
-            {user.email}
+            {user.email || props.onPremiseData?.email}
           </Text>
         </View>
         {/* Current user end */}
@@ -343,10 +346,10 @@ export const LockByMasterPassword = observer(() => {
         <FloatingInput
           isPassword
           isInvalid={isError}
-          label={translate('common.master_pass')}
+          label={translate("common.master_pass")}
           onChangeText={setMasterPassword}
           value={masterPassword}
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
           onSubmitEditing={handleUnlock}
         />
         {/* Master pass input end */}
@@ -357,8 +360,8 @@ export const LockByMasterPassword = observer(() => {
           text={translate("common.unlock")}
           onPress={handleUnlock}
           style={{
-            width: '100%',
-            marginTop: 20
+            width: "100%",
+            marginTop: 20,
           }}
         />
 
@@ -368,13 +371,13 @@ export const LockByMasterPassword = observer(() => {
           preset="ghost"
           onPress={handleUnlockBiometric}
           style={{
-            width: '100%',
-            marginVertical: 10
+            width: "100%",
+            marginVertical: 10,
           }}
         >
           <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginHorizontal: 5 }]}>
             <MaterialCommunityIconsIcon
-              name={biometryType === 'faceid' ? "face-recognition" : 'fingerprint'}
+              name={biometryType === "faceid" ? "face-recognition" : "fingerprint"}
               size={20}
               color={color.textBlack}
             />

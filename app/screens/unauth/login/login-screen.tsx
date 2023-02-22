@@ -98,8 +98,7 @@ export const LoginScreen = observer(() => {
       {index === 0 && <LanguagePicker />}
       {index === 0 && (
         <DefaultLogin
-        
-          enterpriseLogin={loginType === "enterprise"}
+          onPremise={loginType === "onPremise"}
           handleForgot={() => navigation.navigate("forgotPassword")}
           onLoggedIn={onLoggedIn}
           nextStep={(

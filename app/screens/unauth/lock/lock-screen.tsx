@@ -6,7 +6,6 @@ import { useStores } from "../../../models"
 import { useMixins } from "../../../services/mixins"
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 import { IS_IOS } from "../../../config/constants"
-import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { LockByMasterPassword } from "./master-password"
 import { RootParamList } from "../../../navigators"
 import { LockByPasswordless } from "./passwordless"
@@ -14,14 +13,13 @@ import { LockByPasswordless } from "./passwordless"
 export const LockScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<RouteProp<RootParamList, "lock">>()
-  const { user, uiStore, enterpriseStore } = useStores()
-  const { notify, translate, notifyApiError, color } = useMixins()
-  const { logout, sessionLogin, biometricLogin } = useCipherAuthenticationMixins()
-  const { createCipher } = useCipherDataMixins()
+  const { user, uiStore } = useStores()
+  const { translate } = useMixins()
+  const { logout } = useCipherAuthenticationMixins()
 
   // ---------------------- PARAMS -------------------------
   const [lockMethod, setLogMethod] = useState<"masterpass" | "passwordless">("masterpass")
-
+  const [masterPassword, setMasterPassword] = useState("")
   // ---------------------- METHODS -------------------------
 
   const isAutofillAnroid =
@@ -30,15 +28,8 @@ export const LockScreen = observer(() => {
   // ---------------------- METHODS -------------------------
 
   // ---------------------- COMPONENTS -------------------------
-  const isEnterpriseLogin = route.params.type === "enterprise"
 
   // -------------- EFFECT ------------------
-
-  useEffect(()=> {
-    if (isEnterpriseLogin) {
-      // TODO
-    }
-  }, [])
 
   // Handle back press
   useEffect(() => {
@@ -75,11 +66,24 @@ export const LockScreen = observer(() => {
     }
   }, [navigation])
 
+  useEffect(() => {
+    if (route.params.type === "onPremise") {
+      if (route.params.data.login_method !== "password") {
+        setLogMethod("passwordless")
+      }
+      user.setOnPremaiseEmail(route.params.email)
+      user.environment.api.apisauce.setBaseURL(route.params.data.base_api + "/v3")
+    }
+  }, [])
   // ---------------------- RENDER -------------------------
 
-  // if (lockMethod === "masterpass") {
-  //   return <LockByMasterPassword />
-  // } 
+  if (lockMethod === "masterpass") {
+    return (
+      <LockByMasterPassword
+        onPremiseData={route.params}
+        {...{ masterPassword, setMasterPassword }}
+      />
+    )
+  }
   return <LockByPasswordless />
-
 })

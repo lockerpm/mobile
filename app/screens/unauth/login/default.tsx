@@ -9,25 +9,27 @@ import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { IS_IOS, IS_PROD } from "../../../config/constants"
 import { GitHubLoginModal } from "./github-login-modal"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = {
-  enterpriseLogin: boolean
+  onPremise: boolean
   nextStep: (username: string, password: string, methods: { type: string; data: any }[]) => void
   onLoggedIn: (newUser: boolean, token: string) => void
   handleForgot: () => void
 }
 
 export const DefaultLogin = observer((props: Props) => {
+  const navigation = useNavigation()
   const { user, uiStore } = useStores()
   const { translate, notify, notifyApiError, setApiTokens } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
-  const { nextStep, onLoggedIn, handleForgot, enterpriseLogin } = props
+  const { nextStep, onLoggedIn, handleForgot, onPremise } = props
 
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [username, setUsername] = useState(user.email || "")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   const passwordRef = useRef(null)
@@ -39,40 +41,70 @@ export const DefaultLogin = observer((props: Props) => {
   const handleLogin = async () => {
     setIsLoading(true)
     setIsError(false)
-    const payload = { username, password }
-    const res = await user.login(payload)
-    setIsLoading(false)
-    if (res.kind !== "ok") {
-      setIsError(true)
-      if (res.kind === "unauthorized" && res.data) {
-        const errorData: {
-          code: string
-          message: string
-        } = res.data
-        switch (errorData.code) {
-          case "1001": {
-            notify("error", translate("error.wrong_username_or_password"))
-            break
+
+    if (!onPremise) {
+      const payload = { username, password }
+      const res = await user.login(payload)
+      setIsLoading(false)
+      if (res.kind !== "ok") {
+        setIsError(true)
+        if (res.kind === "unauthorized" && res.data) {
+          const errorData: {
+            code: string
+            message: string
+          } = res.data
+          switch (errorData.code) {
+            case "1001": {
+              notify("error", translate("error.wrong_username_or_password"))
+              break
+            }
+            case "1003": {
+              notify("error", translate("error.account_not_activated"))
+              break
+            }
+            default: {
+              notify("error", errorData.message)
+            }
           }
-          case "1003": {
-            notify("error", translate("error.account_not_activated"))
-            break
-          }
-          default: {
-            notify("error", errorData.message)
-          }
+        } else {
+          notifyApiError(res)
         }
       } else {
-        notifyApiError(res)
+        setPassword("")
+        if (res.data.is_factor2) {
+          nextStep(username, password, res.data.methods)
+        } else {
+          // @ts-ignore
+          setApiTokens(res.data?.access_token)
+          onLoggedIn(false, "")
+        }
       }
     } else {
-      setPassword("")
-      if (res.data.is_factor2) {
-        nextStep(username, password, res.data.methods)
+      const res = await user.onPremisePreLogin(username)
+      setIsLoading(false)
+      if (res.kind !== "ok") {
+        setIsError(true)
+        if (res.kind === "unauthorized" && res.data) {
+          const errorData: {
+            code: string
+            message: string
+          } = res.data
+          notify("error", errorData.message)
+        } else {
+          notifyApiError(res)
+        }
       } else {
-        // @ts-ignore
-        setApiTokens(res.data?.access_token)
-        onLoggedIn(false, "")
+        setPassword("")
+        if (res.data[0].activated) {
+          navigation.navigate("lock", {
+            type: "onPremise",
+            data: res.data[0],
+            email: username
+          })
+        } else {
+          // TODO
+          // navigation.navigate("createMasterPassword")
+        }
       }
     }
   }
@@ -167,7 +199,7 @@ export const DefaultLogin = observer((props: Props) => {
       {/* Username input end */}
 
       {/* Password input */}
-      {!enterpriseLogin && (
+      {!onPremise && (
         <FloatingInput
           outerRef={passwordRef}
           isPassword
@@ -194,7 +226,7 @@ export const DefaultLogin = observer((props: Props) => {
 
       <Button
         isLoading={isLoading}
-        isDisabled={isLoading || !(username && password)}
+        isDisabled={isLoading || !onPremise && !(username && password) || onPremise && !username}
         text={translate("common.login")}
         onPress={handleLogin}
         style={{

@@ -8,11 +8,14 @@ import { Button, Screen, Text } from "../../../components/cores"
 import { LanguagePicker } from "../../../components/utils"
 import { IS_IOS, IS_PROD } from "../../../config/constants"
 import { useStores } from "../../../models"
+import { OnPremisePreloginData } from "../../../services/api"
 import { useMixins } from "../../../services/mixins"
 import { verticalScale } from "../../../services/mixins/adaptive-layout"
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { GitHubLoginModal } from "../login/github-login-modal"
 import { OtpPasswordlessGenerator } from "./otp-generator"
+
+
 
 export const LockByPasswordless = observer(() => {
   const navigation = useNavigation()
@@ -56,7 +59,7 @@ export const LockByPasswordless = observer(() => {
 
       <Button
         onPress={() => {
-          navigation.navigate("login", { type: "individual" })
+          navigation.navigate("passwordlessQrScan")
         }}
         size="large"
         text="QR scan"

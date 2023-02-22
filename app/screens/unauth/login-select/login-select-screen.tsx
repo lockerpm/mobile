@@ -104,15 +104,15 @@ export const LoginSelectScreen = observer(() => {
       <View
         style={{
           alignItems: "center",
+          marginBottom: 24
         }}
       >
         <Image
           source={uiStore.isDark ? APP_ICON.textVerticalLight : APP_ICON.textVertical}
           style={{ height: verticalScale(80), width: verticalScale(90) }}
         />
-        <Text preset="bold" text={"Login"} size="3xl" />
       </View>
-      <Text text={"Sign in to your account"} size="medium" style={{ marginBottom: 16 }} />
+      <Text preset="bold" text={"Sign in to your account"} size="large" style={{ marginBottom: 16 }} />
       <Button
         onPress={() => {
           navigation.navigate("login", { type: "individual" })
@@ -121,10 +121,10 @@ export const LoginSelectScreen = observer(() => {
         text="individual"
         style={{ marginBottom: 16 }}
       />
-      <Button onPress={() => {}} size="large" text="Business" style={{ marginBottom: 16 }} />
+      {/* <Button onPress={() => {}} size="large" text="Business" style={{ marginBottom: 16 }} /> */}
       <Button
         onPress={() => {
-          navigation.navigate("login", { type: "enterprise" })
+          navigation.navigate("login", { type: "onPremise" })
         }}
         size="large"
         text="Enterprise"
