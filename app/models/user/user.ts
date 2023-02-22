@@ -97,7 +97,10 @@ export const UserModel = types
     setFCMToken: (token: string) => {
       self.fcmToken = token
     },
-
+    setOnPremaiseEmail: (email: string) => {
+      self.email = email
+      
+    },
     // Info
     saveUser: (userSnapshot: UserSnapshot) => {
       self.isLoggedIn = true
@@ -445,6 +448,7 @@ export const UserModel = types
 
     sessionLogin: async (payload: SessionLoginData) => {
       const userApi = new UserApi(self.environment.api)
+
       const res = await userApi.sessionLogin(self.apiToken, payload)
       if (res.kind === 'ok') {
         self.setLoggedInPw(true)
@@ -656,6 +660,15 @@ export const UserModel = types
       }
       return false
     },
+
+    // On Premise
+    // user is on premise
+    onPremisePreLogin: async (email: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.onPremisePreLogin(email)
+      return res
+    }
+
   }))
   .actions((self) => ({
     purchaseValidation: async (

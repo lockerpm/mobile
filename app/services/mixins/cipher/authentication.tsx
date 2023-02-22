@@ -26,7 +26,7 @@ const { createContext, useContext } = React
 // Mixins data
 const defaultData = {
   // Methods
-  sessionLogin: async (masterPassword: string, createMasterPasswordItem?: () => Promise<void>) => {
+  sessionLogin: async (masterPassword: string, createMasterPasswordItem?: () => Promise<void>, onPremiseData?: boolean) => {
     return { kind: 'unknown', data: {} }
   },
   biometricLogin: async () => {
@@ -79,16 +79,18 @@ export const CipherAuthenticationMixinsProvider = observer(
       kdf: number,
       kdfIterations: number,
       masterPassword?: string,
-      createMasterPasswordItem?: () => Promise<void>
+      createMasterPasswordItem?: () => Promise<void>,
+      onPremiseData?: boolean
     ) => {
       // Session login API
       const res = await user.sessionLogin({
         client_id: 'mobile',
-        password: keyHash,
+        password:  "NswzP+cVVL7Vc1uTFJ5xLVb1KL8C9c+FtivcKpx6VzY=", //keyHash,
         device_name: platformUtilsService.getDeviceString(),
         device_type: platformUtilsService.getDevice(),
         // device_identifier: await storageService.get('device_id') || randomString(),
         device_identifier: DeviceInfo.getUniqueId(),
+        email: user.email
       })
       if (res.kind === 'unauthorized') {
         notify('error', translate('error.token_expired'))
@@ -118,8 +120,14 @@ export const CipherAuthenticationMixinsProvider = observer(
         return res
       }
 
+      console.log(res.data.access_token, "--------")
+      if (onPremiseData) {
+        setApiTokens(res.data?.access_token)
+        await Promise.all([user.getUser(), user.getUserPw()])
+      }
       // Setup service
       messagingService.send('loggedIn')
+
       await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
       await userService.setInformation(tokenService.getUserId(), user.email, kdf, kdfIterations)
       await cryptoService.setKey(key)
@@ -145,12 +153,14 @@ export const CipherAuthenticationMixinsProvider = observer(
     }
 
     // Session login
-    const sessionLogin = async (masterPassword: string, createMasterPasswordItem?: () => Promise<void>): Promise<{ kind: string }> => {
+    const sessionLogin = async (masterPassword: string, createMasterPasswordItem?: () => Promise<void>, onPremiseData?: boolean): Promise<{ kind: string }> => {
       try {
         await delay(200)
 
         const kdf = KdfType.PBKDF2_SHA256
         const kdfIterations = 100000
+
+        console.log(user.email)
         const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
 
         // Offline compare
@@ -170,7 +180,7 @@ export const CipherAuthenticationMixinsProvider = observer(
 
         // Online session login
         const keyHash = await cryptoService.hashPassword(masterPassword, key)
-        return _loginUsingApi(key, keyHash, kdf, kdfIterations, masterPassword, createMasterPasswordItem)
+        return _loginUsingApi(key, keyHash, kdf, kdfIterations, masterPassword, createMasterPasswordItem, onPremiseData)
       } catch (e) {
         notify('error', translate('error.session_login_failed'))
         return { kind: 'bad-data' }
