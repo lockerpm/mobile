@@ -45,9 +45,9 @@ export const Otp = observer((props: Props) => {
     }, true)
     setIsLoading(false)
     if (res.kind === 'ok') {
-      // @ts-ignore
-      setApiTokens(res.data?.access_token)
-      onLoggedIn()
+      // // @ts-ignore
+      // setApiTokens(res.data?.access_token)
+      // onLoggedIn()
     } else {
       notify('error', translate('error.login_failed'))
       setIsError(true)
