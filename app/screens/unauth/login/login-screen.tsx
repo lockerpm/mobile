@@ -11,6 +11,7 @@ import { MethodSelection } from "./2fa/method-selection"
 import { Otp } from "./2fa/otp"
 import { useStores } from "../../../models"
 import { RootParamList } from "../../../navigators"
+import { BASE_URL } from "../../../config/constants"
 
 export const LoginScreen = observer(() => {
   const navigation = useNavigation()
@@ -48,6 +49,13 @@ export const LoginScreen = observer(() => {
   }
 
   // -------------- EFFECT ------------------
+
+  useEffect(() => {
+    if (loginType === "individual") {
+      user.setOnPremiseUser(false)
+      user.environment.api.apisauce.setBaseURL(BASE_URL)
+    }
+  }, [])
 
   useEffect(() => {
     const handleBack = (e) => {

@@ -61,7 +61,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
     setIsLoading(true)
     const res = await changeMasterPassword(current, newPass)
     if (res.kind === 'ok') {
-      navigation.navigate('login')
+      navigation.navigate('loginSelect')
     }
     setIsLoading(false)
   }

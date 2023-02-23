@@ -394,7 +394,7 @@ export const MainNavigator = observer(() => {
         // Check user settings to lock
         if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
           await logout()
-          navigation.navigate('login')
+          navigation.navigate('loginSelect')
         } else {
           await lock()
           navigation.navigate('lock')
@@ -418,7 +418,7 @@ export const MainNavigator = observer(() => {
     if (!isActive && user.appTimeout && user.appTimeout > 0) {
       if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
         await logout()
-        navigation.navigate('login')
+        navigation.navigate('loginSelect')
       } else {
         await lock()
         navigation.navigate('lock')
