@@ -35,7 +35,6 @@ import { AppEventType, EventBus } from "../utils/event-bus"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { TestScreen } from "../screens/test-screen"
 import { LoginSelectScreen } from "../screens/unauth/login-select/login-select-screen"
-import { PasswordlessQrScanScreen } from "../screens/unauth/qr-scanner/passwordless-qr-scan-screen"
 import { OnPremisePreloginData } from "../services/api"
 
 /**
@@ -71,7 +70,6 @@ export type RootParamList = {
     initialId?: string
   }
   loginSelect: undefined
-  passwordlessQrScan: undefined
   test: undefined
 }
 
@@ -192,7 +190,6 @@ const RootStack = observer((props: Props) => {
       <Stack.Screen name="onBoarding" component={OnboardingScreen} />
       <Stack.Screen name="loginSelect" component={LoginSelectScreen} />
       <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: "individual" }} />
-      <Stack.Screen name="passwordlessQrScan" component={PasswordlessQrScanScreen} />
       <Stack.Screen name="login" component={LoginScreen} initialParams={{ type: "individual" }} />
       <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />

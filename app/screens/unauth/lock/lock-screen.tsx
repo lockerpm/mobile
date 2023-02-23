@@ -8,8 +8,8 @@ import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/a
 import { IS_IOS } from "../../../config/constants"
 import { LockByMasterPassword } from "./master-password"
 import { RootParamList } from "../../../navigators"
-import { LockByPasswordless } from "./passwordless"
-import { OnPremiseLockMasterPassword } from "./onpremise-master-password"
+import { LockByPasswordless } from "./on-premise/passwordless/passwordless"
+import { OnPremiseLockMasterPassword } from "./on-premise/onpremise-master-password"
 
 export const LockScreen = observer(() => {
   const navigation = useNavigation()
@@ -82,14 +82,14 @@ export const LockScreen = observer(() => {
   }, [])
   // ---------------------- RENDER -------------------------
 
-  if (lockMethod === "masterpass") {
-    if (route.params.type === "onPremise") {
-      return <OnPremiseLockMasterPassword 
-        data={route.params.data}
-        email={route.params.email}
-      />
-    }
-    return <LockByMasterPassword />
-  }
+  // if (lockMethod === "masterpass") {
+  //   if (route.params.type === "onPremise") {
+  //     return <OnPremiseLockMasterPassword 
+  //       data={route.params.data}
+  //       email={route.params.email}
+  //     />
+  //   }
+  //   return <LockByMasterPassword />
+  // }
   return <LockByPasswordless />
 })
