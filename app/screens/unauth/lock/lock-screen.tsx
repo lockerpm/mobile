@@ -9,6 +9,7 @@ import { IS_IOS } from "../../../config/constants"
 import { LockByMasterPassword } from "./master-password"
 import { RootParamList } from "../../../navigators"
 import { LockByPasswordless } from "./passwordless"
+import { OnPremiseLockMasterPassword } from "./onpremise-master-password"
 
 export const LockScreen = observer(() => {
   const navigation = useNavigation()
@@ -19,7 +20,7 @@ export const LockScreen = observer(() => {
 
   // ---------------------- PARAMS -------------------------
   const [lockMethod, setLogMethod] = useState<"masterpass" | "passwordless">("masterpass")
-  const [masterPassword, setMasterPassword] = useState("")
+
   // ---------------------- METHODS -------------------------
 
   const isAutofillAnroid =
@@ -67,23 +68,28 @@ export const LockScreen = observer(() => {
   }, [navigation])
 
   useEffect(() => {
+
+    // Om Premise setup
     if (route.params.type === "onPremise") {
       if (route.params.data.login_method !== "password") {
         setLogMethod("passwordless")
       }
-      user.setOnPremaiseEmail(route.params.email)
-      user.environment.api.apisauce.setBaseURL(route.params.data.base_api + "/v3")
-    }
+      route.params.email && user.setOnPremaiseEmail(route.params.email)
+      user.setOnPremiseUser(true)
+      route.params.data?.base_api && user.setOnPremiseLastBaseUrl(route.params.data.base_api + "/v3")
+      route.params.data?.base_api && user.environment.api.apisauce.setBaseURL(route.params.data.base_api + "/v3")
+    } 
   }, [])
   // ---------------------- RENDER -------------------------
 
   if (lockMethod === "masterpass") {
-    return (
-      <LockByMasterPassword
-        onPremiseData={route.params}
-        {...{ masterPassword, setMasterPassword }}
+    if (route.params.type === "onPremise") {
+      return <OnPremiseLockMasterPassword 
+        data={route.params.data}
+        email={route.params.email}
       />
-    )
+    }
+    return <LockByMasterPassword />
   }
   return <LockByPasswordless />
 })

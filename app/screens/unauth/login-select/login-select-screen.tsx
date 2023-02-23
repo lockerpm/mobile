@@ -3,7 +3,8 @@ import { observer } from "mobx-react-lite"
 import React from "react"
 import { View, Image } from "react-native"
 import { APP_ICON } from "../../../common/mappings"
-import { Button, Screen, Text } from "../../../components/cores"
+import { Button } from "../../../components"
+import { Screen, Text } from "../../../components/cores"
 import { LanguagePicker } from "../../../components/utils"
 import { useStores } from "../../../models"
 import { verticalScale } from "../../../services/mixins/adaptive-layout"
@@ -43,16 +44,14 @@ export const LoginSelectScreen = observer(() => {
         onPress={() => {
           navigation.navigate("login", { type: "individual" })
         }}
-        size="large"
         text="individual"
         style={{ marginBottom: 16 }}
       />
-      
+
       <Button
         onPress={() => {
           navigation.navigate("login", { type: "individual" })
         }}
-        size="large"
         text="Business"
         style={{ marginBottom: 16 }}
       />
@@ -61,7 +60,6 @@ export const LoginSelectScreen = observer(() => {
         onPress={() => {
           navigation.navigate("login", { type: "onPremise" })
         }}
-        size="large"
         text="Enterprise"
         style={{ marginBottom: 16 }}
       />

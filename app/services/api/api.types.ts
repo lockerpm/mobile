@@ -422,6 +422,12 @@ export type SessionLoginData = {
   email: string
 }
 
+export type SessionOtpLoginData = {
+  method: string,
+  otp: string,
+  save_device: boolean,
+} & SessionLoginData
+
 export type RegisterLockerData = {
   name: string
   email: string

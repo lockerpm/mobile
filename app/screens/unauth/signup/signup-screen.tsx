@@ -118,7 +118,7 @@ export const SignupScreen = observer(() => {
     if (res.kind === 'ok') {
       logRegisterSuccessEvent()
       notify('success', translate('signup.signup_successful'), 5000)
-      navigation.navigate('login')
+      navigation.navigate('login', {type: "individual"})
     } else {
       notifyApiError(res)
     }

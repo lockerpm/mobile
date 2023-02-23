@@ -56,16 +56,18 @@ export const MenuScreen = observer(() => {
     paddingHorizontal: 14,
   }
 
-  useEffect(() => {
-    const getLink = async () => {
-      const res = await user.getReferLink()
-      if (res.kind === "ok") {
-        setReferLink(res.data.referral_link)
-      } else {
-        notifyApiError(res)
-      }
+  const getReferralsLink = async () => {
+    const res = await user.getReferLink()
+    if (res.kind === "ok") {
+      setReferLink(res.data.referral_link)
+    } else {
+      notifyApiError(res)
     }
-    getLink()
+  }
+  useEffect(() => {
+    if (!user.onPremiseUser) {
+      getReferralsLink()
+    }
   }, [])
 
   useEffect(() => {
@@ -132,7 +134,7 @@ export const MenuScreen = observer(() => {
         setIsLoading(true)
         await logout()
         setIsLoading(false)
-        navigation.navigate('login')
+        navigation.navigate('loginSelect')
       },
       noBorder: true
     }

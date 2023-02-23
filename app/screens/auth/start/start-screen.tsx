@@ -21,7 +21,7 @@ export const StartScreen = observer(() => {
   // ------------------------- PARAMS ----------------------------
 
   const [msg, setMsg] = useState("")
-
+  
   // ------------------------- METHODS ----------------------------
   const refreshFCM = async () => {
     if (!user.disablePushNotifications) {
@@ -43,7 +43,6 @@ export const StartScreen = observer(() => {
     // }
 
     const connectionState = await NetInfo.fetch()
-
     // Sync
     if (connectionState.isConnected) {
       // Refresh FCM

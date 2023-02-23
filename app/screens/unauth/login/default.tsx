@@ -99,7 +99,7 @@ export const DefaultLogin = observer((props: Props) => {
           navigation.navigate("lock", {
             type: "onPremise",
             data: res.data[0],
-            email: username
+            email: username,
           })
         }
       }
@@ -223,7 +223,9 @@ export const DefaultLogin = observer((props: Props) => {
 
       <Button
         isLoading={isLoading}
-        isDisabled={isLoading || !onPremise && !(username && password) || onPremise && !username}
+        isDisabled={
+          isLoading || (!onPremise && !(username && password)) || (onPremise && !username)
+        }
         text={translate("common.login")}
         onPress={handleLogin}
         style={{
@@ -232,27 +234,29 @@ export const DefaultLogin = observer((props: Props) => {
         }}
       />
 
-      <View style={commonStyles.CENTER_VIEW}>
-        <Text
-          text={IS_PROD ? translate("common.or_login_with") : ""}
-          style={{ marginBottom: spacing.tiny }}
-        />
+      {!onPremise && (
+        <View style={commonStyles.CENTER_VIEW}>
+          <Text
+            text={IS_PROD ? translate("common.or_login_with") : ""}
+            style={{ marginBottom: spacing.tiny }}
+          />
 
-        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          {Object.values(SOCIAL_LOGIN)
-            .filter((item) => !item.hide)
-            .map((item, index) => (
-              <Button
-                key={index}
-                preset="ghost"
-                onPress={item.handler}
-                style={{ marginHorizontal: spacing.smaller }}
-              >
-                <item.icon height={40} width={40} />
-              </Button>
-            ))}
+          <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+            {Object.values(SOCIAL_LOGIN)
+              .filter((item) => !item.hide)
+              .map((item, index) => (
+                <Button
+                  key={index}
+                  preset="ghost"
+                  onPress={item.handler}
+                  style={{ marginHorizontal: spacing.smaller }}
+                >
+                  <item.icon height={40} width={40} />
+                </Button>
+              ))}
+          </View>
         </View>
-      </View>
+      )}
     </View>
   )
 })

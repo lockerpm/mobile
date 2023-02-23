@@ -15,23 +15,11 @@ import { CipherView, LoginUriView, LoginView } from "../../../../core/models/vie
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { CipherType } from "../../../../core/enums"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { EnterpriseInvitation, OnPremisePreloginData } from "../../../services/api"
+import { EnterpriseInvitation } from "../../../services/api"
 import { EnterpriseInvitationModal } from "./enterprise-invitation-modal"
 import { LanguagePicker } from "../../../components/utils"
 
-interface Props {
-  onPremiseData?: {
-    type?: "individual" | "onPremise"
-    // onpremise data
-    data?: OnPremisePreloginData
-    email?: string
-  }
-  masterPassword: string
-  setMasterPassword: (val: string) => void
-}
-
-export const LockByMasterPassword = observer((props: Props) => {
-  const { masterPassword, setMasterPassword, onPremiseData } = props
+export const LockByMasterPassword = observer(() => {
   const navigation = useNavigation()
   const { user, uiStore, enterpriseStore } = useStores()
   const { notify, translate, notifyApiError, color } = useMixins()
@@ -40,6 +28,7 @@ export const LockByMasterPassword = observer((props: Props) => {
   const { getPasswordStrength, newCipher } = useCipherHelpersMixins()
 
   // ---------------------- PARAMS -------------------------
+  const [masterPassword, setMasterPassword] = useState("")
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isBioUnlocking, setIsBioUnlocking] = useState(false)
@@ -101,11 +90,7 @@ export const LockByMasterPassword = observer((props: Props) => {
     if (masterPassword) {
       setIsError(false)
       setIsUnlocking(true)
-      const res = await sessionLogin(
-        masterPassword,
-        createMasterPasswordItem,
-        onPremiseData.type === "onPremise",
-      )
+      const res = await sessionLogin(masterPassword, createMasterPasswordItem)
       setIsUnlocking(false)
       if (res.kind === "ok") {
         setMasterPassword("")
@@ -197,19 +182,15 @@ export const LockByMasterPassword = observer((props: Props) => {
   // -------------- EFFECT ------------------
   // enterprise invitations
   useEffect(() => {
-    if (onPremiseData?.type !== "onPremise") {
-      if (isShowedInvitationPopup) {
-        fetchEnterpriseInvitation()
-        setIsShowedInvitaionPopup(false)
-      }
+    if (isShowedInvitationPopup) {
+      fetchEnterpriseInvitation()
+      setIsShowedInvitaionPopup(false)
     }
   }, [isShowedInvitationPopup])
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    if (onPremiseData?.type !== "onPremise") {
-      fetchEnterpriseInvitation()
-    }
+    fetchEnterpriseInvitation()
 
     detectbiometryType()
 
@@ -318,18 +299,7 @@ export const LockByMasterPassword = observer((props: Props) => {
               />
             </View>
           )}
-          {!!props.onPremiseData?.data?.avatar && (
-            <View style={{ borderRadius: 14, overflow: "hidden" }}>
-              <Image
-                source={{ uri: props.onPremiseData?.data.avatar }}
-                style={{
-                  height: 28,
-                  width: 28,
-                  backgroundColor: color.white,
-                }}
-              />
-            </View>
-          )}
+
           <Text
             style={{
               fontSize: fontSize.small,
@@ -337,7 +307,7 @@ export const LockByMasterPassword = observer((props: Props) => {
               marginHorizontal: 10,
             }}
           >
-            {user.email || props.onPremiseData?.email}
+            {user.email}
           </Text>
         </View>
         {/* Current user end */}
