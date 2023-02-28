@@ -1050,5 +1050,11 @@
     },
     "btn_request": "Request to join",
     "btn_requested": "Requested"
+  },
+  "login_select": {
+    "title": "Sign in to your account",
+    "individual": "Individual",
+    "business": "Business",
+    "onpremise": "On-Premise"
   }
 }

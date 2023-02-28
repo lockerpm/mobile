@@ -95,7 +95,7 @@ export const DefaultLogin = observer((props: Props) => {
         }
       } else {
         setPassword("")
-        if (res.data[0].activated) {
+        if (res?.data[0]?.activated) {
           navigation.navigate("lock", {
             type: "onPremise",
             data: res.data[0],
@@ -210,16 +210,17 @@ export const DefaultLogin = observer((props: Props) => {
       )}
       {/* Password input end */}
 
-      <View
-        style={{
-          width: "100%",
-          alignItems: "flex-start",
-          marginTop: spacing.large,
-          marginBottom: spacing.medium,
-        }}
-      >
-        <Button preset="link" text={translate("login.forgot_password")} onPress={handleForgot} />
-      </View>
+      {!onPremise && (
+        <View
+          style={{
+            width: "100%",
+            alignItems: "flex-start",
+            marginTop: spacing.large,
+          }}
+        >
+          <Button preset="link" text={translate("login.forgot_password")} onPress={handleForgot} />
+        </View>
+      )}
 
       <Button
         isLoading={isLoading}
@@ -231,6 +232,7 @@ export const DefaultLogin = observer((props: Props) => {
         style={{
           width: "100%",
           marginBottom: spacing.medium,
+          marginTop: spacing.medium,
         }}
       />
 

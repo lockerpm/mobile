@@ -81,26 +81,30 @@ export const LoginScreen = observer(() => {
     <Layout
       isOverlayLoading={isScreenLoading}
       footer={
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: 12,
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            text={translate("login.no_account")}
+        loginType !== "onPremise" ? (
+          <View
             style={{
-              marginRight: spacing.smaller,
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 12,
+              justifyContent: "center",
             }}
-          />
-          <Button
-            preset="link"
-            text={translate("common.sign_up")}
-            onPress={() => navigation.navigate("signup")}
-          />
-        </View>
+          >
+            <Text
+              text={translate("login.no_account")}
+              style={{
+                marginRight: spacing.smaller,
+              }}
+            />
+            <Button
+              preset="link"
+              text={translate("common.sign_up")}
+              onPress={() => navigation.navigate("signup")}
+            />
+          </View>
+        ) : (
+          <View />
+        )
       }
     >
       {index === 0 && <LanguagePicker />}

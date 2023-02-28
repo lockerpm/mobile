@@ -7,12 +7,13 @@ import { Button } from "../../../components"
 import { Screen, Text } from "../../../components/cores"
 import { LanguagePicker } from "../../../components/utils"
 import { useStores } from "../../../models"
+import { useMixins } from "../../../services/mixins"
 import { verticalScale } from "../../../services/mixins/adaptive-layout"
 
 export const LoginSelectScreen = observer(() => {
   const navigation = useNavigation()
   const { uiStore } = useStores()
-
+  const {translate} = useMixins()
   return (
     <Screen
       safeAreaEdges={["top"]}
@@ -36,7 +37,7 @@ export const LoginSelectScreen = observer(() => {
       </View>
       <Text
         preset="bold"
-        text={"Sign in to your account"}
+        text={translate("login_select.title")}
         size="large"
         style={{ marginBottom: 16 }}
       />
@@ -44,7 +45,7 @@ export const LoginSelectScreen = observer(() => {
         onPress={() => {
           navigation.navigate("login", { type: "individual" })
         }}
-        text="individual"
+        text={translate("login_select.individual")}
         style={{ marginBottom: 16 }}
       />
 
@@ -52,7 +53,7 @@ export const LoginSelectScreen = observer(() => {
         onPress={() => {
           navigation.navigate("login", { type: "individual" })
         }}
-        text="Business"
+        text={translate("login_select.business")}
         style={{ marginBottom: 16 }}
       />
 
@@ -60,7 +61,7 @@ export const LoginSelectScreen = observer(() => {
         onPress={() => {
           navigation.navigate("login", { type: "onPremise" })
         }}
-        text="Enterprise"
+        text={translate("login_select.onpremise")}
         style={{ marginBottom: 16 }}
       />
     </Screen>

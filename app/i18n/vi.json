@@ -1043,5 +1043,11 @@
     },
     "btn_request": "Gửi yêu cầu tham gia",
     "btn_requested": "Đã gửi yêu cầu"
+  },
+  "login_select": {
+    "title": "Đăng nhập vào tài khoản",
+    "individual": "Cá nhân",
+    "business": "Doanh nghiệp",
+    "onpremise": "On-Premise"
   }
 }

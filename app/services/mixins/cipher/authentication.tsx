@@ -20,6 +20,7 @@ import { getUrlParameterByName } from "../../../utils/helpers"
 import { CipherView, LoginUriView, LoginView } from "../../../../core/models/view"
 import { CipherType } from "../../../../core/enums"
 import { CipherRequest } from "../../../../core/models/request/cipherRequest"
+import { Utils } from "../../../../core/misc/utils"
 
 const { createContext, useContext } = React
 
@@ -42,10 +43,33 @@ const defaultData = {
     masterPassword: string,
     method: string,
     otp: string,
-    save_device: boolean
+    save_device: boolean,
   ) => {
     return { kind: "unknown", data: {} }
   },
+  sessionOtpLoginWithHashPassword: async (
+    masterPasswordHash: string,
+    key: SymmetricCryptoKey,
+    method: string,
+    otp: string,
+    save_device: boolean,
+  ) => {
+    return { kind: "unknown", data: {} }
+  },
+  sessionQrLogin: async (
+    qr: string,
+    qrOtp: string,
+    onPremise?: boolean,
+    setSymmetricCryptoKey?: (val: SymmetricCryptoKey) => void,
+    onPremiseNextStep?: (
+      username: string,
+      password: string,
+      methods: { type: string; data: any }[],
+    ) => void,
+  ) => {
+    return { kind: "unknown", data: {} }
+  },
+
   biometricLogin: async () => {
     return { kind: "unknown" }
   },
@@ -76,6 +100,7 @@ export const CipherAuthenticationMixinsProvider = observer(
     const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore } = useStores()
     const {
       cryptoService,
+      cryptoFunctionService,
       userService,
       folderService,
       cipherService,
@@ -291,6 +316,85 @@ export const CipherAuthenticationMixinsProvider = observer(
         return { kind: "bad-data" }
       }
     }
+    // password less qr login
+    const sessionQrLogin = async (
+      qr: string,
+      qrOtp: string,
+      onPremise?: boolean,
+      setSymmetricCryptoKey?: (val: SymmetricCryptoKey) => void,
+      onPremiseNextStep?: (
+        username: string,
+        password: string,
+        methods: { type: string; data: any }[],
+      ) => void,
+    ): Promise<{ kind: string }> => {
+      try {
+        await delay(100)
+        const kdf = KdfType.PBKDF2_SHA256
+        const kdfIterations = 100000
+        const keyStr = (qrOtp + qrOtp + qrOtp).slice(0, 16)
+        const keyBuff = Utils.fromUtf8ToArray(keyStr).buffer
+
+        // parse qr
+        const iv = Utils.fromB64ToArray(qr.split(".")[0]).buffer
+        const encryptB64 = Utils.fromB64ToArray(qr.split(".")[1]).buffer
+
+        const dataBuffer = await cryptoFunctionService.aesDecrypt(encryptB64, iv, keyBuff)
+        const data = Utils.fromBufferToUtf8(dataBuffer)
+        const [keyHash, keyB64, encType] = data.split(".")
+
+        const key = new SymmetricCryptoKey(Utils.fromB64ToArray(keyB64).buffer, parseInt(encType))
+        setSymmetricCryptoKey(key)
+        // Online session login
+        return _loginUsingApi(
+          key,
+          keyHash,
+          kdf,
+          kdfIterations,
+          "",
+          () => null,
+          onPremise,
+          (methods) => {
+            onPremiseNextStep(user.email, keyHash, methods)
+          },
+        )
+      } catch (e) {
+        notify("error", translate("error.session_login_failed"))
+        return { kind: "bad-data" }
+      }
+    }
+
+
+    // Session login
+    const sessionOtpLoginWithHashPassword = async (
+      masterPasswordHash: string,
+      key: SymmetricCryptoKey,
+      method: string,
+      otp: string,
+      save_device: boolean,
+    ): Promise<{ kind: string }> => {
+      try {
+        await delay(200)
+
+        const kdf = KdfType.PBKDF2_SHA256
+        const kdfIterations = 100000
+
+        return _loginOnPremiseSessionOtp(
+          key,
+          masterPasswordHash,
+          kdf,
+          kdfIterations,
+          "",
+          method,
+          otp,
+          save_device,
+        )
+      } catch (e) {
+        notify("error", translate("error.session_login_failed"))
+        return { kind: "bad-data" }
+      }
+    }
+
 
     // Session login
     const sessionOtpLogin = async (
@@ -718,6 +822,8 @@ export const CipherAuthenticationMixinsProvider = observer(
       updateNewMasterPasswordEA,
       clearAllData,
       handleDynamicLink,
+      sessionQrLogin,
+      sessionOtpLoginWithHashPassword
     }
 
     return (
