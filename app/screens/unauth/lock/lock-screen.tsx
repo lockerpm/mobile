@@ -10,6 +10,7 @@ import { LockByMasterPassword } from "./master-password"
 import { RootParamList } from "../../../navigators"
 import { LockByPasswordless } from "./on-premise/passwordless/passwordless"
 import { OnPremiseLockMasterPassword } from "./on-premise/onpremise-master-password"
+import ReactNativeBiometrics from "react-native-biometrics"
 
 export const LockScreen = observer(() => {
   const navigation = useNavigation()
@@ -20,6 +21,7 @@ export const LockScreen = observer(() => {
 
   // ---------------------- PARAMS -------------------------
   const [lockMethod, setLogMethod] = useState<"masterpass" | "passwordless">("masterpass")
+  const [biometryType, setBiometryType] = useState<"faceid" | "touchid" | "biometric">("biometric")
 
   // ---------------------- METHODS -------------------------
 
@@ -28,9 +30,28 @@ export const LockScreen = observer(() => {
 
   // ---------------------- METHODS -------------------------
 
+  // Detect biometric type
+  const detectbiometryType = async () => {
+    const { biometryType } = await ReactNativeBiometrics.isSensorAvailable()
+    if (biometryType === ReactNativeBiometrics.TouchID) {
+      setBiometryType("touchid")
+    } else if (biometryType === ReactNativeBiometrics.FaceID) {
+      setBiometryType("faceid")
+    }
+  }
+
+  const handleLogout = async () => {
+    await logout()
+    navigation.navigate("loginSelect")
+  }
+
   // ---------------------- COMPONENTS -------------------------
 
   // -------------- EFFECT ------------------
+  // Auto trigger face id / touch id + detect biometry type
+  useEffect(() => {
+    detectbiometryType()
+  }, [])
 
   // Handle back press
   useEffect(() => {
@@ -68,7 +89,6 @@ export const LockScreen = observer(() => {
   }, [navigation])
 
   useEffect(() => {
-
     // Om Premise setup
     if (route.params.type === "onPremise") {
       if (route.params.data.login_method !== "password") {
@@ -76,20 +96,26 @@ export const LockScreen = observer(() => {
       }
       route.params.email && user.setOnPremaiseEmail(route.params.email)
       user.setOnPremiseUser(true)
-      route.params.data?.base_api && user.setOnPremiseLastBaseUrl(route.params.data.base_api + "/v3")
-      route.params.data?.base_api && user.environment.api.apisauce.setBaseURL(route.params.data.base_api + "/v3")
-    } 
+      route.params.data?.base_api &&
+        user.setOnPremiseLastBaseUrl(route.params.data.base_api + "/v3")
+      route.params.data?.base_api &&
+        user.environment.api.apisauce.setBaseURL(route.params.data.base_api + "/v3")
+    }
   }, [])
   // ---------------------- RENDER -------------------------
 
-  // if (lockMethod === "masterpass") {
-  //   if (route.params.type === "onPremise") {
-  //     return <OnPremiseLockMasterPassword 
-  //       data={route.params.data}
-  //       email={route.params.email}
-  //     />
-  //   }
-  //   return <LockByMasterPassword />
-  // }
-  return <LockByPasswordless />
+  if (lockMethod === "masterpass") {
+    if (route.params.type === "onPremise") {
+      return (
+        <OnPremiseLockMasterPassword
+          data={route.params.data}
+          email={route.params.email}
+          biometryType={biometryType}
+          handleLogout={handleLogout}
+        />
+      )
+    }
+    return <LockByMasterPassword biometryType={biometryType} handleLogout={handleLogout} />
+  }
+  return <LockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
 })

@@ -7,6 +7,7 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import NetInfo from "@react-native-community/netinfo"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 
 export const StartScreen = observer(() => {
   const { user, uiStore, enterpriseStore } = useStores()
@@ -17,7 +18,7 @@ export const StartScreen = observer(() => {
     loadOrganizations,
   } = useCipherDataMixins()
   const navigation = useNavigation()
-
+  const { encDataTest } = useCipherAuthenticationMixins()
   // ------------------------- PARAMS ----------------------------
 
   const [msg, setMsg] = useState("")
@@ -41,7 +42,8 @@ export const StartScreen = observer(() => {
     //   navigation.navigate('dataOutdated')
     //   return
     // }
-
+    encDataTest()
+    
     const connectionState = await NetInfo.fetch()
     // Sync
     if (connectionState.isConnected) {

@@ -9,8 +9,6 @@ import { useMixins } from "../../../services/mixins"
 import { APP_ICON } from "../../../common/mappings"
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
-import { IS_IOS } from "../../../config/constants"
-import ReactNativeBiometrics from "react-native-biometrics"
 import { CipherView, LoginUriView, LoginView } from "../../../../core/models/view"
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { CipherType } from "../../../../core/enums"
@@ -19,7 +17,12 @@ import { EnterpriseInvitation } from "../../../services/api"
 import { EnterpriseInvitationModal } from "./enterprise-invitation-modal"
 import { LanguagePicker } from "../../../components/utils"
 
-export const LockByMasterPassword = observer(() => {
+interface Props {
+  biometryType: "faceid" | "touchid" | "biometric"
+  handleLogout: () => void
+}
+
+export const LockByMasterPassword = observer(({ biometryType, handleLogout }: Props) => {
   const navigation = useNavigation()
   const { user, uiStore, enterpriseStore } = useStores()
   const { notify, translate, notifyApiError, color } = useMixins()
@@ -29,12 +32,10 @@ export const LockByMasterPassword = observer(() => {
 
   // ---------------------- PARAMS -------------------------
   const [masterPassword, setMasterPassword] = useState("")
-  const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isBioUnlocking, setIsBioUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [biometryType, setBiometryType] = useState<"faceid" | "touchid" | "biometric">("biometric")
 
   // enterprise invitaion param
   const [isShowedInvitationPopup, setIsShowedInvitaionPopup] = useState(false)
@@ -53,13 +54,6 @@ export const LockByMasterPassword = observer(() => {
   })()
 
   // ---------------------- METHODS -------------------------
-
-  const handleLogout = async () => {
-    setIsScreenLoading(true)
-    await logout()
-    setIsScreenLoading(false)
-    navigation.navigate("login")
-  }
 
   // Prepare to save password
   const createMasterPasswordItem = async () => {
@@ -150,16 +144,6 @@ export const LockByMasterPassword = observer(() => {
     }
   }
 
-  // Detect biometric type
-  const detectbiometryType = async () => {
-    const { biometryType } = await ReactNativeBiometrics.isSensorAvailable()
-    if (biometryType === ReactNativeBiometrics.TouchID) {
-      setBiometryType("touchid")
-    } else if (biometryType === ReactNativeBiometrics.FaceID) {
-      setBiometryType("faceid")
-    }
-  }
-
   const fetchEnterpriseInvitation = async () => {
     const res = await enterpriseStore.invitations()
     setEnterpriseInvitations(res)
@@ -188,60 +172,18 @@ export const LockByMasterPassword = observer(() => {
     }
   }, [isShowedInvitationPopup])
 
-  // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
     fetchEnterpriseInvitation()
-
-    detectbiometryType()
 
     if (user.isBiometricUnlock) {
       handleUnlockBiometric()
     }
   }, [])
 
-  // Handle back press
-  useEffect(() => {
-    const handleBack = (e) => {
-      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
-        navigation.dispatch(e.data.action)
-        return
-      }
-
-      e.preventDefault()
-
-      if (!IS_IOS && isAutofillAnroid) {
-        BackHandler.exitApp()
-        return
-      }
-
-      Alert.alert(translate("alert.logout") + user.email + "?", "", [
-        {
-          text: translate("common.cancel"),
-          style: "cancel",
-          onPress: () => null,
-        },
-        {
-          text: translate("common.logout"),
-          style: "destructive",
-          onPress: async () => {
-            await logout()
-            navigation.navigate("login")
-          },
-        },
-      ])
-    }
-
-    navigation.addListener("beforeRemove", handleBack)
-
-    return () => {
-      navigation.removeListener("beforeRemove", handleBack)
-    }
-  }, [navigation])
-
   // ---------------------- RENDER -------------------------
 
   return (
-    <Layout isOverlayLoading={isScreenLoading} footer={footer}>
+    <Layout footer={footer}>
       <EnterpriseInvitationModal
         isOpen={isShowInvitation}
         enterpeiseInvitations={enterpeiseInvitations}
