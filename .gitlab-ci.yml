@@ -1,0 +1,12 @@
+stages:
+  - security_check
+
+scan:
+  stage: security_check
+  script:
+    - cystack-deployer
+  tags:
+    - cs_home
+  only:
+    - dev
+    - tags

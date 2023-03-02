@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import find from 'lodash/find'
+import find from "lodash/find"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit, Select
+  Text,
+  Layout,
+  Button,
+  Header,
+  FloatingInput,
+  CipherOthersInfo,
+  CustomFieldsEdit,
+  Select,
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -17,26 +24,25 @@ import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { CitizenIdData, toCitizenIdData } from "../citizen-id.type"
 import { GEN } from "../../../../../config/constants"
-import countries from '../../../../../common/countries.json'
+import countries from "../../../../../common/countries.json"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
 
-type CitizenIDEditScreenProp = RouteProp<PrimaryParamList, 'citizenIDs__edit'>;
+type CitizenIDEditScreenProp = RouteProp<PrimaryParamList, "citizenIDs__edit">
 
 type InputItem = {
-  label: string,
-  value: string,
-  setter: (val: string) => void,
-  onTouchStart?: () => void,
-  isRequired?: boolean,
-  isDateTime?: boolean,
-  isSelect?: boolean,
-  options?: { label: string, value: string | number | null }[],
-  placeholder?: string,
-  isDisableEdit?: boolean,
-  type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
+  label: string
+  value: string
+  setter: (val: string) => void
+  onTouchStart?: () => void
+  isRequired?: boolean
+  isDateTime?: boolean
+  isSelect?: boolean
+  options?: { label: string; value: string | number | null }[]
+  placeholder?: string
+  isDisableEdit?: boolean
+  type?: "default" | "email-address" | "numeric" | "phone-pad" | "number-pad" | "decimal-pad"
 }
-
 
 export const CitizenIDEditScreen = observer(() => {
   const navigation = useNavigation()
@@ -53,42 +59,58 @@ export const CitizenIDEditScreen = observer(() => {
 
   // ------------------ PARAMS -----------------------
   const selectedCollection: CollectionView = route.params.collection
-
+  const isOwner = (() => {
+    if (!selectedCipher.organizationId) {
+      return true
+    }
+    const org = cipherStore.myShares.find(
+      (s) => s.organization_id === selectedCipher.organizationId,
+    )
+    return !!org
+  })()
   // Forms
-  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
 
-  const [idNo, setID] = useState(mode !== 'add' ? citizenIdData.idNo : '')
-  const [fullName, setFullName] = useState(mode !== 'add' ? citizenIdData.fullName : '')
-  const [dob, setDob] = useState(mode !== 'add' ? citizenIdData.dob : '')
-  const [sex, setSex] = useState(mode !== 'add' ? citizenIdData.sex : GEN.MALE)
-  const [nationality, setNationality] = useState(mode !== 'add' ? citizenIdData.nationality : 'vn')
-  const [placeOfOrigin, setPlaceOfOrigin] = useState(mode !== 'add' ? citizenIdData.placeOfOrigin : '')
-  const [placeOfResidence, setPlaceOfResidence] = useState(mode !== 'add' ? citizenIdData.placeOfResidence : '')
-  const [expiryDate, setExpiryDate] = useState(mode !== 'add' ? citizenIdData.expiryDate : '')
-  const [personalId, setPersonalId] = useState(mode !== 'add' ? citizenIdData.personalId : '')
-  const [dateOfIssue, setDateOfIssue] = useState(mode !== 'add' ? citizenIdData.dateOfIssue : '')
-  const [issueBy, setIssueBy] = useState(mode !== 'add' ? citizenIdData.issueBy : '')
-  const [note, setNote] = useState(mode !== 'add' ? citizenIdData.notes : '')
+  const [idNo, setID] = useState(mode !== "add" ? citizenIdData.idNo : "")
+  const [fullName, setFullName] = useState(mode !== "add" ? citizenIdData.fullName : "")
+  const [dob, setDob] = useState(mode !== "add" ? citizenIdData.dob : "")
+  const [sex, setSex] = useState(mode !== "add" ? citizenIdData.sex : GEN.MALE)
+  const [nationality, setNationality] = useState(mode !== "add" ? citizenIdData.nationality : "vn")
+  const [placeOfOrigin, setPlaceOfOrigin] = useState(
+    mode !== "add" ? citizenIdData.placeOfOrigin : "",
+  )
+  const [placeOfResidence, setPlaceOfResidence] = useState(
+    mode !== "add" ? citizenIdData.placeOfResidence : "",
+  )
+  const [expiryDate, setExpiryDate] = useState(mode !== "add" ? citizenIdData.expiryDate : "")
+  const [personalId, setPersonalId] = useState(mode !== "add" ? citizenIdData.personalId : "")
+  const [dateOfIssue, setDateOfIssue] = useState(mode !== "add" ? citizenIdData.dateOfIssue : "")
+  const [issueBy, setIssueBy] = useState(mode !== "add" ? citizenIdData.issueBy : "")
+  const [note, setNote] = useState(mode !== "add" ? citizenIdData.notes : "")
 
-  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
-  const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
-  const [collection, setCollection] = useState(mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null)
-  const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+  const [folder, setFolder] = useState(mode !== "add" ? selectedCipher.folderId : null)
+  const [organizationId, setOrganizationId] = useState(
+    mode === "edit" ? selectedCipher.organizationId : null,
+  )
+  const [collectionIds, setCollectionIds] = useState(
+    mode !== "add" ? selectedCipher.collectionIds : [],
+  )
+  const [collection, setCollection] = useState(
+    mode !== "add" && collectionIds.length > 0 ? collectionIds[0] : null,
+  )
+  const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
 
   const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ EFFECTS -----------------------
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === 'unassigned') {
+        if (cipherStore.selectedFolder === "unassigned") {
           setFolder(null)
-        }
-        else {
-          if (!selectedCollection)
-            setFolder(cipherStore.selectedFolder)
+        } else {
+          if (!selectedCollection) setFolder(cipherStore.selectedFolder)
         }
         setCollection(null)
         setCollectionIds([])
@@ -97,8 +119,7 @@ export const CitizenIDEditScreen = observer(() => {
       }
 
       if (cipherStore.selectedCollection) {
-        if (!selectedCollection)
-          setCollection(cipherStore.selectedCollection)
+        if (!selectedCollection) setCollection(cipherStore.selectedCollection)
         setFolder(null)
         cipherStore.setSelectedCollection(null)
       }
@@ -111,7 +132,7 @@ export const CitizenIDEditScreen = observer(() => {
         }
         uiStore.setSelectedCountry(null)
       }
-    });
+    })
 
     return unsubscribe
   }, [navigation])
@@ -121,7 +142,7 @@ export const CitizenIDEditScreen = observer(() => {
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
-    if (mode === 'add') {
+    if (mode === "add") {
       payload = newCipher(CipherType.CitizenID)
     } else {
       // @ts-ignore
@@ -151,26 +172,27 @@ export const CitizenIDEditScreen = observer(() => {
     payload.secureNote = {
       // @ts-ignore
       response: null,
-      type: 0
+      type: 0,
     }
 
-    let res = { kind: 'unknown' }
-    if (['add', 'clone'].includes(mode)) {
+    let res = { kind: "unknown" }
+    if (["add", "clone"].includes(mode)) {
       res = await createCipher(payload, 0, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    if (res.kind === 'ok') {
-      
-      // for shared folder
-      if (selectedCollection) {
-        await shareFolderAddItem(selectedCollection, payload)
-      }
+    if (res.kind === "ok") {
+      if (isOwner) {
+        // for shared folder
+        if (selectedCollection) {
+          await shareFolderAddItem(selectedCollection, payload)
+        }
 
-      if (collection) {
-        const collectionView = find(collectionStore.collections, e => e.id === collection) || {}
-        await shareFolderAddItem(collectionView, payload)
+        if (collection) {
+          const collectionView = find(collectionStore.collections, (e) => e.id === collection) || {}
+          await shareFolderAddItem(collectionView, payload)
+        }
       }
 
       navigation.goBack()
@@ -179,129 +201,128 @@ export const CitizenIDEditScreen = observer(() => {
   }
 
   const GENDER = [
-    { label: translate('common.male'), value: GEN.MALE },
-    { label: translate('common.female'), value: GEN.FEMALE },
-    { label: translate('common.other'), value: GEN.OTHER },
+    { label: translate("common.male"), value: GEN.MALE },
+    { label: translate("common.female"), value: GEN.FEMALE },
+    { label: translate("common.other"), value: GEN.OTHER },
   ]
   // ----------------- RENDER ----------------------
 
   const citizenIDDetails: InputItem[] = [
     {
-      label: translate('citizen_id.id_no'),
+      label: translate("citizen_id.id_no"),
       value: idNo,
       setter: setID,
-      isRequired: true
+      isRequired: true,
     },
     {
-      label: translate('common.fullname'),
+      label: translate("common.fullname"),
       value: fullName,
-      setter: setFullName
+      setter: setFullName,
     },
     {
-      label: translate('common.dob'),
+      label: translate("common.dob"),
       value: dob,
       setter: setDob,
       isDateTime: true,
-      placeholder: 'dd/mm/yyyy'
+      placeholder: "dd/mm/yyyy",
     },
     {
-      label: translate('citizen_id.sex'),
+      label: translate("citizen_id.sex"),
       value: sex,
       setter: setSex,
       isSelect: true,
-      options: GENDER
+      options: GENDER,
     },
     {
-      label: translate('common.nationality'),
-      value: countries[nationality?.toUpperCase()] ? countries[nationality?.toUpperCase()].country_name : '',
+      label: translate("common.nationality"),
+      value: countries[nationality?.toUpperCase()]
+        ? countries[nationality?.toUpperCase()].country_name
+        : "",
       setter: setNationality,
       isDisableEdit: true,
       onTouchStart: () => {
-        navigation.navigate('countrySelector', { initialId: nationality })
-      }
+        navigation.navigate("countrySelector", { initialId: nationality })
+      },
     },
     {
-      label: translate('citizen_id.place_of_origin'),
+      label: translate("citizen_id.place_of_origin"),
       value: placeOfOrigin,
       setter: setPlaceOfOrigin,
     },
     {
-      label: translate('citizen_id.place_of_residence'),
+      label: translate("citizen_id.place_of_residence"),
       value: placeOfResidence,
-      setter: setPlaceOfResidence
+      setter: setPlaceOfResidence,
     },
     {
-      label: translate('citizen_id.expiry_date'),
+      label: translate("citizen_id.expiry_date"),
       value: expiryDate,
       setter: setExpiryDate,
       isDateTime: true,
-      placeholder: 'dd/mm/yyyy'
+      placeholder: "dd/mm/yyyy",
     },
     {
-      label: translate('citizen_id.personal_id'),
+      label: translate("citizen_id.personal_id"),
       value: personalId,
-      setter: setPersonalId
+      setter: setPersonalId,
     },
     {
-      label: translate('citizen_id.date_of_issue'),
+      label: translate("citizen_id.date_of_issue"),
       value: dateOfIssue,
       setter: setDateOfIssue,
       isDateTime: true,
-      placeholder: 'dd/mm/yyyy'
+      placeholder: "dd/mm/yyyy",
     },
     {
-      label: translate('citizen_id.issued_by'),
+      label: translate("citizen_id.issued_by"),
       value: issueBy,
-      setter: setIssueBy
-    }
+      setter: setIssueBy,
+    },
   ]
-
 
   return (
     <Layout
       isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
-        paddingHorizontal: 0
+        paddingHorizontal: 0,
       }}
-      header={(
+      header={
         <Header
           title={
-            mode === 'add'
-              ? `${translate('common.add')} ${translate('common.citizen_id')}`
-              : translate('common.edit')
+            mode === "add"
+              ? `${translate("common.add")} ${translate("common.citizen_id")}`
+              : translate("common.edit")
           }
           goBack={() => navigation.goBack()}
-          goBackText={translate('common.cancel')}
-          right={(
+          goBackText={translate("common.cancel")}
+          right={
             <Button
               preset="link"
               isDisabled={isLoading || !name.trim()}
-              text={translate('common.save')}
+              text={translate("common.save")}
               onPress={handleSave}
               style={{
                 height: 35,
-                alignItems: 'center',
-                paddingLeft: 10
+                alignItems: "center",
+                paddingLeft: 10,
               }}
               textStyle={{
-                fontSize: fontSize.p
+                fontSize: fontSize.p,
               }}
             />
-          )}
+          }
         />
-      )}
+      }
     >
       {/* Name */}
-      <View
-        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
-      >
+      <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <BROWSE_ITEMS.citizenID.svgIcon height={40} width={40} />
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
-              label={translate('common.item_name')}
+              label={translate("common.item_name")}
               value={name}
               onChangeText={setName}
             />
@@ -312,61 +333,57 @@ export const CitizenIDEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('common.citizen_id').toUpperCase()}
+          text={translate("common.citizen_id").toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
 
       {/* Info */}
       <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
+        style={[
+          commonStyles.SECTION_PADDING,
+          {
+            backgroundColor: color.background,
+            paddingBottom: 32,
+          },
+        ]}
       >
-        {
-          citizenIDDetails.map((item, index) => (
-            <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
-              {
-                item.isSelect ? (
-                  <Select
-                    floating
-                    placeholder={item.label}
-                    value={item.value}
-                    options={item.options}
-                    onChange={val => item.setter(val)}
-                  />
-                ) : (
-                  <FloatingInput
-                    editable={item.isDisableEdit}
-                    isDateTime={item.isDateTime}
-                    isRequired={item.isRequired}
-                    label={item.label}
-                    value={item.value}
-                    onChangeText={(text) => {
-                      item.setter(text)
-                    }}
-                    onTouchStart={item.onTouchStart}
-                    placeholder={item.placeholder}
-                  />
-                )
-              }
-            </View>
-          ))
-        }
+        {citizenIDDetails.map((item, index) => (
+          <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
+            {item.isSelect ? (
+              <Select
+                floating
+                placeholder={item.label}
+                value={item.value}
+                options={item.options}
+                onChange={(val) => item.setter(val)}
+              />
+            ) : (
+              <FloatingInput
+                editable={item.isDisableEdit}
+                isDateTime={item.isDateTime}
+                isRequired={item.isRequired}
+                label={item.label}
+                value={item.value}
+                onChangeText={(text) => {
+                  item.setter(text)
+                }}
+                onTouchStart={item.onTouchStart}
+                placeholder={item.placeholder}
+              />
+            )}
+          </View>
+        ))}
       </View>
       {/* Info end */}
 
-
       {/* Custom fields */}
-      <CustomFieldsEdit
-        fields={fields}
-        setFields={setFields}
-      />
+      <CustomFieldsEdit fields={fields} setFields={setFields} />
       {/* Custom fields end */}
 
       {/* Others */}
       <CipherOthersInfo
+        isOwner={isOwner}
         navigation={navigation}
         hasNote
         note={note}

@@ -57,7 +57,7 @@ export const relativeTime = function timeDifference(previous: number, lang: stri
 
     else if (elapsed < msPerYear) {
         const t = Math.round(elapsed/msPerMonth)
-        return t === 1 ? relative[lang].m1 : t + relative[lang].m2
+        return t === 1 ? relative[lang].mo1 : t + relative[lang].mo2
     }
 
     else {

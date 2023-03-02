@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
-import { BackHandler, View } from 'react-native'
-import find from 'lodash/find'
+import React, { useState, useEffect } from "react"
+import { observer } from "mobx-react-lite"
+import { BackHandler, View } from "react-native"
+import find from "lodash/find"
 import {
   AutoImage as Image,
   Text,
@@ -13,22 +13,22 @@ import {
   PasswordStrength,
   CustomFieldsEdit,
   PasswordPolicyViolationsModal,
-} from '../../../../../components'
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
-import { commonStyles, fontSize } from '../../../../../theme'
-import { PrimaryParamList } from '../../../../../navigators/main-navigator'
-import { BROWSE_ITEMS } from '../../../../../common/mappings'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { useMixins } from '../../../../../services/mixins'
-import { useStores } from '../../../../../models'
-import { CipherType } from '../../../../../../core/enums'
-import { CipherView, FieldView, LoginUriView, LoginView } from '../../../../../../core/models/view'
-import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
-import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
-import { CollectionView } from '../../../../../../core/models/view/collectionView'
-import { useFolderMixins } from '../../../../../services/mixins/folder'
+} from "../../../../../components"
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
+import { commonStyles, fontSize } from "../../../../../theme"
+import { PrimaryParamList } from "../../../../../navigators/main-navigator"
+import { BROWSE_ITEMS } from "../../../../../common/mappings"
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
+import { useMixins } from "../../../../../services/mixins"
+import { useStores } from "../../../../../models"
+import { CipherType } from "../../../../../../core/enums"
+import { CipherView, FieldView, LoginUriView, LoginView } from "../../../../../../core/models/view"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { useFolderMixins } from "../../../../../services/mixins/folder"
 
-type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'passwords__edit'>
+type PasswordEditScreenProp = RouteProp<PrimaryParamList, "passwords__edit">
 
 export const PasswordEditScreen = observer(() => {
   const navigation = useNavigation()
@@ -51,7 +51,7 @@ export const PasswordEditScreen = observer(() => {
       return true
     }
     const org = cipherStore.myShares.find(
-      (s) => s.organization_id === selectedCipher.organizationId
+      (s) => s.organization_id === selectedCipher.organizationId,
     )
     return !!org
   })()
@@ -67,11 +67,11 @@ export const PasswordEditScreen = observer(() => {
   }>(null)
 
   // Forms
-  const [name, setName] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [url, setUrl] = useState('')
-  const [note, setNote] = useState('')
+  const [name, setName] = useState("")
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [url, setUrl] = useState("")
+  const [note, setNote] = useState("")
   const [folder, setFolder] = useState(null)
   const [collection, setCollection] = useState(null)
   const [organizationId, setOrganizationId] = useState(null)
@@ -81,19 +81,21 @@ export const PasswordEditScreen = observer(() => {
   // ----------------- EFFECTS ------------------
   // Set initial data
   useEffect(() => {
-    if (mode !== 'add') {
+    if (mode !== "add") {
       setName(selectedCipher.name)
       setUsername(selectedCipher.login.username)
       setPassword(selectedCipher.login.password)
       setUrl(selectedCipher.login.uri)
       setNote(selectedCipher.notes)
       setFolder(selectedCipher.folderId)
-      setCollection(selectedCipher.collectionIds.length > 0 ? selectedCipher.collectionIds[0] : null)
-      setOrganizationId(mode === 'clone' ? null : selectedCipher.organizationId)
+      setCollection(
+        selectedCipher.collectionIds.length > 0 ? selectedCipher.collectionIds[0] : null,
+      )
+      setOrganizationId(mode === "clone" ? null : selectedCipher.organizationId)
       setCollectionIds(selectedCipher.collectionIds)
       setFields(selectedCipher.fields || [])
     } else {
-      setUrl(initialUrl || 'https://')
+      setUrl(initialUrl || "https://")
     }
   }, [])
 
@@ -104,25 +106,23 @@ export const PasswordEditScreen = observer(() => {
       setUsername(saveData.username)
       setPassword(saveData.password)
       setUrl(saveData.domain)
-      setName(saveData.domain?.replace('https://', ''))
+      setName(saveData.domain?.replace("https://", ""))
     }
   }, [])
 
   // Set generated password/folder from generator
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       if (cipherStore.generatedPassword) {
         setPassword(cipherStore.generatedPassword)
-        cipherStore.setGeneratedPassword('')
+        cipherStore.setGeneratedPassword("")
       }
 
       if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === 'unassigned') {
+        if (cipherStore.selectedFolder === "unassigned") {
           setFolder(null)
-        }
-        else {
-          if (!selectedCollection)
-            setFolder(cipherStore.selectedFolder)
+        } else {
+          if (!selectedCollection) setFolder(cipherStore.selectedFolder)
         }
         setCollection(null)
         setCollectionIds([])
@@ -131,8 +131,7 @@ export const PasswordEditScreen = observer(() => {
       }
 
       if (cipherStore.selectedCollection) {
-        if (!selectedCollection)
-          setCollection(cipherStore.selectedCollection)
+        if (!selectedCollection) setCollection(cipherStore.selectedCollection)
         setFolder(null)
         cipherStore.setSelectedCollection(null)
       }
@@ -156,7 +155,7 @@ export const PasswordEditScreen = observer(() => {
   // Prepare to save password
   const preparePassword = async () => {
     let payload: CipherView
-    if (mode === 'add') {
+    if (mode === "add") {
       payload = newCipher(CipherType.Login)
     } else {
       // @ts-ignore
@@ -203,23 +202,24 @@ export const PasswordEditScreen = observer(() => {
   // Save password
   const handleSave = async (payload: CipherView, passwordStrength: number) => {
     setIsLoading(true)
-    let res = { kind: 'unknown' }
+    let res = { kind: "unknown" }
 
-    if (['add', 'clone'].includes(mode)) {
+    if (["add", "clone"].includes(mode)) {
       res = await createCipher(payload, passwordStrength, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, passwordStrength, collectionIds)
     }
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
+      if (isOwner) {
+        // for shared folder
+        if (selectedCollection) {
+          await shareFolderAddItem(selectedCollection, payload)
+        }
 
-      // for shared folder
-      if (selectedCollection) {
-        await shareFolderAddItem(selectedCollection, payload)
-      }
-
-      if (collection) {
-        const collectionView = find(collectionStore.collections, e => e.id === collection) || {}
-        await shareFolderAddItem(collectionView, payload)
+        if (collection) {
+          const collectionView = find(collectionStore.collections, (e) => e.id === collection) || {}
+          await shareFolderAddItem(collectionView, payload)
+        }
       }
       setIsLoading(false)
       handleBack()
@@ -239,23 +239,23 @@ export const PasswordEditScreen = observer(() => {
       header={
         <Header
           title={
-            mode === 'add'
-              ? `${translate('common.add')} ${translate('common.password')}`
-              : translate('common.edit')
+            mode === "add"
+              ? `${translate("common.add")} ${translate("common.password")}`
+              : translate("common.edit")
           }
           goBack={() => {
             handleBack()
           }}
-          goBackText={translate('common.cancel')}
+          goBackText={translate("common.cancel")}
           right={
             <Button
               isDisabled={isLoading || !name.trim()}
               preset="link"
-              text={translate('common.save')}
+              text={translate("common.save")}
               onPress={preparePassword}
               style={{
                 height: 35,
-                alignItems: 'center',
+                alignItems: "center",
                 paddingLeft: 10,
               }}
               textStyle={{
@@ -276,7 +276,7 @@ export const PasswordEditScreen = observer(() => {
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label={translate('common.item_name')}
+              label={translate("common.item_name")}
               value={name}
               onChangeText={setName}
             />
@@ -287,7 +287,7 @@ export const PasswordEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('password.login_details').toUpperCase()}
+          text={translate("password.login_details").toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
@@ -305,7 +305,7 @@ export const PasswordEditScreen = observer(() => {
         {/* Username */}
         <View style={{ flex: 1 }}>
           <FloatingInput
-            label={translate('password.username')}
+            label={translate("password.username")}
             value={username}
             onChangeText={setUsername}
           />
@@ -316,7 +316,7 @@ export const PasswordEditScreen = observer(() => {
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
             isPassword
-            label={translate('common.password')}
+            label={translate("common.password")}
             value={password}
             onChangeText={setPassword}
           />
@@ -333,7 +333,7 @@ export const PasswordEditScreen = observer(() => {
         {/* Generate password */}
         <Button
           preset="link"
-          onPress={() => navigation.navigate('passwordGenerator')}
+          onPress={() => navigation.navigate("passwordGenerator")}
           style={{
             marginTop: 20,
           }}
@@ -342,16 +342,16 @@ export const PasswordEditScreen = observer(() => {
             style={[
               commonStyles.CENTER_HORIZONTAL_VIEW,
               {
-                justifyContent: 'space-between',
-                width: '100%',
+                justifyContent: "space-between",
+                width: "100%",
               },
             ]}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <FontAwesomeIcon name="repeat" size={18} color={color.primary} />
               <Text
                 preset="green"
-                text={translate('common.generate')}
+                text={translate("common.generate")}
                 style={{ fontSize: fontSize.small, marginLeft: 7 }}
               />
             </View>
@@ -363,12 +363,12 @@ export const PasswordEditScreen = observer(() => {
         {/* Web url */}
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
-            label={translate('password.website_url')}
+            label={translate("password.website_url")}
             value={url}
             onChangeText={setUrl}
             onBlur={() => {
-              if (mode === 'add' && !name) {
-                const genName = url.replace('https://', '')
+              if (mode === "add" && !name) {
+                const genName = url.replace("https://", "")
                 setName(genName)
               }
             }}
@@ -384,6 +384,7 @@ export const PasswordEditScreen = observer(() => {
 
       {/* Others */}
       <CipherOthersInfo
+        isOwner={isOwner}
         navigation={navigation}
         hasNote
         note={note}
@@ -410,7 +411,7 @@ export const PasswordEditScreen = observer(() => {
           setShowViolationModal(false)
           handleSave(pendingPayload.item, pendingPayload.strength)
         }}
-        confirmText={translate('policy.password_violation_modal.use_anyway')}
+        confirmText={translate("policy.password_violation_modal.use_anyway")}
       />
       {/* Violations modal end */}
     </Layout>
