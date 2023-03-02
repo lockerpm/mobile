@@ -88,6 +88,9 @@ export const iconRegistry = {
   'arrow-left': require('../../../../assets/icon/arrow/ArrowLeft.png'),
   'eye': require('../../../../assets/icon/common/eye.png'),
   'eye-slash': require('../../../../assets/icon/common/eye-slash.png'),
+  'user': require('../../../../assets/icon/common/user.png'),
+  'buildings': require('../../../../assets/icon/common/buildings.png'),
+  'briefcaseMetal': require('../../../../assets/icon/common/briefcaseMetal.png'),
 }
 
 const $imageStyle: ImageStyle = {

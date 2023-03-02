@@ -43,7 +43,7 @@ export const OnPremiseOtp = observer((props: Props) => {
     if (res.kind === "ok") {
       navigation.navigate("mainStack", { screen: "start" })
     } else if (res.kind === "unauthorized") {
-      navigation.navigate("login")
+      navigation.navigate("login" , {type: "onPremise"})
     }  else if (res.kind === "on-premise-2fa") {
       return
     } else {

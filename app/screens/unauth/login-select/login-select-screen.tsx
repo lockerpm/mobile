@@ -1,33 +1,56 @@
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import React from "react"
-import { View, Image } from "react-native"
+import { View, Image, TouchableOpacity } from "react-native"
 import { APP_ICON } from "../../../common/mappings"
-import { Button } from "../../../components"
-import { Screen, Text } from "../../../components/cores"
+import { Button, Text } from "../../../components"
+import { Icon, Screen } from "../../../components/cores"
 import { LanguagePicker } from "../../../components/utils"
 import { useStores } from "../../../models"
 import { useMixins } from "../../../services/mixins"
 import { verticalScale } from "../../../services/mixins/adaptive-layout"
+import { commonStyles, spacing } from "../../../theme"
 
 export const LoginSelectScreen = observer(() => {
   const navigation = useNavigation()
   const { uiStore } = useStores()
-  const {translate} = useMixins()
+  const { translate } = useMixins()
   return (
     <Screen
-      safeAreaEdges={["top"]}
+      safeAreaEdges={["top", "bottom"]}
       contentContainerStyle={{
         flex: 1,
         padding: 20,
-        paddingTop: 70,
       }}
+      footer={
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: 12,
+            justifyContent: "center",
+          }}
+        >
+          <Text
+            text={translate("login.no_account")}
+            style={{
+              marginRight: spacing.smaller,
+            }}
+          />
+          <Button
+            preset="link"
+            text={translate("common.sign_up")}
+            onPress={() => navigation.navigate("signup")}
+          />
+        </View>
+      }
     >
       <LanguagePicker />
       <View
         style={{
           alignItems: "center",
-          marginBottom: 24,
+          marginBottom: 32,
+          paddingTop: 70,
         }}
       >
         <Image
@@ -35,35 +58,65 @@ export const LoginSelectScreen = observer(() => {
           style={{ height: verticalScale(80), width: verticalScale(90) }}
         />
       </View>
+
       <Text
-        preset="bold"
+        preset="black"
         text={translate("login_select.title")}
-        size="large"
-        style={{ marginBottom: 16 }}
-      />
-      <Button
-        onPress={() => {
-          navigation.navigate("login", { type: "individual" })
-        }}
-        text={translate("login_select.individual")}
-        style={{ marginBottom: 16 }}
+        style={{ marginBottom: 16, fontWeight: "600", textAlign: "center", fontSize: 24 }}
       />
 
-      <Button
-        onPress={() => {
+      <LoginItem
+        icon={"user"}
+        title={translate("login_select.individual")}
+        action={() => {
           navigation.navigate("login", { type: "individual" })
         }}
-        text={translate("login_select.business")}
-        style={{ marginBottom: 16 }}
       />
 
-      <Button
-        onPress={() => {
+      <LoginItem
+        icon={"briefcaseMetal"}
+        title={translate("login_select.business")}
+        action={() => {
+          navigation.navigate("login", { type: "individual" })
+        }}
+      />
+
+      <LoginItem
+        icon={"buildings"}
+        title={translate("login_select.onpremise")}
+        action={() => {
           navigation.navigate("login", { type: "onPremise" })
         }}
-        text={translate("login_select.onpremise")}
-        style={{ marginBottom: 16 }}
       />
     </Screen>
   )
 })
+
+const LoginItem = ({
+  icon,
+  title,
+  action,
+}: {
+  icon: "user" | "buildings" | "briefcaseMetal"
+  title: string
+  action: () => void
+}) => {
+  const { color } = useMixins()
+  return (
+    <TouchableOpacity
+      style={{
+        padding: 16,
+        borderRadius: 6,
+        borderWidth: 1,
+        borderColor: color.line,
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 16,
+      }}
+      onPress={action}
+    >
+      <Icon icon={icon} size={24} style={{ marginRight: 16 }} />
+      <Text preset="black" text={title} />
+    </TouchableOpacity>
+  )
+}

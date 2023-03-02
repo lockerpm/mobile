@@ -1,28 +1,24 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Loading } from "../../../components"
-import Flurry from 'react-native-flurry-sdk'
+import Flurry from "react-native-flurry-sdk"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import NetInfo from "@react-native-community/netinfo"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
+import { AccountType } from "../../../config/types"
 
 export const StartScreen = observer(() => {
   const { user, uiStore, enterpriseStore } = useStores()
   const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
-  const {
-    loadFolders,
-    loadCollections,
-    loadOrganizations,
-  } = useCipherDataMixins()
+  const { loadFolders, loadCollections, loadOrganizations } = useCipherDataMixins()
   const navigation = useNavigation()
-  const { encDataTest } = useCipherAuthenticationMixins()
   // ------------------------- PARAMS ----------------------------
 
   const [msg, setMsg] = useState("")
-  
+
   // ------------------------- METHODS ----------------------------
   const refreshFCM = async () => {
     if (!user.disablePushNotifications) {
@@ -42,8 +38,7 @@ export const StartScreen = observer(() => {
     //   navigation.navigate('dataOutdated')
     //   return
     // }
-    encDataTest()
-    
+
     const connectionState = await NetInfo.fetch()
     // Sync
     if (connectionState.isConnected) {
@@ -81,7 +76,8 @@ export const StartScreen = observer(() => {
     const navigationRequest = await parsePushNotiData()
     if (navigationRequest.path) {
       // handle navigate browse
-      navigationRequest.tempParams && navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
+      navigationRequest.tempParams &&
+        navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
       navigation.navigate(navigationRequest.path, navigationRequest.params)
       return
     }
@@ -96,25 +92,24 @@ export const StartScreen = observer(() => {
       }
     }
 
-
     // Done -> navigate
     if (uiStore.isDeeplinkEmergencyAccess) {
       uiStore.setIsDeeplinkEmergencyAccess(false)
-      navigation?.navigate('mainTab', { screen: 'menuTab' })
-      navigation.navigate('emergencyAccess')
+      navigation?.navigate("mainTab", { screen: "menuTab" })
+      navigation.navigate("emergencyAccess")
     } else if (uiStore.isDeeplinkShares) {
       uiStore.setIsDeeplinkShares(false)
-      navigation?.navigate('mainTab', { screen: 'browseTab' })
-      navigation?.navigate('mainTab', { screen: 'browseTab', params: { screen: 'shares' } })
+      navigation?.navigate("mainTab", { screen: "browseTab" })
+      navigation?.navigate("mainTab", { screen: "browseTab", params: { screen: "shares" } })
     } else if (uiStore.isFromAutoFill) {
       uiStore.setIsFromAutoFill(false)
       navigation.navigate("autofill")
     } else if (uiStore.isFromAutoFillItem) {
       uiStore.setIsFromAutoFillItem(false)
-      navigation.navigate("autofill", { mode: 'item' })
+      navigation.navigate("autofill", { mode: "item" })
     } else if (uiStore.isOnSaveLogin) {
       // uiStore.setIsOnSaveLogin(false)
-      navigation.navigate("passwords__edit", { mode: 'add' })
+      navigation.navigate("passwords__edit", { mode: "add" })
     } else if (!!enterpriseStore.isEnterpriseInvitations) {
       navigation.navigate("enterpriseInvited")
     } else {
@@ -123,7 +118,6 @@ export const StartScreen = observer(() => {
   }
 
   // --------------------------- EFFECT ----------------------------
-
 
   // Always move forward
   useEffect(() => {

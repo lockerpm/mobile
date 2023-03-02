@@ -22,7 +22,7 @@ export const OnPremiseOtp = observer((props: Props) => {
   const navigation = useNavigation()
   const { translate, color } = useMixins()
   const { sessionOtpLogin } = useCipherAuthenticationMixins()
-  const { goBack, method, email,  masterPassword} = props
+  const { goBack, method, email, masterPassword } = props
 
   // ------------------ Params -----------------------
 
@@ -41,8 +41,8 @@ export const OnPremiseOtp = observer((props: Props) => {
     if (res.kind === "ok") {
       navigation.navigate("mainStack", { screen: "start" })
     } else if (res.kind === "unauthorized") {
-      navigation.navigate("login")
-    }  else if (res.kind === "on-premise-2fa") {
+      navigation.navigate("login", { type: "onPremise" })
+    } else if (res.kind === "on-premise-2fa") {
       return
     } else {
       setIsError(true)

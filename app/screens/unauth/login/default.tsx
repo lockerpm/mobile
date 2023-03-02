@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
-import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
+import { AutoImage as Image, Text, FloatingInput, Button, Header } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import { commonStyles, spacing } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
@@ -10,6 +10,9 @@ import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { IS_IOS, IS_PROD } from "../../../config/constants"
 import { GitHubLoginModal } from "./github-login-modal"
 import { useNavigation } from "@react-navigation/native"
+import { LanguagePicker } from "../../../components/utils"
+import { Icon } from "../../../components/cores"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 type Props = {
   onPremise: boolean
@@ -24,7 +27,7 @@ export const DefaultLogin = observer((props: Props) => {
   const { translate, notify, notifyApiError, setApiTokens } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
   const { nextStep, onLoggedIn, handleForgot, onPremise } = props
-
+  const inset = useSafeAreaInsets()
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
@@ -94,8 +97,10 @@ export const DefaultLogin = observer((props: Props) => {
           notifyApiError(res)
         }
       } else {
-        setPassword("")
-        if (res?.data[0]?.activated) {
+        if (res.data.length === 0) {
+          notify("error", translate("error.onpremise_login_failed"))
+        }
+        if (res.data[0]?.activated) {
           navigation.navigate("lock", {
             type: "onPremise",
             data: res.data[0],
@@ -160,105 +165,120 @@ export const DefaultLogin = observer((props: Props) => {
   // ------------------------------ RENDER -------------------------------
 
   return (
-    <View style={{ alignItems: "center", paddingTop: "10%" }}>
-      <GitHubLoginModal
-        isOpen={showGitHubLogin}
-        onClose={() => setShowGitHubLogin(false)}
-        onDone={(code) => {
-          githubLogin({
-            setIsLoading,
-            onLoggedIn,
-            code,
-          })
+    <View>
+      <Icon
+        icon="arrow-left"
+        size={24}
+        containerStyle={{
+          padding: 10,
+          paddingLeft: 0
         }}
+        onPress={() => navigation.goBack()}
       />
-
-      <Image
-        source={APP_ICON.icon}
-        style={{ height: 70, width: 70, marginBottom: spacing.small, marginTop: spacing.huge }}
-      />
-
-      <Text
-        preset="header"
-        text={translate("login.title")}
-        style={{ marginBottom: spacing.large }}
-      />
-
-      {/* Username input */}
-      <FloatingInput
-        isInvalid={isError}
-        label={translate("login.email_or_username")}
-        onChangeText={setUsername}
-        value={username}
-        style={{ width: "100%", marginBottom: spacing.small }}
-        onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
-      />
-      {/* Username input end */}
-
-      {/* Password input */}
-      {!onPremise && (
-        <FloatingInput
-          outerRef={passwordRef}
-          isPassword
-          isInvalid={isError}
-          label={translate("common.password")}
-          onChangeText={setPassword}
-          value={password}
-          style={{ width: "100%" }}
-          onSubmitEditing={handleLogin}
+      <View style={{ alignItems: "center" }}>
+        <GitHubLoginModal
+          isOpen={showGitHubLogin}
+          onClose={() => setShowGitHubLogin(false)}
+          onDone={(code) => {
+            githubLogin({
+              setIsLoading,
+              onLoggedIn,
+              code,
+            })
+          }}
         />
-      )}
-      {/* Password input end */}
 
-      {!onPremise && (
-        <View
+        <Image
+          source={APP_ICON.icon}
+          style={{ height: 70, width: 70, marginBottom: spacing.small, marginTop: spacing.huge }}
+        />
+
+        <Text
+          preset="header"
+          text={translate("login.title")}
+          style={{ marginBottom: spacing.large }}
+        />
+
+        {/* Username input */}
+        <FloatingInput
+          isInvalid={isError}
+          label={translate("login.email_or_username")}
+          onChangeText={setUsername}
+          value={username}
+          style={{ width: "100%", marginBottom: spacing.small }}
+          onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
+        />
+        {/* Username input end */}
+
+        {/* Password input */}
+        {!onPremise && (
+          <FloatingInput
+            outerRef={passwordRef}
+            isPassword
+            isInvalid={isError}
+            label={translate("common.password")}
+            onChangeText={setPassword}
+            value={password}
+            style={{ width: "100%" }}
+            onSubmitEditing={handleLogin}
+          />
+        )}
+        {/* Password input end */}
+
+        {!onPremise && (
+          <View
+            style={{
+              width: "100%",
+              alignItems: "flex-start",
+              marginTop: spacing.large,
+            }}
+          >
+            <Button
+              preset="link"
+              text={translate("login.forgot_password")}
+              onPress={handleForgot}
+            />
+          </View>
+        )}
+
+        <Button
+          isLoading={isLoading}
+          isDisabled={
+            isLoading || (!onPremise && !(username && password)) || (onPremise && !username)
+          }
+          text={translate("common.login")}
+          onPress={handleLogin}
           style={{
             width: "100%",
-            alignItems: "flex-start",
-            marginTop: spacing.large,
+            marginBottom: spacing.medium,
+            marginTop: spacing.medium,
           }}
-        >
-          <Button preset="link" text={translate("login.forgot_password")} onPress={handleForgot} />
-        </View>
-      )}
+        />
 
-      <Button
-        isLoading={isLoading}
-        isDisabled={
-          isLoading || (!onPremise && !(username && password)) || (onPremise && !username)
-        }
-        text={translate("common.login")}
-        onPress={handleLogin}
-        style={{
-          width: "100%",
-          marginBottom: spacing.medium,
-          marginTop: spacing.medium,
-        }}
-      />
+        {!onPremise && (
+          <View style={commonStyles.CENTER_VIEW}>
+            <Text
+              text={IS_PROD ? translate("common.or_login_with") : ""}
+              style={{ marginBottom: spacing.tiny }}
+            />
 
-      {!onPremise && (
-        <View style={commonStyles.CENTER_VIEW}>
-          <Text
-            text={IS_PROD ? translate("common.or_login_with") : ""}
-            style={{ marginBottom: spacing.tiny }}
-          />
-
-          <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-            {Object.values(SOCIAL_LOGIN)
-              .filter((item) => !item.hide)
-              .map((item, index) => (
-                <Button
-                  key={index}
-                  preset="ghost"
-                  onPress={item.handler}
-                  style={{ marginHorizontal: spacing.smaller }}
-                >
-                  <item.icon height={40} width={40} />
-                </Button>
-              ))}
+            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+              {Object.values(SOCIAL_LOGIN)
+                .filter((item) => !item.hide)
+                .map((item, index) => (
+                  <Button
+                    key={index}
+                    preset="ghost"
+                    onPress={item.handler}
+                    style={{ marginHorizontal: spacing.smaller }}
+                  >
+                    <item.icon height={40} width={40} />
+                  </Button>
+                ))}
+            </View>
           </View>
-        </View>
-      )}
+        )}
+      </View>
     </View>
   )
 })

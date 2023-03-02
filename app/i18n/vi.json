@@ -208,7 +208,8 @@
     "cannot_connect": "Không thể kết nối với máy chủ, vui lòng kiểm tra kết nối mạng",
     "network_error": "Lỗi mạng. Kết nối của bạn không an toàn",
     "share_folder": "Không thể chia sẻ thư mục này",
-    "share_folder_move_item": "Mục này đang được chia sẻ. Ngừng chia sẻ và thử lại sau"
+    "share_folder_move_item": "Mục này đang được chia sẻ. Ngừng chia sẻ và thử lại sau",
+    "onpremise_login_failed": "Your email doesn’t belong to any Enterprise. Please try again"
   },
   "success": {
     "done": "Hoàn tất",

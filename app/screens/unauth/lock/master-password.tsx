@@ -90,7 +90,7 @@ export const LockByMasterPassword = observer(({ biometryType, handleLogout }: Pr
         setMasterPassword("")
         navigation.navigate("mainStack", { screen: "start" })
       } else if (res.kind === "unauthorized") {
-        navigation.navigate("login")
+        navigation.navigate("login", { type: "individual" })
       } else if (res.kind === "enterprise-lock") {
         Alert.alert("", translate("alert.enterprise_lock"), [
           {
