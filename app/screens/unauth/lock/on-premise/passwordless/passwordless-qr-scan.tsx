@@ -23,7 +23,7 @@ export const PasswordlessQrScan = observer(({ otp, goBack, index, setSymmetricCr
   const { sessionQrLogin } = useCipherAuthenticationMixins()
 
   const onSuccess = async (e) => {
-    const res = await sessionQrLogin(e.data, "123456", true, setSymmetricCryptoKey, nextStep)
+    const res = await sessionQrLogin(e.data, otp.toString(), true, setSymmetricCryptoKey, nextStep)
 
     if (res.kind === "ok") {
       navigation.navigate("mainStack", { screen: "start" })
