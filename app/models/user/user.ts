@@ -149,7 +149,7 @@ export const UserModel = types
       self.plan = null
       self.fingerprint = ""
       self.onPremiseUser = false
-      self.onPremiseLastBaseUrl =""
+      self.onPremiseLastBaseUrl = ""
       remove(StorageKey.APP_CURRENT_USER)
     },
     clearSettings: () => {
@@ -447,13 +447,11 @@ export const UserModel = types
       const res = await userApi.getUserPw(self.apiToken)
       if (res.kind === "ok") {
         self.saveUserPw(res.user)
-
         /// TODO
         if (res.user.pwd_user_type === AccountType.ENTERPRISE) {
-          // console.log(self.apiToken, "1111111")
-          // const _res = await userApi.getEnterprise(self.apiToken)
-          // console.log(self.apiToken, "222222222")
-          // if (_res.kind === 'ok') {
+          // const _userApi = new UserApi(self.environment.api)
+          // const _res = await _userApi.getEnterprise(res.user.apiToken)
+          // if (_res.kind === "ok") {
           //   self.saveEnterprise(_res.data)
           // }
         }

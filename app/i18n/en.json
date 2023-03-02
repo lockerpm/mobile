@@ -208,7 +208,8 @@
     "cannot_connect": "Cannot connect to the server. Please check your internet connection",
     "network_error": "Network error. Your connection is not secure",
     "share_folder": "Can not share this folder",
-    "share_folder_move_item": "This item is being shared. Stop sharing and try again"
+    "share_folder_move_item": "This item is being shared. Stop sharing and try again",
+    "onpremise_login_failed": "Your email doesn’t belong to any Enterprise. Please try again"
   },
   "success": {
     "done": "Done",

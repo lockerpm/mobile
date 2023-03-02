@@ -12,6 +12,7 @@ import { Otp } from "./2fa/otp"
 import { useStores } from "../../../models"
 import { RootParamList } from "../../../navigators"
 import { BASE_URL } from "../../../config/constants"
+import { Header } from "../../../components/cores"
 
 export const LoginScreen = observer(() => {
   const navigation = useNavigation()
@@ -65,7 +66,7 @@ export const LoginScreen = observer(() => {
       }
 
       e.preventDefault()
-      navigation.navigate("onBoarding")
+      navigation.navigate("loginSelect")
     }
 
     navigation.addListener("beforeRemove", handleBack)
@@ -107,7 +108,6 @@ export const LoginScreen = observer(() => {
         )
       }
     >
-      {index === 0 && <LanguagePicker />}
       {index === 0 && (
         <DefaultLogin
           onPremise={loginType === "onPremise"}

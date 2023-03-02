@@ -16,48 +16,56 @@ interface Props {
   nextStep: (username: string, passwordHash: string, methods: { type: string; data: any }[]) => void
 }
 
-export const PasswordlessQrScan = observer(({ otp, goBack, index, setSymmetricCryptoKey, nextStep }: Props) => {
-  const { width, height } = Dimensions.get("screen")
-  const navigation = useNavigation()
-  const [onScanQR, setonScanQR] = useState(false)
-  const { sessionQrLogin } = useCipherAuthenticationMixins()
+export const PasswordlessQrScan = observer(
+  ({ otp, goBack, index, setSymmetricCryptoKey, nextStep }: Props) => {
+    const { width, height } = Dimensions.get("screen")
+    const navigation = useNavigation()
+    const [onScanQR, setonScanQR] = useState(false)
+    const { sessionQrLogin } = useCipherAuthenticationMixins()
 
-  const onSuccess = async (e) => {
-    const res = await sessionQrLogin(e.data, otp.toString(), true, setSymmetricCryptoKey, nextStep)
+    const onSuccess = async (e) => {
+      const res = await sessionQrLogin(
+        e.data,
+        otp.toString(),
+        true,
+        setSymmetricCryptoKey,
+        nextStep,
+      )
 
-    if (res.kind === "ok") {
-      navigation.navigate("mainStack", { screen: "start" })
-    } else if (res.kind === "unauthorized") {
-      navigation.navigate("login")
-    } 
-  }
+      if (res.kind === "ok") {
+        navigation.navigate("mainStack", { screen: "start" })
+      } else if (res.kind === "unauthorized") {
+        navigation.navigate("login", { type: "onPremise" })
+      }
+    }
 
-  useEffect(() => {
-    setonScanQR(index === 1)
-  }, [index])
+    useEffect(() => {
+      setonScanQR(index === 1)
+    }, [index])
 
-  return (
-    <View style={{ flex: 1, width, height }}>
-      <Header leftIcon="arrow-left" onLeftPress={goBack} title="Scan QR code" />
-      <View
-        style={{
-          paddingTop: 70,
-          width: width,
-          height: width,
-        }}
-      >
-        {onScanQR && <QRCodeScanner onRead={onSuccess} />}
+    return (
+      <View style={{ flex: 1, width, height }}>
+        <Header leftIcon="arrow-left" onLeftPress={goBack} title="Scan QR code" />
+        <View
+          style={{
+            paddingTop: 70,
+            width: width,
+            height: width,
+          }}
+        >
+          {onScanQR && <QRCodeScanner onRead={onSuccess} />}
+        </View>
+        <View
+          style={{
+            alignItems: "center",
+            marginTop: 86,
+            padding: 20,
+          }}
+        >
+          <Text preset="bold" text="One more step" style={{ marginBottom: 16 }} size="3xl" />
+          <Text text="Point your camera to the QR Code on Desktop App to confirm Login" />
+        </View>
       </View>
-      <View
-        style={{
-          alignItems: "center",
-          marginTop: 86,
-          padding: 20,
-        }}
-      >
-        <Text preset="bold" text="One more step" style={{ marginBottom: 16 }} size="3xl" />
-        <Text text="Point your camera to the QR Code on Desktop App to confirm Login" />
-      </View>
-    </View>
-  )
-})
+    )
+  },
+)
