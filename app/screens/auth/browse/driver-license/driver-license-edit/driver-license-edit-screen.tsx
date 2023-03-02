@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import find from 'lodash/find'
+import find from "lodash/find"
 import {
-  Text, Layout, Button, Header, FloatingInput, CipherOthersInfo, CustomFieldsEdit
+  Text,
+  Layout,
+  Button,
+  Header,
+  FloatingInput,
+  CipherOthersInfo,
+  CustomFieldsEdit,
 } from "../../../../../components"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
@@ -16,24 +22,23 @@ import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { DriverLicenseData, toDriverLicenseData } from "../driver-license.type"
-import countries from '../../../../../common/countries.json'
+import countries from "../../../../../common/countries.json"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
 
-type DriverLicenseEditScreenProp = RouteProp<PrimaryParamList, 'driverLicenses__edit'>;
+type DriverLicenseEditScreenProp = RouteProp<PrimaryParamList, "driverLicenses__edit">
 
 type InputItem = {
-  label: string,
-  value: string,
-  setter: (val: string) => void,
-  onTouchStart?: () => void,
-  isRequired?: boolean,
-  isDateTime?: boolean,
-  placeholder?: string,
-  isDisableEdit?: boolean,
-  type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
+  label: string
+  value: string
+  setter: (val: string) => void
+  onTouchStart?: () => void
+  isRequired?: boolean
+  isDateTime?: boolean
+  placeholder?: string
+  isDisableEdit?: boolean
+  type?: "default" | "email-address" | "numeric" | "phone-pad" | "number-pad" | "decimal-pad"
 }
-
 
 export const DriverLicenseEditScreen = observer(() => {
   const navigation = useNavigation()
@@ -48,44 +53,62 @@ export const DriverLicenseEditScreen = observer(() => {
   const selectedCipher: CipherView = cipherStore.cipherView
   const selectedCollection: CollectionView = route.params.collection
 
-
+  const isOwner = (() => {
+    if (!selectedCipher.organizationId) {
+      return true
+    }
+    const org = cipherStore.myShares.find(
+      (s) => s.organization_id === selectedCipher.organizationId,
+    )
+    return !!org
+  })()
   const driverLicenseData = toDriverLicenseData(selectedCipher.notes)
   // ------------------ PARAMS -----------------------
 
   // Forms
-  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
 
-  const [idNO, setIdNo] = useState(mode !== 'add' ? driverLicenseData.idNO : '')
-  const [fullName, setFullName] = useState(mode !== 'add' ? driverLicenseData.fullName : '')
-  const [dob, setDob] = useState(mode !== 'add' ? driverLicenseData.dob : '')
-  const [address, setAddress] = useState(mode !== 'add' ? driverLicenseData.address : '')
-  const [nationality, setNationality] = useState(mode !== 'add' ? driverLicenseData.nationality : 'vn')
-  const [classId, setClass] = useState(mode !== 'add' ? driverLicenseData.class : '')
-  const [validUntil, setValidUntil] = useState(mode !== 'add' ? driverLicenseData.validUntil : '')
-  const [vehicleClass, setVehicleClass] = useState(mode !== 'add' ? driverLicenseData.vehicleClass : '')
-  const [beginningDate, setBeginningDate] = useState(mode !== 'add' ? driverLicenseData.beginningDate : '')
-  const [issuedBy, setIssuedBy] = useState(mode !== 'add' ? driverLicenseData.issuedBy : '')
-  const [note, setNote] = useState(mode !== 'add' ? driverLicenseData.notes : '')
+  const [idNO, setIdNo] = useState(mode !== "add" ? driverLicenseData.idNO : "")
+  const [fullName, setFullName] = useState(mode !== "add" ? driverLicenseData.fullName : "")
+  const [dob, setDob] = useState(mode !== "add" ? driverLicenseData.dob : "")
+  const [address, setAddress] = useState(mode !== "add" ? driverLicenseData.address : "")
+  const [nationality, setNationality] = useState(
+    mode !== "add" ? driverLicenseData.nationality : "vn",
+  )
+  const [classId, setClass] = useState(mode !== "add" ? driverLicenseData.class : "")
+  const [validUntil, setValidUntil] = useState(mode !== "add" ? driverLicenseData.validUntil : "")
+  const [vehicleClass, setVehicleClass] = useState(
+    mode !== "add" ? driverLicenseData.vehicleClass : "",
+  )
+  const [beginningDate, setBeginningDate] = useState(
+    mode !== "add" ? driverLicenseData.beginningDate : "",
+  )
+  const [issuedBy, setIssuedBy] = useState(mode !== "add" ? driverLicenseData.issuedBy : "")
+  const [note, setNote] = useState(mode !== "add" ? driverLicenseData.notes : "")
 
-  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
-  const [organizationId, setOrganizationId] = useState(mode === 'edit' ? selectedCipher.organizationId : null)
-  const [collectionIds, setCollectionIds] = useState(mode !== 'add' ? selectedCipher.collectionIds : [])
-  const [collection, setCollection] = useState(mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null)
-  const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+  const [folder, setFolder] = useState(mode !== "add" ? selectedCipher.folderId : null)
+  const [organizationId, setOrganizationId] = useState(
+    mode === "edit" ? selectedCipher.organizationId : null,
+  )
+  const [collectionIds, setCollectionIds] = useState(
+    mode !== "add" ? selectedCipher.collectionIds : [],
+  )
+  const [collection, setCollection] = useState(
+    mode !== "add" && collectionIds.length > 0 ? collectionIds[0] : null,
+  )
+  const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
 
   const [isLoading, setIsLoading] = useState(false)
 
   // ------------------ EFFECTS -----------------------
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === 'unassigned') {
+        if (cipherStore.selectedFolder === "unassigned") {
           setFolder(null)
-        }
-        else {
-          if (!selectedCollection)
-            setFolder(cipherStore.selectedFolder)
+        } else {
+          if (!selectedCollection) setFolder(cipherStore.selectedFolder)
         }
         setCollection(null)
         setCollectionIds([])
@@ -94,8 +117,7 @@ export const DriverLicenseEditScreen = observer(() => {
       }
 
       if (cipherStore.selectedCollection) {
-        if (!selectedCollection)
-          setCollection(cipherStore.selectedCollection)
+        if (!selectedCollection) setCollection(cipherStore.selectedCollection)
         setFolder(null)
         cipherStore.setSelectedCollection(null)
       }
@@ -108,7 +130,7 @@ export const DriverLicenseEditScreen = observer(() => {
         }
         uiStore.setSelectedCountry(null)
       }
-    });
+    })
 
     return unsubscribe
   }, [navigation])
@@ -118,7 +140,7 @@ export const DriverLicenseEditScreen = observer(() => {
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
-    if (mode === 'add') {
+    if (mode === "add") {
       payload = newCipher(CipherType.DriverLicense)
     } else {
       // @ts-ignore
@@ -147,95 +169,99 @@ export const DriverLicenseEditScreen = observer(() => {
     payload.secureNote = {
       // @ts-ignore
       response: null,
-      type: 0
+      type: 0,
     }
 
-    let res = { kind: 'unknown' }
-    if (['add', 'clone'].includes(mode)) {
+    let res = { kind: "unknown" }
+    if (["add", "clone"].includes(mode)) {
       res = await createCipher(payload, 0, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
-    if (res.kind === 'ok') {
-      // for shared folder
-      if (selectedCollection) {
-        await shareFolderAddItem(selectedCollection, payload)
+    if (res.kind === "ok") {
+      if (isOwner) {
+        // for shared folder
+        if (selectedCollection) {
+          await shareFolderAddItem(selectedCollection, payload)
+        }
+
+        if (collection) {
+          const collectionView = find(collectionStore.collections, (e) => e.id === collection) || {}
+          await shareFolderAddItem(collectionView, payload)
+        }
       }
 
-      if (collection) {
-        const collectionView = find(collectionStore.collections, e => e.id === collection) || {}
-        await shareFolderAddItem(collectionView, payload)
-      }
       navigation.goBack()
     }
     setIsLoading(false)
-
   }
 
   // ----------------- RENDER ----------------------
 
   const driverLicenseDetails: InputItem[] = [
     {
-      label: translate('driver_license.no'),
+      label: translate("driver_license.no"),
       value: idNO,
       setter: setIdNo,
-      isRequired: true
+      isRequired: true,
     },
     {
-      label: translate('common.fullname'),
+      label: translate("common.fullname"),
       value: fullName,
-      setter: setFullName
+      setter: setFullName,
     },
     {
-      label: translate('common.dob'),
+      label: translate("common.dob"),
       value: dob,
       setter: setDob,
       isDateTime: true,
-      placeholder: 'dd/mm/yyyy'
+      placeholder: "dd/mm/yyyy",
     },
     {
-      label: translate('common.address'),
+      label: translate("common.address"),
       value: address,
       setter: setAddress,
     },
     {
-      label: translate('common.nationality'),
-      value: countries[nationality?.toUpperCase()] ? countries[nationality?.toUpperCase()].country_name : '',
+      label: translate("common.nationality"),
+      value: countries[nationality?.toUpperCase()]
+        ? countries[nationality?.toUpperCase()].country_name
+        : "",
       setter: setNationality,
       isDisableEdit: true,
       onTouchStart: () => {
-        navigation.navigate('countrySelector', { initialId: nationality })
-      }
+        navigation.navigate("countrySelector", { initialId: nationality })
+      },
     },
     {
-      label: translate('driver_license.class'),
+      label: translate("driver_license.class"),
       value: classId,
-      setter: setClass
+      setter: setClass,
     },
     {
-      label: translate('driver_license.valid_until'),
+      label: translate("driver_license.valid_until"),
       value: validUntil,
       setter: setValidUntil,
       isDateTime: true,
-      placeholder: 'dd/mm/yyyy'
+      placeholder: "dd/mm/yyyy",
     },
     {
-      label: translate('driver_license.vehicle_class'),
+      label: translate("driver_license.vehicle_class"),
       value: vehicleClass,
-      setter: setVehicleClass
+      setter: setVehicleClass,
     },
     {
-      label: translate('driver_license.beginning_date'),
+      label: translate("driver_license.beginning_date"),
       value: beginningDate,
       setter: setBeginningDate,
       isDateTime: true,
-      placeholder: 'dd/mm/yyyy'
+      placeholder: "dd/mm/yyyy",
     },
     {
-      label: translate('driver_license.issued_by'),
+      label: translate("driver_license.issued_by"),
       value: issuedBy,
-      setter: setIssuedBy
-    }
+      setter: setIssuedBy,
+    },
   ]
 
   return (
@@ -243,46 +269,44 @@ export const DriverLicenseEditScreen = observer(() => {
       isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
-        paddingHorizontal: 0
+        paddingHorizontal: 0,
       }}
-      header={(
+      header={
         <Header
           title={
-            mode === 'add'
-              ? `${translate('common.add')} ${translate('common.driver_license')}`
-              : translate('common.edit')
+            mode === "add"
+              ? `${translate("common.add")} ${translate("common.driver_license")}`
+              : translate("common.edit")
           }
           goBack={() => navigation.goBack()}
-          goBackText={translate('common.cancel')}
-          right={(
+          goBackText={translate("common.cancel")}
+          right={
             <Button
               preset="link"
               isDisabled={isLoading || !name.trim()}
-              text={translate('common.save')}
+              text={translate("common.save")}
               onPress={handleSave}
               style={{
                 height: 35,
-                alignItems: 'center',
-                paddingLeft: 10
+                alignItems: "center",
+                paddingLeft: 10,
               }}
               textStyle={{
-                fontSize: fontSize.p
+                fontSize: fontSize.p,
               }}
             />
-          )}
+          }
         />
-      )}
+      }
     >
       {/* Name */}
-      <View
-        style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}
-      >
+      <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           <BROWSE_ITEMS.driverLicense.svgIcon height={40} width={40} />
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
-              label={translate('common.item_name')}
+              label={translate("common.item_name")}
               value={name}
               onChangeText={setName}
             />
@@ -293,51 +317,47 @@ export const DriverLicenseEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate('common.driver_license').toUpperCase()}
+          text={translate("common.driver_license").toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
 
       {/* Info */}
       <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background,
-          paddingBottom: 32
-        }]}
+        style={[
+          commonStyles.SECTION_PADDING,
+          {
+            backgroundColor: color.background,
+            paddingBottom: 32,
+          },
+        ]}
       >
-        {
-          driverLicenseDetails.map((item, index) => (
-            <View
-              key={index}
-              style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
-              <FloatingInput
-                editable={item.isDisableEdit}
-                isDateTime={item.isDateTime}
-                isRequired={item.isRequired}
-                label={item.label}
-                value={item.value}
-                onChangeText={(text) => {
-                  item.setter(text)
-                }}
-                onTouchStart={item.onTouchStart}
-                placeholder={item.placeholder}
-              />
-            </View>
-          ))
-        }
+        {driverLicenseDetails.map((item, index) => (
+          <View key={index} style={{ flex: 1, marginTop: index === 0 ? 0 : 20 }}>
+            <FloatingInput
+              editable={item.isDisableEdit}
+              isDateTime={item.isDateTime}
+              isRequired={item.isRequired}
+              label={item.label}
+              value={item.value}
+              onChangeText={(text) => {
+                item.setter(text)
+              }}
+              onTouchStart={item.onTouchStart}
+              placeholder={item.placeholder}
+            />
+          </View>
+        ))}
       </View>
       {/* Info end */}
 
-
       {/* Custom fields */}
-      <CustomFieldsEdit
-        fields={fields}
-        setFields={setFields}
-      />
+      <CustomFieldsEdit fields={fields} setFields={setFields} />
       {/* Custom fields end */}
 
       {/* Others */}
       <CipherOthersInfo
+        isOwner={isOwner}
         navigation={navigation}
         hasNote
         note={note}

@@ -29,7 +29,6 @@ export const NotiListItem = (props: Props) => {
       notifyApiError(res)
     }
   }
-
   const property = (() => {
     let title;
     let source;
