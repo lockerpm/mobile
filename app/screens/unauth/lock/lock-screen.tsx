@@ -77,7 +77,7 @@ export const LockScreen = observer(() => {
           style: "destructive",
           onPress: async () => {
             await logout()
-            navigation.navigate("login")
+            navigation.navigate("loginSelect")
           },
         },
       ])
