@@ -1057,5 +1057,21 @@
     "individual": "Individual",
     "business": "Business",
     "onpremise": "On-Premise"
+  },
+  "onpremise_passwordless": {
+    "title": "Enter the OTP code below to your Locker Desktop app to log in. Make sure that you’ve already registered your account on Desktop app with a FIDO device.",
+    "expired": "Code Expires in: {{ss}}s",
+    "new_otp": "Generate a new one",
+    "instruction": {
+      "label": "Instruction",
+      "1": "Log in on Desktop app",
+      "2": "Click on your profile menu on the top right",
+      "3": "Choose Passwordless Mobile Login",
+      "4": "Enter the OTP",
+      "go_back": "Go Back"
+    },
+    "qr_scan": "Scan QR code",
+    "more_step": "One more step",
+    "point_camera": "Point your camera to the QR Code on Desktop App to confirm Login"
   }
 }

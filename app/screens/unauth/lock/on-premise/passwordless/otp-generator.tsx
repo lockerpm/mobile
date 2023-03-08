@@ -21,7 +21,7 @@ const OTP_EXPIRED_COUNTER = 60
 
 export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack }: Props) => {
   const { uiStore } = useStores()
-  const { color } = useMixins()
+  const { color, translate } = useMixins()
   const [expireOtpCounter, setExpireOtpCounter] = useState(OTP_EXPIRED_COUNTER)
   const timerRef = React.useRef(expireOtpCounter)
 
@@ -51,7 +51,7 @@ export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack 
   }, [])
 
   return (
-    <ScrollView style={{width, padding: 20, paddingTop: 50 }}>
+    <ScrollView style={{ width, padding: 20, paddingTop: 50 }}>
       <View
         style={{
           alignItems: "center",
@@ -65,19 +65,14 @@ export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack 
         />
       </View>
 
-      <Text
-        text={
-          "Your Locker account is set to log in with Passwordless Login. Please enter the OTP below to Desktop App"
-        }
-        style={{ marginBottom: 32 }}
-      />
+      <Text text={translate("onpremise_passwordless.title")} style={{ marginBottom: 32 }} />
 
       <View style={{ alignItems: "center", marginBottom: 16 }}>
         <NumberDisplay number={otp} width={width} />
       </View>
 
       <Text
-        text={`QR Code Expire in: ${expireOtpCounter}s`}
+        text={translate("onpremise_passwordless.expired", {ss: expireOtpCounter})}
         style={{ color: color.error, textAlign: "center" }}
       />
 
@@ -87,7 +82,7 @@ export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack 
           reGenOtp()
         }}
         size="large"
-        text="Generate a new one"
+        text={translate("onpremise_passwordless.new_otp")}
         style={{ marginBottom: 8 }}
       />
 
@@ -100,23 +95,23 @@ export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack 
           marginBottom: 16,
         }}
       >
-        <Text preset="label" text="Instructions " style={{ marginBottom: 16 }} />
-        <Instruction step="01." icon="app-logo" text="Log in on Desktop app" />
-        <Instruction step="02." icon="avatar" text="Click on your profile menu on the top right" />
-        <Instruction step="03." icon="key-hole" text="Choose passwordless Login on Mobile App" />
-        <Instruction step="04." icon="number-square-one" text="Enter the OTP" />
+        <Text preset="label" text={translate("onpremise_passwordless.instruction")} style={{ marginBottom: 16 }} />
+        <Instruction step="01." icon="app-logo" text={translate('onpremise_passwordless.instruction.1')} />
+        <Instruction step="02." icon="avatar" text={translate('onpremise_passwordless.instruction.2')} />
+        <Instruction step="03." icon="key-hole" text={translate('onpremise_passwordless.instruction.3')}/>
+        <Instruction step="04." icon="number-square-one" text={translate('onpremise_passwordless.instruction.4')}/>
       </View>
 
-      <Button onPress={goNext} size="large" text="Continue" style={{ marginBottom: 16 }} />
+      <Button onPress={goNext} size="large" text={translate('common.continue')} style={{ marginBottom: 16 }} />
 
       <Button
         onPress={goBack}
         size="large"
-        text="Go Back"
+        text={translate('onpremise_passwordless.instruction.go_back')}
         style={{ marginBottom: 16, backgroundColor: color.block }}
         textStyle={{ color: color.textBlack }}
       />
-      <View style={{height: 120}}/>
+      <View style={{ height: 120 }} />
     </ScrollView>
   )
 })
@@ -180,7 +175,7 @@ function Digit({ digit }: { digit: number }) {
   const aref = useRef<ScrollView>()
   const { color } = useMixins()
   useEffect(() => {
-    aref.current.scrollTo({x: 5, y: digit * 50, animated: true})
+    aref.current.scrollTo({ x: 5, y: digit * 50, animated: true })
   }, [digit])
 
   return (
