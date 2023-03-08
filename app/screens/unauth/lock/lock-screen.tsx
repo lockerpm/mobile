@@ -105,18 +105,18 @@ export const LockScreen = observer(() => {
   }, [])
   // ---------------------- RENDER -------------------------
 
-  if (lockMethod === "masterpass") {
-    if (route.params.type === "onPremise") {
-      return (
-        <OnPremiseLockMasterPassword
-          data={route.params.data}
-          email={route.params.email}
-          biometryType={biometryType}
-          handleLogout={handleLogout}
-        />
-      )
-    }
-    return <LockByMasterPassword biometryType={biometryType} handleLogout={handleLogout} />
-  }
+  // if (lockMethod === "masterpass") {
+  //   if (route.params.type === "onPremise") {
+  //     return (
+  //       <OnPremiseLockMasterPassword
+  //         data={route.params.data}
+  //         email={route.params.email}
+  //         biometryType={biometryType}
+  //         handleLogout={handleLogout}
+  //       />
+  //     )
+  //   }
+  //   return <LockByMasterPassword biometryType={biometryType} handleLogout={handleLogout} />
+  // }
   return <LockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
 })

@@ -1050,5 +1050,21 @@
     "individual": "Cá nhân",
     "business": "Doanh nghiệp",
     "onpremise": "On-Premise"
+  },
+  "onpremise_passwordless": {
+    "title": "Nhập mã OTP dưới đây vào ứng dụng Locker trên máy tính của bạn. Hãy đảm bảo rằng bạn đã đăng ký tài khoản trên ứng dụng máy tính với thiết bị FIDO.",
+    "expired": "Mã hết hiệu lực trong: {{ss}}s",
+    "new_otp": "Tạo mã mới",
+    "instruction": {
+      "label": "Hướng dẫn",
+      "1": "Đăng nhập vào ứng dụng máy tính",
+      "2": "Nhấp chuột vào memu hồ sơ của bạn ở góc trên bên phải",
+      "3": "Chọn Đăng nhập không mật khẩu vào điện thoại",
+      "4": "Nhập mã OTP",
+      "go_back": "Quay lại"
+    },
+    "qr_scan": "Quét mã QR",
+    "more_step": "Bước cuối cùng",
+    "point_camera": "Quét mã QR trên ứng dụng máy tính của bạn để xác nhận Đăng nhập"
   }
 }

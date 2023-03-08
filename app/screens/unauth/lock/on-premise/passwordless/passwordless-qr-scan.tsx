@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite"
 import { useCipherAuthenticationMixins } from "../../../../../services/mixins/cipher/authentication"
 import { useNavigation } from "@react-navigation/native"
 import { SymmetricCryptoKey } from "../../../../../../core/models/domain"
+import { useMixins } from "../../../../../services/mixins"
 
 interface Props {
   index: number
@@ -18,6 +19,8 @@ interface Props {
 
 export const PasswordlessQrScan = observer(
   ({ otp, goBack, index, setSymmetricCryptoKey, nextStep }: Props) => {
+
+    const {translate} = useMixins()
     const { width, height } = Dimensions.get("screen")
     const navigation = useNavigation()
     const [onScanQR, setonScanQR] = useState(false)
@@ -45,7 +48,7 @@ export const PasswordlessQrScan = observer(
 
     return (
       <View style={{ flex: 1, width, height }}>
-        <Header leftIcon="arrow-left" onLeftPress={goBack} title="Scan QR code" />
+        <Header leftIcon="arrow-left" onLeftPress={goBack} title={translate("onpremise_passwordless.qr_scan")} />
         <View
           style={{
             paddingTop: 70,
@@ -62,8 +65,8 @@ export const PasswordlessQrScan = observer(
             padding: 20,
           }}
         >
-          <Text preset="bold" text="One more step" style={{ marginBottom: 16 }} size="3xl" />
-          <Text text="Point your camera to the QR Code on Desktop App to confirm Login" />
+          <Text preset="bold" text={translate("onpremise_passwordless.more_step")} style={{ marginBottom: 16 }} size="3xl" />
+          <Text text={translate("onpremise_passwordless.point_camera")} />
         </View>
       </View>
     )
