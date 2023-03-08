@@ -3,7 +3,6 @@ import { observer } from "mobx-react-lite"
 import React, { useEffect, useRef, useState } from "react"
 import { Dimensions, ScrollView } from "react-native"
 import { Screen } from "../../../../../components/cores"
-import { LanguagePicker } from "../../../../../components/utils"
 import { useStores } from "../../../../../models"
 import { useMixins } from "../../../../../services/mixins"
 import { useCipherAuthenticationMixins } from "../../../../../services/mixins/cipher/authentication"
@@ -75,7 +74,6 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
 
   return (
     <Screen safeAreaEdges={["top"]}>
-      {index === 0 && <LanguagePicker />}
       {index === 0 && (
         <ScrollView
           horizontal

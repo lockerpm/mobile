@@ -1,16 +1,14 @@
 import { observer } from "mobx-react-lite"
-import React, { useState } from "react"
-import { View, Image, Platform, useWindowDimensions } from "react-native"
+import React, { useEffect, useRef, useState } from "react"
+import { View, Image, useWindowDimensions, ScrollView } from "react-native"
 import { APP_ICON } from "../../../../../common/mappings"
-import { ActionSheet } from "../../../../../components"
-import { Button, Text } from "../../../../../components/cores"
+import { Button, ImageIcon, Text } from "../../../../../components/cores"
 import { useStores } from "../../../../../models"
 import { verticalScale } from "../../../../../services/mixins/adaptive-layout"
-import Animated, { scrollTo, useDerivedValue, useAnimatedRef } from "react-native-reanimated"
+import { useMixins } from "../../../../../services/mixins"
 
 const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-const indices = [0, 1, 2, 3, 5, 6]
-const range = [0, 999999]
+const indices = [0, 1, 2, 3, 4, 5]
 
 interface Props {
   otp: number
@@ -19,70 +17,107 @@ interface Props {
   goBack: () => void
 }
 
+const OTP_EXPIRED_COUNTER = 60
+
 export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack }: Props) => {
   const { uiStore } = useStores()
+  const { color } = useMixins()
+  const [expireOtpCounter, setExpireOtpCounter] = useState(OTP_EXPIRED_COUNTER)
+  const timerRef = React.useRef(expireOtpCounter)
 
-  const [otpInfo, setOtpInfo] = useState(false)
   const { width, height } = useWindowDimensions()
-  const number = useDerivedValue(() => {
-    const val = range[0] + Math.round(otp * (range[1] - range[0]))
-    return val
-  })
+
+  const reGenOtp = () => {
+    setOtp(randomOtpNumber())
+    setExpireOtpCounter(OTP_EXPIRED_COUNTER)
+    timerRef.current = OTP_EXPIRED_COUNTER
+  }
+
+  const counter = () => {
+    if (timerRef.current === 0) {
+      reGenOtp()
+    }
+    timerRef.current -= 1
+    setExpireOtpCounter(timerRef.current)
+  }
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      counter()
+    }, 1000)
+    return () => {
+      clearInterval(timerId)
+    }
+  }, [])
 
   return (
-    <View style={{ flex: 1, width, height, padding: 20, paddingTop: 70 }}>
+    <ScrollView style={{width, padding: 20, paddingTop: 50 }}>
       <View
         style={{
           alignItems: "center",
-          marginBottom: 40,
+          marginBottom: 20,
         }}
       >
         <Image
-          source={uiStore.isDark ? APP_ICON.textVerticalLight : APP_ICON.textVertical}
-          style={{ height: verticalScale(80), width: verticalScale(90) }}
+          source={uiStore.isDark ? APP_ICON.textHorizontalLight : APP_ICON.textHorizontal}
+          style={{ width: verticalScale(132), height: verticalScale(41) }}
+          resizeMode="contain"
         />
       </View>
 
       <Text
-        text={"Enter the OTP code displayed below to Desktop App to continue log in"}
-        style={{ marginBottom: 16 }}
+        text={
+          "Your Locker account is set to log in with Passwordless Login. Please enter the OTP below to Desktop App"
+        }
+        style={{ marginBottom: 32 }}
       />
 
-      <View style={{ alignItems: "center" }}>
-        <NumberDisplay number={number} />
+      <View style={{ alignItems: "center", marginBottom: 16 }}>
+        <NumberDisplay number={otp} width={width} />
       </View>
 
-      <Button onPress={goNext} size="large" text="QR scan" style={{ marginBottom: 16 }} />
-      <Button
-        onPress={() => {
-          setOtp(randomOtpNumber())
-        }}
-        size="large"
-        text="Re gen Otp"
-        style={{ marginBottom: 16 }}
+      <Text
+        text={`QR Code Expire in: ${expireOtpCounter}s`}
+        style={{ color: color.error, textAlign: "center" }}
       />
 
-      <ActionSheet isOpen={otpInfo} onClose={() => setOtpInfo(false)}>
-        <View style={{ width: "100%", paddingHorizontal: 20 }}>
-          <Text
-            preset="bold"
-            text="Your Business Locker is set to log in with Passwordless Login method. To log in to your Vault, please follow the steps below: "
-            style={{ marginBottom: 16 }}
-          />
+      <Button
+        preset="teriatary"
+        onPress={() => {
+          reGenOtp()
+        }}
+        size="large"
+        text="Generate a new one"
+        style={{ marginBottom: 8 }}
+      />
 
-          <Text text={"1. Open your Vault on Locker Desktop App"} style={{ marginBottom: 16 }} />
+      <View
+        style={{
+          width: "100%",
+          padding: 20,
+          backgroundColor: color.block,
+          borderRadius: 12,
+          marginBottom: 16,
+        }}
+      >
+        <Text preset="label" text="Instructions " style={{ marginBottom: 16 }} />
+        <Instruction step="01." icon="app-logo" text="Log in on Desktop app" />
+        <Instruction step="02." icon="avatar" text="Click on your profile menu on the top right" />
+        <Instruction step="03." icon="key-hole" text="Choose passwordless Login on Mobile App" />
+        <Instruction step="04." icon="number-square-one" text="Enter the OTP" />
+      </View>
 
-          <Text
-            text={"2. Click on    button on the top right > choose Passwordless Login on Phone"}
-            style={{ marginBottom: 16 }}
-          />
-          <Text
-            text={"3. Click on Continue button below to receive an OTP code "}
-            style={{ marginBottom: 16 }}
-          />
-        </View>
-      </ActionSheet>
-    </View>
+      <Button onPress={goNext} size="large" text="Continue" style={{ marginBottom: 16 }} />
+
+      <Button
+        onPress={goBack}
+        size="large"
+        text="Go Back"
+        style={{ marginBottom: 16, backgroundColor: color.block }}
+        textStyle={{ color: color.textBlack }}
+      />
+      <View style={{height: 120}}/>
+    </ScrollView>
   )
 })
 
@@ -90,18 +125,45 @@ export const randomOtpNumber = () => {
   return Math.round(Math.random() * 1000000)
 }
 
-function getDigit(number: Animated.SharedValue<number>, i: number) {
-  return useDerivedValue(() => {
-    return Math.floor(number.value / 10 ** i) % 10
-  })
+const Instruction = ({
+  step,
+  icon,
+  text,
+}: {
+  step: string
+  icon: "avatar" | "app-logo" | "key-hole" | "number-square-one"
+  text: string
+}) => {
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 16,
+      }}
+    >
+      <Text text={step} />
+      <ImageIcon icon={icon} size={32} style={{ marginHorizontal: 12 }} />
+      <Text
+        text={text}
+        style={{
+          maxWidth: "75%",
+        }}
+      />
+    </View>
+  )
 }
 
-function NumberDisplay({ number }: { number: Animated.SharedValue<number> }) {
+function getDigit(number: number, i: number) {
+  return parseInt(number.toString().charAt(i))
+}
+
+function NumberDisplay({ number, width }: { number: number; width: number }) {
   return (
-    <View style={{ height: 150, width: 200 }}>
+    <View style={{ width: width, height: 50, paddingHorizontal: 20 }}>
       <View
         style={{
-          flexDirection: "row-reverse",
+          flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
         }}
@@ -114,38 +176,32 @@ function NumberDisplay({ number }: { number: Animated.SharedValue<number> }) {
   )
 }
 
-function Digit({ digit }: { digit: Animated.SharedValue<number> }) {
-  const aref = useAnimatedRef<Animated.ScrollView>()
-
-  useDerivedValue(() => {
-    if (Platform.OS === "web") {
-      if (aref && aref.current) {
-        aref.current.getNode().scrollTo({ y: digit.value * 200 })
-      }
-    } else {
-      // TODO fix this
-      scrollTo(aref, 0, digit.value * 200, true)
-    }
-  })
+function Digit({ digit }: { digit: number }) {
+  const aref = useRef<ScrollView>()
+  const { color } = useMixins()
+  useEffect(() => {
+    aref.current.scrollTo({x: 5, y: digit * 50, animated: true})
+  }, [digit])
 
   return (
-    <View style={{ height: 200, width: Platform.OS === "web" ? 50 : undefined }}>
-      <Animated.ScrollView ref={aref}>
+    <View style={{ height: 50, width: 40, borderBottomWidth: 2, borderBottomColor: color.text }}>
+      <ScrollView ref={aref}>
         {digits.map((i) => {
           return (
             <View
               style={{
-                height: 200,
+                height: 50,
                 alignItems: "center",
                 flexDirection: "row",
+                justifyContent: "center",
               }}
               key={i}
             >
-              <Text style={{ fontSize: 30 }}>{i}</Text>
+              <Text style={{ fontSize: 24, fontWeight: "600" }}>{i}</Text>
             </View>
           )
         })}
-      </Animated.ScrollView>
+      </ScrollView>
     </View>
   )
 }

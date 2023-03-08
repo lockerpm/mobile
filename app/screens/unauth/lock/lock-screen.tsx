@@ -96,10 +96,11 @@ export const LockScreen = observer(() => {
       }
       route.params.email && user.setOnPremaiseEmail(route.params.email)
       user.setOnPremiseUser(true)
-      route.params.data?.base_api &&
+      if (route.params.data?.base_api) {
         user.setOnPremiseLastBaseUrl(route.params.data.base_api + "/v3")
-      route.params.data?.base_api &&
         user.environment.api.apisauce.setBaseURL(route.params.data.base_api + "/v3")
+
+      }
     }
   }, [])
   // ---------------------- RENDER -------------------------

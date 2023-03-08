@@ -1,5 +1,6 @@
 import { FlexStyle } from 'react-native'
 import { Edge, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { IS_IOS } from '../config/constants'
 
 export type ExtendedEdge = Edge | 'start' | 'end'
 
@@ -39,6 +40,10 @@ export function useSafeAreaInsetsStyle(
   const insets = useSafeAreaInsets()
 
   return safeAreaEdges.reduce((acc, e) => {
+    if (e ==='bottom') {
+      const extra = !IS_IOS ? 12 : 0
+      return { ...acc, [`${property}${propertySuffixMap[e]}`]: insets[edgeInsetMap[e] ?? e] + extra}
+    }
     return { ...acc, [`${property}${propertySuffixMap[e]}`]: insets[edgeInsetMap[e] ?? e] }
   }, {})
 }

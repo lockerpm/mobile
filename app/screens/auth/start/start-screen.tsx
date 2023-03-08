@@ -7,8 +7,6 @@ import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import NetInfo from "@react-native-community/netinfo"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
-import { AccountType } from "../../../config/types"
 
 export const StartScreen = observer(() => {
   const { user, uiStore, enterpriseStore } = useStores()
