@@ -86,6 +86,10 @@ export const imgIconRegistry = {
   password: require('../../../../assets/icon/password.png'),
   wallet: require('../../../../assets/icon/wallet.png'),
   wand: require('../../../../assets/icon/wand.png'),
+  'app-logo': require('../../../../assets/icon/app-logo.png'),
+  avatar: require('../../../../assets/icon/avatar.png'),
+  'key-hole': require('../../../../assets/icon/key-hole.png'),
+  'number-square-one': require('../../../../assets/icon/number-square-one.png'),
 }
 
 const $imageStyle: ImageStyle = {

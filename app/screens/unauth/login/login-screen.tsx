@@ -3,7 +3,6 @@ import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { Layout, Text, Button } from "../../../components"
-import { LanguagePicker } from "../../../components/utils"
 import { useMixins } from "../../../services/mixins"
 import { spacing } from "../../../theme"
 import { DefaultLogin } from "./default"
@@ -12,7 +11,6 @@ import { Otp } from "./2fa/otp"
 import { useStores } from "../../../models"
 import { RootParamList } from "../../../navigators"
 import { BASE_URL } from "../../../config/constants"
-import { Header } from "../../../components/cores"
 
 export const LoginScreen = observer(() => {
   const navigation = useNavigation()
