@@ -65,6 +65,7 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
     }
   }
 
+
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
     if (user.isBiometricUnlock) {

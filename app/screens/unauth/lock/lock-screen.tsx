@@ -93,6 +93,7 @@ export const LockScreen = observer(() => {
     if (route.params.type === "onPremise") {
       if (route.params.data.login_method !== "password") {
         setLogMethod("passwordless")
+        user.setPasswordlessLogin(true)
       }
       route.params.email && user.setOnPremaiseEmail(route.params.email)
       user.setOnPremiseUser(true)
@@ -105,18 +106,18 @@ export const LockScreen = observer(() => {
   }, [])
   // ---------------------- RENDER -------------------------
 
-  // if (lockMethod === "masterpass") {
-  //   if (route.params.type === "onPremise") {
-  //     return (
-  //       <OnPremiseLockMasterPassword
-  //         data={route.params.data}
-  //         email={route.params.email}
-  //         biometryType={biometryType}
-  //         handleLogout={handleLogout}
-  //       />
-  //     )
-  //   }
-  //   return <LockByMasterPassword biometryType={biometryType} handleLogout={handleLogout} />
-  // }
+  if (lockMethod === "masterpass") {
+    if (route.params.type === "onPremise") {
+      return (
+        <OnPremiseLockMasterPassword
+          data={route.params.data}
+          email={route.params.email}
+          biometryType={biometryType}
+          handleLogout={handleLogout}
+        />
+      )
+    }
+    return <LockByMasterPassword biometryType={biometryType} handleLogout={handleLogout} />
+  }
   return <LockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
 })
