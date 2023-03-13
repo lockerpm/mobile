@@ -75,6 +75,7 @@ export const UserModel = types
     // On premise user
     onPremiseUser: types.maybeNull(types.boolean),
     onPremiseLastBaseUrl: types.maybeNull(types.string),
+    isPasswordlessLogin: types.maybeNull(types.boolean),
 
     // User settings
     language: types.optional(types.string, "en"),
@@ -108,6 +109,9 @@ export const UserModel = types
     // Info
     setOnPremiseUser: (val: boolean) => {
       self.onPremiseUser = val
+    },
+    setPasswordlessLogin: (val: boolean) => {
+      self.isPasswordlessLogin = val
     },
     setOnPremiseLastBaseUrl: (baseUrl: string) => {
       self.onPremiseLastBaseUrl = baseUrl
@@ -708,7 +712,7 @@ export const UserModel = types
       return res
     },
   }))
-  .postProcessSnapshot(omit(["isLoggedInPw", "isMobileLangChange"]))
+  .postProcessSnapshot(omit(["isLoggedInPw", "isMobileLangChange", "isPasswordlessLogin"]))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

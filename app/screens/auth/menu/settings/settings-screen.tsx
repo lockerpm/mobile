@@ -11,15 +11,13 @@ import ReactNativeBiometrics from "react-native-biometrics"
 import { AutofillDataType, loadShared, saveShared } from "../../../../utils/keychain"
 import { IS_IOS } from "../../../../config/constants"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
-import moment from 'moment'
-
+import moment from "moment"
 
 const SECTION_TITLE: TextStyle = {
   fontSize: fontSize.small,
   marginHorizontal: 20,
   marginBottom: 12,
 }
-
 
 export const SettingsScreen = observer(() => {
   const navigation = useNavigation()
@@ -39,16 +37,16 @@ export const SettingsScreen = observer(() => {
     setIsLoading(false)
 
     if (!available) {
-      notify('error', translate('error.biometric_not_support'))
+      notify("error", translate("error.biometric_not_support"))
       return
     }
 
     const { success } = await ReactNativeBiometrics.simplePrompt({
-      promptMessage: 'Verify FaceID/TouchID'
+      promptMessage: "Verify FaceID/TouchID",
     })
 
     if (!success) {
-      notify('error', translate('error.biometric_unlock_failed'))
+      notify("error", translate("error.biometric_unlock_failed"))
       return
     }
 
@@ -57,7 +55,7 @@ export const SettingsScreen = observer(() => {
     // Update autofill settings
     await updateAutofillFaceIdSetting(true)
 
-    notify('success', translate('success.biometric_enabled'))
+    notify("success", translate("success.biometric_enabled"))
   }
 
   const updateAutofillFaceIdSetting = async (enabled: boolean) => {
@@ -68,14 +66,14 @@ export const SettingsScreen = observer(() => {
     if (credentials && credentials.password) {
       const sharedData: AutofillDataType = JSON.parse(credentials.password)
       sharedData.faceIdEnabled = enabled
-      await saveShared('autofill', JSON.stringify(sharedData))
+      await saveShared("autofill", JSON.stringify(sharedData))
     }
   }
 
   const syncDataManually = async () => {
     const res = await startSyncProcess(Date.now())
-    if (res.kind === 'ok') {
-      notify('success', translate('success.sync_success'))
+    if (res.kind === "ok") {
+      notify("success", translate("success.sync_success"))
     }
   }
 
@@ -84,7 +82,7 @@ export const SettingsScreen = observer(() => {
   let isBacking = false
   useEffect(() => {
     const handleBack = (e) => {
-      if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
+      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
         navigation.dispatch(e.data.action)
         return
       }
@@ -100,10 +98,10 @@ export const SettingsScreen = observer(() => {
       navigation.goBack()
     }
 
-    navigation.addListener('beforeRemove', handleBack)
+    navigation.addListener("beforeRemove", handleBack)
 
     return () => {
-      navigation.removeListener('beforeRemove', handleBack)
+      navigation.removeListener("beforeRemove", handleBack)
     }
   }, [navigation])
 
@@ -111,37 +109,37 @@ export const SettingsScreen = observer(() => {
 
   const settings = {
     language: {
-      value: user.language || 'en',
+      value: user.language || "en",
       onChange: (lang: string) => {
         user.setLanguage(lang)
         user.changeLanguage()
       },
       options: [
         {
-          label: 'Tiếng Việt',
-          value: 'vi'
+          label: "Tiếng Việt",
+          value: "vi",
         },
         {
-          label: 'English',
-          value: 'en'
-        }
-      ]
+          label: "English",
+          value: "en",
+        },
+      ],
     },
     theme: {
-      value: uiStore.isDark ? 'dark' : 'light',
+      value: uiStore.isDark ? "dark" : "light",
       onChange: (theme: string) => {
-        uiStore.setIsDark(theme === 'dark')
+        uiStore.setIsDark(theme === "dark")
       },
       options: [
         {
-          label: translate('settings.light_theme'),
-          value: 'light'
+          label: translate("settings.light_theme"),
+          value: "light",
         },
         {
-          label: translate('settings.dark_theme'),
-          value: 'dark'
-        }
-      ]
+          label: translate("settings.dark_theme"),
+          value: "dark",
+        },
+      ],
     },
     defaultTab: {
       value: user.defaultTab,
@@ -150,26 +148,26 @@ export const SettingsScreen = observer(() => {
       },
       options: [
         {
-          label: translate('common.home'),
-          value: 'homeTab'
+          label: translate("common.home"),
+          value: "homeTab",
         },
         {
-          label: translate('common.browse'),
-          value: 'browseTab'
+          label: translate("common.browse"),
+          value: "browseTab",
         },
         {
-          label: translate('authenticator.title'),
-          value: 'authenticatorTab'
+          label: translate("authenticator.title"),
+          value: "authenticatorTab",
         },
         {
-          label: translate('common.tools'),
-          value: 'toolsTab'
+          label: translate("common.tools"),
+          value: "toolsTab",
         },
         {
-          label: translate('common.menu'),
-          value: 'menuTab'
-        }
-      ]
+          label: translate("common.menu"),
+          value: "menuTab",
+        },
+      ],
     },
     biometric: {
       value: user.isBiometricUnlock,
@@ -180,83 +178,87 @@ export const SettingsScreen = observer(() => {
           user.setBiometricUnlock(false)
           updateAutofillFaceIdSetting(false)
         }
-      }
+      },
     },
     timeout: {
       value: user.appTimeout || 0,
       onChange: user.setAppTimeout,
       options: [
         {
-          label: `30 ${translate('common.seconds')}`,
-          value: 30 * 1000
+          label: `30 ${translate("common.seconds")}`,
+          value: 30 * 1000,
         },
         {
-          label: `1 ${translate('common.minute')}`,
-          value: 1 * 60 * 1000
+          label: `1 ${translate("common.minute")}`,
+          value: 1 * 60 * 1000,
         },
         {
-          label: `3 ${translate('common.minutes')}`,
-          value: 3 * 60 * 1000
+          label: `3 ${translate("common.minutes")}`,
+          value: 3 * 60 * 1000,
         },
         {
-          label: translate('settings.on_screen_off'),
-          value: AppTimeoutType.SCREEN_OFF
+          label: translate("settings.on_screen_off"),
+          value: AppTimeoutType.SCREEN_OFF,
         },
         {
-          label: translate('settings.on_app_close'),
-          value: AppTimeoutType.APP_CLOSE
-        }
-      ]
+          label: translate("settings.on_app_close"),
+          value: AppTimeoutType.APP_CLOSE,
+        },
+      ],
     },
     timeoutAction: {
-      value: user.appTimeoutAction || 'lock',
+      value: user.appTimeoutAction || "lock",
       onChange: user.setAppTimeoutAction,
       options: [
         {
-          label: translate('common.lock'),
-          value: TimeoutActionType.LOCK
+          label: translate("common.lock"),
+          value: TimeoutActionType.LOCK,
         },
         {
-          label: translate('common.logout'),
-          value: TimeoutActionType.LOGOUT
-        }
-      ]
-    }
+          label: translate("common.logout"),
+          value: TimeoutActionType.LOGOUT,
+        },
+      ],
+    },
   }
 
   return (
     <Layout
       isContentOverlayLoading={isLoading}
-      header={(
+      header={
         <Header
           goBack={() => {
             navigation.goBack()
           }}
-          title={translate('common.settings')}
-          right={(<View style={{ width: 30 }} />)}
+          title={translate("common.settings")}
+          right={<View style={{ width: 30 }} />}
         />
-      )}
+      }
       containerStyle={{ backgroundColor: color.block, paddingHorizontal: 0 }}
     >
       {/* Account */}
-      <Text
-        text={translate('common.account').toUpperCase()}
-        style={SECTION_TITLE}
-      />
-      <View style={[commonStyles.GRAY_SCREEN_SECTION, {
-        backgroundColor: color.background
-      }]}>
+      <Text text={translate("common.account").toUpperCase()} style={SECTION_TITLE} />
+      <View
+        style={[
+          commonStyles.GRAY_SCREEN_SECTION,
+          {
+            backgroundColor: color.background,
+          },
+        ]}
+      >
         {/* Change master pass */}
-        <SettingsItem
-          name={translate('settings.change_master_pass')}
-          action={() => navigation.navigate('changeMasterPassword')}
-        />
+        {!user.isPasswordlessLogin && (
+          <SettingsItem
+            name={translate("settings.change_master_pass")}
+            action={() => navigation.navigate("changeMasterPassword")}
+          />
+        )}
         {/* Change master pass end */}
 
         {/* Notifications */}
         <SettingsItem
-          name={translate('common.notifications')}
-          action={() => navigation.navigate('notificationSettings')}
+          name={translate("common.notifications")}
+          action={() => navigation.navigate("notificationSettings")}
         />
         {/* Notifications end */}
 
@@ -265,14 +267,12 @@ export const SettingsScreen = observer(() => {
           value={settings.language.value}
           onChange={settings.language.onChange}
           options={settings.language.options}
-          title={translate('common.language')}
+          title={translate("common.language")}
           renderSelected={({ label }) => (
             <SettingsItem
-              style={{ width: '100%' }}
-              name={translate('common.language')}
-              right={(
-                <Text text={label} />
-              )}
+              style={{ width: "100%" }}
+              name={translate("common.language")}
+              right={<Text text={label} />}
             />
           )}
         />
@@ -283,80 +283,79 @@ export const SettingsScreen = observer(() => {
           value={settings.theme.value}
           onChange={settings.theme.onChange}
           options={settings.theme.options}
-          title={translate('settings.theme')}
+          title={translate("settings.theme")}
           renderSelected={({ label }) => (
             <SettingsItem
-              style={{ width: '100%' }}
-              name={translate('settings.theme')}
-              right={(
-                <Text text={label} />
-              )}
+              style={{ width: "100%" }}
+              name={translate("settings.theme")}
+              right={<Text text={label} />}
             />
           )}
         />
         {/* Theme end */}
-
 
         {/* Default tab */}
         <Select
           value={settings.defaultTab.value}
           onChange={settings.defaultTab.onChange}
           options={settings.defaultTab.options}
-          title={translate('settings.defaultTab')}
+          title={translate("settings.defaultTab")}
           renderSelected={({ label }) => (
             <SettingsItem
               noBorder
-              style={{ width: '100%' }}
-              name={translate('settings.defaultTab')}
-              right={(
-                <Text text={label} />
-              )}
+              style={{ width: "100%" }}
+              name={translate("settings.defaultTab")}
+              right={<Text text={label} />}
             />
           )}
         />
         {/* Default tab end */}
-
-
-
       </View>
       {/* Account end */}
 
       {/* Security */}
       <Text
-        text={translate('common.security').toUpperCase()}
-        style={[SECTION_TITLE, {
-          marginTop: 15,
-        }]}
+        text={translate("common.security").toUpperCase()}
+        style={[
+          SECTION_TITLE,
+          {
+            marginTop: 15,
+          },
+        ]}
       />
-      <View style={[commonStyles.GRAY_SCREEN_SECTION, {
-        backgroundColor: color.background
-      }]}>
+      <View
+        style={[
+          commonStyles.GRAY_SCREEN_SECTION,
+          {
+            backgroundColor: color.background,
+          },
+        ]}
+      >
         {/* Emergency Access */}
         <SettingsItem
-          name={translate('emergency_access.title')}
-          action={() => navigation.navigate('emergencyAccess')}
+          name={translate("emergency_access.title")}
+          action={() => navigation.navigate("emergencyAccess")}
         />
-
 
         {/* Autofill */}
         <SettingsItem
-          name={translate('settings.autofill_service')}
-          action={() => navigation.navigate('autofillService')}
+          name={translate("settings.autofill_service")}
+          action={() => navigation.navigate("autofillService")}
         />
         {/* Autofill */}
 
         {/* Biometric */}
         <SettingsItem
-          name={translate('common.biometric_unlocking')}
+          name={translate("common.biometric_unlocking")}
           noCaret
-          right={(
+          right={
             <Switch
               value={settings.biometric.value}
               onValueChange={settings.biometric.onChage}
               trackColor={{ false: color.disabled, true: color.primary }}
               thumbColor={color.white}
             />
-          )}
+          }
         />
         {/* Biometric end */}
 
@@ -368,11 +367,9 @@ export const SettingsScreen = observer(() => {
           renderSelected={({ label }) => (
             <SettingsItem
               noBorder
-              style={{ width: '100%' }}
-              name={translate('settings.timeout')}
-              right={(
-                <Text text={label} />
-              )}
+              style={{ width: "100%" }}
+              name={translate("settings.timeout")}
+              right={<Text text={label} />}
             />
           )}
         />
@@ -401,58 +398,65 @@ export const SettingsScreen = observer(() => {
 
       {/* Import/Export */}
       <Text
-        text={translate('common.data').toUpperCase()}
-        style={[SECTION_TITLE, {
-          marginTop: 15,
-        }]}
+        text={translate("common.data").toUpperCase()}
+        style={[
+          SECTION_TITLE,
+          {
+            marginTop: 15,
+          },
+        ]}
       />
-      <View style={[commonStyles.GRAY_SCREEN_SECTION, {
-        backgroundColor: color.background
-      }]}>
+      <View
+        style={[
+          commonStyles.GRAY_SCREEN_SECTION,
+          {
+            backgroundColor: color.background,
+          },
+        ]}
+      >
         {/* Sync */}
         <SettingsItem
           isLoading={cipherStore.isSynching}
           disabled={uiStore.isOffline || cipherStore.isSynching}
-          name={translate('settings.sync_now')}
+          name={translate("settings.sync_now")}
           action={syncDataManually}
-          right={(
-            <Text text={moment(cipherStore.lastSync).fromNow()} />
-          )}
+          right={<Text text={moment(cipherStore.lastSync).fromNow()} />}
         />
         {/* Sync end */}
 
         {/* Import */}
         <SettingsItem
-          name={translate('settings.import')}
-          action={() => navigation.navigate('import')}
+          name={translate("settings.import")}
+          action={() => navigation.navigate("import")}
         />
         {/* Import end */}
 
         {/* Export */}
         <SettingsItem
           noBorder
-          name={translate('settings.export')}
-          action={() => navigation.navigate('export')}
+          name={translate("settings.export")}
+          action={() => navigation.navigate("export")}
         />
         {/* Export end */}
       </View>
       {/* Import/Export end */}
 
-
-
       <Text
-        text={translate('settings.danger_zone').toUpperCase()}
-        style={[SECTION_TITLE, {
-          marginTop: 15,
-        }]}
+        text={translate("settings.danger_zone").toUpperCase()}
+        style={[
+          SECTION_TITLE,
+          {
+            marginTop: 15,
+          },
+        ]}
       />
-      <SectionWrapperItem >
+      <SectionWrapperItem>
         {/* Delete tab */}
         <SettingsItem
           noBorder
           color={color.error}
-          style={{ width: '100%' }}
-          name={translate('settings.delete_account')}
+          style={{ width: "100%" }}
+          name={translate("settings.delete_account")}
           action={() => {
             Linking.openURL("https://locker.io/settings/account")
             // navigation.navigate("deleteAccount")

@@ -95,7 +95,7 @@ export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack 
           marginBottom: 16,
         }}
       >
-        <Text preset="label" text={translate("onpremise_passwordless.instruction")} style={{ marginBottom: 16 }} />
+        {/* <Text preset="label" text={translate("onpremise_passwordless.instruction")} style={{ marginBottom: 16 }} /> */}
         <Instruction step="01." icon="app-logo" text={translate('onpremise_passwordless.instruction.1')} />
         <Instruction step="02." icon="avatar" text={translate('onpremise_passwordless.instruction.2')} />
         <Instruction step="03." icon="key-hole" text={translate('onpremise_passwordless.instruction.3')}/>
