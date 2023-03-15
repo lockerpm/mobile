@@ -451,13 +451,12 @@ export const UserModel = types
       const res = await userApi.getUserPw(self.apiToken)
       if (res.kind === "ok") {
         self.saveUserPw(res.user)
-        /// TODO
         if (res.user.pwd_user_type === AccountType.ENTERPRISE) {
-          // const _userApi = new UserApi(self.environment.api)
-          // const _res = await _userApi.getEnterprise(res.user.apiToken)
-          // if (_res.kind === "ok") {
-          //   self.saveEnterprise(_res.data)
-          // }
+          const _userApi = new UserApi(self.environment.api)
+          const _res = await _userApi.getEnterprise(self.apiToken)
+          if (_res.kind === "ok") {
+            self.saveEnterprise(_res.data)
+          }
         }
       }
       return res

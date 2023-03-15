@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View } from 'react-native'
+import React, { useState } from "react"
+import { View } from "react-native"
 import {
   Layout,
   Button,
@@ -7,15 +7,16 @@ import {
   FloatingInput,
   PasswordStrength,
   PasswordPolicyViolationsModal,
-} from '../../../../components'
-import { useNavigation } from '@react-navigation/native'
-import { commonStyles } from '../../../../theme'
-import { useMixins } from '../../../../services/mixins'
-import { useCipherHelpersMixins } from '../../../../services/mixins/cipher/helpers'
-import { useCipherAuthenticationMixins } from '../../../../services/mixins/cipher/authentication'
-import { PolicyType } from '../../../../config/types'
-import { observer } from 'mobx-react-lite'
-import { useStores } from '../../../../models'
+  Text
+} from "../../../../components"
+import { useNavigation } from "@react-navigation/native"
+import { commonStyles } from "../../../../theme"
+import { useMixins } from "../../../../services/mixins"
+import { useCipherHelpersMixins } from "../../../../services/mixins/cipher/helpers"
+import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+import { PolicyType } from "../../../../config/types"
+import { observer } from "mobx-react-lite"
+import { useStores } from "../../../../models"
 
 export const ChangeMasterPasswordScreen = observer(() => {
   const navigation = useNavigation()
@@ -28,9 +29,10 @@ export const ChangeMasterPasswordScreen = observer(() => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(-1)
-  const [current, setCurrent] = useState('')
-  const [newPass, setNewPass] = useState('')
-  const [confirm, setConfirm] = useState('')
+  const [current, setCurrent] = useState("")
+  const [newPass, setNewPass] = useState("")
+  const [confirm, setConfirm] = useState("")
+  const [hint, setHint] = useState("")
 
   const [showViolationModal, setShowViolationModal] = useState(false)
   const [violations, setViolations] = useState<string[]>([])
@@ -59,9 +61,11 @@ export const ChangeMasterPasswordScreen = observer(() => {
 
   const handleChangePassword = async () => {
     setIsLoading(true)
-    const res = await changeMasterPassword(current, newPass)
-    if (res.kind === 'ok') {
-      navigation.navigate('loginSelect')
+
+    console.log(current, newPass, hint)
+    const res = await changeMasterPassword(current, newPass, hint)
+    if (res.kind === "ok") {
+      navigation.navigate("loginSelect")
     }
     setIsLoading(false)
   }
@@ -73,7 +77,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
       header={
         <Header
           goBack={() => navigation.goBack()}
-          title={translate('change_master_pass.title')}
+          title={translate("change_master_pass.title")}
           right={<View style={{ width: 30 }} />}
         />
       }
@@ -90,7 +94,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
       >
         <FloatingInput
           isPassword
-          label={translate('change_master_pass.current')}
+          label={translate("change_master_pass.current")}
           value={current}
           onChangeText={setCurrent}
           style={{ marginBottom: 20 }}
@@ -99,8 +103,8 @@ export const ChangeMasterPasswordScreen = observer(() => {
         <FloatingInput
           isPassword
           isInvalid={isError || !!masterPasswordError}
-          errorText={masterPasswordError || translate('common.password_not_match')}
-          label={translate('change_master_pass.new')}
+          errorText={masterPasswordError || translate("common.password_not_match")}
+          label={translate("change_master_pass.new")}
           value={newPass}
           onChangeText={(text) => {
             setNewPass(text)
@@ -114,18 +118,26 @@ export const ChangeMasterPasswordScreen = observer(() => {
         <FloatingInput
           isPassword
           isInvalid={isError}
-          errorText={translate('common.password_not_match')}
-          label={translate('change_master_pass.confirm')}
+          errorText={translate("common.password_not_match")}
+          label={translate("change_master_pass.confirm")}
           value={confirm}
           onChangeText={setConfirm}
-          style={{ marginBottom: 30, marginTop: 20 }}
+          style={{ marginBottom: 20, marginTop: 20 }}
+        />
+
+        {/* Hint */}
+        <FloatingInput
+          label={translate("create_master_pass.hint")}
+          onChangeText={setHint}
+          value={hint}
+          style={{ width: "100%", marginBottom: 30 }}
         />
 
         <Button
           isLoading={isLoading}
           isDisabled={isLoading || !isReady}
           onPress={preparePassword}
-          text={translate('common.save')}
+          text={translate("common.save")}
         />
       </View>
 
