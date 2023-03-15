@@ -78,7 +78,7 @@ const defaultData = {
   registerLocker: async (masterPassword: string, hint: string, passwordStrength: number) => {
     return { kind: "unknown" }
   },
-  changeMasterPassword: async (oldPassword: string, newPassword: string) => {
+  changeMasterPassword: async (oldPassword: string, newPassword: string, hint: string) => {
     return { kind: "unknown" }
   },
   updateNewMasterPasswordEA: async (
@@ -364,7 +364,6 @@ export const CipherAuthenticationMixinsProvider = observer(
       }
     }
 
-
     // Session login
     const sessionOtpLoginWithHashPassword = async (
       masterPasswordHash: string,
@@ -394,7 +393,6 @@ export const CipherAuthenticationMixinsProvider = observer(
         return { kind: "bad-data" }
       }
     }
-
 
     // Session login
     const sessionOtpLogin = async (
@@ -636,6 +634,7 @@ export const CipherAuthenticationMixinsProvider = observer(
     const changeMasterPassword = async (
       oldPassword: string,
       newPassword: string,
+      hint: string,
     ): Promise<{ kind: string }> => {
       try {
         // createMasterPwItem
@@ -655,13 +654,14 @@ export const CipherAuthenticationMixinsProvider = observer(
         }
 
         const oldKeyHash = await cryptoService.hashPassword(oldPassword, null)
-
+        console.log(hint)
         // Send API
         const res = await user.changeMasterPassword({
           key: encKey[1].encryptedString,
           new_master_password_hash: keyHash,
           master_password_hash: oldKeyHash,
           master_password_cipher: data,
+          new_master_password_hint: hint,
         })
         if (res.kind !== "ok") {
           notifyApiError(res)
@@ -823,7 +823,7 @@ export const CipherAuthenticationMixinsProvider = observer(
       clearAllData,
       handleDynamicLink,
       sessionQrLogin,
-      sessionOtpLoginWithHashPassword
+      sessionOtpLoginWithHashPassword,
     }
 
     return (

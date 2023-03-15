@@ -3,25 +3,20 @@ import { observer } from "mobx-react-lite"
 import React from "react"
 import { View, Image, TouchableOpacity } from "react-native"
 import { APP_ICON } from "../../../common/mappings"
-import { Button, Text } from "../../../components"
-import { Icon, Screen } from "../../../components/cores"
+import { Button, Text, Layout } from "../../../components"
+import { Icon } from "../../../components/cores"
 import { LanguagePicker } from "../../../components/utils"
 import { useStores } from "../../../models"
 import { useMixins } from "../../../services/mixins"
 import { verticalScale } from "../../../services/mixins/adaptive-layout"
-import { commonStyles, spacing } from "../../../theme"
+import {  spacing } from "../../../theme"
 
 export const LoginSelectScreen = observer(() => {
   const navigation = useNavigation()
   const { uiStore } = useStores()
   const { translate } = useMixins()
   return (
-    <Screen
-      safeAreaEdges={["top", "bottom"]}
-      contentContainerStyle={{
-        flex: 1,
-        padding: 20,
-      }}
+    <Layout
       footer={
         <View
           style={{
@@ -88,7 +83,7 @@ export const LoginSelectScreen = observer(() => {
           navigation.navigate("login", { type: "onPremise" })
         }}
       />
-    </Screen>
+    </Layout>
   )
 })
 

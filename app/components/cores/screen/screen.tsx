@@ -198,21 +198,21 @@ function ScreenWithScrolling(props: ScreenProps) {
 }
 
 export const Screen = observer((props: ScreenProps) => {
-  const { color } = useMixins()
+  const { color, isDark } = useMixins()
   const {
     backgroundColor = color.background,
     KeyboardAvoidingViewProps,
     keyboardOffset = 0,
     safeAreaEdges,
     StatusBarProps,
-    statusBarStyle = 'dark-content',
+    statusBarStyle = isDark ? 'light-content' :'dark-content',
   } = props
 
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
 
   return (
     <View style={[$containerStyle, { backgroundColor }, $containerInsets]}>
-      <StatusBar barStyle={statusBarStyle} {...StatusBarProps} />
+      <StatusBar barStyle={statusBarStyle} {...StatusBarProps} backgroundColor={isDark ? color.textBlack : color.white}/>
 
       <KeyboardAvoidingView
         behavior={isIos ? 'padding' : undefined}
