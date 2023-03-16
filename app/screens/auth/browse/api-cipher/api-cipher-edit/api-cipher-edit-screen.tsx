@@ -25,6 +25,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { toApiCipherData, ApiCipherData, API_METHODS } from "../api-cipher.type"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { PlanStorageLimitModal } from "../../plan-storage-limit-modal"
 
 type ApiCipherEditScreenProp = RouteProp<PrimaryParamList, "apiCiphers__edit">
 
@@ -86,7 +87,8 @@ export const ApiCipherEditScreen = observer(() => {
   const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
 
   const [isLoading, setIsLoading] = useState(false)
-
+  // plan storage limit modal
+  const [isOpenModal, setIsOpenModal] = useState(false)
   // ------------------ EFFECTS -----------------------
 
   useEffect(() => {
@@ -164,10 +166,17 @@ export const ApiCipherEditScreen = observer(() => {
           await shareFolderAddItem(collectionView, payload)
         }
       }
-
+      setIsLoading(false)
       navigation.goBack()
+    } else {
+      setIsLoading(false)
+
+      // reach limit plan stogare
+      // @ts-ignore
+      if (res?.data?.code === "5002") {
+        setIsOpenModal(true)
+      }
     }
-    setIsLoading(false)
   }
 
   const METHODS = [
@@ -214,7 +223,6 @@ export const ApiCipherEditScreen = observer(() => {
 
   return (
     <Layout
-      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
@@ -231,6 +239,7 @@ export const ApiCipherEditScreen = observer(() => {
           right={
             <Button
               preset="link"
+              isLoading={isLoading}
               isDisabled={isLoading || !name.trim()}
               text={translate("common.save")}
               onPress={handleSave}
@@ -247,6 +256,7 @@ export const ApiCipherEditScreen = observer(() => {
         />
       }
     >
+      <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
       {/* Name */}
       <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>

@@ -24,6 +24,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { PlanStorageLimitModal } from "../../plan-storage-limit-modal"
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, "notes__edit">
 
@@ -65,6 +66,8 @@ export const NoteEditScreen = observer(() => {
   // Params
   const [isLoading, setIsLoading] = useState(false)
 
+  // plan storage limit modal
+  const [isOpenModal, setIsOpenModal] = useState(false)
   const selectedCollection: CollectionView = route.params.collection
   // Watchers
   useEffect(() => {
@@ -127,16 +130,22 @@ export const NoteEditScreen = observer(() => {
           await shareFolderAddItem(collectionView, payload)
         }
       }
-
+      setIsLoading(false)
       navigation.goBack()
+    } else {
+      setIsLoading(false)
+
+      // reach limit plan stogare
+      // @ts-ignore
+      if (res?.data?.code === "5002") {
+        setIsOpenModal(true)
+      }
     }
-    setIsLoading(false)
   }
 
   // Render
   return (
     <Layout
-      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
@@ -153,6 +162,7 @@ export const NoteEditScreen = observer(() => {
           right={
             <Button
               preset="link"
+              isLoading={isLoading}
               isDisabled={isLoading || !name.trim()}
               text={translate("common.save")}
               onPress={handleSave}
@@ -169,6 +179,7 @@ export const NoteEditScreen = observer(() => {
         />
       }
     >
+      <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
       {/* Name */}
       <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>

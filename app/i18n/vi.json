@@ -111,6 +111,7 @@
     "touchid_unlocking": "Mở khóa bằng Touch ID",
     "unlock": "Mở khóa",
     "upgrade": "Nâng cấp",
+    "upgrade_now": "Nâng cấp ngay",
     "user": "Người dùng",
     "username": "Tên người dùng",
     "value": "Giá trị",
@@ -200,6 +201,7 @@
         "service_configuration_fetch_error": "Không thể tìm nạp cấu hình dịch vụ. Vui lòng thử lại"
       }
     },
+    "limit_storage": "Nâng cấp lên gói Premium để lưu trữ không giới hạn",
     "cannot_select_more": "Không thể chọn nhiều hơn {{count}} mục",
     "cannot_update_more_at_once": "Không thể thay đổi nhiều hơn {{count}} mục cùng một lúc.",
     "rooted_device": "Thiết bị của bạn đã bị can thiệp hệ điều hành, vì vậy không tương thích với ứng dụng này.",

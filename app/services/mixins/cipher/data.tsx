@@ -185,6 +185,8 @@ const defaultData = {
   syncProfile: async () => {
     return { kind: "unknown" }
   },
+
+  createRandomPasswords: async (params: { count: number; type: CipherType }) => null
 }
 
 export const CipherDataMixinsContext = createContext(defaultData)
@@ -215,6 +217,20 @@ export const CipherDataMixinsProvider = observer(
     const syncQueue = SyncQueue
 
     // ----------------------------- METHODS ---------------------------
+    const createRandomPasswords = async (params: { count: number; type: CipherType }) => {
+      const { count, type } = params
+
+      for (let i = 0; i < count; i++) {
+        const name = Math.random().toString()
+
+        const payload = newCipher(type)
+        payload.name = name
+        const passwordStrength = 1
+        await createCipher(payload, passwordStrength, [])
+      }
+
+      notify("success", "Done")
+    }
 
     // Reload offline cache
     const reloadCache = async (options?: { isOnline?: boolean; notCipher?: boolean }) => {
@@ -632,10 +648,8 @@ export const CipherDataMixinsProvider = observer(
               // exclude share folder item
               filters: [
                 (c: CipherView) =>
-                  c.collectionIds.length === 0 &&
-                  c.folderId &&
-                  c.folderId === folder.id,
-                  // : !f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name)
+                  c.collectionIds.length === 0 && c.folderId && c.folderId === folder.id,
+                // : !f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name)
               ],
             })
             return {
@@ -2456,6 +2470,8 @@ export const CipherDataMixinsProvider = observer(
       syncSingleFolder,
       syncSingleOrganization,
       syncProfile,
+
+      createRandomPasswords,
     }
 
     return (

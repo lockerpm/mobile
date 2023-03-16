@@ -85,7 +85,7 @@ export class CipherApi {
       return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error('Post cipher: ' + e.message)
-      return { kind: "bad-data" }
+      return { kind: "bad-data"}
     }
   }
 
