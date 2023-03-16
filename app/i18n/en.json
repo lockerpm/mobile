@@ -111,6 +111,7 @@
     "touchid_unlocking": "Unlock with Touch ID",
     "unlock": "Unlock",
     "upgrade": "Upgrade",
+    "upgrade_now": "Upgrade now",
     "user": "User",
     "username": "Username",
     "value": "Value",
@@ -200,6 +201,7 @@
         "service_configuration_fetch_error": "Could not fetch the service configuration. Please try again"
       }
     },
+    "limit_storage": "Upgrade to Premium to get Unlimited Storage",
     "cannot_select_more": "Cannot select more than {{count}} items",
     "cannot_update_more_at_once": "Cannot update more than {{count}} items at once",
     "rooted_device": "The operating system on your devices has been modified in an unauthorized way, therefore it is not compatible with this application.",

@@ -34,7 +34,6 @@ export * from "./identities/identity-info/identity-info-screen"
 export * from "./crypto-asset/crypto-wallet-edit/crypto-wallet-edit-screen"
 export * from "./crypto-asset/crypto-wallet-info/crypto-wallet-info-screen"
 
-
 // Other cipher types
 export * from "./api-cipher/api-cipher-edit/api-cipher-edit-screen"
 export * from "./api-cipher/api-cipher-info/api-cipher-info-screen"

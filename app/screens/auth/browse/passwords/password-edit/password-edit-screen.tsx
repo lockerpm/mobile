@@ -27,6 +27,7 @@ import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { PlanStorageLimitModal } from "../../plan-storage-limit-modal"
 
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, "passwords__edit">
 
@@ -78,6 +79,8 @@ export const PasswordEditScreen = observer(() => {
   const [collectionIds, setCollectionIds] = useState([])
   const [fields, setFields] = useState<FieldView[]>([])
 
+  // plan storage limit modal
+  const [isOpenModal, setIsOpenModal] = useState(false)
   // ----------------- EFFECTS ------------------
   // Set initial data
   useEffect(() => {
@@ -223,15 +226,21 @@ export const PasswordEditScreen = observer(() => {
       }
       setIsLoading(false)
       handleBack()
+    } else {
+      setIsLoading(false)
+
+      // reach limit plan stogare
+      // @ts-ignore
+      if (res?.data?.code === "5002") {
+        setIsOpenModal(true)
+      }
     }
-    setIsLoading(false)
   }
 
   // ----------------- RENDER ------------------
 
   return (
     <Layout
-      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
@@ -249,6 +258,7 @@ export const PasswordEditScreen = observer(() => {
           goBackText={translate("common.cancel")}
           right={
             <Button
+              isLoading={isLoading}
               isDisabled={isLoading || !name.trim()}
               preset="link"
               text={translate("common.save")}
@@ -266,6 +276,10 @@ export const PasswordEditScreen = observer(() => {
         />
       }
     >
+      <PlanStorageLimitModal
+        isOpen={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+      />
       {/* Name */}
       <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>

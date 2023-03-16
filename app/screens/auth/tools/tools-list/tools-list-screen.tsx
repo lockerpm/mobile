@@ -41,15 +41,20 @@ export const ToolsListScreen = observer(() => {
             <Button
               key={index}
               preset="link"
-              isDisabled={item.premium && isFreeAccount}
+              // isDisabled={item.premium && isFreeAccount}
               onPress={() => {
-                if (item.routeName === 'authenticator') {
-                  navigation.navigate('mainTab', { screen: 'authenticatorTab' })
-                } else if (item.routeName === 'passwordHealth') {
-                  navigation.navigate('healthStack')
+                if (item.premium && isFreeAccount) {
+                  navigation.navigate('payment')
                 } else {
-                  navigation.navigate(item.routeName, { fromTools: true })
-                }
+                  if (item.routeName === 'authenticator') {
+                    navigation.navigate('mainTab', { screen: 'authenticatorTab' })
+                  } else if (item.routeName === 'passwordHealth') {
+                    navigation.navigate('healthStack')
+                  } else {
+                    navigation.navigate(item.routeName, { fromTools: true })
+                  }
+                } 
+                
               }}
               style={{
                 borderBottomColor: color.line,

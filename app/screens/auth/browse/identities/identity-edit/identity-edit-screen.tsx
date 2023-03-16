@@ -24,6 +24,7 @@ import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { PlanStorageLimitModal } from "../../plan-storage-limit-modal"
 
 type IdentityEditScreenProp = RouteProp<PrimaryParamList, "identities__edit">
 type InputItem = {
@@ -95,7 +96,8 @@ export const IdentityEditScreen = observer(() => {
     mode !== "add" && collectionIds.length > 0 ? collectionIds[0] : null,
   )
   const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
-
+  // plan storage limit modal
+  const [isOpenModal, setIsOpenModal] = useState(false)
   // ------------------ EFFECTS -----------------------
 
   useEffect(() => {
@@ -181,8 +183,15 @@ export const IdentityEditScreen = observer(() => {
       }
 
       navigation.goBack()
+    } else {
+      setIsLoading(false)
+
+      // reach limit plan stogare
+      // @ts-ignore
+      if (res?.data?.code === "5002") {
+        setIsOpenModal(true)
+      }
     }
-    setIsLoading(false)
   }
 
   // ----------------- RENDER ----------------------
@@ -300,7 +309,6 @@ export const IdentityEditScreen = observer(() => {
 
   return (
     <Layout
-      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
@@ -316,6 +324,7 @@ export const IdentityEditScreen = observer(() => {
           goBackText={translate("common.cancel")}
           right={
             <Button
+              isLoading={isLoading}
               preset="link"
               isDisabled={isLoading || !name.trim()}
               text={translate("common.save")}
@@ -333,6 +342,7 @@ export const IdentityEditScreen = observer(() => {
         />
       }
     >
+      <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
       {/* Name */}
       <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>

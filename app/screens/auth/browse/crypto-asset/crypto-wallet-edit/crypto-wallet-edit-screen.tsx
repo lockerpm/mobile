@@ -27,6 +27,7 @@ import { ChainSelect } from "./chain-select"
 import { AppSelect } from "./app-select"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
+import { PlanStorageLimitModal } from "../../plan-storage-limit-modal"
 
 type NoteEditScreenProp = RouteProp<PrimaryParamList, "cryptoWallets__edit">
 
@@ -82,7 +83,8 @@ export const CryptoWalletEditScreen = observer(() => {
   const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
 
   const [isLoading, setIsLoading] = useState(false)
-
+  // plan storage limit modal
+  const [isOpenModal, setIsOpenModal] = useState(false)
   // -------------------------- COMPUTED ------------------------------
 
   // -------------------------- EFFECTS ------------------------------
@@ -168,17 +170,23 @@ export const CryptoWalletEditScreen = observer(() => {
           await shareFolderAddItem(collectionView, payload)
         }
       }
-
+      setIsLoading(false)
       navigation.goBack()
+    } else {
+      setIsLoading(false)
+
+      // reach limit plan stogare
+      // @ts-ignore
+      if (res?.data?.code === "5002") {
+        setIsOpenModal(true)
+      }
     }
-    setIsLoading(false)
   }
 
   // -------------------------- RENDER ------------------------------
 
   return (
     <Layout
-      isContentOverlayLoading={isLoading}
       containerStyle={{
         backgroundColor: color.block,
         paddingHorizontal: 0,
@@ -194,6 +202,7 @@ export const CryptoWalletEditScreen = observer(() => {
           goBackText={translate("common.cancel")}
           right={
             <Button
+              isLoading={isLoading}
               preset="link"
               isDisabled={isLoading || !name.trim()}
               text={translate("common.save")}
@@ -211,6 +220,7 @@ export const CryptoWalletEditScreen = observer(() => {
         />
       }
     >
+      <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
       {/* Name */}
       <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
