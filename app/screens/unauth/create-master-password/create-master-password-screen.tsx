@@ -60,7 +60,7 @@ export const CreateMasterPasswordScreen = observer(() => {
     setIsScreenLoading(true)
     await logout()
     setIsScreenLoading(false)
-    navigation.navigate('login')
+    navigation.navigate('loginSelect')
   }
 
   // Load teams to check master password policy
@@ -157,7 +157,7 @@ export const CreateMasterPasswordScreen = observer(() => {
           style: 'destructive',
           onPress: async () => {
             await logout()
-            navigation.navigate('login')
+            navigation.navigate('loginSelect')
           },
         },
       ])

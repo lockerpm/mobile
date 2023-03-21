@@ -3,7 +3,7 @@ import { Linking, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
-import { Layout, AutoImage as Image, Text, FloatingInput, Button, RecaptchaChecker, LanguagePicker } from "../../../components";
+import { Layout, AutoImage as Image, Text, FloatingInput, Button, RecaptchaChecker } from "../../../components";
 import { useMixins } from "../../../services/mixins"
 import { color, commonStyles, fontSize } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
@@ -14,6 +14,7 @@ import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { GitHubLoginModal } from "../login/github-login-modal"
 import { getCookies, logRegisterSuccessEvent } from "../../../utils/analytics"
 import { Logger } from "../../../utils/logger"
+import { LanguagePicker } from "../../../components/utils"
 
 
 export const SignupScreen = observer(() => {
@@ -117,7 +118,7 @@ export const SignupScreen = observer(() => {
     if (res.kind === 'ok') {
       logRegisterSuccessEvent()
       notify('success', translate('signup.signup_successful'), 5000)
-      navigation.navigate('login')
+      navigation.navigate('login', {type: "individual"})
     } else {
       notifyApiError(res)
     }
@@ -178,7 +179,7 @@ export const SignupScreen = observer(() => {
           <Button
             preset="link"
             text={translate("common.login")}
-            onPress={() => navigation.navigate("login")}
+            onPress={() => navigation.navigate("loginSelect")}
           />
         </View>
       )}

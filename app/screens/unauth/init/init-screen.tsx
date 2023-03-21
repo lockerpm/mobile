@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { Loading, Layout, Text } from '../../../components'
-import { useNavigation } from '@react-navigation/native'
-import { useStores } from '../../../models'
-import { load, StorageKey } from '../../../utils/storage'
-import NetInfo from '@react-native-community/netinfo'
-import DeviceInfo from 'react-native-device-info'
-import { IS_IOS, IS_PROD } from '../../../config/constants'
-import { Alert, BackHandler, Linking, View } from 'react-native'
-import { useMixins } from '../../../services/mixins'
-import JailMonkey from 'jail-monkey'
-import { commonStyles } from '../../../theme'
-import { useCipherAuthenticationMixins } from '../../../services/mixins/cipher/authentication'
-import dynamicLinks from '@react-native-firebase/dynamic-links'
-import { Logger } from '../../../utils/logger'
-import VersionCheck from 'react-native-version-check';
-
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { Loading, Layout, Text } from "../../../components"
+import { useNavigation } from "@react-navigation/native"
+import { useStores } from "../../../models"
+import { load, StorageKey } from "../../../utils/storage"
+import NetInfo from "@react-native-community/netinfo"
+import DeviceInfo from "react-native-device-info"
+import { IS_IOS, IS_PROD } from "../../../config/constants"
+import { Alert, BackHandler, Linking, View } from "react-native"
+import { useMixins } from "../../../services/mixins"
+import JailMonkey from "jail-monkey"
+import { commonStyles } from "../../../theme"
+import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
+import dynamicLinks from "@react-native-firebase/dynamic-links"
+import { Logger } from "../../../utils/logger"
+import VersionCheck from "react-native-version-check"
 
 export const InitScreen = observer(() => {
   const { user, cipherStore, uiStore } = useStores()
@@ -48,9 +47,13 @@ export const InitScreen = observer(() => {
   // Create master pass or unlock
   const goLockOrCreatePassword = () => {
     if (user.is_pwd_manager) {
-      navigation.navigate('lock')
+      if (user.onPremiseUser) {
+        navigation.navigate("lock", { type: "onPremise" })
+      } else {
+        navigation.navigate("lock", { type: "individual" })
+      }
     } else {
-      navigation.navigate('createMasterPassword')
+      navigation.navigate("createMasterPassword")
     }
   }
 
@@ -60,7 +63,7 @@ export const InitScreen = observer(() => {
 
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL)
     if (autoFillData && autoFillData.enabled) {
-      uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
+      uiStore.setDeepLinkAction("fill", autoFillData.domain || "")
       uiStore.setIsFromAutoFill(true)
       return true
     }
@@ -75,7 +78,7 @@ export const InitScreen = observer(() => {
 
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL_ITEM)
     if (autoFillData && autoFillData.enabled) {
-      uiStore.setDeepLinkAction('fill_item', autoFillData.id || '')
+      uiStore.setDeepLinkAction("fill_item", autoFillData.id || "")
       uiStore.setIsFromAutoFillItem(true)
       return true
     }
@@ -90,7 +93,7 @@ export const InitScreen = observer(() => {
 
     const loginData = await load(StorageKey.APP_FROM_AUTOFILL_ON_SAVE_REQUEST)
     if (loginData && loginData.enabled) {
-      uiStore.setDeepLinkAction('save', {
+      uiStore.setDeepLinkAction("save", {
         domain: loginData.domain,
         username: loginData.username,
         password: loginData.password,
@@ -135,39 +138,35 @@ export const InitScreen = observer(() => {
     // Check savePassword
     const isOnSaveLogin = await checkOnSaveLogin()
 
-    // Testing
-    // if (__DEV__) {
-    //   // navigation.navigate('createMasterPassword')
-    //   navigation.navigate('intro')
-    //   return
-    // }
-
     // Check App update
-    !__DEV__ && IS_PROD && VersionCheck.needUpdate()
-      .then(async res => {
-        if (res.isNeeded) {
-          Alert.alert(
-            translate('alert.update.title'),
-            translate('alert.update.content', { version: res.latestVersion }),
-            [
-              {
-                text: translate('alert.update.later'),
-                style: 'cancel',
-                onPress: () => null
-              },
-              {
-                text: translate('alert.update.now'),
-                style: 'destructive',
-                onPress: async () => {
-                  Linking.openURL(res.storeUrl);  // open store if update is needed.
-                }
-              },
-            ]
-          )
-        }
-      }).catch(e => {
-        Logger.error(e)
-      });
+    !__DEV__ &&
+      IS_PROD &&
+      VersionCheck.needUpdate()
+        .then(async (res) => {
+          if (res.isNeeded) {
+            Alert.alert(
+              translate("alert.update.title"),
+              translate("alert.update.content", { version: res.latestVersion }),
+              [
+                {
+                  text: translate("alert.update.later"),
+                  style: "cancel",
+                  onPress: () => null,
+                },
+                {
+                  text: translate("alert.update.now"),
+                  style: "destructive",
+                  onPress: async () => {
+                    Linking.openURL(res.storeUrl) // open store if update is needed.
+                  },
+                },
+              ],
+            )
+          }
+        })
+        .catch((e) => {
+          Logger.error(e)
+        })
 
     // Check dynamic link
     const link = await dynamicLinks().getInitialLink()
@@ -185,9 +184,9 @@ export const InitScreen = observer(() => {
     if (!user.isLoggedIn) {
       if (!user.introShown && !isAutoFill && !isOnSaveLogin && !isAutoFillItem) {
         user.setIntroShown(true)
-        navigation.navigate('intro')
+        navigation.navigate("intro")
       } else {
-        navigation.navigate('onBoarding')
+        navigation.navigate("onBoarding")
       }
       return
     }
@@ -200,14 +199,30 @@ export const InitScreen = observer(() => {
 
     // Session validated?
     if (!user.isLoggedIn) {
-      navigation.navigate('login')
+      navigation.navigate("loginSelect")
       return
     }
+
+    if (user.onPremiseUser) {
+      const res = await user.onPremisePreLogin(user.email)
+      if (res.kind == "ok") {
+        if (res.data[0].activated) {
+          navigation.navigate("lock", {
+            type: "onPremise",
+            data: res.data[0],
+            email: user.email,
+          })
+        }
+        return 
+      }
+    }
+
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-    if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
+
+    if (userRes.kind === "ok" && userPwRes.kind === "ok") {
       goLockOrCreatePassword()
     } else {
-      navigation.navigate('login')
+      navigation.navigate("loginSelect")
     }
   }
 
@@ -220,8 +235,8 @@ export const InitScreen = observer(() => {
 
   // Back handler
   useEffect(() => {
-    navigation.addListener('beforeRemove', handleBack)
-    const unsubscribe = navigation.addListener('focus', () => {
+    navigation.addListener("beforeRemove", handleBack)
+    const unsubscribe = navigation.addListener("focus", () => {
       setTimeout(() => {
         if (uiStore.firstRouteAfterInit) {
           navigation.navigate(uiStore.firstRouteAfterInit)
@@ -231,7 +246,7 @@ export const InitScreen = observer(() => {
     })
     return () => {
       unsubscribe()
-      navigation.removeListener('beforeRemove', handleBack)
+      navigation.removeListener("beforeRemove", handleBack)
     }
   }, [navigation])
 
@@ -242,9 +257,9 @@ export const InitScreen = observer(() => {
       <View style={[commonStyles.CENTER_VIEW, commonStyles.SECTION_PADDING]}>
         <Text
           preset="black"
-          text={translate('error.rooted_device')}
+          text={translate("error.rooted_device")}
           style={{
-            textAlign: 'center',
+            textAlign: "center",
           }}
         />
       </View>
