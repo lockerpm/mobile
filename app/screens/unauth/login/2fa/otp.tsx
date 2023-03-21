@@ -1,12 +1,12 @@
 import React, { useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import {Text, Button, FloatingInput } from "../../../components"
-import { useMixins } from "../../../services/mixins"
+import {Text, Button, FloatingInput } from "../../../../components"
+import { useMixins } from "../../../../services/mixins"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { commonStyles, fontSize, spacing } from "../../../theme"
+import { commonStyles, fontSize, spacing } from "../../../../theme"
 import { Checkbox } from "react-native-ui-lib"
-import { useStores } from "../../../models"
+import { useStores } from "../../../../models"
 
 
 type Props = {

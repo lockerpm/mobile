@@ -210,7 +210,8 @@
     "cannot_connect": "Không thể kết nối với máy chủ, vui lòng kiểm tra kết nối mạng",
     "network_error": "Lỗi mạng. Kết nối của bạn không an toàn",
     "share_folder": "Không thể chia sẻ thư mục này",
-    "share_folder_move_item": "Mục này đang được chia sẻ. Ngừng chia sẻ và thử lại sau"
+    "share_folder_move_item": "Mục này đang được chia sẻ. Ngừng chia sẻ và thử lại sau",
+    "onpremise_login_failed": "Your email doesn’t belong to any Enterprise. Please try again"
   },
   "success": {
     "done": "Hoàn tất",
@@ -1045,5 +1046,27 @@
     },
     "btn_request": "Gửi yêu cầu tham gia",
     "btn_requested": "Đã gửi yêu cầu"
+  },
+  "login_select": {
+    "title": "Đăng nhập vào tài khoản",
+    "individual": "Cá nhân",
+    "business": "Doanh nghiệp",
+    "onpremise": "On-Premise"
+  },
+  "onpremise_passwordless": {
+    "title": "Nhập mã OTP dưới đây vào ứng dụng Locker trên máy tính của bạn. Hãy đảm bảo rằng bạn đã đăng ký tài khoản trên ứng dụng máy tính với thiết bị FIDO.",
+    "expired": "Mã hết hiệu lực trong: {{ss}}s",
+    "new_otp": "Tạo mã mới",
+    "instruction": {
+      "label": "Hướng dẫn",
+      "1": "Đăng nhập vào ứng dụng máy tính",
+      "2": "Nhấp chuột vào memu hồ sơ của bạn ở góc trên bên phải",
+      "3": "Chọn Đăng nhập không mật khẩu vào điện thoại",
+      "4": "Nhập mã OTP",
+      "go_back": "Quay lại"
+    },
+    "qr_scan": "Quét mã QR",
+    "more_step": "Bước cuối cùng",
+    "point_camera": "Quét mã QR trên ứng dụng máy tính của bạn để xác nhận Đăng nhập"
   }
 }

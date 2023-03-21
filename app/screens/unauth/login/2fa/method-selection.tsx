@@ -1,12 +1,12 @@
 import React, { useState, useRef, useCallback } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import {Text, Button, RecaptchaChecker } from "../../../components"
-import { useMixins } from "../../../services/mixins"
+import {Text, Button, RecaptchaChecker } from "../../../../components"
+import { useMixins } from "../../../../services/mixins"
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { commonStyles, spacing } from "../../../theme"
-import { useStores } from "../../../models"
+import { commonStyles, spacing } from "../../../../theme"
+import { useStores } from "../../../../models"
 
 
 type Props = {

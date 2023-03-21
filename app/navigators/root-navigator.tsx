@@ -10,11 +10,18 @@ import { NavigationContainer, NavigationContainerRef } from "@react-navigation/n
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
 import {
-  IntroScreen, InitScreen, OnboardingScreen, LockScreen, LoginScreen, SignupScreen,
-  CreateMasterPasswordScreen, ForgotPasswordScreen, CountrySelectorScreen
+  IntroScreen,
+  InitScreen,
+  OnboardingScreen,
+  LockScreen,
+  LoginScreen,
+  SignupScreen,
+  CreateMasterPasswordScreen,
+  ForgotPasswordScreen,
+  CountrySelectorScreen,
 } from "../screens"
 import { useStores } from "../models"
-import Toast, { BaseToastProps } from 'react-native-toast-message'
+import Toast, { BaseToastProps } from "react-native-toast-message"
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../services/mixins"
 import { ErrorToast, SuccessToast, InfoToast } from "./helpers/toast"
@@ -22,12 +29,13 @@ import { Logger } from "../utils/logger"
 import { PushNotifier } from "../utils/push-notification"
 import { NotifeeNotificationData } from "../utils/push-notification/types"
 import { save, StorageKey } from "../utils/storage"
-import dynamicLinks from '@react-native-firebase/dynamic-links'
+import dynamicLinks from "@react-native-firebase/dynamic-links"
 import { AppState } from "react-native"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { TestScreen } from "../screens/test-screen"
-
+import { LoginSelectScreen } from "../screens/unauth/login-select/login-select-screen"
+import { OnPremisePreloginData } from "../services/api"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -45,8 +53,15 @@ export type RootParamList = {
     preview?: boolean
   }
   onBoarding: undefined
-  lock: undefined
-  login: undefined
+  lock: {
+    type?: "individual" | "onPremise"
+    // onpremise data
+    data?: OnPremisePreloginData
+    email?: string
+  }
+  login: {
+    type?: "individual" | "onPremise"
+  }
   forgotPassword: undefined
   signup: undefined
   createMasterPassword: undefined
@@ -54,6 +69,7 @@ export type RootParamList = {
   countrySelector: {
     initialId?: string
   }
+  loginSelect: undefined
   test: undefined
 }
 
@@ -77,7 +93,7 @@ const RootStack = observer((props: Props) => {
     }
 
     const res = await parsePushNotiData({
-      notifeeData: data
+      notifeeData: data,
     })
 
     if (user.isLoggedInPw) {
@@ -88,7 +104,7 @@ const RootStack = observer((props: Props) => {
       }
     } else {
       save(StorageKey.PUSH_NOTI_DATA, {
-        type: data.type
+        type: data.type,
       })
     }
   }
@@ -98,7 +114,7 @@ const RootStack = observer((props: Props) => {
     Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
-    if (nextAppState !== 'active') {
+    if (nextAppState !== "active") {
       return
     }
 
@@ -113,7 +129,7 @@ const RootStack = observer((props: Props) => {
   useEffect(() => {
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
-      Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
+      Logger.debug(offline ? "OFFLINE" : "ONLINE")
       uiStore.setIsOffline(offline)
     })
 
@@ -125,7 +141,7 @@ const RootStack = observer((props: Props) => {
   // Push notification handler
   useEffect(() => {
     const unsubscribe = PushNotifier.setupForegroundHandler({
-      handleForegroundPress: handleForegroundNotiPress
+      handleForegroundPress: handleForegroundNotiPress,
     })
     return () => {
       unsubscribe()
@@ -166,14 +182,15 @@ const RootStack = observer((props: Props) => {
       initialRouteName="init"
       screenOptions={{
         cardStyle: { backgroundColor: color.background },
-        headerShown: false
+        headerShown: false,
       }}
     >
       <Stack.Screen name="init" component={InitScreen} />
       <Stack.Screen name="intro" component={IntroScreen} />
       <Stack.Screen name="onBoarding" component={OnboardingScreen} />
-      <Stack.Screen name="lock" component={LockScreen} />
-      <Stack.Screen name="login" component={LoginScreen} />
+      <Stack.Screen name="loginSelect" component={LoginSelectScreen} />
+      <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: "individual" }} />
+      <Stack.Screen name="login" component={LoginScreen} initialParams={{ type: "individual" }} />
       <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />
       <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
@@ -183,7 +200,7 @@ const RootStack = observer((props: Props) => {
         component={MainNavigator}
         options={{
           headerShown: false,
-          gestureEnabled: false
+          gestureEnabled: false,
         }}
       />
       <Stack.Screen name="test" component={TestScreen} />
@@ -191,22 +208,15 @@ const RootStack = observer((props: Props) => {
   )
 })
 
-
 export const RootNavigator = React.forwardRef<
   NavigationContainerRef,
   Partial<React.ComponentProps<typeof NavigationContainer>>
 >((props, ref) => {
   // Toast
   const toastConfig = {
-    success: (props: BaseToastProps) => (
-      <SuccessToast {...props} />
-    ),
-    error: (props: BaseToastProps) => (
-      <ErrorToast {...props} />
-    ),
-    info: (props: BaseToastProps) => (
-      <InfoToast {...props} />
-    )
+    success: (props: BaseToastProps) => <SuccessToast {...props} />,
+    error: (props: BaseToastProps) => <ErrorToast {...props} />,
+    info: (props: BaseToastProps) => <InfoToast {...props} />,
   }
 
   return (

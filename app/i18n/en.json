@@ -210,7 +210,8 @@
     "cannot_connect": "Cannot connect to the server. Please check your internet connection",
     "network_error": "Network error. Your connection is not secure",
     "share_folder": "Can not share this folder",
-    "share_folder_move_item": "This item is being shared. Stop sharing and try again"
+    "share_folder_move_item": "This item is being shared. Stop sharing and try again",
+    "onpremise_login_failed": "Your email doesn’t belong to any Enterprise. Please try again"
   },
   "success": {
     "done": "Done",
@@ -1052,5 +1053,27 @@
     },
     "btn_request": "Request to join",
     "btn_requested": "Requested"
+  },
+  "login_select": {
+    "title": "Sign in to your account",
+    "individual": "Individual",
+    "business": "Business",
+    "onpremise": "On-Premise"
+  },
+  "onpremise_passwordless": {
+    "title": "Enter the OTP code below to your Locker Desktop app to log in. Make sure that you’ve already registered your account on Desktop app with a FIDO device.",
+    "expired": "Code Expires in: {{ss}}s",
+    "new_otp": "Generate a new one",
+    "instruction": {
+      "label": "Instruction",
+      "1": "Log in on Desktop app",
+      "2": "Click on your profile menu on the top right",
+      "3": "Choose Passwordless Mobile Login",
+      "4": "Enter the OTP",
+      "go_back": "Go Back"
+    },
+    "qr_scan": "Scan QR code",
+    "more_step": "One more step",
+    "point_camera": "Point your camera to the QR Code on Desktop App to confirm Login"
   }
 }

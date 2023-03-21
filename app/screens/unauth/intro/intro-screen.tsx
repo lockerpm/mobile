@@ -1,180 +1,97 @@
-import React, { useState, useRef } from "react"
-import { View, Dimensions, Animated, TouchableOpacity } from "react-native"
-import { AutoImage as Image, Text, Layout, Button, LanguagePicker } from "../../../components"
+import React, { useRef, useState } from "react"
+import { Dimensions, StyleSheet } from "react-native"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { fontSize, spacing } from "../../../theme"
-import { useMixins } from "../../../services/mixins"
-import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
 import { observer } from "mobx-react-lite"
-import { APP_INTRO } from "../../../common/mappings"
 import { RootParamList } from "../../../navigators"
+import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
+import { Intro1, Intro2, Intro3, Intro4 } from "./intro/intro"
+import { Icon, Screen } from "../../../components/cores"
+import { LanguagePicker } from "../../../components/utils"
 
-type IntroScreenProp = RouteProp<RootParamList, "intro">
+import { AnimatedFooter } from "./animated-footer/animated-footer"
+import { Wave } from "./wave"
+
+const SCREEN_WIDTH = Dimensions.get("screen").width
 
 export const IntroScreen = observer(() => {
-  const { translate, color } = useMixins()
   const navigation = useNavigation()
-  const route = useRoute<IntroScreenProp>()
-  const { isPortrait } = useAdaptiveLayoutMixins()
-  const { width, height } = Dimensions.get('screen')
-
-  // ------------------ PARAMS ---------------------
+  const route = useRoute<RouteProp<RootParamList, "intro">>()
 
   const [index, setIndex] = useState(0)
-
-  // ------------------ CONPUTED ---------------------
+  const scrollViewRef = useRef(null)
 
   const isPreview = route.params?.preview
 
-  // ------------------ DATA ---------------------
-
-  const flastListRef = useRef(null)
-  const tabs = [
-    {
-      img: APP_INTRO.security,
-      title: translate('intro.security.title'),
-      desc: translate('intro.security.desc')
-    },
-    {
-      img: APP_INTRO.sync,
-      title: translate('intro.sync.title'),
-      desc: translate('intro.sync.desc')
-    },
-    {
-      img: APP_INTRO.autofill,
-      title: translate('intro.autofill.title'),
-      desc: translate('intro.autofill.desc')
-    },
-    {
-      img: APP_INTRO.otp,
-      title: translate('intro.otp.title'),
-      desc: translate('intro.otp.desc')
-    }
-  ]
-
   // ------------------ METHODS ---------------------
+  const animIndex = useSharedValue(0)
 
-  const onViewableItemsChanged = useRef(({ viewableItems, _ }) => {
-    setIndex(viewableItems[0].index)
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    animIndex.value = event.contentOffset.x / SCREEN_WIDTH
   })
 
+  const goStart= () => {
+    navigation.navigate('onBoarding')
+  }
+
   const scrollTo = (index: number) => {
+    scrollViewRef.current?.scrollTo({
+      x: index * SCREEN_WIDTH,
+      animated: true,
+    })
     setIndex(index)
-    flastListRef.current?.scrollToIndex({ Animated: false, index })
+  }
+
+  const onMomentumScrollEnd = ({ nativeEvent }: any) => {
+    const position = nativeEvent.contentOffset
+    const _index = Math.round(position.x / SCREEN_WIDTH)
+    setIndex(_index)
   }
 
   // ------------------ RENDER ---------------------
 
   return (
-    <Layout
-      noScroll
-      footer={
-        <Button
-          text={index === 3 ? translate("common.get_start") : translate("common.next")}
-          onPress={() => {
-            if (index === 3) {
-              if (isPreview) {
-                navigation.navigate("mainStack", {screen: "help"})
-              } else {
-                navigation.navigate("onBoarding")
-              }
-            } else {
-              scrollTo(index + 1)
-            }
-          }}
-        />
-      }
+    <Screen
+      safeAreaEdges={["top"]}
+      contentContainerStyle={{
+        flex: 1,
+        justifyContent: "space-between",
+      }}
     >
-      <LanguagePicker />
-      <Button
-        text={translate('common.skip').toUpperCase()}
-        textStyle={{ fontSize: fontSize.p }}
-        preset="link"
-        onPress={() => {
-          if (isPreview) {
-            navigation.navigate("mainStack", {screen: "help"})
-          } else {
-            navigation.navigate("onBoarding")
-          }
-        }}
-        style={{ position: "absolute", top: 16, right: 20, zIndex: 11 }}
-      >
-      </Button>
+      {isPreview ? (
+        <Icon
+          onPress={() => {
+            navigation.goBack()
+          }}
+          icon="arrow-left"
+          size={24}
+          style={{ zIndex: 10, position: "absolute", left: 20, top: 16 }}
+        />
+      ) : (
+        <LanguagePicker />
+      )}
 
-      {/** Intro */}
-      <Animated.FlatList
-        data={tabs}
-        ref={flastListRef}
-        // @ts-ignore
-        onViewableItemsChanged={onViewableItemsChanged.current}
-        contentContainerStyle={{ height: height * 0.7 }}
-        keyExtractor={(_, index) => `intro${index}`}
+      <Wave color={"#Dbf5dd"} style={StyleSheet.absoluteFill} />
+
+      <Animated.ScrollView
         horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={width}
-        decelerationRate="fast"
-        viewabilityConfig={{
-          waitForInteraction: true,
-          viewAreaCoveragePercentThreshold: 50
+        style={{
+          marginTop: 68,
         }}
-        getItemLayout={(data, index) => (
-          { length: width, offset: width * index, index }
-        )}
-        renderItem={({ item }) => (
-          <View style={{
-            width: width,
-            alignItems: "center",
-            justifyContent: "space-between"
-          }}>
-            <View />
-            {
-              isPortrait && <View style={{
-                maxWidth: width * 0.9,
-                marginBottom: 16,
-                marginTop: "10%"
-              }}
-              >
-                <Text preset="header" text={item.title} style={{
-                  alignSelf: "center",
-                  marginBottom: 10,
-                }} />
-                <Text text={item.desc} style={{
-                  textAlign: "center"
-                }} />
-              </View>
-            }
-
-            <Image
-              source={item.img}
-              resizeMode="contain"
-              style={{
-                width: Math.min(width, 400),
-                maxHeight: Math.min(width, 400)
-              }}
-            />
-          </View>
-        )}
-      />
-
-      {/* Bullets */}
-      <View style={{ flexDirection: 'row', justifyContent: 'center', flex: 1 }}>
-        {
-          tabs.map((item, i) =>
-            <TouchableOpacity
-              key={i}
-              style={{
-                height: 8,
-                width: 8,
-                borderRadius: 8,
-                marginVertical: spacing.medium,
-                marginHorizontal: spacing.tiny,
-                backgroundColor: i === index ? color.primary : color.line
-              }}
-              onPress={() => setIndex(i)}
-            />
-          )
-        }
-      </View>
-    </Layout>
+        pagingEnabled
+        onMomentumScrollEnd={onMomentumScrollEnd}
+        ref={scrollViewRef}
+        showsHorizontalScrollIndicator={false}
+        onScroll={scrollHandler}
+        snapToInterval={SCREEN_WIDTH}
+        decelerationRate="fast"
+        scrollEventThrottle={16}
+      >
+        <Intro1 onView={index === 0} />
+        <Intro2 onView={index === 1} />
+        <Intro3 onView={index === 2} />
+        <Intro4 onView={index === 3} />
+      </Animated.ScrollView>
+      <AnimatedFooter animIndex={animIndex} index={index} scrollTo={scrollTo} goStart={goStart} />
+    </Screen>
   )
 })

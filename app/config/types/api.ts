@@ -13,6 +13,8 @@ export type SessionSnapshot = {
   key: string
   private_key: string
   has_no_master_pw_item: boolean
+  is_factor2?: boolean
+  methods: {type: string, data: any}[]
 }
 
 export type PasswordPolicy = {

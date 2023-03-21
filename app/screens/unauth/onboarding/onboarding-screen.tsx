@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { BackHandler, View } from "react-native"
-import { AutoImage as Image, Button, LanguagePicker, Layout, Text } from "../../../components"
+import { AutoImage as Image, Button, Layout, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize, spacing } from "../../../theme"
 import { useMixins } from "../../../services/mixins"
@@ -9,6 +9,7 @@ import { APP_ICON } from "../../../common/mappings"
 import { IS_IOS } from "../../../config/constants"
 import { useStores } from "../../../models"
 import { useAdaptiveLayoutMixins } from "../../../services/mixins/adaptive-layout"
+import { LanguagePicker } from "../../../components/utils"
 
 export const OnboardingScreen = observer(() => {
   const navigation = useNavigation()
@@ -16,33 +17,6 @@ export const OnboardingScreen = observer(() => {
   const { uiStore } = useStores()
   const { verticalScale } = useAdaptiveLayoutMixins()
 
-  // Child components
-  const footer = (
-    <View>
-      <Button
-        text={translate("common.sign_up")}
-        onPress={() => navigation.navigate("signup")}
-      />
-      <View
-        style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
-          marginTop: spacing.medium,
-          justifyContent: 'center'
-        }]}
-      >
-        <Text
-          text={translate("onBoarding.has_account")}
-          style={{
-            marginRight: spacing.small,
-          }}
-        />
-        <Button
-          preset="link"
-          text={translate("common.login")}
-          onPress={() => navigation.navigate("login")}
-        />
-      </View>
-    </View>
-  )
 
   // -------------- EFFECT ------------------
 
@@ -70,7 +44,30 @@ export const OnboardingScreen = observer(() => {
   return (
     <Layout
       noScroll
-      footer={footer}
+      footer={<View>
+        <Button
+          text={translate("common.sign_up")}
+          onPress={() => navigation.navigate("signup")}
+        />
+        <View
+          style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+            marginTop: spacing.medium,
+            justifyContent: 'center'
+          }]}
+        >
+          <Text
+            text={translate("onBoarding.has_account")}
+            style={{
+              marginRight: spacing.small,
+            }}
+          />
+          <Button
+            preset="link"
+            text={translate("common.login")}
+            onPress={() => navigation.navigate("loginSelect")}
+          />
+        </View>
+      </View>}
     >
       <LanguagePicker />
       <View style={commonStyles.CENTER_VIEW}>
