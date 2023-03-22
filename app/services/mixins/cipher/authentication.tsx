@@ -445,12 +445,13 @@ export const CipherAuthenticationMixinsProvider = observer(
     // Biometric login
     const biometricLogin = async (): Promise<{ kind: string }> => {
       try {
-        // await delay(200)
+        await delay(200)
         const { available } = await ReactNativeBiometrics.isSensorAvailable()
         if (!available) {
           notify("error", translate("error.biometric_not_support"))
           return { kind: "bad-data" }
         }
+
 
         // Validate biometric
         const { success } = await ReactNativeBiometrics.simplePrompt({
@@ -460,7 +461,6 @@ export const CipherAuthenticationMixinsProvider = observer(
           notify("error", translate("error.biometric_unlock_failed"))
           return { kind: "bad-data" }
         }
-
         // Offline login
         if (uiStore.isOffline) {
           const hasKey = await cryptoService.hasKey()
@@ -468,7 +468,6 @@ export const CipherAuthenticationMixinsProvider = observer(
             notify("error", translate("error.session_login_failed"))
             return { kind: "bad-data" }
           }
-
           // Fake set key
           messagingService.send("loggedIn")
           const storedKey = await cryptoService.getKey()
@@ -483,7 +482,6 @@ export const CipherAuthenticationMixinsProvider = observer(
         const kdfIterations = 100000
         return _loginUsingApi(key, keyHash, kdf, kdfIterations)
       } catch (e) {
-        notify("error", translate("error.session_login_failed"))
         return { kind: "bad-data" }
       }
     }

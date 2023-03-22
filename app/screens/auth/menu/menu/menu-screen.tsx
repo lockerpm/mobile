@@ -67,6 +67,8 @@ export const MenuScreen = observer(() => {
   useEffect(() => {
     if (!user.onPremiseUser) {
       getReferralsLink()
+    } else {
+      // user.getEnterprise()
     }
   }, [])
 

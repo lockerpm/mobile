@@ -26,15 +26,15 @@ import UserMinus from './svg/common/user-minus.svg'
 import Eye from './svg/common/eye.svg'
 import PemcilSimple from './svg/common/pencil-simple.svg'
 
-Ionicons.loadFont()
-AntDesign.loadFont()
-MaterialCommunityIcons.loadFont()
-EvilIcons.loadFont()
-FontAwesome.loadFont()
-Feather.loadFont()
-MaterialIcons.loadFont()
-EntypoIcons.loadFont()
-Octicons.loadFont()
+Ionicons.loadFont().catch((error) => {  });
+AntDesign.loadFont().catch((error) => {});
+MaterialCommunityIcons.loadFont().catch((error) => {  });
+EvilIcons.loadFont().catch((error) => {  });
+FontAwesome.loadFont().catch((error) => {  });
+Feather.loadFont().catch((error) => { });
+MaterialIcons.loadFont().catch((error) => { });
+EntypoIcons.loadFont().catch((error) => {});
+Octicons.loadFont().catch((error) => { });
 
 type IconType = {
   [name: string]: {

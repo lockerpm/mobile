@@ -68,7 +68,7 @@ export const ForgotPasswordScreen = observer(() => {
             goBack={() => setIndex(2)}
             token={token}
             nextStep={() => {
-              navigation.navigate('login')
+              navigation.navigate('loginSelect')
             }}
           />
         )

@@ -90,6 +90,7 @@ export const StartScreen = observer(() => {
       }
     }
 
+
     // Done -> navigate
     if (uiStore.isDeeplinkEmergencyAccess) {
       uiStore.setIsDeeplinkEmergencyAccess(false)

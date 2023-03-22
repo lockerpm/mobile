@@ -172,12 +172,17 @@ export const LockByMasterPassword = observer(({ biometryType, handleLogout }: Pr
     }
   }, [isShowedInvitationPopup])
 
+
   useEffect(() => {
     fetchEnterpriseInvitation()
+  }, [])
 
-    if (user.isBiometricUnlock) {
-      handleUnlockBiometric()
-    }
+  useEffect(() => {
+    navigation.addListener("focus", () => {
+      if (user.isBiometricUnlock) {
+        handleUnlockBiometric()
+      }
+    })
   }, [])
 
   // ---------------------- RENDER -------------------------

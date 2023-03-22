@@ -451,7 +451,7 @@ export const UserModel = types
       const res = await userApi.getUserPw(self.apiToken)
       if (res.kind === "ok") {
         self.saveUserPw(res.user)
-        if (res.user.pwd_user_type === AccountType.ENTERPRISE) {
+        if (res.user.pwd_user_type === AccountType.ENTERPRISE && !self.onPremiseUser) {
           const _userApi = new UserApi(self.environment.api)
           const _res = await _userApi.getEnterprise(self.apiToken)
           if (_res.kind === "ok") {
@@ -460,6 +460,14 @@ export const UserModel = types
         }
       }
       return res
+    },
+
+    getEnterprise: async () => {
+      const _userApi = new UserApi(self.environment.api)
+      const _res = await _userApi.getEnterprise(self.apiToken)
+      if (_res.kind === "ok") {
+        self.saveEnterprise(_res.data)
+      }
     },
 
     sessionLogin: async (payload: SessionLoginData) => {
