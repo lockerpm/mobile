@@ -68,13 +68,15 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    if (user.isBiometricUnlock) {
-      handleUnlockBiometric()
-    }
+    navigation.addListener("focus", () => {
+      if (user.isBiometricUnlock) {
+        handleUnlockBiometric()
+      }
+    })
   }, [])
 
   return (
-    <Screen safeAreaEdges={["top"]}>
+    <Screen  safeAreaEdges={["top"]}>
       {index === 0 && (
         <ScrollView
           horizontal
@@ -139,5 +141,5 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
         />
       )}
     </Screen>
-  )
+  ) 
 })

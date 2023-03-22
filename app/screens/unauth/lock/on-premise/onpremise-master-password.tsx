@@ -98,9 +98,11 @@ export const OnPremiseLockMasterPassword = observer(
 
     // Auto trigger face id / touch id + detect biometry type
     useEffect(() => {
-      if (user.isBiometricUnlock) {
-        handleUnlockBiometric()
-      }
+      navigation.addListener("focus", () => {
+        if (user.isBiometricUnlock) {
+          handleUnlockBiometric()
+        }
+      })
     }, [])
 
     // ---------------------- RENDER -------------------------

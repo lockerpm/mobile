@@ -58,6 +58,7 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+ios/Podfile.lock
 
 # Ignite-specific items below
 # You can safely replace everything above this comment with whatever is
@@ -90,3 +91,5 @@ app/config/.env.staging
 
 android/gradle.properties
 android/app/my-upload-key.keystore
+
+android/app/google-services.json
