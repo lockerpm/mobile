@@ -7,8 +7,8 @@ import { useStores } from "../../../../../models"
 import { useMixins } from "../../../../../services/mixins"
 import { useCipherAuthenticationMixins } from "../../../../../services/mixins/cipher/authentication"
 import { MethodSelection } from "../../../login/2fa/method-selection"
-import { OnPremiseOtp } from "./passwordless-2fa-otp"
 import { OtpPasswordlessGenerator, randomOtpNumber } from "./otp-generator"
+import { OnPremiseOtp } from "./passwordless-2fa-otp"
 import { PasswordlessQrScan } from "./passwordless-qr-scan"
 
 const { width } = Dimensions.get("screen")
