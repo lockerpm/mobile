@@ -355,6 +355,15 @@ export type OnPremisePreLoginResult =
     }
   | GeneralApiProblem
 
+export type BusinessLoginMethodResult =
+  | {
+      kind: "ok"
+      data: {
+        login_method: "password" | "passwordless" 
+      }
+    }
+  | GeneralApiProblem
+
 // ---------------- data --------------------
 
 export type OnPremisePreloginData = {
@@ -423,9 +432,9 @@ export type SessionLoginData = {
 }
 
 export type SessionOtpLoginData = {
-  method: string,
-  otp: string,
-  save_device: boolean,
+  method: string
+  otp: string
+  save_device: boolean
 } & SessionLoginData
 
 export type RegisterLockerData = {

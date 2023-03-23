@@ -695,6 +695,12 @@ export const UserModel = types
       return false
     },
 
+    // business 
+    businessLoginMethod: async () => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.businessLoginMethod()
+      return res
+    },
     // On Premise
     // user is on premise
     onPremisePreLogin: async (email: string) => {

@@ -43,6 +43,7 @@ import {
   GetEnterpriseResult,
   OnPremisePreLoginResult,
   SessionOtpLoginData,
+  BusinessLoginMethodResult,
 } from "./api.types"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
@@ -1233,6 +1234,23 @@ export class UserApi {
     }
   }
 
+  async businessLoginMethod(): Promise<BusinessLoginMethodResult> {
+    try {
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `cystack_platform/pm/users/me/login_method`,
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
   async onPremisePreLogin(email: string): Promise<OnPremisePreLoginResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(

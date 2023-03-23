@@ -69,6 +69,12 @@ const defaultData = {
   ) => {
     return { kind: "unknown", data: {} }
   },
+  sessionBusinessQrLogin: async (
+    qr: string,
+    qrOtp: string,
+  ) => {
+    return { kind: "unknown", data: {} }
+  },
 
   biometricLogin: async () => {
     return { kind: "unknown" }
@@ -363,6 +369,41 @@ export const CipherAuthenticationMixinsProvider = observer(
         return { kind: "bad-data" }
       }
     }
+
+     // password less qr login
+     const sessionBusinessQrLogin = async (
+      qr: string,
+      qrOtp: string,
+    ): Promise<{ kind: string }> => {
+      try {
+        await delay(100)
+        const kdf = KdfType.PBKDF2_SHA256
+        const kdfIterations = 100000
+        const keyStr = (qrOtp + qrOtp + qrOtp).slice(0, 16)
+        const keyBuff = Utils.fromUtf8ToArray(keyStr).buffer
+
+        // parse qr
+        const iv = Utils.fromB64ToArray(qr.split(".")[0]).buffer
+        const encryptB64 = Utils.fromB64ToArray(qr.split(".")[1]).buffer
+
+        const dataBuffer = await cryptoFunctionService.aesDecrypt(encryptB64, iv, keyBuff)
+        const data = Utils.fromBufferToUtf8(dataBuffer)
+        const [keyHash, keyB64, encType] = data.split(".")
+
+        const key = new SymmetricCryptoKey(Utils.fromB64ToArray(keyB64).buffer, parseInt(encType))
+        // Online session login
+        return _loginUsingApi(
+          key,
+          keyHash,
+          kdf,
+          kdfIterations,
+        )
+      } catch (e) {
+        notify("error", translate("error.session_login_failed"))
+        return { kind: "bad-data" }
+      }
+    }
+
 
     // Session login
     const sessionOtpLoginWithHashPassword = async (
@@ -821,6 +862,7 @@ export const CipherAuthenticationMixinsProvider = observer(
       handleDynamicLink,
       sessionQrLogin,
       sessionOtpLoginWithHashPassword,
+      sessionBusinessQrLogin
     }
 
     return (

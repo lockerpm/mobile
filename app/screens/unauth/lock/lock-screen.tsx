@@ -8,9 +8,10 @@ import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/a
 import { IS_IOS } from "../../../config/constants"
 import { LockByMasterPassword } from "./master-password"
 import { RootParamList } from "../../../navigators"
-import { LockByPasswordless } from "./on-premise/passwordless/passwordless"
+import { LockByPasswordless as OnPremiseLockByPasswordless } from "./on-premise/passwordless/passwordless"
 import { OnPremiseLockMasterPassword } from "./on-premise/onpremise-master-password"
 import ReactNativeBiometrics from "react-native-biometrics"
+import { BusinessLockByPasswordless } from "./business/business-passwordless"
 
 export const LockScreen = observer(() => {
   const navigation = useNavigation()
@@ -20,7 +21,7 @@ export const LockScreen = observer(() => {
   const { logout } = useCipherAuthenticationMixins()
 
   // ---------------------- PARAMS -------------------------
-  const [lockMethod, setLogMethod] = useState<"masterpass" | "passwordless">("masterpass")
+  const [lockMethod, setLogMethod] = useState<"password" | "passwordless">("password")
   const [biometryType, setBiometryType] = useState<"faceid" | "touchid" | "biometric">("biometric")
 
   // ---------------------- METHODS -------------------------
@@ -40,17 +41,25 @@ export const LockScreen = observer(() => {
     }
   }
 
+  const fetchBusinessLoginMethod = async () => {
+    if (route.params.type === "individual") {
+      const res = await user.businessLoginMethod()
+      if (res.kind === "ok") {
+        setLogMethod(res.data.login_method)
+      }
+    }
+  }
+
   const handleLogout = async () => {
     await logout()
     navigation.navigate("loginSelect")
   }
 
-  // ---------------------- COMPONENTS -------------------------
-
   // -------------- EFFECT ------------------
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
     detectbiometryType()
+    fetchBusinessLoginMethod()
   }, [])
 
   // Handle back press
@@ -100,14 +109,13 @@ export const LockScreen = observer(() => {
       if (route.params.data?.base_api) {
         user.setOnPremiseLastBaseUrl(route.params.data.base_api + "/v3")
         user.environment.api.apisauce.setBaseURL(route.params.data.base_api + "/v3")
-
       }
     }
   }, [])
   // ---------------------- RENDER -------------------------
 
-  if (lockMethod === "masterpass") {
-    if (route.params.type === "onPremise") {
+  if (route.params.type === "onPremise") {
+    if (lockMethod === "password") {
       return (
         <OnPremiseLockMasterPassword
           data={route.params.data}
@@ -117,7 +125,11 @@ export const LockScreen = observer(() => {
         />
       )
     }
+    return <OnPremiseLockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
+  }
+
+  if (lockMethod === "password") {
     return <LockByMasterPassword biometryType={biometryType} handleLogout={handleLogout} />
   }
-  return <LockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
+  return <BusinessLockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
 })
