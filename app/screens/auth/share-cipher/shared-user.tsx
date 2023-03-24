@@ -6,7 +6,7 @@ import { AccountRoleText, SharingStatus } from '../../../config/types'
 import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
 import { fontSize } from '../../../theme'
 import { SharedGroupType, SharedMemberType } from '../../../config/types/api'
-
+const SHARE_GROUP = require('../../../../assets/icon/common/group.png')
 interface Props {
   reload: boolean
   setReload: (val: boolean) => void
@@ -58,7 +58,7 @@ export const SharedUsers = (props: Props) => {
       }}
     >
       <Image
-        source={item['avatar'] ? { uri: item['avatar'] } : require('./assets/group.png')}
+        source={item['avatar'] ? { uri: item['avatar'] } : SHARE_GROUP}
         style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
       />
 
@@ -111,7 +111,7 @@ export const SharedUsers = (props: Props) => {
           <View style={{ paddingHorizontal: 20 }}>
             <View style={{ flexDirection: 'row', marginBottom: 16 }}>
               <Image
-                source={item['avatar'] ? { uri: item['avatar'] } : require('./assets/group.png')}
+                source={item['avatar'] ? { uri: item['avatar'] } : SHARE_GROUP}
                 style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
               />
 

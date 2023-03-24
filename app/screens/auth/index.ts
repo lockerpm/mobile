@@ -9,3 +9,6 @@ export * from "./menu"
 export * from "./errors"
 export * from "./welcome-premium/welcome-premium-screen"
 export * from "./enterprise-invited"
+
+export * from './share-cipher/normal-shares-screen'
+// export * from './share-cipher/quick-shares-screen'

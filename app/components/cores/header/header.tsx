@@ -228,7 +228,6 @@ function HeaderAction(props: HeaderActionProps) {
         activeOpacity={0.8}
       >
         <Text
-          preset='bold'
           color={textColor}
           size="medium"
           text={text}

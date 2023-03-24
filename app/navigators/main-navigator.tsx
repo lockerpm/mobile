@@ -6,7 +6,7 @@
  */
 import React, { useEffect, useState } from "react"
 import { AppState } from "react-native"
-import { CardStyleInterpolators, createStackNavigator, TransitionSpecs } from "@react-navigation/stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { MainTabNavigator } from "./main-tab-navigator"
 import {
   SwitchDeviceScreen,
@@ -78,6 +78,7 @@ import {
   AutofillServiceScreen,
   AliasStatisticScreen,
   EnterpriseInvitedScreen,
+  NormalSharesScreen,
 } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
 import { useMixins } from "../services/mixins"
@@ -96,6 +97,7 @@ import Intercom from "@intercom/intercom-react-native"
 import { AppNotification } from "../services/api"
 import { RelayAddress, SubdomainData, TrustedContact } from "../config/types/api"
 import { CollectionView } from "../../core/models/view/collectionView"
+import { CipherView } from "../../core/models/view"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -143,6 +145,10 @@ export type PrimaryParamList = {
   dataBreachList: undefined
   dataBreachDetail: undefined
   countrySelector: undefined
+
+  normal_shares: {
+    ciphers?: CipherView[]
+  }
   passwords__info: undefined
   passwords__edit: {
     mode: "add" | "edit" | "clone"
@@ -392,7 +398,7 @@ export const MainNavigator = observer(() => {
         // Check user settings to lock
         if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
           await logout()
-          navigation.navigate('loginSelect')
+          navigation.navigate("loginSelect")
         } else {
           await lock()
           navigation.navigate("lock")
@@ -416,7 +422,7 @@ export const MainNavigator = observer(() => {
     if (!isActive && user.appTimeout && user.appTimeout > 0) {
       if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
         await logout()
-        navigation.navigate('loginSelect')
+        navigation.navigate("loginSelect")
       } else {
         await lock()
         navigation.navigate("lock")
@@ -641,6 +647,12 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
         <Stack.Screen name="dataBreachList" component={DataBreachListScreen} />
         <Stack.Screen name="dataBreachDetail" component={DataBreachDetailScreen} />
+
+        <Stack.Screen
+          name="normal_shares"
+          component={NormalSharesScreen}
+          initialParams={{ ciphers: [] }}
+        />
 
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
         <Stack.Screen

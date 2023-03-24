@@ -101,62 +101,62 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
   },
 
   // TODO
-  // driverLicense: {
-  //   label: 'common.driver_license',
-  //   icon: require('./images/vault/driver-license.png'),
-  //   routeName: 'driverLicenses',
-  //   svgIcon: DriverLicenseIcon,
-  //   addable: true
-  // },
-  // citizenID: {
-  //   label: 'common.citizen_id',
-  //   icon: require('./images/vault/citizen-id.png'),
-  //   routeName: 'citizenIDs',
-  //   svgIcon: CitizenIDIcon,
-  //   addable: true
-  // },
-  // socialSecurityNumber: {
-  //   label: 'common.social_security_number',
-  //   icon: require('./images/vault/social-security-number.png'),
-  //   routeName: 'socialSecurityNumbers',
-  //   svgIcon: SocialSecurituNumberIcon,
-  //   addable: true
-  // },
-  // wirelessRouter: {
-  //   label: 'common.wireless_router',
-  //   icon: require('./images/vault/wireless-router.png'),
-  //   routeName: 'wirelessRouters',
-  //   svgIcon: WirelessIcon,
-  //   addable: true
-  // },
-  // server: {
-  //   label: 'common.server',
-  //   icon: require('./images/vault/server.png'),
-  //   routeName: 'servers',
-  //   svgIcon: ServerIcon,
-  //   addable: true
-  // },
-  // passport: {
-  //   label: 'common.passport',
-  //   icon: require('./images/vault/passport.png'),
-  //   routeName: 'passports',
-  //   svgIcon: PassportIcon,
-  //   addable: true
-  // },
-  // apiCipher: {
-  //   label: 'common.api_cipher',
-  //   icon: require('./images/vault/api-cipher.png'),
-  //   routeName: 'apiCiphers',
-  //   svgIcon: ApiCipherIcon,
-  //   addable: true
-  // },
-  // database: {
-  //   label: 'common.database',
-  //   icon: require('./images/vault/database.png'),
-  //   routeName: 'databases',
-  //   svgIcon: DatabaseIcon,
-  //   addable: true
-  // },
+  driverLicense: {
+    label: 'common.driver_license',
+    icon: require('./images/vault/driver-license.png'),
+    routeName: 'driverLicenses',
+    svgIcon: DriverLicenseIcon,
+    addable: true
+  },
+  citizenID: {
+    label: 'common.citizen_id',
+    icon: require('./images/vault/citizen-id.png'),
+    routeName: 'citizenIDs',
+    svgIcon: CitizenIDIcon,
+    addable: true
+  },
+  socialSecurityNumber: {
+    label: 'common.social_security_number',
+    icon: require('./images/vault/social-security-number.png'),
+    routeName: 'socialSecurityNumbers',
+    svgIcon: SocialSecurituNumberIcon,
+    addable: true
+  },
+  wirelessRouter: {
+    label: 'common.wireless_router',
+    icon: require('./images/vault/wireless-router.png'),
+    routeName: 'wirelessRouters',
+    svgIcon: WirelessIcon,
+    addable: true
+  },
+  server: {
+    label: 'common.server',
+    icon: require('./images/vault/server.png'),
+    routeName: 'servers',
+    svgIcon: ServerIcon,
+    addable: true
+  },
+  passport: {
+    label: 'common.passport',
+    icon: require('./images/vault/passport.png'),
+    routeName: 'passports',
+    svgIcon: PassportIcon,
+    addable: true
+  },
+  apiCipher: {
+    label: 'common.api_cipher',
+    icon: require('./images/vault/api-cipher.png'),
+    routeName: 'apiCiphers',
+    svgIcon: ApiCipherIcon,
+    addable: true
+  },
+  database: {
+    label: 'common.database',
+    icon: require('./images/vault/database.png'),
+    routeName: 'databases',
+    svgIcon: DatabaseIcon,
+    addable: true
+  },
 }
 
 type ToolsItem = {
