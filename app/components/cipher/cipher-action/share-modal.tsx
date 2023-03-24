@@ -14,7 +14,7 @@ import { AppEventType, EventBus } from "../../../utils/event-bus"
 import { Icon } from "../../icon/icon"
 import Entypo from 'react-native-vector-icons/Entypo'
 import { SharedGroupType, SharedMemberType } from "../../../config/types/api"
-import { SharedUsers } from "./shared-user"
+import { SharedUsers } from "../../../screens/auth/share-cipher/shared-user"
 
 interface Props {
   isOpen?: boolean
