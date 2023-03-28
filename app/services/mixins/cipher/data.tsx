@@ -146,6 +146,7 @@ const defaultData = {
   leaveShare: async (organizationId: string, id?: string) => {
     return { kind: "unknown" }
   },
+  syncQuickShares:async () => null,
   acceptShareInvitation: async (id: string) => {
     return { kind: "unknown" }
   },
@@ -186,7 +187,7 @@ const defaultData = {
     return { kind: "unknown" }
   },
 
-  createRandomPasswords: async (params: { count: number; type: CipherType }) => null
+  createRandomPasswords: async (params: { count: number; type: CipherType }) => null,
 }
 
 export const CipherDataMixinsContext = createContext(defaultData)
@@ -2423,6 +2424,21 @@ export const CipherDataMixinsProvider = observer(
       return res
     }
 
+    // -------------------- QUICK SHARE ------------------------
+
+    const syncQuickShares = async () => {
+      try {
+        // this.$store.commit('UPDATE_SYNCING_QUICK_SHARES', true)
+        const res = await cipherStore.syncQuickShares(0)
+        const userId = await userService.getUserId()
+        await syncService.syncSends(userId, res)
+      } catch (error) {
+        console.log(error)
+      } finally {
+        // this.$store.commit('UPDATE_SYNCING_QUICK_SHARES', false)
+      }
+    }
+
     // -------------------- REGISTER FUNCTIONS ------------------
 
     const data = {
@@ -2440,6 +2456,7 @@ export const CipherDataMixinsProvider = observer(
       loadFolders,
       loadCollections,
 
+      syncQuickShares,
       createCipher,
       updateCipher,
       deleteCiphers,

@@ -1,53 +1,40 @@
-import { BaseResponse } from './baseResponse';
+import { BaseResponse } from "./baseResponse"
 
-import { SendType } from '../../enums/sendType';
-
-import { SendFileApi } from '../api/sendFileApi';
-import { SendTextApi } from '../api/sendTextApi';
+import { CipherResponse } from "./cipherResponse"
 
 export class SendResponse extends BaseResponse {
-    id: string;
-    accessId: string;
-    type: SendType;
-    name: string;
-    notes: string;
-    file: SendFileApi;
-    text: SendTextApi;
-    key: string;
-    maxAccessCount?: number;
-    accessCount: number;
-    revisionDate: string;
-    expirationDate: string;
-    deletionDate: string;
-    password: string;
-    disable: boolean;
-    hideEmail: boolean;
+  id: string
+  accessId: string
+  creationDate: number
+  revisionDate: number
+  key: string
+  password: string
+  maxAccessCount?: number
+  accessCount: number
+  eachEmailAccessCount: number
+  expirationDate: string
+  disabled: boolean
+  requireOtp: boolean
+  cipherId: string
+  cipher: CipherResponse
+  emails: string[]
 
-    constructor(response: any) {
-        super(response);
-        this.id = this.getResponseProperty('Id');
-        this.accessId = this.getResponseProperty('AccessId');
-        this.type = this.getResponseProperty('Type');
-        this.name = this.getResponseProperty('Name');
-        this.notes = this.getResponseProperty('Notes');
-        this.key = this.getResponseProperty('Key');
-        this.maxAccessCount = this.getResponseProperty('MaxAccessCount');
-        this.accessCount = this.getResponseProperty('AccessCount');
-        this.revisionDate = this.getResponseProperty('RevisionDate');
-        this.expirationDate = this.getResponseProperty('ExpirationDate');
-        this.deletionDate = this.getResponseProperty('DeletionDate');
-        this.password = this.getResponseProperty('Password');
-        this.disable = this.getResponseProperty('Disabled') || false;
-        this.hideEmail = this.getResponseProperty('HideEmail') || false;
-
-        const text = this.getResponseProperty('Text');
-        if (text != null) {
-            this.text = new SendTextApi(text);
-        }
-
-        const file = this.getResponseProperty('File');
-        if (file != null) {
-            this.file = new SendFileApi(file);
-        }
-    }
+  constructor(response: any) {
+    super(response)
+    this.id = this.getResponseProperty("Id")
+    this.accessId = this.getResponseProperty("AccessId")
+    this.creationDate = this.getResponseProperty("CreationDate")
+    this.revisionDate = this.getResponseProperty("RevisionDate")
+    this.key = this.getResponseProperty("Key")
+    this.maxAccessCount = this.getResponseProperty("MaxAccessCount")
+    this.accessCount = this.getResponseProperty("AccessCount")
+    this.eachEmailAccessCount = this.getResponseProperty("EachEmailAccessCount")
+    this.expirationDate = this.getResponseProperty("ExpirationDate")
+    this.requireOtp = this.getResponseProperty("RequireOtp") || false
+    this.password = this.getResponseProperty("Password")
+    this.disabled = this.getResponseProperty("Disabled") || false
+    this.cipherId = this.getResponseProperty("CipherId")
+    this.cipher = new CipherResponse(this.getResponseProperty("Cipher"))
+    this.emails = this.getResponseProperty("Emails")
+  }
 }

@@ -1,108 +1,94 @@
-import { CryptoService } from '../../abstractions/crypto.service';
+import { CryptoService } from "../../abstractions/crypto.service"
 
-import { SendType } from '../../enums/sendType';
 
-import { Utils } from '../../misc/utils';
+import { Utils } from "../../misc/utils"
 
-import { SendData } from '../data/sendData';
+import { SendData } from "../data/sendData"
 
-import { SendView } from '../view/sendView';
+import { SendView } from "../view/sendView"
+import { Cipher } from "./cipher"
 
-import Domain from './domainBase';
-import { EncString } from './encString';
-import { SendFile } from './sendFile';
-import { SendText } from './sendText';
+import Domain from "./domainBase"
+import { EncString } from "./encString"
 
 export class Send extends Domain {
-    id: string;
-    accessId: string;
-    userId: string;
-    type: SendType;
-    name: EncString;
-    notes: EncString;
-    file: SendFile;
-    text: SendText;
-    key: EncString;
-    maxAccessCount?: number;
-    accessCount: number;
-    revisionDate: Date;
-    expirationDate: Date;
-    deletionDate: Date;
-    password: string;
-    disabled: boolean;
-    hideEmail: boolean;
+  id: string
+  accessId: string
+  creationDate: Date
+  revisionDate: Date
+  key: EncString
+  password: string
+  maxAccessCount?: number
+  accessCount: number
+  eachEmailAccessCount?: number
+  expirationDate: Date
+  disabled: boolean
+  requireOtp: boolean
+  cipherId: string
+  cipher: Cipher
+  emails: string[]
 
-    constructor(obj?: SendData, alreadyEncrypted: boolean = false) {
-        super();
-        if (obj == null) {
-            return;
-        }
+  obj: SendData
 
-        this.buildDomainModel(this, obj, {
-            id: null,
-            accessId: null,
-            userId: null,
-            name: null,
-            notes: null,
-            key: null,
-        }, alreadyEncrypted, ['id', 'accessId', 'userId']);
-
-        this.type = obj.type;
-        this.maxAccessCount = obj.maxAccessCount;
-        this.accessCount = obj.accessCount;
-        this.password = obj.password;
-        this.disabled = obj.disabled;
-        this.revisionDate = obj.revisionDate != null ? new Date(obj.revisionDate) : null;
-        this.deletionDate = obj.deletionDate != null ? new Date(obj.deletionDate) : null;
-        this.expirationDate = obj.expirationDate != null ? new Date(obj.expirationDate) : null;
-        this.hideEmail = obj.hideEmail;
-
-        switch (this.type) {
-            case SendType.Text:
-                this.text = new SendText(obj.text, alreadyEncrypted);
-                break;
-            case SendType.File:
-                this.file = new SendFile(obj.file, alreadyEncrypted);
-                break;
-            default:
-                break;
-        }
+  constructor(obj?: SendData, alreadyEncrypted: boolean = false) {
+    super()
+    if (obj == null) {
+      return
     }
 
-    async decrypt(): Promise<SendView> {
-        const model = new SendView(this);
+    this.obj = obj
 
-        let cryptoService: CryptoService;
-        const containerService = (Utils.global as any).bitwardenContainerService;
-        if (containerService) {
-            cryptoService = containerService.getCryptoService();
-        } else {
-            throw new Error('global bitwardenContainerService not initialized.');
-        }
+    this.buildDomainModel(
+      this,
+      obj,
+      {
+        id: null,
+        userId: null,
+        accessId: null,
+        key: null,
+        cipherId: null,
+      },
+      alreadyEncrypted,
+      ["id", "userId", "accessId", "cipherId"],
+    )
 
-        try {
-            model.key = await cryptoService.decryptToBytes(this.key, null);
-            model.cryptoKey = await cryptoService.makeSendKey(model.key);
-        } catch (e) {
-            // TODO: error?
-        }
+    // @ts-ignore
+    this.creationDate = obj.creationDate != null ? new Date(obj.creationDate) : null
+    // @ts-ignore
+    this.revisionDate = obj.revisionDate != null ? new Date(obj.revisionDate) : null
+    this.password = obj.password
+    this.maxAccessCount = obj.maxAccessCount
+    this.accessCount = obj.accessCount
+    this.eachEmailAccessCount = obj.eachEmailAccessCount
+    // @ts-ignore
+    this.expirationDate = obj.expirationDate != null ? new Date(obj.expirationDate) : null
+    this.disabled = obj.disabled
+    this.requireOtp = obj.requireOtp
+    this.emails = obj.emails
+  }
 
-        await this.decryptObj(model, {
-            name: null,
-            notes: null,
-        }, null, model.cryptoKey);
+  async decrypt(): Promise<SendView> {
+    const model = new SendView(this)
 
-        switch (this.type) {
-            case SendType.File:
-                model.file = await this.file.decrypt(model.cryptoKey);
-                break;
-            case SendType.Text:
-                model.text = await this.text.decrypt(model.cryptoKey);
-                break;
-            default:
-                break;
-        }
-
-        return model;
+    let cryptoService: CryptoService
+    const containerService = (Utils.global as any).bitwardenContainerService
+    if (containerService) {
+      cryptoService = containerService.getCryptoService()
+    } else {
+      throw new Error('global bitwardenContainerService not initialized.')
     }
+
+    try {
+      model.key = await cryptoService.decryptToBytes(this.key)
+      model.cryptoKey = await cryptoService.makeSendKey(model.key)
+    } catch (e) {
+      // TODO: error?
+    }
+
+    const cipher = new Cipher(this.obj.cipher)
+    const cipherView = await cipher.decrypt(model.cryptoKey)
+    model.cipher = cipherView
+
+    return model
+  }
 }

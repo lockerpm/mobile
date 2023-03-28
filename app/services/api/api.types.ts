@@ -102,6 +102,9 @@ export type GetFolderResult = { kind: "ok"; data: FolderResponse } | GeneralApiP
 export type GetOrganizationResult =
   | { kind: "ok"; data: ProfileOrganizationResponse }
   | GeneralApiProblem
+  export type SyncQuickSharesResult =
+  | { kind: "ok"; data: any[] }
+  | GeneralApiProblem
 export type PostFolderResult = { kind: "ok"; data: FolderResponse } | GeneralApiProblem
 export type PostCollectionResult = { kind: "ok"; data: CollectionResponse } | GeneralApiProblem
 export type GetProfileResult = { kind: "ok"; data: ProfileResponse } | GeneralApiProblem
@@ -264,6 +267,17 @@ export type ShareCipherResult =
     }
   | GeneralApiProblem
 
+export type QuickShareCipherResult =
+  | {
+      kind: "ok"
+      data: {
+        access_id: String
+        cipher_id: string
+        id: string
+      }
+    }
+  | GeneralApiProblem
+
 export type GetShareInvitationsResult =
   | { kind: "ok"; data: SharingInvitationType[] }
   | GeneralApiProblem
@@ -359,7 +373,7 @@ export type BusinessLoginMethodResult =
   | {
       kind: "ok"
       data: {
-        login_method: "password" | "passwordless" 
+        login_method: "password" | "passwordless"
       }
     }
   | GeneralApiProblem
@@ -588,6 +602,17 @@ export type ShareCipherData = {
       key: string
     }[]
   }[]
+}
+
+export type QuickShareCipherData = {
+  cipher: CipherRequest
+  cipher_id: string
+  key: string
+  each_email_access_count: number | null
+  emails: string[]
+  expiration_date: number | null
+  max_access_count: number | null
+  require_otp: boolean
 }
 
 export type ShareFolderData = {

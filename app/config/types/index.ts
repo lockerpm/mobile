@@ -31,6 +31,7 @@ export enum SocketEvent {
   SYNC = 'sync',
   MEMBERS = 'members',
   EMERGENCY_ACCESS = 'emergency_access',
+  QUICK_SHARE = 'quick_share'
 }
 
 export enum SocketEventType {

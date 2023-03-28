@@ -91,6 +91,9 @@ export const iconRegistry = {
   'user': require('../../../../assets/icon/common/user.png'),
   'buildings': require('../../../../assets/icon/common/buildings.png'),
   'briefcaseMetal': require('../../../../assets/icon/common/briefcaseMetal.png'),
+  'trash':  require('../../../../assets/icon/common/trash.png'),
+  'checkbox-check':  require('../../../../assets/icon/common/checkbox-check.png'),
+  'checkbox':  require('../../../../assets/icon/common/checkbox.png'),
 }
 
 const $imageStyle: ImageStyle = {

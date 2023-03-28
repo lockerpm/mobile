@@ -5,8 +5,10 @@ import {
   GetShareInvitationsResult, GetSharingPublicKeyData, GetSharingPublicKeyResult, 
   ImportCipherData, 
   ImportCipherWithFolderData, ImportFolderData, ImportFolderResult, MoveFolderData, PostCipherResult, 
+  QuickShareCipherData, 
+  QuickShareCipherResult, 
   ShareCipherData, ShareCipherResult, ShareInvitationResponseData, ShareMultipleCiphersData, 
-  StopShareCipherData, SyncResult 
+  StopShareCipherData, SyncQuickSharesResult, SyncResult 
 } from "./api.types"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { Logger } from "../../utils/logger"
@@ -334,6 +336,26 @@ export class CipherApi {
     }
   }
 
+  //QUICK SHARES
+  async quickShareCipher(token: string, payload: QuickShareCipherData): Promise<QuickShareCipherResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/quick_shares`, payload)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const data = response.data
+
+      return { kind: "ok", data }
+    } catch (e) {
+      Logger.error('Quick Share cipher: ' + e.message)
+      return { kind: "bad-data" }
+    }
+  }
   
 
   // Share cipher
@@ -564,4 +586,47 @@ export class CipherApi {
       return { kind: "bad-data" }
     }
   }
+
+  //------------------QUICK SHARE--------------------------------------
+
+  // Get single organization
+  async stopQuickSharing(token: string, id: string): Promise<EmptyResult> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.delete(`cystack_platform/pm/quick_shares/${id}`)
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok"}
+    } catch (e) {
+      Logger.error('Get org: ' + e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+    // Get single organization
+    async syncQuickShares(token: string, page: number): Promise<SyncQuickSharesResult> {
+      try {
+        this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+  
+        // make the api call
+        const response: ApiResponse<any> = await this.api.apisauce.get(`cystack_platform/pm/quick_shares?paging=${page}`)
+        // the typical ways to die when calling an api
+        if (!response.ok) {
+          const problem = getGeneralApiProblem(response)
+          if (problem) return problem
+        }
+  
+        return { kind: "ok", data: response.data}
+      } catch (e) {
+        Logger.error('Get org: ' + e.message)
+        return { kind: "bad-data" }
+      }
+    }
+
 }

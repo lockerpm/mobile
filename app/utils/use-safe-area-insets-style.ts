@@ -41,7 +41,7 @@ export function useSafeAreaInsetsStyle(
 
   return safeAreaEdges.reduce((acc, e) => {
     if (e ==='bottom') {
-      const extra = !IS_IOS ? 12 : 0
+      const extra = !IS_IOS ? 16 : 12
       return { ...acc, [`${property}${propertySuffixMap[e]}`]: insets[edgeInsetMap[e] ?? e] + extra}
     }
     return { ...acc, [`${property}${propertySuffixMap[e]}`]: insets[edgeInsetMap[e] ?? e] }
