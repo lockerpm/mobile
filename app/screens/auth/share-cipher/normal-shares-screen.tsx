@@ -3,7 +3,6 @@ import { TextInput, View, TouchableOpacity, Image, FlatList } from "react-native
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
 import { useMixins } from "../../../services/mixins"
-import { commonStyles } from "../../../theme"
 import { CipherView } from "../../../../core/models/view"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { AccountRoleText } from "../../../config/types"

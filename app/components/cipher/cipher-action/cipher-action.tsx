@@ -302,6 +302,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
             icon="share-square-o"
             action={() => {
               setShowShareOptions(false)
+              navigation.navigate('quick_shares', {cipher: selectedCipher})
             }}
           />
         </ActionSheetContent>

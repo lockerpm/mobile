@@ -79,6 +79,7 @@ import {
   AliasStatisticScreen,
   EnterpriseInvitedScreen,
   NormalSharesScreen,
+  QuickSharesScreen,
 } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
 import { useMixins } from "../services/mixins"
@@ -148,6 +149,9 @@ export type PrimaryParamList = {
 
   normal_shares: {
     ciphers?: CipherView[]
+  }
+  quick_shares: {
+    cipher: CipherView
   }
   passwords__info: undefined
   passwords__edit: {
@@ -285,6 +289,7 @@ export const MainNavigator = observer(() => {
     syncSingleFolder,
     syncOfflineData,
     startSyncProcess,
+    syncQuickShares
   } = useCipherDataMixins()
   const { uiStore, user, cipherStore, toolStore } = useStores()
 
@@ -470,6 +475,9 @@ export const MainNavigator = observer(() => {
         case SocketEvent.MEMBERS:
           handleUserDataSync()
           break
+        case SocketEvent.QUICK_SHARE:
+          syncQuickShares()
+          break
         default:
           break
       }
@@ -653,6 +661,8 @@ export const MainNavigator = observer(() => {
           component={NormalSharesScreen}
           initialParams={{ ciphers: [] }}
         />
+
+        <Stack.Screen name="quick_shares" component={QuickSharesScreen} />
 
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
         <Stack.Screen
