@@ -40,7 +40,7 @@ export class SendService implements SendServiceAbstraction {
   
     async encrypt (
       model: SendView,
-      password: string,
+      password?: string,
       key?: SymmetricCryptoKey
     ): Promise<Send> {
       const send = new Send()

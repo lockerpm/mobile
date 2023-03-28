@@ -105,6 +105,13 @@ export type GetOrganizationResult =
   export type SyncQuickSharesResult =
   | { kind: "ok"; data: any[] }
   | GeneralApiProblem
+  export type QuickSharesResult =
+  | { kind: "ok"; data: {
+    id: string,
+    cipher_id: string,
+    access_id: string,
+  } }
+  | GeneralApiProblem
 export type PostFolderResult = { kind: "ok"; data: FolderResponse } | GeneralApiProblem
 export type PostCollectionResult = { kind: "ok"; data: CollectionResponse } | GeneralApiProblem
 export type GetProfileResult = { kind: "ok"; data: ProfileResponse } | GeneralApiProblem

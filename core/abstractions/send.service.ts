@@ -11,7 +11,7 @@ export abstract class SendService {
     clearCache: () => void
     encrypt: (
       model: SendView,
-      password: string,
+      password?: string,
       key?: SymmetricCryptoKey
     ) => Promise<Send>
   

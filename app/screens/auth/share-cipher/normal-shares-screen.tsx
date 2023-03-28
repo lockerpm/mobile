@@ -29,7 +29,6 @@ export const NormalSharesScreen = observer(() => {
   const cipherIds = ciphers?.length > 1 ? ciphers.map((c) => c.id) : null
   const selectedCipher: CipherView = ciphers?.length === 1 ? ciphers[0] : null
 
-  console.log(cipherIds, selectedCipher)
 
   // --------------- PARAMS ----------------
   const [page, setPage] = useState<0 | 1>(0)
