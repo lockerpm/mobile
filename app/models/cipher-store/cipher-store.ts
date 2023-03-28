@@ -2,7 +2,9 @@ import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
 import { Organization } from "../../../core/models/domain/organization"
 import { CipherRequest } from "../../../core/models/request/cipherRequest"
+import { SendRequest } from "../../../core/models/request/sendRequest"
 import { CipherView } from "../../../core/models/view"
+import { QUICK_SHARE_BASE_URL } from "../../config/constants"
 import { MyShareType, SharingInvitationType } from "../../config/types/api"
 import {
   ConfirmShareCipherData,
@@ -364,6 +366,12 @@ export const CipherStoreModel = types
     },
 
     // ----------QUICK SHARE--------------------
+
+    quickShare: async (sendRequest: SendRequest) => {
+      const cipherApi = new CipherApi(self.environment.api)
+      const res = await cipherApi.quickShare(self.apiToken, sendRequest)
+      return res
+    },
     syncQuickShares: async (page: number) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.syncQuickShares(self.apiToken, page)
@@ -373,16 +381,14 @@ export const CipherStoreModel = types
       return []
     },
 
-    getPublicShareUrl: (accessId, key) => {
-      return `${
-        process.env.baseUrl
-      }/shares/flash-share-item/${accessId}#${encodeURIComponent(key)}`
+    getPublicShareUrl: ( accessId, key) => {
+      return `${QUICK_SHARE_BASE_URL}/shares/flash-share-item/${accessId}#${encodeURIComponent(key)}`
     },
 
     stopQuickSharing: async (send) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.stopQuickSharing(self.apiToken, send.id)
-      if (res.kind === "ok" ){
+      if (res.kind === "ok") {
         return true
       }
       return false

@@ -1068,5 +1068,43 @@
     "qr_scan": "Quét mã QR",
     "more_step": "Bước cuối cùng",
     "point_camera": "Quét mã QR trên ứng dụng máy tính của bạn để xác nhận Đăng nhập"
+  },
+  "quick_shares" :{
+    "share_option": {
+      "title" : "Choose your sharing option",
+      "normal": {
+        "tl": "In-app shares",
+        "dec": "Share with Locker users or a group of users. They can view or edit your item."
+      },
+      "quick": {
+        "tl": "Quick shares",
+        "dec": "Send a link of the item to anyone, they don't need a Locker account to view it."
+      }
+    },
+    "title": "Get shareable link",
+    "get_link":  "Get Link to Share",
+    "copy_link": "Copy Link",
+    "config" : {
+      "title": "General access",
+      "anyone": "Anyone with the link",
+      "invited": "Only invited people",
+      "email": "Email addresses for the people to share this with",
+      "verify": "They'll need to verify their email before they can access the item",
+      "expired": {
+        "tl": "Link expires after",
+        "1h": "1 hour",
+        "24h":  "24 hours",
+        "7d": "7 days",
+        "14d": "14 days",
+        "30d": "30 days",
+        "no_expired": "No expires"
+      },
+      "access_options": {
+        "unlimited": "Unlimited access",
+        "time":  "Time access"
+      }
+    },
+    "receiver": "Receiver",
+    "expired": "`This item's share link will expire on {{time}}"
   }
 }

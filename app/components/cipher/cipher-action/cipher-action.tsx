@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { commonStyles, fontSize } from "../../../theme"
 import { useStores } from "../../../models"
@@ -50,7 +50,6 @@ export const CipherAction = observer((props: CipherActionProps) => {
   const { getCipherDescription, getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
-  console.log(selectedCipher)
   // Computed
 
   const lockerMasterPassword = selectedCipher.type === CipherType.MasterPassword
@@ -284,27 +283,49 @@ export const CipherAction = observer((props: CipherActionProps) => {
       </ActionSheet>
 
       {/** share option */}
-      <ActionSheet isOpen={showShareOptions} onClose={() => setShowShareOptions(false)}>
-        <Divider style={{ marginTop: 10 }} />
-        <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
-          <ActionItem
-            disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-            name={"normal shares"}
-            icon="share-square-o"
-            action={() => {
+      <ActionSheet
+        isOpen={showShareOptions}
+        onClose={() => setShowShareOptions(false)}
+        style={{ paddingHorizontal: 16 }}
+      >
+        <Text
+          preset="bold"
+          text={translate("quick_shares.share_option.title")}
+          style={{ fontSize: 20 }}
+        />
+        <ActionSheetContent contentContainerStyle={{ paddingVertical: 5, paddingBottom: 16 }}>
+          <TouchableOpacity
+            onPress={() => {
               setShowShareOptions(false)
-              navigation.navigate('normal_shares', {ciphers: [selectedCipher]})
+              navigation.navigate("normal_shares", { ciphers: [selectedCipher] })
             }}
-          />
-          <ActionItem
-            disabled={uiStore.isOffline}
-            name={"Quick shares"}
-            icon="share-square-o"
-            action={() => {
+          >
+            <Text
+              preset="semibold"
+              text={translate("quick_shares.share_option.normal.tl")}
+              style={{
+                marginVertical: 14,
+                marginBottom: 4,
+              }}
+            />
+            <Text text={translate("quick_shares.share_option.normal.dec")} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
               setShowShareOptions(false)
-              navigation.navigate('quick_shares', {cipher: selectedCipher})
+              navigation.navigate("quick_shares", { cipher: selectedCipher })
             }}
-          />
+          >
+            <Text
+              preset="semibold"
+              text={translate("quick_shares.share_option.quick.tl")}
+              style={{
+                marginVertical: 24,
+                marginBottom: 4,
+              }}
+            />
+            <Text text={translate("quick_shares.share_option.quick.dec")} />
+          </TouchableOpacity>
         </ActionSheetContent>
       </ActionSheet>
       {/* Actionsheet end */}
