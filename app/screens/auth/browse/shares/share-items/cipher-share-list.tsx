@@ -92,7 +92,7 @@ export const CipherShareList = observer((props: Props) => {
 
         const share = _getShare(c.organizationId)
         const org = _getOrg(c.organizationId)
-        return org && org.type === AccountRole.OWNER && share && share.members.length
+        return org && org.type === AccountRole.OWNER && share && share.members.length > 0
       },
     ]
 

@@ -99,6 +99,8 @@ import { AppNotification } from "../services/api"
 import { RelayAddress, SubdomainData, TrustedContact } from "../config/types/api"
 import { CollectionView } from "../../core/models/view/collectionView"
 import { CipherView } from "../../core/models/view"
+import { QuickSharesDetailScreen } from "../screens/auth/browse/shares/quick-shares/quick-shares-detail"
+import { SendView } from "../../core/models/view/sendView"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -153,6 +155,10 @@ export type PrimaryParamList = {
   quick_shares: {
     cipher: CipherView
   }
+  quickShareItemsDetail: {
+    send: SendView
+  }
+  
   passwords__info: undefined
   passwords__edit: {
     mode: "add" | "edit" | "clone"
@@ -273,6 +279,7 @@ export type PrimaryParamList = {
     trusted: TrustedContact
     reset_pw: boolean
   }
+  
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -663,7 +670,8 @@ export const MainNavigator = observer(() => {
         />
 
         <Stack.Screen name="quick_shares" component={QuickSharesScreen} />
-
+        <Stack.Screen name="quickShareItemsDetail" component={QuickSharesDetailScreen} /> 
+        
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
         <Stack.Screen
           name="passwords__edit"

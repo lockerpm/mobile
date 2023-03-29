@@ -315,6 +315,7 @@ export const CipherDataMixinsProvider = observer(
           await syncService.syncSends(userId, res.data.sends)
           await syncService.syncSettings(userId, res.data.domains)
           await syncService.syncPolicies(res.data.policies)
+          await syncQuickShares()
 
           messagingService.send("syncCompleted", { successfully: true })
 
@@ -376,7 +377,8 @@ export const CipherDataMixinsProvider = observer(
           await syncService.syncSends(userId, res.data.sends)
           await syncService.syncSettings(userId, res.data.domains)
           await syncService.syncPolicies(res.data.policies)
-
+          await syncQuickShares()
+          
           cipherIds = res.data.ciphers.map((c) => c.id)
 
           // Load all loaded data
@@ -2428,6 +2430,7 @@ export const CipherDataMixinsProvider = observer(
 
     const syncQuickShares = async () => {
       try {
+        console.log("ASdasdasd")
         // this.$store.commit('UPDATE_SYNCING_QUICK_SHARES', true)
         const res = await cipherStore.syncQuickShares(0)
         const userId = await userService.getUserId()

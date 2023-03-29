@@ -382,16 +382,13 @@ export const CipherStoreModel = types
     },
 
     getPublicShareUrl: ( accessId, key) => {
-      return `${QUICK_SHARE_BASE_URL}/shares/flash-share-item/${accessId}#${encodeURIComponent(key)}`
+      return `${QUICK_SHARE_BASE_URL}/shares/quick-share-item/${accessId}#${encodeURIComponent(key)}`
     },
 
     stopQuickSharing: async (send) => {
       const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.stopQuickSharing(self.apiToken, send.id)
-      if (res.kind === "ok") {
-        return true
-      }
-      return false
+      return res
     },
     // ---------------------QUICK SHARE----------------------------
   }))

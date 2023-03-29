@@ -3,10 +3,40 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { 
   BrowseListScreen , FoldersScreen, CardsScreen, PasswordsScreen, 
   NotesScreen, IdentitiesScreen, SharesScreen, TrashScreen,
-  ShareItemsScreen, SharedItemsScreen, CryptoAssetsScreen, DriverLicenseScreen, CitizenIDScreen, PassportScreen, SocialSecurityNumberScreen, WirelessRouterScreen, ServerScreen, ApiCiphersScreen, DatabaseScreen
+  ShareItemsScreen, SharedItemsScreen, CryptoAssetsScreen, DriverLicenseScreen, CitizenIDScreen, PassportScreen, SocialSecurityNumberScreen, WirelessRouterScreen, ServerScreen, ApiCiphersScreen, DatabaseScreen, QuickShareItemsScreen
 } from "../../screens"
+import { SendView } from "../../../core/models/view/sendView"
 
+
+export type BrowseParamList = {
+  browseList: undefined
+  folders: undefined
+  cards: undefined
+  passwords: undefined
+  notes: undefined
+  identities: undefined
+  shares: undefined
+  sharedItems: undefined
+  quickShareItems: undefined
+  quickShareItemsDetail: {
+    send: SendView
+  }
+  shareItems: undefined
+  trash: undefined
+  cryptoWallets: undefined
+
+  driverLicenses: undefined
+  citizenIDs: undefined
+  passports: undefined
+  socialSecurityNumbers: undefined
+  wirelessRouters: undefined
+  servers: undefined
+  apiCiphers: undefined
+  databases: undefined
+}
 const Stack = createStackNavigator()
+
+
 
 export const BrowseNavigator = () => {
   return (
@@ -24,6 +54,7 @@ export const BrowseNavigator = () => {
       <Stack.Screen name="identities" component={IdentitiesScreen} />
       <Stack.Screen name="shares" component={SharesScreen} />
       <Stack.Screen name="sharedItems" component={SharedItemsScreen} />
+      <Stack.Screen name="quickShareItems" component={QuickShareItemsScreen} />
       <Stack.Screen name="shareItems" component={ShareItemsScreen} />
       <Stack.Screen name="trash" component={TrashScreen} />
       <Stack.Screen name="cryptoWallets" component={CryptoAssetsScreen} />

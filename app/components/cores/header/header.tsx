@@ -239,7 +239,7 @@ function HeaderAction(props: HeaderActionProps) {
   if (icon) {
     return (
       <Icon
-        size={24}
+        size={20}
         icon={icon}
         color={iconColor}
         onPress={onPress}

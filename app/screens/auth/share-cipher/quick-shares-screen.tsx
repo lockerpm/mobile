@@ -37,6 +37,7 @@ export const QuickSharesScreen = observer(() => {
 
   // --------------------COMPUTED-----------------------------
   const cipherView = route.params.cipher
+
   const cipherInfo = getCipherInfo(cipherView)
   const cipher = {
     ...cipherView,
