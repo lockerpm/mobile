@@ -1105,6 +1105,7 @@
       }
     },
     "receiver": "Receiver",
-    "expired": "`This item's share link will expire on {{time}}"
+    "expired": "This item's share link will expire on {{time}}",
+    "shared": "My shared items"
   }
 }
