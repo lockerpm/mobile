@@ -43,7 +43,10 @@ import {
   GetEnterpriseResult,
   OnPremisePreLoginResult,
   SessionOtpLoginData,
+<<<<<<< HEAD
   BusinessLoginMethodResult,
+=======
+>>>>>>> a17c199658a2f1dda82e840ecb6a3a56bb4a7c3f
 } from "./api.types"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
@@ -1234,6 +1237,7 @@ export class UserApi {
     }
   }
 
+<<<<<<< HEAD
   async businessLoginMethod(): Promise<BusinessLoginMethodResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -1251,6 +1255,8 @@ export class UserApi {
       return { kind: "bad-data" }
     }
   }
+=======
+>>>>>>> a17c199658a2f1dda82e840ecb6a3a56bb4a7c3f
   async onPremisePreLogin(email: string): Promise<OnPremisePreLoginResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(
