@@ -38,6 +38,7 @@ export const CipherStoreModel = types
     notSynchedCiphers: types.array(types.string), // Create in offline mode
     notUpdatedCiphers: types.array(types.string), // Create in online mode but somehow not update yet
     lastSync: types.maybeNull(types.number),
+    lastSyncQuickShare:  types.maybeNull(types.number),
     lastCacheUpdate: types.maybeNull(types.number),
     sharingInvitations: types.array(types.frozen<SharingInvitationType>()),
     myShares: types.array(types.frozen<MyShareType>()),
@@ -96,6 +97,10 @@ export const CipherStoreModel = types
 
     setLastSync: (val?: number) => {
       self.lastSync = Math.max(val || Date.now(), self.lastSync)
+    },
+
+    setLastSyncQuickShare: (val?: number) => {
+      self.lastSyncQuickShare = Math.max(val || Date.now(), self.lastSyncQuickShare)
     },
 
     setLastCacheUpdate: () => {

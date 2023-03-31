@@ -28,7 +28,7 @@ type Props = {
  */
 export const QuickSharesItemAction = observer((props: Props) => {
   const { isOpen, onClose, selectedCipher, navigation } = props
-  const { color, notifyApiError, copyToClipboard } = useMixins()
+  const { color, notifyApiError, copyToClipboard, translate } = useMixins()
   const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore } = useStores()
 
@@ -78,7 +78,7 @@ export const QuickSharesItemAction = observer((props: Props) => {
 
       <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
         <ActionItem
-          name={"Quick share detail"}
+          name={translate('quick_shares.action.detail')}
           icon="list-alt"
           action={() => {
             onClose()
@@ -86,10 +86,10 @@ export const QuickSharesItemAction = observer((props: Props) => {
           }}
         />
 
-        <ActionItem name={"Copy link"} icon="link" action={copyShareLink} />
+        <ActionItem name={translate('quick_shares.action.copy')} icon="link" action={copyShareLink} />
 
         <ActionItem
-          name={"Stop sharing"}
+          name={translate('quick_shares.action.stop')}
           icon="trash"
           textColor={color.error}
           action={stopQuickShare}

@@ -24,6 +24,7 @@ import { SendRequest } from "../../../../core/models/request/sendRequest"
 import Animated from "react-native-reanimated"
 import { Utils } from "../../../../core/misc/utils"
 import moment from "moment"
+import { Logger } from "../../../utils/logger"
 
 const { width } = Dimensions.get("screen")
 
@@ -135,19 +136,13 @@ export const QuickSharesScreen = observer(() => {
         notifyApiError(res)
       }
     } catch (e) {
-      console.log(e)
+      Logger.error(e)
     } finally {
       setIsSharing(false)
     }
   }
 
   const copyShareUrl = () => {
-    console.log(
-      cipherStore.getPublicShareUrl(
-        quickSharesInfo.accessId,
-        Utils.fromBufferToUrlB64(quickSharesInfo.key),
-      ),
-    )
     copyToClipboard(
       cipherStore.getPublicShareUrl(
         quickSharesInfo.accessId,
@@ -483,7 +478,7 @@ const QuickShareConfig = ({
         <Text preset="black" text={ExpireData.find((e) => e.val === expireAfter).label} />
       </TouchableOpacity>
 
-      <Text text="or" style={{ marginVertical: 12 }} />
+      <Text text={translate('quick_shares.config.or')} style={{ marginVertical: 12 }} />
 
       <View
         style={{

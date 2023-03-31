@@ -1071,41 +1071,54 @@
   },
   "quick_shares" :{
     "share_option": {
-      "title" : "Choose your sharing option",
+      "title" : "Tùy chọn chia sẻ",
       "normal": {
-        "tl": "In-app shares",
-        "dec": "Share with Locker users or a group of users. They can view or edit your item."
+        "tl": "Chia sẻ nội bộ",
+        "dec": "Chia sẻ với người dùng Locker khác, cho phép xem hoặc chỉnh sửa mục được chia sẻ."
       },
       "quick": {
-        "tl": "Quick shares",
-        "dec": "Send a link of the item to anyone, they don't need a Locker account to view it."
+        "tl": "Chia sẻ nhanh",
+        "dec": "Gửi một liên kết cho bất kỳ ai, cho phép xem mà không cần tài khoản Locker."
       }
     },
-    "title": "Get shareable link",
-    "get_link":  "Get Link to Share",
-    "copy_link": "Copy Link",
+    "title": "Chia sẻ qua liên kết",
+    "get_link":  "Nhận liên kết",
+    "copy_link": "Sao chép liên kết",
     "config" : {
-      "title": "General access",
-      "anyone": "Anyone with the link",
-      "invited": "Only invited people",
-      "email": "Email addresses for the people to share this with",
-      "verify": "They'll need to verify their email before they can access the item",
+      "title": "Quyền truy cập",
+      "anyone": "Bất kỳ ai có liên kết",
+      "invited": "Chỉ người được mời",
+      "email": "Nhập email của người bạn muốn chia sẻ",
+      "verify": "Người được mời cần xác nhận lại email để xem được mục này",
       "expired": {
-        "tl": "Link expires after",
-        "1h": "1 hour",
-        "24h":  "24 hours",
-        "7d": "7 days",
-        "14d": "14 days",
-        "30d": "30 days",
-        "no_expired": "No expires"
+        "tl": "Hết hạn sau",
+        "1h": "1 giờ",
+        "24h":  "24 giờ",
+        "7d": "7 ngày",
+        "14d": "14 ngày",
+        "30d": "30 ngày",
+        "no_expired": "Không hết hạn"
       },
+      "or": "hoặc",
       "access_options": {
-        "unlimited": "Unlimited access",
-        "time":  "Time access"
+        "unlimited": "Không giới hạn",
+        "time":  "Lượt truy cập"
       }
     },
-    "receiver": "Receiver",
-    "expired": "This item's share link will expire on {{time}}",
-    "shared": "My shared items"
+    "receiver": "Người nhận",
+    "expired": "Liên kết tới mục này sẽ hết hạn vào {{time}}",
+    "shared": "Mục chia sẻ của tôi",
+    "action": {
+      "detail": "Xem chi tiết",
+      "copy": "Sao chép liên kết",
+      "stop": "Ngừng chia sẻ"
+    },
+    "detail" : {
+      "tl": "Chi tiết",
+      "share_time": "Thời gian tạo",
+      "share_with": "Chia sẻ với",
+      "expire": "Hết hạn vào",
+      "View": "Lượt truy cập/lượt xem"
+    }
   }
 }

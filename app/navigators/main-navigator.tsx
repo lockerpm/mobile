@@ -158,7 +158,7 @@ export type PrimaryParamList = {
   quickShareItemsDetail: {
     send: SendView
   }
-  
+
   passwords__info: undefined
   passwords__edit: {
     mode: "add" | "edit" | "clone"
@@ -279,7 +279,6 @@ export type PrimaryParamList = {
     trusted: TrustedContact
     reset_pw: boolean
   }
-  
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -296,7 +295,7 @@ export const MainNavigator = observer(() => {
     syncSingleFolder,
     syncOfflineData,
     startSyncProcess,
-    syncQuickShares
+    syncQuickShares,
   } = useCipherDataMixins()
   const { uiStore, user, cipherStore, toolStore } = useStores()
 
@@ -459,6 +458,7 @@ export const MainNavigator = observer(() => {
     ws.onmessage = async (e) => {
       const data = JSON.parse(e.data)
       Logger.debug("WEBSOCKET EVENT: " + data.event)
+
       switch (data.event) {
         // SYNC
         case SocketEvent.SYNC:
@@ -670,8 +670,8 @@ export const MainNavigator = observer(() => {
         />
 
         <Stack.Screen name="quick_shares" component={QuickSharesScreen} />
-        <Stack.Screen name="quickShareItemsDetail" component={QuickSharesDetailScreen} /> 
-        
+        <Stack.Screen name="quickShareItemsDetail" component={QuickSharesDetailScreen} />
+
         <Stack.Screen name="passwords__info" component={PasswordInfoScreen} />
         <Stack.Screen
           name="passwords__edit"

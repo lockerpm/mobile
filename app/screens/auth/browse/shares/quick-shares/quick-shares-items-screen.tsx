@@ -67,7 +67,7 @@ export const QuickShareItemsScreen = observer(() => {
             if (isFreeAccount) {
               goPremium()
             } else {
-              navigation.navigate('shareMultiple')
+              navigation.navigate('mainTab', {screen: "homeTab"})
             }
           }}
           onSearch={setSearchText}
@@ -116,7 +116,7 @@ export const QuickShareItemsScreen = observer(() => {
             title={translate('shares.empty.title')}
             desc={translate('shares.empty.desc_share')}
             buttonText={translate('shares.start_sharing')}
-            addItem={() => navigation.navigate('shareMultiple')}
+            addItem={() => navigation.navigate('mainTab', {screen: "homeTab"})}
           />
         )}
       />

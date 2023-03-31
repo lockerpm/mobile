@@ -2430,16 +2430,14 @@ export const CipherDataMixinsProvider = observer(
 
     const syncQuickShares = async () => {
       try {
-        console.log("ASdasdasd")
-        // this.$store.commit('UPDATE_SYNCING_QUICK_SHARES', true)
         const res = await cipherStore.syncQuickShares(0)
         const userId = await userService.getUserId()
         await syncService.syncSends(userId, res)
       } catch (error) {
         console.log(error)
-      } finally {
-        // this.$store.commit('UPDATE_SYNCING_QUICK_SHARES', false)
-      }
+      } 
+
+      cipherStore.setLastSyncQuickShare()
     }
 
     // -------------------- REGISTER FUNCTIONS ------------------
