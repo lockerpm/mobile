@@ -9,6 +9,7 @@ import { QuickSharesCipherListItem } from "./quick-shares-list-item"
 import { useCoreService } from "../../../../../services/core-service"
 import { SendView } from "../../../../../../core/models/view/sendView"
 import { QuickSharesItemAction } from "./quick-shares-item-action"
+import { Logger } from "../../../../../utils/logger"
 
 type Props = {
   emptyContent?: JSX.Element
@@ -36,10 +37,8 @@ export const QuickSharesList = observer((props: Props) => {
     loadData()
   }, [
     searchText,
-    cipherStore.lastSync,
-    cipherStore.lastCacheUpdate,
+    cipherStore.lastSyncQuickShare,
     sortList,
-    JSON.stringify(cipherStore.myShares),
   ])
   // ------------------------ METHODS ----------------------------
 
@@ -49,7 +48,7 @@ export const QuickSharesList = observer((props: Props) => {
     try {
       res = (await sendService.getAllDecrypted()) || []
     } catch (error) {
-      console.log(error)
+      Logger.error(error)
     }
 
     // search

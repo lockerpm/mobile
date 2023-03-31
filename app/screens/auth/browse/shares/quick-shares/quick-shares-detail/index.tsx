@@ -2,7 +2,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import moment from "moment"
 import React from "react"
 import { TouchableOpacity, View, ViewStyle } from "react-native"
-import { AutoImage as Image, Divider, Text, Button } from "../../../../../../components"
+import { AutoImage as Image, Text, Button } from "../../../../../../components"
 import { Header, Icon, Screen } from "../../../../../../components/cores"
 import { useStores } from "../../../../../../models"
 import { BrowseParamList } from "../../../../../../navigators"
@@ -12,7 +12,7 @@ import { commonStyles, fontSize } from "../../../../../../theme"
 
 export const QuickSharesDetailScreen = () => {
   const navigation = useNavigation()
-  const { color, copyToClipboard } = useMixins()
+  const { color, copyToClipboard, translate } = useMixins()
   const { getCipherInfo, getCipherDescription } = useCipherHelpersMixins()
   const route = useRoute<RouteProp<BrowseParamList, "quickShareItemsDetail">>()
   const { cipherStore } = useStores()
@@ -28,7 +28,9 @@ export const QuickSharesDetailScreen = () => {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginVertical: 16,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: color.line,
   }
 
   return (
@@ -40,7 +42,7 @@ export const QuickSharesDetailScreen = () => {
           onLeftPress={() => {
             navigation.goBack()
           }}
-          title="Quick share details"
+          title={translate('quick_shares.detail.tl')}
         />
       }
       footer={
@@ -50,7 +52,7 @@ export const QuickSharesDetailScreen = () => {
           }}
         >
           <Button
-            text="Copy Share link"
+            text={translate('quick_shares.action.copy')}
             onPress={() => {
               const url = cipherStore.getPublicShareUrl(send.accessId, send.key)
               copyToClipboard(url)
@@ -58,7 +60,7 @@ export const QuickSharesDetailScreen = () => {
           />
           <Button
             preset="outline"
-            text="Copy Share link"
+            text={translate('quick_shares.action.stop')}
             onPress={() => {
               const url = cipherStore.getPublicShareUrl(send.accessId, send.key)
               copyToClipboard(url)
@@ -122,15 +124,15 @@ export const QuickSharesDetailScreen = () => {
           }}
         />
       </TouchableOpacity>
+      {!!send.creationDate && (
+        <View style={$horizontalStyle}>
+          <Text text={translate('quick_shares.detail.share_time')}/>
+          <Text preset="black" text={moment.unix(send.creationDate.getTime() / 1000).fromNow()} />
+        </View>
+      )}
 
       <View style={$horizontalStyle}>
-        <Text text="Sharing time" />
-        <Text preset="black" text={moment.unix(send.creationDate.getTime() / 1000).fromNow()} />
-      </View>
-      <Divider />
-
-      <View style={$horizontalStyle}>
-        <Text text="ShareWidth" />
+        <Text text={translate('quick_shares.detail.share_with')} />
         <View>
           {send.emails?.map((e) => (
             <Text text="e" />
@@ -138,26 +140,25 @@ export const QuickSharesDetailScreen = () => {
           {!send.emails || (send.emails.length === 0 && <Text text="Anyone one" />)}
         </View>
       </View>
-      <Divider />
 
-      {!!send.maxAccessCount && (
-        <>
-          <View style={$horizontalStyle}>
-            <Text text="View(s)" />
-            <Text preset="black" text={`${send.eachEmailAccessCount} times`} />
-          </View>
-          <Divider />
-        </>
+      {!!send.accessCount && (
+        <View style={$horizontalStyle}>
+          <Text text={translate('quick_shares.detail.View')} />
+          <Text preset="black" text={`${send.accessCount}`} />
+        </View>
       )}
 
-      <View style={$horizontalStyle}>
-        <Text text="Expiration" />
-        <Text
-          preset="black"
-          text={moment.unix(send.expirationDate.getTime() / 1000).format("Do MMM YYYY, h:mm:ss A")}
-        />
-      </View>
-      <Divider />
+      {!!send.expirationDate && (
+        <View style={$horizontalStyle}>
+          <Text text={translate('quick_shares.detail.expire')} />
+          <Text
+            preset="black"
+            text={moment
+              .unix(send.expirationDate.getTime() / 1000)
+              .format("Do MMM YYYY, h:mm:ss A")}
+          />
+        </View>
+      )}
     </Screen>
   )
 }

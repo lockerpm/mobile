@@ -1104,15 +1104,29 @@
         "7d": "7 days",
         "14d": "14 days",
         "30d": "30 days",
-        "no_expired": "No expires"
+        "no_expired": "No expiration"
       },
+      "or": "or",
       "access_options": {
         "unlimited": "Unlimited access",
-        "time":  "Time access"
+        "time":  "Times access"
       }
     },
     "receiver": "Receiver",
     "expired": "This item's share link will expire on {{time}}",
-    "shared": "My shared items"
+    "shared": "My shared items",
+    "action": {
+      "detail": "Quick share detail",
+      "copy": "Copy link",
+      "stop": "Stop sharing"
+    },
+    "detail" : {
+      "tl": "Quick share details",
+      "share_time": "Sharing time",
+      "share_with": "Share width",
+      "expire": "Expiration",
+      "View": "View(s)"
+    }
+    
   }
 }
