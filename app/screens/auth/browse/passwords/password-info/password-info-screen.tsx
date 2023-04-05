@@ -5,7 +5,7 @@ import {
   Layout, Header, Button, AutoImage as Image, Text, FloatingInput, PasswordStrength,
   CipherInfoCommon, Textarea
 } from "../../../../../components"
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -18,6 +18,7 @@ import { DeletedAction } from "../../../../../components/cipher/cipher-action/de
 import { CipherView } from "../../../../../../core/models/view"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { CipherType } from "../../../../../../core/enums"
+import { PrimaryParamList } from "../../../../../navigators"
 
 
 export const PasswordInfoScreen = observer(() => {
@@ -30,8 +31,10 @@ export const PasswordInfoScreen = observer(() => {
   const [showAction, setShowAction] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  // ------------------ COMPUTED --------------------
+  const route = useRoute<RouteProp<PrimaryParamList, 'passports__info'>>()
+  const fromQuickShare = route.params?.quickShare
   
+  // ------------------ COMPUTED --------------------
   const lockerMasterPassword = selectedCipher?.type === CipherType.MasterPassword
   const passwordStrength = getPasswordStrength(selectedCipher.login.password)
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(selectedCipher.id)
@@ -49,7 +52,7 @@ export const PasswordInfoScreen = observer(() => {
       header={(
         <Header
           goBack={() => navigation.goBack()}
-          right={ !lockerMasterPassword && (
+          right={ !lockerMasterPassword && !fromQuickShare &&(
             <Button
               preset="link"
               onPress={() => setShowAction(true)}

@@ -598,7 +598,7 @@
   "shares": {
     "shares": "Chia sẻ",
     "share_items": "Bạn đã chia sẻ",
-    "shared_items": "Được chia sẻ với bạn",
+    "shared_items": "Được chia sẻ với tôi",
     "shared_folder": "Thư mục chia sẻ",
     "encrypted_content": "Nội dung mã hoá",
     "share_folder": {
@@ -1114,11 +1114,14 @@
       "stop": "Ngừng chia sẻ"
     },
     "detail" : {
+      "anyone": "Bất kì ai",
       "tl": "Chi tiết",
       "share_time": "Thời gian tạo",
       "share_with": "Chia sẻ với",
       "expire": "Hết hạn vào",
       "View": "Lượt truy cập/lượt xem"
-    }
+    },
+    "delete_expired": "Xoá chia sẻ hết hạn",
+    "shared_begin": "Được chia sẻ {{time}}"
   }
 }

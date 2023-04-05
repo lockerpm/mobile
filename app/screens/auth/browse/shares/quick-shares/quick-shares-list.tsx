@@ -10,6 +10,7 @@ import { useCoreService } from "../../../../../services/core-service"
 import { SendView } from "../../../../../../core/models/view/sendView"
 import { QuickSharesItemAction } from "./quick-shares-item-action"
 import { Logger } from "../../../../../utils/logger"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 
 type Props = {
   emptyContent?: JSX.Element
@@ -27,11 +28,18 @@ export const QuickSharesList = observer((props: Props) => {
   const { translate } = useMixins()
   const { sendService } = useCoreService()
   const { cipherStore } = useStores()
+  const {
+    syncQuickShares,
+  } = useCipherDataMixins()
   // ------------------------ PARAMS ----------------------------
 
   const [ciphers, setCiphers] = useState<SendView[]>([])
   const [showAction, setShowAction] = useState(false)
   const [selectedCipher, setSelectedCipher] = useState(null)
+
+  useEffect(() => {
+    syncQuickShares()
+  }, [])
 
   useEffect(() => {
     loadData()

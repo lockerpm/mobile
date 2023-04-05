@@ -14,7 +14,7 @@ import { Divider } from "../../divider/divider"
 import { CipherView } from "../../../../core/models/view"
 import { ChangeTeamFolderModal } from "./change-team-folder-modal"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { AccountRole, AccountRoleText } from "../../../config/types"
+import { AccountRole, AccountRoleText, PlanType } from "../../../config/types"
 import { LeaveShareModal } from "./leave-share-modal"
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { CipherType } from "../../../../core/enums"
@@ -45,13 +45,14 @@ export const CipherAction = observer((props: CipherActionProps) => {
   // const [showShareModal, setShowShareModal] = useState(false)
   const [showShareOptions, setShowShareOptions] = useState(false)
 
-  const { getRouteName, translate, getTeam, color } = useMixins()
+  const { getRouteName, translate, getTeam, color, goPremium } = useMixins()
   const { toTrashCiphers } = useCipherDataMixins()
   const { getCipherDescription, getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, user, uiStore } = useStores()
-  const selectedCipher: CipherView = cipherStore.cipherView
+  const selectedCipher: CipherView = { ...cipherStore.cipherView }
+  selectedCipher.revisionDate = null
   // Computed
-
+  const premiumLock = (user.plan?.alias === PlanType.FREE) || !user.plan
   const lockerMasterPassword = selectedCipher.type === CipherType.MasterPassword
   const emergencyView = isEmergencyView === undefined ? false : isEmergencyView
   const organizations = cipherStore.organizations
@@ -240,7 +241,6 @@ export const CipherAction = observer((props: CipherActionProps) => {
 
               {!lockerMasterPassword && !isInFolderShare && (
                 <ActionItem
-                  isPremium
                   onClose={onClose}
                   disabled={uiStore.isOffline}
                   name={translate("common.share")}
@@ -297,17 +297,48 @@ export const CipherAction = observer((props: CipherActionProps) => {
           <TouchableOpacity
             onPress={() => {
               setShowShareOptions(false)
-              navigation.navigate("normal_shares", { ciphers: [selectedCipher] })
+              if (premiumLock) {
+                goPremium()
+              } else {
+                navigation.navigate("normal_shares", { ciphers: [selectedCipher] })
+              }
+      
             }}
           >
-            <Text
-              preset="semibold"
-              text={translate("quick_shares.share_option.normal.tl")}
-              style={{
-                marginVertical: 14,
-                marginBottom: 4,
-              }}
-            />
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 14,
+            }}>
+              <Text
+                preset="semibold"
+                text={translate("quick_shares.share_option.normal.tl")}
+                style={{
+                  marginBottom: 4,
+                }}
+              />
+              {premiumLock && (
+                <View
+                  style={{
+                    paddingHorizontal: 10,
+                    paddingVertical: 2,
+                    backgroundColor: color.textBlack,
+                    borderRadius: 3,
+                    marginLeft: 10,
+                  }}
+                >
+                  <Text
+                    text="PREMIUM"
+                    style={{
+                      fontWeight: "bold",
+                      color: color.background,
+                      fontSize: fontSize.mini,
+                    }}
+                  />
+                </View>
+              )}
+            </View>
+     
             <Text text={translate("quick_shares.share_option.normal.dec")} />
           </TouchableOpacity>
           <TouchableOpacity

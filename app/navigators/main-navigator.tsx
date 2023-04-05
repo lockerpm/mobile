@@ -159,67 +159,99 @@ export type PrimaryParamList = {
     send: SendView
   }
 
-  passwords__info: undefined
+  passwords__info: {
+    quickShare?: boolean
+  }
   passwords__edit: {
     mode: "add" | "edit" | "clone"
     initialUrl?: string
     collection?: CollectionView
   }
-  notes__info: undefined
+  notes__info: {
+    quickShare?: boolean
+  }
   notes__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
-  cards__info: undefined
+  cards__info: {
+    quickShare?: boolean
+  }
   cards__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
-  identities__info: undefined
+  identities__info: {
+    quickShare?: boolean
+  }
   identities__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
-  driverLicenses__info: undefined
+  driverLicenses__info: {
+    quickShare?: boolean
+  }
   driverLicenses__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
-  citizenIDs__info: undefined
+  citizenIDs__info: {
+    quickShare?: boolean
+  }
   citizenIDs__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
-  passports__info: undefined
+  passports__info: {
+    quickShare?: boolean
+  }
   passports__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
-  socialSecurityNumbers__info: undefined
+  socialSecurityNumbers__info: {
+    quickShare?: boolean
+  }
   socialSecurityNumbers__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
-  wirelessRouters__info: undefined
+  wirelessRouters__info: {
+    quickShare?: boolean
+  }
   wirelessRouters__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
-  servers__info: undefined
+  servers__info: {
+    quickShare?: boolean
+  }
   servers__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
-  apiCiphers__info: undefined
+  apiCiphers__info: {
+    quickShare?: boolean
+  }
   apiCiphers__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
-  databases__info: undefined
+  databases__info: {
+    quickShare?: boolean
+  }
   databases__edit: {
     mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
+  cryptoWallets__info: {
+    quickShare?: boolean
+  }
+  cryptoWallets__edit: {
+    mode: "add" | "edit" | "clone"
+    collection?: CollectionView
+  }
+
   folders__select: {
     mode: "add" | "move"
     initialId?: string
@@ -257,11 +289,7 @@ export type PrimaryParamList = {
   deviceNotiSettings: undefined
   deleteAccount: undefined
   shareMultiple: undefined
-  cryptoWallets__info: undefined
-  cryptoWallets__edit: {
-    mode: "add" | "edit" | "clone"
-    collection?: CollectionView
-  }
+
   welcome_premium: undefined
 
   app_list_noti: {

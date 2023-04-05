@@ -252,7 +252,13 @@ interface QuickShareOptionProps {
   iconColor: string
 }
 
-const QuickShareOption = ({ isAnyone, isSelect, action, text, iconColor }: QuickShareOptionProps) => {
+const QuickShareOption = ({
+  isAnyone,
+  isSelect,
+  action,
+  text,
+  iconColor,
+}: QuickShareOptionProps) => {
   return (
     <TouchableOpacity
       style={{
@@ -264,8 +270,13 @@ const QuickShareOption = ({ isAnyone, isSelect, action, text, iconColor }: Quick
       onPress={action}
     >
       <Icon icon={isSelect ? "checkbox-check" : "checkbox"} size={24} />
-      <Icon icon={isAnyone ? "global" : "user"} size={24} color={iconColor} style={{ marginHorizontal: 12 }} />
-      <Text preset="black" text={text}  />
+      <Icon
+        icon={isAnyone ? "global" : "user"}
+        size={24}
+        color={iconColor}
+        style={{ marginHorizontal: 12 }}
+      />
+      <Text preset="black" text={text} />
     </TouchableOpacity>
   )
 }
@@ -478,7 +489,7 @@ const QuickShareConfig = ({
         <Text preset="black" text={ExpireData.find((e) => e.val === expireAfter).label} />
       </TouchableOpacity>
 
-      <Text text={translate('quick_shares.config.or')} style={{ marginVertical: 12 }} />
+      <Text text={translate("quick_shares.config.or")} style={{ marginVertical: 12 }} />
 
       <View
         style={{
@@ -659,17 +670,19 @@ const QuickSharesInfo = ({
         }}
       >
         {emails.map((e) => (
-          <Text preset="black" text={e} />
+          <Text key={e} preset="black" text={e} />
         ))}
         {emails?.length === 0 && <Text preset="black" text={"Anyone"} />}
       </View>
 
-      <Text
-        text={translate("quick_shares.expired", { time: expried })}
-        style={{
-          marginTop: 26,
-        }}
-      />
+      {!!expirationDate && (
+        <Text
+          text={translate("quick_shares.expired", { time: expried })}
+          style={{
+            marginTop: 26,
+          }}
+        />
+      )}
     </View>
   )
 }

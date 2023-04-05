@@ -32,6 +32,7 @@ export const QuickSharesDetailScreen = () => {
     borderBottomWidth: 1,
     borderBottomColor: color.line,
   }
+  console.log(send.emails)
 
   return (
     <Screen
@@ -42,7 +43,7 @@ export const QuickSharesDetailScreen = () => {
           onLeftPress={() => {
             navigation.goBack()
           }}
-          title={translate('quick_shares.detail.tl')}
+          title={translate("quick_shares.detail.tl")}
         />
       }
       footer={
@@ -52,7 +53,7 @@ export const QuickSharesDetailScreen = () => {
           }}
         >
           <Button
-            text={translate('quick_shares.action.copy')}
+            text={translate("quick_shares.action.copy")}
             onPress={() => {
               const url = cipherStore.getPublicShareUrl(send.accessId, send.key)
               copyToClipboard(url)
@@ -60,7 +61,7 @@ export const QuickSharesDetailScreen = () => {
           />
           <Button
             preset="outline"
-            text={translate('quick_shares.action.stop')}
+            text={translate("quick_shares.action.stop")}
             onPress={() => {
               const url = cipherStore.getPublicShareUrl(send.accessId, send.key)
               copyToClipboard(url)
@@ -91,7 +92,7 @@ export const QuickSharesDetailScreen = () => {
         }}
         onPress={() => {
           cipherStore.setSelectedCipher(send.cipher)
-          navigation.navigate(`${cipherMapper.path}__info`)
+          navigation.navigate(`${cipherMapper.path}__info`, {quickShare: true})
         }}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -126,31 +127,31 @@ export const QuickSharesDetailScreen = () => {
       </TouchableOpacity>
       {!!send.creationDate && (
         <View style={$horizontalStyle}>
-          <Text text={translate('quick_shares.detail.share_time')}/>
+          <Text text={translate("quick_shares.detail.share_time")} />
           <Text preset="black" text={moment.unix(send.creationDate.getTime() / 1000).fromNow()} />
         </View>
       )}
 
       <View style={$horizontalStyle}>
-        <Text text={translate('quick_shares.detail.share_with')} />
+        <Text text={translate("quick_shares.detail.share_with")} />
         <View>
           {send.emails?.map((e) => (
-            <Text text="e" />
+            <Text key={e.email} text={e.email} />
           ))}
-          {!send.emails || (send.emails.length === 0 && <Text text="Anyone one" />)}
+          {!send.emails || (send.emails.length === 0 && <Text text={translate('quick_shares.detail.anyone')} />)}
         </View>
       </View>
 
       {!!send.accessCount && (
         <View style={$horizontalStyle}>
-          <Text text={translate('quick_shares.detail.View')} />
+          <Text text={translate("quick_shares.detail.View")} />
           <Text preset="black" text={`${send.accessCount}`} />
         </View>
       )}
 
       {!!send.expirationDate && (
         <View style={$horizontalStyle}>
-          <Text text={translate('quick_shares.detail.expire')} />
+          <Text text={translate("quick_shares.detail.expire")} />
           <Text
             preset="black"
             text={moment

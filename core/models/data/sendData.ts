@@ -18,7 +18,7 @@ export class SendData {
     cipherId: string
     cipher: CipherData
     userId: string
-    emails: string[]
+    emails: { access_count: number; creation_date: number; email: string; max_access_count: number }[]
   
     constructor (response?: SendResponse, userId?: string) {
       if (response == null) {
