@@ -17,7 +17,7 @@ export class SendResponse extends BaseResponse {
   requireOtp: boolean
   cipherId: string
   cipher: CipherResponse
-  emails: string[]
+  emails: { access_count: number; creation_date: number; email: string; max_access_count: number }[]
 
   constructor(response: any) {
     super(response)

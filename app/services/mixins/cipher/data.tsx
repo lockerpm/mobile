@@ -2436,7 +2436,6 @@ export const CipherDataMixinsProvider = observer(
       } catch (error) {
         console.log(error)
       } 
-
       cipherStore.setLastSyncQuickShare()
     }
 

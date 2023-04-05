@@ -599,7 +599,7 @@
   "shares": {
     "shares": "Shares",
     "share_items": "Your Shares",
-    "shared_items": "Shared With You",
+    "shared_items": "Shared with me",
     "shared_folder": "Shared folder",
     "encrypted_content": "Encrypted Content",
     "share_folder": {
@@ -1121,12 +1121,14 @@
       "stop": "Stop sharing"
     },
     "detail" : {
+      "anyone": "Anyone",
       "tl": "Quick share details",
       "share_time": "Sharing time",
-      "share_with": "Share width",
+      "share_with": "Share with",
       "expire": "Expiration",
       "View": "View(s)"
-    }
-    
+    },
+    "delete_expired": "Delete expired item",
+    "shared_begin": "Shared {{time}}"
   }
 }

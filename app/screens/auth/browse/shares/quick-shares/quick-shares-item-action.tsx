@@ -34,6 +34,10 @@ export const QuickSharesItemAction = observer((props: Props) => {
 
   if (selectedCipher === null) return null
 
+  selectedCipher.revisionDate = null
+
+  const isExpired = selectedCipher.expirationDate?.getTime() < Date.now()
+
   const cipherMapper = (() => {
     const cipherInfo = getCipherInfo(selectedCipher.cipher)
     return cipherInfo
@@ -64,11 +68,18 @@ export const QuickSharesItemAction = observer((props: Props) => {
             <Image
               source={cipherMapper.img}
               backupSource={cipherMapper.backup}
-              style={{ height: 40, width: 40, borderRadius: 8 }}
+              style={{ height: 40, width: 40, borderRadius: 8, opacity: isExpired ? 0.3 : 1 }}
             />
           )}
           <View style={{ marginLeft: 10, flex: 1 }}>
-            <Text preset="semibold" text={selectedCipher.cipher.name} numberOfLines={2} />
+            <Text
+              preset="semibold"
+              text={isExpired ? selectedCipher.cipher.name : selectedCipher.cipher.name}
+              numberOfLines={2}
+              style={{
+                color: isExpired ? color.disabled : color.textBlack,
+              }}
+            />
           </View>
         </View>
       </View>
@@ -77,19 +88,27 @@ export const QuickSharesItemAction = observer((props: Props) => {
       <Divider style={{ marginTop: 10 }} />
 
       <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
-        <ActionItem
-          name={translate('quick_shares.action.detail')}
-          icon="list-alt"
-          action={() => {
-            onClose()
-            navigation.navigate("quickShareItemsDetail", { send: selectedCipher })
-          }}
-        />
+        {!isExpired && (
+          <ActionItem
+            name={translate("quick_shares.action.detail")}
+            icon="list-alt"
+            action={() => {
+              onClose()
+              navigation.navigate("quickShareItemsDetail", { send: selectedCipher })
+            }}
+          />
+        )}
 
-        <ActionItem name={translate('quick_shares.action.copy')} icon="link" action={copyShareLink} />
+        {!isExpired && (
+          <ActionItem
+            name={translate("quick_shares.action.copy")}
+            icon="link"
+            action={copyShareLink}
+          />
+        )}
 
         <ActionItem
-          name={translate('quick_shares.action.stop')}
+          name={isExpired ? translate("quick_shares.delete_expired") :translate("quick_shares.action.stop")}
           icon="trash"
           textColor={color.error}
           action={stopQuickShare}

@@ -17,7 +17,7 @@ type Prop = {
 export const QuickSharesCipherListItem = memo(
   (props: Prop) => {
     const { openActionMenu, item } = props
-    const { color } = useMixins()
+    const { color, translate } = useMixins()
     const { getCipherInfo } = useCipherHelpersMixins()
 
     const cipherInfo = getCipherInfo(item.cipher)
@@ -29,6 +29,8 @@ export const QuickSharesCipherListItem = memo(
       svg: cipherInfo.svg,
     }
     const description = moment.unix(item.creationDate.getTime() / 1000).fromNow()
+
+    const isExpired = item.expirationDate?.getTime() < Date.now()
     return (
       <Button
         preset="link"
@@ -45,7 +47,13 @@ export const QuickSharesCipherListItem = memo(
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           {/* Cipher avatar */}
           {cipher.svg ? (
-            <cipher.svg height={40} width={40} />
+            <View
+              style={{
+                opacity: isExpired ? 0.3 : 1,
+              }}
+            >
+              <cipher.svg height={40} width={40} />
+            </View>
           ) : (
             <Image
               source={cipher.imgLogo || cipher.logo}
@@ -54,6 +62,7 @@ export const QuickSharesCipherListItem = memo(
                 height: 40,
                 width: 40,
                 borderRadius: 8,
+                opacity: isExpired ? 0.3 : 1,
               }}
             />
           )}
@@ -64,19 +73,29 @@ export const QuickSharesCipherListItem = memo(
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-between"
+                justifyContent: "space-between",
               }}
             >
-              <Text preset="semibold" numberOfLines={1} text={cipher.name} />
+              <Text
+                preset="semibold"
+                numberOfLines={1}
+                text={cipher.name}
+                style={{
+                  color: isExpired ? color.disabled : color.textBlack,
+                }}
+              />
               {/* <Text text="Expired" /> */}
             </View>
             {/* Name end */}
 
             {/* Description */}
             <Text
-              text={`Shared ${description}`}
-              style={{ fontSize: fontSize.small }}
+              text={translate("quick_shares.shared_begin", { time: description })}
               numberOfLines={1}
+              style={{
+                fontSize: fontSize.small,
+                color: isExpired ? color.disabled : color.textBlack,
+              }}
             />
             {/* Description end */}
           </View>
