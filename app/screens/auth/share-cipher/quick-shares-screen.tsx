@@ -87,7 +87,6 @@ export const QuickSharesScreen = observer(() => {
     setEmails(emails.filter((e) => e !== val))
   }
 
-  console.log(requireOtp)
   const shareItem = async () => {
     try {
       setIsSharing(true)
@@ -121,7 +120,6 @@ export const QuickSharesScreen = observer(() => {
 
       // Send api
       const res = await cipherStore.quickShare(sendRequest)
-      console.log(res)
       if (res.kind === "ok") {
         setQuickSharesInfo({
           id: res.data.id,
