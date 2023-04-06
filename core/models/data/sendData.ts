@@ -18,7 +18,7 @@ export class SendData {
     cipherId: string
     cipher: CipherData
     userId: string
-    emails: { access_count: number; creation_date: number; email: string; max_access_count: number }[]
+    emails: string[]
   
     constructor (response?: SendResponse, userId?: string) {
       if (response == null) {
@@ -39,7 +39,7 @@ export class SendData {
       this.requireOtp = response.requireOtp
       this.cipherId = response.cipherId
       this.cipher = new CipherData(response.cipher, userId)
-      this.emails = response.emails
+      this.emails = response.emails.map(e => e.email)
   
       // @ts-ignore
       this.userId = userId

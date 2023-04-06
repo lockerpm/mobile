@@ -32,7 +32,6 @@ export const QuickSharesDetailScreen = () => {
     borderBottomWidth: 1,
     borderBottomColor: color.line,
   }
-  console.log(send.emails)
 
   return (
     <Screen
@@ -136,7 +135,7 @@ export const QuickSharesDetailScreen = () => {
         <Text text={translate("quick_shares.detail.share_with")} />
         <View>
           {send.emails?.map((e) => (
-            <Text key={e.email} text={e.email} />
+            <Text key={e} text={e} />
           ))}
           {!send.emails || (send.emails.length === 0 && <Text text={translate('quick_shares.detail.anyone')} />)}
         </View>

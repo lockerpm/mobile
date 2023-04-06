@@ -26,7 +26,7 @@ export class Send extends Domain {
   requireOtp: boolean
   cipherId: string
   cipher: Cipher
-  emails: { access_count: number; creation_date: number; email: string; max_access_count: number }[]
+  emails: string[]
 
   obj: SendData
 

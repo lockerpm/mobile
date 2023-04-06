@@ -58,7 +58,7 @@ export const QuickSharesScreen = observer(() => {
 
   const [requireOtp, setRequireOtp] = useState(false)
 
-  const [expireAfter, setExpireAfter] = useState<null | number>(null)
+  const [expireAfter, setExpireAfter] = useState<null | number>(60 * 60 * 24)
 
   const [countAccess, setCountAccess] = useState(false)
   const [viewOnce, setVieqwOnce] = useState(false)
@@ -87,6 +87,7 @@ export const QuickSharesScreen = observer(() => {
     setEmails(emails.filter((e) => e !== val))
   }
 
+  console.log(requireOtp)
   const shareItem = async () => {
     try {
       setIsSharing(true)
@@ -120,6 +121,7 @@ export const QuickSharesScreen = observer(() => {
 
       // Send api
       const res = await cipherStore.quickShare(sendRequest)
+      console.log(res)
       if (res.kind === "ok") {
         setQuickSharesInfo({
           id: res.data.id,
@@ -562,7 +564,13 @@ const QuickShareConfig = ({
         />
         <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
           {ExpireData.map((e) => (
-            <TouchableOpacity key={e.label} onPress={() => setExpireAfter(e.val)}>
+            <TouchableOpacity
+              key={e.label}
+              onPress={() => {
+                setOpenExpireSelect(false)
+                setExpireAfter(e.val)
+              }}
+            >
               <View
                 style={{
                   flexDirection: "row",
