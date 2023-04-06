@@ -94,6 +94,10 @@
 	<string>Scan QR code</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Authentication</string>
+
+	<key>IntercomCustomURL</key>
+	<string>intercom-messenger.com</string>
+
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -139,5 +143,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+
 </dict>
 </plist>
