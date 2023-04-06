@@ -22,7 +22,7 @@ export class SendView implements View {
   requireOtp: boolean = false
   cipherId: string
   cipher: CipherView
-  emails: { access_count: number; creation_date: number; email: string; max_access_count: number }[]
+  emails: string[]
 
   constructor(s?: Send) {
     if (!s) {
