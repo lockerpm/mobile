@@ -199,7 +199,7 @@ export const InitScreen = observer(() => {
 
     // Session validated?
     if (!user.isLoggedIn) {
-      navigation.navigate("loginSelect")
+      navigation.navigate("login")
       return
     }
 
@@ -222,7 +222,7 @@ export const InitScreen = observer(() => {
     if (userRes.kind === "ok" && userPwRes.kind === "ok") {
       goLockOrCreatePassword()
     } else {
-      navigation.navigate("loginSelect")
+      navigation.navigate("login")
     }
   }
 
