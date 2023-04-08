@@ -64,7 +64,7 @@ export const OnboardingScreen = observer(() => {
           <Button
             preset="link"
             text={translate("common.login")}
-            onPress={() => navigation.navigate("loginSelect")}
+            onPress={() => navigation.navigate("login")}
           />
         </View>
       </View>}

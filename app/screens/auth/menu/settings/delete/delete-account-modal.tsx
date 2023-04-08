@@ -59,7 +59,7 @@ export const DeleteAccountModal = observer((props: Props) => {
       setMasterPass('')
       onClose()
       await logout()
-      navigation.navigate('loginSelect')
+      navigation.navigate('login')
     } else {
       notifyApiError(res)
       if (res.kind === 'unauthorized') {

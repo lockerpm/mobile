@@ -52,7 +52,7 @@ export const LockScreen = observer(() => {
 
   const handleLogout = async () => {
     await logout()
-    navigation.navigate("loginSelect")
+    navigation.navigate("login")
   }
 
   // -------------- EFFECT ------------------
@@ -86,7 +86,7 @@ export const LockScreen = observer(() => {
           style: "destructive",
           onPress: async () => {
             await logout()
-            navigation.navigate("loginSelect")
+            navigation.navigate("login")
           },
         },
       ])

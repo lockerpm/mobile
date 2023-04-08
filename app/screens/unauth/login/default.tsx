@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { View } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
 import { AutoImage as Image, Text, FloatingInput, Button, Header } from "../../../components"
@@ -22,7 +22,7 @@ type Props = {
 export const DefaultLogin = observer((props: Props) => {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { translate, notify, notifyApiError, setApiTokens } = useMixins()
+  const { translate, notify, notifyApiError, setApiTokens, color } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
   const { nextStep, onLoggedIn, handleForgot, onPremise } = props
   // ------------------ Params -----------------------
@@ -168,7 +168,7 @@ export const DefaultLogin = observer((props: Props) => {
         size={24}
         containerStyle={{
           padding: 10,
-          paddingLeft: 0
+          paddingLeft: 0,
         }}
         onPress={() => navigation.goBack()}
       />
@@ -275,6 +275,27 @@ export const DefaultLogin = observer((props: Props) => {
             </View>
           </View>
         )}
+
+        <Text
+          text={IS_PROD ? translate("common.or_login_with") : ""}
+          style={{ marginBottom: spacing.tiny }}
+        />
+
+        <TouchableOpacity
+          style={{
+            width: "100%",
+            padding: 16,
+            borderRadius: 6,
+            borderWidth: 1,
+            borderColor: color.line,
+            flexDirection: "row",
+            alignItems: "center",
+            marginBottom: 16,
+          }}
+          onPress={() => {}}
+        >
+          <Text preset="black" text={"Sso identifier"} />
+        </TouchableOpacity>
       </View>
     </View>
   )

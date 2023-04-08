@@ -34,7 +34,6 @@ import { AppState } from "react-native"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { TestScreen } from "../screens/test-screen"
-import { LoginSelectScreen } from "../screens/unauth/login-select/login-select-screen"
 import { OnPremisePreloginData } from "../services/api"
 
 /**
@@ -59,9 +58,7 @@ export type RootParamList = {
     data?: OnPremisePreloginData
     email?: string
   }
-  login: {
-    type?: "individual" | "onPremise"
-  }
+  login: undefined
   forgotPassword: undefined
   signup: undefined
   createMasterPassword: undefined
@@ -69,7 +66,6 @@ export type RootParamList = {
   countrySelector: {
     initialId?: string
   }
-  loginSelect: undefined
   test: undefined
 }
 
@@ -188,9 +184,8 @@ const RootStack = observer((props: Props) => {
       <Stack.Screen name="init" component={InitScreen} />
       <Stack.Screen name="intro" component={IntroScreen} />
       <Stack.Screen name="onBoarding" component={OnboardingScreen} />
-      <Stack.Screen name="loginSelect" component={LoginSelectScreen} />
       <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: "individual" }} />
-      <Stack.Screen name="login" component={LoginScreen} initialParams={{ type: "individual" }} />
+      <Stack.Screen name="login" component={LoginScreen} />
       <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />
       <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />

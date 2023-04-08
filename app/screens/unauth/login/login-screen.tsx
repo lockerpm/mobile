@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { Layout, Text, Button } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import { spacing } from "../../../theme"
@@ -9,17 +9,13 @@ import { DefaultLogin } from "./default"
 import { MethodSelection } from "./2fa/method-selection"
 import { Otp } from "./2fa/otp"
 import { useStores } from "../../../models"
-import { RootParamList } from "../../../navigators"
 import { BASE_URL } from "../../../config/constants"
 
 export const LoginScreen = observer(() => {
   const navigation = useNavigation()
-  const route = useRoute<RouteProp<RootParamList, "login">>()
   const { user } = useStores()
   const { translate } = useMixins()
   // ------------------------------ PARAMS -------------------------------
-
-  const loginType = route.params.type || "individual"
 
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [index, setIndex] = useState(0)
@@ -49,12 +45,10 @@ export const LoginScreen = observer(() => {
 
   // -------------- EFFECT ------------------
 
-  useEffect(() => {
-    if (loginType === "individual") {
-      user.setOnPremiseUser(false)
-      user.environment.api.apisauce.setBaseURL(BASE_URL)
-    }
-  }, [])
+  // useEffect(() => {
+  //     user.setOnPremiseUser(false)
+  //     user.environment.api.apisauce.setBaseURL(BASE_URL)
+  // }, [])
 
   useEffect(() => {
     const handleBack = (e) => {
@@ -64,7 +58,7 @@ export const LoginScreen = observer(() => {
       }
 
       e.preventDefault()
-      navigation.navigate("loginSelect")
+      navigation.navigate("login")
     }
 
     navigation.addListener("beforeRemove", handleBack)
@@ -79,8 +73,7 @@ export const LoginScreen = observer(() => {
   return (
     <Layout
       isOverlayLoading={isScreenLoading}
-      footer={
-        loginType !== "onPremise" ? (
+      footer={(
           <View
             style={{
               flexDirection: "row",
@@ -101,14 +94,12 @@ export const LoginScreen = observer(() => {
               onPress={() => navigation.navigate("signup")}
             />
           </View>
-        ) : (
-          <View />
         )
       }
     >
       {index === 0 && (
         <DefaultLogin
-          onPremise={loginType === "onPremise"}
+          onPremise={false}
           handleForgot={() => navigation.navigate("forgotPassword")}
           onLoggedIn={onLoggedIn}
           nextStep={(
