@@ -163,7 +163,7 @@ export const DefaultLogin = observer((props: Props) => {
 
   return (
     <View>
-      <Icon
+      {/* <Icon
         icon="arrow-left"
         size={24}
         containerStyle={{
@@ -171,7 +171,7 @@ export const DefaultLogin = observer((props: Props) => {
           paddingLeft: 0,
         }}
         onPress={() => navigation.goBack()}
-      />
+      /> */}
       <View style={{ alignItems: "center" }}>
         <GitHubLoginModal
           isOpen={showGitHubLogin}
@@ -275,7 +275,7 @@ export const DefaultLogin = observer((props: Props) => {
             </View>
           </View>
         )}
-
+{/* 
         <Text
           text={IS_PROD ? translate("common.or_login_with") : ""}
           style={{ marginBottom: spacing.tiny }}
@@ -295,7 +295,7 @@ export const DefaultLogin = observer((props: Props) => {
           onPress={() => {}}
         >
           <Text preset="black" text={"Sso identifier"} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   )
