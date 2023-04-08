@@ -1116,7 +1116,7 @@
     "expired": "This item's share link will expire on {{time}}",
     "shared": "My shared items",
     "action": {
-      "detail": "Quick share detail",
+      "detail": "View details",
       "copy": "Copy link",
       "stop": "Stop sharing"
     },
