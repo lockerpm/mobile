@@ -5,6 +5,7 @@ export type CryptoWalletData = {
   },
   username: string
   password: string
+  pin: string
   address: string
   privateKey: string
   seed: string
@@ -23,6 +24,7 @@ export const toCryptoWalletData = (str: string) => {
     },
     username: "",
     password: "",
+    pin: "",
     address: "",
     privateKey: "",
     seed: "",

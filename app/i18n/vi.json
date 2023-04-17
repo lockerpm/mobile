@@ -848,6 +848,7 @@
       "btn": "Thêm tài sản"
     },
     "copy_seed": "Sao chép chuỗi Seed / chuỗi khôi phục",
+    "copy_pin": "Sao chép PIN",
     "copy_address": "Sao chép địa chỉ",
     "copy_username": "Sao chép tên người dùng",
     "copy_password": "Sao chép mật khẩu / PIN",

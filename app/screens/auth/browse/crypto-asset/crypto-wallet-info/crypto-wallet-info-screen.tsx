@@ -199,8 +199,18 @@ export const CryptoWalletInfoScreen = observer(() => {
           isPassword
           fixedLabel
           copyAble
-          label={translate("common.password") + " / PIN"}
+          label={translate("common.password")}
           value={cryptoWalletData.password}
+          editable={false}
+          style={{ marginTop: 20 }}
+        />
+
+        <FloatingInput
+          isPassword
+          fixedLabel
+          copyAble
+          label={"PIN"}
+          value={cryptoWalletData.pin}
           editable={false}
           style={{ marginTop: 20 }}
         />

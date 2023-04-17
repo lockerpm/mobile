@@ -10,7 +10,9 @@ import {
   FloatingInput,
   CipherOthersInfo,
   CustomFieldsEdit,
+  PasswordStrength,
 } from "../../../../../components"
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../../theme"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
@@ -37,7 +39,7 @@ export const CryptoWalletEditScreen = observer(() => {
   const { cipherStore, collectionStore } = useStores()
   const { translate, color } = useMixins()
   const { shareFolderAddItem } = useFolderMixins()
-  const { newCipher } = useCipherHelpersMixins()
+  const { newCipher, getPasswordStrength } = useCipherHelpersMixins()
   const { createCipher, updateCipher } = useCipherDataMixins()
 
   const selectedCipher: CipherView = cipherStore.cipherView
@@ -62,6 +64,7 @@ export const CryptoWalletEditScreen = observer(() => {
   )
   const [username, setUsername] = useState(mode !== "add" ? cryptoWalletData.username : "")
   const [password, setPassword] = useState(mode !== "add" ? cryptoWalletData.password : "")
+  const [pin, setPin] = useState(mode !== "add" ? cryptoWalletData.pin || "" : "")
   const [address, setAddress] = useState(mode !== "add" ? cryptoWalletData.address : "")
   const [privateKey, setPrivateKey] = useState(mode !== "add" ? cryptoWalletData.privateKey : "")
   const [seed, setSeed] = useState(mode !== "add" ? cryptoWalletData.seed : "           ")
@@ -135,6 +138,7 @@ export const CryptoWalletEditScreen = observer(() => {
       notes: note,
       password,
       address,
+      pin,
       walletApp,
       username,
       privateKey,
@@ -279,12 +283,58 @@ export const CryptoWalletEditScreen = observer(() => {
         <View style={{ flex: 1, marginTop: 20 }}>
           <FloatingInput
             isPassword
-            label={translate("common.password") + " / PIN"}
+            label={translate("common.password")}
             value={password}
             onChangeText={setPassword}
           />
+            {!!password && (
+            <PasswordStrength
+              value={getPasswordStrength(password).score}
+              style={{ marginTop: 15 }}
+            />
+          )}
         </View>
         {/* Password end */}
+
+
+        {/* Generate password */}
+        <Button
+          preset="link"
+          onPress={() => navigation.navigate("passwordGenerator")}
+          style={{
+            marginTop: 20,
+          }}
+        >
+          <View
+            style={[
+              commonStyles.CENTER_HORIZONTAL_VIEW,
+              {
+                justifyContent: "space-between",
+                width: "100%",
+              },
+            ]}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <FontAwesomeIcon name="repeat" size={18} color={color.primary} />
+              <Text
+                preset="green"
+                text={translate("common.generate")}
+                style={{ fontSize: fontSize.small, marginLeft: 7 }}
+              />
+            </View>
+            <FontAwesomeIcon name="angle-right" size={20} color={color.text} />
+          </View>
+        </Button>
+        {/* Generate password end */}
+
+        <View style={{ flex: 1, marginTop: 20 }}>
+          <FloatingInput
+            isPassword
+            label={"PIN"}
+            value={pin}
+            onChangeText={setPin}
+          />
+        </View>
 
         {/* Address */}
         <View style={{ flex: 1, marginTop: 20 }}>

@@ -849,9 +849,10 @@
       "btn": "Add Asset"
     },
     "copy_seed": "Copy Seed Phrase / Recovery Phrase",
+    "copy_pin": "Copy PIN",
     "copy_address": "Copy Address",
     "copy_username": "Copy Username",
-    "copy_password": "Copy Password / PIN",
+    "copy_password": "Copy Password ",
     "copy_private_key": "Copy Private Key",
     "email_recovery": "Email Recovery",
     "seed": "Seed Phrase / Recovery Phrase",
