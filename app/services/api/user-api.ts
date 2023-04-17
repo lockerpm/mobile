@@ -44,6 +44,7 @@ import {
   OnPremisePreLoginResult,
   SessionOtpLoginData,
   BusinessLoginMethodResult,
+  OnPremiseIdentifierResult,
 } from "./api.types"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
@@ -1256,6 +1257,25 @@ export class UserApi {
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/users/onpremise/prelogin`,
         { email },
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async onPremiseIdentifier(identifier: string): Promise<OnPremiseIdentifierResult> {
+    try {
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        `/cystack_platform/pm/users/onpremise/identifier`,
+        { identifier },
       )
 
       // the typical ways to die when calling an api

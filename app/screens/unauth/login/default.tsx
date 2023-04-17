@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { TouchableOpacity, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
@@ -9,8 +9,11 @@ import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { IS_IOS, IS_PROD } from "../../../config/constants"
 import { GitHubLoginModal } from "./github-login-modal"
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { Icon } from "../../../components/cores"
+import { OnPremiseIdentifierData } from "../../../services/api"
+import { RootParamList } from "../../../navigators"
+import { SsoLoginModal } from "./sso-login"
 
 type Props = {
   onPremise: boolean
@@ -21,6 +24,8 @@ type Props = {
 
 export const DefaultLogin = observer((props: Props) => {
   const navigation = useNavigation()
+  const route = useRoute<RouteProp<RootParamList, 'login'>>()
+
   const { user, uiStore } = useStores()
   const { translate, notify, notifyApiError, setApiTokens, color } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
@@ -35,6 +40,18 @@ export const DefaultLogin = observer((props: Props) => {
   const passwordRef = useRef(null)
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
+  const [showSSOLogin, setShowSSOLogin] = useState(false)
+  const [ssoIdentifier, setSsoIdentifier] = useState<OnPremiseIdentifierData>({
+    host: "",
+    use_sso: false,
+    identifier: "",
+  })
+
+  console.log(route.params)
+  useEffect(() =>{
+    setSsoIdentifier(route.params)
+    setShowSSOLogin(route.params.use_sso)
+  },[route.params.identifier, route.params.use_sso])
 
   // ------------------ Methods ----------------------
 
@@ -184,6 +201,13 @@ export const DefaultLogin = observer((props: Props) => {
             })
           }}
         />
+         <SsoLoginModal
+          isOpen={showSSOLogin}
+          onClose={() => setShowSSOLogin(false)}
+          onDone={(code) => {
+          
+          }}
+        />
 
         <Image
           source={APP_ICON.icon}
@@ -275,7 +299,7 @@ export const DefaultLogin = observer((props: Props) => {
             </View>
           </View>
         )}
-{/* 
+
         <Text
           text={IS_PROD ? translate("common.or_login_with") : ""}
           style={{ marginBottom: spacing.tiny }}
@@ -292,10 +316,17 @@ export const DefaultLogin = observer((props: Props) => {
             alignItems: "center",
             marginBottom: 16,
           }}
-          onPress={() => {}}
+          onPress={() => {
+            navigation.setParams({
+              host: "",
+              use_sso: false,
+              identifier: "",
+            })
+            navigation.navigate("ssoLogin")
+          }}
         >
           <Text preset="black" text={"Sso identifier"} />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
     </View>
   )

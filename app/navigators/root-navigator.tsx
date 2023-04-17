@@ -34,7 +34,8 @@ import { AppState } from "react-native"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { TestScreen } from "../screens/test-screen"
-import { OnPremisePreloginData } from "../services/api"
+import { OnPremiseIdentifierData, OnPremisePreloginData } from "../services/api"
+import { SSOIdentifierScreen } from "../screens/unauth/sso-identifier/ssp-identifier-screen"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -58,7 +59,9 @@ export type RootParamList = {
     data?: OnPremisePreloginData
     email?: string
   }
-  login: undefined
+
+  ssoLogin: undefined
+  login: OnPremiseIdentifierData
   forgotPassword: undefined
   signup: undefined
   createMasterPassword: undefined
@@ -185,7 +188,13 @@ const RootStack = observer((props: Props) => {
       <Stack.Screen name="intro" component={IntroScreen} />
       <Stack.Screen name="onBoarding" component={OnboardingScreen} />
       <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: "individual" }} />
-      <Stack.Screen name="login" component={LoginScreen} />
+      
+      <Stack.Screen name="ssoLogin" component={SSOIdentifierScreen} />
+      <Stack.Screen name="login" component={LoginScreen} initialParams={{
+        host: "",
+        use_sso: false,
+        identifier: ""
+      }} />
       <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />
       <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />

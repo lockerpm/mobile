@@ -701,11 +701,17 @@ export const UserModel = types
       const res = await userApi.businessLoginMethod()
       return res
     },
-    // On Premise
+
+    // On Premise ------------------------------------
     // user is on premise
     onPremisePreLogin: async (email: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.onPremisePreLogin(email)
+      return res
+    },
+    onPremiseIdentifier: async (identifier: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.onPremiseIdentifier(identifier)
       return res
     },
   }))

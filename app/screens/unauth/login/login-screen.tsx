@@ -45,10 +45,10 @@ export const LoginScreen = observer(() => {
 
   // -------------- EFFECT ------------------
 
-  // useEffect(() => {
-  //     user.setOnPremiseUser(false)
-  //     user.environment.api.apisauce.setBaseURL(BASE_URL)
-  // }, [])
+  useEffect(() => {
+      user.setOnPremiseUser(false)
+      user.environment.api.apisauce.setBaseURL(BASE_URL)
+  }, [])
 
   useEffect(() => {
     const handleBack = (e) => {
@@ -67,6 +67,8 @@ export const LoginScreen = observer(() => {
       navigation.removeListener("beforeRemove", handleBack)
     }
   }, [navigation])
+
+
 
   // ------------------------------ RENDER -------------------------------
 
