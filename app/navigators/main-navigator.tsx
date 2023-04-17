@@ -94,7 +94,7 @@ import { SocketEvent, SocketEventType } from "../config/types"
 import { HealthNavigator } from "./tools/health-navigator"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import InAppReview from "react-native-in-app-review"
-import Intercom from "@intercom/intercom-react-native"
+import Intercom, { Visibility } from "@intercom/intercom-react-native"
 import { AppNotification } from "../services/api"
 import { RelayAddress, SubdomainData, TrustedContact } from "../config/types/api"
 import { CollectionView } from "../../core/models/view/collectionView"
@@ -546,6 +546,7 @@ export const MainNavigator = observer(() => {
         try {
           await Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id })
           Intercom.updateUser({ name: user.full_name || user.username })
+          Intercom.setInAppMessageVisibility(Visibility.GONE)
         } catch (error) {
           Logger.error(error)
         }
