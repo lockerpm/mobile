@@ -761,3 +761,9 @@ export type EnterpriseInvitation = {
   role: AccountRoleText
   status: EnterpriseInvitationStatus
 }
+
+export type OnpremisePreloginPayload = {
+  email?: string
+  code?: string
+  identifier?: string
+}

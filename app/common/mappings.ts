@@ -25,6 +25,7 @@ import ServerIcon from './images/vault/server.svg'
 import ApiCipherIcon from './images/vault/api-cipher.svg'
 import DatabaseIcon from './images/vault/database.svg'
 
+import SSO from './images/icons/sso.svg'
 import GitHub from './images/icons/github.svg'
 import GitHubLight from './images/icons/github-light.svg'
 import Facebook from './images/icons/facebook.svg'
@@ -242,6 +243,7 @@ export const APP_ICON = {
 
 
 export const SOCIAL_LOGIN_ICON = {
+  sso: SSO,
   google: Google,
   facebook: Facebook,
   github: GitHub,

@@ -45,6 +45,7 @@ import {
   SessionOtpLoginData,
   BusinessLoginMethodResult,
   OnPremiseIdentifierResult,
+  OnpremisePreloginPayload,
 } from "./api.types"
 import { Api } from "./api"
 import { getGeneralApiProblem } from "./api-problem"
@@ -1252,11 +1253,11 @@ export class UserApi {
       return { kind: "bad-data" }
     }
   }
-  async onPremisePreLogin(email: string): Promise<OnPremisePreLoginResult> {
+  async onPremisePreLogin(preLoginPayload: OnpremisePreloginPayload): Promise<OnPremisePreLoginResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/users/onpremise/prelogin`,
-        { email },
+        preLoginPayload,
       )
 
       // the typical ways to die when calling an api

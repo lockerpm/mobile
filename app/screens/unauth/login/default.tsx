@@ -1,22 +1,17 @@
-import React, { useState, useRef, useEffect } from "react"
-import { TouchableOpacity, View } from "react-native"
+import React, { useState, useRef } from "react"
+import { useWindowDimensions, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
-import { AutoImage as Image, Text, FloatingInput, Button, Header } from "../../../components"
+import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
 import { useMixins } from "../../../services/mixins"
 import { commonStyles, spacing } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { IS_IOS, IS_PROD } from "../../../config/constants"
 import { GitHubLoginModal } from "./github-login-modal"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { Icon } from "../../../components/cores"
-import { OnPremiseIdentifierData } from "../../../services/api"
-import { RootParamList } from "../../../navigators"
-import { SsoLoginModal } from "./sso-login"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = {
-  onPremise: boolean
   nextStep: (username: string, password: string, methods: { type: string; data: any }[]) => void
   onLoggedIn: (newUser: boolean, token: string) => void
   handleForgot: () => void
@@ -24,12 +19,11 @@ type Props = {
 
 export const DefaultLogin = observer((props: Props) => {
   const navigation = useNavigation()
-  const route = useRoute<RouteProp<RootParamList, 'login'>>()
-
+  const width = useWindowDimensions().width
   const { user, uiStore } = useStores()
-  const { translate, notify, notifyApiError, setApiTokens, color } = useMixins()
+  const { translate, notify, notifyApiError, setApiTokens } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
-  const { nextStep, onLoggedIn, handleForgot, onPremise } = props
+  const { nextStep, onLoggedIn, handleForgot } = props
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
@@ -40,18 +34,6 @@ export const DefaultLogin = observer((props: Props) => {
   const passwordRef = useRef(null)
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
-  const [showSSOLogin, setShowSSOLogin] = useState(false)
-  const [ssoIdentifier, setSsoIdentifier] = useState<OnPremiseIdentifierData>({
-    host: "",
-    use_sso: false,
-    identifier: "",
-  })
-
-  console.log(route.params)
-  useEffect(() =>{
-    setSsoIdentifier(route.params)
-    setShowSSOLogin(route.params.use_sso)
-  },[route.params.identifier, route.params.use_sso])
 
   // ------------------ Methods ----------------------
 
@@ -59,68 +41,40 @@ export const DefaultLogin = observer((props: Props) => {
     setIsLoading(true)
     setIsError(false)
 
-    if (!onPremise) {
-      const payload = { username, password }
-      const res = await user.login(payload)
-      setIsLoading(false)
-      if (res.kind !== "ok") {
-        setIsError(true)
-        if (res.kind === "unauthorized" && res.data) {
-          const errorData: {
-            code: string
-            message: string
-          } = res.data
-          switch (errorData.code) {
-            case "1001": {
-              notify("error", translate("error.wrong_username_or_password"))
-              break
-            }
-            case "1003": {
-              notify("error", translate("error.account_not_activated"))
-              break
-            }
-            default: {
-              notify("error", errorData.message)
-            }
+    const payload = { username, password }
+    const res = await user.login(payload)
+    setIsLoading(false)
+    if (res.kind !== "ok") {
+      setIsError(true)
+      if (res.kind === "unauthorized" && res.data) {
+        const errorData: {
+          code: string
+          message: string
+        } = res.data
+        switch (errorData.code) {
+          case "1001": {
+            notify("error", translate("error.wrong_username_or_password"))
+            break
           }
-        } else {
-          notifyApiError(res)
+          case "1003": {
+            notify("error", translate("error.account_not_activated"))
+            break
+          }
+          default: {
+            notify("error", errorData.message)
+          }
         }
       } else {
-        setPassword("")
-        if (res.data.is_factor2) {
-          nextStep(username, password, res.data.methods)
-        } else {
-          // @ts-ignore
-          setApiTokens(res.data?.access_token)
-          onLoggedIn(false, "")
-        }
+        notifyApiError(res)
       }
     } else {
-      const res = await user.onPremisePreLogin(username)
-      setIsLoading(false)
-      if (res.kind !== "ok") {
-        setIsError(true)
-        if (res.kind === "unauthorized" && res.data) {
-          const errorData: {
-            code: string
-            message: string
-          } = res.data
-          notify("error", errorData.message)
-        } else {
-          notifyApiError(res)
-        }
+      setPassword("")
+      if (res.data.is_factor2) {
+        nextStep(username, password, res.data.methods)
       } else {
-        if (res.data.length === 0) {
-          notify("error", translate("error.onpremise_login_failed"))
-        }
-        if (res.data[0]?.activated) {
-          navigation.navigate("lock", {
-            type: "onPremise",
-            data: res.data[0],
-            email: username,
-          })
-        }
+        // @ts-ignore
+        setApiTokens(res.data?.access_token)
+        onLoggedIn(false, "")
       }
     }
   }
@@ -174,6 +128,17 @@ export const DefaultLogin = observer((props: Props) => {
         setShowGitHubLogin(true)
       },
     },
+    sso: {
+      icon: SOCIAL_LOGIN_ICON.sso,
+      handler: () => {
+        navigation.setParams({
+          host: "",
+          use_sso: false,
+          identifier: "",
+        })
+        navigation.navigate("ssoIdentifier")
+      },
+    },
   }
 
   // ------------------------------ RENDER -------------------------------
@@ -201,13 +166,6 @@ export const DefaultLogin = observer((props: Props) => {
             })
           }}
         />
-         <SsoLoginModal
-          isOpen={showSSOLogin}
-          onClose={() => setShowSSOLogin(false)}
-          onDone={(code) => {
-          
-          }}
-        />
 
         <Image
           source={APP_ICON.icon}
@@ -232,41 +190,31 @@ export const DefaultLogin = observer((props: Props) => {
         {/* Username input end */}
 
         {/* Password input */}
-        {!onPremise && (
-          <FloatingInput
-            outerRef={passwordRef}
-            isPassword
-            isInvalid={isError}
-            label={translate("common.password")}
-            onChangeText={setPassword}
-            value={password}
-            style={{ width: "100%" }}
-            onSubmitEditing={handleLogin}
-          />
-        )}
+        <FloatingInput
+          outerRef={passwordRef}
+          isPassword
+          isInvalid={isError}
+          label={translate("common.password")}
+          onChangeText={setPassword}
+          value={password}
+          style={{ width: "100%" }}
+          onSubmitEditing={handleLogin}
+        />
         {/* Password input end */}
 
-        {!onPremise && (
-          <View
-            style={{
-              width: "100%",
-              alignItems: "flex-start",
-              marginTop: spacing.large,
-            }}
-          >
-            <Button
-              preset="link"
-              text={translate("login.forgot_password")}
-              onPress={handleForgot}
-            />
-          </View>
-        )}
+        <View
+          style={{
+            width: "100%",
+            alignItems: "flex-start",
+            marginTop: spacing.large,
+          }}
+        >
+          <Button preset="link" text={translate("login.forgot_password")} onPress={handleForgot} />
+        </View>
 
         <Button
           isLoading={isLoading}
-          isDisabled={
-            isLoading || (!onPremise && !(username && password)) || (onPremise && !username)
-          }
+          isDisabled={isLoading || !(username && password)}
           text={translate("common.login")}
           onPress={handleLogin}
           style={{
@@ -276,57 +224,32 @@ export const DefaultLogin = observer((props: Props) => {
           }}
         />
 
-        {!onPremise && (
-          <View style={commonStyles.CENTER_VIEW}>
-            <Text
-              text={IS_PROD ? translate("common.or_login_with") : ""}
-              style={{ marginBottom: spacing.tiny }}
-            />
+        <View style={commonStyles.CENTER_VIEW}>
+          <Text
+            text={IS_PROD ? translate("common.or_login_with") : ""}
+            style={{ marginBottom: spacing.tiny }}
+          />
 
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              {Object.values(SOCIAL_LOGIN)
-                .filter((item) => !item.hide)
-                .map((item, index) => (
-                  <Button
-                    key={index}
-                    preset="ghost"
-                    onPress={item.handler}
-                    style={{ marginHorizontal: spacing.smaller }}
-                  >
-                    <item.icon height={40} width={40} />
-                  </Button>
-                ))}
-            </View>
+          <View
+            style={[
+              commonStyles.CENTER_HORIZONTAL_VIEW,
+              { maxWidth: width - 32, justifyContent: "center" },
+            ]}
+          >
+            {Object.values(SOCIAL_LOGIN)
+              .filter((item) => !item.hide)
+              .map((item, index) => (
+                <Button
+                  key={index}
+                  preset="ghost"
+                  onPress={item.handler}
+                  style={{ marginHorizontal: spacing.smaller }}
+                >
+                  <item.icon height={40} width={40} />
+                </Button>
+              ))}
           </View>
-        )}
-
-        <Text
-          text={IS_PROD ? translate("common.or_login_with") : ""}
-          style={{ marginBottom: spacing.tiny }}
-        />
-
-        <TouchableOpacity
-          style={{
-            width: "100%",
-            padding: 16,
-            borderRadius: 6,
-            borderWidth: 1,
-            borderColor: color.line,
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 16,
-          }}
-          onPress={() => {
-            navigation.setParams({
-              host: "",
-              use_sso: false,
-              identifier: "",
-            })
-            navigation.navigate("ssoLogin")
-          }}
-        >
-          <Text preset="black" text={"Sso identifier"} />
-        </TouchableOpacity>
+        </View>
       </View>
     </View>
   )

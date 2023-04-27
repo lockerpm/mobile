@@ -4,7 +4,7 @@ def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs')
 buildscript {
     ext {
         buildToolsVersion = "30.0.2"
-        minSdkVersion = 21
+        minSdkVersion = 24
         compileSdkVersion = 31
         targetSdkVersion = 31
         ndkVersion = "21.1.6352462"
@@ -16,6 +16,7 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath("com.android.tools.build:gradle:4.1.0")
         classpath 'com.google.gms:google-services:4.3.10'
         // NOTE: Do not place your application dependencies here; they belong

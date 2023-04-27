@@ -9,6 +9,7 @@ import {
   SocialLoginData,
   NotificationSettingData,
   SessionOtpLoginData,
+  OnpremisePreloginPayload,
 } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 import { save, StorageKey, remove } from "../../utils/storage"
@@ -704,9 +705,9 @@ export const UserModel = types
 
     // On Premise ------------------------------------
     // user is on premise
-    onPremisePreLogin: async (email: string) => {
+    onPremisePreLogin: async (payload: OnpremisePreloginPayload) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.onPremisePreLogin(email)
+      const res = await userApi.onPremisePreLogin(payload)
       return res
     },
     onPremiseIdentifier: async (identifier: string) => {

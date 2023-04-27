@@ -19,6 +19,7 @@ import {
   CreateMasterPasswordScreen,
   ForgotPasswordScreen,
   CountrySelectorScreen,
+  SSOEmailLoginScreen,
 } from "../screens"
 import { useStores } from "../models"
 import Toast, { BaseToastProps } from "react-native-toast-message"
@@ -60,8 +61,9 @@ export type RootParamList = {
     email?: string
   }
 
-  ssoLogin: undefined
-  login: OnPremiseIdentifierData
+  ssoIdentifier: undefined
+  ssoLogin: OnPremiseIdentifierData
+  login: undefined
   forgotPassword: undefined
   signup: undefined
   createMasterPassword: undefined
@@ -188,13 +190,18 @@ const RootStack = observer((props: Props) => {
       <Stack.Screen name="intro" component={IntroScreen} />
       <Stack.Screen name="onBoarding" component={OnboardingScreen} />
       <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: "individual" }} />
-      
-      <Stack.Screen name="ssoLogin" component={SSOIdentifierScreen} />
-      <Stack.Screen name="login" component={LoginScreen} initialParams={{
-        host: "",
-        use_sso: false,
-        identifier: ""
-      }} />
+
+      <Stack.Screen name="ssoIdentifier" component={SSOIdentifierScreen} />
+      <Stack.Screen
+        name="ssoLogin"
+        component={SSOEmailLoginScreen}
+        initialParams={{
+          host: "",
+          use_sso: false,
+          identifier: "",
+        }}
+      />
+      <Stack.Screen name="login" component={LoginScreen} />
       <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="signup" component={SignupScreen} />
       <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />

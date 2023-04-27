@@ -13,10 +13,10 @@ import { BASE_URL } from "../../../config/constants"
 
 export const LoginScreen = observer(() => {
   const navigation = useNavigation()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { translate } = useMixins()
   // ------------------------------ PARAMS -------------------------------
-
+  console.log(uiStore.cacheCode)
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [index, setIndex] = useState(0)
   const [credential, setCredential] = useState({
@@ -101,7 +101,6 @@ export const LoginScreen = observer(() => {
     >
       {index === 0 && (
         <DefaultLogin
-          onPremise={false}
           handleForgot={() => navigation.navigate("forgotPassword")}
           onLoggedIn={onLoggedIn}
           nextStep={(

@@ -43,6 +43,7 @@
     </activity>
 
     <activity
+      android:exported="false"
       android:name="com.google.android.gms.tagmanager.TagManagerPreviewActivity"
       android:noHistory="true">
       <intent-filter>
