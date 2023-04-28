@@ -14,16 +14,16 @@ interface Props {
   isOpen?: boolean
   onClose?: () => void
   member: SharedMemberType
-  organizationId: string
 }
 
 export const ConfirmShareModal = observer((props: Props) => {
-  const { isOpen, onClose, member, organizationId } = props
+  const { isOpen, onClose, member } = props
   const { cipherStore } = useStores()
   const { translate, notifyApiError, color } = useMixins()
   const { confirmShareCipher } = useCipherDataMixins()
   const { cryptoService } = useCoreService()
 
+  const organizationId = cipherStore.cipherView?.organizationId 
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)

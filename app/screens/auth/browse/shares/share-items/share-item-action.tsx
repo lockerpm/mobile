@@ -15,8 +15,6 @@ import {
 import { commonStyles } from '../../../../../theme'
 import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
 import { EditShareModal } from './edit-share-modal'
-import { SharingStatus } from '../../../../../config/types'
-import { ConfirmShareModal } from './confirm-share-modal'
 import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
 import { SharedMemberType } from '../../../../../config/types/api'
 
@@ -42,7 +40,6 @@ export const ShareItemAction = observer((props: Props) => {
 
   const [nextModal, setNextModal] = useState<'edit' | 'confirm' | null>(null)
   const [showEditModal, setShowEditModal] = useState(false)
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
 
   // Computed
 
@@ -66,7 +63,6 @@ export const ShareItemAction = observer((props: Props) => {
     onClose()
     switch (nextModal) {
       case 'confirm':
-        setShowConfirmModal(true)
         break
       case 'edit':
         setShowEditModal(true)
@@ -87,12 +83,7 @@ export const ShareItemAction = observer((props: Props) => {
         member={member}
       />
 
-      <ConfirmShareModal
-        isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-        member={member}
-        organizationId={selectedCipher.organizationId}
-      />
+  
 
       {/* Modals end */}
 
@@ -129,16 +120,6 @@ export const ShareItemAction = observer((props: Props) => {
             }}
           />
 
-          {member?.status === SharingStatus.ACCEPTED && (
-            <ActionItem
-              disabled={uiStore.isOffline}
-              name={translate('common.confirm')}
-              action={() => {
-                setNextModal('confirm')
-                onClose()
-              }}
-            />
-          )}
 
           <ActionItem
             disabled={uiStore.isOffline}

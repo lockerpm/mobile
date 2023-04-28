@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react'
-import { View, FlatList, SectionList } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import orderBy from 'lodash/orderBy'
-import { Text } from '../../../../../components/text/text'
-import { useMixins } from '../../../../../services/mixins'
-import { useStores } from '../../../../../models'
-import { CipherView } from '../../../../../../core/models/view'
-import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
-import { AccountRole, AccountRoleText } from '../../../../../config/types'
-import { Organization } from '../../../../../../core/models/domain/organization'
-import { ShareItemAction } from './share-item-action'
-import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
-import { CipherShareListItem, CipherShareType } from './cipher-share-list-item'
-import { FolderAction } from '../../folders/folder-action'
-import { CollectionListItem } from './folder-share-list-item'
-import { CollectionView } from '../../../../../../core/models/view/collectionView'
-import { SharedMemberType } from '../../../../../config/types/api'
+import React, { useState, useEffect } from "react"
+import { View, SectionList } from "react-native"
+import { observer } from "mobx-react-lite"
+import orderBy from "lodash/orderBy"
+import { Text } from "../../../../../components/text/text"
+import { useMixins } from "../../../../../services/mixins"
+import { useStores } from "../../../../../models"
+import { CipherView } from "../../../../../../core/models/view"
+import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import { AccountRole, AccountRoleText } from "../../../../../config/types"
+import { Organization } from "../../../../../../core/models/domain/organization"
+import { ShareItemAction } from "./share-item-action"
+import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+import { CipherShareListItem, CipherShareType } from "./cipher-share-list-item"
+import { FolderAction } from "../../folders/folder-action"
+import { CollectionListItem } from "./folder-share-list-item"
+import { CollectionView } from "../../../../../../core/models/view/collectionView"
+import { SharedMemberType } from "../../../../../config/types/api"
+import { ConfirmShareModal } from "./confirm-share-modal"
 
 type Props = {
   emptyContent?: JSX.Element
@@ -46,6 +47,7 @@ export const CipherShareList = observer((props: Props) => {
   const [selectedCollection, setSelectedCollection] = useState<CollectionView>(null)
   const [selectedMember, setSelectedMember] = useState<SharedMemberType>(null)
 
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
   // ------------------------ COMPUTED ----------------------------
 
   const organizations = cipherStore.organizations
@@ -115,27 +117,27 @@ export const CipherShareList = observer((props: Props) => {
         imgLogo: cipherInfo.img,
         svg: cipherInfo.svg,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-          c.id
+          c.id,
         ),
-        description: '',
+        description: "",
         status: null,
       }
 
       // Display for each sharing member
       const share = _getShare(c.organizationId)
       share.members.forEach((m) => {
-        let shareType = ''
+        let shareType = ""
         switch (m.role) {
           case AccountRoleText.MEMBER:
             // shareType = !m.hide_passwords ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
-            shareType = translate('shares.share_type.view')
+            shareType = translate("shares.share_type.view")
             break
           case AccountRoleText.ADMIN:
-            shareType = translate('shares.share_type.edit')
+            shareType = translate("shares.share_type.edit")
             break
         }
 
-        data.description = `${translate('shares.shared_with')} ${m.full_name} - ${shareType}`
+        data.description = `${translate("shares.shared_with")} ${m.full_name} - ${shareType}`
         data.status = m.status
         data.member = m
 
@@ -150,8 +152,8 @@ export const CipherShareList = observer((props: Props) => {
       res =
         orderBy(
           res,
-          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order]
+          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order],
         ) || []
     }
 
@@ -170,6 +172,13 @@ export const CipherShareList = observer((props: Props) => {
     setSelectedMember(item.member)
     setShowAction(true)
   }
+  // Handle action menu open
+  const openShowConfirmModal = (item: CipherShareType) => {
+    cipherStore.setSelectedCipher(item)
+    setSelectedMember(item.member)
+    setShowConfirmModal(true)
+  }
+
   const openCollectionActionMenu = (item: CollectionView) => {
     setSelectedCollection(item)
     setShowCollectionAction(true)
@@ -198,6 +207,12 @@ export const CipherShareList = observer((props: Props) => {
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
+      <ConfirmShareModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        member={selectedMember}
+      />
+
       <ShareItemAction
         isOpen={showAction}
         onClose={() => setShowAction(false)}
@@ -223,7 +238,12 @@ export const CipherShareList = observer((props: Props) => {
         renderItem={({ item, index, section }) => (
           <View>
             {section.type === 1 && (
-              <CipherShareListItem item={item} openActionMenu={openCipherActionMenu} />
+              <CipherShareListItem
+                member={selectedMember}
+                item={item}
+                openActionMenu={openCipherActionMenu}
+                setShowConfirmModal={openShowConfirmModal}
+              />
             )}
             {section.type === 2 && (
               <CollectionListItem
@@ -241,9 +261,9 @@ export const CipherShareList = observer((props: Props) => {
   ) : (
     <View style={{ paddingHorizontal: 20 }}>
       <Text
-        text={translate('error.no_results_found') + ` '${searchText}'`}
+        text={translate("error.no_results_found") + ` '${searchText}'`}
         style={{
-          textAlign: 'center',
+          textAlign: "center",
         }}
       />
     </View>
