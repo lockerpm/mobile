@@ -1,13 +1,14 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import React, { useEffect, useState } from "react"
-import { Image, NativeModules, View } from "react-native"
+import { Image, NativeModules } from "react-native"
 import { Button, FloatingInput, Text } from "../../../components"
 import { Header, Screen } from "../../../components/cores"
 import { useStores } from "../../../models"
 import { RootParamList } from "../../../navigators"
 import { useMixins } from "../../../services/mixins"
 import { getUrlParameterByName } from "../../../utils/helpers"
+import { IS_IOS, VIN_AUTH_CALLBACK, VIN_AUTH_ENDPOINT } from "../../../config/constants"
 
 const APP_ICON_DARK = require("../../../common/images/appIcon/textHorizontal.png")
 const APP_ICON_LIGHT = require("../../../common/images/appIcon/textHorizontal-light.png")
@@ -19,7 +20,7 @@ export const SSOEmailLoginScreen = observer(() => {
   const route = useRoute<RouteProp<RootParamList, "ssoLogin">>()
   const { user, uiStore } = useStores()
 
-  const { translate, notify, notifyApiError, setApiTokens } = useMixins()
+  const { translate, notify, notifyApiError } = useMixins()
 
   const [username, setUsername] = useState("")
   const [nfcAuthen, setNfcAuthen] = useState(false)
@@ -55,10 +56,9 @@ export const SSOEmailLoginScreen = observer(() => {
     }
   }
 
-  console.log(uiStore.cacheCode)
-
   const showWebauthOpeions = async () => {
     const { FEATURE_USB_HOST, FEATURE_NFC } = VinCssSsoLoginModule.getConstants()
+
     const nfcUsable = await VinCssSsoLoginModule.hasSystemFeature(FEATURE_NFC)
     if (nfcUsable) {
       setNfcAuthen(true)
@@ -72,41 +72,16 @@ export const SSOEmailLoginScreen = observer(() => {
   const handleWebauthLogin = async (method: "nfc" | "usb") => {
     const startWebauth =
       method === "nfc" ? VinCssSsoLoginModule.startNFCAuthen : VinCssSsoLoginModule.startUSBAuthen
-    const result = await startWebauth(
-    
-    )
-    console.log(result)
+
+    const result = await startWebauth(VIN_AUTH_ENDPOINT, VIN_AUTH_CALLBACK)
 
     if (!!result.error_code) {
       notify("error", result.error_message)
       return
     }
 
-    notify("error", result.url)
-
     const code = getUrlParameterByName("code", result.url)
-    uiStore.setCacheCode(result.url)
 
-    notify("success", code)
-
-    // const res = await user.onPremisePreLogin({ identifier: route.params.identifier, code })
-    // if (res.kind !== "ok") {
-    //   notifyApiError(res)
-    // } else {
-    //   if (res.data.length === 0) {
-    //     notify("error", translate("error.onpremise_login_failed"))
-    //   }
-    //   if (res.data[0]?.activated) {
-    //     navigation.navigate("lock", {
-    //       type: "onPremise",
-    //       data: res.data[0],
-    //       email: res.email || "asdasd",
-    //     })
-    //   }
-    // }
-  }
-
-  const test = async (code: string) => {
     const res = await user.onPremisePreLogin({ identifier: route.params.identifier, code })
     if (res.kind !== "ok") {
       notifyApiError(res)
@@ -118,7 +93,7 @@ export const SSOEmailLoginScreen = observer(() => {
         navigation.navigate("lock", {
           type: "onPremise",
           data: res.data[0],
-          email:  "asdasd",
+          email: res.data[0].email || "asdasd",
         })
       }
     }
@@ -126,7 +101,7 @@ export const SSOEmailLoginScreen = observer(() => {
 
   useEffect(() => {
     if (route.params.use_sso) {
-      showWebauthOpeions()
+      !IS_IOS && showWebauthOpeions()
     }
   }, [])
 
@@ -182,39 +157,33 @@ export const SSOEmailLoginScreen = observer(() => {
         style={{ marginTop: 24, marginBottom: 16 }}
       />
 
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {nfcAuthen && (
-          <Button
-            text="Nfc Authen"
-            onPress={() => {
-              handleWebauthLogin("nfc")
-            }}
-          />
-        )}
-        {usbAuthen && (
-          <Button
-            text="Usb Authen"
-            onPress={() => {
-              handleWebauthLogin("usb")
-            }}
-          />
-        )}
-      </View>
+      {usbAuthen && (
+        <Button
+          text="Usb Authen"
+          onPress={() => {
+            handleWebauthLogin("usb")
+          }}
+          style={{
+            flex: 1,
+            marginTop: 12,
+          }}
+        />
+      )}
 
-      <Button
-        text="Usb Authen"
-        onPress={() => {
-          test(uiStore.cacheCode)
-        }}
-      />
+      {nfcAuthen && (
+        <Button
+          text="Nfc Authen"
+          onPress={() => {
+            handleWebauthLogin("nfc")
+          }}
+          style={{
+            flex: 1,
+            marginTop: 12,
+          }}
+        />
+      )}
 
-      <Text text="Looking to create an SSO Identifier instead?" style={{ marginTop: 4 }} />
+      <Text text="Looking to create an SSO Identifier instead?" style={{ marginTop: 12 }} />
       <Text preset="black" style={{ marginTop: 4 }}>
         Contact us at{" "}
         <Text preset="bold" style={{ textDecorationLine: "underline" }}>
@@ -224,5 +193,3 @@ export const SSOEmailLoginScreen = observer(() => {
     </Screen>
   )
 })
-
-

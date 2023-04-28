@@ -18,7 +18,6 @@ export const GitHubLoginModal = (props: Props) => {
   const url = `${GITHUB_CONFIG.authorizationEndpoint}?client_id=${GITHUB_CONFIG.clientId}&redirect_uri=${encodeURIComponent(GITHUB_CONFIG.redirectUrl)}&scope=${encodeURIComponent(GITHUB_CONFIG.scopes.join(' '))}&state=${randomString()}`
 
   const onURLChange = (url: string) => {
-    console.log(url)
     if (url.startsWith(GITHUB_CONFIG.redirectUrl)) {
       const code = getUrlParameterByName('code', url)
       onClose()

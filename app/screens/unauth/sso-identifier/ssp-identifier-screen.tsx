@@ -15,7 +15,7 @@ export const SSOIdentifierScreen = observer(() => {
   const { user, uiStore } = useStores()
   const { notifyApiError } = useMixins()
 
-  const [ssoId, setSsoId] = useState("vin")
+  const [ssoId, setSsoId] = useState("")
   const [errorText, setErrorText] = useState("")
 
   const onSubmit = async () => {

@@ -402,6 +402,7 @@ export type OnPremisePreloginData = {
   avatar: string
   base_api: string
   login_method: "password" | "passwordless" | string
+  email: string
   require_passwordless: boolean
   set_up_passwordless: boolean
 }

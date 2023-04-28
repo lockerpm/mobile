@@ -16,7 +16,6 @@ export const LoginScreen = observer(() => {
   const { user, uiStore } = useStores()
   const { translate } = useMixins()
   // ------------------------------ PARAMS -------------------------------
-  console.log(uiStore.cacheCode)
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [index, setIndex] = useState(0)
   const [credential, setCredential] = useState({
