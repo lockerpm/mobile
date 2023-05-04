@@ -14,7 +14,6 @@ type Prop = {
   item: CipherShareType
   openActionMenu: (val: any) => void
   setShowConfirmModal: (val: any) => void
-  member: SharedMemberType
 }
 
 export type CipherShareType = CipherView & {
@@ -100,7 +99,7 @@ export const CipherShareListItem = memo(
                     <Text
                       text={
                         item.status === SharingStatus.ACCEPTED
-                          ? "Waiting for confirmatioon"
+                          ? translate('shares.wait_confirm')
                           : item.status.toUpperCase()
                       }
                       style={{
@@ -136,75 +135,51 @@ export const CipherShareListItem = memo(
               )}
               {/* Description end */}
             </View>
-
-            {/* <Button
-          preset="link"
-          onPress={() => openActionMenu(item)}
-          style={{ 
-            height: 40,
-            width: 40,
-            justifyContent: 'flex-end',
-            alignItems: 'center'
-          }}
-        >
-          <IoniconsIcon
-            name="ellipsis-horizontal"
-            size={18}
-            color={color.textBlack}
-          />
-        </Button> */}
           </View>
         </Button>
-        <View
-          style={{
-            flexDirection: "row",
-            marginVertical: 8,
-          }}
-        >
-          <Text
-            text="A user has registered a Locker account via your sharing request. Please confirm your sharing request"
-            style={{
-              flex: 2,
-            }}
-          />
-          <View>
-            <TouchableOpacity
-              onPress={() => {
-                setShowConfirmModal(item)
-              }}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                borderRadius: 8,
-                borderColor: color.primary,
-                borderWidth: 1,
-                padding: 8,
-                paddingHorizontal: 16,
-              }}
-            >
-              <Icon icon="check" color={color.primary} size={24} />
-              <Text
-                text="Confirm"
-                style={{
-                  marginLeft: 8,
-                  color: color.primary,
-                  fontSize: 14
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
 
-        {/* {member?.status === SharingStatus.ACCEPTED && (
-            <ActionItem
-              disabled={uiStore.isOffline}
-              name={translate('common.confirm')}
-              action={() => {
-                setNextModal('confirm')
-                onClose()
+        {item?.status === SharingStatus.ACCEPTED && (
+          <View
+            style={{
+              flexDirection: "row",
+              marginVertical: 8,
+            }}
+          >
+            <Text
+              text={translate('shares.confirm')}
+              style={{
+                flex: 2,
+                fontSize: 14,
               }}
             />
-          )} */}
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  setShowConfirmModal(item)
+                }}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  borderRadius: 8,
+                  borderColor: color.primary,
+                  borderWidth: 1,
+                  padding: 8,
+                  paddingHorizontal: 16,
+                }}
+              >
+                <Icon icon="check" color={color.primary} size={24} />
+                <Text
+                  text={translate('common.confirm')}
+                  style={{
+                    marginLeft: 8,
+                    color: color.primary,
+                    fontSize: 14,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
       </View>
     )
   },

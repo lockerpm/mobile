@@ -76,7 +76,6 @@ export const ShareItemAction = observer((props: Props) => {
   return (
     <View>
       {/* Modals */}
-
       <EditShareModal
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}

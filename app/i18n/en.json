@@ -646,7 +646,9 @@
       "verification_desc": "To ensure the integrity of your encryption keys, please verify the user's fingerprint phrase before continuing.",
       "fingerprint_desc": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
     },
-    "suggestion": "Users or groups in Enterprise"
+    "suggestion": "Users or groups in Enterprise",
+    "confirm": "A user has registered a Locker account via your sharing request. Please confirm your sharing request",
+    "wait_confirm" : "Waiting for confirmation"
   },
   "trash": {
     "delete_item": "Delete Item",

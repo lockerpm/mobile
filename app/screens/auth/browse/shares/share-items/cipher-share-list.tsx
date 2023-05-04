@@ -239,7 +239,6 @@ export const CipherShareList = observer((props: Props) => {
           <View>
             {section.type === 1 && (
               <CipherShareListItem
-                member={selectedMember}
                 item={item}
                 openActionMenu={openCipherActionMenu}
                 setShowConfirmModal={openShowConfirmModal}
