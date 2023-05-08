@@ -280,7 +280,6 @@ dependencies {
     implementation "com.airbnb.android:lottie:5.0.3"
     implementation project(':react-native-fs')
 
-    implementation project(path: ':fido2')
     implementation project(path: ':fido2-client')
     implementation 'io.github.chaosleung:pinview:1.4.4'
     implementation 'com.google.guava:guava:27.0.1-android'

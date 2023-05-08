@@ -22,14 +22,25 @@
 }
 
 
-
 #VinCSS js inject
--keep class com.vincss.common.CollectedClientData { *; }
+-keepclassmembers class net.vincss.fido2.core.models.common.CollectedClientData { *; }
+
 #VinCSS FIDO2 SDK
--keep class com.vincss.credential.CredentialItem { *; }
--keep class com.vincss.common.PublicKeyCredentialRpEntity { *; }
--keep class com.vincss.common.PublicKeyCredentialUserEntity { *; }
--keep class com.vincss.common.PublicKeyCredentialDescriptor { *; }
+-keep class net.vincss.fido2.core.models.common.** { *; }
+-keep class net.vincss.fido2.Fido2Manager { *; }
+-keep class net.vincss.fido2.Fido2Manager$Companion { *; }
+-keep class net.vincss.fido2.ClientSDKConfig { *; }
+-keep class net.vincss.fido2.ClientSDKConfig$Companion { *; }
+-keep class net.vincss.fido2.ClientSDKConfig$CommunicationMethod { *; }
+-keep class net.vincss.fido2.core.constants.Errors { *; }
+
+
+-keepattributes InnerClasses
+ -keep class **.R
+ -keep class **.R$* {
+    <fields>;
+}
+
 # Jackson
 -keep @com.fasterxml.jackson.annotation.JsonIgnoreProperties class * { *; }
 -keep @com.fasterxml.jackson.annotation.JsonCreator class * { *; }
@@ -38,7 +49,8 @@
 -keep class org.codehaus.** { *; }
 -keepnames class com.fasterxml.jackson.** { *; }
 -keepclassmembers public final enum com.fasterxml.jackson.annotation.JsonAutoDetect$Visibility {
-       public static final com.fasterxml.jackson.annotation.JsonAutoDetect$Visibility *;
+    public static final com.fasterxml.jackson.annotation.JsonAutoDetect$Visibility *;
 }
+
 # General
 -keepattributes SourceFile,LineNumberTable,*Annotation*,EnclosingMethod,Signature,Exceptions,InnerClasses

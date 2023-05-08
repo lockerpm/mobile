@@ -6,4 +6,4 @@ project(':react-native-fs').projectDir = new File(settingsDir, '../node_modules/
 // Unimodules https://docs.expo.io/bare/installing-unimodules/#configuration-for-android
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'; includeUnimodulesProjects()
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
-include ':app', ':fido2', ':fido2-client'
+include ':fido2-client', ':app'

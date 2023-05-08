@@ -25,6 +25,7 @@ export const SSOEmailLoginScreen = observer(() => {
   const [username, setUsername] = useState("")
   const [nfcAuthen, setNfcAuthen] = useState(false)
   const [usbAuthen, setUsbAuthen] = useState(false)
+  const [loaddingAuthen, setLoadingAuth] = useState<0 | 1 | 2>(0)
 
   const [isError, setIsError] = useState(false)
 
@@ -70,6 +71,7 @@ export const SSOEmailLoginScreen = observer(() => {
   }
 
   const handleWebauthLogin = async (method: "nfc" | "usb") => {
+    setLoadingAuth(method === "usb" ? 1 : 2)
     const startWebauth =
       method === "nfc" ? VinCssSsoLoginModule.startNFCAuthen : VinCssSsoLoginModule.startUSBAuthen
 
@@ -77,6 +79,7 @@ export const SSOEmailLoginScreen = observer(() => {
 
     if (!!result.error_code) {
       notify("error", result.error_message)
+      setLoadingAuth(0)
       return
     }
 
@@ -90,6 +93,7 @@ export const SSOEmailLoginScreen = observer(() => {
         notify("error", translate("error.onpremise_login_failed"))
       }
       if (res.data[0]?.activated) {
+        setLoadingAuth(0)
         navigation.navigate("lock", {
           type: "onPremise",
           data: res.data[0],
@@ -97,6 +101,7 @@ export const SSOEmailLoginScreen = observer(() => {
         })
       }
     }
+    setLoadingAuth(0)
   }
 
   useEffect(() => {
@@ -159,6 +164,7 @@ export const SSOEmailLoginScreen = observer(() => {
 
       {usbAuthen && (
         <Button
+          isLoading={loaddingAuthen === 1}
           text="Usb Authen"
           onPress={() => {
             handleWebauthLogin("usb")
@@ -172,6 +178,7 @@ export const SSOEmailLoginScreen = observer(() => {
 
       {nfcAuthen && (
         <Button
+          isLoading={loaddingAuthen === 2}
           text="Nfc Authen"
           onPress={() => {
             handleWebauthLogin("nfc")
