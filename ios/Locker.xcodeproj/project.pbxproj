@@ -14,12 +14,18 @@
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2DC4AA92A1AB7A3C653EB7CF /* libPods-Locker-LockerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00DA503449115127D317DC02 /* libPods-Locker-LockerTests.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* CyStackLockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CyStackLockerTests.m */; };
+		57268D7B5345216D679DEF66 /* libPods-Locker-LockerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6977AD50EA55BA4C9CB9312E /* libPods-Locker-LockerTests.a */; };
 		7C306D7D27B4B5A600F64944 /* AutofillHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */; };
 		7C306DB127B6467900F64944 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C306DB027B6467900F64944 /* Colors.xcassets */; };
+		7C5BC5892A1261AD0056373C /* VinSsoWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5BC5882A1261AD0056373C /* VinSsoWebViewController.swift */; };
+		7C5BC58B2A1263930056373C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5BC58A2A1263930056373C /* AppDelegate.swift */; };
+		7C5BC58D2A126A420056373C /* VinCSSFido2ClientSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C5BC58C2A126A410056373C /* VinCSSFido2ClientSDK.xcframework */; };
+		7C5BC58E2A126A420056373C /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7C5BC58C2A126A410056373C /* VinCSSFido2ClientSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
+		7C7234922A0CAA870018DE61 /* RNVinSSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7234912A0CAA870018DE61 /* RNVinSSO.swift */; };
+		7C7234962A0CAAD60018DE61 /* RCTVinSSO.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C7234952A0CAAD60018DE61 /* RCTVinSSO.m */; };
 		7C748AFF280EC58200424E43 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C748AFE280EC58100424E43 /* Config.xcconfig */; };
 		7C8496E027B7759200CFEA8B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496E227B7759200CFEA8B /* MainInterface.storyboard */; };
 		7C8496E627B7765C00CFEA8B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496E527B7765C00CFEA8B /* Localizable.strings */; };
@@ -40,13 +46,13 @@
 		7CADBA06281A5E8A00353A83 /* RNAutofillServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CADBA05281A5E8A00353A83 /* RNAutofillServiceIos.swift */; };
 		7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		846A78FADBDA6D5B3C41A6F1 /* libPods-Locker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D706E641FE35AF39B8E85A1 /* libPods-Locker.a */; };
 		CA3BCB36281A78F3007A0503 /* container in Resources */ = {isa = PBXBuildFile; fileRef = CA3BCB35281A78F2007A0503 /* container */; };
 		CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CA53478F27181AB400BA4901 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CA9F41E927183FC300B0C0A5 /* KeychainAccess */; };
 		CAFA4CF8270AF9A20003FFA5 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFA4CF7270AF9A20003FFA5 /* File.swift */; };
+		CBBE6FC25F0247D122205942 /* libPods-Locker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7823102BAB5290EC5D55E9F /* libPods-Locker.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +80,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		7C5BC53A2A0CFBDE0056373C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7C5BC58E2A126A420056373C /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CA53479F27181AB400BA4901 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -89,7 +106,6 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00DA503449115127D317DC02 /* libPods-Locker-LockerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locker-LockerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356EE1AD99517003FC87E /* LockerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LockerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* CyStackLockerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyStackLockerTests.m; sourceTree = "<group>"; };
@@ -111,7 +127,6 @@
 		29E61042944E667AE1836450 /* Pods-CyStackLocker.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker.release staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker/Pods-CyStackLocker.release staging.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Locker-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Locker-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Locker-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Locker-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D706E641FE35AF39B8E85A1 /* libPods-Locker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locker.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		32B04630CC446F19212E357A /* Pods-CyStackLocker-CyStackLockerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.release.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.release.xcconfig"; sourceTree = "<group>"; };
 		39DEEF8D8E58416BB1F1C68A /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		3E1FD80DD6CA437A90A375BC /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
@@ -124,14 +139,20 @@
 		6102F80C8AA04C85ADA0AEE2 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		643666B7E5804C808CAF1052 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		6815861EF5345E1CDC822CF6 /* Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig"; sourceTree = "<group>"; };
+		6977AD50EA55BA4C9CB9312E /* libPods-Locker-LockerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locker-LockerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		771E1616CFA147CD9E433C3F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLockerRelease.entitlements; path = CyStackLocker/CyStackLockerRelease.entitlements; sourceTree = "<group>"; };
 		7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
 		7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillHelpers.swift; sourceTree = "<group>"; };
 		7C306DB027B6467900F64944 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		7C5BC5882A1261AD0056373C /* VinSsoWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VinSsoWebViewController.swift; sourceTree = "<group>"; };
+		7C5BC58A2A1263930056373C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7C5BC58C2A126A410056373C /* VinCSSFido2ClientSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = VinCSSFido2ClientSDK.xcframework; sourceTree = "<group>"; };
 		7C633CDB2761EA0D00140CAA /* Toast */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Toast; path = "Pods/Toast-Swift/Toast"; sourceTree = "<group>"; };
 		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
+		7C7234912A0CAA870018DE61 /* RNVinSSO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNVinSSO.swift; sourceTree = "<group>"; };
+		7C7234952A0CAAD60018DE61 /* RCTVinSSO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTVinSSO.m; sourceTree = "<group>"; };
 		7C748AFE280EC58100424E43 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		7C8496E127B7759200CFEA8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7C8496E527B7765C00CFEA8B /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -155,6 +176,7 @@
 		8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		96D89FDC55DA47C5942CCE3B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		A06EB5D75CE1BCAB8B9346D9 /* Pods-Locker-LockerTests.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.release staging.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.release staging.xcconfig"; sourceTree = "<group>"; };
+		A7823102BAB5290EC5D55E9F /* libPods-Locker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locker.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD4DFC3A42ACAA6CE9380B62 /* Pods-Locker-LockerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.release.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.release.xcconfig"; sourceTree = "<group>"; };
 		BE663438A5A8531CBDCF351D /* Pods-Locker-LockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.debug.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CA3BCB35281A78F2007A0503 /* container */ = {isa = PBXFileReference; lastKnownFileType = folder; path = container; sourceTree = "<group>"; };
@@ -176,7 +198,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DC4AA92A1AB7A3C653EB7CF /* libPods-Locker-LockerTests.a in Frameworks */,
+				57268D7B5345216D679DEF66 /* libPods-Locker-LockerTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,8 +206,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C5BC58D2A126A420056373C /* VinCSSFido2ClientSDK.xcframework in Frameworks */,
 				CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */,
-				846A78FADBDA6D5B3C41A6F1 /* libPods-Locker.a in Frameworks */,
+				CBBE6FC25F0247D122205942 /* libPods-Locker.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,11 +258,13 @@
 		13B07FAE1A68108700A75B9A /* CyStackLocker */ = {
 			isa = PBXGroup;
 			children = (
+				7C7234902A0CA9810018DE61 /* RNVinSSO */,
 				7CADBA02281A5E0200353A83 /* RNAutofillService */,
 				7CA1D4A627F2E3AD009E2A6E /* CryptoService */,
 				7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */,
 				CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
+				7C5BC58A2A1263930056373C /* AppDelegate.swift */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -253,11 +278,12 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7C5BC58C2A126A410056373C /* VinCSSFido2ClientSDK.xcframework */,
 				CA53478927181A9C00BA4901 /* AuthenticationServices.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				2D706E641FE35AF39B8E85A1 /* libPods-Locker.a */,
-				00DA503449115127D317DC02 /* libPods-Locker-LockerTests.a */,
+				A7823102BAB5290EC5D55E9F /* libPods-Locker.a */,
+				6977AD50EA55BA4C9CB9312E /* libPods-Locker-LockerTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -314,6 +340,16 @@
 				7C633CDB2761EA0D00140CAA /* Toast */,
 			);
 			name = Packages;
+			sourceTree = "<group>";
+		};
+		7C7234902A0CA9810018DE61 /* RNVinSSO */ = {
+			isa = PBXGroup;
+			children = (
+				7C7234912A0CAA870018DE61 /* RNVinSSO.swift */,
+				7C7234952A0CAAD60018DE61 /* RCTVinSSO.m */,
+				7C5BC5882A1261AD0056373C /* VinSsoWebViewController.swift */,
+			);
+			name = RNVinSSO;
 			sourceTree = "<group>";
 		};
 		7C80ADBD2759F29200AD45BF /* customUI */ = {
@@ -479,6 +515,7 @@
 				CA53479F27181AB400BA4901 /* Embed App Extensions */,
 				660A1716E0E95A863DA0D28F /* [CP-User] [RNFB] Core Configuration */,
 				7C83F64427FC37F100F60DAE /* ShellScript */,
+				7C5BC53A2A0CFBDE0056373C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -675,6 +712,10 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BlueECC/CryptorECC.framework",
+				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftCBOR/SwiftCBOR.framework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBAEMKit/FBAEMKit.framework/FBAEMKit",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework/FBSDKCoreKit",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit_Basics/FBSDKCoreKit_Basics.framework/FBSDKCoreKit_Basics",
@@ -685,6 +726,10 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptorECC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftCBOR.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBAEMKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit_Basics.framework",
@@ -909,6 +954,10 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BlueECC/CryptorECC.framework",
+				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftCBOR/SwiftCBOR.framework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBAEMKit/FBAEMKit.framework/FBAEMKit",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework/FBSDKCoreKit",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit_Basics/FBSDKCoreKit_Basics.framework/FBSDKCoreKit_Basics",
@@ -919,6 +968,10 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptorECC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftCBOR.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBAEMKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit_Basics.framework",
@@ -988,13 +1041,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C5BC58B2A1263930056373C /* AppDelegate.swift in Sources */,
+				7C7234962A0CAAD60018DE61 /* RCTVinSSO.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				7CADBA06281A5E8A00353A83 /* RNAutofillServiceIos.swift in Sources */,
 				7CA1D4AC27F2E408009E2A6E /* RNCryptoServiceIos.swift in Sources */,
+				7C7234922A0CAA870018DE61 /* RNVinSSO.swift in Sources */,
 				CAFA4CF8270AF9A20003FFA5 /* File.swift in Sources */,
 				7CADBA04281A5E6600353A83 /* RCTAutofillServiceIos.m in Sources */,
 				7CA1D4A827F2E3EC009E2A6E /* RCTCryptoServiceIos.m in Sources */,
 				7CA1D4AF27F2E424009E2A6E /* RSAUtils.swift in Sources */,
+				7C5BC5892A1261AD0056373C /* VinSsoWebViewController.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1139,6 +1196,10 @@
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = CyStackLocker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -1176,6 +1237,10 @@
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = CyStackLocker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -1390,6 +1455,10 @@
 				DISPLAY_NAME = "Staging Locker";
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = CyStackLocker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -1621,6 +1690,10 @@
 				DISPLAY_NAME = "Staging Locker";
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = CyStackLocker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";

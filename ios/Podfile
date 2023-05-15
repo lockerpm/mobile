@@ -1,12 +1,17 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 require_relative '../node_modules/react-native-unimodules/cocoapods.rb'
+plugin 'cocoapods-user-defined-build-types'
+
+enable_user_defined_build_types!
 
 platform :ios, '11.0'
 
 target 'Locker' do
   project 'Locker'
   use_unimodules!
+
+  
   config = use_native_modules!
 
   use_react_native!(
@@ -35,6 +40,11 @@ target 'Locker' do
 
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  
+  pod "PromiseKit", "~> 6.3.4", :build_type => :dynamic_framework
+  pod "CryptoSwift", "~> 1.3.8", :build_type => :dynamic_framework
+  pod 'SwiftCBOR', "~> 0.4", :build_type => :dynamic_framework
+  pod 'BlueECC', "~> 1.2.5", :build_type => :dynamic_framework
 
   target 'LockerTests' do
     inherit! :complete
@@ -46,19 +56,22 @@ target 'Locker' do
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
   use_flipper!({ 'Flipper' => '0.75.1' })
+
   post_install do |installer|
     flipper_post_install(installer)
     react_native_post_install(installer)
-
-    installer.pods_project.build_configurations.each do |config|
-      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
-    end
     
     installer.pods_project.targets.each do |target|
+      if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
+        target.build_configurations.each do |config|
+            config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        end
+      end
+      
       target.build_configurations.each do |config|
         deployment_target = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
         target_components = deployment_target.split
-        
+                
         if target_components.length > 0
           target_initial = target_components[0].to_i
           
