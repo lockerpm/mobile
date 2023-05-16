@@ -6,18 +6,17 @@ import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
 import { Button, Modal, Text } from '../../../../../components'
 import { fontSize } from '../../../../../theme'
 import { useCoreService } from '../../../../../services/core-service'
-import { Utils } from '../../../../../../core/misc/utils'
 import { View } from 'react-native'
-import { SharedMemberType } from '../../../../../config/types/api'
+import { CollectionView } from '../../../../../../core/models/view/collectionView'
 
 interface Props {
   isOpen?: boolean
   onClose?: () => void
-  member: SharedMemberType
+  item: CollectionView
 }
 
-export const ConfirmShareModal = observer((props: Props) => {
-  const { isOpen, onClose, member } = props
+export const ConfirmShareFolderModal = observer((props: Props) => {
+  const { isOpen, onClose, item } = props
   const { cipherStore } = useStores()
   const { translate, notifyApiError, color } = useMixins()
   const { confirmShareCipher } = useCipherDataMixins()
@@ -35,29 +34,16 @@ export const ConfirmShareModal = observer((props: Props) => {
   // --------------- METHODS ----------------
 
   const handleConfirmShare = async () => {
-    setIsLoading(true)
-    const res = await confirmShareCipher(organizationId, member.id, publicKey)
-    setIsLoading(false)
+    // setIsLoading(true)
+    // const res = await confirmShareCipher(organizationId, member.id, publicKey)
+    // setIsLoading(false)
 
-    if (res.kind === 'ok' || res.kind === 'unauthorized') {
-      onClose()
-    }
+    // if (res.kind === 'ok' || res.kind === 'unauthorized') {
+    //   onClose()
+    // }
   }
 
-  const loadFingerprint = async () => {
-    setIsLoading(true)
-    const res = await cipherStore.getSharingPublicKey(member.email)
-    if (res.kind !== 'ok') {
-      notifyApiError(res)
-      setIsLoading(false)
-      return
-    }
-    setPublicKey(res.data.public_key)
-    const pubKey = Utils.fromB64ToArray(res.data.public_key)
-    const fp = await cryptoService.getFingerprint(member.pwd_user_id, pubKey.buffer)
-    setFingerprint(fp.join('-'))
-    setIsLoading(false)
-  }
+
 
   // --------------- EFFECT ----------------
 
@@ -70,7 +56,6 @@ export const ConfirmShareModal = observer((props: Props) => {
       onOpen={() => {
         setFingerprint('')
         setPublicKey('')
-        loadFingerprint()
       }}
       title={translate('shares.confirm_share.verify_fingerprint')}
     >

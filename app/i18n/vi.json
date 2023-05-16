@@ -645,7 +645,9 @@
       "verification_desc": "Để đảm bảo tính minh bạch của khóa mã hóa, vui lòng xác minh Fingerprint trước khi tiếp tục.",
       "fingerprint_desc": "'Fingerprint' là cụm từ duy nhất của mỗi tài khoản, dùng để xác minh khóa công khai với người dùng khác trong trường hợp chia sẻ và tham gia vào một tổ chức."
     },
-    "suggestion": "Người dùng hoặc nhóm trong doanh nghiệp"
+    "suggestion": "Người dùng hoặc nhóm trong doanh nghiệp",
+    "confirm": "Người dùng đã đăng kí tài khoản thông qua chia sẻ của bản, xác nhận chia sẻ lại dữ liệu.",
+    "wait_confirm" : "Chờ xác nhận"
   },
   "trash": {
     "delete_item": "Xóa",
@@ -848,6 +850,7 @@
       "btn": "Thêm tài sản"
     },
     "copy_seed": "Sao chép chuỗi Seed / chuỗi khôi phục",
+    "copy_pin": "Sao chép PIN",
     "copy_address": "Sao chép địa chỉ",
     "copy_username": "Sao chép tên người dùng",
     "copy_password": "Sao chép mật khẩu / PIN",

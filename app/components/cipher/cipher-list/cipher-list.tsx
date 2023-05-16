@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
-import orderBy from 'lodash/orderBy'
+import orderBy from "lodash/orderBy"
 import { Text } from "../../text/text"
-import { CipherType } from "../../../../core/enums"
+import { CipherType, FieldType } from "../../../../core/enums"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
 import { CipherView } from "../../../../core/models/view"
@@ -25,7 +25,7 @@ import { WirelessRouterAction } from "../../../screens/auth/browse/wireless-rout
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { CipherListItem } from "./cipher-list-item"
 import { MAX_CIPHER_SELECTION } from "../../../config/constants"
-
+import { Logger } from "../../../utils/logger"
 
 export interface CipherListProps {
   emptyContent?: JSX.Element
@@ -37,7 +37,7 @@ export interface CipherListProps {
   sortList?: {
     orderField: string
     order: string
-  },
+  }
   folderId?: string
   collectionId?: string
   organizationId?: string
@@ -53,12 +53,23 @@ export interface CipherListProps {
  */
 export const CipherList = observer((props: CipherListProps) => {
   const {
-    emptyContent, navigation, onLoadingChange, searchText, deleted = false, sortList,
-    folderId, collectionId, organizationId,
-    isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
+    emptyContent,
+    navigation,
+    onLoadingChange,
+    searchText,
+    deleted = false,
+    sortList,
+    folderId,
+    collectionId,
+    organizationId,
+    isSelecting,
+    setIsSelecting,
+    selectedItems,
+    setSelectedItems,
+    setAllItems,
   } = props
   const { translate, getTeam, notify } = useMixins()
-  const { getCiphersFromCache } = useCipherDataMixins()
+  const { getCiphersFromCache, updateCipher } = useCipherDataMixins()
   const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, user } = useStores()
 
@@ -82,12 +93,12 @@ export const CipherList = observer((props: CipherListProps) => {
 
   const [ciphers, setCiphers] = useState([])
 
-  const [checkedItem, setCheckedItem] = useState('')
+  const [checkedItem, setCheckedItem] = useState("")
 
   // ------------------------ COMPUTED ----------------------------
 
   const isShared = (organizationId: string) => {
-    const share = cipherStore.myShares.find(s => s.id === organizationId)
+    const share = cipherStore.myShares.find((s) => s.id === organizationId)
     if (share) {
       return share.members.length > 0 || share.groups.length > 0
     }
@@ -116,7 +127,7 @@ export const CipherList = observer((props: CipherListProps) => {
     // Filter
     const filters = []
     if (props.cipherType) {
-      if (typeof props.cipherType === 'number') {
+      if (typeof props.cipherType === "number") {
         filters.push((c: CipherView) => c.type === props.cipherType)
       } else {
         // @ts-ignore
@@ -128,7 +139,7 @@ export const CipherList = observer((props: CipherListProps) => {
     const searchRes = await getCiphersFromCache({
       filters,
       searchText,
-      deleted
+      deleted,
     })
 
     // Add image
@@ -139,45 +150,47 @@ export const CipherList = observer((props: CipherListProps) => {
         logo: cipherInfo.backup,
         imgLogo: cipherInfo.img,
         svg: cipherInfo.svg,
-        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id),
-        isDeleted: c.isDeleted
+        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
+          c.id,
+        ),
+        isDeleted: c.isDeleted,
       }
       return data
     })
 
-
     // Filter
     if (folderId !== undefined) {
-      res = res.filter(i => i.folderId === folderId)
+      res = res.filter((i) => i.folderId === folderId)
     }
 
     // collection
     if (collectionId !== undefined) {
       if (collectionId !== null) {
-        res = res.filter(i => i.collectionIds.includes(collectionId))
+        res = res.filter((i) => i.collectionIds.includes(collectionId))
       }
     }
 
     if (organizationId === undefined && collectionId === undefined && folderId === null) {
-      res = res.filter(i => !getTeam(user.teams, i.organizationId).name)
-      res = res.filter(i => !i.collectionIds.length)
+      res = res.filter((i) => !getTeam(user.teams, i.organizationId).name)
+      res = res.filter((i) => !i.collectionIds.length)
     }
     if (organizationId !== undefined) {
       if (organizationId === null) {
-        res = res.filter(i => !!i.organizationId)
+        res = res.filter((i) => !!i.organizationId)
       } else {
-        res = res.filter(i => i.organizationId === organizationId)
+        res = res.filter((i) => i.organizationId === organizationId)
       }
     }
 
     // Sort
     if (sortList) {
       const { orderField, order } = sortList
-      res = orderBy(
-        res,
-        [c => orderField === 'name' ? (c.name && c.name.toLowerCase()) : c.revisionDate],
-        [order]
-      ) || []
+      res =
+        orderBy(
+          res,
+          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order],
+        ) || []
     }
 
     // if (searchText) {
@@ -191,8 +204,9 @@ export const CipherList = observer((props: CipherListProps) => {
     // t.final()
     // Done
     setCiphers(res)
-    setAllItems(res.map(c => c.id))
+    setAllItems(res.map((c) => c.id))
   }
+
 
 
   // Handle action menu open
@@ -249,6 +263,52 @@ export const CipherList = observer((props: CipherListProps) => {
     }
   }
 
+  // remove new item type (convert exsiting this item type to note)
+  const removeItemn = () => {
+    const removeItemType = [
+      CipherType.DriverLicense,
+      CipherType.CitizenID,
+      CipherType.Passport,
+      CipherType.SocialSecurityNumber,
+      CipherType.WirelessRouter,
+      CipherType.Server,
+      CipherType.APICipher,
+      CipherType.Database,
+    ]
+    ciphers
+      .filter((c) => removeItemType.includes(c.type))
+      ?.forEach((cipher) => {
+        try {
+          const content = JSON.parse(cipher.notes)
+          cipher.type = CipherType.SecureNote
+          cipher.secureNote.type = 0
+          cipher.notes = content.notes
+          function camelCaseToWords(str) {
+            if (!str) {
+              return ""
+            }
+            const newStr = str
+              .replace(/([a-z])([A-Z])/g, "$1 $2")
+              .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
+              .replace(/(\b[A-Z]{2,}\b)(?=[a-z])/g, "$1 ")
+              .toLowerCase()
+            return newStr ? newStr[0].toUpperCase() + newStr.slice(1) : newStr
+          }
+          const newFields = Object.keys(content)
+            .filter((k) => k !== "notes")
+            .map((k) => ({
+              name: camelCaseToWords(k),
+              value: content[k],
+              type: FieldType.Text,
+            }))
+          cipher.fields = [...(cipher.fields || []), ...newFields]
+          updateCipher(cipher.id, cipher, 0, [], true)
+        } catch (e) {
+          Logger.error(e)
+        }
+      })
+  }
+
   // Go to detail
   // const goToDetail = (item: CipherView) => {
   //   cipherStore.setSelectedCipher(item)
@@ -264,16 +324,20 @@ export const CipherList = observer((props: CipherListProps) => {
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
       if (selected.length === MAX_CIPHER_SELECTION) {
-        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
+        notify("error", translate("error.cannot_select_more", { count: MAX_CIPHER_SELECTION }))
         return
       }
       selected.push(id)
     } else {
-      selected = selected.filter(i => i !== id)
+      selected = selected.filter((i) => i !== id)
     }
     setSelectedItems(selected)
   }
   // ------------------------ RENDER ----------------------------
+
+  useEffect(() => {
+    removeItemn()
+  }, [ciphers])
 
   const renderItem = ({ item }) => {
     return (
@@ -398,30 +462,26 @@ export const CipherList = observer((props: CipherListProps) => {
           paddingHorizontal: 20,
         }}
         data={ciphers}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         getItemLayout={(data, index) => ({
           length: 71,
           offset: 71 * index,
-          index
+          index,
         })}
       />
       {/* Cipher list end */}
     </View>
+  ) : emptyContent && !searchText.trim() ? (
+    <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
   ) : (
-    emptyContent && !searchText.trim() ? (
-      <View style={{ paddingHorizontal: 20 }}>
-        {emptyContent}
-      </View>
-    ) : (
-      <View style={{ paddingHorizontal: 20 }}>
-        <Text
-          text={translate('error.no_results_found') + ` '${searchText}'`}
-          style={{
-            textAlign: 'center'
-          }}
-        />
-      </View>
-    )
+    <View style={{ paddingHorizontal: 20 }}>
+      <Text
+        text={translate("error.no_results_found") + ` '${searchText}'`}
+        style={{
+          textAlign: "center",
+        }}
+      />
+    </View>
   )
 })

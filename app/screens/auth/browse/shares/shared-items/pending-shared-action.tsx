@@ -66,12 +66,6 @@ export const PendingSharedAction = observer((props: Props) => {
 
   return (
     <View>
-      {/* Modals */}
-
-      
-
-      {/* Modals end */}
-
       {/* Actionsheet */}
       <ActionSheet
         isOpen={isOpen}
