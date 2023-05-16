@@ -1191,7 +1191,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 109;
+				CURRENT_PROJECT_VERSION = 114;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
@@ -1208,7 +1208,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.29;
+				MARKETING_VERSION = 1.31;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1232,7 +1232,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 109;
+				CURRENT_PROJECT_VERSION = 114;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
@@ -1249,7 +1249,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.29;
+				MARKETING_VERSION = 1.31;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1450,7 +1450,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 109;
+				CURRENT_PROJECT_VERSION = 114;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = "Staging Locker";
 				ENABLE_BITCODE = NO;
@@ -1467,14 +1467,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.29;
+				MARKETING_VERSION = 1.31;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.staging;
-				PRODUCT_NAME = "[Staging] Locker";
+				PRODUCT_NAME = "Staging Locker";
 				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLocker-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1685,7 +1685,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 109;
+				CURRENT_PROJECT_VERSION = 114;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = "Staging Locker";
 				ENABLE_BITCODE = NO;
@@ -1702,14 +1702,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.29;
+				MARKETING_VERSION = 1.31;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.staging;
-				PRODUCT_NAME = "[Staging] Locker";
+				PRODUCT_NAME = "Staging Locker";
 				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLocker-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
