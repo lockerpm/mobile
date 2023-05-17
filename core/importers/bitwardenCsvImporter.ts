@@ -6,7 +6,6 @@ import { ImportResult } from '../models/domain/importResult';
 import { CipherView } from '../models/view/cipherView';
 import { CollectionView } from '../models/view/collectionView';
 import { FieldView } from '../models/view/fieldView';
-import { FolderView } from '../models/view/folderView';
 import { LoginView } from '../models/view/loginView';
 import { SecureNoteView } from '../models/view/secureNoteView';
 

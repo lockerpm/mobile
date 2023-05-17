@@ -59,7 +59,7 @@ import { MeldiumCsvImporter } from "../importers/meldiumCsvImporter"
 import { MSecureCsvImporter } from "../importers/msecureCsvImporter"
 import { MykiCsvImporter } from "../importers/mykiCsvImporter"
 import { NordPassCsvImporter } from "../importers/nordpassCsvImporter"
-import { OnePassword1PuxImporter } from "../importers/onepasswordImporters/onepassword1PuxImporter";
+import { OnePassword1PuxImporter } from "../importers/onepasswordImporters/onepassword1PuxImporter"
 import { OnePassword1PifImporter } from "../importers/onepasswordImporters/onepassword1PifImporter"
 import { OnePasswordMacCsvImporter } from "../importers/onepasswordImporters/onepasswordMacCsvImporter"
 import { OnePasswordWinCsvImporter } from "../importers/onepasswordImporters/onepasswordWinCsvImporter"
@@ -84,6 +84,7 @@ import { UpmCsvImporter } from "../importers/upmCsvImporter"
 import { YotiCsvImporter } from "../importers/yotiCsvImporter"
 import { ZohoVaultCsvImporter } from "../importers/zohoVaultCsvImporter"
 import { SafariCsvImporter } from "../importers/safariCsvImporter"
+import { HeyLoginCsvImporter } from "../importers/heyloginCsvImport"
 
 export class ImportService implements ImportServiceAbstraction {
   featuredImportOptions = [
@@ -148,6 +149,7 @@ export class ImportService implements ImportServiceAbstraction {
     { id: "nordpasscsv", name: "Nordpass (csv)" },
     { id: "1password1pif", name: "1Password (1pif)" },
     { id: "dashlanejson", name: "Dashlane (json)" },
+    { id: "heylogincsv", name: "HeyLogin (csv)" },
   ]
 
   constructor(
@@ -247,8 +249,8 @@ export class ImportService implements ImportServiceAbstraction {
         return new SaferPassCsvImporter()
       case "meldiumcsv":
         return new MeldiumCsvImporter()
-    case "1password1pux":
-        return new OnePassword1PuxImporter();
+      case "1password1pux":
+        return new OnePassword1PuxImporter()
       case "1password1pif":
         return new OnePassword1PifImporter()
       case "1passwordwincsv":
@@ -329,6 +331,8 @@ export class ImportService implements ImportServiceAbstraction {
         return new NordPassCsvImporter()
       case "safaricsv":
         return new SafariCsvImporter()
+      case "heylogincsv":
+        return new HeyLoginCsvImporter()
       default:
         return null
     }
