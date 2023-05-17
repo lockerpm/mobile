@@ -16,16 +16,16 @@ export class AuditService implements AuditServiceAbstraction {
     @throttle(100, () => 'passwordLeaked')
     async passwordLeaked(password: string): Promise<number> {
         const hashBytes = await this.cryptoFunctionService.hash(password, 'sha1');
-        const hash = Utils.fromBufferToHex(hashBytes).toUpperCase();
+        // const hash = Utils.fromBufferToHex(hashBytes).toUpperCase();  // hash function on mobile is different than on the web
+        const hash = Utils.fromBufferToUtf8(hashBytes).toUpperCase();
         const hashStart = hash.substr(0, 5);
         const hashEnding = hash.substr(5);
-
         const response = await this.apiService.nativeFetch(new Request(PwnedPasswordsApi + hashStart));
         const leakedHashes = await response.text();
+ 
         const match = leakedHashes.split(/\r?\n/).find(v => {
             return v.split(':')[0] === hashEnding;
         });
-
         return match != null ? parseInt(match.split(':')[1], 10) : 0;
     }
 
