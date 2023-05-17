@@ -444,12 +444,13 @@ export class UserApi {
   async sessionOtpLogin(token: string, payload: SessionOtpLoginData): Promise<SessionLoginResult> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/cystack_platform/pm/users/session/otp",
         payload,
       )
+
+
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)

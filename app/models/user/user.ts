@@ -158,6 +158,7 @@ export const UserModel = types
       remove(StorageKey.APP_CURRENT_USER)
     },
     clearSettings: () => {
+      self.isPasswordlessLogin = false
       self.isBiometricUnlock = false
       self.appTimeout = AppTimeoutType.APP_CLOSE
       self.appTimeoutAction = TimeoutActionType.LOCK

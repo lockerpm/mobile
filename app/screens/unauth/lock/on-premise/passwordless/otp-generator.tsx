@@ -42,6 +42,7 @@ export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack 
   }
 
   useEffect(() => {
+    reGenOtp()
     const timerId = setInterval(() => {
       counter()
     }, 1000)

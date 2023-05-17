@@ -120,7 +120,7 @@ export const SSOEmailLoginScreen = observer(() => {
         navigation.navigate("lock", {
           type: "onPremise",
           data: res.data[0],
-          email: res.data[0].email || "asdasd",
+          email: res.data[0].email ,
         })
       }
     }

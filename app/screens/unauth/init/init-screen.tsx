@@ -206,7 +206,7 @@ export const InitScreen = observer(() => {
     if (user.onPremiseUser) {
       const res = await user.onPremisePreLogin({email: user.email})
       if (res.kind == "ok") {
-        if (res.data[0].activated) {
+        if (res.data[0]?.activated) {
           navigation.navigate("lock", {
             type: "onPremise",
             data: res.data[0],

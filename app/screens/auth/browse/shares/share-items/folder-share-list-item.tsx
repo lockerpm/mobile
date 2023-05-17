@@ -18,8 +18,6 @@ export const CollectionListItem = (props: Prop) => {
   const { item, openActionMenu, navigation } = props
   const { color } = useMixins()
 
-    console.log(item)
-
   return (
     <Button
       preset="link"
