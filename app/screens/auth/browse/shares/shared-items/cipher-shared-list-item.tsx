@@ -1,15 +1,15 @@
 import React, { memo } from "react"
 import { View } from "react-native"
 import { Checkbox } from "react-native-ui-lib"
-import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons"
 // import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import isEqual from 'lodash/isEqual'
+import isEqual from "lodash/isEqual"
 import { CipherView } from "../../../../../../core/models/view"
 import { AccountRole } from "../../../../../config/types"
 import { useMixins } from "../../../../../services/mixins"
 import { Button, AutoImage as Image, Text } from "../../../../../components"
 import { commonStyles, fontSize } from "../../../../../theme"
-
+import { useStores } from "../../../../../models"
 
 type Prop = {
   item: CipherSharedType
@@ -33,54 +33,54 @@ export type CipherSharedType = CipherView & {
   notSync?: boolean
 }
 
+export const CipherSharedListItem = memo(
+  (props: Prop) => {
+    const { item, isSelecting, toggleItemSelection, openActionMenu, isSelected, org } = props
+    const { color, getTeam, translate } = useMixins()
+    const { cipherStore } = useStores()
 
-export const CipherSharedListItem = memo((props: Prop) => {
-  const { item, isSelecting, toggleItemSelection, openActionMenu, isSelected, org } = props
-  const { color, translate } = useMixins()
-
-  const getDescription = (item: CipherSharedType) => {
-    if (item.isShared) {
-      return item.description
-    }
-
-    let shareType = ''
-    if (org) {
-      switch (org.type) {
-        case AccountRole.MEMBER:
-          // shareType = item.viewPassword ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
-          shareType = translate('shares.share_type.view')
-          break
-        case AccountRole.ADMIN:
-          shareType = translate('shares.share_type.edit')
-          break
+    const getDescription = (item: CipherSharedType) => {
+      if (item.isShared) {
+        return item.description
       }
-    }
-    return org ? `${org.name} - ${shareType}` : ''
-  }
 
-  return (
-    <Button
-      preset="link"
-      onPress={() => {
-        if (isSelecting) {
-          toggleItemSelection(item.id)
-        } else {
-          // goToDetail(item)
-          openActionMenu(item)
+      let shareType = ""
+      if (org) {
+        switch (org.type) {
+          case AccountRole.MEMBER:
+            // shareType = item.viewPassword ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
+            shareType = translate("shares.share_type.view")
+            break
+          case AccountRole.ADMIN:
+            shareType = translate("shares.share_type.edit")
+            break
         }
-      }}
-      onLongPress={() => !item.isShared && toggleItemSelection(item.id)}
-      style={{
-        borderBottomColor: color.line,
-        borderBottomWidth: 0.5,
-        paddingVertical: 15,
-        height: 70.5
-      }}
-    >
-      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-        {/* Cipher avatar */}
-        {
-          item.svg ? (
+      }
+      return org ? `${org.name} - ${shareType}` : ""
+    }
+
+    return (
+      <Button
+        preset="link"
+        onPress={() => {
+          if (isSelecting) {
+            toggleItemSelection(item.id)
+          } else {
+            // goToDetail(item)
+            openActionMenu(item)
+          }
+        }}
+        onLongPress={() => !item.isShared && toggleItemSelection(item.id)}
+        style={{
+          borderBottomColor: color.line,
+          borderBottomWidth: 0.5,
+          paddingVertical: 15,
+          height: 70.5,
+        }}
+      >
+        <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
+          {/* Cipher avatar */}
+          {item.svg ? (
             <item.svg height={40} width={40} />
           ) : (
             <Image
@@ -89,49 +89,43 @@ export const CipherSharedListItem = memo((props: Prop) => {
               style={{
                 height: 40,
                 width: 40,
-                borderRadius: 8
+                borderRadius: 8,
               }}
             />
-          )
-        }
-        {/* Cipher avatar end */}
+          )}
+          {/* Cipher avatar end */}
 
-        <View style={{ flex: 1, marginLeft: 12 }}>
-          <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
-            <View style={{ flex: 1 }}>
-              <Text
-                preset="semibold"
-                text={item.name}
-                numberOfLines={1}
-              />
-            </View>
+          <View style={{ flex: 1, marginLeft: 12 }}>
+            <View style={[commonStyles.CENTER_HORIZONTAL_VIEW]}>
+              <View style={{ flex: 1 }}>
+                <Text preset="semibold" text={item.name} numberOfLines={1} />
+              </View>
 
-            {/* Pending status */}
-            {
-              item.isShared && (
-                <View style={{
-                  paddingHorizontal: 10,
-                  paddingVertical: 2,
-                  backgroundColor: color.warning,
-                  borderRadius: 3,
-                  marginLeft: 10
-                }}>
+              {/* Pending status */}
+              {item.isShared && (
+                <View
+                  style={{
+                    paddingHorizontal: 10,
+                    paddingVertical: 2,
+                    backgroundColor: color.warning,
+                    borderRadius: 3,
+                    marginLeft: 10,
+                  }}
+                >
                   <Text
                     text="PENDING"
                     style={{
-                      fontWeight: 'bold',
+                      fontWeight: "bold",
                       color: color.background,
-                      fontSize: fontSize.mini
+                      fontSize: fontSize.mini,
                     }}
                   />
                 </View>
-              )
-            }
-            {/* Pending status */}
+              )}
+              {/* Pending status */}
 
-            {/* Not sync icon */}
-            {
-              item.notSync && (
+              {/* Not sync icon */}
+              {item.notSync && (
                 <View style={{ marginLeft: 10 }}>
                   <MaterialCommunityIconsIcon
                     name="cloud-off-outline"
@@ -139,26 +133,33 @@ export const CipherSharedListItem = memo((props: Prop) => {
                     color={color.textBlack}
                   />
                 </View>
-              )
-            }
-            {/* Not sync icon end */}
-          </View>
+              )}
+              {/* Not sync icon end */}
+            </View>
 
-          {/* Description */}
-          {
-            !!getDescription(item) && (
+            {/* Description */}
+            {!!getDescription(item) && (
               <Text
                 text={getDescription(item)}
-                style={{ fontSize: fontSize.small }}
+                style={{ fontSize: fontSize.small, marginTop: 3 }}
                 numberOfLines={1}
               />
-            )
-          }
-          {/* Description end */}
-        </View>
+            )}
+            {/* Description end */}
 
-        {
-          isSelecting ? (
+            {
+              !item.isShared && <Text
+                text={
+                  getTeam(cipherStore.organizations, item.organizationId).name ||
+                  translate("common.me")
+                }
+                style={{ fontSize: fontSize.small, marginTop: 3  }}
+                numberOfLines={1}
+              />
+            }
+          </View>
+
+          {isSelecting ? (
             <Checkbox
               value={isSelected}
               color={color.primary}
@@ -171,7 +172,7 @@ export const CipherSharedListItem = memo((props: Prop) => {
             // <Button
             //   preset="link"
             //   onPress={() => openActionMenu(item)}
-            //   style={{ 
+            //   style={{
             //     height: 40,
             //     width: 40,
             //     justifyContent: 'flex-end',
@@ -184,23 +185,24 @@ export const CipherSharedListItem = memo((props: Prop) => {
             //     color={color.textBlack}
             //   />
             // </Button>
-          )
-        }
-      </View>
-    </Button>
-  )
-}, (prev, next) => {
-  const whitelist = ['toggleItemSelection', 'openActionMenu']
-  const prevProps = Object.keys(prev)
-  const nextProps = Object.keys(next)
-  if (!isEqual(prevProps, nextProps)) {
-    return false
-  }
-  const isPropsEqual = prevProps.reduce((val, key) => {
-    if (whitelist.includes(key)) {
-      return val
+          )}
+        </View>
+      </Button>
+    )
+  },
+  (prev, next) => {
+    const whitelist = ["toggleItemSelection", "openActionMenu"]
+    const prevProps = Object.keys(prev)
+    const nextProps = Object.keys(next)
+    if (!isEqual(prevProps, nextProps)) {
+      return false
     }
-    return val && isEqual(prev[key], next[key])
-  }, true)
-  return isPropsEqual
-})
+    const isPropsEqual = prevProps.reduce((val, key) => {
+      if (whitelist.includes(key)) {
+        return val
+      }
+      return val && isEqual(prev[key], next[key])
+    }, true)
+    return isPropsEqual
+  },
+)

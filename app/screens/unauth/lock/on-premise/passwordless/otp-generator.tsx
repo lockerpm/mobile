@@ -118,7 +118,7 @@ export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack 
 })
 
 export const randomOtpNumber = () => {
-  return Math.round(Math.random() * 1000000)
+  return Math.floor(100000 + Math.random() * 900000)
 }
 
 const Instruction = ({

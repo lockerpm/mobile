@@ -97,7 +97,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
       const allCiphers = await getCiphers({
         deleted: false,
         searchText: '',
-        filters: [(c: CipherView) => (c.type === CipherType.Login || c.type === CipherType.MasterPassword) && c.login.password]
+        filters: [(c: CipherView) => c.type === CipherType.Login && !!c.login.password]
       })
       const weakPasswordCiphers = []
       const isUserNameNotEmpty = (c: CipherView) => {
@@ -147,6 +147,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
 
         // Check exposed password
         const promise = auditService.passwordLeaked(c.login.password).then(exposedCount => {
+          console.log(exposedCount, c.login.password)
           if (exposedCount > 0) {
             exposedPasswordCiphers.push(c)
             exposedPasswordMap.set(c.id, exposedCount)
