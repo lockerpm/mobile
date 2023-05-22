@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Loading, Layout, Text } from "../../../components"
+import { Loading, Text } from "../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { load, StorageKey } from "../../../utils/storage"
@@ -213,7 +213,7 @@ export const InitScreen = observer(() => {
             email: user.email,
           })
         }
-        return 
+        return
       }
     }
 
@@ -225,7 +225,6 @@ export const InitScreen = observer(() => {
       navigation.navigate("login")
     }
   }
-
   // ------------------ EFFECTS ---------------------
 
   // NOTE: dont change this effect to navigation onFocus or it will mess up handleDynamicLink
@@ -252,19 +251,20 @@ export const InitScreen = observer(() => {
 
   // ------------------ RENDER ---------------------
 
-  return isRooted ? (
-    <Layout noScroll>
-      <View style={[commonStyles.CENTER_VIEW, commonStyles.SECTION_PADDING]}>
-        <Text
-          preset="black"
-          text={translate("error.rooted_device")}
-          style={{
-            textAlign: "center",
-          }}
-        />
-      </View>
-    </Layout>
-  ) : (
-    <Loading />
+  return (
+    <View style={{ flex: 1 }}>
+      {isRooted && (
+        <View style={[commonStyles.CENTER_VIEW, commonStyles.SECTION_PADDING]}>
+          <Text
+            preset="black"
+            text={translate("error.rooted_device")}
+            style={{
+              textAlign: "center",
+            }}
+          />
+        </View>
+      )}
+      {!isRooted && <Loading />}
+    </View>
   )
 })

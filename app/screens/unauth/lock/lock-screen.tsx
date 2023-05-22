@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, BackHandler } from "react-native"
+import { Alert, BackHandler, View } from "react-native"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { useStores } from "../../../models"
 import { useMixins } from "../../../services/mixins"
@@ -17,7 +17,7 @@ export const LockScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<RouteProp<RootParamList, "lock">>()
   const { user, uiStore } = useStores()
-  const { translate } = useMixins()
+  const { translate} = useMixins()
   const { logout } = useCipherAuthenticationMixins()
 
   // ---------------------- PARAMS -------------------------
@@ -54,6 +54,7 @@ export const LockScreen = observer(() => {
     await logout()
     navigation.navigate("login")
   }
+
 
   // -------------- EFFECT ------------------
   // Auto trigger face id / touch id + detect biometry type
@@ -97,6 +98,7 @@ export const LockScreen = observer(() => {
     }
   }, [navigation])
 
+
   useEffect(() => {
     // Om Premise setup
     if (route.params.type === "onPremise") {
@@ -114,22 +116,30 @@ export const LockScreen = observer(() => {
   }, [])
   // ---------------------- RENDER -------------------------
 
-  if (route.params.type === "onPremise") {
-    if (lockMethod === "password") {
-      return (
-        <OnPremiseLockMasterPassword
-          data={route.params.data}
-          email={route.params.email}
-          biometryType={biometryType}
-          handleLogout={handleLogout}
-        />
-      )
+  const renderContent = () => {
+    if (route.params.type === "onPremise") {
+      if (lockMethod === "password") {
+        return (
+          <OnPremiseLockMasterPassword
+            data={route.params.data}
+            email={route.params.email}
+            biometryType={biometryType}
+            handleLogout={handleLogout}
+          />
+        )
+      }
+      return <OnPremiseLockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
     }
-    return <OnPremiseLockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
+
+    if (lockMethod === "password") {
+      return <LockByMasterPassword biometryType={biometryType} handleLogout={handleLogout} />
+    }
+    return <BusinessLockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
   }
 
-  if (lockMethod === "password") {
-    return <LockByMasterPassword biometryType={biometryType} handleLogout={handleLogout} />
-  }
-  return <BusinessLockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
+  return (
+    <View style={{ flex: 1 }}>
+      {renderContent()}
+    </View>
+  )
 })
