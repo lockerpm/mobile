@@ -11,12 +11,15 @@ export enum PushEvent {
   EMERGENCY_INITIATE = "emergency_access_initiate",
   EMERGENCY_APPROVE_REQUEST = "emergency_access_approve_request",
   EMERGENCY_REJECT_REQUEST = "emergency_access_reject_request",
+
+  TIP_TRICK = 'password_tip_trick' // new updates info
 }
 
 
 
 export type NotifeeNotificationData = {
   type?: PushEvent
+  url?: string
 }
 
 export type NewShareData = {
@@ -42,4 +45,17 @@ export type EmergencyAccessData = {
   grantor_name?: string
   is_grantor?: boolean
   is_grantee?: boolean
+}
+
+export type TipTrickData = {
+  title: {
+    en: string
+    vi: string
+  },
+  metadata: {
+    link: {
+      en: string
+      vi: string
+    },
+  }
 }

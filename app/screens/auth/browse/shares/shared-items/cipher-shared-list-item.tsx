@@ -9,7 +9,6 @@ import { AccountRole } from "../../../../../config/types"
 import { useMixins } from "../../../../../services/mixins"
 import { Button, AutoImage as Image, Text } from "../../../../../components"
 import { commonStyles, fontSize } from "../../../../../theme"
-import { useStores } from "../../../../../models"
 
 type Prop = {
   item: CipherSharedType
@@ -36,8 +35,7 @@ export type CipherSharedType = CipherView & {
 export const CipherSharedListItem = memo(
   (props: Prop) => {
     const { item, isSelecting, toggleItemSelection, openActionMenu, isSelected, org } = props
-    const { color, getTeam, translate } = useMixins()
-    const { cipherStore } = useStores()
+    const { color, translate } = useMixins()
 
     const getDescription = (item: CipherSharedType) => {
       if (item.isShared) {
@@ -148,11 +146,8 @@ export const CipherSharedListItem = memo(
             {/* Description end */}
 
             {
-              !item.isShared && <Text
-                text={
-                  getTeam(cipherStore.organizations, item.organizationId).name ||
-                  translate("common.me")
-                }
+              !!item.login.username && <Text
+                text={item.login.username}
                 style={{ fontSize: fontSize.small, marginTop: 3  }}
                 numberOfLines={1}
               />
