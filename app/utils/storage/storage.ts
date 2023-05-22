@@ -14,6 +14,7 @@ export enum StorageKey {
 
 export type PushNotiData = {
   type: string
+  url?: string
   data?: any
 }
 

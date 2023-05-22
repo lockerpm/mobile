@@ -147,7 +147,6 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
 
         // Check exposed password
         const promise = auditService.passwordLeaked(c.login.password).then(exposedCount => {
-          console.log(exposedCount, c.login.password)
           if (exposedCount > 0) {
             exposedPasswordCiphers.push(c)
             exposedPasswordMap.set(c.id, exposedCount)
