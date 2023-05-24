@@ -39,6 +39,7 @@ import WebView from "react-native-webview"
 import { IS_IOS } from "../config/constants"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Header } from "../components"
+import { MainNavigator } from "./main-navigator"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -198,6 +199,7 @@ const RootStack = observer((props: Props) => {
         <Stack.Screen name="intro" component={IntroScreen} />
         <Stack.Screen name="onBoarding" component={OnboardingScreen} />
         <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: "individual" }} />
+        <Stack.Screen name="login" component={LoginScreen} />
 
         <Stack.Screen name="ssoIdentifier" component={SSOIdentifierScreen} />
         <Stack.Screen
@@ -210,7 +212,15 @@ const RootStack = observer((props: Props) => {
           }}
         />
 
-        <Stack.Screen name="login" component={LoginScreen} />
+        <Stack.Screen
+          name="mainStack"
+          component={MainNavigator}
+          options={{
+            headerShown: false,
+            gestureEnabled: false,
+          }}
+        />
+
         <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="signup" component={SignupScreen} />
         <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
