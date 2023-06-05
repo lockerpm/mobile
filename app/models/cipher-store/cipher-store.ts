@@ -45,7 +45,9 @@ export const CipherStoreModel = types
     organizations: types.array(types.frozen<Organization>()),
 
     // Selector
+    
     generatedPassword: types.maybeNull(types.string),
+    selectedTotp: types.maybeNull(types.string),
     selectedCipher: types.maybeNull(types.frozen()),
     selectedFolder: types.maybeNull(types.string),
     selectedCollection: types.maybeNull(types.string),
@@ -73,6 +75,10 @@ export const CipherStoreModel = types
 
     setSelectedFolder: (folderId: string) => {
       self.selectedFolder = folderId
+    },
+
+    setSelectedTotp: (totp: string) => {
+      self.selectedTotp = totp
     },
 
     setSelectedCollection: (collectionId: string) => {

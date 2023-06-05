@@ -13,24 +13,28 @@ export interface OTPData {
 
 export const getTOTP = (otp: OTPData) => {
   try {
-    return totp(otp.secret, {
+    const res = totp(_removeInvalidBase32Chars(otp.secret), {
       algorithm: otp.algorithm || 'SHA-1',
       period: otp.period || 30,
       digits: otp.digits || 6
     })
-  } catch(e) {
-    return null
+    return res
+  } catch (e) {
+    console.error(e)
+    return 'N/A'
   }
 }
 
-// Parse OTP from URI
+
+
+/// Parse OTP from URI
 export const parseOTPUri = (uri: string) => {
   const res: OTPData = {
     account: undefined,
     secret: undefined,
-    algorithm: undefined,
-    period: undefined,
-    digits: undefined
+    algorithm: 'SHA-1',
+    period: 30,
+    digits: 6
   }
 
   if (!uri) {
@@ -49,15 +53,23 @@ export const parseOTPUri = (uri: string) => {
     return res
   }
 
+  if (data.length === 1) {
+    res.secret = data[0]
+    return res
+  }
+
   const account = decodeURIComponent(data[0])
   const query = _parseQueryString(data[1])
 
-  res.account = (query.issuer && !account.startsWith(query.issuer)) ? `${query.issuer} (${account})` : account
+  res.account =
+    query.issuer && !account.startsWith(query.issuer)
+      ? `${query.issuer} (${account})`
+      : account
   res.secret = query.secret
   res.algorithm = _parseAlgorithm(query.algorithm)
   try {
     res.period = parseInt(query.period)
-  } catch(e) {
+  } catch (e) {
     // Do nothing
   }
   if (!res.period) {
@@ -65,7 +77,7 @@ export const parseOTPUri = (uri: string) => {
   }
   try {
     res.digits = parseInt(query.digits)
-  } catch(e) {
+  } catch (e) {
     // Do nothing
   }
   if (!res.digits) {
@@ -74,6 +86,7 @@ export const parseOTPUri = (uri: string) => {
 
   return res
 }
+
 
 export const decodeGoogleAuthenticatorImport = (uri: string): OTPData[] => {
   if (!uri) {
@@ -141,8 +154,8 @@ export const decodeGoogleAuthenticatorImport = (uri: string): OTPData[] => {
 // ------------------ SUPPORT --------------------
 
 const _parseQueryString = (query: string) => {
-  const vars = query.split("&")
-  const query_string = {
+  const vars = query.split('&')
+  const queryString = {
     account: undefined,
     secret: undefined,
     algorithm: undefined,
@@ -152,20 +165,21 @@ const _parseQueryString = (query: string) => {
     issuer: undefined
   }
   for (let i = 0; i < vars.length; i++) {
-    const pair = vars[i].split("=")
+    const pair = vars[i].split('=')
     const key = decodeURIComponent(pair[0])
     const value = decodeURIComponent(pair[1])
-    if (typeof query_string[key] === "undefined") {
-      query_string[key] = decodeURIComponent(value)
-    } else if (typeof query_string[key] === "string") {
-      const arr = [query_string[key], decodeURIComponent(value)]
-      query_string[key] = arr
+    if (typeof queryString[key] === 'undefined') {
+      queryString[key] = decodeURIComponent(value)
+    } else if (typeof queryString[key] === 'string') {
+      const arr = [queryString[key], decodeURIComponent(value)]
+      queryString[key] = arr
     } else {
-      query_string[key].push(decodeURIComponent(value))
+      queryString[key].push(decodeURIComponent(value))
     }
   }
-  return query_string
+  return queryString
 }
+
 
 const _parseAlgorithm = (algo: string) => {
   if (!algo) {
@@ -198,4 +212,15 @@ export const beautifyName = (name: string) => {
   }
 
   return name
+}
+
+const _removeInvalidBase32Chars = (base32String: string) => {
+  if (!base32String) {
+    return ''
+  }
+  const filteredString = base32String
+    .toUpperCase()
+    .trim()
+    .replace(/[^A-Z2-7]/g, '')
+  return filteredString
 }
