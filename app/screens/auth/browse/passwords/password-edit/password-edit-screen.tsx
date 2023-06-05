@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { BackHandler, View } from "react-native"
+import { BackHandler, TouchableOpacity, View } from "react-native"
 import find from "lodash/find"
 import {
   AutoImage as Image,
@@ -28,6 +28,7 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
 import { PlanStorageLimitModal } from "../../plan-storage-limit-modal"
+import { PasswordOtp } from "./otp"
 
 type PasswordEditScreenProp = RouteProp<PrimaryParamList, "passwords__edit">
 
@@ -71,6 +72,7 @@ export const PasswordEditScreen = observer(() => {
   const [name, setName] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [totp, setTotp] = useState("")
   const [url, setUrl] = useState("")
   const [note, setNote] = useState("")
   const [folder, setFolder] = useState(null)
@@ -81,6 +83,7 @@ export const PasswordEditScreen = observer(() => {
 
   // plan storage limit modal
   const [isOpenModal, setIsOpenModal] = useState(false)
+
   // ----------------- EFFECTS ------------------
   // Set initial data
   useEffect(() => {
@@ -88,6 +91,7 @@ export const PasswordEditScreen = observer(() => {
       setName(selectedCipher.name)
       setUsername(selectedCipher.login.username)
       setPassword(selectedCipher.login.password)
+      setTotp(selectedCipher.login.totp)
       setUrl(selectedCipher.login.uri)
       setNote(selectedCipher.notes)
       setFolder(selectedCipher.folderId)
@@ -133,6 +137,12 @@ export const PasswordEditScreen = observer(() => {
         cipherStore.setSelectedFolder(null)
       }
 
+      if (cipherStore.selectedTotp) {
+        setTotp(cipherStore.selectedTotp === "-1" ?  '' : cipherStore.selectedTotp )
+        cipherStore.setSelectedTotp('')
+      }
+   
+
       if (cipherStore.selectedCollection) {
         if (!selectedCollection) setCollection(cipherStore.selectedCollection)
         setFolder(null)
@@ -168,6 +178,7 @@ export const PasswordEditScreen = observer(() => {
     const data = new LoginView()
     data.username = username
     data.password = password
+    data.totp = totp
     if (url) {
       const uriView = new LoginUriView()
       uriView.uri = url
@@ -276,10 +287,7 @@ export const PasswordEditScreen = observer(() => {
         />
       }
     >
-      <PlanStorageLimitModal
-        isOpen={isOpenModal}
-        onClose={() => setIsOpenModal(false)}
-      />
+      <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
       {/* Name */}
       <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
@@ -392,6 +400,28 @@ export const PasswordEditScreen = observer(() => {
       </View>
       {/* Info end */}
 
+      {/** OTP */}
+      <View style={commonStyles.SECTION_PADDING}>
+        <Text text={translate('password.2fa_setup')} style={{ fontSize: fontSize.small }} />
+      </View>
+
+      <TouchableOpacity onPress={() => navigation.navigate("passwords_2fa_setup")}>
+        <View
+          style={[
+            commonStyles.SECTION_PADDING,
+            {
+              backgroundColor: color.background,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            },
+          ]}
+        >
+          {!totp ? <Text preset="black" text={translate('password.add_otp')} /> : <PasswordOtp data={totp} />}
+
+          <FontAwesomeIcon name="angle-right" size={20} color={color.text} />
+        </View>
+      </TouchableOpacity>
       {/* Custom fields */}
       <CustomFieldsEdit fields={fields} setFields={setFields} />
       {/* Custom fields end */}

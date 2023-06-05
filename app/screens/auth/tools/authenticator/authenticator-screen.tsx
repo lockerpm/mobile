@@ -5,10 +5,10 @@ import { useMixins } from "../../../../services/mixins"
 import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../components"
 import { SortAction } from "../../home/all-item/sort-action"
 import { AuthenticatorAddAction } from "./authenticator-add-action"
-import { OtpList } from "./otp-list"
 import { useStores } from "../../../../models"
 import { BackHandler } from "react-native"
 import { MAX_CIPHER_SELECTION } from "../../../../config/constants"
+import { OtpList } from "./otp-list"
 
 
 export const AuthenticatorScreen = observer(() => {

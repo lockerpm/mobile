@@ -24,6 +24,7 @@ export * from "./server/server-screen"
 // Inner screens
 export * from "./passwords/password-edit/password-edit-screen"
 export * from "./passwords/password-info/password-info-screen"
+export * from "./passwords/2fa-setup/2fa-setup-screen"
 export * from "./folders/folder-select/folder-select-screen"
 export * from "./folders/folder-ciphers/folder-ciphers-screen"
 export * from "./notes/note-edit/note-edit-screen"

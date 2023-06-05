@@ -80,6 +80,7 @@ import {
   EnterpriseInvitedScreen,
   NormalSharesScreen,
   QuickSharesScreen,
+  Password2FASetupScreen,
 } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
 import { useMixins } from "../services/mixins"
@@ -167,6 +168,8 @@ export type PrimaryParamList = {
     initialUrl?: string
     collection?: CollectionView
   }
+  passwords_2fa_setup: undefined
+
   notes__info: {
     quickShare?: boolean
   }
@@ -707,6 +710,8 @@ export const MainNavigator = observer(() => {
           component={PasswordEditScreen}
           initialParams={{ mode: "add" }}
         />
+        <Stack.Screen name="passwords_2fa_setup" component={Password2FASetupScreen} />
+        
         <Stack.Screen name="notes__info" component={NoteInfoScreen} />
         <Stack.Screen
           name="notes__edit"
