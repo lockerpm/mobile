@@ -8,6 +8,7 @@
 import Foundation
 import LocalAuthentication
 import UIKit
+import SwiftOTP
 
 class Utils {
 
@@ -32,6 +33,42 @@ class Utils {
     return pbkdf2.makeKeyHash(masterPassword: key, email: text)
   }
   
+  // ---- OTP -----
+  static public func GetOTPAlgorithm(algr:String) -> OTPAlgorithm {
+    switch algr {
+     case "SHA1":
+       return .sha1
+     case "SHA256":
+       return .sha256
+     case "SHA512":
+       return .sha512
+     default:
+       return .sha1
+    }
+  }
+  static public func GetQueryParamValue(uri: String, query: String) -> String {
+    let queryItems = URLComponents(string: uri)?.queryItems
+    return queryItems?.filter({$0.name == query}).first?.value ?? ""
+  }
+
+  static public func GetOTPFromUri(uri: String) -> String {
+    if uri.isEmpty {
+      return ""
+    }
+    if !uri.contains("/") {
+      let totp = TOTP(secret: Data(base32Decode(uri)!), digits: 6, timeInterval: 30, algorithm: .sha1)
+      return totp?.generate(time: Date()) ?? ""
+    }
+    
+    let secret: String = GetQueryParamValue(uri: uri, query: "secret")
+    let algorithm: OTPAlgorithm = GetOTPAlgorithm(algr: GetQueryParamValue(uri: uri, query: "algorithm"))
+    let timeInterval: Int = Int(GetQueryParamValue(uri: uri, query: "period")) ?? 30
+    let digits: Int = Int(GetQueryParamValue(uri: uri, query: "digits")) ?? 6
+  
+    let totp = TOTP(secret: Data(base32Decode(secret)!), digits: digits, timeInterval: timeInterval, algorithm: algorithm)
+      
+    return totp?.generate(time: Date()) ?? ""
+  }
   
   static public func BiometricAuthentication(view: UIViewController, onSuccess: @escaping () -> Void, onFailed: @escaping () -> Void) {
     let context = LAContext()

@@ -107,7 +107,7 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
     if (self.credentials?.count == 0){
       return "No data"
     } else if (self.filterCredentials.count == 0) {
-      return "No data matches \(self.searchBar.text!)"
+      return "No data matches '\(self.searchBar.text!)'"
     } else {
       return nil
     }
@@ -122,10 +122,6 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
     let target = filterCredentials[indexPath.row]
     completeRequest(data: target)
   }
-
-
-  
-  
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let credential = self.filterCredentials[indexPath.row]
@@ -143,7 +139,6 @@ extension LoginListViewController: UITableViewDataSource, UITableViewDelegate {
         selectedCredentials = item
       }
     }
-
     
     let actionSheet = UIAlertController(title: Utils.Translate("Name: ") + selectedCredentials.name, message: nil , preferredStyle: .actionSheet)
     actionSheet.addAction(UIAlertAction(title: Utils.Translate("Copy Username"), style: .default, handler: {action in

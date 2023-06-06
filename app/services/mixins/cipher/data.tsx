@@ -547,7 +547,9 @@ export const CipherDataMixinsProvider = observer(
         username: c.login.username || "",
         password: c.login.password || "",
         isOwner: !c.organizationId,
+        otp: c.login.totp || ""
       }))
+
 
       const sharedData: AutofillDataType = {
         passwords: passwordData,

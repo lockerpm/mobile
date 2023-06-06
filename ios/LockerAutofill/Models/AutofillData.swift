@@ -15,8 +15,9 @@ struct AutofillData {
   var username: String!
   var password: String!
   var isOwner: Bool!
+  var otp: String!
   
-  init(fillID: Int, name: String, id: String, uri: String, username: String,password: String, isOwner:Bool) {
+  init(fillID: Int, name: String, id: String, uri: String, username: String,password: String, isOwner:Bool, otp: String?) {
     self.fillID = fillID
     self.id = id
     self.uri = uri
@@ -24,7 +25,9 @@ struct AutofillData {
     self.password = password
     self.isOwner = isOwner
     self.name = name
+    self.otp = otp
   }
+  
   init(){}
 }
 
