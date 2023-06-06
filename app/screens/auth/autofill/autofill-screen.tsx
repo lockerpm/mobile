@@ -7,9 +7,12 @@ import { useMixins } from "../../../services/mixins"
 import { BackHandler, NativeModules } from "react-native"
 import { useStores } from "../../../models"
 import { PrimaryParamList } from "../../../navigators"
-import { useCipherToolsMixins } from "../../../services/mixins/cipher/tools"
 import { AutoFillList } from "./autofill-list"
 import { MAX_CIPHER_SELECTION } from "../../../config/constants"
+import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import { CipherView } from "../../../../core/models/view"
+import { CipherType } from "../../../../core/enums"
+import { getTOTP, parseOTPUri } from "../../../utils/totp"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -17,11 +20,11 @@ type PasswordEditScreenProp = RouteProp<PrimaryParamList, "autofill">
 
 export const AutoFillScreen = observer(function AutoFillScreen() {
   const navigation = useNavigation()
-  const { translate } = useMixins()
+  const { translate, copyToClipboard } = useMixins()
   const { uiStore } = useStores()
-  const { checkLoginIdExist } = useCipherToolsMixins()
   const route = useRoute<PasswordEditScreenProp>()
   const { mode } = route.params
+  const { getCiphersFromCache } = useCipherDataMixins()
   // -------------------- PARAMS ----------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -78,9 +81,20 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
     if (mode === 'item') {
       const check = async () => {
         const id = uiStore.saveLastId;
-        const res = await checkLoginIdExist(id);
-        if (res) {
+        const allLogins = await getCiphersFromCache({
+          deleted: false,
+          searchText: '',
+          filters: [
+            (c: CipherView) => c.type === CipherType.Login && c.id === id
+          ]
+        })
+        
+        if (allLogins.length > 0) {
           RNAutofillServiceAndroid.useLastItem();
+          if (allLogins[0].login.hasTotp) {
+            const otp = getTOTP(parseOTPUri(allLogins[0].login.totp))
+            copyToClipboard(otp)
+          }
         } else {
           RNAutofillServiceAndroid.removeLastItem();
           BackHandler.exitApp();
