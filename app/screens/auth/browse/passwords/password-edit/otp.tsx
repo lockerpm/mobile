@@ -13,7 +13,7 @@ type Prop = {
 
 export const PasswordOtp = (props: Prop) => {
   const { data, secure } = props
-  const { color } = useMixins()
+  const { color, copyToClipboard } = useMixins()
 
   const otpData = parseOTPUri(data)
 
@@ -35,7 +35,7 @@ export const PasswordOtp = (props: Prop) => {
       }}
     >
       <View>
-        {!!otpData.account && (
+        {!!otpData.account && !secure && (
           <Text
             preset="semibold"
             text={otpData.account}
@@ -78,14 +78,32 @@ export const PasswordOtp = (props: Prop) => {
         </View>
       </View>
       {secure && (
-        <Button
-          preset="link"
-          onPress={() => {
-            setHide(!hide)
-          }}
-        >
-          <Icon name={!hide ? "eye-slash" : "eye"} size={20} color={color.text} />
-        </Button>
+        <View style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginRight: 10
+        }}>
+          <Button
+            preset="link"
+            onPress={() => {
+              setHide(!hide)
+            }}
+          >
+            <Icon name={!hide ? "eye-slash" : "eye"} size={18} color={color.text} />
+          </Button>
+
+          <Button
+            preset="link"
+            style={{
+              paddingLeft: 12
+            }}
+            onPress={() => {
+              copyToClipboard(getTOTP(otpData))
+            }}
+          >
+            <Icon name={"copy"} size={18} color={color.text} />
+          </Button>
+        </View>
       )}
     </View>
   )

@@ -138,10 +138,9 @@ export const PasswordEditScreen = observer(() => {
       }
 
       if (cipherStore.selectedTotp) {
-        setTotp(cipherStore.selectedTotp === "-1" ?  '' : cipherStore.selectedTotp )
-        cipherStore.setSelectedTotp('')
+        setTotp(cipherStore.selectedTotp === "-1" ? "" : cipherStore.selectedTotp)
+        cipherStore.setSelectedTotp("")
       }
-   
 
       if (cipherStore.selectedCollection) {
         if (!selectedCollection) setCollection(cipherStore.selectedCollection)
@@ -402,10 +401,16 @@ export const PasswordEditScreen = observer(() => {
 
       {/** OTP */}
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text={translate('password.2fa_setup')} style={{ fontSize: fontSize.small }} />
+        <Text text={translate("password.2fa_setup")} style={{ fontSize: fontSize.small }} />
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate("passwords_2fa_setup")}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("passwords_2fa_setup", {
+            mode,
+          })
+        }
+      >
         <View
           style={[
             commonStyles.SECTION_PADDING,
@@ -417,7 +422,11 @@ export const PasswordEditScreen = observer(() => {
             },
           ]}
         >
-          {!totp ? <Text preset="black" text={translate('password.add_otp')} /> : <PasswordOtp data={totp} />}
+          {!totp ? (
+            <Text preset="black" text={translate("password.add_otp")} />
+          ) : (
+            <PasswordOtp data={totp} />
+          )}
 
           <FontAwesomeIcon name="angle-right" size={20} color={color.text} />
         </View>
