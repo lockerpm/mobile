@@ -12,10 +12,12 @@ import { useCipherAuthenticationMixins } from "../../../../services/mixins/ciphe
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { MAX_CIPHER_SELECTION } from "../../../../config/constants"
 import { AutofillServiceEnabled } from "../../../../utils/Autofill"
+import Intercom from "@intercom/intercom-react-native"
+import { Logger } from "../../../../utils/logger"
 
 export const AllItemScreen = observer(() => {
   const navigation = useNavigation()
-  const { uiStore } = useStores()
+  const { uiStore, user } = useStores()
   const { translate } = useMixins()
   const { lock } = useCipherAuthenticationMixins()
 
@@ -66,6 +68,23 @@ export const AllItemScreen = observer(() => {
     }
   }, [searchText]);
 
+
+  // Intercom support
+  useEffect(() => {
+    const registerIntercomUser = async () => {
+      if (user.isLoggedInPw) {
+        try {
+          console.log(1211)
+          const a = await Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id })
+          const b = Intercom.updateUser({ name: user.full_name || user.username })
+          console.log(a,b )
+        } catch (error) {
+          Logger.error(error)
+        }
+      }
+    }
+    registerIntercomUser()
+  }, [user.isLoggedInPw])
 
   // Navigation event listener
   useEffect(() => {
