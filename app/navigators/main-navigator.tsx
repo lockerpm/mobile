@@ -141,9 +141,13 @@ export type PrimaryParamList = {
   }
   authenticator__edit: {
     mode: "add" | "edit"
+    passwordTotp?: boolean
+    passwordMode?: "add" | "edit" | "clone"
   }
   qrScanner: {
     totpCount?: number
+    passwordTotp?: boolean
+    passwordMode?: "add" | "edit" | "clone"
   }
   dataBreachScanner: undefined
   dataBreachList: undefined
@@ -168,7 +172,9 @@ export type PrimaryParamList = {
     initialUrl?: string
     collection?: CollectionView
   }
-  passwords_2fa_setup: undefined
+  passwords_2fa_setup: {
+    mode: "add" | "edit" | "clone"
+  }
 
   notes__info: {
     quickShare?: boolean

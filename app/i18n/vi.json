@@ -590,7 +590,7 @@
     "copy_username": "Sao chép Email / Tên người dùng",
     "copy_password": "Sao chép mật khẩu",
     "copy_totp": "Sao chép OTP",
-    "add_otp": "Thêm OTP cho mật khẩu",
+    "add_otp": "Thêm OTP mới",
     "no_otp": "Không dùng OTP",
     "existing_otp": "Chọn các OTP có sẵn",
     "2fa_setup": "Cài đặt 2FA",

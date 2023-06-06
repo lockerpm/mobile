@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Header, Screen } from "../../../../../components/cores"
-import { useNavigation } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { Button, SearchBar, Text } from "../../../../../components"
 import { useMixins } from "../../../../../services/mixins"
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons"
@@ -9,6 +9,7 @@ import { OtpList } from "./otp-list"
 import { CipherView } from "../../../../../../core/models/view"
 import { AuthenticatorAddAction } from "../../../tools/authenticator/authenticator-add-action"
 import { useStores } from "../../../../../models"
+import { PrimaryParamList } from "../../../../../navigators"
 
 export const Password2FASetupScreen = () => {
   const navigation: any = useNavigation()
@@ -17,7 +18,7 @@ export const Password2FASetupScreen = () => {
   const [searchText, setSearchText] = useState("")
   const [selectedOtp, setSelectedOtp] = useState<CipherView>(null)
   const [isAddOpen, setIsAddOpen] = useState(false)
-
+  const route = useRoute<RouteProp<PrimaryParamList, "passwords_2fa_setup">>()
 
   const { translate, color } = useMixins()
   return (
@@ -52,6 +53,8 @@ export const Password2FASetupScreen = () => {
       }}
     >
       <AuthenticatorAddAction
+        passwordTotp
+        passwordMode={route.params.mode}
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
