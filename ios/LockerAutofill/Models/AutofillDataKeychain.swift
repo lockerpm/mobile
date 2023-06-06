@@ -65,7 +65,8 @@ class AutofillDataModel {
                                       uri: (item["uri"] as? String)!,
                                       username: (item["username"] as? String)!,
                                       password: (item["password"] as? String)!,
-                                      isOwner: (item["isOwner"] as? Bool)!)
+                                      isOwner: (item["isOwner"] as? Bool)!,
+                                      otp: (item["otp"] as? String)!)
         self.credentials.append(credential)
       }
     }

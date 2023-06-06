@@ -63,7 +63,7 @@ target 'Locker' do
           target_initial = target_components[0].to_i
           
           if target_initial < 9
-            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = "9.0"
+            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = "13.0"
           end
         end
       end
