@@ -12,6 +12,7 @@ export type AutofillDataType = {
     username: string
     password: string
     isOwner: boolean
+    otp?: string
   }[]
   deleted: {
     id: string

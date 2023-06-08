@@ -590,6 +590,12 @@
     "launch_website": "Launch Website",
     "copy_username": "Copy Email or Username",
     "copy_password": "Copy Password",
+    "copy_totp": "Copy OTP",
+    "add_otp": "Add new OTP",
+    "no_otp": "No OTP",
+    "existing_otp": "Choose an existing OTP",
+    "2fa_setup": "2FA Setup",
+
     "empty": {
       "title": "Forget password resets",
       "desc": "Add your passwords and access them on any device, anytime",

@@ -589,6 +589,12 @@
     "launch_website": "Mở website",
     "copy_username": "Sao chép Email / Tên người dùng",
     "copy_password": "Sao chép mật khẩu",
+    "copy_totp": "Sao chép OTP",
+    "add_otp": "Thêm OTP mới",
+    "no_otp": "Không dùng OTP",
+    "existing_otp": "Chọn các OTP có sẵn",
+    "2fa_setup": "Cài đặt 2FA",
+
     "empty": {
       "title": "Khỏi lo quên mật khẩu",
       "desc": "Thêm mật khẩu của bạn và truy cập chúng trên mọi thiết bị, bất kỳ lúc nào",
