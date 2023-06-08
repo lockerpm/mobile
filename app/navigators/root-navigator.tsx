@@ -39,6 +39,7 @@ import WebView from "react-native-webview"
 import { IS_IOS } from "../config/constants"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Header, OverlayLoading } from "../components"
+import Intercom, { Visibility } from "@intercom/intercom-react-native"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -129,6 +130,10 @@ const RootStack = observer((props: Props) => {
   }
 
   // ------------------- EFFECTS -------------------
+
+    useEffect(() => {
+      Intercom.setInAppMessageVisibility(Visibility.GONE)
+    }, [])
 
   // Check internet connection
   useEffect(() => {

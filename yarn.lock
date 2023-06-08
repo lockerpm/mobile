@@ -1512,10 +1512,10 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@intercom/intercom-react-native@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@intercom/intercom-react-native/-/intercom-react-native-1.1.1.tgz#e6034a02ed88b2edb458398e5240f2895587fbea"
-  integrity sha512-nP5FSOxlsbGxIaW1L0gM/KqQOTvCz7pvmMlFVep/wNh/ZzpnXM3s5d67FABXJBZy/7uaiMkZ5BJUyaBL62q+uA==
+"@intercom/intercom-react-native@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@intercom/intercom-react-native/-/intercom-react-native-4.0.0.tgz#8fe7a0b75668cf3b9c979210bd89e589c27762f4"
+  integrity sha512-zgKME/ly0veTlMvzdIHbCLpX92GpTco3INAyKFB34QnfeOnjqz6wSHa/YUBVcRS4VDIfs71Bpu9S0zGc6ZD6lQ==
 
 "@invertase/react-native-apple-authentication@2.1.5":
   version "2.1.5"
