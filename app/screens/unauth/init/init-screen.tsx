@@ -15,6 +15,7 @@ import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/a
 import dynamicLinks from "@react-native-firebase/dynamic-links"
 import { Logger } from "../../../utils/logger"
 import VersionCheck from "react-native-version-check"
+import Intercom from "@intercom/intercom-react-native"
 
 export const InitScreen = observer(() => {
   const { user, cipherStore, uiStore } = useStores()
@@ -111,6 +112,8 @@ export const InitScreen = observer(() => {
     if (checkTrustFall()) {
       return
     }
+
+    await Intercom.logout()
 
     const connectionState = await NetInfo.fetch()
 

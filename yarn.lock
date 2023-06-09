@@ -10778,10 +10778,10 @@ react-native-app-auth@^6.4.3:
     invariant "2.2.4"
     react-native-base64 "0.0.2"
 
-react-native-appsflyer@^6.8.0:
-  version "6.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-appsflyer/-/react-native-appsflyer-6.8.0.tgz#a21f54d2110e965b16be0bbe4ff820e2596e1de8"
-  integrity sha512-cOHr5JLGgCYieNnLetNGoCCIHBS7o9HTaDm+LGqbkVTRO6SOF/RsJHYe4Se4ace3IIXypIvfiHGirGuNigLbjQ==
+react-native-appsflyer@^6.10.3:
+  version "6.10.3"
+  resolved "https://registry.yarnpkg.com/react-native-appsflyer/-/react-native-appsflyer-6.10.3.tgz#2a6e77f4a02eb2a6f88a44c2f9d1b2e37c66f6df"
+  integrity sha512-62IUiZa5mY1hsY9chgE755AgCpKpfHNwwIRs2NnHvIX8SdIFhm+Arn4kASvXCTfSIuZaDyKKOQT4bf0EVmBLyQ==
 
 react-native-base64@0.0.2:
   version "0.0.2"
@@ -11266,10 +11266,10 @@ react-native-web@^0.16.3:
     normalize-css-color "^1.0.2"
     prop-types "^15.6.0"
 
-react-native-webview@^11.6.5:
-  version "11.14.0"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.14.0.tgz#01d7669409d7510c859300c058902c8a8490cbbb"
-  integrity sha512-G5pIYL3dU4rWt4K8W8ZoEDHL3nCR+rnNWsrCP/rJcl1gElxZn2xlpHjNml4myopIzn835NgE0/dJJ9VHvdMg3Q==
+react-native-webview@11.22.7:
+  version "11.22.7"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.22.7.tgz#bf0d1755473af6e1af8486e862668fc7530149b4"
+  integrity sha512-IYMElB4fFS6S8LbhivAQfAlW95HorqCK4T3mFKmWsV24iPVTfYoaiA1TNzkRnjw2mMgXDk/QnMeH9IbjBVs1Ag==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
