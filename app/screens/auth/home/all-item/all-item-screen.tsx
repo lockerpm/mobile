@@ -74,10 +74,7 @@ export const AllItemScreen = observer(() => {
     const registerIntercomUser = async () => {
       if (user.isLoggedInPw) {
         try {
-          console.log(1211)
-          const a = await Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id })
-          const b = Intercom.updateUser({ name: user.full_name || user.username })
-          console.log(a,b )
+          await Intercom.loginUserWithUserAttributes({ email: user.email, userId: user.pwd_user_id, name: user.full_name || user.username })
         } catch (error) {
           Logger.error(error)
         }
