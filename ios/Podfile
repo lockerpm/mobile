@@ -5,7 +5,7 @@ plugin 'cocoapods-user-defined-build-types'
 
 enable_user_defined_build_types!
 
-platform :ios, '11.0'
+platform :ios, '13.0'
 
 target 'Locker' do
   project 'Locker'

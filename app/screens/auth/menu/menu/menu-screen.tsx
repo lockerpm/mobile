@@ -33,7 +33,7 @@ import moment from "moment"
 export const MenuScreen = observer(() => {
   const navigation = useNavigation()
   const { user } = useStores()
-  const { translate, notify, color, isDark, notifyApiError } = useMixins()
+  const { translate, color, isDark, notifyApiError } = useMixins()
   const { lock, logout } = useCipherAuthenticationMixins()
   const { isTablet } = useAdaptiveLayoutMixins()
   const appVersion = `${getVersion()}`
@@ -56,6 +56,10 @@ export const MenuScreen = observer(() => {
     paddingHorizontal: 14,
   }
 
+  const getUnreadConversationCount = async () => {
+    const res = await Intercom.getUnreadConversationCount()
+    setUnreadConversationCount(res);
+  }
   const getReferralsLink = async () => {
     const res = await user.getReferLink()
     if (res.kind === "ok") {
@@ -73,6 +77,7 @@ export const MenuScreen = observer(() => {
   }, [])
 
   useEffect(() => {
+    getUnreadConversationCount()
     const countListener = Intercom.addEventListener(
       IntercomEvents.IntercomUnreadCountDidChange,
       (response) => {
