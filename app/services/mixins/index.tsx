@@ -258,6 +258,7 @@ export const MixinsProvider = observer(
         const permissionGranted = await PushNotifier.getPermission()
         if (permissionGranted) {
           const token = await PushNotifier.getToken()
+
           user.setFCMToken(token)
           return true
         } else {

@@ -81,7 +81,6 @@ export const MenuScreen = observer(() => {
     const countListener = Intercom.addEventListener(
       IntercomEvents.IntercomUnreadCountDidChange,
       (response) => {
-        console.log(response)
         setUnreadConversationCount(response.count as number);
       }
     );
