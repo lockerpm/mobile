@@ -107,7 +107,6 @@ export const InitScreen = observer(() => {
     return false
   }
 
-  console.log("1211")
   // Mounted
   const mounted = async () => {
     if (checkTrustFall()) {

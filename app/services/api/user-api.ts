@@ -93,6 +93,8 @@ export class UserApi {
         `/sso/auth${isOtp ? "/otp" : ""}`,
         payload,
       )
+
+      
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
