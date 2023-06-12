@@ -88,6 +88,12 @@ const RootStack = observer((props: Props) => {
   const [updateBlogUrl, setUpdateBlogUrl] = useState("")
   // ------------------- METHODS -------------------
 
+  const androidHandleNotiPress =async () => {
+    const res = await parsePushNotiData({
+      tipTrick: true
+    })
+    if (!!res.url) setUpdateBlogUrl(res.url)
+  }
   // Notification
   const handleForegroundNotiPress = async (data: NotifeeNotificationData) => {
     if (!data) {
@@ -150,6 +156,7 @@ const RootStack = observer((props: Props) => {
 
   // Push notification handler
   useEffect(() => {
+    !IS_IOS && androidHandleNotiPress()
     const unsubscribe = PushNotifier.setupForegroundHandler({
       handleForegroundPress: handleForegroundNotiPress,
     })

@@ -47,7 +47,6 @@ export const AutofillListItem = memo(
             selectForAutoFill(item)
             if (item.login.hasTotp) {
               const otp = getTOTP(parseOTPUri(item.login.totp))
-              console.log(otp)
               copyToClipboard(otp)
             }
           }
