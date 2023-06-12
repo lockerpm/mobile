@@ -261,7 +261,7 @@ export const handleTipTrick = async (data: string) => {
   // const isVn = language === 'vi'
 
 
-  const text =  tipTrickdata.title[language]
+  const text =  tipTrickdata.data.title[language]
 
   PushNotifier._notify({
     id: `new_feature`,
@@ -269,7 +269,7 @@ export const handleTipTrick = async (data: string) => {
     body: text,
     data: {
       type: PushEvent.TIP_TRICK,
-      url: tipTrickdata.metadata.link[language]
+      url: tipTrickdata.data.metadata.link[language]
     }
   })
 }

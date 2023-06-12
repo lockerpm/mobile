@@ -72,6 +72,7 @@ export const NotiListItem = (props: Props) => {
         onPress = () => { }
         break
       case NotificationCategory.PW_TIPS:
+        title = translate('noti_setting.tips')
         source = require('./assets/pw-tips.png')
         onPress = () => { 
           const { link } = metadata
