@@ -19,7 +19,5 @@ PushNotifier.setupBackgroundHandler()
 // i.e., you need two API keys if you are going to release the app on both Android and iOS platforms.
 // If you are building for TV platforms, you will need two API keys for Android TV and tvOS.
 
-
-
 AppRegistry.registerComponent("CyStackLocker", () => App)
 export default App
