@@ -720,9 +720,9 @@ export const CipherAuthenticationMixinsProvider = observer(
     // Logout
     const logout = async () => {
       try {
-        await clearAllData()
         await user.updateFCM(null)
         await user.logout()
+        await clearAllData()
         await logoutAllServices()
         await Intercom.logout()
       } catch (e) {
