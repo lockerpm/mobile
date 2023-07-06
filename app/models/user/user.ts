@@ -80,7 +80,8 @@ export const UserModel = types
 
     // User settings
     language: types.optional(types.string, "en"),
-    isBiometricUnlock: types.maybeNull(types.boolean),
+    // isBiometricUnlock: types.maybeNull(types.boolean),
+    isBiometricUnlockList: types.array(types.string), // store user email
     appTimeout: types.optional(types.number, AppTimeoutType.APP_CLOSE),
     appTimeoutAction: types.optional(types.string, TimeoutActionType.LOCK),
     defaultTab: types.optional(types.string, "homeTab"),
@@ -94,6 +95,9 @@ export const UserModel = types
   .views((self) => ({
     get isEnterprise() {
       return self.pwd_user_type === "enterprise" && self.enterprise
+    },
+    get isBiometricUnlock() {
+      return self.isBiometricUnlockList.includes(self.email)
     },
   }))
   .actions((self) => ({
@@ -159,7 +163,6 @@ export const UserModel = types
     },
     clearSettings: () => {
       self.isPasswordlessLogin = false
-      self.isBiometricUnlock = false
       self.appTimeout = AppTimeoutType.APP_CLOSE
       self.appTimeoutAction = TimeoutActionType.LOCK
       self.defaultTab = "homeTab"
@@ -260,7 +263,14 @@ export const UserModel = types
       })
     },
     setBiometricUnlock: (isActive: boolean) => {
-      self.isBiometricUnlock = isActive
+      if (isActive) {
+        self.isBiometricUnlockList = cast([self.email, ...self.isBiometricUnlockList])
+      } else {
+        const index = self.isBiometricUnlockList.findIndex(e => e === self.email)
+        if (index >= 0) {
+          self.isBiometricUnlockList.splice(index, 1)
+        }
+      }
     },
     setAppTimeout: (timeout: number) => {
       self.appTimeout = timeout
@@ -361,7 +371,7 @@ export const UserModel = types
             SERVICE_URL: "/",
             SERVICE_SCOPE: "pwdmanager",
             CLIENT: "mobile",
-          })
+          }, self.deviceId)
           if (pmRes.kind === "ok") {
             self.setApiToken(pmRes.data.access_token)
             self.setLoggedIn(true)
@@ -374,7 +384,7 @@ export const UserModel = types
 
     socialLogin: async (payload: SocialLoginData) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.socialLogin(payload)
+      const res = await userApi.socialLogin(payload, self.deviceId)
       return res
     },
 
@@ -384,7 +394,7 @@ export const UserModel = types
         SERVICE_URL: "/",
         SERVICE_SCOPE: "pwdmanager",
         CLIENT: "mobile",
-      })
+      }, self.deviceId)
 
       if (pmRes.kind === "ok") {
         self.setApiToken(pmRes.data.access_token)

@@ -140,7 +140,7 @@ export const CipherAuthenticationMixinsProvider = observer(
       // Session login API
       const res = await user.sessionLogin({
         client_id: "mobile",
-        password: keyHash, //keyHash,
+        password: keyHash,  // keyHash,
         device_name: platformUtilsService.getDeviceString(),
         device_type: platformUtilsService.getDevice(),
         // device_identifier: await storageService.get('device_id') || randomString(),
@@ -227,7 +227,7 @@ export const CipherAuthenticationMixinsProvider = observer(
       // Session login API
       const res = await user.sessionOtpLogin({
         client_id: "mobile",
-        password: keyHash, //keyHash,
+        password: keyHash, // keyHash,
         device_name: platformUtilsService.getDeviceString(),
         device_type: platformUtilsService.getDevice(),
         // device_identifier: await storageService.get('device_id') || randomString(),
@@ -720,10 +720,10 @@ export const CipherAuthenticationMixinsProvider = observer(
     const logout = async () => {
       try {
         user.environment.api.apisauce.setBaseURL(BASE_URL)
-        setApiTokens("")
-        await clearAllData()
         await user.updateFCM(null)
         await user.logout()
+        await clearAllData()
+        setApiTokens("")
         await logoutAllServices()
         await Intercom.logout()
       } catch (e) {
