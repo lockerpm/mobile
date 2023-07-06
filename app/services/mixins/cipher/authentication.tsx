@@ -139,7 +139,7 @@ export const CipherAuthenticationMixinsProvider = observer(
       // Session login API
       const res = await user.sessionLogin({
         client_id: "mobile",
-        password: keyHash, //keyHash,
+        password: keyHash,  // keyHash,
         device_name: platformUtilsService.getDeviceString(),
         device_type: platformUtilsService.getDevice(),
         // device_identifier: await storageService.get('device_id') || randomString(),
@@ -225,7 +225,7 @@ export const CipherAuthenticationMixinsProvider = observer(
       // Session login API
       const res = await user.sessionOtpLogin({
         client_id: "mobile",
-        password: keyHash, //keyHash,
+        password: keyHash, // keyHash,
         device_name: platformUtilsService.getDeviceString(),
         device_type: platformUtilsService.getDevice(),
         // device_identifier: await storageService.get('device_id') || randomString(),
@@ -720,9 +720,9 @@ export const CipherAuthenticationMixinsProvider = observer(
     // Logout
     const logout = async () => {
       try {
-        await clearAllData()
         await user.updateFCM(null)
         await user.logout()
+        await clearAllData()
         await logoutAllServices()
         await Intercom.logout()
       } catch (e) {

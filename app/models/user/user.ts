@@ -369,7 +369,7 @@ export const UserModel = types
             SERVICE_URL: "/",
             SERVICE_SCOPE: "pwdmanager",
             CLIENT: "mobile",
-          })
+          }, self.deviceId)
           if (pmRes.kind === "ok") {
             self.setApiToken(pmRes.data.access_token)
             self.setLoggedIn(true)
@@ -382,7 +382,7 @@ export const UserModel = types
 
     socialLogin: async (payload: SocialLoginData) => {
       const userApi = new UserApi(self.environment.api)
-      const res = await userApi.socialLogin(payload)
+      const res = await userApi.socialLogin(payload, self.deviceId)
       return res
     },
 
@@ -392,7 +392,7 @@ export const UserModel = types
         SERVICE_URL: "/",
         SERVICE_SCOPE: "pwdmanager",
         CLIENT: "mobile",
-      })
+      }, self.deviceId)
 
       if (pmRes.kind === "ok") {
         self.setApiToken(pmRes.data.access_token)
