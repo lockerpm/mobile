@@ -13,6 +13,7 @@ import { OnPremisePreloginData } from "../../../../services/api"
 import { LanguagePicker } from "../../../../components/utils"
 import { MethodSelection } from "../../login/2fa/method-selection"
 import { OnPremiseOtp } from "./onpremise-2fa-otp"
+import { useCoreService } from "../../../../services/core-service"
 
 interface Props {
   data: OnPremisePreloginData
@@ -27,9 +28,12 @@ export const OnPremiseLockMasterPassword = observer(
     const { user, uiStore } = useStores()
     const { notify, translate, color } = useMixins()
     const { sessionLogin, biometricLogin } = useCipherAuthenticationMixins()
+    const { cryptoService } = useCoreService()
+    
     // ---------------------- PARAMS -------------------------
-    const [masterPassword, setMasterPassword] = useState("")
 
+    const [isValidForBiometric, setIsValidForBiometric] = useState(false)
+    const [masterPassword, setMasterPassword] = useState("")
     const [isUnlocking, setIsUnlocking] = useState(false)
     const [isBioUnlocking, setIsBioUnlocking] = useState(false)
     const [isError, setIsError] = useState(false)
@@ -49,7 +53,17 @@ export const OnPremiseLockMasterPassword = observer(
       uiStore.isFromAutoFill || uiStore.isOnSaveLogin || uiStore.isFromAutoFillItem
 
     // ---------------------- METHODS -------------------------
-
+    const checkKey = async () => {
+      // Online login
+      const key = await cryptoService.getKey()
+      if (!key) {
+        setIsValidForBiometric(false)
+        return false
+      } else {
+        setIsValidForBiometric(true)
+        return true
+      }
+    }
     const handleUnlock = async () => {
       if (masterPassword) {
         setIsError(false)
@@ -81,10 +95,10 @@ export const OnPremiseLockMasterPassword = observer(
     }
 
     const handleUnlockBiometric = async () => {
-      if (!user.isBiometricUnlock) {
-        notify("error", translate("error.biometric_not_enable"))
-        return
-      }
+      const hadKey = await checkKey()
+      if (!hadKey) return
+
+      
       setIsBioUnlocking(true)
       const res = await biometricLogin()
       setIsBioUnlocking(false)
@@ -98,6 +112,7 @@ export const OnPremiseLockMasterPassword = observer(
 
     // Auto trigger face id / touch id + detect biometry type
     useEffect(() => {
+      checkKey()
       navigation.addListener("focus", () => {
         if (user.isBiometricUnlock) {
           handleUnlockBiometric()
@@ -196,7 +211,17 @@ export const OnPremiseLockMasterPassword = observer(
                 // isLoading={isBioUnlocking}
                 isDisabled={isBioUnlocking}
                 preset="ghost"
-                onPress={handleUnlockBiometric}
+                onPress={() => {
+                  if (!user.isBiometricUnlock) {
+                    notify("error", translate("error.biometric_not_enable"))
+                    return
+                  }
+                  if (!isValidForBiometric) {
+                    notify("info", translate("error.not_valid_for_biometric"))
+                    return
+                  }
+                  handleUnlockBiometric()
+                }}
                 style={{
                   width: "100%",
                   marginVertical: 10,
