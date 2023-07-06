@@ -4,12 +4,12 @@ import React, { useEffect, useRef, useState } from "react"
 import { Dimensions, ScrollView } from "react-native"
 import { Screen } from "../../../../../components/cores"
 import { useStores } from "../../../../../models"
-import { useMixins } from "../../../../../services/mixins"
 import { useCipherAuthenticationMixins } from "../../../../../services/mixins/cipher/authentication"
 import { MethodSelection } from "../../../login/2fa/method-selection"
 import { OtpPasswordlessGenerator, randomOtpNumber } from "./otp-generator"
 import { OnPremiseOtp } from "./passwordless-2fa-otp"
 import { PasswordlessQrScan } from "./passwordless-qr-scan"
+import { useCoreService } from "../../../../../services/core-service"
 
 const { width } = Dimensions.get("screen")
 
@@ -20,17 +20,14 @@ interface Props {
 
 export const LockByPasswordless = observer(({ handleLogout, biometryType }: Props) => {
   const navigation = useNavigation()
-  const { notify, translate } = useMixins()
   const { user } = useStores()
   const {  biometricLogin } = useCipherAuthenticationMixins()
-
+  const { cryptoService } = useCoreService()
   // ---------------------- PARAMS -------------------------
 
   const [otp, setOtp] = useState(randomOtpNumber())
   const [scanQrStep, setScanQrStep] = useState(0)
-
   const [symmetricCryptoKey, setSymmetricCryptoKey] = useState(null)
-  const [isBioUnlocking, setIsBioUnlocking] = useState(false)
 
   const [index, setIndex] = useState(0)
   const [credential, setCredential] = useState({
@@ -53,13 +50,9 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
   }
 
   const handleUnlockBiometric = async () => {
-    if (!user.isBiometricUnlock) {
-      notify("error", translate("error.biometric_not_enable"))
-      return
-    }
-    setIsBioUnlocking(true)
+    const key = await cryptoService.getKey()
+    if (!key) return
     const res = await biometricLogin()
-    setIsBioUnlocking(false)
     if (res.kind === "ok") {
       navigation.navigate("mainStack", { screen: "start" })
     }

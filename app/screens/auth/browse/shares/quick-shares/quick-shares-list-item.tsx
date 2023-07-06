@@ -47,11 +47,7 @@ export const QuickSharesCipherListItem = memo(
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
           {/* Cipher avatar */}
           {cipher.svg ? (
-            <View
-              style={{
-                opacity: isExpired ? 0.3 : 1,
-              }}
-            >
+            <View>
               <cipher.svg height={40} width={40} />
             </View>
           ) : (
@@ -62,7 +58,6 @@ export const QuickSharesCipherListItem = memo(
                 height: 40,
                 width: 40,
                 borderRadius: 8,
-                opacity: isExpired ? 0.3 : 1,
               }}
             />
           )}
@@ -81,10 +76,30 @@ export const QuickSharesCipherListItem = memo(
                 numberOfLines={1}
                 text={cipher.name}
                 style={{
-                  color: isExpired ? color.disabled : color.textBlack,
+                  color: color.textBlack,
                 }}
               />
-              {/* <Text text="Expired" /> */}
+              {isExpired && (
+                <View
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    backgroundColor: color.warning,
+                    paddingHorizontal: 10,
+                    paddingVertical: 2,
+                    borderRadius: 4,
+                  }}
+                >
+                  <Text
+                    text={translate("common.expired").toUpperCase()}
+                    style={{
+                      color: color.background,
+                      fontSize: 12,
+                    }}
+                  />
+                </View>
+              )}
             </View>
             {/* Name end */}
 
@@ -94,7 +109,7 @@ export const QuickSharesCipherListItem = memo(
               numberOfLines={1}
               style={{
                 fontSize: fontSize.small,
-                color: isExpired ? color.disabled : color.textBlack,
+                color: color.textBlack,
               }}
             />
             {/* Description end */}

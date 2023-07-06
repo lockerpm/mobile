@@ -17,12 +17,14 @@ export const LockScreen = observer(() => {
   const navigation = useNavigation()
   const route = useRoute<RouteProp<RootParamList, "lock">>()
   const { user, uiStore } = useStores()
-  const { translate} = useMixins()
+  const { translate, notify } = useMixins()
   const { logout } = useCipherAuthenticationMixins()
-
   // ---------------------- PARAMS -------------------------
+
   const [lockMethod, setLogMethod] = useState<"password" | "passwordless">("password")
-  const [biometryType, setBiometryType] = useState<"faceid" | "touchid" | "biometric">("biometric")
+  const [biometryType, setBiometryType] = useState<"faceid" | "touchid" | "biometric" | null>(
+    "biometric",
+  )
 
   // ---------------------- METHODS -------------------------
 
@@ -56,7 +58,10 @@ export const LockScreen = observer(() => {
   }
 
 
+
+
   // -------------- EFFECT ------------------
+
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
     detectbiometryType()
@@ -98,7 +103,6 @@ export const LockScreen = observer(() => {
     }
   }, [navigation])
 
-
   useEffect(() => {
     // Om Premise setup
     if (route.params.type === "onPremise") {
@@ -137,9 +141,5 @@ export const LockScreen = observer(() => {
     return <BusinessLockByPasswordless biometryType={biometryType} handleLogout={handleLogout} />
   }
 
-  return (
-    <View style={{ flex: 1 }}>
-      {renderContent()}
-    </View>
-  )
+  return <View style={{ flex: 1 }}>{renderContent()}</View>
 })
