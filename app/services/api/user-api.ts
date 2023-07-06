@@ -106,9 +106,10 @@ export class UserApi {
   }
 
   // ID social login
-  async socialLogin(payload: SocialLoginData): Promise<SocialLoginResult> {
+  async socialLogin(payload: SocialLoginData, deviceId: string): Promise<SocialLoginResult> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.setHeader("device-id", deviceId)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/social", payload)
@@ -306,9 +307,10 @@ export class UserApi {
   // --------------------- LOCKER -----------------------------
 
   // Get PM API token
-  async getPMToken(token: string, payload: GetPMTokenData): Promise<GetPMTokenResult> {
+  async getPMToken(token: string, payload: GetPMTokenData, deviceId: string): Promise<GetPMTokenResult> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("device-id", deviceId)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post("/sso/access_token", payload)
@@ -1251,6 +1253,7 @@ export class UserApi {
       return { kind: "bad-data" }
     }
   }
+  
   async onPremisePreLogin(email: string): Promise<OnPremisePreLoginResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(
