@@ -7,23 +7,40 @@ import { useMixins } from '../../services/mixins'
 
 
 export const InfoToast = (props: BaseToastProps) => {
-  const { color, isDark } = useMixins()
+  const { color } = useMixins()
 
   return (
     <BaseToast
       {...props}
       style={{
-        borderLeftColor: color.textBlack,
-        backgroundColor: isDark ? color.block : color.background,
+        borderLeftWidth: 0,
+        borderRadius: 8,
+        height: undefined,
+        width: Dimensions.get("screen").width - 40,
+        backgroundColor: color.toastBackground,
+        paddingVertical: 10,
       }}
       text2Style={{
-        color: color.textBlack,
+        color:  color.white,
         fontSize: fontSize.small
       }}
       text2NumberOfLines={0}
       contentContainerStyle={{
         paddingLeft: 10
       }}
+      renderLeadingIcon={() => (
+        <View style={{
+          height: '100%',
+          justifyContent: 'center',
+          marginLeft: 15
+        }}>
+          <Ionicons
+            name="information-circle-outline"
+            size={22}
+            color={color.white}
+          />
+        </View>
+      )}
     />
   )
 }

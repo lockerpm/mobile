@@ -9,7 +9,6 @@ import { DefaultLogin } from "./default"
 import { MethodSelection } from "./2fa/method-selection"
 import { Otp } from "./2fa/otp"
 import { useStores } from "../../../models"
-import { BASE_URL } from "../../../config/constants"
 
 export const LoginScreen = observer(() => {
   const navigation = useNavigation()
