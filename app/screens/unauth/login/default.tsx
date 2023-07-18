@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
@@ -10,7 +10,10 @@ import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { IS_IOS, IS_PROD } from "../../../config/constants"
 import { GitHubLoginModal } from "./github-login-modal"
 import { useNavigation } from "@react-navigation/native"
-import { Icon } from "../../../components/cores"
+import { Passkey, PasskeyAuthenticationResult } from "react-native-passkey"
+import { PasskeyAuthenticationRequest } from "react-native-passkey/lib/typescript/Passkey"
+import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "../../../utils/passkey"
+import { Logger } from "../../../utils/logger"
 
 type Props = {
   onPremise: boolean
@@ -19,24 +22,46 @@ type Props = {
   handleForgot: () => void
 }
 
+enum METHOD {
+  PASSKEY = 0,
+  PASSWORD = 1,
+  NONE = 2,
+}
+
 export const DefaultLogin = observer((props: Props) => {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { translate, notify, notifyApiError, setApiTokens, color } = useMixins()
+  const { translate, notify, notifyApiError, setApiTokens } = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
   const { nextStep, onLoggedIn, handleForgot, onPremise } = props
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [username, setUsername] = useState("")
+  const [username, setUsername] = useState("testpasskey@maily.org")
   const [password, setPassword] = useState("")
+
+  const [loginMethod, setLoginMethod] = useState<METHOD>(METHOD.NONE)
 
   const passwordRef = useRef(null)
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
   // ------------------ Methods ----------------------
+
+  const getLoginMethod = async () => {
+    const res = await user.loginMethod(username)
+    if (res.kind === "ok") {
+      if (res.data.webauthn) {
+        setLoginMethod(METHOD.PASSKEY)
+        handleAuthWebauth()
+        return
+      }
+      setLoginMethod(METHOD.PASSWORD)
+    } else {
+      notifyApiError(res)
+    }
+  }
 
   const handleLogin = async () => {
     setIsLoading(true)
@@ -108,7 +133,62 @@ export const DefaultLogin = observer((props: Props) => {
     }
   }
 
+  const handleAuthWebauth = async () => {
+    const resAuthPasskeyOptions = await user.authPasskeyOptions(username)
+    if (resAuthPasskeyOptions.kind === "ok") {
+      try {
+        const authRequest: PasskeyAuthenticationRequest = credentialAuthOptions(
+          resAuthPasskeyOptions.data,
+        )
+        // Call the `authenticate` method with the retrieved request in JSON format
+        // A native overlay will be displayed
+        const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest)
+
+        const res = await user.authPasskey({
+          username,
+          response: publicKeyCredentialWithAssertion(result),
+        })
+
+        if (res.kind === "ok") {
+          setPassword("")
+          if (res.data.is_factor2) {
+            nextStep(username, password, res.data.methods)
+          } else {
+            // @ts-ignore
+            setApiTokens(res.data?.access_token)
+            onLoggedIn(false, "")
+          }
+        } else {
+          notifyApiError(res)
+        }
+        // The `authenticate` method returns a FIDO2 assertion result
+        // Pass it to your server for verification
+      } catch (error) {
+        // Handle Error...
+        Logger.error(error)
+      }
+    } else {
+      notifyApiError(resAuthPasskeyOptions)
+    }
+  }
   // ------------------------------ DATA -------------------------------
+  const checkPasskeySupported = async () => {
+    if (onPremise) {
+      setLoginMethod(METHOD.PASSWORD)
+      return
+    }
+
+    const res = await Passkey.isSupported()
+    if (res) {
+      setLoginMethod(METHOD.NONE)
+      return
+    }
+    setLoginMethod(METHOD.PASSWORD)
+  }
+
+  useEffect(() => {
+    checkPasskeySupported()
+  }, [])
 
   const SOCIAL_LOGIN: {
     [service: string]: {
@@ -161,17 +241,10 @@ export const DefaultLogin = observer((props: Props) => {
 
   // ------------------------------ RENDER -------------------------------
 
+  // ------------------------------ RENDER -------------------------------
+
   return (
     <View>
-      {/* <Icon
-        icon="arrow-left"
-        size={24}
-        containerStyle={{
-          padding: 10,
-          paddingLeft: 0,
-        }}
-        onPress={() => navigation.goBack()}
-      /> */}
       <View style={{ alignItems: "center" }}>
         <GitHubLoginModal
           isOpen={showGitHubLogin}
@@ -208,7 +281,7 @@ export const DefaultLogin = observer((props: Props) => {
         {/* Username input end */}
 
         {/* Password input */}
-        {!onPremise && (
+        {!onPremise && loginMethod === METHOD.PASSWORD && (
           <FloatingInput
             outerRef={passwordRef}
             isPassword
@@ -222,7 +295,7 @@ export const DefaultLogin = observer((props: Props) => {
         )}
         {/* Password input end */}
 
-        {!onPremise && (
+        {!onPremise && loginMethod === METHOD.PASSWORD && (
           <View
             style={{
               width: "100%",
@@ -238,19 +311,35 @@ export const DefaultLogin = observer((props: Props) => {
           </View>
         )}
 
-        <Button
-          isLoading={isLoading}
-          isDisabled={
-            isLoading || (!onPremise && !(username && password)) || (onPremise && !username)
-          }
-          text={translate("common.login")}
-          onPress={handleLogin}
-          style={{
-            width: "100%",
-            marginBottom: spacing.medium,
-            marginTop: spacing.medium,
-          }}
-        />
+        {loginMethod === METHOD.PASSWORD && (
+          <Button
+            isLoading={isLoading}
+            isDisabled={
+              isLoading || (!onPremise && !(username && password)) || (onPremise && !username)
+            }
+            text={translate("common.login")}
+            onPress={handleLogin}
+            style={{
+              width: "100%",
+              marginBottom: spacing.medium,
+              marginTop: spacing.medium,
+            }}
+          />
+        )}
+
+        {loginMethod !== METHOD.PASSWORD && (
+          <Button
+            isLoading={isLoading}
+            isDisabled={!username}
+            text={"Continue"}
+            onPress={getLoginMethod}
+            style={{
+              width: "100%",
+              marginBottom: spacing.medium,
+              marginTop: spacing.medium,
+            }}
+          />
+        )}
 
         {!onPremise && (
           <View style={commonStyles.CENTER_VIEW}>
@@ -275,27 +364,6 @@ export const DefaultLogin = observer((props: Props) => {
             </View>
           </View>
         )}
-{/* 
-        <Text
-          text={IS_PROD ? translate("common.or_login_with") : ""}
-          style={{ marginBottom: spacing.tiny }}
-        />
-
-        <TouchableOpacity
-          style={{
-            width: "100%",
-            padding: 16,
-            borderRadius: 6,
-            borderWidth: 1,
-            borderColor: color.line,
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 16,
-          }}
-          onPress={() => {}}
-        >
-          <Text preset="black" text={"Sso identifier"} />
-        </TouchableOpacity> */}
       </View>
     </View>
   )
