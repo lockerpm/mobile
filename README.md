@@ -1,122 +1,42 @@
-# Welcome to your new ignited app!
+![Locker Password Manager](https://raw.githubusercontent.com/lockerpm/.github/main/images/locker4.png)
 
-[![CircleCI](https://circleci.com/gh/infinitered/ignite.svg?style=svg)](https://circleci.com/gh/infinitered/ignite)
+# Locker Web Vault
 
-## The latest and greatest boilerplate for Infinite Red opinions
+Locker Mobile is a secure and user-friendly cross-platform application written in React Native, designed to allow users to store and manage their passwords and secrets on both Android and iOS devices.
 
-This is the boilerplate that [Infinite Red](https://infinite.red) uses as a way to test bleeding-edge changes to our React Native stack.
+## Getting Started
 
-Currently includes:
+### Configure Git blame
 
-- React Native
-- React Navigation
-- MobX State Tree
-- TypeScript
-- And more!
-
-## Quick Start
-
-The Ignite boilerplate project's structure will look similar to this:
+We recommend that you configure git to ignore the Prettier revision:
 
 ```
-ignite-project
-├── app
-│   ├── components
-│   ├── i18n
-│   ├── utils
-│   ├── models
-│   ├── navigators
-│   ├── screens
-│   ├── services
-│   ├── theme
-│   ├── app.tsx
-├── test
-│   ├── __snapshots__
-│   ├── storyshots.test.ts.snap
-│   ├── mock-i18n.ts
-│   ├── mock-reactotron.ts
-│   ├── setup.ts
-│   ├── storyshots.test.ts
-├── README.md
-├── android
-│   ├── app
-│   ├── build.gradle
-│   ├── gradle
-│   ├── gradle.properties
-│   ├── gradlew
-│   ├── gradlew.bat
-│   ├── keystores
-│   └── settings.gradle
-├── ignite
-│   ├── ignite.json
-│   └── plugins
-├── index.js
-├── ios
-│   ├── IgniteProject
-│   ├── IgniteProject-tvOS
-│   ├── IgniteProject-tvOSTests
-│   ├── IgniteProject.xcodeproj
-│   └── IgniteProjectTests
-├── .env
-└── package.json
+git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 ```
 
-### ./app directory
+### Android/iOS Development
 
-Included in an Ignite boilerplate project is the `app` directory. This is a directory you would normally have to create when using vanilla React Native.
+See the  [React native environment setup](https://reactnative.dev/docs/0.71/environment-setup) page to set up an Android and iOS development environment.
 
-The inside of the src directory looks similar to the following:
+### Environment variables
+
+We are using [Ignite](https://github.com/infinitered/ignite/tree/master) boilerplate. You can manually set your API endpoints and web socket settings by creating a `app/config/.env.production` file for production environment or `app/config/.env.staing` file for Staging environment with the following `app/config/.env.example` content.
+
+### Build and Debug
 
 ```
-app
-│── components
-│── i18n
-├── models
-├── navigators
-├── screens
-├── services
-├── theme
-├── utils
-└── app.tsx
+git clone https://github.com/lockerpm/mobile.git
+cd mobile
+yarn
+yarn ios | yarn android
 ```
 
-**components**
-This is where your React components will live. Each component will have a directory containing the `.tsx` file, along with a story file, and optionally `.presets`, and `.props` files for larger components. The app will come with some commonly used components like Button.
+## Contributing
+Contributions to the Locker Mobile project are welcome! If you find any issues or want to suggest improvements, please feel free to open an issue or submit a pull request.
 
-**i18n**
-This is where your translations will live if you are using `react-native-i18n`.
+Before contributing, please review the [Contribution Guidelines](https://github.com/lockerpm/.github/blob/main/CONTRIBUTING.md).
 
-**models**
-This is where your app's models will live. Each model has a directory which will contain the `mobx-state-tree` model file, test file, and any other supporting files like actions, types, etc.
+## License
+The Locker Mobile is open-source and released under the [GPLv3](./LICENSE) License. Feel free to use, modify, and distribute the code as per the terms of the license.
 
-**navigators**
-This is where your `react-navigation` navigators will live.
-
-**screens**
-This is where your screen components will live. A screen is a React component which will take up the entire screen and be part of the navigation hierarchy. Each screen will have a directory containing the `.tsx` file, along with any assets or other helper files.
-
-**services**
-Any services that interface with the outside world will live here (think REST APIs, Push Notifications, etc.).
-
-**theme**
-Here lives the theme for your application, including spacing, colors, and typography.
-
-**utils**
-This is a great place to put miscellaneous helpers and utilities. Things like date helpers, formatters, etc. are often found here. However, it should only be used for things that are truely shared across your application. If a helper or utility is only used by a specific component or model, consider co-locating your helper with that component or model.
-
-**app.tsx** This is the entry point to your app. This is where you will find the main App component which renders the rest of the application.
-
-### ./ignite directory
-
-The `ignite` directory stores all things Ignite, including CLI and boilerplate items. Here you will find generators, plugins and examples to help you get started with React Native.
-
-## Running e2e tests
-
-Read [e2e setup instructions](./e2e/README.md).
-
-## tttt
-
-- [2018 aka Bowser](https://github.com/infinitered/ignite-bowser)
-- [2017 aka Andross](https://github.com/infinitered/ignite-andross)
-- [2016 aka Ignite 1.0](https://github.com/infinitered/ignite-ir-boilerplate-2016)
