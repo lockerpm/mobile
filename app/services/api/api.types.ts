@@ -36,6 +36,13 @@ import { PasskeyAuthenticationResult, PasskeyRegistrationResult } from "react-na
 
 // ------------------ Response ------------------------
 
+export type WebAuthListCredentialsResult =
+  | {
+      kind: "ok"
+      data: WebauthCredential[]
+    }
+  | GeneralApiProblem
+
 export type LoginMethodResult =
   | {
       kind: "ok"
@@ -774,4 +781,13 @@ export type EnterpriseInvitation = {
   owner_email: string
   role: AccountRoleText
   status: EnterpriseInvitationStatus
+}
+
+export type WebauthCredential = {
+  id: string
+  created_time: number
+  webauthn_credential_id: string
+  webauthn_public_key: string
+  name: string
+  last_used_time: number
 }

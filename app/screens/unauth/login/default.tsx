@@ -38,7 +38,7 @@ export const DefaultLogin = observer((props: Props) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [username, setUsername] = useState("testpasskey@maily.org")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   const [loginMethod, setLoginMethod] = useState<METHOD>(METHOD.NONE)

@@ -22,6 +22,7 @@ import { omit } from "ramda"
 import { AppEventType, EventBus } from "../../utils/event-bus"
 import { AccountType, EmergencyAccessType, PolicyType } from "../../config/types"
 import { Enterprise, UserTeam } from "../../config/types/api"
+import { PasskeyRegistrationResult } from "react-native-passkey"
 
 export enum AppTimeoutType {
   SCREEN_OFF = -1,
@@ -361,6 +362,12 @@ export const UserModel = types
       return res
     },
 
+    webAuthListCredentials: async (paging: number) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.webAuthListCredentials(self.apiToken, paging)
+      return res
+    },
+
     loginMethod: async (username: string) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.loginMethod(username)
@@ -489,7 +496,27 @@ export const UserModel = types
       return res
     },
 
+
     // -------------------- LOCKER ------------------------
+
+
+    // enablePasskeyOptions: async (algorithms: string[]) => {
+    //   const userApi = new UserApi(self.environment.api)
+    //   const res = await userApi.enablePasskeyOptions(self.apiToken, algorithms)
+    //   return res
+    // },
+
+    // enablePasskey: async (payload: PasskeyRegistrationResult) => {
+    //   const userApi = new UserApi(self.environment.api)
+    //   const res = await userApi.enablePasskey(self.apiToken, payload)
+    //   return res
+    // },
+
+    disablePasskey:async (credentialsId: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.disablePasskey(self.apiToken, credentialsId)
+      return res
+    }, 
 
     sendPasswordHint: async (email: string) => {
       const userApi = new UserApi(self.environment.api)
