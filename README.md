@@ -1,6 +1,6 @@
 ![Locker Password Manager](https://raw.githubusercontent.com/lockerpm/.github/main/images/locker4.png)
 
-# Locker Web Vault
+# Locker Mobile
 
 Locker Mobile is a secure and user-friendly cross-platform application written in React Native, designed to allow users to store and manage their passwords and secrets on both Android and iOS devices.
 
@@ -39,4 +39,3 @@ Before contributing, please review the [Contribution Guidelines](https://github.
 
 ## License
 The Locker Mobile is open-source and released under the [GPLv3](./LICENSE) License. Feel free to use, modify, and distribute the code as per the terms of the license.
-
