@@ -41,10 +41,10 @@ export const SignupScreen = observer(() => {
 
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [email, setEmail] = useState("testpasskey@maily.org")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-  const [fullname, setFullname] = useState("thinhnnCyStack")
+  const [fullname, setFullname] = useState("")
   const [country, setCountry] = useState("VN")
   const [phone, setPhone] = useState("")
   const [phonePrefix, setPhonePrefix] = useState("+84")
@@ -156,6 +156,7 @@ export const SignupScreen = observer(() => {
 
         // @ts-ignore
         const result: PasskeyRegistrationResult = await Passkey.register(requestJson)
+
         const res = await user.registerPasskey({
           email,
           password,
@@ -178,7 +179,6 @@ export const SignupScreen = observer(() => {
         }
       } catch (error) {
         // Handle Error...
-        Logger.error(error)
       }
     }
   }

@@ -69,7 +69,10 @@ export class Utils {
   }
 
   static base64ToBase64url(strBase64: string): string {
-    return Utils.bufferToBase64url(Buffer.from(strBase64, 'base64'));
+    return strBase64
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=/g, "")
   }
 
   static fromByteToB64(str: string): string {
