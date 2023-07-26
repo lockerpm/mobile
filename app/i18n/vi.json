@@ -1145,6 +1145,7 @@
       "signup_passkey": "Đăng nhập bằng passkey",
       "signup_password": "Đăng nhập bằng mật khẩu"
     },
-    "login_passkey_setting": "Đăng nhập với passkeys"
+    "login_passkey_setting": "Đăng nhập với passkeys",
+    "login_passkey": "Đăng nhập bằng passkey"
   }
 }

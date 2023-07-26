@@ -1152,6 +1152,7 @@
       "signup_passkey": "Sign up with passkey",
       "signup_password": "Sign up with password"
     },
-    "login_passkey_setting": "Login with passkeys"
+    "login_passkey_setting": "Login with passkeys",
+    "login_passkey": "Log in with passkey"
   }
 }

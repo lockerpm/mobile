@@ -42,7 +42,7 @@ export const DefaultLogin = observer((props: Props) => {
 
   const [loginMethod, setLoginMethod] = useState<METHOD>(METHOD.NONE)
   const [passkeySupported, setPasskeySupported] = useState(false)
-  // const [showExtraPasskeyLogin, setShowExtraPasskeyLogin] = useState(false)
+  const [showExtraPasskeyLogin, setShowExtraPasskeyLogin] = useState(false)
   const passwordRef = useRef(null)
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
@@ -54,7 +54,8 @@ export const DefaultLogin = observer((props: Props) => {
     if (res.kind === "ok") {
       if (res.data.webauthn) {
         setLoginMethod(METHOD.PASSKEY)
-        handleAuthWebauth()
+        await handleAuthWebauth()
+        setShowExtraPasskeyLogin(true)
         return
       }
       setLoginMethod(METHOD.PASSWORD)
@@ -159,16 +160,16 @@ export const DefaultLogin = observer((props: Props) => {
             onLoggedIn(false, "")
           }
         } else {
-          if (res.kind === 'unauthorized') {
-            notify('error', translate('passkey.error.login_failed'))
+          if (res.kind === "unauthorized") {
+            notify("error", translate("passkey.error.login_failed"))
           }
         }
         // The `authenticate` method returns a FIDO2 assertion result
         // Pass it to your server for verification
       } catch (error) {
         // Handle Error...
-        if (error.error === 'UserCancelled') {
-          notify('error', translate('passkey.error.user_cancel'))
+        if (error.error === "UserCancelled") {
+          notify("error", translate("passkey.error.user_cancel"))
           setLoginMethod(METHOD.PASSWORD)
         }
       }
@@ -282,6 +283,7 @@ export const DefaultLogin = observer((props: Props) => {
           onChangeText={(val) => {
             if (passkeySupported && loginMethod !== METHOD.NONE) {
               setLoginMethod(METHOD.NONE)
+              setShowExtraPasskeyLogin(false)
             }
             setUsername(val)
           }}
@@ -348,6 +350,20 @@ export const DefaultLogin = observer((props: Props) => {
               width: "100%",
               marginBottom: spacing.medium,
               marginTop: spacing.medium,
+            }}
+          />
+        )}
+
+        {!onPremise && showExtraPasskeyLogin && (
+          <Button
+            preset="outline"
+            isLoading={isLoading}
+            isDisabled={isLoading || !username }
+            text={translate("passkey.login_passkey")}
+            onPress={handleAuthWebauth}
+            style={{
+              width: "100%",
+              marginBottom: 12,
             }}
           />
         )}
