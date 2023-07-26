@@ -160,7 +160,7 @@
     "required_data": "Không được để trống thông tin này",
     "session_login_failed": "Đăng nhập phiên không thành công! Vui lòng thử lại",
     "login_failed": "Đăng nhập không thành công! Vui lòng thử lại",
-    "wrong_username_or_password": "Tài khoản hoặc mật khẩu không chính xác",
+    "wrong_username_or_password": "Mật khẩu không chính xác",
     "account_not_activated": "Tài khoản này chưa được kích hoạt. Vui lòng kiểm tra email và làm theo hướng dẫn (chúng tôi sẽ gửi lại sau 1 ngày).",
     "something_went_wrong": "Đã có lỗi xảy ra",
     "sync_failed": "Đồng bộ hóa không thành công",
