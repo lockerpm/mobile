@@ -45,7 +45,7 @@ export const ImportScreen = observer(() => {
   }
 
   const [step, setStep] = useState(0)
-  const [format, setFormat] = useState("cystackjson")
+  const [format, setFormat] = useState("lockerjson")
   const [file, setFile] = useState<FileData>(fileData)
   const [importedCount, setImportedCount] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
@@ -53,20 +53,13 @@ export const ImportScreen = observer(() => {
 
   // -------------------- COMPUTED --------------------
 
-  const cystackOptions = [
-    { name: "Locker (json)", id: "cystackjson" },
-    { name: "Locker (csv)", id: "cystackcsv" },
-  ]
   // -------------------- METHODS --------------------
 
   const handleImport = async () => {
     setStep(1)
 
     try {
-      const f = cystackOptions.map((e) => e.id).includes(format)
-        ? format.replace("cystack", "bitwarden")
-        : format
-      const importer = importService.getImporter(f)
+      const importer = importService.getImporter(format)
 
       let content: string
 

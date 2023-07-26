@@ -32,6 +32,8 @@ import { AvastJsonImporter } from "../importers/avastJsonImporter"
 import { AviraCsvImporter } from "../importers/aviraCsvImporter"
 import { BitwardenCsvImporter } from "../importers/bitwardenCsvImporter"
 import { BitwardenJsonImporter } from "../importers/bitwardenJsonImporter"
+import { LockerCsvImporter } from "../importers/lockerCsvImporter"
+import { LockerJsonImporter } from "../importers/lockerJsonImporter"
 import { BlackBerryCsvImporter } from "../importers/blackBerryCsvImporter"
 import { BlurCsvImporter } from "../importers/blurCsvImporter"
 import { ButtercupCsvImporter } from "../importers/buttercupCsvImporter"
@@ -88,6 +90,8 @@ import { HeyLoginCsvImporter } from "../importers/heyloginCsvImport"
 
 export class ImportService implements ImportServiceAbstraction {
   featuredImportOptions = [
+    { id: "lockerjson", name: "Locker (json)" },
+    { id: "lockercsv", name: "Locker (csv)" },
     { id: "bitwardenjson", name: "Bitwarden (json)" },
     { id: "bitwardencsv", name: "Bitwarden (csv)" },
     { id: "chromecsv", name: "Chrome (csv)" },
@@ -218,6 +222,10 @@ export class ImportService implements ImportServiceAbstraction {
     }
 
     switch (format) {
+      case "lockercsv":
+        return new LockerCsvImporter()
+      case "lockerjson":
+        return new LockerJsonImporter(this.cryptoService, this.i18nService)
       case "bitwardencsv":
         return new BitwardenCsvImporter()
       case "bitwardenjson":
