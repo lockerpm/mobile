@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react"
 import { useWindowDimensions, View } from "react-native"
+import React, { useState, useRef, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
 import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
@@ -10,11 +10,20 @@ import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { IS_IOS, IS_PROD } from "../../../config/constants"
 import { GitHubLoginModal } from "./github-login-modal"
 import { useNavigation } from "@react-navigation/native"
+import { Passkey, PasskeyAuthenticationResult } from "react-native-passkey"
+import { PasskeyAuthenticationRequest } from "react-native-passkey/lib/typescript/Passkey"
+import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "../../../utils/passkey"
 
 type Props = {
   nextStep: (username: string, password: string, methods: { type: string; data: any }[]) => void
   onLoggedIn: (newUser: boolean, token: string) => void
   handleForgot: () => void
+}
+
+enum METHOD {
+  PASSKEY = 0,
+  PASSWORD = 1,
+  NONE = 2,
 }
 
 export const DefaultLogin = observer((props: Props) => {
@@ -31,11 +40,29 @@ export const DefaultLogin = observer((props: Props) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
+  const [loginMethod, setLoginMethod] = useState<METHOD>(METHOD.NONE)
+  const [passkeySupported, setPasskeySupported] = useState(false)
+  const [showExtraPasskeyLogin, setShowExtraPasskeyLogin] = useState(false)
   const passwordRef = useRef(null)
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
   // ------------------ Methods ----------------------
+
+  const getLoginMethod = async () => {
+    const res = await user.loginMethod(username)
+    if (res.kind === "ok") {
+      if (res.data.webauthn) {
+        setLoginMethod(METHOD.PASSKEY)
+        await handleAuthWebauth()
+        setShowExtraPasskeyLogin(true)
+        return
+      }
+      setLoginMethod(METHOD.PASSWORD)
+    } else {
+      notifyApiError(res)
+    }
+  }
 
   const handleLogin = async () => {
     setIsLoading(true)
@@ -79,7 +106,64 @@ export const DefaultLogin = observer((props: Props) => {
     }
   }
 
+  const handleAuthWebauth = async () => {
+    const resAuthPasskeyOptions = await user.authPasskeyOptions(username)
+    if (resAuthPasskeyOptions.kind === "ok") {
+      try {
+        const authRequest: PasskeyAuthenticationRequest = credentialAuthOptions(
+          resAuthPasskeyOptions.data,
+        )
+        // Call the `authenticate` method with the retrieved request in JSON format
+        // A native overlay will be displayed
+        const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest)
+
+        const res = await user.authPasskey({
+          username,
+          response: publicKeyCredentialWithAssertion(result),
+        })
+
+        if (res.kind === "ok") {
+          setPassword("")
+          if (res.data.is_factor2) {
+            nextStep(username, password, res.data.methods)
+          } else {
+            // @ts-ignore
+            setApiTokens(res.data?.access_token)
+            onLoggedIn(false, "")
+          }
+        } else {
+          if (res.kind === "unauthorized") {
+            notify("error", translate("passkey.error.login_failed"))
+          }
+          setLoginMethod(METHOD.PASSWORD)
+        }
+        // The `authenticate` method returns a FIDO2 assertion result
+        // Pass it to your server for verification
+      } catch (error) {
+        // Handle Error...
+        if (error.error === "UserCancelled") {
+          notify("error", translate("passkey.error.user_cancel"))
+        }
+        setLoginMethod(METHOD.PASSWORD)
+      }
+    } else {
+      notifyApiError(resAuthPasskeyOptions)
+    }
+  }
   // ------------------------------ DATA -------------------------------
+  const checkPasskeySupported = async () => {
+    const res = await Passkey.isSupported()
+    if (res) {
+      setLoginMethod(METHOD.NONE)
+      setPasskeySupported(true)
+      return
+    }
+    setLoginMethod(METHOD.PASSWORD)
+  }
+
+  useEffect(() => {
+    checkPasskeySupported()
+  }, [])
 
   const SOCIAL_LOGIN: {
     [service: string]: {
@@ -143,17 +227,10 @@ export const DefaultLogin = observer((props: Props) => {
 
   // ------------------------------ RENDER -------------------------------
 
+  // ------------------------------ RENDER -------------------------------
+
   return (
     <View>
-      {/* <Icon
-        icon="arrow-left"
-        size={24}
-        containerStyle={{
-          padding: 10,
-          paddingLeft: 0,
-        }}
-        onPress={() => navigation.goBack()}
-      /> */}
       <View style={{ alignItems: "center" }}>
         <GitHubLoginModal
           isOpen={showGitHubLogin}
@@ -182,7 +259,13 @@ export const DefaultLogin = observer((props: Props) => {
         <FloatingInput
           isInvalid={isError}
           label={translate("login.email_or_username")}
-          onChangeText={setUsername}
+          onChangeText={(val) => {
+            if (passkeySupported && loginMethod !== METHOD.NONE) {
+              setLoginMethod(METHOD.NONE)
+              setShowExtraPasskeyLogin(false)
+            }
+            setUsername(val)
+          }}
           value={username}
           style={{ width: "100%", marginBottom: spacing.small }}
           onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
@@ -223,6 +306,77 @@ export const DefaultLogin = observer((props: Props) => {
             marginTop: spacing.medium,
           }}
         />
+        {loginMethod === METHOD.PASSWORD && (
+          <FloatingInput
+            outerRef={passwordRef}
+            isPassword
+            isInvalid={isError}
+            label={translate("common.password")}
+            onChangeText={setPassword}
+            value={password}
+            style={{ width: "100%" }}
+            onSubmitEditing={handleLogin}
+          />
+        )}
+        {/* Password input end */}
+
+        { loginMethod === METHOD.PASSWORD && (
+          <View
+            style={{
+              width: "100%",
+              alignItems: "flex-start",
+              marginTop: spacing.large,
+            }}
+          >
+            <Button
+              preset="link"
+              text={translate("login.forgot_password")}
+              onPress={handleForgot}
+            />
+          </View>
+        )}
+
+        {loginMethod === METHOD.PASSWORD && (
+          <Button
+            isLoading={isLoading}
+            isDisabled={isLoading || !(username && password)}
+            text={translate("common.login")}
+            onPress={handleLogin}
+            style={{
+              width: "100%",
+              marginBottom: spacing.medium,
+              marginTop: spacing.medium,
+            }}
+          />
+        )}
+
+        {loginMethod !== METHOD.PASSWORD && (
+          <Button
+            isLoading={isLoading}
+            isDisabled={!username}
+            text={"Continue"}
+            onPress={getLoginMethod}
+            style={{
+              width: "100%",
+              marginBottom: spacing.medium,
+              marginTop: spacing.medium,
+            }}
+          />
+        )}
+
+        { showExtraPasskeyLogin && (
+          <Button
+            preset="outline"
+            isLoading={isLoading}
+            isDisabled={isLoading || !username }
+            text={translate("passkey.login_passkey")}
+            onPress={handleAuthWebauth}
+            style={{
+              width: "100%",
+              marginBottom: 12,
+            }}
+          />
+        )}
 
         <View style={commonStyles.CENTER_VIEW}>
           <Text
@@ -250,6 +404,7 @@ export const DefaultLogin = observer((props: Props) => {
               ))}
           </View>
         </View>
+
       </View>
     </View>
   )

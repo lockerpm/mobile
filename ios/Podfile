@@ -8,7 +8,9 @@ enable_user_defined_build_types!
 platform :ios, '13.0'
 
 target 'Locker' do
-  project 'Locker'
+  project 'Locker',
+    'Debug Staging' => :debug,
+    'Release Staging' => :release
   use_unimodules!
 
   

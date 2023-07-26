@@ -160,7 +160,7 @@
     "required_data": "This data is mandatory",
     "session_login_failed": "Session login failed! Please try again",
     "login_failed": "Login failed! Please try again",
-    "wrong_username_or_password": "The email or password is not valid",
+    "wrong_username_or_password": "The password is not valid",
     "account_not_activated": "This account is not activated yet! Please check your email and follow the instructions (we will resend after 1 day).",
     "something_went_wrong": "Something went wrong",
     "sync_failed": "Synchronize data failed",
@@ -1141,5 +1141,18 @@
     },
     "delete_expired": "Delete expired item",
     "shared_begin": "Shared {{time}}"
+  },
+  "passkey": {
+    "error": {
+      "user_cancel": "The user cancelled the request.",
+      "login_failed": "Failed to log in with passkey."
+    },
+    "sign_up": {
+      "continue_password": "Continue with password",
+      "signup_passkey": "Sign up with passkey",
+      "signup_password": "Sign up with password"
+    },
+    "login_passkey_setting": "Login with passkeys",
+    "login_passkey": "Log in with passkey"
   }
 }

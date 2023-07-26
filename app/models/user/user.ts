@@ -10,6 +10,9 @@ import {
   NotificationSettingData,
   SessionOtpLoginData,
   OnpremisePreloginPayload,
+  RegisterPasskeyData,
+  RegisterPasskeyOptionData,
+  AuthPasskeyData,
 } from "../../services/api"
 import { UserApi } from "../../services/api/user-api"
 import { save, StorageKey, remove } from "../../utils/storage"
@@ -20,6 +23,7 @@ import { omit } from "ramda"
 import { AppEventType, EventBus } from "../../utils/event-bus"
 import { AccountType, EmergencyAccessType, PolicyType } from "../../config/types"
 import { Enterprise, UserTeam } from "../../config/types/api"
+import { PasskeyRegistrationResult } from "react-native-passkey"
 
 export enum AppTimeoutType {
   SCREEN_OFF = -1,
@@ -203,11 +207,9 @@ export const UserModel = types
     setBiometricIntroShown: (val: boolean) => {
       self.biometricIntroShown = val
     },
-
     setMobileChangeLanguage: (val: boolean) => {
       self.isMobileLangChange = val
     },
-
     // User settings
     setDeviceId: (id: string) => {
       self.deviceId = id
@@ -266,7 +268,7 @@ export const UserModel = types
       if (isActive) {
         self.isBiometricUnlockList = cast([self.email, ...self.isBiometricUnlockList])
       } else {
-        const index = self.isBiometricUnlockList.findIndex(e => e === self.email)
+        const index = self.isBiometricUnlockList.findIndex((e) => e === self.email)
         if (index >= 0) {
           self.isBiometricUnlockList.splice(index, 1)
         }
@@ -362,16 +364,32 @@ export const UserModel = types
       return res
     },
 
+    webAuthListCredentials: async (paging: number) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.webAuthListCredentials(self.apiToken, paging)
+      return res
+    },
+
+    loginMethod: async (username: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.loginMethod(username)
+      return res
+    },
+
     login: async (payload: LoginData, isOtp?: boolean) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.login(payload, self.deviceId, isOtp)
       if (res.kind === "ok") {
         if (res.data.token) {
-          const pmRes = await userApi.getPMToken(res.data.token, {
-            SERVICE_URL: "/",
-            SERVICE_SCOPE: "pwdmanager",
-            CLIENT: "mobile",
-          }, self.deviceId)
+          const pmRes = await userApi.getPMToken(
+            res.data.token,
+            {
+              SERVICE_URL: "/",
+              SERVICE_SCOPE: "pwdmanager",
+              CLIENT: "mobile",
+            },
+            self.deviceId,
+          )
           if (pmRes.kind === "ok") {
             self.setApiToken(pmRes.data.access_token)
             self.setLoggedIn(true)
@@ -379,6 +397,35 @@ export const UserModel = types
           return pmRes
         }
       }
+      return res
+    },
+
+    authPasskey: async (payload: AuthPasskeyData) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.authPasskey(payload)
+      if (res.kind === "ok") {
+        if (res.data.token) {
+          const pmRes = await userApi.getPMToken(
+            res.data.token,
+            {
+              SERVICE_URL: "/",
+              SERVICE_SCOPE: "pwdmanager",
+              CLIENT: "mobile",
+            },
+            self.deviceId,
+          )
+          if (pmRes.kind === "ok") {
+            self.setApiToken(pmRes.data.access_token)
+            self.setLoggedIn(true)
+          }
+          return pmRes
+        }
+      }
+      return res
+    },
+    authPasskeyOptions: async (username: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.authPasskeyOptions(username)
       return res
     },
 
@@ -390,11 +437,15 @@ export const UserModel = types
 
     getPMToken: async (token: string) => {
       const userApi = new UserApi(self.environment.api)
-      const pmRes = await userApi.getPMToken(token, {
-        SERVICE_URL: "/",
-        SERVICE_SCOPE: "pwdmanager",
-        CLIENT: "mobile",
-      }, self.deviceId)
+      const pmRes = await userApi.getPMToken(
+        token,
+        {
+          SERVICE_URL: "/",
+          SERVICE_SCOPE: "pwdmanager",
+          CLIENT: "mobile",
+        },
+        self.deviceId,
+      )
 
       if (pmRes.kind === "ok") {
         self.setApiToken(pmRes.data.access_token)
@@ -406,6 +457,18 @@ export const UserModel = types
     register: async (payload: RegisterData) => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.register(payload)
+      return res
+    },
+
+    registerPasskeyOptions: async (payload: RegisterPasskeyOptionData) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.registerPasskeyOptions(payload)
+      return res
+    },
+
+    registerPasskey: async (payload: RegisterPasskeyData) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.registerPasskey(payload)
       return res
     },
 
@@ -435,7 +498,27 @@ export const UserModel = types
       return res
     },
 
+
     // -------------------- LOCKER ------------------------
+
+
+    // enablePasskeyOptions: async (algorithms: string[]) => {
+    //   const userApi = new UserApi(self.environment.api)
+    //   const res = await userApi.enablePasskeyOptions(self.apiToken, algorithms)
+    //   return res
+    // },
+
+    // enablePasskey: async (payload: PasskeyRegistrationResult) => {
+    //   const userApi = new UserApi(self.environment.api)
+    //   const res = await userApi.enablePasskey(self.apiToken, payload)
+    //   return res
+    // },
+
+    disablePasskey:async (credentialsId: string) => {
+      const userApi = new UserApi(self.environment.api)
+      const res = await userApi.disablePasskey(self.apiToken, credentialsId)
+      return res
+    }, 
 
     sendPasswordHint: async (email: string) => {
       const userApi = new UserApi(self.environment.api)
@@ -707,7 +790,7 @@ export const UserModel = types
       return false
     },
 
-    // business 
+    // business
     businessLoginMethod: async () => {
       const userApi = new UserApi(self.environment.api)
       const res = await userApi.businessLoginMethod()

@@ -4,7 +4,7 @@ import { EncArrayBuffer } from '../models/domain/encArrayBuffer';
 
 import { Utils } from '../misc/utils';
 
-export class BitwardenFileUploadService
+export class CyStackFileUploadService
 {
     constructor(private apiService: ApiService) { }
 

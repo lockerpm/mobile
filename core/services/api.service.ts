@@ -182,17 +182,6 @@ export class ApiService implements ApiServiceAbstraction {
         this.apiBaseUrl = urls.api;
         this.identityBaseUrl = urls.identity;
         this.eventsBaseUrl = urls.events;
-
-        // Production
-        if (this.apiBaseUrl == null) {
-            this.apiBaseUrl = 'https://api.bitwarden.com';
-        }
-        if (this.identityBaseUrl == null) {
-            this.identityBaseUrl = 'https://identity.bitwarden.com';
-        }
-        if (this.eventsBaseUrl == null) {
-            this.eventsBaseUrl = 'https://events.bitwarden.com';
-        }
     }
 
     // Auth APIs
