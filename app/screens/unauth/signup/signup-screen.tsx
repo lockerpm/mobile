@@ -180,6 +180,8 @@ export const SignupScreen = observer(() => {
       } catch (error) {
         // Handle Error...
       }
+    } else {
+      notifyApiError(resPassKeyOptions)
     }
   }
 
@@ -406,7 +408,7 @@ export const SignupScreen = observer(() => {
         <Button
           isLoading={isLoading}
           isDisabled={isLoading || !formValidated}
-          text={isSignupWithPassword ? translate("common.sign_up") : "Sign up with password"}
+          text={isSignupWithPassword ? translate("passkey.sign_up.signup_password") : translate("passkey.sign_up.continue_password")}
           onPress={() => {
             if (isSignupWithPassword) {
               getCaptchaToken().then(handleRegister)
@@ -426,7 +428,7 @@ export const SignupScreen = observer(() => {
             preset="outline"
             isLoading={isLoading}
             isDisabled={isLoading || !email || !fullname || !agreed}
-            text={"Sign up with passkey"}
+            text={translate("passkey.sign_up.signup_passkey")}
             onPress={() => {
               getCaptchaToken().then(handleRegisterWebauth)
             }}
