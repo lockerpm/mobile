@@ -37,7 +37,7 @@ export const DefaultLogin = observer((props: Props) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [username, setUsername] = useState("lg41ux@maily.org")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   const [loginMethod, setLoginMethod] = useState<METHOD>(METHOD.NONE)
@@ -163,6 +163,7 @@ export const DefaultLogin = observer((props: Props) => {
           if (res.kind === "unauthorized") {
             notify("error", translate("passkey.error.login_failed"))
           }
+          setLoginMethod(METHOD.PASSWORD)
         }
         // The `authenticate` method returns a FIDO2 assertion result
         // Pass it to your server for verification
@@ -170,8 +171,8 @@ export const DefaultLogin = observer((props: Props) => {
         // Handle Error...
         if (error.error === "UserCancelled") {
           notify("error", translate("passkey.error.user_cancel"))
-          setLoginMethod(METHOD.PASSWORD)
         }
+        setLoginMethod(METHOD.PASSWORD)
       }
     } else {
       notifyApiError(resAuthPasskeyOptions)
