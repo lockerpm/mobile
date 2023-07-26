@@ -1,17 +1,29 @@
-import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging'
-import notifee, { Notification, EventType, Event, AndroidLaunchActivityFlag } from '@notifee/react-native'
-import { IS_IOS } from '../../config/constants'
-import { Logger } from '../logger'
-import { NotifeeNotificationData, PushEvent, EmergencyAccessData } from './types';
-import { load, save, StorageKey } from '../storage';
-import { handleNewShare, handleConfirmShare, handleResponseShare, handleInviteEA, handleIviteResponseEA, handleRequestEA, handleRequestEAResponseEA } from './handler';
-
+import messaging, { FirebaseMessagingTypes } from "@react-native-firebase/messaging"
+import notifee, {
+  Notification,
+  EventType,
+  Event,
+  AndroidLaunchActivityFlag,
+} from "@notifee/react-native"
+import { IS_IOS } from "../../config/constants"
+import { Logger } from "../logger"
+import { NotifeeNotificationData, PushEvent } from "./types"
+import { load, save, StorageKey } from "../storage"
+import {
+  handleNewShare,
+  handleConfirmShare,
+  handleResponseShare,
+  handleInviteEA,
+  handleIviteResponseEA,
+  handleRequestEA,
+  handleRequestEAResponseEA,
+  handleTipTrick,
+} from "./handler"
 
 export class PushNotifier {
-
   // Request permission
   static async getPermission() {
-    const authStatus = await messaging().requestPermission();
+    const authStatus = await messaging().requestPermission()
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL
@@ -35,10 +47,10 @@ export class PushNotifier {
 
     // Firebase
     messaging().onMessage(async (message: FirebaseMessagingTypes.RemoteMessage) => {
-      Logger.debug('Firebase: FOREGROUND HANDLER')
+      Logger.debug("Firebase: FOREGROUND HANDLER")
       Logger.debug(message.data)
-
       const { event, data } = message.data
+      
       switch (event) {
         case PushEvent.SHARE_NEW: {
           await handleNewShare(data)
@@ -80,14 +92,18 @@ export class PushNotifier {
           await handleRequestEAResponseEA(data, false)
           break
         }
+        case PushEvent.TIP_TRICK: {
+          await handleTipTrick(data)
+          break
+        }
         default:
-          Logger.debug('Unknow FCM event: ' + JSON.stringify(message))
+          Logger.debug("Unknow FCM event: " + JSON.stringify(message))
       }
     })
 
     // Notifee - Handle user interaction with notification here
     return notifee.onForegroundEvent((event: Event) => {
-      Logger.debug('Notifee: FOREGROUND HANDLER')
+      Logger.debug("Notifee: FOREGROUND HANDLER")
 
       const { detail, type } = event
 
@@ -100,68 +116,74 @@ export class PushNotifier {
   // Background handler
   static setupBackgroundHandler() {
     // Firebase
-    messaging().setBackgroundMessageHandler(async (message: FirebaseMessagingTypes.RemoteMessage) => {
-      Logger.debug('Firebase: BACKGROUND HANDLER')
-      Logger.debug(message.data)
-      const currentUser = await load(StorageKey.APP_CURRENT_USER)
-      if (!currentUser) {
-        return
-      }
-
-      const { event, data } = message.data
-      switch (event) {
-        case PushEvent.SHARE_NEW: {
-          await handleNewShare(data)
-          break
+    messaging().setBackgroundMessageHandler(
+      async (message: FirebaseMessagingTypes.RemoteMessage) => {
+        Logger.debug("Firebase: BACKGROUND HANDLER")
+        Logger.debug(message.data)
+        const currentUser = await load(StorageKey.APP_CURRENT_USER)
+        if (!currentUser) {
+          return
         }
-        case PushEvent.SHARE_ACCEPT: {
-          await handleResponseShare(data, true)
-          break
+        const { event, data } = message.data
+        switch (event) {
+          case PushEvent.SHARE_NEW: {
+            await handleNewShare(data)
+            break
+          }
+          case PushEvent.SHARE_ACCEPT: {
+            await handleResponseShare(data, true)
+            break
+          }
+          case PushEvent.SHARE_REJECT: {
+            await handleResponseShare(data, false)
+            break
+          }
+          case PushEvent.SHARE_CONFIRM: {
+            await handleConfirmShare(data)
+            break
+          }
+          case PushEvent.EMERGENCY_INVITE: {
+            await handleInviteEA(data)
+            break
+          }
+          case PushEvent.EMERGENCY_ACCEPT_INVITATION: {
+            await handleIviteResponseEA(data, true)
+            break
+          }
+          case PushEvent.EMERGENCY_REJECT_INVITATION: {
+            await handleIviteResponseEA(data, false)
+            break
+          }
+          case PushEvent.EMERGENCY_INITIATE: {
+            await handleRequestEA(data)
+            break
+          }
+          case PushEvent.EMERGENCY_APPROVE_REQUEST: {
+            await handleRequestEAResponseEA(data, true)
+            break
+          }
+          case PushEvent.EMERGENCY_REJECT_REQUEST: {
+            await handleRequestEAResponseEA(data, false)
+            break
+          }
+          case PushEvent.TIP_TRICK: {
+            await handleTipTrick(data)
+            break
+          }
+          default:
+            Logger.debug("Unknow FCM event: " + JSON.stringify(message))
         }
-        case PushEvent.SHARE_REJECT: {
-          await handleResponseShare(data, false)
-          break
-        }
-        case PushEvent.SHARE_CONFIRM: {
-          await handleConfirmShare(data)
-          break
-        }
-        case PushEvent.EMERGENCY_INVITE: {
-          await handleInviteEA(data)
-          break
-        }
-        case PushEvent.EMERGENCY_ACCEPT_INVITATION: {
-          await handleIviteResponseEA(data, true)
-          break
-        }
-        case PushEvent.EMERGENCY_REJECT_INVITATION: {
-          await handleIviteResponseEA(data, false)
-          break
-        }
-        case PushEvent.EMERGENCY_INITIATE: {
-          await handleRequestEA(data)
-          break
-        }
-        case PushEvent.EMERGENCY_APPROVE_REQUEST: {
-          await handleRequestEAResponseEA(data, true)
-          break
-        }
-        case PushEvent.EMERGENCY_REJECT_REQUEST: {
-          await handleRequestEAResponseEA(data, false)
-          break
-        }
-        default:
-          Logger.debug('Unknow FCM event: ' + JSON.stringify(message))
-      }
-    })
+      },
+    )
 
     // Notifee
     notifee.onBackgroundEvent(async (event: Event) => {
       // Handle user interaction with notification here
-      Logger.debug('BACKGROUND HANDLER NOTIFEE')
+      Logger.debug("BACKGROUND HANDLER NOTIFEE")
       const { type, detail } = event
       if (type === EventType.PRESS) {
         const data: NotifeeNotificationData = detail.notification.data
+
         if (!data) {
           return
         }
@@ -177,8 +199,10 @@ export class PushNotifier {
           case PushEvent.EMERGENCY_INITIATE:
           case PushEvent.EMERGENCY_APPROVE_REQUEST:
           case PushEvent.EMERGENCY_REJECT_REQUEST:
+          case PushEvent.TIP_TRICK:
             save(StorageKey.PUSH_NOTI_DATA, {
-              type: data.type
+              type: data.type,
+              url: data.url,
             })
             break
         }
@@ -195,8 +219,8 @@ export class PushNotifier {
   static async _notify(data: Notification) {
     // Create a channel
     const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
+      id: "default",
+      name: "Default Channel",
     })
 
     // Display a notification
@@ -207,11 +231,11 @@ export class PushNotifier {
         pressAction: {
           launchActivity: "default",
           id: "default",
-          launchActivityFlags: [AndroidLaunchActivityFlag.SINGLE_TOP]
+          launchActivityFlags: [AndroidLaunchActivityFlag.SINGLE_TOP],
         },
-        smallIcon: 'locker_small',
-        color: '#268334'
-      }
+        smallIcon: "locker_small",
+        color: "#268334",
+      },
     })
   }
 }

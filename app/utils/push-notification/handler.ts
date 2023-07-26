@@ -1,7 +1,7 @@
 import { PushNotifier } from "."
 import { CipherType } from "../../../core/enums"
 import { load, StorageKey } from "../storage"
-import { ConfirmShareData, NewShareData, PushEvent, ResponseShareData, EmergencyAccessData } from "./types"
+import { ConfirmShareData, NewShareData, PushEvent, ResponseShareData, EmergencyAccessData, TipTrickData } from "./types"
 
 
 // New share
@@ -255,6 +255,24 @@ export const handleRequestEAResponseEA = async (data: string, response: boolean)
   })
 }
 
+export const handleTipTrick = async (data: string) => {
+  const tipTrickdata: TipTrickData = JSON.parse(data)
+  const { language } = await _getCurrentUser()
+  // const isVn = language === 'vi'
+
+
+  const text =  tipTrickdata.data.title[language]
+
+  PushNotifier._notify({
+    id: `new_feature`,
+    title: 'Locker',
+    body: text,
+    data: {
+      type: PushEvent.TIP_TRICK,
+      url: tipTrickdata.data.metadata.link[language]
+    }
+  })
+}
 // ------------------ PRIVATE --------------------
 
 const _getCurrentUser = async () => {

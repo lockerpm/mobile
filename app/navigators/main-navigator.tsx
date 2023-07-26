@@ -80,6 +80,7 @@ import {
   EnterpriseInvitedScreen,
   NormalSharesScreen,
   QuickSharesScreen,
+  Password2FASetupScreen,
 } from "../screens"
 import UserInactivity from "react-native-user-inactivity"
 import { useMixins } from "../services/mixins"
@@ -140,9 +141,13 @@ export type PrimaryParamList = {
   }
   authenticator__edit: {
     mode: "add" | "edit"
+    passwordTotp?: boolean
+    passwordMode?: "add" | "edit" | "clone"
   }
   qrScanner: {
     totpCount?: number
+    passwordTotp?: boolean
+    passwordMode?: "add" | "edit" | "clone"
   }
   dataBreachScanner: undefined
   dataBreachList: undefined
@@ -167,6 +172,10 @@ export type PrimaryParamList = {
     initialUrl?: string
     collection?: CollectionView
   }
+  passwords_2fa_setup: {
+    mode: "add" | "edit" | "clone"
+  }
+
   notes__info: {
     quickShare?: boolean
   }
@@ -539,21 +548,6 @@ export const MainNavigator = observer(() => {
   }
 
   // ------------------ EFFECT --------------------
-  // Intercom support
-  useEffect(() => {
-    const registerIntercomUser = async () => {
-      if (user.isLoggedInPw) {
-        try {
-          await Intercom.registerIdentifiedUser({ email: user.email, userId: user.pwd_user_id })
-          Intercom.updateUser({ name: user.full_name || user.username })
-          Intercom.setInAppMessageVisibility(Visibility.GONE)
-        } catch (error) {
-          Logger.error(error)
-        }
-      }
-    }
-    registerIntercomUser()
-  }, [user.isLoggedInPw])
 
   // check app revire
   useEffect(() => {
@@ -707,6 +701,8 @@ export const MainNavigator = observer(() => {
           component={PasswordEditScreen}
           initialParams={{ mode: "add" }}
         />
+        <Stack.Screen name="passwords_2fa_setup" component={Password2FASetupScreen} />
+        
         <Stack.Screen name="notes__info" component={NoteInfoScreen} />
         <Stack.Screen
           name="notes__edit"

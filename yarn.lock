@@ -1512,10 +1512,10 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@intercom/intercom-react-native@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@intercom/intercom-react-native/-/intercom-react-native-1.1.1.tgz#e6034a02ed88b2edb458398e5240f2895587fbea"
-  integrity sha512-nP5FSOxlsbGxIaW1L0gM/KqQOTvCz7pvmMlFVep/wNh/ZzpnXM3s5d67FABXJBZy/7uaiMkZ5BJUyaBL62q+uA==
+"@intercom/intercom-react-native@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@intercom/intercom-react-native/-/intercom-react-native-4.0.0.tgz#8fe7a0b75668cf3b9c979210bd89e589c27762f4"
+  integrity sha512-zgKME/ly0veTlMvzdIHbCLpX92GpTco3INAyKFB34QnfeOnjqz6wSHa/YUBVcRS4VDIfs71Bpu9S0zGc6ZD6lQ==
 
 "@invertase/react-native-apple-authentication@2.1.5":
   version "2.1.5"
@@ -3934,6 +3934,11 @@ base-64@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/base-64/-/base-64-0.1.0.tgz#780a99c84e7d600260361511c4877613bf24f6bb"
   integrity sha1-eAqZyE59YAJgNhURxId2E78k9rs=
+
+base-64@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/base-64/-/base-64-1.0.0.tgz#09d0f2084e32a3fd08c2475b973788eee6ae8f4a"
+  integrity sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==
 
 base64-js@0.0.8:
   version "0.0.8"
@@ -10778,10 +10783,10 @@ react-native-app-auth@^6.4.3:
     invariant "2.2.4"
     react-native-base64 "0.0.2"
 
-react-native-appsflyer@^6.8.0:
-  version "6.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-appsflyer/-/react-native-appsflyer-6.8.0.tgz#a21f54d2110e965b16be0bbe4ff820e2596e1de8"
-  integrity sha512-cOHr5JLGgCYieNnLetNGoCCIHBS7o9HTaDm+LGqbkVTRO6SOF/RsJHYe4Se4ace3IIXypIvfiHGirGuNigLbjQ==
+react-native-appsflyer@^6.10.3:
+  version "6.10.3"
+  resolved "https://registry.yarnpkg.com/react-native-appsflyer/-/react-native-appsflyer-6.10.3.tgz#2a6e77f4a02eb2a6f88a44c2f9d1b2e37c66f6df"
+  integrity sha512-62IUiZa5mY1hsY9chgE755AgCpKpfHNwwIRs2NnHvIX8SdIFhm+Arn4kASvXCTfSIuZaDyKKOQT4bf0EVmBLyQ==
 
 react-native-base64@0.0.2:
   version "0.0.2"
@@ -10990,6 +10995,11 @@ react-native-pager-view@^5.2.1:
   version "5.4.6"
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.6.tgz#21d16b67136301875da1355dc9d442a4aafab1c7"
   integrity sha512-yZiG65xlOeC8LOCNF0N8Cdc+MDQGWJnOpsmlHAndWXQhuVPjj4/KnS556BeTddcQ2EqJu/DjL7o8j0hpB+nkVg==
+
+react-native-passkey@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-passkey/-/react-native-passkey-2.0.0.tgz#5607bcd9fa0ff0908444f0bccde31c0515f47433"
+  integrity sha512-EfUlHr0UR6pUWekDF28aDwwf71MNZjvwomBWiy23ocLRbY9NAa0z0F7JKdZkq42bUYOtwTC/8PC5ojfaWIjC3g==
 
 react-native-permissions@^2.0.2:
   version "2.2.2"
@@ -11266,10 +11276,10 @@ react-native-web@^0.16.3:
     normalize-css-color "^1.0.2"
     prop-types "^15.6.0"
 
-react-native-webview@^11.6.5:
-  version "11.14.0"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.14.0.tgz#01d7669409d7510c859300c058902c8a8490cbbb"
-  integrity sha512-G5pIYL3dU4rWt4K8W8ZoEDHL3nCR+rnNWsrCP/rJcl1gElxZn2xlpHjNml4myopIzn835NgE0/dJJ9VHvdMg3Q==
+react-native-webview@11.22.7:
+  version "11.22.7"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.22.7.tgz#bf0d1755473af6e1af8486e862668fc7530149b4"
+  integrity sha512-IYMElB4fFS6S8LbhivAQfAlW95HorqCK4T3mFKmWsV24iPVTfYoaiA1TNzkRnjw2mMgXDk/QnMeH9IbjBVs1Ag==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"

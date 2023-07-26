@@ -35,6 +35,7 @@
     "email": "Email",
     "enterprise": "Doanh nghiệp",
     "enter_master_pass": "Nhập Master Password",
+    "expired": "Hết hạn",
     "faceid_unlocking": "Mở khóa bằng Face ID",
     "female": "Nữ",
     "folder": "Thư mục",
@@ -152,6 +153,7 @@
   "error": {
     "master_password": "Không thể tự động tạo Siêu Mật Khẩu tự động",
     "not_supported": "Không hỗ trợ",
+    "not_valid_for_biometric": "Bạn cần nhập lại Master Password để kích hoạt lại FaceID/TouchID",
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
     "biometric_unlock_failed": "Xác thực bằng Face ID/Touch ID không thành công",
@@ -589,6 +591,12 @@
     "launch_website": "Mở website",
     "copy_username": "Sao chép Email / Tên người dùng",
     "copy_password": "Sao chép mật khẩu",
+    "copy_totp": "Sao chép OTP",
+    "add_otp": "Thêm OTP mới",
+    "no_otp": "Không dùng OTP",
+    "existing_otp": "Chọn các OTP có sẵn",
+    "2fa_setup": "Cài đặt 2FA",
+
     "empty": {
       "title": "Khỏi lo quên mật khẩu",
       "desc": "Thêm mật khẩu của bạn và truy cập chúng trên mọi thiết bị, bất kỳ lúc nào",
@@ -1126,5 +1134,18 @@
     },
     "delete_expired": "Xoá chia sẻ hết hạn",
     "shared_begin": "Được chia sẻ {{time}}"
+  },
+  "passkey": {
+    "error": {
+      "user_cancel": "Người dùng huỷ yêu cầu.",
+      "login_failed": "Đăng nhập bằng passkey thất bại."
+    },
+    "sign_up": {
+      "continue_password": "Tiếp tục với mật khẩu",
+      "signup_passkey": "Đăng nhập bằng passkey",
+      "signup_password": "Đăng nhập bằng mật khẩu"
+    },
+    "login_passkey_setting": "Đăng nhập với passkeys",
+    "login_passkey": "Đăng nhập bằng passkey"
   }
 }

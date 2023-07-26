@@ -35,6 +35,7 @@
     "email": "Email",
     "enterprise": "Enterprise",
     "enter_master_pass": "Enter master password",
+    "expired": "Expired",
     "faceid_unlocking": "Unlock with Face ID",
     "female": "Female",
     "folder": "Folder",
@@ -152,6 +153,7 @@
   "error": {
     "master_password": "Cannot auto create Master Password item",
     "not_supported": "Not supported",
+    "not_valid_for_biometric": "Log in with Master Password to re-enable FaceID/TouchID",
     "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
     "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
     "biometric_unlock_failed": "Face ID/Touch ID verification failed",
@@ -590,6 +592,12 @@
     "launch_website": "Launch Website",
     "copy_username": "Copy Email or Username",
     "copy_password": "Copy Password",
+    "copy_totp": "Copy OTP",
+    "add_otp": "Add new OTP",
+    "no_otp": "No OTP",
+    "existing_otp": "Choose an existing OTP",
+    "2fa_setup": "2FA Setup",
+
     "empty": {
       "title": "Forget password resets",
       "desc": "Add your passwords and access them on any device, anytime",
@@ -1133,5 +1141,18 @@
     },
     "delete_expired": "Delete expired item",
     "shared_begin": "Shared {{time}}"
+  },
+  "passkey": {
+    "error": {
+      "user_cancel": "The user cancelled the request.",
+      "login_failed": "Failed to log in with passkey."
+    },
+    "sign_up": {
+      "continue_password": "Continue with password",
+      "signup_passkey": "Sign up with passkey",
+      "signup_password": "Sign up with password"
+    },
+    "login_passkey_setting": "Login with passkeys",
+    "login_passkey": "Log in with passkey"
   }
 }

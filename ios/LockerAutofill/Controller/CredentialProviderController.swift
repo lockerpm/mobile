@@ -93,8 +93,14 @@ class CredentialProviderController: ASCredentialProviderViewController {
       performSegue(withIdentifier: "loginListSegue", sender: self)
   }
   
-  private func completeRequest(user: String, password: String){
+  private func completeRequest(user: String, password: String, otp: String){
     let passwordCredential = ASPasswordCredential(user: user, password: password)
+    if (!otp.isEmpty) {
+      let otpString = Utils.GetOTPFromUri(uri: otp)
+      if (!otpString.isEmpty) {
+        UIPasteboard.general.string = otpString
+      }
+    }
     self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
   }
   
@@ -139,7 +145,7 @@ extension CredentialProviderController: VerifyMasterPasswordDelegate {
     if (self.quickBarCredential == nil) {
       performLoginListScreen()
     } else {
-      completeRequest(user: quickBarCredential.username, password: quickBarCredential.password)
+      completeRequest(user: quickBarCredential.username, password: quickBarCredential.password, otp: quickBarCredential.otp)
     }
   }
 }
@@ -153,6 +159,7 @@ extension CredentialProviderController: LoginListControllerDelegate {
   
   func loginSelected(data: AutofillData) {
     AutofillHelpers.ReplaceCredentialIdentities(identifier: self.serviceIdentifier, type: 1, user: data.username, recordIdentifier: data.id)
-    completeRequest(user: data.username, password: data.password)
+  
+    completeRequest(user: data.username, password: data.password, otp: data.otp)
   }
 }

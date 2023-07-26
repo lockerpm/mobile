@@ -7,6 +7,8 @@ interface Props {
   onClose?: () => void,
   navigation?: any
   allItemsLength?: number
+  passwordTotp?: boolean
+  passwordMode?: "add" | "edit" | "clone"
 }
 
 export const AuthenticatorAddAction = (props: Props) => {
@@ -23,7 +25,11 @@ export const AuthenticatorAddAction = (props: Props) => {
           icon="qrcode"
           action={() => {
             props.onClose && props.onClose()
-            props.navigation && props.navigation.navigate('qrScanner', {totpCount: props.allItemsLength})
+            props.navigation && props.navigation.navigate('qrScanner', {
+              totpCount: props.allItemsLength,
+              passwordTotp: props.passwordTotp,
+              passwordMode: props.passwordMode
+            })
           }}
         />
         <ActionItem
@@ -31,7 +37,10 @@ export const AuthenticatorAddAction = (props: Props) => {
           icon="keyboard-o"
           action={() => {
             props.onClose && props.onClose()
-            props.navigation && props.navigation.navigate('authenticator__edit')
+            props.navigation && props.navigation.navigate('authenticator__edit', {
+              passwordTotp: props.passwordTotp,
+              passwordMode: props.passwordMode
+            })
           }}
         />
       </ActionSheetContent>

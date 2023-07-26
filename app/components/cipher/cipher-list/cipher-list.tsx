@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, FlatList } from "react-native"
+import { View, FlatList, ActivityIndicator } from "react-native"
 import { observer } from "mobx-react-lite"
 import orderBy from "lodash/orderBy"
 import { Text } from "../../text/text"
@@ -68,7 +68,7 @@ export const CipherList = observer((props: CipherListProps) => {
     setSelectedItems,
     setAllItems,
   } = props
-  const { translate, getTeam, notify } = useMixins()
+  const { translate, getTeam, notify, color } = useMixins()
   const { getCiphersFromCache, updateCipher } = useCipherDataMixins()
   const { getCipherInfo } = useCipherHelpersMixins()
   const { cipherStore, user } = useStores()
@@ -95,6 +95,7 @@ export const CipherList = observer((props: CipherListProps) => {
 
   const [checkedItem, setCheckedItem] = useState("")
 
+  const [isSearching, setIsSearching] = useState(true)
   // ------------------------ COMPUTED ----------------------------
 
   const isShared = (organizationId: string) => {
@@ -112,12 +113,18 @@ export const CipherList = observer((props: CipherListProps) => {
   }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
 
   useEffect(() => {
+    if (!!searchText) setIsSearching(true)
+    if (!searchText && isSearching) {
+      setIsSearching(false)
+    }
+  }, [searchText])
+
+  useEffect(() => {
     if (checkedItem) {
       toggleItemSelection(checkedItem)
       setCheckedItem(null)
     }
   }, [checkedItem, selectedItems])
-
   // ------------------------ METHODS ----------------------------
 
   // Get ciphers list
@@ -200,14 +207,12 @@ export const CipherList = observer((props: CipherListProps) => {
     // Delay loading
     setTimeout(() => {
       onLoadingChange && onLoadingChange(false)
-    }, 50)
+    }, 100)
     // t.final()
     // Done
     setCiphers(res)
     setAllItems(res.map((c) => c.id))
   }
-
-
 
   // Handle action menu open
   const openActionMenu = (item: CipherView) => {
@@ -352,7 +357,7 @@ export const CipherList = observer((props: CipherListProps) => {
     )
   }
 
-  return ciphers.length ? (
+  return (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
@@ -464,6 +469,24 @@ export const CipherList = observer((props: CipherListProps) => {
         data={ciphers}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
+        ListEmptyComponent={
+          !!emptyContent && !searchText.trim() && !isSearching ? (
+            <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
+          ) : (
+            <View style={{ paddingHorizontal: 20 }}>
+              {!!searchText ? (
+                <Text
+                  text={translate("error.no_results_found") + ` '${searchText}'`}
+                  style={{
+                    textAlign: "center",
+                  }}
+                />
+              ) : (
+                <ActivityIndicator size={30} color={color.textBlack} />
+              )}
+            </View>
+          )
+        }
         getItemLayout={(data, index) => ({
           length: 71,
           offset: 71 * index,
@@ -471,17 +494,6 @@ export const CipherList = observer((props: CipherListProps) => {
         })}
       />
       {/* Cipher list end */}
-    </View>
-  ) : emptyContent && !searchText.trim() ? (
-    <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
-  ) : (
-    <View style={{ paddingHorizontal: 20 }}>
-      <Text
-        text={translate("error.no_results_found") + ` '${searchText}'`}
-        style={{
-          textAlign: "center",
-        }}
-      />
     </View>
   )
 })

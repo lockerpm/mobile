@@ -44,12 +44,22 @@ import {
   OnPremisePreLoginResult,
   SessionOtpLoginData,
   BusinessLoginMethodResult,
+  RegisterPasskeyOptionData,
+  RegisterPasskeyData,
+  LoginMethodResult,
+  AuthPasskeyData,
+  WebAuthListCredentialsResult,
 } from "./api.types"
 import { Api } from "./api"
-import { getGeneralApiProblem } from "./api-problem"
+import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import { Logger } from "../../utils/logger"
 import { IS_IOS } from "../../config/constants"
 import { PolicyType } from "../../config/types"
+import {
+  PasskeyAuthenticationRequest,
+  PasskeyRegistrationRequest,
+  PasskeyRegistrationResult,
+} from "react-native-passkey/lib/typescript/Passkey"
 
 export class UserApi {
   private api: Api
@@ -81,6 +91,83 @@ export class UserApi {
   }
 
   // ID login
+  async loginMethod(username: string): Promise<LoginMethodResult> {
+    try {
+      this.api.apisauce.deleteHeader("Authorization")
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/sso/auth/method`, {
+        username,
+      })
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const data = response.data
+
+      return { kind: "ok", data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  // authentication PASSKEY
+  async authPasskeyOptions(
+    username: string,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: PasskeyAuthenticationRequest
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      this.api.apisauce.deleteHeader("Authorization")
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/sso/users/webauthn/auth/options",
+        { username },
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "unknown", temporary: true }
+    }
+  }
+
+  async authPasskey(payload: AuthPasskeyData): Promise<LoginResult> {
+    try {
+      this.api.apisauce.deleteHeader("Authorization")
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/sso/users/webauthn/auth",
+        payload,
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const data = response.data
+
+      return { kind: "ok", data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "unknown", temporary: true }
+    }
+  }
+
+  // ID login
   async login(payload: LoginData, deviceId: string, isOtp?: boolean): Promise<LoginResult> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
@@ -106,9 +193,10 @@ export class UserApi {
   }
 
   // ID social login
-  async socialLogin(payload: SocialLoginData): Promise<SocialLoginResult> {
+  async socialLogin(payload: SocialLoginData, deviceId: string): Promise<SocialLoginResult> {
     try {
       this.api.apisauce.deleteHeader("Authorization")
+      this.api.apisauce.setHeader("device-id", deviceId)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/social", payload)
@@ -144,6 +232,159 @@ export class UserApi {
     } catch (e) {
       Logger.error(e.message)
       return { kind: "unknown", temporary: true }
+    }
+  }
+
+  // register PASSKEY
+  async registerPasskeyOptions(
+    payload: RegisterPasskeyOptionData,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: PasskeyRegistrationRequest
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      this.api.apisauce.deleteHeader("Authorization")
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/sso/users/webauthn/register/options",
+        payload,
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "unknown", temporary: true }
+    }
+  }
+
+  async registerPasskey(payload: RegisterPasskeyData): Promise<EmptyResult> {
+    try {
+      this.api.apisauce.deleteHeader("Authorization")
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        "/sso/users/webauthn/register",
+        payload,
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "unknown", temporary: true }
+    }
+  }
+
+  // register PASSKEY
+  // async enablePasskeyOptions(
+  //   token: string,
+  //   algorithms: string[],
+  // ): Promise<
+  //   | {
+  //       kind: "ok"
+  //       data: PasskeyRegistrationRequest
+  //     }
+  //   | GeneralApiProblem
+  // > {
+  //   try {
+  //     this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+
+  //     // make the api call
+  //     const response: ApiResponse<any> = await this.api.apisauce.post(
+  //       "sso/users/me/webauthn/enable/options",
+  //       { algorithms },
+  //     )
+  //     // the typical ways to die when calling an api
+  //     if (!response.ok) {
+  //       const problem = getGeneralApiProblem(response)
+  //       if (problem) return problem
+  //     }
+
+  //     return { kind: "ok", data: response.data }
+  //   } catch (e) {
+  //     Logger.error(e.message)
+  //     return { kind: "unknown", temporary: true }
+  //   }
+  // }
+
+  // async enablePasskey(token: string, payload: PasskeyRegistrationResult): Promise<EmptyResult> {
+  //   try {
+  //     this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+
+  //     // make the api call
+  //     const response: ApiResponse<any> = await this.api.apisauce.post(
+  //       "/sso/users/me/webauthn/enable",
+  //       { response: payload },
+  //     )
+  //     // the typical ways to die when calling an api
+  //     if (!response.ok) {
+  //       const problem = getGeneralApiProblem(response)
+  //       if (problem) return problem
+  //     }
+
+  //     return { kind: "ok" }
+  //   } catch (e) {
+  //     Logger.error(e.message)
+  //     return { kind: "unknown", temporary: true }
+  //   }
+  // }
+
+  async disablePasskey(token: string, credentialsId: string): Promise<EmptyResult> {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        `/sso/users/me/webauthn/disable/${credentialsId}`,
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "unknown", temporary: true }
+    }
+  }
+
+  async webAuthListCredentials(
+    token: string,
+    paging: number,
+  ): Promise<WebAuthListCredentialsResult> {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+
+      // make the api call
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/sso/users/me/webauthn/list?paging=${paging}`,
+      )
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      const data = response.data
+
+      return { kind: "ok", data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
     }
   }
 
@@ -306,9 +547,14 @@ export class UserApi {
   // --------------------- LOCKER -----------------------------
 
   // Get PM API token
-  async getPMToken(token: string, payload: GetPMTokenData): Promise<GetPMTokenResult> {
+  async getPMToken(
+    token: string,
+    payload: GetPMTokenData,
+    deviceId: string,
+  ): Promise<GetPMTokenResult> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader("device-id", deviceId)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post("/sso/access_token", payload)
@@ -1251,6 +1497,7 @@ export class UserApi {
       return { kind: "bad-data" }
     }
   }
+
   async onPremisePreLogin(email: string): Promise<OnPremisePreLoginResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(

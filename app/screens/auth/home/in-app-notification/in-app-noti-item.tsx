@@ -2,7 +2,7 @@ import React from "react"
 import { useNavigation } from "@react-navigation/native"
 import { NotificationCategory } from "../../../../config/types"
 import { AutoImage as Image, Text } from "../../../../components"
-import { TouchableOpacity, View } from "react-native"
+import { Linking, TouchableOpacity, View } from "react-native"
 import { relativeTime } from "../../../../utils/relative-time"
 import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
@@ -72,8 +72,12 @@ export const NotiListItem = (props: Props) => {
         onPress = () => { }
         break
       case NotificationCategory.PW_TIPS:
+        title = translate('noti_setting.tips')
         source = require('./assets/pw-tips.png')
-        onPress = () => { }
+        onPress = () => { 
+          const { link } = metadata
+          Linking.openURL(link[user.language])
+        }
         break
     }
 
