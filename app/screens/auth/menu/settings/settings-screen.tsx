@@ -174,7 +174,7 @@ export const SettingsScreen = observer(() => {
       value: false,
       onChage:  () => {
         Linking.openURL('https://id.locker.io/security/webauthn').catch((e) => {
-          Linking.openURL('https://id-staging.locker.io/security/webauthn')
+          Linking.openURL('https://id.locker.io/security/webauthn')
         })
       },
     },
@@ -356,7 +356,7 @@ export const SettingsScreen = observer(() => {
 
         {/* Passkey */}
         <SettingsItem
-          name={"Login with passkey"}
+          name={translate("passkey.login_passkey_setting")}
           action={settings.passkey.onChage}
          
         />

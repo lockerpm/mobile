@@ -181,6 +181,7 @@ export const MixinsProvider = observer(
 
     // Notify based on api error
     const notifyApiError = async (problem: GeneralApiProblem) => {
+      console.log(problem.kind)
       switch (problem.kind) {
         case "cannot-connect":
           notify("error", translate("error.cannot_connect"))

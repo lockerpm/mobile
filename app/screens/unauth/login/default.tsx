@@ -13,7 +13,6 @@ import { useNavigation } from "@react-navigation/native"
 import { Passkey, PasskeyAuthenticationResult } from "react-native-passkey"
 import { PasskeyAuthenticationRequest } from "react-native-passkey/lib/typescript/Passkey"
 import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "../../../utils/passkey"
-import { Logger } from "../../../utils/logger"
 
 type Props = {
   onPremise: boolean
@@ -38,11 +37,12 @@ export const DefaultLogin = observer((props: Props) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [username, setUsername] = useState("")
+  const [username, setUsername] = useState("lg41ux@maily.org")
   const [password, setPassword] = useState("")
 
   const [loginMethod, setLoginMethod] = useState<METHOD>(METHOD.NONE)
-
+  const [passkeySupported, setPasskeySupported] = useState(false)
+  // const [showExtraPasskeyLogin, setShowExtraPasskeyLogin] = useState(false)
   const passwordRef = useRef(null)
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
@@ -159,13 +159,18 @@ export const DefaultLogin = observer((props: Props) => {
             onLoggedIn(false, "")
           }
         } else {
-          notifyApiError(res)
+          if (res.kind === 'unauthorized') {
+            notify('error', translate('passkey.error.login_failed'))
+          }
         }
         // The `authenticate` method returns a FIDO2 assertion result
         // Pass it to your server for verification
       } catch (error) {
         // Handle Error...
-        Logger.error(error)
+        if (error.error === 'UserCancelled') {
+          notify('error', translate('passkey.error.user_cancel'))
+          setLoginMethod(METHOD.PASSWORD)
+        }
       }
     } else {
       notifyApiError(resAuthPasskeyOptions)
@@ -181,6 +186,7 @@ export const DefaultLogin = observer((props: Props) => {
     const res = await Passkey.isSupported()
     if (res) {
       setLoginMethod(METHOD.NONE)
+      setPasskeySupported(true)
       return
     }
     setLoginMethod(METHOD.PASSWORD)
@@ -273,7 +279,12 @@ export const DefaultLogin = observer((props: Props) => {
         <FloatingInput
           isInvalid={isError}
           label={translate("login.email_or_username")}
-          onChangeText={setUsername}
+          onChangeText={(val) => {
+            if (passkeySupported && loginMethod !== METHOD.NONE) {
+              setLoginMethod(METHOD.NONE)
+            }
+            setUsername(val)
+          }}
           value={username}
           style={{ width: "100%", marginBottom: spacing.small }}
           onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
