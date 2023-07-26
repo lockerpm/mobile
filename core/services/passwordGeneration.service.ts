@@ -385,7 +385,7 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
         if (password == null || password.length === 0) {
             return null;
         }
-        let globalUserInputs = ['bitwarden', 'bit', 'warden'];
+        let globalUserInputs = ['CyStack', 'Cy', 'Sttack'];
         if (userInputs != null && userInputs.length > 0) {
             globalUserInputs = globalUserInputs.concat(userInputs);
         }

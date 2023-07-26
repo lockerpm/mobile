@@ -11,28 +11,28 @@ import { AttachmentUploadDataResponse } from '../models/response/attachmentUploa
 import { SendFileUploadDataResponse } from '../models/response/sendFileUploadDataResponse';
 
 import { AzureFileUploadService } from './azureFileUpload.service';
-import { BitwardenFileUploadService } from './bitwardenFileUpload.service';
+import { CyStackFileUploadService } from './cystackFileUpload.service';
 
 export class FileUploadService implements FileUploadServiceAbstraction {
     private azureFileUploadService: AzureFileUploadService;
-    private bitwardenFileUploadService: BitwardenFileUploadService;
+    private cystackFileUploadService: CyStackFileUploadService;
 
     constructor(private logService: LogService, private apiService: ApiService) {
         this.azureFileUploadService = new AzureFileUploadService(logService);
-        this.bitwardenFileUploadService = new BitwardenFileUploadService(apiService);
+        this.cystackFileUploadService = new CyStackFileUploadService(apiService);
     }
 
     async uploadSendFile(uploadData: SendFileUploadDataResponse, fileName: EncString, encryptedFileData: EncArrayBuffer) {
         try {
             switch (uploadData.fileUploadType) {
                 case FileUploadType.Direct:
-                    await this.bitwardenFileUploadService.upload(fileName.encryptedString, encryptedFileData,
-                        fd => this.apiService.postSendFile(uploadData.sendResponse.id, uploadData.sendResponse.file.id, fd));
+                    await this.cystackFileUploadService.upload(fileName.encryptedString, encryptedFileData,
+                        fd => this.apiService.postSendFile(uploadData.sendResponse.id, uploadData.sendResponse.id, fd));
                     break;
                 case FileUploadType.Azure:
                     const renewalCallback = async () => {
                         const renewalResponse = await this.apiService.renewSendFileUploadUrl(uploadData.sendResponse.id,
-                            uploadData.sendResponse.file.id);
+                            uploadData.sendResponse.id);
                         return renewalResponse.url;
                     };
                     await this.azureFileUploadService.upload(uploadData.url, encryptedFileData,
@@ -53,7 +53,7 @@ export class FileUploadService implements FileUploadServiceAbstraction {
         try {
             switch (uploadData.fileUploadType) {
                 case FileUploadType.Direct:
-                    await this.bitwardenFileUploadService.upload(encryptedFileName.encryptedString, encryptedFileData,
+                    await this.cystackFileUploadService.upload(encryptedFileName.encryptedString, encryptedFileData,
                         fd => this.apiService.postAttachmentFile(response.id, uploadData.attachmentId, fd));
                     break;
                 case FileUploadType.Azure:

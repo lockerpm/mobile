@@ -35,7 +35,6 @@ export class NotificationsService implements NotificationsServiceAbstraction {
 
     async init(environmentService: EnvironmentService): Promise<void> {
         this.inited = false;
-        this.url = 'https://notifications.bitwarden.com';
         if (environmentService.notificationsUrl != null) {
             this.url = environmentService.notificationsUrl;
         } else if (environmentService.baseUrl != null) {
