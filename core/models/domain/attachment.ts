@@ -41,11 +41,11 @@ export class Attachment extends Domain {
 
         if (this.key != null) {
             let cryptoService: CryptoService;
-            const containerService = (Utils.global as any).bitwardenContainerService;
+            const containerService = (Utils.global as any).cyStackContainerService;
             if (containerService) {
                 cryptoService = containerService.getCryptoService();
             } else {
-                throw new Error('global bitwardenContainerService not initialized.');
+                throw new Error('global cyStackContainerService not initialized.');
             }
 
             try {

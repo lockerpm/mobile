@@ -60,7 +60,7 @@ export class ExportService implements ExportServiceAbstraction {
             this.padNumber(now.getHours(), 2) + '' + this.padNumber(now.getMinutes(), 2) +
             this.padNumber(now.getSeconds(), 2);
 
-        return 'bitwarden' + (prefix ? ('_' + prefix) : '') + '_export_' + dateString + '.' + extension;
+        return 'locker' + (prefix ? ('_' + prefix) : '') + '_export_' + dateString + '.' + extension;
     }
 
     private async getDecryptedExport(format: 'json' | 'csv'): Promise<string> {

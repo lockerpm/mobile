@@ -1134,5 +1134,18 @@
     },
     "delete_expired": "Xoá chia sẻ hết hạn",
     "shared_begin": "Được chia sẻ {{time}}"
+  },
+  "passkey": {
+    "error": {
+      "user_cancel": "Người dùng huỷ yêu cầu.",
+      "login_failed": "Đăng nhập bằng passkey thất bại."
+    },
+    "sign_up": {
+      "continue_password": "Tiếp tục với mật khẩu",
+      "signup_passkey": "Đăng nhập bằng passkey",
+      "signup_password": "Đăng nhập bằng mật khẩu"
+    },
+    "login_passkey_setting": "Đăng nhập với passkeys",
+    "login_passkey": "Đăng nhập bằng passkey"
   }
 }
