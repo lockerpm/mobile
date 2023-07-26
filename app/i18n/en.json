@@ -1141,5 +1141,18 @@
     },
     "delete_expired": "Delete expired item",
     "shared_begin": "Shared {{time}}"
+  },
+  "passkey": {
+    "error": {
+      "user_cancel": "The user cancelled the request.",
+      "login_failed": "Failed to log in with passkey."
+    },
+    "sign_up": {
+      "continue_password": "Continue with password",
+      "signup_passkey": "Sign up with passkey",
+      "signup_password": "Sign up with password"
+    },
+    "login_passkey_setting": "Login with passkeys",
+    "login_passkey": "Log in with passkey"
   }
 }

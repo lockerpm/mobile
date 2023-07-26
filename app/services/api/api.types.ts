@@ -32,8 +32,26 @@ import {
   SubdomainData,
   Enterprise,
 } from "../../config/types/api"
+import { PasskeyAuthenticationResult, PasskeyRegistrationResult } from "react-native-passkey"
 
 // ------------------ Response ------------------------
+
+export type WebAuthListCredentialsResult =
+  | {
+      kind: "ok"
+      data: WebauthCredential[]
+    }
+  | GeneralApiProblem
+
+export type LoginMethodResult =
+  | {
+      kind: "ok"
+      data: {
+        webauthn: boolean
+        is_random_password: boolean
+      }
+    }
+  | GeneralApiProblem
 
 export type LoginResult =
   | {
@@ -416,6 +434,10 @@ export type LoginData = {
   save_device?: boolean
 }
 
+export type AuthPasskeyData = {
+  username: string,
+  response: PasskeyAuthenticationResult
+}
 export type GetPMTokenData = {
   SERVICE_URL: "/"
   SERVICE_SCOPE: "pwdmanager"
@@ -433,6 +455,19 @@ export type RegisterData = {
   request_code: string
   scope: string
   utm_source?: string
+}
+
+
+export type RegisterPasskeyOptionData = {
+  algorithms: string[]
+  email: string
+  full_name: string
+}
+
+export type RegisterPasskeyData = RegisterData & {
+  response: PasskeyRegistrationResult & {
+    authenticatorAttachment: string
+  }
 }
 
 export type SocialLoginData = {
@@ -746,4 +781,13 @@ export type EnterpriseInvitation = {
   owner_email: string
   role: AccountRoleText
   status: EnterpriseInvitationStatus
+}
+
+export type WebauthCredential = {
+  id: string
+  created_time: number
+  webauthn_credential_id: string
+  webauthn_public_key: string
+  name: string
+  last_used_time: number
 }

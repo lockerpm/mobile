@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { TextStyle, View, Switch, Linking } from "react-native"
+import { TextStyle, View, Switch, Linking, Alert } from "react-native"
 import { Layout, Text, Header, Select } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { commonStyles, fontSize } from "../../../../theme"
@@ -13,16 +13,16 @@ import { IS_IOS } from "../../../../config/constants"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 import moment from "moment"
 
+
 const SECTION_TITLE: TextStyle = {
   fontSize: fontSize.small,
   marginHorizontal: 20,
   marginBottom: 12,
 }
-
 export const SettingsScreen = observer(() => {
   const navigation = useNavigation()
   const { user, uiStore, cipherStore } = useStores()
-  const { notify, isBiometricAvailable, translate, color } = useMixins()
+  const { notify, isBiometricAvailable, translate, color, notifyApiError } = useMixins()
   const { startSyncProcess } = useCipherDataMixins()
 
   // ----------------------- PARAMS -----------------------
@@ -58,6 +58,7 @@ export const SettingsScreen = observer(() => {
     notify("success", translate("success.biometric_enabled"))
   }
 
+  
   const updateAutofillFaceIdSetting = async (enabled: boolean) => {
     if (!IS_IOS) {
       return
@@ -169,6 +170,14 @@ export const SettingsScreen = observer(() => {
         },
       ],
     },
+    passkey: {
+      value: false,
+      onChage:  () => {
+        Linking.openURL('https://id.locker.io/security/webauthn').catch((e) => {
+          Linking.openURL('https://id.locker.io/security/webauthn')
+        })
+      },
+    },
     biometric: {
       value: user.isBiometricUnlock,
       onChage: (isActive: boolean) => {
@@ -180,6 +189,7 @@ export const SettingsScreen = observer(() => {
         }
       },
     },
+
     timeout: {
       value: user.appTimeout || 0,
       onChange: user.setAppTimeout,
@@ -343,6 +353,13 @@ export const SettingsScreen = observer(() => {
           action={() => navigation.navigate("autofillService")}
         />
         {/* Autofill */}
+
+        {/* Passkey */}
+        <SettingsItem
+          name={translate("passkey.login_passkey_setting")}
+          action={settings.passkey.onChage}
+         
+        />
 
         {/* Biometric */}
         <SettingsItem
