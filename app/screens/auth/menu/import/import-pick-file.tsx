@@ -26,12 +26,7 @@ export const ImportPickFile = (props: Props) => {
 
     // -------------------- COMPUTED --------------------
 
-    const cystackOptions = [
-        { name: 'Locker (json)', id: 'cystackjson' },
-        { name: 'Locker (csv)', id: 'cystackcsv' }
-    ]
     const formats = [
-        ...cystackOptions,
         ...importService.featuredImportOptions,
         ...(importService.regularImportOptions || []).sort((a, b) => {
             if (a.name == null && b.name != null) {
