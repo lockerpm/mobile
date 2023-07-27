@@ -273,7 +273,7 @@ export const DefaultLogin = observer((props: Props) => {
         {/* Username input end */}
 
         {/* Password input */}
-        <FloatingInput
+        {/* <FloatingInput
           outerRef={passwordRef}
           isPassword
           isInvalid={isError}
@@ -283,7 +283,6 @@ export const DefaultLogin = observer((props: Props) => {
           style={{ width: "100%" }}
           onSubmitEditing={handleLogin}
         />
-        {/* Password input end */}
 
         <View
           style={{
@@ -305,7 +304,7 @@ export const DefaultLogin = observer((props: Props) => {
             marginBottom: spacing.medium,
             marginTop: spacing.medium,
           }}
-        />
+        /> */}
         {loginMethod === METHOD.PASSWORD && (
           <FloatingInput
             outerRef={passwordRef}

@@ -20,8 +20,6 @@
 		7C306DB127B6467900F64944 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C306DB027B6467900F64944 /* Colors.xcassets */; };
 		7C5BC5892A1261AD0056373C /* VinSsoWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5BC5882A1261AD0056373C /* VinSsoWebViewController.swift */; };
 		7C5BC58B2A1263930056373C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5BC58A2A1263930056373C /* AppDelegate.swift */; };
-		7C5BC58D2A126A420056373C /* VinCSSFido2ClientSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C5BC58C2A126A410056373C /* VinCSSFido2ClientSDK.xcframework */; };
-		7C5BC58E2A126A420056373C /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7C5BC58C2A126A410056373C /* VinCSSFido2ClientSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
 		7C7234922A0CAA870018DE61 /* RNVinSSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7234912A0CAA870018DE61 /* RNVinSSO.swift */; };
@@ -45,10 +43,12 @@
 		7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3335279AA04E0000B15E /* LoginListViewController.swift */; };
 		7CADBA04281A5E6600353A83 /* RCTAutofillServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CADBA03281A5E6600353A83 /* RCTAutofillServiceIos.m */; };
 		7CADBA06281A5E8A00353A83 /* RNAutofillServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CADBA05281A5E8A00353A83 /* RNAutofillServiceIos.swift */; };
+		7CC06D2F2A71361E006460A8 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
+		7CC06D312A713709006460A8 /* VinCSSFido2ClientSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C5BC58C2A126A410056373C /* VinCSSFido2ClientSDK.xcframework */; };
+		7CC06D322A713709006460A8 /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7C5BC58C2A126A410056373C /* VinCSSFido2ClientSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		CA3BCB36281A78F3007A0503 /* container in Resources */ = {isa = PBXBuildFile; fileRef = CA3BCB35281A78F2007A0503 /* container */; };
-		CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CA53478F27181AB400BA4901 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CA9F41E927183FC300B0C0A5 /* KeychainAccess */; };
@@ -81,13 +81,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		7C5BC53A2A0CFBDE0056373C /* Embed Frameworks */ = {
+		7CC06D332A713709006460A8 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				7C5BC58E2A126A420056373C /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */,
+				7CC06D322A713709006460A8 /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -207,8 +207,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C5BC58D2A126A420056373C /* VinCSSFido2ClientSDK.xcframework in Frameworks */,
-				CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */,
+				7CC06D312A713709006460A8 /* VinCSSFido2ClientSDK.xcframework in Frameworks */,
+				7CC06D2F2A71361E006460A8 /* AuthenticationServices.framework in Frameworks */,
 				CBBE6FC25F0247D122205942 /* libPods-Locker.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -517,7 +517,7 @@
 				CA53479F27181AB400BA4901 /* Embed App Extensions */,
 				660A1716E0E95A863DA0D28F /* [CP-User] [RNFB] Core Configuration */,
 				7C83F64427FC37F100F60DAE /* ShellScript */,
-				7C5BC53A2A0CFBDE0056373C /* Embed Frameworks */,
+				7CC06D332A713709006460A8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1195,7 +1195,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 122;
+				CURRENT_PROJECT_VERSION = 123;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
@@ -1236,7 +1236,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 122;
+				CURRENT_PROJECT_VERSION = 123;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
@@ -1454,7 +1454,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 122;
+				CURRENT_PROJECT_VERSION = 123;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = "Staging Locker";
 				ENABLE_BITCODE = NO;
@@ -1689,7 +1689,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 122;
+				CURRENT_PROJECT_VERSION = 123;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = "Staging Locker";
 				ENABLE_BITCODE = NO;
