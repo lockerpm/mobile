@@ -451,7 +451,10 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
 
     async makeSendKey(keyMaterial: ArrayBuffer): Promise<SymmetricCryptoKey> {
-        const sendKey = await this.cryptoFunctionService.hkdf(keyMaterial, 'cystack-send', 'send', 64, 'sha256');
+        const salt = new Uint8Array([
+            98, 105, 116, 119, 97, 114, 100, 101, 110, 45, 115, 101, 110, 100
+          ])
+        const sendKey = await this.cryptoFunctionService.hkdf(keyMaterial, salt, 'send', 64, 'sha256');
         return new SymmetricCryptoKey(sendKey);
     }
 
