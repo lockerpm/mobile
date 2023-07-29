@@ -216,13 +216,16 @@ export const InitScreen = observer(() => {
             email: user.email,
           })
         }
+        else {
+          navigation.navigate("login")
+        }
         return
       }
     }
 
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
 
-    if (userRes.kind === "ok" && userPwRes.kind === "ok") {
+    if ([ "ok", "unauthorized"].includes(userRes.kind) && [ "ok", "unauthorized"].includes(userPwRes.kind)) {
       goLockOrCreatePassword()
     } else {
       navigation.navigate("login")
