@@ -1142,8 +1142,8 @@
     },
     "sign_up": {
       "continue_password": "Tiếp tục với mật khẩu",
-      "signup_passkey": "Đăng nhập bằng passkey",
-      "signup_password": "Đăng nhập bằng mật khẩu"
+      "signup_passkey": "Đăng ký bằng passkey",
+      "signup_password": "Đăng ký bằng mật khẩu"
     },
     "login_passkey_setting": "Đăng nhập với passkeys",
     "login_passkey": "Đăng nhập bằng passkey"
