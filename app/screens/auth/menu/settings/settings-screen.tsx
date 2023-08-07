@@ -12,6 +12,7 @@ import { AutofillDataType, loadShared, saveShared } from "../../../../utils/keyc
 import { IS_IOS } from "../../../../config/constants"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 import moment from "moment"
+import { Utils } from "../../../../services/core-service/utils"
 
 
 const SECTION_TITLE: TextStyle = {
@@ -173,9 +174,7 @@ export const SettingsScreen = observer(() => {
     passkey: {
       value: false,
       onChage:  () => {
-        Linking.openURL('https://id.locker.io/security/webauthn').catch((e) => {
-          Linking.openURL('https://id.locker.io/security/webauthn')
-        })
+          Linking.openURL(`https://id.locker.io/authenticate?token=${encodeURI(user.apiToken)}&path=${encodeURI('/security/webauthn')}`)
       },
     },
     biometric: {

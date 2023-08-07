@@ -69,7 +69,7 @@ ios/Podfile.lock
 
 # Expo
 .expo/*
-bin/Exponent.app
+bin/Exponent.appw
 
 npm-debug.*
 *.jks
@@ -91,5 +91,6 @@ app/config/.env.staging
 
 android/gradle.properties
 android/app/my-upload-key.keystore
-
 android/app/google-services.json
+
+/ios/Firebase/
