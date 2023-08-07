@@ -13,6 +13,7 @@ import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { CipherView } from "../../../../core/models/view"
 import { CipherType } from "../../../../core/enums"
 import { getTOTP, parseOTPUri } from "../../../utils/totp"
+import { parseSearchText } from "../../../utils/Autofill"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -26,9 +27,9 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
   const { mode } = route.params
   const { getCiphersFromCache } = useCipherDataMixins()
   // -------------------- PARAMS ----------------------------
-
+  
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState(uiStore.deepLinkUrl || '')
+  const [searchText, setSearchText] = useState(parseSearchText(uiStore.deepLinkUrl )|| '')
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
     orderField: 'revisionDate',
