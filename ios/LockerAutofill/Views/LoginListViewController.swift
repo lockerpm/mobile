@@ -34,8 +34,9 @@ class LoginListViewController: UIViewController {
     self.tableView.delegate = self
     self.tableView.dataSource = self
     
-    self.searchBar.text = delegate.uri
+    self.searchBar.text = prepareInitSearch(searchStr: delegate.uri)
     
+    print(prepareInitSearch(searchStr: delegate.uri))
     var initCredentials: [AutofillData] = []
 
     // get matches credentiral username
@@ -48,8 +49,16 @@ class LoginListViewController: UIViewController {
     filterCredentials = initCredentials
   }
   
+  
+  
   @IBAction func cancel(_ sender: AnyObject?) {
     delegate.cancel()
+  }
+  
+  func prepareInitSearch(searchStr: String ) ->String {
+    let meaninglessSearch: [String] = ["com", "net", "app", "package", "io"]
+    let patterns = searchStr.components(separatedBy: ".").filter { !meaninglessSearch.contains($0)}
+    return patterns.joined(separator: " ")
   }
   
   func completeRequest(data: AutofillData){
@@ -77,18 +86,24 @@ extension LoginListViewController: UISearchBarDelegate {
   }
   
   private func isMatchCredentials(credential: AutofillData, searchPattern: String) -> Bool {
+    let patterns = searchPattern.components(separatedBy: " ")
+    
     let username: String = credential.username.lowercased()
     let uri = credential.uri.lowercased()
     let name = credential.name.lowercased()
-    if username.contains(searchPattern.lowercased()) {
-        return true
+    
+    for pattern in patterns {
+      if username.contains(pattern.lowercased()) {
+          return true
+      }
+      if uri.contains(pattern.lowercased()) {
+          return true
+      }
+      if name.contains(pattern.lowercased()) {
+          return true
+      }
     }
-    if uri.contains(searchPattern.lowercased()) {
-        return true
-    }
-    if name.contains(searchPattern.lowercased()) {
-        return true
-    }
+  
     return false
   }
 }

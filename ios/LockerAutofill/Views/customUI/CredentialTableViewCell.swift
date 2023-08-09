@@ -23,8 +23,7 @@ class CredentialTableViewCell: UITableViewCell {
   
   func makeCell(credential: AutofillData){
     self.credentialID = credential.id
-    self.username.text = credential.username
-    self.uri.text = credential.uri
+    self.username.text = credential.name
+    self.uri.text = credential.username ?? credential.uri
   }
-  
 }
