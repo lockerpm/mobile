@@ -60,11 +60,6 @@
       </intent-filter>
     </activity>
 
-    <meta-data android:name="asset_statements" android:resource="@string/asset_statements" />
-
-    <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-    <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
-
     <service
       android:exported="false"
       android:name=".autofill.LockerAutoFillService"
@@ -79,6 +74,10 @@
       />
     </service>
     
+
+    <meta-data android:name="asset_statements" android:resource="@string/asset_statements" />
+    <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+    <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
     <meta-data android:name="io.sentry.anr.enable" android:value="false" />
     <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
     <meta-data android:name="io.intercom.android.sdk.host" android:value=".intercom-messenger.com" />

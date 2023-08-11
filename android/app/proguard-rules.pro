@@ -9,6 +9,7 @@
 
 # Add any project specific keep options here:
 -keep class com.cystack.locker.BuildConfig { *; }
+
 -keep class com.facebook.jni.** { *; }
 -keep public class com.horcrux.svg.** {*;}
 -keep class com.facebook.react.turbomodule.** { *; }
