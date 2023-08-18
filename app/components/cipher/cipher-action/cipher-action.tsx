@@ -239,7 +239,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
                 />
               )}
 
-              {!lockerMasterPassword && !isInFolderShare && (
+              {!lockerMasterPassword && !isInFolderShare && !isShared && (
                 <ActionItem
                   onClose={onClose}
                   disabled={uiStore.isOffline}

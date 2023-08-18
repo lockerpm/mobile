@@ -34,15 +34,21 @@ class LoginListViewController: UIViewController {
     self.tableView.delegate = self
     self.tableView.dataSource = self
     
-    self.searchBar.text = prepareInitSearch(searchStr: delegate.uri)
+    let searchStr = prepareInitSearch(searchStr: delegate.uri)
+    
+    self.searchBar.text = searchStr
     
     print(prepareInitSearch(searchStr: delegate.uri))
     var initCredentials: [AutofillData] = []
 
-    // get matches credentiral username
-    for credential in credentials {
-      if (isMatchCredentials(credential: credential, searchPattern: delegate.uri)) {
-        initCredentials.append(credential)
+    if searchStr.isEmpty {
+      initCredentials = credentials
+    } else {
+      // get matches credentiral username
+      for credential in credentials {
+        if (isMatchCredentials(credential: credential, searchPattern: searchStr)) {
+          initCredentials.append(credential)
+        }
       }
     }
 
@@ -70,17 +76,21 @@ class LoginListViewController: UIViewController {
 extension LoginListViewController: UISearchBarDelegate {
   //mark search bar config, handle search function.
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
     filterCredentials = []
 
-    if searchText == "" {
+    if trimmedSearch.isEmpty {
       filterCredentials = credentials
-    }
-    // get matches credentiral username
-    for credential in credentials {
-      if (isMatchCredentials(credential: credential, searchPattern: searchText)) {
-          filterCredentials.append(credential)
+    } else {
+      // get matches credentiral username
+      for credential in credentials {
+        if (isMatchCredentials(credential: credential, searchPattern: trimmedSearch)) {
+            filterCredentials.append(credential)
+        }
       }
     }
+    print(trimmedSearch, "Ádkjasbdjkhasbdhjbasd")
+
 
     self.tableView.reloadData()
   }

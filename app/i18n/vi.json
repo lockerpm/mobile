@@ -612,8 +612,8 @@
     "share_folder": {
       "error_share_item": "Không thể chia sẻ thư mục chứa các mục đã được chia sẻ trước đó. Vui lòng dừng hoặc xóa các mục chia sẻ và thử lại",
       "manage_user": "Quản lý chia sẻ",
-      "share_with": "Thư mục này được chia sẻ với ",
-      "select_member": "Thêm người dùng vào thư mục được chia sẻ",
+      "share_with": "Mục này được chia sẻ với ",
+      "select_member": "Thêm người dùng vào mục được chia sẻ",
       "add_email": "Thêm email thành viên",
       "viewer": "Thành viên",
       "editor": "Quản trị",

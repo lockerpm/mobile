@@ -613,8 +613,8 @@
     "share_folder": {
       "error_share_item": "Folders with shared items can’t be shared. Remove or stop shared items and try again",
       "manage_user": "Manage Share",
-      "share_with": "This folder has been shared with",
-      "select_member": "Shared this folder with",
+      "share_with": "This item has been shared with",
+      "select_member": "Shared this item with",
       "add_email": "Add email to share",
       "viewer": "Viewer",
       "editor": "Editor",
