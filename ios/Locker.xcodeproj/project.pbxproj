@@ -18,6 +18,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* CyStackLockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CyStackLockerTests.m */; };
 		7C306D7D27B4B5A600F64944 /* AutofillHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */; };
 		7C306DB127B6467900F64944 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C306DB027B6467900F64944 /* Colors.xcassets */; };
+		7C575E432A984E9200DE0C42 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
 		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
 		7C748AFF280EC58200424E43 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C748AFE280EC58100424E43 /* Config.xcconfig */; };
@@ -43,7 +44,6 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		846A78FADBDA6D5B3C41A6F1 /* libPods-Locker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D706E641FE35AF39B8E85A1 /* libPods-Locker.a */; };
 		CA3BCB36281A78F3007A0503 /* container in Resources */ = {isa = PBXBuildFile; fileRef = CA3BCB35281A78F2007A0503 /* container */; };
-		CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
 		CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CA53478F27181AB400BA4901 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CA9F41E927183FC300B0C0A5 /* KeychainAccess */; };
@@ -185,7 +185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA53478A27181A9C00BA4901 /* AuthenticationServices.framework in Frameworks */,
+				7C575E432A984E9200DE0C42 /* AuthenticationServices.framework in Frameworks */,
 				846A78FADBDA6D5B3C41A6F1 /* libPods-Locker.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -595,7 +595,7 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				7C7A47362A2DE8040002FCAD /* XCRemoteSwiftPackageReference "SwiftOTP.git" */,
+				7C7A47362A2DE8040002FCAD /* XCRemoteSwiftPackageReference "SwiftOTP" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -1144,6 +1144,7 @@
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CyStackLocker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1181,6 +1182,7 @@
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CyStackLocker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1395,6 +1397,7 @@
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CyStackLocker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1626,6 +1629,7 @@
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CyStackLocker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -2062,7 +2066,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7C7A47362A2DE8040002FCAD /* XCRemoteSwiftPackageReference "SwiftOTP.git" */ = {
+		7C7A47362A2DE8040002FCAD /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
 			requirement = {
@@ -2083,7 +2087,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		7C7A47372A2DE8040002FCAD /* SwiftOTP */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C7A47362A2DE8040002FCAD /* XCRemoteSwiftPackageReference "SwiftOTP.git" */;
+			package = 7C7A47362A2DE8040002FCAD /* XCRemoteSwiftPackageReference "SwiftOTP" */;
 			productName = SwiftOTP;
 		};
 		CA9F41E927183FC300B0C0A5 /* KeychainAccess */ = {

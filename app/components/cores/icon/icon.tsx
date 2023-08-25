@@ -96,6 +96,7 @@ export const iconRegistry = {
   'checkbox':  require('../../../../assets/icon/common/checkbox.png'),
   'check':  require('../../../../assets/icon/common/check.png'),
   'global':  require('../../../../assets/icon/common/global.png'),
+  'key-fill': require('../../../../assets/icon/common/key-fill.png'),
 }
 
 const $imageStyle: ImageStyle = {

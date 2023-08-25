@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../services/mixins"
 import { useStores } from "../../../../models"
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { PlanType } from "../../../../config/types"
 
 interface Props {
     imported: number
@@ -19,7 +18,7 @@ export const ImportResult = (props: Props) => {
     const { translate, color } = useMixins()
     const {user} = useStores()
     const {imported, total, isLimited, setIsLimited} = props
-    const isFreeAccount = user.plan?.alias === PlanType.FREE
+    const isFreeAccount = user.isFreePlan
     const isAllImported = imported == total
     const [isFree, setIsFree] = useState(true)
 

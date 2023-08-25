@@ -14,7 +14,7 @@ export const YourTrustedContactScreen = () => {
   const navigation = useNavigation()
   const { translate, color, notifyApiError } = useMixins()
   const { user } = useStores()
-  const isFree = user.plan.alias === PlanType.FREE
+  const isFree = user.isFreePlan
 
   // ----------------------- PARAMS -----------------------
   const [isShowAddModal, setIsShowAddModal] = useState(false)

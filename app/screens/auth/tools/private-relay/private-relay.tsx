@@ -33,7 +33,7 @@ export const PrivateRelay = observer(() => {
   const [showSubdomainDesc, setShowSubdomainDesc] = useState(false)
   const [subdomain, setSubdomain] = useState<SubdomainData>(null)
 
-  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
+  const isFreeAccount = user.isFreePlan
   const isReachLimit = isFreeAccount && alias.length >= FREE_PLAM_ALIAS_LIMIT
   const suffixitle = isFreeAccount ? ` (${alias.length}/5)` : ` (${alias.length})`
 

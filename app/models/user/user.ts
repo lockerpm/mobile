@@ -20,9 +20,8 @@ import DeviceInfo from "react-native-device-info"
 import moment from "moment"
 import { omit } from "ramda"
 import { AppEventType, EventBus } from "../../utils/event-bus"
-import { AccountType, EmergencyAccessType, PolicyType } from "../../config/types"
+import { AccountType, EmergencyAccessType, PlanType, PolicyType } from "../../config/types"
 import { Enterprise, UserTeam } from "../../config/types/api"
-import { PasskeyRegistrationResult } from "react-native-passkey"
 
 export enum AppTimeoutType {
   SCREEN_OFF = -1,
@@ -64,7 +63,7 @@ export const UserModel = types
     plan: types.maybeNull(
       types.frozen<{
         name: string
-        alias: string
+        alias: PlanType
         is_family: boolean
         cancel_at_period_end: boolean
         duration: "monthly" | "yearly"
@@ -96,6 +95,18 @@ export const UserModel = types
   })
   .extend(withEnvironment)
   .views((self) => ({
+    get isFreePlan() {
+      return self.plan && self.plan.alias === PlanType.FREE
+    },
+    get isFamilyPlan() {
+      return self.plan && self.plan.alias === PlanType.FAMILY
+    },
+    get isLifeTimePlan() {
+      return self.plan && self.plan.alias === PlanType.LIFETIME
+    },
+    get isShowPremiumFeature() {
+      return self.plan && self.plan.alias === PlanType.PREMIUM
+    },
     get isEnterprise() {
       return self.pwd_user_type === "enterprise" && self.enterprise
     },
@@ -186,7 +197,7 @@ export const UserModel = types
     },
     setPlan: (plan: {
       name: string
-      alias: string
+      alias: PlanType
       is_family: boolean
       cancel_at_period_end: boolean
       duration: "monthly" | "yearly"
@@ -288,20 +299,6 @@ export const UserModel = types
       self.notificationSettings = val
     },
 
-    // DEV
-    setUserFreePlan: () => {
-      if (__DEV__) {
-        self.plan = {
-          name: "Free",
-          is_family: false,
-          alias: "pm_free",
-          cancel_at_period_end: false,
-          duration: "monthly",
-          next_billing_time: 0,
-          payment_method: "mobile",
-        }
-      }
-    },
   }))
   .actions((self) => ({
     // -------------------- ID ------------------------
@@ -619,7 +616,7 @@ export const UserModel = types
         self.setPlan({
           name: "Premium",
           is_family: false,
-          alias: "pm_premium",
+          alias: PlanType.PREMIUM,
           cancel_at_period_end: false,
           duration: "monthly",
           next_billing_time: 0,

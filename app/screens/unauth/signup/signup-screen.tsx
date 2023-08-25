@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react"
-import { Linking, View } from "react-native"
+import { Linking, Platform, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
@@ -28,6 +28,7 @@ import {
   credentialCreationOptions,
   publicKeyCredentialWithAttestation,
 } from "../../../utils/passkey"
+import { Icon } from "../../../components/cores"
 
 export const SignupScreen = observer(() => {
   const { user, uiStore } = useStores()
@@ -141,7 +142,7 @@ export const SignupScreen = observer(() => {
     }
   }
 
-  const handleRegisterWebauth = async (captchaToken: string) => {
+  const handleRegisterWebauth = async (captchaToken: string, withSecurityKey?: boolean) => {
     // setIsLoading(true)
     const resPassKeyOptions = await user.registerPasskeyOptions({
       email,
@@ -154,8 +155,12 @@ export const SignupScreen = observer(() => {
           resPassKeyOptions.data,
         )
 
+        console.log(requestJson)
+
         // @ts-ignore
-        const result: PasskeyRegistrationResult = await Passkey.register(requestJson)
+        const result: PasskeyRegistrationResult = await Passkey.register(requestJson, {
+          withSecurityKey,
+        })
 
         const res = await user.registerPasskey({
           email,
@@ -226,6 +231,68 @@ export const SignupScreen = observer(() => {
     checkPasskeySupported()
   }, [])
   // ---------------- RENDER ---------------------
+
+  const RegisterWithPasskey = () => {
+    if (!isPasskeySupported) return null
+    if (Platform.OS === "ios") {
+      return (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginBottom: 12,
+          }}
+        >
+          <Button
+            preset="outline"
+            isLoading={isLoading}
+            isDisabled={isLoading || !email || !fullname || !agreed}
+            text={translate("passkey.sign_up.signup_passkey")}
+            onPress={() => {
+              getCaptchaToken().then(handleRegisterWebauth)
+            }}
+            style={{
+              width: "80%",
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+              borderRightWidth: 0,
+              height: 50,
+            }}
+          />
+          <Button
+            preset="outline"
+            style={{
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              width: "20%",
+              height: 50,
+              padding: undefined,
+            }}
+            onPress={() => {
+              getCaptchaToken().then((captchaToken) => handleRegisterWebauth(captchaToken, true))
+            }}
+          >
+            <Icon icon="key-fill" size={34} color={color.textBlack} />
+          </Button>
+        </View>
+      )
+    }
+    return (
+      <Button
+        preset="outline"
+        isLoading={isLoading}
+        isDisabled={isLoading || !email || !fullname || !agreed}
+        text={translate("passkey.sign_up.signup_passkey")}
+        onPress={() => {
+          getCaptchaToken().then(handleRegisterWebauth)
+        }}
+        style={{
+          width: "100%",
+          height: 50,
+        }}
+      />
+    )
+  }
 
   return (
     <Layout
@@ -408,7 +475,11 @@ export const SignupScreen = observer(() => {
         <Button
           isLoading={isLoading}
           isDisabled={isLoading || !formValidated}
-          text={isSignupWithPassword ? translate("passkey.sign_up.signup_password") : translate("passkey.sign_up.continue_password")}
+          text={
+            isSignupWithPassword
+              ? translate("passkey.sign_up.signup_password")
+              : translate("passkey.sign_up.continue_password")
+          }
           onPress={() => {
             if (isSignupWithPassword) {
               getCaptchaToken().then(handleRegister)
@@ -423,21 +494,7 @@ export const SignupScreen = observer(() => {
           }}
         />
 
-        {isPasskeySupported && (
-          <Button
-            preset="outline"
-            isLoading={isLoading}
-            isDisabled={isLoading || !email || !fullname || !agreed}
-            text={translate("passkey.sign_up.signup_passkey")}
-            onPress={() => {
-              getCaptchaToken().then(handleRegisterWebauth)
-            }}
-            style={{
-              width: "100%",
-              marginBottom: 12,
-            }}
-          />
-        )}
+        {RegisterWithPasskey()}
 
         <View style={commonStyles.CENTER_VIEW}>
           <Text

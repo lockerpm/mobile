@@ -83,7 +83,7 @@
     "passwords": "Mật khẩu",
     "password_not_match": "Mật khẩu không khớp",
     "phone": "Điện thoại",
-    "push_notifications": "Thông báo",
+    "push_notifications": "Thông báo về thiết bị",
     "regenerate": "Tạo lại",
     "reject": "Từ chối",
     "remove": "Xoá",
@@ -1003,7 +1003,7 @@
   },
   "noti_setting": {
     "in_app_noti": "Thông báo trên thiết bị",
-    "marketing": "Các email tiếp thị và quản cáo",
+    "marketing": "Các email tiếp thị và quảng cáo",
     "tips": "Mẹo và thủ thuật dùng mật khẩu",
     "breach_scan": "Kết quả quyét vi phạm dữ liệu",
     "item_sharing": "Chia sẻ dữ liệu",

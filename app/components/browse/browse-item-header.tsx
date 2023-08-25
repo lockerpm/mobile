@@ -75,8 +75,7 @@ export const BrowseItemHeader = observer((props: BrowseItemHeaderProps) => {
 
   // ----------------------- COMPUTED ------------------------
   
-  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
-
+  const isFreeAccount = user.isFreePlan
   // ----------------------- METHODS ------------------------
 
   const handleDelete = async () => {

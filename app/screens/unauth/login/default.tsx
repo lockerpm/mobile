@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from "react"
-import { View } from "react-native"
+import { Platform, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
 import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
+import { Icon } from "../../../components/cores"
 import { useMixins } from "../../../services/mixins"
 import { commonStyles, spacing } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
@@ -30,7 +31,7 @@ enum METHOD {
 export const DefaultLogin = observer((props: Props) => {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
-  const { translate, notify, notifyApiError, setApiTokens } = useMixins()
+  const { translate, notify, notifyApiError, setApiTokens , color} = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
   const { nextStep, onLoggedIn, handleForgot, onPremise } = props
   // ------------------ Params -----------------------
@@ -134,7 +135,7 @@ export const DefaultLogin = observer((props: Props) => {
     }
   }
 
-  const handleAuthWebauth = async () => {
+  const handleAuthWebauth = async (withSecurityKey?: boolean) => {
     const resAuthPasskeyOptions = await user.authPasskeyOptions(username)
     if (resAuthPasskeyOptions.kind === "ok") {
       try {
@@ -143,7 +144,7 @@ export const DefaultLogin = observer((props: Props) => {
         )
         // Call the `authenticate` method with the retrieved request in JSON format
         // A native overlay will be displayed
-        const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest)
+        const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest,  { withSecurityKey })
 
         const res = await user.authPasskey({
           username,
@@ -248,6 +249,62 @@ export const DefaultLogin = observer((props: Props) => {
   }
 
   // ------------------------------ RENDER -------------------------------
+  const AuthWithPasskey = () => {
+    if (!(!onPremise && showExtraPasskeyLogin)) return null
+    if (Platform.OS === "ios") {
+      return (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginBottom: 12,
+          }}
+        >
+          <Button
+            preset="outline"
+            isLoading={isLoading}
+            isDisabled={isLoading || !username }
+            text={translate("passkey.login_passkey")}
+            onPress={() => handleAuthWebauth(false)}
+            style={{
+              width: "80%",
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+              borderRightWidth: 0,
+              height: 50,
+            }}
+          />
+          <Button
+            preset="outline"
+            isDisabled={isLoading || !username }
+            style={{
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              width: "20%",
+              height: 50,
+              padding: undefined,
+            }}
+            onPress={() => handleAuthWebauth(true)}
+          >
+            <Icon icon="key-fill" size={34} color={color.textBlack} />
+          </Button>
+        </View>
+      )
+    }
+    return (
+      <Button
+        preset="outline"
+        isLoading={isLoading}
+        isDisabled={isLoading || !username }
+        text={translate("passkey.sign_up.signup_passkey")}
+        onPress={() => handleAuthWebauth(false)}
+        style={{
+          width: "100%",
+          height: 50,
+        }}
+      />
+    )
+  }
 
   // ------------------------------ RENDER -------------------------------
 
@@ -355,7 +412,7 @@ export const DefaultLogin = observer((props: Props) => {
           />
         )}
 
-        {!onPremise && showExtraPasskeyLogin && (
+        {/* {!onPremise && showExtraPasskeyLogin && (
           <Button
             preset="outline"
             isLoading={isLoading}
@@ -367,7 +424,8 @@ export const DefaultLogin = observer((props: Props) => {
               marginBottom: 12,
             }}
           />
-        )}
+        )} */}
+        {AuthWithPasskey()}
 
         {!onPremise && (
           <View style={commonStyles.CENTER_VIEW}>

@@ -5,11 +5,11 @@ import {
   PasskeyRegistrationResult,
 } from "react-native-passkey/lib/typescript/Passkey"
 import { Utils } from "../services/core-service/utils"
-import { Platform } from "react-native"
 
 export type Base64urlString = string
 
 export const credentialCreationOptions = (request: PasskeyRegistrationRequest) => {
+  console.log(request)
   return  {
     ...request,
     user: {
@@ -17,7 +17,15 @@ export const credentialCreationOptions = (request: PasskeyRegistrationRequest) =
       id: Utils.base64UrlToBase64(request.user.id),
     },
     challenge: Utils.base64UrlToBase64(request.challenge),
+    authenticatorSelection: {
+      ...request.authenticatorSelection,
+      authenticatorAttachment: "cross-platform",
+      requireResidentKey: true,
+      residentKey: "required", 
+    }
   }
+
+
   // return Platform.select({
   //   ios: {
   //     ...request,
