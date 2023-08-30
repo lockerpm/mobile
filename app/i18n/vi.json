@@ -1147,15 +1147,15 @@
       "passkey_options": "Cọn phương thức khởi tạo passkey cho “Locker”",
       "keychain" : {
         "title": "ICloud Keychain",
-        "label": "Đồng bộ trên các thiết bị có cùng Keychain."
+        "label": "Đồng bộ trên các thiết bị Apple của bạn."
       },
       "security_key": {
         "title": "Khoá bảo mật",
-        "label": "Sử dụng thiết bị bên ngoài."
+        "label": "Sử dụng khoá bảo mật bên ngoài."
       }
     },
     "login_passkey_setting": "Đăng nhập với passkeys",
     "login_passkey": "Đăng nhập bằng passkey",
-    "login_passkey_options": "Chọn một tùy chọn mà bạn đã lưu trữ mật mã của mình cho Locker"
+    "login_passkey_options": "Chọn một nơi mà bạn đã lưu trữ passkey cho Locker"
   }
 }
