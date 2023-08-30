@@ -3,7 +3,6 @@ import { Platform, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
 import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
-import { Icon } from "../../../components/cores"
 import { useMixins } from "../../../services/mixins"
 import { commonStyles, spacing } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
@@ -14,6 +13,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Passkey, PasskeyAuthenticationResult } from "react-native-passkey"
 import { PasskeyAuthenticationRequest } from "react-native-passkey/lib/typescript/Passkey"
 import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "../../../utils/passkey"
+import { IosPasskeyOptions } from "../signup/ios-passkey-options"
 
 type Props = {
   onPremise: boolean
@@ -48,6 +48,8 @@ export const DefaultLogin = observer((props: Props) => {
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
+  const [isShowCreatePasskeyOptions, setIsShowCreatePasskeyOptions] = useState(false)
+  const [isIcloudSelected, setIsIcloudSelected] = useState(true)
   // ------------------ Methods ----------------------
 
   const getLoginMethod = async () => {
@@ -55,7 +57,11 @@ export const DefaultLogin = observer((props: Props) => {
     if (res.kind === "ok") {
       if (res.data.webauthn) {
         setLoginMethod(METHOD.PASSKEY)
-        await handleAuthWebauth()
+        if (IS_IOS){
+          setIsShowCreatePasskeyOptions(true)
+        } else {
+          await handleAuthWebauth()
+        }
         setShowExtraPasskeyLogin(true)
         return
       }
@@ -142,6 +148,8 @@ export const DefaultLogin = observer((props: Props) => {
         const authRequest: PasskeyAuthenticationRequest = credentialAuthOptions(
           resAuthPasskeyOptions.data,
         )
+
+        // return
         // Call the `authenticate` method with the retrieved request in JSON format
         // A native overlay will be displayed
         const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest,  { withSecurityKey })
@@ -251,56 +259,23 @@ export const DefaultLogin = observer((props: Props) => {
   // ------------------------------ RENDER -------------------------------
   const AuthWithPasskey = () => {
     if (!(!onPremise && showExtraPasskeyLogin)) return null
-    if (Platform.OS === "ios") {
-      return (
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 12,
-          }}
-        >
-          <Button
-            preset="outline"
-            isLoading={isLoading}
-            isDisabled={isLoading || !username }
-            text={translate("passkey.login_passkey")}
-            onPress={() => handleAuthWebauth(false)}
-            style={{
-              width: "80%",
-              borderTopRightRadius: 0,
-              borderBottomRightRadius: 0,
-              borderRightWidth: 0,
-              height: 50,
-            }}
-          />
-          <Button
-            preset="outline"
-            isDisabled={isLoading || !username }
-            style={{
-              borderTopLeftRadius: 0,
-              borderBottomLeftRadius: 0,
-              width: "20%",
-              height: 50,
-              padding: undefined,
-            }}
-            onPress={() => handleAuthWebauth(true)}
-          >
-            <Icon icon="key-fill" size={34} color={color.textBlack} />
-          </Button>
-        </View>
-      )
-    }
     return (
       <Button
         preset="outline"
         isLoading={isLoading}
         isDisabled={isLoading || !username }
-        text={translate("passkey.sign_up.signup_passkey")}
-        onPress={() => handleAuthWebauth(false)}
+        text={translate("passkey.login_passkey")}
+        onPress={() => {
+          if (Platform.OS === "ios") {
+            setIsShowCreatePasskeyOptions(true)
+          } else {
+            handleAuthWebauth(false)
+          }
+        }}
         style={{
           width: "100%",
           height: 50,
+          marginBottom: 12
         }}
       />
     )
@@ -322,6 +297,22 @@ export const DefaultLogin = observer((props: Props) => {
             })
           }}
         />
+              {IS_IOS && (
+        <IosPasskeyOptions
+          isOpen={isShowCreatePasskeyOptions}
+          onClose={() => {
+            setIsShowCreatePasskeyOptions(false)
+          }}
+          label={translate('passkey.login_passkey_options')}
+          title={translate("common.login")}
+          isIcloudSelected={isIcloudSelected}
+          setIsIcloudSelected={setIsIcloudSelected}
+          action={async () => {
+            setIsShowCreatePasskeyOptions(false)
+            await handleAuthWebauth(!isIcloudSelected)
+          }}
+        />
+      )}
 
         <Image
           source={APP_ICON.icon}

@@ -297,7 +297,7 @@ export type QuickShareCipherResult =
   | {
       kind: "ok"
       data: {
-        access_id: String
+        access_id: string
         cipher_id: string
         id: string
       }
