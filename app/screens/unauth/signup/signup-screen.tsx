@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react"
-import { Linking, View } from "react-native"
+import { Linking, Platform, View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../../models"
@@ -28,6 +28,7 @@ import {
   credentialCreationOptions,
   publicKeyCredentialWithAttestation,
 } from "../../../utils/passkey"
+import { IosPasskeyOptions } from "./ios-passkey-options"
 
 export const SignupScreen = observer(() => {
   const { user, uiStore } = useStores()
@@ -53,6 +54,8 @@ export const SignupScreen = observer(() => {
   const [isSignupWithPassword, setIsSignupWithPassword] = useState(false)
   const [isPasskeySupported, setIsPasskeySupported] = useState(true)
 
+  const [isShowCreatePasskeyOptions, setIsShowCreatePasskeyOptions] = useState(false)
+  const [isIcloudSelected, setIsIcloudSelected] = useState(true)
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
   // ------------------------------ DATA -------------------------------
@@ -141,8 +144,11 @@ export const SignupScreen = observer(() => {
     }
   }
 
-  const handleRegisterWebauth = async (captchaToken: string) => {
-    // setIsLoading(true)
+  const handleRegisterWebauth = async (
+    email: string,
+    fullname: string,
+    withSecurityKey?: boolean,
+  ) => {
     const resPassKeyOptions = await user.registerPasskeyOptions({
       email,
       full_name: fullname,
@@ -155,16 +161,17 @@ export const SignupScreen = observer(() => {
         )
 
         // @ts-ignore
-        const result: PasskeyRegistrationResult = await Passkey.register(requestJson)
+        const result: PasskeyRegistrationResult = await Passkey.register(requestJson, {
+          withSecurityKey,
+        })
 
         const res = await user.registerPasskey({
           email,
-          password,
+          password: "",
           country,
-          confirm_password: confirmPassword,
+          confirm_password: "",
           full_name: fullname,
-          phone: phone ? phonePrefix + " " + phone : undefined,
-          request_code: captchaToken,
+          request_code: "",
           scope: "pwdmanager",
           utm_source: await getCookies("utm_source"),
           response: publicKeyCredentialWithAttestation(result),
@@ -182,6 +189,14 @@ export const SignupScreen = observer(() => {
       }
     } else {
       notifyApiError(resPassKeyOptions)
+    }
+  }
+
+  const onRegisterWebauth = async () => {
+    if (isIcloudSelected) {
+      handleRegisterWebauth(email, fullname)
+    } else {
+      handleRegisterWebauth(email, fullname, true)
     }
   }
 
@@ -227,6 +242,30 @@ export const SignupScreen = observer(() => {
   }, [])
   // ---------------- RENDER ---------------------
 
+  const RegisterWithPasskey = () => {
+    if (!isPasskeySupported) return null
+    return (
+      <Button
+        preset="outline"
+        isLoading={isLoading}
+        isDisabled={isLoading || !email || !fullname || !agreed}
+        text={translate("passkey.sign_up.signup_passkey")}
+        onPress={() => {
+          if (Platform.OS === "ios") {
+            setIsShowCreatePasskeyOptions(true)
+          } else {
+            handleRegisterWebauth(email, fullname)
+          }
+        }}
+        style={{
+          width: "100%",
+          height: 50,
+          marginBottom: 12,
+        }}
+      />
+    )
+  }
+
   return (
     <Layout
       isOverlayLoading={isScreenLoading}
@@ -254,6 +293,8 @@ export const SignupScreen = observer(() => {
         </View>
       }
     >
+      <RecaptchaChecker ref={captchaRef} />
+
       <LanguagePicker />
       {/* Modal */}
       <GitHubLoginModal
@@ -268,7 +309,23 @@ export const SignupScreen = observer(() => {
         }}
       />
 
-      <RecaptchaChecker ref={captchaRef} />
+      {IS_IOS && (
+        <IosPasskeyOptions
+          isOpen={isShowCreatePasskeyOptions}
+          onClose={() => {
+            setIsShowCreatePasskeyOptions(false)
+          }}
+          title={translate("common.sign_up")}
+          label={translate('passkey.sign_up.passkey_options')}
+          isIcloudSelected={isIcloudSelected}
+          setIsIcloudSelected={setIsIcloudSelected}
+          action={async () => {
+            setIsShowCreatePasskeyOptions(false)
+            await onRegisterWebauth()
+          }}
+        />
+      )}
+
       {/* Modal end */}
       <View style={{ alignItems: "center", paddingTop: "10%" }}>
         <Image
@@ -408,7 +465,11 @@ export const SignupScreen = observer(() => {
         <Button
           isLoading={isLoading}
           isDisabled={isLoading || !formValidated}
-          text={isSignupWithPassword ? translate("passkey.sign_up.signup_password") : translate("passkey.sign_up.continue_password")}
+          text={
+            isSignupWithPassword
+              ? translate("passkey.sign_up.signup_password")
+              : translate("passkey.sign_up.continue_password")
+          }
           onPress={() => {
             if (isSignupWithPassword) {
               getCaptchaToken().then(handleRegister)
@@ -423,21 +484,7 @@ export const SignupScreen = observer(() => {
           }}
         />
 
-        {isPasskeySupported && (
-          <Button
-            preset="outline"
-            isLoading={isLoading}
-            isDisabled={isLoading || !email || !fullname || !agreed}
-            text={translate("passkey.sign_up.signup_passkey")}
-            onPress={() => {
-              getCaptchaToken().then(handleRegisterWebauth)
-            }}
-            style={{
-              width: "100%",
-              marginBottom: 12,
-            }}
-          />
-        )}
+        {RegisterWithPasskey()}
 
         <View style={commonStyles.CENTER_VIEW}>
           <Text

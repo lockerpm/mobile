@@ -6,7 +6,6 @@ import { useStores } from "../../../../../models"
 import { BrowseItemEmptyContent, BrowseItemHeader, Layout } from "../../../../../components"
 import { SortAction } from "../../../home/all-item/sort-action"
 import { CipherShareList } from "./cipher-share-list"
-import { PlanType } from "../../../../../config/types"
 import { PushNotifier } from "../../../../../utils/push-notification"
 
 
@@ -28,7 +27,7 @@ export const ShareItemsScreen = observer(() => {
 
   // --------------------- COMPUTED -------------------------
 
-  const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
+  const isFreeAccount = user.isFreePlan
 
   // --------------------- EFFECTS -------------------------
 

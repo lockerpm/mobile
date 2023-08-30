@@ -16,7 +16,7 @@ type Props = {
   navigation: any
   isOpen?: boolean
   onClose?: () => void
-  onLoadingChange?: Function
+  onLoadingChange?: (val: boolean) => void
   cipher: CipherView
 }
 

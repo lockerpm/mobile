@@ -8,7 +8,6 @@ type Props = {
 }
 
 export const RecaptchaChecker = forwardRef((props: Props, ref) => {
-  const {} = props
   const { notify } = useMixins()
 
   let token = ''

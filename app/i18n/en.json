@@ -1150,9 +1150,19 @@
     "sign_up": {
       "continue_password": "Continue with password",
       "signup_passkey": "Sign up with passkey",
-      "signup_password": "Sign up with password"
+      "signup_password": "Sign up with password",
+      "passkey_options": "Choose an option to save your passkey for “Locker”",
+      "keychain" : {
+        "title": "iCloud Keychain",
+        "label": "Sync across your phone devices"
+      },
+      "security_key": {
+        "title": "Security Key",
+        "label": "Use an external security key"
+      }
     },
     "login_passkey_setting": "Login with passkeys",
-    "login_passkey": "Log in with passkey"
+    "login_passkey": "Log in with passkey",
+    "login_passkey_options": "Choose an option in which you've stored your passkey for Locker"
   }
 }

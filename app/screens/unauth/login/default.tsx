@@ -1,5 +1,5 @@
-import { useWindowDimensions, View } from "react-native"
 import React, { useState, useRef, useEffect } from "react"
+import { Platform, View, useWindowDimensions } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
 import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Passkey, PasskeyAuthenticationResult } from "react-native-passkey"
 import { PasskeyAuthenticationRequest } from "react-native-passkey/lib/typescript/Passkey"
 import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "../../../utils/passkey"
+import { IosPasskeyOptions } from "../signup/ios-passkey-options"
 
 type Props = {
   nextStep: (username: string, password: string, methods: { type: string; data: any }[]) => void
@@ -30,7 +31,7 @@ export const DefaultLogin = observer((props: Props) => {
   const navigation = useNavigation()
   const width = useWindowDimensions().width
   const { user, uiStore } = useStores()
-  const { translate, notify, notifyApiError, setApiTokens } = useMixins()
+  const { translate, notify, notifyApiError, setApiTokens , color} = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
   const { nextStep, onLoggedIn, handleForgot } = props
   // ------------------ Params -----------------------
@@ -47,6 +48,8 @@ export const DefaultLogin = observer((props: Props) => {
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
+  const [isShowCreatePasskeyOptions, setIsShowCreatePasskeyOptions] = useState(false)
+  const [isIcloudSelected, setIsIcloudSelected] = useState(true)
   // ------------------ Methods ----------------------
 
   const getLoginMethod = async () => {
@@ -54,7 +57,11 @@ export const DefaultLogin = observer((props: Props) => {
     if (res.kind === "ok") {
       if (res.data.webauthn) {
         setLoginMethod(METHOD.PASSKEY)
-        await handleAuthWebauth()
+        if (IS_IOS){
+          setIsShowCreatePasskeyOptions(true)
+        } else {
+          await handleAuthWebauth()
+        }
         setShowExtraPasskeyLogin(true)
         return
       }
@@ -106,16 +113,18 @@ export const DefaultLogin = observer((props: Props) => {
     }
   }
 
-  const handleAuthWebauth = async () => {
+  const handleAuthWebauth = async (withSecurityKey?: boolean) => {
     const resAuthPasskeyOptions = await user.authPasskeyOptions(username)
     if (resAuthPasskeyOptions.kind === "ok") {
       try {
         const authRequest: PasskeyAuthenticationRequest = credentialAuthOptions(
           resAuthPasskeyOptions.data,
         )
+
+        // return
         // Call the `authenticate` method with the retrieved request in JSON format
         // A native overlay will be displayed
-        const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest)
+        const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest,  { withSecurityKey })
 
         const res = await user.authPasskey({
           username,
@@ -226,6 +235,29 @@ export const DefaultLogin = observer((props: Props) => {
   }
 
   // ------------------------------ RENDER -------------------------------
+  const AuthWithPasskey = () => {
+    if (!showExtraPasskeyLogin) return null
+    return (
+      <Button
+        preset="outline"
+        isLoading={isLoading}
+        isDisabled={isLoading || !username }
+        text={translate("passkey.login_passkey")}
+        onPress={() => {
+          if (Platform.OS === "ios") {
+            setIsShowCreatePasskeyOptions(true)
+          } else {
+            handleAuthWebauth(false)
+          }
+        }}
+        style={{
+          width: "100%",
+          height: 50,
+          marginBottom: 12
+        }}
+      />
+    )
+  }
 
   // ------------------------------ RENDER -------------------------------
 
@@ -243,6 +275,22 @@ export const DefaultLogin = observer((props: Props) => {
             })
           }}
         />
+              {IS_IOS && (
+        <IosPasskeyOptions
+          isOpen={isShowCreatePasskeyOptions}
+          onClose={() => {
+            setIsShowCreatePasskeyOptions(false)
+          }}
+          label={translate('passkey.login_passkey_options')}
+          title={translate("common.login")}
+          isIcloudSelected={isIcloudSelected}
+          setIsIcloudSelected={setIsIcloudSelected}
+          action={async () => {
+            setIsShowCreatePasskeyOptions(false)
+            await handleAuthWebauth(!isIcloudSelected)
+          }}
+        />
+      )}
 
         <Image
           source={APP_ICON.icon}
@@ -273,38 +321,6 @@ export const DefaultLogin = observer((props: Props) => {
         {/* Username input end */}
 
         {/* Password input */}
-        {/* <FloatingInput
-          outerRef={passwordRef}
-          isPassword
-          isInvalid={isError}
-          label={translate("common.password")}
-          onChangeText={setPassword}
-          value={password}
-          style={{ width: "100%" }}
-          onSubmitEditing={handleLogin}
-        />
-
-        <View
-          style={{
-            width: "100%",
-            alignItems: "flex-start",
-            marginTop: spacing.large,
-          }}
-        >
-          <Button preset="link" text={translate("login.forgot_password")} onPress={handleForgot} />
-        </View>
-
-        <Button
-          isLoading={isLoading}
-          isDisabled={isLoading || !(username && password)}
-          text={translate("common.login")}
-          onPress={handleLogin}
-          style={{
-            width: "100%",
-            marginBottom: spacing.medium,
-            marginTop: spacing.medium,
-          }}
-        /> */}
         {loginMethod === METHOD.PASSWORD && (
           <FloatingInput
             outerRef={passwordRef}
@@ -363,7 +379,7 @@ export const DefaultLogin = observer((props: Props) => {
           />
         )}
 
-        { showExtraPasskeyLogin && (
+        {/* {!onPremise && showExtraPasskeyLogin && (
           <Button
             preset="outline"
             isLoading={isLoading}
@@ -375,7 +391,8 @@ export const DefaultLogin = observer((props: Props) => {
               marginBottom: 12,
             }}
           />
-        )}
+        )} */}
+        {AuthWithPasskey()}
 
         <View style={commonStyles.CENTER_VIEW}>
           <Text

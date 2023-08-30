@@ -76,6 +76,7 @@ export enum PlanType {
   FREE = 'pm_free',
   PREMIUM = 'pm_premium',
   FAMILY = 'pm_family',
+  LIFETIME = 'pm_lifetime_premium'
 }
 
 export enum InvitationStatus {

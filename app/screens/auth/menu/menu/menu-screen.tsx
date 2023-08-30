@@ -102,13 +102,13 @@ export const MenuScreen = observer(() => {
           navigation.navigate("invite_member")
         }
       },
-      hide: user.pwd_user_type === "enterprise"
+      hide: user.pwd_user_type === "enterprise" || user.isLifeTimePlan
     },
     {
       icon: isDark ? <PlanIconLight height={22} /> : <PlanIcon height={22} />,
       name: translate('menu.plan'),
       action: () => navigation.navigate('payment'),
-      hide: user.pwd_user_type === "enterprise"
+      hide: user.pwd_user_type === "enterprise" || user.isLifeTimePlan
     },
     {
       icon: isDark ? <SettingsIconLight height={22} /> : <SettingsIcon height={22} />,
@@ -148,6 +148,9 @@ export const MenuScreen = observer(() => {
   ]
   const isSmallWidth = Dimensions.get("screen").width < 390
   const item3 = {
+    "pm_lifetime_premium": {
+      node: <Text text="LIFETIME" style={[PLAN_NAME, { color: color.primary }]}></Text>,
+    }, 
     "pm_free": {
       node: <Text text="FREE" style={[PLAN_NAME, { color: color.textBlack }]}></Text>,
     },

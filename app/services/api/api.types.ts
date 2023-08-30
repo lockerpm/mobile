@@ -14,6 +14,7 @@ import {
   EnterpriseInvitationStatus,
   InvitationStatus,
   NotificationCategory,
+  PlanType,
 } from "../../config/types"
 import { ProfileResponse } from "../../../core/models/response/profileResponse"
 import { ProfileOrganizationResponse } from "../../../core/models/response/profileOrganizationResponse"
@@ -141,7 +142,7 @@ export type GetPlanResult =
       kind: "ok"
       data: {
         name: string
-        alias: string
+        alias: PlanType
         is_family: boolean
         cancel_at_period_end: boolean
         duration: "monthly" | "yearly"
@@ -297,7 +298,7 @@ export type QuickShareCipherResult =
   | {
       kind: "ok"
       data: {
-        access_id: String
+        access_id: string
         cipher_id: string
         id: string
       }
