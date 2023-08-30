@@ -119,8 +119,7 @@ const Options = ({title, label, icon,  isSelect, action}: OptionsProps) => {
       <View
         style={{
           marginTop: 12,
-          padding: 8,
-          paddingHorizontal: 16,
+          padding: 16,
           backgroundColor: color.background,
           borderRadius: 12,
           flexDirection: "row",
@@ -152,7 +151,7 @@ const Options = ({title, label, icon,  isSelect, action}: OptionsProps) => {
           onTintColor={color.palette.blue}
           animationDuration={0.1}
           onCheckColor={color.white}
-          style={{ margin: 16, width: 24,  height: 24 }}
+          style={{  width: 24,  height: 24, alignSelf: 'flex-end' }}
           disabled={true}
           value={isSelect}
        
