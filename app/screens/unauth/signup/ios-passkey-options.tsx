@@ -131,6 +131,7 @@ const Options = ({title, label, icon,  isSelect, action}: OptionsProps) => {
           style={{
             flexDirection: "row",
             alignItems: "center",
+            maxWidth: '90%',
           }}
         >
           <ImageIcon icon={icon} size={32} />
@@ -140,7 +141,7 @@ const Options = ({title, label, icon,  isSelect, action}: OptionsProps) => {
             }}
           >
             <Text preset="black" text={title} />
-            <Text text={label} style={{ fontSize: 14, maxWidth: '80%' }} />
+            <Text text={label} style={{ fontSize: 14, maxWidth: '90%' }} />
           </View>
         </View>
 
