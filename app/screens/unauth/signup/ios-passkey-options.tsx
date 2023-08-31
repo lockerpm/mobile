@@ -140,7 +140,7 @@ const Options = ({title, label, icon,  isSelect, action}: OptionsProps) => {
             }}
           >
             <Text preset="black" text={title} />
-            <Text text={label} style={{ fontSize: 14 }} />
+            <Text text={label} style={{ fontSize: 14, maxWidth: '80%' }} />
           </View>
         </View>
 
