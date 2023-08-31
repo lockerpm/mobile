@@ -1146,7 +1146,7 @@
       "signup_password": "Đăng ký bằng mật khẩu",
       "passkey_options": "Cọn phương thức khởi tạo passkey cho “Locker”",
       "keychain" : {
-        "title": "ICloud Keychain",
+        "title": "iCloud Keychain",
         "label": "Đồng bộ trên các thiết bị Apple của bạn."
       },
       "security_key": {
