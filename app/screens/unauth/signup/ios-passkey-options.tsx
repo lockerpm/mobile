@@ -146,9 +146,9 @@ const Options = ({title, label, icon,  isSelect, action}: OptionsProps) => {
 
         <CheckBox
           tintColors={{ true: "black", false: color.text }}
-          onFillColor={color.palette.blue}
+          onFillColor={color.primary}
           tintColor={color.text}
-          onTintColor={color.palette.blue}
+          onTintColor={color.primary}
           animationDuration={0.1}
           onCheckColor={color.white}
           style={{  width: 24,  height: 24, alignSelf: 'flex-end' }}
