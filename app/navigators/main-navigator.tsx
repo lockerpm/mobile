@@ -95,13 +95,12 @@ import { SocketEvent, SocketEventType } from "../config/types"
 import { HealthNavigator } from "./tools/health-navigator"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import InAppReview from "react-native-in-app-review"
-import Intercom, { Visibility } from "@intercom/intercom-react-native"
-import { AppNotification } from "../services/api"
 import { RelayAddress, SubdomainData, TrustedContact } from "../config/types/api"
 import { CollectionView } from "../../core/models/view/collectionView"
 import { CipherView } from "../../core/models/view"
 import { QuickSharesDetailScreen } from "../screens/auth/browse/shares/quick-shares/quick-shares-detail"
 import { SendView } from "../../core/models/view/sendView"
+import { AppNotification } from "app/static/types"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator

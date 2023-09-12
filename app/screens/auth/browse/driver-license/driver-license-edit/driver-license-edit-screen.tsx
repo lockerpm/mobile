@@ -22,9 +22,11 @@ import { CipherType } from "../../../../../../core/enums"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { DriverLicenseData, toDriverLicenseData } from "../driver-license.type"
-import countries from "../../../../../common/countries.json"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
+
+import countries from 'app/static/countries.json'
+
 
 type DriverLicenseEditScreenProp = RouteProp<PrimaryParamList, "driverLicenses__edit">
 

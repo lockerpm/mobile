@@ -13,10 +13,10 @@ import { CipherView, LoginUriView, LoginView } from "../../../../core/models/vie
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { CipherType } from "../../../../core/enums"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { EnterpriseInvitation } from "../../../services/api"
 import { EnterpriseInvitationModal } from "./enterprise-invitation-modal"
 import { LanguagePicker } from "../../../components/utils"
 import { useCoreService } from "../../../services/core-service"
+import { EnterpriseInvitation } from "app/static/types"
 
 interface Props {
   biometryType: "faceid" | "touchid" | "biometric" | null

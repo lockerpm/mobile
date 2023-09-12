@@ -6,7 +6,6 @@ import { useMixins } from "../../../services/mixins"
 import { CipherView } from "../../../../core/models/view"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { AccountRoleText } from "../../../config/types"
-import { GroupData, GroupMemberData } from "../../../services/api"
 import Entypo from "react-native-vector-icons/Entypo"
 import { SharedGroupType, SharedMemberType } from "../../../config/types/api"
 import { Button, Icon, Text } from "../../../components"
@@ -14,6 +13,7 @@ import { Header, Screen } from "../../../components/cores"
 import { SharedUsers } from "./shared-user"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../navigators"
+import { GroupMemberData, GroupData } from "app/static/types"
 
 const SHARE_AVATAR = require("../../../../assets/icon/common/avatar.png")
 const SHARE_GROUP = require("../../../../assets/icon/common/group.png")

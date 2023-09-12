@@ -25,7 +25,7 @@ import {
   SocialSecurityNumberData,
   toSocialSecurityNumberData,
 } from "../social-security-number.type"
-import countries from "../../../../../common/countries.json"
+import countries from 'app/static/countries.json'
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
 

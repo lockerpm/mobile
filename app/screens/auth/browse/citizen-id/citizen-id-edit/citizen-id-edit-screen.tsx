@@ -24,9 +24,10 @@ import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { CitizenIdData, toCitizenIdData } from "../citizen-id.type"
 import { GEN } from "../../../../../config/constants"
-import countries from "../../../../../common/countries.json"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
+
+import countries from 'app/static/countries.json'
 
 type CitizenIDEditScreenProp = RouteProp<PrimaryParamList, "citizenIDs__edit">
 

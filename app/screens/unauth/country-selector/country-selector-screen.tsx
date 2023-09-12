@@ -5,11 +5,12 @@ import { Button, Header, Layout, SearchBar, Text } from "../../../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { commonStyles } from "../../../theme"
 import Icon from 'react-native-vector-icons/FontAwesome'
-import countries from '../../../common/countries.json'
-import flags from '../../../common/flags.json'
 import { useMixins } from "../../../services/mixins"
 import { RootParamList } from "../../../navigators/root-navigator"
 import { useStores } from "../../../models"
+
+import countries from 'app/static/countries.json'
+import flags from 'app/static/flags.json'
 
 type CountrySelectScreenProp = RouteProp<RootParamList, 'countrySelector'>;
 

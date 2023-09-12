@@ -11,7 +11,6 @@ import { useMixins } from "../../services/mixins"
 import { DeleteConfirmModal } from "../../screens/auth/browse/trash/delete-confirm-modal"
 import { useCipherDataMixins } from "../../services/mixins/cipher/data"
 import { useStores } from "../../models"
-import { PlanType } from "../../config/types"
 import { observer } from "mobx-react-lite"
 import { ShareModal } from "../cipher/cipher-action/share-modal"
 

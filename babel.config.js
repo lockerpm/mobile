@@ -21,6 +21,10 @@ const plugins = [
           rootPathPrefix: "app/components",
           rootPathSuffix: "deprecated",
         },
+        {
+          rootPathPrefix: "app/components-v2",
+          rootPathSuffix: "components",
+        },
       ],
     },
   ],

@@ -10,7 +10,7 @@ import { CollectionView } from "../../../../../../core/models/view/collectionVie
 import { FolderView } from "../../../../../../core/models/view/folderView"
 import { AccountRoleText } from "../../../../../config/types"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
-import { GroupData, GroupMemberData } from "../../../../../services/api"
+import { GroupMemberData , GroupData} from "app/static/types"
 
 
 interface InviteProps {

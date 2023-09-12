@@ -1,65 +1,34 @@
 import { ApiResponse } from "apisauce"
-import {
-  GetUserResult,
-  EmptyResult,
-  SessionLoginData,
-  SessionLoginResult,
-  PasswordHintRequestData,
-  RegisterLockerData,
-  GetTeamsResult,
-  GetPlanResult,
-  ChangePasswordData,
-  LoginData,
-  LoginResult,
-  EmailOtpRequestData,
-  EmailOtpResult,
-  AccountRecoveryResult,
-  ResetPasswordResult,
-  ResetPasswordWithCodeResult,
-  SocialLoginResult,
-  RegisterData,
-  GetInvitationsResult,
-  BillingResult,
-  PurchaseValidationResult,
-  FamilyMemberResult,
-  AddMemberResult,
-  RemoveMemberResult,
-  GetReferLinkResult,
-  FeedbackData,
-  GetPMTokenResult,
-  GetPMTokenData,
-  UpdateFCMData,
-  GetTrialEligibleResult,
-  SocialLoginData,
-  GetNotificationSettings,
-  UpdateNotiSettingsResult,
-  FetchInappNotiResult,
-  TrustedResult,
-  EAInviteResult,
-  EATakeoverResult,
-  EAViewResult,
-  GetTeamPoliciesResult,
-  GetTeamPolicyResult,
-  GetEnterpriseResult,
-  OnPremisePreLoginResult,
-  SessionOtpLoginData,
-  BusinessLoginMethodResult,
-  RegisterPasskeyOptionData,
-  RegisterPasskeyData,
-  LoginMethodResult,
-  AuthPasskeyData,
-  WebAuthListCredentialsResult,
-} from "./api.types"
 import { Api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import { Logger } from "../../utils/logger"
 import { IS_IOS } from "../../config/constants"
-import { PolicyType } from "../../config/types"
 import {
-  PasskeyAuthenticationRequest,
-  PasskeyRegistrationRequest,
-  PasskeyRegistrationResult,
-} from "react-native-passkey/lib/typescript/Passkey"
+  Billing,
+  BlockFailedLoginPolicy,
+  Enterprise,
+  FamilyMember,
+  GetPMTokenData,
+  MasterPasswordPolicy,
+  PasswordPolicy,
+  PasswordlessPolicy,
+  SessionSnapshot,
+  TeamPolicies,
+  TrustedContact,
+  UserPlan,
+  UserTeam,
+  ChangePasswordRequest,
+  FeedbackRequest,
+  RegisterLockerRequest,
+  SessionLoginRequest,
+  SessionOtpLoginRequest,
+  UpdateFCMRequest,
+  UserInvitations,
+  NotificationSettingData,
+} from "app/static/types"
+import { CipherResponse } from "core/models/response/cipherResponse"
+import { PolicyType } from "app/static/types/enum"
+import { UserSnapshot } from "app/models"
 
 export class UserApi {
   private api: Api
@@ -71,7 +40,7 @@ export class UserApi {
   // --------------------- ID -----------------------------
 
   // Get me
-  async getUser(token: string): Promise<GetUserResult> {
+  async getUser(token: string): Promise<{ kind: "ok"; user: UserSnapshot } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -90,460 +59,6 @@ export class UserApi {
     }
   }
 
-  // ID login
-  async loginMethod(username: string): Promise<LoginMethodResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(`/sso/auth/method`, {
-        username,
-      })
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-
-      return { kind: "ok", data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // authentication PASSKEY
-  async authPasskeyOptions(
-    username: string,
-  ): Promise<
-    | {
-        kind: "ok"
-        data: PasskeyAuthenticationRequest
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/webauthn/auth/options",
-        { username },
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok", data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "unknown", temporary: true }
-    }
-  }
-
-  async authPasskey(payload: AuthPasskeyData): Promise<LoginResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/webauthn/auth",
-        payload,
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-
-      return { kind: "ok", data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "unknown", temporary: true }
-    }
-  }
-
-  // ID login
-  async login(payload: LoginData, deviceId: string, isOtp?: boolean): Promise<LoginResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-      this.api.apisauce.setHeader("device-id", deviceId)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/sso/auth${isOtp ? "/otp" : ""}`,
-        payload,
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-
-      return { kind: "ok", data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // ID social login
-  async socialLogin(payload: SocialLoginData, deviceId: string): Promise<SocialLoginResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-      this.api.apisauce.setHeader("device-id", deviceId)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/social", payload)
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-
-      return { kind: "ok", data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // ID register
-  async register(payload: RegisterData): Promise<EmptyResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/users", payload)
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "unknown", temporary: true }
-    }
-  }
-
-  // register PASSKEY
-  async registerPasskeyOptions(
-    payload: RegisterPasskeyOptionData,
-  ): Promise<
-    | {
-        kind: "ok"
-        data: PasskeyRegistrationRequest
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/webauthn/register/options",
-        payload,
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok", data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "unknown", temporary: true }
-    }
-  }
-
-  async registerPasskey(payload: RegisterPasskeyData): Promise<EmptyResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/webauthn/register",
-        payload,
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "unknown", temporary: true }
-    }
-  }
-
-  // register PASSKEY
-  // async enablePasskeyOptions(
-  //   token: string,
-  //   algorithms: string[],
-  // ): Promise<
-  //   | {
-  //       kind: "ok"
-  //       data: PasskeyRegistrationRequest
-  //     }
-  //   | GeneralApiProblem
-  // > {
-  //   try {
-  //     this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
-  //     // make the api call
-  //     const response: ApiResponse<any> = await this.api.apisauce.post(
-  //       "sso/users/me/webauthn/enable/options",
-  //       { algorithms },
-  //     )
-  //     // the typical ways to die when calling an api
-  //     if (!response.ok) {
-  //       const problem = getGeneralApiProblem(response)
-  //       if (problem) return problem
-  //     }
-
-  //     return { kind: "ok", data: response.data }
-  //   } catch (e) {
-  //     Logger.error(e.message)
-  //     return { kind: "unknown", temporary: true }
-  //   }
-  // }
-
-  // async enablePasskey(token: string, payload: PasskeyRegistrationResult): Promise<EmptyResult> {
-  //   try {
-  //     this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
-  //     // make the api call
-  //     const response: ApiResponse<any> = await this.api.apisauce.post(
-  //       "/sso/users/me/webauthn/enable",
-  //       { response: payload },
-  //     )
-  //     // the typical ways to die when calling an api
-  //     if (!response.ok) {
-  //       const problem = getGeneralApiProblem(response)
-  //       if (problem) return problem
-  //     }
-
-  //     return { kind: "ok" }
-  //   } catch (e) {
-  //     Logger.error(e.message)
-  //     return { kind: "unknown", temporary: true }
-  //   }
-  // }
-
-  async disablePasskey(token: string, credentialsId: string): Promise<EmptyResult> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/sso/users/me/webauthn/disable/${credentialsId}`,
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "unknown", temporary: true }
-    }
-  }
-
-  async webAuthListCredentials(
-    token: string,
-    paging: number,
-  ): Promise<WebAuthListCredentialsResult> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/sso/users/me/webauthn/list?paging=${paging}`,
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-
-      return { kind: "ok", data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Logout
-  async logout(token: string): Promise<EmptyResult> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/users/logout")
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "rejected" }
-    }
-  }
-
-  // Get email OTP
-  async sendOtpEmail(payload: EmailOtpRequestData): Promise<EmailOtpResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/auth/otp/mail", payload)
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: "ok", success: response.data.success }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Account recovery
-  async recoverAccount(payload: { username: string }): Promise<AccountRecoveryResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/account_recovery",
-        payload,
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: "ok", data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Reset ID password
-  async resetPassword(payload: {
-    username: string
-    method: string
-    request_code: string
-  }): Promise<ResetPasswordResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/reset_password",
-        payload,
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: "ok", success: response.data.success }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Reset ID password with code
-  async resetPasswordWithCode(payload: {
-    username: string
-    code: string
-  }): Promise<ResetPasswordWithCodeResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/reset_password/token",
-        payload,
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: "ok", data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Set new ID password
-  async setNewPassword(payload: { new_password: string; token: string }): Promise<EmptyResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/sso/users/new_password",
-        payload,
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Set new ID password when signup by using social login
-  async setPassword(payload: {
-    new_password: string
-    token: string
-    username: string
-  }): Promise<EmptyResult> {
-    try {
-      this.api.apisauce.deleteHeader("Authorization")
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post("/sso/new_password", payload)
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
   // --------------------- LOCKER -----------------------------
 
   // Get PM API token
@@ -551,7 +66,24 @@ export class UserApi {
     token: string,
     payload: GetPMTokenData,
     deviceId: string,
-  ): Promise<GetPMTokenResult> {
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          url: string
+          access_token: string
+
+          // Clone data here to hide error
+          // These data actually not exists
+          is_factor2?: boolean
+          methods?: {
+            type: string
+            data: any
+          }[]
+        }
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       this.api.apisauce.setHeader("device-id", deviceId)
@@ -575,8 +107,8 @@ export class UserApi {
   // Get master password hint
   async sendMasterPasswordHint(
     token: string,
-    payload: PasswordHintRequestData,
-  ): Promise<EmptyResult> {
+    payload: { email: string },
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -598,7 +130,7 @@ export class UserApi {
   }
 
   // Get user info from PM
-  async getUserPw(token: string): Promise<GetUserResult> {
+  async getUserPw(token: string): Promise<{ kind: "ok"; user: UserSnapshot } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -621,7 +153,9 @@ export class UserApi {
     }
   }
 
-  async getEnterprise(token: string): Promise<GetEnterpriseResult> {
+  async getEnterprise(
+    token: string,
+  ): Promise<{ kind: "ok"; data: Enterprise[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -643,7 +177,10 @@ export class UserApi {
     }
   }
 
-  async setUserLanguage(token: string, language: string): Promise<EmptyResult> {
+  async setUserLanguage(
+    token: string,
+    language: string,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -662,7 +199,10 @@ export class UserApi {
   }
 
   // Session login
-  async sessionLogin(token: string, payload: SessionLoginData): Promise<SessionLoginResult> {
+  async sessionLogin(
+    token: string,
+    payload: SessionLoginRequest,
+  ): Promise<{ kind: "ok"; data: SessionSnapshot } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -685,7 +225,10 @@ export class UserApi {
   }
 
   // Session login
-  async sessionOtpLogin(token: string, payload: SessionOtpLoginData): Promise<SessionLoginResult> {
+  async sessionOtpLogin(
+    token: string,
+    payload: SessionOtpLoginRequest,
+  ): Promise<{ kind: "ok"; data: SessionSnapshot } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -708,7 +251,10 @@ export class UserApi {
   }
 
   // Create new master password
-  async registerLocker(token: string, payload: RegisterLockerData): Promise<EmptyResult> {
+  async registerLocker(
+    token: string,
+    payload: RegisterLockerRequest,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -731,7 +277,10 @@ export class UserApi {
   }
 
   // Change master password
-  async changeMasterPassword(token: string, payload: ChangePasswordData): Promise<EmptyResult> {
+  async changeMasterPassword(
+    token: string,
+    payload: ChangePasswordRequest,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -754,7 +303,7 @@ export class UserApi {
   }
 
   // Get teams
-  async getTeams(token: string): Promise<GetTeamsResult> {
+  async getTeams(token: string): Promise<{ kind: "ok"; teams: UserTeam[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -775,7 +324,15 @@ export class UserApi {
   }
 
   // Get plan
-  async getPlan(token: string): Promise<GetPlanResult> {
+  async getPlan(
+    token: string,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: UserPlan
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       // make the api call
@@ -796,8 +353,16 @@ export class UserApi {
     }
   }
 
-  // Get invitations
-  async getInvitations(token: string): Promise<GetInvitationsResult> {
+   // Get invitations
+   async getInvitations(
+    token: string,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: UserInvitations[]
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -820,7 +385,11 @@ export class UserApi {
   }
 
   // Respond to an invitation
-  async invitationRespond(token: string, id: string, status: string): Promise<EmptyResult> {
+  async invitationRespond(
+    token: string,
+    id: string,
+    status: string,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -845,7 +414,10 @@ export class UserApi {
   }
 
   // Deauthorize all sessions
-  async deauthorizeSessions(token: string, hashedPassword: string): Promise<EmptyResult> {
+  async deauthorizeSessions(
+    token: string,
+    hashedPassword: string,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -870,7 +442,10 @@ export class UserApi {
   }
 
   // Purge account
-  async purgeAccount(token: string, hashedPassword: string): Promise<EmptyResult> {
+  async purgeAccount(
+    token: string,
+    hashedPassword: string,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -894,8 +469,83 @@ export class UserApi {
     }
   }
 
+  async getReferLink(
+    token: string,
+  ): Promise<{ kind: "ok"; data: { referral_link: string } } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        "/cystack_platform/pm/referrals",
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async getNotificationSettings(
+    token: string,
+  ): Promise<{ kind: "ok"; data: NotificationSettingData[] } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        "/cystack_platform/pm/notifcation/settings",
+        { type: "notification" },
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async updateNotiSettings(
+    token: string,
+    categoryId: string,
+    mail: boolean,
+    notification: boolean,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      const response: ApiResponse<any> = await this.api.apisauce.put(
+        `/cystack_platform/pm/notifcation/settings/${categoryId}`,
+        { mail, notification },
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: "ok" }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+
   // Delete account
-  async deleteAccount(token: string, hashedPassword: string): Promise<EmptyResult> {
+  async deleteAccount(
+    token: string,
+    hashedPassword: string,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -920,7 +570,10 @@ export class UserApi {
   }
 
   // Get all policies
-  async getTeamPolicies(token: string, organizationId: string): Promise<GetTeamPoliciesResult> {
+  async getTeamPolicies(
+    token: string,
+    organizationId: string,
+  ): Promise<{ kind: "ok"; data: TeamPolicies } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -947,7 +600,13 @@ export class UserApi {
     token: string,
     organizationId: string,
     policyType: PolicyType,
-  ): Promise<GetTeamPolicyResult> {
+  ): Promise<
+    | {
+        kind: "ok"
+        data: PasswordPolicy | MasterPasswordPolicy | BlockFailedLoginPolicy | PasswordlessPolicy
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -970,7 +629,10 @@ export class UserApi {
   }
 
   // Send feedback
-  async sendFeedback(token: string, payload: FeedbackData): Promise<EmptyResult> {
+  async sendFeedback(
+    token: string,
+    payload: FeedbackRequest,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -993,7 +655,10 @@ export class UserApi {
   }
 
   // Update FCM
-  async updateFCM(token: string, payload: UpdateFCMData): Promise<EmptyResult> {
+  async updateFCM(
+    token: string,
+    payload: UpdateFCMRequest,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       // make the api call
@@ -1015,7 +680,16 @@ export class UserApi {
   }
 
   // Get Billing Documents
-  async getBillingDocuments(token: string, page: number): Promise<BillingResult> {
+  async getBillingDocuments(
+    token: string,
+    page: number,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: Billing[]
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -1043,7 +717,16 @@ export class UserApi {
     receipt?: string,
     subscriptionId?: string,
     originalTransactionIdentifierIOS?: string,
-  ): Promise<PurchaseValidationResult> {
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          success: boolean
+          detail: string
+        }
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       let response: ApiResponse<any>
@@ -1074,7 +757,15 @@ export class UserApi {
     }
   }
 
-  async getFamilyMember(token: string): Promise<FamilyMemberResult> {
+  async getFamilyMember(
+    token: string,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: FamilyMember[]
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -1093,7 +784,10 @@ export class UserApi {
     }
   }
 
-  async addFamilyMember(token: string, emailMembers: string[]): Promise<AddMemberResult> {
+  async addFamilyMember(
+    token: string,
+    emailMembers: string[],
+  ): Promise<{ kind: "ok"; data: any } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -1114,7 +808,10 @@ export class UserApi {
     }
   }
 
-  async removeFamilyMember(token: string, memberId: string): Promise<RemoveMemberResult> {
+  async removeFamilyMember(
+    token: string,
+    memberId: string,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.delete(
@@ -1134,27 +831,18 @@ export class UserApi {
     }
   }
 
-  async getReferLink(token: string): Promise<GetReferLinkResult> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/referrals",
-      )
 
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
+  async getTrialEligible(
+    token: string,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          personal_trial_applied: boolean
+        }
       }
-
-      return { kind: "ok", data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  async getTrialEligible(token: string): Promise<GetTrialEligibleResult> {
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post("/payments/webhook/trial", {
@@ -1174,92 +862,7 @@ export class UserApi {
     }
   }
 
-  async getNotificationSettings(token: string): Promise<GetNotificationSettings> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        "/cystack_platform/pm/notifcation/settings",
-        { type: "notification" },
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok", data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  async updateNotiSettings(
-    token: string,
-    categoryId: string,
-    mail: boolean,
-    notification: boolean,
-  ): Promise<UpdateNotiSettingsResult> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/notifcation/settings/${categoryId}`,
-        { mail, notification },
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  async fetchInAppNoti(token: string): Promise<FetchInappNotiResult> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/notifications?scope=pwdmanager`,
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok", data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  async markReadInappNoti(token: string, id: string): Promise<EmptyResult> {
-    try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.put(`/notifications/${id}`, {
-        read: true,
-      })
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
+  // ---------------- EMERGENCY ACCESS ------------------------
 
   async EAInvite(
     token: string,
@@ -1267,7 +870,7 @@ export class UserApi {
     key: string,
     type: string,
     wait_time_days: number,
-  ): Promise<EAInviteResult> {
+  ): Promise<{ kind: "ok"; data: { is: string } } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -1288,7 +891,9 @@ export class UserApi {
     }
   }
 
-  async EATrusted(token: string): Promise<TrustedResult> {
+  async EATrusted(
+    token: string,
+  ): Promise<{ kind: "ok"; data: TrustedContact[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -1308,7 +913,9 @@ export class UserApi {
     }
   }
 
-  async EAGranted(token: string): Promise<TrustedResult> {
+  async EAGranted(
+    token: string,
+  ): Promise<{ kind: "ok"; data: TrustedContact[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
@@ -1332,7 +939,7 @@ export class UserApi {
     token: string,
     id: string,
     action: "accept" | "initiate",
-  ): Promise<EmptyResult> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -1352,7 +959,20 @@ export class UserApi {
     }
   }
 
-  async EATakeover(token: string, id: string): Promise<EATakeoverResult> {
+  async EATakeover(
+    token: string,
+    id: string,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          kdf: number
+          kdf_iterations: number
+          key_encrypted: string
+        }
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -1372,7 +992,19 @@ export class UserApi {
     }
   }
 
-  async EAView(token: string, id: string): Promise<EAViewResult> {
+  async EAView(
+    token: string,
+    id: string,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          ciphers: CipherResponse[]
+          key_encrypted: string
+        }
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -1396,7 +1028,7 @@ export class UserApi {
     token: string,
     id: string,
     action: "reject" | "approve" | "reinvite",
-  ): Promise<EmptyResult> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -1416,7 +1048,11 @@ export class UserApi {
     }
   }
 
-  async EAPassword(token: string, id: string, payload: any): Promise<EmptyResult> {
+  async EAPassword(
+    token: string,
+    id: string,
+    payload: any,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -1437,7 +1073,11 @@ export class UserApi {
     }
   }
 
-  async EALockerPassword(token: string, id: string, newPass: string): Promise<EmptyResult> {
+  async EALockerPassword(
+    token: string,
+    id: string,
+    newPass: string,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.post(
@@ -1460,7 +1100,7 @@ export class UserApi {
     }
   }
 
-  async EARemove(token: string, id: string): Promise<EmptyResult> {
+  async EARemove(token: string, id: string): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.delete(
@@ -1474,43 +1114,6 @@ export class UserApi {
       }
 
       return { kind: "ok" }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  async businessLoginMethod(): Promise<BusinessLoginMethodResult> {
-    try {
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        `cystack_platform/pm/users/me/login_method`,
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: "ok", data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  async onPremisePreLogin(email: string): Promise<OnPremisePreLoginResult> {
-    try {
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/users/onpremise/prelogin`,
-        { email },
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error(e.message)
       return { kind: "bad-data" }

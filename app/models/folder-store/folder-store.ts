@@ -2,9 +2,9 @@ import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { omit } from "ramda"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { FolderView } from "../../../core/models/view/folderView"
-import { ShareFolderData } from "../../services/api"
 import { FolderApi } from "../../services/api/folder-api"
 import { withEnvironment } from "../extensions/with-environment"
+import { ShareFolderData } from "app/static/types"
 
 /**
  * Model description here for TypeScript hints.

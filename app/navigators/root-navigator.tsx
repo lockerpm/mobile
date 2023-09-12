@@ -34,12 +34,12 @@ import { AppState, Modal, View } from "react-native"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { TestScreen } from "../screens/test-screen"
-import { OnPremisePreloginData } from "../services/api"
 import WebView from "react-native-webview"
 import { IS_IOS } from "../config/constants"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Header, OverlayLoading } from "../components"
 import Intercom, { Visibility } from "@intercom/intercom-react-native"
+import { OnPremisePreloginData } from "app/static/types"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator

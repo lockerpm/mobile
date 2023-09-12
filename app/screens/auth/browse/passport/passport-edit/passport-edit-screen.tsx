@@ -24,7 +24,7 @@ import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { PassportData, toPassportData } from "../passport.type"
 import { GEN } from "../../../../../config/constants"
-import countries from "../../../../../common/countries.json"
+import countries from 'app/static/countries.json'
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
 

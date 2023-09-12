@@ -1,8 +1,8 @@
-import { ApiResponse } from "apisauce";
-import { Logger } from "../../utils/logger";
-import { Api } from "./api";
-import { getGeneralApiProblem } from "./api-problem";
-import { EditShareCipherData, EmptyResult, EnterpriseGroupsMemebersResult, EnterpriseGroupsResult, EnterpriseInvitationResult, EnterpriseSearchGroupResult } from "./api.types";
+import { ApiResponse } from "apisauce"
+import { Logger } from "../../utils/logger"
+import { Api } from "./api"
+import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
+import { EnterpriseInvitation, GroupData, GroupMemberData } from "app/static/types"
 
 export class EnterpriseApi {
   private api: Api
@@ -11,12 +11,16 @@ export class EnterpriseApi {
     this.api = api
   }
 
-  async getListUserGroups(token: string): Promise<EnterpriseGroupsResult> {
+  async getListUserGroups(
+    token: string,
+  ): Promise<{ kind: "ok"; data: GroupData[] } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/enterprises/user_groups`)
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/cystack_platform/pm/enterprises/user_groups`,
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -29,12 +33,17 @@ export class EnterpriseApi {
     }
   }
 
-  async getListGroupMembers(token: string, groupId: string): Promise<EnterpriseGroupsMemebersResult> {
+  async getListGroupMembers(
+    token: string,
+    groupId: string,
+  ): Promise<{ kind: "ok"; data: GroupData & { members: GroupMemberData[] } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/enterprises/user_groups/${groupId}/members`)
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/cystack_platform/pm/enterprises/user_groups/${groupId}/members`,
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -47,12 +56,28 @@ export class EnterpriseApi {
     }
   }
 
-  async searchGroupOrMember(token: string, enterpriseId: string, query: string): Promise<EnterpriseSearchGroupResult> {
+  async searchGroupOrMember(
+    token: string,
+    enterpriseId: string,
+    query: string,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          groups: GroupData[]
+          members: GroupMemberData[]
+        }
+      }
+    | GeneralApiProblem
+  > {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/enterprises/${enterpriseId}/members_groups/search`, { query })
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        `/cystack_platform/pm/enterprises/${enterpriseId}/members_groups/search`,
+        { query },
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -62,39 +87,28 @@ export class EnterpriseApi {
       return { kind: "ok", data: response.data }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
-    }
-  }
-
-  // Edit share cipher
-  async editShareCipher(token: string, organizationId: string, groupID: string, payload: EditShareCipherData): Promise<EmptyResult> {
-    try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/sharing/${organizationId}/groups/${groupID}`, payload)
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: "ok" }
-    } catch (e) {
-      Logger.error('Edit share cipher: ' + e.message)
       return { kind: "bad-data" }
     }
   }
 
   // Join enterprise invitations
-
   // Get list invitations
-  // Edit share cipher
-  async invitations(token: string): Promise<EnterpriseInvitationResult> {
+  async invitations(
+    token: string,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: EnterpriseInvitation[]
+      }
+    | GeneralApiProblem
+  > {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get(`/cystack_platform/pm/enterprises/members/invitations`)
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/cystack_platform/pm/enterprises/members/invitations`,
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -107,12 +121,19 @@ export class EnterpriseApi {
     }
   }
 
-  async invitationsActions(token: string, id: string, status: "confirmed" | "reject"): Promise<EmptyResult> {
+  async invitationsActions(
+    token: string,
+    id: string,
+    status: "confirmed" | "reject",
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.put(`/cystack_platform/pm/enterprises/members/invitations/${id}`, { status })
+      const response: ApiResponse<any> = await this.api.apisauce.put(
+        `/cystack_platform/pm/enterprises/members/invitations/${id}`,
+        { status },
+      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -124,5 +145,4 @@ export class EnterpriseApi {
       return { kind: "bad-data" }
     }
   }
-
 }

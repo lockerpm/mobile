@@ -5,7 +5,7 @@ import { useMixins } from "../../../../../services/mixins"
 import { useStores } from "../../../../../models"
 import { observer } from "mobx-react-lite"
 import { PremiumBenefits } from "./premium-benefits"
-import { IS_IOS } from '../../../../../config/constants'
+import { IS_IOS } from "../../../../../config/constants"
 import { SKU } from "./price-plan.sku"
 import { PricePlan } from "./price-plan"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
@@ -20,33 +20,27 @@ import RNIap, {
   finishTransaction,
   purchaseErrorListener,
   purchaseUpdatedListener,
-  presentCodeRedemptionSheetIOS
-} from 'react-native-iap';
-import { PurchaseValidationResult } from "../../../../../services/api"
+  presentCodeRedemptionSheetIOS,
+} from "react-native-iap"
 import { PremiumPayment } from "./premium-payment/premium-payment"
 
 // control init premium benefit tab
-type ScreenProp = RouteProp<PrimaryParamList, 'payment'>;
+type ScreenProp = RouteProp<PrimaryParamList, "payment">
 
-let purchaseUpdateSubscription: EmitterSubscription;
-let purchaseErrorSubscription: EmitterSubscription;
+let purchaseUpdateSubscription: EmitterSubscription
+let purchaseErrorSubscription: EmitterSubscription
 
-const subSkus = [
-  SKU.PRE_MON,
-  SKU.PRE_YEAR,
-  SKU.FAM_MON,
-  SKU.FAM_YEAR
-]
+const subSkus = [SKU.PRE_MON, SKU.PRE_YEAR, SKU.FAM_MON, SKU.FAM_YEAR]
 
 export const PaymentScreen = observer(function PaymentScreen() {
   const { translate, color, isDark, notifyApiError } = useMixins()
-  const navigation = useNavigation();
-  const route = useRoute<ScreenProp>();
+  const navigation = useNavigation()
+  const route = useRoute<ScreenProp>()
   const { user, uiStore } = useStores()
 
   // -------------------- STATE ----------------------
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
-  const [processPayment, setProcessPayment] = useState<boolean>(false);
+  const [processPayment, setProcessPayment] = useState<boolean>(false)
   const [payIndividual, setPayIndividual] = useState(true)
   const [isEnable, setEnable] = useState(true)
   const [isTrial, setIsTrial] = useState(false)
@@ -64,71 +58,68 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   const getSubscription = useCallback(async (): Promise<void> => {
     try {
-      await RNIap.initConnection();
+      await RNIap.initConnection()
       if (!IS_IOS) {
-        await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
-      }
-      else {
-        if (__DEV__) await RNIap.clearTransactionIOS();
+        await RNIap.flushFailedPurchasesCachedAsPendingAndroid()
+      } else {
+        if (__DEV__) await RNIap.clearTransactionIOS()
       }
 
-      const subs = await RNIap.getSubscriptions(subSkus);
-      setSubscriptions(subs);
+      const subs = await RNIap.getSubscriptions(subSkus)
+      setSubscriptions(subs)
     } catch (err) {
-      Logger.error({ 'initConnection': err })
-      Alert.alert('Fail to get in-app-purchase information', "",
-        [
-          { text: "OK", onPress: () => { navigation.goBack() } }
-        ]);
+      Logger.error({ initConnection: err })
+      Alert.alert("Fail to get in-app-purchase information", "", [
+        {
+          text: "OK",
+          onPress: () => {
+            navigation.goBack()
+          },
+        },
+      ])
     }
 
-
-    purchaseUpdateSubscription = purchaseUpdatedListener(
-      async (purchase: SubscriptionPurchase) => {
-        if (purchase) {
-
-          const receipt = purchase.transactionReceipt
-          if (receipt) {
-            try {
-              const ackResult = await finishTransaction(purchase);
-              Logger.debug({ 'ackResult': ackResult });
-            } catch (ackErr) {
-              Logger.error({ 'ackErr': ackErr });
-            }
-
-            let res: PurchaseValidationResult;
-            if (IS_IOS) {
-              res = await user.purchaseValidation(purchase.transactionReceipt, purchase.productId, purchase.originalTransactionIdentifierIOS)
-            } else {
-              res = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
-            }
-            if (res.kind === "ok") {
-              if (res.data.success) {
-                await user.loadPlan()
-                uiStore.setShowWelcomePremium(true)
-                navigation.navigate("welcome_premium")
-              }
-              else {
-                Alert.alert(
-                  translate("manage_plan.verify"),
-                  res.data.detail,
-                )
-              }
-            } else {
-              notifyApiError(res)
-            }
-            setProcessPayment(false)
+    purchaseUpdateSubscription = purchaseUpdatedListener(async (purchase: SubscriptionPurchase) => {
+      if (purchase) {
+        const receipt = purchase.transactionReceipt
+        if (receipt) {
+          try {
+            const ackResult = await finishTransaction(purchase)
+            Logger.debug({ ackResult: ackResult })
+          } catch (ackErr) {
+            Logger.error({ ackErr: ackErr })
           }
+
+          let res
+          if (IS_IOS) {
+            res = await user.purchaseValidation(
+              purchase.transactionReceipt,
+              purchase.productId,
+              purchase.originalTransactionIdentifierIOS,
+            )
+          } else {
+            res = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
+          }
+          if (res.kind === "ok") {
+            if (res.data.success) {
+              await user.loadPlan()
+              uiStore.setShowWelcomePremium(true)
+              navigation.navigate("welcome_premium")
+            } else {
+              Alert.alert(translate("manage_plan.verify"), res.data.detail)
+            }
+          } else {
+            notifyApiError(res)
+          }
+          setProcessPayment(false)
         }
       }
-    );
+    })
 
-    purchaseErrorSubscription = purchaseErrorListener(
-      (error: PurchaseError) => {
-        Logger.error({ 'purchaseErrorListener': error });
-      },
-    );
-  }, []);
+    purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
+      Logger.error({ purchaseErrorListener: error })
+    })
+  }, [])
 
   const purchase = async (productId: string) => {
     setProcessPayment(true)
@@ -136,33 +127,28 @@ export const PaymentScreen = observer(function PaymentScreen() {
       RNIap.clearTransactionIOS()
     }
 
-    RNIap.requestSubscription(productId)
-      .catch((error) => {
-        setProcessPayment(false)
-        if (error.code !== 'E_USER_CANCELLED') {
-          Logger.debug(JSON.stringify(error))
-        }
-      });
-
-  };
-
-
+    RNIap.requestSubscription(productId).catch((error) => {
+      setProcessPayment(false)
+      if (error.code !== "E_USER_CANCELLED") {
+        Logger.debug(JSON.stringify(error))
+      }
+    })
+  }
 
   // -------------------- EFFECT ----------------------
 
-
   useEffect(() => {
-    getSubscription();
+    getSubscription()
     return (): void => {
       if (purchaseUpdateSubscription) {
-        purchaseUpdateSubscription.remove();
+        purchaseUpdateSubscription.remove()
       }
       if (purchaseErrorSubscription) {
-        purchaseErrorSubscription.remove();
+        purchaseErrorSubscription.remove()
       }
-      RNIap.endConnection();
-    };
-  }, []);
+      RNIap.endConnection()
+    }
+  }, [])
 
   useEffect(() => {
     getEligibleTrial()
@@ -174,24 +160,39 @@ export const PaymentScreen = observer(function PaymentScreen() {
   const Segment = () => {
     return (
       <View
-        style={[styles.segment, {
-          backgroundColor: color.block,
-          maxWidth: 500,
-          alignSelf: "center"
-        }]}
+        style={[
+          styles.segment,
+          {
+            backgroundColor: color.block,
+            maxWidth: 500,
+            alignSelf: "center",
+          },
+        ]}
       >
         <TouchableOpacity
           onPress={() => setPayIndividual(true)}
-          style={[styles.segmentItem, { backgroundColor: payIndividual ? color.background : color.block, left: 0 }, payIndividual && styles.shadow]}
+          style={[
+            styles.segmentItem,
+            { backgroundColor: payIndividual ? color.background : color.block, left: 0 },
+            payIndividual && styles.shadow,
+          ]}
         >
-          <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.individual")}</Text>
+          <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>
+            {translate("payment.individual")}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => setPayIndividual(false)}
-          style={[styles.segmentItem, { backgroundColor: payIndividual ? color.block : color.background, right: 0 }, !payIndividual && styles.shadow]}
+          style={[
+            styles.segmentItem,
+            { backgroundColor: payIndividual ? color.block : color.background, right: 0 },
+            !payIndividual && styles.shadow,
+          ]}
         >
-          <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>{translate("payment.family_text")}</Text>
+          <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>
+            {translate("payment.family_text")}
+          </Text>
         </TouchableOpacity>
       </View>
     )
@@ -201,94 +202,83 @@ export const PaymentScreen = observer(function PaymentScreen() {
   return (
     <Layout
       containerStyle={{
-        backgroundColor: route.params.family || route.params.premium ? color.background : color.block, 
-        paddingHorizontal: 0
+        backgroundColor:
+          route.params.family || route.params.premium ? color.background : color.block,
+        paddingHorizontal: 0,
       }}
       header={
-        <View style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
           <Image
             source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
             style={{ height: 32, width: 152 }}
           />
           <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
-            <Image
-              source={require("./Cross.png")}
-              style={{ height: 24, width: 24 }}
-            />
+            <Image source={require("./Cross.png")} style={{ height: 24, width: 24 }} />
           </TouchableOpacity>
         </View>
       }
     >
-      {
-        route.params.family && (
-          <FamilyPayment
-            isTrial={isTrial}
-            subscriptions={subscriptions}
-            onPress={setEnable}
-            isProcessPayment={processPayment}
-            isEnable={isEnable}
-            purchase={purchase} />
-        )
-      }
-      {
-        route.params.premium && (
-          <PremiumPayment
-            isTrial={isTrial}
-            subscriptions={subscriptions}
-            onPress={setEnable}
-            isProcessPayment={processPayment}
-            isEnable={isEnable}
-            purchase={purchase} />
-        )
-      }
-      {
-        !route.params.family && !route.params.premium && (
-          <View>
-            <View style={{ flex: 1, top: 0, minHeight: 310, width: "100%", zIndex: 1 }}>
-              <PremiumBenefits benefitTab={route.params.benefitTab} />
-            </View>
+      {route.params.family && (
+        <FamilyPayment
+          isTrial={isTrial}
+          subscriptions={subscriptions}
+          onPress={setEnable}
+          isProcessPayment={processPayment}
+          isEnable={isEnable}
+          purchase={purchase}
+        />
+      )}
+      {route.params.premium && (
+        <PremiumPayment
+          isTrial={isTrial}
+          subscriptions={subscriptions}
+          onPress={setEnable}
+          isProcessPayment={processPayment}
+          isEnable={isEnable}
+          purchase={purchase}
+        />
+      )}
+      {!route.params.family && !route.params.premium && (
+        <View>
+          <View style={{ flex: 1, top: 0, minHeight: 310, width: "100%", zIndex: 1 }}>
+            <PremiumBenefits benefitTab={route.params.benefitTab} />
+          </View>
 
-            <View style={[styles.payment, { backgroundColor: color.background }]}>
-              <Segment />
-              <PricePlan
-                isTrial={isTrial}
-                subscriptions={subscriptions}
-                onPress={setEnable}
-                isProcessPayment={processPayment}
-                isEnable={isEnable}
-                personal={payIndividual}
-                purchase={purchase}
-              />
-              {IS_IOS && <Button
+          <View style={[styles.payment, { backgroundColor: color.background }]}>
+            <Segment />
+            <PricePlan
+              isTrial={isTrial}
+              subscriptions={subscriptions}
+              onPress={setEnable}
+              isProcessPayment={processPayment}
+              isEnable={isEnable}
+              personal={payIndividual}
+              purchase={purchase}
+            />
+            {IS_IOS && (
+              <Button
                 preset="link"
                 style={{
-                  marginBottom: 20
+                  marginBottom: 20,
                 }}
-                onPress={() => presentCodeRedemptionSheetIOS()}>
-                <Text style={{ fontSize: 18, color: color.primary }}>
-                  Redeem code
-                </Text>
-              </Button>}
-            </View>
-          </View>)}
+                onPress={() => presentCodeRedemptionSheetIOS()}
+              >
+                <Text style={{ fontSize: 18, color: color.primary }}>Redeem code</Text>
+              </Button>
+            )}
+          </View>
+        </View>
+      )}
     </Layout>
   )
 })
 
 const styles = StyleSheet.create({
-  header: {
-    position: "absolute",
-    top: 0,
-    zIndex: 2,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    paddingTop: 15,
-    width: "100%",
-  },
   payment: {
     width: "100%",
     flex: 1,
@@ -301,7 +291,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: "49%",
     alignItems: "center",
-
   },
   shadow: {
     shadowColor: "#000",

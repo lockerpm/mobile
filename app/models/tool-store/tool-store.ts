@@ -2,6 +2,8 @@ import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { ToolApi } from "../../services/api/tool-api"
 import { withEnvironment } from "../extensions/with-environment"
 import { omit } from "ramda"
+import { BreanchResult } from "app/static/types"
+import { CipherView } from "core/models/view"
 
 /**
  * Model description here for TypeScript hints.
@@ -13,17 +15,17 @@ export const ToolStoreModel = types
 
     // Data breach scanner
     breachedEmail: types.maybeNull(types.string),
-    breaches: types.array(types.frozen()),
-    selectedBreach: types.maybeNull(types.frozen()),
+    breaches: types.array(types.frozen<BreanchResult>()),
+    selectedBreach: types.maybeNull(types.frozen<BreanchResult>()),
 
     // Password health
     isDataLoading: types.maybeNull(types.boolean), // is data synchronizing or decrypting
     isLoadingHealth: types.maybeNull(types.boolean),
     lastHealthCheck: types.maybeNull(types.number),
-    weakPasswords: types.array(types.frozen()),
-    reusedPasswords: types.array(types.frozen()),
-    exposedPasswords: types.array(types.frozen()),
-    passwordStrengthMap: types.maybeNull(types.frozen()),
+    weakPasswords: types.array(types.frozen<CipherView>()),
+    reusedPasswords: types.array(types.frozen<CipherView>()),
+    exposedPasswords: types.array(types.frozen<CipherView>()),
+    passwordStrengthMap: types.maybeNull(types.frozen<Map<any, any>>()),
     passwordUseMap: types.maybeNull(types.frozen()),
     exposedPasswordMap: types.maybeNull(types.frozen()),
 
@@ -45,11 +47,11 @@ export const ToolStoreModel = types
       self.breachedEmail = email
     },
 
-    setBreaches: (breaches: Object[]) => {
+    setBreaches: (breaches: BreanchResult[]) => {
       self.breaches = cast(breaches)
     },
 
-    setSelectedBreach: (data: Object) => {
+    setSelectedBreach: (data: BreanchResult) => {
       self.selectedBreach = cast(data)
     },
 
@@ -67,27 +69,27 @@ export const ToolStoreModel = types
       self.lastHealthCheck = val === undefined ? Date.now() : val
     },
 
-    setWeakPasswords: (data: Object[]) => {
+    setWeakPasswords: (data: CipherView[]) => {
       self.weakPasswords = cast(data)
     },
 
-    setReusedPasswords: (data: Object[]) => {
+    setReusedPasswords: (data: CipherView[]) => {
       self.reusedPasswords = cast(data)
     },
 
-    setExposedPasswords: (data: Object[]) => {
+    setExposedPasswords: (data: CipherView[]) => {
       self.exposedPasswords = cast(data)
     },
 
-    setPasswordStrengthMap: (data: Object) => {
+    setPasswordStrengthMap: (data: Map<any, any>) => {
       self.passwordStrengthMap = cast(data)
     },
 
-    setPasswordUseMap: (data: Object) => {
+    setPasswordUseMap: (data: Map<any, any>) => {
       self.passwordUseMap = cast(data)
     },
 
-    setExposedPasswordMap: (data: Object) => {
+    setExposedPasswordMap: (data: Map<any, any>) => {
       self.exposedPasswordMap = cast(data)
     },
 
@@ -136,6 +138,19 @@ export const ToolStoreModel = types
     },
 
     // ----------------- API -------------------
+
+    fetchInAppNoti: async () => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.fetchInAppNoti(self.apiToken)
+      return res
+    },
+
+    markReadInAppNoti: async (id: string) => {
+      const toolApi = new ToolApi(self.environment.api)
+      const res = await toolApi.markReadInappNoti(self.apiToken, id)
+      return res
+    },
+
 
     // PRIVATE RELAY 
     fetchRelayListAddresses: async () => {

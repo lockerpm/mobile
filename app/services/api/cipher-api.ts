@@ -1,39 +1,29 @@
 import { ApiResponse } from "apisauce"
+import { Logger } from "../../utils/logger"
+import { Api } from "./api"
+import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
+import { detectTempId } from "../../utils/event-bus/helpers"
+
 import {
   ConfirmShareCipherData,
   EditShareCipherData,
-  EmptyResult,
-  GetCipherResult,
-  GetLastUpdateResult,
-  GetMySharesResult,
-  GetOrganizationResult,
-  GetProfileResult,
-  GetShareInvitationsResult,
-  GetSharingPublicKeyData,
-  GetSharingPublicKeyResult,
   ImportCipherData,
   ImportCipherWithFolderData,
   ImportFolderData,
-  ImportFolderResult,
   MoveFolderData,
-  PostCipherResult,
+  MyShareType,
   QuickShareCipherData,
-  QuickShareCipherResult,
-  QuickSharesResult,
   ShareCipherData,
-  ShareCipherResult,
-  ShareInvitationResponseData,
   ShareMultipleCiphersData,
+  SharingInvitationType,
   StopShareCipherData,
-  SyncQuickSharesResult,
-  SyncResult,
-} from "./api.types"
-import { CipherRequest } from "../../../core/models/request/cipherRequest"
-import { Logger } from "../../utils/logger"
-import { Api } from "./api"
-import { getGeneralApiProblem } from "./api-problem"
-import { detectTempId } from "../../utils/event-bus/helpers"
-import { SendRequest } from "../../../core/models/request/sendRequest"
+} from "app/static/types"
+import { SyncResponse } from "core/models/response/syncResponse"
+import { CipherResponse } from "core/models/response/cipherResponse"
+import { CipherRequest } from "core/models/request/cipherRequest"
+import { ProfileResponse } from "core/models/response/profileResponse"
+import { ProfileOrganizationResponse } from "core/models/response/profileOrganizationResponse"
+import { SendRequest } from "core/models/request/sendRequest"
 
 export class CipherApi {
   private api: Api
@@ -43,7 +33,13 @@ export class CipherApi {
   }
 
   // Sync
-  async syncData(token: string, page?: number, size?: number): Promise<SyncResult> {
+  async syncData(
+    token: string,
+    page?: number,
+    size?: number,
+  ): Promise<
+    { kind: "ok"; data: SyncResponse & { count?: { ciphers: number } } } | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -67,7 +63,10 @@ export class CipherApi {
   }
 
   // Get single cipher
-  async getCipher(token: string, id: string): Promise<GetCipherResult> {
+  async getCipher(
+    token: string,
+    id: string,
+  ): Promise<{ kind: "ok"; data: CipherResponse } | GeneralApiProblem> {
     try {
       detectTempId([id])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -95,7 +94,7 @@ export class CipherApi {
     data: CipherRequest,
     score: number,
     collectionIds: string[],
-  ): Promise<PostCipherResult> {
+  ): Promise<{ kind: "ok"; data: { id: string } } | GeneralApiProblem> {
     try {
       detectTempId(collectionIds)
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -124,7 +123,7 @@ export class CipherApi {
   async importCipherWithFolder(
     token: string,
     data: ImportCipherWithFolderData,
-  ): Promise<EmptyResult> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -146,7 +145,10 @@ export class CipherApi {
   }
 
   // Import folders
-  async importFolders(token: string, data: ImportFolderData): Promise<ImportFolderResult> {
+  async importFolders(
+    token: string,
+    data: ImportFolderData,
+  ): Promise<{ kind: "ok"; data: { ids: string[] } } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -168,7 +170,10 @@ export class CipherApi {
   }
 
   // Import ciphers
-  async importCiphers(token: string, data: ImportCipherData): Promise<EmptyResult> {
+  async importCiphers(
+    token: string,
+    data: ImportCipherData,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -190,7 +195,10 @@ export class CipherApi {
   }
 
   // Offline sync cipher
-  async offlineSyncCipher(token: string, data: ImportCipherWithFolderData): Promise<EmptyResult> {
+  async offlineSyncCipher(
+    token: string,
+    data: ImportCipherWithFolderData,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -218,7 +226,7 @@ export class CipherApi {
     data: CipherRequest,
     score: number,
     collectionIds: string[],
-  ): Promise<EmptyResult> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id, ...collectionIds])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -251,7 +259,7 @@ export class CipherApi {
     data: CipherRequest,
     score: number,
     collectionIds: string[],
-  ): Promise<EmptyResult> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id, ...collectionIds])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -278,7 +286,7 @@ export class CipherApi {
   }
 
   // Permanent delete ciphers
-  async deleteCiphers(token: string, ids: string[]): Promise<EmptyResult> {
+  async deleteCiphers(token: string, ids: string[]): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId(ids)
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -301,7 +309,7 @@ export class CipherApi {
   }
 
   // Move to trash ciphers
-  async toTrashCiphers(token: string, ids: string[]): Promise<EmptyResult> {
+  async toTrashCiphers(token: string, ids: string[]): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId(ids)
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -324,7 +332,7 @@ export class CipherApi {
   }
 
   // Restore ciphers
-  async restoresCiphers(token: string, ids: string[]): Promise<EmptyResult> {
+  async restoresCiphers(token: string, ids: string[]): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId(ids)
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -347,7 +355,10 @@ export class CipherApi {
   }
 
   // Move to folder
-  async moveToFolder(token: string, data: MoveFolderData): Promise<EmptyResult> {
+  async moveToFolder(
+    token: string,
+    data: MoveFolderData,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([data.folderId, ...data.ids])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -370,7 +381,9 @@ export class CipherApi {
   }
 
   // Get last update time
-  async getLastUpdate(token: string): Promise<GetLastUpdateResult> {
+  async getLastUpdate(
+    token: string,
+  ): Promise<{ kind: "ok"; data: { revision_date: number } } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -394,8 +407,10 @@ export class CipherApi {
   // Get sharing public key
   async getSharingPublicKey(
     token: string,
-    payload: GetSharingPublicKeyData,
-  ): Promise<GetSharingPublicKeyResult> {
+    payload: {
+      email: string
+    },
+  ): Promise<{ kind: "ok"; data: { public_key: string } } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -422,7 +437,17 @@ export class CipherApi {
   async quickShareCipher(
     token: string,
     payload: QuickShareCipherData,
-  ): Promise<QuickShareCipherResult> {
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          access_id: string
+          cipher_id: string
+          id: string
+        }
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -446,7 +471,18 @@ export class CipherApi {
   }
 
   // Share cipher
-  async shareCipher(token: string, payload: ShareCipherData): Promise<ShareCipherResult> {
+  async shareCipher(
+    token: string,
+    payload: ShareCipherData,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          id: string // organizationId
+        }
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -473,7 +509,7 @@ export class CipherApi {
   async shareMultipleCiphers(
     token: string,
     payload: ShareMultipleCiphersData,
-  ): Promise<EmptyResult> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -501,7 +537,7 @@ export class CipherApi {
     organizationId: string,
     memberId: string,
     payload: StopShareCipherData,
-  ): Promise<EmptyResult> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([organizationId, memberId])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -530,7 +566,7 @@ export class CipherApi {
     organizationId: string,
     memberId: string,
     payload: EditShareCipherData,
-  ): Promise<EmptyResult> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([organizationId, memberId])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -559,7 +595,7 @@ export class CipherApi {
     organizationId: string,
     memberId: string,
     payload: ConfirmShareCipherData,
-  ): Promise<EmptyResult> {
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([organizationId, memberId])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -583,7 +619,9 @@ export class CipherApi {
   }
 
   // Get sharing invitations
-  async getSharingInvitations(token: string): Promise<GetShareInvitationsResult> {
+  async getSharingInvitations(
+    token: string,
+  ): Promise<{ kind: "ok"; data: SharingInvitationType[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -606,7 +644,9 @@ export class CipherApi {
   }
 
   // Get my shares
-  async getMyShares(token: string): Promise<GetMySharesResult> {
+  async getMyShares(
+    token: string,
+  ): Promise<{ kind: "ok"; data: MyShareType[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -628,7 +668,10 @@ export class CipherApi {
   }
 
   // Leave share
-  async leaveShare(token: string, organizationId: string): Promise<EmptyResult> {
+  async leaveShare(
+    token: string,
+    organizationId: string,
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([organizationId])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -655,8 +698,10 @@ export class CipherApi {
   async respondShareInvitation(
     token: string,
     id: string,
-    payload: ShareInvitationResponseData,
-  ): Promise<EmptyResult> {
+    payload: {
+      status: "accept" | "reject"
+    },
+  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       detectTempId([id])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -680,7 +725,9 @@ export class CipherApi {
   }
 
   // Get profile
-  async getPMProfile(token: string): Promise<GetProfileResult> {
+  async getPMProfile(
+    token: string,
+  ): Promise<{ kind: "ok"; data: ProfileResponse } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -703,7 +750,10 @@ export class CipherApi {
   }
 
   // Get single organization
-  async getOrganization(token: string, id: string): Promise<GetOrganizationResult> {
+  async getOrganization(
+    token: string,
+    id: string,
+  ): Promise<{ kind: "ok"; data: ProfileOrganizationResponse } | GeneralApiProblem> {
     try {
       detectTempId([id])
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
@@ -727,14 +777,27 @@ export class CipherApi {
 
   // ------------------QUICK SHARE--------------------------------------
 
-  async quickShare(token: string, sendRequest: SendRequest): Promise<QuickSharesResult> {
+  async quickShare(
+    token: string,
+    sendRequest: SendRequest,
+  ): Promise<
+    | {
+        kind: "ok"
+        data: {
+          id: string
+          cipher_id: string
+          access_id: string
+        }
+      }
+    | GeneralApiProblem
+  > {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `cystack_platform/pm/quick_shares`,
-        sendRequest
+        sendRequest,
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -750,7 +813,7 @@ export class CipherApi {
   }
 
   // Get single organization
-  async stopQuickSharing(token: string, id: string): Promise<EmptyResult> {
+  async stopQuickSharing(token: string, id: string): Promise<{ kind: "ok" } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 
@@ -772,7 +835,10 @@ export class CipherApi {
   }
 
   // Get single organization
-  async syncQuickShares(token: string, page: number): Promise<SyncQuickSharesResult> {
+  async syncQuickShares(
+    token: string,
+    page: number,
+  ): Promise<{ kind: "ok"; data: any[] } | GeneralApiProblem> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
 

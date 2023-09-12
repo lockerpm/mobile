@@ -16,7 +16,7 @@ import { color, commonStyles, fontSize } from "../../../theme"
 import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
 import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL, IS_PROD } from "../../../config/constants"
 import { Checkbox } from "react-native-ui-lib"
-import countries from "../../../common/countries.json"
+import countries from 'app/static/countries.json'
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { GitHubLoginModal } from "../login/github-login-modal"
 import { getCookies, logRegisterSuccessEvent } from "../../../utils/analytics"

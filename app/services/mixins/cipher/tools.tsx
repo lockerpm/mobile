@@ -3,7 +3,6 @@ import React, { createContext, useContext } from 'react'
 import { useMixins } from '..'
 import { CipherType } from '../../../../core/enums'
 import { CipherView } from '../../../../core/models/view'
-import { PlanType } from '../../../config/types'
 import { useStores } from '../../../models'
 import { Logger } from '../../../utils/logger'
 import { useCoreService } from '../../core-service'
@@ -11,7 +10,9 @@ import { useCipherDataMixins } from './data'
 
 
 const defaultData = {
-  loadPasswordsHealth: async () => { },
+  loadPasswordsHealth: async () => { 
+    //
+  },
   getCipherCount: async (type: CipherType, deleted?: boolean, share?: boolean ): Promise<number> => { return 0 },
   checkLoginIdExist: async (id: string): Promise<boolean> => { return false }
 }

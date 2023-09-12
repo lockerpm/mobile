@@ -4,9 +4,9 @@ import { observer } from "mobx-react-lite"
 import { Text, Button, Modal } from "../../../components"
 import Entypo from 'react-native-vector-icons/Entypo'
 import { useMixins } from "../../../services/mixins"
-import { EnterpriseInvitation } from "../../../services/api"
 import { useStores } from "../../../models"
 import { EnterpriseInvitationStatus } from "../../../config/types"
+import { EnterpriseInvitation } from "app/static/types"
 
 
 type Props = {

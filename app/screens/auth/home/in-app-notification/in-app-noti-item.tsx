@@ -21,10 +21,10 @@ export const NotiListItem = (props: Props) => {
   const { type, title, description, lang, id, metadata, read, publish_time } = props
   const navigation = useNavigation()
   const { translate, notifyApiError } = useMixins()
-  const { user } = useStores()
+  const { user, toolStore } = useStores()
 
   const markRead = async () => {
-    const res = await user.markReadInAppNoti(id)
+    const res = await toolStore.markReadInAppNoti(id)
     if (res.kind !== "ok") {
       notifyApiError(res)
     }

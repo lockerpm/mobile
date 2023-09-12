@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native"
 import { ColorValue, ImageSourcePropType, TouchableOpacity, View } from "react-native"
 import { useStores } from "../../../models"
 import { useMixins } from "../../../services/mixins"
-import { EnterpriseInvitation } from "../../../services/api"
+import { EnterpriseInvitation } from "app/static/types"
 
 
 const ASSETS = {

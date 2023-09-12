@@ -1,8 +1,9 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
-import { EditShareCipherData } from "../../services/api"
 import { EnterpriseApi } from "../../services/api/enterprise-api"
 import { withEnvironment } from "../extensions/with-environment"
+import { FolderApi } from "app/services/api/folder-api"
+import { EditShareCipherData } from "app/static/types"
 
 /**
  * Model description here for TypeScript hints.
@@ -11,7 +12,7 @@ export const EnterpriseModel = types
   .model("Enterprise")
   .props({
     apiToken: types.maybeNull(types.string),
-    isEnterpriseInvitations: false
+    isEnterpriseInvitations: false,
   })
   .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -42,11 +43,13 @@ export const EnterpriseModel = types
       return res
     },
 
-    editShareCipher: async (organizationId: string,
+    editShareCipher: async (
+      organizationId: string,
       groupID: string,
-      payload: EditShareCipherData) => {
-      const enterpriseApi = new EnterpriseApi(self.environment.api)
-      const res = await enterpriseApi.editShareCipher(self.apiToken, organizationId, groupID, payload)
+      payload: EditShareCipherData,
+    ) => {
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.editShareCipher(self.apiToken, organizationId, groupID, payload)
       return res
     },
     invitations: async () => {
@@ -54,7 +57,7 @@ export const EnterpriseModel = types
       const res = await enterpriseApi.invitations(self.apiToken)
       if (res.kind === "ok") {
         if (res.data.length > 0) {
-          self.setEnterpriseInvited(res.data.some(e => e.domain === null))
+          self.setEnterpriseInvited(res.data.some((e) => e.domain === null))
         }
         return res.data
       }
@@ -66,9 +69,7 @@ export const EnterpriseModel = types
       return res
     },
   }))
-  .postProcessSnapshot(omit([
-    'enterpriseInvitations',
-  ]))
+  .postProcessSnapshot(omit(["enterpriseInvitations"]))
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).
  * Useful for sensitive data like passwords, or transitive state like whether a modal is open.
@@ -78,7 +79,7 @@ export const EnterpriseModel = types
  */
 
 type EnterpriseType = Instance<typeof EnterpriseModel>
-export interface Enterprise extends EnterpriseType { }
+export interface Enterprise extends EnterpriseType {}
 type EnterpriseSnapshotType = SnapshotOut<typeof EnterpriseModel>
-export interface EnterpriseSnapshot extends EnterpriseSnapshotType { }
+export interface EnterpriseSnapshot extends EnterpriseSnapshotType {}
 export const createEnterpriseDefaultModel = () => types.optional(EnterpriseModel, {})

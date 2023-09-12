@@ -9,11 +9,11 @@ import { useMixins } from "../../../../services/mixins"
 import { APP_ICON } from "../../../../common/mappings"
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
-import { OnPremisePreloginData } from "../../../../services/api"
 import { LanguagePicker } from "../../../../components/utils"
 import { MethodSelection } from "../../login/2fa/method-selection"
 import { OnPremiseOtp } from "./onpremise-2fa-otp"
 import { useCoreService } from "../../../../services/core-service"
+import { OnPremisePreloginData } from "app/static/types"
 
 interface Props {
   data: OnPremisePreloginData

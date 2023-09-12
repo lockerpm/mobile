@@ -56,7 +56,6 @@ import { Utils } from '../misc/utils';
 import _ from 'lodash'
 import { AppEventType, EventBus } from '../../app/utils/event-bus';
 import { BACKGROUND_DECRYPT_BATCH_SIZE, BACKGROUND_DECRYPT_FIRST_BATCH_SIZE, BACKGROUND_DECRYPT_REINDEX_EVERY } from '../../app/config/constants';
-import { DurationTest } from '../../app/utils/testing/duration';
 
 const Keys = {
     ciphersPrefix: 'ciphers_',

@@ -9,12 +9,12 @@ import { commonStyles } from "../../../theme"
 import { CipherView } from "../../../../core/models/view"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { AccountRoleText } from "../../../config/types"
-import { GroupData, GroupMemberData } from "../../../services/api"
 import { AppEventType, EventBus } from "../../../utils/event-bus"
 import { Icon } from "../../icon/icon"
 import Entypo from 'react-native-vector-icons/Entypo'
 import { SharedGroupType, SharedMemberType } from "../../../config/types/api"
 import { SharedUsers } from "../../../screens/auth/share-cipher/shared-user"
+import { GroupMemberData, GroupData } from "app/static/types"
 
 interface Props {
   isOpen?: boolean

@@ -6,19 +6,19 @@ import { SendRequest } from "../../../core/models/request/sendRequest"
 import { CipherView } from "../../../core/models/view"
 import { QUICK_SHARE_BASE_URL } from "../../config/constants"
 import { MyShareType, SharingInvitationType } from "../../config/types/api"
+import { CipherApi } from "../../services/api/cipher-api"
+import { withEnvironment } from "../extensions/with-environment"
 import {
   ConfirmShareCipherData,
   EditShareCipherData,
+  StopShareCipherData,
+  ShareMultipleCiphersData,
+  ShareCipherData,
+  ImportFolderData,
   ImportCipherData,
   ImportCipherWithFolderData,
-  ImportFolderData,
   MoveFolderData,
-  ShareCipherData,
-  ShareMultipleCiphersData,
-  StopShareCipherData,
-} from "../../services/api"
-import { CipherApi } from "../../services/api/cipher-api"
-import { withEnvironment } from "../extensions/with-environment"
+} from "app/static/types"
 
 /**
  * Model description here for TypeScript hints.
@@ -38,14 +38,14 @@ export const CipherStoreModel = types
     notSynchedCiphers: types.array(types.string), // Create in offline mode
     notUpdatedCiphers: types.array(types.string), // Create in online mode but somehow not update yet
     lastSync: types.maybeNull(types.number),
-    lastSyncQuickShare:  types.maybeNull(types.number),
+    lastSyncQuickShare: types.maybeNull(types.number),
     lastCacheUpdate: types.maybeNull(types.number),
     sharingInvitations: types.array(types.frozen<SharingInvitationType>()),
     myShares: types.array(types.frozen<MyShareType>()),
     organizations: types.array(types.frozen<Organization>()),
 
     // Selector
-    
+
     generatedPassword: types.maybeNull(types.string),
     selectedTotp: types.maybeNull(types.string),
     selectedCipher: types.maybeNull(types.frozen()),
@@ -392,8 +392,10 @@ export const CipherStoreModel = types
       return []
     },
 
-    getPublicShareUrl: ( accessId, key) => {
-      return `${QUICK_SHARE_BASE_URL}/shares/quick-share-item/${accessId}#${encodeURIComponent(key)}`
+    getPublicShareUrl: (accessId, key) => {
+      return `${QUICK_SHARE_BASE_URL}/shares/quick-share-item/${accessId}#${encodeURIComponent(
+        key,
+      )}`
     },
 
     stopQuickSharing: async (send) => {

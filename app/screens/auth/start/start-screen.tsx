@@ -109,7 +109,7 @@ export const StartScreen = observer(() => {
     } else if (uiStore.isOnSaveLogin) {
       // uiStore.setIsOnSaveLogin(false)
       navigation.navigate("passwords__edit", { mode: "add" })
-    } else if (!!enterpriseStore.isEnterpriseInvitations) {
+    } else if (enterpriseStore.isEnterpriseInvitations) {
       navigation.navigate("enterpriseInvited")
     } else {
       navigation.navigate("mainTab", { screen: user.defaultTab })

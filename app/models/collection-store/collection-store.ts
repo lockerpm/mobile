@@ -4,9 +4,9 @@ import { CipherRequest } from "../../../core/models/request/cipherRequest"
 import { CollectionRequest } from "../../../core/models/request/collectionRequest"
 import { CollectionView } from "../../../core/models/view/collectionView"
 import { AccountRoleText } from "../../config/types"
-import { CollectionActionData } from "../../services/api"
-import { CollectionApi } from "../../services/api/collection-api"
 import { withEnvironment } from "../extensions/with-environment"
+import { FolderApi } from "app/services/api/folder-api"
+import { CollectionActionData } from "app/static/types"
 
 /**
  * Model description here for TypeScript hints.
@@ -82,35 +82,35 @@ export const CollectionStoreModel = types
       self.notUpdatedCollections = cast([])
     },
 
-    // ----------------- CRUD -------------------
-
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
     createCollection: async (teamId: string, data: CollectionRequest) => {
-      const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.postCollection(self.apiToken, teamId, data)
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.postCollection(self.apiToken, teamId, data)
       return res
     },
 
     updateCollection: async (id: string, teamId: string, data: CollectionRequest) => {
-      const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.putCollection(self.apiToken, id, teamId, data)
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.putCollection(self.apiToken, id, teamId, data)
       return res
     },
 
     deleteCollection: async (id: string, teamId: string, payload: CollectionActionData) => {
-      const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.deleteCollection(self.apiToken, id, teamId, payload)
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.deleteCollection(self.apiToken, id, teamId, payload)
       return res
     },
 
     stopShare: async (id: string, teamId: string, payload: CollectionActionData) => {
-      const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.stopShare(self.apiToken, id, teamId, payload)
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.stopShare(self.apiToken, id, teamId, payload)
       return res
     },
 
     removeShareMember: async (memberId: string, teamId: string, payload: CollectionActionData, isGroup?: boolean) => {
-      const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.removeShareMember(self.apiToken, memberId, teamId, payload, isGroup)
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.removeShareMember(self.apiToken, memberId, teamId, payload, isGroup)
       return res
     },
 
@@ -120,20 +120,20 @@ export const CollectionStoreModel = types
       key: string
       hide_passwords: boolean
     }[]) => {
-      const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.addShareMember(self.apiToken, teamId, members)
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.addShareMember(self.apiToken, teamId, members)
       return res
     },
 
     updateShareItem: async (id: string, teamId: string, payload: { cipher: CipherRequest & { id: string } }) => {
-      const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.updateShareItem(self.apiToken, id, teamId, payload)
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.updateShareItem(self.apiToken, id, teamId, payload)
       return res
     },
 
     removeShareItem: async (id: string, teamId: string, payload: { cipher: CipherRequest & { id: string } }) => {
-      const collectionApi = new CollectionApi(self.environment.api)
-      const res = await collectionApi.removeShareItem(self.apiToken, id, teamId, payload)
+      const folderApi = new FolderApi(self.environment.api)
+      const res = await folderApi.removeShareItem(self.apiToken, id, teamId, payload)
       return res
     },
 

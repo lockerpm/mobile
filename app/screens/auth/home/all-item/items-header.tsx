@@ -14,7 +14,7 @@ import ConfigIcon from "./config.svg"
 import ConfigIconLight from "./config-light.svg"
 import PlusIcon from "./plus.svg"
 import PlusIconLight from "./plus-light.svg"
-import { AppNotification } from "../../../../services/api"
+import { AppNotification } from "app/static/types"
 
 interface Props {
   openSort: Function
@@ -62,7 +62,7 @@ export const ItemsHeader = observer((props: Props) => {
   } = props
   const { translate, color, isDark, notifyApiError } = useMixins()
   const { toTrashCiphers, createRandomPasswords } = useCipherDataMixins()
-  const { user, uiStore } = useStores()
+  const { user, uiStore, toolStore } = useStores()
 
   // ----------------------- PARAMS ------------------------
 
@@ -78,7 +78,7 @@ export const ItemsHeader = observer((props: Props) => {
 
   const fetchInAppNotification = async () => {
     if (navigation.isFocused()) {
-      const res = await user.fetchInAppNoti()
+      const res = await toolStore.fetchInAppNoti()
       if (res.kind === "ok") {
         setNotifications(res.data)
       } else {
