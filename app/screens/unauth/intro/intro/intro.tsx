@@ -8,7 +8,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated"
 import { withPause } from "react-native-redash"
-import { AutoImage as Image } from "../../../../components"
 
 const SCREEN_WIDTH = Dimensions.get("screen").width
 
