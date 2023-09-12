@@ -1,9 +1,6 @@
 import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { setLang } from "../../i18n"
-import { UserApi } from "../../services/api/user-api"
-import { IdApi } from "../../services/api/id-api"
 import { save, StorageKey, remove } from "../../utils/storage"
-import { withEnvironment } from "../extensions/with-environment"
 import DeviceInfo from "react-native-device-info"
 import moment from "moment"
 import { omit } from "ramda"
@@ -11,6 +8,7 @@ import { AppEventType, EventBus } from "../../utils/event-bus"
 import { AccountType, EmergencyAccessType, PlanType, PolicyType } from "../../config/types"
 import { Enterprise, UserTeam } from "../../config/types/api"
 import { NotificationSettingData, LoginData, ChangePasswordRequest, RegisterLockerRequest, SessionOtpLoginRequest, SessionLoginRequest, SocialLoginRequest, RegisterPasskeyRequest, RegisterPasskeyOptionRequest, RegisterRequest, AuthPasskeyRequest } from "app/static/types"
+import { idApi, userApi } from "app/services/api"
 
 export enum AppTimeoutType {
   SCREEN_OFF = -1,
@@ -83,7 +81,6 @@ export const UserModel = types
     // cache
     isMobileLangChange: types.maybeNull(types.boolean),
   })
-  .extend(withEnvironment)
   .views((self) => ({
     get isFreePlan() {
       return self.plan && self.plan.alias === PlanType.FREE
@@ -293,7 +290,6 @@ export const UserModel = types
     // -------------------- LOCKER ------------------------
 
     getPMToken: async (token: string) => {
-      const userApi = new UserApi(self.environment.api)
       const pmRes = await userApi.getPMToken(
         token,
         {
@@ -312,7 +308,6 @@ export const UserModel = types
     },
 
     getUser: async (options?: { customToken?: string; dontSetData?: boolean }) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUser(options?.customToken || self.apiToken)
       if (res.kind === "ok" && !options?.dontSetData) {
         if (self.email && res.user.email !== self.email) {
@@ -332,31 +327,26 @@ export const UserModel = types
     },
 
     deleteAccount: async (hashedPassword: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.deleteAccount(self.apiToken, hashedPassword)
       return res
     },
 
     sendPasswordHint: async (email: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.sendMasterPasswordHint(self.apiToken, { email })
       return res
     },
 
     deauthorizeSessions: async (hashedPassword: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.deauthorizeSessions(self.apiToken, hashedPassword)
       return res
     },
 
     purgeAccount: async (hashedPassword: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.purgeAccount(self.apiToken, hashedPassword)
       return res
     },
 
     getInvitations: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getInvitations(self.apiToken)
       if (res.kind === "ok") {
         self.setInvitations(res.data)
@@ -365,19 +355,16 @@ export const UserModel = types
     },
 
     invitationRespond: async (id: string, status: "accept" | "reject") => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.invitationRespond(self.apiToken, id, status)
       return res
     },
 
     getUserPw: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getUserPw(self.apiToken)
       if (res.kind === "ok") {
         self.saveUserPw(res.user)
         if (res.user.pwd_user_type === AccountType.ENTERPRISE && !self.onPremiseUser) {
-          const _userApi = new UserApi(self.environment.api)
-          const _res = await _userApi.getEnterprise(self.apiToken)
+          const _res = await userApi.getEnterprise(self.apiToken)
           if (_res.kind === "ok") {
             self.saveEnterprise(_res.data)
           }
@@ -387,16 +374,13 @@ export const UserModel = types
     },
 
     getEnterprise: async () => {
-      const _userApi = new UserApi(self.environment.api)
-      const _res = await _userApi.getEnterprise(self.apiToken)
+      const _res = await userApi.getEnterprise(self.apiToken)
       if (_res.kind === "ok") {
         self.saveEnterprise(_res.data)
       }
     },
 
     sessionLogin: async (payload: SessionLoginRequest) => {
-      const userApi = new UserApi(self.environment.api)
-
       const res = await userApi.sessionLogin(self.apiToken, payload)
       if (res.kind === "ok") {
         self.setLoggedInPw(true)
@@ -405,8 +389,6 @@ export const UserModel = types
     },
 
     sessionOtpLogin: async (payload: SessionOtpLoginRequest) => {
-      const userApi = new UserApi(self.environment.api)
-
       const res = await userApi.sessionOtpLogin(self.apiToken, payload)
       if (res.kind === "ok") {
         self.setLoggedInPw(true)
@@ -415,19 +397,16 @@ export const UserModel = types
     },
 
     registerLocker: async (payload: RegisterLockerRequest) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.registerLocker(self.apiToken, payload)
       return res
     },
 
     changeMasterPassword: async (payload: ChangePasswordRequest) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.changeMasterPassword(self.apiToken, payload)
       return res
     },
 
     changeLanguage: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.setUserLanguage(self.apiToken, self.language)
       return res
     },
@@ -437,7 +416,6 @@ export const UserModel = types
     },
 
     loadTeams: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getTeams(self.apiToken)
       if (res.kind === "ok") {
         self.setTeams(res.teams)
@@ -458,7 +436,6 @@ export const UserModel = types
         })
         return null
       }
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getPlan(self.apiToken)
       if (res.kind === "ok") {
         self.setPlan(res.data)
@@ -467,19 +444,16 @@ export const UserModel = types
     },
 
     getTeamPolicies: async (organizationId: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getTeamPolicies(self.apiToken, organizationId)
       return res
     },
 
     getTeamPolicy: async (organizationId: string, policyType: PolicyType) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getTeamPolicy(self.apiToken, organizationId, policyType)
       return res
     },
 
     feedback: async (description: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.sendFeedback(self.apiToken, {
         type: "feedback",
         description,
@@ -488,7 +462,6 @@ export const UserModel = types
     },
 
     updateFCM: async (token: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.updateFCM(self.apiToken, {
         fcm_id: token,
         device_identifier: DeviceInfo.getUniqueId(),
@@ -497,44 +470,37 @@ export const UserModel = types
     },
 
     getBillingDocuments: async (page: number) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getBillingDocuments(self.apiToken, page)
       return res
     },
 
     getFamilyMember: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getFamilyMember(self.apiToken)
       return res
     },
 
     addFamilyMember: async (memberEmails: string[]) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.addFamilyMember(self.apiToken, memberEmails)
       return res
     },
 
     removeFamilyMember: async (memberID: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.removeFamilyMember(self.apiToken, memberID)
       return res
     },
 
     getReferLink: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getReferLink(self.apiToken)
       return res
     },
 
     getTrialEligible: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getTrialEligible(self.apiToken)
       return res
     },
 
     // NOTIFICATION SETTING
     getNotificationSettings: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.getNotificationSettings(self.apiToken)
       if (res.kind === "ok") {
         self.setNotificationSettings(res.data)
@@ -542,29 +508,24 @@ export const UserModel = types
       return res
     },
     updateNotiSettings: async (categoryId: string, mail: boolean, notification: boolean) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.updateNotiSettings(self.apiToken, categoryId, mail, notification)
       return res
     },
 
     // EMERGENCY ACCESS
     inviteEA: async (email: string, key: string, type: EmergencyAccessType, waitTime: number) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAInvite(self.apiToken, email, key, type, waitTime)
       return res
     },
     trustedEA: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EATrusted(self.apiToken)
       return res
     },
     grantedEA: async () => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAGranted(self.apiToken)
       return res
     },
     yourTrustedActionEA: async (id: string, action: "reject" | "approve" | "reinvite") => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAyourTrustedAction(self.apiToken, id, action)
       if (res.kind === "ok") {
         return true
@@ -572,7 +533,6 @@ export const UserModel = types
       return false
     },
     trustedYouActionEA: async (id: string, action: "accept" | "initiate") => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EATrustedYouAction(self.apiToken, id, action)
       if (res.kind === "ok") {
         return true
@@ -580,27 +540,22 @@ export const UserModel = types
       return false
     },
     takeoverEA: async (id: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EATakeover(self.apiToken, id)
       return res
     },
     passwordEA: async (id: string, payload: any) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAPassword(self.apiToken, id, payload)
       return res
     },
     lockerPasswordEA: async (id: string, newPass: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EALockerPassword(self.apiToken, id, newPass)
       return res
     },
     viewEA: async (id: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EAView(self.apiToken, id)
       return res
     },
     removeEA: async (id: string) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.EARemove(self.apiToken, id)
       if (res.kind === "ok") {
         return true
@@ -612,7 +567,6 @@ export const UserModel = types
       subscriptionId?: string,
       originalTransactionIdentifierIOS?: string,
     ) => {
-      const userApi = new UserApi(self.environment.api)
       const res = await userApi.purchaseValidation(
         self.apiToken,
         receipt,
@@ -625,47 +579,38 @@ export const UserModel = types
   .actions((self) => ({
     // -------------------- ID ------------------------
     sendOtpEmail: async (username: string, password: string, request_code: string) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.sendOtpEmail({ username, password, request_code })
       return res
     },
     recoverAccount: async (username: string) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.recoverAccount({ username })
       return res
     },
     resetPassword: async (username: string, method: string, request_code?: string) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.resetPassword({ username, method, request_code })
       return res
     },
     resetPasswordWithCode: async (username: string, code: string) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.resetPasswordWithCode({ username, code })
       return res
     },
     setNewPassword: async (new_password: string, token: string) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.setNewPassword({ new_password, token })
       return res
     },
     setSocialPassword: async (new_password: string, token: string, username?: string) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.setPassword({ new_password, token, username })
       return res
     },
     webAuthListCredentials: async (paging: number) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.webAuthListCredentials(self.apiToken, paging)
       return res
     },
     loginMethod: async (username: string) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.loginMethod(username)
       return res
     },
     login: async (payload: LoginData, isOtp?: boolean) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.login(payload, self.deviceId, isOtp)
       if (res.kind === "ok") {
         if (res.data.token) {
@@ -675,7 +620,6 @@ export const UserModel = types
       return res
     },
     authPasskey: async (payload: AuthPasskeyRequest, deviceId?: string) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.authPasskey(payload, deviceId)
       if (res.kind === "ok") {
         if (res.data.token) {
@@ -685,32 +629,26 @@ export const UserModel = types
       return res
     },
     authPasskeyOptions: async (username: string) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.authPasskeyOptions(username)
       return res
     },
     socialLogin: async (payload: SocialLoginRequest) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.socialLogin(payload, self.deviceId)
       return res
     },
     register: async (payload: RegisterRequest) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.register(payload)
       return res
     },
     registerPasskeyOptions: async (payload: RegisterPasskeyOptionRequest) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.registerPasskeyOptions(payload)
       return res
     },
     registerPasskey: async (payload: RegisterPasskeyRequest) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.registerPasskey(payload)
       return res
     },
     logout: async () => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.logout(self.apiToken)
       self.clearUser()
       self.clearSettings()
@@ -718,14 +656,12 @@ export const UserModel = types
     },
     // business
     businessLoginMethod: async () => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.businessLoginMethod()
       return res
     },
     // On Premise
     // user is on premise
     onPremisePreLogin: async (email: string) => {
-      const idApi = new IdApi(self.environment.api)
       const res = await idApi.onPremisePreLogin(email)
       return res
     },

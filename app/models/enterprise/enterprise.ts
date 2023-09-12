@@ -1,9 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { omit } from "ramda"
-import { EnterpriseApi } from "../../services/api/enterprise-api"
-import { withEnvironment } from "../extensions/with-environment"
-import { FolderApi } from "app/services/api/folder-api"
 import { EditShareCipherData } from "app/static/types"
+import { enterpriseApi, folderApi } from "app/services/api"
 
 /**
  * Model description here for TypeScript hints.
@@ -14,7 +12,6 @@ export const EnterpriseModel = types
     apiToken: types.maybeNull(types.string),
     isEnterpriseInvitations: false,
   })
-  .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     setApiToken: (token: string) => {
@@ -26,19 +23,16 @@ export const EnterpriseModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     getListUserGroups: async () => {
-      const enterpriseApi = new EnterpriseApi(self.environment.api)
       const res = await enterpriseApi.getListUserGroups(self.apiToken)
       return res
     },
 
     getListGroupMembers: async (groupId: string) => {
-      const enterpriseApi = new EnterpriseApi(self.environment.api)
       const res = await enterpriseApi.getListGroupMembers(self.apiToken, groupId)
       return res
     },
 
     searchGroupOrMember: async (enterpriseId: string, query: string) => {
-      const enterpriseApi = new EnterpriseApi(self.environment.api)
       const res = await enterpriseApi.searchGroupOrMember(self.apiToken, enterpriseId, query)
       return res
     },
@@ -48,12 +42,10 @@ export const EnterpriseModel = types
       groupID: string,
       payload: EditShareCipherData,
     ) => {
-      const folderApi = new FolderApi(self.environment.api)
       const res = await folderApi.editShareCipher(self.apiToken, organizationId, groupID, payload)
       return res
     },
     invitations: async () => {
-      const enterpriseApi = new EnterpriseApi(self.environment.api)
       const res = await enterpriseApi.invitations(self.apiToken)
       if (res.kind === "ok") {
         if (res.data.length > 0) {
@@ -64,7 +56,6 @@ export const EnterpriseModel = types
       return []
     },
     invitationsActions: async (id: string, status: "confirmed" | "reject") => {
-      const enterpriseApi = new EnterpriseApi(self.environment.api)
       const res = await enterpriseApi.invitationsActions(self.apiToken, id, status)
       return res
     },

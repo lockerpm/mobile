@@ -1,6 +1,6 @@
 import { ApiResponse } from "apisauce"
 import { Logger } from "../../utils/logger"
-import { Api } from "./api"
+import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import { detectTempId } from "../../utils/event-bus/helpers"
 
@@ -25,12 +25,8 @@ import { ProfileResponse } from "core/models/response/profileResponse"
 import { ProfileOrganizationResponse } from "core/models/response/profileOrganizationResponse"
 import { SendRequest } from "core/models/request/sendRequest"
 
-export class CipherApi {
-  private api: Api
-
-  constructor(api: Api) {
-    this.api = api
-  }
+class CipherApi {
+  private api: Api = api
 
   // Sync
   async syncData(
@@ -859,3 +855,5 @@ export class CipherApi {
     }
   }
 }
+
+export const cipherApi = new CipherApi()

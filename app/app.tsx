@@ -48,6 +48,7 @@ import { IS_PROD } from "./config/constants"
 import { AppEventType, EventBus } from "./utils/event-bus"
 import { FolderMixinsProvider } from "./services/mixins/folder"
 import { autofillParserAndroid } from "./utils/autofill-android"
+import { api } from "./services/api"
 
 enableScreens()
 Settings.initializeSDK()
@@ -142,8 +143,10 @@ function App(props: RootProp) {
       }`,
     )
   }
-  rootStore.user.environment.api.apisauce.addMonitor(monitorApiResponse)
-  rootStore.user.environment.api.apisauce.addAsyncRequestTransform(monitorApiRequest)
+
+  
+  api.apisauce.addMonitor(monitorApiResponse)
+  api.apisauce.addAsyncRequestTransform(monitorApiRequest)
 
   // if app start from android autofill service. navigate to autofill screen
   autofillParserAndroid(props)

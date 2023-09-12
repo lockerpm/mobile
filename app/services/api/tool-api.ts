@@ -1,6 +1,6 @@
 import { ApiResponse } from "apisauce"
 import { Logger } from "../../utils/logger"
-import { Api } from "./api"
+import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import {
   AppNotification,
@@ -9,12 +9,9 @@ import {
   SubdomainData,
 } from "app/static/types"
 
-export class ToolApi {
-  private api: Api
+class ToolApi {
+  private api: Api = api
 
-  constructor(api: Api) {
-    this.api = api
-  }
 
   async fetchInAppNoti(
     token: string,
@@ -355,3 +352,5 @@ export class ToolApi {
     }
   }
 }
+
+export const toolApi = new ToolApi()

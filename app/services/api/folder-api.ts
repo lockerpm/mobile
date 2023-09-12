@@ -1,7 +1,7 @@
 import { ApiResponse } from "apisauce"
 import { detectTempId } from "../../utils/event-bus/helpers"
 import { Logger } from "../../utils/logger"
-import { Api } from "./api"
+import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import { FolderRequest } from "core/models/request/folderRequest"
 import { CollectionActionData, EditShareCipherData, ShareFolderData } from "app/static/types"
@@ -10,12 +10,8 @@ import { CollectionResponse } from "core/models/response/collectionResponse"
 import { CipherRequest } from "core/models/request/cipherRequest"
 import { FolderResponse } from "core/models/response/folderResponse"
 
-export class FolderApi {
-  private api: Api
-
-  constructor(api: Api) {
-    this.api = api
-  }
+class FolderApi {
+  private api: Api = api
 
   // Edit share cipher
   async editShareCipher(
@@ -408,3 +404,5 @@ export class FolderApi {
     }
   }
 }
+
+export const folderApi = new FolderApi()

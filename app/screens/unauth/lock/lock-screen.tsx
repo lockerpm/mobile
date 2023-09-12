@@ -12,6 +12,7 @@ import { LockByPasswordless as OnPremiseLockByPasswordless } from "./on-premise/
 import { OnPremiseLockMasterPassword } from "./on-premise/onpremise-master-password"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { BusinessLockByPasswordless } from "./business/business-passwordless"
+import { api } from "app/services/api"
 
 export const LockScreen = observer(() => {
   const navigation = useNavigation()
@@ -114,7 +115,7 @@ export const LockScreen = observer(() => {
       user.setOnPremiseUser(true)
       if (route.params.data?.base_api) {
         user.setOnPremiseLastBaseUrl(route.params.data.base_api + "/v3")
-        user.environment.api.apisauce.setBaseURL(route.params.data.base_api + "/v3")
+        api.apisauce.setBaseURL(route.params.data.base_api + "/v3")
       }
     }
   }, [])

@@ -1,15 +1,11 @@
 import { ApiResponse } from "apisauce"
 import { Logger } from "../../utils/logger"
-import { Api } from "./api"
+import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import { EnterpriseInvitation, GroupData, GroupMemberData } from "app/static/types"
 
-export class EnterpriseApi {
-  private api: Api
-
-  constructor(api: Api) {
-    this.api = api
-  }
+class EnterpriseApi {
+  private api: Api = api
 
   async getListUserGroups(
     token: string,
@@ -146,3 +142,6 @@ export class EnterpriseApi {
     }
   }
 }
+
+
+export const enterpriseApi = new EnterpriseApi()

@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { Api } from "./api"
+import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import {
   PasskeyAuthenticationRequest,
@@ -30,12 +30,8 @@ import { Logger } from "app/utils/logger"
  * Login to id.locker
  */
 
-export class IdApi {
-  private api: Api
-
-  constructor(api: Api) {
-    this.api = api
-  }
+class IdApi {
+  private api: Api = api
 
   // ID login
   async loginMethod(
@@ -529,3 +525,6 @@ export class IdApi {
     }
   }
 }
+
+
+export const idApi = new IdApi()

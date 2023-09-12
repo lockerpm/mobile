@@ -6,8 +6,6 @@ import { SendRequest } from "../../../core/models/request/sendRequest"
 import { CipherView } from "../../../core/models/view"
 import { QUICK_SHARE_BASE_URL } from "../../config/constants"
 import { MyShareType, SharingInvitationType } from "../../config/types/api"
-import { CipherApi } from "../../services/api/cipher-api"
-import { withEnvironment } from "../extensions/with-environment"
 import {
   ConfirmShareCipherData,
   EditShareCipherData,
@@ -19,6 +17,7 @@ import {
   ImportCipherWithFolderData,
   MoveFolderData,
 } from "app/static/types"
+import { cipherApi } from "app/services/api"
 
 /**
  * Model description here for TypeScript hints.
@@ -52,7 +51,6 @@ export const CipherStoreModel = types
     selectedFolder: types.maybeNull(types.string),
     selectedCollection: types.maybeNull(types.string),
   })
-  .extend(withEnvironment)
   .views((self) => ({
     get cipherView() {
       return self.selectedCipher || new CipherView()
@@ -186,43 +184,36 @@ export const CipherStoreModel = types
   }))
   .actions((self) => ({
     syncData: async (page?: number, size?: number) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.syncData(self.apiToken, page, size)
       return res
     },
 
     getCipher: async (id: string) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.getCipher(self.apiToken, id)
       return res
     },
 
     createCipher: async (data: CipherRequest, score: number, collectionIds: string[]) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.postCipher(self.apiToken, data, score, collectionIds)
       return res
     },
 
     importCipherWithFolder: async (data: ImportCipherWithFolderData) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.importCipherWithFolder(self.apiToken, data)
       return res
     },
 
     importFolders: async (data: ImportFolderData) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.importFolders(self.apiToken, data)
       return res
     },
 
     importCiphers: async (data: ImportCipherData) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.importCiphers(self.apiToken, data)
       return res
     },
 
     offlineSyncCipher: async (data: ImportCipherWithFolderData) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.offlineSyncCipher(self.apiToken, data)
       return res
     },
@@ -233,7 +224,6 @@ export const CipherStoreModel = types
       score: number,
       collectionIds: string[],
     ) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.putCipher(self.apiToken, id, data, score, collectionIds)
       return res
     },
@@ -244,55 +234,46 @@ export const CipherStoreModel = types
       score: number,
       collectionIds: string[],
     ) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.shareCipherToTeam(self.apiToken, id, data, score, collectionIds)
       return res
     },
 
     toTrashCiphers: async (ids: string[]) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.toTrashCiphers(self.apiToken, ids)
       return res
     },
 
     deleteCiphers: async (ids: string[]) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.deleteCiphers(self.apiToken, ids)
       return res
     },
 
     restoreCiphers: async (ids: string[]) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.restoresCiphers(self.apiToken, ids)
       return res
     },
 
     moveToFolder: async (data: MoveFolderData) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.moveToFolder(self.apiToken, data)
       return res
     },
 
     getLastUpdate: async () => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.getLastUpdate(self.apiToken)
       return res
     },
 
     getSharingPublicKey: async (email: string) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.getSharingPublicKey(self.apiToken, { email })
       return res
     },
 
     shareCipher: async (payload: ShareCipherData) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.shareCipher(self.apiToken, payload)
       return res
     },
 
     shareMultipleCiphers: async (payload: ShareMultipleCiphersData) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.shareMultipleCiphers(self.apiToken, payload)
       return res
     },
@@ -302,7 +283,6 @@ export const CipherStoreModel = types
       memberId: string,
       payload: StopShareCipherData,
     ) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.stopShareCipher(self.apiToken, organizationId, memberId, payload)
       return res
     },
@@ -312,7 +292,6 @@ export const CipherStoreModel = types
       memberId: string,
       payload: EditShareCipherData,
     ) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.editShareCipher(self.apiToken, organizationId, memberId, payload)
       return res
     },
@@ -322,7 +301,6 @@ export const CipherStoreModel = types
       memberId: string,
       payload: ConfirmShareCipherData,
     ) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.confirmShareCipher(
         self.apiToken,
         organizationId,
@@ -333,7 +311,6 @@ export const CipherStoreModel = types
     },
 
     loadSharingInvitations: async () => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.getSharingInvitations(self.apiToken)
       if (res.kind === "ok") {
         self.setSharingInvitations(res.data)
@@ -342,7 +319,6 @@ export const CipherStoreModel = types
     },
 
     loadMyShares: async () => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.getMyShares(self.apiToken)
       if (res.kind === "ok") {
         self.setMyShares(res.data)
@@ -351,13 +327,11 @@ export const CipherStoreModel = types
     },
 
     leaveShare: async (organizationId: string) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.leaveShare(self.apiToken, organizationId)
       return res
     },
 
     respondShare: async (id: string, accepted: boolean) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.respondShareInvitation(self.apiToken, id, {
         status: accepted ? "accept" : "reject",
       })
@@ -365,13 +339,11 @@ export const CipherStoreModel = types
     },
 
     getProfile: async () => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.getPMProfile(self.apiToken)
       return res
     },
 
     getOrganization: async (id: string) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.getOrganization(self.apiToken, id)
       return res
     },
@@ -379,12 +351,10 @@ export const CipherStoreModel = types
     // ----------QUICK SHARE--------------------
 
     quickShare: async (sendRequest: SendRequest) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.quickShare(self.apiToken, sendRequest)
       return res
     },
     syncQuickShares: async (page: number) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.syncQuickShares(self.apiToken, page)
       if (res.kind === "ok") {
         return res.data
@@ -399,7 +369,6 @@ export const CipherStoreModel = types
     },
 
     stopQuickSharing: async (send) => {
-      const cipherApi = new CipherApi(self.environment.api)
       const res = await cipherApi.stopQuickSharing(self.apiToken, send.id)
       return res
     },

@@ -2,9 +2,8 @@ import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
 import { omit } from "ramda"
 import { FolderRequest } from "../../../core/models/request/folderRequest"
 import { FolderView } from "../../../core/models/view/folderView"
-import { FolderApi } from "../../services/api/folder-api"
-import { withEnvironment } from "../extensions/with-environment"
 import { ShareFolderData } from "app/static/types"
+import { folderApi } from "app/services/api"
 
 /**
  * Model description here for TypeScript hints.
@@ -18,7 +17,6 @@ export const FolderStoreModel = types
     notSynchedFolders: types.array(types.string),   // Create in offline mode
     notUpdatedFolders: types.array(types.string),   // Create in online mode but somehow not update yet
   })
-  .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     setApiToken: (token: string) => {
@@ -84,31 +82,26 @@ export const FolderStoreModel = types
     // ----------------- CRUD -------------------
 
     getFolder: async (id: string) => {
-      const folderApi = new FolderApi(self.environment.api)
       const res = await folderApi.getFolder(self.apiToken, id)
       return res
     },
 
     createFolder: async (data: FolderRequest) => {
-      const folderApi = new FolderApi(self.environment.api)
       const res = await folderApi.postFolder(self.apiToken, data)
       return res
     },
 
     updateFolder: async (id: string, data: FolderRequest) => {
-      const folderApi = new FolderApi(self.environment.api)
       const res = await folderApi.putFolder(self.apiToken, id, data)
       return res
     },
 
     deleteFolder: async (id: string) => {
-      const folderApi = new FolderApi(self.environment.api)
       const res = await folderApi.deleteFolder(self.apiToken, id)
       return res
     },
     shareFolder: async (payload: ShareFolderData) => {
-      const cipherApi = new FolderApi(self.environment.api)
-      const res = await cipherApi.shareFolder(self.apiToken, payload)
+      const res = await folderApi.shareFolder(self.apiToken, payload)
       return res
     },
   }))

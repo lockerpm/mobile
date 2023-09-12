@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { Api } from "./api"
+import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import { Logger } from "../../utils/logger"
 import { IS_IOS } from "../../config/constants"
@@ -30,12 +30,8 @@ import { CipherResponse } from "core/models/response/cipherResponse"
 import { PolicyType } from "app/static/types/enum"
 import { UserSnapshot } from "app/models"
 
-export class UserApi {
-  private api: Api
-
-  constructor(api: Api) {
-    this.api = api
-  }
+class UserApi {
+  private api: Api = api
 
   // --------------------- ID -----------------------------
 
@@ -1120,3 +1116,6 @@ export class UserApi {
     }
   }
 }
+
+
+export const userApi = new UserApi()

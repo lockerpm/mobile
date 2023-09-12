@@ -1,9 +1,8 @@
 import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
-import { ToolApi } from "../../services/api/tool-api"
-import { withEnvironment } from "../extensions/with-environment"
 import { omit } from "ramda"
 import { BreanchResult } from "app/static/types"
 import { CipherView } from "core/models/view"
+import { toolApi } from "app/services/api"
 
 /**
  * Model description here for TypeScript hints.
@@ -32,7 +31,6 @@ export const ToolStoreModel = types
     // Authenticator
     authenticatorOrder: types.optional(types.array(types.string), [])
   })
-  .extend(withEnvironment)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     setApiToken: (token: string) => {
@@ -40,9 +38,6 @@ export const ToolStoreModel = types
     },
 
     // ----------------- DATA -------------------
-
-    // BREACH
-
     setBreachedEmail: (email: string) => {
       self.breachedEmail = email
     },
@@ -138,83 +133,68 @@ export const ToolStoreModel = types
     },
 
     // ----------------- API -------------------
-
     fetchInAppNoti: async () => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.fetchInAppNoti(self.apiToken)
       return res
     },
 
     markReadInAppNoti: async (id: string) => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.markReadInappNoti(self.apiToken, id)
       return res
     },
 
-
     // PRIVATE RELAY 
     fetchRelayListAddresses: async () => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.fetchRelayListAddresses(self.apiToken)
       return res
     },
 
     generateRelayNewAddress: async () => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.generateRelayNewAddress(self.apiToken)
       return res
     },
 
     updateRelayAddress: async (addressId: number, address: string) => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.updateRelayAddress(self.apiToken, addressId, address)
       return res
     },
 
     deleteRelayAddress: async (addressId: number) => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.deleteRelayAddress(self.apiToken, addressId)
       return res
     },
 
     configRelayAddress: async (id: number, address: string, enabled: boolean, blockSpam: boolean) => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.configRelayAddress(self.apiToken, id, address, enabled, blockSpam)
       return res
     },
 
     fetchSubdomain: async () => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.fetchSubdomain(self.apiToken)
       return res
     },
 
     createSubdomain: async (subdomain: string) => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.createSubdomain(self.apiToken, subdomain)
       return res
     },
 
     editSubdomain: async (id: number, subdomain: string) => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.editSubdomain(self.apiToken, id, subdomain)
       return res
     },
 
     useSubdomain: async (useSubdomain: boolean) => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.useSubdomain(self.apiToken, useSubdomain)
       return res
     },
 
     fetchUseSubdomain: async () => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.fetchUseSubdomain(self.apiToken)
       return res
     },
 
     checkBreaches: async (email: string) => {
-      const toolApi = new ToolApi(self.environment.api)
       const res = await toolApi.checkBreaches(self.apiToken, email)
       return res
     }

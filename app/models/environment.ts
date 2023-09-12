@@ -1,5 +1,3 @@
-import { Api } from "../services/api"
-
 let ReactotronDev
 if (__DEV__) {
   const { Reactotron } = require("../services/reactotron")
@@ -17,7 +15,6 @@ export class Environment {
       // dev-only services
       this.reactotron = new ReactotronDev()
     }
-    this.api = new Api()
   }
 
   async setup() {
@@ -25,16 +22,10 @@ export class Environment {
     if (__DEV__) {
       await this.reactotron.setup()
     }
-    await this.api.setup()
   }
 
   /**
    * Reactotron is only available in dev.
    */
   reactotron: typeof ReactotronDev
-
-  /**
-   * Our api.
-   */
-  api: Api
 }
