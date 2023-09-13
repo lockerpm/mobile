@@ -10,7 +10,7 @@ import {
   ViewStyle,
 } from 'react-native'
 
-type ImageIconTypes = keyof typeof imageRegistry
+export type ImageIconTypes = keyof typeof imageRegistry
 
 interface IconProps extends TouchableOpacityProps {
   /**
