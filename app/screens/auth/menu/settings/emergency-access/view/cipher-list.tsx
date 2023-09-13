@@ -1,25 +1,15 @@
-import React, { useState, useEffect } from "react"
-import { View, FlatList } from "react-native"
-import { observer } from "mobx-react-lite"
-import { useMixins } from "../../../../../../services/mixins"
-import { useStores } from "../../../../../../models"
-import { CipherView } from "../../../../../../../core/models/view"
-import { CipherType } from "../../../../../../../core/enums"
-import { CipherListItem } from "../../../../../../components/cipher/cipher-list/cipher-list-item"
-import { PasswordAction } from "../../../../browse/passwords/password-action"
-import { CardAction } from "../../../../browse/cards/card-action"
-import { IdentityAction } from "../../../../browse/identities/identity-action"
-import { NoteAction } from "../../../../browse/notes/note-action"
-import { CryptoWalletAction } from "../../../../browse/crypto-asset/crypto-wallet-action"
-import { DriverLicenseAction } from "../../../../browse/driver-license/driver-license-action"
-import { CitizenIDAction } from "../../../../browse/citizen-id/citizen-id-action"
-import { PassportAction } from "../../../../browse/passport/passport-action"
-import { SocialSecurityNumberAction } from "../../../../browse/social-security-number/social-security-number-action"
-import { WirelessRouterAction } from "../../../../browse/wireless-router/wireless-router-action"
-import { ServerAction } from "../../../../browse/server/server-action"
-import { ApiCipherAction } from "../../../../browse/api-cipher/api-cipher-action"
-import { DatabaseAction } from "../../../../browse/database/database-action"
-
+import React, { useState, useEffect } from 'react'
+import { View, FlatList } from 'react-native'
+import { observer } from 'mobx-react-lite'
+import { useStores } from '../../../../../../models'
+import { CipherView } from '../../../../../../../core/models/view'
+import { CipherType } from '../../../../../../../core/enums'
+import { CipherListItem } from '../../../../../../components/cipher/cipher-list/cipher-list-item'
+import { PasswordAction } from '../../../../browse/passwords/password-action'
+import { CardAction } from '../../../../browse/cards/card-action'
+import { IdentityAction } from '../../../../browse/identities/identity-action'
+import { NoteAction } from '../../../../browse/notes/note-action'
+import { CryptoWalletAction } from '../../../../browse/crypto-asset/crypto-wallet-action'
 
 export interface CipherListProps {
   ciphers: any[]
@@ -33,10 +23,7 @@ export interface CipherListProps {
  * Describe your component here
  */
 export const CipherList = observer((props: CipherListProps) => {
-  const {
-    emptyContent, navigation, onLoadingChange, searchText, ciphers,
-  } = props
-  const { translate } = useMixins()
+  const { emptyContent, navigation, onLoadingChange, ciphers } = props
   const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -46,16 +33,6 @@ export const CipherList = observer((props: CipherListProps) => {
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
-
-  const [showDriverLicenseAction, setShowDriverLicenseAction] = useState(false)
-  const [showCitizenIDAction, setShowCitizenIDAction] = useState(false)
-  const [showPassportAction, setShowPassportAction] = useState(false)
-  const [showSocialNumberAction, setShowSocialNumberAction] = useState(false)
-  const [showWirelessRouterAction, setShowWirelessRouterAction] = useState(false)
-  const [showServerAction, setShowServerAction] = useState(false)
-  const [showApiAction, setShowApiAction] = useState(false)
-  const [showDataBaseAction, setShowDatabaseAction] = useState(false)
-
   const [checkedItem, setCheckedItem] = useState('')
 
   // ------------------------ COMPUTED ----------------------------
@@ -68,8 +45,6 @@ export const CipherList = observer((props: CipherListProps) => {
   }, [checkedItem])
 
   // ------------------------ METHODS ----------------------------
-
-
 
   // Handle action menu open
   const openActionMenu = (item: CipherView) => {
@@ -91,30 +66,6 @@ export const CipherList = observer((props: CipherListProps) => {
         break
       case CipherType.CryptoWallet:
         setShowCryptoWalletAction(true)
-        break
-        case CipherType.DriverLicense:
-        setShowDriverLicenseAction(true)
-        break
-      case CipherType.CitizenID:
-        setShowCitizenIDAction(true)
-        break
-      case CipherType.Passport:
-        setShowPassportAction(true)
-        break
-      case CipherType.SocialSecurityNumber:
-        setShowSocialNumberAction(true)
-        break
-      case CipherType.WirelessRouter:
-        setShowWirelessRouterAction(true)
-        break
-      case CipherType.Server:
-        setShowWirelessRouterAction(true)
-        break
-      case CipherType.APICipher:
-        setShowApiAction(true)
-        break
-      case CipherType.Database:
-        setShowDatabaseAction(true)
         break
       default:
     }
@@ -185,65 +136,6 @@ export const CipherList = observer((props: CipherListProps) => {
         onLoadingChange={onLoadingChange}
         isEmergencyView={true}
       />
-      
-      {/* Other types */}
-      <DriverLicenseAction
-        isOpen={showDriverLicenseAction}
-        onClose={() => setShowDriverLicenseAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <CitizenIDAction
-        isOpen={showCitizenIDAction}
-        onClose={() => setShowCitizenIDAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <PassportAction
-        isOpen={showPassportAction}
-        onClose={() => setShowPassportAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <SocialSecurityNumberAction
-        isOpen={showSocialNumberAction}
-        onClose={() => setShowSocialNumberAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <WirelessRouterAction
-        isOpen={showWirelessRouterAction}
-        onClose={() => setShowWirelessRouterAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <ServerAction
-        isOpen={showServerAction}
-        onClose={() => setShowServerAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <ApiCipherAction
-        isOpen={showApiAction}
-        onClose={() => setShowApiAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <DatabaseAction
-        isOpen={showDataBaseAction}
-        onClose={() => setShowDatabaseAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      {/* Action menus end */}
 
       {/* Cipher list */}
       <FlatList
@@ -251,21 +143,17 @@ export const CipherList = observer((props: CipherListProps) => {
           paddingHorizontal: 20,
         }}
         data={ciphers}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         getItemLayout={(data, index) => ({
           length: 71,
           offset: 71 * index,
-          index
+          index,
         })}
       />
       {/* Cipher list end */}
     </View>
   ) : (
-    emptyContent && (
-      <View style={{ paddingHorizontal: 20 }}>
-        {emptyContent}
-      </View>
-    )
+    emptyContent && <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
   )
 })

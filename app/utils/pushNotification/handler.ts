@@ -1,8 +1,14 @@
-import { PushNotifier } from "./pushNotifier"
-import { CipherType } from "../../../core/enums"
-import { load, StorageKey } from "../storage"
-import { ConfirmShareData, NewShareData, PushEvent, ResponseShareData, EmergencyAccessData, TipTrickData } from "./types"
-
+import { PushNotifier } from './pushNotifier'
+import { CipherType } from '../../../core/enums'
+import { load, StorageKey } from '../storage'
+import {
+  ConfirmShareData,
+  NewShareData,
+  PushEvent,
+  ResponseShareData,
+  EmergencyAccessData,
+  TipTrickData,
+} from './types'
 
 // New share
 export const handleNewShare = async (data: string) => {
@@ -11,7 +17,7 @@ export const handleNewShare = async (data: string) => {
   const isVn = language === 'vi'
 
   // Only noti current user
-  if (!pwd_user_id || !shareData.pwd_user_ids.map(i => i.toString()).includes(pwd_user_id)) {
+  if (!pwd_user_id || !shareData.pwd_user_ids.map((i) => i.toString()).includes(pwd_user_id)) {
     return
   }
 
@@ -19,10 +25,12 @@ export const handleNewShare = async (data: string) => {
     PushNotifier._notify({
       id: `share_new`,
       title: isVn ? 'Locker' : 'Locker',
-      body: isVn ? `Bạn đã được chia sẻ ${shareData.count} mục. Vào Locker để chấp nhận hoặc từ chối.` : `You have ${shareData.count} new shared items. Open Locker to accept or reject.`,
+      body: isVn
+        ? `Bạn đã được chia sẻ ${shareData.count} mục. Vào Locker để chấp nhận hoặc từ chối.`
+        : `You have ${shareData.count} new shared items. Open Locker to accept or reject.`,
       data: {
-        type: PushEvent.SHARE_NEW
-      }
+        type: PushEvent.SHARE_NEW,
+      },
     })
     return
   }
@@ -44,30 +52,6 @@ export const handleNewShare = async (data: string) => {
     case CipherType.SecureNote:
       typeName = isVn ? 'ghi chú' : 'note'
       break
-    // case CipherType.DriverLicense:
-    //   typeName = isVn ? 'goi' : 'note'
-    //   break
-    // case CipherType.CitizenID:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.Passport:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.SocialSecurityNumber:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.WirelessRouter:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.Server:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.APICipher:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.Database:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
     default:
       typeName = isVn ? 'mục' : 'item'
   }
@@ -77,11 +61,10 @@ export const handleNewShare = async (data: string) => {
     title: isVn ? 'Locker' : 'Locker',
     body: isVn ? `Bạn đã được chia sẻ một ${typeName}` : `You have a new shared ${typeName}`,
     data: {
-      type: PushEvent.SHARE_NEW
-    }
+      type: PushEvent.SHARE_NEW,
+    },
   })
 }
-
 
 export const handleConfirmShare = async (data: string) => {
   const shareData: ConfirmShareData = JSON.parse(data)
@@ -89,17 +72,19 @@ export const handleConfirmShare = async (data: string) => {
   const isVn = language === 'vi'
 
   // Only noti current user
-  if (!shareData.pwd_user_ids.map(i => i.toString()).includes(pwd_user_id)) {
+  if (!shareData.pwd_user_ids.map((i) => i.toString()).includes(pwd_user_id)) {
     return
   }
 
   PushNotifier._notify({
     id: `share_confirm`,
     title: isVn ? 'Locker' : 'Locker',
-    body: isVn ? `Vui lòng xác nhận yêu cầu chia sẻ của bạn` : `Please confirm your sharing request`,
+    body: isVn
+      ? `Vui lòng xác nhận yêu cầu chia sẻ của bạn`
+      : `Please confirm your sharing request`,
     data: {
-      type: PushEvent.SHARE_CONFIRM
-    }
+      type: PushEvent.SHARE_CONFIRM,
+    },
   })
 }
 
@@ -126,30 +111,6 @@ export const handleResponseShare = async (data: string, accepted: boolean) => {
     case CipherType.SecureNote:
       typeName = isVn ? 'ghi chú' : 'note'
       break
-    // case CipherType.DriverLicense:
-    //   typeName = isVn ? 'goi' : 'note'
-    //   break
-    // case CipherType.CitizenID:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.Passport:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.SocialSecurityNumber:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.WirelessRouter:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.Server:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.APICipher:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
-    // case CipherType.Database:
-    //   typeName = isVn ? 'ghi chú' : 'note'
-    //   break
     default:
       typeName = isVn ? 'mục' : 'item'
   }
@@ -158,19 +119,23 @@ export const handleResponseShare = async (data: string, accepted: boolean) => {
     PushNotifier._notify({
       id: `share_accepted`,
       title: isVn ? 'Locker' : 'Locker',
-      body: isVn ? `${shareData.recipient_name} đã chấp nhận ${typeName} bạn chia sẻ` : `${shareData.recipient_name} has accepted the ${typeName} you share`,
+      body: isVn
+        ? `${shareData.recipient_name} đã chấp nhận ${typeName} bạn chia sẻ`
+        : `${shareData.recipient_name} has accepted the ${typeName} you share`,
       data: {
-        type: PushEvent.SHARE_ACCEPT
-      }
+        type: PushEvent.SHARE_ACCEPT,
+      },
     })
   } else {
     PushNotifier._notify({
       id: `share_rejected`,
       title: isVn ? 'Locker' : 'Locker',
-      body: isVn ? `${shareData.recipient_name} đã từ chối ${typeName} bạn chia sẻ` : `${shareData.recipient_name} has rejected the ${typeName} you share`,
+      body: isVn
+        ? `${shareData.recipient_name} đã từ chối ${typeName} bạn chia sẻ`
+        : `${shareData.recipient_name} has rejected the ${typeName} you share`,
       data: {
-        type: PushEvent.SHARE_REJECT
-      }
+        type: PushEvent.SHARE_REJECT,
+      },
     })
   }
 }
@@ -185,10 +150,12 @@ export const handleInviteEA = async (data: string) => {
   PushNotifier._notify({
     id: `emergency_access_notification`,
     title: 'Locker',
-    body: isVn ? `${user} đã thêm bạn làm Liên hệ khẩn cấp` : `${user} has invited you to be emergency access contact`,
+    body: isVn
+      ? `${user} đã thêm bạn làm Liên hệ khẩn cấp`
+      : `${user} has invited you to be emergency access contact`,
     data: {
-      type: PushEvent.EMERGENCY_INVITE
-    }
+      type: PushEvent.EMERGENCY_INVITE,
+    },
   })
 }
 
@@ -199,16 +166,20 @@ export const handleIviteResponseEA = async (data: string, response: boolean) => 
 
   const user = eaData.grantee_name
 
-  const acceptText = isVn ? `${user} đã chấp nhận trở thành Liên hệ khẩn cấp của bạn` : `${user} has accepted your emergency access invitation`
-  const rejectText = isVn ? `${user} đã từ chối trở thành Liên hệ khẩn cấp của bạn` : `${user} has rejected your emergency access invitation`
+  const acceptText = isVn
+    ? `${user} đã chấp nhận trở thành Liên hệ khẩn cấp của bạn`
+    : `${user} has accepted your emergency access invitation`
+  const rejectText = isVn
+    ? `${user} đã từ chối trở thành Liên hệ khẩn cấp của bạn`
+    : `${user} has rejected your emergency access invitation`
 
   PushNotifier._notify({
     id: `emergency_access_notification`,
     title: 'Locker',
     body: response ? acceptText : rejectText,
     data: {
-      type: PushEvent.EMERGENCY_ACCEPT_INVITATION
-    }
+      type: PushEvent.EMERGENCY_ACCEPT_INVITATION,
+    },
   })
 }
 
@@ -217,18 +188,20 @@ export const handleRequestEA = async (data: string) => {
   const { language } = await _getCurrentUser()
   const isVn = language === 'vi'
 
-  const view = isVn ? "Xem" : "View"
-  const takeOver = isVn ? "Chiếm quyền" : "Takeover"
+  const view = isVn ? 'Xem' : 'View'
+  const takeOver = isVn ? 'Chiếm quyền' : 'Takeover'
   const user = eaData.grantee_name
-  const type = eaData.type.toLowerCase() === "view" ? view : takeOver
+  const type = eaData.type.toLowerCase() === 'view' ? view : takeOver
 
   PushNotifier._notify({
     id: `emergency_access_notification`,
     title: 'Locker',
-    body: isVn ? `${user} đã yêu cầu ${type} tài khoản Locker của bạn ${type}` : `${user} has requested to ${type} your Locker account`,
+    body: isVn
+      ? `${user} đã yêu cầu ${type} tài khoản Locker của bạn ${type}`
+      : `${user} has requested to ${type} your Locker account`,
     data: {
-      type: PushEvent.EMERGENCY_INITIATE
-    }
+      type: PushEvent.EMERGENCY_INITIATE,
+    },
   })
 }
 
@@ -237,21 +210,25 @@ export const handleRequestEAResponseEA = async (data: string, response: boolean)
   const { language } = await _getCurrentUser()
   const isVn = language === 'vi'
 
-  const view = isVn ? "Xem" : "View"
-  const takeOver = isVn ? "Chiếm quyền" : "Takeover"
-  const type = eaData.type.toLowerCase() === "view" ? view : takeOver
+  const view = isVn ? 'Xem' : 'View'
+  const takeOver = isVn ? 'Chiếm quyền' : 'Takeover'
+  const type = eaData.type.toLowerCase() === 'view' ? view : takeOver
   const user = eaData.grantor_name
 
-  const acceptText = isVn ? `${user} đã chấp nhận yêu cầu ${type} tài khoản Locker của bạn` : `${user} approved your request to ${type} their Locker account`
-  const rejectText = isVn ? `${user} đã từ chối yêu cầu ${type} tài khoản Locker của bạn` : `${user} has rejected your request to ${type} their Locker account`
+  const acceptText = isVn
+    ? `${user} đã chấp nhận yêu cầu ${type} tài khoản Locker của bạn`
+    : `${user} approved your request to ${type} their Locker account`
+  const rejectText = isVn
+    ? `${user} đã từ chối yêu cầu ${type} tài khoản Locker của bạn`
+    : `${user} has rejected your request to ${type} their Locker account`
 
   PushNotifier._notify({
     id: `emergency_access_notification`,
     title: 'Locker',
     body: response ? acceptText : rejectText,
     data: {
-      type: PushEvent.EMERGENCY_APPROVE_REQUEST
-    }
+      type: PushEvent.EMERGENCY_APPROVE_REQUEST,
+    },
   })
 }
 
@@ -259,7 +236,6 @@ export const handleTipTrick = async (data: string) => {
   const tipTrickdata: TipTrickData = JSON.parse(data)
   const { language } = await _getCurrentUser()
   // const isVn = language === 'vi'
-
 
   const text = tipTrickdata.data.title[language]
 
@@ -269,8 +245,8 @@ export const handleTipTrick = async (data: string) => {
     body: text,
     data: {
       type: PushEvent.TIP_TRICK,
-      url: tipTrickdata.data.metadata.link[language]
-    }
+      url: tipTrickdata.data.metadata.link[language],
+    },
   })
 }
 // ------------------ PRIVATE --------------------

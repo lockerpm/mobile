@@ -1,36 +1,27 @@
-import React, { useState, useEffect } from "react"
-import { View, FlatList, SectionList } from "react-native"
-import { observer } from "mobx-react-lite"
+import React, { useState, useEffect } from 'react'
+import { View, FlatList, SectionList } from 'react-native'
+import { observer } from 'mobx-react-lite'
 import orderBy from 'lodash/orderBy'
-import { Text } from "../../../../../components/text/text"
-import { CipherType } from "../../../../../../core/enums"
-import { useMixins } from "../../../../../services/mixins"
-import { useStores } from "../../../../../models"
-import { CipherView } from "../../../../../../core/models/view"
-import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { AccountRole, AccountRoleText } from "../../../../../config/types"
-import { Organization } from "../../../../../../core/models/domain/organization"
-import { PasswordAction } from "../../passwords/password-action"
-import { CardAction } from "../../cards/card-action"
-import { NoteAction } from "../../notes/note-action"
-import { IdentityAction } from "../../identities/identity-action"
-import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
-import { PendingSharedAction } from "./pending-shared-action"
-import { CryptoWalletAction } from "../../crypto-asset/crypto-wallet-action"
-import { CipherSharedListItem, CipherSharedType } from "./cipher-shared-list-item"
-import { MAX_CIPHER_SELECTION } from "../../../../../config/constants"
-import { CollectionListItem } from "../share-items/folder-share-list-item"
-import { CollectionView } from "../../../../../../core/models/view/collectionView"
-import { FolderAction } from "../../folders/folder-action"
-import { DriverLicenseAction } from "../../driver-license/driver-license-action"
-import { CitizenIDAction } from "../../citizen-id/citizen-id-action"
-import { PassportAction } from "../../passport/passport-action"
-import { SocialSecurityNumberAction } from "../../social-security-number/social-security-number-action"
-import { WirelessRouterAction } from "../../wireless-router/wireless-router-action"
-import { ServerAction } from "../../server/server-action"
-import { ApiCipherAction } from "../../api-cipher/api-cipher-action"
-import { DatabaseAction } from "../../database/database-action"
-
+import { Text } from '../../../../../components/text/text'
+import { CipherType } from '../../../../../../core/enums'
+import { useMixins } from '../../../../../services/mixins'
+import { useStores } from '../../../../../models'
+import { CipherView } from '../../../../../../core/models/view'
+import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
+import { AccountRole, AccountRoleText } from '../../../../../config/types'
+import { Organization } from '../../../../../../core/models/domain/organization'
+import { PasswordAction } from '../../passwords/password-action'
+import { CardAction } from '../../cards/card-action'
+import { NoteAction } from '../../notes/note-action'
+import { IdentityAction } from '../../identities/identity-action'
+import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
+import { PendingSharedAction } from './pending-shared-action'
+import { CryptoWalletAction } from '../../crypto-asset/crypto-wallet-action'
+import { CipherSharedListItem, CipherSharedType } from './cipher-shared-list-item'
+import { MAX_CIPHER_SELECTION } from '../../../../../config/constants'
+import { CollectionListItem } from '../share-items/folder-share-list-item'
+import { CollectionView } from '../../../../../../core/models/view/collectionView'
+import { FolderAction } from '../../folders/folder-action'
 
 export interface CipherSharedListProps {
   emptyContent?: JSX.Element
@@ -40,7 +31,7 @@ export interface CipherSharedListProps {
   sortList?: {
     orderField: string
     order: string
-  },
+  }
   isSelecting: boolean
   setIsSelecting: Function
   selectedItems: string[]
@@ -53,8 +44,16 @@ export interface CipherSharedListProps {
  */
 export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const {
-    emptyContent, navigation, onLoadingChange, searchText, sortList,
-    isSelecting, setIsSelecting, selectedItems, setSelectedItems, setAllItems
+    emptyContent,
+    navigation,
+    onLoadingChange,
+    searchText,
+    sortList,
+    isSelecting,
+    setIsSelecting,
+    selectedItems,
+    setSelectedItems,
+    setAllItems,
   } = props
   const { translate, notify, getTeam } = useMixins()
   const { getCiphersFromCache } = useCipherDataMixins()
@@ -73,23 +72,13 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showPendingAction, setShowPendingAction] = useState(false)
 
-  const [showDriverLicenseAction, setShowDriverLicenseAction] = useState(false)
-  const [showCitizenIDAction, setShowCitizenIDAction] = useState(false)
-  const [showPassportAction, setShowPassportAction] = useState(false)
-  const [showSocialNumberAction, setShowSocialNumberAction] = useState(false)
-  const [showWirelessRouterAction, setShowWirelessRouterAction] = useState(false)
-  const [showServerAction, setShowServerAction] = useState(false)
-  const [showApiAction, setShowApiAction] = useState(false)
-  const [showDataBaseAction, setShowDatabaseAction] = useState(false)
-
-
   const [checkedItem, setCheckedItem] = useState('')
 
   // ------------------------ COMPUTED ----------------------------
 
   const organizations = cipherStore.organizations
 
-  const pendingCiphers = cipherStore.sharingInvitations.map(i => {
+  const pendingCiphers = cipherStore.sharingInvitations.map((i) => {
     const cipher: CipherSharedType = newCipher(i.cipher_type)
     const cipherInfo = getCipherInfo(cipher)
 
@@ -118,15 +107,15 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
 
   const allCiphers = !!searchText.trim() || isSelecting ? ciphers : [...pendingCiphers, ...ciphers]
 
-
-
-  const sharedCollection = collectionStore.collections.filter(i => {
+  const sharedCollection = collectionStore.collections.filter((i) => {
     // Computed
     const teamRole = getTeam(user.teams, i.organizationId).role
     const shareRole = getTeam(organizations, i.organizationId).type
-    const isMember = !i.organizationId
-      || (teamRole && teamRole !== AccountRoleText.OWNER)
-      || (shareRole === AccountRole.ADMIN || shareRole === AccountRole.MEMBER)
+    const isMember =
+      !i.organizationId ||
+      (teamRole && teamRole !== AccountRoleText.OWNER) ||
+      shareRole === AccountRole.ADMIN ||
+      shareRole === AccountRole.MEMBER
     return isMember && i.name?.includes(searchText.toLowerCase())
   })
 
@@ -154,19 +143,21 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     // onLoadingChange && onLoadingChange(true)
 
     // Filter
-    const filters = [(c: CipherView) => {
-      if (!c.organizationId) {
-        return false
-      }
-      const org = _getOrg(c.organizationId)
-      return org && org.type !== AccountRole.OWNER
-    }]
+    const filters = [
+      (c: CipherView) => {
+        if (!c.organizationId) {
+          return false
+        }
+        const org = _getOrg(c.organizationId)
+        return org && org.type !== AccountRole.OWNER
+      },
+    ]
 
     // Search
     const searchRes = await getCiphersFromCache({
       filters,
       searchText,
-      deleted: false
+      deleted: false,
     })
 
     // Add image + org info
@@ -177,7 +168,9 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         logo: cipherInfo.backup,
         imgLogo: cipherInfo.img,
         svg: cipherInfo.svg,
-        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(c.id)
+        notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
+          c.id
+        ),
       }
       return data
     })
@@ -185,11 +178,12 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     // Sort
     if (sortList) {
       const { orderField, order } = sortList
-      res = orderBy(
-        res,
-        [c => orderField === 'name' ? (c.name && c.name.toLowerCase()) : c.revisionDate],
-        [order]
-      ) || []
+      res =
+        orderBy(
+          res,
+          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order]
+        ) || []
     }
 
     // Delay loading
@@ -200,7 +194,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     // Done
     // @ts-ignore
     setCiphers(res)
-    setAllItems(res.map(c => c.id))
+    setAllItems(res.map((c) => c.id))
   }
 
   // Handle action menu open
@@ -227,30 +221,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       case CipherType.CryptoWallet:
         setShowCryptoWalletAction(true)
         break
-      case CipherType.DriverLicense:
-        setShowDriverLicenseAction(true)
-        break
-      case CipherType.CitizenID:
-        setShowCitizenIDAction(true)
-        break
-      case CipherType.Passport:
-        setShowPassportAction(true)
-        break
-      case CipherType.SocialSecurityNumber:
-        setShowSocialNumberAction(true)
-        break
-      case CipherType.WirelessRouter:
-        setShowWirelessRouterAction(true)
-        break
-      case CipherType.Server:
-        setShowWirelessRouterAction(true)
-        break
-      case CipherType.APICipher:
-        setShowApiAction(true)
-        break
-      case CipherType.Database:
-        setShowDatabaseAction(true)
-        break
       default:
     }
   }
@@ -274,7 +244,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
       }
       selected.push(id)
     } else {
-      selected = selected.filter(i => i !== id)
+      selected = selected.filter((i) => i !== id)
     }
     setSelectedItems(selected)
   }
@@ -282,13 +252,13 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
   const DATA = [
     {
       type: 2,
-      data: [...sharedCollection]
+      data: [...sharedCollection],
     },
     {
       type: 1,
-      data: [...allCiphers.filter(c => !c.collectionIds?.length)]
-    }
-  ];
+      data: [...allCiphers.filter((c) => !c.collectionIds?.length)],
+    },
+  ]
 
   // ------------------------ RENDER ----------------------------
 
@@ -344,65 +314,6 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         folder={selectedCollection}
       />
 
-      {/* Other types */}
-      <DriverLicenseAction
-        isOpen={showDriverLicenseAction}
-        onClose={() => setShowDriverLicenseAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <CitizenIDAction
-        isOpen={showCitizenIDAction}
-        onClose={() => setShowCitizenIDAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <PassportAction
-        isOpen={showPassportAction}
-        onClose={() => setShowPassportAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <SocialSecurityNumberAction
-        isOpen={showSocialNumberAction}
-        onClose={() => setShowSocialNumberAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <WirelessRouterAction
-        isOpen={showWirelessRouterAction}
-        onClose={() => setShowWirelessRouterAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <ServerAction
-        isOpen={showServerAction}
-        onClose={() => setShowServerAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <ApiCipherAction
-        isOpen={showApiAction}
-        onClose={() => setShowApiAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <DatabaseAction
-        isOpen={showDataBaseAction}
-        onClose={() => setShowDatabaseAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-      {/* Action menus end */}
-
-
       <SectionList
         style={{
           paddingHorizontal: 20,
@@ -411,46 +322,37 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
         keyExtractor={(item, index) => String(index)}
         renderItem={({ item, index, section }) => (
           <View>
-            {
-              section.type === 1 && (
-                <CipherSharedListItem
-                  item={item}
-                  isSelecting={isSelecting}
-                  toggleItemSelection={setCheckedItem}
-                  openActionMenu={openActionMenu}
-                  isSelected={selectedItems.includes(item.id)}
-                  org={_getOrg(item)}
-                />
-              )
-            }
-            {
-              section.type === 2 && (
-                <CollectionListItem
-                  item={item}
-                  openActionMenu={openCollectionActionMenu}
-                  navigation={navigation}
-                />
-              )
-            }
+            {section.type === 1 && (
+              <CipherSharedListItem
+                item={item}
+                isSelecting={isSelecting}
+                toggleItemSelection={setCheckedItem}
+                openActionMenu={openActionMenu}
+                isSelected={selectedItems.includes(item.id)}
+                org={_getOrg(item)}
+              />
+            )}
+            {section.type === 2 && (
+              <CollectionListItem
+                item={item}
+                openActionMenu={openCollectionActionMenu}
+                navigation={navigation}
+              />
+            )}
           </View>
         )}
       />
-
     </View>
+  ) : emptyContent && !searchText.trim() ? (
+    <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
   ) : (
-    emptyContent && !searchText.trim() ? (
-      <View style={{ paddingHorizontal: 20 }}>
-        {emptyContent}
-      </View>
-    ) : (
-      <View style={{ paddingHorizontal: 20 }}>
-        <Text
-          text={translate('error.no_results_found') + ` '${searchText}'`}
-          style={{
-            textAlign: 'center'
-          }}
-        />
-      </View>
-    )
+    <View style={{ paddingHorizontal: 20 }}>
+      <Text
+        text={translate('error.no_results_found') + ` '${searchText}'`}
+        style={{
+          textAlign: 'center',
+        }}
+      />
+    </View>
   )
 })

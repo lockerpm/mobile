@@ -1,31 +1,22 @@
-import React, { useState, useEffect } from "react"
-import { View, FlatList, ActivityIndicator } from "react-native"
-import { observer } from "mobx-react-lite"
-import orderBy from "lodash/orderBy"
-import { Text } from "../../text/text"
-import { CipherType, FieldType } from "../../../../core/enums"
-import { useMixins } from "../../../services/mixins"
-import { useStores } from "../../../models"
-import { CipherView } from "../../../../core/models/view"
-import { PasswordAction } from "../../../screens/auth/browse/passwords/password-action"
-import { CardAction } from "../../../screens/auth/browse/cards/card-action"
-import { IdentityAction } from "../../../screens/auth/browse/identities/identity-action"
-import { NoteAction } from "../../../screens/auth/browse/notes/note-action"
-import { DeletedAction } from "../cipher-action/deleted-action"
-import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { CryptoWalletAction } from "../../../screens/auth/browse/crypto-asset/crypto-wallet-action"
-import { DriverLicenseAction } from "../../../screens/auth/browse/driver-license/driver-license-action"
-import { CitizenIDAction } from "../../../screens/auth/browse/citizen-id/citizen-id-action"
-import { PassportAction } from "../../../screens/auth/browse/passport/passport-action"
-import { SocialSecurityNumberAction } from "../../../screens/auth/browse/social-security-number/social-security-number-action"
-import { ApiCipherAction } from "../../../screens/auth/browse/api-cipher/api-cipher-action"
-import { ServerAction } from "../../../screens/auth/browse/server/server-action"
-import { DatabaseAction } from "../../../screens/auth/browse/database/database-action"
-import { WirelessRouterAction } from "../../../screens/auth/browse/wireless-router/wireless-router-action"
-import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
-import { CipherListItem } from "./cipher-list-item"
-import { MAX_CIPHER_SELECTION } from "../../../config/constants"
-import { Logger } from "../../../utils/utils"
+import React, { useState, useEffect } from 'react'
+import { View, FlatList, ActivityIndicator } from 'react-native'
+import { observer } from 'mobx-react-lite'
+import orderBy from 'lodash/orderBy'
+import { Text } from '../../text/text'
+import { CipherType } from '../../../../core/enums'
+import { useMixins } from '../../../services/mixins'
+import { useStores } from '../../../models'
+import { CipherView } from '../../../../core/models/view'
+import { PasswordAction } from '../../../screens/auth/browse/passwords/password-action'
+import { CardAction } from '../../../screens/auth/browse/cards/card-action'
+import { IdentityAction } from '../../../screens/auth/browse/identities/identity-action'
+import { NoteAction } from '../../../screens/auth/browse/notes/note-action'
+import { DeletedAction } from '../cipher-action/deleted-action'
+import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
+import { CryptoWalletAction } from '../../../screens/auth/browse/crypto-asset/crypto-wallet-action'
+import { useCipherHelpersMixins } from '../../../services/mixins/cipher/helpers'
+import { CipherListItem } from './cipher-list-item'
+import { MAX_CIPHER_SELECTION } from '../../../config/constants'
 
 export interface CipherListProps {
   emptyContent?: JSX.Element
@@ -82,18 +73,9 @@ export const CipherList = observer((props: CipherListProps) => {
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
   const [showDeletedAction, setShowDeletedAction] = useState(false)
 
-  const [showDriverLicenseAction, setShowDriverLicenseAction] = useState(false)
-  const [showCitizenIDAction, setShowCitizenIDAction] = useState(false)
-  const [showPassportAction, setShowPassportAction] = useState(false)
-  const [showSocialNumberAction, setShowSocialNumberAction] = useState(false)
-  const [showWirelessRouterAction, setShowWirelessRouterAction] = useState(false)
-  const [showServerAction, setShowServerAction] = useState(false)
-  const [showApiAction, setShowApiAction] = useState(false)
-  const [showDataBaseAction, setShowDatabaseAction] = useState(false)
-
   const [ciphers, setCiphers] = useState([])
 
-  const [checkedItem, setCheckedItem] = useState("")
+  const [checkedItem, setCheckedItem] = useState('')
 
   const [isSearching, setIsSearching] = useState(true)
   // ------------------------ COMPUTED ----------------------------
@@ -133,7 +115,7 @@ export const CipherList = observer((props: CipherListProps) => {
     // Filter
     const filters = []
     if (props.cipherType) {
-      if (typeof props.cipherType === "number") {
+      if (typeof props.cipherType === 'number') {
         filters.push((c: CipherView) => c.type === props.cipherType)
       } else {
         // @ts-ignore
@@ -157,7 +139,7 @@ export const CipherList = observer((props: CipherListProps) => {
         imgLogo: cipherInfo.img,
         svg: cipherInfo.svg,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-          c.id,
+          c.id
         ),
         isDeleted: c.isDeleted,
       }
@@ -194,8 +176,8 @@ export const CipherList = observer((props: CipherListProps) => {
       res =
         orderBy(
           res,
-          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order],
+          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order]
         ) || []
     }
 
@@ -238,79 +220,9 @@ export const CipherList = observer((props: CipherListProps) => {
       case CipherType.CryptoWallet:
         setShowCryptoWalletAction(true)
         break
-      case CipherType.DriverLicense:
-        setShowDriverLicenseAction(true)
-        break
-      case CipherType.CitizenID:
-        setShowCitizenIDAction(true)
-        break
-      case CipherType.Passport:
-        setShowPassportAction(true)
-        break
-      case CipherType.SocialSecurityNumber:
-        setShowSocialNumberAction(true)
-        break
-      case CipherType.WirelessRouter:
-        setShowWirelessRouterAction(true)
-        break
-      case CipherType.Server:
-        setShowWirelessRouterAction(true)
-        break
-      case CipherType.APICipher:
-        setShowApiAction(true)
-        break
-      case CipherType.Database:
-        setShowDatabaseAction(true)
-        break
       default:
         break
     }
-  }
-
-  // remove new item type (convert exsiting this item type to note)
-  const removeItemn = () => {
-    const removeItemType = [
-      CipherType.DriverLicense,
-      CipherType.CitizenID,
-      CipherType.Passport,
-      CipherType.SocialSecurityNumber,
-      CipherType.WirelessRouter,
-      CipherType.Server,
-      CipherType.APICipher,
-      CipherType.Database,
-    ]
-    ciphers
-      .filter((c) => removeItemType.includes(c.type))
-      ?.forEach((cipher) => {
-        try {
-          const content = JSON.parse(cipher.notes)
-          cipher.type = CipherType.SecureNote
-          cipher.secureNote.type = 0
-          cipher.notes = content.notes
-          function camelCaseToWords(str) {
-            if (!str) {
-              return ""
-            }
-            const newStr = str
-              .replace(/([a-z])([A-Z])/g, "$1 $2")
-              .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
-              .replace(/(\b[A-Z]{2,}\b)(?=[a-z])/g, "$1 ")
-              .toLowerCase()
-            return newStr ? newStr[0].toUpperCase() + newStr.slice(1) : newStr
-          }
-          const newFields = Object.keys(content)
-            .filter((k) => k !== "notes")
-            .map((k) => ({
-              name: camelCaseToWords(k),
-              value: content[k],
-              type: FieldType.Text,
-            }))
-          cipher.fields = [...(cipher.fields || []), ...newFields]
-          updateCipher(cipher.id, cipher, 0, [], true)
-        } catch (e) {
-          Logger.error(e)
-        }
-      })
   }
 
   // Go to detail
@@ -328,7 +240,7 @@ export const CipherList = observer((props: CipherListProps) => {
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
       if (selected.length === MAX_CIPHER_SELECTION) {
-        notify("error", translate("error.cannot_select_more", { count: MAX_CIPHER_SELECTION }))
+        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
         return
       }
       selected.push(id)
@@ -338,11 +250,6 @@ export const CipherList = observer((props: CipherListProps) => {
     setSelectedItems(selected)
   }
   // ------------------------ RENDER ----------------------------
-
-  useEffect(() => {
-    removeItemn()
-  }, [ciphers])
-
   const renderItem = ({ item }) => {
     return (
       <CipherListItem
@@ -402,64 +309,6 @@ export const CipherList = observer((props: CipherListProps) => {
         onLoadingChange={onLoadingChange}
       />
 
-      {/* Other types */}
-      <DriverLicenseAction
-        isOpen={showDriverLicenseAction}
-        onClose={() => setShowDriverLicenseAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <CitizenIDAction
-        isOpen={showCitizenIDAction}
-        onClose={() => setShowCitizenIDAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <PassportAction
-        isOpen={showPassportAction}
-        onClose={() => setShowPassportAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <SocialSecurityNumberAction
-        isOpen={showSocialNumberAction}
-        onClose={() => setShowSocialNumberAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <WirelessRouterAction
-        isOpen={showWirelessRouterAction}
-        onClose={() => setShowWirelessRouterAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <ServerAction
-        isOpen={showServerAction}
-        onClose={() => setShowServerAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <ApiCipherAction
-        isOpen={showApiAction}
-        onClose={() => setShowApiAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-
-      <DatabaseAction
-        isOpen={showDataBaseAction}
-        onClose={() => setShowDatabaseAction(false)}
-        navigation={navigation}
-        onLoadingChange={onLoadingChange}
-      />
-      {/* Action menus end */}
-
       {/* Cipher list */}
       <FlatList
         style={{
@@ -475,9 +324,9 @@ export const CipherList = observer((props: CipherListProps) => {
             <View style={{ paddingHorizontal: 20 }}>
               {searchText ? (
                 <Text
-                  text={translate("error.no_results_found") + ` '${searchText}'`}
+                  text={translate('error.no_results_found') + ` '${searchText}'`}
                   style={{
-                    textAlign: "center",
+                    textAlign: 'center',
                   }}
                 />
               ) : (

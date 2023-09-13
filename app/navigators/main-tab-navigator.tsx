@@ -1,25 +1,23 @@
-import React, { useEffect } from "react"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { BrowseNavigator } from "./browse/browse-navigator"
-import { MenuNavigator } from "./menu/menu-navigator"
-import { View } from "react-native"
-import { Button, Text } from "../components"
-import { fontSize } from "../theme"
-import { AllItemScreen, ToolsListScreen, AuthenticatorScreen } from "../screens"
-import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons"
-import { useMixins } from "../services/mixins"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useStores } from "../models"
-import { observer } from "mobx-react-lite"
-import { SharingStatus } from "../config/types"
+import React from 'react'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { BrowseNavigator } from './browse/browse-navigator'
+import { MenuNavigator } from './menu/menu-navigator'
+import { View } from 'react-native'
+import { Button, Text } from '../components'
+import { fontSize } from '../theme'
+import { AllItemScreen, ToolsListScreen, AuthenticatorScreen } from '../screens'
+import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
+import { useMixins } from '../services/mixins'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useStores } from '../models'
+import { observer } from 'mobx-react-lite'
+import { SharingStatus } from '../config/types'
 
-import HomeIcon from "./icons/home.svg"
-import BrowseIcon from "./icons/menu.svg"
-import ToolsIcon from "./icons/settings.svg"
-import MenuIcon from "./icons/menu-2.svg"
-import AuthenticatorIcon from "./icons/authenticator.svg"
-import Intercom from "@intercom/intercom-react-native"
-import { Logger } from "../utils/utils"
+import HomeIcon from './icons/home.svg'
+import BrowseIcon from './icons/menu.svg'
+import ToolsIcon from './icons/settings.svg'
+import MenuIcon from './icons/menu-2.svg'
+import AuthenticatorIcon from './icons/authenticator.svg'
 
 const Tab = createBottomTabNavigator()
 
@@ -32,12 +30,12 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
 
   const mappings = {
     homeTab: {
-      label: translate("common.home"),
+      label: translate('common.home'),
       icon: HomeIcon,
       notiCount: 0,
     },
     browseTab: {
-      label: translate("common.browse"),
+      label: translate('common.browse'),
       icon: BrowseIcon,
       notiCount:
         cipherStore.sharingInvitations.length +
@@ -46,17 +44,17 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
         }, 0),
     },
     authenticatorTab: {
-      label: "OTP",
+      label: 'OTP',
       icon: AuthenticatorIcon,
       notiCount: 0,
     },
     toolsTab: {
-      label: translate("common.tools"),
+      label: translate('common.tools'),
       icon: ToolsIcon,
       notiCount: 0,
     },
     menuTab: {
-      label: translate("common.menu"),
+      label: translate('common.menu'),
       icon: MenuIcon,
       notiCount: user.invitations.length,
     },
@@ -74,10 +72,10 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
       {isStatusBarVisible && (
         <View
           style={{
-            backgroundColor: "#161922",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
+            backgroundColor: '#161922',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
             paddingVertical: 4,
           }}
         >
@@ -90,7 +88,7 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
                   color: color.white,
                   marginLeft: 5,
                 }}
-                text={translate("navigator.is_offline")}
+                text={translate('navigator.is_offline')}
               />
             </>
           ) : cipherStore.isBatchDecrypting ? (
@@ -102,7 +100,7 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
                   color: color.white,
                   marginLeft: 5,
                 }}
-                text={translate("start.decrypting")}
+                text={translate('start.decrypting')}
               />
             </>
           ) : (
@@ -116,7 +114,7 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
                   color: color.white,
                   marginLeft: 5,
                 }}
-                text={translate("start.synching")}
+                text={translate('start.synching')}
               />
             </>
           )}
@@ -125,7 +123,7 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
       {/* Status bar end */}
 
       {/* Tab items */}
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: 'row' }}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key]
 
@@ -138,7 +136,7 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
 
           const onPress = () => {
             const event = navigation.emit({
-              type: "tabPress",
+              type: 'tabPress',
               target: route.key,
               canPreventDefault: true,
             })
@@ -151,7 +149,7 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
 
           const onLongPress = () => {
             navigation.emit({
-              type: "tabLongPress",
+              type: 'tabLongPress',
               target: route.key,
             })
           }
@@ -165,8 +163,8 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
               onLongPress={onLongPress}
               style={{
                 flex: 1,
-                alignItems: "center",
-                flexDirection: "column",
+                alignItems: 'center',
+                flexDirection: 'column',
               }}
             >
               {Icon && (
@@ -185,16 +183,16 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
                     borderRadius: 20,
                     minWidth: 17,
                     height: 17,
-                    position: "absolute",
+                    position: 'absolute',
                     top: 3,
                     right: 20,
                   }}
                 >
                   <Text
-                    text={notiCount >= 100 ? "99+" : notiCount.toString()}
+                    text={notiCount >= 100 ? '99+' : notiCount.toString()}
                     style={{
                       fontSize: 12,
-                      textAlign: "center",
+                      textAlign: 'center',
                       color: color.white,
                       lineHeight: 17,
                     }}
@@ -220,7 +218,6 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
 })
 
 export function MainTabNavigator() {
-
   return (
     <Tab.Navigator initialRouteName="homeTab" tabBar={(props) => <TabBar {...props} />}>
       <Tab.Screen name="homeTab" component={AllItemScreen} />

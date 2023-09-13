@@ -4,11 +4,11 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React, { useEffect, useState } from "react"
-import NetInfo from "@react-native-community/netinfo"
-import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
-import { createStackNavigator } from "@react-navigation/stack"
-import { MainNavigator } from "./main-navigator"
+import React, { useEffect, useState } from 'react'
+import NetInfo from '@react-native-community/netinfo'
+import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import { MainNavigator } from './main-navigator'
 import {
   IntroScreen,
   InitScreen,
@@ -19,26 +19,25 @@ import {
   CreateMasterPasswordScreen,
   ForgotPasswordScreen,
   CountrySelectorScreen,
-} from "../screens"
-import { useStores } from "../models"
-import Toast, { BaseToastProps } from "react-native-toast-message"
-import { observer } from "mobx-react-lite"
-import { useMixins } from "../services/mixins"
-import { ErrorToast, SuccessToast, InfoToast } from "./helpers/toast"
-import { Logger } from "../utils/utils"
-import { PushNotifier, NotifeeNotificationData } from "../utils/pushNotification"
-import { save, StorageKey } from "../utils/storage"
-import dynamicLinks from "@react-native-firebase/dynamic-links"
-import { AppState, Modal, View } from "react-native"
-import { AppEventType, EventBus } from "../utils/eventBus"
-import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
-import { TestScreen } from "../screens/test-screen"
-import WebView from "react-native-webview"
-import { IS_IOS } from "../config/constants"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { Header } from "../components"
-import Intercom, { Visibility } from "@intercom/intercom-react-native"
-import { OnPremisePreloginData } from "app/static/types"
+} from '../screens'
+import { useStores } from '../models'
+import Toast, { BaseToastProps } from 'react-native-toast-message'
+import { observer } from 'mobx-react-lite'
+import { useMixins } from '../services/mixins'
+import { ErrorToast, SuccessToast, InfoToast } from './helpers/toast'
+import { Logger } from '../utils/utils'
+import { PushNotifier, NotifeeNotificationData } from '../utils/pushNotification'
+import { save, StorageKey } from '../utils/storage'
+import dynamicLinks from '@react-native-firebase/dynamic-links'
+import { AppState, Modal, View } from 'react-native'
+import { AppEventType, EventBus } from '../utils/eventBus'
+import { useCipherAuthenticationMixins } from '../services/mixins/cipher/authentication'
+import WebView from 'react-native-webview'
+import { IS_IOS } from '../config/constants'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Header } from '../components'
+import Intercom, { Visibility } from '@intercom/intercom-react-native'
+import { OnPremisePreloginData } from 'app/static/types'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -57,7 +56,7 @@ export type RootParamList = {
   }
   onBoarding: undefined
   lock: {
-    type?: "individual" | "onPremise"
+    type?: 'individual' | 'onPremise'
     // onpremise data
     data?: OnPremisePreloginData
     email?: string
@@ -84,12 +83,12 @@ const RootStack = observer((props: Props) => {
   const { clearAllData, handleDynamicLink } = useCipherAuthenticationMixins()
   const { uiStore, user } = useStores()
   const insets = useSafeAreaInsets()
-  const [updateBlogUrl, setUpdateBlogUrl] = useState("")
+  const [updateBlogUrl, setUpdateBlogUrl] = useState('')
   // ------------------- METHODS -------------------
 
   const androidHandleNotiPress = async () => {
     const res = await parsePushNotiData({
-      tipTrick: true
+      tipTrick: true,
     })
     if (res.url) setUpdateBlogUrl(res.url)
   }
@@ -101,8 +100,7 @@ const RootStack = observer((props: Props) => {
 
     const res = await parsePushNotiData({
       notifeeData: data,
-      tipTrick: true
-
+      tipTrick: true,
     })
     if (res.url) setUpdateBlogUrl(res.url)
 
@@ -113,10 +111,11 @@ const RootStack = observer((props: Props) => {
         navigationRef.current.navigate(res.path, res.params)
       }
     } else {
-      !res.url && save(StorageKey.PUSH_NOTI_DATA, {
-        type: data.type,
-        // url: data.url,
-      })
+      !res.url &&
+        save(StorageKey.PUSH_NOTI_DATA, {
+          type: data.type,
+          // url: data.url,
+        })
     }
   }
 
@@ -125,7 +124,7 @@ const RootStack = observer((props: Props) => {
     Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
-    if (nextAppState !== "active") {
+    if (nextAppState !== 'active') {
       return
     }
 
@@ -144,7 +143,7 @@ const RootStack = observer((props: Props) => {
   useEffect(() => {
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
-      Logger.debug(offline ? "OFFLINE" : "ONLINE")
+      Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
       uiStore.setIsOffline(offline)
     })
 
@@ -175,9 +174,9 @@ const RootStack = observer((props: Props) => {
 
   // Dynamic links background handler
   useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange)
+    AppState.addEventListener('change', _handleAppStateChange)
     return () => {
-      AppState.removeEventListener("change", _handleAppStateChange)
+      AppState.removeEventListener('change', _handleAppStateChange)
     }
   }, [])
 
@@ -205,7 +204,7 @@ const RootStack = observer((props: Props) => {
         <Stack.Screen name="init" component={InitScreen} />
         <Stack.Screen name="intro" component={IntroScreen} />
         <Stack.Screen name="onBoarding" component={OnboardingScreen} />
-        <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: "individual" }} />
+        <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: 'individual' }} />
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="signup" component={SignupScreen} />
@@ -219,15 +218,14 @@ const RootStack = observer((props: Props) => {
             gestureEnabled: false,
           }}
         />
-        <Stack.Screen name="test" component={TestScreen} />
       </Stack.Navigator>
       <Modal
         visible={!!updateBlogUrl}
         animationType="slide"
         onRequestClose={() => {
-          setUpdateBlogUrl("")
+          setUpdateBlogUrl('')
         }}
-        supportedOrientations={["portrait", "landscape"]}
+        supportedOrientations={['portrait', 'landscape']}
       >
         <View
           style={{
@@ -241,7 +239,7 @@ const RootStack = observer((props: Props) => {
             incognito
             startInLoadingState
             source={{ uri: updateBlogUrl }}
-            originWhitelist={["https://*", "com.cystack.locker://*"]}
+            originWhitelist={['https://*', 'com.cystack.locker://*']}
           />
           <View
             style={{
@@ -251,14 +249,14 @@ const RootStack = observer((props: Props) => {
               paddingVertical: 12,
               paddingHorizontal: 16,
               backgroundColor: color.background,
-              position: "absolute",
+              position: 'absolute',
               borderBottomColor: color.line,
               borderBottomWidth: 0.5,
             }}
           >
             <Header
               goBack={() => {
-                setUpdateBlogUrl("")
+                setUpdateBlogUrl('')
               }}
             />
           </View>
@@ -287,4 +285,4 @@ export const RootNavigator = React.forwardRef<
   )
 })
 
-RootNavigator.displayName = "RootNavigator"
+RootNavigator.displayName = 'RootNavigator'
