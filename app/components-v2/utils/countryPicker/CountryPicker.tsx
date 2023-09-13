@@ -119,6 +119,7 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
           snapPoints={snapPoints}
           onClose={onClose}
           onChange={onSheetChange}
+          enablePanDownToClose
           backdropComponent={() => (
             <TouchableWithoutFeedback onPress={closeSheet} style={{ flex: 1 }}>
               <View style={{ flex: 1, backgroundColor: colors.transparentModal }} />

@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { View } from "react-native"
-import { observer } from "mobx-react-lite"
-import { useNavigation } from "@react-navigation/native"
-import { Layout, Text, Button } from "../../../components"
-import { useMixins } from "../../../services/mixins"
-import { spacing } from "../../../theme"
-import { LoginForm } from "./LoginForm"
-import { MethodSelection } from "./2fa/method-selection"
-import { Otp } from "./2fa/otp"
-import { useStores } from "../../../models"
-import { api } from "app/services/api"
 import { BASE_URL } from "app/config/constants"
+import { RootStackScreenProps } from "app/navigators"
+import { useStores } from "app/models"
+import { api } from "app/services/api"
 
-export const LoginScreen = observer(() => {
-  const navigation = useNavigation()
+import { LoginForm } from "./LoginForm"
+// import { MethodSelection } from "./2fa/method-selection"
+// import { Otp } from "./2fa/otp"
+
+
+
+import { Layout, Text, Button } from "../../../components"
+import { translate } from "app/i18n"
+
+
+export const LoginScreen: FC<RootStackScreenProps<'login'>> = (props) => {
+  const navigation = props.navigation
   const { user } = useStores()
-  const { translate } = useMixins()
   // ------------------------------ PARAMS -------------------------------
 
   const [index, setIndex] = useState(0)
@@ -40,6 +42,17 @@ export const LoginScreen = observer(() => {
       }
     }
   }
+
+  const nextStep = (
+    username: string,
+    password: string,
+    methods: { type: string; data: any }[],
+  ) => {
+    setCredential({ username, password, methods })
+    setIndex(1)
+  }
+
+  const handleForgot = () => navigation.navigate("forgotPassword")
 
   // -------------- EFFECT ------------------
 
@@ -82,7 +95,7 @@ export const LoginScreen = observer(() => {
           <Text
             text={translate("login.no_account")}
             style={{
-              marginRight: spacing.smaller,
+              marginRight: 12,
             }}
           />
           <Button
@@ -94,21 +107,13 @@ export const LoginScreen = observer(() => {
       )
       }
     >
-      {index === 0 && (
-        <LoginForm
-          handleForgot={() => navigation.navigate("forgotPassword")}
-          onLoggedIn={onLoggedIn}
-          nextStep={(
-            username: string,
-            password: string,
-            methods: { type: string; data: any }[],
-          ) => {
-            setCredential({ username, password, methods })
-            setIndex(1)
-          }}
-        />
-      )}
-      {index === 1 && (
+      <LoginForm
+        handleForgot={handleForgot}
+        onLoggedIn={onLoggedIn}
+        nextStep={nextStep}
+      />
+
+      {/* {index === 1 && (
         <MethodSelection
           goBack={() => setIndex(0)}
           methods={credential.methods}
@@ -130,7 +135,7 @@ export const LoginScreen = observer(() => {
           password={credential.password}
           onLoggedIn={onLoggedIn}
         />
-      )}
+      )} */}
     </Layout>
   )
-})
+}

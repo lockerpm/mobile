@@ -7,7 +7,8 @@ import { useHelper } from 'app/services/hook'
 import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
 import { Checkbox } from 'react-native-ui-lib'
-import { Screen, Text, Button, TextInput, Logo } from 'app/components-v2/cores'
+import Animated, { ZoomIn } from 'react-native-reanimated'
+import { Screen, Text, Button, TextInput, Logo, Header } from 'app/components-v2/cores'
 import {
   CountryPicker,
   CountryCode,
@@ -55,6 +56,10 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
     : email && fullname && agreed
 
   // ---------------- METHODS ---------------------
+
+  const goBack = () => {
+    props.navigation.goBack()
+  }
 
   const navigateLogin = () => {
     props.navigation.navigate('login')
@@ -172,7 +177,8 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
     () => (
       <View
         style={{
-          marginHorizontal: 20,
+          margin: 12,
+          marginBottom: 30
         }}
       >
         <Text
@@ -194,7 +200,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
     []
   )
   return (
-    <Screen padding preset="auto" safeAreaEdges={['top', 'bottom']} footer={<Footer />}>
+    <Screen preset="auto" contentContainerStyle={{ paddingBottom: 20 }}>
       <RecaptchaChecker ref={captchaRef} />
 
       {IS_IOS && (
@@ -214,11 +220,13 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
         />
       )}
 
-      {/* Modal end */}
-      <View style={{ paddingTop: '10%' }}>
+      <Header leftIcon='arrow-left' onLeftPress={goBack} />
+
+
+      <View style={{ paddingHorizontal: 20 }}>
         <Logo
           preset={'default'}
-          style={{ height: 80, width: 70, marginBottom: 10, marginTop: 30, alignSelf: 'center' }}
+          style={{ height: 80, width: 70, marginBottom: 10, alignSelf: 'center' }}
         />
         <Text
           preset="bold"
@@ -236,7 +244,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
         />
 
         {isSignupWithPassword && (
-          <>
+          <Animated.View entering={ZoomIn}>
             <TextInput
               animated
               isRequired
@@ -253,7 +261,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
               onChangeText={setConfirmPassword}
               value={confirmPassword}
             />
-          </>
+          </Animated.View>
         )}
 
         <TextInput
@@ -291,6 +299,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
             if (isSignupWithPassword) {
               getCaptchaToken().then(handleRegister)
             } else {
+
               setIsSignupWithPassword(true)
             }
           }}
@@ -323,6 +332,8 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
         )}
 
         <SocialLogin onLoggedIn={onLoggedIn} />
+
+        <Footer />
 
         <CountryPicker
           value={country}

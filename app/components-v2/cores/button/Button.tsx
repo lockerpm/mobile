@@ -168,7 +168,7 @@ export const Button = observer((props: ButtonProps) => {
   // Button Disable
   const $disabledViewStyle: Record<Presets, StyleProp<ViewStyle>> = {
     primary: { backgroundColor: colors.primary, opacity: 0.5 },
-    secondary: { backgroundColor: colors.disable, borderColor: colors.palette.neutral5 },
+    secondary: { opacity: 0.7, borderColor: colors.palette.neutral5 },
     teriatary: { backgroundColor: teriataryBackground },
   }
 

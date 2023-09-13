@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Button, Icon, ImageIconTypes, ImageIcon, Text, Toggle } from '../../cores'
+import { Button, Icon, ImageIconTypes, ImageIcon, Text, Logo, Toggle } from '../../cores'
 import { useTheme } from 'app/services/context'
 import { Dialog } from 'react-native-ui-lib'
 import { translate } from 'app/i18n'
@@ -48,22 +48,23 @@ export const IosPasswordlessOptions = ({
     {
       borderTopLeftRadius: 10,
       borderTopRightRadius: 10,
-      backgroundColor: colors.border,
+      backgroundColor: colors.block,
       paddingBottom: inset.bottom + 16,
     },
   ]
-  const $headerStyle: StyleProp<ViewStyle> = {
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    backgroundColor: colors.border,
-    paddingBottom: inset.bottom + 16,
-  }
 
   const header = () => {
     return (
-      <View style={$headerStyle}>
+      <View style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        backgroundColor: colors.block,
+        paddingHorizontal: 16,
+        paddingVertical: 16,
+      }}>
         <Text preset="bold" text={title} style={{ fontSize: 24, lineHeight: 28 }} />
-        <Icon icon="x-circle" size={24} />
+        <Icon icon="x-circle" size={24} onPress={onClose} />
       </View>
     )
   }
@@ -77,11 +78,10 @@ export const IosPasswordlessOptions = ({
       containerStyle={$containerStyle}
       renderPannableHeader={header}
     >
-      <View style={{ paddingHorizontal: 16, backgroundColor: colors.background }}>
-        <ImageIcon
-          icon="app-logo-secondary"
-          size={60}
-          style={{ alignSelf: 'center', marginBottom: 16 }}
+      <View style={{ paddingHorizontal: 16, backgroundColor: colors.block }}>
+        <Logo
+          preset="app-logo-secondary"
+          style={{ alignSelf: 'center', marginBottom: 16, width: 60, height: 60 }}
         />
         <Text text={label} style={{ textAlign: 'center' }} />
 
@@ -135,6 +135,7 @@ const Options = ({ title, label, icon, isSelect, action }: OptionsProps) => {
         style={{
           marginTop: 12,
           padding: 16,
+          paddingVertical: 8,
           backgroundColor: colors.background,
           borderRadius: 12,
           flexDirection: 'row',
@@ -156,11 +157,14 @@ const Options = ({ title, label, icon, isSelect, action }: OptionsProps) => {
             }}
           >
             <Text text={title} />
-            <Text text={label} size="base" style={{ maxWidth: '90%' }} />
+            <Text preset='label' text={label} size="base" style={{ maxWidth: '90%' }} />
           </View>
         </View>
 
-        <Toggle variant="checkbox" value={isSelect} disabled={true} />
+        <Toggle
+          disabled={true}
+          value={isSelect}
+        />
       </View>
     </TouchableOpacity>
   )

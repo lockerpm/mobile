@@ -4,9 +4,9 @@ import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native
 import { RootStackScreenProps } from 'app/navigators'
 import { Icon, Screen } from 'app/components-v2/cores'
 
-import { Intro1, Intro2, Intro3, Intro4 } from './intro/Intro'
 import { AnimatedFooter } from './animatedFooter/AnimatedFooter'
 import { Wave } from './Wave'
+import { Intro1, Intro2, Intro3, Intro4 } from './intro/Intro'
 
 const SCREEN_WIDTH = Dimensions.get('screen').width
 

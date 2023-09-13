@@ -91,6 +91,7 @@ export const colorsLight = {
   border: paletteLight.neutral3,
   divider: paletteLight.neutral2,
   background: paletteLight.neutral1,
+  block: paletteLight.neutral3,
 }
 
 export const colorsDark = {
@@ -142,4 +143,5 @@ export const colorsDark = {
   border: paletteDark.neutral7,
   divider: paletteDark.neutral8,
   background: paletteDark.neutral9,
+  block: paletteDark.neutral7,
 }

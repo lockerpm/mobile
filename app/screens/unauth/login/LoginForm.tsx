@@ -1,24 +1,23 @@
 import React, { useState, useRef, useEffect } from "react"
 import { Platform, View } from "react-native"
-import { observer } from "mobx-react-lite"
-import { useStores } from "../../../models"
-import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
-import { useMixins } from "../../../services/mixins"
-import { commonStyles, spacing } from "../../../theme"
-import { APP_ICON, SOCIAL_LOGIN_ICON } from "../../../common/mappings"
-import { useSocialLoginMixins } from "../../../services/mixins/social-login"
-import { IS_IOS, IS_PROD } from "../../../config/constants"
-import { GitHubLoginModal } from "./github-login-modal"
-import { useNavigation } from "@react-navigation/native"
+import { useStores } from "app/models"
 import { Passkey, PasskeyAuthenticationResult } from "react-native-passkey"
 import { PasskeyAuthenticationRequest } from "react-native-passkey/lib/typescript/Passkey"
-import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "../../../utils/passkey"
+import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "app/utils/passkey"
+
+
+import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
+import { spacing } from "../../../theme"
+import { APP_ICON } from "../../../common/mappings"
+
 import { IosPasskeyOptions } from "../signup/ios-passkey-options"
+import { useHelper } from "app/services/hook"
+import { translate } from "app/i18n"
+import { SocialLogin } from "app/components-v2/utils"
 
 type Props = {
-  onPremise: boolean
   nextStep: (username: string, password: string, methods: { type: string; data: any }[]) => void
-  onLoggedIn: (newUser: boolean, token: string) => void
+  onLoggedIn: (newUser: boolean, token: string) => Promise<void>
   handleForgot: () => void
 }
 
@@ -28,12 +27,12 @@ enum METHOD {
   NONE = 2,
 }
 
-export const DefaultLogin = observer((props: Props) => {
-  const navigation = useNavigation()
-  const { user, uiStore } = useStores()
-  const { translate, notify, notifyApiError, setApiTokens , color} = useMixins()
-  const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
-  const { nextStep, onLoggedIn, handleForgot, onPremise } = props
+const IS_IOS = Platform.OS === 'ios'
+
+export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
+  const { user } = useStores()
+  const { notify, notifyApiError, setApiTokens } = useHelper()
+
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
@@ -46,8 +45,6 @@ export const DefaultLogin = observer((props: Props) => {
   const [showExtraPasskeyLogin, setShowExtraPasskeyLogin] = useState(false)
   const passwordRef = useRef(null)
 
-  const [showGitHubLogin, setShowGitHubLogin] = useState(false)
-
   const [isShowCreatePasskeyOptions, setIsShowCreatePasskeyOptions] = useState(false)
   const [isIcloudSelected, setIsIcloudSelected] = useState(true)
   // ------------------ Methods ----------------------
@@ -57,7 +54,7 @@ export const DefaultLogin = observer((props: Props) => {
     if (res.kind === "ok") {
       if (res.data.webauthn) {
         setLoginMethod(METHOD.PASSKEY)
-        if (IS_IOS){
+        if (IS_IOS) {
           setIsShowCreatePasskeyOptions(true)
         } else {
           await handleAuthWebauth()
@@ -75,68 +72,40 @@ export const DefaultLogin = observer((props: Props) => {
     setIsLoading(true)
     setIsError(false)
 
-    if (!onPremise) {
-      const payload = { username, password }
-      const res = await user.login(payload)
-      setIsLoading(false)
-      if (res.kind !== "ok") {
-        setIsError(true)
-        if (res.kind === "unauthorized" && res.data) {
-          const errorData: {
-            code: string
-            message: string
-          } = res.data
-          switch (errorData.code) {
-            case "1001": {
-              notify("error", translate("error.wrong_username_or_password"))
-              break
-            }
-            case "1003": {
-              notify("error", translate("error.account_not_activated"))
-              break
-            }
-            default: {
-              notify("error", errorData.message)
-            }
+    const payload = { username, password }
+    const res = await user.login(payload)
+    setIsLoading(false)
+    if (res.kind !== "ok") {
+      setIsError(true)
+      if (res.kind === "unauthorized" && res.data) {
+        const errorData: {
+          code: string
+          message: string
+        } = res.data
+        switch (errorData.code) {
+          case "1001": {
+            notify("error", translate("error.wrong_username_or_password"))
+            break
           }
-        } else {
-          notifyApiError(res)
+          case "1003": {
+            notify("error", translate("error.account_not_activated"))
+            break
+          }
+          default: {
+            notify("error", errorData.message)
+          }
         }
       } else {
-        setPassword("")
-        if (res.data.is_factor2) {
-          nextStep(username, password, res.data.methods)
-        } else {
-          // @ts-ignore
-          setApiTokens(res.data?.access_token)
-          onLoggedIn(false, "")
-        }
+        notifyApiError(res)
       }
     } else {
-      const res = await user.onPremisePreLogin(username)
-      setIsLoading(false)
-      if (res.kind !== "ok") {
-        setIsError(true)
-        if (res.kind === "unauthorized" && res.data) {
-          const errorData: {
-            code: string
-            message: string
-          } = res.data
-          notify("error", errorData.message)
-        } else {
-          notifyApiError(res)
-        }
+      setPassword("")
+      if (res.data.is_factor2) {
+        nextStep(username, password, res.data.methods)
       } else {
-        if (res.data.length === 0) {
-          notify("error", translate("error.onpremise_login_failed"))
-        }
-        if (res.data[0]?.activated) {
-          navigation.navigate("lock", {
-            type: "onPremise",
-            data: res.data[0],
-            email: username,
-          })
-        }
+        // @ts-ignore
+        setApiTokens(res.data?.access_token)
+        onLoggedIn(false, "")
       }
     }
   }
@@ -152,7 +121,7 @@ export const DefaultLogin = observer((props: Props) => {
         // return
         // Call the `authenticate` method with the retrieved request in JSON format
         // A native overlay will be displayed
-        const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest,  { withSecurityKey })
+        const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest, { withSecurityKey })
 
         const res = await user.authPasskey({
           username,
@@ -189,11 +158,6 @@ export const DefaultLogin = observer((props: Props) => {
   }
   // ------------------------------ DATA -------------------------------
   const checkPasskeySupported = async () => {
-    if (onPremise) {
-      setLoginMethod(METHOD.PASSWORD)
-      return
-    }
-
     const res = await Passkey.isSupported()
     if (res) {
       setLoginMethod(METHOD.NONE)
@@ -207,63 +171,15 @@ export const DefaultLogin = observer((props: Props) => {
     checkPasskeySupported()
   }, [])
 
-  const SOCIAL_LOGIN: {
-    [service: string]: {
-      hide?: boolean
-      icon: any
-      handler: () => void
-    }
-  } = {
-    apple: {
-      hide: !IS_IOS,
-      icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.appleLight : SOCIAL_LOGIN_ICON.apple,
-      handler: () => {
-        return appleLogin({
-          setIsLoading,
-          onLoggedIn,
-        })
-      },
-    },
-
-    google: {
-      hide: !IS_PROD,
-      icon: SOCIAL_LOGIN_ICON.google,
-      handler: () => {
-        return googleLogin({
-          setIsLoading,
-          onLoggedIn,
-        })
-      },
-    },
-
-    facebook: {
-      hide: !IS_PROD,
-      icon: SOCIAL_LOGIN_ICON.facebook,
-      handler: () => {
-        return facebookLogin({
-          setIsLoading,
-          onLoggedIn,
-        })
-      },
-    },
-
-    github: {
-      hide: !IS_PROD,
-      icon: uiStore.isDark ? SOCIAL_LOGIN_ICON.githubLight : SOCIAL_LOGIN_ICON.github,
-      handler: () => {
-        setShowGitHubLogin(true)
-      },
-    },
-  }
 
   // ------------------------------ RENDER -------------------------------
   const AuthWithPasskey = () => {
-    if (!(!onPremise && showExtraPasskeyLogin)) return null
+    if (!showExtraPasskeyLogin) return null
     return (
       <Button
         preset="outline"
         isLoading={isLoading}
-        isDisabled={isLoading || !username }
+        isDisabled={isLoading || !username}
         text={translate("passkey.login_passkey")}
         onPress={() => {
           if (Platform.OS === "ios") {
@@ -286,33 +202,22 @@ export const DefaultLogin = observer((props: Props) => {
   return (
     <View>
       <View style={{ alignItems: "center" }}>
-        <GitHubLoginModal
-          isOpen={showGitHubLogin}
-          onClose={() => setShowGitHubLogin(false)}
-          onDone={(code) => {
-            githubLogin({
-              setIsLoading,
-              onLoggedIn,
-              code,
-            })
-          }}
-        />
-              {IS_IOS && (
-        <IosPasskeyOptions
-          isOpen={isShowCreatePasskeyOptions}
-          onClose={() => {
-            setIsShowCreatePasskeyOptions(false)
-          }}
-          label={translate('passkey.login_passkey_options')}
-          title={translate("common.login")}
-          isIcloudSelected={isIcloudSelected}
-          setIsIcloudSelected={setIsIcloudSelected}
-          action={async () => {
-            setIsShowCreatePasskeyOptions(false)
-            await handleAuthWebauth(!isIcloudSelected)
-          }}
-        />
-      )}
+        {IS_IOS && (
+          <IosPasskeyOptions
+            isOpen={isShowCreatePasskeyOptions}
+            onClose={() => {
+              setIsShowCreatePasskeyOptions(false)
+            }}
+            label={translate('passkey.login_passkey_options')}
+            title={translate("common.login")}
+            isIcloudSelected={isIcloudSelected}
+            setIsIcloudSelected={setIsIcloudSelected}
+            action={async () => {
+              setIsShowCreatePasskeyOptions(false)
+              await handleAuthWebauth(!isIcloudSelected)
+            }}
+          />
+        )}
 
         <Image
           source={APP_ICON.icon}
@@ -343,7 +248,7 @@ export const DefaultLogin = observer((props: Props) => {
         {/* Username input end */}
 
         {/* Password input */}
-        {!onPremise && loginMethod === METHOD.PASSWORD && (
+        {loginMethod === METHOD.PASSWORD && (
           <FloatingInput
             outerRef={passwordRef}
             isPassword
@@ -357,7 +262,7 @@ export const DefaultLogin = observer((props: Props) => {
         )}
         {/* Password input end */}
 
-        {!onPremise && loginMethod === METHOD.PASSWORD && (
+        {loginMethod === METHOD.PASSWORD && (
           <View
             style={{
               width: "100%",
@@ -377,7 +282,7 @@ export const DefaultLogin = observer((props: Props) => {
           <Button
             isLoading={isLoading}
             isDisabled={
-              isLoading || (!onPremise && !(username && password)) || (onPremise && !username)
+              isLoading || !(username && password)
             }
             text={translate("common.login")}
             onPress={handleLogin}
@@ -403,45 +308,11 @@ export const DefaultLogin = observer((props: Props) => {
           />
         )}
 
-        {/* {!onPremise && showExtraPasskeyLogin && (
-          <Button
-            preset="outline"
-            isLoading={isLoading}
-            isDisabled={isLoading || !username }
-            text={translate("passkey.login_passkey")}
-            onPress={handleAuthWebauth}
-            style={{
-              width: "100%",
-              marginBottom: 12,
-            }}
-          />
-        )} */}
+
         {AuthWithPasskey()}
 
-        {!onPremise && (
-          <View style={commonStyles.CENTER_VIEW}>
-            <Text
-              text={IS_PROD ? translate("common.or_login_with") : ""}
-              style={{ marginBottom: spacing.tiny }}
-            />
-
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              {Object.values(SOCIAL_LOGIN)
-                .filter((item) => !item.hide)
-                .map((item, index) => (
-                  <Button
-                    key={index}
-                    preset="ghost"
-                    onPress={item.handler}
-                    style={{ marginHorizontal: spacing.smaller }}
-                  >
-                    <item.icon height={40} width={40} />
-                  </Button>
-                ))}
-            </View>
-          </View>
-        )}
+        <SocialLogin onLoggedIn={onLoggedIn} />
       </View>
     </View>
   )
-})
+}

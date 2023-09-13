@@ -85,7 +85,7 @@ export const imageRegistry = {
   google: require('assets/images/icons/google.png'),
   sso: require('assets/images/icons/sso.png'),
 
-  'app-logo-secondary': require('assets/images/icons/app-logo-secondary.png'),
+
   'security-key': require('assets/images/icons/security-key.png'),
   keychain: require('assets/images/icons/keychain.png'),
   desktop: require('assets/images/icons/desktop.png'),

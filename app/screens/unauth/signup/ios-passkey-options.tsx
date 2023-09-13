@@ -20,7 +20,7 @@ interface Props {
 /**
  * is a surface containing content related to the previous screen.
  */
-export const IosPasskeyOptions = ({ title, label, isOpen, onClose, isIcloudSelected , setIsIcloudSelected, action}: Props) => {
+export const IosPasskeyOptions = ({ title, label, isOpen, onClose, isIcloudSelected, setIsIcloudSelected, action }: Props) => {
   const { color, translate } = useMixins()
   const inset = useSafeAreaInsets()
   const $containerStyle: StyleProp<ViewStyle> = [
@@ -33,21 +33,21 @@ export const IosPasskeyOptions = ({ title, label, isOpen, onClose, isIcloudSelec
   ]
 
   const header = () => {
-      return (
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            backgroundColor: color.block,
-            paddingHorizontal: 16,
-            paddingVertical: 16,
-          }}
-        >
-          <Text preset="bold" text={title} style={{ fontSize: 24, lineHeight: 28 }} />
-          <Icon icon="x" size={24} />
-        </View>
-      )
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: color.block,
+          paddingHorizontal: 16,
+          paddingVertical: 16,
+        }}
+      >
+        <Text preset="bold" text={title} style={{ fontSize: 24, lineHeight: 28 }} />
+        <Icon icon="x" size={24} />
+      </View>
+    )
   }
   return (
     <Dialog
@@ -75,18 +75,18 @@ export const IosPasskeyOptions = ({ title, label, isOpen, onClose, isIcloudSelec
           title={translate('passkey.sign_up.keychain.title')}
           label={translate('passkey.sign_up.keychain.label')}
           icon="keychain"
-          isSelect={isIcloudSelected} 
+          isSelect={isIcloudSelected}
           action={() => {
             setIsIcloudSelected(!isIcloudSelected)
-        }}        />
+          }} />
         <Options
           title={translate('passkey.sign_up.security_key.title')}
           label={translate('passkey.sign_up.security_key.label')}
           icon="security-key"
-          isSelect={!isIcloudSelected} 
+          isSelect={!isIcloudSelected}
           action={() => {
             setIsIcloudSelected(!isIcloudSelected)
-        }}    
+          }}
         />
       </View>
 
@@ -112,7 +112,7 @@ interface OptionsProps {
   icon: IconTypes
 }
 
-const Options = ({title, label, icon,  isSelect, action}: OptionsProps) => {
+const Options = ({ title, label, icon, isSelect, action }: OptionsProps) => {
   const { color } = useMixins()
   return (
     <TouchableOpacity onPress={action}>
@@ -151,10 +151,9 @@ const Options = ({title, label, icon,  isSelect, action}: OptionsProps) => {
           onTintColor={color.primary}
           animationDuration={0.1}
           onCheckColor={color.white}
-          style={{  width: 24,  height: 24, alignSelf: 'flex-end' }}
+          style={{ width: 24, height: 24, alignSelf: 'flex-end' }}
           disabled={true}
           value={isSelect}
-       
         />
       </View>
     </TouchableOpacity>
