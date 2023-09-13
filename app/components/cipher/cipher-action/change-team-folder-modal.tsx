@@ -1,21 +1,20 @@
-import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
-import { useStores } from "../../../models"
-import { useMixins } from "../../../services/mixins"
-import { Modal } from "../../modal/modal"
-import { DropdownPicker } from "../../dropdown-picker/dropdown-picker"
-import { Button } from "../../button/button"
-import { Text } from "../../text/text"
-import { fontSize } from "../../../theme"
-import { CipherView } from "../../../../core/models/view"
-import { useCoreService } from "../../../services/core-service"
-import { CipherRequest } from "../../../../core/models/request/cipherRequest"
-import isEqual from "lodash/isEqual"
-import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
-
+import React, { useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useStores } from '../../../models'
+import { useMixins } from '../../../services/mixins'
+import { Modal } from '../../modal/modal'
+import { DropdownPicker } from '../../dropdown-picker/dropdown-picker'
+import { Button } from '../../button/button'
+import { Text } from '../../text/text'
+import { fontSize } from '../../../theme'
+import { CipherView } from '../../../../core/models/view'
+import { useCoreService } from '../../../services/coreService'
+import { CipherRequest } from '../../../../core/models/request/cipherRequest'
+import isEqual from 'lodash/isEqual'
+import { useCipherHelpersMixins } from '../../../services/mixins/cipher/helpers'
 
 interface Props {
-  isOpen?: boolean,
+  isOpen?: boolean
   onClose?: () => void
 }
 
@@ -27,13 +26,12 @@ export const ChangeTeamFolderModal = observer((props: Props) => {
   const { cipherService } = useCoreService()
 
   const selectedCipher: CipherView = cipherStore.cipherView
-  const teamCollections = collectionStore.collections.filter(c => (
-    !c.readOnly 
-    && c.organizationId === selectedCipher.organizationId
-  )).map(c => ({
-    label: c.name,
-    value: c.id
-  }))
+  const teamCollections = collectionStore.collections
+    .filter((c) => !c.readOnly && c.organizationId === selectedCipher.organizationId)
+    .map((c) => ({
+      label: c.name,
+      value: c.id,
+    }))
 
   // --------------- PARAMS ----------------
 
@@ -58,7 +56,12 @@ export const ChangeTeamFolderModal = observer((props: Props) => {
 
     const cipherEnc = await cipherService.encrypt(selectedCipher)
     const data = new CipherRequest(cipherEnc)
-    const res = await cipherStore.updateCipher(selectedCipher.id, data, passwordStrength.score, collectionIds)
+    const res = await cipherStore.updateCipher(
+      selectedCipher.id,
+      data,
+      passwordStrength.score,
+      collectionIds
+    )
 
     setIsLoading(false)
 
@@ -92,7 +95,7 @@ export const ChangeTeamFolderModal = observer((props: Props) => {
         style={{
           marginTop: 20,
           marginBottom: 10,
-          fontSize: fontSize.small
+          fontSize: fontSize.small,
         }}
       />
 
@@ -108,12 +111,16 @@ export const ChangeTeamFolderModal = observer((props: Props) => {
 
       <Button
         text={translate('common.save')}
-        isDisabled={isLoading || (collectionIds && !collectionIds.length) || isEqual(collectionIds, selectedCipher.collectionIds)}
+        isDisabled={
+          isLoading ||
+          (collectionIds && !collectionIds.length) ||
+          isEqual(collectionIds, selectedCipher.collectionIds)
+        }
         isLoading={isLoading}
         onPress={handleShare}
         style={{
           width: '100%',
-          marginTop: 30
+          marginTop: 30,
         }}
       />
     </Modal>

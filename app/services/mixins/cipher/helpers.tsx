@@ -24,7 +24,7 @@ import { toSocialSecurityNumberData } from '../../../screens/auth/browse/social-
 import { toWirelessRouterData } from '../../../screens/auth/browse/wireless-router/wireless-router.type'
 import { toCryptoWalletData } from '../../../utils/crypto'
 import { WALLET_APP_LIST } from '../../../utils/crypto/applist'
-import { useCoreService } from '../../core-service'
+import { useCoreService } from '../../coreService'
 
 const defaultData = {
   newCipher: (type: CipherType) => {
@@ -82,8 +82,9 @@ export const CipherHelpersMixinsProvider = observer(
           return item.identity.fullName
         case CipherType.CryptoWallet: {
           const walletData = toCryptoWalletData(item.notes)
-          return `${walletData.username}${walletData.username ? ', ' : ''}${walletData.networks.length
-            } networks`
+          return `${walletData.username}${walletData.username ? ', ' : ''}${
+            walletData.networks.length
+          } networks`
         }
         case CipherType.DriverLicense: {
           const driverLicenseData = toDriverLicenseData(item.notes)

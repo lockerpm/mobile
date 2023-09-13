@@ -12,7 +12,7 @@ import { fontSizes, typography } from '../../../theme'
 
 type Presets = 'default' | 'bold' | 'label'
 type Sizes = keyof typeof fontSizes
-type Weights = keyof typeof typography.secondary
+type Weights = keyof typeof typography.primary
 
 const AnimatedText = Animated.createAnimatedComponent(RNText)
 
@@ -52,45 +52,31 @@ export interface TextProps extends RNTextProps {
  * This component is a HOC over the built-in React Native one.
  */
 export const Text = (props: TextProps) => {
-  const {
-    weight,
-    size,
-    text,
-    children,
-    style: $styleOverride,
-    color: colorValue,
-    ...rest
-  } = props
+  const { weight, size, text, children, style: $styleOverride, color: colorValue, ...rest } = props
 
   const { color: themeColor } = useMixins()
 
-  const $baseStyle: StyleProp<TextStyle> = [{  
-    fontFamily: typography.primary,
-    color: themeColor.textBlack,
-    fontSize: fontSizes.medium
-  }]
-  
+  const $baseStyle: StyleProp<TextStyle> = [
+    {
+      fontFamily: typography.secondary,
+      color: themeColor.textBlack,
+      fontSize: fontSizes.medium,
+    },
+  ]
 
   const $presetStyles: Record<Presets, StyleProp<TextStyle>> = {
     default: [$baseStyle],
 
-    bold: [$baseStyle, { fontWeight: "600", color: themeColor.title }],
+    bold: [$baseStyle, { fontWeight: '600', color: themeColor.title }],
 
-    label: [$baseStyle,  { color: themeColor.text }],
+    label: [$baseStyle, { color: themeColor.text }],
   }
 
-  const content =  text || children
+  const content = text || children
   const preset: Presets = $presetStyles[props.preset] ? props.preset : 'default'
 
-  const $textColor: StyleProp<TextStyle> = [
-    colorValue && { color: colorValue },
-  ]
-  const $styles = [
-    $presetStyles[preset],
-    $fontSizeStyles[size],
-    $textColor,
-    $styleOverride,
-  ]
+  const $textColor: StyleProp<TextStyle> = [colorValue && { color: colorValue }]
+  const $styles = [$presetStyles[preset], $fontSizeStyles[size], $textColor, $styleOverride]
 
   return (
     <AnimatedText {...rest} style={$styles}>
@@ -102,6 +88,3 @@ export const Text = (props: TextProps) => {
 const $fontSizeStyles = Object.entries(fontSizes).reduce((acc, [size, fontSize]) => {
   return { ...acc, [size]: { fontSize, lineHeight: (fontSize * 3) / 2 } }
 }, {}) as Record<Sizes, TextStyle>
-
-
-

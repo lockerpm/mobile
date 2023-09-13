@@ -1,4 +1,4 @@
-import { useCoreService } from '../core-service'
+import { useCoreService } from '../coreService'
 import find from 'lodash/find'
 import { nanoid } from 'nanoid'
 import { useStores } from 'app/models'

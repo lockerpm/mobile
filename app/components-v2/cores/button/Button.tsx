@@ -1,5 +1,5 @@
-import { observer } from "mobx-react-lite"
-import React, { ComponentType, useCallback } from "react"
+import { observer } from 'mobx-react-lite'
+import React, { ComponentType } from 'react'
 import {
   Pressable,
   PressableProps,
@@ -11,14 +11,13 @@ import {
   ViewStyle,
   ActivityIndicator,
   ColorValue,
-  ImageStyle,
-} from "react-native"
-import { spacing } from "../../../theme"
-import { Text, TextProps } from "../text/Text"
-import { useTheme } from "app/services/hook"
-import { Icon, IconProps, IconTypes } from "../icon/Icon"
+} from 'react-native'
+import { spacing } from '../../../theme'
+import { Text, TextProps } from '../text/Text'
+import { useTheme } from 'app/services/context'
+import { Icon, IconProps, IconTypes } from '../icon/Icon'
 
-type Presets = "primary" | "secondary" | "teriatary"
+type Presets = 'primary' | 'secondary' | 'teriatary'
 type Sizes = keyof typeof $sizeStyles
 
 export interface ButtonAccessoryProps {
@@ -27,7 +26,6 @@ export interface ButtonAccessoryProps {
 }
 
 export interface ButtonProps extends PressableProps {
-
   /**
    * Button is disabled
    */
@@ -44,7 +42,7 @@ export interface ButtonProps extends PressableProps {
   /**
    * The text to display if not using `tx` or nested components.
    */
-  text?: TextProps["text"]
+  text?: TextProps['text']
   /**
    * An optional style override useful for padding & margin.
    */
@@ -106,7 +104,7 @@ export const Button = observer((props: ButtonProps) => {
     text,
     disabled,
     loading,
-    size = "medium",
+    size = 'medium',
     style: $viewStyleOverride,
     pressedStyle: $pressedViewStyleOverride,
     textStyle: $textStyleOverride,
@@ -191,7 +189,7 @@ export const Button = observer((props: ButtonProps) => {
     teriatary: colors.primary,
   }
 
-  const preset: Presets = $viewPresets[props.preset] ? props.preset : "primary"
+  const preset: Presets = $viewPresets[props.preset] ? props.preset : 'primary'
 
   function $viewStyle({ pressed }) {
     return [
@@ -213,16 +211,16 @@ export const Button = observer((props: ButtonProps) => {
   }
 
   const LeftIcon = (state) => {
-    if (!!leftIcon)
+    if (leftIcon)
       return <Icon containerStyle={$leftAccessoryStyle} {...leftIconProps} icon={leftIcon} />
-    if (!!LeftAccessory) return <LeftAccessory style={$leftAccessoryStyle} pressableState={state} />
+    if (LeftAccessory) return <LeftAccessory style={$leftAccessoryStyle} pressableState={state} />
     return null
   }
 
   const RightIcon = (state) => {
-    if (!!rightIcon)
+    if (rightIcon)
       return <Icon containerStyle={$rightAccessoryStyle} {...rightIconProps} icon={rightIcon} />
-    if (!!RightAccessory)
+    if (RightAccessory)
       return <RightAccessory style={$rightAccessoryStyle} pressableState={state} />
     return null
   }
@@ -254,18 +252,17 @@ const $baseViewStyle: ViewStyle = {
   paddingHorizontal: 12,
   minHeight: 28,
   borderRadius: 8,
-  justifyContent: "center",
-  alignItems: "center",
-  flexDirection: "row",
-  overflow: "hidden",
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'row',
+  overflow: 'hidden',
   paddingVertical: 12,
 }
 
 const $baseTextStyle: TextStyle = {
   fontSize: 16,
   lineHeight: 20,
-  // fontFamily: typography.primary.normal,
-  textAlign: "center",
+  textAlign: 'center',
   flexShrink: 1,
   flexGrow: 0,
   zIndex: 2,
@@ -283,5 +280,5 @@ const $sizeStyles = {
   small: { paddingVertical: 4 } as ViewStyle,
 }
 
-const $rightAccessoryStyle: ViewStyle = { marginLeft: spacing.xs }
-const $leftAccessoryStyle: ViewStyle = { marginRight: spacing.xs }
+const $rightAccessoryStyle: ViewStyle = { marginLeft: spacing.smaller }
+const $leftAccessoryStyle: ViewStyle = { marginRight: spacing.smaller }

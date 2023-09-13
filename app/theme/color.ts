@@ -56,6 +56,7 @@ export const colorsLight = {
    * A helper for making something see-thru.
    */
   transparent: 'rgba(0, 0, 0, 0)',
+  transparentModal: 'rgba(0, 0, 0, 0.3)',
   /**
    * Brand Color
    */
@@ -106,6 +107,7 @@ export const colorsDark = {
    * A helper for making something see-thru.
    */
   transparent: 'rgba(0, 0, 0, 0)',
+  transparentModal: 'rgba(0, 0, 0, 0.3)',
   /**
    * Brand Color
    */

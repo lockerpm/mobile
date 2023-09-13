@@ -1,4 +1,12 @@
-import React, { ComponentType, forwardRef, Ref, useEffect, useImperativeHandle, useRef, useState } from "react"
+import React, {
+  ComponentType,
+  forwardRef,
+  Ref,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 import {
   NativeSyntheticEvent,
   StyleProp,
@@ -10,35 +18,35 @@ import {
   View,
   ViewStyle,
   LayoutAnimation,
-} from "react-native"
+} from 'react-native'
 import Animated, {
   interpolate,
   interpolateColor,
   useAnimatedStyle,
   useDerivedValue,
   withTiming,
-} from "react-native-reanimated"
-import { bin } from "react-native-redash"
-import { Icon } from "../icon/Icon"
-import { Text, TextProps } from "../text/Text"
-import { useTheme } from "app/services/hook"
-import { typography } from "app/theme"
+} from 'react-native-reanimated'
+import { bin } from 'react-native-redash'
+import { Icon } from '../icon/Icon'
+import { Text, TextProps } from '../text/Text'
+import { useTheme } from 'app/services/context'
+import { typography } from 'app/theme'
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
-  status: TextFieldProps["status"]
+  status: TextFieldProps['status']
   multiline: boolean
   editable: boolean
 }
 
-export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
+export interface TextFieldProps extends Omit<TextInputProps, 'ref'> {
   /**
    *  error style modifier for different input states.
    */
   isError?: boolean
   /**
-  *  This field cannot be left blank
-  */
+   *  This field cannot be left blank
+   */
   isRequired?: boolean
   /**
    *  disbled style modifier for different input states.
@@ -56,11 +64,7 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
   /**
    * A style modifier for different input states.
    */
-  status?: "error" | "disabled"
-  /**
-   * The label text to display if not using .
-   */
-  label?: TextProps["text"]
+  status?: 'error' | 'disabled'
   /**
    * Pass any additional props directly to the label Text component.
    */
@@ -68,7 +72,7 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
   /**
    * The helper text to display if not using .
    */
-  helper?: TextProps["text"]
+  helper?: TextProps['text']
   /**
    * Pass any additional props directly to the helper Text component.
    */
@@ -76,7 +80,7 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
   /**
    * The placeholder text to display if not using .
    */
-  placeholder?: TextProps["text"]
+  placeholder?: TextProps['text']
   /**
    * Optional input style override.
    */
@@ -110,7 +114,7 @@ export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
  */
 export const TextInput = forwardRef(function TextField(
   props: TextFieldProps,
-  ref: Ref<RNTextInput>,
+  ref: Ref<RNTextInput>
 ) {
   const {
     isRequired: isRequiredProps,
@@ -118,7 +122,6 @@ export const TextInput = forwardRef(function TextField(
     isDisabled,
     isPassword,
     animated,
-    label,
     placeholder,
     helper: helperProps,
     status: statusProps,
@@ -131,7 +134,7 @@ export const TextInput = forwardRef(function TextField(
     inputWrapperStyle: $inputWrapperStyleOverride,
     onFocus: propsFocus,
     onBlur: propsBlur,
-    value = "",
+    value = '',
     ...TextInputProps
   } = props
 
@@ -141,17 +144,17 @@ export const TextInput = forwardRef(function TextField(
   const [isShowText, setIsShowText] = useState(false)
   const input = useRef<RNTextInput>()
   const status = (() => {
-    const _status = ((isRequired || isError) && "error") || (isDisabled && "disabled")
+    const _status = ((isRequired || isError) && 'error') || (isDisabled && 'disabled')
     if (_status) return _status
-    return undefined
+    return statusProps
   })()
-  const disabled = TextInputProps.editable === false || status === "disabled"
+  const disabled = TextInputProps.editable === false || status === 'disabled'
 
-  const helper = helperProps || (isRequired && "This field is required")
+  const helper = helperProps || (isRequired && 'This field is required')
   const placeholderContent = placeholder && placeholder + (isRequiredProps ? ' (*)' : '')
-
+  const label = animated ? placeholderContent : ''
   const $containerStyles: StyleProp<ViewStyle> = [
-    { width: "100%", alignItems: "flex-start", marginVertical: 2 },
+    { width: '100%', alignItems: 'flex-start', marginVertical: 2 },
     $containerStyleOverride,
   ]
   const $labelStyles: StyleProp<TextStyle> = [
@@ -162,7 +165,7 @@ export const TextInput = forwardRef(function TextField(
   const $inputWrapperStyles = [
     $inputWrapperStyle,
     { borderColor: isFocus && !disabled ? colors.primary : colors.disable },
-    status === "error" && { borderColor: colors.error },
+    status === 'error' && { borderColor: colors.error },
     TextInputProps.multiline && { minHeight: 112 },
     LeftAccessory && { paddingStart: 0 },
     RightAccessory && { paddingEnd: 0 },
@@ -172,13 +175,13 @@ export const TextInput = forwardRef(function TextField(
   const $inputStyles = [
     $inputStyle,
     disabled && { color: colors.disable },
-    TextInputProps.multiline && { height: "auto" },
+    TextInputProps.multiline && { height: 'auto' },
     $inputStyleOverride,
   ]
 
   const $helperStyles = [
     $helperStyle,
-    status === "error" && { color: colors.error },
+    status === 'error' && { color: colors.error },
     HelperTextProps?.style,
   ]
 
@@ -208,7 +211,6 @@ export const TextInput = forwardRef(function TextField(
     }
     propsBlur && propsBlur(e)
   }
-
 
   const toggleStyle = useDerivedValue(() => {
     return withTiming(bin(isFocus || value.length !== 0))
@@ -255,7 +257,7 @@ export const TextInput = forwardRef(function TextField(
     >
       {!!label && (
         <Animated.Text {...LabelTextProps} style={[$labelStyles, $titleAnim]}>
-          {label + (isRequiredProps ? ' (*)' : '')}
+          {label}
         </Animated.Text>
       )}
 
@@ -275,7 +277,6 @@ export const TextInput = forwardRef(function TextField(
           textAlignVertical="top"
           placeholder={placeholderContent}
           placeholderTextColor={colors.disable}
-          cursorColor={colors.primary}
           value={value}
           {...TextInputProps}
           secureTextEntry={!isShowText && isPassword}
@@ -283,6 +284,7 @@ export const TextInput = forwardRef(function TextField(
           onFocus={onFucus}
           onBlur={onBlur}
           editable={!disabled}
+          // cursorColor={colors.primary}
           style={$inputStyles}
         />
 
@@ -292,7 +294,7 @@ export const TextInput = forwardRef(function TextField(
               setIsShowText(!isShowText)
             }}
             containerStyle={$rightAccessoryStyle}
-            icon={!isShowText ? "eye" : "eye-slash"}
+            icon={!isShowText ? 'eye' : 'eye-slash'}
             color={colors.primaryText}
             size={20}
           />
@@ -314,16 +316,16 @@ export const TextInput = forwardRef(function TextField(
 })
 
 const $inputWrapperStyle: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "flex-start",
+  flexDirection: 'row',
+  alignItems: 'flex-start',
   borderWidth: 1,
   borderRadius: 8,
-  overflow: "hidden",
+  overflow: 'hidden',
 }
 
 const $inputStyle: TextStyle = {
   flex: 1,
-  alignSelf: "stretch",
+  alignSelf: 'stretch',
   fontSize: 16,
   height: 24,
   paddingVertical: 0,
@@ -339,13 +341,13 @@ const $rightAccessoryStyle: ViewStyle = {
   paddingEnd: 12,
   height: 48,
   paddingLeft: 4,
-  justifyContent: "center",
-  alignItems: "center",
+  justifyContent: 'center',
+  alignItems: 'center',
 }
 const $leftAccessoryStyle: ViewStyle = {
   paddingEnd: 12,
   height: 48,
   paddingLeft: 4,
-  justifyContent: "center",
-  alignItems: "center",
+  justifyContent: 'center',
+  alignItems: 'center',
 }

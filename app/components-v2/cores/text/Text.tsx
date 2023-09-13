@@ -1,14 +1,15 @@
-import i18n from "i18n-js"
-import React from "react"
+import i18n from 'i18n-js'
+import React from 'react'
 import {
   StyleProp,
   Text as RNText,
   TextProps as RNTextProps,
   TextStyle,
   ColorValue,
-} from "react-native"
-import { isRTL, translate, TxKeyPath } from "../../../i18n"
-import { colorsLight as colors, typography } from "../../../theme"
+} from 'react-native'
+import { isRTL, translate, TxKeyPath } from '../../../i18n'
+import { typography } from '../../../theme'
+import { useTheme } from 'app/services/context'
 
 type Sizes = keyof typeof $sizeStyles
 type Weights = keyof typeof typography.primary
@@ -73,10 +74,12 @@ export function Text(props: TextProps) {
     ...rest
   } = props
 
+  const { colors } = useTheme()
+
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
 
-  const preset: Presets = $presets[props.preset] ? props.preset : "default"
+  const preset: Presets = $presets[props.preset] ? props.preset : 'default'
 
   const $colorPreset = {
     default: { color: colors.primaryText },
@@ -85,12 +88,12 @@ export function Text(props: TextProps) {
     label: { color: colors.secondaryText },
     helper: { color: colors.secondaryText },
   }
-  const $styles = [
+  const $styles: StyleProp<TextStyle> = [
     $rtlStyle,
     $presets[preset],
     $fontWeightStyles[weight],
     $sizeStyles[size],
-    !!color ? { color: color } : $colorPreset[preset],
+    color ? { color: color } : $colorPreset[preset],
     $styleOverride,
   ]
 
@@ -102,14 +105,14 @@ export function Text(props: TextProps) {
 }
 
 const $sizeStyles = {
-  xxxl: { fontSize: 28, lineHeight: 46 } satisfies TextStyle,
-  xxl: { fontSize: 30, lineHeight: 38 } satisfies TextStyle,
-  xl: { fontSize: 24, lineHeight: 32 } satisfies TextStyle,
-  large: { fontSize: 20, lineHeight: 28 } satisfies TextStyle,
-  medium: { fontSize: 16, lineHeight: 24 } satisfies TextStyle,
-  base: { fontSize: 14, lineHeight: 22 } satisfies TextStyle,
-  small: { fontSize: 12, lineHeight: 20 } satisfies TextStyle,
-  sx: { fontSize: 10, lineHeight: 18 } satisfies TextStyle,
+  xxxl: { fontSize: 28, lineHeight: 46 },
+  xxl: { fontSize: 30, lineHeight: 38 },
+  xl: { fontSize: 24, lineHeight: 32 },
+  large: { fontSize: 20, lineHeight: 28 },
+  medium: { fontSize: 16, lineHeight: 24 },
+  base: { fontSize: 14, lineHeight: 22 },
+  small: { fontSize: 12, lineHeight: 20 },
+  sx: { fontSize: 10, lineHeight: 18 },
 }
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {
@@ -130,4 +133,4 @@ const $presets = {
   helper: [$baseStyle, $sizeStyles.small] as StyleProp<TextStyle>,
 }
 
-const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}
+const $rtlStyle: TextStyle = isRTL ? { writingDirection: 'rtl' } : {}

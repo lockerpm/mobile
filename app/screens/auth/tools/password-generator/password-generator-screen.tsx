@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react"
-import { observer } from "mobx-react-lite"
-import { View } from "react-native"
-import { Layout, Header, Text, Button, PasswordStrength } from "../../../../components"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { commonStyles, fontSize } from "../../../../theme"
+import React, { useState, useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
+import { View } from 'react-native'
+import { Layout, Header, Text, Button, PasswordStrength } from '../../../../components'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { commonStyles, fontSize } from '../../../../theme'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { useMixins } from "../../../../services/mixins"
-import { useCoreService } from "../../../../services/core-service"
-import { useStores } from "../../../../models"
-import { PrimaryParamList } from "../../../../navigators/main-navigator"
-import { Slider, Checkbox } from "react-native-ui-lib"
-import { useCipherHelpersMixins } from "../../../../services/mixins/cipher/helpers"
+import { useMixins } from '../../../../services/mixins'
+import { useCoreService } from '../../../../services/coreService'
+import { useStores } from '../../../../models'
+import { PrimaryParamList } from '../../../../navigators/main-navigator'
+import { Slider, Checkbox } from 'react-native-ui-lib'
+import { useCipherHelpersMixins } from '../../../../services/mixins/cipher/helpers'
 
-
-type ScreenProp = RouteProp<PrimaryParamList, 'passwordGenerator'>;
+type ScreenProp = RouteProp<PrimaryParamList, 'passwordGenerator'>
 
 export const PasswordGeneratorScreen = observer(() => {
   const navigation = useNavigation()
@@ -33,30 +32,30 @@ export const PasswordGeneratorScreen = observer(() => {
     lowercase: true,
     number: true,
     special: true,
-    ambiguous: false
+    ambiguous: false,
   })
 
   const OPTIONS = [
     {
       label: translate('pass_generator.use_upper'),
-      key: 'uppercase'
+      key: 'uppercase',
     },
     {
       label: translate('pass_generator.use_lower'),
-      key: 'lowercase'
+      key: 'lowercase',
     },
     {
       label: translate('pass_generator.use_digits'),
-      key: 'number'
+      key: 'number',
     },
     {
       label: translate('pass_generator.use_symbol'),
-      key: 'special'
+      key: 'special',
     },
     {
       label: translate('pass_generator.avoid_ambiguous'),
-      key: 'ambiguous'
-    }
+      key: 'ambiguous',
+    },
   ]
 
   // Methods
@@ -79,18 +78,16 @@ export const PasswordGeneratorScreen = observer(() => {
     <Layout
       containerStyle={{
         backgroundColor: color.block,
-        paddingHorizontal: 0
+        paddingHorizontal: 0,
       }}
-      header={(
+      header={
         <Header
           title={translate('pass_generator.title')}
           goBack={() => navigation.goBack()}
-          right={(
-            <View style={{ width: 30 }} />
-          )}
+          right={<View style={{ width: 30 }} />}
         />
-      )}
-      footer={(
+      }
+      footer={
         <View>
           <Button
             text={translate('pass_generator.use_password')}
@@ -110,37 +107,26 @@ export const PasswordGeneratorScreen = observer(() => {
             style={{ marginTop: 10 }}
           />
         </View>
-      )}
+      }
     >
       {/* Password */}
       <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background
-        }]}
+        style={[
+          commonStyles.SECTION_PADDING,
+          {
+            backgroundColor: color.background,
+          },
+        ]}
       >
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Text
-            preset="black"
-            text={password}
-            style={{ flex: 1, fontSize: fontSize.h4 }}
-          />
+          <Text preset="black" text={password} style={{ flex: 1, fontSize: fontSize.h4 }} />
 
-          <Button
-            preset="link"
-            onPress={() => copyToClipboard(password)}
-          >
-            <IoniconsIcon
-              name="copy-outline"
-              size={18}
-              color={color.textBlack}
-            />
+          <Button preset="link" onPress={() => copyToClipboard(password)}>
+            <IoniconsIcon name="copy-outline" size={18} color={color.textBlack} />
           </Button>
         </View>
 
-        <PasswordStrength
-          preset="text"
-          value={getPasswordStrength(password).score}
-        />
+        <PasswordStrength preset="text" value={getPasswordStrength(password).score} />
       </View>
       {/* Password end */}
 
@@ -153,9 +139,12 @@ export const PasswordGeneratorScreen = observer(() => {
 
       {/* Options */}
       <View
-        style={[commonStyles.SECTION_PADDING, {
-          backgroundColor: color.background
-        }]}
+        style={[
+          commonStyles.SECTION_PADDING,
+          {
+            backgroundColor: color.background,
+          },
+        ]}
       >
         {/* Password length */}
         <Text
@@ -180,32 +169,30 @@ export const PasswordGeneratorScreen = observer(() => {
         {/* Password length end */}
 
         <View style={{ marginTop: 10 }}>
-          {
-            OPTIONS.map((item) => (
-              <Checkbox
-                key={item.key}
-                value={options[item.key]}
-                accessibilityLabel={item.key}
-                color={color.primary}
-                label={item.label}
-                onValueChange={checked => {
-                  const newOptions = { ...options }
-                  newOptions[item.key] = checked
-                  if (!OPTIONS.some(o => newOptions[o.key])) {
-                    newOptions.lowercase = true
-                  }
-                  setOptions(newOptions)
-                }}
-                style={{
-                  marginVertical: 7
-                }}
-                labelStyle={{
-                  color: color.textBlack,
-                  fontSize: fontSize.p
-                }}
-              />
-            ))
-          }
+          {OPTIONS.map((item) => (
+            <Checkbox
+              key={item.key}
+              value={options[item.key]}
+              accessibilityLabel={item.key}
+              color={color.primary}
+              label={item.label}
+              onValueChange={(checked) => {
+                const newOptions = { ...options }
+                newOptions[item.key] = checked
+                if (!OPTIONS.some((o) => newOptions[o.key])) {
+                  newOptions.lowercase = true
+                }
+                setOptions(newOptions)
+              }}
+              style={{
+                marginVertical: 7,
+              }}
+              labelStyle={{
+                color: color.textBlack,
+                fontSize: fontSize.p,
+              }}
+            />
+          ))}
         </View>
       </View>
       {/* Options end */}

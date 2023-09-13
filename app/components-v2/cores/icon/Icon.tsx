@@ -1,5 +1,5 @@
-import * as React from "react"
-import { ComponentType } from "react"
+import * as React from 'react'
+import { ComponentType } from 'react'
 import {
   Image,
   ImageStyle,
@@ -8,7 +8,7 @@ import {
   TouchableOpacityProps,
   View,
   ViewStyle,
-} from "react-native"
+} from 'react-native'
 
 type RegularIconTypes = keyof typeof iconRegularRegistry
 type CommonIconTypes = keyof typeof iconRegistry
@@ -49,7 +49,7 @@ export interface IconProps extends TouchableOpacityProps {
   /**
    * An optional function to be called when the icon is pressed
    */
-  onPress?: TouchableOpacityProps["onPress"]
+  onPress?: TouchableOpacityProps['onPress']
 }
 
 /**
@@ -76,7 +76,7 @@ export function Icon(props: IconProps) {
 
   return (
     <Wrapper
-      accessibilityRole={isPressable ? "imagebutton" : undefined}
+      accessibilityRole={isPressable ? 'imagebutton' : undefined}
       {...WrapperProps}
       style={$containerStyleOverride}
     >
@@ -92,8 +92,8 @@ export function Icon(props: IconProps) {
             iconRegistry[icon]
               ? iconRegistry[icon]
               : !filled
-                ? iconRegularRegistry[icon]
-                : iconFillRegistry[icon]
+              ? iconRegularRegistry[icon]
+              : iconFillRegistry[icon]
           }
         />
       ) : (
@@ -104,31 +104,31 @@ export function Icon(props: IconProps) {
 }
 
 export const iconRegularRegistry = {
-  "arrow-left": require("../../../../assets/icons/regular/arrow-left.png"),
-  "arrow-right": require("../../../../assets/icons/regular/arrow-right.png"),
-  "caret-left": require("../../../../assets/icons/regular/caret-left.png"),
-  "caret-right": require("../../../../assets/icons/regular/caret-right.png"),
-  check: require("../../../../assets/icons/regular/check.png"),
-  "x-circle": require("../../../../assets/icons/regular/x-circle.png"),
-  bug: require("../../../../assets/icons/regular/bug.png"),
+  'arrow-left': require('assets/icons/regular/arrow-left.png'),
+  'arrow-right': require('assets/icons/regular/arrow-right.png'),
+  'caret-left': require('assets/icons/regular/caret-left.png'),
+  'caret-right': require('assets/icons/regular/caret-right.png'),
+  check: require('assets/icons/regular/check.png'),
+  'x-circle': require('assets/icons/regular/x-circle.png'),
+  bug: require('assets/icons/regular/bug.png'),
 }
 
 export const iconFillRegistry = {
-  "arrow-left": require("../../../../assets/icons/fill/arrow-left-fill.png"),
-  "arrow-right": require("../../../../assets/icons/fill/arrow-right-fill.png"),
-  "caret-left": require("../../../../assets/icons/fill/caret-left-fill.png"),
-  "caret-right": require("../../../../assets/icons/fill/caret-right-fill.png"),
-  check: require("../../../../assets/icons/fill/check-fill.png"),
-  "x-circle": require("../../../../assets/icons/fill/x-circle-fill.png"),
-  bug: require("../../../../assets/icons/fill/bug-fill.png"),
+  'arrow-left': require('assets/icons/fill/arrow-left-fill.png'),
+  'arrow-right': require('assets/icons/fill/arrow-right-fill.png'),
+  'caret-left': require('assets/icons/fill/caret-left-fill.png'),
+  'caret-right': require('assets/icons/fill/caret-right-fill.png'),
+  check: require('assets/icons/fill/check-fill.png'),
+  'x-circle': require('assets/icons/fill/x-circle-fill.png'),
+  bug: require('assets/icons/fill/bug-fill.png'),
 }
 
 export const iconRegistry = {
-  "eye-slash": require("../../../../assets/icons/eye-slash.png"),
-  eye: require("../../../../assets/icons/eye.png"),
-  'magnifying-glass': require("../../../../assets/icons/magnifying-glass.png"),
+  'eye-slash': require('assets/icons/eye-slash.png'),
+  eye: require('assets/icons/eye.png'),
+  'magnifying-glass': require('assets/icons/magnifying-glass.png'),
 }
 
 const $imageStyle: ImageStyle = {
-  resizeMode: "contain",
+  resizeMode: 'contain',
 }

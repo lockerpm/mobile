@@ -6,7 +6,6 @@ const IS_IOS = Platform.OS === 'ios'
 const SCREEN_WIDTH = Dimensions.get('screen').width
 
 export const SocialLogin = () => {
-
   const [showGithubLogin, setShowGithubLogin] = useState(false)
 
   const SOCIAL_LOGIN: {
@@ -20,28 +19,28 @@ export const SocialLogin = () => {
       hide: !IS_IOS,
       icon: 'apple',
       handler: () => {
-//
+        //
       },
     },
 
     google: {
       icon: 'google',
       handler: () => {
-//
+        //
       },
     },
 
     facebook: {
       icon: 'facebook',
       handler: () => {
-//
+        //
       },
     },
 
     github: {
       icon: 'github',
       handler: () => {
-//
+        //
       },
     },
     sso: {
@@ -99,33 +98,35 @@ export const SocialLogin = () => {
             ))}
         </View>
       </View>
-
     )
   }, [])
   return (
     <View>
       <Modal transparent animationType="fade" visible={showGithubLogin}>
-        <View style={{
-          flex: 1,
-          backgroundColor: 'red',
-          justifyContent: "center"
-        }}>
-          <Button text='asd' onPress={() => {
-            setShowGithubLogin(false)
-          }} />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+          }}
+        >
+          <Button
+            text="asd"
+            onPress={() => {
+              setShowGithubLogin(false)
+            }}
+          />
         </View>
       </Modal>
 
-      <Text text='Or login with' style={{ textAlign: 'center', marginVertical: 16 }} />
+      <Text text="Or login with" style={{ textAlign: 'center', marginVertical: 16 }} />
 
       <SocialLoginFlexLayout />
     </View>
-
   )
 }
 
 const $centerRowSpaceBtw: ViewStyle = {
   flexDirection: 'row',
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
 }

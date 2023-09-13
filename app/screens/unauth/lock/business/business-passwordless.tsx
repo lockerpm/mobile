@@ -1,18 +1,18 @@
-import { useNavigation } from "@react-navigation/native"
-import { observer } from "mobx-react-lite"
-import React, { useEffect, useRef, useState } from "react"
-import { Dimensions, ScrollView } from "react-native"
-import { Screen } from "../../../../components/cores"
-import { useStores } from "../../../../models"
-import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
-import { OtpPasswordlessGenerator, randomOtpNumber } from "../on-premise/passwordless/otp-generator"
-import { BusinessPasswordlessQrScan } from "./passwordless-qr-scan"
-import { useCoreService } from "../../../../services/core-service"
+import { useNavigation } from '@react-navigation/native'
+import { observer } from 'mobx-react-lite'
+import React, { useEffect, useRef, useState } from 'react'
+import { Dimensions, ScrollView } from 'react-native'
+import { Screen } from '../../../../components/cores'
+import { useStores } from '../../../../models'
+import { useCipherAuthenticationMixins } from '../../../../services/mixins/cipher/authentication'
+import { OtpPasswordlessGenerator, randomOtpNumber } from '../on-premise/passwordless/otp-generator'
+import { BusinessPasswordlessQrScan } from './passwordless-qr-scan'
+import { useCoreService } from '../../../../services/coreService'
 
-const { width } = Dimensions.get("screen")
+const { width } = Dimensions.get('screen')
 
 interface Props {
-  biometryType: "faceid" | "touchid" | "biometric"
+  biometryType: 'faceid' | 'touchid' | 'biometric'
   handleLogout: () => void
 }
 
@@ -25,7 +25,6 @@ export const BusinessLockByPasswordless = observer(({ handleLogout, biometryType
   // ---------------------- PARAMS -------------------------
   const [otp, setOtp] = useState(randomOtpNumber())
   const [scanQrStep, setScanQrStep] = useState(0)
-
 
   const scrollViewRef = useRef(null)
   // ------------------ METHODS ---------------------
@@ -42,14 +41,14 @@ export const BusinessLockByPasswordless = observer(({ handleLogout, biometryType
     if (!key) return
 
     const res = await biometricLogin()
-    if (res.kind === "ok") {
-      navigation.navigate("mainStack", { screen: "start" })
+    if (res.kind === 'ok') {
+      navigation.navigate('mainStack', { screen: 'start' })
     }
   }
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    navigation.addListener("focus", () => {
+    navigation.addListener('focus', () => {
       if (user.isBiometricUnlock) {
         handleUnlockBiometric()
       }
@@ -57,7 +56,7 @@ export const BusinessLockByPasswordless = observer(({ handleLogout, biometryType
   }, [])
 
   return (
-    <Screen safeAreaEdges={["top"]}>
+    <Screen safeAreaEdges={['top']}>
       <ScrollView
         horizontal
         pagingEnabled

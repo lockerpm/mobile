@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet"
-import Countries from "../../static/countries.json"
-import Flags from "../../static/flags.json"
-import { View, StyleSheet, Modal, TouchableWithoutFeedback, Image, Keyboard } from "react-native"
-import { TouchableHighlight, Text, Icon } from "../cores"
-// import { useTheme } from "app/services/hook"
-import { SearchBar } from "./searchBar/SearchBar"
-import { useMixins } from "../../services/mixins"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
+import Countries from 'app/static/countries.json'
+import Flags from 'app/static/flags.json'
+import { View, Modal, TouchableWithoutFeedback, Image, Keyboard } from 'react-native'
+import { TouchableHighlight, Text, Icon } from '../cores'
+import { useTheme } from 'app/services/context'
+import { SearchBar } from './searchBar/SearchBar'
 
 export type CountryCode = keyof typeof Countries
 
@@ -30,9 +29,9 @@ interface Props {
 }
 
 export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) => {
-  const { color: colors } = useMixins()
+  const { colors } = useTheme()
 
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState('')
 
   const items = Object.keys(Countries).map((code) => {
     return {
@@ -46,7 +45,7 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
   const sheetRef = useRef<BottomSheet>(null)
 
   // variables
-  const snapPoints = useMemo(() => ["45%", "90%"], [])
+  const snapPoints = useMemo(() => ['45%', '90%'], [])
 
   const showSheet = useCallback(() => {
     sheetRef.current?.snapToIndex(0)
@@ -82,8 +81,8 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
     >
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           paddingHorizontal: 20,
           paddingVertical: 15,
         }}
@@ -122,7 +121,7 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
           onChange={onSheetChange}
           backdropComponent={() => (
             <TouchableWithoutFeedback onPress={closeSheet} style={{ flex: 1 }}>
-              <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.1)" }} />
+              <View style={{ flex: 1, backgroundColor: colors.transparentModal }} />
             </TouchableWithoutFeedback>
           )}
         >
@@ -137,12 +136,14 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
               (i) =>
                 !search.trim() ||
                 i.country_name.toUpperCase().includes(search.toUpperCase()) ||
-                i.country_code.includes(search.toUpperCase()),
+                i.country_code.includes(search.toUpperCase())
             )}
             keyboardShouldPersistTaps="never"
             keyExtractor={(item) => item.country_code}
             renderItem={renderItem}
-            contentContainerStyle={styles.contentContainer}
+            contentContainerStyle={{
+              backgroundColor: colors.background,
+            }}
             getItemLayout={(data, index) => ({
               length: 52.2,
               offset: 52.2 * index,
@@ -154,9 +155,3 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
     </Modal>
   )
 }
-const styles = StyleSheet.create({
-  contentContainer: {
-    backgroundColor: "white",
-  },
-  
-})

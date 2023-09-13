@@ -1,15 +1,15 @@
-import React, { useState } from "react"
-import { FloatingInput, Button, Modal, Text } from "../../../../../components"
-import { observer } from "mobx-react-lite"
-import { useMixins } from "../../../../../services/mixins"
-import { View } from "react-native"
-import { useStores } from "../../../../../models"
-import { useCoreService } from "../../../../../services/core-service"
-import { useCipherAuthenticationMixins } from "../../../../../services/mixins/cipher/authentication"
+import React, { useState } from 'react'
+import { FloatingInput, Button, Modal, Text } from '../../../../../components'
+import { observer } from 'mobx-react-lite'
+import { useMixins } from '../../../../../services/mixins'
+import { View } from 'react-native'
+import { useStores } from '../../../../../models'
+import { useCoreService } from '../../../../../services/coreService'
+import { useCipherAuthenticationMixins } from '../../../../../services/mixins/cipher/authentication'
 
 interface Props {
-  isOpen?: boolean,
-  onClose?: () => void,
+  isOpen?: boolean
+  onClose?: () => void
   navigation: any
 }
 
@@ -69,37 +69,33 @@ export const DeleteAccountModal = observer((props: Props) => {
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={translate('settings.delete_account')}
-    >
-      <View style={{
-        borderRadius: 5,
-        borderTopWidth: 1,
-        borderBottomWidth: 0.5,
-        borderRightWidth: 1,
-        borderLeftWidth: 4,
-        borderTopColor: color.line,
-        borderBottomColor: color.line,
-        borderRightColor: color.line,
-        borderLeftColor: color.error,
-        marginTop: 20,
-        marginBottom: 20,
-        paddingHorizontal: 16,
-        paddingVertical: 8
-      }}>
+    <Modal isOpen={isOpen} onClose={onClose} title={translate('settings.delete_account')}>
+      <View
+        style={{
+          borderRadius: 5,
+          borderTopWidth: 1,
+          borderBottomWidth: 0.5,
+          borderRightWidth: 1,
+          borderLeftWidth: 4,
+          borderTopColor: color.line,
+          borderBottomColor: color.line,
+          borderRightColor: color.line,
+          borderLeftColor: color.error,
+          marginTop: 20,
+          marginBottom: 20,
+          paddingHorizontal: 16,
+          paddingVertical: 8,
+        }}
+      >
         <Text
           preset="bold"
           text={translate('settings.delete_account')}
           style={{
             marginBottom: 8,
-            color: color.error
+            color: color.error,
           }}
         />
-        <Text
-          text={translate('settings.delete_account_warning')}
-        />
+        <Text text={translate('settings.delete_account_warning')} />
       </View>
 
       <FloatingInput
@@ -109,7 +105,7 @@ export const DeleteAccountModal = observer((props: Props) => {
         errorText={translate('error.invalid_password')}
         label={translate('common.master_pass')}
         value={masterPass}
-        onChangeText={txt => {
+        onChangeText={(txt) => {
           setIsError(false)
           setMasterPass(txt)
         }}
@@ -124,7 +120,7 @@ export const DeleteAccountModal = observer((props: Props) => {
         onPress={handleConfirm}
         style={{
           width: '100%',
-          marginTop: 30
+          marginTop: 30,
         }}
       />
     </Modal>

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react"
-import { View, FlatList } from "react-native"
-import { observer } from "mobx-react-lite"
-import orderBy from "lodash/orderBy"
-import { Text } from "../../../../../components/text/text"
-import { useMixins } from "../../../../../services/mixins"
-import { useStores } from "../../../../../models"
-import { QuickSharesCipherListItem } from "./quick-shares-list-item"
-import { useCoreService } from "../../../../../services/core-service"
-import { SendView } from "../../../../../../core/models/view/sendView"
-import { QuickSharesItemAction } from "./quick-shares-item-action"
-import { Logger } from "../../../../../utils/utils"
-import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
+import React, { useState, useEffect } from 'react'
+import { View, FlatList } from 'react-native'
+import { observer } from 'mobx-react-lite'
+import orderBy from 'lodash/orderBy'
+import { Text } from '../../../../../components/text/text'
+import { useMixins } from '../../../../../services/mixins'
+import { useStores } from '../../../../../models'
+import { QuickSharesCipherListItem } from './quick-shares-list-item'
+import { useCoreService } from '../../../../../services/coreService'
+import { SendView } from '../../../../../../core/models/view/sendView'
+import { QuickSharesItemAction } from './quick-shares-item-action'
+import { Logger } from '../../../../../utils/utils'
+import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
 
 type Props = {
   emptyContent?: JSX.Element
@@ -28,9 +28,7 @@ export const QuickSharesList = observer((props: Props) => {
   const { translate } = useMixins()
   const { sendService } = useCoreService()
   const { cipherStore } = useStores()
-  const {
-    syncQuickShares,
-  } = useCipherDataMixins()
+  const { syncQuickShares } = useCipherDataMixins()
   // ------------------------ PARAMS ----------------------------
 
   const [ciphers, setCiphers] = useState<SendView[]>([])
@@ -43,11 +41,7 @@ export const QuickSharesList = observer((props: Props) => {
 
   useEffect(() => {
     loadData()
-  }, [
-    searchText,
-    cipherStore.lastSyncQuickShare,
-    sortList,
-  ])
+  }, [searchText, cipherStore.lastSyncQuickShare, sortList])
   // ------------------------ METHODS ----------------------------
 
   // Get ciphers list
@@ -61,7 +55,10 @@ export const QuickSharesList = observer((props: Props) => {
 
     // search
     res = res.filter((s) => {
-      if (s.cipher.name != null && s.cipher.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
+      if (
+        s.cipher.name != null &&
+        s.cipher.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+      ) {
         return true
       }
       return false
@@ -73,8 +70,8 @@ export const QuickSharesList = observer((props: Props) => {
       res =
         orderBy(
           res,
-          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order],
+          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order]
         ) || []
     }
 
@@ -106,10 +103,13 @@ export const QuickSharesList = observer((props: Props) => {
         data={ciphers}
         keyExtractor={(item, index) => String(index)}
         renderItem={({ item, index }) => (
-          <QuickSharesCipherListItem item={item} openActionMenu={(val: any) => {
-            setSelectedCipher(val)
-            setShowAction(true)
-          }} />
+          <QuickSharesCipherListItem
+            item={item}
+            openActionMenu={(val: any) => {
+              setSelectedCipher(val)
+              setShowAction(true)
+            }}
+          />
         )}
       />
     </View>
@@ -118,9 +118,9 @@ export const QuickSharesList = observer((props: Props) => {
   ) : (
     <View style={{ paddingHorizontal: 20 }}>
       <Text
-        text={translate("error.no_results_found") + ` '${searchText}'`}
+        text={translate('error.no_results_found') + ` '${searchText}'`}
         style={{
-          textAlign: "center",
+          textAlign: 'center',
         }}
       />
     </View>

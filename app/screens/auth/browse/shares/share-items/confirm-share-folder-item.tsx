@@ -5,7 +5,7 @@ import { useMixins } from '../../../../../services/mixins'
 import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
 import { Button, Modal, Text } from '../../../../../components'
 import { fontSize } from '../../../../../theme'
-import { useCoreService } from '../../../../../services/core-service'
+import { useCoreService } from '../../../../../services/coreService'
 import { View } from 'react-native'
 import { CollectionView } from '../../../../../../core/models/view/collectionView'
 
@@ -22,7 +22,7 @@ export const ConfirmShareFolderModal = observer((props: Props) => {
   const { confirmShareCipher } = useCipherDataMixins()
   const { cryptoService } = useCoreService()
 
-  const organizationId = cipherStore.cipherView?.organizationId 
+  const organizationId = cipherStore.cipherView?.organizationId
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)
@@ -37,13 +37,10 @@ export const ConfirmShareFolderModal = observer((props: Props) => {
     // setIsLoading(true)
     // const res = await confirmShareCipher(organizationId, member.id, publicKey)
     // setIsLoading(false)
-
     // if (res.kind === 'ok' || res.kind === 'unauthorized') {
     //   onClose()
     // }
   }
-
-
 
   // --------------- EFFECT ----------------
 

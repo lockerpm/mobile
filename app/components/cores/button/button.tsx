@@ -133,13 +133,16 @@ export const Button = observer((props: ButtonProps) => {
   const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
     primary: [$baseTextStyle, { color: colors.palette.white }],
     secondary: [$baseTextStyle, { color: colors.primary }],
-    teriatary: [$baseTextStyle, { color: colors.primary}],
+    teriatary: [$baseTextStyle, { color: colors.primary }],
   }
 
   // Button Pressed
   const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
     primary: { backgroundColor: colors.primary },
-    secondary: { backgroundColor: colors.palette.lightGreen, borderColor: colors.palette.lightGreen },
+    secondary: {
+      backgroundColor: colors.palette.lightGreen,
+      borderColor: colors.palette.lightGreen,
+    },
     teriatary: { backgroundColor: teriataryBackground },
   }
 
@@ -157,7 +160,7 @@ export const Button = observer((props: ButtonProps) => {
   }
 
   const $disabledTextStyle: StyleProp<TextStyle> = {
-    color: "gray",
+    color: 'gray',
   }
 
   // Button Loading
@@ -232,7 +235,6 @@ const $baseViewStyle: ViewStyle = {
 const $baseTextStyle: TextStyle = {
   fontSize: 16,
   lineHeight: 20,
-  // fontFamily: typography.primary.normal,
   textAlign: 'center',
   flexShrink: 1,
   flexGrow: 0,

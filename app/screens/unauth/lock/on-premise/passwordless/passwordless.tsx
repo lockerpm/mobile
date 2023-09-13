@@ -1,27 +1,27 @@
-import { useNavigation } from "@react-navigation/native"
-import { observer } from "mobx-react-lite"
-import React, { useEffect, useRef, useState } from "react"
-import { Dimensions, ScrollView } from "react-native"
-import { Screen } from "../../../../../components/cores"
-import { useStores } from "../../../../../models"
-import { useCipherAuthenticationMixins } from "../../../../../services/mixins/cipher/authentication"
-import { MethodSelection } from "../../../login/2fa/method-selection"
-import { OtpPasswordlessGenerator, randomOtpNumber } from "./otp-generator"
-import { OnPremiseOtp } from "./passwordless-2fa-otp"
-import { PasswordlessQrScan } from "./passwordless-qr-scan"
-import { useCoreService } from "../../../../../services/core-service"
+import { useNavigation } from '@react-navigation/native'
+import { observer } from 'mobx-react-lite'
+import React, { useEffect, useRef, useState } from 'react'
+import { Dimensions, ScrollView } from 'react-native'
+import { Screen } from '../../../../../components/cores'
+import { useStores } from '../../../../../models'
+import { useCipherAuthenticationMixins } from '../../../../../services/mixins/cipher/authentication'
+import { MethodSelection } from '../../../login/2fa/method-selection'
+import { OtpPasswordlessGenerator, randomOtpNumber } from './otp-generator'
+import { OnPremiseOtp } from './passwordless-2fa-otp'
+import { PasswordlessQrScan } from './passwordless-qr-scan'
+import { useCoreService } from '../../../../../services/coreService'
 
-const { width } = Dimensions.get("screen")
+const { width } = Dimensions.get('screen')
 
 interface Props {
-  biometryType: "faceid" | "touchid" | "biometric"
+  biometryType: 'faceid' | 'touchid' | 'biometric'
   handleLogout: () => void
 }
 
 export const LockByPasswordless = observer(({ handleLogout, biometryType }: Props) => {
   const navigation = useNavigation()
   const { user } = useStores()
-  const {  biometricLogin } = useCipherAuthenticationMixins()
+  const { biometricLogin } = useCipherAuthenticationMixins()
   const { cryptoService } = useCoreService()
   // ---------------------- PARAMS -------------------------
 
@@ -31,12 +31,12 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
 
   const [index, setIndex] = useState(0)
   const [credential, setCredential] = useState({
-    username: "",
-    pwdHash: "",
+    username: '',
+    pwdHash: '',
     methods: [],
   })
-  const [method, setMethod] = useState("")
-  const [partialEmail, setPartialEamil] = useState("")
+  const [method, setMethod] = useState('')
+  const [partialEmail, setPartialEamil] = useState('')
 
   const scrollViewRef = useRef(null)
   // ------------------ METHODS ---------------------
@@ -53,15 +53,14 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
     const key = await cryptoService.getKey()
     if (!key) return
     const res = await biometricLogin()
-    if (res.kind === "ok") {
-      navigation.navigate("mainStack", { screen: "start" })
+    if (res.kind === 'ok') {
+      navigation.navigate('mainStack', { screen: 'start' })
     }
   }
 
-
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    navigation.addListener("focus", () => {
+    navigation.addListener('focus', () => {
       if (user.isBiometricUnlock) {
         handleUnlockBiometric()
       }
@@ -69,7 +68,7 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
   }, [])
 
   return (
-    <Screen  safeAreaEdges={["top"]}>
+    <Screen safeAreaEdges={['top']}>
       {index === 0 && (
         <ScrollView
           horizontal
@@ -101,7 +100,7 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
             nextStep={(
               username: string,
               pwdHash: string,
-              methods: { type: string; data: any }[],
+              methods: { type: string; data: any }[]
             ) => {
               setCredential({ username, pwdHash, methods })
               setIndex(1)
@@ -134,5 +133,5 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
         />
       )}
     </Screen>
-  ) 
+  )
 })

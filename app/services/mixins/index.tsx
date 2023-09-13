@@ -15,7 +15,7 @@ import { observer } from 'mobx-react-lite'
 import { color, colorDark } from '../../theme'
 import extractDomain from 'extract-domain'
 import { Logger } from '../../utils/utils'
-import { useCoreService } from '../core-service'
+import { useCoreService } from '../coreService'
 import { NotifeeNotificationData, PushEvent, PushNotifier } from 'app/utils/pushNotification'
 import { AppEventType, EventBus } from '../../utils/eventBus'
 

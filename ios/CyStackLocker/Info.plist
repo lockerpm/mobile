@@ -94,12 +94,10 @@
 	<string>Scan QR code</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Authentication</string>
-
 	<key>IntercomCustomURL</key>
 	<string>intercom-messenger.com</string>
-
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send photos to support center</string>
 	<key>UIAppFonts</key>
@@ -120,6 +118,9 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Inter-Medium.ttf</string>
+		<string>Inter-Regular.ttf</string>
+		<string>Inter-SemiBold.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
@@ -143,7 +144,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-
 </dict>
 </plist>

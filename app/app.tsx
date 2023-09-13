@@ -85,7 +85,6 @@ function App(props: RootProp) {
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
     ;(async () => {
-      // await initFonts() // expo
       setupRootStore().then(setRootStore)
       SplashScreen.hide()
     })()

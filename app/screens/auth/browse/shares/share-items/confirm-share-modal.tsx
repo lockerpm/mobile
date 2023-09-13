@@ -5,7 +5,7 @@ import { useMixins } from '../../../../../services/mixins'
 import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
 import { Button, Modal, Text } from '../../../../../components'
 import { fontSize } from '../../../../../theme'
-import { useCoreService } from '../../../../../services/core-service'
+import { useCoreService } from '../../../../../services/coreService'
 import { Utils } from '../../../../../../core/misc/utils'
 import { View } from 'react-native'
 import { SharedMemberType } from '../../../../../config/types/api'
@@ -23,7 +23,7 @@ export const ConfirmShareModal = observer((props: Props) => {
   const { confirmShareCipher } = useCipherDataMixins()
   const { cryptoService } = useCoreService()
 
-  const organizationId = cipherStore.cipherView?.organizationId 
+  const organizationId = cipherStore.cipherView?.organizationId
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)

@@ -1,36 +1,36 @@
-import { observer } from "mobx-react-lite"
-import React, { createContext, useContext } from "react"
-import { useMixins } from ".."
-import { CipherRequest } from "../../../../core/models/request/cipherRequest"
-import { FolderRequest } from "../../../../core/models/request/folderRequest"
-import { CipherView, LoginUriView, LoginView } from "../../../../core/models/view"
-import { FolderView } from "../../../../core/models/view/folderView"
-import { useStores } from "../../../models"
-import { useCoreService } from "../../core-service"
-import { ImportCiphersRequest } from "../../../../core/models/request/importCiphersRequest"
-import { KvpRequest } from "../../../../core/models/request/kvpRequest"
-import { CipherType } from "../../../../core/enums"
-import { AutofillDataType, loadShared, saveShared } from "../../../utils/keychain"
-import { useCipherHelpersMixins } from "./helpers"
+import { observer } from 'mobx-react-lite'
+import React, { createContext, useContext } from 'react'
+import { useMixins } from '..'
+import { CipherRequest } from '../../../../core/models/request/cipherRequest'
+import { FolderRequest } from '../../../../core/models/request/folderRequest'
+import { CipherView, LoginUriView, LoginView } from '../../../../core/models/view'
+import { FolderView } from '../../../../core/models/view/folderView'
+import { useStores } from '../../../models'
+import { useCoreService } from '../../coreService'
+import { ImportCiphersRequest } from '../../../../core/models/request/importCiphersRequest'
+import { KvpRequest } from '../../../../core/models/request/kvpRequest'
+import { CipherType } from '../../../../core/enums'
+import { AutofillDataType, loadShared, saveShared } from '../../../utils/keychain'
+import { useCipherHelpersMixins } from './helpers'
 import {
   IMPORT_BATCH_SIZE,
   MAX_MULTIPLE_SHARE_COUNT,
   TEMP_PREFIX,
   FREE_PLAN_LIMIT,
-} from "../../../config/constants"
-import { CollectionView } from "../../../../core/models/view/collectionView"
-import { CollectionRequest } from "../../../../core/models/request/collectionRequest"
-import { CipherData } from "../../../../core/models/data/cipherData"
-import { FolderData } from "../../../../core/models/data/folderData"
-import { Logger } from "../../../utils/utils"
-import { Cipher, EncString, SymmetricCryptoKey } from "../../../../core/models/domain"
-import { Utils } from "../../core-service/utils"
-import { AccountRoleText, EmergencyAccessType } from "../../../config/types"
-import { OrganizationData } from "../../../../core/models/data/organizationData"
-import { ImportResult } from "../../../../core/models/domain/importResult"
-import { SyncQueue } from "../../../utils/queue"
-import { AppEventType, EventBus } from "../../../utils/eventBus"
-import chunk from "lodash/chunk"
+} from '../../../config/constants'
+import { CollectionView } from '../../../../core/models/view/collectionView'
+import { CollectionRequest } from '../../../../core/models/request/collectionRequest'
+import { CipherData } from '../../../../core/models/data/cipherData'
+import { FolderData } from '../../../../core/models/data/folderData'
+import { Logger } from '../../../utils/utils'
+import { Cipher, EncString, SymmetricCryptoKey } from '../../../../core/models/domain'
+import { Utils } from '../../coreService/utils'
+import { AccountRoleText, EmergencyAccessType } from '../../../config/types'
+import { OrganizationData } from '../../../../core/models/data/organizationData'
+import { ImportResult } from '../../../../core/models/domain/importResult'
+import { SyncQueue } from '../../../utils/queue'
+import { AppEventType, EventBus } from '../../../utils/eventBus'
+import chunk from 'lodash/chunk'
 
 type GetCiphersParams = {
   deleted: boolean
@@ -42,10 +42,10 @@ type GetCiphersParams = {
 const defaultData = {
   reloadCache: async () => null,
   startSyncProcess: async (bumpTimestamp: number) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   getSyncData: async (bumpTimestamp: number) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   syncOfflineData: async () => null,
   syncAutofillData: async () => null,
@@ -75,27 +75,27 @@ const defaultData = {
     cipher: CipherView,
     score: number,
     collectionIds: string[],
-    silent?: boolean,
+    silent?: boolean
   ) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   updateCipher: async (
     id: string,
     cipher: CipherView,
     score: number,
     collectionIds: string[],
-    silent?: boolean,
+    silent?: boolean
   ) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   toTrashCiphers: async (ids: string[]) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   deleteCiphers: async (ids: string[]) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   restoreCiphers: async (ids: string[]) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   importCiphers: async (payload: {
     importResult: any
@@ -104,87 +104,87 @@ const defaultData = {
     setIsLimited: (val: boolean) => void
     isFreeAccount: boolean
   }) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
 
   inviteEA: async (email: string, type: EmergencyAccessType, waitTime: number) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   shareCipher: async (
     cipher: CipherView,
     emails: string[],
     role: AccountRoleText,
     autofillOnly: boolean,
-    groups?: { id: string; name: string }[],
+    groups?: { id: string; name: string }[]
   ) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   shareMultipleCiphers: async (
     ids: string[],
     emails: string[],
     role: AccountRoleText,
     autofillOnly: boolean,
-    groups?: { id: string; name: string }[],
+    groups?: { id: string; name: string }[]
   ) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   confirmShareCipher: async (organizationId: string, memberId: string, publicKey: string) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   stopShareCipher: async (cipher: CipherView, memberId: string) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   editShareCipher: async (
     organizationId: string,
     memberId: string,
     role: AccountRoleText,
     onlyFill: boolean,
-    isGroup?: boolean,
+    isGroup?: boolean
   ) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   leaveShare: async (organizationId: string, id?: string) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   syncQuickShares: async () => null,
   acceptShareInvitation: async (id: string) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   rejectShareInvitation: async (id: string) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
 
   createFolder: async (folder: FolderView) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   updateFolder: async (folder: FolderView) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   deleteFolder: async (id: string) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
 
   createCollection: async (collection: CollectionView) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   updateCollection: async (collection: CollectionView) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   deleteCollection: async (collection: CollectionView) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
 
   syncSingleCipher: async (id: string) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   syncSingleFolder: async (id: string) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   syncSingleOrganization: async (id: string) => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
   syncProfile: async () => {
-    return { kind: "unknown" }
+    return { kind: 'unknown' }
   },
 
   createRandomPasswords: async (params: { count: number; type: CipherType }) => null,
@@ -230,12 +230,12 @@ export const CipherDataMixinsProvider = observer(
         await createCipher(payload, passwordStrength, [])
       }
 
-      notify("success", "Done")
+      notify('success', 'Done')
     }
 
     // Reload offline cache
     const reloadCache = async (options?: { isOnline?: boolean; notCipher?: boolean }) => {
-      Logger.debug("reload cache")
+      Logger.debug('reload cache')
       cipherStore.setLastCacheUpdate()
       if (!options?.notCipher) {
         await cipherService.clearCache()
@@ -256,7 +256,7 @@ export const CipherDataMixinsProvider = observer(
 
     // Reload offline cache of a single cipher only
     const minimalReloadCache = async (payload: { cipher?: CipherView; deletedIds?: string[] }) => {
-      Logger.debug("minimal reload cache")
+      Logger.debug('minimal reload cache')
 
       const { cipher, deletedIds } = payload
       if (cipher) {
@@ -291,13 +291,13 @@ export const CipherDataMixinsProvider = observer(
       return syncQueue.add(async () => {
         try {
           cipherStore.setIsSynching(true)
-          messagingService.send("syncStarted")
+          messagingService.send('syncStarted')
 
           // Sync api
           const res = await cipherStore.syncData()
-          if (res.kind !== "ok") {
+          if (res.kind !== 'ok') {
             notifyApiError(res)
-            messagingService.send("syncCompleted", { successfully: false })
+            messagingService.send('syncCompleted', { successfully: false })
             return res
           }
 
@@ -317,7 +317,7 @@ export const CipherDataMixinsProvider = observer(
           await syncService.syncPolicies(res.data.policies)
           await syncQuickShares()
 
-          messagingService.send("syncCompleted", { successfully: true })
+          messagingService.send('syncCompleted', { successfully: true })
 
           // Clear not updated list
           cipherStore.clearNotUpdate()
@@ -326,7 +326,7 @@ export const CipherDataMixinsProvider = observer(
 
           // Save fingerprint
           const fingerprint = await cryptoService.getFingerprint(userId)
-          user.setFingerprint(fingerprint.join("-"))
+          user.setFingerprint(fingerprint.join('-'))
 
           // Save to shared keychain for autofill service
           await _updateAutofillData()
@@ -334,11 +334,11 @@ export const CipherDataMixinsProvider = observer(
           // Reload password health
           EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
 
-          return { kind: "ok" }
+          return { kind: 'ok' }
         } catch (e) {
-          Logger.error("getSyncData: " + e)
-          messagingService.send("syncCompleted", { successfully: false })
-          return { kind: "error" }
+          Logger.error('getSyncData: ' + e)
+          messagingService.send('syncCompleted', { successfully: false })
+          return { kind: 'error' }
         } finally {
           cipherStore.setIsSynching(false)
         }
@@ -358,7 +358,7 @@ export const CipherDataMixinsProvider = observer(
 
           // Sync api
           let res = await cipherStore.syncData(page, pageSize)
-          if (res.kind !== "ok") {
+          if (res.kind !== 'ok') {
             notifyApiError(res)
             return res
           }
@@ -390,7 +390,7 @@ export const CipherDataMixinsProvider = observer(
           while (page * pageSize < totalCipherCount) {
             page += 1
             res = await cipherStore.syncData(page, pageSize)
-            if (res.kind !== "ok") {
+            if (res.kind !== 'ok') {
               notifyApiError(res)
               return res
             }
@@ -422,7 +422,7 @@ export const CipherDataMixinsProvider = observer(
 
           // Save fingerprint
           const fingerprint = await cryptoService.getFingerprint(userId)
-          user.setFingerprint(fingerprint.join("-"))
+          user.setFingerprint(fingerprint.join('-'))
 
           // Save to shared keychain for autofill service
           await _updateAutofillData()
@@ -430,10 +430,10 @@ export const CipherDataMixinsProvider = observer(
           // Reload password health
           EventBus.emit(AppEventType.PASSWORD_UPDATE, null)
 
-          return { kind: "ok" }
+          return { kind: 'ok' }
         } catch (e) {
-          Logger.error("startSyncProcess: " + e)
-          return { kind: "error" }
+          Logger.error('startSyncProcess: ' + e)
+          return { kind: 'error' }
         } finally {
           cipherStore.setIsSynching(false)
         }
@@ -456,13 +456,13 @@ export const CipherDataMixinsProvider = observer(
       if (cipherStore.notSynchedCiphers.length > 0) {
         const notSynchedCiphers = await getEncryptedCiphers({
           deleted: false,
-          searchText: "",
+          searchText: '',
           filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)],
           includeExtensions: true,
         })
         const notSynchedCiphersDeleted = await getEncryptedCiphers({
           deleted: true,
-          searchText: "",
+          searchText: '',
           filters: [(c: CipherView) => cipherStore.notSynchedCiphers.includes(c.id)],
           includeExtensions: true,
         })
@@ -494,7 +494,7 @@ export const CipherDataMixinsProvider = observer(
                 // @ts-ignore
                 folderReq.id = f.id
                 folders.push(folderReq)
-              }),
+              })
             )
           })
         await Promise.all(promises)
@@ -537,19 +537,18 @@ export const CipherDataMixinsProvider = observer(
           (c: CipherView) =>
             c.type === CipherType.Login && !!c.login.username && !!c.login.password,
         ],
-        searchText: "",
+        searchText: '',
         deleted: false,
       })
       const passwordData = passwordRes.map((c: CipherView) => ({
         id: c.id,
         name: c.name,
-        uri: c.login.uri || "",
-        username: c.login.username || "",
-        password: c.login.password || "",
+        uri: c.login.uri || '',
+        username: c.login.username || '',
+        password: c.login.password || '',
         isOwner: !c.organizationId,
-        otp: c.login.totp || ""
+        otp: c.login.totp || '',
       }))
-
 
       const sharedData: AutofillDataType = {
         passwords: passwordData,
@@ -558,7 +557,7 @@ export const CipherDataMixinsProvider = observer(
         faceIdEnabled: user.isBiometricUnlock,
       }
 
-      await saveShared("autofill", JSON.stringify(sharedData))
+      await saveShared('autofill', JSON.stringify(sharedData))
     }
 
     // Sync autofill data
@@ -578,7 +577,7 @@ export const CipherDataMixinsProvider = observer(
             authen: null,
             faceIdEnabled: false,
           }
-          await saveShared("autofill", JSON.stringify(sharedData))
+          await saveShared('autofill', JSON.stringify(sharedData))
           return
         }
 
@@ -621,7 +620,7 @@ export const CipherDataMixinsProvider = observer(
           await syncOfflineData()
         }
       } catch (e) {
-        Logger.error("syncAutofillData: " + e)
+        Logger.error('syncAutofillData: ' + e)
       } finally {
         cipherStore.setIsSynchingAutofill(false)
       }
@@ -633,8 +632,8 @@ export const CipherDataMixinsProvider = observer(
         const res = (await userService.getAllOrganizations()) || []
         cipherStore.setOrganizations(res)
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("loadOrganizations: " + e)
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('loadOrganizations: ' + e)
       }
     }
 
@@ -648,7 +647,7 @@ export const CipherDataMixinsProvider = observer(
             if (!folder.id) return folder
             const ciphers = await getEncryptedCiphers({
               deleted: false,
-              searchText: "",
+              searchText: '',
               // filters: [(c: CipherView) => c.folderId ? c.folderId === f.id : (!f.id && (!c.organizationId || !getTeam(user.teams, c.organizationId).name))]
               // exclude share folder item
               filters: [
@@ -661,14 +660,14 @@ export const CipherDataMixinsProvider = observer(
               ...folder,
               cipherCount: ciphers ? ciphers.length : 0,
             }
-          }),
+          })
         )
 
         folderStore.setFolders(folders)
         folderStore.setLastUpdate()
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("loadFolders: " + e)
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('loadFolders: ' + e)
       }
     }
 
@@ -681,20 +680,20 @@ export const CipherDataMixinsProvider = observer(
           res.map(async (collection) => {
             const ciphers = await getEncryptedCiphers({
               deleted: false,
-              searchText: "",
+              searchText: '',
               filters: [(c) => c.collectionIds.includes(collection.id)],
             })
             return {
               ...collection,
               cipherCount: ciphers ? ciphers.length : 0,
             }
-          }),
+          })
         )
 
         // Add unassigned
         const unassignedTeamCiphers = await getEncryptedCiphers({
           deleted: false,
-          searchText: "",
+          searchText: '',
           filters: [
             (c: CipherView) =>
               !c.collectionIds?.length && !!getTeam(user.teams, c.organizationId).name,
@@ -702,7 +701,7 @@ export const CipherDataMixinsProvider = observer(
         })
         unassignedTeamCiphers.forEach((item: CipherView) => {
           const target = collections.find(
-            (f) => f.id === null && f.organizationId === item.organizationId,
+            (f) => f.id === null && f.organizationId === item.organizationId
           )
           if (target) {
             target.cipherCount += 1
@@ -712,7 +711,7 @@ export const CipherDataMixinsProvider = observer(
               cipherCount: 1,
               hidePasswords: null,
               id: null,
-              name: "",
+              name: '',
               organizationId: item.organizationId,
             })
           }
@@ -721,8 +720,8 @@ export const CipherDataMixinsProvider = observer(
         collectionStore.setCollections(collections)
         collectionStore.setLastUpdate()
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("loadCollections: " + e)
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('loadCollections: ' + e)
       }
     }
 
@@ -741,8 +740,8 @@ export const CipherDataMixinsProvider = observer(
         }
         return (await searchService.searchEncryptedCiphers(filters, null)) || []
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("getEncryptedCiphers: " + e)
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('getEncryptedCiphers: ' + e)
         return []
       }
     }
@@ -755,10 +754,10 @@ export const CipherDataMixinsProvider = observer(
         if (!params.includeExtensions) {
           filters.unshift((c: CipherView) => ![CipherType.TOTP].includes(c.type))
         }
-        return (await searchService.searchCiphers(params.searchText || "", filters, null)) || []
+        return (await searchService.searchCiphers(params.searchText || '', filters, null)) || []
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("getCiphers: " + e)
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('getCiphers: ' + e)
         return []
       }
     }
@@ -772,11 +771,11 @@ export const CipherDataMixinsProvider = observer(
           filters.unshift((c: CipherView) => ![CipherType.TOTP].includes(c.type))
         }
         return (
-          (await searchService.searchCiphersFromCache(params.searchText || "", filters, null)) || []
+          (await searchService.searchCiphersFromCache(params.searchText || '', filters, null)) || []
         )
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("getCiphersFromCache: " + e)
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('getCiphersFromCache: ' + e)
         return []
       }
     }
@@ -785,7 +784,7 @@ export const CipherDataMixinsProvider = observer(
     const getCipherById = async (id: string) => {
       const ciphers = await getCiphers({
         deleted: false,
-        searchText: "",
+        searchText: '',
         filters: [(c) => c.id === id],
       })
       return ciphers[0] || new CipherView()
@@ -798,8 +797,8 @@ export const CipherDataMixinsProvider = observer(
         res = res.filter((item) => item.id)
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("getCollections: " + e)
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('getCollections: ' + e)
         return []
       }
     }
@@ -818,10 +817,10 @@ export const CipherDataMixinsProvider = observer(
           isFreeAccount,
         })
         notify(
-          "success",
-          translate("import.success") + " " + translate("success.will_sync_when_online"),
+          'success',
+          translate('import.success') + ' ' + translate('success.will_sync_when_online')
         )
-        return { kind: "ok" }
+        return { kind: 'ok' }
       }
       // Online
       const request = new ImportCiphersRequest()
@@ -913,7 +912,7 @@ export const CipherDataMixinsProvider = observer(
       }
       if (importResult.folderRelationships != null) {
         importResult.folderRelationships.forEach((r) =>
-          request.folderRelationships.push(new KvpRequest(r[0], r[1])),
+          request.folderRelationships.push(new KvpRequest(r[0], r[1]))
         )
       }
 
@@ -923,7 +922,7 @@ export const CipherDataMixinsProvider = observer(
       const folderBatches = chunk(request.folders, IMPORT_BATCH_SIZE)
       for (const batch of folderBatches) {
         const res = await cipherStore.importFolders({ folders: batch })
-        if (res.kind !== "ok") {
+        if (res.kind !== 'ok') {
           notifyApiError(res)
           return res
         }
@@ -944,7 +943,7 @@ export const CipherDataMixinsProvider = observer(
       const cipherBatches = chunk(request.ciphers, IMPORT_BATCH_SIZE)
       for (const batch of cipherBatches) {
         const res = await cipherStore.importCiphers({ ciphers: batch })
-        if (res.kind !== "ok") {
+        if (res.kind !== 'ok') {
           notifyApiError(res)
           return res
         }
@@ -953,16 +952,16 @@ export const CipherDataMixinsProvider = observer(
       }
       // await startSyncProcess(Date.now())
       if (importedCipherCount !== 0) {
-        notify("success", translate("import.success"))
+        notify('success', translate('import.success'))
       }
 
-      return { kind: "ok" }
+      return { kind: 'ok' }
     }
 
     const _getCipherCount = async (type: CipherType) => {
       const allCiphers = await getEncryptedCiphers({
         deleted: false,
-        searchText: "",
+        searchText: '',
         filters: [(c: CipherView) => c.type === type],
       })
       return allCiphers.length
@@ -1153,7 +1152,7 @@ export const CipherDataMixinsProvider = observer(
       }
 
       await reloadCache()
-      return { kind: "ok" }
+      return { kind: 'ok' }
     }
 
     // Check cipher name duplication
@@ -1193,46 +1192,46 @@ export const CipherDataMixinsProvider = observer(
       cipher: CipherView,
       score: number,
       collectionIds: string[],
-      silent?: boolean,
+      silent?: boolean
     ) => {
       try {
         // Check name duplication
         const countDuplicate = await _countDuplicateCipherName(cipher)
         if (countDuplicate > 0) {
-          notify("error", translate("error.duplicate_cipher_name"))
-          return { kind: "bad-data" }
+          notify('error', translate('error.duplicate_cipher_name'))
+          return { kind: 'bad-data' }
         }
 
         // Offline
         if (uiStore.isOffline) {
           await _offlineCreateCipher({ cipher, collectionIds })
           notify(
-            "success",
-            `${translate("success.cipher_created")} ${translate("success.will_sync_when_online")}`,
+            'success',
+            `${translate('success.cipher_created')} ${translate('success.will_sync_when_online')}`
           )
-          return { kind: "ok" }
+          return { kind: 'ok' }
         }
 
         // Online
         const cipherEnc = await cipherService.encrypt(cipher)
         const data = new CipherRequest(cipherEnc)
         const res = await cipherStore.createCipher(data, score, collectionIds)
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineCreateCipher({
             cipher,
             collectionIds,
             cipherRequest: data,
             cipherId: res.data.id,
           })
-          !silent && notify("success", translate("success.cipher_created"))
+          !silent && notify('success', translate('success.cipher_created'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("createCipher: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('createCipher: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -1275,39 +1274,39 @@ export const CipherDataMixinsProvider = observer(
       cipher: CipherView,
       score: number,
       collectionIds: string[],
-      silent?: boolean,
+      silent?: boolean
     ) => {
       try {
         // Offline
         if (uiStore.isOffline) {
           await _offlineUpdateCipher({ cipher, collectionIds })
           notify(
-            "success",
-            `${translate("success.cipher_updated")} ${translate("success.will_sync_when_online")}`,
+            'success',
+            `${translate('success.cipher_updated')} ${translate('success.will_sync_when_online')}`
           )
-          return { kind: "ok" }
+          return { kind: 'ok' }
         }
 
         // Online
         const cipherEnc = await cipherService.encrypt(cipher)
         const data = new CipherRequest(cipherEnc)
         const res = await cipherStore.updateCipher(id, data, score, collectionIds)
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineUpdateCipher({
             cipher,
             collectionIds,
             isAccepted: true,
             cipherRequest: data,
           })
-          !silent && notify("success", translate("success.cipher_updated"))
+          !silent && notify('success', translate('success.cipher_updated'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("updateCipher: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('updateCipher: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -1348,29 +1347,29 @@ export const CipherDataMixinsProvider = observer(
     // Delete
     const deleteCiphers = async (ids: string[]) => {
       if (!ids.length) {
-        return { kind: "ok" }
+        return { kind: 'ok' }
       }
       try {
         // Offline
         if (uiStore.isOffline) {
           await _offlineDeleteCiphers(ids)
-          notify("success", `${translate("success.cipher_deleted")}`)
-          return { kind: "ok" }
+          notify('success', `${translate('success.cipher_deleted')}`)
+          return { kind: 'ok' }
         }
 
         // Online
         const res = await cipherStore.deleteCiphers(ids)
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineDeleteCiphers(ids, true)
-          notify("success", translate("success.cipher_deleted"))
+          notify('success', translate('success.cipher_deleted'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("deleteCiphers: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('deleteCiphers: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -1391,32 +1390,32 @@ export const CipherDataMixinsProvider = observer(
     // To trash
     const toTrashCiphers = async (ids: string[]) => {
       if (!ids.length) {
-        return { kind: "ok" }
+        return { kind: 'ok' }
       }
       try {
         // Offline
         if (uiStore.isOffline) {
           await _offlineToTrashCiphers(ids)
           notify(
-            "success",
-            `${translate("success.cipher_trashed")} ${translate("success.will_sync_when_online")}`,
+            'success',
+            `${translate('success.cipher_trashed')} ${translate('success.will_sync_when_online')}`
           )
-          return { kind: "ok" }
+          return { kind: 'ok' }
         }
 
         // Online
         const res = await cipherStore.toTrashCiphers(ids)
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineToTrashCiphers(ids, true)
-          notify("success", translate("success.cipher_trashed"))
+          notify('success', translate('success.cipher_trashed'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("toTrashCiphers: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('toTrashCiphers: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -1437,33 +1436,33 @@ export const CipherDataMixinsProvider = observer(
     // Restore
     const restoreCiphers = async (ids: string[]) => {
       if (!ids.length) {
-        return { kind: "ok" }
+        return { kind: 'ok' }
       }
 
       // Offline
       if (uiStore.isOffline) {
         await _offlineRestoreCiphers(ids)
         notify(
-          "success",
-          `${translate("success.cipher_restored")} ${translate("success.will_sync_when_online")}`,
+          'success',
+          `${translate('success.cipher_restored')} ${translate('success.will_sync_when_online')}`
         )
-        return { kind: "ok" }
+        return { kind: 'ok' }
       }
 
       // Online
       try {
         const res = await cipherStore.restoreCiphers(ids)
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineRestoreCiphers(ids, true)
-          notify("success", translate("success.cipher_restored"))
+          notify('success', translate('success.cipher_restored'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("restoreCiphers: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('restoreCiphers: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -1476,7 +1475,7 @@ export const CipherDataMixinsProvider = observer(
         ids.map((id) => ({
           id,
           revisionDate: new Date().toISOString(),
-        })),
+        }))
       )
 
       ids.forEach((id) => {
@@ -1491,43 +1490,43 @@ export const CipherDataMixinsProvider = observer(
     const inviteEA = async (
       email: string,
       type: EmergencyAccessType,
-      waitTime: number,
+      waitTime: number
     ): Promise<{ kind: string }> => {
       try {
         const publicKeyRes = await cipherStore.getSharingPublicKey(email)
-        if (publicKeyRes.kind !== "ok") return { kind: "bad-data" }
+        if (publicKeyRes.kind !== 'ok') return { kind: 'bad-data' }
 
         const encKey = await cryptoService.getEncKey()
         const key = await _generateMemberKey(publicKeyRes.data.public_key, encKey)
         const res = await user.inviteEA(email, key, type, waitTime)
-        if (res.kind !== "ok") {
-          if (res.kind === "bad-data") {
+        if (res.kind !== 'ok') {
+          if (res.kind === 'bad-data') {
             const errorData: {
               email?: string[]
               code: string
               message?: string
             } = res.data
-            if (errorData.code === "0004") {
-              return { kind: "exist-data" }
+            if (errorData.code === '0004') {
+              return { kind: 'exist-data' }
             }
           }
-          return { kind: "bad-data" }
+          return { kind: 'bad-data' }
         }
-        return { kind: "ok" }
+        return { kind: 'ok' }
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        return { kind: "bad-data" }
+        notify('error', translate('error.something_went_wrong'))
+        return { kind: 'bad-data' }
       }
     }
 
     const _shareFolderToGroups = async (
       orgKey: SymmetricCryptoKey,
-      groups: { id: string; name: string }[],
+      groups: { id: string; name: string }[]
     ) => {
       return await Promise.all(
         groups.map(async (group) => {
           const groupMemberRes = await enterpriseStore.getListGroupMembers(group.id)
-          if (groupMemberRes.kind !== "ok") {
+          if (groupMemberRes.kind !== 'ok') {
             return null
           }
           const members = await Promise.all(
@@ -1540,14 +1539,14 @@ export const CipherDataMixinsProvider = observer(
                     ? await _generateMemberKey(member.public_key, orgKey)
                     : null,
                 }
-              }),
+              })
           )
           return {
             id: group.id,
-            role: "member",
+            role: 'member',
             members,
           }
-        }),
+        })
       )
     }
 
@@ -1557,7 +1556,7 @@ export const CipherDataMixinsProvider = observer(
       emails: string[],
       role: AccountRoleText,
       autofillOnly: boolean,
-      groups?: { id: string; name: string }[],
+      groups?: { id: string; name: string }[]
     ) => {
       try {
         // Prepare org key
@@ -1578,8 +1577,8 @@ export const CipherDataMixinsProvider = observer(
         const members = await Promise.all(
           emails.map(async (email) => {
             const publicKeyRes = await cipherStore.getSharingPublicKey(email)
-            let publicKey = ""
-            if (publicKeyRes.kind === "ok") {
+            let publicKey = ''
+            if (publicKeyRes.kind === 'ok') {
               publicKey = publicKeyRes.data.public_key
             }
             return {
@@ -1588,7 +1587,7 @@ export const CipherDataMixinsProvider = observer(
               hide_passwords: autofillOnly,
               key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
             }
-          }),
+          })
         )
 
         // prepare for share to groups
@@ -1606,16 +1605,16 @@ export const CipherDataMixinsProvider = observer(
           sharing_key: shareKey ? shareKey[0].encryptedString : null,
           groups: groupsPayload,
         })
-        if (res.kind === "ok") {
-          notify("success", translate("success.cipher_shared"))
+        if (res.kind === 'ok') {
+          notify('success', translate('success.cipher_shared'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("shareCipher: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('shareCipher: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -1632,19 +1631,19 @@ export const CipherDataMixinsProvider = observer(
       emails: string[],
       role: AccountRoleText,
       autofillOnly: boolean,
-      groups?: { id: string; name: string }[],
+      groups?: { id: string; name: string }[]
     ) => {
       if (!ids.length) {
-        return { kind: "ok" }
+        return { kind: 'ok' }
       }
       const ciphers =
         (await getCiphers({
           deleted: false,
-          searchText: "",
+          searchText: '',
           filters: [(c: CipherView) => ids.includes(c.id)],
         })) || []
       if (!ciphers.length || ciphers.length > MAX_MULTIPLE_SHARE_COUNT) {
-        return { kind: "ok" }
+        return { kind: 'ok' }
       }
 
       try {
@@ -1674,8 +1673,8 @@ export const CipherDataMixinsProvider = observer(
         const members = await Promise.all(
           emails.map(async (email) => {
             const publicKeyRes = await cipherStore.getSharingPublicKey(email)
-            let publicKey = ""
-            if (publicKeyRes.kind === "ok") {
+            let publicKey = ''
+            if (publicKeyRes.kind === 'ok') {
               publicKey = publicKeyRes.data.public_key
             }
             return {
@@ -1686,7 +1685,7 @@ export const CipherDataMixinsProvider = observer(
               hide_passwords: autofillOnly,
               key: publicKey ? await _generateMemberKey(publicKey, orgKey) : null,
             }
-          }),
+          })
         )
 
         // Prepare cipher
@@ -1705,7 +1704,7 @@ export const CipherDataMixinsProvider = observer(
                 hide_passwords: autofillOnly,
                 key: m.publicKey ? await _generateMemberKey(m.publicKey, _orgKey) : null,
               }
-            }),
+            })
           )
 
           // prepare for share to groups
@@ -1731,16 +1730,16 @@ export const CipherDataMixinsProvider = observer(
           ciphers: sharedCiphers,
           sharing_key: shareKey ? shareKey[0].encryptedString : null,
         })
-        if (res.kind === "ok") {
-          notify("success", translate("success.cipher_shared"))
+        if (res.kind === 'ok') {
+          notify('success', translate('success.cipher_shared'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("shareMultipleCiphers: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('shareMultipleCiphers: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -1748,21 +1747,21 @@ export const CipherDataMixinsProvider = observer(
     const confirmShareCipher = async (
       organizationId: string,
       memberId: string,
-      publicKey: string,
+      publicKey: string
     ) => {
       try {
         const key = await _generateOrgKey(organizationId, publicKey)
         const res = await cipherStore.confirmShareCipher(organizationId, memberId, { key })
-        if (res.kind === "ok") {
-          notify("success", translate("success.done"))
+        if (res.kind === 'ok') {
+          notify('success', translate('success.done'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("confirmShareCipher: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('confirmShareCipher: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -1788,8 +1787,8 @@ export const CipherDataMixinsProvider = observer(
             ...data,
           },
         })
-        if (res.kind === "ok") {
-          notify("success", translate("success.done"))
+        if (res.kind === 'ok') {
+          notify('success', translate('success.done'))
 
           // Remove member in local my share first
           const myShares = [...cipherStore.myShares]
@@ -1804,9 +1803,9 @@ export const CipherDataMixinsProvider = observer(
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("stopShareCipher: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('stopShareCipher: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -1816,7 +1815,7 @@ export const CipherDataMixinsProvider = observer(
       itemId: string,
       role: AccountRoleText,
       onlyFill: boolean,
-      isGroup?: boolean,
+      isGroup?: boolean
     ) => {
       try {
         // Send API
@@ -1832,8 +1831,8 @@ export const CipherDataMixinsProvider = observer(
           })
         }
 
-        if (res.kind === "ok") {
-          notify("success", translate("success.done"))
+        if (res.kind === 'ok') {
+          notify('success', translate('success.done'))
 
           // Update member in local my share first
           const myShares = [...cipherStore.myShares]
@@ -1858,16 +1857,16 @@ export const CipherDataMixinsProvider = observer(
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("editShareCipher: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('editShareCipher: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
     // Leave share
     const leaveShare = async (organizationId: string, id?: string) => {
       const apiRes = await cipherStore.leaveShare(organizationId)
-      if (apiRes.kind !== "ok") {
+      if (apiRes.kind !== 'ok') {
         notifyApiError(apiRes)
         return apiRes
       }
@@ -1882,8 +1881,8 @@ export const CipherDataMixinsProvider = observer(
     // Accept share invitation
     const acceptShareInvitation = async (id: string) => {
       const res = await cipherStore.respondShare(id, true)
-      if (res.kind === "ok") {
-        notify("success", translate("success.share_invitaion_accepted"))
+      if (res.kind === 'ok') {
+        notify('success', translate('success.share_invitaion_accepted'))
         cipherStore.setSharingInvitations(cipherStore.sharingInvitations.filter((i) => i.id !== id))
       } else {
         notifyApiError(res)
@@ -1894,8 +1893,8 @@ export const CipherDataMixinsProvider = observer(
     // Reject share invitation
     const rejectShareInvitation = async (id: string) => {
       const res = await cipherStore.respondShare(id, false)
-      if (res.kind === "ok") {
-        notify("success", translate("success.done"))
+      if (res.kind === 'ok') {
+        notify('success', translate('success.done'))
         cipherStore.setSharingInvitations(cipherStore.sharingInvitations.filter((i) => i.id !== id))
       } else {
         notifyApiError(res)
@@ -1912,31 +1911,31 @@ export const CipherDataMixinsProvider = observer(
         if (uiStore.isOffline) {
           await _offlineCreateFolder({ folder })
           notify(
-            "success",
-            `${translate("folder.folder_created")} ${translate("success.will_sync_when_online")}`,
+            'success',
+            `${translate('folder.folder_created')} ${translate('success.will_sync_when_online')}`
           )
-          return { kind: "ok" }
+          return { kind: 'ok' }
         }
 
         // Online
         const folderEnc = await folderService.encrypt(folder)
         const payload = new FolderRequest(folderEnc)
         const res = await folderStore.createFolder(payload)
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineCreateFolder({
             folder,
             folderRequest: payload,
             folderId: res.data.id,
           })
-          notify("success", translate("folder.folder_created"))
+          notify('success', translate('folder.folder_created'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("createFolder: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('createFolder: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -1976,31 +1975,31 @@ export const CipherDataMixinsProvider = observer(
         if (uiStore.isOffline) {
           await _offlineUpdateFolder({ folder })
           notify(
-            "success",
-            `${translate("folder.folder_updated")} ${translate("success.will_sync_when_online")}`,
+            'success',
+            `${translate('folder.folder_updated')} ${translate('success.will_sync_when_online')}`
           )
-          return { kind: "ok" }
+          return { kind: 'ok' }
         }
 
         // Online
         const folderEnc = await folderService.encrypt(folder)
         const payload = new FolderRequest(folderEnc)
         const res = await folderStore.updateFolder(folder.id, payload)
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineUpdateFolder({
             folder,
             isAccepted: true,
             folderRequest: payload,
           })
-          notify("success", translate("folder.folder_updated"))
+          notify('success', translate('folder.folder_updated'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("updateFolder: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('updateFolder: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -2036,23 +2035,23 @@ export const CipherDataMixinsProvider = observer(
         // Offline
         if (uiStore.isOffline) {
           await _offlineDeleteFolder(id)
-          notify("success", translate("folder.folder_deleted"))
-          return { kind: "ok" }
+          notify('success', translate('folder.folder_deleted'))
+          return { kind: 'ok' }
         }
 
         // Online
         const res = await folderStore.deleteFolder(id)
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineDeleteFolder(id, true)
-          notify("success", translate("folder.folder_deleted"))
+          notify('success', translate('folder.folder_deleted'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("deleteFolder: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('deleteFolder: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -2080,7 +2079,7 @@ export const CipherDataMixinsProvider = observer(
           // await _offlineCreateCollection(collection)
           // notify('success', `${translate('folder.folder_created')} ${translate('success.will_sync_when_online')}`)
           // return { kind: 'ok' }
-          return { kind: "unknown" }
+          return { kind: 'unknown' }
         }
 
         // Online
@@ -2088,21 +2087,21 @@ export const CipherDataMixinsProvider = observer(
         const payload = new CollectionRequest(collectionEnc)
         const res = await collectionStore.createCollection(collection.organizationId, payload)
 
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineCreateCollection({
             collection,
             collectionRequest: payload,
             collectionId: res.data.id,
           })
-          notify("success", translate("folder.folder_created"))
+          notify('success', translate('folder.folder_created'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("createCollection: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('createCollection: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -2143,7 +2142,7 @@ export const CipherDataMixinsProvider = observer(
           // await _offlineUpdateCollection(collection)
           // notify('success', `${translate('folder.folder_updated')} ${translate('success.will_sync_when_online')}`)
           // return { kind: 'ok' }
-          return { kind: "unknown" }
+          return { kind: 'unknown' }
         }
 
         // Online
@@ -2152,24 +2151,24 @@ export const CipherDataMixinsProvider = observer(
         const res = await collectionStore.updateCollection(
           collection.id,
           collection.organizationId,
-          payload,
+          payload
         )
 
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineUpdateCollection({
             collection,
             isAccepted: true,
             collectionRequest: payload,
           })
-          notify("success", translate("folder.folder_updated"))
+          notify('success', translate('folder.folder_updated'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("updateCollection: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('updateCollection: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -2205,15 +2204,15 @@ export const CipherDataMixinsProvider = observer(
         // Offline
         if (uiStore.isOffline) {
           await _offlineDeleteCollection(collection.id)
-          notify("success", translate("folder.folder_deleted"))
-          return { kind: "ok" }
+          notify('success', translate('folder.folder_deleted'))
+          return { kind: 'ok' }
         }
 
         const personalKey = await cryptoService.getEncKey()
         const ciphers: CipherView[] =
           (await getCiphers({
             deleted: false,
-            searchText: "",
+            searchText: '',
             filters: [(c: CipherView) => c.collectionIds.includes(collection.id)],
           })) || []
 
@@ -2241,19 +2240,19 @@ export const CipherDataMixinsProvider = observer(
               name: folderNameEnc.encryptedString,
               ciphers: data,
             },
-          },
+          }
         )
-        if (res.kind === "ok") {
+        if (res.kind === 'ok') {
           await _offlineDeleteCollection(collection.id, true)
-          notify("success", translate("folder.folder_deleted"))
+          notify('success', translate('folder.folder_deleted'))
         } else {
           notifyApiError(res)
         }
         return res
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("deleteCollection: " + e)
-        return { kind: "unknown" }
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('deleteCollection: ' + e)
+        return { kind: 'unknown' }
       }
     }
 
@@ -2279,8 +2278,8 @@ export const CipherDataMixinsProvider = observer(
         const cipherRes = await cipherStore.getCipher(id)
 
         // Error/Deleted
-        if (cipherRes.kind !== "ok") {
-          if (cipherRes.kind === "not-found" || cipherRes.kind === "forbidden") {
+        if (cipherRes.kind !== 'ok') {
+          if (cipherRes.kind === 'not-found' || cipherRes.kind === 'forbidden') {
             await _offlineDeleteCiphers([id], true)
             cipherStore.setLastSync()
           } else {
@@ -2347,8 +2346,8 @@ export const CipherDataMixinsProvider = observer(
         const folderRes = await folderStore.getFolder(id)
 
         // Error/Deleted
-        if (folderRes.kind !== "ok") {
-          if (folderRes.kind === "not-found") {
+        if (folderRes.kind !== 'ok') {
+          if (folderRes.kind === 'not-found') {
             await _offlineDeleteFolder(id, true)
             cipherStore.setLastSync()
           } else {
@@ -2395,8 +2394,8 @@ export const CipherDataMixinsProvider = observer(
       const res = (await storageService.get(key)) || {}
 
       const orgRes = await cipherStore.getOrganization(id)
-      if (orgRes.kind !== "ok") {
-        if (orgRes.kind === "not-found" || orgRes.kind === "forbidden") {
+      if (orgRes.kind !== 'ok') {
+        if (orgRes.kind === 'not-found' || orgRes.kind === 'forbidden') {
           delete res[id]
         } else {
           notifyApiError(orgRes)
@@ -2419,7 +2418,7 @@ export const CipherDataMixinsProvider = observer(
     // Sync profile (nested use only --> no need to add to queue)
     const syncProfile = async () => {
       const res = await cipherStore.getProfile()
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         await syncService.syncProfile(res.data)
         await loadOrganizations()
       } else {
@@ -2498,7 +2497,7 @@ export const CipherDataMixinsProvider = observer(
         {props.children}
       </CipherDataMixinsContext.Provider>
     )
-  },
+  }
 )
 
 export const useCipherDataMixins = () => useContext(CipherDataMixinsContext)

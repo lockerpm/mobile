@@ -1,27 +1,18 @@
-import * as React from "react"
-import { ComponentType } from "react"
+import * as React from 'react'
+import { ComponentType } from 'react'
 import {
   Image,
   ImageStyle,
-  Platform,
   StyleProp,
   TouchableOpacity,
   TouchableOpacityProps,
   View,
   ViewStyle,
-} from "react-native"
+} from 'react-native'
 
 type LogoPreset = keyof typeof logoRegistry
 
 interface LogoProps extends TouchableOpacityProps {
-  /**
- * How wide should the image be?
- */
-  maxWidth?: number
-  /**
-   * How tall should the image be?
-   */
-  maxHeight?: number
   /**
    * The name of the Logo
    * if null is given, the component will renders the view for placeholder
@@ -41,7 +32,7 @@ interface LogoProps extends TouchableOpacityProps {
   /**
    * An optional function to be called when the Logo is pressed
    */
-  onPress?: TouchableOpacityProps["onPress"]
+  onPress?: TouchableOpacityProps['onPress']
 }
 
 /**
@@ -51,13 +42,7 @@ interface LogoProps extends TouchableOpacityProps {
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Icon.md)
  */
 export function Logo(props: LogoProps) {
-  const {
-    maxWidth,
-    maxHeight,
-    preset,
-    containerStyle: $containerStyleOverride,
-    ...WrapperProps
-  } = props
+  const { preset, containerStyle: $containerStyleOverride, ...WrapperProps } = props
 
   const isPressable = !!WrapperProps.onPress
   const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress
@@ -66,22 +51,17 @@ export function Logo(props: LogoProps) {
 
   return (
     <Wrapper
-      accessibilityRole={isPressable ? "imagebutton" : undefined}
+      accessibilityRole={isPressable ? 'imagebutton' : undefined}
       {...WrapperProps}
       style={$containerStyleOverride}
     >
-      <Image
-        style={props.style}
-        source={
-          logoRegistry[preset]
-        }
-      />
+      <Image style={props.style} source={logoRegistry[preset]} />
     </Wrapper>
   )
 }
 
 const logoRegistry = {
-  "default": require("../../../../assets/images/logo/locker.png"),
-  "vertical-dark": require("../../../../assets/images/logo/logo-vertical-dark.png"),
-  "vertical-light": require("../../../../assets/images/logo/logo-vertical-light.png"),
+  default: require('assets/images/logo/locker.png'),
+  'vertical-dark': require('assets/images/logo/logo-vertical-dark.png'),
+  'vertical-light': require('assets/images/logo/logo-vertical-light.png'),
 }

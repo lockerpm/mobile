@@ -1,6 +1,6 @@
 import { useStores } from 'app/models'
 import extractDomain from 'extract-domain'
-import { useCoreService } from '../core-service'
+import { useCoreService } from '../coreService'
 import Config from 'react-native-config'
 import {
   CardView,

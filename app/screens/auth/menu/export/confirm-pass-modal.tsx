@@ -1,14 +1,14 @@
-import React, { useState } from "react"
-import { FloatingInput, Button, Modal } from "../../../../components"
-import { observer } from "mobx-react-lite"
-import { useMixins } from "../../../../services/mixins"
-import { useCoreService } from "../../../../services/core-service"
-import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
+import React, { useState } from 'react'
+import { FloatingInput, Button, Modal } from '../../../../components'
+import { observer } from 'mobx-react-lite'
+import { useMixins } from '../../../../services/mixins'
+import { useCoreService } from '../../../../services/coreService'
+import { useCipherAuthenticationMixins } from '../../../../services/mixins/cipher/authentication'
 
 interface Props {
-  isOpen?: boolean,
-  onClose?: () => void,
-  onConfirm?: () => void,
+  isOpen?: boolean
+  onClose?: () => void
+  onConfirm?: () => void
   navigation: any
 }
 
@@ -50,24 +50,20 @@ export const ConfirmPassModal = observer((props: Props) => {
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={translate('common.enter_master_pass')}
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title={translate('common.enter_master_pass')}>
       <FloatingInput
         isPassword
         isInvalid={isError}
         errorText={translate('error.invalid_password')}
         label={translate('common.master_pass')}
         value={masterPass}
-        onChangeText={txt => {
+        onChangeText={(txt) => {
           setIsError(false)
           setMasterPass(txt)
         }}
         onSubmitEditing={handleConfirm}
         style={{
-          marginTop: 10
+          marginTop: 10,
         }}
       />
 
@@ -78,7 +74,7 @@ export const ConfirmPassModal = observer((props: Props) => {
         onPress={handleConfirm}
         style={{
           width: '100%',
-          marginTop: 30
+          marginTop: 30,
         }}
       />
     </Modal>
