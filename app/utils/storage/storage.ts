@@ -55,7 +55,7 @@ export async function saveString(key: string, value: string): Promise<boolean> {
  * @param key The key to fetch.
  */
 export function load(key: string): Promise<any | null> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const res = storage.getString(key)
     resolve(res ? JSON.parse(res) : null)
   })
@@ -84,7 +84,7 @@ export async function save(key: string, value: any): Promise<boolean> {
 export async function remove(key: string): Promise<void> {
   try {
     await Promise.resolve(storage.delete(key))
-  } catch {}
+  } catch { }
 }
 
 /**
@@ -94,7 +94,7 @@ export async function clear(): Promise<void> {
   try {
     // await AsyncStorage.clear()
     await Promise.resolve(storage.clearAll())
-  } catch {}
+  } catch { }
 }
 
 /**

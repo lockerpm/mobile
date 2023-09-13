@@ -90,10 +90,10 @@ import { observer } from "mobx-react-lite"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { useCipherDataMixins } from "../services/mixins/cipher/data"
 import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from "../config/constants"
-import { Logger } from "../utils/logger"
+import { Logger } from "../utils/utils"
 import { SocketEvent, SocketEventType } from "../config/types"
 import { HealthNavigator } from "./tools/health-navigator"
-import { AppEventType, EventBus } from "../utils/event-bus"
+import { AppEventType, EventBus } from "../utils/eventBus"
 import InAppReview from "react-native-in-app-review"
 import { RelayAddress, SubdomainData, TrustedContact } from "../config/types/api"
 import { CollectionView } from "../../core/models/view/collectionView"
@@ -701,7 +701,7 @@ export const MainNavigator = observer(() => {
           initialParams={{ mode: "add" }}
         />
         <Stack.Screen name="passwords_2fa_setup" component={Password2FASetupScreen} />
-        
+
         <Stack.Screen name="notes__info" component={NoteInfoScreen} />
         <Stack.Screen
           name="notes__edit"

@@ -20,7 +20,7 @@ import countries from 'app/static/countries.json'
 import { useSocialLoginMixins } from "../../../services/mixins/social-login"
 import { GitHubLoginModal } from "../login/github-login-modal"
 import { getCookies, logRegisterSuccessEvent } from "../../../utils/analytics"
-import { Logger } from "../../../utils/logger"
+import { Logger } from "../../../utils/utils"
 import { LanguagePicker } from "../../../components/utils"
 import { Passkey, PasskeyRegistrationResult } from "react-native-passkey"
 import { PasskeyRegistrationRequest } from "react-native-passkey/lib/typescript/Passkey"

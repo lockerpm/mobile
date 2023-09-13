@@ -9,7 +9,7 @@ import { QuickSharesCipherListItem } from "./quick-shares-list-item"
 import { useCoreService } from "../../../../../services/core-service"
 import { SendView } from "../../../../../../core/models/view/sendView"
 import { QuickSharesItemAction } from "./quick-shares-item-action"
-import { Logger } from "../../../../../utils/logger"
+import { Logger } from "../../../../../utils/utils"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 
 type Props = {
@@ -106,7 +106,7 @@ export const QuickSharesList = observer((props: Props) => {
         data={ciphers}
         keyExtractor={(item, index) => String(index)}
         renderItem={({ item, index }) => (
-          <QuickSharesCipherListItem item={item} openActionMenu={(val: any)  => {
+          <QuickSharesCipherListItem item={item} openActionMenu={(val: any) => {
             setSelectedCipher(val)
             setShowAction(true)
           }} />

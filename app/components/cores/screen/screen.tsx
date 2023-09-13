@@ -15,7 +15,7 @@ import {
   ViewStyle,
 } from 'react-native'
 import { useMixins } from '../../../services/mixins'
-import { ExtendedEdge, useSafeAreaInsetsStyle } from '../../../utils/use-safe-area-insets-style'
+import { ExtendedEdge, useSafeAreaInsetsStyle } from '../../../utils/useSafeAreaInsetsStyle'
 
 interface BaseScreenProps {
   /**
@@ -205,14 +205,14 @@ export const Screen = observer((props: ScreenProps) => {
     keyboardOffset = 0,
     safeAreaEdges,
     StatusBarProps,
-    statusBarStyle = isDark ? 'light-content' :'dark-content',
+    statusBarStyle = isDark ? 'light-content' : 'dark-content',
   } = props
 
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
 
   return (
     <View style={[$containerStyle, { backgroundColor }, $containerInsets]}>
-      <StatusBar barStyle={statusBarStyle} {...StatusBarProps} backgroundColor={isDark ? color.textBlack : color.white}/>
+      <StatusBar barStyle={statusBarStyle} {...StatusBarProps} backgroundColor={isDark ? color.textBlack : color.white} />
 
       <KeyboardAvoidingView
         behavior={isIos ? 'padding' : undefined}

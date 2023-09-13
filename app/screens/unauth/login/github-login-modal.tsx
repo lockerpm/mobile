@@ -2,7 +2,7 @@ import React from 'react'
 import { WebViewModal } from '../../../components'
 import { GITHUB_CONFIG } from '../../../config/constants'
 import { useMixins } from '../../../services/mixins'
-import { getUrlParameterByName } from '../../../utils/helpers'
+import { getUrlParameterByName } from 'app/utils/utils'
 
 
 type Props = {
@@ -34,4 +34,3 @@ export const GitHubLoginModal = (props: Props) => {
     />
   )
 }
-                                         

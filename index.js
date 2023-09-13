@@ -10,7 +10,7 @@
 import './shim.js'
 import App from "./app/app.tsx"
 import { AppRegistry } from "react-native"
-import { PushNotifier } from './app/utils/push-notification'
+import { PushNotifier } from './app/utils/pushNotification'
 
 PushNotifier.setupBackgroundHandler()
 

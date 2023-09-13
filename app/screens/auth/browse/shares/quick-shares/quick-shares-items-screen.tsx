@@ -6,7 +6,7 @@ import { useStores } from "../../../../../models"
 import { BrowseItemEmptyContent, BrowseItemHeader, Layout } from "../../../../../components"
 import { SortAction } from "../../../home/all-item/sort-action"
 import { QuickSharesList } from "./quick-shares-list"
-import { PushNotifier } from "../../../../../utils/push-notification"
+import { PushNotifier } from "app/utils/pushNotification"
 
 
 export const QuickShareItemsScreen = observer(() => {
@@ -66,7 +66,7 @@ export const QuickShareItemsScreen = observer(() => {
             if (isFreeAccount) {
               goPremium()
             } else {
-              navigation.navigate('mainTab', {screen: "homeTab"})
+              navigation.navigate('mainTab', { screen: "homeTab" })
             }
           }}
           onSearch={setSearchText}
@@ -115,7 +115,7 @@ export const QuickShareItemsScreen = observer(() => {
             title={translate('shares.empty.title')}
             desc={translate('shares.empty.desc_share')}
             buttonText={translate('shares.start_sharing')}
-            addItem={() => navigation.navigate('mainTab', {screen: "homeTab"})}
+            addItem={() => navigation.navigate('mainTab', { screen: "homeTab" })}
           />
         )}
       />

@@ -14,11 +14,10 @@ import { GeneralApiProblem } from "../api/api-problem"
 import { observer } from "mobx-react-lite"
 import { color, colorDark } from "../../theme"
 import extractDomain from "extract-domain"
-import { PushNotifier } from "../../utils/push-notification"
-import { Logger } from "../../utils/logger"
+import { Logger } from "../../utils/utils"
 import { useCoreService } from "../core-service"
-import { NotifeeNotificationData, PushEvent } from "../../utils/push-notification/types"
-import { AppEventType, EventBus } from "../../utils/event-bus"
+import { NotifeeNotificationData, PushEvent, PushNotifier } from "app/utils/pushNotification"
+import { AppEventType, EventBus } from "../../utils/eventBus"
 
 const { createContext, useContext } = React
 
@@ -29,11 +28,11 @@ const defaultData = {
   isDark: false,
 
   // Methods
-  setApiTokens: (token: string) => {},
+  setApiTokens: (token: string) => { },
   getWebsiteLogo: (uri: string) => ({ uri: "" }),
   getAllOrganizations: async () => [],
   getTeam: (teams: object[], orgId: string) => ({ name: "", role: "", type: 0 }),
-  copyToClipboard: (text: string) => {},
+  copyToClipboard: (text: string) => { },
   getRouteName: async () => {
     return ""
   },
@@ -43,15 +42,15 @@ const defaultData = {
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => {
     return ""
   },
-  notifyApiError: (problem: GeneralApiProblem) => {},
+  notifyApiError: (problem: GeneralApiProblem) => { },
   notify: (
     type: "error" | "success" | "warning" | "info",
     text: string,
     duration?: undefined | number,
-  ) => {},
+  ) => { },
   randomString: () => "",
   boostrapPushNotifier: async () => true,
-  goPremium: () => {},
+  goPremium: () => { },
   parsePushNotiData: async (params?: { notifeeData?: NotifeeNotificationData, tipTrick?: boolean }) => ({
     path: "",
     params: {},
@@ -118,7 +117,7 @@ export const MixinsProvider = observer(
         text2: text,
         position: "top",
         autoHide: true,
-        visibilityTime: duration ? duration : type === "error" ? 3000 : 2000,
+        visibilityTime: duration || (type === "error" ? 3000 : 2000),
         topOffset: insets.top + 10,
         onPress: () => {
           Toast.hide()
@@ -212,7 +211,7 @@ export const MixinsProvider = observer(
 
           let errorMessage = ""
           if (errorData.details) {
-            for (let key of Object.keys(errorData.details)) {
+            for (const key of Object.keys(errorData.details)) {
               if (errorData.details[key][0]) {
                 if (!errorMessage) {
                   errorMessage = errorData.details[key][0]
@@ -340,7 +339,7 @@ export const MixinsProvider = observer(
         }
         if (data.type !== PushEvent.TIP_TRICK || (tipTrick && data.type === PushEvent.TIP_TRICK)) {
           await remove(StorageKey.PUSH_NOTI_DATA)
-        } 
+        }
       }
       return res
     }

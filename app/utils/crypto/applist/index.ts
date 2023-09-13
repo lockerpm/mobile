@@ -5,7 +5,7 @@ export const WALLET_APP_LIST = orderBy([
   {
     name: 'Coinbase',
     alias: 'coinbase',
-    logo: require('./img/coinbase.jpeg'),
+    logo: require('assets/images/icons/crypto/coinbase.jpeg'),
     passcode: true,
     password: false,
     pin: false
@@ -13,7 +13,7 @@ export const WALLET_APP_LIST = orderBy([
   {
     name: 'Binance',
     alias: 'bsc',
-    logo: require('./img/binance.webp'),
+    logo: require('assets/images/icons/crypto/binance.webp'),
     passcode: false,
     password: true,
     pin: false
@@ -21,7 +21,7 @@ export const WALLET_APP_LIST = orderBy([
   {
     name: 'Metamask',
     alias: 'metamask',
-    logo: require('./img/metamask.webp'),
+    logo: require('assets/images/icons/crypto/metamask.webp'),
     passcode: false,
     password: true,
     pin: false
@@ -29,7 +29,7 @@ export const WALLET_APP_LIST = orderBy([
   {
     name: 'Huobi',
     alias: 'huobi',
-    logo: require('./img/huobi.webp'),
+    logo: require('assets/images/icons/crypto/huobi.webp'),
     passcode: false,
     password: true,
     pin: false
@@ -37,7 +37,7 @@ export const WALLET_APP_LIST = orderBy([
   {
     name: 'Exodus',
     alias: 'exodus',
-    logo: require('./img/exodus.webp'),
+    logo: require('assets/images/icons/crypto/exodus.webp'),
     passcode: true,
     password: false,
     pin: false
@@ -45,7 +45,7 @@ export const WALLET_APP_LIST = orderBy([
   {
     name: 'Crypto.com DeFi Wallet',
     alias: 'cryptocom',
-    logo: require('./img/cryptocom.webp'),
+    logo: require('assets/images/icons/crypto/cryptocom.webp'),
     passcode: true,
     password: false,
     pin: false
@@ -53,7 +53,7 @@ export const WALLET_APP_LIST = orderBy([
   {
     name: 'RICE Wallet',
     alias: 'rice',
-    logo: require('./img/rice.webp'),
+    logo: require('assets/images/icons/crypto/rice.webp'),
     passcode: false,
     password: false,
     pin: true
@@ -61,7 +61,7 @@ export const WALLET_APP_LIST = orderBy([
   {
     name: 'Coin98',
     alias: 'coin98',
-    logo: require('./img/coin98.webp'),
+    logo: require('assets/images/icons/crypto/coin98.webp'),
     passcode: false,
     password: false,
     pin: true
@@ -69,7 +69,7 @@ export const WALLET_APP_LIST = orderBy([
   {
     name: 'Trust Wallet',
     alias: 'trustwallet',
-    logo: require('./img/trustwallet.webp'),
+    logo: require('assets/images/icons/crypto/trustwallet.webp'),
     passcode: true,
     password: false,
     pin: false
@@ -78,7 +78,7 @@ export const WALLET_APP_LIST = orderBy([
   {
     name: 'Other',
     alias: 'other',
-    logo: require('./img/crypto-wallet.png'),
+    logo: require('assets/images/icons/crypto/crypto-wallet.png'),
     passcode: false,
     password: true,
     pin: false

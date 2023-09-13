@@ -1,5 +1,5 @@
 import { EventRegister } from 'react-native-event-listeners'
-// import { Logger } from '../logger'
+import { TEMP_PREFIX } from "../../config/constants"
 
 
 export enum AppEventType {
@@ -25,4 +25,17 @@ export class EventBus {
     EventRegister.emit(event, data)
     // Logger.debug(`EVENT BUS EMIT: ${event} --- ${JSON.stringify(data)}`)
   }
+}
+
+
+export const detectTempId = (ids: string[]) => {
+  if (ids) {
+    for (const id of ids) {
+      if (id?.startsWith(TEMP_PREFIX)) {
+        EventBus.emit(AppEventType.TEMP_ID_DECTECTED, null)
+        return true
+      }
+    }
+  }
+  return false
 }

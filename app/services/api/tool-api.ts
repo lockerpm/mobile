@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { Logger } from "../../utils/logger"
+import { Logger } from "../../utils/utils"
 import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import {
@@ -61,9 +61,9 @@ class ToolApi {
     email: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: BreanchResult[]
-      }
+      kind: "ok"
+      data: BreanchResult[]
+    }
     | GeneralApiProblem
   > {
     try {
@@ -92,14 +92,14 @@ class ToolApi {
     token: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          count: number
-          next: string | null
-          previous: string | null
-          results: RelayAddress[]
-        }
+      kind: "ok"
+      data: {
+        count: number
+        next: string | null
+        previous: string | null
+        results: RelayAddress[]
       }
+    }
     | GeneralApiProblem
   > {
     try {
@@ -268,9 +268,9 @@ class ToolApi {
     subdomain: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: SubdomainData
-      }
+      kind: "ok"
+      data: SubdomainData
+    }
     | GeneralApiProblem
   > {
     try {
@@ -300,8 +300,8 @@ class ToolApi {
     subdomain: string,
   ): Promise<
     | {
-        kind: "ok"
-      }
+      kind: "ok"
+    }
     | GeneralApiProblem
   > {
     try {
@@ -329,9 +329,9 @@ class ToolApi {
     token: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: SubdomainData[]
-      }
+      kind: "ok"
+      data: SubdomainData[]
+    }
     | GeneralApiProblem
   > {
     try {

@@ -10,7 +10,7 @@ import { SKU } from "./price-plan.sku"
 import { PricePlan } from "./price-plan"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators/main-navigator"
-import { Logger } from "../../../../../utils/logger"
+import { Logger } from "../../../../../utils/utils"
 import { FamilyPayment } from "./family-payment/family-payment"
 
 import RNIap, {

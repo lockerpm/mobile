@@ -24,7 +24,7 @@ import { SendRequest } from "../../../../core/models/request/sendRequest"
 import Animated from "react-native-reanimated"
 import { Utils } from "../../../../core/misc/utils"
 import moment from "moment"
-import { Logger } from "../../../utils/logger"
+import { Logger } from "../../../utils/utils"
 
 const { width } = Dimensions.get("screen")
 
@@ -102,7 +102,7 @@ export const QuickSharesScreen = observer(() => {
       send.cipher = cipherView
       send.cipherId = cipher.id
       send.password = ""
-      send.maxAccessCount = countAccess ? parseInt(maxAccessCount ? maxAccessCount : "1") : null
+      send.maxAccessCount = countAccess ? parseInt(maxAccessCount || "1") : null
       send.expirationDate = expireAfter ? new Date(Date.now() + expireAfter * 1000) : null
       send.requireOtp = !!requireOtp
       send.emails = requireOtp ? emails : []

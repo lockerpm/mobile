@@ -4,7 +4,7 @@ import { useStores } from '../../models'
 import { useMixins } from '.'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { GOOGLE_CLIENT_ID } from '../../config/constants'
-import { Logger } from '../../utils/logger'
+import { Logger } from '../../utils/utils'
 import { LoginManager, AccessToken } from "react-native-fbsdk-next"
 import { appleAuth } from '@invertase/react-native-apple-authentication'
 import { getCookies, logRegisterSuccessEvent } from '../../utils/analytics'
@@ -187,7 +187,7 @@ export const SocialLoginMixinsProvider = observer((props: {
 
     setIsLoading && setIsLoading(false)
     if (loginRes.kind !== 'ok') {
-        notifyApiError(loginRes)
+      notifyApiError(loginRes)
       await logoutAllServices()
     } else {
       if (loginRes.data.is_first) {
@@ -211,7 +211,7 @@ export const SocialLoginMixinsProvider = observer((props: {
       }
     }
 
-    
+
   }
 
   const _logoutGoogle = async () => {

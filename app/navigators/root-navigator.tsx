@@ -25,19 +25,18 @@ import Toast, { BaseToastProps } from "react-native-toast-message"
 import { observer } from "mobx-react-lite"
 import { useMixins } from "../services/mixins"
 import { ErrorToast, SuccessToast, InfoToast } from "./helpers/toast"
-import { Logger } from "../utils/logger"
-import { PushNotifier } from "../utils/push-notification"
-import { NotifeeNotificationData } from "../utils/push-notification/types"
+import { Logger } from "../utils/utils"
+import { PushNotifier, NotifeeNotificationData } from "../utils/pushNotification"
 import { save, StorageKey } from "../utils/storage"
 import dynamicLinks from "@react-native-firebase/dynamic-links"
 import { AppState, Modal, View } from "react-native"
-import { AppEventType, EventBus } from "../utils/event-bus"
+import { AppEventType, EventBus } from "../utils/eventBus"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
 import { TestScreen } from "../screens/test-screen"
 import WebView from "react-native-webview"
 import { IS_IOS } from "../config/constants"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { Header, OverlayLoading } from "../components"
+import { Header } from "../components"
 import Intercom, { Visibility } from "@intercom/intercom-react-native"
 import { OnPremisePreloginData } from "app/static/types"
 
@@ -88,11 +87,11 @@ const RootStack = observer((props: Props) => {
   const [updateBlogUrl, setUpdateBlogUrl] = useState("")
   // ------------------- METHODS -------------------
 
-  const androidHandleNotiPress =async () => {
+  const androidHandleNotiPress = async () => {
     const res = await parsePushNotiData({
       tipTrick: true
     })
-    if (!!res.url) setUpdateBlogUrl(res.url)
+    if (res.url) setUpdateBlogUrl(res.url)
   }
   // Notification
   const handleForegroundNotiPress = async (data: NotifeeNotificationData) => {
@@ -103,9 +102,9 @@ const RootStack = observer((props: Props) => {
     const res = await parsePushNotiData({
       notifeeData: data,
       tipTrick: true
-      
+
     })
-    if (!!res.url) setUpdateBlogUrl(res.url)
+    if (res.url) setUpdateBlogUrl(res.url)
 
     if (user.isLoggedInPw) {
       // Close all modals before navigate
@@ -137,9 +136,9 @@ const RootStack = observer((props: Props) => {
 
   // ------------------- EFFECTS -------------------
 
-    useEffect(() => {
-      Intercom.setInAppMessageVisibility(Visibility.GONE)
-    }, [])
+  useEffect(() => {
+    Intercom.setInAppMessageVisibility(Visibility.GONE)
+  }, [])
 
   // Check internet connection
   useEffect(() => {

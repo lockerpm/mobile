@@ -6,7 +6,7 @@ import { SettingsItem } from "../settings/settings-item"
 import { useCoreService } from "../../../../services/core-service"
 import DocumentPicker from 'react-native-document-picker'
 import { useStores } from "../../../../models"
-import { Logger } from "../../../../utils/logger"
+import { Logger } from "../../../../utils/utils"
 import { FileData } from "./import-screen"
 
 interface Props {
@@ -83,7 +83,7 @@ export const ImportPickFile = (props: Props) => {
         }
     }
 
-    
+
     return (<View>
         <Select
             showSearch

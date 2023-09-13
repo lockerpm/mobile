@@ -25,7 +25,7 @@ import { WirelessRouterAction } from "../../../screens/auth/browse/wireless-rout
 import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
 import { CipherListItem } from "./cipher-list-item"
 import { MAX_CIPHER_SELECTION } from "../../../config/constants"
-import { Logger } from "../../../utils/logger"
+import { Logger } from "../../../utils/utils"
 
 export interface CipherListProps {
   emptyContent?: JSX.Element
@@ -113,7 +113,7 @@ export const CipherList = observer((props: CipherListProps) => {
   }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
 
   useEffect(() => {
-    if (!!searchText) setIsSearching(true)
+    if (searchText) setIsSearching(true)
     if (!searchText && isSearching) {
       setIsSearching(false)
     }
@@ -130,7 +130,6 @@ export const CipherList = observer((props: CipherListProps) => {
   // Get ciphers list
   const loadData = async () => {
     // onLoadingChange && onLoadingChange(true)
-    // const t = new DurationTest("load")
     // Filter
     const filters = []
     if (props.cipherType) {
@@ -474,7 +473,7 @@ export const CipherList = observer((props: CipherListProps) => {
             <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
           ) : (
             <View style={{ paddingHorizontal: 20 }}>
-              {!!searchText ? (
+              {searchText ? (
                 <Text
                   text={translate("error.no_results_found") + ` '${searchText}'`}
                   style={{

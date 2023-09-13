@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { useNavigation } from "@react-navigation/core"
@@ -11,7 +11,7 @@ import DataBreachScannerIcon from './data-breach-scanner.svg'
 import { useStores } from "../../../../models"
 import { LoadingHeader } from "./loading-header"
 import { useCipherToolsMixins } from "../../../../services/mixins/cipher/tools"
-import { AppEventType, EventBus } from "../../../../utils/event-bus"
+import { AppEventType, EventBus } from "../../../../utils/eventBus"
 import { PasswordHealthQueue } from "../../../../utils/queue"
 
 
@@ -25,9 +25,9 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
 
 
   useEffect(() => {
-      if (!(cipherStore.isSynching || cipherStore.isBatchDecrypting)) {
-        toolStore.setDataLoading(false)
-      }
+    if (!(cipherStore.isSynching || cipherStore.isBatchDecrypting)) {
+      toolStore.setDataLoading(false)
+    }
   }, [cipherStore.isSynching, cipherStore.isBatchDecrypting])
   useEffect(() => {
     if (!toolStore.lastHealthCheck && !toolStore.isDataLoading) {
@@ -87,7 +87,7 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
       <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
         flex: 1
       }]}>
-        { left }
+        {left}
 
         <View style={{ paddingHorizontal: 10, flex: 1 }}>
           <Text
@@ -103,7 +103,7 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
           />
         </View>
       </View>
-      
+
       <FontAwesomeIcon
         name="angle-right"
         size={18}
@@ -133,7 +133,7 @@ export const PasswordHealthScreen = observer(function PasswordHealthScreen() {
       <View style={{ marginBottom: 16 }}>
         <LoadingHeader />
       </View>
-      
+
       <View style={[commonStyles.GRAY_SCREEN_SECTION, {
         backgroundColor: color.background
       }]}>

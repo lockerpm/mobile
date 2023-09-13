@@ -1,5 +1,5 @@
 import { ApiResponse } from "apisauce"
-import { Logger } from "../../utils/logger"
+import { Logger } from "../../utils/utils"
 import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import { EnterpriseInvitation, GroupData, GroupMemberData } from "app/static/types"
@@ -58,12 +58,12 @@ class EnterpriseApi {
     query: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          groups: GroupData[]
-          members: GroupMemberData[]
-        }
+      kind: "ok"
+      data: {
+        groups: GroupData[]
+        members: GroupMemberData[]
       }
+    }
     | GeneralApiProblem
   > {
     try {
@@ -93,9 +93,9 @@ class EnterpriseApi {
     token: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: EnterpriseInvitation[]
-      }
+      kind: "ok"
+      data: EnterpriseInvitation[]
+    }
     | GeneralApiProblem
   > {
     try {

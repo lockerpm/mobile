@@ -24,7 +24,7 @@ import {
   SocialLoginRequest,
 } from "app/static/types"
 import { LoginMethod } from "app/static/types/enum"
-import { Logger } from "app/utils/logger"
+import { Logger } from "app/utils/utils"
 
 /**
  * Login to id.locker
@@ -118,9 +118,9 @@ class IdApi {
     username: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: PasskeyAuthenticationRequest
-      }
+      kind: "ok"
+      data: PasskeyAuthenticationRequest
+    }
     | GeneralApiProblem
   > {
     try {
@@ -149,9 +149,9 @@ class IdApi {
     deviceId?: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: LoginResult
-      }
+      kind: "ok"
+      data: LoginResult
+    }
     | GeneralApiProblem
   > {
     try {
@@ -202,9 +202,9 @@ class IdApi {
     payload: RegisterPasskeyOptionRequest,
   ): Promise<
     | {
-        kind: "ok"
-        data: PasskeyRegistrationRequest
-      }
+      kind: "ok"
+      data: PasskeyRegistrationRequest
+    }
     | GeneralApiProblem
   > {
     try {
@@ -232,8 +232,8 @@ class IdApi {
     payload: RegisterPasskeyRequest,
   ): Promise<
     | {
-        kind: "ok"
-      }
+      kind: "ok"
+    }
     | GeneralApiProblem
   > {
     try {
@@ -283,9 +283,9 @@ class IdApi {
     username: string
   }): Promise<
     | {
-        kind: "ok"
-        data: AccountRecovery[]
-      }
+      kind: "ok"
+      data: AccountRecovery[]
+    }
     | GeneralApiProblem
   > {
     try {
@@ -337,11 +337,11 @@ class IdApi {
     payload: ResetIDPasswordWithCode,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          reset_password_url: string
-        }
+      kind: "ok"
+      data: {
+        reset_password_url: string
       }
+    }
     | GeneralApiProblem
   > {
     try {
@@ -394,8 +394,8 @@ class IdApi {
     payload: SetNewPasswordSocialLoginRequest,
   ): Promise<
     | {
-        kind: "ok"
-      }
+      kind: "ok"
+    }
     | GeneralApiProblem
   > {
     try {
@@ -420,9 +420,9 @@ class IdApi {
     paging: number,
   ): Promise<
     | {
-        kind: "ok"
-        data: WebauthCredential[]
-      }
+      kind: "ok"
+      data: WebauthCredential[]
+    }
     | GeneralApiProblem
   > {
     try {
@@ -451,8 +451,8 @@ class IdApi {
     token: string,
   ): Promise<
     | {
-        kind: "ok"
-      }
+      kind: "ok"
+    }
     | GeneralApiProblem
   > {
     try {
@@ -474,11 +474,11 @@ class IdApi {
 
   async businessLoginMethod(): Promise<
     | {
-        kind: "ok"
-        data: {
-          login_method: LoginMethod
-        }
+      kind: "ok"
+      data: {
+        login_method: LoginMethod
       }
+    }
     | GeneralApiProblem
   > {
     try {
@@ -502,9 +502,9 @@ class IdApi {
     email: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: OnPremisePreloginData[]
-      }
+      kind: "ok"
+      data: OnPremisePreloginData[]
+    }
     | GeneralApiProblem
   > {
     try {

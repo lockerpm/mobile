@@ -6,7 +6,7 @@ import notifee, {
   AndroidLaunchActivityFlag,
 } from "@notifee/react-native"
 import { IS_IOS } from "../../config/constants"
-import { Logger } from "../logger"
+import { Logger } from "../utils"
 import { NotifeeNotificationData, PushEvent } from "./types"
 import { load, save, StorageKey } from "../storage"
 import {
@@ -50,7 +50,7 @@ export class PushNotifier {
       Logger.debug("Firebase: FOREGROUND HANDLER")
       Logger.debug(message.data)
       const { event, data } = message.data
-      
+
       switch (event) {
         case PushEvent.SHARE_NEW: {
           await handleNewShare(data)

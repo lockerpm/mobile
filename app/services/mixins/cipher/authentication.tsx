@@ -4,19 +4,18 @@ import { KdfType } from "../../../../core/enums/kdfType"
 import { useStores } from "../../../models"
 import { useCipherDataMixins } from "./data"
 import { useCoreService } from "../../core-service"
-import { delay } from "../../../utils/delay"
 import { saveShared } from "../../../utils/keychain"
 import { observer } from "mobx-react-lite"
 import moment from "moment"
 import DeviceInfo from "react-native-device-info"
 import { useMixins } from ".."
-import { Logger } from "../../../utils/logger"
+import { Logger } from "../../../utils/utils"
 import { SymmetricCryptoKey } from "../../../../core/models/domain"
 import { remove, removeSecure, StorageKey } from "../../../utils/storage"
 import { useSocialLoginMixins } from "../social-login"
 import Intercom from "@intercom/intercom-react-native"
 import { setCookiesFromUrl } from "../../../utils/analytics"
-import { getUrlParameterByName } from "../../../utils/helpers"
+import { getUrlParameterByName, delay } from 'app/utils/utils'
 import { CipherView, LoginUriView, LoginView } from "../../../../core/models/view"
 import { CipherType } from "../../../../core/enums"
 import { CipherRequest } from "../../../../core/models/request/cipherRequest"
@@ -370,8 +369,8 @@ export const CipherAuthenticationMixinsProvider = observer(
       }
     }
 
-     // password less qr login
-     const sessionBusinessQrLogin = async (
+    // password less qr login
+    const sessionBusinessQrLogin = async (
       qr: string,
       qrOtp: string,
     ): Promise<{ kind: string }> => {

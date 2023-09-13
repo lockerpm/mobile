@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/react-native"
 import appsFlyer from "react-native-appsflyer"
 import { APPS_FLYER_APP_ID, APPS_FLYER_DEV_KEY, DSN_SENTRY, IS_PROD } from "../../config/constants"
-import { Logger } from "../logger"
+import { Logger } from "../utils"
 
 export const initSentry = () => {
   !__DEV__ &&

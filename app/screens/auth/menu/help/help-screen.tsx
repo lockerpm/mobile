@@ -8,7 +8,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { useMixins } from "../../../../services/mixins"
 import { PRIVACY_POLICY_URL, TERMS_URL, HELP_CENTER_URL, REPORT_VULN } from "../../../../config/constants"
 import { FeedbackModal } from "./feedback-modal"
-import { Logger } from "../../../../utils/logger"
+import { Logger } from "../../../../utils/utils"
 
 type Item = {
   name: string
@@ -26,7 +26,7 @@ export const HelpScreen = observer(function HelpScreen() {
   const items: Item[] = [
     {
       name: translate('help.tutorial'),
-      action: () => navigation.navigate('intro', {preview: true})
+      action: () => navigation.navigate('intro', { preview: true })
     },
     {
       name: translate('help.help_center'),

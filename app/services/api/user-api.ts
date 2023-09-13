@@ -1,7 +1,7 @@
 import { ApiResponse } from "apisauce"
 import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
-import { Logger } from "../../utils/logger"
+import { Logger } from "../../utils/utils"
 import { IS_IOS } from "../../config/constants"
 import {
   Billing,
@@ -64,20 +64,20 @@ class UserApi {
     deviceId: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          url: string
-          access_token: string
+      kind: "ok"
+      data: {
+        url: string
+        access_token: string
 
-          // Clone data here to hide error
-          // These data actually not exists
-          is_factor2?: boolean
-          methods?: {
-            type: string
-            data: any
-          }[]
-        }
+        // Clone data here to hide error
+        // These data actually not exists
+        is_factor2?: boolean
+        methods?: {
+          type: string
+          data: any
+        }[]
       }
+    }
     | GeneralApiProblem
   > {
     try {
@@ -324,9 +324,9 @@ class UserApi {
     token: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: UserPlan
-      }
+      kind: "ok"
+      data: UserPlan
+    }
     | GeneralApiProblem
   > {
     try {
@@ -349,14 +349,14 @@ class UserApi {
     }
   }
 
-   // Get invitations
-   async getInvitations(
+  // Get invitations
+  async getInvitations(
     token: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: UserInvitations[]
-      }
+      kind: "ok"
+      data: UserInvitations[]
+    }
     | GeneralApiProblem
   > {
     try {
@@ -598,9 +598,9 @@ class UserApi {
     policyType: PolicyType,
   ): Promise<
     | {
-        kind: "ok"
-        data: PasswordPolicy | MasterPasswordPolicy | BlockFailedLoginPolicy | PasswordlessPolicy
-      }
+      kind: "ok"
+      data: PasswordPolicy | MasterPasswordPolicy | BlockFailedLoginPolicy | PasswordlessPolicy
+    }
     | GeneralApiProblem
   > {
     try {
@@ -681,9 +681,9 @@ class UserApi {
     page: number,
   ): Promise<
     | {
-        kind: "ok"
-        data: Billing[]
-      }
+      kind: "ok"
+      data: Billing[]
+    }
     | GeneralApiProblem
   > {
     try {
@@ -715,12 +715,12 @@ class UserApi {
     originalTransactionIdentifierIOS?: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          success: boolean
-          detail: string
-        }
+      kind: "ok"
+      data: {
+        success: boolean
+        detail: string
       }
+    }
     | GeneralApiProblem
   > {
     try {
@@ -757,9 +757,9 @@ class UserApi {
     token: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: FamilyMember[]
-      }
+      kind: "ok"
+      data: FamilyMember[]
+    }
     | GeneralApiProblem
   > {
     try {
@@ -832,11 +832,11 @@ class UserApi {
     token: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          personal_trial_applied: boolean
-        }
+      kind: "ok"
+      data: {
+        personal_trial_applied: boolean
       }
+    }
     | GeneralApiProblem
   > {
     try {
@@ -960,13 +960,13 @@ class UserApi {
     id: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          kdf: number
-          kdf_iterations: number
-          key_encrypted: string
-        }
+      kind: "ok"
+      data: {
+        kdf: number
+        kdf_iterations: number
+        key_encrypted: string
       }
+    }
     | GeneralApiProblem
   > {
     try {
@@ -993,12 +993,12 @@ class UserApi {
     id: string,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          ciphers: CipherResponse[]
-          key_encrypted: string
-        }
+      kind: "ok"
+      data: {
+        ciphers: CipherResponse[]
+        key_encrypted: string
       }
+    }
     | GeneralApiProblem
   > {
     try {

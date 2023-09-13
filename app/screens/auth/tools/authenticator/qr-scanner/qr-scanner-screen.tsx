@@ -13,7 +13,7 @@ import {
 } from "../../../../../utils/totp"
 import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { Logger } from "../../../../../utils/logger"
+import { Logger } from "../../../../../utils/utils"
 import { useStores } from "../../../../../models"
 import { RouteProp, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators"

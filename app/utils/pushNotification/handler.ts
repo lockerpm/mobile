@@ -1,4 +1,4 @@
-import { PushNotifier } from "."
+import { PushNotifier } from "./pushNotifier"
 import { CipherType } from "../../../core/enums"
 import { load, StorageKey } from "../storage"
 import { ConfirmShareData, NewShareData, PushEvent, ResponseShareData, EmergencyAccessData, TipTrickData } from "./types"
@@ -68,7 +68,7 @@ export const handleNewShare = async (data: string) => {
     // case CipherType.Database:
     //   typeName = isVn ? 'ghi chú' : 'note'
     //   break
-    default: 
+    default:
       typeName = isVn ? 'mục' : 'item'
   }
 
@@ -150,8 +150,8 @@ export const handleResponseShare = async (data: string, accepted: boolean) => {
     // case CipherType.Database:
     //   typeName = isVn ? 'ghi chú' : 'note'
     //   break
-    default: 
-    typeName = isVn ? 'mục' : 'item'
+    default:
+      typeName = isVn ? 'mục' : 'item'
   }
 
   if (accepted) {
@@ -261,7 +261,7 @@ export const handleTipTrick = async (data: string) => {
   // const isVn = language === 'vi'
 
 
-  const text =  tipTrickdata.data.title[language]
+  const text = tipTrickdata.data.title[language]
 
   PushNotifier._notify({
     id: `new_feature`,

@@ -19,7 +19,7 @@ import ToolsIcon from "./icons/settings.svg"
 import MenuIcon from "./icons/menu-2.svg"
 import AuthenticatorIcon from "./icons/authenticator.svg"
 import Intercom from "@intercom/intercom-react-native"
-import { Logger } from "../utils/logger"
+import { Logger } from "../utils/utils"
 
 const Tab = createBottomTabNavigator()
 
@@ -220,7 +220,7 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
 })
 
 export function MainTabNavigator() {
- 
+
   return (
     <Tab.Navigator initialRouteName="homeTab" tabBar={(props) => <TabBar {...props} />}>
       <Tab.Screen name="homeTab" component={AllItemScreen} />

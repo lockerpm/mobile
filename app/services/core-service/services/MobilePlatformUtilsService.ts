@@ -6,7 +6,7 @@ import ReactNativeBiometrics from 'react-native-biometrics'
 import DeviceInfo from 'react-native-device-info'
 import Toast from 'react-native-toast-message'
 import RNFS from 'react-native-fs'
-import { Logger } from "../../../utils/logger"
+import { Logger } from "../../../utils/utils"
 
 
 export class MobilePlatformUtilsService implements PlatformUtilsService {
@@ -121,7 +121,7 @@ export class MobilePlatformUtilsService implements PlatformUtilsService {
   async saveFile(blobData: any, blobOptions: any, fileName: string): Promise<boolean> {
     try {
       let path: string
-    
+
       if (Platform.OS === 'android') {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE

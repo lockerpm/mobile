@@ -8,10 +8,6 @@ import { Platform } from 'react-native'
 
 
 export class DeviceActionService implements DeviceActionServiceAbstraction {
-  constructor() {
-    
-  }
-
   // --------- Requirements for autofill -------------
 
   systemMajorVersion() {
@@ -19,8 +15,9 @@ export class DeviceActionService implements DeviceActionServiceAbstraction {
   }
 
   openAutofillSettings() {
+    //
   }
-  
+
   disableAutofillService: () => void
   openAccessibilitySettings: () => void
   openAccessibilityOverlayPermissionSettings: () => void
@@ -30,7 +27,7 @@ export class DeviceActionService implements DeviceActionServiceAbstraction {
 
   // --------- Others-------------
 
-  deviceUserAgent: string = 'mobile'
+  deviceUserAgent = 'mobile'
   deviceType: DeviceType = DeviceType.Android
 
   toast: (text: string, longDuration?: boolean) => void

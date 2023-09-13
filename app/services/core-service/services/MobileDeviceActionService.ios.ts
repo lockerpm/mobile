@@ -6,9 +6,6 @@ import { Platform } from 'react-native'
 
 
 export class DeviceActionService implements DeviceActionServiceAbstraction {
-  constructor() {
-    
-  }
 
   // --------- Requirements for autofill -------------
 
@@ -26,7 +23,7 @@ export class DeviceActionService implements DeviceActionServiceAbstraction {
 
   // --------- Others-------------
 
-  deviceUserAgent: string = 'mobile'
+  deviceUserAgent = 'mobile'
   deviceType: DeviceType = DeviceType.iOS
 
   toast: (text: string, longDuration?: boolean) => void

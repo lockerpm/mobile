@@ -9,9 +9,9 @@ import {
 } from "react-native"
 import { isRTL, translate } from "../../../i18n"
 import { colorsLight as colors, spacing } from "../../../theme"
-import { ExtendedEdge, useSafeAreaInsetsStyle } from "../../../utils/useSafeAreaInsetsStyle"
 import { Icon, IconTypes } from "../icon/Icon"
 import { Text, TextProps } from "../text/Text"
+import { ExtendedEdge, useSafeAreaInsetsStyle } from "app/utils/useSafeAreaInsetsStyle"
 
 export interface HeaderProps {
   /**

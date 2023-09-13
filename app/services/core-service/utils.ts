@@ -1,5 +1,4 @@
 import { decode as atob, encode as btoa } from "base-64"
-var utf8 = require("utf8")
 
 export class Utils {
   static fromB64ToArray(str: string): Uint8Array {

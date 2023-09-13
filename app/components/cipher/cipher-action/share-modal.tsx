@@ -9,7 +9,7 @@ import { commonStyles } from "../../../theme"
 import { CipherView } from "../../../../core/models/view"
 import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
 import { AccountRoleText } from "../../../config/types"
-import { AppEventType, EventBus } from "../../../utils/event-bus"
+import { AppEventType, EventBus } from "../../../utils/eventBus"
 import { Icon } from "../../icon/icon"
 import Entypo from 'react-native-vector-icons/Entypo'
 import { SharedGroupType, SharedMemberType } from "../../../config/types/api"

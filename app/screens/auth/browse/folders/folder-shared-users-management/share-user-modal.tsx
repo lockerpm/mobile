@@ -5,12 +5,12 @@ import { useStores } from "../../../../../models"
 import { commonStyles } from "../../../../../theme"
 import { useMixins } from "../../../../../services/mixins"
 import Entypo from 'react-native-vector-icons/Entypo'
-import { AppEventType, EventBus } from "../../../../../utils/event-bus"
+import { AppEventType, EventBus } from "../../../../../utils/eventBus"
 import { CollectionView } from "../../../../../../core/models/view/collectionView"
 import { FolderView } from "../../../../../../core/models/view/folderView"
 import { AccountRoleText } from "../../../../../config/types"
 import { useFolderMixins } from "../../../../../services/mixins/folder"
-import { GroupMemberData , GroupData} from "app/static/types"
+import { GroupMemberData, GroupData } from "app/static/types"
 
 
 interface InviteProps {

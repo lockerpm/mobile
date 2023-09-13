@@ -4,7 +4,7 @@ import { Header, Layout, Text, Button } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../services/mixins"
 import { View, Image, Linking, AppState } from "react-native"
-import { AutofillServiceEnabled } from "../../../../utils/Autofill"
+import { AutofillServiceEnabled } from "app/utils/autofillHelper"
 import { Step } from "./enable-autofill-step"
 
 
@@ -68,9 +68,9 @@ export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
     >
       {
         enabled && (
-          <View style={{  alignItems: "center", justifyContent: "center", flex: 1 }}>
+          <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
             <Image source={require("./autofillActive.png")} style={{ width: 335, height: 215 }}></Image>
-            <View style={{ marginTop: 24,  alignItems: "center" }}>
+            <View style={{ marginTop: 24, alignItems: "center" }}>
               <Text preset="largeHeader" text={translate("autofill_service.activated.title")} style={{ textAlign: "center" }} />
               <Text preset="black" text={translate("autofill_service.activated.content")} style={{ marginTop: 24, textAlign: "center" }} />
             </View>

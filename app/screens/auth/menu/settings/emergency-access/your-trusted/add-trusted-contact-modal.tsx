@@ -4,7 +4,7 @@ import { Button, Divider, Header, Icon, Layout, Text } from "../../../../../../c
 import { observer } from "mobx-react-lite"
 import { commonStyles, fontSize } from "../../../../../../theme"
 import { useMixins } from "../../../../../../services/mixins"
-import { AppEventType, EventBus } from "../../../../../../utils/event-bus"
+import { AppEventType, EventBus } from "../../../../../../utils/eventBus"
 import CheckBox from "@react-native-community/checkbox"
 import { EmergencyAccessType } from "../../../../../../config/types"
 import { useCipherDataMixins } from "../../../../../../services/mixins/cipher/data"

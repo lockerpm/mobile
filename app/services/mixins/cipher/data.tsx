@@ -22,14 +22,14 @@ import { CollectionView } from "../../../../core/models/view/collectionView"
 import { CollectionRequest } from "../../../../core/models/request/collectionRequest"
 import { CipherData } from "../../../../core/models/data/cipherData"
 import { FolderData } from "../../../../core/models/data/folderData"
-import { Logger } from "../../../utils/logger"
+import { Logger } from "../../../utils/utils"
 import { Cipher, EncString, SymmetricCryptoKey } from "../../../../core/models/domain"
 import { Utils } from "../../core-service/utils"
 import { AccountRoleText, EmergencyAccessType } from "../../../config/types"
 import { OrganizationData } from "../../../../core/models/data/organizationData"
 import { ImportResult } from "../../../../core/models/domain/importResult"
 import { SyncQueue } from "../../../utils/queue"
-import { AppEventType, EventBus } from "../../../utils/event-bus"
+import { AppEventType, EventBus } from "../../../utils/eventBus"
 import chunk from "lodash/chunk"
 
 type GetCiphersParams = {
@@ -146,7 +146,7 @@ const defaultData = {
   leaveShare: async (organizationId: string, id?: string) => {
     return { kind: "unknown" }
   },
-  syncQuickShares:async () => null,
+  syncQuickShares: async () => null,
   acceptShareInvitation: async (id: string) => {
     return { kind: "unknown" }
   },
@@ -378,7 +378,7 @@ export const CipherDataMixinsProvider = observer(
           await syncService.syncSettings(userId, res.data.domains)
           await syncService.syncPolicies(res.data.policies)
           await syncQuickShares()
-          
+
           cipherIds = res.data.ciphers.map((c) => c.id)
 
           // Load all loaded data
@@ -2437,7 +2437,7 @@ export const CipherDataMixinsProvider = observer(
         await syncService.syncSends(userId, res)
       } catch (error) {
         console.log(error)
-      } 
+      }
       cipherStore.setLastSyncQuickShare()
     }
 

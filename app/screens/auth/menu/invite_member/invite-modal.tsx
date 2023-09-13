@@ -9,7 +9,7 @@ import { useMixins } from "../../../../services/mixins"
 import { Member } from "./member"
 import { FAMILY_MEMBER_LIMIT } from "../../../../config/constants"
 import Entypo from 'react-native-vector-icons/Entypo'
-import { AppEventType, EventBus } from "../../../../utils/event-bus"
+import { AppEventType, EventBus } from "../../../../utils/eventBus"
 
 
 interface InviteProps {
@@ -128,7 +128,7 @@ export const InviteMemberModal = observer(function InviteMemberModal(props: Invi
                             placeholder={translate('invite_member.placeholder')}
                             placeholderTextColor={color.text}
                             selectionColor={color.primary}
-                            style={{color: color.textBlack}}
+                            style={{ color: color.textBlack }}
                             onChangeText={setEmail}
                             value={email}
                             clearButtonMode="unless-editing"

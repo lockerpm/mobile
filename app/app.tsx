@@ -10,7 +10,7 @@
  * if you're interested in adding screens and navigators.
  */
 import "./i18n"
-import "./utils/ignore-warnings"
+import "./utils/ignoreWarnings"
 import React, { useState, useEffect, useRef } from "react"
 import { NavigationContainerRef } from "@react-navigation/native"
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
@@ -41,14 +41,14 @@ import { CipherHelpersMixinsProvider } from "./services/mixins/cipher/helpers"
 import { CipherAuthenticationMixinsProvider } from "./services/mixins/cipher/authentication"
 import { CipherDataMixinsProvider } from "./services/mixins/cipher/data"
 import { CipherToolsMixinsProvider } from "./services/mixins/cipher/tools"
-import { Logger } from "./utils/logger"
+import { Logger } from "app/utils/utils"
 import { SocialLoginMixinsProvider } from "./services/mixins/social-login"
 import { AdaptiveLayoutMixinsProvider } from "./services/mixins/adaptive-layout"
 import { IS_PROD } from "./config/constants"
-import { AppEventType, EventBus } from "./utils/event-bus"
+import { AppEventType, EventBus } from "./utils/eventBus"
 import { FolderMixinsProvider } from "./services/mixins/folder"
-import { autofillParserAndroid } from "./utils/autofill-android"
 import { api } from "./services/api"
+import { autofillParserAndroid } from "./utils/autofillHelper"
 
 enableScreens()
 Settings.initializeSDK()
@@ -83,7 +83,7 @@ function App(props: RootProp) {
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       // await initFonts() // expo
       setupRootStore().then(setRootStore)
       SplashScreen.hide()
@@ -102,8 +102,7 @@ function App(props: RootProp) {
 
     if (problem) {
       Logger.debug(
-        `URL:${response.config.baseURL}${response.config.url} - Status: ${
-          response.status
+        `URL:${response.config.baseURL}${response.config.url} - Status: ${response.status
         } - Message: ${JSON.stringify(response.data)}`,
       )
     }
@@ -138,13 +137,12 @@ function App(props: RootProp) {
   }
   const monitorApiRequest = (request) => async () => {
     Logger.debug(
-      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
-        request.params ? JSON.stringify(request.params) : ""
+      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${request.params ? JSON.stringify(request.params) : ""
       }`,
     )
   }
 
-  
+
   api.apisauce.addMonitor(monitorApiResponse)
   api.apisauce.addAsyncRequestTransform(monitorApiRequest)
 

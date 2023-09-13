@@ -6,7 +6,7 @@ import { CipherAction } from "../../../../components/cipher/cipher-action/cipher
 import { ActionItem } from "../../../../components/cipher/cipher-action/action-item"
 import { CipherView } from "../../../../../core/models/view"
 import { observer } from "mobx-react-lite"
-import { Logger } from "../../../../utils/logger"
+import { Logger } from "../../../../utils/utils"
 import { CipherType } from "../../../../../core/enums"
 import { getTOTP, parseOTPUri } from "../../../../utils/totp"
 

@@ -6,7 +6,7 @@ import { useStores } from "../../../../../models"
 import { BrowseItemEmptyContent, BrowseItemHeader, Layout } from "../../../../../components"
 import { SortAction } from "../../../home/all-item/sort-action"
 import { CipherShareList } from "./cipher-share-list"
-import { PushNotifier } from "../../../../../utils/push-notification"
+import { PushNotifier } from "app/utils/pushNotification/pushNotifier"
 
 
 export const ShareItemsScreen = observer(() => {

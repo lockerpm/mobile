@@ -5,7 +5,7 @@ import Dialog from "react-native-ui-lib/dialog"
 import { commonStyles } from "../../theme"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useMixins } from "../../services/mixins"
-import { AppEventType, EventBus } from "../../utils/event-bus"
+import { AppEventType, EventBus } from "../../utils/eventBus"
 
 
 export interface ActionSheetProps {

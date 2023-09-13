@@ -8,7 +8,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import RNAndroidSettingsTool from "react-native-android-settings-tool"
 import { getApiLevel, getManufacturer } from 'react-native-device-info'
 import * as Animatable from 'react-native-animatable';
-import { AutofillServiceEnabled } from "../../../../utils/Autofill"
+import { AutofillServiceEnabled } from "app/utils/autofillHelper"
 import Accordion from 'react-native-collapsible/Accordion';
 
 
@@ -90,12 +90,12 @@ export const AutofillServiceScreen = function AutofillServiceScreen() {
 
 
 	const setSections = (sections) => {
-		//setting up a active section state
+		// setting up a active section state
 		setActiveSections(sections.includes(undefined) ? [] : sections);
 	};
 
 	const renderHeader = (section, _, isActive) => {
-		//Accordion Header view
+		// Accordion Header view
 		return (
 			<View
 				style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
@@ -137,7 +137,7 @@ export const AutofillServiceScreen = function AutofillServiceScreen() {
 	};
 
 	const renderContent = (section, _, isActive) => {
-		//Accordion Content view
+		// Accordion Content view
 		return (
 			<Animatable.View
 				duration={200}

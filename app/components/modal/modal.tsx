@@ -7,7 +7,7 @@ import { Text } from "../text/text"
 import { Button } from "../button/button"
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { useMixins } from "../../services/mixins"
-import { AppEventType, EventBus } from "../../utils/event-bus"
+import { AppEventType, EventBus } from "../../utils/eventBus"
 
 
 export interface ModalProps {

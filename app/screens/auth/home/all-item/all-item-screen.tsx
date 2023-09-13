@@ -11,9 +11,9 @@ import { useStores } from "../../../../models"
 import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { MAX_CIPHER_SELECTION } from "../../../../config/constants"
-import { AutofillServiceEnabled } from "../../../../utils/Autofill"
 import Intercom from "@intercom/intercom-react-native"
-import { Logger } from "../../../../utils/logger"
+import { Logger } from "../../../../utils/utils"
+import { AutofillServiceEnabled } from "app/utils/autofillHelper"
 
 export const AllItemScreen = observer(() => {
   const navigation = useNavigation()

@@ -5,7 +5,7 @@ import { WebView } from 'react-native-webview'
 import { IS_IOS } from '../../config/constants'
 import { useMixins } from '../../services/mixins'
 import { commonStyles } from '../../theme'
-import { AppEventType, EventBus } from '../../utils/event-bus'
+import { AppEventType, EventBus } from '../../utils/eventBus'
 import { Header } from '../header/header'
 import { OverlayLoading } from '../loading/loading'
 
@@ -66,7 +66,7 @@ export const WebViewModal = (props: Props) => {
             if (request.url?.startsWith('com.cystack.locker')) {
               return false
             }
-        
+
             return true
           }}
           originWhitelist={['https://*', 'com.cystack.locker://*']}

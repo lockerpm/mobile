@@ -1,9 +1,5 @@
-import RNSecureStorage, { ACCESSIBLE } from 'rn-secure-storage'
+import { load, reset, save } from '../keychain'
 
-
-const options = {
-	accessible: ACCESSIBLE.WHEN_UNLOCKED
-}
 
 
 /**
@@ -13,8 +9,8 @@ const options = {
  */
 export async function loadSecure(key: string): Promise<any | null> {
   try {
-    const almostThere = await RNSecureStorage.get(key)
-    return JSON.parse(almostThere)
+    const almostThere = await load(key)
+    return JSON.parse(almostThere.password)
   } catch {
     return null
   }
@@ -28,7 +24,7 @@ export async function loadSecure(key: string): Promise<any | null> {
  */
 export async function saveSecure(key: string, value: any): Promise<boolean> {
   try {
-    await RNSecureStorage.set(key, JSON.stringify(value), options)
+    await save(key, JSON.stringify(value), key)
     return true
   } catch {
     return false
@@ -42,8 +38,8 @@ export async function saveSecure(key: string, value: any): Promise<boolean> {
  */
 export async function removeSecure(key: string): Promise<void> {
   try {
-    await RNSecureStorage.remove(key)
-  } catch {}
+    await reset(key)
+  } catch { }
 }
 
 /**
@@ -51,8 +47,8 @@ export async function removeSecure(key: string): Promise<void> {
  */
 export async function hasSecure(key: string): Promise<boolean> {
   try {
-    const res = await RNSecureStorage.exists(key)
-    return res
+    const res = await load(key)
+    return res.password !== null
   } catch {
     return false
   }

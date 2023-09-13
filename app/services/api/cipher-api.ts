@@ -1,8 +1,8 @@
 import { ApiResponse } from "apisauce"
-import { Logger } from "../../utils/logger"
+import { Logger } from "../../utils/utils"
 import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
-import { detectTempId } from "../../utils/event-bus/helpers"
+import { detectTempId } from "../../utils/eventBus"
 
 import {
   ConfirmShareCipherData,
@@ -435,13 +435,13 @@ class CipherApi {
     payload: QuickShareCipherData,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          access_id: string
-          cipher_id: string
-          id: string
-        }
+      kind: "ok"
+      data: {
+        access_id: string
+        cipher_id: string
+        id: string
       }
+    }
     | GeneralApiProblem
   > {
     try {
@@ -472,11 +472,11 @@ class CipherApi {
     payload: ShareCipherData,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          id: string // organizationId
-        }
+      kind: "ok"
+      data: {
+        id: string // organizationId
       }
+    }
     | GeneralApiProblem
   > {
     try {
@@ -778,13 +778,13 @@ class CipherApi {
     sendRequest: SendRequest,
   ): Promise<
     | {
-        kind: "ok"
-        data: {
-          id: string
-          cipher_id: string
-          access_id: string
-        }
+      kind: "ok"
+      data: {
+        id: string
+        cipher_id: string
+        access_id: string
       }
+    }
     | GeneralApiProblem
   > {
     try {

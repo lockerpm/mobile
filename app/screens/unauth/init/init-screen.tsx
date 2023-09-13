@@ -13,7 +13,7 @@ import JailMonkey from "jail-monkey"
 import { commonStyles } from "../../../theme"
 import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
 import dynamicLinks from "@react-native-firebase/dynamic-links"
-import { Logger } from "../../../utils/logger"
+import { Logger } from "../../../utils/utils"
 import VersionCheck from "react-native-version-check"
 import Intercom from "@intercom/intercom-react-native"
 
@@ -225,7 +225,7 @@ export const InitScreen = observer(() => {
 
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
 
-    if ([ "ok", "unauthorized"].includes(userRes.kind) && [ "ok", "unauthorized"].includes(userPwRes.kind)) {
+    if (["ok", "unauthorized"].includes(userRes.kind) && ["ok", "unauthorized"].includes(userPwRes.kind)) {
       goLockOrCreatePassword()
     } else {
       navigation.navigate("login")

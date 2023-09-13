@@ -4,7 +4,7 @@ import { save, StorageKey, remove } from "../../utils/storage"
 import DeviceInfo from "react-native-device-info"
 import moment from "moment"
 import { omit } from "ramda"
-import { AppEventType, EventBus } from "../../utils/event-bus"
+import { AppEventType, EventBus } from "../../utils/eventBus"
 import { AccountType, EmergencyAccessType, PlanType, PolicyType } from "../../config/types"
 import { Enterprise, UserTeam } from "../../config/types/api"
 import { NotificationSettingData, LoginData, ChangePasswordRequest, RegisterLockerRequest, SessionOtpLoginRequest, SessionLoginRequest, SocialLoginRequest, RegisterPasskeyRequest, RegisterPasskeyOptionRequest, RegisterRequest, AuthPasskeyRequest } from "app/static/types"
@@ -677,7 +677,7 @@ export const UserModel = types
  */
 
 type UserType = Instance<typeof UserModel>
-export interface User extends UserType {}
+export interface User extends UserType { }
 type UserSnapshotType = SnapshotOut<typeof UserModel>
-export interface UserSnapshot extends UserSnapshotType {}
+export interface UserSnapshot extends UserSnapshotType { }
 export const createUserDefaultModel = () => types.optional(UserModel, {})

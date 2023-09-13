@@ -1,6 +1,6 @@
 import { ApiResponse } from "apisauce"
-import { detectTempId } from "../../utils/event-bus/helpers"
-import { Logger } from "../../utils/logger"
+import { detectTempId } from "../../utils/eventBus"
+import { Logger } from "../../utils/utils"
 import { Api, api } from "./api"
 import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
 import { FolderRequest } from "core/models/request/folderRequest"

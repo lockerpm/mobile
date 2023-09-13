@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { FieldType } from '../../../../../core/enums'
 import { useMixins } from '../../../../services/mixins'
 import { commonStyles, spacing } from '../../../../theme'
-import { shouldRerenderItem } from '../../../../utils/helpers'
+import { shouldRerenderItem } from 'app/utils/utils'
 import { Button } from '../../../button/button'
 import { LabelInput } from './label-input'
 import { TextField } from './text-field'
@@ -23,7 +23,7 @@ type Props = {
   onDelete: () => void
 }
 
-export const FieldEdit = memo((props: Props) => {
+export const FieldEdit = memo(function FieldEdit(props: Props) {
   const { type, name, value, onChange, onDelete } = props
   const { color, translate } = useMixins()
 
@@ -50,7 +50,7 @@ export const FieldEdit = memo((props: Props) => {
               value={value}
               onChange={val => onChange({ type, name, value: val })}
               placeholder={translate('common.value')}
-            />  
+            />
           )
         }
       </View>

@@ -7,7 +7,7 @@ import { useMixins } from "../../../../../services/mixins"
 import { BackHandler } from "react-native"
 import { useStores } from "../../../../../models"
 import { CipherSharedList } from "./cipher-shared-list"
-import { PushNotifier } from "../../../../../utils/push-notification"
+import { PushNotifier } from "app/utils/pushNotification/pushNotifier"
 import { MAX_CIPHER_SELECTION } from "../../../../../config/constants"
 
 
