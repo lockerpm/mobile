@@ -3,9 +3,9 @@ import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import Countries from 'app/static/countries.json'
 import Flags from 'app/static/flags.json'
 import { View, Modal, TouchableWithoutFeedback, Image, Keyboard } from 'react-native'
-import { TouchableHighlight, Text, Icon } from '../cores'
+import { TouchableHighlight, Text, Icon } from '../../cores'
 import { useTheme } from 'app/services/context'
-import { SearchBar } from './searchBar/SearchBar'
+import { SearchBar } from '../searchBar/SearchBar'
 
 export type CountryCode = keyof typeof Countries
 

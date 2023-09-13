@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react"
-import { BackHandler } from "react-native"
-import { PartialState, NavigationState, NavigationContainerRef } from "@react-navigation/native"
+import React, { useState, useEffect, useRef } from 'react'
+import { BackHandler } from 'react-native'
+import { PartialState, NavigationState, NavigationContainerRef } from '@react-navigation/native'
 import Flurry from 'react-native-flurry-sdk'
-import { IS_PROD } from "../config/constants"
+import { IS_PROD } from '../config/constants'
 
 export const RootNavigation = {
   navigate(name: string) {
@@ -44,7 +44,7 @@ export function getActiveRouteName(state: NavigationState | PartialState<Navigat
  */
 export function useBackButtonHandler(
   ref: React.RefObject<NavigationContainerRef>,
-  canExit: (routeName: string) => boolean,
+  canExit: (routeName: string) => boolean
 ) {
   const canExitRef = useRef(canExit)
 
@@ -81,10 +81,10 @@ export function useBackButtonHandler(
     }
 
     // Subscribe when we come to life
-    BackHandler.addEventListener("hardwareBackPress", onBackPress)
+    BackHandler.addEventListener('hardwareBackPress', onBackPress)
 
     // Unsubscribe when we're done
-    return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress)
+    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress)
   }, [ref])
 }
 

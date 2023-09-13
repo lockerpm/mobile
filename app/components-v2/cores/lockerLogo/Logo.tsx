@@ -2,6 +2,7 @@ import * as React from 'react'
 import { ComponentType } from 'react'
 import {
   Image,
+  ImageProps,
   ImageStyle,
   StyleProp,
   TouchableOpacity,
@@ -25,6 +26,11 @@ interface LogoProps extends TouchableOpacityProps {
   style?: StyleProp<ImageStyle>
 
   /**
+   * Style overrides for the Logo image
+   */
+  imageProps?: ImageProps
+
+  /**
    * Style overrides for the Logo container
    */
   containerStyle?: StyleProp<ViewStyle>
@@ -42,7 +48,7 @@ interface LogoProps extends TouchableOpacityProps {
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Icon.md)
  */
 export function Logo(props: LogoProps) {
-  const { preset, containerStyle: $containerStyleOverride, ...WrapperProps } = props
+  const { preset, containerStyle: $containerStyleOverride, imageProps, ...WrapperProps } = props
 
   const isPressable = !!WrapperProps.onPress
   const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress
@@ -55,7 +61,7 @@ export function Logo(props: LogoProps) {
       {...WrapperProps}
       style={$containerStyleOverride}
     >
-      <Image style={props.style} source={logoRegistry[preset]} />
+      <Image style={props.style} source={logoRegistry[preset]} {...imageProps} />
     </Wrapper>
   )
 }

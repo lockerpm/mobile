@@ -1,42 +1,37 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { Loading, Text } from "../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../../models"
-import { load, StorageKey } from "../../../utils/storage"
-import NetInfo from "@react-native-community/netinfo"
-import DeviceInfo from "react-native-device-info"
-import { IS_IOS, IS_PROD } from "../../../config/constants"
-import { Alert, BackHandler, Linking, View } from "react-native"
-import { useMixins } from "../../../services/mixins"
-import JailMonkey from "jail-monkey"
-import { commonStyles } from "../../../theme"
-import { useCipherAuthenticationMixins } from "../../../services/mixins/cipher/authentication"
-import dynamicLinks from "@react-native-firebase/dynamic-links"
-import { Logger } from "../../../utils/utils"
-import VersionCheck from "react-native-version-check"
-import Intercom from "@intercom/intercom-react-native"
+import React, { FC, useEffect, useState } from 'react'
+import { Alert, Linking, Platform, View } from 'react-native'
 
-export const InitScreen = observer(() => {
+import VersionCheck from 'react-native-version-check'
+import Intercom from '@intercom/intercom-react-native'
+import dynamicLinks from '@react-native-firebase/dynamic-links'
+import NetInfo from '@react-native-community/netinfo'
+import DeviceInfo from 'react-native-device-info'
+import JailMonkey from 'jail-monkey'
+
+import { RootStackScreenProps } from 'app/navigators'
+import { useStores } from 'app/models'
+import { load, StorageKey } from 'app/utils/storage'
+import { IS_PROD } from 'app/config/constants'
+import { Logger } from 'app/utils/utils'
+import { translate } from 'app/i18n'
+import { useAuthentication, useHelper } from 'app/services/hook'
+import { Text } from 'app/components-v2/cores'
+import { Loading } from 'app/components-v2/utils'
+
+const IS_IOS = Platform.OS === 'ios'
+
+export const InitScreen: FC<RootStackScreenProps<'init'>> = (props) => {
   const { user, cipherStore, uiStore } = useStores()
-  const navigation = useNavigation()
-  // const theme = Appearance.getColorScheme()
-  const { boostrapPushNotifier, translate } = useMixins()
-  const { handleDynamicLink } = useCipherAuthenticationMixins()
+  const navigation = props.navigation
+
+  const { boostrapPushNotifier } = useHelper()
+  const { handleDynamicLink } = useAuthentication()
 
   // ------------------ METHODS ---------------------
 
   const [isRooted, setIsRooted] = useState(false)
 
   // ------------------ METHODS ---------------------
-
-  // Handle go back
-  const handleBack = (e) => {
-    e.preventDefault()
-    if (!IS_IOS) {
-      BackHandler.exitApp()
-    }
-  }
 
   // Check jailbreak/rooted
   const checkTrustFall = () => {
@@ -49,12 +44,12 @@ export const InitScreen = observer(() => {
   const goLockOrCreatePassword = () => {
     if (user.is_pwd_manager) {
       if (user.onPremiseUser) {
-        navigation.navigate("lock", { type: "onPremise" })
+        navigation.navigate('lock', { type: 'onPremise' })
       } else {
-        navigation.navigate("lock", { type: "individual" })
+        navigation.navigate('lock', { type: 'individual' })
       }
     } else {
-      navigation.navigate("createMasterPassword")
+      navigation.navigate('createMasterPassword')
     }
   }
 
@@ -64,11 +59,10 @@ export const InitScreen = observer(() => {
 
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL)
     if (autoFillData && autoFillData.enabled) {
-      uiStore.setDeepLinkAction("fill", autoFillData.domain || "")
+      uiStore.setDeepLinkAction('fill', autoFillData.domain || '')
       uiStore.setIsFromAutoFill(true)
       return true
     }
-
     uiStore.setIsFromAutoFill(false)
     return false
   }
@@ -79,11 +73,10 @@ export const InitScreen = observer(() => {
 
     const autoFillData = await load(StorageKey.APP_FROM_AUTOFILL_ITEM)
     if (autoFillData && autoFillData.enabled) {
-      uiStore.setDeepLinkAction("fill_item", autoFillData.id || "")
+      uiStore.setDeepLinkAction('fill_item', autoFillData.id || '')
       uiStore.setIsFromAutoFillItem(true)
       return true
     }
-
     uiStore.setIsFromAutoFillItem(false)
     return false
   }
@@ -94,7 +87,7 @@ export const InitScreen = observer(() => {
 
     const loginData = await load(StorageKey.APP_FROM_AUTOFILL_ON_SAVE_REQUEST)
     if (loginData && loginData.enabled) {
-      uiStore.setDeepLinkAction("save", {
+      uiStore.setDeepLinkAction('save', {
         domain: loginData.domain,
         username: loginData.username,
         password: loginData.password,
@@ -102,9 +95,39 @@ export const InitScreen = observer(() => {
       uiStore.setIsOnSaveLogin(true)
       return true
     }
-
     uiStore.setIsOnSaveLogin(false)
     return false
+  }
+
+  const checkAppUpdate = () => {
+    !__DEV__ &&
+      IS_PROD &&
+      VersionCheck.needUpdate()
+        .then(async (res) => {
+          if (res.isNeeded) {
+            Alert.alert(
+              translate('alert.update.title'),
+              translate('alert.update.content', { version: res.latestVersion }),
+              [
+                {
+                  text: translate('alert.update.later'),
+                  style: 'cancel',
+                  onPress: () => null,
+                },
+                {
+                  text: translate('alert.update.now'),
+                  style: 'destructive',
+                  onPress: async () => {
+                    Linking.openURL(res.storeUrl) // open store if update is needed.
+                  },
+                },
+              ]
+            )
+          }
+        })
+        .catch((e) => {
+          Logger.error(e)
+        })
   }
 
   // Mounted
@@ -141,35 +164,7 @@ export const InitScreen = observer(() => {
     // Check savePassword
     const isOnSaveLogin = await checkOnSaveLogin()
 
-    // Check App update
-    !__DEV__ &&
-      IS_PROD &&
-      VersionCheck.needUpdate()
-        .then(async (res) => {
-          if (res.isNeeded) {
-            Alert.alert(
-              translate("alert.update.title"),
-              translate("alert.update.content", { version: res.latestVersion }),
-              [
-                {
-                  text: translate("alert.update.later"),
-                  style: "cancel",
-                  onPress: () => null,
-                },
-                {
-                  text: translate("alert.update.now"),
-                  style: "destructive",
-                  onPress: async () => {
-                    Linking.openURL(res.storeUrl) // open store if update is needed.
-                  },
-                },
-              ],
-            )
-          }
-        })
-        .catch((e) => {
-          Logger.error(e)
-        })
+    checkAppUpdate()
 
     // Check dynamic link
     const link = await dynamicLinks().getInitialLink()
@@ -187,9 +182,9 @@ export const InitScreen = observer(() => {
     if (!user.isLoggedIn) {
       if (!user.introShown && !isAutoFill && !isOnSaveLogin && !isAutoFillItem) {
         user.setIntroShown(true)
-        navigation.navigate("intro")
+        navigation.navigate('intro')
       } else {
-        navigation.navigate("onBoarding")
+        navigation.navigate('onBoarding')
       }
       return
     }
@@ -202,22 +197,21 @@ export const InitScreen = observer(() => {
 
     // Session validated?
     if (!user.isLoggedIn) {
-      navigation.navigate("login")
+      navigation.navigate('login')
       return
     }
 
     if (user.onPremiseUser) {
       const res = await user.onPremisePreLogin(user.email)
-      if (res.kind == "ok") {
+      if (res.kind === 'ok') {
         if (res.data[0].activated) {
-          navigation.navigate("lock", {
-            type: "onPremise",
+          navigation.navigate('lock', {
+            type: 'onPremise',
             data: res.data[0],
             email: user.email,
           })
-        }
-        else {
-          navigation.navigate("login")
+        } else {
+          navigation.navigate('login')
         }
         return
       }
@@ -225,10 +219,13 @@ export const InitScreen = observer(() => {
 
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
 
-    if (["ok", "unauthorized"].includes(userRes.kind) && ["ok", "unauthorized"].includes(userPwRes.kind)) {
+    if (
+      ['ok', 'unauthorized'].includes(userRes.kind) &&
+      ['ok', 'unauthorized'].includes(userPwRes.kind)
+    ) {
       goLockOrCreatePassword()
     } else {
-      navigation.navigate("login")
+      navigation.navigate('login')
     }
   }
   // ------------------ EFFECTS ---------------------
@@ -238,34 +235,24 @@ export const InitScreen = observer(() => {
     mounted()
   }, [])
 
-  // Back handler
-  useEffect(() => {
-    navigation.addListener("beforeRemove", handleBack)
-    const unsubscribe = navigation.addListener("focus", () => {
-      setTimeout(() => {
-        if (uiStore.firstRouteAfterInit) {
-          navigation.navigate(uiStore.firstRouteAfterInit)
-          uiStore.setFirstRouteAfterInit(null)
-        }
-      }, 1000)
-    })
-    return () => {
-      unsubscribe()
-      navigation.removeListener("beforeRemove", handleBack)
-    }
-  }, [navigation])
-
   // ------------------ RENDER ---------------------
 
   return (
     <View style={{ flex: 1 }}>
       {isRooted && (
-        <View style={[commonStyles.CENTER_VIEW, commonStyles.SECTION_PADDING]}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 20,
+            paddingVertical: 16,
+          }}
+        >
           <Text
-            preset="black"
-            text={translate("error.rooted_device")}
+            text={translate('error.rooted_device')}
             style={{
-              textAlign: "center",
+              textAlign: 'center',
             }}
           />
         </View>
@@ -273,4 +260,4 @@ export const InitScreen = observer(() => {
       {!isRooted && <Loading />}
     </View>
   )
-})
+}

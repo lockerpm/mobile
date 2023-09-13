@@ -1,12 +1,12 @@
-import React from "react"
-import { TouchableOpacity } from "react-native"
+import React from 'react'
+import { TouchableOpacity } from 'react-native'
 import Animated, {
   Extrapolate,
   interpolate,
   interpolateColor,
   useAnimatedStyle,
-} from "react-native-reanimated"
-import { useMixins } from "../../../../services/mixins"
+} from 'react-native-reanimated'
+import { useTheme } from 'app/services/context'
 
 interface ContentProps {
   val: number
@@ -14,14 +14,14 @@ interface ContentProps {
   onPress: () => void
 }
 export const AnimatedTabIndicator = ({ val, animIndex, onPress }: ContentProps) => {
-  const { color } = useMixins()
+  const { colors } = useTheme()
   const $contentStyle = useAnimatedStyle(() => {
     return {
       width: interpolate(animIndex.value, [val - 1, val, val + 1], [8, 20, 8], Extrapolate.CLAMP),
       backgroundColor: interpolateColor(
         animIndex.value,
         [val - 1, val, val + 1],
-        [color.white, color.primary, color.white],
+        [colors.white, colors.primary, colors.white]
       ),
     }
   })
@@ -39,7 +39,7 @@ export const AnimatedTabIndicator = ({ val, animIndex, onPress }: ContentProps) 
             height: 8,
             width: 8,
             borderRadius: 4,
-            backgroundColor: color.white,
+            backgroundColor: colors.white,
           },
           $contentStyle,
         ]}

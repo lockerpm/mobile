@@ -7,7 +7,7 @@
 import React, { useEffect, useState } from 'react'
 import NetInfo from '@react-native-community/netinfo'
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { MainNavigator } from './main-navigator'
 import {
   IntroScreen,
@@ -69,8 +69,9 @@ export type RootParamList = {
   countrySelector: {
     initialId?: string
   }
-  test: undefined
 }
+
+export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
 
 const Stack = createStackNavigator<RootParamList>()
 
@@ -286,3 +287,11 @@ export const RootNavigator = React.forwardRef<
 })
 
 RootNavigator.displayName = 'RootNavigator'
+
+/**
+ * This is a list of all the route names that will exit the app if the back button
+ * is pressed while in that screen. Only affects Android.
+ */
+const exitRoutes: string[] = ['init', 'onBoarding']
+
+export const canExit = (routeName: string) => exitRoutes.includes(routeName)

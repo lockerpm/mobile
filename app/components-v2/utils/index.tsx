@@ -1,1 +1,6 @@
 export * from './searchBar/SearchBar'
+export * from './countryPicker/CountryPicker'
+export * from './loading/Loading'
+export * from './recaptchaChecker/RecaptchaChecker'
+export * from './socialLogin/SocialLogin'
+export * from './passwordlessOptions/IosPasswordlessOptions'

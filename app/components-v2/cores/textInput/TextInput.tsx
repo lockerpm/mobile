@@ -66,6 +66,10 @@ export interface TextFieldProps extends Omit<TextInputProps, 'ref'> {
    */
   status?: 'error' | 'disabled'
   /**
+   * Title
+   */
+  label?: TextProps['text']
+  /**
    * Pass any additional props directly to the label Text component.
    */
   LabelTextProps?: TextProps
@@ -125,6 +129,7 @@ export const TextInput = forwardRef(function TextField(
     placeholder,
     helper: helperProps,
     status: statusProps,
+    label,
     RightAccessory,
     LeftAccessory,
     HelperTextProps,
@@ -152,13 +157,13 @@ export const TextInput = forwardRef(function TextField(
 
   const helper = helperProps || (isRequired && 'This field is required')
   const placeholderContent = placeholder && placeholder + (isRequiredProps ? ' (*)' : '')
-  const label = animated ? placeholderContent : ''
+
   const $containerStyles: StyleProp<ViewStyle> = [
     { width: '100%', alignItems: 'flex-start', marginVertical: 2 },
     $containerStyleOverride,
   ]
   const $labelStyles: StyleProp<TextStyle> = [
-    { fontSize: 16, fontFamily: typography.primary.medium },
+    { fontSize: 16, fontFamily: typography.primary.medium, marginBottom: 4 },
     LabelTextProps?.style,
   ]
 
@@ -233,17 +238,19 @@ export const TextInput = forwardRef(function TextField(
       zIndex: 2,
       backgroundColor: colors.background,
       paddingHorizontal: 4,
-      transform: [
-        {
-          scale: interpolate(toggleStyle.value, [0, 1], [1, 0.9]),
-        },
-        {
-          translateX: interpolate(toggleStyle.value, [0, 1], [12, 0]),
-        },
-        {
-          translateY: interpolate(toggleStyle.value, [0, 1], [35, 10]),
-        },
-      ],
+      transform: animated
+        ? [
+            {
+              scale: interpolate(toggleStyle.value, [0, 1], [1, 0.9]),
+            },
+            {
+              translateX: interpolate(toggleStyle.value, [0, 1], [12, 0]),
+            },
+            {
+              translateY: interpolate(toggleStyle.value, [0, 1], [39, 14]),
+            },
+          ]
+        : [],
       color: interpolateColor(toggleStyle.value, [0, 1], [colors.disable, colors.primaryText]),
     }
   })
@@ -257,7 +264,7 @@ export const TextInput = forwardRef(function TextField(
     >
       {!!label && (
         <Animated.Text {...LabelTextProps} style={[$labelStyles, $titleAnim]}>
-          {label}
+          {label + (isRequiredProps ? ' (*)' : '')}
         </Animated.Text>
       )}
 

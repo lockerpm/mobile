@@ -1,12 +1,24 @@
 import React, { useCallback, useState } from 'react'
-import { Dimensions, Modal, Platform, View, ViewStyle } from 'react-native'
-import { Button, ImageIcon, Text } from '../cores'
+import { Dimensions, Platform, View, ViewStyle } from 'react-native'
+import { ImageIcon, Text } from '../../cores'
+import { useHelper, useSocialLogin } from 'app/services/hook'
+import { GITHUB_CONFIG } from 'app/config/constants'
+import { getUrlParameterByName } from 'app/utils/utils'
+import { WebViewModal } from '../../webviewModal/WebviewModal'
 
 const IS_IOS = Platform.OS === 'ios'
 const SCREEN_WIDTH = Dimensions.get('screen').width
 
-export const SocialLogin = () => {
-  const [showGithubLogin, setShowGithubLogin] = useState(false)
+interface Props {
+  /**
+   * Callback when social authen success
+   */
+  onLoggedIn: (_newUser: boolean, _token: string) => Promise<void>
+}
+
+export const SocialLogin = ({ onLoggedIn }: Props) => {
+  const [showGitHubLogin, setShowGitHubLogin] = useState(false)
+  const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLogin()
 
   const SOCIAL_LOGIN: {
     [service: string]: {
@@ -19,34 +31,40 @@ export const SocialLogin = () => {
       hide: !IS_IOS,
       icon: 'apple',
       handler: () => {
-        //
+        return appleLogin({
+          onLoggedIn,
+        })
       },
     },
 
     google: {
       icon: 'google',
       handler: () => {
-        //
+        return googleLogin({
+          onLoggedIn,
+        })
       },
     },
 
     facebook: {
       icon: 'facebook',
       handler: () => {
-        //
+        return facebookLogin({
+          onLoggedIn,
+        })
       },
     },
 
     github: {
       icon: 'github',
       handler: () => {
-        //
+        setShowGitHubLogin(true)
       },
     },
     sso: {
       icon: 'sso',
       handler: () => {
-        setShowGithubLogin(true)
+        //
       },
     },
   }
@@ -102,27 +120,49 @@ export const SocialLogin = () => {
   }, [])
   return (
     <View>
-      <Modal transparent animationType="fade" visible={showGithubLogin}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-          }}
-        >
-          <Button
-            text="asd"
-            onPress={() => {
-              setShowGithubLogin(false)
-            }}
-          />
-        </View>
-      </Modal>
+      <GitHubLoginModal
+        isOpen={showGitHubLogin}
+        onClose={() => setShowGitHubLogin(false)}
+        onDone={(code) => {
+          githubLogin({
+            onLoggedIn,
+            code,
+          })
+        }}
+      />
 
       <Text text="Or login with" style={{ textAlign: 'center', marginVertical: 16 }} />
 
       <SocialLoginFlexLayout />
     </View>
   )
+}
+
+type GitHubLoginModalProps = {
+  isOpen: boolean
+  onClose: () => void
+  onDone: (code: string) => void
+}
+
+export const GitHubLoginModal = (props: GitHubLoginModalProps) => {
+  const { isOpen, onClose, onDone } = props
+  const { randomString } = useHelper()
+
+  const url = `${GITHUB_CONFIG.authorizationEndpoint}?client_id=${
+    GITHUB_CONFIG.clientId
+  }&redirect_uri=${encodeURIComponent(GITHUB_CONFIG.redirectUrl)}&scope=${encodeURIComponent(
+    GITHUB_CONFIG.scopes.join(' ')
+  )}&state=${randomString()}`
+
+  const onURLChange = (url: string) => {
+    if (url.startsWith(GITHUB_CONFIG.redirectUrl)) {
+      const code = getUrlParameterByName('code', url)
+      onClose()
+      onDone(code)
+    }
+  }
+
+  return <WebViewModal url={url} isOpen={isOpen} onClose={onClose} onURLChange={onURLChange} />
 }
 
 const $centerRowSpaceBtw: ViewStyle = {

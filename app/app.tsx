@@ -129,7 +129,6 @@ function App(props: RootProp) {
           // Close all modals before navigate
           EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
           if (navigationRef.current) {
-            rootStore.uiStore.setFirstRouteAfterInit('login')
             navigationRef.current.navigate('init')
           }
         }

@@ -322,6 +322,7 @@
       "react-native/no-raw-text": 0,
       "react/no-unescaped-entities": 0,
       "react/prop-types": 0,
+      "react/display-name": 0,
       "space-before-function-paren": 0,
       "camelcase": 0
     }

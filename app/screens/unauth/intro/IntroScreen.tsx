@@ -1,21 +1,18 @@
-import React, { useRef, useState } from "react"
-import { Dimensions, StyleSheet } from "react-native"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { observer } from "mobx-react-lite"
-import { RootParamList } from "../../../navigators"
-import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { Intro1, Intro2, Intro3, Intro4 } from "./intro/intro"
-import { Icon, Screen } from "../../../components/cores"
-import { LanguagePicker } from "../../../components/utils"
+import React, { FC, useRef, useState } from 'react'
+import { Dimensions, StyleSheet } from 'react-native'
+import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
+import { RootStackScreenProps } from 'app/navigators'
+import { Icon, Screen } from 'app/components-v2/cores'
 
-import { AnimatedFooter } from "./animated-footer/animated-footer"
-import { Wave } from "./wave"
+import { Intro1, Intro2, Intro3, Intro4 } from './intro/Intro'
+import { AnimatedFooter } from './animatedFooter/AnimatedFooter'
+import { Wave } from './Wave'
 
-const SCREEN_WIDTH = Dimensions.get("screen").width
+const SCREEN_WIDTH = Dimensions.get('screen').width
 
-export const IntroScreen = observer(() => {
-  const navigation = useNavigation()
-  const route = useRoute<RouteProp<RootParamList, "intro">>()
+export const IntroScreen: FC<RootStackScreenProps<'intro'>> = (props) => {
+  const navigation = props.navigation
+  const route = props.route
 
   const [index, setIndex] = useState(0)
   const scrollViewRef = useRef(null)
@@ -29,7 +26,7 @@ export const IntroScreen = observer(() => {
     animIndex.value = event.contentOffset.x / SCREEN_WIDTH
   })
 
-  const goStart= () => {
+  const goStart = () => {
     navigation.navigate('onBoarding')
   }
 
@@ -51,26 +48,24 @@ export const IntroScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={["top"]}
+      safeAreaEdges={['top']}
       contentContainerStyle={{
         flex: 1,
-        justifyContent: "space-between",
+        justifyContent: 'space-between',
       }}
     >
-      {isPreview ? (
+      {isPreview && (
         <Icon
           onPress={() => {
             navigation.goBack()
           }}
           icon="arrow-left"
           size={24}
-          style={{ zIndex: 10, position: "absolute", left: 20, top: 16 }}
+          style={{ zIndex: 10, position: 'absolute', left: 20, top: 16 }}
         />
-      ) : (
-        <LanguagePicker />
       )}
 
-      <Wave color={"#Dbf5dd"} style={StyleSheet.absoluteFill} />
+      <Wave color={'#Dbf5dd'} style={StyleSheet.absoluteFill} />
 
       <Animated.ScrollView
         horizontal
@@ -94,4 +89,4 @@ export const IntroScreen = observer(() => {
       <AnimatedFooter animIndex={animIndex} index={index} scrollTo={scrollTo} goStart={goStart} />
     </Screen>
   )
-})
+}

@@ -1,11 +1,11 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { Instance, SnapshotOut, types } from 'mobx-state-tree'
 import { omit } from 'ramda'
 
 /**
  * Model description here for TypeScript hints.
  */
 export const UiStoreModel = types
-  .model("UiStore")
+  .model('UiStore')
   .props({
     // Data
     isDark: types.maybeNull(types.boolean),
@@ -24,18 +24,17 @@ export const UiStoreModel = types
     selectedCountry: types.maybeNull(types.string),
     deepLinkAction: types.maybeNull(types.string),
     deepLinkUrl: types.maybeNull(types.string),
-    saveLogin: types.maybeNull(types.frozen<{ domain: string, username: string, password: string }>()),
+    saveLogin: types.maybeNull(
+      types.frozen<{ domain: string; username: string; password: string }>()
+    ),
     saveLastId: types.maybeNull(types.string),
-    firstRouteAfterInit: types.maybeNull(types.string),
     isOffline: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
     isPerformOverlayTask: types.maybeNull(types.boolean),
-    hasNoMasterPwItem: types.maybeNull(types.boolean)
+    hasNoMasterPwItem: types.maybeNull(types.boolean),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-
-
     setHasNoMasterPwItem: (val: boolean) => {
       self.hasNoMasterPwItem = val
     },
@@ -58,7 +57,6 @@ export const UiStoreModel = types
     setShowedAppReview: (val: number) => {
       self.inAppReviewShowDate = val
     },
-
 
     setIsDark: (isDark: boolean) => {
       self.isDark = isDark
@@ -116,27 +114,24 @@ export const UiStoreModel = types
     setLockResendOtpResetPasswordTime(val: number) {
       self.lockResendOtpResetPasswordTime = val
     },
-
-    setFirstRouteAfterInit(val: string) {
-      self.firstRouteAfterInit = val
-    }
   }))
-  .postProcessSnapshot(omit([
-    'firstRouteAfterInit',
-    'isSelecting',
-    'isOffline',
-    'isPerformOverlayTask',
-    'isFromAutoFillItem',
-    'isOnSaveLogin',
-    'selectedCountry',
-    'deepLinkAction',
-    'deepLinkUrl',
-    'saveLogin',
-    'saveLastId',
-    'hasNoMasterPwItem',
-    'isDeeplinkShares',
-    'isDeeplinkEmergencyAccess'
-  ]))
+  .postProcessSnapshot(
+    omit([
+      'isSelecting',
+      'isOffline',
+      'isPerformOverlayTask',
+      'isFromAutoFillItem',
+      'isOnSaveLogin',
+      'selectedCountry',
+      'deepLinkAction',
+      'deepLinkUrl',
+      'saveLogin',
+      'saveLastId',
+      'hasNoMasterPwItem',
+      'isDeeplinkShares',
+      'isDeeplinkEmergencyAccess',
+    ])
+  )
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -147,7 +142,7 @@ export const UiStoreModel = types
  */
 
 type UiStoreType = Instance<typeof UiStoreModel>
-export interface UiStore extends UiStoreType { }
+export interface UiStore extends UiStoreType {}
 type UiStoreSnapshotType = SnapshotOut<typeof UiStoreModel>
-export interface UiStoreSnapshot extends UiStoreSnapshotType { }
+export interface UiStoreSnapshot extends UiStoreSnapshotType {}
 export const createUiStoreDefaultModel = () => types.optional(UiStoreModel, {})

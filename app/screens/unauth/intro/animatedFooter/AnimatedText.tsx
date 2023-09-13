@@ -1,8 +1,8 @@
-import React from "react"
-import { StyleProp, TextStyle, ViewStyle } from "react-native"
-import Animated, { Extrapolate, interpolate, useAnimatedStyle } from "react-native-reanimated"
-import { Text } from "../../../../components/cores"
-import { useMixins } from "../../../../services/mixins"
+import React from 'react'
+import { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import Animated, { Extrapolate, interpolate, useAnimatedStyle } from 'react-native-reanimated'
+import { Text } from 'app/components-v2/cores'
+import { translate } from 'app/i18n'
 
 interface Props {
   style?: StyleProp<ViewStyle>
@@ -12,23 +12,22 @@ interface Props {
 export const TITLE_HEIGHT = 90
 
 export const AnimatedTitle = ({ style, animIndex }: Props) => {
-  const { translate } = useMixins()
   const intros = [
     {
-      title: translate("intro.security.title"),
-      desc: translate("intro.security.desc"),
+      title: translate('intro.security.title'),
+      desc: translate('intro.security.desc'),
     },
     {
-      title: translate("intro.sync.title"),
-      desc: translate("intro.sync.desc"),
+      title: translate('intro.sync.title'),
+      desc: translate('intro.sync.desc'),
     },
     {
-      title: translate("intro.autofill.title"),
-      desc: translate("intro.autofill.desc"),
+      title: translate('intro.autofill.title'),
+      desc: translate('intro.autofill.desc'),
     },
     {
-      title: translate("intro.otp.title"),
-      desc: translate("intro.otp.desc"),
+      title: translate('intro.otp.title'),
+      desc: translate('intro.otp.desc'),
     },
   ]
 
@@ -39,7 +38,7 @@ export const AnimatedTitle = ({ style, animIndex }: Props) => {
           translateY: interpolate(
             animIndex.value,
             [0, 1, 2, 3],
-            [0, -TITLE_HEIGHT, -TITLE_HEIGHT * 2, -TITLE_HEIGHT * 3],
+            [0, -TITLE_HEIGHT, -TITLE_HEIGHT * 2, -TITLE_HEIGHT * 3]
           ),
         },
       ],
@@ -53,7 +52,7 @@ export const AnimatedTitle = ({ style, animIndex }: Props) => {
           height: TITLE_HEIGHT + 40,
           paddingTop: 20,
           paddingBottom: 20,
-          overflow: "hidden",
+          overflow: 'hidden',
         },
         style,
       ]}
@@ -79,18 +78,8 @@ const AnimatedTitleContent = ({ index, intro, animIndex }: ContentProps) => {
         animIndex.value,
         [index - 0.5, index, index + 0.35],
         [0, 1, 0],
-        Extrapolate.CLAMP,
+        Extrapolate.CLAMP
       ),
-      // transform: [
-      //   {
-      //     scale: interpolate(
-      //       animIndex.value,
-      //       [index - 0.5, index, index + 0.5],
-      //       [0.3, 1, 0.3],
-      //       Extrapolate.CLAMP,
-      //     ),
-      //   },
-      // ],
     }
   })
   return (
@@ -98,19 +87,17 @@ const AnimatedTitleContent = ({ index, intro, animIndex }: ContentProps) => {
       style={[
         {
           height: TITLE_HEIGHT,
-          alignItems: "center",
+          alignItems: 'center',
         },
         $contentStyle,
       ]}
     >
-      <Text preset="bold" text={intro.title} size="2xl" style={$centerText}/>
-
-
-      <Text preset="label" text={intro.desc} style={[$centerText, {marginTop: 4}]} />
+      <Text preset="bold" text={intro.title} size="xxl" style={$centerText} />
+      <Text text={intro.desc} style={[$centerText, { marginTop: 4 }]} />
     </Animated.View>
   )
 }
 
 const $centerText: TextStyle = {
-  textAlign: "center",
+  textAlign: 'center',
 }

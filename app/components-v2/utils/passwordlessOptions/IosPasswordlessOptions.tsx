@@ -1,22 +1,39 @@
 import React from 'react'
 import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Button, Icon, ImageIconTypes, ImageIcon, Text, Toggle } from '../cores'
+import { Button, Icon, ImageIconTypes, ImageIcon, Text, Toggle } from '../../cores'
 import { useTheme } from 'app/services/context'
 import { Dialog } from 'react-native-ui-lib'
 import { translate } from 'app/i18n'
 
 interface Props {
+  /**
+   * Sheet title header
+   */
   title: string
+  /**
+   * Description
+   */
   label: string
+  /**
+   * is sheet visible
+   */
   isOpen: boolean
+  /**
+   * Callback function when bottom sheet closed
+   */
   onClose: () => void
+
+  /**
+   * Is save credentials in keychain
+   */
   isIcloudSelected: boolean
+
   setIsIcloudSelected: (val: boolean) => void
   action: () => void
 }
 
-export const PasswordlessOptions = ({
+export const IosPasswordlessOptions = ({
   title,
   label,
   isOpen,
