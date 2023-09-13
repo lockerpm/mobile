@@ -1,11 +1,11 @@
-import React from "react"
-import { useNavigation } from "@react-navigation/native"
-import { NotificationCategory } from "../../../../config/types"
-import { AutoImage as Image, Text } from "../../../../components"
-import { Linking, TouchableOpacity, View } from "react-native"
-import { relativeTime } from "../../../../utils/relative-time"
-import { useMixins } from "../../../../services/mixins"
-import { useStores } from "../../../../models"
+import React from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { NotificationCategory } from '../../../../config/types'
+import { AutoImage as Image, Text } from '../../../../components'
+import { Linking, TouchableOpacity, View } from 'react-native'
+import { relativeTime } from 'app/utils/utils'
+import { useMixins } from '../../../../services/mixins'
+import { useStores } from '../../../../models'
 
 interface Props {
   lang: string
@@ -18,21 +18,21 @@ interface Props {
   publish_time: number
 }
 export const NotiListItem = (props: Props) => {
-  const { type, title, description, lang, id, metadata, read, publish_time } = props
+  const { type, title, lang, id, metadata, publish_time } = props
   const navigation = useNavigation()
   const { translate, notifyApiError } = useMixins()
   const { user, toolStore } = useStores()
 
   const markRead = async () => {
     const res = await toolStore.markReadInAppNoti(id)
-    if (res.kind !== "ok") {
+    if (res.kind !== 'ok') {
       notifyApiError(res)
     }
   }
   const property = (() => {
-    let title;
-    let source;
-    let onPress;
+    let title
+    let source
+    let onPress
     switch (type) {
       case NotificationCategory.ITEM_SHARE:
         title = translate('noti_setting.item_sharing')
@@ -45,8 +45,8 @@ export const NotiListItem = (props: Props) => {
           navigation.navigate('mainTab', {
             screen: 'browseTab',
             params: {
-              screen: 'sharedItems'
-            }
+              screen: 'sharedItems',
+            },
           })
         }
         break
@@ -60,21 +60,20 @@ export const NotiListItem = (props: Props) => {
           } else {
             navigation.navigate(is_grantor ? 'yourTrustedContact' : 'contactsTrustedYou')
           }
-
         }
         break
       case NotificationCategory.DATA_BREACH:
         source = require('./assets/breach-scan.png')
-        onPress = () => { }
+        onPress = () => {}
         break
       case NotificationCategory.MARKETING:
         source = require('./assets/marketing.png')
-        onPress = () => { }
+        onPress = () => {}
         break
       case NotificationCategory.PW_TIPS:
         title = translate('noti_setting.tips')
         source = require('./assets/pw-tips.png')
-        onPress = () => { 
+        onPress = () => {
           const { link } = metadata
           Linking.openURL(link[user.language])
         }
@@ -84,16 +83,16 @@ export const NotiListItem = (props: Props) => {
     return {
       title,
       source,
-      onPress
+      onPress,
     }
   })()
 
   return (
     <TouchableOpacity
       style={{
-        flexDirection: "row",
+        flexDirection: 'row',
         maxHeight: 108,
-        flex: 1
+        flex: 1,
       }}
       onPress={property.onPress}
     >
@@ -106,7 +105,8 @@ export const NotiListItem = (props: Props) => {
           text={title[lang]}
           ellipsizeMode="tail"
           numberOfLines={3}
-          style={{ marginBottom: 4, maxHeight: 60 }} />
+          style={{ marginBottom: 4, maxHeight: 60 }}
+        />
         <Text text={relativeTime(publish_time * 1000, lang)} />
       </View>
     </TouchableOpacity>

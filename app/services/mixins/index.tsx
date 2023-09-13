@@ -1,23 +1,23 @@
-import React from "react"
-import { nanoid } from "nanoid"
-import find from "lodash/find"
-import ReactNativeBiometrics from "react-native-biometrics"
-import Toast from "react-native-toast-message"
-import { useStores } from "../../models"
-import Clipboard from "@react-native-clipboard/clipboard"
-import { load, PushNotiData, remove, StorageKey } from "../../utils/storage"
-import { translate as tl, TxKeyPath } from "../../i18n"
-import { GET_LOGO_URL, MASTER_PW_MIN_LENGTH, MAX_CIPHER_SELECTION } from "../../config/constants"
-import i18n from "i18n-js"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { GeneralApiProblem } from "../api/api-problem"
-import { observer } from "mobx-react-lite"
-import { color, colorDark } from "../../theme"
-import extractDomain from "extract-domain"
-import { Logger } from "../../utils/utils"
-import { useCoreService } from "../core-service"
-import { NotifeeNotificationData, PushEvent, PushNotifier } from "app/utils/pushNotification"
-import { AppEventType, EventBus } from "../../utils/eventBus"
+import React from 'react'
+import { nanoid } from 'nanoid'
+import find from 'lodash/find'
+import ReactNativeBiometrics from 'react-native-biometrics'
+import Toast from 'react-native-toast-message'
+import { useStores } from '../../models'
+import Clipboard from '@react-native-clipboard/clipboard'
+import { load, PushNotiData, remove, StorageKey } from '../../utils/storage'
+import { translate as tl, TxKeyPath } from '../../i18n'
+import { GET_LOGO_URL, MASTER_PW_MIN_LENGTH, MAX_CIPHER_SELECTION } from '../../config/constants'
+import i18n from 'i18n-js'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { GeneralApiProblem } from '../api/apiProblem'
+import { observer } from 'mobx-react-lite'
+import { color, colorDark } from '../../theme'
+import extractDomain from 'extract-domain'
+import { Logger } from '../../utils/utils'
+import { useCoreService } from '../core-service'
+import { NotifeeNotificationData, PushEvent, PushNotifier } from 'app/utils/pushNotification'
+import { AppEventType, EventBus } from '../../utils/eventBus'
 
 const { createContext, useContext } = React
 
@@ -28,36 +28,39 @@ const defaultData = {
   isDark: false,
 
   // Methods
-  setApiTokens: (token: string) => { },
-  getWebsiteLogo: (uri: string) => ({ uri: "" }),
+  setApiTokens: (token: string) => {},
+  getWebsiteLogo: (uri: string) => ({ uri: '' }),
   getAllOrganizations: async () => [],
-  getTeam: (teams: object[], orgId: string) => ({ name: "", role: "", type: 0 }),
-  copyToClipboard: (text: string) => { },
+  getTeam: (teams: object[], orgId: string) => ({ name: '', role: '', type: 0 }),
+  copyToClipboard: (text: string) => {},
   getRouteName: async () => {
-    return ""
+    return ''
   },
   isBiometricAvailable: async () => {
     return false
   },
   translate: (tx: TxKeyPath, options?: i18n.TranslateOptions) => {
-    return ""
+    return ''
   },
-  notifyApiError: (problem: GeneralApiProblem) => { },
+  notifyApiError: (problem: GeneralApiProblem) => {},
   notify: (
-    type: "error" | "success" | "warning" | "info",
+    type: 'error' | 'success' | 'warning' | 'info',
     text: string,
-    duration?: undefined | number,
-  ) => { },
-  randomString: () => "",
+    duration?: undefined | number
+  ) => {},
+  randomString: () => '',
   boostrapPushNotifier: async () => true,
-  goPremium: () => { },
-  parsePushNotiData: async (params?: { notifeeData?: NotifeeNotificationData, tipTrick?: boolean }) => ({
-    path: "",
+  goPremium: () => {},
+  parsePushNotiData: async (params?: {
+    notifeeData?: NotifeeNotificationData
+    tipTrick?: boolean
+  }) => ({
+    path: '',
     params: {},
     tempParams: {},
-    url: ""
+    url: '',
   }),
-  validateMasterPassword: (password: string) => ({ isValid: true, error: "" }),
+  validateMasterPassword: (password: string) => ({ isValid: true, error: '' }),
 }
 
 export const MixinsContext = createContext(defaultData)
@@ -98,7 +101,7 @@ export const MixinsProvider = observer(
 
     // Get current route name
     const getRouteName = async () => {
-      const res = await load("NAVIGATION_STATE")
+      const res = await load('NAVIGATION_STATE')
       let route = res.routes.slice(-1)[0]
       while (route.state && route.state.routes) {
         route = route.state.routes.slice(-1)[0]
@@ -108,16 +111,16 @@ export const MixinsProvider = observer(
 
     // Alert message
     const notify = (
-      type: "error" | "success" | "info",
+      type: 'error' | 'success' | 'info',
       text: null | string,
-      duration?: undefined | number,
+      duration?: undefined | number
     ) => {
       Toast.show({
         type: type,
         text2: text,
-        position: "top",
+        position: 'top',
         autoHide: true,
-        visibilityTime: duration || (type === "error" ? 3000 : 2000),
+        visibilityTime: duration || (type === 'error' ? 3000 : 2000),
         topOffset: insets.top + 10,
         onPress: () => {
           Toast.hide()
@@ -132,7 +135,7 @@ export const MixinsProvider = observer(
 
     // Clipboard
     const copyToClipboard = (text: string) => {
-      notify("success", translate("common.copied_to_clipboard"), 1000)
+      notify('success', translate('common.copied_to_clipboard'), 1000)
       Clipboard.setString(text)
     }
 
@@ -153,7 +156,7 @@ export const MixinsProvider = observer(
 
     // Get team
     const getTeam = (teams: object[], orgId: string) => {
-      return find(teams, (e) => e.id === orgId) || { name: "", role: "", type: 0 }
+      return find(teams, (e) => e.id === orgId) || { name: '', role: '', type: 0 }
     }
 
     // Check if biometric is viable
@@ -162,8 +165,8 @@ export const MixinsProvider = observer(
         const { available } = await ReactNativeBiometrics.isSensorAvailable()
         return available
       } catch (e) {
-        notify("error", translate("error.something_went_wrong"))
-        Logger.error("isBiometricAvailable: " + e)
+        notify('error', translate('error.something_went_wrong'))
+        Logger.error('isBiometricAvailable: ' + e)
         return false
       }
     }
@@ -181,19 +184,19 @@ export const MixinsProvider = observer(
     // Notify based on api error
     const notifyApiError = async (problem: GeneralApiProblem) => {
       switch (problem.kind) {
-        case "cannot-connect":
-          notify("error", translate("error.cannot_connect"))
+        case 'cannot-connect':
+          notify('error', translate('error.cannot_connect'))
           break
 
-        case "network-error":
-          notify("error", translate("error.network_error"))
+        case 'network-error':
+          notify('error', translate('error.network_error'))
           break
 
-        case "rejected":
-          notify("error", translate("error.invalid_data"))
+        case 'rejected':
+          notify('error', translate('error.invalid_data'))
           break
 
-        case "bad-data": {
+        case 'bad-data': {
           const errorData: {
             details?: {
               [key: string]: string[]
@@ -201,15 +204,15 @@ export const MixinsProvider = observer(
             code: string
             message?: string
           } = problem.data
-          if (errorData.code === "5001") {
+          if (errorData.code === '5001') {
             notify(
-              "error",
-              translate("error.cannot_update_more_at_once", { count: MAX_CIPHER_SELECTION }),
+              'error',
+              translate('error.cannot_update_more_at_once', { count: MAX_CIPHER_SELECTION })
             )
             break
           }
 
-          let errorMessage = ""
+          let errorMessage = ''
           if (errorData.details) {
             for (const key of Object.keys(errorData.details)) {
               if (errorData.details[key][0]) {
@@ -219,32 +222,32 @@ export const MixinsProvider = observer(
               }
             }
           }
-          notify("error", errorMessage || errorData.message || translate("error.invalid_data"))
+          notify('error', errorMessage || errorData.message || translate('error.invalid_data'))
           break
         }
 
-        case "forbidden":
-          notify("error", translate("error.forbidden"))
+        case 'forbidden':
+          notify('error', translate('error.forbidden'))
           break
 
-        case "not-found":
-          notify("error", translate("error.not_found"))
+        case 'not-found':
+          notify('error', translate('error.not_found'))
           break
 
-        case "unauthorized":
-          notify("error", translate("error.token_expired"))
+        case 'unauthorized':
+          notify('error', translate('error.token_expired'))
           break
 
-        case "timeout":
-          notify("error", translate("error.network_timeout"))
+        case 'timeout':
+          notify('error', translate('error.network_timeout'))
           break
 
-        case "server":
-          notify("error", translate("error.server_error"))
+        case 'server':
+          notify('error', translate('error.server_error'))
           break
 
         default:
-          notify("error", translate("error.something_went_wrong"))
+          notify('error', translate('error.something_went_wrong'))
       }
     }
 
@@ -265,7 +268,7 @@ export const MixinsProvider = observer(
           return true
         }
       } catch (e) {
-        Logger.error("boostrapPushNotifier: " + e)
+        Logger.error('boostrapPushNotifier: ' + e)
         return false
       }
     }
@@ -275,7 +278,7 @@ export const MixinsProvider = observer(
       // Close all modals before navigate
       EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
       if (props.navigationRef.current) {
-        props.navigationRef.current.navigate("payment")
+        props.navigationRef.current.navigate('payment')
       }
     }
 
@@ -286,10 +289,10 @@ export const MixinsProvider = observer(
     }) => {
       const { notifeeData, tipTrick } = params || {}
       const res = {
-        path: "",
+        path: '',
         params: {},
         tempParams: {},
-        url: "",
+        url: '',
       }
       let data: PushNotiData | NotifeeNotificationData = notifeeData
       if (!data) {
@@ -298,41 +301,41 @@ export const MixinsProvider = observer(
       if (data) {
         switch (data.type) {
           case PushEvent.SHARE_NEW:
-            res.path = "mainTab"
+            res.path = 'mainTab'
             res.params = {
-              screen: "browseTab",
+              screen: 'browseTab',
               params: {
-                screen: "sharedItems",
+                screen: 'sharedItems',
               },
             }
             res.tempParams = {
-              screen: "browseTab",
+              screen: 'browseTab',
             }
             break
           case PushEvent.SHARE_CONFIRM:
           case PushEvent.SHARE_ACCEPT:
           case PushEvent.SHARE_REJECT:
-            res.path = "mainTab"
+            res.path = 'mainTab'
             res.params = {
-              screen: "browseTab",
+              screen: 'browseTab',
               params: {
-                screen: "shareItems",
+                screen: 'shareItems',
               },
             }
             res.tempParams = {
-              screen: "browseTab",
+              screen: 'browseTab',
             }
             break
 
           case PushEvent.EMERGENCY_INVITE:
           case PushEvent.EMERGENCY_REJECT_REQUEST:
           case PushEvent.EMERGENCY_APPROVE_REQUEST:
-            res.path = "contactsTrustedYou"
+            res.path = 'contactsTrustedYou'
             break
           case PushEvent.EMERGENCY_INITIATE:
           case PushEvent.EMERGENCY_ACCEPT_INVITATION:
           case PushEvent.EMERGENCY_REJECT_INVITATION:
-            res.path = "yourTrustedContact"
+            res.path = 'yourTrustedContact'
           case PushEvent.TIP_TRICK:
             res.url = data.url
             break
@@ -347,11 +350,11 @@ export const MixinsProvider = observer(
     // Validate master password
     const validateMasterPassword = (password: string) => {
       let isValid = true
-      let error = ""
+      let error = ''
 
       if (password.length && password.length < MASTER_PW_MIN_LENGTH) {
         isValid = false
-        error = translate("policy.min_password_length", { length: MASTER_PW_MIN_LENGTH })
+        error = translate('policy.min_password_length', { length: MASTER_PW_MIN_LENGTH })
       }
 
       return {
@@ -384,7 +387,7 @@ export const MixinsProvider = observer(
     }
 
     return <MixinsContext.Provider value={data}>{props.children}</MixinsContext.Provider>
-  },
+  }
 )
 
 export const useMixins = () => useContext(MixinsContext)

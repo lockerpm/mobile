@@ -1,14 +1,14 @@
-import { ApiResponse } from "apisauce"
-import { detectTempId } from "../../utils/eventBus"
-import { Logger } from "../../utils/utils"
-import { Api, api } from "./api"
-import { GeneralApiProblem, getGeneralApiProblem } from "./api-problem"
-import { FolderRequest } from "core/models/request/folderRequest"
-import { CollectionActionData, EditShareCipherData, ShareFolderData } from "app/static/types"
-import { CollectionRequest } from "core/models/request/collectionRequest"
-import { CollectionResponse } from "core/models/response/collectionResponse"
-import { CipherRequest } from "core/models/request/cipherRequest"
-import { FolderResponse } from "core/models/response/folderResponse"
+import { ApiResponse } from 'apisauce'
+import { detectTempId } from '../../utils/eventBus'
+import { Logger } from '../../utils/utils'
+import { Api, api } from './api'
+import { GeneralApiProblem, getGeneralApiProblem } from './apiProblem'
+import { FolderRequest } from 'core/models/request/folderRequest'
+import { CollectionActionData, EditShareCipherData, ShareFolderData } from 'app/static/types'
+import { CollectionRequest } from 'core/models/request/collectionRequest'
+import { CollectionResponse } from 'core/models/response/collectionResponse'
+import { CipherRequest } from 'core/models/request/cipherRequest'
+import { FolderResponse } from 'core/models/response/folderResponse'
 
 class FolderApi {
   private api: Api = api
@@ -18,40 +18,40 @@ class FolderApi {
     token: string,
     organizationId: string,
     groupID: string,
-    payload: EditShareCipherData,
-  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    payload: EditShareCipherData
+  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
         `/cystack_platform/pm/sharing/${organizationId}/groups/${groupID}`,
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: 'ok' }
     } catch (e) {
-      Logger.error("Edit share cipher: " + e.message)
-      return { kind: "bad-data" }
+      Logger.error('Edit share cipher: ' + e.message)
+      return { kind: 'bad-data' }
     }
   }
 
   // Get single folder
   async getFolder(
     token: string,
-    id: string,
-  ): Promise<{ kind: "ok"; data: FolderResponse } | GeneralApiProblem> {
+    id: string
+  ): Promise<{ kind: 'ok'; data: FolderResponse } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `/cystack_platform/pm/sync/folders/${id}`,
+        `/cystack_platform/pm/sync/folders/${id}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -60,25 +60,25 @@ class FolderApi {
       }
       const res = new FolderResponse(response.data)
 
-      return { kind: "ok", data: res }
+      return { kind: 'ok', data: res }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
   // Create folder
   async postFolder(
     token: string,
-    data: FolderRequest,
-  ): Promise<{ kind: "ok"; data: FolderResponse } | GeneralApiProblem> {
+    data: FolderRequest
+  ): Promise<{ kind: 'ok'; data: FolderResponse } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
-        "/cystack_platform/pm/folders",
-        data,
+        '/cystack_platform/pm/folders',
+        data
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -86,10 +86,10 @@ class FolderApi {
         if (problem) return problem
       }
       const res = new FolderResponse(response.data)
-      return { kind: "ok", data: res }
+      return { kind: 'ok', data: res }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -97,16 +97,16 @@ class FolderApi {
   async putFolder(
     token: string,
     id: string,
-    data: FolderRequest,
-  ): Promise<{ kind: "ok"; data: FolderResponse } | GeneralApiProblem> {
+    data: FolderRequest
+  ): Promise<{ kind: 'ok'; data: FolderResponse } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
         `/cystack_platform/pm/folders/${id}`,
-        data,
+        data
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -114,47 +114,47 @@ class FolderApi {
         if (problem) return problem
       }
       const res = new FolderResponse(response.data)
-      return { kind: "ok", data: res }
+      return { kind: 'ok', data: res }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
   // Delete folder
-  async deleteFolder(token: string, id: string): Promise<{ kind: "ok" } | GeneralApiProblem> {
+  async deleteFolder(token: string, id: string): Promise<{ kind: 'ok' } | GeneralApiProblem> {
     try {
       detectTempId([id])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.delete(
-        `/cystack_platform/pm/folders/${id}`,
+        `/cystack_platform/pm/folders/${id}`
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: 'ok' }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
   // Share Folder
   async shareFolder(
     token: string,
-    payload: ShareFolderData,
-  ): Promise<{ kind: "ok"; data: { id: string } } | GeneralApiProblem> {
+    payload: ShareFolderData
+  ): Promise<{ kind: 'ok'; data: { id: string } } | GeneralApiProblem> {
     try {
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
         `/cystack_platform/pm/sharing`,
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -163,10 +163,10 @@ class FolderApi {
       }
       const data = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -176,16 +176,16 @@ class FolderApi {
   async postCollection(
     token: string,
     teamId: string,
-    data: CollectionRequest,
-  ): Promise<{ kind: "ok"; data: CollectionResponse } | GeneralApiProblem> {
+    data: CollectionRequest
+  ): Promise<{ kind: 'ok'; data: CollectionResponse } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/sharing/${teamId}/folders`,
-        data,
+        data
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -193,10 +193,10 @@ class FolderApi {
         if (problem) return problem
       }
       const res = new CollectionResponse(response.data)
-      return { kind: "ok", data: res }
+      return { kind: 'ok', data: res }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -205,16 +205,16 @@ class FolderApi {
     token: string,
     id: string,
     teamId: string,
-    data: CollectionRequest,
-  ): Promise<{ kind: "ok"; data: CollectionResponse } | GeneralApiProblem> {
+    data: CollectionRequest
+  ): Promise<{ kind: 'ok'; data: CollectionResponse } | GeneralApiProblem> {
     try {
       detectTempId([id, teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
         `/cystack_platform/pm/sharing/${teamId}/folders/${id}`,
-        data,
+        data
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -222,10 +222,10 @@ class FolderApi {
         if (problem) return problem
       }
       const res = new CollectionResponse(response.data)
-      return { kind: "ok", data: res }
+      return { kind: 'ok', data: res }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -234,26 +234,26 @@ class FolderApi {
     token: string,
     id: string,
     teamId: string,
-    payload: CollectionActionData,
-  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    payload: CollectionActionData
+  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
     try {
       detectTempId([id, teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/sharing/${teamId}/folders/${id}/delete`,
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: 'ok' }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -262,26 +262,26 @@ class FolderApi {
     token: string,
     id: string,
     teamId: string,
-    payload: CollectionActionData,
-  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    payload: CollectionActionData
+  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
     try {
       detectTempId([id, teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/sharing/${teamId}/folders/${id}/stop`,
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: 'ok' }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -291,11 +291,11 @@ class FolderApi {
     memberId: string,
     teamId: string,
     payload: CollectionActionData,
-    isGroup?: boolean,
-  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    isGroup?: boolean
+  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       let response: ApiResponse<any>
@@ -303,12 +303,12 @@ class FolderApi {
       if (!isGroup) {
         response = await this.api.apisauce.post(
           `/cystack_platform/pm/sharing/${teamId}/members/${memberId}/stop`,
-          payload,
+          payload
         )
       } else {
         response = await this.api.apisauce.post(
           `/cystack_platform/pm/sharing/${teamId}/groups/${memberId}/stop`,
-          payload,
+          payload
         )
       }
 
@@ -317,36 +317,36 @@ class FolderApi {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: 'ok' }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
   async addShareMember(
     token: string,
     teamId: string,
-    members: any[],
-  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    members: any[]
+  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/sharing/${teamId}/members`,
-        { members },
+        { members }
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: 'ok' }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -354,26 +354,26 @@ class FolderApi {
     token: string,
     id: string,
     teamId: string,
-    payload: { cipher: CipherRequest & { id: string } },
-  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    payload: { cipher: CipherRequest & { id: string } }
+  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/sharing/${teamId}/folders/${id}/items`,
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: 'ok' }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -381,26 +381,26 @@ class FolderApi {
     token: string,
     id: string,
     teamId: string,
-    payload: { cipher: CipherRequest & { id: string } },
-  ): Promise<{ kind: "ok" } | GeneralApiProblem> {
+    payload: { cipher: CipherRequest & { id: string } }
+  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
     try {
       detectTempId([teamId])
-      this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.put(
         `/cystack_platform/pm/sharing/${teamId}/folders/${id}/items`,
-        payload,
+        payload
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
-      return { kind: "ok" }
+      return { kind: 'ok' }
     } catch (e) {
       Logger.error(e.message)
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 }

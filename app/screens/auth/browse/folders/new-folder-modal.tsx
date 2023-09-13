@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react"
-import { FloatingInput, Button, Modal} from "../../../../components"
-import { observer } from "mobx-react-lite"
-import { useStores } from "../../../../models"
-import { FolderView } from "../../../../../core/models/view/folderView"
-import { useMixins } from "../../../../services/mixins"
-import { GeneralApiProblem } from "../../../../services/api/api-problem"
-import { CollectionView } from "../../../../../core/models/view/collectionView"
-import { TEAM_COLLECTION_EDITOR } from "../../../../config/constants"
-import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
-
+import React, { useState, useEffect } from 'react'
+import { FloatingInput, Button, Modal } from '../../../../components'
+import { observer } from 'mobx-react-lite'
+import { useStores } from '../../../../models'
+import { FolderView } from '../../../../../core/models/view/folderView'
+import { useMixins } from '../../../../services/mixins'
+import { GeneralApiProblem } from '../../../../services/api/apiProblem'
+import { CollectionView } from '../../../../../core/models/view/collectionView'
+import { TEAM_COLLECTION_EDITOR } from '../../../../config/constants'
+import { useCipherDataMixins } from '../../../../services/mixins/cipher/data'
 
 interface Props {
-  isOpen?: boolean,
+  isOpen?: boolean
   onClose?: () => void
 }
 
@@ -26,35 +25,36 @@ export const NewFolderModal = observer((props: Props) => {
   const [name, setName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const [owner, setOwner] = useState('me');
+  const [owner, setOwner] = useState('me')
   const [owners, setOwners] = useState([
     { label: translate('common.me'), value: 'me' },
-    ...user.teams.filter((team) => {
-      return TEAM_COLLECTION_EDITOR.includes(team.role)
-    }).map((team) => {
-      return {
-        label: team.name,
-        value: team.id
-      }
-    })
+    ...user.teams
+      .filter((team) => {
+        return TEAM_COLLECTION_EDITOR.includes(team.role)
+      })
+      .map((team) => {
+        return {
+          label: team.name,
+          value: team.id,
+        }
+      }),
   ])
 
   // --------------- COMPUTED ---------------
 
   const isExisted = (() => {
-    if (!name.trim() || isLoading ) {
+    if (!name.trim() || isLoading) {
       return false
     }
     if (owner === 'me') {
-      return folderStore.folders.some(f => f.name && f.name === name)
+      return folderStore.folders.some((f) => f.name && f.name === name)
     }
-    return collectionStore.collections.some(f => f.name && f.name === name)
+    return collectionStore.collections.some((f) => f.name && f.name === name)
   })()
 
   // --------------- METHODS ----------------
 
   const handleCreateFolder = async () => {
-   
     if (!name.trim() || isExisted) {
       return
     }
@@ -82,8 +82,6 @@ export const NewFolderModal = observer((props: Props) => {
         onClose()
       }
     }
-  
-
   }
 
   // --------------- EFFECT ----------------
@@ -97,19 +95,14 @@ export const NewFolderModal = observer((props: Props) => {
   // --------------- RENDER ----------------
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={translate('folder.create_folder')}
-    >
-
+    <Modal isOpen={isOpen} onClose={onClose} title={translate('folder.create_folder')}>
       <FloatingInput
         persistError
         isInvalid={isExisted}
         errorText={translate('folder.folder_existed')}
         label={translate('folder.folder_name')}
         value={name}
-        onChangeText={txt => setName(txt)}
+        onChangeText={(txt) => setName(txt)}
         onSubmitEditing={handleCreateFolder}
       />
 
@@ -120,7 +113,7 @@ export const NewFolderModal = observer((props: Props) => {
         onPress={handleCreateFolder}
         style={{
           width: '100%',
-          marginTop: 30
+          marginTop: 30,
         }}
       />
     </Modal>
