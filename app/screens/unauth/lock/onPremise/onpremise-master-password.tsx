@@ -14,11 +14,12 @@ import { MethodSelection } from '../../login/2fa/method-selection'
 import { OnPremiseOtp } from './onpremise-2fa-otp'
 import { useCoreService } from '../../../../services/coreService'
 import { OnPremisePreloginData } from 'app/static/types'
+import { BiometricsType } from '../lock.types'
 
 interface Props {
   data: OnPremisePreloginData
   email: string
-  biometryType: 'faceid' | 'touchid' | 'biometric'
+  biometryType: BiometricsType
   handleLogout: () => void
 }
 
@@ -85,7 +86,7 @@ export const OnPremiseLockMasterPassword = observer(
         } else if (res.kind === 'unauthorized') {
           navigation.navigate('login', { type: 'onPremise' })
         } else if (res.kind === 'on-premise-2fa') {
-          return
+
         } else {
           setIsError(true)
         }
@@ -262,7 +263,7 @@ export const OnPremiseLockMasterPassword = observer(
             email={partialEmail}
             username={credential.username}
             masterPassword={masterPassword}
-            onLoggedIn={() => {}}
+            onLoggedIn={() => { }}
           />
         )}
       </Layout>

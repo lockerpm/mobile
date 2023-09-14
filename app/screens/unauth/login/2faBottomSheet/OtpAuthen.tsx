@@ -1,12 +1,12 @@
 import React, { useState } from "react"
 import { View } from "react-native"
-import { observer } from "mobx-react-lite"
-import {Text, Button, FloatingInput } from "../../../../components"
-import { useMixins } from "../../../../services/mixins"
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { commonStyles, fontSize, spacing } from "../../../../theme"
 import { Checkbox } from "react-native-ui-lib"
-import { useStores } from "../../../../models"
+import { useStores } from "app/models"
+import { useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { translate } from "app/i18n"
+import { Text, Button, TextInput, Icon } from "app/components-v2/cores"
+
 
 
 type Props = {
@@ -19,9 +19,11 @@ type Props = {
 }
 
 
-export const Otp = observer((props: Props) => {
+export const OtpAuthen = (props: Props) => {
   const { user } = useStores()
-  const { translate, notify, color, setApiTokens } = useMixins()
+  const { colors } = useTheme()
+  const { notify, setApiTokens } = useHelper()
+
   const { goBack, method, email, username, password, onLoggedIn } = props
 
   // ------------------ Params -----------------------
@@ -58,40 +60,38 @@ export const Otp = observer((props: Props) => {
 
   return (
     <View>
-      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-        <Button
-          preset="link"
-          onPress={() => goBack()}
-          style={{ marginRight: 15 }}
-        >
-          <IoniconsIcon 
-            name="md-arrow-back"
-            size={26} 
-            color={color.title} 
-          />
-        </Button>
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
+        <Icon
+          icon="arrow-left"
+          onPress={goBack}
+        />
         <Text
-          preset="header"
+          preset='bold'
+          size='xl'
           text={translate('login.enter_code')}
         />
+        <View style={{ width: 24, height: 24 }} />
       </View>
 
       <Text
         text={
-          method === 'mail' 
+          method === 'mail'
             ? translate('login.from_email', { email })
             : translate('login.from_authenticator')
         }
-        preset="black"
         style={{
-          marginBottom: spacing.margin / 2,
+          marginBottom: 12,
           marginTop: 30
         }}
       />
 
-      <FloatingInput
-        isInvalid={isError}
-        label={translate('login.enter_code_here')}
+      <TextInput
+        isError={isError}
+        placeholder={translate('login.enter_code_here')}
         value={otp}
         onChangeText={setOtp}
         onSubmitEditing={handleAuthenticate}
@@ -99,30 +99,27 @@ export const Otp = observer((props: Props) => {
 
       <Checkbox
         value={saveDevice}
-        accessibilityLabel={'saveDevice'}
-        color={color.primary}
+        color={colors.primary}
         label={translate('login.save_device')}
         onValueChange={setSaveDevice}
         style={{
-          marginTop: spacing.margin,
-          marginBottom: spacing.margin
+          marginVertical: 16
         }}
         labelStyle={{
-          color: color.textBlack,
-          fontSize: fontSize.p
+          color: colors.primaryText,
+          fontSize: 16
         }}
       />
 
       <Button
-        isLoading={isLoading}
-        isDisabled={isLoading || !otp}
+        loading={isLoading}
+        disabled={isLoading || !otp}
         text={translate("common.authenticate")}
         onPress={handleAuthenticate}
         style={{
-          width: '100%',
-          marginTop: spacing.margin / 2 
+          marginTop: 12
         }}
       />
     </View>
   )
-})
+}

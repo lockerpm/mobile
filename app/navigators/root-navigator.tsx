@@ -18,7 +18,7 @@ import {
   SignupScreen,
   CreateMasterPasswordScreen,
   ForgotPasswordScreen,
-  CountrySelectorScreen,
+  LockType,
 } from '../screens'
 import { useStores } from '../models'
 import Toast, { BaseToastProps } from 'react-native-toast-message'
@@ -56,7 +56,7 @@ export type RootParamList = {
   }
   onBoarding: undefined
   lock: {
-    type?: 'individual' | 'onPremise'
+    type?: LockType
     // onpremise data
     data?: OnPremisePreloginData
     email?: string
@@ -205,12 +205,11 @@ const RootStack = observer((props: Props) => {
         <Stack.Screen name="init" component={InitScreen} />
         <Stack.Screen name="intro" component={IntroScreen} />
         <Stack.Screen name="onBoarding" component={OnboardingScreen} />
-        <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: 'individual' }} />
+        <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: LockType.Individual }} />
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="signup" component={SignupScreen} />
         <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
-        <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
         <Stack.Screen
           name="mainStack"
           component={MainNavigator}

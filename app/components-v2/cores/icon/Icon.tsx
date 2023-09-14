@@ -92,8 +92,8 @@ export function Icon(props: IconProps) {
             iconRegistry[icon]
               ? iconRegistry[icon]
               : !filled
-              ? iconRegularRegistry[icon]
-              : iconFillRegistry[icon]
+                ? iconRegularRegistry[icon]
+                : iconFillRegistry[icon]
           }
         />
       ) : (
@@ -126,7 +126,12 @@ export const iconFillRegistry = {
 export const iconRegistry = {
   'eye-slash': require('assets/icons/eye-slash.png'),
   eye: require('assets/icons/eye.png'),
+  dot: require('assets/icons/dot.png'),
   'magnifying-glass': require('assets/icons/magnifying-glass.png'),
+  'envelope-simple': require('assets/icons/envelope-simple.png'),
+  'device-mobile': require('assets/icons/device-mobile.png'),
+  'face-id': require('assets/icons/face-id.png'),
+  'fingerprint': require('assets/icons/fingerprint.png'),
 }
 
 const $imageStyle: ImageStyle = {

@@ -1,22 +1,23 @@
-import { useNavigation } from '@react-navigation/native'
-import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef, useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
 import { Dimensions, ScrollView } from 'react-native'
+
 import { Screen } from '../../../../components/cores'
 import { useStores } from '../../../../models'
 import { useCipherAuthenticationMixins } from '../../../../services/mixins/cipher/authentication'
-import { OtpPasswordlessGenerator, randomOtpNumber } from '../on-premise/passwordless/otp-generator'
-import { BusinessPasswordlessQrScan } from './passwordless-qr-scan'
+import { OtpPasswordlessGenerator, randomOtpNumber } from '../onPremise/passwordless/otp-generator'
+import { BusinessPasswordlessQrScan } from './PasswordlessQrScan'
 import { useCoreService } from '../../../../services/coreService'
+import { BiometricsType } from '../lock.types'
 
 const { width } = Dimensions.get('screen')
 
 interface Props {
-  biometryType: 'faceid' | 'touchid' | 'biometric'
+  biometryType: BiometricsType
   handleLogout: () => void
 }
 
-export const BusinessLockByPasswordless = observer(({ handleLogout, biometryType }: Props) => {
+export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
   const navigation = useNavigation()
   const { user } = useStores()
   const { biometricLogin } = useCipherAuthenticationMixins()
@@ -87,4 +88,4 @@ export const BusinessLockByPasswordless = observer(({ handleLogout, biometryType
       </ScrollView>
     </Screen>
   )
-})
+}

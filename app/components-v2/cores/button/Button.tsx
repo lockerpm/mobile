@@ -142,7 +142,7 @@ export const Button = observer((props: ButtonProps) => {
     teriatary: [
       $baseViewStyle,
       $sizeStyles.medium,
-      { backgroundColor: teriataryBackground },
+      { backgroundColor: teriataryBackground, paddingHorizontal: 0 },
     ] as StyleProp<ViewStyle>,
   }
 

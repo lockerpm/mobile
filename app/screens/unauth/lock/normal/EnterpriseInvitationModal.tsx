@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { View } from "react-native"
-import { observer } from "mobx-react-lite"
-import { Text, Button, Modal } from "../../../components"
-import Entypo from 'react-native-vector-icons/Entypo'
-import { useMixins } from "../../../services/mixins"
-import { useStores } from "../../../models"
-import { EnterpriseInvitationStatus } from "../../../config/types"
-import { EnterpriseInvitation } from "app/static/types"
+import { Text, Button, Icon } from "app/components-v2/cores"
+import { Modal } from "app/components-v2/utils"
+import { useStores } from "app/models"
+import { EnterpriseInvitation, EnterpriseInvitationStatus } from "app/static/types"
+import { translate } from "app/i18n"
 
 
 type Props = {
@@ -16,10 +14,10 @@ type Props = {
 }
 
 // By domain only
-export const EnterpriseInvitationModal = observer((props: Props) => {
+export const EnterpriseInvitationModal = (props: Props) => {
   const { isOpen, onClose, enterpeiseInvitations } = props
   const { enterpriseStore } = useStores()
-  const { translate, color } = useMixins()
+
 
   const [invitationByDomain, setInvitationByDomain] = useState(enterpeiseInvitations.find(e => !!e.domain))
   const [isLoading, setIsLoading] = useState(false)
@@ -54,15 +52,14 @@ export const EnterpriseInvitationModal = observer((props: Props) => {
       <View >
         <View style={{ alignItems: "center" }}>
           <Text
-            preset="largeHeader"
+            size="xl"
+            preset="bold"
             text={translate("enterprise_invitation.domain.join_org")}
-            style={{ fontSize: 26 }}
           />
         </View>
 
         <View style={{ marginVertical: 12 }}>
           <Text
-            preset="black"
             text={translate("enterprise_invitation.domain.managed_by")}
           />
           <Text
@@ -73,52 +70,37 @@ export const EnterpriseInvitationModal = observer((props: Props) => {
         </View>
 
         <Text
-          preset="black"
           text={translate("enterprise_invitation.enterprise_note.note", { name: invitationByDomain?.enterprise.name })}
         />
-
-        <View style={{ marginVertical: 2, flexDirection: "row" }}>
-          <Entypo name="dot-single" size={20} color={color.textBlack} />
-          <Text
-            preset="black"
-            text={translate("enterprise_invitation.enterprise_note.note_1")}
-          />
-        </View>
-        <View style={{ marginVertical: 2, flexDirection: "row" }}>
-          <Entypo name="dot-single" size={20} color={color.textBlack} />
-          <Text
-            preset="black"
-            text={translate("enterprise_invitation.enterprise_note.note_2")}
-          />
-        </View>
-        <View style={{ marginVertical: 2, flexDirection: "row" }}>
-          <Entypo name="dot-single" size={20} color={color.textBlack} />
-          <Text
-            preset="black"
-            text={translate("enterprise_invitation.enterprise_note.note_3")}
-          />
-        </View>
-
+        <Desription text={translate("enterprise_invitation.enterprise_note.note_1")} />
+        <Desription text={translate("enterprise_invitation.enterprise_note.note_2")} />
+        <Desription text={translate("enterprise_invitation.enterprise_note.note_3")} />
 
         <Text
-          preset="black"
           text={translate("enterprise_invitation.data", { name: invitationByDomain?.enterprise.name })}
           style={{ marginVertical: 8 }}
         />
 
         <Text
-          preset="black"
           text={translate("enterprise_invitation.request_access", { name: invitationByDomain?.enterprise.name })}
           style={{ marginVertical: 8 }}
         />
 
         <Button
-          isLoading={isLoading}
-          isDisabled={requested || isLoading}
+          loading={isLoading}
+          disabled={requested || isLoading}
           text={requested ? translate("enterprise_invitation.btn_requested") : translate("enterprise_invitation.btn_request")}
           onPress={invitationByDomainAction}
         />
       </View>
     </Modal>
   )
-})
+}
+const Desription = ({ text }: { text: string }) => (
+  <View style={{ marginVertical: 2, flexDirection: "row", alignItems: 'center' }}>
+    <Icon icon="dot" size={20} />
+    <Text
+      text={text}
+    />
+  </View>
+)

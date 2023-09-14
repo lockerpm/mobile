@@ -10,15 +10,16 @@ import { OtpPasswordlessGenerator, randomOtpNumber } from './otp-generator'
 import { OnPremiseOtp } from './passwordless-2fa-otp'
 import { PasswordlessQrScan } from './passwordless-qr-scan'
 import { useCoreService } from '../../../../../services/coreService'
+import { BiometricsType } from '../../lock.types'
 
 const { width } = Dimensions.get('screen')
 
 interface Props {
-  biometryType: 'faceid' | 'touchid' | 'biometric'
+  biometryType: BiometricsType
   handleLogout: () => void
 }
 
-export const LockByPasswordless = observer(({ handleLogout, biometryType }: Props) => {
+export const OnPremiseLockByPasswordless = observer(({ handleLogout, biometryType }: Props) => {
   const navigation = useNavigation()
   const { user } = useStores()
   const { biometricLogin } = useCipherAuthenticationMixins()
@@ -129,7 +130,7 @@ export const LockByPasswordless = observer(({ handleLogout, biometryType }: Prop
           username={credential.username}
           pwdHash={credential.pwdHash}
           symmetricCryptoKey={symmetricCryptoKey}
-          onLoggedIn={() => {}}
+          onLoggedIn={() => { }}
         />
       )}
     </Screen>

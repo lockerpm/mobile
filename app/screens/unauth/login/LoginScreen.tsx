@@ -4,42 +4,43 @@ import { BASE_URL } from "app/config/constants"
 import { RootStackScreenProps } from "app/navigators"
 import { useStores } from "app/models"
 import { api } from "app/services/api"
-
 import { LoginForm } from "./LoginForm"
-// import { MethodSelection } from "./2fa/method-selection"
-// import { Otp } from "./2fa/otp"
-
-
-
-import { Layout, Text, Button } from "../../../components"
 import { translate } from "app/i18n"
+import { TwoFAAuthenSheet } from "./2faBottomSheet/BottomSheetModal"
+import { Screen, Text } from "app/components-v2/cores"
+import { useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
 
 
 export const LoginScreen: FC<RootStackScreenProps<'login'>> = (props) => {
   const navigation = props.navigation
+  const { colors } = useTheme()
   const { user } = useStores()
+  const { notify } = useHelper()
+
   // ------------------------------ PARAMS -------------------------------
 
-  const [index, setIndex] = useState(0)
   const [credential, setCredential] = useState({
     username: "",
     password: "",
     methods: [],
   })
-  const [method, setMethod] = useState("")
-  const [partialEmail, setPartialEamil] = useState("")
+  const [isShow2FASheet, setIsShow2FASheet] = useState(false)
+
+  console.log(credential)
 
   // ------------------------------ METHODS -------------------------------
 
   const onLoggedIn = async (_newUser?: boolean, _token?: string) => {
-    setIndex(0)
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
     if (userRes.kind === "ok" && userPwRes.kind === "ok") {
       if (user.is_pwd_manager) {
-        navigation.navigate("lock")
+        navigation.replace("lock")
       } else {
-        navigation.navigate("createMasterPassword")
+        navigation.replace("createMasterPassword")
       }
+    } else {
+      notify("error", translate("passkey.error.login_failed"))
     }
   }
 
@@ -49,7 +50,7 @@ export const LoginScreen: FC<RootStackScreenProps<'login'>> = (props) => {
     methods: { type: string; data: any }[],
   ) => {
     setCredential({ username, password, methods })
-    setIndex(1)
+    setIsShow2FASheet(true)
   }
 
   const handleForgot = () => navigation.navigate("forgotPassword")
@@ -82,60 +83,47 @@ export const LoginScreen: FC<RootStackScreenProps<'login'>> = (props) => {
   // ------------------------------ RENDER -------------------------------
 
   return (
-    <Layout
-      footer={(
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: 12,
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            text={translate("login.no_account")}
-            style={{
-              marginRight: 12,
-            }}
-          />
-          <Button
-            preset="link"
-            text={translate("common.sign_up")}
-            onPress={() => navigation.navigate("signup")}
-          />
-        </View>
-      )
-      }
+    <Screen
+      padding
+      safeAreaEdges={['top', 'bottom']}
+      contentContainerStyle={{ flex: 1 }}
     >
-      <LoginForm
-        handleForgot={handleForgot}
-        onLoggedIn={onLoggedIn}
-        nextStep={nextStep}
-      />
-
-      {/* {index === 1 && (
-        <MethodSelection
-          goBack={() => setIndex(0)}
-          methods={credential.methods}
-          onSelect={(type: string, data: any) => {
-            setMethod(type)
-            setPartialEamil(data)
-            setIndex(2)
-          }}
-          username={credential.username}
-          password={credential.password}
+      <View style={{
+        flex: 1
+      }}>
+        <LoginForm
+          handleForgot={handleForgot}
+          onLoggedIn={onLoggedIn}
+          nextStep={nextStep}
         />
-      )}
-      {index === 2 && (
-        <Otp
-          goBack={() => setIndex(1)}
-          method={method}
-          email={partialEmail}
-          username={credential.username}
-          password={credential.password}
+
+        <TwoFAAuthenSheet
+          credential={credential}
+          isOpen={isShow2FASheet}
+          onClose={() => { setIsShow2FASheet(false) }}
           onLoggedIn={onLoggedIn}
         />
-      )} */}
-    </Layout>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginTop: 12,
+          justifyContent: "center",
+        }}
+      >
+        <Text
+          text={translate("login.no_account")}
+          style={{
+            marginRight: 12,
+          }}
+        />
+        <Text
+          color={colors.primary}
+          text={translate("common.sign_up")}
+          onPress={() => navigation.navigate("signup")}
+        />
+      </View>
+    </Screen>
   )
 }

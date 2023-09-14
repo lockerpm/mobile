@@ -20,7 +20,6 @@ import {
   NoteEditScreen,
   CardEditScreen,
   IdentityEditScreen,
-  CountrySelectorScreen,
   SettingsScreen,
   ChangeMasterPasswordScreen,
   HelpScreen,
@@ -584,8 +583,7 @@ export const MainNavigator = observer(() => {
 
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
         <Stack.Screen name="healthStack" component={HealthNavigator} />
-        {/* Inner screens */}
-        <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
+
 
         <Stack.Screen name="app_list_noti" component={InAppListNotification} />
         <Stack.Screen name="app_noti" component={InAppNotificationScreen} />

@@ -1,19 +1,16 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Platform, View } from "react-native"
+import { LayoutAnimation, Platform, TouchableOpacity, View } from "react-native"
 import { useStores } from "app/models"
 import { Passkey, PasskeyAuthenticationResult } from "react-native-passkey"
 import { PasskeyAuthenticationRequest } from "react-native-passkey/lib/typescript/Passkey"
 import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "app/utils/passkey"
-
-
-import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
-import { spacing } from "../../../theme"
-import { APP_ICON } from "../../../common/mappings"
-
-import { IosPasskeyOptions } from "../signup/ios-passkey-options"
-import { useHelper } from "app/services/hook"
+import { IosPasswordlessOptions, SocialLogin } from "app/components-v2/utils"
 import { translate } from "app/i18n"
-import { SocialLogin } from "app/components-v2/utils"
+import { useHelper } from "app/services/hook"
+import { Logo, Text, Button, TextInput } from "app/components-v2/cores"
+import Animated, { ZoomIn } from "react-native-reanimated"
+import { useTheme } from "app/services/context"
+
 
 type Props = {
   nextStep: (username: string, password: string, methods: { type: string; data: any }[]) => void
@@ -31,9 +28,12 @@ const IS_IOS = Platform.OS === 'ios'
 
 export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
   const { user } = useStores()
+  const { colors } = useTheme()
   const { notify, notifyApiError, setApiTokens } = useHelper()
 
   // ------------------ Params -----------------------
+
+  const passwordRef = useRef(null)
 
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
@@ -43,10 +43,10 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
   const [loginMethod, setLoginMethod] = useState<METHOD>(METHOD.NONE)
   const [passkeySupported, setPasskeySupported] = useState(false)
   const [showExtraPasskeyLogin, setShowExtraPasskeyLogin] = useState(false)
-  const passwordRef = useRef(null)
 
   const [isShowCreatePasskeyOptions, setIsShowCreatePasskeyOptions] = useState(false)
   const [isIcloudSelected, setIsIcloudSelected] = useState(true)
+
   // ------------------ Methods ----------------------
 
   const getLoginMethod = async () => {
@@ -99,10 +99,10 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
         notifyApiError(res)
       }
     } else {
-      setPassword("")
       if (res.data.is_factor2) {
         nextStep(username, password, res.data.methods)
       } else {
+        setPassword("")
         // @ts-ignore
         setApiTokens(res.data?.access_token)
         onLoggedIn(false, "")
@@ -118,7 +118,6 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
           resAuthPasskeyOptions.data,
         )
 
-        // return
         // Call the `authenticate` method with the retrieved request in JSON format
         // A native overlay will be displayed
         const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest, { withSecurityKey })
@@ -156,7 +155,6 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
       notifyApiError(resAuthPasskeyOptions)
     }
   }
-  // ------------------------------ DATA -------------------------------
   const checkPasskeySupported = async () => {
     const res = await Passkey.isSupported()
     if (res) {
@@ -167,46 +165,30 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
     setLoginMethod(METHOD.PASSWORD)
   }
 
+  // ------------------------------ EFFECT -------------------------------
+
   useEffect(() => {
     checkPasskeySupported()
   }, [])
 
 
   // ------------------------------ RENDER -------------------------------
-  const AuthWithPasskey = () => {
-    if (!showExtraPasskeyLogin) return null
-    return (
-      <Button
-        preset="outline"
-        isLoading={isLoading}
-        isDisabled={isLoading || !username}
-        text={translate("passkey.login_passkey")}
-        onPress={() => {
-          if (Platform.OS === "ios") {
-            setIsShowCreatePasskeyOptions(true)
-          } else {
-            handleAuthWebauth(false)
-          }
-        }}
-        style={{
-          width: "100%",
-          height: 50,
-          marginBottom: 12
-        }}
-      />
-    )
-  }
-
-  // ------------------------------ RENDER -------------------------------
 
   return (
-    <View>
-      <View style={{ alignItems: "center" }}>
+    <View style={{ marginTop: 56 }}>
+      <View>
         {IS_IOS && (
-          <IosPasskeyOptions
+          <IosPasswordlessOptions
             isOpen={isShowCreatePasskeyOptions}
             onClose={() => {
               setIsShowCreatePasskeyOptions(false)
+              LayoutAnimation.configureNext({
+                duration: 250,
+                update: {
+                  type: LayoutAnimation.Types.easeInEaseOut,
+                },
+              })
+              setLoginMethod(METHOD.PASSWORD)
             }}
             label={translate('passkey.login_passkey_options')}
             title={translate("common.login")}
@@ -219,97 +201,110 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
           />
         )}
 
-        <Image
-          source={APP_ICON.icon}
-          style={{ height: 70, width: 70, marginBottom: spacing.small, marginTop: spacing.huge }}
+        <Logo
+          preset={'default'}
+          style={{ height: 80, width: 70, marginBottom: 10, alignSelf: 'center' }}
         />
+
 
         <Text
-          preset="header"
+          preset="bold"
+          size="xl"
           text={translate("login.title")}
-          style={{ marginBottom: spacing.large }}
+          style={{ marginBottom: 20, textAlign: 'center' }}
         />
 
-        {/* Username input */}
-        <FloatingInput
-          isInvalid={isError}
+        <TextInput
+          animated
+          isError={isError}
           label={translate("login.email_or_username")}
+          value={username}
           onChangeText={(val) => {
-            if (passkeySupported && loginMethod !== METHOD.NONE) {
+            if (passkeySupported && loginMethod === METHOD.NONE) {
               setLoginMethod(METHOD.NONE)
               setShowExtraPasskeyLogin(false)
             }
             setUsername(val)
           }}
-          value={username}
-          style={{ width: "100%", marginBottom: spacing.small }}
           onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
         />
-        {/* Username input end */}
+
 
         {/* Password input */}
         {loginMethod === METHOD.PASSWORD && (
-          <FloatingInput
-            outerRef={passwordRef}
-            isPassword
-            isInvalid={isError}
-            label={translate("common.password")}
-            onChangeText={setPassword}
-            value={password}
-            style={{ width: "100%" }}
-            onSubmitEditing={handleLogin}
-          />
+          <Animated.View entering={ZoomIn}>
+            <TextInput
+              ref={passwordRef}
+              animated
+              isRequired
+              isPassword
+              isError={isError}
+              label={translate('common.password')}
+              onChangeText={setPassword}
+              value={password}
+              onSubmitEditing={handleLogin}
+            />
+            <View
+              style={{
+                width: "100%",
+                alignItems: "flex-start",
+                marginTop: 12,
+              }}
+            >
+              <TouchableOpacity
+                onPress={handleForgot}
+              >
+                <Text text={translate("login.forgot_password")} color={colors.primary} />
+              </TouchableOpacity>
+            </View>
+            <Button
+              loading={isLoading}
+              disabled={
+                isLoading || !(username && password)
+              }
+              text={translate("common.login")}
+              onPress={handleLogin}
+              style={{
+                marginVertical: 16
+              }}
+            />
+          </Animated.View>
         )}
         {/* Password input end */}
 
-        {loginMethod === METHOD.PASSWORD && (
-          <View
-            style={{
-              width: "100%",
-              alignItems: "flex-start",
-              marginTop: spacing.large,
-            }}
-          >
-            <Button
-              preset="link"
-              text={translate("login.forgot_password")}
-              onPress={handleForgot}
-            />
-          </View>
-        )}
-
-        {loginMethod === METHOD.PASSWORD && (
-          <Button
-            isLoading={isLoading}
-            isDisabled={
-              isLoading || !(username && password)
-            }
-            text={translate("common.login")}
-            onPress={handleLogin}
-            style={{
-              width: "100%",
-              marginBottom: spacing.medium,
-              marginTop: spacing.medium,
-            }}
-          />
-        )}
 
         {loginMethod !== METHOD.PASSWORD && (
           <Button
-            isLoading={isLoading}
-            isDisabled={!username}
-            text={"Continue"}
+            loading={isLoading}
+            disabled={!username}
+            text={translate("common.continue")}
             onPress={getLoginMethod}
             style={{
-              width: "100%",
-              marginBottom: spacing.medium,
-              marginTop: spacing.medium,
+              marginVertical: 16
             }}
           />
         )}
 
 
-        {AuthWithPasskey()}
+        {showExtraPasskeyLogin && (
+          <Button
+            preset="secondary"
+            loading={isLoading}
+            disabled={isLoading || !username}
+            text={translate("passkey.login_passkey")}
+            onPress={() => {
+              if (Platform.OS === "ios") {
+                setIsShowCreatePasskeyOptions(true)
+              } else {
+                handleAuthWebauth(false)
+              }
+            }}
+            style={{
+              height: 50,
+              marginBottom: 12
+            }}
+          />
+        )}
 
         <SocialLogin onLoggedIn={onLoggedIn} />
       </View>
