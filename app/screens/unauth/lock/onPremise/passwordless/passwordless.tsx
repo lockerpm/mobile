@@ -1,16 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigation } from '@react-navigation/native'
-import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef, useState } from 'react'
 import { Dimensions, ScrollView } from 'react-native'
-import { Screen } from '../../../../../components/cores'
-import { useStores } from '../../../../../models'
-import { useCipherAuthenticationMixins } from '../../../../../services/mixins/cipher/authentication'
-import { MethodSelection } from '../../../login/2fa/method-selection'
-import { OtpPasswordlessGenerator, randomOtpNumber } from './otp-generator'
-import { OnPremiseOtp } from './passwordless-2fa-otp'
-import { PasswordlessQrScan } from './passwordless-qr-scan'
-import { useCoreService } from '../../../../../services/coreService'
+import { Screen } from 'app/components-v2/cores'
+import { useStores } from 'app/models'
+import { OtpPasswordlessGenerator, randomOtpNumber } from './OtpGenerator'
+import { PasswordlessQrScan } from './PasswordlessQrScan'
+import { useCoreService } from 'app/services/coreService'
 import { BiometricsType } from '../../lock.types'
+import { useAuthentication } from 'app/services/hook'
 
 const { width } = Dimensions.get('screen')
 
@@ -19,25 +17,15 @@ interface Props {
   handleLogout: () => void
 }
 
-export const OnPremiseLockByPasswordless = observer(({ handleLogout, biometryType }: Props) => {
+export const OnPremiseLockByPasswordless = ({ handleLogout, biometryType }: Props) => {
   const navigation = useNavigation()
   const { user } = useStores()
-  const { biometricLogin } = useCipherAuthenticationMixins()
+  const { biometricLogin } = useAuthentication()
   const { cryptoService } = useCoreService()
   // ---------------------- PARAMS -------------------------
 
   const [otp, setOtp] = useState(randomOtpNumber())
   const [scanQrStep, setScanQrStep] = useState(0)
-  const [symmetricCryptoKey, setSymmetricCryptoKey] = useState(null)
-
-  const [index, setIndex] = useState(0)
-  const [credential, setCredential] = useState({
-    username: '',
-    pwdHash: '',
-    methods: [],
-  })
-  const [method, setMethod] = useState('')
-  const [partialEmail, setPartialEamil] = useState('')
 
   const scrollViewRef = useRef(null)
   // ------------------ METHODS ---------------------
@@ -70,69 +58,34 @@ export const OnPremiseLockByPasswordless = observer(({ handleLogout, biometryTyp
 
   return (
     <Screen safeAreaEdges={['top']}>
-      {index === 0 && (
-        <ScrollView
-          horizontal
-          pagingEnabled
-          scrollEnabled={false}
-          ref={scrollViewRef}
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={width}
-          decelerationRate="fast"
-          scrollEventThrottle={16}
-        >
-          <OtpPasswordlessGenerator
-            otp={otp}
-            setOtp={setOtp}
-            goNext={() => {
-              scrollTo(1)
-            }}
-            goBack={() => {
-              navigation.goBack()
-            }}
-          />
-          <PasswordlessQrScan
-            otp={otp}
-            goBack={() => {
-              scrollTo(0)
-            }}
-            index={scanQrStep}
-            setSymmetricCryptoKey={setSymmetricCryptoKey}
-            nextStep={(
-              username: string,
-              pwdHash: string,
-              methods: { type: string; data: any }[]
-            ) => {
-              setCredential({ username, pwdHash, methods })
-              setIndex(1)
-            }}
-          />
-        </ScrollView>
-      )}
-      {index === 1 && (
-        <MethodSelection
-          goBack={() => setIndex(0)}
-          methods={credential.methods}
-          onSelect={(type: string, data: any) => {
-            setMethod(type)
-            setPartialEamil(data)
-            setIndex(2)
+      <ScrollView
+        horizontal
+        pagingEnabled
+        scrollEnabled={false}
+        ref={scrollViewRef}
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={width}
+        decelerationRate="fast"
+        scrollEventThrottle={16}
+      >
+        <OtpPasswordlessGenerator
+          otp={otp}
+          setOtp={setOtp}
+          goNext={() => {
+            scrollTo(1)
           }}
-          username={credential.username}
-          password={credential.pwdHash}
+          goBack={() => {
+            navigation.goBack()
+          }}
         />
-      )}
-      {index === 2 && (
-        <OnPremiseOtp
-          goBack={() => setIndex(1)}
-          method={method}
-          email={partialEmail}
-          username={credential.username}
-          pwdHash={credential.pwdHash}
-          symmetricCryptoKey={symmetricCryptoKey}
-          onLoggedIn={() => { }}
+        <PasswordlessQrScan
+          otp={otp}
+          goBack={() => {
+            scrollTo(0)
+          }}
+          index={scanQrStep}
         />
-      )}
+      </ScrollView>
     </Screen>
   )
-})
+}

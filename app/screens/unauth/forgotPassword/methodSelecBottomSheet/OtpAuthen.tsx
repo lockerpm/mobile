@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react"
-import { View } from "react-native"
-import { observer } from "mobx-react-lite"
-import {Text, Button, FloatingInput } from "../../../components"
-import { useMixins } from "../../../services/mixins"
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { commonStyles } from "../../../theme"
-import { useStores } from "../../../models"
-
+import React, { useEffect, useState } from 'react'
+import { View } from 'react-native'
+import { useStores } from 'app/models'
+import { useHelper } from 'app/services/hook'
+import { translate } from 'app/i18n'
+import { Text, Button, TextInput, Icon } from 'app/components-v2/cores'
 
 type Props = {
   goBack: () => void
@@ -14,11 +11,11 @@ type Props = {
   username: string
 }
 
-
-export const Step3 = observer((props: Props) => {
+export const OtpAuthen = (props: Props) => {
   const { user, uiStore } = useStores()
-  const { translate, notify, color, notifyApiError } = useMixins()
-  const { goBack, nextStep, username } = props
+  const { notify, notifyApiError } = useHelper()
+
+  const { goBack, username, nextStep } = props
 
   // ------------------ Params -----------------------
 
@@ -75,7 +72,6 @@ export const Step3 = observer((props: Props) => {
       }
     }, 1000)
   }
-
   // ------------------------------ EFFECT -------------------------------
 
   useEffect(() => {
@@ -94,61 +90,53 @@ export const Step3 = observer((props: Props) => {
 
   return (
     <View>
-      <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-        <Button
-          preset="link"
-          onPress={() => goBack()}
-          style={{ marginRight: 15 }}
-        >
-          <IoniconsIcon 
-            name="md-arrow-back"
-            size={26} 
-            color={color.title} 
-          />
-        </Button>
-        <Text
-          preset="header"
-          text={translate('forgot_password.enter_code')}
-        />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Icon icon="arrow-left" onPress={goBack} />
+        <Text preset="bold" size="xl" text={translate('forgot_password.enter_code')} />
+        <View style={{ width: 24, height: 24 }} />
       </View>
 
-      <Text
-        preset="black"
-        text={translate('forgot_password.enter_code_desc')}
-        style={{ marginTop: 20 }}
-      />
+      <Text text={translate('forgot_password.enter_code_desc')} style={{ marginVertical: 20 }} />
 
-      <FloatingInput
-        isInvalid={isError}
+      <TextInput
+        animated
+        isError={isError}
         label={translate('forgot_password.enter_code_here')}
         value={code}
         onChangeText={setCode}
         onSubmitEditing={handleRequest}
-        style={{ marginTop: 20 }}
       />
 
       <Button
-        isLoading={isLoading}
-        isDisabled={isLoading || !code}
-        text={translate("common.authenticate")}
+        loading={isLoading}
+        disabled={isLoading || !code}
+        text={translate('common.authenticate')}
         onPress={handleRequest}
         style={{
           width: '100%',
-          marginTop: 30
+          marginTop: 30,
         }}
       />
 
       <Button
-        preset="outline"
-        isDisabled={!!remainingLockTime || sendingEmail}
-        isLoading={sendingEmail}
+        preset="secondary"
+        disabled={!!remainingLockTime || sendingEmail}
+        loading={sendingEmail}
         onPress={resendEmail}
-        text={`${translate('forgot_password.resend_email')}${remainingLockTime ? ` (${remainingLockTime}s)` : ''}`}
+        text={`${translate('forgot_password.resend_email')}${
+          remainingLockTime ? ` (${remainingLockTime}s)` : ''
+        }`}
         style={{
           width: '100%',
-          marginTop: 15
+          marginTop: 15,
         }}
       />
     </View>
   )
-})
+}

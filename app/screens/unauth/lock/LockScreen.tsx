@@ -1,18 +1,18 @@
-import React, { FC, useEffect, useState } from "react"
-import { Alert, BackHandler, Platform, View } from "react-native"
-import { useStores } from "app/models"
-import { api } from "app/services/api"
-import { translate } from "app/i18n"
-import { useAuthentication } from "app/services/hook"
-import { RootStackScreenProps } from "app/navigators"
-import ReactNativeBiometrics from "react-native-biometrics"
-import { BiometricsType, LockType } from "./lock.types"
-import { LoginMethod } from "app/static/types/enum"
+import React, { FC, useEffect, useState } from 'react'
+import { Alert, BackHandler, Platform, View } from 'react-native'
+import { useStores } from 'app/models'
+import { api } from 'app/services/api'
+import { translate } from 'app/i18n'
+import { useAuthentication } from 'app/services/hook'
+import { RootStackScreenProps } from 'app/navigators'
+import ReactNativeBiometrics from 'react-native-biometrics'
+import { BiometricsType, LockType } from './lock.types'
+import { LoginMethod } from 'app/static/types/enum'
 
-import { LockByMasterPassword } from "./normal/MasterPassword"
-import { BusinessLockByPasswordless } from "./business/BusinessPasswordless"
-import { OnPremiseLockByPasswordless } from "./onPremise/passwordless/passwordless"
-import { OnPremiseLockMasterPassword } from "./onPremise/onpremise-master-password"
+import { LockByMasterPassword } from './normal/MasterPassword'
+import { BusinessLockByPasswordless } from './business/BusinessPasswordless'
+import { OnPremiseLockByPasswordless } from './onPremise/passwordless/passwordless'
+import { OnPremiseLockMasterPassword } from './onPremise/masterPassword/OnPremiseMasterPassword'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -26,7 +26,6 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = (props) => {
 
   const [lockMethod, setLogMethod] = useState<LoginMethod>(LoginMethod.PASSWORD)
   const [biometryType, setBiometryType] = useState<BiometricsType>(BiometricsType.Biometrics)
-
 
   // ---------------------- COMPUTED -------------------------
 
@@ -52,7 +51,7 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = (props) => {
   const fetchBusinessLoginMethod = async () => {
     if (route.params.type === LockType.Individual) {
       const res = await user.businessLoginMethod()
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         setLogMethod(res.data.login_method)
       }
     }
@@ -69,17 +68,16 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = (props) => {
       route.params.email && user.setOnPremaiseEmail(route.params.email)
       user.setOnPremiseUser(true)
       if (route.params.data?.base_api) {
-        user.setOnPremiseLastBaseUrl(route.params.data.base_api + "/v3")
-        api.apisauce.setBaseURL(route.params.data.base_api + "/v3")
+        user.setOnPremiseLastBaseUrl(route.params.data.base_api + '/v3')
+        api.apisauce.setBaseURL(route.params.data.base_api + '/v3')
       }
     }
   }
 
   const handleLogout = async () => {
     await logout()
-    navigation.replace("login")
+    navigation.replace('login')
   }
-
 
   // -------------- EFFECT ------------------
 
@@ -93,7 +91,7 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = (props) => {
   // Handle back press
   useEffect(() => {
     const handleBack = (e) => {
-      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
+      if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
         navigation.dispatch(e.data.action)
         return
       }
@@ -103,21 +101,21 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = (props) => {
         BackHandler.exitApp()
         return
       }
-      Alert.alert(translate("alert.logout") + user.email + "?", "", [
+      Alert.alert(translate('alert.logout') + user.email + '?', '', [
         {
-          text: translate("common.cancel"),
-          style: "cancel",
+          text: translate('common.cancel'),
+          style: 'cancel',
         },
         {
-          text: translate("common.logout"),
-          style: "destructive",
+          text: translate('common.logout'),
+          style: 'destructive',
           onPress: handleLogout,
         },
       ])
     }
-    navigation.addListener("beforeRemove", handleBack)
+    navigation.addListener('beforeRemove', handleBack)
     return () => {
-      navigation.removeListener("beforeRemove", handleBack)
+      navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
 

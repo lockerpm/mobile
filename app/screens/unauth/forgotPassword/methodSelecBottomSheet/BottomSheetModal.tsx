@@ -7,14 +7,11 @@ import { OtpAuthen } from './OtpAuthen'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 
 interface Props {
-  credential: {
-    username: string
-    password: string
-    methods: {
-      type: string
-      data: any
-    }[]
-  }
+  methods: {
+    type: string
+    data: any
+  }[]
+  setToken: (val: string) => void
   /**
    * Open Country picker bottom sheet
    */
@@ -23,18 +20,13 @@ interface Props {
    * Call back when sheet close
    */
   onClose: () => void
-
-  // onPremise login dont need this prop
-  onLoggedIn?: () => Promise<void>
 }
 
-export const TwoFAAuthenSheet = ({ credential, isOpen, onClose, onLoggedIn }: Props) => {
+export const MethodSelectSheet = ({ methods, isOpen, onClose, setToken }: Props) => {
   const { colors } = useTheme()
 
   const [index, setIndex] = useState(0)
-  const [method, setMethod] = useState('')
-  const [partialEmail, setPartialEamil] = useState('')
-
+  const [username, setUsername] = useState('')
   // ref
   const sheetRef = useRef<BottomSheet>(null)
 
@@ -85,15 +77,12 @@ export const TwoFAAuthenSheet = ({ credential, isOpen, onClose, onLoggedIn }: Pr
             {index === 0 && (
               <Animated.View entering={FadeInDown}>
                 <MethodSelection
-                  methods={credential.methods}
+                  methods={methods}
                   onSelect={(type: string, data: any) => {
-                    setMethod(type)
-                    setPartialEamil(data)
+                    setUsername(data[0])
                     setIndex(1)
                     showFullSheet()
                   }}
-                  username={credential.username}
-                  password={credential.password}
                 />
               </Animated.View>
             )}
@@ -101,13 +90,10 @@ export const TwoFAAuthenSheet = ({ credential, isOpen, onClose, onLoggedIn }: Pr
               <Animated.View entering={FadeInDown}>
                 <OtpAuthen
                   goBack={() => setIndex(0)}
-                  method={method}
-                  email={partialEmail}
-                  username={credential.username}
-                  password={credential.password}
-                  onLoggedIn={() => {
+                  username={username}
+                  nextStep={(token: string) => {
+                    setToken(token)
                     closeSheet()
-                    onLoggedIn()
                   }}
                 />
               </Animated.View>

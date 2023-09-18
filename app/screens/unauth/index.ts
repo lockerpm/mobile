@@ -7,4 +7,4 @@ export * from './lock/lock.types'
 export * from './lock/LockScreen'
 
 export * from './create-master-password/create-master-password-screen'
-export * from './forgot-password/forgot-password-screen'
+export * from './forgotPassword/ForgotPasswordScreen'

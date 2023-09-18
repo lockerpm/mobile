@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { Dimensions, ScrollView } from 'react-native'
-
-import { Screen } from '../../../../components/cores'
-import { useStores } from '../../../../models'
-import { useCipherAuthenticationMixins } from '../../../../services/mixins/cipher/authentication'
-import { OtpPasswordlessGenerator, randomOtpNumber } from '../onPremise/passwordless/otp-generator'
+import { Screen } from 'app/components-v2/cores'
+import { useStores } from 'app/models'
 import { BusinessPasswordlessQrScan } from './PasswordlessQrScan'
-import { useCoreService } from '../../../../services/coreService'
+import { useAuthentication } from 'app/services/hook'
+import { useCoreService } from 'app/services/coreService'
 import { BiometricsType } from '../lock.types'
+
+import { OtpPasswordlessGenerator, randomOtpNumber } from '../onPremise/passwordless/OtpGenerator'
 
 const { width } = Dimensions.get('screen')
 
@@ -20,7 +21,7 @@ interface Props {
 export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
   const navigation = useNavigation()
   const { user } = useStores()
-  const { biometricLogin } = useCipherAuthenticationMixins()
+  const { biometricLogin } = useAuthentication()
   const { cryptoService } = useCoreService()
 
   // ---------------------- PARAMS -------------------------

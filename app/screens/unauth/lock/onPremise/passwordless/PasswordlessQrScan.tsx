@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { View, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { translate } from 'app/i18n'
 import { useAuthentication } from 'app/services/hook'
 import { Header, Text } from 'app/components-v2/cores'
+import { translate } from 'app/i18n'
 
 interface Props {
   index: number
@@ -12,14 +12,14 @@ interface Props {
   goBack: () => void
 }
 
-export const BusinessPasswordlessQrScan = ({ otp, goBack, index }: Props) => {
+export const PasswordlessQrScan = ({ otp, goBack, index }: Props) => {
   const { width, height } = Dimensions.get('screen')
   const navigation = useNavigation()
   const [onScanQR, setonScanQR] = useState(false)
-  const { sessionBusinessQrLogin } = useAuthentication()
+  const { sessionQrLogin } = useAuthentication()
 
   const onSuccess = async (e) => {
-    const res = await sessionBusinessQrLogin(e.data, otp.toString())
+    const res = await sessionQrLogin(e.data, otp.toString(), true)
 
     if (res.kind === 'ok') {
       navigation.navigate('mainStack', { screen: 'start' })

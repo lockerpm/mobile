@@ -45,8 +45,7 @@ export function useAuthentication() {
     kdfIterations: number,
     masterPassword?: string,
     createMasterPasswordItem?: () => Promise<void>,
-    onPremiseData?: boolean,
-    onPremiseNextStep?: (methods: { type: string; data: any }[]) => void
+    onPremiseData?: boolean
   ) => {
     // Session login API
     const res = await user.sessionLogin({
@@ -87,14 +86,8 @@ export function useAuthentication() {
     }
 
     if (onPremiseData) {
-      if (res.data.is_factor2) {
-        onPremiseNextStep(res.data.methods)
-
-        return { kind: 'on-premise-2fa' }
-      } else {
-        setApiTokens(res.data?.access_token)
-        await Promise.all([user.getUser(), user.getUserPw()])
-      }
+      setApiTokens(res.data?.access_token)
+      await Promise.all([user.getUser(), user.getUserPw()])
     }
 
     // Setup service
@@ -185,12 +178,7 @@ export function useAuthentication() {
   const sessionLogin = async (
     masterPassword: string,
     createMasterPasswordItem?: () => Promise<void>,
-    onPremiseData?: boolean,
-    onPremiseNextStep?: (
-      username: string,
-      password: string,
-      methods: { type: string; data: any }[]
-    ) => void
+    onPremiseData?: boolean
   ): Promise<{ kind: string }> => {
     try {
       await delay(200)
@@ -224,10 +212,7 @@ export function useAuthentication() {
         kdfIterations,
         masterPassword,
         createMasterPasswordItem,
-        onPremiseData,
-        (methods) => {
-          onPremiseNextStep(user.email, keyHash, methods)
-        }
+        onPremiseData
       )
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
@@ -238,13 +223,7 @@ export function useAuthentication() {
   const sessionQrLogin = async (
     qr: string,
     qrOtp: string,
-    onPremise?: boolean,
-    setSymmetricCryptoKey?: (val: SymmetricCryptoKey) => void,
-    onPremiseNextStep?: (
-      username: string,
-      password: string,
-      methods: { type: string; data: any }[]
-    ) => void
+    onPremise?: boolean
   ): Promise<{ kind: string }> => {
     try {
       await delay(100)
@@ -262,20 +241,8 @@ export function useAuthentication() {
       const [keyHash, keyB64, encType] = data.split('.')
 
       const key = new SymmetricCryptoKey(Utils.fromB64ToArray(keyB64).buffer, parseInt(encType))
-      setSymmetricCryptoKey(key)
       // Online session login
-      return _loginUsingApi(
-        key,
-        keyHash,
-        kdf,
-        kdfIterations,
-        '',
-        () => null,
-        onPremise,
-        (methods) => {
-          onPremiseNextStep(user.email, keyHash, methods)
-        }
-      )
+      return _loginUsingApi(key, keyHash, kdf, kdfIterations, '', () => null, onPremise)
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
       return { kind: 'bad-data' }

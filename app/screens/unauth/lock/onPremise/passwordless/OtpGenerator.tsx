@@ -1,11 +1,8 @@
-import { observer } from "mobx-react-lite"
-import React, { useEffect, useRef, useState } from "react"
-import { View, Image, useWindowDimensions, ScrollView } from "react-native"
-import { APP_ICON } from "../../../../../common/mappings"
-import { Button, ImageIcon, Text } from "../../../../../components/cores"
-import { useStores } from "../../../../../models"
-import { verticalScale } from "../../../../../services/mixins/adaptive-layout"
-import { useMixins } from "../../../../../services/mixins"
+import React, { useEffect, useRef, useState } from 'react'
+import { View, useWindowDimensions, ScrollView } from 'react-native'
+import { Button, ImageIcon, Logo, Text } from 'app/components-v2/cores'
+import { useTheme } from 'app/services/context'
+import { translate } from 'app/i18n'
 
 const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const indices = [0, 1, 2, 3, 4, 5]
@@ -19,13 +16,13 @@ interface Props {
 
 const OTP_EXPIRED_COUNTER = 60
 
-export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack }: Props) => {
-  const { uiStore } = useStores()
-  const { color, translate } = useMixins()
+export const OtpPasswordlessGenerator = ({ otp, setOtp, goNext, goBack }: Props) => {
+  const { colors, isDark } = useTheme()
+
   const [expireOtpCounter, setExpireOtpCounter] = useState(OTP_EXPIRED_COUNTER)
   const timerRef = React.useRef(expireOtpCounter)
 
-  const { width, height } = useWindowDimensions()
+  const { width } = useWindowDimensions()
 
   const reGenOtp = () => {
     setOtp(randomOtpNumber())
@@ -52,28 +49,21 @@ export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack 
 
   return (
     <ScrollView style={{ width, padding: 20, paddingTop: 50 }}>
-      <View
-        style={{
-          alignItems: "center",
-          marginBottom: 20,
-        }}
-      >
-        <Image
-          source={uiStore.isDark ? APP_ICON.textHorizontalLight : APP_ICON.textHorizontal}
-          style={{ width: verticalScale(132), height: verticalScale(41) }}
-          resizeMode="contain"
-        />
-      </View>
+      <Logo
+        preset={isDark ? 'horizontal-light' : 'horizontal-dark'}
+        style={{ width: 132, height: 41, alignSelf: 'center', marginBottom: 20 }}
+        resizeMode="contain"
+      />
 
-      <Text text={translate("onpremise_passwordless.title")} style={{ marginBottom: 32 }} />
+      <Text text={translate('onpremise_passwordless.title')} style={{ marginBottom: 32 }} />
 
-      <View style={{ alignItems: "center", marginBottom: 16 }}>
+      <View style={{ alignItems: 'center', marginBottom: 16 }}>
         <NumberDisplay number={otp} width={width} />
       </View>
 
       <Text
-        text={translate("onpremise_passwordless.expired", {ss: expireOtpCounter})}
-        style={{ color: color.error, textAlign: "center" }}
+        text={translate('onpremise_passwordless.expired', { ss: expireOtpCounter })}
+        style={{ color: colors.error, textAlign: 'center' }}
       />
 
       <Button
@@ -82,39 +72,60 @@ export const OtpPasswordlessGenerator = observer(({ otp, setOtp, goNext, goBack 
           reGenOtp()
         }}
         size="large"
-        text={translate("onpremise_passwordless.new_otp")}
+        text={translate('onpremise_passwordless.new_otp')}
         style={{ marginBottom: 8 }}
       />
 
       <View
         style={{
-          width: "100%",
+          width: '100%',
           padding: 20,
-          backgroundColor: color.block,
+          backgroundColor: colors.block,
           borderRadius: 12,
           marginBottom: 16,
         }}
       >
         {/* <Text preset="label" text={translate("onpremise_passwordless.instruction")} style={{ marginBottom: 16 }} /> */}
-        <Instruction step="01." icon="app-logo" text={translate('onpremise_passwordless.instruction.1')} />
-        <Instruction step="02." icon="avatar" text={translate('onpremise_passwordless.instruction.2')} />
-        <Instruction step="03." icon="key-hole" text={translate('onpremise_passwordless.instruction.3')}/>
-        <Instruction step="04." icon="number-square-one" text={translate('onpremise_passwordless.instruction.4')}/>
+        <Instruction
+          step="01."
+          icon="app-logo"
+          text={translate('onpremise_passwordless.instruction.1')}
+        />
+        <Instruction
+          step="02."
+          icon="avatar"
+          text={translate('onpremise_passwordless.instruction.2')}
+        />
+        <Instruction
+          step="03."
+          icon="key-hole"
+          text={translate('onpremise_passwordless.instruction.3')}
+        />
+        <Instruction
+          step="04."
+          icon="number-square-one"
+          text={translate('onpremise_passwordless.instruction.4')}
+        />
       </View>
 
-      <Button onPress={goNext} size="large" text={translate('common.continue')} style={{ marginBottom: 16 }} />
+      <Button
+        onPress={goNext}
+        size="large"
+        text={translate('common.continue')}
+        style={{ marginBottom: 16 }}
+      />
 
       <Button
         onPress={goBack}
         size="large"
         text={translate('onpremise_passwordless.instruction.go_back')}
-        style={{ marginBottom: 16, backgroundColor: color.block }}
-        textStyle={{ color: color.textBlack }}
+        style={{ marginBottom: 16, backgroundColor: colors.block }}
+        textStyle={{ color: colors.primaryText }}
       />
       <View style={{ height: 120 }} />
     </ScrollView>
   )
-})
+}
 
 export const randomOtpNumber = () => {
   return Math.round(Math.random() * 1000000)
@@ -126,14 +137,14 @@ const Instruction = ({
   text,
 }: {
   step: string
-  icon: "avatar" | "app-logo" | "key-hole" | "number-square-one"
+  icon: 'avatar' | 'app-logo' | 'key-hole' | 'number-square-one'
   text: string
 }) => {
   return (
     <View
       style={{
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
         marginBottom: 16,
       }}
     >
@@ -142,7 +153,7 @@ const Instruction = ({
       <Text
         text={text}
         style={{
-          maxWidth: "75%",
+          maxWidth: '75%',
         }}
       />
     </View>
@@ -158,9 +169,9 @@ function NumberDisplay({ number, width }: { number: number; width: number }) {
     <View style={{ width: width, height: 50, paddingHorizontal: 20 }}>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
         {indices.map((i) => {
@@ -173,26 +184,26 @@ function NumberDisplay({ number, width }: { number: number; width: number }) {
 
 function Digit({ digit }: { digit: number }) {
   const aref = useRef<ScrollView>()
-  const { color } = useMixins()
+  const { colors } = useTheme()
   useEffect(() => {
     aref.current.scrollTo({ x: 5, y: digit * 50, animated: true })
   }, [digit])
 
   return (
-    <View style={{ height: 50, width: 40, borderBottomWidth: 2, borderBottomColor: color.text }}>
+    <View style={{ height: 50, width: 40, borderBottomWidth: 2, borderBottomColor: colors.border }}>
       <ScrollView ref={aref}>
         {digits.map((i) => {
           return (
             <View
               style={{
                 height: 50,
-                alignItems: "center",
-                flexDirection: "row",
-                justifyContent: "center",
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'center',
               }}
               key={i}
             >
-              <Text style={{ fontSize: 24, fontWeight: "600" }}>{i}</Text>
+              <Text style={{ fontSize: 24, fontWeight: '600' }}>{i}</Text>
             </View>
           )
         })}
