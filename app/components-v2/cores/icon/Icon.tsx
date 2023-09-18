@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { ComponentType } from 'react'
 import {
+  ColorValue,
   Image,
   ImageStyle,
   StyleProp,
@@ -29,7 +30,7 @@ export interface IconProps extends TouchableOpacityProps {
   /**
    * An optional tint color for the icon
    */
-  color?: string
+  color?: ColorValue
 
   /**
    * An optional size for the icon. If not provided, the icon will be sized to the icon's resolution.
@@ -92,8 +93,8 @@ export function Icon(props: IconProps) {
             iconRegistry[icon]
               ? iconRegistry[icon]
               : !filled
-                ? iconRegularRegistry[icon]
-                : iconFillRegistry[icon]
+              ? iconRegularRegistry[icon]
+              : iconFillRegistry[icon]
           }
         />
       ) : (
@@ -111,6 +112,8 @@ export const iconRegularRegistry = {
   check: require('assets/icons/regular/check.png'),
   'x-circle': require('assets/icons/regular/x-circle.png'),
   bug: require('assets/icons/regular/bug.png'),
+  shield: require('assets/icons/regular/shield.png'),
+  'shield-check': require('assets/icons/regular/shield-check.png'),
 }
 
 export const iconFillRegistry = {
@@ -121,6 +124,8 @@ export const iconFillRegistry = {
   check: require('assets/icons/fill/check-fill.png'),
   'x-circle': require('assets/icons/fill/x-circle-fill.png'),
   bug: require('assets/icons/fill/bug-fill.png'),
+  shield: require('assets/icons/fill/shield-fill.png'),
+  'shield-check': require('assets/icons/fill/shield-check-fill.png'),
 }
 
 export const iconRegistry = {
@@ -131,7 +136,7 @@ export const iconRegistry = {
   'envelope-simple': require('assets/icons/envelope-simple.png'),
   'device-mobile': require('assets/icons/device-mobile.png'),
   'face-id': require('assets/icons/face-id.png'),
-  'fingerprint': require('assets/icons/fingerprint.png'),
+  fingerprint: require('assets/icons/fingerprint.png'),
 }
 
 const $imageStyle: ImageStyle = {

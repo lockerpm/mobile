@@ -17,6 +17,7 @@ import { translate } from 'app/i18n'
 import { useAuthentication, useHelper } from 'app/services/hook'
 import { Text } from 'app/components-v2/cores'
 import { Loading } from 'app/components-v2/utils'
+import { LockType } from '../lock/lock.types'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -44,9 +45,9 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = (props) => {
   const goLockOrCreatePassword = () => {
     if (user.is_pwd_manager) {
       if (user.onPremiseUser) {
-        navigation.navigate('lock', { type: 'onPremise' })
+        navigation.navigate('lock', { type: LockType.OnPremise })
       } else {
-        navigation.navigate('lock', { type: 'individual' })
+        navigation.navigate('lock', { type: LockType.Individual })
       }
     } else {
       navigation.navigate('createMasterPassword')
@@ -206,7 +207,7 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = (props) => {
       if (res.kind === 'ok') {
         if (res.data[0].activated) {
           navigation.navigate('lock', {
-            type: 'onPremise',
+            type: LockType.OnPremise,
             data: res.data[0],
             email: user.email,
           })

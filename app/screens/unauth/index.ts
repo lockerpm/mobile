@@ -5,6 +5,5 @@ export * from './signup/SignupScreen'
 export * from './login/LoginScreen'
 export * from './lock/lock.types'
 export * from './lock/LockScreen'
-
-export * from './create-master-password/create-master-password-screen'
+export * from './createMasterPassword/CreateMasterPasswordScreen'
 export * from './forgotPassword/ForgotPasswordScreen'

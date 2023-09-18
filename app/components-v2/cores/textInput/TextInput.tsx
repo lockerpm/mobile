@@ -317,7 +317,9 @@ export const TextInput = forwardRef(function TextField(
         )}
       </View>
 
-      {!!helper && <Text preset="label" text={helper} {...HelperTextProps} style={$helperStyles} />}
+      {!!helper && status === 'error' && (
+        <Text preset="label" text={helper} {...HelperTextProps} style={$helperStyles} />
+      )}
     </TouchableOpacity>
   )
 })

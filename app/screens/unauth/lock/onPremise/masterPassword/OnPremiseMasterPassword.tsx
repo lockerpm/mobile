@@ -156,7 +156,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
               </View>
             )}
             <Text
-              size="small"
+              size="base"
               style={{
                 marginHorizontal: 10,
               }}

@@ -1,36 +1,26 @@
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { Alert, View } from 'react-native'
-import {
-  AutoImage as Image,
-  Button,
-  Layout,
-  Text,
-  FloatingInput,
-  PasswordStrength,
-  PasswordPolicyViolationsModal,
-} from '../../../components'
-import { useNavigation } from '@react-navigation/native'
-import { useStores } from '../../../models'
-import { fontSize } from '../../../theme'
-import { useMixins } from '../../../services/mixins'
-import { APP_ICON } from '../../../common/mappings'
-import { useCipherHelpersMixins } from '../../../services/mixins/cipher/helpers'
-import { useCipherAuthenticationMixins } from '../../../services/mixins/cipher/authentication'
-import { logCreateMasterPwEvent } from '../../../utils/analytics'
-import { PolicyType } from '../../../config/types'
-import { CipherView, LoginUriView, LoginView } from '../../../../core/models/view'
-import { CipherType } from '../../../../core/enums'
-import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
-import { ConfirmCreateMPModal } from './confirm-create-mp-modal'
+import React, { FC, useEffect, useState } from 'react'
+import { Alert, View, Image } from 'react-native'
+import { ConfirmCreateMPModal } from './ConfirmCreateMpModal'
+import { RootStackScreenProps } from 'app/navigators'
+import { translate } from 'app/i18n'
+import { useStores } from 'app/models'
+import { PolicyType } from 'app/static/types'
+import { useTheme } from 'app/services/context'
+import { logCreateMasterPwEvent } from 'app/utils/analytics'
+import { useAuthentication, useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
+import { Button, Header, Logo, Screen, Text, TextInput } from 'app/components-v2/cores'
+import { PasswordPolicyViolationsModal, PasswordStrength } from 'app/components-v2/utils'
 
-export const CreateMasterPasswordScreen = observer(() => {
-  const navigation = useNavigation()
-  const { translate, color, validateMasterPassword, notify } = useMixins()
-  const { createCipher } = useCipherDataMixins()
-  const { getPasswordStrength, checkPasswordPolicy, newCipher } = useCipherHelpersMixins()
-  const { logout, registerLocker, sessionLogin } = useCipherAuthenticationMixins()
+export const CreateMasterPasswordScreen: FC<RootStackScreenProps<'createMasterPassword'>> = (
+  props
+) => {
+  const navigation = props.navigation
+  const { colors } = useTheme()
   const { user } = useStores()
+  const { validateMasterPassword } = useHelper()
+  const { createMasterPasswordItem } = useCipherData()
+  const { getPasswordStrength, checkPasswordPolicy } = useCipherHelper()
+  const { logout, registerLocker, sessionLogin } = useAuthentication()
 
   // -------------- PARAMS ------------------
 
@@ -40,7 +30,6 @@ export const CreateMasterPasswordScreen = observer(() => {
 
   // UI
   const [passwordStrength, setPasswordStrength] = useState(-1)
-  const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
 
   const [showViolationModal, setShowViolationModal] = useState(false)
@@ -55,19 +44,18 @@ export const CreateMasterPasswordScreen = observer(() => {
 
   // -------------- METHODS ------------------
 
+  const createMasterPasswordLoginType = async () => {
+    await createMasterPasswordItem(masterPassword, passwordStrength)
+  }
   // Logout
   const handleLogout = async () => {
-    setIsScreenLoading(true)
     await logout()
-    setIsScreenLoading(false)
     navigation.navigate('login')
   }
 
   // Load teams to check master password policy
   const loadUserTeams = async () => {
-    setIsScreenLoading(true)
     await user.loadTeams()
-    setIsScreenLoading(false)
   }
 
   // Prepare to create master pass
@@ -93,8 +81,7 @@ export const CreateMasterPasswordScreen = observer(() => {
     const res = await registerLocker(masterPassword, hint, passwordStrength)
     if (res.kind === 'ok') {
       logCreateMasterPwEvent()
-
-      const sessionRes = await sessionLogin(masterPassword, createMasterPasswordItem)
+      const sessionRes = await sessionLogin(masterPassword, createMasterPasswordLoginType)
 
       if (sessionRes.kind === 'ok') {
         setIsCreating(false)
@@ -102,29 +89,8 @@ export const CreateMasterPasswordScreen = observer(() => {
       } else {
         navigation.navigate('lock')
       }
-    } 
-    setIsCreating(false)
-  }
-
-  // Prepare to save password
-  const createMasterPasswordItem = async () => {
-    const payload: CipherView = newCipher(CipherType.MasterPassword)
-
-    const data = new LoginView()
-    data.username = "locker.io"
-    data.password = masterPassword
-
-    const uriView = new LoginUriView()
-    uriView.uri = "https://locker.io"
-    data.uris = [uriView]
-
-    payload.name = "Locker Master Password"
-    payload.login = data
-
-    const res = await createCipher(payload, passwordStrength, [], true)
-    if (res.kind !== 'ok') {
-      notify("error", translate("error.master_password"))
     }
+    setIsCreating(false)
   }
 
   // -------------- EFFECT ------------------
@@ -148,9 +114,6 @@ export const CreateMasterPasswordScreen = observer(() => {
         {
           text: translate('common.cancel'),
           style: 'cancel',
-          onPress: () => {
-            // Do nothing
-          },
         },
         {
           text: translate('common.logout'),
@@ -162,9 +125,7 @@ export const CreateMasterPasswordScreen = observer(() => {
         },
       ])
     }
-
     navigation.addListener('beforeRemove', handleBack)
-
     return () => {
       navigation.removeListener('beforeRemove', handleBack)
     }
@@ -173,40 +134,41 @@ export const CreateMasterPasswordScreen = observer(() => {
   // -------------- RENDER ------------------
 
   return (
-    <Layout
-      isOverlayLoading={isScreenLoading}
+    <Screen
+      padding
+      preset="auto"
+      safeAreaEdges={['bottom']}
       header={
-        <View style={{ alignItems: 'flex-end' }}>
-          <Button
-            text={translate('common.logout').toUpperCase()}
-            textStyle={{ fontSize: fontSize.p }}
-            preset="link"
-            onPress={handleLogout}
-          ></Button>
-        </View>
+        <Header
+          rightText={translate('common.logout').toUpperCase()}
+          rightTextColor={colors.primary}
+          onRightPress={handleLogout}
+        />
       }
     >
       <View style={{ alignItems: 'center' }}>
-        <Image source={APP_ICON.icon} style={{ height: 63, width: 63 }} />
+        <Logo preset="default" style={{ height: 73, width: 63 }} />
 
         <Text
-          preset="header"
+          preset="bold"
+          size="xl"
           style={{ marginBottom: 10, marginTop: 25 }}
           text={translate('create_master_pass.title')}
         />
 
         <Text
-          style={{ textAlign: 'center', fontSize: fontSize.small, lineHeight: 21 }}
+          size="base"
+          preset="label"
+          style={{ textAlign: 'center' }}
           text={translate('create_master_pass.desc')}
         />
 
         {/* Current user */}
         <View
           style={{
-            marginTop: 16,
-            marginBottom: 26,
+            marginVertical: 16,
             borderRadius: 20,
-            backgroundColor: color.block,
+            backgroundColor: colors.block,
             flexDirection: 'row',
             alignItems: 'center',
             padding: 4,
@@ -219,15 +181,14 @@ export const CreateMasterPasswordScreen = observer(() => {
                 style={{
                   height: 28,
                   width: 28,
-                  backgroundColor: color.white,
+                  backgroundColor: colors.white,
                 }}
               />
             </View>
           )}
           <Text
+            size="base"
             style={{
-              fontSize: fontSize.small,
-              color: color.title,
               marginHorizontal: 10,
             }}
           >
@@ -237,10 +198,11 @@ export const CreateMasterPasswordScreen = observer(() => {
         {/* Current user end */}
 
         {/* Master pass input */}
-        <FloatingInput
+        <TextInput
+          animated
           isPassword
-          isInvalid={isError || !!masterPasswordError}
-          errorText={masterPasswordError || translate('common.password_not_match')}
+          isError={isError || !!masterPasswordError}
+          helper={masterPasswordError || translate('common.password_not_match')}
           label={translate('common.master_pass')}
           onChangeText={(text) => {
             setMasterPassword(text)
@@ -248,7 +210,6 @@ export const CreateMasterPasswordScreen = observer(() => {
             setPasswordStrength(strength ? strength.score : -1)
           }}
           value={masterPassword}
-          style={{ width: '100%' }}
         />
 
         {!!masterPassword && (
@@ -257,31 +218,31 @@ export const CreateMasterPasswordScreen = observer(() => {
         {/* Master pass input end */}
 
         {/* Master pass confirm */}
-        <FloatingInput
+        <TextInput
+          animated
           isPassword
-          isInvalid={isError}
-          errorText={translate('common.password_not_match')}
+          isError={isError}
+          helper={translate('common.password_not_match')}
           label={translate('create_master_pass.confirm_master_pass')}
           onChangeText={setConfirmPassword}
           value={confirmPassword}
-          style={{ width: '100%', marginVertical: 20 }}
         />
         {/* Master pass confirm end */}
 
         {/* Hint */}
-        <FloatingInput
+        <TextInput
+          animated
           label={translate('create_master_pass.hint')}
           onChangeText={setHint}
           value={hint}
-          style={{ width: '100%', marginBottom: 20 }}
         />
         {/* Hint end */}
 
         {/* Bottom */}
         <>
           <Button
-            isDisabled={isCreating || !isReady}
-            isLoading={isCreating}
+            disabled={isCreating || !isReady}
+            loading={isCreating}
             text={translate('create_master_pass.btn')}
             onPress={() => setShowConfirmCreateModal(true)}
             style={{
@@ -291,12 +252,13 @@ export const CreateMasterPasswordScreen = observer(() => {
           />
 
           <Text
-            style={{ textAlign: 'center', fontSize: fontSize.small, lineHeight: 21 }}
+            preset="label"
+            size="base"
+            style={{ textAlign: 'center' }}
             text={translate('create_master_pass.note')}
           />
         </>
         {/* Bottom end */}
-
 
         {/* Confirm create password modal */}
         <ConfirmCreateMPModal
@@ -321,6 +283,6 @@ export const CreateMasterPasswordScreen = observer(() => {
         />
         {/* Violations modal end */}
       </View>
-    </Layout>
+    </Screen>
   )
-})
+}

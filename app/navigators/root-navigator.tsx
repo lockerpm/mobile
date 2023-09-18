@@ -66,9 +66,6 @@ export type RootParamList = {
   signup: undefined
   createMasterPassword: undefined
   mainStack: undefined
-  countrySelector: {
-    initialId?: string
-  }
 }
 
 export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
@@ -205,7 +202,11 @@ const RootStack = observer((props: Props) => {
         <Stack.Screen name="init" component={InitScreen} />
         <Stack.Screen name="intro" component={IntroScreen} />
         <Stack.Screen name="onBoarding" component={OnboardingScreen} />
-        <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: LockType.Individual }} />
+        <Stack.Screen
+          name="lock"
+          component={LockScreen}
+          initialParams={{ type: LockType.Individual }}
+        />
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="signup" component={SignupScreen} />
