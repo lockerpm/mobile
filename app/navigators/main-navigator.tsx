@@ -6,7 +6,7 @@
  */
 import React, { useEffect, useState } from 'react'
 import { AppState } from 'react-native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { MainTabNavigator } from './main-tab-navigator'
 import {
   SwitchDeviceScreen,
@@ -67,7 +67,7 @@ import {
 } from '../screens'
 import UserInactivity from 'react-native-user-inactivity'
 import { useMixins } from '../services/mixins'
-import { useNavigation } from '@react-navigation/native'
+import { NavigatorScreenParams, useNavigation } from '@react-navigation/native'
 import { AppTimeoutType, TimeoutActionType, useStores } from '../models'
 import { observer } from 'mobx-react-lite'
 import { useCipherAuthenticationMixins } from '../services/mixins/cipher/authentication'
@@ -75,7 +75,7 @@ import { useCipherDataMixins } from '../services/mixins/cipher/data'
 import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from '../config/constants'
 import { Logger } from '../utils/utils'
 import { SocketEvent, SocketEventType } from '../config/types'
-import { HealthNavigator } from './tools/health-navigator'
+import { ToolsNavigator, ToolsParamList } from './tools/ToolNavigator'
 import { AppEventType, EventBus } from '../utils/eventBus'
 import InAppReview from 'react-native-in-app-review'
 import { RelayAddress, SubdomainData, TrustedContact } from '../config/types/api'
@@ -98,9 +98,10 @@ import { AppNotification } from 'app/static/types'
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
-  // Nested
-  mainTab: undefined
-  healthStack: undefined
+  mainTab: {
+    screen?: string
+  }
+  toolsStack: NavigatorScreenParams<ToolsParamList>
 
   // Errors
   dataOutdated: undefined
@@ -243,6 +244,11 @@ export type PrimaryParamList = {
     reset_pw: boolean
   }
 }
+
+export type AppStackScreenProps<T extends keyof PrimaryParamList> = StackScreenProps<
+  PrimaryParamList,
+  T
+>
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createStackNavigator<PrimaryParamList>()
@@ -582,8 +588,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="dataOutdated" component={DataOutdatedScreen} />
 
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
-        <Stack.Screen name="healthStack" component={HealthNavigator} />
-
+        <Stack.Screen name="toolsStack" component={ToolsNavigator} />
 
         <Stack.Screen name="app_list_noti" component={InAppListNotification} />
         <Stack.Screen name="app_noti" component={InAppNotificationScreen} />

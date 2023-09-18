@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { Loading } from "../../../components"
-import Flurry from "react-native-flurry-sdk"
-import { useNavigation } from "@react-navigation/native"
-import { useMixins } from "../../../services/mixins"
-import { useStores } from "../../../models"
-import NetInfo from "@react-native-community/netinfo"
-import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
+import React, { FC, useEffect, useState } from 'react'
+import { useStores } from 'app/models'
+import NetInfo from '@react-native-community/netinfo'
+import { AppStackScreenProps } from 'app/navigators'
+import { useCipherData, useHelper } from 'app/services/hook'
+import { translate } from 'app/i18n'
+import { Loading } from 'app/components-v2/utils'
 
-export const StartScreen = observer(() => {
+export const StartScreen: FC<AppStackScreenProps<'start'>> = (props) => {
   const { user, uiStore, enterpriseStore } = useStores()
-  const { isBiometricAvailable, translate, boostrapPushNotifier, parsePushNotiData } = useMixins()
-  const { loadFolders, loadCollections, loadOrganizations } = useCipherDataMixins()
-  const navigation = useNavigation()
+  const { isBiometricAvailable, boostrapPushNotifier, parsePushNotiData } = useHelper()
+  const { loadFolders, loadCollections, loadOrganizations } = useCipherData()
+  const navigation = props.navigation
   // ------------------------- PARAMS ----------------------------
 
-  const [msg, setMsg] = useState("")
+  const [msg, setMsg] = useState('')
 
   // ------------------------- METHODS ----------------------------
   const refreshFCM = async () => {
@@ -31,12 +29,6 @@ export const StartScreen = observer(() => {
   }
 
   const mounted = async () => {
-    // Testing
-    // if (__DEV__) {
-    //   navigation.navigate('dataOutdated')
-    //   return
-    // }
-
     const connectionState = await NetInfo.fetch()
     // Sync
     if (connectionState.isConnected) {
@@ -45,37 +37,33 @@ export const StartScreen = observer(() => {
 
       // Sync teams and plan
       if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
-        // setMsg(translate('start.getting_plan_info'))
-        // await Promise.all([
-        //   user.loadTeams(),
-        //   user.loadPlan(),
-        // ])
         await user.loadTeams()
         await user.loadPlan()
       }
     }
 
-    // Log user id
-    Flurry.setUserId(user.pwd_user_id)
-
     // Load folders and collections
-    setMsg(translate("start.decrypting"))
+    setMsg(translate('start.decrypting'))
     Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
 
     // TODO: check device limit
     const isDeviceLimitReached = false
     if (isDeviceLimitReached) {
-      navigation.navigate("switchDevice")
+      navigation.navigate('switchDevice')
     }
 
-    setMsg("")
+    setMsg('')
 
     // Parse push noti data
     const navigationRequest = await parsePushNotiData()
     if (navigationRequest.path) {
       // handle navigate browse
+
       navigationRequest.tempParams &&
+        // @ts-ignore TODO
         navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
+
+      // @ts-ignore TODO
       navigation.navigate(navigationRequest.path, navigationRequest.params)
       return
     }
@@ -84,35 +72,36 @@ export const StartScreen = observer(() => {
       if (!user.biometricIntroShown && !user.isBiometricUnlock) {
         const available = await isBiometricAvailable()
         if (available) {
-          navigation.navigate("biometricUnlockIntro")
+          navigation.navigate('biometricUnlockIntro')
           return
         }
       }
     }
 
-
     // Done -> navigate
     if (uiStore.isDeeplinkEmergencyAccess) {
       uiStore.setIsDeeplinkEmergencyAccess(false)
-      navigation?.navigate("mainTab", { screen: "menuTab" })
-      navigation.navigate("emergencyAccess")
+      navigation?.navigate('mainTab', { screen: 'menuTab' })
+      navigation.navigate('emergencyAccess')
     } else if (uiStore.isDeeplinkShares) {
       uiStore.setIsDeeplinkShares(false)
-      navigation?.navigate("mainTab", { screen: "browseTab" })
-      navigation?.navigate("mainTab", { screen: "browseTab", params: { screen: "shares" } })
+      navigation?.navigate('mainTab', { screen: 'browseTab' })
+
+      // @ts-ignore TODO
+      navigation?.navigate('mainTab', { screen: 'browseTab', params: { screen: 'shares' } })
     } else if (uiStore.isFromAutoFill) {
       uiStore.setIsFromAutoFill(false)
-      navigation.navigate("autofill")
+      navigation.navigate('autofill')
     } else if (uiStore.isFromAutoFillItem) {
       uiStore.setIsFromAutoFillItem(false)
-      navigation.navigate("autofill", { mode: "item" })
+      navigation.navigate('autofill', { mode: 'item' })
     } else if (uiStore.isOnSaveLogin) {
       // uiStore.setIsOnSaveLogin(false)
-      navigation.navigate("passwords__edit", { mode: "add" })
+      navigation.navigate('passwords__edit', { mode: 'add' })
     } else if (enterpriseStore.isEnterpriseInvitations) {
-      navigation.navigate("enterpriseInvited")
+      navigation.navigate('enterpriseInvited')
     } else {
-      navigation.navigate("mainTab", { screen: user.defaultTab })
+      navigation.navigate('mainTab', { screen: user.defaultTab })
     }
   }
 
@@ -120,11 +109,11 @@ export const StartScreen = observer(() => {
 
   // Always move forward
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", mounted)
+    const unsubscribe = navigation.addListener('focus', mounted)
     return unsubscribe
   }, [navigation])
 
   // ------------------------- RENDER ----------------------------
 
   return <Loading message={msg} />
-})
+}

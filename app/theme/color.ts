@@ -57,6 +57,8 @@ export const colorsLight = {
    */
   transparent: 'rgba(0, 0, 0, 0)',
   transparentModal: 'rgba(0, 0, 0, 0.3)',
+
+  toastBackground: 'rgba(22, 22, 22, 0.9)',
   /**
    * Brand Color
    */
@@ -109,6 +111,8 @@ export const colorsDark = {
    */
   transparent: 'rgba(0, 0, 0, 0)',
   transparentModal: 'rgba(0, 0, 0, 0.3)',
+
+  toastBackground: 'rgba(100, 100, 100, 1)',
   /**
    * Brand Color
    */

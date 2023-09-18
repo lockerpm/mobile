@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { BackHandler } from 'react-native'
 import { PartialState, NavigationState, NavigationContainerRef } from '@react-navigation/native'
-import Flurry from 'react-native-flurry-sdk'
 import { IS_PROD } from '../config/constants'
 
 export const RootNavigation = {
@@ -102,7 +101,7 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
 
     if (previousRouteName !== currentRouteName) {
       if (!__DEV__ && IS_PROD) {
-        Flurry.logEvent(currentRouteName, true)
+        //
       }
     }
 

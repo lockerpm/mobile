@@ -6,11 +6,9 @@ import { useMixins } from '../../../../services/mixins'
 import { Text } from '../../../../components'
 import { fontSize } from '../../../../theme'
 
-
 type Props = {
   style?: StyleProp<ViewStyle>
 }
-
 
 export const LoadingHeader = observer((props: Props) => {
   const { style } = props
@@ -19,18 +17,23 @@ export const LoadingHeader = observer((props: Props) => {
 
   const Render = ({ title }) => {
     return (
-      <View style={[{
-        backgroundColor: '#161922',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: 4
-      }, style]}>
+      <View
+        style={[
+          {
+            backgroundColor: color.textBlack,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 4,
+          },
+          style,
+        ]}
+      >
         <Text
           style={{
             fontSize: fontSize.small,
             color: color.white,
-            marginLeft: 5
+            marginLeft: 5,
           }}
           text={title + '...'}
         />

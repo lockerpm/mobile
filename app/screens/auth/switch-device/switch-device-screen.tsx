@@ -1,41 +1,38 @@
-import React from "react"
-import { observer } from "mobx-react-lite"
-import { AutoImage as Image, Text, Button, Layout } from "../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { View } from "react-native"
+import React, { FC } from 'react'
+import { View, Image } from 'react-native'
+import { AppStackScreenProps } from 'app/navigators'
+import { Text, Button, Screen } from 'app/components-v2/cores'
 
-export const SwitchDeviceScreen = observer(function SwitchDeviceScreen() {
-  const navigation = useNavigation()
+const SWITCH = require('assets/images/switch-devices.png')
+
+export const SwitchDeviceScreen: FC<AppStackScreenProps<'switchDevice'>> = (props) => {
+  const navigation = props.navigation
 
   // Methods
   const handleSwitchDevice = () => {
     navigation.navigate('mainTab', { screen: 'homeTab' })
   }
 
-  const handleBuyPremium = () => {}
+  const handleBuyPremium = () => {
+    navigation.navigate('payment')
+  }
 
   return (
-    <Layout>
+    <Screen padding preset="auto" safeAreaEdges={['top']}>
       <View style={{ alignItems: 'center', paddingTop: '5%' }}>
-        <Image source={require("./switch.png")} />
+        <Image source={SWITCH} />
 
-        <Text
-          preset="header"
-          style={{ marginBottom: 10, marginTop: 30 }}
-        >
+        <Text preset="bold" size="xl" style={{ marginBottom: 10, marginTop: 30 }}>
           2 device switches left
         </Text>
 
-        <Text style={{ textAlign: 'center' }}>
-          Active device type: 
-        </Text>
+        <Text style={{ textAlign: 'center' }}>Active device type:</Text>
 
-        <Text preset="bold">
-          Computer
-        </Text>
+        <Text preset="bold">Computer</Text>
 
         <Text style={{ textAlign: 'center', marginTop: 10 }}>
-        You can only use Locker for free one type of device. Switch up to 3 times to find the right option for you. 
+          You can only use Locker for free one type of device. Switch up to 3 times to find the
+          right option for you.
         </Text>
 
         <Button
@@ -44,19 +41,19 @@ export const SwitchDeviceScreen = observer(function SwitchDeviceScreen() {
           style={{
             width: '100%',
             marginTop: 30,
-            marginBottom: 10
+            marginBottom: 10,
           }}
         />
 
         <Button
-          preset="outline"
+          preset="secondary"
           text="Go Premium for unlimited access"
           onPress={handleBuyPremium}
           style={{
-            width: '100%'
+            width: '100%',
           }}
         />
       </View>
-    </Layout>
+    </Screen>
   )
-})
+}

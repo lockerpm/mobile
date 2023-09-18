@@ -48,11 +48,6 @@ export const CF_ACCESS_CLIENT_ID = Config.CF_ACCESS_CLIENT_ID
 export const APPS_FLYER_DEV_KEY = Config.APPS_FLYER_DEV_KEY
 export const APPS_FLYER_APP_ID = Config.APPS_FLYER_APP_ID
 
-// FLURRY
-export const FLURRY_ANDROID_API_KEY = Config.FLURRY_ANDROID_API_KEY
-export const FLURRY_IOS_API_KEY = Config.FLURRY_IOS_API_KEY
-
-
 // PERMISSIONS
 
 export const TEAM_COLLECTION_EDITOR = ['owner', 'admin']
@@ -86,5 +81,5 @@ export const FREE_PLAN_LIMIT = {
 export const GEN = {
   MALE: 't',
   FEMALE: 'f',
-  OTHER: 'o'
+  OTHER: 'o',
 }

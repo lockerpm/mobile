@@ -1,16 +1,15 @@
-import React from "react"
-import { observer } from "mobx-react-lite"
-import { View } from "react-native"
-import Icon from "react-native-vector-icons/FontAwesome"
-import { Text, Button, Layout, AutoImage as Image } from "../../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { commonStyles, fontSize } from "../../../../theme"
-import { TOOLS_ITEMS } from "../../../../common/mappings"
-import { useMixins } from "../../../../services/mixins"
-import { useStores } from "../../../../models"
-import { PlanType } from "../../../../config/types"
+import React, { FC } from 'react'
+import { View } from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { Text, Button, Layout, AutoImage as Image } from '../../../../components'
+import { useNavigation } from '@react-navigation/native'
+import { commonStyles, fontSize } from '../../../../theme'
+import { TOOLS_ITEMS } from '../../../../common/mappings'
+import { useMixins } from '../../../../services/mixins'
+import { useStores } from '../../../../models'
+import { AppStackScreenProps } from 'app/navigators'
 
-export const ToolsListScreen = observer(() => {
+export const ToolsListScreen: FC<AppStackScreenProps<'t'>> = () => {
   const navigation = useNavigation()
   const { user, uiStore } = useStores()
   const { translate, color } = useMixins()
@@ -24,7 +23,7 @@ export const ToolsListScreen = observer(() => {
         backgroundColor: uiStore.isDark ? color.background : color.block,
         paddingTop: 0,
       }}
-      header={<Text preset="largeHeader" text={translate("common.tools")} />}
+      header={<Text preset="largeHeader" text={translate('common.tools')} />}
     >
       <View
         style={{
@@ -35,7 +34,7 @@ export const ToolsListScreen = observer(() => {
         }}
       >
         {Object.values(TOOLS_ITEMS).map((item, index) => {
-          if (user.onPremiseUser && item.routeName === "privateRelay") {
+          if (user.onPremiseUser && item.routeName === 'privateRelay') {
             return null
           }
 
@@ -46,16 +45,16 @@ export const ToolsListScreen = observer(() => {
               // isDisabled={item.premium && isFreeAccount}
               onPress={() => {
                 if (item.premium && isFreeAccount) {
-                  navigation.navigate("payment")
-                } else if (item.routeName === "authenticator") {
-                  navigation.navigate("mainTab", { screen: "authenticatorTab" })
-                } else if (item.routeName === "passwordHealth") {
-                  navigation.navigate("healthStack")
+                  navigation.navigate('payment')
+                } else if (item.routeName === 'authenticator') {
+                  navigation.navigate('mainTab', { screen: 'authenticatorTab' })
+                } else if (item.routeName === 'passwordHealth') {
+                  navigation.navigate('toolsStack')
                 } else {
-                  if (item.routeName === "authenticator") {
-                    navigation.navigate("mainTab", { screen: "authenticatorTab" })
-                  } else if (item.routeName === "passwordHealth") {
-                    navigation.navigate("healthStack")
+                  if (item.routeName === 'authenticator') {
+                    navigation.navigate('mainTab', { screen: 'authenticatorTab' })
+                  } else if (item.routeName === 'passwordHealth') {
+                    navigation.navigate('toolsStack')
                   } else {
                     navigation.navigate(item.routeName, { fromTools: true })
                   }
@@ -64,8 +63,8 @@ export const ToolsListScreen = observer(() => {
               style={{
                 borderBottomColor: color.line,
                 borderBottomWidth: index === Object.keys(TOOLS_ITEMS).length - 1 ? 0 : 1,
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 paddingVertical: 12,
               }}
             >
@@ -75,7 +74,7 @@ export const ToolsListScreen = observer(() => {
                 <Image source={item.icon} style={{ height: 40, width: 40 }} />
               )}
               <View style={{ flex: 1, paddingHorizontal: 10 }}>
-                <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: "wrap" }]}>
+                <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
                   <Text
                     tx={item.label}
                     style={{
@@ -97,7 +96,7 @@ export const ToolsListScreen = observer(() => {
                       <Text
                         text="PREMIUM"
                         style={{
-                          fontWeight: "bold",
+                          fontWeight: 'bold',
                           color: color.background,
                           fontSize: fontSize.mini,
                         }}
@@ -115,4 +114,4 @@ export const ToolsListScreen = observer(() => {
       </View>
     </Layout>
   )
-})
+}

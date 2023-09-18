@@ -1,29 +1,36 @@
-import React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
-import { 
-  PasswordHealthScreen, WeakPasswordList, ReusePasswordList, ExposedPasswordList
-} from "../../screens"
+import React from 'react'
+import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import {
+  PasswordHealthScreen,
+  WeakPasswordList,
+  ReusePasswordList,
+  ExposedPasswordList,
+} from '../../screens'
 
-import { observer } from "mobx-react-lite"
+import { observer } from 'mobx-react-lite'
 
-export type HealthParamList = {
+export type ToolsParamList = {
   passwordHealth: undefined
   weakPasswordList: undefined
   reusePasswordList: undefined
   exposedPasswordList: undefined
 }
 
-const Stack = createStackNavigator<HealthParamList>()
+export type ToolsStackScreenProps<T extends keyof ToolsParamList> = StackScreenProps<
+  ToolsParamList,
+  T
+>
 
-export const HealthNavigator = observer(() => {
+const Stack = createStackNavigator<ToolsParamList>()
 
+export const ToolsNavigator = observer(() => {
   // ------------------ RENDER --------------------
-  
+
   return (
     <Stack.Navigator
       initialRouteName="passwordHealth"
       screenOptions={{
-        headerShown: false
+        headerShown: false,
       }}
     >
       <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />

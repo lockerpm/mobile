@@ -1,7 +1,7 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { BrowseNavigator } from './browse/browse-navigator'
-import { MenuNavigator } from './menu/menu-navigator'
+import { BrowseNavigator, BrowseParamList } from './browse/BrowseNavigator'
+import { MenuNavigator, MenuParamList } from './menu/menu-navigator'
 import { View } from 'react-native'
 import { Button, Text } from '../components'
 import { fontSize } from '../theme'
@@ -12,12 +12,21 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useStores } from '../models'
 import { observer } from 'mobx-react-lite'
 import { SharingStatus } from '../config/types'
+import { NavigatorScreenParams } from '@react-navigation/native'
 
 import HomeIcon from './icons/home.svg'
 import BrowseIcon from './icons/menu.svg'
 import ToolsIcon from './icons/settings.svg'
 import MenuIcon from './icons/menu-2.svg'
 import AuthenticatorIcon from './icons/authenticator.svg'
+
+export type TabsParamList = {
+  homeTab: undefined
+  browseTab: NavigatorScreenParams<BrowseParamList>
+  authenticatorTab: undefined
+  toolsTab: undefined
+  menuTab: NavigatorScreenParams<MenuParamList>
+}
 
 const Tab = createBottomTabNavigator()
 
@@ -72,7 +81,7 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
       {isStatusBarVisible && (
         <View
           style={{
-            backgroundColor: '#161922',
+            backgroundColor: color.textBlack,
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
