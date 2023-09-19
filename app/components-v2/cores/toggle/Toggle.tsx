@@ -1,9 +1,8 @@
 import React from 'react'
-import {
-  SwitchProps,
-} from 'react-native'
+import { SwitchProps } from 'react-native'
 import { useTheme } from 'app/services/context'
 import CheckBox from '@react-native-community/checkbox'
+import { Switch } from 'react-native-ui-lib'
 
 type Variants = 'checkbox' | 'switch' | 'radio'
 
@@ -21,25 +20,19 @@ interface ToggleProps {
   /**
    * Invoked with the new value when the value changes.
    */
-  onValueChange?: (SwitchProps['onValueChange'])
+  onValueChange?: SwitchProps['onValueChange']
   /**
    * Disable touch
    */
   disabled?: boolean
 }
 
-
 /**
  * Renders a boolean input.
  * This is a controlled component that requires an onValueChange callback that updates the value prop in order for the component to reflect user actions. If the value prop is not updated, the component will continue to render the supplied value prop instead of the expected result of any user actions.
  */
 export function Toggle(props: ToggleProps) {
-  const {
-    variant = 'checkbox',
-    disabled,
-    value,
-    onValueChange,
-  } = props
+  const { variant = 'checkbox', disabled, value, onValueChange } = props
   const { colors } = useTheme()
   if (variant === 'checkbox') {
     return (
@@ -54,6 +47,17 @@ export function Toggle(props: ToggleProps) {
         disabled={disabled}
         value={value}
         onValueChange={onValueChange}
+      />
+    )
+  }
+
+  if (variant === 'switch') {
+    return (
+      <Switch
+        value={value}
+        onValueChange={onValueChange}
+        onColor={colors.primary}
+        offColor={colors.disable}
       />
     )
   }

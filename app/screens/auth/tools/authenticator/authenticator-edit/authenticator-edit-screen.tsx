@@ -1,16 +1,9 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { View } from 'react-native'
-import {
-  AutoImage as Image,
-  Layout,
-  Button,
-  Header,
-  FloatingInput,
-} from '../../../../../components'
+import { Layout, Button, Header, FloatingInput } from '../../../../../components'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { commonStyles, fontSize } from '../../../../../theme'
-import { TOOLS_ITEMS } from '../../../../../common/mappings'
 import { useMixins } from '../../../../../services/mixins'
 import { CipherType } from '../../../../../../core/enums'
 import { getTOTP, parseOTPUri } from '../../../../../utils/totp'
@@ -19,6 +12,8 @@ import { PrimaryParamList } from '../../../../../navigators/MainNavigator'
 import { CipherView } from '../../../../../../core/models/view'
 import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
 import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
+import { TOOLS_ITEMS } from 'app/navigators'
+import { ImageIcon } from 'app/components-v2/cores'
 
 type ScreenProp = RouteProp<PrimaryParamList, 'authenticator__edit'>
 
@@ -132,10 +127,7 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
       {/* Name */}
       <View style={[commonStyles.SECTION_PADDING, { backgroundColor: color.background }]}>
         <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-          <Image
-            source={TOOLS_ITEMS.authenticator.icon}
-            style={{ height: 40, width: 40, marginRight: 10 }}
-          />
+          <ImageIcon icon={TOOLS_ITEMS.authenticator.icon} size={40} style={{ marginRight: 10 }} />
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired

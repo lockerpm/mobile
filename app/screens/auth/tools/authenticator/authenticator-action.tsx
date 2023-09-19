@@ -1,16 +1,14 @@
-import React, { useState } from "react"
-import { Text, ActionItem, ActionSheet, Divider, ActionSheetContent } from "../../../../components"
-import { color, commonStyles } from "../../../../theme"
-import { View } from "react-native"
-import { TOOLS_ITEMS } from "../../../../common/mappings"
-import { useMixins } from "../../../../services/mixins"
-import { DeleteConfirmModal } from "../../browse/trash/delete-confirm-modal"
-import { CipherView } from "../../../../../core/models/view"
-import { parseOTPUri, getTOTP } from "../../../../utils/totp"
-import { useStores } from "../../../../models"
-import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
-import { observer } from "mobx-react-lite"
-
+import React, { useState } from 'react'
+import { Text, ActionItem, ActionSheet, Divider, ActionSheetContent } from '../../../../components'
+import { color, commonStyles } from '../../../../theme'
+import { View } from 'react-native'
+import { useMixins } from '../../../../services/mixins'
+import { DeleteConfirmModal } from '../../browse/trash/delete-confirm-modal'
+import { CipherView } from '../../../../../core/models/view'
+import { parseOTPUri, getTOTP } from '../../../../utils/totp'
+import { useStores } from '../../../../models'
+import { useCipherDataMixins } from '../../../../services/mixins/cipher/data'
+import { observer } from 'mobx-react-lite'
 
 type Props = {
   navigation: any
@@ -19,7 +17,6 @@ type Props = {
   onLoadingChange?: (val: boolean) => void
   cipher: CipherView
 }
-
 
 export const AuthenticatorAction = observer((props: Props) => {
   const { navigation, isOpen, onClose, onLoadingChange, cipher } = props
@@ -56,7 +53,7 @@ export const AuthenticatorAction = observer((props: Props) => {
     }
     setNextModal(null)
   }
-  
+
   // ---------------- RENDER -----------------
 
   return (
@@ -74,20 +71,12 @@ export const AuthenticatorAction = observer((props: Props) => {
 
       {/* Modals / Actions end */}
 
-      <ActionSheet
-        isOpen={isOpen}
-        onClose={handleActionSheetClose}
-      >
+      <ActionSheet isOpen={isOpen} onClose={handleActionSheetClose}>
         {/* Info */}
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-            <TOOLS_ITEMS.authenticator.svgIcon height={40} />
-            <View style={{ marginLeft: 10, flex: 1  }}>
-              <Text
-                preset="semibold"
-                text={cipher.name}
-                numberOfLines={2}
-              />
+            <View style={{ marginLeft: 10, flex: 1 }}>
+              <Text preset="semibold" text={cipher.name} numberOfLines={2} />
             </View>
           </View>
         </View>
@@ -104,17 +93,15 @@ export const AuthenticatorAction = observer((props: Props) => {
             }}
           />
 
-          {
-            __DEV__ && (
-              <ActionItem
-                name={'(DEBUG) Log note'}
-                icon="copy"
-                action={() => {
-                  console.log(cipher.notes)
-                }}
-              />
-            )
-          }
+          {__DEV__ && (
+            <ActionItem
+              name={'(DEBUG) Log note'}
+              icon="copy"
+              action={() => {
+                console.log(cipher.notes)
+              }}
+            />
+          )}
 
           <Divider style={{ marginVertical: 5 }} />
 

@@ -84,8 +84,6 @@ export const imageRegistry = {
   github: require('assets/images/icons/github.png'),
   google: require('assets/images/icons/google.png'),
   sso: require('assets/images/icons/sso.png'),
-
-
   'security-key': require('assets/images/icons/security-key.png'),
   keychain: require('assets/images/icons/keychain.png'),
   desktop: require('assets/images/icons/desktop.png'),
@@ -98,6 +96,12 @@ export const imageRegistry = {
   avatar: require('assets/images/icons/avatar.png'),
   'key-hole': require('assets/images/icons/key-hole.png'),
   'number-square-one': require('assets/images/icons/number-square-one.png'),
+  'root-email': require('assets/images/icons/root-email.png'),
+  'password-generator': require('assets/images/icons/tools/password-generator.png'),
+  'private-relay': require('assets/images/icons/tools/private-relay.png'),
+  authenticator: require('assets/images/icons/tools/authenticator.png'),
+  'password-health': require('assets/images/icons/tools/password-health.png'),
+  'data-breach-scanner': require('assets/images/icons/tools/data-breach-scanner.png'),
 }
 
 const $imageStyle: ImageStyle = {

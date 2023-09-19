@@ -1,33 +1,52 @@
-import React, { FC } from 'react'
-import { View } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import { Text, Button, Layout, AutoImage as Image } from '../../../../components'
+import React from 'react'
+import { View, TouchableOpacity } from 'react-native'
+import { useStores } from 'app/models'
+import { Text, Screen, Icon, ImageIcon } from 'app/components-v2/cores'
 import { useNavigation } from '@react-navigation/native'
-import { commonStyles, fontSize } from '../../../../theme'
-import { TOOLS_ITEMS } from '../../../../common/mappings'
-import { useMixins } from '../../../../services/mixins'
-import { useStores } from '../../../../models'
-import { AppStackScreenProps } from 'app/navigators'
+import { useTheme } from 'app/services/context'
+import { translate } from 'app/i18n'
+import { TOOLS_ITEMS, ToolsItem } from 'app/navigators'
+import { TabHeader } from 'app/components-v2/cores/header/TabHeader'
+import { PremiumTag } from 'app/components-v2/utils'
 
-export const ToolsListScreen: FC<AppStackScreenProps<'t'>> = () => {
+export const ToolsListScreen = () => {
   const navigation = useNavigation()
-  const { user, uiStore } = useStores()
-  const { translate, color } = useMixins()
+  const { user } = useStores()
+  const { colors, isDark } = useTheme()
 
   const isFreeAccount = user.isFreePlan
+
+  // -----------------------METHODS----------------------------
+
+  const handleNavigate = (item: ToolsItem) => {
+    if (item.premium && isFreeAccount) {
+      navigation.navigate('payment')
+      return
+    }
+    switch (item.routeName) {
+      case 'authenticator':
+        navigation.navigate('mainTab', { screen: 'authenticatorTab' })
+        break
+      case 'passwordHealth':
+        navigation.navigate('toolsStack', { screen: 'passwordHealth' })
+        break
+      case 'privateRelay':
+        navigation.navigate('toolsStack', { screen: 'privateRelay' })
+        break
+      default:
+        navigation.navigate(item.routeName, { fromTools: true })
+    }
+  }
+
   return (
-    <Layout
-      borderBottom
-      hasBottomNav
-      containerStyle={{
-        backgroundColor: uiStore.isDark ? color.background : color.block,
-        paddingTop: 0,
-      }}
-      header={<Text preset="largeHeader" text={translate('common.tools')} />}
+    <Screen
+      padding
+      backgroundColor={isDark ? colors.background : colors.block}
+      header={<TabHeader title={translate('common.tools')} />}
     >
       <View
         style={{
-          backgroundColor: uiStore.isDark ? color.block : color.background,
+          backgroundColor: isDark ? colors.block : colors.background,
           borderRadius: 10,
           paddingHorizontal: 14,
           marginTop: 20,
@@ -39,79 +58,42 @@ export const ToolsListScreen: FC<AppStackScreenProps<'t'>> = () => {
           }
 
           return (
-            <Button
+            <TouchableOpacity
               key={index}
-              preset="link"
-              // isDisabled={item.premium && isFreeAccount}
               onPress={() => {
-                if (item.premium && isFreeAccount) {
-                  navigation.navigate('payment')
-                } else if (item.routeName === 'authenticator') {
-                  navigation.navigate('mainTab', { screen: 'authenticatorTab' })
-                } else if (item.routeName === 'passwordHealth') {
-                  navigation.navigate('toolsStack')
-                } else {
-                  if (item.routeName === 'authenticator') {
-                    navigation.navigate('mainTab', { screen: 'authenticatorTab' })
-                  } else if (item.routeName === 'passwordHealth') {
-                    navigation.navigate('toolsStack')
-                  } else {
-                    navigation.navigate(item.routeName, { fromTools: true })
-                  }
-                }
+                handleNavigate(item)
               }}
               style={{
-                borderBottomColor: color.line,
+                borderBottomColor: colors.border,
                 borderBottomWidth: index === Object.keys(TOOLS_ITEMS).length - 1 ? 0 : 1,
                 flexDirection: 'row',
                 alignItems: 'center',
                 paddingVertical: 12,
               }}
             >
-              {item.svgIcon ? (
-                <item.svgIcon height={40} width={40} />
-              ) : (
-                <Image source={item.icon} style={{ height: 40, width: 40 }} />
-              )}
+              <ImageIcon icon={item.icon} size={40} />
+
               <View style={{ flex: 1, paddingHorizontal: 10 }}>
-                <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { flexWrap: 'wrap' }]}>
+                <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignItems: 'center' }}>
                   <Text
                     tx={item.label}
                     style={{
-                      color: color.title,
                       marginBottom: 3,
                       marginRight: item.premium ? 7 : 0,
                     }}
                   />
 
-                  {item.premium && isFreeAccount && (
-                    <View
-                      style={{
-                        paddingHorizontal: 10,
-                        paddingVertical: 2,
-                        backgroundColor: color.textBlack,
-                        borderRadius: 3,
-                      }}
-                    >
-                      <Text
-                        text="PREMIUM"
-                        style={{
-                          fontWeight: 'bold',
-                          color: color.background,
-                          fontSize: fontSize.mini,
-                        }}
-                      />
-                    </View>
-                  )}
+                  {item.premium && isFreeAccount && <PremiumTag />}
                 </View>
 
-                <Text tx={item.desc} style={{ fontSize: fontSize.small }} />
+                <Text preset="label" tx={item.desc} size="base" />
               </View>
-              <Icon name="angle-right" size={20} color={color.title} />
-            </Button>
+
+              <Icon icon="caret-right" size={20} color={colors.title} />
+            </TouchableOpacity>
           )
         })}
       </View>
-    </Layout>
+    </Screen>
   )
 }

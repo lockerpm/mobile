@@ -1,6 +1,5 @@
-import { TxKeyPath } from "app/i18n"
-import { ImageSourcePropType, ImageURISource } from "react-native"
-
+import { TxKeyPath } from 'app/i18n'
+import { ImageSourcePropType, ImageURISource } from 'react-native'
 
 type BrowseItem = {
   label: TxKeyPath
@@ -15,7 +14,6 @@ type BrowseItemContainer = {
   [name: string]: BrowseItem
 }
 
-
 export const BROWSE_ITEMS: BrowseItemContainer = {
   folder: {
     label: 'common.folders',
@@ -26,7 +24,7 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     label: 'common.passwords',
     icon: require('../../../assets/images/icons/vault/password.png'),
     routeName: 'passwords',
-    addable: true
+    addable: true,
   },
   note: {
     label: 'common.note',
@@ -38,13 +36,13 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
     label: 'common.card',
     icon: require('../../../assets/images/icons/vault/card.png'),
     routeName: 'cards',
-    addable: true
+    addable: true,
   },
   cryptoWallet: {
     label: 'common.crypto_wallet',
     icon: require('../../../assets/images/icons/vault/crypto-wallet.png'),
     routeName: 'cryptoWallets',
-    addable: true
+    addable: true,
   },
   identity: {
     label: 'common.identity',
@@ -64,58 +62,6 @@ export const BROWSE_ITEMS: BrowseItemContainer = {
   },
 }
 
-type ToolsItem = {
-  label: TxKeyPath,
-  desc: TxKeyPath,
-  icon: ImageSourcePropType & ImageURISource,
-  routeName: string
-  svgIcon?: any
-  premium?: boolean
-}
-
-type ToolsItemContainer = {
-  passwordGenerator: ToolsItem,
-  authenticator: ToolsItem,
-  privateRelay: ToolsItem,
-  passwordHealth: ToolsItem,
-  dataBreachScanner: ToolsItem
-}
-
-export const TOOLS_ITEMS: ToolsItemContainer = {
-  passwordGenerator: {
-    label: 'pass_generator.title',
-    desc: 'pass_generator.desc',
-    icon: require('../../../assets/images/icons/vault/password-generator.png'),
-    routeName: 'passwordGenerator',
-  },
-  privateRelay: {
-    label: 'private_relay.title',
-    desc: 'private_relay.tool',
-    icon: require('../../../assets/images/icons/vault/private-relay.png'),
-    routeName: 'privateRelay',
-  },
-  authenticator: {
-    label: 'authenticator.title',
-    desc: 'authenticator.desc',
-    icon: require('../../../assets/images/icons/vault/authenticator.png'),
-    routeName: 'authenticator',
-  },
-  passwordHealth: {
-    label: 'pass_health.title',
-    desc: 'pass_health.desc',
-    icon: require('../../../assets/images/icons/vault/password-health.png'),
-    routeName: 'passwordHealth',
-    premium: true
-  },
-  dataBreachScanner: {
-    label: 'data_breach_scanner.title',
-    desc: 'data_breach_scanner.desc',
-    icon: require('../../../assets/images/icons/vault/data-breach-scanner.png'),
-    routeName: 'dataBreachScanner',
-    premium: true
-  }
-}
-
 export const FOLDER_IMG = {
   add: {
     img: require('../../../assets/images/icons/vault/folder-add.png'),
@@ -125,6 +71,5 @@ export const FOLDER_IMG = {
   },
   normal: {
     img: require('../../../assets/images/icons/vault/folder.png'),
-  }
+  },
 }
-

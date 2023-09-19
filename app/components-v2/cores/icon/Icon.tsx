@@ -148,6 +148,16 @@ export const iconRegistry = {
   tools: require('assets/icons/tools.png'),
   'arrows-clockwise': require('assets/icons/arrows-clockwise.png'),
   'wifi-slash': require('assets/icons/wifi-slash.png'),
+  'caret-down': require('assets/icons/caret-down.png'),
+  'caret-up': require('assets/icons/caret-up.png'),
+  'dots-three': require('assets/icons/dots-three.png'),
+
+  copy: require('assets/icons/copy.png'),
+  edit: require('assets/icons/edit.png'),
+  'file-text': require('assets/icons/file-text.png'),
+  gear: require('assets/icons/gear.png'),
+  trash: require('assets/icons/trash.png'),
+  x: require('assets/icons/x.png'),
 }
 
 const $imageStyle: ImageStyle = {

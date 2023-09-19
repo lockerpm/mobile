@@ -14,14 +14,7 @@ import UserInactivity from 'react-native-user-inactivity'
 import InAppReview from 'react-native-in-app-review'
 import { AppTimeoutType, TimeoutActionType, useStores } from '../models'
 import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from '../config/constants'
-import {
-  AppNotification,
-  RelayAddress,
-  SocketEvent,
-  SocketEventType,
-  SubdomainData,
-  TrustedContact,
-} from 'app/static/types'
+import { AppNotification, SocketEvent, SocketEventType, TrustedContact } from 'app/static/types'
 
 import {
   SwitchDeviceScreen,
@@ -65,8 +58,6 @@ import {
   InAppListNotification,
   InAppNotificationScreen,
   DeleteScreen,
-  PrivateRelay,
-  ManageSubdomainScreen,
   EmergencyAccessScreen,
   YourTrustedContactScreen,
   ContactsTrustedYouScreen,
@@ -74,7 +65,6 @@ import {
   TakeoverEAScreen,
   // @ts-ignore
   AutofillServiceScreen,
-  AliasStatisticScreen,
   EnterpriseInvitedScreen,
   NormalSharesScreen,
   QuickSharesScreen,
@@ -116,13 +106,7 @@ export type PrimaryParamList = {
   enterpriseInvited: undefined
   switchDevice: undefined
   biometricUnlockIntro: undefined
-  privateRelay: undefined
-  manageSubdomain: {
-    subdomain: SubdomainData
-  }
-  aliasStatistic: {
-    alias: RelayAddress
-  }
+
   passwordGenerator: {
     fromTools?: boolean
   }
@@ -606,9 +590,6 @@ export const MainNavigator = () => {
           }}
         />
 
-        <Stack.Screen name="privateRelay" component={PrivateRelay} />
-        <Stack.Screen name="manageSubdomain" component={ManageSubdomainScreen} />
-        <Stack.Screen name="aliasStatistic" component={AliasStatisticScreen} />
         <Stack.Screen name="qrScanner" component={QRScannerScreen} />
         <Stack.Screen
           name="authenticator__edit"
