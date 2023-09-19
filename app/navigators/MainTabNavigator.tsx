@@ -1,24 +1,18 @@
-import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { BrowseNavigator, BrowseParamList } from './browse/BrowseNavigator'
-import { MenuNavigator, MenuParamList } from './menu/menu-navigator'
-import { View } from 'react-native'
-import { Button, Text } from '../components'
-import { fontSize } from '../theme'
-import { AllItemScreen, ToolsListScreen, AuthenticatorScreen } from '../screens'
-import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
-import { useMixins } from '../services/mixins'
+import React, { useCallback } from 'react'
+import { TouchableOpacity, View } from 'react-native'
+import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useTheme } from 'app/services/context'
+import { translate } from 'app/i18n'
+import { fontSize } from '../theme'
 import { useStores } from '../models'
-import { observer } from 'mobx-react-lite'
-import { SharingStatus } from '../config/types'
 import { NavigatorScreenParams } from '@react-navigation/native'
+import { Icon, Text } from 'app/components-v2/cores'
 
-import HomeIcon from './icons/home.svg'
-import BrowseIcon from './icons/menu.svg'
-import ToolsIcon from './icons/settings.svg'
-import MenuIcon from './icons/menu-2.svg'
-import AuthenticatorIcon from './icons/authenticator.svg'
+import { BrowseNavigator, BrowseParamList } from './browse/BrowseNavigator'
+import { MenuNavigator, MenuParamList } from './menu/MenuNavigator'
+import { AllItemScreen, ToolsListScreen, AuthenticatorScreen } from '../screens'
+import { SharingStatus } from 'app/static/types'
 
 export type TabsParamList = {
   homeTab: undefined
@@ -28,24 +22,22 @@ export type TabsParamList = {
   menuTab: NavigatorScreenParams<MenuParamList>
 }
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator<TabsParamList>()
 
-// @ts-ignore
-const TabBar = observer(({ state, descriptors, navigation }) => {
-  const { translate, color } = useMixins()
+const TabBar = ({ state, descriptors, navigation }) => {
+  const { colors } = useTheme()
   const { user, uiStore, cipherStore } = useStores()
-
   const insets = useSafeAreaInsets()
 
   const mappings = {
     homeTab: {
       label: translate('common.home'),
-      icon: HomeIcon,
+      icon: 'home',
       notiCount: 0,
     },
     browseTab: {
       label: translate('common.browse'),
-      icon: BrowseIcon,
+      icon: 'browser',
       notiCount:
         cipherStore.sharingInvitations.length +
         cipherStore.myShares.reduce((total, s) => {
@@ -54,17 +46,17 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
     },
     authenticatorTab: {
       label: 'OTP',
-      icon: AuthenticatorIcon,
+      icon: 'authenticator',
       notiCount: 0,
     },
     toolsTab: {
       label: translate('common.tools'),
-      icon: ToolsIcon,
+      icon: 'tools',
       notiCount: 0,
     },
     menuTab: {
       label: translate('common.menu'),
-      icon: MenuIcon,
+      icon: 'menu',
       notiCount: user.invitations.length,
     },
   }
@@ -76,12 +68,14 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
     cipherStore.isBatchDecrypting
 
   return uiStore.isSelecting ? null : (
-    <View style={{ paddingBottom: insets.bottom, backgroundColor: color.background }}>
+    <View
+      style={{ paddingBottom: insets.bottom, backgroundColor: colors.background, paddingTop: 8 }}
+    >
       {/* Status bar */}
       {isStatusBarVisible && (
         <View
           style={{
-            backgroundColor: color.textBlack,
+            backgroundColor: colors.primaryText,
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
@@ -90,11 +84,11 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
         >
           {uiStore.isOffline ? (
             <>
-              <MaterialIconsIcon name="wifi-off" size={16} color={color.white} />
+              <Icon icon="wifi-slash" size={16} color={colors.white} />
               <Text
                 style={{
                   fontSize: fontSize.small,
-                  color: color.white,
+                  color: colors.white,
                   marginLeft: 5,
                 }}
                 text={translate('navigator.is_offline')}
@@ -102,11 +96,10 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
             </>
           ) : cipherStore.isBatchDecrypting ? (
             <>
-              <MaterialIconsIcon name="vpn-key" size={18} color={color.white} />
               <Text
                 style={{
                   fontSize: fontSize.small,
-                  color: color.white,
+                  color: colors.white,
                   marginLeft: 5,
                 }}
                 text={translate('start.decrypting')}
@@ -114,13 +107,11 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
             </>
           ) : (
             <>
-              {/* <Animated.View style={spin}> */}
-              <MaterialIconsIcon name="sync" size={18} color={color.white} />
-              {/* </Animated.View> */}
+              <Icon icon="arrows-clockwise" size={18} color={colors.white} />
               <Text
                 style={{
                   fontSize: fontSize.small,
-                  color: color.white,
+                  color: colors.white,
                   marginLeft: 5,
                 }}
                 text={translate('start.synching')}
@@ -138,7 +129,6 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
 
           const targetMapping = mappings[route.name]
           const label = targetMapping ? targetMapping.label : route.name
-          const Icon = targetMapping ? targetMapping.icon : () => null
           const notiCount = targetMapping ? targetMapping.notiCount : 0
 
           const isFocused = state.index === index
@@ -164,10 +154,9 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
           }
 
           return (
-            <Button
+            <TouchableOpacity
               key={index}
               testID={options.tabBarTestID}
-              preset="ghost"
               onPress={onPress}
               onLongPress={onLongPress}
               style={{
@@ -176,18 +165,16 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
                 flexDirection: 'column',
               }}
             >
-              {Icon && (
-                <Icon
-                  height={20}
-                  style={{
-                    color: isFocused ? color.primary : color.text,
-                  }}
-                />
-              )}
+              <Icon
+                icon={targetMapping.icon}
+                size={20}
+                color={isFocused ? colors.primary : colors.primaryText}
+              />
+
               {notiCount > 0 && (
                 <View
                   style={{
-                    backgroundColor: color.error,
+                    backgroundColor: colors.error,
                     opacity: 0.9,
                     borderRadius: 20,
                     minWidth: 17,
@@ -202,7 +189,7 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
                     style={{
                       fontSize: 12,
                       textAlign: 'center',
-                      color: color.white,
+                      color: colors.white,
                       lineHeight: 17,
                     }}
                   />
@@ -211,24 +198,25 @@ const TabBar = observer(({ state, descriptors, navigation }) => {
 
               <Text
                 text={label}
+                color={isFocused ? colors.primary : colors.primaryText}
                 style={{
                   fontSize: 12,
-                  color: isFocused ? color.primary : color.text,
                   marginTop: 3,
                 }}
               />
-            </Button>
+            </TouchableOpacity>
           )
         })}
       </View>
       {/* Tab items end */}
     </View>
   )
-})
+}
 
 export function MainTabNavigator() {
+  const renderTabbar = useCallback((props: BottomTabBarProps) => <TabBar {...props} />, [])
   return (
-    <Tab.Navigator initialRouteName="homeTab" tabBar={(props) => <TabBar {...props} />}>
+    <Tab.Navigator initialRouteName="homeTab" tabBar={renderTabbar}>
       <Tab.Screen name="homeTab" component={AllItemScreen} />
       <Tab.Screen name="browseTab" component={BrowseNavigator} />
       <Tab.Screen name="authenticatorTab" component={AuthenticatorScreen} />

@@ -8,7 +8,7 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { useMixins } from '../../../../services/mixins'
 import { useCoreService } from '../../../../services/coreService'
 import { useStores } from '../../../../models'
-import { PrimaryParamList } from '../../../../navigators/main-navigator'
+import { PrimaryParamList } from '../../../../navigators/MainNavigator'
 import { Slider, Checkbox } from 'react-native-ui-lib'
 import { useCipherHelpersMixins } from '../../../../services/mixins/cipher/helpers'
 

@@ -1,3 +1,4 @@
+import { useTheme } from 'app/services/context'
 import * as React from 'react'
 import { ComponentType } from 'react'
 import {
@@ -60,9 +61,10 @@ export interface IconProps extends TouchableOpacityProps {
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Icon.md)
  */
 export function Icon(props: IconProps) {
+  const { colors } = useTheme()
   const {
     icon,
-    color,
+    color = colors.primaryText,
     filled,
     size = 24,
     style: $imageStyleOverride,
@@ -85,7 +87,7 @@ export function Icon(props: IconProps) {
         <Image
           style={[
             $imageStyle,
-            color && { tintColor: color },
+            { tintColor: color },
             size && { width: size, height: size },
             $imageStyleOverride,
           ]}
@@ -137,6 +139,15 @@ export const iconRegistry = {
   'device-mobile': require('assets/icons/device-mobile.png'),
   'face-id': require('assets/icons/face-id.png'),
   fingerprint: require('assets/icons/fingerprint.png'),
+  info: require('assets/icons/info.png'),
+  'check-circle': require('assets/icons/check-circle.png'),
+  authenticator: require('assets/icons/authenticator.png'),
+  browser: require('assets/icons/browser.png'),
+  home: require('assets/icons/home.png'),
+  menu: require('assets/icons/menu.png'),
+  tools: require('assets/icons/tools.png'),
+  'arrows-clockwise': require('assets/icons/arrows-clockwise.png'),
+  'wifi-slash': require('assets/icons/wifi-slash.png'),
 }
 
 const $imageStyle: ImageStyle = {

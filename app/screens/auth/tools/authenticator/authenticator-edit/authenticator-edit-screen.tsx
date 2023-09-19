@@ -1,26 +1,26 @@
-import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
-import { View } from "react-native"
+import React, { useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { View } from 'react-native'
 import {
   AutoImage as Image,
   Layout,
   Button,
   Header,
   FloatingInput,
-} from "../../../../../components"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { commonStyles, fontSize } from "../../../../../theme"
-import { TOOLS_ITEMS } from "../../../../../common/mappings"
-import { useMixins } from "../../../../../services/mixins"
-import { CipherType } from "../../../../../../core/enums"
-import { getTOTP, parseOTPUri } from "../../../../../utils/totp"
-import { useStores } from "../../../../../models"
-import { PrimaryParamList } from "../../../../../navigators/main-navigator"
-import { CipherView } from "../../../../../../core/models/view"
-import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
+} from '../../../../../components'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { commonStyles, fontSize } from '../../../../../theme'
+import { TOOLS_ITEMS } from '../../../../../common/mappings'
+import { useMixins } from '../../../../../services/mixins'
+import { CipherType } from '../../../../../../core/enums'
+import { getTOTP, parseOTPUri } from '../../../../../utils/totp'
+import { useStores } from '../../../../../models'
+import { PrimaryParamList } from '../../../../../navigators/MainNavigator'
+import { CipherView } from '../../../../../../core/models/view'
+import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
+import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
 
-type ScreenProp = RouteProp<PrimaryParamList, "authenticator__edit">
+type ScreenProp = RouteProp<PrimaryParamList, 'authenticator__edit'>
 
 export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen() {
   const navigation = useNavigation()
@@ -35,7 +35,7 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
   const selectedCipher: CipherView = cipherStore.cipherView
   const defaultSecretKey = (() => {
     const otp = parseOTPUri(selectedCipher.notes)
-    return otp ? otp.secret : ""
+    return otp ? otp.secret : ''
   })()
 
   // ----------------- PARAMS ------------------
@@ -43,8 +43,8 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
   const [isLoading, setIsLoading] = useState(false)
 
   // Forms
-  const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
-  const [secretKey, setSecretKey] = useState(mode !== "add" ? defaultSecretKey : "")
+  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [secretKey, setSecretKey] = useState(mode !== 'add' ? defaultSecretKey : '')
 
   // ----------------- METHODS ------------------
 
@@ -52,17 +52,17 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
     try {
       const otp = getTOTP({ secret: secretKey })
       if (!otp) {
-        notify("error", translate("authenticator.invalid_key"))
+        notify('error', translate('authenticator.invalid_key'))
         return
       }
     } catch (e) {
-      notify("error", translate("authenticator.invalid_key"))
+      notify('error', translate('authenticator.invalid_key'))
       return
     }
 
     setIsLoading(true)
     let payload: CipherView
-    if (mode === "add") {
+    if (mode === 'add') {
       payload = newCipher(CipherType.TOTP)
     } else {
       // @ts-ignore
@@ -71,24 +71,24 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
 
     payload.name = name
     payload.notes = `otpauth://totp/${encodeURIComponent(
-      name,
+      name
     )}?secret=${secretKey}&issuer=${encodeURIComponent(name)}&algorithm=SHA1&digits=6&period=30`
 
-    let res = { kind: "unknown" }
-    if (["add", "clone"].includes(mode)) {
+    let res = { kind: 'unknown' }
+    if (['add', 'clone'].includes(mode)) {
       res = await createCipher(payload, 0, [])
     } else {
       res = await updateCipher(payload.id, payload, 0, [])
     }
 
     setIsLoading(false)
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       if (!passwordTotp) {
         navigation.goBack()
       } else {
         cipherStore.setSelectedTotp(payload.notes)
 
-        navigation.navigate("passwords__edit", {
+        navigation.navigate('passwords__edit', {
           mode: passwordMode,
         })
       }
@@ -106,20 +106,20 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
       }}
       header={
         <Header
-          title={mode === "add" ? translate("authenticator.enter_key") : translate("common.edit")}
+          title={mode === 'add' ? translate('authenticator.enter_key') : translate('common.edit')}
           goBack={() => {
             navigation.goBack()
           }}
-          goBackText={translate("common.cancel")}
+          goBackText={translate('common.cancel')}
           right={
             <Button
               isDisabled={isLoading || !name.trim() || !secretKey.trim()}
               preset="link"
-              text={translate("common.save")}
+              text={translate('common.save')}
               onPress={handleSave}
               style={{
                 height: 35,
-                alignItems: "center",
+                alignItems: 'center',
               }}
               textStyle={{
                 fontSize: fontSize.p,
@@ -139,7 +139,7 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
           <View style={{ flex: 1 }}>
             <FloatingInput
               isRequired
-              label={translate("common.item_name")}
+              label={translate('common.item_name')}
               value={name}
               onChangeText={setName}
             />
@@ -149,7 +149,7 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
       {/* Name end */}
 
       {/* Info */}
-      {mode === "add" && (
+      {mode === 'add' && (
         <View
           style={[
             commonStyles.SECTION_PADDING,
@@ -164,10 +164,10 @@ export const AuthenticatorEditScreen = observer(function AuthenticatorEditScreen
             <FloatingInput
               isPassword
               isRequired
-              label={translate("authenticator.secret_key")}
+              label={translate('authenticator.secret_key')}
               value={secretKey}
               onChangeText={(val) => {
-                setSecretKey(val.replace(/\s/g, ""))
+                setSecretKey(val.replace(/\s/g, ''))
               }}
             />
           </View>

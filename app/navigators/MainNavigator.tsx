@@ -7,7 +7,22 @@
 import React, { useEffect, useState } from 'react'
 import { AppState } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { MainTabNavigator } from './main-tab-navigator'
+import { NavigatorScreenParams, useNavigation } from '@react-navigation/native'
+import { MainTabNavigator } from './MainTabNavigator'
+import { ToolsNavigator, ToolsParamList } from './tools/ToolNavigator'
+import UserInactivity from 'react-native-user-inactivity'
+import InAppReview from 'react-native-in-app-review'
+import { AppTimeoutType, TimeoutActionType, useStores } from '../models'
+import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from '../config/constants'
+import {
+  AppNotification,
+  RelayAddress,
+  SocketEvent,
+  SocketEventType,
+  SubdomainData,
+  TrustedContact,
+} from 'app/static/types'
+
 import {
   SwitchDeviceScreen,
   StartScreen,
@@ -64,26 +79,15 @@ import {
   NormalSharesScreen,
   QuickSharesScreen,
   Password2FASetupScreen,
+  QuickSharesDetailScreen,
 } from '../screens'
-import UserInactivity from 'react-native-user-inactivity'
-import { useMixins } from '../services/mixins'
-import { NavigatorScreenParams, useNavigation } from '@react-navigation/native'
-import { AppTimeoutType, TimeoutActionType, useStores } from '../models'
-import { observer } from 'mobx-react-lite'
-import { useCipherAuthenticationMixins } from '../services/mixins/cipher/authentication'
-import { useCipherDataMixins } from '../services/mixins/cipher/data'
-import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from '../config/constants'
-import { Logger } from '../utils/utils'
-import { SocketEvent, SocketEventType } from '../config/types'
-import { ToolsNavigator, ToolsParamList } from './tools/ToolNavigator'
-import { AppEventType, EventBus } from '../utils/eventBus'
-import InAppReview from 'react-native-in-app-review'
-import { RelayAddress, SubdomainData, TrustedContact } from '../config/types/api'
-import { CollectionView } from '../../core/models/view/collectionView'
-import { CipherView } from '../../core/models/view'
-import { QuickSharesDetailScreen } from '../screens/auth/browse/shares/quick-shares/quick-shares-detail'
-import { SendView } from '../../core/models/view/sendView'
-import { AppNotification } from 'app/static/types'
+import { CipherView } from 'core/models/view'
+import { SendView } from 'core/models/view/sendView'
+import { CollectionView } from 'core/models/view/collectionView'
+import { useAuthentication, useCipherData, useHelper } from 'app/services/hook'
+import { translate } from 'app/i18n'
+import { Logger } from 'app/utils/utils'
+import { AppEventType, EventBus } from 'app/utils/eventBus'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -253,10 +257,10 @@ export type AppStackScreenProps<T extends keyof PrimaryParamList> = StackScreenP
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createStackNavigator<PrimaryParamList>()
 
-export const MainNavigator = observer(() => {
+export const MainNavigator = () => {
   const navigation = useNavigation()
-  const { notify, translate, parsePushNotiData } = useMixins()
-  const { lock, logout } = useCipherAuthenticationMixins()
+  const { notify, parsePushNotiData } = useHelper()
+  const { lock, logout } = useAuthentication()
   const {
     getCipherById,
     syncAutofillData,
@@ -265,7 +269,7 @@ export const MainNavigator = observer(() => {
     syncOfflineData,
     startSyncProcess,
     syncQuickShares,
-  } = useCipherDataMixins()
+  } = useCipherData()
   const { uiStore, user, cipherStore, toolStore } = useStores()
 
   // ------------------ PARAMS --------------------
@@ -693,4 +697,4 @@ export const MainNavigator = observer(() => {
       </Stack.Navigator>
     </UserInactivity>
   )
-})
+}

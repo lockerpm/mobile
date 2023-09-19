@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useCallback } from "react"
-import { View, StyleSheet, TouchableOpacity, Alert, Image, EmitterSubscription } from "react-native"
-import { Text, Layout, Button } from "../../../../../components"
-import { useMixins } from "../../../../../services/mixins"
-import { useStores } from "../../../../../models"
-import { observer } from "mobx-react-lite"
-import { PremiumBenefits } from "./premium-benefits"
-import { IS_IOS } from "../../../../../config/constants"
-import { SKU } from "./price-plan.sku"
-import { PricePlan } from "./price-plan"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { PrimaryParamList } from "../../../../../navigators/main-navigator"
-import { Logger } from "../../../../../utils/utils"
-import { FamilyPayment } from "./family-payment/family-payment"
+import React, { useState, useEffect, useCallback } from 'react'
+import { View, StyleSheet, TouchableOpacity, Alert, Image, EmitterSubscription } from 'react-native'
+import { Text, Layout, Button } from '../../../../../components'
+import { useMixins } from '../../../../../services/mixins'
+import { useStores } from '../../../../../models'
+import { observer } from 'mobx-react-lite'
+import { PremiumBenefits } from './premium-benefits'
+import { IS_IOS } from '../../../../../config/constants'
+import { SKU } from './price-plan.sku'
+import { PricePlan } from './price-plan'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { PrimaryParamList } from '../../../../../navigators/MainNavigator'
+import { Logger } from '../../../../../utils/utils'
+import { FamilyPayment } from './family-payment/family-payment'
 
 import RNIap, {
   PurchaseError,
@@ -21,11 +21,11 @@ import RNIap, {
   purchaseErrorListener,
   purchaseUpdatedListener,
   presentCodeRedemptionSheetIOS,
-} from "react-native-iap"
-import { PremiumPayment } from "./premium-payment/premium-payment"
+} from 'react-native-iap'
+import { PremiumPayment } from './premium-payment/premium-payment'
 
 // control init premium benefit tab
-type ScreenProp = RouteProp<PrimaryParamList, "payment">
+type ScreenProp = RouteProp<PrimaryParamList, 'payment'>
 
 let purchaseUpdateSubscription: EmitterSubscription
 let purchaseErrorSubscription: EmitterSubscription
@@ -49,7 +49,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
   const getEligibleTrial = async () => {
     const res = await user.getTrialEligible()
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       setIsTrial(!res.data.personal_trial_applied)
     } else {
       notifyApiError(res)
@@ -69,9 +69,9 @@ export const PaymentScreen = observer(function PaymentScreen() {
       setSubscriptions(subs)
     } catch (err) {
       Logger.error({ initConnection: err })
-      Alert.alert("Fail to get in-app-purchase information", "", [
+      Alert.alert('Fail to get in-app-purchase information', '', [
         {
-          text: "OK",
+          text: 'OK',
           onPress: () => {
             navigation.goBack()
           },
@@ -95,18 +95,18 @@ export const PaymentScreen = observer(function PaymentScreen() {
             res = await user.purchaseValidation(
               purchase.transactionReceipt,
               purchase.productId,
-              purchase.originalTransactionIdentifierIOS,
+              purchase.originalTransactionIdentifierIOS
             )
           } else {
             res = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
           }
-          if (res.kind === "ok") {
+          if (res.kind === 'ok') {
             if (res.data.success) {
               await user.loadPlan()
               uiStore.setShowWelcomePremium(true)
-              navigation.navigate("welcome_premium")
+              navigation.navigate('welcome_premium')
             } else {
-              Alert.alert(translate("manage_plan.verify"), res.data.detail)
+              Alert.alert(translate('manage_plan.verify'), res.data.detail)
             }
           } else {
             notifyApiError(res)
@@ -129,7 +129,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
     RNIap.requestSubscription(productId).catch((error) => {
       setProcessPayment(false)
-      if (error.code !== "E_USER_CANCELLED") {
+      if (error.code !== 'E_USER_CANCELLED') {
         Logger.debug(JSON.stringify(error))
       }
     })
@@ -165,7 +165,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
           {
             backgroundColor: color.block,
             maxWidth: 500,
-            alignSelf: "center",
+            alignSelf: 'center',
           },
         ]}
       >
@@ -178,7 +178,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
           ]}
         >
           <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>
-            {translate("payment.individual")}
+            {translate('payment.individual')}
           </Text>
         </TouchableOpacity>
 
@@ -191,7 +191,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
           ]}
         >
           <Text preset="bold" style={{ padding: 2, fontSize: 16 }}>
-            {translate("payment.family_text")}
+            {translate('payment.family_text')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -209,16 +209,16 @@ export const PaymentScreen = observer(function PaymentScreen() {
       header={
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}
         >
           <Image
-            source={isDark ? require("./LockerPremiumDark.png") : require("./LockerPremium.png")}
+            source={isDark ? require('./LockerPremiumDark.png') : require('./LockerPremium.png')}
             style={{ height: 32, width: 152 }}
           />
           <TouchableOpacity onPress={() => navigation.goBack()} disabled={processPayment}>
-            <Image source={require("./Cross.png")} style={{ height: 24, width: 24 }} />
+            <Image source={require('./Cross.png')} style={{ height: 24, width: 24 }} />
           </TouchableOpacity>
         </View>
       }
@@ -245,7 +245,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
       )}
       {!route.params.family && !route.params.premium && (
         <View>
-          <View style={{ flex: 1, top: 0, minHeight: 310, width: "100%", zIndex: 1 }}>
+          <View style={{ flex: 1, top: 0, minHeight: 310, width: '100%', zIndex: 1 }}>
             <PremiumBenefits benefitTab={route.params.benefitTab} />
           </View>
 
@@ -280,7 +280,7 @@ export const PaymentScreen = observer(function PaymentScreen() {
 
 const styles = StyleSheet.create({
   payment: {
-    width: "100%",
+    width: '100%',
     flex: 1,
     borderRadius: 15,
     marginTop: 20,
@@ -289,11 +289,11 @@ const styles = StyleSheet.create({
     margin: 2,
     padding: 2,
     borderRadius: 6,
-    width: "49%",
-    alignItems: "center",
+    width: '49%',
+    alignItems: 'center',
   },
   shadow: {
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -303,9 +303,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   segment: {
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
     marginLeft: 20,
     marginRight: 20,
     marginTop: 10,

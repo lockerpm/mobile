@@ -34,7 +34,7 @@ export const InfoToast = (props: BaseToastProps) => {
             marginLeft: 15,
           }}
         >
-          <Icon name="information-circle-outline" size={22} color={colors.white} />
+          <Icon icon="info" size={22} color={colors.white} />
         </View>
       )}
     />
@@ -71,7 +71,7 @@ export const SuccessToast = (props: BaseToastProps) => {
             marginLeft: 15,
           }}
         >
-          <Icon name="checkmark-circle-outline" size={22} color={colors.primary} />
+          <Icon icon="check-circle" size={22} color={colors.primary} />
         </View>
       )}
     />
@@ -108,7 +108,7 @@ export const ErrorToast = (props: BaseToastProps) => {
             marginLeft: 15,
           }}
         >
-          <Icon name="close-circle-outline" size={22} color={colors.error} />
+          <Icon icon="x-circle" size={22} color={colors.error} />
         </View>
       )}
     />

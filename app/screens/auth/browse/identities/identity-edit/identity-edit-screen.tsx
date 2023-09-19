@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { View } from "react-native"
-import find from "lodash/find"
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { View } from 'react-native'
+import find from 'lodash/find'
 import {
   Text,
   Layout,
@@ -11,28 +11,28 @@ import {
   CipherOthersInfo,
   Select,
   CustomFieldsEdit,
-} from "../../../../../components"
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { commonStyles, fontSize } from "../../../../../theme"
-import { PrimaryParamList } from "../../../../../navigators/main-navigator"
-import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import { useMixins } from "../../../../../services/mixins"
-import { useStores } from "../../../../../models"
-import { CipherView, IdentityView } from "../../../../../../core/models/view"
-import { CipherType } from "../../../../../../core/enums"
-import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
-import { useFolderMixins } from "../../../../../services/mixins/folder"
-import { CollectionView } from "../../../../../../core/models/view/collectionView"
-import { PlanStorageLimitModal } from "../../plan-storage-limit-modal"
+} from '../../../../../components'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
+import { commonStyles, fontSize } from '../../../../../theme'
+import { PrimaryParamList } from '../../../../../navigators/MainNavigator'
+import { BROWSE_ITEMS } from '../../../../../common/mappings'
+import { useMixins } from '../../../../../services/mixins'
+import { useStores } from '../../../../../models'
+import { CipherView, IdentityView } from '../../../../../../core/models/view'
+import { CipherType } from '../../../../../../core/enums'
+import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
+import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
+import { useFolderMixins } from '../../../../../services/mixins/folder'
+import { CollectionView } from '../../../../../../core/models/view/collectionView'
+import { PlanStorageLimitModal } from '../../plan-storage-limit-modal'
 
-type IdentityEditScreenProp = RouteProp<PrimaryParamList, "identities__edit">
+type IdentityEditScreenProp = RouteProp<PrimaryParamList, 'identities__edit'>
 type InputItem = {
   label: string
   value: string
   setter: (val: string) => void
   isRequired?: boolean
-  type?: "default" | "email-address" | "numeric" | "phone-pad" | "number-pad" | "decimal-pad"
+  type?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
 }
 
 export const IdentityEditScreen = observer(() => {
@@ -52,7 +52,7 @@ export const IdentityEditScreen = observer(() => {
       return true
     }
     const org = cipherStore.myShares.find(
-      (s) => s.organization_id === selectedCipher.organizationId,
+      (s) => s.organization_id === selectedCipher.organizationId
     )
     return !!org
   })()
@@ -60,50 +60,50 @@ export const IdentityEditScreen = observer(() => {
   const [isLoading, setIsLoading] = useState(false)
 
   // Forms
-  const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
-  const [title, setTitle] = useState(mode !== "add" ? selectedCipher.identity.title : "")
+  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [title, setTitle] = useState(mode !== 'add' ? selectedCipher.identity.title : '')
   const [firstName, setFirstName] = useState(
-    mode !== "add" ? selectedCipher.identity.firstName : "",
+    mode !== 'add' ? selectedCipher.identity.firstName : ''
   )
-  const [lastName, setLastName] = useState(mode !== "add" ? selectedCipher.identity.lastName : "")
-  const [username, setUsername] = useState(mode !== "add" ? selectedCipher.identity.username : "")
-  const [email, setEmail] = useState(mode !== "add" ? selectedCipher.identity.email : "")
-  const [phone, setPhone] = useState(mode !== "add" ? selectedCipher.identity.phone : "")
-  const [company, setCompany] = useState(mode !== "add" ? selectedCipher.identity.company : "")
-  const [ssn, setSsn] = useState(mode !== "add" ? selectedCipher.identity.ssn : "")
+  const [lastName, setLastName] = useState(mode !== 'add' ? selectedCipher.identity.lastName : '')
+  const [username, setUsername] = useState(mode !== 'add' ? selectedCipher.identity.username : '')
+  const [email, setEmail] = useState(mode !== 'add' ? selectedCipher.identity.email : '')
+  const [phone, setPhone] = useState(mode !== 'add' ? selectedCipher.identity.phone : '')
+  const [company, setCompany] = useState(mode !== 'add' ? selectedCipher.identity.company : '')
+  const [ssn, setSsn] = useState(mode !== 'add' ? selectedCipher.identity.ssn : '')
   const [passport, setPassport] = useState(
-    mode !== "add" ? selectedCipher.identity.passportNumber : "",
+    mode !== 'add' ? selectedCipher.identity.passportNumber : ''
   )
   const [license, setLicense] = useState(
-    mode !== "add" ? selectedCipher.identity.licenseNumber : "",
+    mode !== 'add' ? selectedCipher.identity.licenseNumber : ''
   )
-  const [address1, setAddress1] = useState(mode !== "add" ? selectedCipher.identity.address1 : "")
-  const [address2, setAddress2] = useState(mode !== "add" ? selectedCipher.identity.address2 : "")
+  const [address1, setAddress1] = useState(mode !== 'add' ? selectedCipher.identity.address1 : '')
+  const [address2, setAddress2] = useState(mode !== 'add' ? selectedCipher.identity.address2 : '')
   // const [address3, setAddress3] = useState(mode !== 'add' ? selectedCipher.identity.address3 : '')
-  const [city, setCity] = useState(mode !== "add" ? selectedCipher.identity.city : "")
-  const [state, setState] = useState(mode !== "add" ? selectedCipher.identity.state : "")
-  const [zip, setZip] = useState(mode !== "add" ? selectedCipher.identity.postalCode : "")
-  const [country, setCountry] = useState(mode !== "add" ? selectedCipher.identity.country : "")
-  const [note, setNote] = useState(mode !== "add" ? selectedCipher.notes : "")
-  const [folder, setFolder] = useState(mode !== "add" ? selectedCipher.folderId : null)
+  const [city, setCity] = useState(mode !== 'add' ? selectedCipher.identity.city : '')
+  const [state, setState] = useState(mode !== 'add' ? selectedCipher.identity.state : '')
+  const [zip, setZip] = useState(mode !== 'add' ? selectedCipher.identity.postalCode : '')
+  const [country, setCountry] = useState(mode !== 'add' ? selectedCipher.identity.country : '')
+  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(
-    mode === "edit" ? selectedCipher.organizationId : null,
+    mode === 'edit' ? selectedCipher.organizationId : null
   )
   const [collectionIds, setCollectionIds] = useState(
-    mode !== "add" ? selectedCipher.collectionIds : [],
+    mode !== 'add' ? selectedCipher.collectionIds : []
   )
   const [collection, setCollection] = useState(
-    mode !== "add" && collectionIds.length > 0 ? collectionIds[0] : null,
+    mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null
   )
-  const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
+  const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
   // plan storage limit modal
   const [isOpenModal, setIsOpenModal] = useState(false)
   // ------------------ EFFECTS -----------------------
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === "unassigned") {
+        if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
           if (!selectedCollection) setFolder(cipherStore.selectedFolder)
@@ -129,7 +129,7 @@ export const IdentityEditScreen = observer(() => {
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
-    if (mode === "add") {
+    if (mode === 'add') {
       payload = newCipher(CipherType.Identity)
     } else {
       // @ts-ignore
@@ -162,14 +162,14 @@ export const IdentityEditScreen = observer(() => {
     payload.identity = data
     payload.organizationId = organizationId
 
-    let res = { kind: "unknown" }
-    if (["add", "clone"].includes(mode)) {
+    let res = { kind: 'unknown' }
+    if (['add', 'clone'].includes(mode)) {
       res = await createCipher(payload, 0, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       if (isOwner) {
         // for shared folder
         if (selectedCollection) {
@@ -188,7 +188,7 @@ export const IdentityEditScreen = observer(() => {
 
       // reach limit plan stogare
       // @ts-ignore
-      if (res?.data?.code === "5002") {
+      if (res?.data?.code === '5002') {
         setIsOpenModal(true)
       }
     }
@@ -198,65 +198,65 @@ export const IdentityEditScreen = observer(() => {
 
   const contactDetails: InputItem[] = [
     {
-      label: translate("identity.first_name"),
+      label: translate('identity.first_name'),
       value: firstName,
       setter: setFirstName,
     },
     {
-      label: translate("identity.last_name"),
+      label: translate('identity.last_name'),
       value: lastName,
       setter: setLastName,
     },
     {
-      label: translate("identity.username"),
+      label: translate('identity.username'),
       value: username,
       setter: setUsername,
     },
     {
-      label: translate("identity.email"),
+      label: translate('identity.email'),
       value: email,
       setter: setEmail,
-      type: "email-address",
+      type: 'email-address',
     },
     {
-      label: translate("identity.company"),
+      label: translate('identity.company'),
       value: company,
       setter: setCompany,
     },
     {
-      label: translate("identity.phone"),
+      label: translate('identity.phone'),
       value: phone,
       setter: setPhone,
-      type: "numeric",
+      type: 'numeric',
     },
     {
-      label: translate("identity.ssn"),
+      label: translate('identity.ssn'),
       value: ssn,
       setter: setSsn,
-      type: "numeric",
+      type: 'numeric',
     },
     {
-      label: translate("identity.passport"),
+      label: translate('identity.passport'),
       value: passport,
       setter: setPassport,
-      type: "numeric",
+      type: 'numeric',
     },
     {
-      label: translate("identity.license"),
+      label: translate('identity.license'),
       value: license,
       setter: setLicense,
-      type: "numeric",
+      type: 'numeric',
     },
   ]
 
   const addressDetails: InputItem[] = [
     {
-      label: translate("identity.address") + " 1",
+      label: translate('identity.address') + ' 1',
       value: address1,
       setter: setAddress1,
     },
     {
-      label: translate("identity.address") + " 2",
+      label: translate('identity.address') + ' 2',
       value: address2,
       setter: setAddress2,
     },
@@ -266,23 +266,23 @@ export const IdentityEditScreen = observer(() => {
     //   setter: setAddress3
     // },
     {
-      label: translate("identity.city"),
+      label: translate('identity.city'),
       value: city,
       setter: setCity,
     },
     {
-      label: translate("identity.state"),
+      label: translate('identity.state'),
       value: state,
       setter: setState,
     },
     {
-      label: translate("identity.zip"),
+      label: translate('identity.zip'),
       value: zip,
       setter: setZip,
-      type: "numeric",
+      type: 'numeric',
     },
     {
-      label: translate("identity.country"),
+      label: translate('identity.country'),
       value: country,
       setter: setCountry,
     },
@@ -290,20 +290,20 @@ export const IdentityEditScreen = observer(() => {
 
   const TITLES = [
     {
-      label: "mr",
-      value: "mr",
+      label: 'mr',
+      value: 'mr',
     },
     {
-      label: "mrs",
-      value: "mrs",
+      label: 'mrs',
+      value: 'mrs',
     },
     {
-      label: "ms",
-      value: "ms",
+      label: 'ms',
+      value: 'ms',
     },
     {
-      label: "dr",
-      value: "dr",
+      label: 'dr',
+      value: 'dr',
     },
   ]
 
@@ -316,22 +316,22 @@ export const IdentityEditScreen = observer(() => {
       header={
         <Header
           title={
-            mode === "add"
-              ? `${translate("common.add")} ${translate("common.identity")}`
-              : translate("common.edit")
+            mode === 'add'
+              ? `${translate('common.add')} ${translate('common.identity')}`
+              : translate('common.edit')
           }
           goBack={() => navigation.goBack()}
-          goBackText={translate("common.cancel")}
+          goBackText={translate('common.cancel')}
           right={
             <Button
               isLoading={isLoading}
               preset="link"
               isDisabled={isLoading || !name.trim()}
-              text={translate("common.save")}
+              text={translate('common.save')}
               onPress={handleSave}
               style={{
                 height: 35,
-                alignItems: "center",
+                alignItems: 'center',
                 paddingLeft: 10,
               }}
               textStyle={{
@@ -350,7 +350,7 @@ export const IdentityEditScreen = observer(() => {
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
-              label={translate("common.item_name")}
+              label={translate('common.item_name')}
               value={name}
               onChangeText={setName}
             />
@@ -361,7 +361,7 @@ export const IdentityEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate("identity.personal_info").toUpperCase()}
+          text={translate('identity.personal_info').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
@@ -378,7 +378,7 @@ export const IdentityEditScreen = observer(() => {
       >
         <Select
           floating
-          placeholder={translate("identity.title")}
+          placeholder={translate('identity.title')}
           value={title}
           options={TITLES}
           onChange={(val) => setTitle(val.toString())}
@@ -388,7 +388,7 @@ export const IdentityEditScreen = observer(() => {
           <FloatingInput
             key={index}
             isRequired={item.isRequired}
-            keyboardType={item.type || "default"}
+            keyboardType={item.type || 'default'}
             label={item.label}
             value={item.value}
             onChangeText={(text) => item.setter(text)}
@@ -402,7 +402,7 @@ export const IdentityEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate("identity.address_details").toUpperCase()}
+          text={translate('identity.address_details').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
@@ -421,7 +421,7 @@ export const IdentityEditScreen = observer(() => {
           <FloatingInput
             key={index}
             isRequired={item.isRequired}
-            keyboardType={item.type || "default"}
+            keyboardType={item.type || 'default'}
             label={item.label}
             value={item.value}
             onChangeText={(text) => item.setter(text)}

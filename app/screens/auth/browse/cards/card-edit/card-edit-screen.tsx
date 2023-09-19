@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { View } from "react-native"
-import find from "lodash/find"
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { View } from 'react-native'
+import find from 'lodash/find'
 import {
   AutoImage as Image,
   Text,
@@ -12,30 +12,30 @@ import {
   CipherOthersInfo,
   Select,
   CustomFieldsEdit,
-} from "../../../../../components"
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native"
-import { commonStyles, fontSize } from "../../../../../theme"
-import { PrimaryParamList } from "../../../../../navigators/main-navigator"
-import { BROWSE_ITEMS } from "../../../../../common/mappings"
-import { TextInputMaskOptionProp, TextInputMaskTypeProp } from "react-native-masked-text"
-import { useStores } from "../../../../../models"
-import { useMixins } from "../../../../../services/mixins"
-import { CardView, CipherView } from "../../../../../../core/models/view"
-import { CipherType } from "../../../../../../core/enums"
-import { CARD_BRANDS } from "../constants"
-import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
-import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/helpers"
-import { useFolderMixins } from "../../../../../services/mixins/folder"
-import { CollectionView } from "../../../../../../core/models/view/collectionView"
-import { PlanStorageLimitModal } from "../../plan-storage-limit-modal"
+} from '../../../../../components'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
+import { commonStyles, fontSize } from '../../../../../theme'
+import { PrimaryParamList } from '../../../../../navigators/MainNavigator'
+import { BROWSE_ITEMS } from '../../../../../common/mappings'
+import { TextInputMaskOptionProp, TextInputMaskTypeProp } from 'react-native-masked-text'
+import { useStores } from '../../../../../models'
+import { useMixins } from '../../../../../services/mixins'
+import { CardView, CipherView } from '../../../../../../core/models/view'
+import { CipherType } from '../../../../../../core/enums'
+import { CARD_BRANDS } from '../constants'
+import { useCipherDataMixins } from '../../../../../services/mixins/cipher/data'
+import { useCipherHelpersMixins } from '../../../../../services/mixins/cipher/helpers'
+import { useFolderMixins } from '../../../../../services/mixins/folder'
+import { CollectionView } from '../../../../../../core/models/view/collectionView'
+import { PlanStorageLimitModal } from '../../plan-storage-limit-modal'
 
-type CardEditScreenProp = RouteProp<PrimaryParamList, "cards__edit">
+type CardEditScreenProp = RouteProp<PrimaryParamList, 'cards__edit'>
 type InputItem = {
   label: string
   value: string
   setter: Function
   isRequired?: boolean
-  inputType?: "default" | "email-address" | "numeric" | "phone-pad" | "number-pad" | "decimal-pad"
+  inputType?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
   placeholder?: string
   isPassword?: boolean
   maskType?: TextInputMaskTypeProp
@@ -62,7 +62,7 @@ export const CardEditScreen = observer(() => {
       return true
     }
     const org = cipherStore.myShares.find(
-      (s) => s.organization_id === selectedCipher.organizationId,
+      (s) => s.organization_id === selectedCipher.organizationId
     )
     return !!org
   })()
@@ -71,34 +71,34 @@ export const CardEditScreen = observer(() => {
 
   // Forms
 
-  const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
-  const [cardName, setCardName] = useState(mode !== "add" ? selectedCipher.card.cardholderName : "")
-  const [brand, setBrand] = useState(mode !== "add" ? selectedCipher.card.brand : "")
-  const [cardNumber, setCardNumber] = useState(mode !== "add" ? selectedCipher.card.number : "")
+  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+  const [cardName, setCardName] = useState(mode !== 'add' ? selectedCipher.card.cardholderName : '')
+  const [brand, setBrand] = useState(mode !== 'add' ? selectedCipher.card.brand : '')
+  const [cardNumber, setCardNumber] = useState(mode !== 'add' ? selectedCipher.card.number : '')
   const [expDate, setExpDate] = useState(
-    mode !== "add" ? `${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}` : "",
+    mode !== 'add' ? `${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}` : ''
   )
-  const [securityCode, setSecurityCode] = useState(mode !== "add" ? selectedCipher.card.code : "")
-  const [note, setNote] = useState(mode !== "add" ? selectedCipher.notes : "")
-  const [folder, setFolder] = useState(mode !== "add" ? selectedCipher.folderId : null)
+  const [securityCode, setSecurityCode] = useState(mode !== 'add' ? selectedCipher.card.code : '')
+  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
+  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(
-    mode === "edit" ? selectedCipher.organizationId : null,
+    mode === 'edit' ? selectedCipher.organizationId : null
   )
   const [collectionIds, setCollectionIds] = useState(
-    mode !== "add" ? selectedCipher.collectionIds : [],
+    mode !== 'add' ? selectedCipher.collectionIds : []
   )
   const [collection, setCollection] = useState(
-    mode !== "add" && collectionIds.length > 0 ? collectionIds[0] : null,
+    mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null
   )
-  const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
+  const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
   // plan storage limit modal
   const [isOpenModal, setIsOpenModal] = useState(false)
   // Watchers
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === "unassigned") {
+        if (cipherStore.selectedFolder === 'unassigned') {
           setFolder(null)
         } else {
           if (!selectedCollection) setFolder(cipherStore.selectedFolder)
@@ -124,7 +124,7 @@ export const CardEditScreen = observer(() => {
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
-    if (mode === "add") {
+    if (mode === 'add') {
       payload = newCipher(CipherType.Card)
     } else {
       // @ts-ignore
@@ -136,7 +136,7 @@ export const CardEditScreen = observer(() => {
     data.brand = brand
     data.number = cardNumber
     if (expDate) {
-      const splitDate = expDate.split("/")
+      const splitDate = expDate.split('/')
       data.expMonth = splitDate[0]
       data.expYear = splitDate[1]
     }
@@ -149,14 +149,14 @@ export const CardEditScreen = observer(() => {
     payload.card = data
     payload.organizationId = organizationId
 
-    let res = { kind: "unknown" }
-    if (["add", "clone"].includes(mode)) {
+    let res = { kind: 'unknown' }
+    if (['add', 'clone'].includes(mode)) {
       res = await createCipher(payload, 0, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       // for shared folder
       if (isOwner) {
         if (selectedCollection) {
@@ -175,7 +175,7 @@ export const CardEditScreen = observer(() => {
 
       // reach limit plan stogare
       // @ts-ignore
-      if (res?.data?.code === "5002") {
+      if (res?.data?.code === '5002') {
         setIsOpenModal(true)
       }
     }
@@ -185,46 +185,46 @@ export const CardEditScreen = observer(() => {
 
   const cardDetails: InputItem[] = [
     {
-      label: translate("card.card_name"),
+      label: translate('card.card_name'),
       value: cardName,
       setter: setCardName,
       isRequired: true,
     },
     {
-      label: translate("card.brand"),
+      label: translate('card.brand'),
       value: brand,
       setter: setBrand,
       isSelect: true,
       options: CARD_BRANDS,
     },
     {
-      label: translate("card.card_number"),
+      label: translate('card.card_number'),
       value: cardNumber,
       setter: setCardNumber,
-      inputType: "numeric",
-      maskType: "credit-card",
-      placeholder: "0000 0000 0000 0000",
+      inputType: 'numeric',
+      maskType: 'credit-card',
+      placeholder: '0000 0000 0000 0000',
     },
     {
-      label: translate("card.exp_date"),
+      label: translate('card.exp_date'),
       value: expDate,
       setter: setExpDate,
-      inputType: "numeric",
-      maskType: "datetime",
+      inputType: 'numeric',
+      maskType: 'datetime',
       maskOptions: {
-        format: "MM/YY",
+        format: 'MM/YY',
       },
-      placeholder: "MM/YY",
+      placeholder: 'MM/YY',
     },
     {
-      label: translate("card.cvv"),
+      label: translate('card.cvv'),
       value: securityCode,
       setter: setSecurityCode,
       maskOptions: {
-        mask: "999",
+        mask: '999',
       },
-      inputType: "numeric",
-      placeholder: "000",
+      inputType: 'numeric',
+      placeholder: '000',
       isPassword: true,
     },
   ]
@@ -238,22 +238,22 @@ export const CardEditScreen = observer(() => {
       header={
         <Header
           title={
-            mode === "add"
-              ? `${translate("common.add")} ${translate("common.card")}`
-              : translate("common.edit")
+            mode === 'add'
+              ? `${translate('common.add')} ${translate('common.card')}`
+              : translate('common.edit')
           }
           goBack={() => navigation.goBack()}
-          goBackText={translate("common.cancel")}
+          goBackText={translate('common.cancel')}
           right={
             <Button
               isLoading={isLoading}
               preset="link"
               isDisabled={isLoading || !name.trim()}
-              text={translate("common.save")}
+              text={translate('common.save')}
               onPress={handleSave}
               style={{
                 height: 35,
-                alignItems: "center",
+                alignItems: 'center',
                 paddingLeft: 10,
               }}
               textStyle={{
@@ -272,7 +272,7 @@ export const CardEditScreen = observer(() => {
           <View style={{ flex: 1, marginLeft: 10 }}>
             <FloatingInput
               isRequired
-              label={translate("common.item_name")}
+              label={translate('common.item_name')}
               value={name}
               onChangeText={setName}
             />
@@ -283,7 +283,7 @@ export const CardEditScreen = observer(() => {
 
       <View style={commonStyles.SECTION_PADDING}>
         <Text
-          text={translate("card.card_details").toUpperCase()}
+          text={translate('card.card_details').toUpperCase()}
           style={{ fontSize: fontSize.small }}
         />
       </View>
@@ -312,7 +312,7 @@ export const CardEditScreen = observer(() => {
               <FloatingInput
                 isRequired={item.isRequired}
                 isPassword={item.isPassword}
-                keyboardType={item.inputType || "default"}
+                keyboardType={item.inputType || 'default'}
                 maskType={item.maskType}
                 maskOptions={item.maskOptions}
                 label={item.label}

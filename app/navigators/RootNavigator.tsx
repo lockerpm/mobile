@@ -5,10 +5,19 @@
  * will use once logged in.
  */
 import React, { useEffect, useState } from 'react'
+import { AppState, Modal, Platform, View } from 'react-native'
 import NetInfo from '@react-native-community/netinfo'
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { MainNavigator } from './main-navigator'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import Intercom, { Visibility } from '@intercom/intercom-react-native'
+import Toast, { BaseToastProps } from 'react-native-toast-message'
+import dynamicLinks from '@react-native-firebase/dynamic-links'
+import WebView from 'react-native-webview'
+import { observer } from 'mobx-react-lite'
+import { useStores } from '../models'
+import { OnPremisePreloginData } from 'app/static/types'
+import { ErrorToast, InfoToast, SuccessToast } from 'app/components-v2/utils'
 import {
   IntroScreen,
   InitScreen,
@@ -20,24 +29,16 @@ import {
   ForgotPasswordScreen,
   LockType,
 } from '../screens'
-import { useStores } from '../models'
-import Toast, { BaseToastProps } from 'react-native-toast-message'
-import { observer } from 'mobx-react-lite'
-import { useMixins } from '../services/mixins'
-import { ErrorToast, SuccessToast, InfoToast } from './helpers/toast'
-import { Logger } from '../utils/utils'
-import { PushNotifier, NotifeeNotificationData } from '../utils/pushNotification'
-import { save, StorageKey } from '../utils/storage'
-import dynamicLinks from '@react-native-firebase/dynamic-links'
-import { AppState, Modal, View } from 'react-native'
-import { AppEventType, EventBus } from '../utils/eventBus'
-import { useCipherAuthenticationMixins } from '../services/mixins/cipher/authentication'
-import WebView from 'react-native-webview'
-import { IS_IOS } from '../config/constants'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Header } from '../components'
-import Intercom, { Visibility } from '@intercom/intercom-react-native'
-import { OnPremisePreloginData } from 'app/static/types'
+import { MainNavigator } from './MainNavigator'
+import { useAuthentication, useHelper } from 'app/services/hook'
+import { useTheme } from 'app/services/context'
+import { NotifeeNotificationData, PushNotifier } from 'app/utils/pushNotification'
+import { AppEventType, EventBus } from 'app/utils/eventBus'
+import { StorageKey, save } from 'app/utils/storage'
+import { Logger } from 'app/utils/utils'
+import { Header } from 'app/components-v2/cores'
+
+const IS_IOS = Platform.OS === 'ios'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -77,8 +78,9 @@ type Props = {
 }
 const RootStack = observer((props: Props) => {
   const { navigationRef } = props
-  const { color, parsePushNotiData } = useMixins()
-  const { clearAllData, handleDynamicLink } = useCipherAuthenticationMixins()
+  const { colors } = useTheme()
+  const { parsePushNotiData } = useHelper()
+  const { clearAllData, handleDynamicLink } = useAuthentication()
   const { uiStore, user } = useStores()
   const insets = useSafeAreaInsets()
   const [updateBlogUrl, setUpdateBlogUrl] = useState('')
@@ -195,7 +197,7 @@ const RootStack = observer((props: Props) => {
       <Stack.Navigator
         initialRouteName="init"
         screenOptions={{
-          cardStyle: { backgroundColor: color.background },
+          cardStyle: { backgroundColor: colors.background },
           headerShown: false,
         }}
       >
@@ -233,7 +235,7 @@ const RootStack = observer((props: Props) => {
             paddingTop: IS_IOS ? insets.top : 0,
             paddingBottom: insets.bottom,
             flex: 1,
-            backgroundColor: color.background,
+            backgroundColor: colors.background,
           }}
         >
           <WebView
@@ -249,14 +251,15 @@ const RootStack = observer((props: Props) => {
               top: IS_IOS ? insets.top : 0,
               paddingVertical: 12,
               paddingHorizontal: 16,
-              backgroundColor: color.background,
+              backgroundColor: colors.background,
               position: 'absolute',
-              borderBottomColor: color.line,
+              borderBottomColor: colors.border,
               borderBottomWidth: 0.5,
             }}
           >
             <Header
-              goBack={() => {
+              leftIcon="arrow-left"
+              onLeftPress={() => {
                 setUpdateBlogUrl('')
               }}
             />

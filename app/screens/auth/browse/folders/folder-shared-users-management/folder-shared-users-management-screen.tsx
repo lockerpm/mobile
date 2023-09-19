@@ -7,7 +7,7 @@ import { useMixins } from '../../../../../services/mixins'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { AddUserShareFolderModal } from './share-user-modal'
 import { SharedUsers } from './shared-user'
-import { PrimaryParamList } from '../../../../../navigators/main-navigator'
+import { PrimaryParamList } from '../../../../../navigators/MainNavigator'
 import { CollectionView } from '../../../../../../core/models/view/collectionView'
 import { commonStyles } from '../../../../../theme'
 import { useFolderMixins } from '../../../../../services/mixins/folder'
@@ -35,16 +35,16 @@ export const FolderSharedUsersManagementScreen = observer(
 
     const data = (() => {
       const data = []
-      sharedGroups.forEach(e => {
+      sharedGroups.forEach((e) => {
         data.push({
           type: 'group',
-          ...e
+          ...e,
         })
       })
-      sharedUsers.forEach(e => {
+      sharedUsers.forEach((e) => {
         data.push({
           type: 'user',
-          ...e
+          ...e,
         })
       })
       return data
@@ -59,11 +59,9 @@ export const FolderSharedUsersManagementScreen = observer(
       }
       const share = cipherStore.myShares.find((s) => s.id === collection.organizationId)
       if (share) {
-        if (share.members.length > 0)
-          setSharedUsers(share.members)
+        if (share.members.length > 0) setSharedUsers(share.members)
 
-        if (share.groups.length > 0)
-          setSharedGroups(share.groups)
+        if (share.groups.length > 0) setSharedGroups(share.groups)
 
         return share.members?.length + share.groups?.length
       }
