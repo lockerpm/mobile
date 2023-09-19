@@ -92,6 +92,7 @@ export const EditSubdomainModal = (props: Props) => {
             placeholder={'... '}
             placeholderTextColor={colors.secondaryText}
             selectionColor={colors.primary}
+            autoFocus
             style={{
               flex: 5,
               color: colors.title,

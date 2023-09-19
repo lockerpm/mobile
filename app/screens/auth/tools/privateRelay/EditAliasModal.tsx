@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { useMixins } from "../../../../services/mixins"
-import { Button, Modal, Text } from "../../../../components"
-import { commonStyles, fontSize } from "../../../../theme"
 import { TextInput, View } from "react-native"
-import { RelayAddress } from '../../../../config/types/api'
-import { useStores } from "../../../../models"
-
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { RelayAddress } from "app/static/types"
+import { BottomModal, Text, Button } from 'app/components-v2/cores'
+import { translate } from "app/i18n"
+import Animated, { FadeInDown } from "react-native-reanimated"
 
 interface Props {
   isOpen?: boolean
@@ -15,9 +14,9 @@ interface Props {
   onEdit: () => void
 }
 
-export const EditAliasModal = observer((props: Props) => {
+export const EditAliasModal = (props: Props) => {
   const { isOpen, onClose, item, onEdit } = props
-  const { translate, color } = useMixins()
+  const { colors } = useTheme()
   const { toolStore } = useStores()
   // --------------- PARAMS ----------------
 
@@ -25,8 +24,6 @@ export const EditAliasModal = observer((props: Props) => {
   const [newAddress, setNewAddress] = useState("")
   const [updateError, setUpdateError] = useState("")
   const [isConfirm, setIsConfirm] = useState(false)
-
-  // --------------- COMPUTED ----------------
 
   // --------------- METHODS ----------------
 
@@ -74,28 +71,29 @@ export const EditAliasModal = observer((props: Props) => {
   // --------------- RENDER ----------------
 
   const renderEdit = () => (
-    <>
+    <Animated.View entering={FadeInDown}>
       <View>
         <Text
+          preset="label"
+          size="base"
           text={translate('private_relay.edit_modal.current')}
           style={{
             marginTop: 10,
             marginBottom: 4,
-            fontSize: fontSize.small
           }}
         />
 
         <Text
-          preset="black"
           text={item.full_address}
         />
 
         <Text
+          preset="label"
+          size="base"
           text={translate('private_relay.edit_modal.new')}
           style={{
             marginTop: 24,
             marginBottom: 4,
-            fontSize: fontSize.small
           }}
         />
 
@@ -105,7 +103,7 @@ export const EditAliasModal = observer((props: Props) => {
           alignItems: "center",
           justifyContent: "space-between",
           height: 44,
-          borderColor: color.line,
+          borderColor: colors.primary,
           borderRadius: 8,
           paddingRight: 12,
           paddingLeft: 12,
@@ -117,12 +115,12 @@ export const EditAliasModal = observer((props: Props) => {
               if (updateError !== "") setUpdateError("")
             }}
             placeholder={"... "}
-            placeholderTextColor={color.text}
-            selectionColor={color.primary}
+            placeholderTextColor={colors.secondaryText}
+            selectionColor={colors.primary}
             style={{
               flex: 5,
-              color: color.textBlack,
-              fontSize: fontSize.p,
+              color: colors.title,
+              fontSize: 16,
             }}
           />
           <Text text={item.full_address.replace(item.address, "")} style={{
@@ -134,24 +132,22 @@ export const EditAliasModal = observer((props: Props) => {
 
       <Text
         numberOfLines={2}
+        size="base"
         text={updateError}
-        style={{ color: color.error, fontSize: fontSize.small, marginVertical: 8 }}
+        style={{ color: colors.error, marginVertical: 8 }}
       />
 
       <Button
         text={translate('common.save')}
-        isDisabled={isLoading || !newAddress || updateError !== ""}
-        isLoading={isLoading}
+        disabled={isLoading || !newAddress || updateError !== ""}
+        loading={isLoading}
         onPress={() => setIsConfirm(true)}
-        style={{
-          width: '100%',
-        }}
       />
-    </>
+    </Animated.View>
   )
 
   const renderConfirmEdit = () => (
-    <>
+    <Animated.View entering={FadeInDown}>
       <Text
         text={translate('private_relay.edit_warning', { alias: item.full_address })}
         style={{
@@ -159,9 +155,9 @@ export const EditAliasModal = observer((props: Props) => {
           marginBottom: 4,
         }}
       />
-      <View style={[commonStyles.CENTER_HORIZONTAL_VIEW, { marginTop: 12, justifyContent: "flex-end" }]}>
+      <View style={{ marginTop: 12, justifyContent: "flex-end", flexDirection: 'row', alignItems: 'center' }}>
         <Button
-          preset="outlinePlain"
+          preset='secondary'
           text={translate('common.cancel')}
           onPress={() => {
             setIsConfirm(false)
@@ -173,7 +169,7 @@ export const EditAliasModal = observer((props: Props) => {
         />
         <Button
           text={translate('common.save')}
-          isLoading={isLoading}
+          loading={isLoading}
           onPress={handleEdit}
           style={{
             width: 100,
@@ -181,12 +177,11 @@ export const EditAliasModal = observer((props: Props) => {
           }}
         />
       </View>
-
-    </>
+    </Animated.View>
   )
 
   return (
-    <Modal
+    <BottomModal
       isOpen={isOpen}
       onClose={onClose}
       title={!isConfirm ? translate('private_relay.edit_modal.titel') : translate('private_relay.edit_modal.confirm_title')}
@@ -198,6 +193,6 @@ export const EditAliasModal = observer((props: Props) => {
         isConfirm && renderConfirmEdit()
       }
 
-    </Modal>
+    </BottomModal>
   )
-})
+}

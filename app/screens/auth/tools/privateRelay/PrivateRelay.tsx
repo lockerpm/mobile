@@ -7,9 +7,9 @@ import { RelayAddress, SubdomainData } from 'app/static/types'
 import { translate } from 'app/i18n'
 import { Screen, Header, Text, Button, ImageIcon, Icon } from 'app/components-v2/cores'
 import { AliasItem } from './PrivateRelayItem'
-import { EditAliasModal } from './edit-alias-modal'
-import { CreateSubdomainModal } from './manageSubdomain/create-subdomain-modal'
-import { ConfigAliasModal } from './config-alias-modal'
+import { EditAliasModal } from './EditAliasModal'
+import { CreateSubdomainModal } from './manageSubdomain/CreateSubdomainModal'
+import { ConfigAliasModal } from './ConfigAliasModal'
 import Animated, { ZoomIn } from 'react-native-reanimated'
 
 const FREE_PLAM_ALIAS_LIMIT = 5
@@ -208,15 +208,15 @@ const Item = ({
 
   const rootEmailDesc = isFreeAccount
     ? [
-        translate('private_relay.desc.one'),
-        translate('private_relay.desc.two'),
-        translate('private_relay.desc.three'),
-      ]
+      translate('private_relay.desc.one'),
+      translate('private_relay.desc.two'),
+      translate('private_relay.desc.three'),
+    ]
     : [
-        translate('private_relay.desc_premium.one'),
-        translate('private_relay.desc_premium.two'),
-        translate('private_relay.desc_premium.three'),
-      ]
+      translate('private_relay.desc_premium.one'),
+      translate('private_relay.desc_premium.two'),
+      translate('private_relay.desc_premium.three'),
+    ]
 
   const subDomainDesc = [
     translate('private_relay.manage_subdomain.desc.one'),
@@ -262,8 +262,8 @@ const Item = ({
                   isRootEmail
                     ? translate('private_relay.root_email')
                     : subdomain
-                    ? translate('private_relay.manage_subdomain.your_subdomain')
-                    : translate('private_relay.no_subdomain')
+                      ? translate('private_relay.manage_subdomain.your_subdomain')
+                      : translate('private_relay.no_subdomain')
                 }
               />
               <Text

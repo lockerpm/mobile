@@ -1,13 +1,9 @@
 import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
-import { useMixins } from "../../../../services/mixins"
-import {  Divider, Modal, Text } from "../../../../components"
-import { fontSize } from "../../../../theme"
 import { TouchableOpacity, View } from "react-native"
-import { RelayAddress } from '../../../../config/types/api'
-import { useStores } from "../../../../models"
-import CheckBox from "@react-native-community/checkbox"
-
+import { RelayAddress } from "app/static/types"
+import { BottomModal, Text, Toggle } from 'app/components-v2/cores'
+import { useStores } from "app/models"
+import { translate } from "app/i18n"
 
 interface Props {
   isOpen?: boolean
@@ -16,9 +12,8 @@ interface Props {
 }
 
 
-export const ConfigAliasModal = observer((props: Props) => {
+export const ConfigAliasModal = (props: Props) => {
   const { isOpen, onClose, item } = props
-  const { color, translate } = useMixins()
   const { toolStore } = useStores()
   // --------------- PARAMS ----------------
 
@@ -75,18 +70,16 @@ export const ConfigAliasModal = observer((props: Props) => {
   // --------------- RENDER ----------------
 
   return (
-    <Modal
+    <BottomModal
       isOpen={isOpen}
       onClose={onClose}
       title={translate('private_relay.config_modal.title')}
     >
       <View>
         <Text
-          preset="black"
           text={item.full_address}
           style={{ marginBottom: 12 }}
         />
-        <Divider />
         {
           configurations.map((item, index) => (<View
             key={index}>
@@ -99,30 +92,23 @@ export const ConfigAliasModal = observer((props: Props) => {
               onPress={item.onChange}
             >
               <>
-                <CheckBox
-                  tintColors={{ true: "black", false: color.text }}
-                  onFillColor={color.background}
-                  tintColor={color.text}
-                  onTintColor={color.text}
-                  animationDuration={0.3}
-                  onCheckColor={color.primary}
-                  disabled={false}
-                  style={{ marginRight: 16 }}
+                <Toggle
                   value={item.value}
                   onValueChange={item.onChange}
                 />
-                <Text preset="black" text={item.title} style={{maxWidth: "85%"}}/>
+                <Text text={item.title} style={{ maxWidth: "85%", marginLeft: 12 }} />
               </>
             </TouchableOpacity>
-            <Divider />
           </View>
           ))
         }
       </View>
       <Text
-        style={{ fontSize: fontSize.small, marginTop: 12 }}
+        preset="label"
+        size="base"
+        style={{ marginTop: 12 }}
         text={translate('private_relay.config_modal.note')}
       />
-    </Modal>
+    </BottomModal>
   )
-})
+}

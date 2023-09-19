@@ -9,7 +9,7 @@ import { useStores } from 'app/models'
 import { SubdomainData } from 'app/static/types'
 import { translate } from 'app/i18n'
 
-import { EditSubdomainModal } from './edit-subdomain-modal'
+import { EditSubdomainModal } from './EditSubdomainModal'
 
 export const ManageSubdomainScreen: FC<ToolsStackScreenProps<'manageSubdomain'>> = (props) => {
   const navigation = props.navigation

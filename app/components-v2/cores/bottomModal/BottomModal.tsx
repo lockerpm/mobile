@@ -72,7 +72,7 @@ export const BottomModal = ({ style, children, isOpen, onClose, title }: BottomM
       renderPannableHeader={() => (
         <View
           style={{
-            height: 40,
+            height: 45,
             paddingHorizontal: 20,
             paddingTop: 12,
             flexDirection: 'row',

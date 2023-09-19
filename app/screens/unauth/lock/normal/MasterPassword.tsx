@@ -187,6 +187,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
   // ---------------------- RENDER -------------------------
   return (
     <Screen
+      preset='auto'
       padding
       safeAreaEdges={['bottom']}
       header={
@@ -212,9 +213,6 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
           }
         />
       }
-      contentContainerStyle={{
-        flex: 1,
-      }}
     >
       <EnterpriseInvitationModal
         isOpen={isShowInvitation}
@@ -225,112 +223,107 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
         }}
       />
 
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
-        <Logo
-          preset={'default'}
-          style={{ height: 80, width: 70, marginBottom: 25, alignSelf: 'center' }}
-        />
 
-        <Text
-          preset="bold"
-          size="xl"
-          style={{ marginBottom: 10, textAlign: 'center' }}
-          tx={'lock.title'}
-        />
+      <Logo
+        preset={'default'}
+        style={{ height: 80, width: 70, marginBottom: 25, alignSelf: 'center' }}
+      />
 
-        <Text style={{ textAlign: 'center' }} tx={'lock.desc'} />
+      <Text
+        preset="bold"
+        size="xl"
+        style={{ marginBottom: 10, textAlign: 'center' }}
+        tx={'lock.title'}
+      />
 
-        {/* Current user */}
-        <View style={{ alignItems: 'center' }}>
-          <View
-            style={{
-              marginVertical: 16,
-              borderRadius: 20,
-              backgroundColor: colors.block,
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: 4,
-            }}
-          >
-            {!!user.avatar && (
-              <Image
-                source={{ uri: user.avatar }}
-                style={{
-                  height: 28,
-                  width: 28,
-                  borderRadius: 14,
-                  backgroundColor: colors.white,
-                }}
-              />
-            )}
+      <Text style={{ textAlign: 'center' }} tx={'lock.desc'} />
 
-            <Text
-              size="base"
-              text={user.email}
+      {/* Current user */}
+      <View style={{ alignItems: 'center' }}>
+        <View
+          style={{
+            marginVertical: 16,
+            borderRadius: 20,
+            backgroundColor: colors.block,
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 4,
+          }}
+        >
+          {!!user.avatar && (
+            <Image
+              source={{ uri: user.avatar }}
               style={{
-                marginHorizontal: 10,
+                height: 28,
+                width: 28,
+                borderRadius: 14,
+                backgroundColor: colors.white,
               }}
             />
-          </View>
+          )}
+
+          <Text
+            size="base"
+            text={user.email}
+            style={{
+              marginHorizontal: 10,
+            }}
+          />
         </View>
+      </View>
 
-        <TextInput
-          isPassword
-          animated
-          isError={isError}
-          label={translate('common.master_pass')}
-          onChangeText={setMasterPassword}
-          value={masterPassword}
-          onSubmitEditing={handleUnlock}
-        />
+      <TextInput
+        isPassword
+        animated
+        isError={isError}
+        label={translate('common.master_pass')}
+        onChangeText={setMasterPassword}
+        value={masterPassword}
+        onSubmitEditing={handleUnlock}
+      />
 
-        <Button
-          loading={isUnlocking}
-          disabled={isUnlocking || !masterPassword}
-          text={translate('common.unlock')}
-          onPress={handleUnlock}
+      <Button
+        loading={isUnlocking}
+        disabled={isUnlocking || !masterPassword}
+        text={translate('common.unlock')}
+        onPress={handleUnlock}
+        style={{
+          marginTop: 20,
+        }}
+      />
+
+      <TouchableOpacity
+        disabled={isBioUnlocking}
+        onPress={() => {
+          if (!user.isBiometricUnlock) {
+            notify('error', translate('error.biometric_not_enable'))
+            return
+          }
+          if (!isValidForBiometric) {
+            notify('info', translate('error.not_valid_for_biometric'))
+            return
+          }
+          handleUnlockBiometric()
+        }}
+        style={{
+          width: '100%',
+          marginVertical: 25,
+          alignItems: 'center',
+        }}
+      >
+        <View
           style={{
-            marginTop: 20,
-          }}
-        />
-
-        <TouchableOpacity
-          disabled={isBioUnlocking}
-          onPress={() => {
-            if (!user.isBiometricUnlock) {
-              notify('error', translate('error.biometric_not_enable'))
-              return
-            }
-            if (!isValidForBiometric) {
-              notify('info', translate('error.not_valid_for_biometric'))
-              return
-            }
-            handleUnlockBiometric()
-          }}
-          style={{
-            width: '100%',
-            marginVertical: 25,
+            flexDirection: 'row',
             alignItems: 'center',
           }}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <Icon icon={biometryType === BiometricsType.FaceID ? 'face-id' : 'fingerprint'} />
-            <Text
-              // @ts-ignore
-              text={translate(`common.${biometryType}_unlocking`)}
-            />
-          </View>
-        </TouchableOpacity>
-      </View>
+          <Icon icon={biometryType === BiometricsType.FaceID ? 'face-id' : 'fingerprint'} />
+          <Text
+            // @ts-ignore
+            text={translate(`common.${biometryType}_unlocking`)}
+          />
+        </View>
+      </TouchableOpacity>
       <Button
         preset="teriatary"
         disabled={isSendingHint}
