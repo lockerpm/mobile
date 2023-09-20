@@ -158,6 +158,15 @@ export const iconRegistry = {
   gear: require('assets/icons/gear.png'),
   trash: require('assets/icons/trash.png'),
   x: require('assets/icons/x.png'),
+
+  'check-bold': require('assets/icons/check-bold.png'),
+  'folder-simple': require('assets/icons/folder-simple.png'),
+  plus: require('assets/icons/plus.png'),
+  share: require('assets/icons/share.png'),
+  'sliders-horizontal': require('assets/icons/sliders-horizontal.png'),
+  bell: require('assets/icons/bell.png'),
+  'users-three': require('assets/icons/users-three.png'),
+  keyboard: require('assets/icons/keyboard.png'),
 }
 
 const $imageStyle: ImageStyle = {

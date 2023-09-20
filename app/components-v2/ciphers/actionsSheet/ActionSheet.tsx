@@ -15,7 +15,7 @@ interface Props {
   onClose: () => void
 
   header?: React.ReactNode
-  children?: React.ReactNode[]
+  children?: React.ReactNode | React.ReactNode[]
 }
 
 export const ActionSheet = ({ isOpen, onClose, children, header }: Props) => {

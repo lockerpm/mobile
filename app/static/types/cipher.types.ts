@@ -1,7 +1,19 @@
-import { CipherRequest } from "core/models/request/cipherRequest"
-import { AccountRoleText, SharingStatus, SharingType } from "./enum"
-import { FolderRequest } from "core/models/request/folderRequest"
-import { CipherView } from "core/models/view"
+import { CipherRequest } from 'core/models/request/cipherRequest'
+import { AccountRoleText, SharingStatus, SharingType } from './enum'
+import { FolderRequest } from 'core/models/request/folderRequest'
+import {
+  AttachmentView,
+  CardView,
+  CipherView,
+  FieldView,
+  IdentityView,
+  LoginView,
+  SecureNoteView,
+} from 'core/models/view'
+import { ImageSourcePropType } from 'react-native'
+import { CipherType } from 'core/enums'
+import { PasswordHistoryView } from 'core/models/view/passwordHistoryView'
+import { CipherRepromptType } from 'core/enums/cipherRepromptType'
 
 export type EditShareCipherData = {
   role: AccountRoleText
@@ -24,7 +36,6 @@ export type ImportFolderData = {
 export type ImportCipherData = {
   ciphers: CipherRequest[]
 }
-
 
 export type MoveFolderData = {
   ids: string[]
@@ -90,7 +101,6 @@ export type ConfirmShareCipherData = {
   key: string
 }
 
-
 export type SharingInvitationType = {
   access_time: number
   cipher_type: number
@@ -110,7 +120,6 @@ export type SharingInvitationType = {
     organization_id: string
   }
 }
-
 
 export type MyShareType = {
   id: string
@@ -148,4 +157,32 @@ export type GetCiphersParams = {
   searchText: string
   filters: ((c: CipherView) => boolean)[]
   includeExtensions?: boolean
+}
+
+export type CipherAppView = {
+  id: string
+  organizationId: string
+  folderId: string
+  name: string
+  notes: string
+  type: CipherType
+  favorite: boolean
+  organizationUseTotp: boolean
+  edit: boolean
+  viewPassword: boolean
+  localData: any
+  login: LoginView
+  identity: IdentityView
+  card: CardView
+  secureNote: SecureNoteView
+  attachments: AttachmentView[]
+  fields: FieldView[]
+  passwordHistory: PasswordHistoryView[]
+  collectionIds: string[]
+  revisionDate: Date
+  deletedDate: Date
+  reprompt: CipherRepromptType
+  imgLogo: ImageSourcePropType
+  notSync: boolean
+  isDeleted: boolean
 }

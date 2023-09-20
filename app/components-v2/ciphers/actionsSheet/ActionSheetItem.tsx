@@ -11,7 +11,11 @@ export interface ActionItemProps {
   /**
    * Item custom icon
    */
-  icon: IconTypes
+  icon?: IconTypes
+  /**
+   * Overide defaule icon color
+   */
+  iconColor?: ColorValue
   /**
    * Overide defaule text and icon color
    */
@@ -29,7 +33,7 @@ export interface ActionItemProps {
 }
 
 export const ActionItem = (props: ActionItemProps) => {
-  const { name, icon, action, disabled, isPremium, color, containerStyle } = props
+  const { name, icon, action, disabled, isPremium, color, containerStyle, iconColor } = props
 
   return (
     <TouchableOpacity
@@ -60,7 +64,7 @@ export const ActionItem = (props: ActionItemProps) => {
           <Text text={name} color={color} style={{ marginRight: 8 }} />
           {isPremium && <PremiumTag />}
         </View>
-        <Icon icon={icon} size={22} color={color} />
+        {!!icon && <Icon icon={icon} size={22} color={iconColor || color} />}
       </View>
     </TouchableOpacity>
   )

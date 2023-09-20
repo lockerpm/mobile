@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { useNavigation } from "@react-navigation/native"
-import { ShareMultipleHeader } from "./items-header"
-import { CipherList, Layout } from "../../../../../components"
-import { SortAction } from "../../../home/all-item/sort-action"
-import { AddAction } from "../../../home/all-item/add-action"
-import { MAX_CIPHER_SELECTION } from "../../../../../config/constants"
-
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useNavigation } from '@react-navigation/native'
+import { ShareMultipleHeader } from './items-header'
+import { CipherList, Layout } from '../../../../../components'
+import { MAX_CIPHER_SELECTION } from '../../../../../config/constants'
+import { AddCipherActionModal, SortActionConfigModal } from 'app/components-v2/ciphers'
 
 export const ShareMultipleScreen = observer(() => {
   const navigation = useNavigation()
@@ -19,7 +17,7 @@ export const ShareMultipleScreen = observer(() => {
   const [searchText, setSearchText] = useState('')
   const [sortList, setSortList] = useState({
     orderField: 'revisionDate',
-    order: 'desc'
+    order: 'desc',
   })
   const [sortOption, setSortOption] = useState('last_updated')
   const [selectedItems, setSelectedItems] = useState([])
@@ -32,23 +30,23 @@ export const ShareMultipleScreen = observer(() => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption("most_relevant")
+        setSortOption('most_relevant')
       }
     } else {
       setSortList({
         orderField: 'revisionDate',
-        order: 'desc'
+        order: 'desc',
       })
-      setSortOption("last_updated")
+      setSortOption('last_updated')
     }
-  }, [searchText]);
+  }, [searchText])
 
   // -------------- RENDER ------------------
 
   return (
     <Layout
       isContentOverlayLoading={isLoading}
-      header={(
+      header={
         <ShareMultipleHeader
           navigation={navigation}
           openSort={() => setIsSortOpen(true)}
@@ -66,21 +64,21 @@ export const ShareMultipleScreen = observer(() => {
             }
           }}
         />
-      )}
+      }
       borderBottom
       noScroll
     >
-      <SortAction
+      <SortActionConfigModal
         isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
-        onSelect={(value: string, obj: { orderField: string, order: string }) => {
+        onSelect={(value: string, obj: { orderField: string; order: string }) => {
           setSortOption(value)
           setSortList(obj)
         }}
         value={sortOption}
       />
 
-      <AddAction
+      <AddCipherActionModal
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
@@ -92,7 +90,7 @@ export const ShareMultipleScreen = observer(() => {
         searchText={searchText}
         sortList={sortList}
         isSelecting={true}
-        setIsSelecting={() => { }}
+        setIsSelecting={() => {}}
         selectedItems={selectedItems}
         setSelectedItems={setSelectedItems}
         setAllItems={setAllItems}

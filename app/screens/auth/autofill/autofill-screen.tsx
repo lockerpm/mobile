@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from "../../../components"
-import { useNavigation, RouteProp, useRoute } from "@react-navigation/native"
-import { SortAction } from "../home/all-item/sort-action"
-import { useMixins } from "../../../services/mixins"
-import { BackHandler, NativeModules } from "react-native"
-import { useStores } from "../../../models"
-import { PrimaryParamList } from "../../../navigators"
-import { AutoFillList } from "./autofill-list"
-import { MAX_CIPHER_SELECTION } from "../../../config/constants"
-import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { CipherView } from "../../../../core/models/view"
-import { CipherType } from "../../../../core/enums"
-import { getTOTP, parseOTPUri } from "../../../utils/totp"
-import { parseSearchText } from "app/utils/autofillHelper"
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from '../../../components'
+import { useNavigation, RouteProp, useRoute } from '@react-navigation/native'
+import { useMixins } from '../../../services/mixins'
+import { BackHandler, NativeModules } from 'react-native'
+import { useStores } from '../../../models'
+import { PrimaryParamList } from '../../../navigators'
+import { AutoFillList } from './autofill-list'
+import { MAX_CIPHER_SELECTION } from '../../../config/constants'
+import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
+import { CipherView } from '../../../../core/models/view'
+import { CipherType } from '../../../../core/enums'
+import { getTOTP, parseOTPUri } from '../../../utils/totp'
+import { parseSearchText } from 'app/utils/autofillHelper'
+import { SortActionConfigModal } from 'app/components-v2/ciphers'
 
 const { RNAutofillServiceAndroid } = NativeModules
 
-type PasswordEditScreenProp = RouteProp<PrimaryParamList, "autofill">
+type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'autofill'>
 
 export const AutoFillScreen = observer(function AutoFillScreen() {
   const navigation = useNavigation()
@@ -33,7 +33,7 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
     orderField: 'revisionDate',
-    order: 'desc'
+    order: 'desc',
   })
   const [sortOption, setSortOption] = useState('last_updated')
   const [selectedItems, setSelectedItems] = useState([])
@@ -66,39 +66,37 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption("most_relevant")
+        setSortOption('most_relevant')
       }
     } else {
       setSortList({
         orderField: 'revisionDate',
-        order: 'desc'
+        order: 'desc',
       })
-      setSortOption("last_updated")
+      setSortOption('last_updated')
     }
-  }, [searchText]);
+  }, [searchText])
 
   // Suggest save
   useEffect(() => {
     if (mode === 'item') {
       const check = async () => {
-        const id = uiStore.saveLastId;
+        const id = uiStore.saveLastId
         const allLogins = await getCiphersFromCache({
           deleted: false,
           searchText: '',
-          filters: [
-            (c: CipherView) => c.type === CipherType.Login && c.id === id
-          ]
+          filters: [(c: CipherView) => c.type === CipherType.Login && c.id === id],
         })
 
         if (allLogins.length > 0) {
-          RNAutofillServiceAndroid.useLastItem();
+          RNAutofillServiceAndroid.useLastItem()
           if (allLogins[0].login.hasTotp) {
             const otp = getTOTP(parseOTPUri(allLogins[0].login.totp))
             copyToClipboard(otp)
           }
         } else {
-          RNAutofillServiceAndroid.removeLastItem();
-          BackHandler.exitApp();
+          RNAutofillServiceAndroid.removeLastItem()
+          BackHandler.exitApp()
         }
       }
       check()
@@ -110,7 +108,7 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
   return (
     <Layout
       isContentOverlayLoading={isLoading}
-      header={(
+      header={
         <BrowseItemHeader
           isAutoFill
           header={translate('common.passwords')}
@@ -135,14 +133,14 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
             }
           }}
         />
-      )}
+      }
       borderBottom
       noScroll
     >
-      <SortAction
+      <SortActionConfigModal
         isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
-        onSelect={(value: string, obj: { orderField: string, order: string }) => {
+        onSelect={(value: string, obj: { orderField: string; order: string }) => {
           setSortOption(value)
           setSortList(obj)
         }}
@@ -159,7 +157,7 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
         selectedItems={selectedItems}
         setSelectedItems={setSelectedItems}
         setAllItems={setAllItems}
-        emptyContent={(
+        emptyContent={
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
             imgStyle={{ height: 55, width: 120 }}
@@ -167,10 +165,13 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
             desc={translate('password.empty.desc')}
             buttonText={translate('password.empty.btn')}
             addItem={() => {
-              navigation.navigate('passwords__edit', { mode: 'add', initialUrl: uiStore.deepLinkUrl })
+              navigation.navigate('passwords__edit', {
+                mode: 'add',
+                initialUrl: uiStore.deepLinkUrl,
+              })
             }}
           />
-        )}
+        }
       />
     </Layout>
   )

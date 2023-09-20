@@ -614,7 +614,9 @@ export function useCipherData() {
   }
 
   // Get ciphers from cache only
-  const getCiphersFromCache = async (params: GetCiphersParams) => {
+  const getCiphersFromCache: (params: GetCiphersParams) => Promise<CipherView[]> = async (
+    params: GetCiphersParams
+  ) => {
     try {
       const deletedFilter = (c: CipherView) => c.isDeleted === params.deleted
       const filters = [deletedFilter, ...params.filters]

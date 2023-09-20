@@ -17,6 +17,7 @@ import { translate } from 'app/i18n'
 import { PolicyType } from 'app/static/types/enum'
 import { MasterPasswordPolicy, PasswordPolicy } from 'app/static/types'
 import { BROWSE_ITEMS } from 'app/common/mappings'
+import { ImageSourcePropType } from 'react-native'
 
 export function useCipherHelper() {
   const { passwordGenerationService } = useCoreService()
@@ -77,14 +78,21 @@ export function useCipherHelper() {
   }
 
   // Get cipher logo
-  const getCipherInfo = (item: CipherView) => {
+  const getCipherInfo: (
+    item: CipherView
+  ) => {
+    img: ImageSourcePropType
+    path: string
+  } = (item: CipherView) => {
     switch (item.type) {
       case CipherType.MasterPassword:
-      case CipherType.Login:
+      case CipherType.Login: {
+        const { uri } = getWebsiteLogo(item.login.uri)
         return {
-          img: item.login.uri ? getWebsiteLogo(item.login.uri) : BROWSE_ITEMS.password.icon,
+          img: uri ? { uri } : BROWSE_ITEMS.password.icon,
           path: 'passwords',
         }
+      }
       case CipherType.Card:
         return {
           img: BROWSE_ITEMS.card.icon,

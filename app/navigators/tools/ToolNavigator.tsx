@@ -2,7 +2,7 @@ import React from 'react'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import {
   PasswordHealthScreen,
-  WeakPasswordList,
+  WeakPasswordListScreen,
   ReusePasswordList,
   ExposedPasswordList,
   PrivateRelay,
@@ -98,7 +98,7 @@ export const ToolsNavigator = () => {
       }}
     >
       <Stack.Screen name="passwordHealth" component={PasswordHealthScreen} />
-      <Stack.Screen name="weakPasswordList" component={WeakPasswordList} />
+      <Stack.Screen name="weakPasswordList" component={WeakPasswordListScreen} />
       <Stack.Screen name="reusePasswordList" component={ReusePasswordList} />
       <Stack.Screen name="exposedPasswordList" component={ExposedPasswordList} />
       <Stack.Screen name="privateRelay" component={PrivateRelay} />

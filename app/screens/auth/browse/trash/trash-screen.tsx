@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { Layout, CipherList, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { SortAction } from "../../home/all-item/sort-action"
-import { useMixins } from "../../../../services/mixins"
-import { BackHandler } from "react-native"
-import { useStores } from "../../../../models"
-import { MAX_CIPHER_SELECTION } from "../../../../config/constants"
-
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import {
+  Layout,
+  CipherList,
+  BrowseItemHeader,
+  BrowseItemEmptyContent,
+} from '../../../../components'
+import { useNavigation } from '@react-navigation/native'
+import { useMixins } from '../../../../services/mixins'
+import { BackHandler } from 'react-native'
+import { useStores } from '../../../../models'
+import { MAX_CIPHER_SELECTION } from '../../../../config/constants'
+import { SortActionConfigModal } from 'app/components-v2/ciphers'
 
 export const TrashScreen = observer(function TrashScreen() {
   const navigation = useNavigation()
@@ -19,7 +23,7 @@ export const TrashScreen = observer(function TrashScreen() {
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
     orderField: 'revisionDate',
-    order: 'desc'
+    order: 'desc',
   })
   const [sortOption, setSortOption] = useState('last_updated')
   const [selectedItems, setSelectedItems] = useState([])
@@ -43,27 +47,26 @@ export const TrashScreen = observer(function TrashScreen() {
     }
   }, [isSelecting])
 
-
   useEffect(() => {
     // set Most relevant by defalt when users search
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption("most_relevant")
+        setSortOption('most_relevant')
       }
     } else {
       setSortList({
         orderField: 'revisionDate',
-        order: 'desc'
+        order: 'desc',
       })
-      setSortOption("last_updated")
+      setSortOption('last_updated')
     }
-  }, [searchText]);
+  }, [searchText])
 
   return (
     <Layout
       isContentOverlayLoading={isLoading}
-      header={(
+      header={
         <BrowseItemHeader
           isTrash
           header={translate('common.trash')}
@@ -85,15 +88,15 @@ export const TrashScreen = observer(function TrashScreen() {
             }
           }}
         />
-      )}
+      }
       borderBottom
       noScroll
       hasBottomNav
     >
-      <SortAction
+      <SortActionConfigModal
         isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
-        onSelect={(value: string, obj: { orderField: string, order: string }) => {
+        onSelect={(value: string, obj: { orderField: string; order: string }) => {
           setSortOption(value)
           setSortList(obj)
         }}
@@ -111,14 +114,14 @@ export const TrashScreen = observer(function TrashScreen() {
         selectedItems={selectedItems}
         setSelectedItems={setSelectedItems}
         setAllItems={setAllItems}
-        emptyContent={(
+        emptyContent={
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
             imgStyle={{ height: 55, width: 55 }}
             title={translate('trash.empty.title')}
             desc={translate('trash.empty.desc')}
           />
-        )}
+        }
       />
     </Layout>
   )

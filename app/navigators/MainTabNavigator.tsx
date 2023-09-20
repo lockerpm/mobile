@@ -11,7 +11,7 @@ import { Icon, Text } from 'app/components-v2/cores'
 
 import { BrowseNavigator, BrowseParamList } from './browse/BrowseNavigator'
 import { MenuNavigator, MenuParamList } from './menu/MenuNavigator'
-import { AllItemScreen, ToolsListScreen, AuthenticatorScreen } from '../screens'
+import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen } from '../screens'
 import { SharingStatus } from 'app/static/types'
 
 export type TabsParamList = {
@@ -217,7 +217,7 @@ export function MainTabNavigator() {
   const renderTabbar = useCallback((props: BottomTabBarProps) => <TabBar {...props} />, [])
   return (
     <Tab.Navigator initialRouteName="homeTab" tabBar={renderTabbar}>
-      <Tab.Screen name="homeTab" component={AllItemScreen} />
+      <Tab.Screen name="homeTab" component={HomeTabScreen} />
       <Tab.Screen name="browseTab" component={BrowseNavigator} />
       <Tab.Screen name="authenticatorTab" component={AuthenticatorScreen} />
       <Tab.Screen name="toolsTab" component={ToolsListScreen} />

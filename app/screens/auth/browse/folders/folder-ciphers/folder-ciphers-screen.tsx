@@ -8,8 +8,6 @@ import {
   BrowseItemHeader,
 } from '../../../../../components'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import { SortAction } from '../../../home/all-item/sort-action'
-import { AddAction } from '../../../home/all-item/add-action'
 import { useStores } from '../../../../../models'
 import { FolderView } from '../../../../../../core/models/view/folderView'
 import { PrimaryParamList } from '../../../../../navigators/MainNavigator'
@@ -18,8 +16,11 @@ import { CollectionView } from '../../../../../../core/models/view/collectionVie
 import { MAX_CIPHER_SELECTION, TEAM_CIPHER_EDITOR } from '../../../../../config/constants'
 import { BackHandler } from 'react-native'
 import { AccountRole } from '../../../../../config/types'
+import { AddCipherActionModal, SortActionConfigModal } from 'app/components-v2/ciphers'
 
 type FolderCiphersScreenProp = RouteProp<PrimaryParamList, 'folders__ciphers'>
+
+const HOME_EMPTY_CIPHER = require('assets/images/emptyCipherList/home-empty-cipher.png')
 
 export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
   const navigation = useNavigation()
@@ -125,7 +126,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
       }
       noScroll
     >
-      <SortAction
+      <SortActionConfigModal
         isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
         onSelect={(value: string, obj: { orderField: string; order: string }) => {
@@ -135,7 +136,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
         value={sortOption}
       />
 
-      <AddAction
+      <AddCipherActionModal
         collection={isSharedFolder ? folder : undefined}
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
@@ -158,7 +159,7 @@ export const FolderCiphersScreen = observer(function FolderCiphersScreen() {
         setAllItems={setAllItems}
         emptyContent={
           <BrowseItemEmptyContent
-            img={require('../../../home/all-item/empty-img.png')}
+            img={HOME_EMPTY_CIPHER}
             imgStyle={{
               height: 55,
               width: 120,

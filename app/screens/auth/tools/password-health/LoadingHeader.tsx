@@ -1,26 +1,25 @@
-import { observer } from 'mobx-react-lite'
+import { useStores } from 'app/models'
+import { useTheme } from 'app/services/context'
 import React from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
-import { useStores } from '../../../../models'
-import { useMixins } from '../../../../services/mixins'
-import { Text } from '../../../../components'
-import { fontSize } from '../../../../theme'
+import { Text } from 'app/components-v2/cores'
+import { translate } from 'app/i18n'
 
 type Props = {
   style?: StyleProp<ViewStyle>
 }
 
-export const LoadingHeader = observer((props: Props) => {
+export const LoadingHeader = (props: Props) => {
   const { style } = props
   const { toolStore } = useStores()
-  const { color, translate } = useMixins()
+  const { colors } = useTheme()
 
   const Render = ({ title }) => {
     return (
       <View
         style={[
           {
-            backgroundColor: color.textBlack,
+            backgroundColor: colors.title,
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
@@ -30,9 +29,9 @@ export const LoadingHeader = observer((props: Props) => {
         ]}
       >
         <Text
+          size="base"
+          color={colors.white}
           style={{
-            fontSize: fontSize.small,
-            color: color.white,
             marginLeft: 5,
           }}
           text={title + '...'}
@@ -46,4 +45,4 @@ export const LoadingHeader = observer((props: Props) => {
   ) : toolStore.isLoadingHealth ? (
     <Render title={translate('common.calculating') + '...'} />
   ) : null
-})
+}

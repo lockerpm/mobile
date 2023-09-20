@@ -3,8 +3,6 @@ import { observer } from 'mobx-react-lite'
 import { Layout, Header, Text } from '../../../../../../components'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import orderBy from 'lodash/orderBy'
-// import { ItemsHeader } from "./items-header"
-// import { SortAction } from "./sort-action"
 import { useMixins } from '../../../../../../services/mixins'
 import { useStores } from '../../../../../../models'
 import { View } from 'react-native'

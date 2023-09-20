@@ -1,25 +1,30 @@
-import React, { useState, useEffect, useRef } from "react"
-import { observer } from "mobx-react-lite"
-import { CipherList, Layout, BrowseItemEmptyContent } from "../../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { ItemsHeader } from "./items-header"
-import { SortAction } from "./sort-action"
-import { AddAction } from "./add-action"
-import { useMixins } from "../../../../services/mixins"
-import { Alert, BackHandler, Image, View, Text, TouchableOpacity, AppState } from "react-native"
-import { useStores } from "../../../../models"
-import { useCipherAuthenticationMixins } from "../../../../services/mixins/cipher/authentication"
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { MAX_CIPHER_SELECTION } from "../../../../config/constants"
-import Intercom from "@intercom/intercom-react-native"
-import { Logger } from "../../../../utils/utils"
-import { AutofillServiceEnabled } from "app/utils/autofillHelper"
+import React, { useState, useEffect, useRef } from 'react'
+import { Alert, BackHandler, View, AppState } from 'react-native'
+import { Logger } from 'app/utils/utils'
+import { translate } from 'app/i18n'
+import { MAX_CIPHER_SELECTION } from 'app/static/constants'
+import { useTheme } from 'app/services/context'
+import Intercom from '@intercom/intercom-react-native'
+import { AutofillServiceEnabled } from 'app/utils/autofillHelper'
+import { useStores } from 'app/models'
+import { useAuthentication } from 'app/services/hook'
+import { useNavigation } from '@react-navigation/native'
+import { Icon, Screen, Text } from 'app/components-v2/cores'
 
-export const AllItemScreen = observer(() => {
+import { HomeHeader } from './HomeHeader'
+import {
+  SortActionConfigModal,
+  EmptyCipherList,
+  CipherList,
+  AddCipherActionModal,
+} from 'app/components-v2/ciphers'
+
+const HOME_EMPTY_CIPHER = require('assets/images/emptyCipherList/home-empty-cipher.png')
+
+export const HomeTabScreen = () => {
   const navigation = useNavigation()
   const { uiStore, user } = useStores()
-  const { translate } = useMixins()
-  const { lock } = useCipherAuthenticationMixins()
+  const { lock } = useAuthentication()
 
   // -------------- PARAMS ------------------
   const [isAutofillEnabled, setIsAutofillEnabled] = useState(true)
@@ -30,51 +35,54 @@ export const AllItemScreen = observer(() => {
   const [searchText, setSearchText] = useState('')
   const [sortList, setSortList] = useState({
     orderField: 'revisionDate',
-    order: 'desc'
+    order: 'desc',
   })
   const [sortOption, setSortOption] = useState('last_updated')
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
 
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  const appState = useRef(AppState.currentState)
+  const [appStateVisible, setAppStateVisible] = useState(appState.current)
 
-  // -------------- EFFECT ------------------
+  // ------------------------ EFFECT ----------------------------
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", nextAppState => {
-      setAppStateVisible(nextAppState);
-    });
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      setAppStateVisible(nextAppState)
+    })
 
     return () => {
       // eslint-disable-next-line no-unused-expressions
-      subscription == null;
-    };
-  }, []);
+      subscription == null
+    }
+  }, [])
 
   useEffect(() => {
     // set Most relevant by defalt when users search
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption("most_relevant")
+        setSortOption('most_relevant')
       }
     } else {
       setSortList({
         orderField: 'revisionDate',
-        order: 'desc'
+        order: 'desc',
       })
-      setSortOption("last_updated")
+      setSortOption('last_updated')
     }
-  }, [searchText]);
-
+  }, [searchText])
 
   // Intercom support
   useEffect(() => {
     const registerIntercomUser = async () => {
       if (user.isLoggedInPw) {
         try {
-          await Intercom.loginUserWithUserAttributes({ email: user.email, userId: user.pwd_user_id, name: user.full_name || user.username })
+          await Intercom.loginUserWithUserAttributes({
+            email: user.email,
+            userId: user.pwd_user_id,
+            name: user.full_name || user.username,
+          })
         } catch (error) {
           Logger.error(error)
         }
@@ -93,35 +101,27 @@ export const AllItemScreen = observer(() => {
 
       e.preventDefault()
 
-      Alert.alert(
-        translate('alert.lock_app'),
-        '',
-        [
-          {
-            text: translate('common.cancel'),
-            style: 'cancel',
-            onPress: () => null
+      Alert.alert(translate('alert.lock_app'), '', [
+        {
+          text: translate('common.cancel'),
+          style: 'cancel',
+          onPress: () => null,
+        },
+        {
+          text: translate('common.lock'),
+          style: 'destructive',
+          onPress: async () => {
+            await lock()
+            navigation.navigate('lock')
           },
-          {
-            text: translate('common.lock'),
-            style: 'destructive',
-            onPress: async () => {
-              await lock()
-              navigation.navigate('lock')
-            }
-          },
-        ]
-      )
+        },
+      ])
     }
-
     navigation.addListener('beforeRemove', handleBack)
-
     return () => {
       navigation.removeListener('beforeRemove', handleBack)
     }
   }, [navigation])
-
-
 
   // Close select before leave
   useEffect(() => {
@@ -163,10 +163,10 @@ export const AllItemScreen = observer(() => {
   // -------------- RENDER ------------------
 
   return (
-    <Layout
-      isContentOverlayLoading={isLoading}
-      header={(
-        <ItemsHeader
+    <Screen
+      safeAreaEdges={['top']}
+      header={
+        <HomeHeader
           navigation={navigation}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
@@ -186,26 +186,27 @@ export const AllItemScreen = observer(() => {
             }
           }}
         />
-      )}
-      borderBottom
-      noScroll
-      hasBottomNav
+      }
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
-      <SortAction
+      <SortActionConfigModal
         isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
-        onSelect={(value: string, obj: { orderField: string, order: string }) => {
+        onSelect={(value: string, obj: { orderField: string; order: string }) => {
           setSortOption(value)
           setSortList(obj)
         }}
         value={sortOption}
       />
 
-      <AddAction
+      <AddCipherActionModal
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         navigation={navigation}
       />
+
       <SuggestEnableAutofill
         isShow={isShowAutofillSuggest && !isAutofillEnabled}
         onClose={() => setShowAutofillSuggest(false)}
@@ -221,9 +222,9 @@ export const AllItemScreen = observer(() => {
         selectedItems={selectedItems}
         setSelectedItems={setSelectedItems}
         setAllItems={setAllItems}
-        emptyContent={(
-          <BrowseItemEmptyContent
-            img={require('./empty-img.png')}
+        emptyContent={
+          <EmptyCipherList
+            img={HOME_EMPTY_CIPHER}
             imgStyle={{ height: 55, width: 120 }}
             title={translate('all_items.empty.title')}
             desc={translate('all_items.empty.desc')}
@@ -232,59 +233,71 @@ export const AllItemScreen = observer(() => {
               setIsAddOpen(true)
             }}
           />
-        )}
+        }
       />
-    </Layout>
+    </Screen>
   )
-})
-
+}
 
 const SuggestEnableAutofill = ({ isShow, onClose }) => {
   const navigation = useNavigation()
-  const { translate } = useMixins()
+  const { colors } = useTheme()
+  return (
+    isShow && (
+      <View
+        style={{
+          borderWidth: 1,
+          borderColor: colors.palette.orange7,
+          backgroundColor: colors.palette.orange1,
+          flexDirection: 'row',
+          paddingVertical: 16,
+          paddingHorizontal: 20,
+          width: '100%',
+        }}
+      >
+        <Icon
+          icon="keyboard"
+          color={colors.palette.neutral9}
+          size={32}
+          containerStyle={{
+            marginRight: 16,
+          }}
+        />
 
-  return isShow && <View
-    style={{
-      borderWidth: 1,
-      borderColor: "orange",
-      backgroundColor: "#FCFAF0",
-      flexDirection: "row",
-      paddingVertical: 16,
-      paddingHorizontal: 20,
-      width: "100%",
-    }}>
-
-    <Image
-      source={require("./Keyboard.png")}
-      style={{
-        width: 32,
-        height: 32,
-        marginRight: 16
-      }}></Image>
-    <View style={{ marginRight: 80 }}>
-      {/* <Text>{translate("all_items.enable_autofill.title")}</Text> */}
-      <Text>{translate("all_items.enable_autofill.content")}</Text>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('autofillService')
-        }}>
-        <Text style={{
-          marginTop: 10,
-          color: "#007AFF",
-          fontWeight: "700"
-        }}>{translate("all_items.enable_autofill.btn")}</Text>
-      </TouchableOpacity>
-    </View>
-    <TouchableOpacity
-      style={{
-        position: "absolute",
-        top: 20,
-        right: 20,
-      }}
-      onPress={() => {
-        onClose(true)
-      }}>
-      <AntDesign name="close" size={20} color={"black"} />
-    </TouchableOpacity>
-  </View>
+        <View style={{ marginRight: 80 }}>
+          <Text
+            color={colors.palette.neutral9}
+            text={translate('all_items.enable_autofill.content')}
+          />
+          <Text
+            preset="bold"
+            text={translate('all_items.enable_autofill.btn')}
+            color={colors.link}
+            style={{
+              marginTop: 10,
+            }}
+            onPress={() => {
+              navigation.navigate('autofillService')
+            }}
+          />
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            top: 20,
+            right: 20,
+          }}
+        >
+          <Icon
+            icon="x"
+            color={colors.palette.neutral9}
+            size={20}
+            onPress={() => {
+              onClose(true)
+            }}
+          />
+        </View>
+      </View>
+    )
+  )
 }

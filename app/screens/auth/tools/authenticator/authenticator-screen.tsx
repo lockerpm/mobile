@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react"
-import { observer } from "mobx-react-lite"
-import { useNavigation } from "@react-navigation/core"
-import { useMixins } from "../../../../services/mixins"
-import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from "../../../../components"
-import { SortAction } from "../../home/all-item/sort-action"
-import { AuthenticatorAddAction } from "./authenticator-add-action"
-import { useStores } from "../../../../models"
-import { BackHandler } from "react-native"
-import { MAX_CIPHER_SELECTION } from "../../../../config/constants"
-import { OtpList } from "./otp-list"
-
+import React, { useState, useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useNavigation } from '@react-navigation/core'
+import { useMixins } from '../../../../services/mixins'
+import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from '../../../../components'
+import { AuthenticatorAddAction } from './authenticator-add-action'
+import { useStores } from '../../../../models'
+import { BackHandler } from 'react-native'
+import { MAX_CIPHER_SELECTION } from '../../../../config/constants'
+import { OtpList } from './otp-list'
+import { SortActionConfigModal } from 'app/components-v2/ciphers'
 
 export const AuthenticatorScreen = observer(() => {
   const { translate } = useMixins()
@@ -23,7 +22,7 @@ export const AuthenticatorScreen = observer(() => {
   const [searchText, setSearchText] = useState('')
   const [sortList, setSortList] = useState({
     orderField: 'revisionDate',
-    order: 'desc'
+    order: 'desc',
   })
   const [sortOption, setSortOption] = useState('last_updated')
   const [isLoading, setIsLoading] = useState(false)
@@ -50,7 +49,6 @@ export const AuthenticatorScreen = observer(() => {
     }
   }, [isSelecting])
 
-
   // -------------------- RENDER ----------------------
 
   return (
@@ -59,7 +57,7 @@ export const AuthenticatorScreen = observer(() => {
       borderBottom
       hasBottomNav
       isContentOverlayLoading={isLoading}
-      header={(
+      header={
         <BrowseItemHeader
           isAuthenticator
           header={translate('authenticator.title')}
@@ -82,13 +80,12 @@ export const AuthenticatorScreen = observer(() => {
             }
           }}
         />
-      )}
+      }
     >
-      {/* Actions */}
-      <SortAction
+      <SortActionConfigModal
         isOpen={isSortOpen}
         onClose={() => setIsSortOpen(false)}
-        onSelect={(value: string, obj: { orderField: string, order: string }) => {
+        onSelect={(value: string, obj: { orderField: string; order: string }) => {
           setSortOption(value)
           setSortList(obj)
         }}
@@ -114,7 +111,7 @@ export const AuthenticatorScreen = observer(() => {
         selectedItems={selectedItems}
         setSelectedItems={setSelectedItems}
         setAllItems={setAllItems}
-        emptyContent={(
+        emptyContent={
           <BrowseItemEmptyContent
             img={require('./empty-img.png')}
             imgStyle={{ height: 55, width: 120 }}
@@ -125,7 +122,7 @@ export const AuthenticatorScreen = observer(() => {
               setIsAddOpen(true)
             }}
           />
-        )}
+        }
       />
       {/* OTP list end */}
     </Layout>
