@@ -1,20 +1,18 @@
-import React from "react"
-import { observer } from "mobx-react-lite"
-import { useNavigation } from "@react-navigation/native"
-import { Layout, Header, Button, Text, AutoImage as Image } from "../../../../components"
+import React, { FC } from "react"
+import { Screen, Header, Button, Text, AutoImage as Image } from "app/components-v2/cores"
 import { View } from "react-native"
-import { useMixins } from "../../../../services/mixins"
-import { useStores } from "../../../../models"
-import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
+import { AppStackScreenProps } from "app/navigators"
+import { useCipherData, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { translate } from "app/i18n"
 
+const DATA_IMG = require('assets/images/intro/intro1.png')
 
-export const DataOutdatedScreen = observer(() => {
-  const navigation = useNavigation()
-  const { translate, notify } = useMixins()
+export const DataOutdatedScreen: FC<AppStackScreenProps<'dataOutdated'>> = (props) => {
+  const navigation = props.navigation
+  const { notify } = useHelper()
   const { cipherStore } = useStores()
-  const { startSyncProcess } = useCipherDataMixins()
-
-  // ------------------------- PARAMS ----------------------------
+  const { startSyncProcess } = useCipherData()
 
   // ------------------------- METHODS ----------------------------
 
@@ -25,18 +23,14 @@ export const DataOutdatedScreen = observer(() => {
     }
   }
 
-  // --------------------------- EFFECT ----------------------------
-
-  // ------------------------- RENDER ----------------------------
-
   return (
-    <Layout
+    <Screen
+      preset="auto"
+      padding
+      safeAreaEdges={['bottom']}
       header={(
-        <Header goBack={() => navigation.goBack()} />
+        <Header leftIcon="arrow-left" onLeftPress={() => navigation.goBack()} />
       )}
-      containerStyle={{
-        paddingTop: 0
-      }}
     >
       <View
         style={{
@@ -44,37 +38,38 @@ export const DataOutdatedScreen = observer(() => {
           paddingHorizontal: 16
         }}
       >
-        <Image 
-          source={require('./intro1.png')}
+        <Image
+          source={DATA_IMG}
           style={{
             width: '100%'
           }}
         />
-        <Text 
-          preset="header" 
+        <Text
+          preset="bold"
+          size="xl"
           text={'OOPS!'}
           style={{
             marginTop: 16,
             marginBottom: 10
           }}
         />
-        <Text 
+        <Text
+          preset="label"
           text={translate('outdated_data.desc')}
           style={{ lineHeight: 24 }}
         />
         <Button
-          isLoading={cipherStore.isSynching}
+          loading={cipherStore.isSynching}
           disabled={cipherStore.isSynching}
           onPress={syncDataManually}
           text={cipherStore.isSynching ? translate('outdated_data.synchronizing') : translate('common.synchronize')}
           style={{
-            marginTop : 32,
+            marginTop: 32,
             marginBottom: 16,
-            width: '100%'
           }}
         />
         <Button
-          preset="outline"
+          preset='secondary'
           onPress={() => navigation.goBack()}
           text={translate('outdated_data.go_back')}
           style={{
@@ -82,6 +77,6 @@ export const DataOutdatedScreen = observer(() => {
           }}
         />
       </View>
-    </Layout>
+    </Screen>
   )
-})
+}

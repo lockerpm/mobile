@@ -55,8 +55,7 @@ import {
   FolderSharedUsersManagementScreen,
   PushEmailSettingsScreen,
   PushNotificationSettingsScreen,
-  InAppListNotification,
-  InAppNotificationScreen,
+  InAppListNotificationScreen,
   DeleteScreen,
   EmergencyAccessScreen,
   YourTrustedContactScreen,
@@ -219,7 +218,6 @@ export type PrimaryParamList = {
   app_list_noti: {
     notifications: AppNotification
   }
-  app_noti: undefined
 
   emergencyAccess: undefined
   yourTrustedContact: undefined
@@ -578,8 +576,7 @@ export const MainNavigator = () => {
         <Stack.Screen name="mainTab" component={MainTabNavigator} />
         <Stack.Screen name="toolsStack" component={ToolsNavigator} />
 
-        <Stack.Screen name="app_list_noti" component={InAppListNotification} />
-        <Stack.Screen name="app_noti" component={InAppNotificationScreen} />
+        <Stack.Screen name="app_list_noti" component={InAppListNotificationScreen} />
 
         <Stack.Screen
           name="passwordGenerator"

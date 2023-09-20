@@ -9,7 +9,7 @@ export * from './browse'
 export * from './tools'
 export * from './menu'
 export * from './errors'
-export * from './enterprise-invited'
+export * from './enterpriseInvited/EnterpriseInvitedScreen'
 
 export * from './share-cipher/normal-shares-screen'
 export * from './share-cipher/quick-shares-screen'

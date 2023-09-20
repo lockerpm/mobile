@@ -102,6 +102,10 @@ export const imageRegistry = {
   authenticator: require('assets/images/icons/tools/authenticator.png'),
   'password-health': require('assets/images/icons/tools/password-health.png'),
   'data-breach-scanner': require('assets/images/icons/tools/data-breach-scanner.png'),
+  'emergency': require('assets/images/icons/appNoti/emergency.png'),
+  'marketing': require('assets/images/icons/appNoti/marketing.png'),
+  'pw-tips': require('assets/images/icons/appNoti/pw-tips.png'),
+  'share-item': require('assets/images/icons/appNoti/share-item.png'),
 }
 
 const $imageStyle: ImageStyle = {

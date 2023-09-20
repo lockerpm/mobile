@@ -1,23 +1,22 @@
-import React, { useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { AutoImage as Image, Text, Layout, Button, Icon } from "../../../components"
-import { useNavigation } from "@react-navigation/native"
-import { ColorValue, ImageSourcePropType, TouchableOpacity, View } from "react-native"
-import { useStores } from "../../../models"
-import { useMixins } from "../../../services/mixins"
+import React, { FC, useEffect, useState } from "react"
+import { Text, Screen, Button, Icon } from "app/components-v2/cores"
+import { ColorValue, ImageSourcePropType, TouchableOpacity, View, Image } from "react-native"
 import { EnterpriseInvitation } from "app/static/types"
+import { AppStackScreenProps } from "app/navigators"
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { translate } from "app/i18n"
 
 
 const ASSETS = {
-  user: require('./user.png'),
-  org: require("./organization.png")
+  user: require('assets/images/intro/user.png'),
+  org: require("assets/images/intro/organization.png")
 }
 
-export const EnterpriseInvitedScreen = observer(function EnterpriseInvitedScreen() {
-  const navigation = useNavigation()
+export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'>> = (props) => {
+  const navigation = props.navigation
   const { enterpriseStore, user } = useStores()
-
-  const { translate, color } = useMixins()
+  const { colors } = useTheme()
 
   const onNext = () => {
     navigation.navigate("mainTab", { screen: user.defaultTab })
@@ -58,26 +57,25 @@ export const EnterpriseInvitedScreen = observer(function EnterpriseInvitedScreen
   const footer = (
     <View>
       <Button
-        isLoading={isLoading}
+        loading={isLoading}
         text={translate('common.accept')}
         onPress={() =>
           invitationAction("confirmed")
         }
         style={{
-          width: '100%',
           marginBottom: 12,
         }}
       />
       <Button
-        preset="outlinePlain"
+        preset='secondary'
         text={translate('common.decline')}
         onPress={() => invitationAction("reject")}
         textStyle={{
-          color: color.error
+          color: colors.error
         }}
         style={{
           width: '100%',
-          borderColor: color.disabled
+          borderColor: colors.disable
         }}
       />
     </View>
@@ -85,7 +83,9 @@ export const EnterpriseInvitedScreen = observer(function EnterpriseInvitedScreen
   )
 
   return (
-    <Layout
+    <Screen
+      safeAreaEdges={['top', 'bottom']}
+      padding
       footer={footer}
     >
       <View style={{ alignItems: "flex-end" }}>
@@ -95,12 +95,13 @@ export const EnterpriseInvitedScreen = observer(function EnterpriseInvitedScreen
             paddingBottom: 10,
             paddingLeft: 10
           }}>
-          <Icon icon={"cross"} size={24} color={color.textBlack} />
+          <Icon icon={"x"} size={24} />
         </TouchableOpacity>
       </View>
 
       <Text
-        preset="largeHeader"
+        preset="bold"
+        size="xl"
         text={translate('enterprise_invitation.invited')}
         style={{
           textAlign: "center",
@@ -109,7 +110,7 @@ export const EnterpriseInvitedScreen = observer(function EnterpriseInvitedScreen
       />
 
       <Item
-        leftBorderColor={color.primary}
+        leftBorderColor={colors.primary}
         backgroundColor={"rgba(44,142,93,0.05)"}
         label={translate('enterprise_invitation.org')}
         text={manaulInvitation?.enterprise.name}
@@ -127,22 +128,20 @@ export const EnterpriseInvitedScreen = observer(function EnterpriseInvitedScreen
       <View style={{
         marginTop: 10,
         borderRadius: 16,
-        backgroundColor: color.block,
+        backgroundColor: colors.block,
         padding: 20
       }}>
         <Text
-          preset="black"
           text={translate('enterprise_invitation.accept_note')}
           style={{ marginBottom: 12 }}
         />
         <Text
-          preset="black"
           text={translate('enterprise_invitation.decline_note')}
         />
       </View>
-    </Layout>
+    </Screen>
   )
-})
+}
 
 interface ItemProp {
   leftBorderColor: ColorValue,
@@ -185,7 +184,7 @@ const Item = (props: ItemProp) => <View style={{
         height: 40,
         marginRight: 12
       }} />
-      <Text style={{ maxWidth: "75%" }} preset="header" text={props.text} />
+      <Text style={{ maxWidth: "75%" }} preset="bold" size="large" text={props.text} />
     </View>
   </View>
 </View>
