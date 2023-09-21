@@ -13,7 +13,7 @@ import { AppEventType, EventBus } from "../../../utils/eventBus"
 import { Icon } from "../../icon/icon"
 import Entypo from 'react-native-vector-icons/Entypo'
 import { SharedGroupType, SharedMemberType } from "../../../config/types/api"
-import { SharedUsers } from "../../../screens/auth/share-cipher/shared-user"
+import { SharedUsers } from "../../../screens/auth/shareCipher/SharedUser"
 import { GroupMemberData, GroupData } from "app/static/types"
 
 interface Props {

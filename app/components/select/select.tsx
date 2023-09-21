@@ -39,8 +39,8 @@ export interface SelectProps {
 export const Select = (props: SelectProps) => {
   const { translate, color } = useMixins()
   const insets = useSafeAreaInsets()
-  
-  const { 
+
+  const {
     style, value, onChange, options,
     floating, renderSelected, renderItem, placeholder, title, multiple,
     showSearch, searchPlaceholder = translate('common.search')
@@ -108,7 +108,7 @@ export const Select = (props: SelectProps) => {
         }
       }}
       renderCustomSearch={({ onSearchChange }) => (
-        <SearchBar 
+        <SearchBar
           onSearch={onSearchChange}
           style={{
             borderRadius: 0,
@@ -119,10 +119,10 @@ export const Select = (props: SelectProps) => {
       )}
     >
       {options.map((option) => (
-        <Picker.Item 
-          key={option.value} 
-          value={option.value} 
-          label={option.label} 
+        <Picker.Item
+          key={option.value}
+          value={option.value}
+          label={option.label}
           disabled={option.disabled}
           // @ts-ignore
           labelStyle={{

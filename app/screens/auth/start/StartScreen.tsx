@@ -16,6 +16,8 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = (props) => {
   const [msg, setMsg] = useState('')
 
   // ------------------------- METHODS ----------------------------
+
+
   const refreshFCM = async () => {
     if (!user.disablePushNotifications) {
       let isSuccess = true

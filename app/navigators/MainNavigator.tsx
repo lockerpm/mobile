@@ -56,7 +56,6 @@ import {
   PushEmailSettingsScreen,
   PushNotificationSettingsScreen,
   InAppListNotificationScreen,
-  DeleteScreen,
   EmergencyAccessScreen,
   YourTrustedContactScreen,
   ContactsTrustedYouScreen,
@@ -77,6 +76,7 @@ import { useAuthentication, useCipherData, useHelper } from 'app/services/hook'
 import { translate } from 'app/i18n'
 import { Logger } from 'app/utils/utils'
 import { AppEventType, EventBus } from 'app/utils/eventBus'
+import { observer } from 'mobx-react-lite'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -210,7 +210,6 @@ export type PrimaryParamList = {
   notificationSettings: undefined
   emailNotiSettings: undefined
   deviceNotiSettings: undefined
-  deleteAccount: undefined
   shareMultiple: undefined
 
   welcome_premium: undefined
@@ -239,7 +238,7 @@ export type AppStackScreenProps<T extends keyof PrimaryParamList> = StackScreenP
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createStackNavigator<PrimaryParamList>()
 
-export const MainNavigator = () => {
+export const MainNavigator = observer(() => {
   const navigation = useNavigation()
   const { notify, parsePushNotiData } = useHelper()
   const { lock, logout } = useAuthentication()
@@ -659,7 +658,6 @@ export const MainNavigator = () => {
         <Stack.Screen name="autofillService" component={AutofillServiceScreen} />
         <Stack.Screen name="import" component={ImportScreen} />
         <Stack.Screen name="export" component={ExportScreen} />
-        <Stack.Screen name="deleteAccount" component={DeleteScreen} />
         <Stack.Screen name="notificationSettings" component={NotificationSettingsScreen} />
         <Stack.Screen name="emailNotiSettings" component={PushEmailSettingsScreen} />
         <Stack.Screen name="deviceNotiSettings" component={PushNotificationSettingsScreen} />
@@ -676,3 +674,4 @@ export const MainNavigator = () => {
     </UserInactivity>
   )
 }
+)

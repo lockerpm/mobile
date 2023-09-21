@@ -186,3 +186,10 @@ export type CipherAppView = {
   notSync: boolean
   isDeleted: boolean
 }
+
+export interface FileData {
+  name: string
+  uri: string
+  type: string
+  size: number
+}

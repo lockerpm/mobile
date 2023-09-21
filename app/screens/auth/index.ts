@@ -1,15 +1,20 @@
 export * from './welcomePremium/WelcomePremiumScreen'
 export * from './start/StartScreen'
+export * from './enterpriseInvited/EnterpriseInvitedScreen'
+export * from './biometricUnlockIntro/BiometricUnlockIntroScreen'
+export * from './shareCipher/NormalSharesScreen'
+export * from './shareCipher/QuickSharesScreen'
 
-export * from './autofill/autofill-screen'
-export * from './switch-device/switch-device-screen'
-export * from './biometric-unlock-intro/biometric-unlock-intro-screen'
+
 export * from './home'
 export * from './browse'
 export * from './tools'
 export * from './menu'
 export * from './errors'
-export * from './enterpriseInvited/EnterpriseInvitedScreen'
 
-export * from './share-cipher/normal-shares-screen'
-export * from './share-cipher/quick-shares-screen'
+
+// android
+export * from './autofill/autofill-screen'
+
+// not working
+export * from './switchDevice/SwitchDeviceScreen'

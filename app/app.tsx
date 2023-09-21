@@ -84,7 +84,7 @@ function App(props: RootProp) {
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       setupRootStore().then(setRootStore)
       SplashScreen.hide()
     })()
@@ -102,8 +102,7 @@ function App(props: RootProp) {
 
     if (problem) {
       Logger.debug(
-        `URL:${response.config.baseURL}${response.config.url} - Status: ${
-          response.status
+        `URL:${response.config.baseURL}${response.config.url} - Status: ${response.status
         } - Message: ${JSON.stringify(response.data)}`
       )
     }
@@ -137,14 +136,13 @@ function App(props: RootProp) {
   }
   const monitorApiRequest = (request) => async () => {
     Logger.debug(
-      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
-        request.params ? JSON.stringify(request.params) : ''
+      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${request.params ? JSON.stringify(request.params) : ''
       }`
     )
   }
 
-  api.apisauce.addMonitor(monitorApiResponse)
-  api.apisauce.addAsyncRequestTransform(monitorApiRequest)
+  // api.apisauce.addMonitor(monitorApiResponse)
+  // api.apisauce.addAsyncRequestTransform(monitorApiRequest)
 
   // if app start from android autofill service. navigate to autofill screen
   autofillParserAndroid(props)

@@ -1,9 +1,7 @@
 import React, { useState } from "react"
 import { View, Image, TouchableOpacity } from "react-native"
-import { Text } from "../../../../components"
-import Feather from 'react-native-vector-icons/Feather'
-import { useMixins } from "../../../../services/mixins"
-import { ActionSheet, ActionSheetContent } from "../../../../components"
+import { Text } from "app/components-v2/cores"
+import { useTheme } from "app/services/context"
 
 
 
@@ -27,19 +25,19 @@ interface MemberProps {
 export const Member = (props: MemberProps) => {
   const { member, family, add, onRemove } = props
   const { id, email, avatar, created_time, username, full_name } = member
-  const { color, translate } = useMixins()
+  const { colors } = useTheme()
 
   const owner = id === null
   // ----------------------- PARAMS -----------------------
-  const [showSheetModal, setShowSheetModal] = useState<boolean>(false)
 
+  const [showSheetModal, setShowSheetModal] = useState<boolean>(false)
 
   // ----------------------- RENDER -----------------------
   return (
     <View
       style={
         {
-          borderBottomColor: color.block,
+          borderBottomColor: colors.block,
           borderBottomWidth: 1,
           width: "100%",
           flexDirection: "row",
@@ -62,7 +60,7 @@ export const Member = (props: MemberProps) => {
       {!add && <View style={{ flex: 1, justifyContent: 'center' }}>
         <Text
           preset="black"
-          text={full_name ? full_name : "Unknown"}
+          text={full_name || "Unknown"}
           style={{ color: owner ? color.primary : color.textBlack }}
         />
         <Text

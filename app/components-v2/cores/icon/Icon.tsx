@@ -95,8 +95,8 @@ export function Icon(props: IconProps) {
             iconRegistry[icon]
               ? iconRegistry[icon]
               : !filled
-              ? iconRegularRegistry[icon]
-              : iconFillRegistry[icon]
+                ? iconRegularRegistry[icon]
+                : iconFillRegistry[icon]
           }
         />
       ) : (
@@ -167,6 +167,19 @@ export const iconRegistry = {
   bell: require('assets/icons/bell.png'),
   'users-three': require('assets/icons/users-three.png'),
   keyboard: require('assets/icons/keyboard.png'),
+  'user-plus': require('assets/icons/user-plus.png'),
+  'user-minus': require('assets/icons/user-minus.png'),
+
+  star: require('assets/icons/star.png'),
+  question: require('assets/icons/question.png'),
+  'lock-key': require('assets/icons/lock-key.png'),
+  'sign-out': require('assets/icons/sign-out.png'),
+  invite: require('assets/icons/invite.png'),
+
+  headset: require('assets/icons/headset.png'),
+  user: require('assets/icons/user.png'),
+  warning: require('assets/icons/warning.png'),
+  'file-arrow-up': require('assets/icons/file-arrow-up.png'),
 }
 
 const $imageStyle: ImageStyle = {

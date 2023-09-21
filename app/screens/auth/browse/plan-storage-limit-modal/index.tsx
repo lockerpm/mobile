@@ -3,6 +3,7 @@ import React from "react"
 import { Image } from "react-native"
 import { Button, Modal, Text } from "../../../../components"
 import { useMixins } from "../../../../services/mixins"
+import { PREMIUM_FEATURES_IMG } from "../../menu"
 
 interface Props {
   isOpen: boolean
@@ -32,7 +33,7 @@ export const PlanStorageLimitModal = ({ isOpen, onClose }: Props) => {
         }}
       />
       <Image
-        source={require("../../menu/manage-plan/assets/Locker.png")}
+        source={PREMIUM_FEATURES_IMG.locker}
         style={{ height: "50%", width: "50%" }}
         resizeMode="contain"
       />

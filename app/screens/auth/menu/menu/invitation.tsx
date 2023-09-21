@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 import { View } from "react-native"
-import { Button, Text } from "../../../../components"
-import { commonStyles } from "../../../../theme"
-import { observer } from "mobx-react-lite"
-import { useStores } from "../../../../models"
-import { useMixins } from "../../../../services/mixins"
-import { AccountRoleText, InvitationStatus } from "../../../../config/types"
+import { Button, Text } from "app/components-v2/cores"
+import { AccountRoleText, InvitationStatus } from "app/static/types"
+import { useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { useStores } from "app/models"
+import { translate } from "app/i18n"
 
 export type InvitationData = {
   access_time: number
@@ -19,9 +19,10 @@ export type InvitationData = {
   }
 }
 
-export const Invitation = observer((props: InvitationData) => {
+export const Invitation = (props: InvitationData) => {
   const { user } = useStores()
-  const { notify, translate, notifyApiError, color, isDark } = useMixins()
+  const { colors, isDark } = useTheme()
+  const { notify, notifyApiError } = useHelper()
   const [isLoading, setIsLoading] = useState('')
 
   const handleInvitation = async (status: 'accept' | 'reject') => {
@@ -29,8 +30,8 @@ export const Invitation = observer((props: InvitationData) => {
     const res = await user.invitationRespond(props.id, status)
     setIsLoading('')
     if (res.kind === 'ok') {
-      notify('success', status === 'accept' 
-        ? translate('success.invitation_accepted') 
+      notify('success', status === 'accept'
+        ? translate('success.invitation_accepted')
         : translate('success.invitation_rejected')
       )
       user.setInvitations(user.invitations.filter(item => item.id !== props.id))
@@ -41,7 +42,7 @@ export const Invitation = observer((props: InvitationData) => {
 
   return (
     <View style={{
-      backgroundColor: isDark ? color.block : color.background,
+      backgroundColor: isDark ? colors.block : colors.background,
       borderRadius: 10,
       paddingHorizontal: 14,
       paddingVertical: 20,
@@ -55,18 +56,21 @@ export const Invitation = observer((props: InvitationData) => {
         }}
       />
       <Text
+        preset="label"
         text={translate('menu.invitation_desc', { org: props.team.name })}
       />
       <View
-        style={[commonStyles.CENTER_HORIZONTAL_VIEW, {
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
           marginTop: 20
-        }]}
+        }}
       >
         <Button
-          preset="outline"
+          preset='secondary'
           text={translate('common.reject')}
-          isDisabled={!!isLoading}
-          isLoading={isLoading === 'reject'}
+          disabled={!!isLoading}
+          loading={isLoading === 'reject'}
           onPress={() => handleInvitation('reject')}
           style={{
             marginRight: 10
@@ -74,11 +78,11 @@ export const Invitation = observer((props: InvitationData) => {
         />
         <Button
           text={translate('common.accept')}
-          isDisabled={!!isLoading}
-          isLoading={isLoading === 'accept'}
+          disabled={!!isLoading}
+          loading={isLoading === 'accept'}
           onPress={() => handleInvitation('accept')}
         />
       </View>
     </View>
   )
-})
+}

@@ -1,9 +1,6 @@
 import React from 'react'
-import { observer } from 'mobx-react-lite'
-import { Modal } from '../../modal/modal'
-import { Button } from '../../button/button'
-import { Text } from '../../text/text'
-import { useMixins } from '../../../services/mixins'
+import { BottomModal, Text, Button } from 'app/components-v2/cores'
+import { translate } from 'app/i18n'
 
 interface Props {
   isOpen: boolean
@@ -14,28 +11,15 @@ interface Props {
   confirmText: string
 }
 
-export const PasswordPolicyViolationsModal = observer((props: Props) => {
+export const PasswordPolicyViolationsModal = (props: Props) => {
   const { isOpen, onClose, onConfirm, violations, teamName, confirmText } = props
-  const { translate } = useMixins()
-
-  // --------------- PARAMS ----------------
-
-  // --------------- COMPUTED ----------------
-
-  // --------------- METHODS ----------------
-
-  // --------------- EFFECT ----------------
-
-  // --------------- RENDER ----------------
-
   return (
-    <Modal
+    <BottomModal
       isOpen={isOpen}
       onClose={onClose}
       title={translate('policy.password_violation_modal.title')}
     >
       <Text
-        preset="black"
         text={`${translate('policy.password_violation_modal.desc')} ${teamName}:`}
         style={{
           marginTop: 20,
@@ -55,14 +39,13 @@ export const PasswordPolicyViolationsModal = observer((props: Props) => {
       ))}
 
       <Button
-        preset="outline"
+        preset='secondary'
         text={confirmText}
         onPress={onConfirm}
         style={{
-          width: '100%',
           marginTop: 30,
         }}
       />
-    </Modal>
+    </BottomModal>
   )
-})
+}

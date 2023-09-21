@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { Layout, BrowseItemHeader, BrowseItemEmptyContent } from '../../../components'
-import { useNavigation, RouteProp, useRoute } from '@react-navigation/native'
-import { useMixins } from '../../../services/mixins'
+import React, { FC, useEffect, useState } from 'react'
+import { BrowseItemHeader } from '../../../components'
 import { BackHandler, NativeModules } from 'react-native'
-import { useStores } from '../../../models'
-import { PrimaryParamList } from '../../../navigators'
 import { AutoFillList } from './autofill-list'
-import { MAX_CIPHER_SELECTION } from '../../../config/constants'
-import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
-import { CipherView } from '../../../../core/models/view'
-import { CipherType } from '../../../../core/enums'
-import { getTOTP, parseOTPUri } from '../../../utils/totp'
 import { parseSearchText } from 'app/utils/autofillHelper'
-import { SortActionConfigModal } from 'app/components-v2/ciphers'
+import { AppStackScreenProps } from 'app/navigators'
+import { useCipherData, useHelper } from 'app/services/hook'
+import { useStores } from 'app/models'
+import { CipherView } from 'core/models/view'
+import { CipherType } from 'core/enums'
+import { getTOTP, parseOTPUri } from 'app/utils/totp'
+import { Screen } from 'app/components-v2/cores'
+import { translate } from 'app/i18n'
+import { MAX_CIPHER_SELECTION } from 'app/static/constants'
+
+import { EmptyCipherList, SortActionConfigModal } from 'app/components-v2/ciphers'
+
 
 const { RNAutofillServiceAndroid } = NativeModules
 
-type PasswordEditScreenProp = RouteProp<PrimaryParamList, 'autofill'>
+const EMPTY_CIPHER = require('assets/images/emptyCipherList/autofill-empty-cipher.png')
 
-export const AutoFillScreen = observer(function AutoFillScreen() {
-  const navigation = useNavigation()
-  const { translate, copyToClipboard } = useMixins()
+export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = (props) => {
+  const navigation = props.navigation
+  const { mode } = props.route.params
+  const { copyToClipboard } = useHelper()
   const { uiStore } = useStores()
-  const route = useRoute<PasswordEditScreenProp>()
-  const { mode } = route.params
-  const { getCiphersFromCache } = useCipherDataMixins()
+  const { getCiphersFromCache } = useCipherData()
   // -------------------- PARAMS ----------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -106,8 +106,9 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
   // -------------------- RENDER ----------------------------
 
   return (
-    <Layout
-      isContentOverlayLoading={isLoading}
+    <Screen
+      padding
+      safeAreaEdges={['bottom']}
       header={
         <BrowseItemHeader
           isAutoFill
@@ -134,8 +135,6 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
           }}
         />
       }
-      borderBottom
-      noScroll
     >
       <SortActionConfigModal
         isOpen={isSortOpen}
@@ -158,8 +157,8 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
         setSelectedItems={setSelectedItems}
         setAllItems={setAllItems}
         emptyContent={
-          <BrowseItemEmptyContent
-            img={require('./empty-img.png')}
+          <EmptyCipherList
+            img={EMPTY_CIPHER}
             imgStyle={{ height: 55, width: 120 }}
             title={translate('password.empty.title')}
             desc={translate('password.empty.desc')}
@@ -173,6 +172,6 @@ export const AutoFillScreen = observer(function AutoFillScreen() {
           />
         }
       />
-    </Layout>
+    </Screen>
   )
-})
+}
