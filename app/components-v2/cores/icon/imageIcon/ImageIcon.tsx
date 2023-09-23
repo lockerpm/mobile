@@ -106,6 +106,10 @@ export const imageRegistry = {
   'marketing': require('assets/images/icons/appNoti/marketing.png'),
   'pw-tips': require('assets/images/icons/appNoti/pw-tips.png'),
   'share-item': require('assets/images/icons/appNoti/share-item.png'),
+
+  'folder': require('assets/images/icons/folder/folder.png'),
+  'folder-add': require('assets/images/icons/folder/folder-add.png'),
+  'folder-share': require('assets/images/icons/folder/folder-share.png'),
 }
 
 const $imageStyle: ImageStyle = {

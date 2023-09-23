@@ -31,6 +31,8 @@ import { Icon } from '../icon/Icon'
 import { Text, TextProps } from '../text/Text'
 import { useTheme } from 'app/services/context'
 import { typography } from 'app/theme'
+import { useHelper } from 'app/services/hook'
+import { MaskService, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
@@ -61,6 +63,10 @@ export interface TextFieldProps extends Omit<TextInputProps, 'ref'> {
    * Input password
    */
   isPassword?: boolean
+  /**
+   * Copy button
+   */
+  isCopyable?: boolean
   /**
    * A style modifier for different input states.
    */
@@ -109,6 +115,11 @@ export interface TextFieldProps extends Omit<TextInputProps, 'ref'> {
    * Note: It is a good idea to memoize this.
    */
   LeftAccessory?: ComponentType<TextFieldAccessoryProps>
+  /**
+   * Custom value
+   */
+  maskType?: TextInputMaskTypeProp
+  maskOptions?: TextInputMaskOptionProp
 }
 
 /**
@@ -125,10 +136,13 @@ export const TextInput = forwardRef(function TextField(
     isError,
     isDisabled,
     isPassword,
+    isCopyable,
     animated,
     placeholder,
     helper: helperProps,
     status: statusProps,
+    maskType,
+    maskOptions,
     label,
     RightAccessory,
     LeftAccessory,
@@ -142,7 +156,7 @@ export const TextInput = forwardRef(function TextField(
     value = '',
     ...TextInputProps
   } = props
-
+  const { copyToClipboard } = useHelper()
   const { colors } = useTheme()
   const [isFocus, setIsFocus] = useState(false)
   const [isRequired, setIsRequired] = useState(false)
@@ -196,6 +210,14 @@ export const TextInput = forwardRef(function TextField(
     input.current?.focus()
   }
 
+  const validateMask = (text: string) => {
+    if (maskType || maskOptions) {
+      const masked = MaskService.toMask(maskType || 'custom', text, maskOptions)
+      return masked
+    }
+    return text
+  }
+
   useImperativeHandle(ref, () => input.current)
 
   const onFucus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -240,16 +262,16 @@ export const TextInput = forwardRef(function TextField(
       paddingHorizontal: 4,
       transform: animated
         ? [
-            {
-              scale: interpolate(toggleStyle.value, [0, 1], [1, 0.9]),
-            },
-            {
-              translateX: interpolate(toggleStyle.value, [0, 1], [12, 0]),
-            },
-            {
-              translateY: interpolate(toggleStyle.value, [0, 1], [39, 14]),
-            },
-          ]
+          {
+            scale: interpolate(toggleStyle.value, [0, 1], [1, 0.9]),
+          },
+          {
+            translateX: interpolate(toggleStyle.value, [0, 1], [12, 0]),
+          },
+          {
+            translateY: interpolate(toggleStyle.value, [0, 1], [39, 14]),
+          },
+        ]
         : [],
       color: interpolateColor(toggleStyle.value, [0, 1], [colors.disable, colors.primaryText]),
     }
@@ -284,7 +306,7 @@ export const TextInput = forwardRef(function TextField(
           textAlignVertical="top"
           placeholder={placeholderContent}
           placeholderTextColor={colors.disable}
-          value={value}
+          value={validateMask(value)}
           {...TextInputProps}
           secureTextEntry={!isShowText && isPassword}
           selectionColor={colors.primary}
@@ -307,7 +329,19 @@ export const TextInput = forwardRef(function TextField(
           />
         )}
 
-        {!!RightAccessory && !isPassword && (
+        {
+          isCopyable && (
+            <Icon
+              onPress={() => copyToClipboard(value)}
+              containerStyle={$rightAccessoryStyle}
+              icon={'copy'}
+              color={colors.primaryText}
+              size={20}
+            />
+          )
+        }
+
+        {!!RightAccessory && !isPassword && !isCopyable && (
           <RightAccessory
             style={$rightAccessoryStyle}
             status={status}

@@ -6,10 +6,10 @@ import { CipherView } from '../../../../../../../core/models/view'
 import { CipherType } from '../../../../../../../core/enums'
 import { CipherListItem } from '../../../../../../components/cipher/cipher-list/cipher-list-item'
 import { PasswordAction } from '../../../../browse/passwords/password-action'
-import { CardAction } from '../../../../browse/cards/card-action'
+import { CardAction } from '../../../../browse/cards/CardAction'
 import { IdentityAction } from '../../../../browse/identities/identity-action'
 import { NoteAction } from '../../../../browse/notes/note-action'
-import { CryptoWalletAction } from '../../../../browse/crypto-asset/crypto-wallet-action'
+import { CryptoWalletAction } from '../../../../browse/cryptoAsset/CryptoWalletAction'
 
 export interface CipherListProps {
   ciphers: any[]

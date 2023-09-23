@@ -8,11 +8,8 @@ import { commonStyles, fontSize } from "../../../../../theme"
 import { Button, Header, SearchBar, Text } from "../../../../../components"
 import { ShareModal } from "../../../../../components/cipher/cipher-action/share-modal"
 
-import ConfigIcon from './config.svg'
-import ConfigIconLight from './config-light.svg'
-import PlusIcon from './plus.svg'
-import PlusIconLight from './plus-light.svg'
 import { MAX_MULTIPLE_SHARE_COUNT } from "../../../../../config/constants"
+import { Icon } from "app/components-v2/cores"
 
 
 interface Props {
@@ -43,20 +40,20 @@ const BUTTON_RIGHT: ViewStyle = {
 }
 
 export const ShareMultipleHeader = observer((props: Props) => {
-  const { 
+  const {
     openAdd, openSort, onSearch, searchText, navigation,
     selectedItems, setSelectedItems, toggleSelectAll
   } = props
-  const { translate, color, isDark } = useMixins()
+  const { translate, color } = useMixins()
 
   // ----------------------- PARAMS ------------------------
 
   const [showShareModal, setShowShareModal] = useState(false)
 
   // ----------------------- COMPUTED ------------------------
-  
+
   const isExceeded = selectedItems.length > MAX_MULTIPLE_SHARE_COUNT
-  
+
   // ----------------------- METHODS ------------------------
 
   // Select right
@@ -97,33 +94,9 @@ export const ShareMultipleHeader = observer((props: Props) => {
         )
       }
 
-      <Button
-        preset="link"
-        style={BUTTON_RIGHT}
-        onPress={() => openSort && openSort()}
-      >
-        {
-          isDark ? (
-            <ConfigIconLight height={17} />
-          ) : (
-            <ConfigIcon height={17} />
-          )
-        }
-      </Button>
+      <Icon icon='sliders-horizontal' size={20} containerStyle={{ padding: 8 }} onPress={() => openSort && openSort()} />
+      <Icon icon='plus' size={20} containerStyle={{ padding: 8 }} onPress={() => openAdd && openAdd()} />
 
-      <Button
-        preset="link"
-        style={BUTTON_RIGHT}
-        onPress={() => openAdd && openAdd()}
-      >
-        {
-          isDark ? (
-            <PlusIconLight height={18} />
-          ) : (
-            <PlusIcon height={18} />
-          )
-        }
-      </Button>
     </View>
   )
 
@@ -148,8 +121,8 @@ export const ShareMultipleHeader = observer((props: Props) => {
       <Text
         preset="black"
         text={
-          selectedItems.length 
-            ? `${selectedItems.length} ${translate('common.selected')} (${translate('common.max')} ${MAX_MULTIPLE_SHARE_COUNT})` 
+          selectedItems.length
+            ? `${selectedItems.length} ${translate('common.selected')} (${translate('common.max')} ${MAX_MULTIPLE_SHARE_COUNT})`
             : translate('common.select')
         }
         style={{

@@ -178,8 +178,14 @@ export const iconRegistry = {
 
   headset: require('assets/icons/headset.png'),
   user: require('assets/icons/user.png'),
+  link: require('assets/icons/link.png'),
   warning: require('assets/icons/warning.png'),
   'file-arrow-up': require('assets/icons/file-arrow-up.png'),
+  repeat: require('assets/icons/repeat.png'),
+  'plus-circle': require('assets/icons/plus-circle.png'),
+  'minus-circle': require('assets/icons/minus-circle.png'),
+
+  'list-bullets': require('assets/icons/list-bullets.png'),
 }
 
 const $imageStyle: ImageStyle = {

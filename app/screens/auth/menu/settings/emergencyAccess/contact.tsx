@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Dimensions, TouchableOpacity, View } from 'react-native'
-import { AutoImage as Image, Button, Modal, Text } from '../../../../../components'
+import { Dimensions, TouchableOpacity, View, Image } from 'react-native'
+import { Button, Modal, Text } from '../../../../../components'
 import { useMixins } from '../../../../../services/mixins'
 import { fontSize } from '../../../../../theme'
 import { EmergencyAccessStatus } from '../../../../../config/types'

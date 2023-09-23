@@ -7,12 +7,11 @@ export * from "./help/HelpScreen"
 export * from "./import/ImportScreen"
 export * from "./managePlan/ManagePlanScreen"
 export * from './managePlan/PremiumFeature'
-
-export * from "./invite_member/invite_member_screen"
+export * from "./inviteMember/InviteMemberScreen"
+export * from "./referFriend/ReferFriendScreen"
 
 // TODO
 export * from './settings/emergencyAccess'
 export * from "./managePlan/payment/payment-screen"
-export * from "./refer-friend/refer-friend-screen"
 // @ts-ignore
 export * from "./autofill-service/autofill-service-screen"

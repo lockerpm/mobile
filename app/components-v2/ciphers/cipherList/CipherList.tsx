@@ -12,6 +12,12 @@ import { View, FlatList, ActivityIndicator } from 'react-native'
 import { CipherListItem } from './CipherListItem'
 
 import { Text } from '../../cores'
+import { PasswordAction } from 'app/screens/auth/browse/passwords/password-action'
+import { CardAction } from 'app/screens/auth/browse/cards/CardAction'
+import { IdentityAction } from 'app/screens/auth/browse/identities/identity-action'
+import { NoteAction } from 'app/screens/auth/browse/notes/note-action'
+import { CryptoWalletAction } from 'app/screens/auth/browse/cryptoAsset/CryptoWalletAction'
+import { DeletedAction } from 'app/components/cipher/cipher-action/deleted-action'
 
 export interface CipherListProps {
   navigation: any
@@ -43,6 +49,7 @@ export const CipherList = (props: CipherListProps) => {
     emptyContent,
     onLoadingChange,
     searchText,
+    navigation,
     deleted = false,
     sortList,
     folderId,
@@ -62,12 +69,12 @@ export const CipherList = (props: CipherListProps) => {
 
   // ------------------------ PARAMS ----------------------------
 
-  // const [showPasswordAction, setShowPasswordAction] = useState(false)
-  // const [showNoteAction, setShowNoteAction] = useState(false)
-  // const [showIdentityAction, setShowIdentityAction] = useState(false)
-  // const [showCardAction, setShowCardAction] = useState(false)
-  // const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
-  // const [showDeletedAction, setShowDeletedAction] = useState(false)
+  const [showPasswordAction, setShowPasswordAction] = useState(false)
+  const [showNoteAction, setShowNoteAction] = useState(false)
+  const [showIdentityAction, setShowIdentityAction] = useState(false)
+  const [showCardAction, setShowCardAction] = useState(false)
+  const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
+  const [showDeletedAction, setShowDeletedAction] = useState(false)
 
   const [ciphers, setCiphers] = useState<CipherAppView[]>([])
 
@@ -176,34 +183,34 @@ export const CipherList = (props: CipherListProps) => {
   }
 
   // Handle action menu open
-  // const openActionMenu = (item: CipherView) => {
-  //   cipherStore.setSelectedCipher(item)
-  //   if (deleted) {
-  //     setShowDeletedAction(true)
-  //     return
-  //   }
+  const openActionMenu = (item: CipherView) => {
+    cipherStore.setSelectedCipher(item)
+    if (deleted) {
+      setShowDeletedAction(true)
+      return
+    }
 
-  //   switch (item.type) {
-  //     case CipherType.MasterPassword:
-  //     case CipherType.Login:
-  //       setShowPasswordAction(true)
-  //       break
-  //     case CipherType.Card:
-  //       setShowCardAction(true)
-  //       break
-  //     case CipherType.Identity:
-  //       setShowIdentityAction(true)
-  //       break
-  //     case CipherType.SecureNote:
-  //       setShowNoteAction(true)
-  //       break
-  //     case CipherType.CryptoWallet:
-  //       setShowCryptoWalletAction(true)
-  //       break
-  //     default:
-  //       break
-  //   }
-  // }
+    switch (item.type) {
+      case CipherType.MasterPassword:
+      case CipherType.Login:
+        setShowPasswordAction(true)
+        break
+      case CipherType.Card:
+        setShowCardAction(true)
+        break
+      case CipherType.Identity:
+        setShowIdentityAction(true)
+        break
+      case CipherType.SecureNote:
+        setShowNoteAction(true)
+        break
+      case CipherType.CryptoWallet:
+        setShowCryptoWalletAction(true)
+        break
+      default:
+        break
+    }
+  }
 
   // Go to detail
   // const goToDetail = (item: CipherView) => {
@@ -280,9 +287,7 @@ export const CipherList = (props: CipherListProps) => {
         item={item}
         isSelecting={isSelecting}
         toggleItemSelection={setCheckedItem}
-        openActionMenu={() => {
-          //
-        }}
+        openActionMenu={openActionMenu}
         isSelected={selectedItems.includes(item.id)}
         isShared={isShared(item.organizationId)}
       />
@@ -292,7 +297,7 @@ export const CipherList = (props: CipherListProps) => {
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
-      {/* <PasswordAction
+      <PasswordAction
         isOpen={showPasswordAction}
         onClose={() => setShowPasswordAction(false)}
         navigation={navigation}
@@ -332,7 +337,7 @@ export const CipherList = (props: CipherListProps) => {
         onClose={() => setShowDeletedAction(false)}
         navigation={navigation}
         onLoadingChange={onLoadingChange}
-      /> */}
+      />
 
       <FlatList
         data={ciphers}
