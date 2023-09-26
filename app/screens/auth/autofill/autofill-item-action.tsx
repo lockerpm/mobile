@@ -1,21 +1,28 @@
-import React, { useState } from "react"
-import { View } from "react-native"
-import { observer } from "mobx-react-lite"
-import { commonStyles, fontSize } from "../../../theme"
-import { useStores } from "../../../models"
-import { BROWSE_ITEMS } from "../../../common/mappings"
-import { CipherType } from "../../../../core/enums"
-import { useMixins } from "../../../services/mixins"
-import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
-import { CipherView } from "../../../../core/models/view"
-import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { ActionItem, ActionSheet, ActionSheetContent, AutoImage as Image, Divider, Text } from "../../../components"
-import { AccountRoleText } from "../../../config/types"
+import React, { useState } from 'react'
+import { View } from 'react-native'
+import { observer } from 'mobx-react-lite'
+import { commonStyles, fontSize } from '../../../theme'
+import { useStores } from '../../../models'
+import { BROWSE_ITEMS } from '../../../common/mappings'
+import { CipherType } from '../../../../core/enums'
+import { useMixins } from '../../../services/mixins'
+import { DeleteConfirmModal } from '../browse/trash/DeleteConfirmModal'
+import { CipherView } from '../../../../core/models/view'
+import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
+import {
+  ActionItem,
+  ActionSheet,
+  ActionSheetContent,
+  AutoImage as Image,
+  Divider,
+  Text,
+} from '../../../components'
+import { AccountRoleText } from '../../../config/types'
 
 interface Props {
-  isOpen?: boolean,
-  onClose?: () => void,
-  navigation: any,
+  isOpen?: boolean
+  onClose?: () => void
+  navigation: any
   onLoadingChange?: Function
 }
 
@@ -40,9 +47,11 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
 
   const cipherMapper = (() => {
     return {
-      img: selectedCipher.login.uri ? getWebsiteLogo(selectedCipher.login.uri) : BROWSE_ITEMS.password.icon,
+      img: selectedCipher.login.uri
+        ? getWebsiteLogo(selectedCipher.login.uri)
+        : BROWSE_ITEMS.password.icon,
       backup: BROWSE_ITEMS.password.icon,
-      path: 'passwords'
+      path: 'passwords',
     }
   })()
 
@@ -80,10 +89,7 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
       {/* Modals end */}
 
       {/* Actionsheet */}
-      <ActionSheet
-        isOpen={isOpen}
-        onClose={handleActionSheetClose}
-      >
+      <ActionSheet isOpen={isOpen} onClose={handleActionSheetClose}>
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             <Image
@@ -92,18 +98,10 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
               style={{ height: 40, width: 40, borderRadius: 8 }}
             />
             <View style={{ marginLeft: 10 }}>
-              <Text
-                preset="semibold"
-                text={selectedCipher.name}
-              />
-              {
-                (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
-                  <Text
-                    text={selectedCipher.login.username}
-                    style={{ fontSize: fontSize.small }}
-                  />
-                )
-              }
+              <Text preset="semibold" text={selectedCipher.name} />
+              {selectedCipher.type === CipherType.Login && !!selectedCipher.login.username && (
+                <Text text={selectedCipher.login.username} style={{ fontSize: fontSize.small }} />
+              )}
             </View>
           </View>
         </View>

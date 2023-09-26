@@ -6,7 +6,7 @@ import { AppNotification } from 'app/static/types'
 import { useTheme } from 'app/services/context'
 import { SearchBar } from 'app/components-v2/utils'
 
-import { DeleteConfirmModal } from '../../browse/trash/delete-confirm-modal'
+import { DeleteConfirmModal } from '../../browse/trash/DeleteConfirmModal'
 import { useCipherData, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { translate } from 'app/i18n'

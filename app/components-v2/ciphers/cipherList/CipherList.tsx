@@ -12,10 +12,10 @@ import { View, FlatList, ActivityIndicator } from 'react-native'
 import { CipherListItem } from './CipherListItem'
 
 import { Text } from '../../cores'
-import { PasswordAction } from 'app/screens/auth/browse/passwords/password-action'
+import { PasswordAction } from 'app/screens/auth/browse/passwords/PasswordAction'
 import { CardAction } from 'app/screens/auth/browse/cards/CardAction'
-import { IdentityAction } from 'app/screens/auth/browse/identities/identity-action'
-import { NoteAction } from 'app/screens/auth/browse/notes/note-action'
+import { IdentityAction } from 'app/screens/auth/browse/identities/IdentityAction'
+import { NoteAction } from 'app/screens/auth/browse/notes/NoteAction'
 import { CryptoWalletAction } from 'app/screens/auth/browse/cryptoAsset/CryptoWalletAction'
 import { DeletedAction } from 'app/components/cipher/cipher-action/deleted-action'
 

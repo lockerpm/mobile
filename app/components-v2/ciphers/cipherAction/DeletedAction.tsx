@@ -1,20 +1,20 @@
-import React, { useState } from "react"
-import { View, Image } from "react-native"
-import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
-import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
-import { useStores } from "app/models"
-import { translate } from "app/i18n"
-import { ActionSheet } from "../actionsSheet/ActionSheet"
-import { Text } from "app/components-v2/cores"
-import { CipherType } from "core/enums"
-import { ActionItem } from "../actionsSheet/ActionSheetItem"
-import { useTheme } from "app/services/context"
+import React, { useState } from 'react'
+import { View, Image } from 'react-native'
+import { DeleteConfirmModal } from '../../../screens/auth/browse/trash/DeleteConfirmModal'
+import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
+import { useStores } from 'app/models'
+import { translate } from 'app/i18n'
+import { ActionSheet } from '../actionsSheet/ActionSheet'
+import { Text } from 'app/components-v2/cores'
+import { CipherType } from 'core/enums'
+import { ActionItem } from '../actionsSheet/ActionSheetItem'
+import { useTheme } from 'app/services/context'
 
 export interface DeletedActionProps {
-  children?: React.ReactNode,
-  isOpen?: boolean,
-  onClose?: () => void,
-  navigation: any,
+  children?: React.ReactNode
+  isOpen?: boolean
+  onClose?: () => void
+  navigation: any
 }
 
 /**
@@ -92,25 +92,12 @@ export const DeletedAction = (props: DeletedActionProps) => {
         header={
           <View style={{ width: '100%', paddingHorizontal: 20 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-              <Image
-                source={cipherMapper.img}
-                style={{ height: 40, width: 40, borderRadius: 8 }}
-              />
+              <Image source={cipherMapper.img} style={{ height: 40, width: 40, borderRadius: 8 }} />
               <View style={{ marginLeft: 10, flex: 1 }}>
-                <Text
-                  preset="bold"
-                  text={selectedCipher.name}
-                  numberOfLines={2}
-                />
-                {
-                  (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
-                    <Text
-                      preset="label"
-                      size="base"
-                      text={selectedCipher.login.username}
-                    />
-                  )
-                }
+                <Text preset="bold" text={selectedCipher.name} numberOfLines={2} />
+                {selectedCipher.type === CipherType.Login && !!selectedCipher.login.username && (
+                  <Text preset="label" size="base" text={selectedCipher.login.username} />
+                )}
               </View>
             </View>
           </View>

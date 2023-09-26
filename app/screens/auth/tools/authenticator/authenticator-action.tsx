@@ -3,7 +3,7 @@ import { Text, ActionItem, ActionSheet, Divider, ActionSheetContent } from '../.
 import { color, commonStyles } from '../../../../theme'
 import { View } from 'react-native'
 import { useMixins } from '../../../../services/mixins'
-import { DeleteConfirmModal } from '../../browse/trash/delete-confirm-modal'
+import { DeleteConfirmModal } from '../../browse/trash/DeleteConfirmModal'
 import { CipherView } from '../../../../../core/models/view'
 import { parseOTPUri, getTOTP } from '../../../../utils/totp'
 import { useStores } from '../../../../models'

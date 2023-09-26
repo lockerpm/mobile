@@ -14,7 +14,7 @@ import { CipherType } from 'core/enums'
 import { translate } from 'app/i18n'
 import { Button, Header, Screen, TextInput, Text } from 'app/components-v2/cores'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components-v2/ciphers'
-import { PlanStorageLimitModal } from '../../plan-storage-limit-modal'
+import { PlanStorageLimitModal } from '../../planStorageLimitModal'
 import { Select } from 'app/components-v2/utils'
 
 type InputItem = {
@@ -233,7 +233,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
           RightActionComponent={
             <Button
               loading={isLoading}
-              preset='teriatary'
+              preset="teriatary"
               disabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
@@ -266,11 +266,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
       {/* Title end */}
 
       <View style={{ padding: 16 }}>
-        <Text
-          preset='label'
-          size='base'
-          text={translate('card.card_details').toUpperCase()}
-        />
+        <Text preset="label" size="base" text={translate('card.card_details').toUpperCase()} />
       </View>
 
       {/* Info */}

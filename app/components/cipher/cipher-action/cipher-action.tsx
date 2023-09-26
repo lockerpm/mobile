@@ -1,23 +1,23 @@
-import React, { useState } from "react"
-import { TouchableOpacity, View } from "react-native"
-import { observer } from "mobx-react-lite"
-import { commonStyles, fontSize } from "../../../theme"
-import { useStores } from "../../../models"
-import { ActionItem } from "./action-item"
-import { useMixins } from "../../../services/mixins"
-import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
-import { Text } from "../../text/text"
-import { AutoImage as Image } from "../../auto-image/auto-image"
-import { ActionSheet } from "../../action-sheet/action-sheet"
-import { ActionSheetContent } from "../../action-sheet"
-import { Divider } from "../../divider/divider"
-import { CipherView } from "../../../../core/models/view"
-import { ChangeTeamFolderModal } from "./change-team-folder-modal"
-import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { AccountRole, AccountRoleText, PlanType } from "../../../config/types"
-import { LeaveShareModal } from "./leave-share-modal"
-import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
-import { CipherType } from "../../../../core/enums"
+import React, { useState } from 'react'
+import { TouchableOpacity, View } from 'react-native'
+import { observer } from 'mobx-react-lite'
+import { commonStyles, fontSize } from '../../../theme'
+import { useStores } from '../../../models'
+import { ActionItem } from './action-item'
+import { useMixins } from '../../../services/mixins'
+import { DeleteConfirmModal } from '../../../screens/auth/browse/trash/DeleteConfirmModal'
+import { Text } from '../../text/text'
+import { AutoImage as Image } from '../../auto-image/auto-image'
+import { ActionSheet } from '../../action-sheet/action-sheet'
+import { ActionSheetContent } from '../../action-sheet'
+import { Divider } from '../../divider/divider'
+import { CipherView } from '../../../../core/models/view'
+import { ChangeTeamFolderModal } from './change-team-folder-modal'
+import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
+import { AccountRole, AccountRoleText, PlanType } from '../../../config/types'
+import { LeaveShareModal } from './leave-share-modal'
+import { useCipherHelpersMixins } from '../../../services/mixins/cipher/helpers'
+import { CipherType } from '../../../../core/enums'
 
 export interface CipherActionProps {
   children?: React.ReactNode
@@ -39,7 +39,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
 
   const [showChangeTeamFolderModal, setShowChangeTeamFolderModal] = useState(false)
   const [nextModal, setNextModal] = useState<
-    "changeTeamFolder" | "share" | "trashConfirm" | "leaveConfirm" | null
+    'changeTeamFolder' | 'share' | 'trashConfirm' | 'leaveConfirm' | null
   >(null)
 
   // const [showShareModal, setShowShareModal] = useState(false)
@@ -77,9 +77,9 @@ export const CipherAction = observer((props: CipherActionProps) => {
 
   const handleDelete = async () => {
     const res = await toTrashCiphers([selectedCipher.id])
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       const routeName = await getRouteName()
-      if (routeName.endsWith("__info")) {
+      if (routeName.endsWith('__info')) {
         navigation.goBack()
       }
     }
@@ -88,16 +88,16 @@ export const CipherAction = observer((props: CipherActionProps) => {
   const handleActionSheetClose = () => {
     onClose()
     switch (nextModal) {
-      case "changeTeamFolder":
+      case 'changeTeamFolder':
         setShowChangeTeamFolderModal(true)
         break
-      case "share":
+      case 'share':
         setShowShareOptions(true)
         break
-      case "trashConfirm":
+      case 'trashConfirm':
         setShowConfirmTrashModal(true)
         break
-      case "leaveConfirm":
+      case 'leaveConfirm':
         setShowConfirmLeaveModal(true)
         break
     }
@@ -114,8 +114,8 @@ export const CipherAction = observer((props: CipherActionProps) => {
         isOpen={showConfirmTrashModal}
         onClose={() => setShowConfirmTrashModal(false)}
         onConfirm={handleDelete}
-        title={translate("trash.to_trash")}
-        desc={translate("trash.to_trash_desc")}
+        title={translate('trash.to_trash')}
+        desc={translate('trash.to_trash_desc')}
         btnText="OK"
       />
 
@@ -140,7 +140,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
       {/* Actionsheet */}
       <ActionSheet isOpen={isOpen} onClose={handleActionSheetClose}>
         {/* Cipher info */}
-        <View style={{ width: "100%", paddingHorizontal: 20 }}>
+        <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
             {cipherMapper.svg ? (
               <cipherMapper.svg height={40} width={40} />
@@ -173,7 +173,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
 
           <ActionItem
             disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-            name={translate("common.details")}
+            name={translate('common.details')}
             icon="list-alt"
             action={() => {
               onClose()
@@ -185,11 +185,11 @@ export const CipherAction = observer((props: CipherActionProps) => {
             <View>
               {!lockerMasterPassword && (
                 <ActionItem
-                  name={translate("common.clone")}
+                  name={translate('common.clone')}
                   icon="clone"
                   action={() => {
                     onClose()
-                    navigation.navigate(`${cipherMapper.path}__edit`, { mode: "clone" })
+                    navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'clone' })
                   }}
                 />
               )}
@@ -197,12 +197,12 @@ export const CipherAction = observer((props: CipherActionProps) => {
               {!isInFolderShare && !lockerMasterPassword && (
                 <ActionItem
                   disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-                  name={translate("folder.move_to_folder")}
+                  name={translate('folder.move_to_folder')}
                   icon="folder-o"
                   action={() => {
                     onClose()
-                    navigation.navigate("folders__select", {
-                      mode: "move",
+                    navigation.navigate('folders__select', {
+                      mode: 'move',
                       initialId: selectedCipher.folderId,
                       cipherIds: [selectedCipher.id],
                     })
@@ -230,11 +230,11 @@ export const CipherAction = observer((props: CipherActionProps) => {
               {!lockerMasterPassword && (
                 <ActionItem
                   disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-                  name={translate("common.edit")}
+                  name={translate('common.edit')}
                   icon="edit"
                   action={() => {
                     onClose()
-                    navigation.navigate(`${cipherMapper.path}__edit`, { mode: "edit" })
+                    navigation.navigate(`${cipherMapper.path}__edit`, { mode: 'edit' })
                   }}
                 />
               )}
@@ -243,10 +243,10 @@ export const CipherAction = observer((props: CipherActionProps) => {
                 <ActionItem
                   onClose={onClose}
                   disabled={uiStore.isOffline}
-                  name={translate("common.share")}
+                  name={translate('common.share')}
                   icon="share-square-o"
                   action={() => {
-                    setNextModal("share")
+                    setNextModal('share')
                     onClose()
                   }}
                 />
@@ -255,11 +255,11 @@ export const CipherAction = observer((props: CipherActionProps) => {
               {!lockerMasterPassword && !isInFolderShare && (
                 <ActionItem
                   disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-                  name={translate("trash.to_trash")}
+                  name={translate('trash.to_trash')}
                   icon="trash"
                   textColor={color.error}
                   action={() => {
-                    setNextModal("trashConfirm")
+                    setNextModal('trashConfirm')
                     onClose()
                   }}
                 />
@@ -270,11 +270,11 @@ export const CipherAction = observer((props: CipherActionProps) => {
           {isShared && !isInFolderShare && (
             <ActionItem
               disabled={uiStore.isOffline}
-              name={translate("shares.leave")}
+              name={translate('shares.leave')}
               icon="sign-out"
               textColor={color.error}
               action={() => {
-                setNextModal("leaveConfirm")
+                setNextModal('leaveConfirm')
                 onClose()
               }}
             />
@@ -290,7 +290,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
       >
         <Text
           preset="bold"
-          text={translate("quick_shares.share_option.title")}
+          text={translate('quick_shares.share_option.title')}
           style={{ fontSize: 20 }}
         />
         <ActionSheetContent contentContainerStyle={{ paddingVertical: 5, paddingBottom: 16 }}>
@@ -300,19 +300,20 @@ export const CipherAction = observer((props: CipherActionProps) => {
               if (premiumLock) {
                 goPremium()
               } else {
-                navigation.navigate("normal_shares", { ciphers: [selectedCipher] })
+                navigation.navigate('normal_shares', { ciphers: [selectedCipher] })
               }
-      
             }}
           >
-            <View style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: 14,
-            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 14,
+              }}
+            >
               <Text
                 preset="semibold"
-                text={translate("quick_shares.share_option.normal.tl")}
+                text={translate('quick_shares.share_option.normal.tl')}
                 style={{
                   marginBottom: 4,
                 }}
@@ -330,7 +331,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
                   <Text
                     text="PREMIUM"
                     style={{
-                      fontWeight: "bold",
+                      fontWeight: 'bold',
                       color: color.background,
                       fontSize: fontSize.mini,
                     }}
@@ -338,24 +339,24 @@ export const CipherAction = observer((props: CipherActionProps) => {
                 </View>
               )}
             </View>
-     
-            <Text text={translate("quick_shares.share_option.normal.dec")} />
+
+            <Text text={translate('quick_shares.share_option.normal.dec')} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setShowShareOptions(false)
-              navigation.navigate("quick_shares", { cipher: selectedCipher })
+              navigation.navigate('quick_shares', { cipher: selectedCipher })
             }}
           >
             <Text
               preset="semibold"
-              text={translate("quick_shares.share_option.quick.tl")}
+              text={translate('quick_shares.share_option.quick.tl')}
               style={{
                 marginVertical: 24,
                 marginBottom: 4,
               }}
             />
-            <Text text={translate("quick_shares.share_option.quick.dec")} />
+            <Text text={translate('quick_shares.share_option.quick.dec')} />
           </TouchableOpacity>
         </ActionSheetContent>
       </ActionSheet>

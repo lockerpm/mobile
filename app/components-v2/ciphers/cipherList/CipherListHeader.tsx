@@ -1,26 +1,26 @@
-import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
-import { useCipherData } from "app/services/hook"
-import React, { useState } from "react"
-import { View, BackHandler } from "react-native"
-import { Text, Icon, TabHeader } from "app/components-v2/cores"
-import { SearchBar } from "app/components-v2/utils"
-import { translate } from "app/i18n"
-import { DeleteConfirmModal } from "app/screens/auth/browse/trash/delete-confirm-modal"
-import { ShareModal } from "../cipherAction/ShareModal"
+import { useStores } from 'app/models'
+import { useTheme } from 'app/services/context'
+import { useCipherData } from 'app/services/hook'
+import React, { useState } from 'react'
+import { View, BackHandler } from 'react-native'
+import { Text, Icon, TabHeader } from 'app/components-v2/cores'
+import { SearchBar } from 'app/components-v2/utils'
+import { translate } from 'app/i18n'
+import { DeleteConfirmModal } from 'app/screens/auth/browse/trash/DeleteConfirmModal'
+import { ShareModal } from '../cipherAction/ShareModal'
 
 export interface CipherListHeaderProps {
-  openSort?: () => void,
-  openAdd?: () => void,
-  navigation: any,
-  header: string,
-  onSearch?: (text: string) => void,
+  openSort?: () => void
+  openAdd?: () => void
+  navigation: any
+  header: string
+  onSearch?: (text: string) => void
   searchText?: string
   isSelecting: boolean
-  setIsSelecting: (val: boolean) => void
-  selectedItems: string[]
-  setSelectedItems: (val: any) => void
-  toggleSelectAll: () => void
+  setIsSelecting?: (val: boolean) => void
+  selectedItems?: string[]
+  setSelectedItems?: (val: any) => void
+  toggleSelectAll?: () => void
   setIsLoading: (val: boolean) => void
   isTrash?: boolean
   isAuthenticator?: boolean
@@ -28,14 +28,31 @@ export interface CipherListHeaderProps {
   isShared?: boolean
 }
 
+const EmpFc = () => {
+  //
+}
 
 /**
  * Describe your component here
  */
 export const CipherListHeader = (props: CipherListHeaderProps) => {
   const {
-    openAdd, openSort, navigation, header, onSearch, searchText, isTrash, isAuthenticator, isAutoFill,
-    isSelecting, setIsSelecting, selectedItems, setSelectedItems, toggleSelectAll, setIsLoading, isShared
+    openAdd,
+    openSort,
+    navigation,
+    header,
+    onSearch,
+    searchText,
+    isTrash,
+    isAuthenticator,
+    isAutoFill,
+    isSelecting,
+    setIsSelecting = EmpFc,
+    selectedItems = [],
+    setSelectedItems = EmpFc,
+    toggleSelectAll = EmpFc,
+    setIsLoading,
+    isShared,
   } = props
   const { colors } = useTheme()
   const { toTrashCiphers, restoreCiphers, deleteCiphers } = useCipherData()
@@ -65,7 +82,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
     navigation.navigate('folders__select', {
       mode: 'move',
       initialId: null,
-      cipherIds: selectedItems
+      cipherIds: selectedItems,
     })
     setIsSelecting(false)
     setSelectedItems([])
@@ -99,33 +116,28 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight: -8
+        marginRight: -8,
       }}
     >
-      {
-        !isAuthenticator && (
-          <Icon
-            icon="sliders-horizontal"
-            size={24}
-            color={colors.primaryText}
-            onPress={openSort}
-            containerStyle={{ padding: 8 }}
-          />
+      {!isAuthenticator && (
+        <Icon
+          icon="sliders-horizontal"
+          size={24}
+          color={colors.primaryText}
+          onPress={openSort}
+          containerStyle={{ padding: 8 }}
+        />
+      )}
 
-        )
-      }
-
-      {
-        !!openAdd && (
-          <Icon
-            icon="plus"
-            size={24}
-            color={colors.primaryText}
-            onPress={openAdd}
-            containerStyle={{ padding: 8 }}
-          />
-        )
-      }
+      {!!openAdd && (
+        <Icon
+          icon="plus"
+          size={24}
+          color={colors.primaryText}
+          onPress={openAdd}
+          containerStyle={{ padding: 8 }}
+        />
+      )}
     </View>
   )
 
@@ -135,7 +147,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginRight: -8
+        marginRight: -8,
       }}
     >
       <Icon
@@ -146,71 +158,63 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
         containerStyle={{ padding: 8 }}
       />
 
-      {
-        selectedItems.length > 0 && (
-          <>
-            {
-              isTrash || isAuthenticator || isAutoFill ? (
-                <>
-                  {
-                    isTrash && (
-                      <Icon
-                        icon="repeat"
-                        size={24}
-                        onPress={handleRestore}
-                        containerStyle={{ padding: 8 }}
-                      />
-                    )
-                  }
+      {selectedItems.length > 0 && (
+        <>
+          {isTrash || isAuthenticator || isAutoFill ? (
+            <>
+              {isTrash && (
+                <Icon
+                  icon="repeat"
+                  size={24}
+                  onPress={handleRestore}
+                  containerStyle={{ padding: 8 }}
+                />
+              )}
 
-                  <Icon
-                    icon="trash"
-                    size={24}
-                    color={colors.error}
-                    onPress={() => setShowConfirmModal(true)}
-                    containerStyle={{ padding: 8 }}
-                  />
-                </>
-              ) : (
-                <>
-                  {
-                    !uiStore.isOffline && !isShared && !isFreeAccount && (
-                      <Icon
-                        icon="share"
-                        size={24}
-                        color={colors.primaryText}
-                        onPress={() => setShowShareModal(true)}
-                        containerStyle={{ padding: 8 }}
-                      />
-                    )
-                  }
+              <Icon
+                icon="trash"
+                size={24}
+                color={colors.error}
+                onPress={() => setShowConfirmModal(true)}
+                containerStyle={{ padding: 8 }}
+              />
+            </>
+          ) : (
+            <>
+              {!uiStore.isOffline && !isShared && !isFreeAccount && (
+                <Icon
+                  icon="share"
+                  size={24}
+                  color={colors.primaryText}
+                  onPress={() => setShowShareModal(true)}
+                  containerStyle={{ padding: 8 }}
+                />
+              )}
 
-                  <Icon
-                    icon="folder-simple"
-                    size={24}
-                    color={colors.primaryText}
-                    onPress={handleMoveFolder}
-                    containerStyle={{ padding: 8 }}
-                  />
+              <Icon
+                icon="folder-simple"
+                size={24}
+                color={colors.primaryText}
+                onPress={handleMoveFolder}
+                containerStyle={{ padding: 8 }}
+              />
 
-                  <Icon
-                    icon="trash"
-                    size={24}
-                    color={colors.error}
-                    onPress={() => setShowConfirmModal(true)}
-                    containerStyle={{ padding: 8 }}
-                  />
-                </>
-              )
-            }
-          </>
-        )
-      }
+              <Icon
+                icon="trash"
+                size={24}
+                color={colors.error}
+                onPress={() => setShowConfirmModal(true)}
+                containerStyle={{ padding: 8 }}
+              />
+            </>
+          )}
+        </>
+      )}
     </View>
   )
 
   const renderHeaderSelectLeft = () => (
-    <View style={{ marginLeft: - 8, flexDirection: 'row', alignItems: 'center' }}>
+    <View style={{ marginLeft: -8, flexDirection: 'row', alignItems: 'center' }}>
       <Icon
         icon="x"
         size={26}
@@ -222,9 +226,13 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
 
       <Text
         size="xl"
-        text={selectedItems.length ? `${selectedItems.length} ${translate('common.selected')}` : translate('common.select')}
+        text={
+          selectedItems.length
+            ? `${selectedItems.length} ${translate('common.selected')}`
+            : translate('common.select')
+        }
         style={{
-          marginLeft: 5
+          marginLeft: 5,
         }}
       />
     </View>
@@ -240,9 +248,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
     return () => navigation.goBack()
   }
 
-  const renderHeaderAuthenticatorLeft = () => (
-    <TabHeader title={header} />
-  )
+  const renderHeaderAuthenticatorLeft = () => <TabHeader title={header} />
 
   return (
     <View
@@ -261,23 +267,25 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
       >
         {isSelecting ? (
           renderHeaderSelectLeft()
-        ) : isAuthenticator ? renderHeaderAuthenticatorLeft() : <Icon icon='arrow-left' onPress={renderGoBack} />}
+        ) : isAuthenticator ? (
+          renderHeaderAuthenticatorLeft()
+        ) : (
+          <Icon icon="arrow-left" onPress={renderGoBack} />
+        )}
 
         {isSelecting ? renderHeaderSelectRight() : renderHeaderRight()}
       </View>
 
       <View style={{ paddingHorizontal: 20 }}>
-        {
-          !isSelecting && !isAuthenticator && (
-            <Text
-              preset="bold"
-              size="xl"
-              text={header}
-              numberOfLines={2}
-              style={{ marginBottom: 10 }}
-            />
-          )
-        }
+        {!isSelecting && !isAuthenticator && (
+          <Text
+            preset="bold"
+            size="xl"
+            text={header}
+            numberOfLines={2}
+            style={{ marginBottom: 10 }}
+          />
+        )}
 
         <SearchBar value={searchText} onChangeText={onSearch} />
       </View>
@@ -285,8 +293,14 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={isTrash || isAuthenticator ? handlePermaDelete : handleDelete}
-        title={isTrash || isAuthenticator ? translate('trash.perma_delete') : translate('trash.to_trash')}
-        desc={isTrash || isAuthenticator ? translate('trash.perma_delete_desc') : translate('trash.to_trash_desc')}
+        title={
+          isTrash || isAuthenticator ? translate('trash.perma_delete') : translate('trash.to_trash')
+        }
+        desc={
+          isTrash || isAuthenticator
+            ? translate('trash.perma_delete_desc')
+            : translate('trash.to_trash_desc')
+        }
         btnText="OK"
       />
 

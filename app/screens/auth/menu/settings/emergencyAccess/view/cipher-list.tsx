@@ -5,10 +5,10 @@ import { useStores } from '../../../../../../models'
 import { CipherView } from '../../../../../../../core/models/view'
 import { CipherType } from '../../../../../../../core/enums'
 import { CipherListItem } from '../../../../../../components/cipher/cipher-list/cipher-list-item'
-import { PasswordAction } from '../../../../browse/passwords/password-action'
+import { PasswordAction } from '../../../../browse/passwords/PasswordAction'
 import { CardAction } from '../../../../browse/cards/CardAction'
-import { IdentityAction } from '../../../../browse/identities/identity-action'
-import { NoteAction } from '../../../../browse/notes/note-action'
+import { IdentityAction } from '../../../../browse/identities/IdentityAction'
+import { NoteAction } from '../../../../browse/notes/NoteAction'
 import { CryptoWalletAction } from '../../../../browse/cryptoAsset/CryptoWalletAction'
 
 export interface CipherListProps {

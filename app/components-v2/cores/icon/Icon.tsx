@@ -95,8 +95,8 @@ export function Icon(props: IconProps) {
             iconRegistry[icon]
               ? iconRegistry[icon]
               : !filled
-                ? iconRegularRegistry[icon]
-                : iconFillRegistry[icon]
+              ? iconRegularRegistry[icon]
+              : iconFillRegistry[icon]
           }
         />
       ) : (
@@ -186,6 +186,7 @@ export const iconRegistry = {
   'minus-circle': require('assets/icons/minus-circle.png'),
 
   'list-bullets': require('assets/icons/list-bullets.png'),
+  'external-link': require('assets/icons/external-link.png'),
 }
 
 const $imageStyle: ImageStyle = {

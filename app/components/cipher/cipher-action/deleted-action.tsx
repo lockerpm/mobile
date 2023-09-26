@@ -1,25 +1,25 @@
-import React, { useState } from "react"
-import { View } from "react-native"
-import { observer } from "mobx-react-lite"
-import { color, commonStyles, fontSize } from "../../../theme"
-import { Text } from "../../text/text"
-import { AutoImage as Image } from "../../auto-image/auto-image"
-import { useStores } from "../../../models"
-import { ActionItem } from "./action-item"
-import { CipherType } from "../../../../core/enums"
-import { useMixins } from "../../../services/mixins"
-import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/delete-confirm-modal"
-import { ActionSheet, ActionSheetContent } from "../../action-sheet"
-import { Divider } from "../../divider/divider"
-import { useCipherDataMixins } from "../../../services/mixins/cipher/data"
-import { useCipherHelpersMixins } from "../../../services/mixins/cipher/helpers"
+import React, { useState } from 'react'
+import { View } from 'react-native'
+import { observer } from 'mobx-react-lite'
+import { color, commonStyles, fontSize } from '../../../theme'
+import { Text } from '../../text/text'
+import { AutoImage as Image } from '../../auto-image/auto-image'
+import { useStores } from '../../../models'
+import { ActionItem } from './action-item'
+import { CipherType } from '../../../../core/enums'
+import { useMixins } from '../../../services/mixins'
+import { DeleteConfirmModal } from '../../../screens/auth/browse/trash/DeleteConfirmModal'
+import { ActionSheet, ActionSheetContent } from '../../action-sheet'
+import { Divider } from '../../divider/divider'
+import { useCipherDataMixins } from '../../../services/mixins/cipher/data'
+import { useCipherHelpersMixins } from '../../../services/mixins/cipher/helpers'
 
 export interface DeletedActionProps {
-  children?: React.ReactNode,
-  isOpen?: boolean,
-  onClose?: () => void,
-  navigation: any,
-  onLoadingChange?: Function,
+  children?: React.ReactNode
+  isOpen?: boolean
+  onClose?: () => void
+  navigation: any
+  onLoadingChange?: Function
 }
 
 /**
@@ -49,7 +49,7 @@ export const DeletedAction = observer((props: DeletedActionProps) => {
   const handleRestore = async () => {
     const res = await restoreCiphers([selectedCipher.id])
     if (res.kind === 'ok') {
-      let routeName = await getRouteName()
+      const routeName = await getRouteName()
       if (routeName.endsWith('__info')) {
         navigation.goBack()
       }
@@ -59,7 +59,7 @@ export const DeletedAction = observer((props: DeletedActionProps) => {
   const handleDelete = async () => {
     const res = await deleteCiphers([selectedCipher.id])
     if (res.kind === 'ok') {
-      let routeName = await getRouteName()
+      const routeName = await getRouteName()
       if (routeName.endsWith('__info')) {
         navigation.goBack()
       }
@@ -94,38 +94,24 @@ export const DeletedAction = observer((props: DeletedActionProps) => {
       {/* Modals end */}
 
       {/* Actionsheet */}
-      <ActionSheet
-        isOpen={isOpen}
-        onClose={handleActionSheetClose}
-      >
+      <ActionSheet isOpen={isOpen} onClose={handleActionSheetClose}>
         {/* Cipher info */}
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-            {
-              cipherMapper.svg ? (
-                <cipherMapper.svg height={40} width={40} />
-              ) : (
-                <Image
-                  source={cipherMapper.img}
-                  backupSource={cipherMapper.backup}
-                  style={{ height: 40, width: 40, borderRadius: 8 }}
-                />
-              )
-            }
-            <View style={{ marginLeft: 10, flex: 1 }}>
-              <Text
-                preset="semibold"
-                text={selectedCipher.name}
-                numberOfLines={2}
+            {cipherMapper.svg ? (
+              <cipherMapper.svg height={40} width={40} />
+            ) : (
+              <Image
+                source={cipherMapper.img}
+                backupSource={cipherMapper.backup}
+                style={{ height: 40, width: 40, borderRadius: 8 }}
               />
-              {
-                (selectedCipher.type === CipherType.Login && !!selectedCipher.login.username) && (
-                  <Text
-                    text={selectedCipher.login.username}
-                    style={{ fontSize: fontSize.small }}
-                  />
-                )
-              }
+            )}
+            <View style={{ marginLeft: 10, flex: 1 }}>
+              <Text preset="semibold" text={selectedCipher.name} numberOfLines={2} />
+              {selectedCipher.type === CipherType.Login && !!selectedCipher.login.username && (
+                <Text text={selectedCipher.login.username} style={{ fontSize: fontSize.small }} />
+              )}
             </View>
           </View>
         </View>
@@ -134,12 +120,8 @@ export const DeletedAction = observer((props: DeletedActionProps) => {
         <Divider style={{ marginTop: 10 }} />
 
         <ActionSheetContent contentContainerStyle={{ paddingVertical: 5 }}>
-          { children }
-          {
-            !!children && (
-              <Divider style={{ marginVertical: 5 }} />
-            )
-          }
+          {children}
+          {!!children && <Divider style={{ marginVertical: 5 }} />}
 
           <ActionItem
             disabled={uiStore.isOffline && !!selectedCipher.organizationId}
