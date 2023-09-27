@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { View, TouchableOpacity, TextInput, Modal } from "react-native"
-import { Button, Divider, Header, Icon, Layout, Text } from "../../../../../../components"
 import { observer } from "mobx-react-lite"
-import { commonStyles, fontSize } from "../../../../../../theme"
-import { useMixins } from "../../../../../../services/mixins"
-import { AppEventType, EventBus } from "../../../../../../utils/eventBus"
-import CheckBox from "@react-native-community/checkbox"
-import { EmergencyAccessType } from "../../../../../../config/types"
-import { useCipherDataMixins } from "../../../../../../services/mixins/cipher/data"
+import { Text } from "app/components-v2/cores"
 
 
 interface InviteProps {

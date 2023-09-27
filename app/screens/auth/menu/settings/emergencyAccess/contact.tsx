@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { Dimensions, TouchableOpacity, View, Image } from 'react-native'
-import { Button, Modal, Text } from '../../../../../components'
-import { useMixins } from '../../../../../services/mixins'
-import { fontSize } from '../../../../../theme'
-import { EmergencyAccessStatus } from '../../../../../config/types'
-import { ContactAction } from './contact-action'
-import { useStores } from '../../../../../models'
-import { TrustedContact } from '../../../../../config/types/api'
+import { ContactAction } from './ContactAction'
+import { EmergencyAccessStatus, TrustedContact } from 'app/static/types'
+import { useTheme } from 'app/services/context'
+import { useStores } from 'app/models'
+import { translate } from 'app/i18n'
+import { BottomModal, Button, Text } from 'app/components-v2/cores'
 
 interface Props {
   isYourTrusted: boolean
@@ -16,7 +15,7 @@ interface Props {
 
 export const Contact = (props: Props) => {
   const { trustedContact, setOnAction, isYourTrusted } = props
-  const { translate, color } = useMixins()
+  const { colors } = useTheme()
   const { user } = useStores()
 
   // ----------------------- PARAMS -----------------------
@@ -52,30 +51,30 @@ export const Contact = (props: Props) => {
   // ----------------------- RENDER -----------------------
 
   const RequestAccessModal = () => (
-    <Modal
+    <BottomModal
       isOpen={isShowRequestModal}
       onClose={() => setShowRequestModal(false)}
       title={translate('common.confirmation')}
     >
       <Text
-        preset="black"
         text={translate('emergency_access.rq_noti', { waitTime: trustedContact.wait_time_days })}
         style={{ lineHeight: 20 }}
       />
 
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 12 }}>
         <Button
-          preset="outlinePlain"
+          preset='secondary'
           text={translate('common.cancel')}
           onPress={() => {
             setShowRequestModal(false)
           }}
-          style={{ marginRight: 12 }}
+          style={{ marginRight: 12, borderColor: colors.block }}
         />
         <Button text={translate('common.yes')} onPress={approveInitiateEA} />
       </View>
-    </Modal>
+    </BottomModal>
   )
+
   return (
     <TouchableOpacity
       onPress={() => setShowAcction(true)}
@@ -108,10 +107,8 @@ export const Contact = (props: Props) => {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text
               style={{ maxWidth: Dimensions.get('screen').width - 200 }}
-              preset="black"
               text={trustedContact.full_name} />
             <Text
-              preset="black"
               text={
                 trustedContact.type === 'view'
                   ? translate('emergency_access.view')
@@ -122,7 +119,7 @@ export const Contact = (props: Props) => {
           </View>
 
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text text={trustedContact.email} style={{ fontSize: fontSize.small }} />
+            <Text preset='label' size='base' text={trustedContact.email} />
 
             {/** Status */}
             <View
@@ -130,31 +127,30 @@ export const Contact = (props: Props) => {
                 position: 'absolute',
                 zIndex: 2,
                 right: 0,
-                backgroundColor: color.background,
+                backgroundColor: colors.background,
                 paddingLeft: 5,
                 borderRadius: 3,
               }}
             >
               <View style={{
                 backgroundColor: isInvited
-                  ? color.warning
+                  ? colors.warning
                   : isConfirm || isApproved
-                    ? color.primary
-                    : color.textBlack,
+                    ? colors.primary
+                    : colors.title,
                 paddingHorizontal: 5,
               }}>
                 <Text
+                  preset='bold'
                   text={status}
+                  size='base'
                   style={{
-                    fontWeight: 'bold',
-                    color: color.background,
-                    fontSize: fontSize.small
+                    color: colors.background,
                   }}
                 />
               </View>
 
             </View>
-            {/** Status */}
           </View>
         </View>
       </View>

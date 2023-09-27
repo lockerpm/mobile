@@ -8,6 +8,7 @@ import { Screen, Header } from 'app/components-v2/cores'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 import { MenuItemContainer, SettingsItem } from 'app/components-v2/utils'
+
 export const EmergencyAccessScreen = () => {
   const navigation = useNavigation()
   const { notifyApiError } = useHelper()

@@ -1,19 +1,13 @@
 import React, { useState } from 'react'
-import { View } from 'react-native'
-import {
-  ActionItem,
-  ActionSheet,
-  ActionSheetContent,
-  AutoImage as Image,
-  Divider,
-  Text,
-} from '../../../../../components'
-import { useMixins } from '../../../../../services/mixins'
-import { fontSize } from '../../../../../theme'
-import { EmergencyAccessStatus, EmergencyAccessType } from '../../../../../config/types'
-import { useStores } from '../../../../../models'
+import { View, Image } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { TrustedContact } from '../../../../../config/types/api'
+import { EmergencyAccessStatus, EmergencyAccessType, TrustedContact } from 'app/static/types'
+import { useTheme } from 'app/services/context'
+import { useStores } from 'app/models'
+import { Text } from 'app/components-v2/cores'
+import { ActionItem, ActionSheet } from 'app/components-v2/ciphers'
+import { translate } from 'app/i18n'
+
 
 interface Props {
   isYourTrusted: boolean
@@ -25,7 +19,7 @@ interface Props {
 
 export const ContactAction = (props: Props) => {
   const { isShow, onClose, trustedContact, setOnAction, isYourTrusted } = props
-  const { translate, color } = useMixins()
+  const { colors } = useTheme()
   const { user } = useStores()
   const navigation = useNavigation()
 
@@ -75,13 +69,13 @@ export const ContactAction = (props: Props) => {
         style={{ height: 40, width: 40, borderRadius: 20, marginRight: 12 }}
       />
       <View style={{ justifyContent: 'space-between' }}>
-        <Text preset="black" text={trustedContact.full_name} />
-        <Text text={trustedContact.email} style={{ fontSize: fontSize.small }} />
+        <Text text={trustedContact.full_name} />
+        <Text preset='label' size='base' text={trustedContact.email} />
       </View>
     </View>
   )
   const YourTrustedAction = () => (
-    <ActionSheetContent>
+    <>
       {isInintiated && (
         <>
           <ActionItem
@@ -90,14 +84,12 @@ export const ContactAction = (props: Props) => {
               handleYourTrustAction('approve')
             }}
           />
-          <Divider />
           <ActionItem
             name={translate('common.reject')}
             action={() => {
               handleYourTrustAction('reject')
             }}
           />
-          <Divider />
         </>
       )}
       {isInvited && (
@@ -108,7 +100,6 @@ export const ContactAction = (props: Props) => {
               handleYourTrustAction('reinvite')
             }}
           />
-          <Divider />
         </>
       )}
       <ActionItem
@@ -116,13 +107,13 @@ export const ContactAction = (props: Props) => {
         action={() => {
           handleRemoveAction()
         }}
-        textColor={color.error}
+        color={colors.error}
       />
-    </ActionSheetContent>
+    </>
   )
 
   const TrustYouAction = () => (
-    <ActionSheetContent>
+    <>
       {isApproved && isViewType && (
         <>
           <ActionItem
@@ -134,7 +125,6 @@ export const ContactAction = (props: Props) => {
               })
             }}
           />
-          <Divider />
         </>
       )}
       {isApproved && !isViewType && (
@@ -149,7 +139,6 @@ export const ContactAction = (props: Props) => {
               })
             }}
           />
-          <Divider />
           <ActionItem
             name={translate('emergency_access.reset_master_pw')}
             action={() => {
@@ -160,7 +149,6 @@ export const ContactAction = (props: Props) => {
               })
             }}
           />
-          <Divider />
         </>
       )}
 
@@ -178,7 +166,6 @@ export const ContactAction = (props: Props) => {
               // handleTrustedYouAction('initiate')
             }}
           />
-          <Divider />
         </>
       )}
       {isInvited && (
@@ -189,7 +176,6 @@ export const ContactAction = (props: Props) => {
               handleTrustedYouAction('accept')
             }}
           />
-          <Divider />
         </>
       )}
 
@@ -198,18 +184,18 @@ export const ContactAction = (props: Props) => {
         action={() => {
           handleRemoveAction()
         }}
-        textColor={color.error}
+        color={colors.error}
       />
-    </ActionSheetContent>
+    </>
   )
 
   return (
     <ActionSheet isOpen={isShow} onClose={() => {
       setNextModal(null)
       onClose(nextModal)
-    }}>
-      <Avatar />
-      <Divider />
+    }}
+      header={<Avatar />}
+    >
       {isYourTrusted && <YourTrustedAction />}
       {!isYourTrusted && <TrustYouAction />}
     </ActionSheet>
