@@ -4,9 +4,9 @@ import { observer } from 'mobx-react-lite'
 import { useNavigation } from '@react-navigation/native'
 import { QuickSharesList } from './QuickSharesList'
 import { PushNotifier } from 'app/utils/pushNotification'
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components-v2/ciphers'
+import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
 import { useStores } from 'app/models'
-import { Screen } from 'app/components-v2/cores'
+import { Screen } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 const SHARE_EMPTY = require('assets/images/emptyCipherList/share-empty-img.png')

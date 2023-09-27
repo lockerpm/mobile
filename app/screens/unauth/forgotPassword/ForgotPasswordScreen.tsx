@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { RootStackScreenProps } from 'app/navigators'
-import { Button, Header, Screen, TextInput } from 'app/components-v2/cores'
+import { Button, Header, Screen, TextInput } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 import { useHelper } from 'app/services/hook'

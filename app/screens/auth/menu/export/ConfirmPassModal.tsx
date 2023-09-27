@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BottomModal, Button, TextInput } from 'app/components-v2/cores'
+import { BottomModal, Button, TextInput } from 'app/components/cores'
 import { useAuthentication, useHelper } from 'app/services/hook'
 import { translate } from 'app/i18n'
 import { useCoreService } from 'app/services/coreService'

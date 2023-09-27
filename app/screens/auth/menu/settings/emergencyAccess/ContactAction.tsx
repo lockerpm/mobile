@@ -4,10 +4,9 @@ import { useNavigation } from '@react-navigation/native'
 import { EmergencyAccessStatus, EmergencyAccessType, TrustedContact } from 'app/static/types'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
-import { Text } from 'app/components-v2/cores'
-import { ActionItem, ActionSheet } from 'app/components-v2/ciphers'
+import { Text } from 'app/components/cores'
+import { ActionItem, ActionSheet } from 'app/components/ciphers'
 import { translate } from 'app/i18n'
-
 
 interface Props {
   isYourTrusted: boolean
@@ -52,7 +51,6 @@ export const ContactAction = (props: Props) => {
     onClose()
   }
 
-
   // ----------------------- RENDER -----------------------
 
   const Avatar = () => (
@@ -70,7 +68,7 @@ export const ContactAction = (props: Props) => {
       />
       <View style={{ justifyContent: 'space-between' }}>
         <Text text={trustedContact.full_name} />
-        <Text preset='label' size='base' text={trustedContact.email} />
+        <Text preset="label" size="base" text={trustedContact.email} />
       </View>
     </View>
   )
@@ -133,9 +131,9 @@ export const ContactAction = (props: Props) => {
             name={translate('emergency_access.reset_pw')}
             action={() => {
               onClose()
-              navigation.navigate("takeoverEA", {
+              navigation.navigate('takeoverEA', {
                 trusted: trustedContact,
-                reset_pw: true
+                reset_pw: true,
               })
             }}
           />
@@ -161,7 +159,7 @@ export const ContactAction = (props: Props) => {
                 : translate('emergency_access.rq_takeover')
             }
             action={() => {
-              setNextModal("rq_modal")
+              setNextModal('rq_modal')
               onClose()
               // handleTrustedYouAction('initiate')
             }}
@@ -190,10 +188,12 @@ export const ContactAction = (props: Props) => {
   )
 
   return (
-    <ActionSheet isOpen={isShow} onClose={() => {
-      setNextModal(null)
-      onClose(nextModal)
-    }}
+    <ActionSheet
+      isOpen={isShow}
+      onClose={() => {
+        setNextModal(null)
+        onClose(nextModal)
+      }}
       header={<Avatar />}
     >
       {isYourTrusted && <YourTrustedAction />}

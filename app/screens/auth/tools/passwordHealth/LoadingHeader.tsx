@@ -2,7 +2,7 @@ import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import React from 'react'
 import { StyleProp, View, ViewStyle } from 'react-native'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 type Props = {

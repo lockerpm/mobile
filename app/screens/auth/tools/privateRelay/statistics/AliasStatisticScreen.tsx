@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import moment from 'moment'
 import { View } from 'react-native'
-import { Screen, Header, Text } from 'app/components-v2/cores'
+import { Screen, Header, Text } from 'app/components/cores'
 import { ToolsStackScreenProps } from 'app/navigators'
 import { translate } from 'app/i18n'
 

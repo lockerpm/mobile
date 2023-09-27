@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Image } from 'react-native'
 import { observer } from 'mobx-react-lite'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
@@ -10,7 +10,7 @@ import { AccountRoleText } from 'app/static/types'
 import { BROWSE_ITEMS } from 'app/navigators'
 import { DeleteConfirmModal } from '../browse/trash/DeleteConfirmModal'
 import { translate } from 'app/i18n'
-import { ActionItem, ActionSheet } from 'app/components-v2/ciphers'
+import { ActionItem, ActionSheet } from 'app/components/ciphers'
 import { CipherType } from 'core/enums'
 
 interface Props {

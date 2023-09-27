@@ -1,10 +1,10 @@
-import { Select } from 'app/components-v2/utils'
+import { Select } from 'app/components/utils'
 import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
 import { CHAIN_LIST } from 'app/utils/crypto/chainlist'
 import React from 'react'
 import { ImageStyle, View, ViewStyle, Image } from 'react-native'
-import { Icon, Text } from 'app/components-v2/cores'
+import { Icon, Text } from 'app/components/cores'
 
 type Props = {
   selected: {

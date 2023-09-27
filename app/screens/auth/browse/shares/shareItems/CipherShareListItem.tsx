@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { TouchableOpacity, View, Image } from 'react-native'
 import isEqual from 'lodash/isEqual'
-import { Icon, Text } from 'app/components-v2/cores'
+import { Icon, Text } from 'app/components/cores'
 import { CipherView } from 'core/models/view'
 import { SharedMemberType, SharingStatus } from 'app/static/types'
 import { useTheme } from 'app/services/context'

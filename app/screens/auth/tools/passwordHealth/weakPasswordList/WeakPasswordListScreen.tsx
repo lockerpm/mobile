@@ -6,7 +6,7 @@ import { BROWSE_ITEMS, ToolsStackScreenProps } from 'app/navigators'
 import { useStores } from 'app/models'
 import { useCipherHelper } from 'app/services/hook'
 import { CipherView } from 'core/models/view'
-import { Header, Screen, Text } from 'app/components-v2/cores'
+import { Header, Screen, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 import { useNavigation } from '@react-navigation/native'
 

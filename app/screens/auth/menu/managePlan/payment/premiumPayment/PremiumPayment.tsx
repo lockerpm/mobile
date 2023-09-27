@@ -4,7 +4,7 @@ import { Subscription } from 'react-native-iap'
 import { SKU } from '../PricePlan.sku'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
-import { Text, Button, Icon } from 'app/components-v2/cores'
+import { Text, Button, Icon } from 'app/components/cores'
 
 interface Props {
   isTrial: boolean

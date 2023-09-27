@@ -8,7 +8,7 @@ import {
   CipherListHeader,
   EmptyCipherList,
   SortActionConfigModal,
-} from 'app/components-v2/ciphers'
+} from 'app/components/ciphers'
 import { AppStackScreenProps } from 'app/navigators'
 import { useStores } from 'app/models'
 import { FolderView } from 'core/models/view/folderView'
@@ -16,7 +16,7 @@ import { CollectionView } from 'core/models/view/collectionView'
 import { MAX_CIPHER_SELECTION, TEAM_CIPHER_EDITOR } from 'app/static/constants'
 import { useHelper } from 'app/services/hook'
 import { AccountRole } from 'app/static/types'
-import { Screen } from 'app/components-v2/cores'
+import { Screen } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 const HOME_EMPTY_CIPHER = require('assets/images/emptyCipherList/home-empty-cipher.png')

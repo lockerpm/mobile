@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import isEqual from 'lodash/isEqual'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import { Icon, Text } from 'app/components-v2/cores'
+import { Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { getTOTP, parseOTPUri } from 'app/utils/totp'
 

@@ -4,9 +4,9 @@ import { AccountRoleText, SharedGroupType, SharedMemberType, SharingStatus } fro
 import { CollectionView } from 'core/models/view/collectionView'
 import React, { useState } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
-import { Icon, Text } from 'app/components-v2/cores'
+import { Icon, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
-import { ActionItem, ActionSheet } from 'app/components-v2/ciphers'
+import { ActionItem, ActionSheet } from 'app/components/ciphers'
 
 interface Props {
   reload: boolean

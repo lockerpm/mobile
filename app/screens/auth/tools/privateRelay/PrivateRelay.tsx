@@ -5,7 +5,7 @@ import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
 import { RelayAddress, SubdomainData } from 'app/static/types'
 import { translate } from 'app/i18n'
-import { Screen, Header, Text, Button, ImageIcon, Icon } from 'app/components-v2/cores'
+import { Screen, Header, Text, Button, ImageIcon, Icon } from 'app/components/cores'
 import { AliasItem } from './PrivateRelayItem'
 import { EditAliasModal } from './EditAliasModal'
 import { CreateSubdomainModal } from './manageSubdomain/CreateSubdomainModal'
@@ -208,15 +208,15 @@ const Item = ({
 
   const rootEmailDesc = isFreeAccount
     ? [
-      translate('private_relay.desc.one'),
-      translate('private_relay.desc.two'),
-      translate('private_relay.desc.three'),
-    ]
+        translate('private_relay.desc.one'),
+        translate('private_relay.desc.two'),
+        translate('private_relay.desc.three'),
+      ]
     : [
-      translate('private_relay.desc_premium.one'),
-      translate('private_relay.desc_premium.two'),
-      translate('private_relay.desc_premium.three'),
-    ]
+        translate('private_relay.desc_premium.one'),
+        translate('private_relay.desc_premium.two'),
+        translate('private_relay.desc_premium.three'),
+      ]
 
   const subDomainDesc = [
     translate('private_relay.manage_subdomain.desc.one'),
@@ -262,8 +262,8 @@ const Item = ({
                   isRootEmail
                     ? translate('private_relay.root_email')
                     : subdomain
-                      ? translate('private_relay.manage_subdomain.your_subdomain')
-                      : translate('private_relay.no_subdomain')
+                    ? translate('private_relay.manage_subdomain.your_subdomain')
+                    : translate('private_relay.no_subdomain')
                 }
               />
               <Text

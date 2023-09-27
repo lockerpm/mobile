@@ -5,7 +5,7 @@ import moment from 'moment'
 import { SendView } from 'core/models/view/sendView'
 import { useTheme } from 'app/services/context'
 import { useCipherHelper } from 'app/services/hook'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 type Prop = {

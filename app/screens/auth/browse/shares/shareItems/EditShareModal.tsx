@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { BottomModal, Button, Text } from 'app/components-v2/cores'
+import { BottomModal, Button, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { useCipherData } from 'app/services/hook'
 import { AccountRoleText, SharedMemberType } from 'app/static/types'
 import { CipherView } from 'core/models/view'
-import { DropdownPicker } from 'app/components-v2/utils'
+import { DropdownPicker } from 'app/components/utils'
 
 interface Props {
   isOpen?: boolean

@@ -4,10 +4,10 @@ import { useNavigation } from '@react-navigation/native'
 import { useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { EmergencyAccessStatus, TrustedContact } from 'app/static/types'
-import { Screen, Header } from 'app/components-v2/cores'
+import { Screen, Header } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
-import { MenuItemContainer, SettingsItem } from 'app/components-v2/utils'
+import { MenuItemContainer, SettingsItem } from 'app/components/utils'
 
 export const EmergencyAccessScreen = () => {
   const navigation = useNavigation()
@@ -54,7 +54,7 @@ export const EmergencyAccessScreen = () => {
       safeAreaEdges={['bottom']}
       header={
         <Header
-          leftIcon='arrow-left'
+          leftIcon="arrow-left"
           onLeftPress={() => {
             navigation.goBack()
           }}
@@ -67,29 +67,31 @@ export const EmergencyAccessScreen = () => {
         <SettingsItem
           name={translate('emergency_access.your_trust')}
           onPress={() => {
-            isFree ? navigation.navigate('payment', { premium: true }) : navigation.navigate('yourTrustedContact')
+            isFree
+              ? navigation.navigate('payment', { premium: true })
+              : navigation.navigate('yourTrustedContact')
           }}
-        // status={
-        //   pendingRequest > 0
-        //     ? translate('emergency_access.pending_trusted', {
-        //       count: pendingRequest,
-        //       s: pendingRequest > 1 ? 's' : '',
-        //     })
-        //     : ''
-        // }
+          // status={
+          //   pendingRequest > 0
+          //     ? translate('emergency_access.pending_trusted', {
+          //       count: pendingRequest,
+          //       s: pendingRequest > 1 ? 's' : '',
+          //     })
+          //     : ''
+          // }
         />
 
         <SettingsItem
           name={translate('emergency_access.trust_you')}
           onPress={() => navigation.navigate('contactsTrustedYou')}
-        // status={
-        //   pendingInvite > 0
-        //     ? translate('emergency_access.pending_grant', {
-        //       count: pendingInvite,
-        //       s: pendingInvite > 1 ? 's' : '',
-        //     })
-        //     : ''
-        // }
+          // status={
+          //   pendingInvite > 0
+          //     ? translate('emergency_access.pending_grant', {
+          //       count: pendingInvite,
+          //       s: pendingInvite > 1 ? 's' : '',
+          //     })
+          //     : ''
+          // }
         />
       </MenuItemContainer>
     </Screen>

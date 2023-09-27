@@ -4,7 +4,7 @@ import { View, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { translate } from 'app/i18n'
 import { useAuthentication } from 'app/services/hook'
-import { Header, Text } from 'app/components-v2/cores'
+import { Header, Text } from 'app/components/cores'
 
 interface Props {
   index: number

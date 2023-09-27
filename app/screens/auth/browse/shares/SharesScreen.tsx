@@ -6,7 +6,7 @@ import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
 import { translate } from 'app/i18n'
 import { SharingStatus } from 'app/static/types'
-import { Header, Icon, Screen, Text } from 'app/components-v2/cores'
+import { Header, Icon, Screen, Text } from 'app/components/cores'
 
 export const SharesScreen = observer(() => {
   const navigation = useNavigation()

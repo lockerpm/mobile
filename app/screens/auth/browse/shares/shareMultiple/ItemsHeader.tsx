@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
-import { Icon, Text } from 'app/components-v2/cores'
+import { Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { MAX_MULTIPLE_SHARE_COUNT } from 'app/static/constants'
 import { translate } from 'app/i18n'
-import { SearchBar } from 'app/components-v2/utils'
-import { ShareModal } from 'app/components-v2/ciphers'
+import { SearchBar } from 'app/components/utils'
+import { ShareModal } from 'app/components/ciphers'
 
 interface Props {
   openSort: () => void

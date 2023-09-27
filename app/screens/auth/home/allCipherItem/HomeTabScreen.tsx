@@ -9,7 +9,7 @@ import { AutofillServiceEnabled } from 'app/utils/autofillHelper'
 import { useStores } from 'app/models'
 import { useAuthentication } from 'app/services/hook'
 import { useNavigation } from '@react-navigation/native'
-import { Icon, Screen, Text } from 'app/components-v2/cores'
+import { Icon, Screen, Text } from 'app/components/cores'
 
 import { HomeHeader } from './HomeHeader'
 import {
@@ -17,7 +17,7 @@ import {
   EmptyCipherList,
   CipherList,
   AddCipherActionModal,
-} from 'app/components-v2/ciphers'
+} from 'app/components/ciphers'
 
 const HOME_EMPTY_CIPHER = require('assets/images/emptyCipherList/home-empty-cipher.png')
 

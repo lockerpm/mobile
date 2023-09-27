@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { View, Image, ColorValue } from 'react-native'
 import LottieView from 'lottie-react-native'
-import { Screen, Text, Button, Icon } from 'app/components-v2/cores'
+import { Screen, Text, Button, Icon } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { AppStackScreenProps } from 'app/navigators'
 import { translate } from 'app/i18n'

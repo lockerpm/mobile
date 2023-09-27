@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Image } from 'react-native'
-import { BottomModal, Button, Text } from 'app/components-v2/cores'
+import { BottomModal, Button, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
 

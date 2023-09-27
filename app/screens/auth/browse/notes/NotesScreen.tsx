@@ -8,8 +8,8 @@ import {
   CipherListHeader,
   EmptyCipherList,
   SortActionConfigModal,
-} from 'app/components-v2/ciphers'
-import { Screen } from 'app/components-v2/cores'
+} from 'app/components/ciphers'
+import { Screen } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'

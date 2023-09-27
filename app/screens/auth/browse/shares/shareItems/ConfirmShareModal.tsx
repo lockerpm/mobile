@@ -7,7 +7,7 @@ import { useCipherData, useHelper } from 'app/services/hook'
 import { SharedMemberType } from 'app/static/types'
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
-import { Text, BottomModal, Button } from 'app/components-v2/cores'
+import { Text, BottomModal, Button } from 'app/components/cores'
 
 interface Props {
   isOpen?: boolean

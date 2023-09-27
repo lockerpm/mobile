@@ -7,8 +7,8 @@ import { useTheme } from 'app/services/context'
 import { useCoreService } from 'app/services/coreService'
 import { translate } from 'app/i18n'
 
-import { Screen, Header } from 'app/components-v2/cores'
-import { MenuItemContainer, SettingsItem } from 'app/components-v2/utils'
+import { Screen, Header } from 'app/components/cores'
+import { MenuItemContainer, SettingsItem } from 'app/components/utils'
 
 export const ExportScreen = observer(() => {
   const navigation = useNavigation()
@@ -88,7 +88,7 @@ export const ExportScreen = observer(() => {
     <Screen
       header={
         <Header
-          leftIcon='arrow-left'
+          leftIcon="arrow-left"
           onLeftPress={() => {
             navigation.goBack()
           }}

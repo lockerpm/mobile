@@ -9,11 +9,11 @@ import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { getTOTP, parseOTPUri } from 'app/utils/totp'
-import { Screen } from 'app/components-v2/cores'
+import { Screen } from 'app/components/cores'
 import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components-v2/ciphers'
+import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
 
 const { RNAutofillServiceAndroid } = NativeModules
 

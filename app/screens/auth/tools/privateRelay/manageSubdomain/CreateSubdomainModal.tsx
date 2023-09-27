@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { TextInput, View } from 'react-native'
-import { BottomModal, Button, Text } from 'app/components-v2/cores'
+import { BottomModal, Button, Text } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { useHelper } from 'app/services/hook'
@@ -19,9 +19,8 @@ export const CreateSubdomainModal = (props: Props) => {
   const { notifyApiError } = useHelper()
   const { toolStore } = useStores()
 
-
   const [isLoading, setIsLoading] = useState(false)
-  const [subdomain, setSubdomain] = useState("")
+  const [subdomain, setSubdomain] = useState('')
 
   const handleCreateSubdomain = async () => {
     setIsLoading(true)
@@ -32,7 +31,7 @@ export const CreateSubdomainModal = (props: Props) => {
         num_alias: 0,
         num_forwarded: 0,
         num_spam: 0,
-        created_time: Date.now()
+        created_time: Date.now(),
       }
       props.setSubdomain(data)
       onClose()
@@ -49,24 +48,26 @@ export const CreateSubdomainModal = (props: Props) => {
       title={translate('private_relay.manage_subdomain.new')}
     >
       <View>
-        <View style={{
-          borderWidth: 1,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: 44,
-          marginTop: 16,
-          borderColor: colors.primary,
-          borderRadius: 8,
-          paddingRight: 12,
-          paddingLeft: 12,
-        }}>
+        <View
+          style={{
+            borderWidth: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: 44,
+            marginTop: 16,
+            borderColor: colors.primary,
+            borderRadius: 8,
+            paddingRight: 12,
+            paddingLeft: 12,
+          }}
+        >
           <TextInput
             value={subdomain}
             onChangeText={(text: string) => {
               setSubdomain(text.toLowerCase())
             }}
-            placeholder={"... "}
+            placeholder={'... '}
             placeholderTextColor={colors.secondaryText}
             selectionColor={colors.primary}
             style={{
@@ -75,20 +76,22 @@ export const CreateSubdomainModal = (props: Props) => {
               fontSize: 16,
             }}
           />
-          <Text text={".maily.org"} style={{
-            marginLeft: 2,
-            right: 0
-          }} />
+          <Text
+            text={'.maily.org'}
+            style={{
+              marginLeft: 2,
+              right: 0,
+            }}
+          />
         </View>
 
         <Button
           loading={isLoading}
           disabled={!subdomain}
           style={{ marginTop: 16 }}
-          text={isLoading ? "" : translate('common.confirm')}
+          text={isLoading ? '' : translate('common.confirm')}
           onPress={handleCreateSubdomain}
         />
-
       </View>
     </BottomModal>
   )

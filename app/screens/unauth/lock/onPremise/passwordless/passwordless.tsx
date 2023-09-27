@@ -2,7 +2,7 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Dimensions, ScrollView } from 'react-native'
-import { Screen } from 'app/components-v2/cores'
+import { Screen } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { OtpPasswordlessGenerator, randomOtpNumber } from './OtpGenerator'
 import { PasswordlessQrScan } from './PasswordlessQrScan'

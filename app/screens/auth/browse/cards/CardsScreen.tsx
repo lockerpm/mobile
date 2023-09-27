@@ -4,9 +4,14 @@ import { observer } from 'mobx-react-lite'
 import { useNavigation } from '@react-navigation/native'
 import { BackHandler } from 'react-native'
 
-import { SortActionConfigModal, EmptyCipherList, CipherList, CipherListHeader } from 'app/components-v2/ciphers'
+import {
+  SortActionConfigModal,
+  EmptyCipherList,
+  CipherList,
+  CipherListHeader,
+} from 'app/components/ciphers'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { Screen } from 'app/components-v2/cores'
+import { Screen } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { CipherType } from 'core/enums'
 import { translate } from 'app/i18n'
@@ -67,7 +72,7 @@ export const CardsScreen = observer(() => {
       padding
       safeAreaEdges={['bottom', 'top']}
       contentContainerStyle={{
-        flex: 1
+        flex: 1,
       }}
       header={
         <CipherListHeader

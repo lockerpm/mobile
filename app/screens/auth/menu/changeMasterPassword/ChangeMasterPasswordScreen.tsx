@@ -1,15 +1,14 @@
-import React, { useState } from "react"
-import { View } from "react-native"
-import { useNavigation } from "@react-navigation/native"
-import { observer } from "mobx-react-lite"
-import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
-import { useStores } from "app/models"
-import { PolicyType } from "app/static/types"
-import { Screen, Header, TextInput, Button } from "app/components-v2/cores"
-import { PasswordPolicyViolationsModal, PasswordStrength } from "app/components-v2/utils"
-import { translate } from "app/i18n"
-
+import React, { useState } from 'react'
+import { View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { observer } from 'mobx-react-lite'
+import { useAuthentication, useCipherHelper, useHelper } from 'app/services/hook'
+import { useTheme } from 'app/services/context'
+import { useStores } from 'app/models'
+import { PolicyType } from 'app/static/types'
+import { Screen, Header, TextInput, Button } from 'app/components/cores'
+import { PasswordPolicyViolationsModal, PasswordStrength } from 'app/components/utils'
+import { translate } from 'app/i18n'
 
 export const ChangeMasterPasswordScreen = observer(() => {
   const navigation = useNavigation()
@@ -23,10 +22,10 @@ export const ChangeMasterPasswordScreen = observer(() => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(-1)
-  const [current, setCurrent] = useState("")
-  const [newPass, setNewPass] = useState("")
-  const [confirm, setConfirm] = useState("")
-  const [hint, setHint] = useState("")
+  const [current, setCurrent] = useState('')
+  const [newPass, setNewPass] = useState('')
+  const [confirm, setConfirm] = useState('')
+  const [hint, setHint] = useState('')
 
   const [showViolationModal, setShowViolationModal] = useState(false)
   const [violations, setViolations] = useState<string[]>([])
@@ -55,8 +54,8 @@ export const ChangeMasterPasswordScreen = observer(() => {
     setIsLoading(true)
 
     const res = await changeMasterPassword(current, newPass, hint)
-    if (res.kind === "ok") {
-      navigation.navigate("login")
+    if (res.kind === 'ok') {
+      navigation.navigate('login')
     }
     setIsLoading(false)
   }
@@ -69,7 +68,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
         <Header
           leftIcon="arrow-left"
           onLeftPress={() => navigation.goBack()}
-          title={translate("change_master_pass.title")}
+          title={translate('change_master_pass.title')}
         />
       }
       backgroundColor={colors.background}
@@ -84,9 +83,9 @@ export const ChangeMasterPasswordScreen = observer(() => {
         <TextInput
           animated
           isPassword
-          label={translate("change_master_pass.current")}
+          label={translate('change_master_pass.current')}
           isError={isError || !!masterPasswordError}
-          helper={masterPasswordError || translate("common.password_not_match")}
+          helper={masterPasswordError || translate('common.password_not_match')}
           value={current}
           onChangeText={setCurrent}
           style={{ marginBottom: 20 }}
@@ -95,7 +94,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
         <TextInput
           isPassword
           animated
-          label={translate("change_master_pass.new")}
+          label={translate('change_master_pass.new')}
           value={newPass}
           onChangeText={(text) => {
             setNewPass(text)
@@ -110,15 +109,15 @@ export const ChangeMasterPasswordScreen = observer(() => {
           animated
           isPassword
           isError={isError}
-          helper={translate("common.password_not_match")}
-          label={translate("change_master_pass.confirm")}
+          helper={translate('common.password_not_match')}
+          label={translate('change_master_pass.confirm')}
           value={confirm}
           onChangeText={setConfirm}
           style={{ marginBottom: 20, marginTop: 20 }}
         />
 
         <TextInput
-          label={translate("create_master_pass.hint")}
+          label={translate('create_master_pass.hint')}
           onChangeText={setHint}
           value={hint}
           style={{ marginBottom: 30 }}
@@ -128,7 +127,7 @@ export const ChangeMasterPasswordScreen = observer(() => {
           loading={isLoading}
           disabled={isLoading || !isReady}
           onPress={preparePassword}
-          text={translate("common.save")}
+          text={translate('common.save')}
         />
       </View>
 

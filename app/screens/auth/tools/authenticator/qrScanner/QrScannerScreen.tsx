@@ -9,7 +9,7 @@ import { beautifyName, decodeGoogleAuthenticatorImport, getTOTP, parseOTPUri } f
 import { CipherType } from 'core/enums'
 import { translate } from 'app/i18n'
 import { Logger } from 'app/utils/utils'
-import { Header, Screen } from 'app/components-v2/cores'
+import { Header, Screen } from 'app/components/cores'
 
 export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = (props) => {
   const navigation = props.navigation

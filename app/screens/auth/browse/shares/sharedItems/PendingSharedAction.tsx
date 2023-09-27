@@ -1,10 +1,10 @@
-import { ActionItem, ActionSheet } from 'app/components-v2/ciphers'
+import { ActionItem, ActionSheet } from 'app/components/ciphers'
 import { useStores } from 'app/models'
 import { useCipherData, useCipherHelper } from 'app/services/hook'
 import { CipherView } from 'core/models/view'
 import React from 'react'
 import { View, Image } from 'react-native'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 type Props = {

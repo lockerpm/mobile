@@ -1,13 +1,13 @@
 import React from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { useStores } from 'app/models'
-import { Text, Screen, Icon, ImageIcon } from 'app/components-v2/cores'
+import { Text, Screen, Icon, ImageIcon } from 'app/components/cores'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 import { TOOLS_ITEMS, ToolsItem } from 'app/navigators'
-import { TabHeader } from 'app/components-v2/cores/header/TabHeader'
-import { PremiumTag } from 'app/components-v2/utils'
+import { TabHeader } from 'app/components/cores/header/TabHeader'
+import { PremiumTag } from 'app/components/utils'
 
 export const ToolsListScreen = () => {
   const navigation = useNavigation()

@@ -2,7 +2,7 @@ import React, { FC, useRef, useState } from 'react'
 import { Dimensions, StyleSheet } from 'react-native'
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
 import { RootStackScreenProps } from 'app/navigators'
-import { Icon, Screen } from 'app/components-v2/cores'
+import { Icon, Screen } from 'app/components/cores'
 
 import { AnimatedFooter } from './animatedFooter/AnimatedFooter'
 import { Wave } from './Wave'

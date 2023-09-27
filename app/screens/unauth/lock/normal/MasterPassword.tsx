@@ -10,7 +10,7 @@ import { CipherView, LoginUriView, LoginView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { useCoreService } from 'app/services/coreService'
 import { translate } from 'app/i18n'
-import { Logo, Button, Screen, Text, TextInput, Header, Icon } from 'app/components-v2/cores'
+import { Logo, Button, Screen, Text, TextInput, Header, Icon } from 'app/components/cores'
 import { EnterpriseInvitationModal } from './EnterpriseInvitationModal'
 
 interface Props {
@@ -187,7 +187,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
   // ---------------------- RENDER -------------------------
   return (
     <Screen
-      preset='auto'
+      preset="auto"
       padding
       safeAreaEdges={['bottom']}
       header={
@@ -222,7 +222,6 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
           setIsShowInvitation(false)
         }}
       />
-
 
       <Logo
         preset={'default'}

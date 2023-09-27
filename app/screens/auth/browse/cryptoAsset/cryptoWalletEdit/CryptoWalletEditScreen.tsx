@@ -13,11 +13,11 @@ import { CipherView } from 'core/models/view'
 import { CollectionView } from 'core/models/view/collectionView'
 import { CryptoWalletData, toCryptoWalletData } from 'app/utils/crypto'
 import { CipherType } from 'core/enums'
-import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components-v2/cores'
+import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
 import { translate } from 'app/i18n'
 import { PlanStorageLimitModal } from '../../planStorageLimitModal'
-import { PasswordStrength } from 'app/components-v2/utils'
-import { CipherOthersInfo, CustomFieldsEdit } from 'app/components-v2/ciphers'
+import { PasswordStrength } from 'app/components/utils'
+import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
 
 export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit'>> = observer(
   (props) => {

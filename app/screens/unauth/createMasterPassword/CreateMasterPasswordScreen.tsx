@@ -8,8 +8,8 @@ import { PolicyType } from 'app/static/types'
 import { useTheme } from 'app/services/context'
 import { logCreateMasterPwEvent } from 'app/utils/analytics'
 import { useAuthentication, useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
-import { Button, Header, Logo, Screen, Text, TextInput } from 'app/components-v2/cores'
-import { PasswordPolicyViolationsModal, PasswordStrength } from 'app/components-v2/utils'
+import { Button, Header, Logo, Screen, Text, TextInput } from 'app/components/cores'
+import { PasswordPolicyViolationsModal, PasswordStrength } from 'app/components/utils'
 
 export const CreateMasterPasswordScreen: FC<RootStackScreenProps<'createMasterPassword'>> = (
   props

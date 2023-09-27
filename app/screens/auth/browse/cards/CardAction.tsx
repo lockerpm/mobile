@@ -1,2 +1,2 @@
-import { CipherAction } from "app/components-v2/ciphers"
+import { CipherAction } from 'app/components/ciphers'
 export const CardAction = CipherAction

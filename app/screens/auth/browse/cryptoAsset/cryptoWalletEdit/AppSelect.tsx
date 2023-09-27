@@ -1,8 +1,8 @@
 import React from 'react'
 import { ImageStyle, View, ViewStyle } from 'react-native'
-import { Text, AutoImage as Image, Icon } from 'app/components-v2/cores'
+import { Text, AutoImage as Image, Icon } from 'app/components/cores'
 import { WALLET_APP_LIST } from 'app/utils/crypto/applist'
-import { Select } from 'app/components-v2/utils'
+import { Select } from 'app/components/utils'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 

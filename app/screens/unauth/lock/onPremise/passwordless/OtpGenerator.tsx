@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View, useWindowDimensions, ScrollView } from 'react-native'
-import { Button, ImageIcon, Logo, Text } from 'app/components-v2/cores'
+import { Button, ImageIcon, Logo, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 

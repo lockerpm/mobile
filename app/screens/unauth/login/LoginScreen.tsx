@@ -7,7 +7,7 @@ import { api } from 'app/services/api'
 import { LoginForm } from './LoginForm'
 import { translate } from 'app/i18n'
 import { TwoFAAuthenSheet } from './2faBottomSheet/BottomSheetModal'
-import { Screen, Text } from 'app/components-v2/cores'
+import { Screen, Text } from 'app/components/cores'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 

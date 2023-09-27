@@ -9,7 +9,7 @@ import { CipherView } from 'core/models/view'
 import { useCipherData } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CipherType } from 'core/enums'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 interface Props {

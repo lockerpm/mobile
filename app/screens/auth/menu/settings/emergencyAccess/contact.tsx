@@ -5,7 +5,7 @@ import { EmergencyAccessStatus, TrustedContact } from 'app/static/types'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
 import { translate } from 'app/i18n'
-import { BottomModal, Button, Text } from 'app/components-v2/cores'
+import { BottomModal, Button, Text } from 'app/components/cores'
 
 interface Props {
   isYourTrusted: boolean
@@ -63,7 +63,7 @@ export const Contact = (props: Props) => {
 
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 12 }}>
         <Button
-          preset='secondary'
+          preset="secondary"
           text={translate('common.cancel')}
           onPress={() => {
             setShowRequestModal(false)
@@ -107,7 +107,8 @@ export const Contact = (props: Props) => {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text
               style={{ maxWidth: Dimensions.get('screen').width - 200 }}
-              text={trustedContact.full_name} />
+              text={trustedContact.full_name}
+            />
             <Text
               text={
                 trustedContact.type === 'view'
@@ -119,7 +120,7 @@ export const Contact = (props: Props) => {
           </View>
 
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text preset='label' size='base' text={trustedContact.email} />
+            <Text preset="label" size="base" text={trustedContact.email} />
 
             {/** Status */}
             <View
@@ -132,24 +133,25 @@ export const Contact = (props: Props) => {
                 borderRadius: 3,
               }}
             >
-              <View style={{
-                backgroundColor: isInvited
-                  ? colors.warning
-                  : isConfirm || isApproved
+              <View
+                style={{
+                  backgroundColor: isInvited
+                    ? colors.warning
+                    : isConfirm || isApproved
                     ? colors.primary
                     : colors.title,
-                paddingHorizontal: 5,
-              }}>
+                  paddingHorizontal: 5,
+                }}
+              >
                 <Text
-                  preset='bold'
+                  preset="bold"
                   text={status}
-                  size='base'
+                  size="base"
                   style={{
                     color: colors.background,
                   }}
                 />
               </View>
-
             </View>
           </View>
         </View>

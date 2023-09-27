@@ -7,7 +7,7 @@ import { getApiLevel, getManufacturer } from 'react-native-device-info'
 import * as Animatable from 'react-native-animatable'
 import { AutofillServiceEnabled } from 'app/utils/autofillHelper'
 import Accordion from 'react-native-collapsible/Accordion'
-import { Button, Header, Icon, Screen, Text } from 'app/components-v2/cores'
+import { Button, Header, Icon, Screen, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 

@@ -8,9 +8,9 @@ import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
-import { Header, Icon, Screen, Text, TextInput } from 'app/components-v2/cores'
-import { CipherInfoCommon, DeletedAction } from 'app/components-v2/ciphers'
-import { Textarea } from 'app/components-v2/utils'
+import { Header, Icon, Screen, Text, TextInput } from 'app/components/cores'
+import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
+import { Textarea } from 'app/components/utils'
 
 export const IdentityInfoScreen: FC<AppStackScreenProps<'identities__info'>> = observer((props) => {
   const navigation = props.navigation

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, TouchableOpacity, TextInput, Modal } from 'react-native'
 import { observer } from 'mobx-react-lite'
-import { Button, Header, Screen, Text, Toggle } from 'app/components-v2/cores'
+import { Button, Header, Screen, Text, Toggle } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { useCipherData } from 'app/services/hook'
 import { translate } from 'app/i18n'

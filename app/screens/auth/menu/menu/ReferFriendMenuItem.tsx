@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-color-literals */
 import React from 'react'
 import { View, Image, Dimensions, TouchableOpacity } from 'react-native'
-import { Icon, Text } from 'app/components-v2/cores'
+import { Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 

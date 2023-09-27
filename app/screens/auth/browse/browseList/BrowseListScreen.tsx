@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
-import { Text, Screen, TabHeader, Icon } from 'app/components-v2/cores'
+import { Text, Screen, TabHeader, Icon } from 'app/components/cores'
 import { useNavigation } from '@react-navigation/native'
 import { observer } from 'mobx-react-lite'
 import { useTheme } from 'app/services/context'
@@ -83,7 +83,7 @@ export const BrowseListScreen = observer(() => {
         style={{
           borderRadius: 12,
           marginTop: 20,
-          overflow: 'hidden'
+          overflow: 'hidden',
         }}
       >
         {data.map((item, index) => (
@@ -99,7 +99,7 @@ export const BrowseListScreen = observer(() => {
               flexDirection: 'row',
               alignItems: 'center',
               paddingVertical: 12,
-              paddingHorizontal: 16
+              paddingHorizontal: 16,
             }}
           >
             {item.svgIcon ? (
@@ -107,7 +107,9 @@ export const BrowseListScreen = observer(() => {
             ) : (
               <Image source={item?.icon} style={{ height: 40, width: 40 }} />
             )}
-            <View style={{ flex: 1, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center' }}>
+            <View
+              style={{ flex: 1, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center' }}
+            >
               <Text tx={item.label} style={{ marginRight: 10 }} />
               {item.notiCount > 0 && (
                 <View
@@ -130,7 +132,7 @@ export const BrowseListScreen = observer(() => {
                 </View>
               )}
             </View>
-            {<Text preset='label' text={item.total} style={{ marginRight: 12 }} />}
+            {<Text preset="label" text={item.total} style={{ marginRight: 12 }} />}
 
             <Icon icon="caret-right" size={20} />
           </TouchableOpacity>

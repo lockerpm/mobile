@@ -5,7 +5,7 @@ import { useCipherHelper, useHelper } from 'app/services/hook'
 import moment from 'moment'
 import React, { FC } from 'react'
 import { TouchableOpacity, View, ViewStyle, Image } from 'react-native'
-import { Button, Header, Icon, Screen, Text } from 'app/components-v2/cores'
+import { Button, Header, Icon, Screen, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 export const QuickSharesDetailScreen: FC<AppStackScreenProps<'quickShareItemsDetail'>> = (

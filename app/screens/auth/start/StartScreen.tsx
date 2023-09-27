@@ -4,7 +4,7 @@ import NetInfo from '@react-native-community/netinfo'
 import { AppStackScreenProps } from 'app/navigators'
 import { useCipherData, useHelper } from 'app/services/hook'
 import { translate } from 'app/i18n'
-import { Loading } from 'app/components-v2/utils'
+import { Loading } from 'app/components/utils'
 
 export const StartScreen: FC<AppStackScreenProps<'start'>> = (props) => {
   const { user, uiStore, enterpriseStore } = useStores()
@@ -16,7 +16,6 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = (props) => {
   const [msg, setMsg] = useState('')
 
   // ------------------------- METHODS ----------------------------
-
 
   const refreshFCM = async () => {
     if (!user.disablePushNotifications) {

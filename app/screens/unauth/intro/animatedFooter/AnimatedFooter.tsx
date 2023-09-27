@@ -4,7 +4,7 @@ import { TouchableOpacity, View, ViewStyle } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Icon, Text } from 'app/components-v2/cores'
+import { Icon, Text } from 'app/components/cores'
 import { AnimatedTitle } from './AnimatedText'
 import { AnimatedTabIndicator } from './Indicator'
 import { useTheme } from 'app/services/context'

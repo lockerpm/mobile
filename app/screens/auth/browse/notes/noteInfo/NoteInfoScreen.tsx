@@ -5,10 +5,10 @@ import { Image, View } from 'react-native'
 import { NoteAction } from '../NoteAction'
 import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
 import { useStores } from 'app/models'
-import { Header, Icon, Screen, Text } from 'app/components-v2/cores'
+import { Header, Icon, Screen, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
-import { CipherInfoCommon, DeletedAction } from 'app/components-v2/ciphers'
-import { Textarea } from 'app/components-v2/utils'
+import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
+import { Textarea } from 'app/components/utils'
 import { translate } from 'app/i18n'
 
 export const NoteInfoScreen: FC<AppStackScreenProps<'notes__info'>> = observer((props) => {

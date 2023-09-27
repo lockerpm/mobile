@@ -1,10 +1,10 @@
 import React, { memo } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
 import isEqual from 'lodash/isEqual'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { useCipherHelper } from 'app/services/hook'
-import { PasswordStrength } from 'app/components-v2/utils'
+import { PasswordStrength } from 'app/components/utils'
 
 type Prop = {
   item: any

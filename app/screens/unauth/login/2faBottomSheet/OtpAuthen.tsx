@@ -1,13 +1,11 @@
-import React, { useState } from "react"
-import { View } from "react-native"
-import { Checkbox } from "react-native-ui-lib"
-import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
-import { translate } from "app/i18n"
-import { Text, Button, TextInput, Icon } from "app/components-v2/cores"
-
-
+import React, { useState } from 'react'
+import { View } from 'react-native'
+import { Checkbox } from 'react-native-ui-lib'
+import { useStores } from 'app/models'
+import { useHelper } from 'app/services/hook'
+import { useTheme } from 'app/services/context'
+import { translate } from 'app/i18n'
+import { Text, Button, TextInput, Icon } from 'app/components/cores'
 
 type Props = {
   goBack: () => void
@@ -17,7 +15,6 @@ type Props = {
   password: string
   onLoggedIn: () => void
 }
-
 
 export const OtpAuthen = (props: Props) => {
   const { user } = useStores()
@@ -38,13 +35,16 @@ export const OtpAuthen = (props: Props) => {
   const handleAuthenticate = async () => {
     setIsError(false)
     setIsLoading(true)
-    const res = await user.login({
-      username,
-      password,
-      method,
-      otp,
-      save_device: saveDevice
-    }, true)
+    const res = await user.login(
+      {
+        username,
+        password,
+        method,
+        otp,
+        save_device: saveDevice,
+      },
+      true
+    )
     setIsLoading(false)
     if (res.kind === 'ok') {
       // @ts-ignore
@@ -60,20 +60,15 @@ export const OtpAuthen = (props: Props) => {
 
   return (
     <View>
-      <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
-        <Icon
-          icon="arrow-left"
-          onPress={goBack}
-        />
-        <Text
-          preset='bold'
-          size='xl'
-          text={translate('login.enter_code')}
-        />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Icon icon="arrow-left" onPress={goBack} />
+        <Text preset="bold" size="xl" text={translate('login.enter_code')} />
         <View style={{ width: 24, height: 24 }} />
       </View>
 
@@ -85,7 +80,7 @@ export const OtpAuthen = (props: Props) => {
         }
         style={{
           marginBottom: 12,
-          marginTop: 30
+          marginTop: 30,
         }}
       />
 
@@ -103,21 +98,21 @@ export const OtpAuthen = (props: Props) => {
         label={translate('login.save_device')}
         onValueChange={setSaveDevice}
         style={{
-          marginVertical: 16
+          marginVertical: 16,
         }}
         labelStyle={{
           color: colors.primaryText,
-          fontSize: 16
+          fontSize: 16,
         }}
       />
 
       <Button
         loading={isLoading}
         disabled={isLoading || !otp}
-        text={translate("common.authenticate")}
+        text={translate('common.authenticate')}
         onPress={handleAuthenticate}
         style={{
-          marginTop: 12
+          marginTop: 12,
         }}
       />
     </View>

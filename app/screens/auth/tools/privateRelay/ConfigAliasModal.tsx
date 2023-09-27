@@ -1,16 +1,15 @@
-import React, { useState } from "react"
-import { TouchableOpacity, View } from "react-native"
-import { RelayAddress } from "app/static/types"
-import { BottomModal, Text, Toggle } from 'app/components-v2/cores'
-import { useStores } from "app/models"
-import { translate } from "app/i18n"
+import React, { useState } from 'react'
+import { TouchableOpacity, View } from 'react-native'
+import { RelayAddress } from 'app/static/types'
+import { BottomModal, Text, Toggle } from 'app/components/cores'
+import { useStores } from 'app/models'
+import { translate } from 'app/i18n'
 
 interface Props {
   isOpen?: boolean
   onClose?: () => void
   item: RelayAddress
 }
-
 
 export const ConfigAliasModal = (props: Props) => {
   const { isOpen, onClose, item } = props
@@ -32,7 +31,7 @@ export const ConfigAliasModal = (props: Props) => {
         setConfig(ALIAS_CONFIG.ENABLE)
         handleEdit(ALIAS_CONFIG.ENABLE)
       },
-      title: translate('private_relay.config_modal.enable')
+      title: translate('private_relay.config_modal.enable'),
     },
     {
       value: config === ALIAS_CONFIG.BLOCK,
@@ -40,7 +39,7 @@ export const ConfigAliasModal = (props: Props) => {
         setConfig(ALIAS_CONFIG.BLOCK)
         handleEdit(ALIAS_CONFIG.BLOCK)
       },
-      title: translate('private_relay.config_modal.block')
+      title: translate('private_relay.config_modal.block'),
     },
     {
       value: config === ALIAS_CONFIG.BLOCK_SPAM,
@@ -48,8 +47,8 @@ export const ConfigAliasModal = (props: Props) => {
         setConfig(ALIAS_CONFIG.BLOCK_SPAM)
         handleEdit(ALIAS_CONFIG.BLOCK_SPAM)
       },
-      title: translate('private_relay.config_modal.block_spam')
-    }
+      title: translate('private_relay.config_modal.block_spam'),
+    },
   ]
 
   // --------------- COMPUTED ----------------
@@ -76,32 +75,24 @@ export const ConfigAliasModal = (props: Props) => {
       title={translate('private_relay.config_modal.title')}
     >
       <View>
-        <Text
-          text={item.full_address}
-          style={{ marginBottom: 12 }}
-        />
-        {
-          configurations.map((item, index) => (<View
-            key={index}>
+        <Text text={item.full_address} style={{ marginBottom: 12 }} />
+        {configurations.map((item, index) => (
+          <View key={index}>
             <TouchableOpacity
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginVertical: 12
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginVertical: 12,
               }}
               onPress={item.onChange}
             >
               <>
-                <Toggle
-                  value={item.value}
-                  onValueChange={item.onChange}
-                />
-                <Text text={item.title} style={{ maxWidth: "85%", marginLeft: 12 }} />
+                <Toggle value={item.value} onValueChange={item.onChange} />
+                <Text text={item.title} style={{ maxWidth: '85%', marginLeft: 12 }} />
               </>
             </TouchableOpacity>
           </View>
-          ))
-        }
+        ))}
       </View>
       <Text
         preset="label"

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { View, Image, Linking, AppState } from 'react-native'
 import { AutofillServiceEnabled } from 'app/utils/autofillHelper'
 import { Step } from './EnableAutofillStep'
-import { Button, Header, Screen, Text } from 'app/components-v2/cores'
+import { Button, Header, Screen, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 const ACTIVE = require('assets/images/autofill/autofillActive.png')

@@ -8,14 +8,14 @@ import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
 import { Checkbox } from 'react-native-ui-lib'
 import Animated, { ZoomIn } from 'react-native-reanimated'
-import { Screen, Text, Button, TextInput, Logo, Header } from 'app/components-v2/cores'
+import { Screen, Text, Button, TextInput, Logo, Header } from 'app/components/cores'
 import {
   CountryPicker,
   CountryCode,
   SocialLogin,
   RecaptchaChecker,
   IosPasswordlessOptions,
-} from 'app/components-v2/utils'
+} from 'app/components/utils'
 import { Passkey, PasskeyRegistrationResult } from 'react-native-passkey'
 import { PasskeyRegistrationRequest } from 'react-native-passkey/lib/typescript/Passkey'
 import { credentialCreationOptions, publicKeyCredentialWithAttestation } from 'app/utils/passkey'
@@ -178,7 +178,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
       <View
         style={{
           margin: 12,
-          marginBottom: 30
+          marginBottom: 30,
         }}
       >
         <Text
@@ -220,8 +220,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
         />
       )}
 
-      <Header leftIcon='arrow-left' onLeftPress={goBack} />
-
+      <Header leftIcon="arrow-left" onLeftPress={goBack} />
 
       <View style={{ paddingHorizontal: 20 }}>
         <Logo
@@ -299,7 +298,6 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
             if (isSignupWithPassword) {
               getCaptchaToken().then(handleRegister)
             } else {
-
               setIsSignupWithPassword(true)
             }
           }}

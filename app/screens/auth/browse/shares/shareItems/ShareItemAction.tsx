@@ -5,8 +5,8 @@ import { SharedMemberType } from 'app/static/types'
 import { useCipherData, useCipherHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
-import { ActionItem, ActionSheet } from 'app/components-v2/ciphers'
-import { Text } from 'app/components-v2/cores'
+import { ActionItem, ActionSheet } from 'app/components/ciphers'
+import { Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 type Props = {

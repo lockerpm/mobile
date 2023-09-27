@@ -8,7 +8,7 @@ import { useStores } from 'app/models'
 import { useFolder, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
-import { Header, Icon, ImageIcon, Screen, Text } from 'app/components-v2/cores'
+import { Header, Icon, ImageIcon, Screen, Text } from 'app/components/cores'
 import { AccountRole } from 'app/static/types'
 
 export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = observer((props) => {

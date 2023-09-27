@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
 import { translate } from 'app/i18n'
-import { Text, Button, TextInput, Icon } from 'app/components-v2/cores'
+import { Text, Button, TextInput, Icon } from 'app/components/cores'
 
 type Props = {
   goBack: () => void

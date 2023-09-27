@@ -1,12 +1,12 @@
 import React, { memo } from 'react'
 import { TouchableOpacity, View, Image } from 'react-native'
 import isEqual from 'lodash/isEqual'
-import { Icon, Text, Toggle } from 'app/components-v2/cores'
+import { Icon, Text, Toggle } from 'app/components/cores'
 import { AccountRole } from 'app/static/types'
 import { CipherView } from 'core/models/view'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
-import { PremiumTag } from 'app/components-v2/utils'
+import { PremiumTag } from 'app/components/utils'
 
 type Prop = {
   item: CipherSharedType

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react"
-import { View } from "react-native"
-import { Text, Button, Icon } from "app/components-v2/cores"
-import { Modal } from "app/components-v2/utils"
-import { useStores } from "app/models"
-import { EnterpriseInvitation, EnterpriseInvitationStatus } from "app/static/types"
-import { translate } from "app/i18n"
-
+import React, { useEffect, useState } from 'react'
+import { View } from 'react-native'
+import { Text, Button, Icon } from 'app/components/cores'
+import { Modal } from 'app/components/utils'
+import { useStores } from 'app/models'
+import { EnterpriseInvitation, EnterpriseInvitationStatus } from 'app/static/types'
+import { translate } from 'app/i18n'
 
 type Props = {
   isOpen: boolean
@@ -18,17 +17,20 @@ export const EnterpriseInvitationModal = (props: Props) => {
   const { isOpen, onClose, enterpeiseInvitations } = props
   const { enterpriseStore } = useStores()
 
-
-  const [invitationByDomain, setInvitationByDomain] = useState(enterpeiseInvitations.find(e => !!e.domain))
+  const [invitationByDomain, setInvitationByDomain] = useState(
+    enterpeiseInvitations.find((e) => !!e.domain)
+  )
   const [isLoading, setIsLoading] = useState(false)
-  const [requested, setRequested] = useState(invitationByDomain?.status === EnterpriseInvitationStatus.REQUESTED)
+  const [requested, setRequested] = useState(
+    invitationByDomain?.status === EnterpriseInvitationStatus.REQUESTED
+  )
 
   // ------------------ Params -----------------------
 
   const invitationByDomainAction = async () => {
     setIsLoading(true)
-    const res = await enterpriseStore.invitationsActions(invitationByDomain?.id, "confirmed")
-    if (res.kind === "ok") {
+    const res = await enterpriseStore.invitationsActions(invitationByDomain?.id, 'confirmed')
+    if (res.kind === 'ok') {
       setRequested(true)
     }
     setIsLoading(false)
@@ -36,7 +38,7 @@ export const EnterpriseInvitationModal = (props: Props) => {
 
   // ------------------ Methods ----------------------
   useEffect(() => {
-    const _invitation = enterpeiseInvitations.find(e => !!e.domain)
+    const _invitation = enterpeiseInvitations.find((e) => !!e.domain)
     setInvitationByDomain(_invitation)
     setRequested(_invitation?.status === EnterpriseInvitationStatus.REQUESTED)
   }, [enterpeiseInvitations])
@@ -44,24 +46,14 @@ export const EnterpriseInvitationModal = (props: Props) => {
   // ------------------------------ RENDER -------------------------------
 
   return (
-    <Modal
-      disableHeader
-      isOpen={isOpen}
-      onClose={onClose}
-    >
-      <View >
-        <View style={{ alignItems: "center" }}>
-          <Text
-            size="xl"
-            preset="bold"
-            text={translate("enterprise_invitation.domain.join_org")}
-          />
+    <Modal disableHeader isOpen={isOpen} onClose={onClose}>
+      <View>
+        <View style={{ alignItems: 'center' }}>
+          <Text size="xl" preset="bold" text={translate('enterprise_invitation.domain.join_org')} />
         </View>
 
         <View style={{ marginVertical: 12 }}>
-          <Text
-            text={translate("enterprise_invitation.domain.managed_by")}
-          />
+          <Text text={translate('enterprise_invitation.domain.managed_by')} />
           <Text
             preset="bold"
             text={`${invitationByDomain?.enterprise.name}`}
@@ -70,26 +62,36 @@ export const EnterpriseInvitationModal = (props: Props) => {
         </View>
 
         <Text
-          text={translate("enterprise_invitation.enterprise_note.note", { name: invitationByDomain?.enterprise.name })}
+          text={translate('enterprise_invitation.enterprise_note.note', {
+            name: invitationByDomain?.enterprise.name,
+          })}
         />
-        <Desription text={translate("enterprise_invitation.enterprise_note.note_1")} />
-        <Desription text={translate("enterprise_invitation.enterprise_note.note_2")} />
-        <Desription text={translate("enterprise_invitation.enterprise_note.note_3")} />
+        <Desription text={translate('enterprise_invitation.enterprise_note.note_1')} />
+        <Desription text={translate('enterprise_invitation.enterprise_note.note_2')} />
+        <Desription text={translate('enterprise_invitation.enterprise_note.note_3')} />
 
         <Text
-          text={translate("enterprise_invitation.data", { name: invitationByDomain?.enterprise.name })}
+          text={translate('enterprise_invitation.data', {
+            name: invitationByDomain?.enterprise.name,
+          })}
           style={{ marginVertical: 8 }}
         />
 
         <Text
-          text={translate("enterprise_invitation.request_access", { name: invitationByDomain?.enterprise.name })}
+          text={translate('enterprise_invitation.request_access', {
+            name: invitationByDomain?.enterprise.name,
+          })}
           style={{ marginVertical: 8 }}
         />
 
         <Button
           loading={isLoading}
           disabled={requested || isLoading}
-          text={requested ? translate("enterprise_invitation.btn_requested") : translate("enterprise_invitation.btn_request")}
+          text={
+            requested
+              ? translate('enterprise_invitation.btn_requested')
+              : translate('enterprise_invitation.btn_request')
+          }
           onPress={invitationByDomainAction}
         />
       </View>
@@ -97,10 +99,8 @@ export const EnterpriseInvitationModal = (props: Props) => {
   )
 }
 const Desription = ({ text }: { text: string }) => (
-  <View style={{ marginVertical: 2, flexDirection: "row", alignItems: 'center' }}>
+  <View style={{ marginVertical: 2, flexDirection: 'row', alignItems: 'center' }}>
     <Icon icon="dot" size={20} />
-    <Text
-      text={text}
-    />
+    <Text text={text} />
   </View>
 )

@@ -5,8 +5,8 @@ import { RelayAddress } from 'app/static/types'
 import { useTheme } from 'app/services/context'
 import { useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
-import { Icon, Text } from 'app/components-v2/cores'
-import { ActionItem, ActionSheet } from 'app/components-v2/ciphers'
+import { Icon, Text } from 'app/components/cores'
+import { ActionItem, ActionSheet } from 'app/components/ciphers'
 import { translate } from 'app/i18n'
 
 interface Props {

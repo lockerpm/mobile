@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, TextInput } from 'react-native'
-import { BottomModal, Text, Button } from 'app/components-v2/cores'
+import { BottomModal, Text, Button } from 'app/components/cores'
 import { SubdomainData } from 'app/static/types'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'

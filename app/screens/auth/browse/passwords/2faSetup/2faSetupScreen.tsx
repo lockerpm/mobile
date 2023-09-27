@@ -1,14 +1,14 @@
 import React, { FC, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { OtpList } from './OtpList'
-import { Text, Screen, Header, Icon } from 'app/components-v2/cores'
+import { Text, Screen, Header, Icon } from 'app/components/cores'
 import { AppStackScreenProps } from 'app/navigators'
 import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 import { AuthenticatorAddAction } from 'app/screens/auth/tools/authenticator/AuthenticatorAddAction'
-import { SearchBar } from 'app/components-v2/utils'
+import { SearchBar } from 'app/components/utils'
 
 export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup'>> = (props) => {
   const navigation: any = props.navigation

@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { RootStackScreenProps } from 'app/navigators'
 import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
-import { Button, Screen, Text, Logo } from 'app/components-v2/cores'
+import { Button, Screen, Text, Logo } from 'app/components/cores'
 
 export const OnboardingScreen: FC<RootStackScreenProps<'onBoarding'>> = (props) => {
   const { colors, isDark } = useTheme()

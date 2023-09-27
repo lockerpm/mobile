@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, TouchableOpacity, View } from 'react-native'
-import { Text, Button } from 'app/components-v2/cores'
-import { Modal } from 'app/components-v2/utils'
+import { Text, Button } from 'app/components/cores'
+import { Modal } from 'app/components/utils'
 import { translate } from 'app/i18n'
 
 type Props = {

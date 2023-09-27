@@ -11,7 +11,7 @@ import { TrustedContact } from 'app/static/types'
 import { CipherData } from 'core/models/data'
 import { Cipher } from 'core/models/domain'
 import { CipherView } from 'core/models/view'
-import { Header, Screen, Text } from 'app/components-v2/cores'
+import { Header, Screen, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 export const ViewEAScreen: FC<AppStackScreenProps<'viewEA'>> = observer((props) => {

@@ -3,7 +3,7 @@ import { TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import { Checkbox } from 'react-native-ui-lib'
 import isEqual from 'lodash/isEqual'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import { Text, Icon } from 'app/components-v2/cores'
+import { Text, Icon } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { getTOTP, parseOTPUri } from 'app/utils/totp'
 

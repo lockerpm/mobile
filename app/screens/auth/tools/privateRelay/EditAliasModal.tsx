@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react"
-import { TextInput, View } from "react-native"
-import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
-import { RelayAddress } from "app/static/types"
-import { BottomModal, Text, Button } from 'app/components-v2/cores'
-import { translate } from "app/i18n"
-import Animated, { FadeInDown } from "react-native-reanimated"
+import React, { useEffect, useState } from 'react'
+import { TextInput, View } from 'react-native'
+import { useStores } from 'app/models'
+import { useTheme } from 'app/services/context'
+import { RelayAddress } from 'app/static/types'
+import { BottomModal, Text, Button } from 'app/components/cores'
+import { translate } from 'app/i18n'
+import Animated, { FadeInDown } from 'react-native-reanimated'
 
 interface Props {
   isOpen?: boolean
@@ -21,8 +21,8 @@ export const EditAliasModal = (props: Props) => {
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)
-  const [newAddress, setNewAddress] = useState("")
-  const [updateError, setUpdateError] = useState("")
+  const [newAddress, setNewAddress] = useState('')
+  const [updateError, setUpdateError] = useState('')
   const [isConfirm, setIsConfirm] = useState(false)
 
   // --------------- METHODS ----------------
@@ -83,9 +83,7 @@ export const EditAliasModal = (props: Props) => {
           }}
         />
 
-        <Text
-          text={item.full_address}
-        />
+        <Text text={item.full_address} />
 
         <Text
           preset="label"
@@ -97,24 +95,26 @@ export const EditAliasModal = (props: Props) => {
           }}
         />
 
-        <View style={{
-          borderWidth: 1,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: 44,
-          borderColor: colors.primary,
-          borderRadius: 8,
-          paddingRight: 12,
-          paddingLeft: 12,
-        }}>
+        <View
+          style={{
+            borderWidth: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: 44,
+            borderColor: colors.primary,
+            borderRadius: 8,
+            paddingRight: 12,
+            paddingLeft: 12,
+          }}
+        >
           <TextInput
             value={newAddress}
             onChangeText={(text: string) => {
               setNewAddress(text)
-              if (updateError !== "") setUpdateError("")
+              if (updateError !== '') setUpdateError('')
             }}
-            placeholder={"... "}
+            placeholder={'... '}
             placeholderTextColor={colors.secondaryText}
             selectionColor={colors.primary}
             style={{
@@ -123,10 +123,13 @@ export const EditAliasModal = (props: Props) => {
               fontSize: 16,
             }}
           />
-          <Text text={item.full_address.replace(item.address, "")} style={{
-            marginLeft: 2,
-            right: 0
-          }} />
+          <Text
+            text={item.full_address.replace(item.address, '')}
+            style={{
+              marginLeft: 2,
+              right: 0,
+            }}
+          />
         </View>
       </View>
 
@@ -139,7 +142,7 @@ export const EditAliasModal = (props: Props) => {
 
       <Button
         text={translate('common.save')}
-        disabled={isLoading || !newAddress || updateError !== ""}
+        disabled={isLoading || !newAddress || updateError !== ''}
         loading={isLoading}
         onPress={() => setIsConfirm(true)}
       />
@@ -155,9 +158,16 @@ export const EditAliasModal = (props: Props) => {
           marginBottom: 4,
         }}
       />
-      <View style={{ marginTop: 12, justifyContent: "flex-end", flexDirection: 'row', alignItems: 'center' }}>
+      <View
+        style={{
+          marginTop: 12,
+          justifyContent: 'flex-end',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
         <Button
-          preset='secondary'
+          preset="secondary"
           text={translate('common.cancel')}
           onPress={() => {
             setIsConfirm(false)
@@ -173,7 +183,7 @@ export const EditAliasModal = (props: Props) => {
           onPress={handleEdit}
           style={{
             width: 100,
-            marginLeft: 12
+            marginLeft: 12,
           }}
         />
       </View>
@@ -184,15 +194,14 @@ export const EditAliasModal = (props: Props) => {
     <BottomModal
       isOpen={isOpen}
       onClose={onClose}
-      title={!isConfirm ? translate('private_relay.edit_modal.titel') : translate('private_relay.edit_modal.confirm_title')}
+      title={
+        !isConfirm
+          ? translate('private_relay.edit_modal.titel')
+          : translate('private_relay.edit_modal.confirm_title')
+      }
     >
-      {
-        !isConfirm && renderEdit()
-      }
-      {
-        isConfirm && renderConfirmEdit()
-      }
-
+      {!isConfirm && renderEdit()}
+      {isConfirm && renderConfirmEdit()}
     </BottomModal>
   )
 }

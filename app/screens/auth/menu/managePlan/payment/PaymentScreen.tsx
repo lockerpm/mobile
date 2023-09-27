@@ -28,7 +28,7 @@ import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
 import { Logger } from 'app/utils/utils'
 import { translate } from 'app/i18n'
-import { Icon, Logo, Screen, Text } from 'app/components-v2/cores'
+import { Icon, Logo, Screen, Text } from 'app/components/cores'
 
 const IS_IOS = Platform.OS === 'ios'
 

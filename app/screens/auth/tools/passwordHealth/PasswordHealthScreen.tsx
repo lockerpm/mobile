@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react'
 import { TouchableOpacity, View } from 'react-native'
-import { Header, Icon, ImageIcon, Screen, Text } from 'app/components-v2/cores'
+import { Header, Icon, ImageIcon, Screen, Text } from 'app/components/cores'
 import { LoadingHeader } from './LoadingHeader'
 import { ToolsStackScreenProps } from 'app/navigators'
 import { useTheme } from 'app/services/context'

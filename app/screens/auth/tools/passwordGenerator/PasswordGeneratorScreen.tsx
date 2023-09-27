@@ -8,8 +8,8 @@ import { useCipherHelper, useHelper } from 'app/services/hook'
 import { useCoreService } from 'app/services/coreService'
 import { useStores } from 'app/models'
 import { translate } from 'app/i18n'
-import { Button, Header, Icon, Screen, Text } from 'app/components-v2/cores'
-import { PasswordStrength } from 'app/components-v2/utils'
+import { Button, Header, Icon, Screen, Text } from 'app/components/cores'
+import { PasswordStrength } from 'app/components/utils'
 
 export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'>> = observer(
   (props) => {

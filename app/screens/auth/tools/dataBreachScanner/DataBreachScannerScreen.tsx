@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { View } from 'react-native'
-import { Text, Screen, Header, TextInput, Button } from 'app/components-v2/cores'
+import { Text, Screen, Header, TextInput, Button } from 'app/components/cores'
 import { useNavigation } from '@react-navigation/core'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'

@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { NativeModules, TouchableOpacity, View, Image } from 'react-native'
 import isEqual from 'lodash/isEqual'
-import { Icon, Text, Toggle } from 'app/components-v2/cores'
+import { Icon, Text, Toggle } from 'app/components/cores'
 import { useCipherHelper, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { CipherView } from 'core/models/view'

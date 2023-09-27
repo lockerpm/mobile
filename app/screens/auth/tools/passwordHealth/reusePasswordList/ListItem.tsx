@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { TouchableOpacity, View, Image } from 'react-native'
 import isEqual from 'lodash/isEqual'
-import { Icon, Text } from 'app/components-v2/cores'
+import { Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { useCipherHelper } from 'app/services/hook'
 import { translate } from 'app/i18n'

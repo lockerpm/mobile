@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, Icon } from 'app/components-v2/cores'
+import { Text, Icon } from 'app/components/cores'
 import { View } from 'react-native'
 import { SeedPhraseInput } from '../cryptoWalletEdit/SeedPhraseInput'
 import { useHelper } from 'app/services/hook'

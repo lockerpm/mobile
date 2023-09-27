@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
-import { Button, TextInput } from 'app/components-v2/cores'
+import { Button, TextInput } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
 import { translate } from 'app/i18n'

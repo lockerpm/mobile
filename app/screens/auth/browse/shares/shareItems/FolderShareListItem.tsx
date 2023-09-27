@@ -1,4 +1,4 @@
-import { Icon, ImageIcon, Text } from 'app/components-v2/cores'
+import { Icon, ImageIcon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { CollectionView } from 'core/models/view/collectionView'
 import React from 'react'

@@ -1,10 +1,9 @@
-import React, { useState } from "react"
-import { View, Image, TouchableOpacity } from "react-native"
-import { Icon, Text } from "app/components-v2/cores"
-import { useTheme } from "app/services/context"
-import { ActionSheet } from "app/components-v2/ciphers"
-import { translate } from "app/i18n"
-
+import React, { useState } from 'react'
+import { View, Image, TouchableOpacity } from 'react-native'
+import { Icon, Text } from 'app/components/cores'
+import { useTheme } from 'app/services/context'
+import { ActionSheet } from 'app/components/ciphers'
+import { translate } from 'app/i18n'
 
 export interface FamilyMemberProp {
   id?: number
@@ -14,7 +13,6 @@ export interface FamilyMemberProp {
   username?: string
   full_name?: string
 }
-
 
 interface MemberProps {
   member: FamilyMemberProp
@@ -36,69 +34,73 @@ export const Member = (props: MemberProps) => {
   // ----------------------- RENDER -----------------------
   return (
     <View
-      style={
-        {
-          borderBottomColor: colors.block,
-          borderBottomWidth: 1,
-          width: "100%",
-          flexDirection: "row",
-          marginBottom: 15,
-          paddingVertical: 14,
-          justifyContent: "flex-start"
-        }
-      }>
+      style={{
+        borderBottomColor: colors.block,
+        borderBottomWidth: 1,
+        width: '100%',
+        flexDirection: 'row',
+        marginBottom: 15,
+        paddingVertical: 14,
+        justifyContent: 'flex-start',
+      }}
+    >
       <Image
-        source={avatar ? { uri: avatar } : require("./avatar.png")}
+        source={avatar ? { uri: avatar } : require('./avatar.png')}
         style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
       />
 
-      {add && <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Text
-          text={email}></Text>
-      </View>
-      }
-      {!add && <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Text
-          text={full_name || "Unknown"}
-          style={{ color: owner ? colors.primary : colors.title }}
-        />
-        <Text
-          text={email}
-          style={{ color: colors.secondaryText, fontSize: 15 }}
-        />
-      </View>}
+      {add && (
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Text text={email}></Text>
+        </View>
+      )}
+      {!add && (
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Text
+            text={full_name || 'Unknown'}
+            style={{ color: owner ? colors.primary : colors.title }}
+          />
+          <Text text={email} style={{ color: colors.secondaryText, fontSize: 15 }} />
+        </View>
+      )}
 
-      {!add && family && !owner && <TouchableOpacity
-        onPress={() => setShowSheetModal(true)}
-        style={{ justifyContent: 'center' }}>
-        <Icon
-          icon="dots-three"
-          size={20}
-        />
-      </TouchableOpacity>}
+      {!add && family && !owner && (
+        <TouchableOpacity
+          onPress={() => setShowSheetModal(true)}
+          style={{ justifyContent: 'center' }}
+        >
+          <Icon icon="dots-three" size={20} />
+        </TouchableOpacity>
+      )}
 
-      <ActionSheet
-        isOpen={showSheetModal}
-        onClose={() => setShowSheetModal(false)}>
-        <View style={{ alignItems: "center" }}>
+      <ActionSheet isOpen={showSheetModal} onClose={() => setShowSheetModal(false)}>
+        <View style={{ alignItems: 'center' }}>
           <Image
-            source={avatar ? { uri: avatar } : require("./avatar.png")}
+            source={avatar ? { uri: avatar } : require('./avatar.png')}
             style={{ height: 40, width: 40, borderRadius: 20 }}
           />
           <Text style={{ marginVertical: 20 }}>{email}</Text>
-          <View style={{ borderBottomColor: colors.block, borderWidth: 0.4, width: "100%", marginVertical: 2 }}></View>
+          <View
+            style={{
+              borderBottomColor: colors.block,
+              borderWidth: 0.4,
+              width: '100%',
+              marginVertical: 2,
+            }}
+          ></View>
           <TouchableOpacity
             onPress={() => {
               setShowSheetModal(false)
-              onRemove(id.toString());
+              onRemove(id.toString())
             }}
-            style={{ justifyContent: 'center' }}>
-            <Text style={{ marginVertical: 20, color: colors.error }}>{translate("invite_member.remove")}</Text>
+            style={{ justifyContent: 'center' }}
+          >
+            <Text style={{ marginVertical: 20, color: colors.error }}>
+              {translate('invite_member.remove')}
+            </Text>
           </TouchableOpacity>
         </View>
       </ActionSheet>
-
-
-    </View >
+    </View>
   )
 }

@@ -6,7 +6,7 @@ import { NotificationCategory } from 'app/static/types'
 import { useHelper } from 'app/services/hook'
 import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
-import { ImageIcon, ImageIconTypes, Text } from 'app/components-v2/cores'
+import { ImageIcon, ImageIconTypes, Text } from 'app/components/cores'
 
 interface Props {
   lang: string
@@ -52,7 +52,7 @@ export const NotiListItem = (props: Props) => {
                 screen: 'sharedItems',
               },
             })
-          }
+          },
         }
       case NotificationCategory.EMERGENCY:
         return {
@@ -65,7 +65,7 @@ export const NotiListItem = (props: Props) => {
             } else {
               navigation.navigate(is_grantor ? 'yourTrustedContact' : 'contactsTrustedYou')
             }
-          }
+          },
         }
       case NotificationCategory.DATA_BREACH:
         return {
@@ -82,7 +82,7 @@ export const NotiListItem = (props: Props) => {
           onPress: async () => {
             const { link } = metadata
             Linking.openURL(link[user.language])
-          }
+          },
         }
     }
   })()
@@ -106,7 +106,7 @@ export const NotiListItem = (props: Props) => {
           numberOfLines={3}
           style={{ marginBottom: 4, maxHeight: 60 }}
         />
-        <Text preset='label' text={relativeTime(publish_time * 1000, lang)} />
+        <Text preset="label" text={relativeTime(publish_time * 1000, lang)} />
       </View>
     </TouchableOpacity>
   )

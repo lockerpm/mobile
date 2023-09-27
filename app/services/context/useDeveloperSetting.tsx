@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react'
 // import { useTheme } from "./useTheme"
 // import { useStores } from "app/models"
 import { Modal } from 'react-native'
-import { Screen } from 'app/components-v2/cores'
+import { Screen } from 'app/components/cores'
 
 const DeveloperSettingsContext: React.Context<{
   setIsOpenDeveloperSettingModal: (val: boolean) => void

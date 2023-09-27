@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react'
-import { BottomModal, Button, Text } from 'app/components-v2/cores'
+import { BottomModal, Button, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { useCoreService } from 'app/services/coreService'

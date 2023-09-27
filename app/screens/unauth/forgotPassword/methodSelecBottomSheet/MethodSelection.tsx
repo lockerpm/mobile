@@ -1,11 +1,11 @@
 import React, { useState, useRef, useCallback } from 'react'
 import { View } from 'react-native'
-import { Text, Button, Icon } from 'app/components-v2/cores'
+import { Text, Button, Icon } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
-import { RecaptchaChecker } from 'app/components-v2/utils'
+import { RecaptchaChecker } from 'app/components/utils'
 
 type Props = {
   methods: {

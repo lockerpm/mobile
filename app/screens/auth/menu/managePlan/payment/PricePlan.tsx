@@ -4,7 +4,7 @@ import CheckBox from '@react-native-community/checkbox'
 import { SKU } from './PricePlan.sku'
 import { Subscription } from 'react-native-iap'
 import { useTheme } from 'app/services/context'
-import { Text, Button } from 'app/components-v2/cores'
+import { Text, Button } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 interface PricePlanItemProps {

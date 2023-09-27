@@ -8,7 +8,7 @@ import { BiometricsType } from '../../lock.types'
 import { useAuthentication, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { translate } from 'i18n-js'
-import { Logo, Button, Screen, Text, TextInput, Icon } from 'app/components-v2/cores'
+import { Logo, Button, Screen, Text, TextInput, Icon } from 'app/components/cores'
 
 interface Props {
   data: OnPremisePreloginData

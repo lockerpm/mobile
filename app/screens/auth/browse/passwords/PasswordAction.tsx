@@ -5,7 +5,7 @@ import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { Logger } from 'app/utils/utils'
-import { ActionItem, CipherAction } from 'app/components-v2/ciphers'
+import { ActionItem, CipherAction } from 'app/components/ciphers'
 import { translate } from 'app/i18n'
 import { getTOTP, parseOTPUri } from 'app/utils/totp'
 

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { View, Image } from 'react-native'
 import { AppStackScreenProps } from 'app/navigators'
-import { Text, Button, Screen } from 'app/components-v2/cores'
+import { Text, Button, Screen } from 'app/components/cores'
 
 const SWITCH = require('assets/images/switch-devices.png')
 

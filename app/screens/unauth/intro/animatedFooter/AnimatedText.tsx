@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleProp, TextStyle, ViewStyle } from 'react-native'
 import Animated, { Extrapolate, interpolate, useAnimatedStyle } from 'react-native-reanimated'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 interface Props {

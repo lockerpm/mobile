@@ -1,10 +1,10 @@
-import { ActionItem, CipherAction } from "app/components-v2/ciphers"
-import { translate } from "app/i18n"
-import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
-import { toCryptoWalletData } from "app/utils/crypto"
-import { observer } from "mobx-react-lite"
-import React from "react"
+import { ActionItem, CipherAction } from 'app/components/ciphers'
+import { translate } from 'app/i18n'
+import { useStores } from 'app/models'
+import { useHelper } from 'app/services/hook'
+import { toCryptoWalletData } from 'app/utils/crypto'
+import { observer } from 'mobx-react-lite'
+import React from 'react'
 
 type Props = {
   isOpen?: boolean
@@ -24,14 +24,14 @@ export const CryptoWalletAction = observer((props: Props) => {
   const renderContent = () => (
     <>
       <ActionItem
-        name={translate("crypto_asset.copy_address")}
+        name={translate('crypto_asset.copy_address')}
         icon="copy"
         action={() => copyToClipboard(data.address)}
         disabled={!data.address}
       />
 
       <ActionItem
-        name={translate("crypto_asset.copy_password")}
+        name={translate('crypto_asset.copy_password')}
         icon="copy"
         action={() => copyToClipboard(data.password)}
         disabled={!data.password}
@@ -45,21 +45,21 @@ export const CryptoWalletAction = observer((props: Props) => {
       />
 
       <ActionItem
-        name={translate("crypto_asset.copy_private_key")}
+        name={translate('crypto_asset.copy_private_key')}
         icon="copy"
         action={() => copyToClipboard(data.privateKey)}
         disabled={!data.privateKey}
       />
 
       <ActionItem
-        name={translate("crypto_asset.copy_seed")}
+        name={translate('crypto_asset.copy_seed')}
         icon="copy"
         action={() => copyToClipboard(data.seed)}
         disabled={!data.seed}
       />
       {__DEV__ && (
         <ActionItem
-          name={"(DEBUG) Copy notes"}
+          name={'(DEBUG) Copy notes'}
           icon="copy"
           action={() => copyToClipboard(selectedCipher.notes)}
           disabled={!data.seed}

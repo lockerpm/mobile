@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, TouchableOpacity, Image } from 'react-native'
 import { TabView, SceneMap } from 'react-native-tab-view'
 import { PREMIUM_FEATURES_IMG } from '../PremiumFeature'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 

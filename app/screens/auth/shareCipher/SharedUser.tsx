@@ -3,8 +3,8 @@ import { View, Image, TouchableOpacity } from 'react-native'
 import { AccountRoleText, SharedGroupType, SharedMemberType, SharingStatus } from 'app/static/types'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
-import { Icon, Text } from 'app/components-v2/cores'
-import { ActionSheet } from 'app/components-v2/ciphers'
+import { Icon, Text } from 'app/components/cores'
+import { ActionSheet } from 'app/components/ciphers'
 import { useCipherData } from 'app/services/hook'
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
   onRemove: (id: string, isGroup?: boolean) => void
 }
 
-const SHARE_GROUP = require('../../../../assets/icon/common/group.png')
+const SHARE_GROUP = require('assets/images/icons/group.png')
 
 export const SharedUsers = (props: Props) => {
   const { item, organizationId, reload, setReload, onRemove } = props

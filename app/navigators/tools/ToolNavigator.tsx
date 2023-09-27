@@ -10,7 +10,7 @@ import {
   AliasStatisticScreen,
 } from '../../screens'
 import { TxKeyPath } from 'app/i18n'
-import { ImageIconTypes } from 'app/components-v2/cores'
+import { ImageIconTypes } from 'app/components/cores'
 import { RelayAddress, SubdomainData } from 'app/static/types'
 
 // ------------------------Tools list screen routing---------------------

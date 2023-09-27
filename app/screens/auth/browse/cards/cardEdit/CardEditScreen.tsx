@@ -12,10 +12,10 @@ import { CardView, CipherView } from 'core/models/view'
 import { CollectionView } from 'core/models/view/collectionView'
 import { CipherType } from 'core/enums'
 import { translate } from 'app/i18n'
-import { Button, Header, Screen, TextInput, Text } from 'app/components-v2/cores'
-import { CipherOthersInfo, CustomFieldsEdit } from 'app/components-v2/ciphers'
+import { Button, Header, Screen, TextInput, Text } from 'app/components/cores'
+import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
 import { PlanStorageLimitModal } from '../../planStorageLimitModal'
-import { Select } from 'app/components-v2/utils'
+import { Select } from 'app/components/utils'
 
 type InputItem = {
   label: string

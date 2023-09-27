@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Image } from 'react-native'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 
 interface StepProps {
   text: string

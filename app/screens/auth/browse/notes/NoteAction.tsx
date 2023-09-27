@@ -1,4 +1,4 @@
-import { ActionItem, CipherAction } from 'app/components-v2/ciphers'
+import { ActionItem, CipherAction } from 'app/components/ciphers'
 import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'

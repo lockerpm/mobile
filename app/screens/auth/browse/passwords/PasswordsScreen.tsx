@@ -8,9 +8,9 @@ import {
   CipherListHeader,
   EmptyCipherList,
   SortActionConfigModal,
-} from 'app/components-v2/ciphers'
+} from 'app/components/ciphers'
 import { useStores } from 'app/models'
-import { Screen } from 'app/components-v2/cores'
+import { Screen } from 'app/components/cores'
 import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { CipherType } from 'core/enums'

@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { Dimensions, ScrollView } from 'react-native'
-import { Screen } from 'app/components-v2/cores'
+import { Screen } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { BusinessPasswordlessQrScan } from './PasswordlessQrScan'
 import { useAuthentication } from 'app/services/hook'

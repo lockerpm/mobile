@@ -1,17 +1,22 @@
-import React, { FC, useEffect, useState } from "react"
-import { View, TouchableOpacity, Image, FlatList } from "react-native"
-import { Button, Header, Icon, Screen, Text, TextInput } from "app/components-v2/cores"
-import { SharedUsers } from "./SharedUser"
-import { GroupMemberData, GroupData, SharedMemberType, SharedGroupType, AccountRoleText } from "app/static/types"
-import { AppStackScreenProps } from "app/navigators"
-import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
-import { useCipherData, useHelper } from "app/services/hook"
-import { CipherView } from "core/models/view"
-import { translate } from "app/i18n"
+import React, { FC, useEffect, useState } from 'react'
+import { View, TouchableOpacity, Image, FlatList } from 'react-native'
+import { Button, Header, Icon, ImageIcon, Screen, Text, TextInput } from 'app/components/cores'
+import { SharedUsers } from './SharedUser'
+import {
+  GroupMemberData,
+  GroupData,
+  SharedMemberType,
+  SharedGroupType,
+  AccountRoleText,
+} from 'app/static/types'
+import { AppStackScreenProps } from 'app/navigators'
+import { useStores } from 'app/models'
+import { useTheme } from 'app/services/context'
+import { useCipherData, useHelper } from 'app/services/hook'
+import { CipherView } from 'core/models/view'
+import { translate } from 'app/i18n'
 
-const SHARE_AVATAR = require("../../../../assets/icon/common/avatar.png")
-const SHARE_GROUP = require("../../../../assets/icon/common/group.png")
+const SHARE_GROUP = require('assets/images/icons/group.png')
 
 export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (props) => {
   const route = props.route
@@ -25,12 +30,11 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
   const cipherIds = ciphers?.length > 1 ? ciphers.map((c) => c.id) : null
   const selectedCipher: CipherView = ciphers?.length === 1 ? ciphers[0] : null
 
-
   // --------------- PARAMS ----------------
   const [page, setPage] = useState<0 | 1>(0)
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState('')
   const [emails, setEmails] = useState<string[]>([])
-  const [shareType, setShareType] = useState("view")
+  const [shareType, setShareType] = useState('view')
   const [groups, setGroups] = useState<{ name: string; id: string }[]>([])
   type Suggest = GroupData | GroupMemberData
   const [suggestions, setSuggestions] = useState<Suggest[]>([])
@@ -44,13 +48,13 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
     const data = []
     sharedGroups.forEach((e) => {
       data.push({
-        type: "group",
+        type: 'group',
         ...e,
       })
     })
     sharedUsers.forEach((e) => {
       data.push({
-        type: "user",
+        type: 'user',
         ...e,
       })
     })
@@ -67,7 +71,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
     if (!!e && !emails.includes(e)) {
       setEmails([...emails, e])
     }
-    setEmail("")
+    setEmail('')
   }
 
   const removeEmail = (val: string) => {
@@ -76,7 +80,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
 
   const getSharedUsers = async () => {
     const res = await cipherStore.loadMyShares()
-    if (res.kind !== "ok") {
+    if (res.kind !== 'ok') {
       notifyApiError(res)
     }
     const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
@@ -92,7 +96,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
 
   const onRemove = async (id: string, _isGroup?: boolean) => {
     const res = await stopShareCipher(selectedCipher, id)
-    if (res.kind === "ok" || res.kind === "unauthorized") {
+    if (res.kind === 'ok' || res.kind === 'unauthorized') {
       const sharedUserCount = await getSharedUsers()
       if (sharedUserCount === 0) {
         setPage(0)
@@ -105,10 +109,10 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
     let role = AccountRoleText.MEMBER
     let autofillOnly = false
     switch (shareType) {
-      case "only_fill":
+      case 'only_fill':
         autofillOnly = true
         break
-      case "edit":
+      case 'edit':
         role = AccountRoleText.ADMIN
         break
     }
@@ -117,7 +121,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
       ? await shareMultipleCiphers(cipherIds, emails, role, autofillOnly, groups)
       : await shareCipher(selectedCipher, emails, role, autofillOnly, groups)
 
-    if (res.kind === "ok" || res.kind === "unauthorized") {
+    if (res.kind === 'ok' || res.kind === 'unauthorized') {
       reset()
       navigation.goBack()
     }
@@ -125,7 +129,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
 
   const searchGroupOrMember = async (query: string) => {
     const res = await enterpriseStore.searchGroupOrMember(user.enterprise.id, query)
-    if (res.kind === "ok") {
+    if (res.kind === 'ok') {
       setSuggestions([...res.data.groups, ...res.data.members].slice(0, 4))
     } else {
       notifyApiError(res)
@@ -133,11 +137,11 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
   }
 
   const reset = () => {
-    setEmail("")
+    setEmail('')
     setEmails([])
     setGroups([])
     setSuggestions([])
-    setShareType("view")
+    setShareType('view')
     setReload(true)
     setSharedUsers([])
     setSharedGroups([])
@@ -168,17 +172,15 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
     <View style={{ flex: 1 }}>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
         }}
       >
-        <Text style={{ maxWidth: "50%" }} preset="bold" size="xl" text={selectedCipher.name} />
+        <Text style={{ maxWidth: '50%' }} preset="bold" size="xl" text={selectedCipher.name} />
         {showManageShare && (
-          <TouchableOpacity
-            onPress={() => setPage(1)}
-          >
-            <Text preset="bold" text={translate("shares.share_folder.manage_user")} />
+          <TouchableOpacity onPress={() => setPage(1)}>
+            <Text preset="bold" text={translate('shares.share_folder.manage_user')} />
           </TouchableOpacity>
         )}
       </View>
@@ -191,8 +193,8 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
       >
         <View
           style={{
-            width: "100%",
-            flexDirection: "row",
+            width: '100%',
+            flexDirection: 'row',
           }}
         >
           <TouchableOpacity
@@ -200,9 +202,12 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
               addEmail(email)
             }}
           >
-            <Icon icon="user-plus" size={24} onPress={() => {
-              addEmail(email)
-            }}
+            <Icon
+              icon="user-plus"
+              size={24}
+              onPress={() => {
+                addEmail(email)
+              }}
               containerStyle={{ paddingRight: 16, paddingVertical: 16 }}
             />
           </TouchableOpacity>
@@ -210,7 +215,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
             animated
             onChangeText={setEmail}
             value={email}
-            label={translate("shares.share_folder.add_email")}
+            label={translate('shares.share_folder.add_email')}
             clearButtonMode="unless-editing"
             clearTextOnFocus={true}
             onSubmitEditing={() => {
@@ -230,16 +235,19 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
                   backgroundColor: colors.block,
                   paddingLeft: 10,
                   marginBottom: 16,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
                   paddingVertical: 4,
                 }}
               >
                 <Text text={e} />
-                <Icon icon="x-circle" size={20} containerStyle={{
-                  paddingHorizontal: 12,
-                  alignItems: "center",
-                }}
+                <Icon
+                  icon="x-circle"
+                  size={20}
+                  containerStyle={{
+                    paddingHorizontal: 12,
+                    alignItems: 'center',
+                  }}
                   onPress={() => removeEmail(e)}
                 />
               </View>
@@ -259,16 +267,21 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
                   backgroundColor: colors.block,
                   paddingLeft: 10,
                   marginBottom: 16,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
                   paddingVertical: 4,
                 }}
               >
                 <Text text={e.name} />
-                <Icon icon="x-circle" size={20} onPress={() => setGroups(groups.filter((group) => group.id !== e.id))} containerStyle={{
-                  paddingHorizontal: 12,
-                  alignItems: "center",
-                }} />
+                <Icon
+                  icon="x-circle"
+                  size={20}
+                  onPress={() => setGroups(groups.filter((group) => group.id !== e.id))}
+                  containerStyle={{
+                    paddingHorizontal: 12,
+                    alignItems: 'center',
+                  }}
+                />
               </View>
             )
           })}
@@ -276,7 +289,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
       </View>
 
       <View style={{ marginTop: 20, marginBottom: 20 }}>
-        <Text>{translate("invite_member.select_person")}</Text>
+        <Text>{translate('invite_member.select_person')}</Text>
       </View>
       {!!email && (
         <TouchableOpacity onPress={() => addEmail(email)}>
@@ -284,19 +297,23 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
             style={{
               borderBottomColor: colors.border,
               borderBottomWidth: 1,
-              width: "100%",
-              flexDirection: "row",
+              width: '100%',
+              flexDirection: 'row',
               marginBottom: 15,
               paddingVertical: 14,
-              justifyContent: "flex-start",
+              justifyContent: 'flex-start',
             }}
           >
-            <Image
-              source={SHARE_AVATAR}
-              style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
+            <ImageIcon
+              icon="avatar-2"
+              size={40}
+              style={{
+                borderRadius: 20,
+                marginRight: 10,
+              }}
             />
 
-            <View style={{ flex: 1, justifyContent: "center" }}>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
               <Text text={email}></Text>
             </View>
           </View>
@@ -306,7 +323,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
       {/* Enterprise suggestion */}
       {suggestions.length > 0 && (
         <View style={{ marginTop: 20, marginBottom: 20 }}>
-          <Text style={{ marginBottom: 20 }}>{translate("shares.suggestion")}</Text>
+          <Text style={{ marginBottom: 20 }}>{translate('shares.suggestion')}</Text>
           {suggestions.map((e, index) => (
             <TouchableOpacity
               key={e + index.toString()}
@@ -325,8 +342,9 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
                     ...groups,
                     {
                       // @ts-ignore
-                      name: e.name, id: e.id,
-                    }
+                      name: e.name,
+                      id: e.id,
+                    },
                   ])
                 }
               }}
@@ -335,10 +353,10 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
                 style={{
                   borderBottomColor: colors.block,
                   borderBottomWidth: 1,
-                  width: "100%",
-                  flexDirection: "row",
+                  width: '100%',
+                  flexDirection: 'row',
                   paddingVertical: 8,
-                  justifyContent: "flex-start",
+                  justifyContent: 'flex-start',
                 }}
               >
                 <Image
@@ -347,7 +365,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
                   style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
                 />
 
-                <View style={{ flex: 1, justifyContent: "center" }}>
+                <View style={{ flex: 1, justifyContent: 'center' }}>
                   <Text
                     // @ts-ignore
                     text={e.email || e.name}
@@ -366,17 +384,17 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
       <View
         style={{
           marginVertical: 20,
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
         }}
       >
-        <Text preset="bold" text={translate("shares.share_folder.share_with")} />
+        <Text preset="bold" text={translate('shares.share_folder.share_with')} />
         <Button
-          preset='teriatary'
+          preset="teriatary"
           onPress={() => {
             setPage(0)
           }}
-          text={translate("common.add")}
+          text={translate('common.add')}
         />
       </View>
 
@@ -386,7 +404,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
         keyExtractor={(_, index) => String(index)}
         ListEmptyComponent={() => (
           <View>
-            <Text text={translate("shares.share_folder.no_shared_users")} />
+            <Text text={translate('shares.share_folder.no_shared_users')} />
           </View>
         )}
         renderItem={({ item }) => (
@@ -403,12 +421,12 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
   )
   return (
     <Screen
-      safeAreaEdges={["top"]}
+      safeAreaEdges={['top']}
       header={
         <Header
-          leftText={translate("common.cancel")}
+          leftText={translate('common.cancel')}
           onLeftPress={() => navigation.goBack()}
-          rightText={translate("common.done")}
+          rightText={translate('common.done')}
           rightTextColor={emails?.length > 0 || groups.length > 0 ? colors.primary : colors.disable}
           onRightPress={() => {
             if (emails?.length > 0 || groups.length > 0) {
@@ -419,7 +437,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
       }
       contentContainerStyle={{
         flex: 1,
-        padding: 16
+        padding: 16,
       }}
     >
       {page === 0 && renderAddUser()}

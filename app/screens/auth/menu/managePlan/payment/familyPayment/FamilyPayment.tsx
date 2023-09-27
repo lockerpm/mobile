@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Image } from 'react-native'
 import { Subscription } from 'react-native-iap'
 import { SKU } from '../PricePlan.sku'
-import { Text, Button, Icon } from 'app/components-v2/cores'
+import { Text, Button, Icon } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 

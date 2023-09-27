@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { TextInput, View } from 'react-native'
-import { Text, Icon } from 'app/components-v2/cores'
+import { Text, Icon } from 'app/components/cores'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'

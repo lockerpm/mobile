@@ -22,7 +22,7 @@ import { Organization } from 'core/models/domain/organization'
 import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 
 export interface CipherSharedListProps {
   emptyContent?: JSX.Element

@@ -6,8 +6,8 @@ import { useCoreService } from 'app/services/coreService'
 import { useStores } from 'app/models'
 import { translate } from 'app/i18n'
 import { Logger } from 'app/utils/utils'
-import { Button, Text } from 'app/components-v2/cores'
-import { SettingsItem, Select } from 'app/components-v2/utils'
+import { Button, Text } from 'app/components/cores'
+import { SettingsItem, Select } from 'app/components/utils'
 import { FileData } from 'app/static/types'
 
 interface Props {
@@ -92,10 +92,7 @@ export const ImportPickFile = (props: Props) => {
         options={formats}
         title={translate('import.format')}
         renderSelected={({ label }) => (
-          <SettingsItem
-            name={translate('import.format')}
-            RightAccessory={<Text text={label} />}
-          />
+          <SettingsItem name={translate('import.format')} RightAccessory={<Text text={label} />} />
         )}
       />
 

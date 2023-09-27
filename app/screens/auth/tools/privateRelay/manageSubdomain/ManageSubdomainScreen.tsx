@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import moment from 'moment'
-import { Screen, Header, Text, Toggle } from 'app/components-v2/cores'
+import { Screen, Header, Text, Toggle } from 'app/components/cores'
 import { ToolsStackScreenProps } from 'app/navigators'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'

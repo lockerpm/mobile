@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import { Icon, Text } from 'app/components-v2/cores'
+import { Icon, Text } from 'app/components/cores'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'

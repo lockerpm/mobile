@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useRef, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { useNavigation } from "@react-navigation/native"
-import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
-import { NotificationCategory } from "app/static/types"
-import { Screen, Header, Toggle } from "app/components-v2/cores"
-import { translate } from "i18n-js"
-import { MenuItemContainer, SettingsItem } from "app/components-v2/utils"
+import React, { useEffect, useRef, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useNavigation } from '@react-navigation/native'
+import { useStores } from 'app/models'
+import { useHelper } from 'app/services/hook'
+import { useTheme } from 'app/services/context'
+import { NotificationCategory } from 'app/static/types'
+import { Screen, Header, Toggle } from 'app/components/cores'
+import { translate } from 'i18n-js'
+import { MenuItemContainer, SettingsItem } from 'app/components/utils'
 
 export const PushEmailSettingsScreen = observer(() => {
   const navigation = useNavigation()
@@ -44,7 +44,7 @@ export const PushEmailSettingsScreen = observer(() => {
   }, [])
 
   useEffect(() => {
-    user.notificationSettings?.forEach(e => {
+    user.notificationSettings?.forEach((e) => {
       switch (e.category.id) {
         case NotificationCategory.ITEM_SHARE:
           settings[NotificationCategory.ITEM_SHARE] = { noti: e.notification, mail: e.mail }
@@ -79,7 +79,7 @@ export const PushEmailSettingsScreen = observer(() => {
     <Screen
       padding
       preset="auto"
-      header={(
+      header={
         <Header
           leftIcon="arrow-left"
           onLeftPress={() => {
@@ -87,17 +87,16 @@ export const PushEmailSettingsScreen = observer(() => {
           }}
           title={translate('common.email')}
         />
-      )}
+      }
       backgroundColor={colors.block}
     >
       <MenuItemContainer>
-
         <SettingsItem
           disabled={enable}
           name={translate('noti_setting.item_sharing')}
           RightAccessory={
             <Toggle
-              variant='switch'
+              variant="switch"
               value={shareEmail && enable}
               onValueChange={(val) => {
                 setShareEmail(val)
@@ -111,7 +110,7 @@ export const PushEmailSettingsScreen = observer(() => {
           name={translate('noti_setting.emergency')}
           RightAccessory={
             <Toggle
-              variant='switch'
+              variant="switch"
               value={emergencyEmail && enable}
               onValueChange={(val) => {
                 setEmergencyEmail(val)
@@ -125,7 +124,7 @@ export const PushEmailSettingsScreen = observer(() => {
           name={translate('noti_setting.breach_scan')}
           RightAccessory={
             <Toggle
-              variant='switch'
+              variant="switch"
               value={dataBreachEmail && enable}
               onValueChange={(val) => {
                 setDataBreachEmail(val)
@@ -139,7 +138,7 @@ export const PushEmailSettingsScreen = observer(() => {
           name={translate('noti_setting.tips')}
           RightAccessory={
             <Toggle
-              variant='switch'
+              variant="switch"
               value={pwTipEmail && enable}
               onValueChange={(val) => {
                 setPwTipEmail(val)
@@ -148,17 +147,13 @@ export const PushEmailSettingsScreen = observer(() => {
             />
           }
         />
-        <SettingsItem
-          disabled={enable}
-          name={translate('noti_setting.marketing')}
-
-        />
+        <SettingsItem disabled={enable} name={translate('noti_setting.marketing')} />
         <SettingsItem
           disabled={enable}
           name={translate('common.other')}
           RightAccessory={
             <Toggle
-              variant='switch'
+              variant="switch"
               value={otherEmail && enable}
               onValueChange={(val) => {
                 setOtherEmail(val)

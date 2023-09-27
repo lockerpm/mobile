@@ -1,4 +1,4 @@
-import { ActionItem, ActionSheet } from 'app/components-v2/ciphers'
+import { ActionItem, ActionSheet } from 'app/components/ciphers'
 import { translate } from 'app/i18n'
 import React from 'react'
 

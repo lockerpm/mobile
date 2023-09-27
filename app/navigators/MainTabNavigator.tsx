@@ -7,7 +7,7 @@ import { translate } from 'app/i18n'
 import { fontSize } from '../theme'
 import { useStores } from '../models'
 import { NavigatorScreenParams } from '@react-navigation/native'
-import { Icon, Text } from 'app/components-v2/cores'
+import { Icon, Text } from 'app/components/cores'
 
 import { BrowseNavigator, BrowseParamList } from './browse/BrowseNavigator'
 import { MenuNavigator, MenuParamList } from './menu/MenuNavigator'

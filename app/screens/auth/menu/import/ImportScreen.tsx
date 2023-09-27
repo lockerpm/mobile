@@ -9,7 +9,7 @@ import { ImportProgress } from './ImportProgress'
 import { ImportPickFile } from './ImportPickFile'
 import JSZip from 'jszip'
 
-import { Screen, Header } from 'app/components-v2/cores'
+import { Screen, Header } from 'app/components/cores'
 import { useCipherData, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { useCoreService } from 'app/services/coreService'
@@ -21,7 +21,6 @@ import { Utils } from 'core/misc/utils'
 import { FileData } from 'app/static/types'
 
 const DOMParser = require('react-native-html-parser').DOMParser
-
 
 export const ImportScreen = observer(() => {
   const navigation = useNavigation()
@@ -165,7 +164,7 @@ export const ImportScreen = observer(() => {
       padding
       header={
         <Header
-          leftIcon='arrow-left'
+          leftIcon="arrow-left"
           onLeftPress={() => {
             navigation.goBack()
           }}
@@ -180,7 +179,7 @@ export const ImportScreen = observer(() => {
           paddingVertical: 20,
           marginTop: 16,
           paddingHorizontal: 20,
-          borderRadius: 12
+          borderRadius: 12,
         }}
       >
         {step === 0 && (

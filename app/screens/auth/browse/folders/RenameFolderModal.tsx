@@ -5,7 +5,7 @@ import { CollectionView } from 'core/models/view/collectionView'
 import { useStores } from 'app/models'
 import { useCipherData } from 'app/services/hook'
 import { translate } from 'app/i18n'
-import { BottomModal, Button, TextInput } from 'app/components-v2/cores'
+import { BottomModal, Button, TextInput } from 'app/components/cores'
 
 interface Props {
   isOpen?: boolean

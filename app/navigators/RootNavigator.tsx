@@ -17,7 +17,7 @@ import WebView from 'react-native-webview'
 import { observer } from 'mobx-react-lite'
 import { useStores } from '../models'
 import { OnPremisePreloginData } from 'app/static/types'
-import { ErrorToast, InfoToast, SuccessToast } from 'app/components-v2/utils'
+import { ErrorToast, InfoToast, SuccessToast } from 'app/components/utils'
 import {
   IntroScreen,
   InitScreen,
@@ -36,7 +36,7 @@ import { NotifeeNotificationData, PushNotifier } from 'app/utils/pushNotificatio
 import { AppEventType, EventBus } from 'app/utils/eventBus'
 import { StorageKey, save } from 'app/utils/storage'
 import { Logger } from 'app/utils/utils'
-import { Header } from 'app/components-v2/cores'
+import { Header } from 'app/components/cores'
 
 const IS_IOS = Platform.OS === 'ios'
 

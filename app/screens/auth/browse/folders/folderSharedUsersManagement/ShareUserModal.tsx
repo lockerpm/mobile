@@ -7,7 +7,7 @@ import { useStores } from 'app/models'
 import { useFolder, useHelper } from 'app/services/hook'
 import { translate } from 'app/i18n'
 import { AppEventType, EventBus } from 'app/utils/eventBus'
-import { Button, Icon, Text } from 'app/components-v2/cores'
+import { Button, Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 
 interface InviteProps {

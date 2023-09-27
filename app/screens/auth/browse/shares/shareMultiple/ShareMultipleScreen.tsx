@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useNavigation } from '@react-navigation/native'
 import { ShareMultipleHeader } from './ItemsHeader'
-import { AddCipherActionModal, CipherList, SortActionConfigModal } from 'app/components-v2/ciphers'
-import { Screen } from 'app/components-v2/cores'
+import { AddCipherActionModal, CipherList, SortActionConfigModal } from 'app/components/ciphers'
+import { Screen } from 'app/components/cores'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 
 export const ShareMultipleScreen = observer(() => {

@@ -1,7 +1,7 @@
 import { StackActions, useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { Image } from 'react-native'
-import { BottomModal, Button, Text } from 'app/components-v2/cores'
+import { BottomModal, Button, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { PREMIUM_FEATURES_IMG } from '../../menu'
 import { translate } from 'app/i18n'

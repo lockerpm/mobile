@@ -13,10 +13,10 @@ import { SendView } from 'core/models/view/sendView'
 import { SendRequest } from 'core/models/request/sendRequest'
 import { Logger } from 'app/utils/utils'
 import { Utils } from 'app/services/coreService/utils'
-import { Button, Header, Icon, Screen, Text, Toggle } from 'app/components-v2/cores'
+import { Button, Header, Icon, Screen, Text, Toggle } from 'app/components/cores'
 import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
-import { ActionSheet } from 'app/components-v2/ciphers'
+import { ActionSheet } from 'app/components/ciphers'
 
 const { width } = Dimensions.get('screen')
 

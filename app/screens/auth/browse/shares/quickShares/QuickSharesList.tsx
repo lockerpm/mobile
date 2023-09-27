@@ -8,7 +8,7 @@ import { useStores } from 'app/models'
 import { useCipherData } from 'app/services/hook'
 import { SendView } from 'core/models/view/sendView'
 import { Logger } from 'app/utils/utils'
-import { Text } from 'app/components-v2/cores'
+import { Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 type Props = {
