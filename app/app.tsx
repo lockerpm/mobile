@@ -30,26 +30,18 @@ import * as Sentry from '@sentry/react-native'
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 import { enableScreens } from 'react-native-screens'
-import { MixinsProvider } from './services/mixins'
 
 // Custom extras
 import { ApiResponse } from 'apisauce'
 import { getGeneralApiProblem } from './services/api/apiProblem'
 import { Settings } from 'react-native-fbsdk-next'
-import CombineContext from './services/mixins/combine-context'
-import { CipherHelpersMixinsProvider } from './services/mixins/cipher/helpers'
-import { CipherAuthenticationMixinsProvider } from './services/mixins/cipher/authentication'
-import { CipherDataMixinsProvider } from './services/mixins/cipher/data'
-import { CipherToolsMixinsProvider } from './services/mixins/cipher/tools'
 import { Logger } from 'app/utils/utils'
-import { SocialLoginMixinsProvider } from './services/mixins/social-login'
-import { AdaptiveLayoutMixinsProvider } from './services/mixins/adaptive-layout'
 import { IS_PROD } from './config/constants'
 import { AppEventType, EventBus } from './utils/eventBus'
-import { FolderMixinsProvider } from './services/mixins/folder'
 import { api } from './services/api'
 import { autofillParserAndroid } from './utils/autofillHelper'
 import { ThemeContextProvider } from './services/context/useTheme'
+import CombineContext from './services/context/useCombineContext'
 
 enableScreens()
 Settings.initializeSDK()
@@ -84,7 +76,7 @@ function App(props: RootProp) {
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       setupRootStore().then(setRootStore)
       SplashScreen.hide()
     })()
@@ -102,7 +94,8 @@ function App(props: RootProp) {
 
     if (problem) {
       Logger.debug(
-        `URL:${response.config.baseURL}${response.config.url} - Status: ${response.status
+        `URL:${response.config.baseURL}${response.config.url} - Status: ${
+          response.status
         } - Message: ${JSON.stringify(response.data)}`
       )
     }
@@ -136,7 +129,8 @@ function App(props: RootProp) {
   }
   const monitorApiRequest = (request) => async () => {
     Logger.debug(
-      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${request.params ? JSON.stringify(request.params) : ''
+      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
+        request.params ? JSON.stringify(request.params) : ''
       }`
     )
   }
@@ -155,17 +149,7 @@ function App(props: RootProp) {
           childProps={{
             navigationRef: navigationRef,
           }}
-          components={[
-            ThemeContextProvider,
-            MixinsProvider,
-            SocialLoginMixinsProvider,
-            CipherHelpersMixinsProvider,
-            CipherAuthenticationMixinsProvider,
-            CipherDataMixinsProvider,
-            CipherToolsMixinsProvider,
-            AdaptiveLayoutMixinsProvider,
-            FolderMixinsProvider,
-          ]}
+          components={[ThemeContextProvider]}
         >
           <RootNavigator
             ref={navigationRef}

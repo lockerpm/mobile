@@ -16,8 +16,8 @@ import { WALLET_APP_LIST } from 'app/utils/crypto/applist'
 import { translate } from 'app/i18n'
 import { PolicyType } from 'app/static/types/enum'
 import { CipherAppView, MasterPasswordPolicy, PasswordPolicy } from 'app/static/types'
-import { BROWSE_ITEMS } from 'app/common/mappings'
 import { ImageSourcePropType } from 'react-native'
+import { BROWSE_ITEMS } from 'app/navigators'
 
 export function useCipherHelper() {
   const { passwordGenerationService } = useCoreService()

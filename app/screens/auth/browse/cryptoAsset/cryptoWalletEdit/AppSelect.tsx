@@ -1,9 +1,10 @@
 import React from 'react'
 import { ImageStyle, View, ViewStyle } from 'react-native'
 import { Text, AutoImage as Image, Icon } from 'app/components-v2/cores'
-import { useMixins } from 'app/services/mixins'
 import { WALLET_APP_LIST } from 'app/utils/crypto/applist'
 import { Select } from 'app/components-v2/utils'
+import { useTheme } from 'app/services/context'
+import { translate } from 'app/i18n'
 
 type Props = {
   alias: string
@@ -12,7 +13,7 @@ type Props = {
 
 export const AppSelect = (props: Props) => {
   const { onChange, alias } = props
-  const { translate, color } = useMixins()
+  const { colors } = useTheme()
 
   // ------------------ METHODS ------------------
 
@@ -32,7 +33,7 @@ export const AppSelect = (props: Props) => {
     overflow: 'hidden',
     marginRight: 10,
     borderWidth: 1,
-    borderColor: color.line,
+    borderColor: colors.border,
   }
 
   const IMG: ImageStyle = {
@@ -60,7 +61,7 @@ export const AppSelect = (props: Props) => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: color.background,
+            backgroundColor: colors.background,
             paddingHorizontal: 16,
             paddingVertical: 8,
           }}
@@ -69,7 +70,7 @@ export const AppSelect = (props: Props) => {
             <Image source={findApp(value)?.logo || otherApp.logo} borderRadius={20} style={IMG} />
           </View>
           <Text text={itemLabel} style={{ flex: 1, marginRight: 20 }} />
-          {isSelected && <Icon icon="check" color={color.primary} size={24} />}
+          {isSelected && <Icon icon="check" color={colors.primary} size={24} />}
         </View>
       )}
       renderSelected={({ label }) => (
@@ -102,7 +103,7 @@ export const AppSelect = (props: Props) => {
                 <Text text={label || translate('common.none')} />
               </View>
             </View>
-            <Icon icon="caret-right" size={20} color={color.text} />
+            <Icon icon="caret-right" size={20} color={colors.secondaryText} />
           </View>
         </View>
       )}

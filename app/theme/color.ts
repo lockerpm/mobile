@@ -1,46 +1,4 @@
-import { palette, paletteDark, paletteLight } from './palette'
-
-// TODO: DEPRECATED
-export const color = {
-  palette,
-  toastBackground: 'rgba(22, 22, 22, 0.9)',
-  transparent: 'rgba(0, 0, 0, 0)',
-  background: palette.white,
-  disabled: palette.gray,
-  line: palette.lightGray,
-  block: palette.lighterGray,
-  text: palette.lighterBlack,
-  textBlack: palette.lightBlack,
-  title: palette.black,
-  lightPrimary: palette.lightGreen,
-  primary: palette.green,
-  error: palette.danger,
-  warning: palette.warning,
-  info: palette.blue,
-  white: palette.white,
-  orange: palette.orange,
-}
-
-// TODO: DEPRECATED
-export const colorDark = {
-  palette,
-  toastBackground: 'rgba(100, 100, 100, 1)',
-  transparent: 'rgba(0, 0, 0, 0)',
-  background: '#131313',
-  disabled: palette.gray,
-  line: '#8E8E93',
-  block: '#313131',
-  text: '#8E8E93',
-  textBlack: '#FDFDFD',
-  title: '#FDFDFD',
-  lightPrimary: palette.lightGreen,
-  primary: '#62AD56',
-  error: palette.danger,
-  warning: palette.warning,
-  info: palette.blue,
-  white: '#FDFDFD',
-  orange: palette.orange,
-}
+import { paletteDark, paletteLight } from './palette'
 
 export const colorsLight = {
   /**

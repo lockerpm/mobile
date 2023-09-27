@@ -1,21 +1,21 @@
-import { Instance, SnapshotOut, types, cast } from "mobx-state-tree"
-import { omit } from "ramda"
-import { FolderRequest } from "../../../core/models/request/folderRequest"
-import { FolderView } from "../../../core/models/view/folderView"
-import { ShareFolderData } from "app/static/types"
-import { folderApi } from "app/services/api"
+import { Instance, SnapshotOut, types, cast } from 'mobx-state-tree'
+import { omit } from 'ramda'
+import { FolderRequest } from 'core/models/request/folderRequest'
+import { FolderView } from 'core/models/view/folderView'
+import { ShareFolderData } from 'app/static/types'
+import { folderApi } from 'app/services/api'
 
 /**
  * Model description here for TypeScript hints.
  */
 export const FolderStoreModel = types
-  .model("FolderStore")
+  .model('FolderStore')
   .props({
     apiToken: types.maybeNull(types.string),
     folders: types.array(types.frozen()),
     lastUpdate: types.maybeNull(types.number),
-    notSynchedFolders: types.array(types.string),   // Create in offline mode
-    notUpdatedFolders: types.array(types.string),   // Create in online mode but somehow not update yet
+    notSynchedFolders: types.array(types.string), // Create in offline mode
+    notUpdatedFolders: types.array(types.string), // Create in online mode but somehow not update yet
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -55,7 +55,7 @@ export const FolderStoreModel = types
 
     removeNotSync: (id: string) => {
       if (!self.notSynchedFolders.includes(id)) {
-        self.notSynchedFolders = cast(self.notSynchedFolders.filter(i => i !== id))
+        self.notSynchedFolders = cast(self.notSynchedFolders.filter((i) => i !== id))
       }
     },
 
@@ -71,7 +71,7 @@ export const FolderStoreModel = types
 
     removeNotUpdate: (id: string) => {
       if (self.notUpdatedFolders.includes(id)) {
-        self.notUpdatedFolders = cast(self.notUpdatedFolders.filter(i => i !== id))
+        self.notUpdatedFolders = cast(self.notUpdatedFolders.filter((i) => i !== id))
       }
     },
 

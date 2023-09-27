@@ -1,10 +1,9 @@
 import { cast, Instance, SnapshotOut, types } from 'mobx-state-tree'
 import { omit } from 'ramda'
-import { CipherRequest } from '../../../core/models/request/cipherRequest'
-import { CollectionRequest } from '../../../core/models/request/collectionRequest'
-import { CollectionView } from '../../../core/models/view/collectionView'
-import { AccountRoleText } from '../../config/types'
-import { CollectionActionData } from 'app/static/types'
+import { CipherRequest } from 'core/models/request/cipherRequest'
+import { CollectionRequest } from 'core/models/request/collectionRequest'
+import { CollectionView } from 'core/models/view/collectionView'
+import { AccountRoleText, CollectionActionData } from 'app/static/types'
 import { folderApi } from 'app/services/api'
 
 /**

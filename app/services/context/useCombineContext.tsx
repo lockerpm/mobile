@@ -3,19 +3,19 @@ import React from 'react'
 interface Props {
   components: Array<React.JSXElementConstructor<React.PropsWithChildren<any>>>
   children: React.ReactNode
+  childProps?: {
+    [key: string]: any
+  }
 }
 
-export function CombineContext(props: Props) {
-  const { components = [], children } = props
+export default function CombineContext(props: Props) {
+  const { components = [], children, childProps = {} } = props
 
   return (
     <>
-      {components.reduceRight(
-        (acc, Comp) => (
-          <Comp>{acc}</Comp>
-        ),
-        children
-      )}
+      {components.reduceRight((acc, Comp) => {
+        return <Comp {...childProps}>{acc}</Comp>
+      }, children)}
     </>
   )
 }

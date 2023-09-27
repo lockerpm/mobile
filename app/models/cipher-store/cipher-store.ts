@@ -1,11 +1,10 @@
-import { cast, Instance, SnapshotOut, types } from "mobx-state-tree"
-import { omit } from "ramda"
-import { Organization } from "../../../core/models/domain/organization"
-import { CipherRequest } from "../../../core/models/request/cipherRequest"
-import { SendRequest } from "../../../core/models/request/sendRequest"
-import { CipherView } from "../../../core/models/view"
-import { QUICK_SHARE_BASE_URL } from "../../config/constants"
-import { MyShareType, SharingInvitationType } from "../../config/types/api"
+import { cast, Instance, SnapshotOut, types } from 'mobx-state-tree'
+import { omit } from 'ramda'
+import { Organization } from 'core/models/domain/organization'
+import { CipherRequest } from 'core/models/request/cipherRequest'
+import { SendRequest } from 'core/models/request/sendRequest'
+import { CipherView } from 'core/models/view'
+import { QUICK_SHARE_BASE_URL } from '../../config/constants'
 import {
   ConfirmShareCipherData,
   EditShareCipherData,
@@ -16,14 +15,16 @@ import {
   ImportCipherData,
   ImportCipherWithFolderData,
   MoveFolderData,
-} from "app/static/types"
-import { cipherApi } from "app/services/api"
+  SharingInvitationType,
+  MyShareType,
+} from 'app/static/types'
+import { cipherApi } from 'app/services/api'
 
 /**
  * Model description here for TypeScript hints.
  */
 export const CipherStoreModel = types
-  .model("CipherStore")
+  .model('CipherStore')
   .props({
     apiToken: types.maybeNull(types.string),
 
@@ -222,7 +223,7 @@ export const CipherStoreModel = types
       id: string,
       data: CipherRequest,
       score: number,
-      collectionIds: string[],
+      collectionIds: string[]
     ) => {
       const res = await cipherApi.putCipher(self.apiToken, id, data, score, collectionIds)
       return res
@@ -232,7 +233,7 @@ export const CipherStoreModel = types
       id: string,
       data: CipherRequest,
       score: number,
-      collectionIds: string[],
+      collectionIds: string[]
     ) => {
       const res = await cipherApi.shareCipherToTeam(self.apiToken, id, data, score, collectionIds)
       return res
@@ -281,7 +282,7 @@ export const CipherStoreModel = types
     stopShareCipher: async (
       organizationId: string,
       memberId: string,
-      payload: StopShareCipherData,
+      payload: StopShareCipherData
     ) => {
       const res = await cipherApi.stopShareCipher(self.apiToken, organizationId, memberId, payload)
       return res
@@ -290,7 +291,7 @@ export const CipherStoreModel = types
     editShareCipher: async (
       organizationId: string,
       memberId: string,
-      payload: EditShareCipherData,
+      payload: EditShareCipherData
     ) => {
       const res = await cipherApi.editShareCipher(self.apiToken, organizationId, memberId, payload)
       return res
@@ -299,20 +300,20 @@ export const CipherStoreModel = types
     confirmShareCipher: async (
       organizationId: string,
       memberId: string,
-      payload: ConfirmShareCipherData,
+      payload: ConfirmShareCipherData
     ) => {
       const res = await cipherApi.confirmShareCipher(
         self.apiToken,
         organizationId,
         memberId,
-        payload,
+        payload
       )
       return res
     },
 
     loadSharingInvitations: async () => {
       const res = await cipherApi.getSharingInvitations(self.apiToken)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         self.setSharingInvitations(res.data)
       }
       return res
@@ -320,7 +321,7 @@ export const CipherStoreModel = types
 
     loadMyShares: async () => {
       const res = await cipherApi.getMyShares(self.apiToken)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         self.setMyShares(res.data)
       }
       return res
@@ -333,7 +334,7 @@ export const CipherStoreModel = types
 
     respondShare: async (id: string, accepted: boolean) => {
       const res = await cipherApi.respondShareInvitation(self.apiToken, id, {
-        status: accepted ? "accept" : "reject",
+        status: accepted ? 'accept' : 'reject',
       })
       return res
     },
@@ -356,7 +357,7 @@ export const CipherStoreModel = types
     },
     syncQuickShares: async (page: number) => {
       const res = await cipherApi.syncQuickShares(self.apiToken, page)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         return res.data
       }
       return []
@@ -364,7 +365,7 @@ export const CipherStoreModel = types
 
     getPublicShareUrl: (accessId, key) => {
       return `${QUICK_SHARE_BASE_URL}/shares/quick-share-item/${accessId}#${encodeURIComponent(
-        key,
+        key
       )}`
     },
 
@@ -376,17 +377,17 @@ export const CipherStoreModel = types
   }))
   .postProcessSnapshot(
     omit([
-      "generatedPassword",
-      "selectedCipher",
-      "selectedFolder",
-      "selectedCollection",
-      "isSynching",
-      "isSynchingOffline",
-      "isSynchingAutofill",
-      "isBatchDecrypting",
-      "organizations",
-      "lastUpdate",
-    ]),
+      'generatedPassword',
+      'selectedCipher',
+      'selectedFolder',
+      'selectedCollection',
+      'isSynching',
+      'isSynchingOffline',
+      'isSynchingAutofill',
+      'isBatchDecrypting',
+      'organizations',
+      'lastUpdate',
+    ])
   )
 
 /**
