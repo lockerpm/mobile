@@ -1,7 +1,7 @@
 export type BreanchResult = {
   added_date: string
   breach_date: string
-  data_clases: string[]
+  data_classes: string[]
   description: string
   domain: string
   is_fabricated: boolean
@@ -34,10 +34,10 @@ export type RelayAddress = {
 }
 
 export type SubdomainData = {
-  id: number,
+  id: number
   subdomain: string
-  created_time: number,
-  num_alias: number,
-  num_spam: number,
+  created_time: number
+  num_alias: number
+  num_spam: number
   num_forwarded: number
 }

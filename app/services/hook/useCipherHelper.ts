@@ -15,7 +15,7 @@ import { toCryptoWalletData } from 'app/utils/crypto'
 import { WALLET_APP_LIST } from 'app/utils/crypto/applist'
 import { translate } from 'app/i18n'
 import { PolicyType } from 'app/static/types/enum'
-import { MasterPasswordPolicy, PasswordPolicy } from 'app/static/types'
+import { CipherAppView, MasterPasswordPolicy, PasswordPolicy } from 'app/static/types'
 import { BROWSE_ITEMS } from 'app/common/mappings'
 import { ImageSourcePropType } from 'react-native'
 
@@ -56,7 +56,7 @@ export function useCipherHelper() {
   }
 
   // Get cipher description
-  const getCipherDescription = (item: CipherView) => {
+  const getCipherDescription = (item: CipherView | CipherAppView) => {
     switch (item.type) {
       case CipherType.MasterPassword:
       case CipherType.Login:

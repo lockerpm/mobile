@@ -187,6 +187,7 @@ export const iconRegistry = {
 
   'list-bullets': require('assets/icons/list-bullets.png'),
   'external-link': require('assets/icons/external-link.png'),
+  'qr-code': require('assets/icons/qr-code.png'),
 }
 
 const $imageStyle: ImageStyle = {

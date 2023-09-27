@@ -9,10 +9,8 @@ import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 import { AutofillDataType, loadShared, saveShared } from 'app/utils/keychain'
 import { Header, Screen, Text, Toggle } from 'app/components-v2/cores'
-import { SettingsItem, MenuItemContainer } from 'app/components-v2/utils'
-import { Select } from 'app/components'
+import { SettingsItem, MenuItemContainer, Select } from 'app/components-v2/utils'
 import { observer } from 'mobx-react-lite'
-
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -24,7 +22,6 @@ export const SettingsScreen = observer(() => {
   const { startSyncProcess } = useCipherData()
 
   // ----------------------- PARAMS -----------------------
-
 
   // ----------------------- METHODS -----------------------
 
@@ -201,11 +198,11 @@ export const SettingsScreen = observer(() => {
   return (
     <Screen
       padding
-      preset='auto'
+      preset="auto"
       safeAreaEdges={['bottom']}
       header={
         <Header
-          leftIcon='arrow-left'
+          leftIcon="arrow-left"
           onLeftPress={() => {
             navigation.goBack()
           }}
@@ -214,7 +211,7 @@ export const SettingsScreen = observer(() => {
       }
       backgroundColor={colors.block}
     >
-      <MenuItemContainer title={translate('common.account')} >
+      <MenuItemContainer title={translate('common.account')}>
         {!user.isPasswordlessLogin && (
           <SettingsItem
             name={translate('settings.change_master_pass')}
@@ -251,7 +248,7 @@ export const SettingsScreen = observer(() => {
             />
           )}
         />
-      </MenuItemContainer >
+      </MenuItemContainer>
 
       <MenuItemContainer title={translate('common.security')}>
         <SettingsItem
@@ -272,7 +269,7 @@ export const SettingsScreen = observer(() => {
           onPress={() => settings.biometric.onChage(!settings.biometric.value)}
           RightAccessory={
             <Toggle
-              variant='switch'
+              variant="switch"
               value={settings.biometric.value}
               onValueChange={settings.biometric.onChage}
             />
@@ -287,7 +284,8 @@ export const SettingsScreen = observer(() => {
               name={translate('settings.timeout')}
               RightAccessory={<Text text={label} />}
             />
-          )} />
+          )}
+        />
       </MenuItemContainer>
 
       <MenuItemContainer title={translate('common.data')}>

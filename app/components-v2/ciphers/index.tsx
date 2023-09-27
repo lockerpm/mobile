@@ -4,6 +4,7 @@ export * from './sortConfigModal/SortActionConfigModal'
 export * from './cipherList/CipherList'
 export * from './cipherList/EmptyCipherList'
 export * from './cipherList/CipherListHeader'
+export * from './cipherList/CipherListItem'
 export * from './addCipherModal/AddCipherActionModal'
 
 export * from './cipherAction/ChangeTeamFolderModal'

@@ -1,8 +1,9 @@
-export * from './password-generator/password-generator-screen'
-export * from './password-health'
-export * from './data-breach-scanner'
+export * from './passwordGenerator/PasswordGeneratorScreen'
+export * from './passwordHealth'
+export * from './dataBreachScanner'
 export * from './toolsList/ToolsListScreen'
 export * from './authenticator'
+
 export * from './privateRelay/PrivateRelay'
 export * from './privateRelay/manageSubdomain/ManageSubdomainScreen'
 export * from './privateRelay/statistics/AliasStatisticScreen'

@@ -15,7 +15,7 @@ import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { CipherType } from 'core/enums'
 
-const EMPTY_LIST = require('assets/images/emptyCipherList/identiry-empty-img.png')
+const EMPTY_LIST = require('assets/images/emptyCipherList/identity-empty-img.png')
 
 export const IdentitiesScreen = observer(() => {
   const navigation = useNavigation()

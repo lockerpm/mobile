@@ -1,10 +1,9 @@
-import React, { useState } from "react"
-import { View, Image, TouchableOpacity } from "react-native"
-import { BottomModal, Text } from "app/components-v2/cores"
-import { useTheme } from "app/services/context"
-import { useCipherData, useHelper } from "app/services/hook"
-import { translate } from "app/i18n"
-
+import React, { useState } from 'react'
+import { View, Image, TouchableOpacity } from 'react-native'
+import { BottomModal, Text } from 'app/components-v2/cores'
+import { useTheme } from 'app/services/context'
+import { useCipherData, useHelper } from 'app/services/hook'
+import { translate } from 'app/i18n'
 
 interface Props {
   isOpen?: boolean
@@ -12,6 +11,8 @@ interface Props {
   cipherId?: string
   organizationId: string
 }
+
+const TRASH = require('assets/images/intro/trash.png')
 
 export const LeaveShareModal = (props: Props) => {
   const { colors } = useTheme()
@@ -34,15 +35,9 @@ export const LeaveShareModal = (props: Props) => {
   }
 
   return (
-    <BottomModal
-      isOpen={isOpen}
-      onClose={onClose} title={""}
-    >
+    <BottomModal isOpen={isOpen} onClose={onClose} title={''}>
       <View style={{ alignItems: 'center' }}>
-        <Image
-          source={require('../../../screens/auth/browse/trash/trash.png')}
-          style={{ height: 110, width: 100 }}
-        />
+        <Image source={TRASH} style={{ height: 110, width: 100 }} />
         <Text
           preset="bold"
           size="xl"
@@ -64,13 +59,10 @@ export const LeaveShareModal = (props: Props) => {
           backgroundColor: colors.error,
           width: '100%',
           marginTop: 30,
-          borderRadius: 12
+          borderRadius: 12,
         }}
       >
-        <Text
-          text={translate('shares.leave')}
-          style={{ color: colors.white }}
-        />
+        <Text text={translate('shares.leave')} style={{ color: colors.white }} />
       </TouchableOpacity>
     </BottomModal>
   )

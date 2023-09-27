@@ -5,7 +5,7 @@ import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
-import { RecaptchaChecker } from 'app/components'
+import { RecaptchaChecker } from 'app/components-v2/utils'
 
 type Props = {
   methods: {

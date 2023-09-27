@@ -7,7 +7,7 @@ import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
-import { AuthenticatorAddAction } from 'app/screens/auth/tools/authenticator/authenticator-add-action'
+import { AuthenticatorAddAction } from 'app/screens/auth/tools/authenticator/AuthenticatorAddAction'
 import { SearchBar } from 'app/components-v2/utils'
 
 export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup'>> = (props) => {

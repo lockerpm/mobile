@@ -17,7 +17,7 @@ import { CardAction } from 'app/screens/auth/browse/cards/CardAction'
 import { IdentityAction } from 'app/screens/auth/browse/identities/IdentityAction'
 import { NoteAction } from 'app/screens/auth/browse/notes/NoteAction'
 import { CryptoWalletAction } from 'app/screens/auth/browse/cryptoAsset/CryptoWalletAction'
-import { DeletedAction } from 'app/components/cipher/cipher-action/deleted-action'
+import { DeletedAction } from '../cipherAction/DeletedAction'
 
 export interface CipherListProps {
   navigation: any
@@ -301,7 +301,6 @@ export const CipherList = (props: CipherListProps) => {
         isOpen={showPasswordAction}
         onClose={() => setShowPasswordAction(false)}
         navigation={navigation}
-        onLoadingChange={onLoadingChange}
       />
 
       <CardAction
@@ -322,7 +321,6 @@ export const CipherList = (props: CipherListProps) => {
         isOpen={showNoteAction}
         onClose={() => setShowNoteAction(false)}
         navigation={navigation}
-        onLoadingChange={onLoadingChange}
       />
 
       <CryptoWalletAction
@@ -336,7 +334,6 @@ export const CipherList = (props: CipherListProps) => {
         isOpen={showDeletedAction}
         onClose={() => setShowDeletedAction(false)}
         navigation={navigation}
-        onLoadingChange={onLoadingChange}
       />
 
       <FlatList

@@ -1,22 +1,21 @@
-import React, { useState, useRef, useCallback } from "react"
-import { View } from "react-native"
-import { Text, Button, Icon } from "app/components-v2/cores"
-import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
-import { translate } from "app/i18n"
-import { RecaptchaChecker } from "app/components"
+import React, { useState, useRef, useCallback } from 'react'
+import { View } from 'react-native'
+import { Text, Button, Icon } from 'app/components-v2/cores'
+import { useStores } from 'app/models'
+import { useHelper } from 'app/services/hook'
+import { useTheme } from 'app/services/context'
+import { translate } from 'app/i18n'
+import { RecaptchaChecker } from 'app/components-v2/utils'
 
 type Props = {
   methods: {
-    type: string,
+    type: string
     data: any
   }[]
   onSelect: (type: string, data: any) => void
-  username: string,
+  username: string
   password: string
 }
-
 
 export const MethodSelection = (props: Props) => {
   const { user } = useStores()
@@ -49,20 +48,24 @@ export const MethodSelection = (props: Props) => {
 
   // ------------------------------ RENDER -------------------------------
 
-  const renderOptionContent = (title: string, icon: 'envelope-simple' | 'device-mobile', iconSize: number) => (
-    <View style={{
-      flexDirection: 'row',
-      alignItems: 'center'
-    }}>
-      <Icon
-        icon={icon}
-        size={iconSize}
-        color={colors.primary}
-      />
-      <Text style={{
-        color: colors.primary,
-        marginLeft: 12
-      }}>
+  const renderOptionContent = (
+    title: string,
+    icon: 'envelope-simple' | 'device-mobile',
+    iconSize: number
+  ) => (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+    >
+      <Icon icon={icon} size={iconSize} color={colors.primary} />
+      <Text
+        style={{
+          color: colors.primary,
+          marginLeft: 12,
+        }}
+      >
         {title}
       </Text>
     </View>
@@ -70,51 +73,41 @@ export const MethodSelection = (props: Props) => {
 
   return (
     <View>
-      <RecaptchaChecker
-        ref={captchaRef}
-      />
+      <RecaptchaChecker ref={captchaRef} />
 
       <Text
         preset="bold"
-        size='xl'
+        size="xl"
         text={translate('login.verify_your_identity')}
         style={{
           marginBottom: 30,
-          textAlign: 'center'
+          textAlign: 'center',
         }}
       />
 
-      <Text
-        text={translate('login.select_method')}
-        style={{ marginBottom: 12 }}
-      />
+      <Text text={translate('login.select_method')} style={{ marginBottom: 12 }} />
 
-      {
-        methods.map((item, index) => (
-          <Button
-            key={index}
-            preset='secondary'
-            disabled={item.type === 'mail' && sendingEmail}
-            loading={item.type === 'mail' && sendingEmail}
-            onPress={
-              () => item.type === 'mail'
-                ? getCaptchaToken().then(token => sendEmail(item.data, token))
-                : onSelect(item.type, item.data)
-            }
-            style={{
-              width: '100%',
-              marginBottom: 12
-            }}
-          >
-            {
-              item.type === 'mail' && renderOptionContent(`Email ${item.data}`, 'envelope-simple', 18)
-            }
-            {
-              item.type === 'smart_otp' && renderOptionContent(translate('common.authentication_app'), 'device-mobile', 24)
-            }
-          </Button>
-        ))
-      }
+      {methods.map((item, index) => (
+        <Button
+          key={index}
+          preset="secondary"
+          disabled={item.type === 'mail' && sendingEmail}
+          loading={item.type === 'mail' && sendingEmail}
+          onPress={() =>
+            item.type === 'mail'
+              ? getCaptchaToken().then((token) => sendEmail(item.data, token))
+              : onSelect(item.type, item.data)
+          }
+          style={{
+            width: '100%',
+            marginBottom: 12,
+          }}
+        >
+          {item.type === 'mail' && renderOptionContent(`Email ${item.data}`, 'envelope-simple', 18)}
+          {item.type === 'smart_otp' &&
+            renderOptionContent(translate('common.authentication_app'), 'device-mobile', 24)}
+        </Button>
+      ))}
     </View>
   )
 }
