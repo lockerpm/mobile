@@ -6,14 +6,14 @@ export class AccountRole {
 }
 
 export enum AccountType {
-  PERSONAL = "personal",
-  ENTERPRISE = "enterprise"
+  PERSONAL = 'personal',
+  ENTERPRISE = 'enterprise',
 }
 
 export enum EnterpriseGroupRoleText {
   PRIMARY_ADMIN = 'primary_admin',
   ADMIN = 'admin',
-  MEMBER = 'member'
+  MEMBER = 'member',
 }
 export enum EnterpriseInvitationStatus {
   INVITED = 'invited',
@@ -31,7 +31,7 @@ export enum SocketEvent {
   SYNC = 'sync',
   MEMBERS = 'members',
   EMERGENCY_ACCESS = 'emergency_access',
-  QUICK_SHARE = 'quick_share'
+  QUICK_SHARE = 'quick_share',
 }
 
 export enum SocketEventType {
@@ -76,7 +76,8 @@ export enum PlanType {
   FREE = 'pm_free',
   PREMIUM = 'pm_premium',
   FAMILY = 'pm_family',
-  LIFETIME = 'pm_lifetime_premium'
+  LIFETIME_PREMIUM = 'pm_lifetime_premium',
+  LIFETIME_FAMILY = 'pm_lifetime_family',
 }
 
 export enum InvitationStatus {
