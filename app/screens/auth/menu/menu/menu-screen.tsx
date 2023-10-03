@@ -36,8 +36,8 @@ export const MenuScreen = observer(() => {
   const { lock, logout } = useCipherAuthenticationMixins()
   const { isTablet } = useAdaptiveLayoutMixins()
   const appVersion = `${getVersion()}`
-  const isFreeAccount = user.plan?.alias === PlanType.FREE
-  const isPremiumAccount = user.plan?.alias === PlanType.PREMIUM
+  const isFreeAccount = user.isFreePlan
+  const isPremiumAccount = user.isShowPremiumFeature
   const [isLoading, setIsLoading] = useState(false)
   const [showFingerprint, setShowFingerprint] = useState(false)
   const [referLink, setReferLink] = useState<string>(null)
