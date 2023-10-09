@@ -19,13 +19,17 @@ export abstract class AuthService {
     logInApiKey: (clientId: string, clientSecret: string) => Promise<AuthResult>;
     logInTwoFactor: (twoFactorProvider: TwoFactorProviderType, twoFactorToken: string,
         remember?: boolean) => Promise<AuthResult>;
+
     logInComplete: (email: string, masterPassword: string, twoFactorProvider: TwoFactorProviderType,
         twoFactorToken: string, remember?: boolean) => Promise<AuthResult>;
+
     logInSsoComplete: (code: string, codeVerifier: string, redirectUrl: string,
         twoFactorProvider: TwoFactorProviderType, twoFactorToken: string, remember?: boolean) => Promise<AuthResult>;
+
     logInApiKeyComplete: (clientId: string, clientSecret: string, twoFactorProvider: TwoFactorProviderType,
         twoFactorToken: string, remember?: boolean) => Promise<AuthResult>;
-    logOut: (callback: Function) => void;
+
+    logOut: (callback: () => void) => void;
     getSupportedTwoFactorProviders: (win: Window) => any[];
     getDefaultTwoFactorProvider: (webAuthnSupported: boolean) => TwoFactorProviderType;
     makePreloginKey: (masterPassword: string, email: string) => Promise<SymmetricCryptoKey>;

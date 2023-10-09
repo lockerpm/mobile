@@ -243,9 +243,9 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
       return undefined
     }
     if (isAutoFill) {
-      return () => BackHandler.exitApp()
+      return BackHandler.exitApp()
     }
-    return () => navigation.goBack()
+    return navigation.goBack()
   }
 
   const renderHeaderAuthenticatorLeft = () => <TabHeader title={header} />

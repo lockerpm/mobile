@@ -10,8 +10,9 @@ import { SubdomainData } from 'app/static/types'
 import { translate } from 'app/i18n'
 
 import { EditSubdomainModal } from './EditSubdomainModal'
+import { observer } from 'mobx-react-lite'
 
-export const ManageSubdomainScreen: FC<ToolsStackScreenProps<'manageSubdomain'>> = (props) => {
+export const ManageSubdomainScreen: FC<ToolsStackScreenProps<'manageSubdomain'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { colors } = useTheme()
@@ -123,4 +124,4 @@ export const ManageSubdomainScreen: FC<ToolsStackScreenProps<'manageSubdomain'>>
       </View>
     </Screen>
   )
-}
+})

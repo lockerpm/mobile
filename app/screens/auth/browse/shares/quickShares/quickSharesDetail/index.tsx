@@ -7,8 +7,9 @@ import React, { FC } from 'react'
 import { TouchableOpacity, View, ViewStyle, Image } from 'react-native'
 import { Button, Header, Icon, Screen, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
+import { observer } from 'mobx-react-lite'
 
-export const QuickSharesDetailScreen: FC<AppStackScreenProps<'quickShareItemsDetail'>> = (
+export const QuickSharesDetailScreen: FC<AppStackScreenProps<'quickShareItemsDetail'>> = observer((
   props
 ) => {
   const navigation = props.navigation
@@ -37,7 +38,7 @@ export const QuickSharesDetailScreen: FC<AppStackScreenProps<'quickShareItemsDet
 
   return (
     <Screen
-      safeAreaEdges={['top', 'bottom']}
+      safeAreaEdges={['bottom']}
       header={
         <Header
           leftIcon="arrow-left"
@@ -78,9 +79,6 @@ export const QuickSharesDetailScreen: FC<AppStackScreenProps<'quickShareItemsDet
           />
         </View>
       }
-      contentContainerStyle={{
-        padding: 16,
-      }}
     >
       <TouchableOpacity
         style={{
@@ -158,4 +156,4 @@ export const QuickSharesDetailScreen: FC<AppStackScreenProps<'quickShareItemsDet
       )}
     </Screen>
   )
-}
+})

@@ -5,8 +5,9 @@ import { NotiListItem } from './InAppNotiItem'
 import { AppStackScreenProps } from 'app/navigators'
 import { useStores } from 'app/models'
 import { translate } from 'app/i18n'
+import { observer } from 'mobx-react-lite'
 
-export const InAppListNotificationScreen: FC<AppStackScreenProps<'app_list_noti'>> = (props) => {
+export const InAppListNotificationScreen: FC<AppStackScreenProps<'app_list_noti'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { user } = useStores()
@@ -44,4 +45,4 @@ export const InAppListNotificationScreen: FC<AppStackScreenProps<'app_list_noti'
       />
     </Screen>
   )
-}
+})

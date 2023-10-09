@@ -1,6 +1,7 @@
+// @ts-nocheck
 import React, { FC, useEffect, useState } from 'react'
 import { View, TouchableOpacity, Image, FlatList } from 'react-native'
-import { Button, Header, Icon, ImageIcon, Screen, Text, TextInput } from 'app/components/cores'
+import { Button, Header, Icon, Screen, Text, TextInput } from 'app/components/cores'
 import { SharedUsers } from './SharedUser'
 import {
   GroupMemberData,
@@ -15,10 +16,12 @@ import { useTheme } from 'app/services/context'
 import { useCipherData, useHelper } from 'app/services/hook'
 import { CipherView } from 'core/models/view'
 import { translate } from 'app/i18n'
+import { observer } from 'mobx-react-lite'
 
+const SHARE_AVATAR = require('assets/images/icons/avatar-2.png')
 const SHARE_GROUP = require('assets/images/icons/group.png')
 
-export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (props) => {
+export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = observer((props) => {
   const route = props.route
   const navigation = props.navigation
   const { ciphers } = route.params
@@ -195,6 +198,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
           style={{
             width: '100%',
             flexDirection: 'row',
+            alignItems: 'center'
           }}
         >
           <TouchableOpacity
@@ -208,22 +212,29 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
               onPress={() => {
                 addEmail(email)
               }}
-              containerStyle={{ paddingRight: 16, paddingVertical: 16 }}
+              containerStyle={{ paddingRight: 16, paddingVertical: 16, marginTop: 22 }}
             />
           </TouchableOpacity>
-          <TextInput
-            animated
-            onChangeText={setEmail}
-            value={email}
-            label={translate('shares.share_folder.add_email')}
-            clearButtonMode="unless-editing"
-            clearTextOnFocus={true}
-            onSubmitEditing={() => {
-              addEmail(email)
-            }}
-          />
+          <View style={{
+            flex: 1
+          }}>
+            <TextInput
+              animated
+              onChangeText={setEmail}
+              value={email}
+              label={translate('shares.share_folder.add_email')}
+              clearButtonMode="unless-editing"
+              clearTextOnFocus={true}
+              onSubmitEditing={() => {
+                addEmail(email)
+              }}
+            />
+          </View>
+
         </View>
-        <View>
+        <View style={{
+          marginTop: 20
+        }}>
           {emails.map((e, index) => {
             return (
               <View
@@ -255,7 +266,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
           })}
         </View>
 
-        <View>
+        <View >
           {groups.map((e, index) => {
             return (
               <View
@@ -304,13 +315,9 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
               justifyContent: 'flex-start',
             }}
           >
-            <ImageIcon
-              icon="avatar-2"
-              size={40}
-              style={{
-                borderRadius: 20,
-                marginRight: 10,
-              }}
+            <Image
+              source={SHARE_AVATAR}
+              style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
             />
 
             <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -328,20 +335,15 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
             <TouchableOpacity
               key={e + index.toString()}
               onPress={() => {
-                // TODO what this?? shit of ts
-                // @ts-ignore
                 if (e.email) {
-                  // @ts-ignore
                   addEmail(e.email)
                 } else {
-                  // @ts-ignore
                   if (groups.some((i) => i.id === e.id)) {
                     return
                   }
                   setGroups([
                     ...groups,
                     {
-                      // @ts-ignore
                       name: e.name,
                       id: e.id,
                     },
@@ -360,14 +362,12 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
                 }}
               >
                 <Image
-                  // @ts-ignore
                   source={e.email ? { uri: e.avatar } : SHARE_GROUP}
                   style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
                 />
 
                 <View style={{ flex: 1, justifyContent: 'center' }}>
                   <Text
-                    // @ts-ignore
                     text={e.email || e.name}
                   />
                 </View>
@@ -421,7 +421,6 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
   )
   return (
     <Screen
-      safeAreaEdges={['top']}
       header={
         <Header
           leftText={translate('common.cancel')}
@@ -444,4 +443,4 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = (pro
       {page === 1 && renderManageShare()}
     </Screen>
   )
-}
+})

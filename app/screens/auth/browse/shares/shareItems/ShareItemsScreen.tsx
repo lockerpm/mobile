@@ -12,7 +12,7 @@ import { translate } from 'app/i18n'
 const SHARE_EMPTY = require('assets/images/emptyCipherList/share-empty-img.png')
 
 export const ShareItemsScreen = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { user } = useStores()
 
   // --------------------- PARAMS -------------------------
@@ -57,7 +57,7 @@ export const ShareItemsScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={['top']}
       header={
         <CipherListHeader
           header={translate('shares.share_items')}
@@ -76,6 +76,9 @@ export const ShareItemsScreen = observer(() => {
           setIsLoading={setIsLoading}
         />
       }
+      contentContainerStyle={{
+        flex: 1
+      }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}

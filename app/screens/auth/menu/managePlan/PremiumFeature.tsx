@@ -16,7 +16,7 @@ export const PREMIUM_FEATURES_IMG = {
 export const PremiumFeature = () => {
   const { colors } = useTheme()
   const { user } = useStores()
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const isFreeAccount = user.isFreePlan
 
   const item = {

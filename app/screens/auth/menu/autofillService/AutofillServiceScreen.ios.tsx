@@ -15,8 +15,8 @@ const Switch = require('assets/images/icons/autofill/switch.png')
 const Key = require('assets/images/icons/autofill/key.png')
 const Locker = require('assets/images/icons/autofill/locker.png')
 
-export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
-  const navigation = useNavigation()
+export const AutofillServiceScreen = observer(() => {
+  const navigation = useNavigation() as any
 
   const appState = useRef(AppState.currentState)
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
@@ -37,6 +37,8 @@ export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
 
   return (
     <Screen
+      padding
+      safeAreaEdges={['bottom']}
       header={
         !enabled ? (
           <Header
@@ -49,7 +51,6 @@ export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
         ) : null
       }
       footer={
-        <View>
           <Button
             text={enabled ? translate('common.ok') : translate('common.open_settings')}
             onPress={() => {
@@ -63,9 +64,14 @@ export const AutofillServiceScreen = observer(function AutofillServiceScreen() {
                 })
               }
             }}
-          ></Button>
-        </View>
+            style={{
+              marginHorizontal: 20
+            }}
+          />
       }
+      contentContainerStyle={{
+        flex: 1
+      }}
     >
       {enabled && (
         <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>

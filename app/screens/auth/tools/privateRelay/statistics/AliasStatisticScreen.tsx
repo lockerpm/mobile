@@ -4,8 +4,9 @@ import { View } from 'react-native'
 import { Screen, Header, Text } from 'app/components/cores'
 import { ToolsStackScreenProps } from 'app/navigators'
 import { translate } from 'app/i18n'
+import { observer } from 'mobx-react-lite'
 
-export const AliasStatisticScreen: FC<ToolsStackScreenProps<'aliasStatistic'>> = (props) => {
+export const AliasStatisticScreen: FC<ToolsStackScreenProps<'aliasStatistic'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
@@ -59,4 +60,4 @@ export const AliasStatisticScreen: FC<ToolsStackScreenProps<'aliasStatistic'>> =
       ))}
     </Screen>
   )
-}
+})

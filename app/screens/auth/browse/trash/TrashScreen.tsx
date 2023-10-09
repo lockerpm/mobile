@@ -68,7 +68,7 @@ export const TrashScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={[ 'top']}
       header={
         <CipherListHeader
           isTrash
@@ -92,6 +92,9 @@ export const TrashScreen = observer(() => {
           }}
         />
       }
+      contentContainerStyle={{
+        flex: 1
+      }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}

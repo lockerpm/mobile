@@ -1,20 +1,21 @@
-import React, { FC, useEffect, useState } from 'react'
-import { LayoutAnimation, TouchableOpacity, View } from 'react-native'
-import { ToolsStackScreenProps } from 'app/navigators'
-import { useTheme } from 'app/services/context'
-import { useStores } from 'app/models'
-import { RelayAddress, SubdomainData } from 'app/static/types'
-import { translate } from 'app/i18n'
-import { Screen, Header, Text, Button, ImageIcon, Icon } from 'app/components/cores'
-import { AliasItem } from './PrivateRelayItem'
-import { EditAliasModal } from './EditAliasModal'
-import { CreateSubdomainModal } from './manageSubdomain/CreateSubdomainModal'
-import { ConfigAliasModal } from './ConfigAliasModal'
-import Animated, { ZoomIn } from 'react-native-reanimated'
+import React, { FC, useEffect, useState } from "react"
+import { LayoutAnimation, TouchableOpacity, View } from "react-native"
+import { ToolsStackScreenProps } from "app/navigators"
+import { useTheme } from "app/services/context"
+import { useStores } from "app/models"
+import { RelayAddress, SubdomainData } from "app/static/types"
+import { translate } from "app/i18n"
+import { Screen, Header, Text, Button, ImageIcon, Icon } from "app/components/cores"
+import { AliasItem } from "./PrivateRelayItem"
+import { EditAliasModal } from "./EditAliasModal"
+import { CreateSubdomainModal } from "./manageSubdomain/CreateSubdomainModal"
+import { ConfigAliasModal } from "./ConfigAliasModal"
+import Animated, { FadeInUp } from "react-native-reanimated"
+import { observer } from "mobx-react-lite"
 
 const FREE_PLAM_ALIAS_LIMIT = 5
 
-export const PrivateRelay: FC<ToolsStackScreenProps<'privateRelay'>> = (props) => {
+export const PrivateRelay: FC<ToolsStackScreenProps<"privateRelay">> = observer((props) => {
   const navigation = props.navigation
   const { colors } = useTheme()
   const { toolStore, user } = useStores()
@@ -34,7 +35,7 @@ export const PrivateRelay: FC<ToolsStackScreenProps<'privateRelay'>> = (props) =
 
   const fetchRelayDomain = async () => {
     const res = await toolStore.fetchSubdomain()
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       if (res.data.length === 0) {
         setSubdomain(null)
       } else {
@@ -45,14 +46,14 @@ export const PrivateRelay: FC<ToolsStackScreenProps<'privateRelay'>> = (props) =
 
   const fetchRelayListAddressed = async () => {
     const res = await toolStore.fetchRelayListAddresses()
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setAlias(res.data.results)
     }
   }
 
   const generateRelayNewAddress = async () => {
     const res = await toolStore.generateRelayNewAddress()
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       const newList = [...alias, res.data]
       setAlias(newList)
       fetchRelayDomain()
@@ -74,33 +75,30 @@ export const PrivateRelay: FC<ToolsStackScreenProps<'privateRelay'>> = (props) =
   }, [selectedItem])
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', onMount)
+    const unsubscribe = navigation.addListener("focus", onMount)
     return unsubscribe
   }, [])
 
   // Render
   return (
     <Screen
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={["bottom"]}
       preset="auto"
       header={
         <Header
-          title={translate('private_relay.title')}
+          title={translate("private_relay.title")}
           leftIcon="arrow-left"
           onLeftPress={() => navigation.goBack()}
           titleMode="center"
           RightActionComponent={
             <TouchableOpacity
               disabled={isReachLimit}
-              style={{
-                paddingHorizontal: 20,
-              }}
               onPress={() => {
                 generateRelayNewAddress()
               }}
             >
               <Text
-                text={translate('private_relay.btn')}
+                text={translate("private_relay.btn")}
                 color={isReachLimit ? colors.block : colors.primary}
               />
             </TouchableOpacity>
@@ -145,7 +143,7 @@ export const PrivateRelay: FC<ToolsStackScreenProps<'privateRelay'>> = (props) =
           isRootEmail={false}
           subdomain={subdomain}
           createSubdomain={() => setShowCreateSubdomainModal(true)}
-          manageSubdomain={() => navigation.navigate('manageSubdomain', { subdomain })}
+          manageSubdomain={() => navigation.navigate("manageSubdomain", { subdomain })}
         />
       )}
 
@@ -158,7 +156,7 @@ export const PrivateRelay: FC<ToolsStackScreenProps<'privateRelay'>> = (props) =
       >
         <Text
           preset="label"
-          text={translate('private_relay.label') + suffixitle}
+          text={translate("private_relay.label") + suffixitle}
           style={{
             marginVertical: 12,
           }}
@@ -172,7 +170,7 @@ export const PrivateRelay: FC<ToolsStackScreenProps<'privateRelay'>> = (props) =
             deleteRelayAddress={deleteRelayAddress}
             setShowEditModal={() => setShowEditModal(true)}
             navigateStatistic={() => {
-              navigation.navigate('aliasStatistic', { alias: item })
+              navigation.navigate("aliasStatistic", { alias: item })
             }}
             setShowConfigModal={() => {
               setShowConfigModal(true)
@@ -181,10 +179,9 @@ export const PrivateRelay: FC<ToolsStackScreenProps<'privateRelay'>> = (props) =
           />
         ))}
       </View>
-      {/* emails end */}
     </Screen>
   )
-}
+})
 
 interface ItemProps {
   isFreeAccount: boolean
@@ -208,22 +205,22 @@ const Item = ({
 
   const rootEmailDesc = isFreeAccount
     ? [
-        translate('private_relay.desc.one'),
-        translate('private_relay.desc.two'),
-        translate('private_relay.desc.three'),
+        translate("private_relay.desc.one"),
+        translate("private_relay.desc.two"),
+        translate("private_relay.desc.three"),
       ]
     : [
-        translate('private_relay.desc_premium.one'),
-        translate('private_relay.desc_premium.two'),
-        translate('private_relay.desc_premium.three'),
+        translate("private_relay.desc_premium.one"),
+        translate("private_relay.desc_premium.two"),
+        translate("private_relay.desc_premium.three"),
       ]
 
   const subDomainDesc = [
-    translate('private_relay.manage_subdomain.desc.one'),
-    translate('private_relay.manage_subdomain.desc.two'),
+    translate("private_relay.manage_subdomain.desc.one"),
+    translate("private_relay.manage_subdomain.desc.two"),
   ]
   const descriptions = isRootEmail ? rootEmailDesc : subDomainDesc
-
+  const title = isRootEmail ? email : subdomain ? `${subdomain.subdomain}.maily.org` : ""
   return (
     <TouchableOpacity
       onPress={() => {
@@ -249,42 +246,39 @@ const Item = ({
       >
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <ImageIcon icon={'root-email'} size={36} />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <ImageIcon icon={"root-email"} size={36} />
             <View style={{ marginLeft: 8 }}>
               <Text
                 text={
                   isRootEmail
-                    ? translate('private_relay.root_email')
+                    ? translate("private_relay.root_email")
                     : subdomain
-                    ? translate('private_relay.manage_subdomain.your_subdomain')
-                    : translate('private_relay.no_subdomain')
+                    ? translate("private_relay.manage_subdomain.your_subdomain")
+                    : translate("private_relay.no_subdomain")
                 }
               />
-              <Text
-                preset="bold"
-                text={isRootEmail ? email : subdomain ? `${subdomain.subdomain}.maily.org` : ''}
-              />
+              {!!title && <Text preset="bold" text={title} />}
             </View>
           </View>
-          <Icon icon={showDesc ? 'caret-up' : 'caret-down'} size={20} />
+          <Icon icon={showDesc ? "caret-up" : "caret-down"} size={20} />
         </View>
 
         {showDesc && (
-          <Animated.View style={{ marginTop: 8 }} entering={ZoomIn}>
+          <Animated.View style={{ marginTop: 8 }} entering={FadeInUp}>
             {descriptions.map((item, index) => (
               <View
                 key={index}
                 style={{
-                  flexDirection: 'row',
+                  flexDirection: "row",
                   marginRight: 16,
                   marginVertical: 2,
-                  alignItems: 'center',
+                  alignItems: "center",
                 }}
               >
                 <Icon icon="dot" size={24} />
@@ -294,14 +288,14 @@ const Item = ({
 
             {!!subdomain && (
               <Button
-                text={translate('private_relay.manage_subdomain.manage')}
+                text={translate("private_relay.manage_subdomain.manage")}
                 style={{ marginTop: 24 }}
                 onPress={manageSubdomain}
               />
             )}
             {!subdomain && !isRootEmail && (
               <Button
-                text={translate('common.create')}
+                text={translate("common.create")}
                 style={{ marginTop: 24 }}
                 onPress={createSubdomain}
               />

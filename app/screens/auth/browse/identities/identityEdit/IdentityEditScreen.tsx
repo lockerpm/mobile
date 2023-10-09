@@ -11,7 +11,7 @@ import { CipherView, IdentityView } from 'core/models/view'
 import { CollectionView } from 'core/models/view/collectionView'
 import { CipherType } from 'core/enums'
 import { translate } from 'app/i18n'
-import { Button, Header, Screen, TextInput, Text } from 'app/components/cores'
+import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
 import { Select } from 'app/components/utils'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
 
@@ -300,9 +300,8 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
 
   return (
     <Screen
-      safeAreaEdges={['bottom']}
       preset="auto"
-      backgroundColor={colors.block}
+      safeAreaEdges={['bottom']}
       header={
         <Header
           title={
@@ -319,11 +318,6 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
               disabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{
-                height: 35,
-                alignItems: 'center',
-                paddingLeft: 10,
-              }}
             />
           }
         />
@@ -332,18 +326,18 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
       <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
 
       {/* Name */}
-      <View style={{ backgroundColor: colors.background, padding: 16 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ padding: 16, paddingTop: 0 }}>
+        <View style={{ flexDirection: 'row' }}>
           <Image
             source={BROWSE_ITEMS.identity.icon}
             style={{
-              width: 40,
-              height: 40,
+              height: 50, width: 50, marginRight: 10, marginTop: 25
             }}
           />
 
-          <View style={{ flex: 1, marginLeft: 10 }}>
+          <View style={{ flex: 1 }}>
             <TextInput
+              animated
               isRequired
               label={translate('common.item_name')}
               value={name}
@@ -353,42 +347,63 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
         </View>
       </View>
 
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: 16, backgroundColor: colors.block }}>
         <Text preset="label" size="base" text={translate('identity.personal_info').toUpperCase()} />
       </View>
 
       {/* Info */}
       <View
         style={{
-          backgroundColor: colors.background,
           padding: 16,
           paddingBottom: 32,
         }}
       >
         <Select
-          floating
           placeholder={translate('identity.title')}
           value={title}
           options={TITLES}
           onChange={(val) => setTitle(val.toString())}
+          renderSelected={({ label }) => (
+            <View
+              style={{
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+                <Text
+                  preset="bold"
+                  text={label + ": "}
+                />
+                {!!title && <Text
+                  preset="bold"
+                  text={title}
+                  style={{ marginTop: 4 }}
+                />}
+              </View>
+              <Icon icon="caret-right" size={20} color={colors.secondaryText} />
+            </View>
+          )}
         />
 
         {contactDetails.map((item, index) => (
           <TextInput
+            animated
             key={index}
             isRequired={item.isRequired}
             keyboardType={item.type || 'default'}
             label={item.label}
             value={item.value}
             onChangeText={(text) => item.setter(text)}
-            style={{
-              marginTop: 20,
-            }}
           />
         ))}
       </View>
 
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: 16, backgroundColor: colors.block }}>
         <Text
           preset="label"
           size="base"
@@ -401,20 +416,18 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
         style={{
           backgroundColor: colors.background,
           padding: 16,
-          paddingBottom: 32,
+          paddingTop: 0
         }}
       >
         {addressDetails.map((item, index) => (
           <TextInput
+            animated
             key={index}
             isRequired={item.isRequired}
             keyboardType={item.type || 'default'}
             label={item.label}
             value={item.value}
             onChangeText={(text) => item.setter(text)}
-            style={{
-              marginTop: index !== 0 ? 20 : 0,
-            }}
           />
         ))}
       </View>

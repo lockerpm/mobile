@@ -7,6 +7,7 @@ import { translate } from 'app/i18n'
 import { HELP_CENTER_URL, PRIVACY_POLICY_URL, REPORT_VULN, TERMS_URL } from 'app/config/constants'
 import { Logger } from 'app/utils/utils'
 import { MenuItemContainer, SettingsItem } from 'app/components/utils'
+import { observer } from 'mobx-react-lite'
 
 type Item = {
   name: string
@@ -14,15 +15,11 @@ type Item = {
   action?: () => void
 }
 
-export const HelpScreen = () => {
-  const navigation = useNavigation()
+export const HelpScreen = observer(() => {
+  const navigation = useNavigation() as any
   const { colors } = useTheme()
 
   const items: Item[] = [
-    {
-      name: translate('help.tutorial'),
-      action: () => navigation.navigate('intro', { preview: true }),
-    },
     {
       name: translate('help.help_center'),
       action: () => {
@@ -90,4 +87,4 @@ export const HelpScreen = () => {
       </MenuItemContainer>
     </Screen>
   )
-}
+})

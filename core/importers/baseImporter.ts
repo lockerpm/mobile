@@ -1,3 +1,4 @@
+/* eslint-disable prefer-regex-literals */
 import * as papa from "papaparse"
 
 import { LogService } from "../abstractions/log.service"
@@ -148,7 +149,7 @@ export abstract class BaseImporter {
   }
 
   protected parseCsv(data: string, header: boolean, options: any = {}): any[] {
-    const parseOptions = Object.assign({ header: header }, this.parseCsvOptions, options)
+    const parseOptions = Object.assign({ header }, this.parseCsvOptions, options)
     data = this.splitNewLine(data).join("\n").trim()
     const result = papa.parse(data, parseOptions)
     if (result.errors != null && result.errors.length > 0) {
@@ -413,7 +414,7 @@ export abstract class BaseImporter {
         try {
           const val = parseInt(value)
           field.value = moment(val).format(type === FieldType.MonthYear ? "MM/YYYY" : "DD/MM/YYYY")
-        } catch (error) {}
+        } catch (error) { }
       }
 
       cipher.fields.push(field)

@@ -30,7 +30,7 @@ export class Send extends Domain {
 
   obj: SendData
 
-  constructor(obj?: SendData, alreadyEncrypted: boolean = false) {
+  constructor(obj?: SendData, alreadyEncrypted = false) {
     super()
     if (obj == null) {
       return

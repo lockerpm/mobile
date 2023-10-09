@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react'
 import { Alert, BackHandler, View, AppState } from 'react-native'
 import { Logger } from 'app/utils/utils'
@@ -18,11 +19,12 @@ import {
   CipherList,
   AddCipherActionModal,
 } from 'app/components/ciphers'
+import { observer } from 'mobx-react-lite'
 
 const HOME_EMPTY_CIPHER = require('assets/images/emptyCipherList/home-empty-cipher.png')
 
-export const HomeTabScreen = () => {
-  const navigation = useNavigation()
+export const HomeTabScreen = observer(() => {
+  const navigation: any = useNavigation()
   const { uiStore, user } = useStores()
   const { lock } = useAuthentication()
 
@@ -50,11 +52,6 @@ export const HomeTabScreen = () => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
       setAppStateVisible(nextAppState)
     })
-
-    return () => {
-      // eslint-disable-next-line no-unused-expressions
-      subscription == null
-    }
   }, [])
 
   useEffect(() => {
@@ -118,9 +115,6 @@ export const HomeTabScreen = () => {
       ])
     }
     navigation.addListener('beforeRemove', handleBack)
-    return () => {
-      navigation.removeListener('beforeRemove', handleBack)
-    }
   }, [navigation])
 
   // Close select before leave
@@ -135,9 +129,6 @@ export const HomeTabScreen = () => {
       return false
     }
     BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-    }
   }, [isSelecting])
 
   // Mounted
@@ -237,10 +228,10 @@ export const HomeTabScreen = () => {
       />
     </Screen>
   )
-}
+})
 
 const SuggestEnableAutofill = ({ isShow, onClose }) => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { colors } = useTheme()
   return (
     isShow && (

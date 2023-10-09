@@ -237,7 +237,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
     <Screen
       preset="auto"
       safeAreaEdges={['bottom']}
-      backgroundColor={colors.block}
       header={
         <Header
           title={
@@ -256,11 +255,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
               preset="teriatary"
               text={translate('common.save')}
               onPress={preparePassword}
-              style={{
-                height: 35,
-                alignItems: 'center',
-                paddingLeft: 10,
-              }}
             />
           }
         />
@@ -268,14 +262,15 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
     >
       <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
 
-      <View style={{ backgroundColor: colors.background, padding: 16 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ padding: 16, paddingTop: 0 }}>
+        <View style={{ flexDirection: 'row' }}>
           <Image
             source={BROWSE_ITEMS.password.icon}
-            style={{ height: 40, width: 40, marginRight: 10 }}
+            style={{ height: 50, width: 50, marginRight: 10, marginTop: 25 }}
           />
           <View style={{ flex: 1 }}>
             <TextInput
+              animated
               isRequired
               label={translate('common.item_name')}
               value={name}
@@ -286,63 +281,59 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
       </View>
       {/* Name end */}
 
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: 16, backgroundColor: colors.block }}>
         <Text preset="label" size="base" text={translate('password.login_details').toUpperCase()} />
       </View>
 
       {/* Info */}
       <View
         style={{
-          backgroundColor: colors.background,
           paddingBottom: 32,
           padding: 16,
+          paddingTop: 0
         }}
       >
-        <View style={{ flex: 1 }}>
-          <TextInput
-            label={translate('password.username')}
-            value={username}
-            onChangeText={setUsername}
-          />
-        </View>
+        <TextInput
+          animated
+          label={translate('password.username')}
+          value={username}
+          onChangeText={setUsername}
+        />
 
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <TextInput
-            isPassword
-            label={translate('common.password')}
-            value={password}
-            onChangeText={setPassword}
-          />
+        <TextInput
+          isPassword
+          animated
+          label={translate('common.password')}
+          value={password}
+          onChangeText={setPassword}
+        />
 
-          {!!password && (
-            <PasswordStrength
-              value={getPasswordStrength(password).score}
-              style={{ marginTop: 15 }}
-            />
-          )}
-        </View>
+        {!!password && (
+          <PasswordStrength
+            value={getPasswordStrength(password).score}
+            style={{ marginTop: 15 }}
+          />
+        )}
         {/* Password end */}
 
         <TouchableOpacity
           onPress={() => navigation.navigate('passwordGenerator')}
           style={{
-            marginTop: 20,
+            marginTop: 16,
           }}
         >
           <View
             style={{
               justifyContent: 'space-between',
-              width: '100%',
               flexDirection: 'row',
               alignItems: 'center',
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Icon icon="repeat" size={18} color={colors.primary} />
+              <Icon icon="repeat" size={20} color={colors.primary} />
               <Text
                 preset="bold"
                 color={colors.primary}
-                size="base"
                 text={translate('common.generate')}
                 style={{ marginLeft: 7 }}
               />
@@ -351,23 +342,22 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
           </View>
         </TouchableOpacity>
 
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <TextInput
-            label={translate('password.website_url')}
-            value={url}
-            onChangeText={setUrl}
-            onBlur={() => {
-              if (mode === 'add' && !name) {
-                const genName = url.replace('https://', '')
-                setName(genName)
-              }
-            }}
-          />
-        </View>
+        <TextInput
+          animated
+          label={translate('password.website_url')}
+          value={url}
+          onChangeText={setUrl}
+          onBlur={() => {
+            if (mode === 'add' && !name) {
+              const genName = url.replace('https://', '')
+              setName(genName)
+            }
+          }}
+        />
       </View>
 
-      <View style={{ padding: 16 }}>
-        <Text preset="label" size="base" text={translate('password.2fa_setup')} />
+      <View style={{ padding: 16, backgroundColor: colors.block }}>
+        <Text preset="label" size="base" text={translate('password.2fa_setup').toUpperCase()} />
       </View>
 
       <TouchableOpacity
@@ -380,7 +370,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
         <View
           style={{
             padding: 16,
-            backgroundColor: colors.background,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',

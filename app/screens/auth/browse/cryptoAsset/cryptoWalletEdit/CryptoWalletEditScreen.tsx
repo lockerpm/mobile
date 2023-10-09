@@ -197,11 +197,6 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
                 disabled={isLoading || !name.trim()}
                 text={translate('common.save')}
                 onPress={handleSave}
-                style={{
-                  height: 35,
-                  alignItems: 'center',
-                  paddingLeft: 10,
-                }}
               />
             }
           />
@@ -209,17 +204,17 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
       >
         <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
 
-        <View style={{ backgroundColor: colors.background, padding: 16 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ padding: 16, paddingTop: 0 }}>
+          <View style={{ flexDirection: 'row' }}>
             <Image
               source={BROWSE_ITEMS.cryptoWallet.icon}
               style={{
-                width: 40,
-                height: 40,
+                height: 50, width: 50, marginRight: 10, marginTop: 25
               }}
             />
-            <View style={{ flex: 1, marginLeft: 10 }}>
+            <View style={{ flex: 1 }}>
               <TextInput
+                animated
                 isRequired
                 label={translate('common.item_name')}
                 value={name}
@@ -229,67 +224,63 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
           </View>
         </View>
 
-        <View style={{ padding: 16 }}>
+        <View style={{ padding: 16, backgroundColor: colors.block }}>
           <Text preset="label" size="base" text={translate('common.details').toUpperCase()} />
         </View>
 
         {/* Info */}
         <View
           style={{
-            backgroundColor: colors.background,
             padding: 16,
             paddingBottom: 32,
           }}
         >
-          <View style={{ flex: 1 }}>
-            <AppSelect
-              alias={walletApp.alias}
-              onChange={(alias: string, appName: string) => {
-                setWalletApp({ alias, name: appName })
-              }}
-            />
-          </View>
+          <AppSelect
+            alias={walletApp.alias}
+            onChange={(alias: string, appName: string) => {
+              setWalletApp({ alias, name: appName })
+            }}
+          />
 
-          <View style={{ flex: 1, marginTop: 20 }}>
-            <TextInput
-              label={translate('common.username')}
-              value={username}
-              onChangeText={setUsername}
-            />
-          </View>
+          <TextInput
+            animated
+            label={translate('common.username')}
+            value={username}
+            onChangeText={setUsername}
+
+          />
 
           {/* Password */}
-          <View style={{ flex: 1, marginTop: 20 }}>
-            <TextInput
-              isPassword
-              label={translate('common.password')}
-              value={password}
-              onChangeText={setPassword}
+          <TextInput
+            isPassword
+            animated
+            label={translate('common.password')}
+            value={password}
+            onChangeText={setPassword}
+
+          />
+          {!!password && (
+            <PasswordStrength
+              value={getPasswordStrength(password).score}
+              style={{ marginTop: 8 }}
             />
-            {!!password && (
-              <PasswordStrength
-                value={getPasswordStrength(password).score}
-                style={{ marginTop: 15 }}
-              />
-            )}
-          </View>
+          )}
 
           <TouchableOpacity
             onPress={() => navigation.navigate('passwordGenerator')}
             style={{
-              marginTop: 20,
+              marginTop: 16,
             }}
           >
             <View
               style={{
                 justifyContent: 'space-between',
-                width: '100%',
                 flexDirection: 'row',
                 alignItems: 'center',
               }}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Icon icon="repeat" size={18} color={colors.primary} />
+                <Icon icon="repeat" size={20} color={colors.primary} />
                 <Text
                   color={colors.primary}
                   size="base"
@@ -301,26 +292,22 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
             </View>
           </TouchableOpacity>
 
-          <View style={{ flex: 1, marginTop: 20 }}>
-            <TextInput isPassword label={'PIN'} value={pin} onChangeText={setPin} />
-          </View>
+          <TextInput animated isPassword label={'PIN'} value={pin} onChangeText={setPin} />
 
-          <View style={{ flex: 1, marginTop: 20 }}>
-            <TextInput
-              label={translate('crypto_asset.wallet_address')}
-              value={address}
-              onChangeText={setAddress}
-            />
-          </View>
+          <TextInput
+            animated
+            label={translate('crypto_asset.wallet_address')}
+            value={address}
+            onChangeText={setAddress}
+          />
 
-          <View style={{ flex: 1, marginTop: 20 }}>
-            <TextInput
-              isPassword
-              label={translate('crypto_asset.private_key')}
-              value={privateKey}
-              onChangeText={setPrivateKey}
-            />
-          </View>
+          <TextInput
+            isPassword
+            animated
+            label={translate('crypto_asset.private_key')}
+            value={privateKey}
+            onChangeText={setPrivateKey}
+          />
 
           {/* Seed */}
           <View style={{ flex: 1, marginTop: 20 }}>

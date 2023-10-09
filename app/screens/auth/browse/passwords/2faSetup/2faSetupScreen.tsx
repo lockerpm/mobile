@@ -9,8 +9,9 @@ import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
 import { AuthenticatorAddAction } from 'app/screens/auth/tools/authenticator/AuthenticatorAddAction'
 import { SearchBar } from 'app/components/utils'
+import { observer } from 'mobx-react-lite'
 
-export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup'>> = (props) => {
+export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup'>> = observer((props) => {
   const navigation: any = props.navigation
   const route = props.route
 
@@ -111,4 +112,4 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup
       </View>
     </Screen>
   )
-}
+})

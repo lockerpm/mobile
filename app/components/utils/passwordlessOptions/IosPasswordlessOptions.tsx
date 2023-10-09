@@ -73,10 +73,11 @@ export const IosPasswordlessOptions = ({
       bottom
       width="100%"
       visible={isOpen}
-      // onDialogDismissed={action}
       onDismiss={onClose}
       containerStyle={$containerStyle}
       renderPannableHeader={header}
+      supportedOrientations={['portrait', 'landscape']}
+      panDirection={null}
     >
       <View style={{ paddingHorizontal: 16, backgroundColor: colors.block }}>
         <Logo

@@ -17,6 +17,7 @@ import {
 import { SendView } from 'core/models/view/sendView'
 import { TxKeyPath } from 'app/i18n'
 import { ImageSourcePropType, ImageURISource } from 'react-native'
+import { observer } from 'mobx-react-lite'
 
 export type BrowseParamList = {
   browseList: undefined
@@ -43,7 +44,7 @@ export type BrowseStackScreenProps<T extends keyof BrowseParamList> = StackScree
 
 const Stack = createStackNavigator<BrowseParamList>()
 
-export const BrowseNavigator = () => {
+export const BrowseNavigator = observer(() => {
   return (
     <Stack.Navigator
       initialRouteName="browseList"
@@ -57,15 +58,17 @@ export const BrowseNavigator = () => {
       <Stack.Screen name="passwords" component={PasswordsScreen} />
       <Stack.Screen name="notes" component={NotesScreen} />
       <Stack.Screen name="identities" component={IdentitiesScreen} />
-      <Stack.Screen name="shares" component={SharesScreen} />
-      <Stack.Screen name="sharedItems" component={SharedItemsScreen} />
-      <Stack.Screen name="quickShareItems" component={QuickShareItemsScreen} />
-      <Stack.Screen name="shareItems" component={ShareItemsScreen} />
+
       <Stack.Screen name="trash" component={TrashScreen} />
       <Stack.Screen name="cryptoWallets" component={CryptoAssetsScreen} />
+
+      <Stack.Screen name="shares" component={SharesScreen} />
+      <Stack.Screen name="sharedItems" component={SharedItemsScreen} />
+      <Stack.Screen name="shareItems" component={ShareItemsScreen} />
+      <Stack.Screen name="quickShareItems" component={QuickShareItemsScreen} />
     </Stack.Navigator>
   )
-}
+})
 
 export type BrowseItem = {
   label: TxKeyPath

@@ -10,8 +10,10 @@ import { logCreateMasterPwEvent } from 'app/utils/analytics'
 import { useAuthentication, useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
 import { Button, Header, Logo, Screen, Text, TextInput } from 'app/components/cores'
 import { PasswordPolicyViolationsModal, PasswordStrength } from 'app/components/utils'
+import Animated, { FadeInUp } from 'react-native-reanimated'
+import { observer } from 'mobx-react-lite'
 
-export const CreateMasterPasswordScreen: FC<RootStackScreenProps<'createMasterPassword'>> = (
+export const CreateMasterPasswordScreen: FC<RootStackScreenProps<'createMasterPassword'>> = observer((
   props
 ) => {
   const navigation = props.navigation
@@ -195,7 +197,6 @@ export const CreateMasterPasswordScreen: FC<RootStackScreenProps<'createMasterPa
             {user.email}
           </Text>
         </View>
-        {/* Current user end */}
 
         {/* Master pass input */}
         <TextInput
@@ -213,7 +214,9 @@ export const CreateMasterPasswordScreen: FC<RootStackScreenProps<'createMasterPa
         />
 
         {!!masterPassword && (
-          <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />
+          <Animated.View entering={FadeInUp} style={{ width: "100%" }}>
+            <PasswordStrength value={passwordStrength} style={{ marginTop: 15 }} />
+          </Animated.View>
         )}
         {/* Master pass input end */}
 
@@ -285,4 +288,4 @@ export const CreateMasterPasswordScreen: FC<RootStackScreenProps<'createMasterPa
       </View>
     </Screen>
   )
-}
+})

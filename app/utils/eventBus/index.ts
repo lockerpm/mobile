@@ -1,5 +1,5 @@
+import { TEMP_PREFIX } from 'app/static/constants'
 import { EventRegister } from 'react-native-event-listeners'
-import { TEMP_PREFIX } from "../../config/constants"
 
 
 export enum AppEventType {

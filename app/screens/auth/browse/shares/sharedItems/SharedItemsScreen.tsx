@@ -75,8 +75,7 @@ export const SharedItemsScreen = observer(() => {
 
   return (
     <Screen
-      preset="auto"
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={[ 'top']}
       header={
         <CipherListHeader
           isShared
@@ -100,6 +99,9 @@ export const SharedItemsScreen = observer(() => {
           }}
         />
       }
+      contentContainerStyle={{
+        flex: 1
+      }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}

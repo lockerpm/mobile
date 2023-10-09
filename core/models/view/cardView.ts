@@ -29,6 +29,7 @@ export class CardView implements View {
     get brand(): string {
         return this._brand;
     }
+
     set brand(value: string) {
         this._brand = value;
         this._subTitle = null;
@@ -37,6 +38,7 @@ export class CardView implements View {
     get number(): string {
         return this._number;
     }
+
     set number(value: string) {
         this._number = value;
         this._subTitle = null;

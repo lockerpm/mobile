@@ -62,14 +62,13 @@ export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
       {(cipher.fields || []).map((item, index) => (
         <TextInput
           isCopyable
+          animated
           key={index}
           editable={false}
           isPassword={item.type === FieldType.Hidden}
           label={item.name}
           value={item.value}
-          style={{
-            marginTop: 20,
-          }}
+
         />
       ))}
 
@@ -104,30 +103,30 @@ export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
       />
       {collections.length > 0
         ? collections.map((c: CollectionView) => (
-            <View
-              key={c.id}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 10,
-              }}
-            >
-              <ImageIcon icon="folder-share" size={30} />
-              <Text text={c.name || translate('folder.unassigned')} style={{ marginLeft: 10 }} />
-            </View>
-          ))
+          <View
+            key={c.id}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 10,
+            }}
+          >
+            <ImageIcon icon="folder-share" size={30} />
+            <Text text={c.name || translate('folder.unassigned')} style={{ marginLeft: 10 }} />
+          </View>
+        ))
         : (!cipher.organizationId ||
-            !!folder.name ||
-            getTeam(user.teams, cipher.organizationId)) && (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <ImageIcon icon="folder" size={30} />
-              <Text
-                text={folder.name || translate('folder.unassigned')}
-                numberOfLines={2}
-                style={{ marginLeft: 10, flex: 1 }}
-              />
-            </View>
-          )}
+          !!folder.name ||
+          getTeam(user.teams, cipher.organizationId)) && (
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <ImageIcon icon="folder" size={30} />
+            <Text
+              text={folder.name || translate('folder.unassigned')}
+              numberOfLines={2}
+              style={{ marginLeft: 10, flex: 1 }}
+            />
+          </View>
+        )}
     </View>
   )
 }

@@ -76,7 +76,9 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
     // Render
     return (
       <Screen
+        safeAreaEdges={['bottom']}
         backgroundColor={colors.block}
+        footerPadding
         header={
           <Header
             leftIcon="arrow-left"
@@ -109,13 +111,13 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
         {/* Password */}
         <View
           style={{
+            marginTop: 16,
             backgroundColor: colors.background,
             padding: 16,
           }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text text={password} style={{ flex: 1, fontSize: 20 }} />
-
             <Icon icon="copy" size={18} onPress={() => copyToClipboard(password)} />
           </View>
           <PasswordStrength preset="text" value={getPasswordStrength(password).score} />

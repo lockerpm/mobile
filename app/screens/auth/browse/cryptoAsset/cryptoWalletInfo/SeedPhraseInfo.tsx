@@ -14,7 +14,9 @@ export const SeedPhraseInfo = (props: Props) => {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <View>
+    <View style={{
+      marginTop: 16
+    }}>
       <View
         style={{
           flexDirection: 'row',
@@ -28,19 +30,21 @@ export const SeedPhraseInfo = (props: Props) => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
+            paddingRight: 14
           }}
         >
           <Icon
             icon={showPassword ? 'eye-slash' : 'eye'}
-            size={18}
+            size={20}
             onPress={() => {
               setShowPassword(!showPassword)
             }}
+            containerStyle={{ marginRight: 16 }}
           />
 
           <Icon
             icon="copy"
-            size={17}
+            size={20}
             onPress={() => {
               copyToClipboard(props.seed)
             }}

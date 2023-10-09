@@ -156,14 +156,14 @@ export function useTool() {
         (c: CipherView) =>
           passwordUseMap.has(c.login.password) && passwordUseMap.get(c.login.password) > 1
       )
-
+      toolStore.setLoadingHealth(false)
       toolStore.setWeakPasswords(weakPasswordCiphers)
       toolStore.setPasswordStrengthMap(passwordStrengthMap)
       toolStore.setReusedPasswords(reusedPasswordCiphers)
       toolStore.setPasswordUseMap(passwordUseMap)
       toolStore.setExposedPasswords(exposedPasswordCiphers)
       toolStore.setExposedPasswordMap(exposedPasswordMap)
-      toolStore.setLoadingHealth(false)
+ 
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       Logger.error('loadPasswordsHealth: ' + e)

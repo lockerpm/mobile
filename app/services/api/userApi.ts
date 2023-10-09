@@ -28,7 +28,7 @@ import {
 } from 'app/static/types'
 import { CipherResponse } from 'core/models/response/cipherResponse'
 import { PolicyType } from 'app/static/types/enum'
-import { UserSnapshot } from 'app/models'
+import { UserSnapshotIn as UserSnapshot } from 'app/models'
 
 class UserApi {
   private api: Api = api

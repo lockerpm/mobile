@@ -164,17 +164,18 @@ export const WordInput = (props: InputProps) => {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        borderRadius: 16,
+        borderRadius: 12,
         borderWidth: 1,
         borderColor: isFocused ? color.primary : color.border,
         minWidth: 100,
         maxWidth: maxWidth || undefined,
         marginHorizontal: 4,
         paddingHorizontal: 12,
+        paddingVertical: 8,
         marginBottom: 8,
       }}
     >
-      <Text text={`${index + 1}.`} />
+      <Text text={`${index + 1}. `} />
       <TextInput
         selectTextOnFocus
         ref={outerRef}
@@ -226,17 +227,17 @@ export const AddWordBtn = (props: BtnProps) => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'flex-start',
-          borderRadius: 16,
+          borderRadius: 12,
           minWidth: 100,
           maxWidth: maxWidth || undefined,
           marginHorizontal: 4,
           paddingHorizontal: 12,
           marginBottom: 8,
+          paddingVertical: 8,
           backgroundColor: colors.block,
-          height: 28,
         }}
       >
-        <Icon icon="plus-circle" color={colors.title} size={18} />
+        <Icon icon="plus-circle" color={colors.title} size={20} />
         <Text text={translate('common.add')} style={{ marginLeft: 4 }} />
       </View>
     </TouchableOpacity>

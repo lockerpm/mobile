@@ -18,7 +18,7 @@ import { translate } from 'app/i18n'
 const EMPTY_IMG = require('assets/images/emptyCipherList/crypto-empty-img.png')
 
 export const CryptoAssetsScreen = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -68,8 +68,7 @@ export const CryptoAssetsScreen = observer(() => {
 
   return (
     <Screen
-      padding
-      safeAreaEdges={['bottom', 'top']}
+      safeAreaEdges={['top']}
       contentContainerStyle={{
         flex: 1,
       }}

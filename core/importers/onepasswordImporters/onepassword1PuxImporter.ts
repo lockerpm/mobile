@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { CipherRepromptType } from "../../enums/cipherRepromptType";
 import { CipherType } from "../../enums/cipherType";
 import { FieldType } from "../../enums/fieldType";
@@ -83,7 +84,7 @@ export class OnePassword1PuxImporter extends BaseImporter implements Importer {
             break;
         }
 
-        cipher.favorite = item.favIndex === 1 ? true : false;
+        cipher.favorite = item.favIndex === 1;
 
         this.processOverview(item.overview, cipher);
 
@@ -345,6 +346,7 @@ export class OnePassword1PuxImporter extends BaseImporter implements Importer {
     }
 
     // Naive approach of checking if the fields id is usable
+    // eslint-disable-next-line prefer-regex-literals
     if (id.length > 25 && RegExp(/[0-9]{2}[A-Z]{2}/, "i").test(id)) {
       return title;
     }

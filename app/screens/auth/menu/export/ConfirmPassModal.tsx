@@ -61,8 +61,8 @@ export const ConfirmPassModal = (props: Props) => {
           setMasterPass(txt)
         }}
         onSubmitEditing={handleConfirm}
-        style={{
-          marginTop: 10,
+        containerStyle={{
+          marginTop: 16,
         }}
       />
 

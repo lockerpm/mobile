@@ -5,11 +5,12 @@ import { useNavigation } from '@react-navigation/core'
 import { AuthenticatorAddAction } from './AuthenticatorAddAction'
 import { BackHandler } from 'react-native'
 import { OtpList } from './OtpList'
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
+import {  EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
 import { Screen } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { translate } from 'app/i18n'
+import { AuthenticatorHeader } from './AuthenticatorHeader'
 
 const EMPTY = require('assets/images/emptyCipherList/password-empty-img.png')
 
@@ -46,19 +47,15 @@ export const AuthenticatorScreen = observer(() => {
       return false
     }
     BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
-    }
   }, [isSelecting])
 
   // -------------------- RENDER ----------------------
 
   return (
     <Screen
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={['top']}
       header={
-        <CipherListHeader
-          isAuthenticator
+        <AuthenticatorHeader
           header={translate('authenticator.title')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => setIsAddOpen(true)}
@@ -80,6 +77,9 @@ export const AuthenticatorScreen = observer(() => {
           }}
         />
       }
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}

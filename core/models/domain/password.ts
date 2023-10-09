@@ -10,7 +10,7 @@ export class Password extends Domain {
     password: EncString;
     lastUsedDate: Date;
 
-    constructor(obj?: PasswordHistoryData, alreadyEncrypted: boolean = false) {
+    constructor(obj?: PasswordHistoryData, alreadyEncrypted = false) {
         super();
         if (obj == null) {
             return;
@@ -23,7 +23,7 @@ export class Password extends Domain {
     }
 
     decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<PasswordHistoryView> {
-         return this.decryptObj(new PasswordHistoryView(this), {
+        return this.decryptObj(new PasswordHistoryView(this), {
             password: null,
         }, orgId, encKey);
     }

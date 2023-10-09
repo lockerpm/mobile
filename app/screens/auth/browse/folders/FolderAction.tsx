@@ -25,7 +25,7 @@ type Props = {
 export const FolderAction = (props: Props) => {
   const { isOpen, onClose, folder, onLoadingChange } = props
   if (!folder) return null
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { cipherStore, user, uiStore } = useStores()
   const { colors } = useTheme()
   const { getTeam, notifyApiError } = useHelper()

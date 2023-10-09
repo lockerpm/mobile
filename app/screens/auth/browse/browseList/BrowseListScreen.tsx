@@ -12,7 +12,7 @@ import { translate } from 'app/i18n'
 import { CipherType } from 'core/enums'
 
 export const BrowseListScreen = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { colors } = useTheme()
   const { cipherStore, folderStore, collectionStore } = useStores()
   const { getCipherCount } = useTool()
@@ -84,6 +84,7 @@ export const BrowseListScreen = observer(() => {
           borderRadius: 12,
           marginTop: 20,
           overflow: 'hidden',
+          backgroundColor: colors.background
         }}
       >
         {data.map((item, index) => (

@@ -1,30 +1,30 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { QuickSharesList } from './QuickSharesList'
-import { PushNotifier } from 'app/utils/pushNotification'
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
-import { useStores } from 'app/models'
-import { Screen } from 'app/components/cores'
-import { translate } from 'app/i18n'
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { QuickSharesList } from "./QuickSharesList"
+import { PushNotifier } from "app/utils/pushNotification"
+import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
+import { useStores } from "app/models"
+import { Screen } from "app/components/cores"
+import { translate } from "app/i18n"
 
-const SHARE_EMPTY = require('assets/images/emptyCipherList/share-empty-img.png')
+const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
 
 export const QuickShareItemsScreen = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { user } = useStores()
 
   // --------------------- PARAMS -------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
 
   // --------------------- COMPUTED -------------------------
 
@@ -34,7 +34,7 @@ export const QuickShareItemsScreen = observer(() => {
 
   // Clear noti
   useEffect(() => {
-    PushNotifier.cancelNotification('share_confirm')
+    PushNotifier.cancelNotification("share_confirm")
   }, [navigation])
 
   useEffect(() => {
@@ -42,14 +42,14 @@ export const QuickShareItemsScreen = observer(() => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
 
@@ -57,15 +57,16 @@ export const QuickShareItemsScreen = observer(() => {
 
   return (
     <Screen
+      safeAreaEdges={["top"]}
       header={
         <CipherListHeader
-          header={translate('quick_shares.share_option.quick.tl')}
+          header={translate("quick_shares.share_option.quick.tl")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
             if (isFreeAccount) {
-              navigation.navigate('payment')
+              navigation.navigate("payment")
             } else {
-              navigation.navigate('mainTab', { screen: 'homeTab' })
+              navigation.navigate("mainTab", { screen: "homeTab" })
             }
           }}
           onSearch={setSearchText}
@@ -75,6 +76,9 @@ export const QuickShareItemsScreen = observer(() => {
           setIsLoading={setIsLoading}
         />
       }
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}
@@ -96,21 +100,21 @@ export const QuickShareItemsScreen = observer(() => {
             <EmptyCipherList
               img={SHARE_EMPTY}
               imgStyle={{ height: 55, width: 55 }}
-              title={translate('shares.empty.title')}
-              desc={translate('error.not_available_for_free')}
-              buttonText={translate('common.upgrade')}
+              title={translate("shares.empty.title")}
+              desc={translate("error.not_available_for_free")}
+              buttonText={translate("common.upgrade")}
               addItem={() => {
-                navigation.navigate('payment')
+                navigation.navigate("payment")
               }}
             />
           ) : (
             <EmptyCipherList
               img={SHARE_EMPTY}
               imgStyle={{ height: 55, width: 55 }}
-              title={translate('shares.empty.title')}
-              desc={translate('shares.empty.desc_share')}
-              buttonText={translate('shares.start_sharing')}
-              addItem={() => navigation.navigate('mainTab', { screen: 'homeTab' })}
+              title={translate("shares.empty.title")}
+              desc={translate("shares.empty.desc_share")}
+              buttonText={translate("shares.start_sharing")}
+              addItem={() => navigation.navigate("mainTab", { screen: "homeTab" })}
             />
           )
         }

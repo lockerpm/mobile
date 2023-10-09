@@ -4,8 +4,7 @@ import { EncArrayBuffer } from '../models/domain/encArrayBuffer';
 
 import { Utils } from '../misc/utils';
 
-export class CyStackFileUploadService
-{
+export class CyStackFileUploadService {
     constructor(private apiService: ApiService) { }
 
     async upload(encryptedFileName: string, encryptedFileData: EncArrayBuffer, apiCall: (fd: FormData) => Promise<any>) {

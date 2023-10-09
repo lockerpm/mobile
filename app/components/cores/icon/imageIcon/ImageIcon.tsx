@@ -102,17 +102,14 @@ export const imageRegistry = {
   authenticator: require('assets/images/icons/tools/authenticator.png'),
   'password-health': require('assets/images/icons/tools/password-health.png'),
   'data-breach-scanner': require('assets/images/icons/tools/data-breach-scanner.png'),
-  emergency: require('assets/images/icons/appNoti/emergency.png'),
-  marketing: require('assets/images/icons/appNoti/marketing.png'),
+  'emergency': require('assets/images/icons/appNoti/emergency.png'),
+  'marketing': require('assets/images/icons/appNoti/marketing.png'),
   'pw-tips': require('assets/images/icons/appNoti/pw-tips.png'),
   'share-item': require('assets/images/icons/appNoti/share-item.png'),
 
-  folder: require('assets/images/icons/folder/folder.png'),
+  'folder': require('assets/images/icons/folder/folder.png'),
   'folder-add': require('assets/images/icons/folder/folder-add.png'),
   'folder-share': require('assets/images/icons/folder/folder-share.png'),
-
-  'avatar-2': require('assets/images/icons/avatar-2.png'),
-  group: require('assets/images/icons/group.png'),
 }
 
 const $imageStyle: ImageStyle = {

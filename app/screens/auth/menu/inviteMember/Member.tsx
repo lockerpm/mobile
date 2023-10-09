@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
-import { Icon, Text } from 'app/components/cores'
+import { BottomModal, Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
-import { ActionSheet } from 'app/components/ciphers'
 import { translate } from 'app/i18n'
 
 export interface FamilyMemberProp {
@@ -39,6 +38,7 @@ export const Member = (props: MemberProps) => {
         borderBottomWidth: 1,
         width: '100%',
         flexDirection: 'row',
+        alignItems: 'center',
         marginBottom: 15,
         paddingVertical: 14,
         justifyContent: 'flex-start',
@@ -73,7 +73,7 @@ export const Member = (props: MemberProps) => {
         </TouchableOpacity>
       )}
 
-      <ActionSheet isOpen={showSheetModal} onClose={() => setShowSheetModal(false)}>
+      <BottomModal title='' isOpen={showSheetModal} onClose={() => setShowSheetModal(false)}>
         <View style={{ alignItems: 'center' }}>
           <Image
             source={avatar ? { uri: avatar } : require('./avatar.png')}
@@ -95,12 +95,12 @@ export const Member = (props: MemberProps) => {
             }}
             style={{ justifyContent: 'center' }}
           >
-            <Text style={{ marginVertical: 20, color: colors.error }}>
+            <Text style={{ marginTop: 20, color: colors.error }}>
               {translate('invite_member.remove')}
             </Text>
           </TouchableOpacity>
         </View>
-      </ActionSheet>
+      </BottomModal>
     </View>
   )
 }

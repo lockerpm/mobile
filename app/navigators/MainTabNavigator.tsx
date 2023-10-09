@@ -13,6 +13,7 @@ import { BrowseNavigator, BrowseParamList } from './browse/BrowseNavigator'
 import { MenuNavigator, MenuParamList } from './menu/MenuNavigator'
 import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen } from '../screens'
 import { SharingStatus } from 'app/static/types'
+import { observer } from 'mobx-react-lite'
 
 export type TabsParamList = {
   homeTab: undefined
@@ -213,10 +214,10 @@ const TabBar = ({ state, descriptors, navigation }) => {
   )
 }
 
-export function MainTabNavigator() {
+export const  MainTabNavigator = observer(() => {
   const renderTabbar = useCallback((props: BottomTabBarProps) => <TabBar {...props} />, [])
   return (
-    <Tab.Navigator initialRouteName="homeTab" tabBar={renderTabbar}>
+    <Tab.Navigator screenOptions={{headerShown: false}} initialRouteName="homeTab" tabBar={renderTabbar}>
       <Tab.Screen name="homeTab" component={HomeTabScreen} />
       <Tab.Screen name="browseTab" component={BrowseNavigator} />
       <Tab.Screen name="authenticatorTab" component={AuthenticatorScreen} />
@@ -224,4 +225,4 @@ export function MainTabNavigator() {
       <Tab.Screen name="menuTab" component={MenuNavigator} />
     </Tab.Navigator>
   )
-}
+})

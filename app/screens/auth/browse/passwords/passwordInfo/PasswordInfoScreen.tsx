@@ -9,7 +9,6 @@ import { useCipherHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
-import { useTheme } from 'app/services/context'
 import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
 import { translate } from 'app/i18n'
 import { PasswordStrength, Textarea } from 'app/components/utils'
@@ -17,7 +16,6 @@ import { PasswordStrength, Textarea } from 'app/components/utils'
 export const PasswordInfoScreen: FC<AppStackScreenProps<'passwords__info'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
-  const { colors } = useTheme()
   const { getWebsiteLogo, getPasswordStrength } = useCipherHelper()
   const { cipherStore } = useStores()
   const selectedCipher: CipherView = cipherStore.cipherView
@@ -48,8 +46,8 @@ export const PasswordInfoScreen: FC<AppStackScreenProps<'passwords__info'>> = ob
   return (
     <Screen
       preset="auto"
+      padding
       safeAreaEdges={['bottom']}
-      backgroundColor={colors.block}
       header={
         <Header
           leftIcon="arrow-left"
@@ -73,129 +71,113 @@ export const PasswordInfoScreen: FC<AppStackScreenProps<'passwords__info'>> = ob
         />
       )}
 
-      <View>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: colors.background,
-            paddingTop: 20,
-            paddingBottom: 30,
-            marginBottom: 10,
-          }}
-        >
-          <Image source={source} style={{ height: 55, width: 55, borderRadius: 8 }} />
 
-          <Text
-            preset="bold"
-            size="xl"
-            text={selectedCipher.name}
-            style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
-          >
-            {notSync && (
-              <View style={{ paddingLeft: 10 }}>
-                <Icon icon="wifi-slash" size={22} />
-              </View>
-            )}
-          </Text>
-        </View>
-      </View>
+      <Image source={source} style={{ height: 55, width: 55, borderRadius: 8, alignSelf: 'center' }} />
 
-      <View
-        style={{
-          backgroundColor: colors.background,
-          padding: 16,
-          paddingVertical: 22,
-        }}
+      <Text
+        preset="bold"
+        size="xxl"
+        style={{ margin: 20, textAlign: 'center' }}
       >
-        {!lockerMasterPassword && (
-          <TextInput
-            isCopyable
-            label={translate('password.username')}
-            value={selectedCipher.login.username}
-            editable={false}
-            style={{ marginBottom: 20 }}
+        {selectedCipher.name}
+        {notSync && (
+          <View style={{ paddingLeft: 10 }}>
+            <Icon icon="wifi-slash" size={22} />
+          </View>
+        )}
+      </Text>
+
+      {!lockerMasterPassword && (
+        <TextInput
+          animated
+          isCopyable
+          label={translate('password.username')}
+          value={selectedCipher.login.username}
+          editable={false}
+        />
+      )}
+
+      <TextInput
+        animated
+        isPassword
+        isCopyable={selectedCipher.viewPassword}
+        label={translate('common.password')}
+        value={selectedCipher.login.password}
+        editable={false}
+      />
+
+      {selectedCipher.login.hasTotp && (
+        <>
+          <Text
+            size="base"
+            preset="label"
+            text={translate('password.2fa_setup')}
+            style={{ marginBottom: 4 }}
+          />
+
+          <View
+            style={{
+              marginBottom: 20,
+            }}
+          >
+            <PasswordOtp data={selectedCipher.login.totp} secure />
+          </View>
+        </>
+      )}
+
+      <PasswordStrength preset="text" value={passwordStrength.score} />
+
+      <TextInput
+        animated
+        label={translate('password.website_url')}
+        value={selectedCipher.login.uri}
+        editable={false}
+        RightAccessory={() => (
+          <Icon
+            icon="external-link"
+            size={20}
+            onPress={
+              !selectedCipher.login.uri
+                ? undefined
+                : () => {
+                  Linking.openURL(selectedCipher.login.uri).catch(() => {
+                    Linking.openURL('https://' + selectedCipher.login.uri)
+                  })
+                }
+            }
+            containerStyle={{
+              alignSelf: 'center',
+              paddingRight: 12
+            }}
           />
         )}
+      />
 
-        <TextInput
-          isPassword
-          isCopyable={selectedCipher.viewPassword}
-          label={translate('common.password')}
-          value={selectedCipher.login.password}
-          editable={false}
-          style={{ marginBottom: 20 }}
-        />
+      {!lockerMasterPassword && (
+        <>
+          <Textarea
+            label={translate('common.notes')}
+            value={selectedCipher.notes}
+            editable={false}
+            copyAble
+            style={{ marginTop: 12 }}
+          />
 
-        {selectedCipher.login.hasTotp && (
-          <>
-            <Text
-              size="base"
-              preset="label"
-              text={translate('password.2fa_setup')}
-              style={{ marginBottom: 4 }}
-            />
+          <CipherInfoCommon cipher={selectedCipher} />
+        </>
+      )}
 
-            <View
-              style={{
-                marginBottom: 20,
-              }}
-            >
-              <PasswordOtp data={selectedCipher.login.totp} secure />
-            </View>
-          </>
-        )}
-
-        <Text preset="label" size="base" text={translate('password.password_security')} />
-        <PasswordStrength preset="text" value={passwordStrength.score} />
-
-        <TextInput
-          label={translate('password.website_url')}
-          value={selectedCipher.login.uri}
-          editable={false}
-          style={{ marginVertical: 20 }}
-          RightAccessory={() => (
-            <Icon
-              icon="external-link"
-              size={16}
-              onPress={
-                !selectedCipher.login.uri
-                  ? undefined
-                  : () => {
-                      Linking.openURL(selectedCipher.login.uri).catch(() => {
-                        Linking.openURL('https://' + selectedCipher.login.uri)
-                      })
-                    }
-              }
-            />
-          )}
-        />
-
-        {!lockerMasterPassword && (
-          <>
-            <Textarea
-              label={translate('common.notes')}
-              value={selectedCipher.notes}
-              editable={false}
-              copyAble
-            />
-
-            <CipherInfoCommon cipher={selectedCipher} />
-          </>
-        )}
-
-        {lockerMasterPassword && (
-          <>
-            <Text
-              preset="label"
-              size="base"
-              text={translate('common.notes')}
-              style={{ marginBottom: 12 }}
-            />
-            <Text text={translate('password.master_password_note')} />
-          </>
-        )}
-      </View>
-      {/* Info end */}
+      {lockerMasterPassword && (
+        <>
+          <Text
+            preset="label"
+            size="base"
+            text={translate('common.notes')}
+            style={{ marginBottom: 12 }}
+          />
+          <Text text={translate('password.master_password_note')} />
+        </>
+      )}
     </Screen>
   )
 })

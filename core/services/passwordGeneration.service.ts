@@ -1,6 +1,4 @@
 // import zxcvbn from 'zxcvbn';
-const zxcvbn = require('zxcvbn')
-
 import { EncString } from '../models/domain/encString';
 import { GeneratedPasswordHistory } from '../models/domain/generatedPasswordHistory';
 import { PasswordGeneratorPolicyOptions } from '../models/domain/passwordGeneratorPolicyOptions';
@@ -16,6 +14,8 @@ import { StorageService } from '../abstractions/storage.service';
 import { EEFLongWordList } from '../misc/wordlist';
 
 import { PolicyType } from '../enums/policyType';
+
+const zxcvbn = require('zxcvbn')
 
 const DefaultOptions = {
     length: 14,

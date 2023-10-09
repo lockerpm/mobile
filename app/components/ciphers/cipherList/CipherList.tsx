@@ -1,3 +1,6 @@
+import orderBy from 'lodash/orderBy'
+import React, { useState, useEffect, useCallback } from 'react'
+import { View, FlatList, ActivityIndicator } from 'react-native'
 import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
@@ -6,11 +9,8 @@ import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { CipherAppView } from 'app/static/types'
 import { CipherType } from 'core/enums'
 import { CipherView } from 'core/models/view'
-import orderBy from 'lodash/orderBy'
-import React, { useState, useEffect, useCallback } from 'react'
-import { View, FlatList, ActivityIndicator } from 'react-native'
-import { CipherListItem } from './CipherListItem'
 
+import { CipherListItem } from './CipherListItem'
 import { Text } from '../../cores'
 import { PasswordAction } from 'app/screens/auth/browse/passwords/PasswordAction'
 import { CardAction } from 'app/screens/auth/browse/cards/CardAction'
@@ -18,6 +18,7 @@ import { IdentityAction } from 'app/screens/auth/browse/identities/IdentityActio
 import { NoteAction } from 'app/screens/auth/browse/notes/NoteAction'
 import { CryptoWalletAction } from 'app/screens/auth/browse/cryptoAsset/CryptoWalletAction'
 import { DeletedAction } from '../cipherAction/DeletedAction'
+import { observer } from 'mobx-react-lite'
 
 export interface CipherListProps {
   navigation: any
@@ -44,7 +45,9 @@ export interface CipherListProps {
 /**
  * Describe your component here
  */
-export const CipherList = (props: CipherListProps) => {
+export const CipherList = observer((props: CipherListProps) => {
+  const { cipherStore, user } = useStores()
+
   const {
     emptyContent,
     onLoadingChange,
@@ -65,7 +68,6 @@ export const CipherList = (props: CipherListProps) => {
   const { getTeam, notify } = useHelper()
   const { getCiphersFromCache } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
-  const { cipherStore, user } = useStores()
 
   // ------------------------ PARAMS ----------------------------
 
@@ -239,16 +241,18 @@ export const CipherList = (props: CipherListProps) => {
 
   // ------------------------ EFFECTS ----------------------------
 
-  useEffect(() => {
-    loadData()
-  }, [searchText, cipherStore.lastSync, cipherStore.lastCacheUpdate, sortList])
+  const lastSync = cipherStore.lastSync
+  const lastCacheUpdate = cipherStore.lastCacheUpdate
 
   useEffect(() => {
     if (searchText) setIsSearching(true)
     if (!searchText && isSearching) {
       setIsSearching(false)
     }
-  }, [searchText])
+
+    loadData()
+  }, [searchText, lastSync, lastCacheUpdate, sortList])
+
 
   useEffect(() => {
     if (checkedItem) {
@@ -295,8 +299,6 @@ export const CipherList = (props: CipherListProps) => {
   }
   return (
     <View style={{ flex: 1 }}>
-      {/* Action menus */}
-
       <PasswordAction
         isOpen={showPasswordAction}
         onClose={() => setShowPasswordAction(false)}
@@ -350,4 +352,4 @@ export const CipherList = (props: CipherListProps) => {
       />
     </View>
   )
-}
+})

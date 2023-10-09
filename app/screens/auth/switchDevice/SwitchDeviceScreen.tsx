@@ -2,10 +2,11 @@ import React, { FC } from 'react'
 import { View, Image } from 'react-native'
 import { AppStackScreenProps } from 'app/navigators'
 import { Text, Button, Screen } from 'app/components/cores'
+import { observer } from 'mobx-react-lite'
 
 const SWITCH = require('assets/images/switch-devices.png')
 
-export const SwitchDeviceScreen: FC<AppStackScreenProps<'switchDevice'>> = (props) => {
+export const SwitchDeviceScreen: FC<AppStackScreenProps<'switchDevice'>> = observer((props) => {
   const navigation = props.navigation
 
   // Methods
@@ -56,4 +57,4 @@ export const SwitchDeviceScreen: FC<AppStackScreenProps<'switchDevice'>> = (prop
       </View>
     </Screen>
   )
-}
+})

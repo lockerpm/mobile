@@ -1,6 +1,6 @@
 import countries from 'app/static/countries.json'
 import React, { useState, useEffect, useRef, useCallback, FC } from 'react'
-import { Linking, Platform, TouchableOpacity, View } from 'react-native'
+import { Linking, Platform, TouchableOpacity, View} from 'react-native'
 import { useStores } from 'app/models'
 import { RootStackScreenProps } from 'app/navigators'
 import { useHelper } from 'app/services/hook'
@@ -22,8 +22,9 @@ import { credentialCreationOptions, publicKeyCredentialWithAttestation } from 'a
 import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL } from 'app/config/constants'
 import { getCookies, logRegisterSuccessEvent } from 'app/utils/analytics'
 import { Logger } from 'app/utils/utils'
+import { observer } from 'mobx-react-lite'
 
-export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
+export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props) => {
   const navigation = props.navigation
   const { colors } = useTheme()
   const { user } = useStores()
@@ -62,7 +63,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
   }
 
   const navigateLogin = () => {
-    props.navigation.navigate('login')
+    props.navigation.replace('login')
   }
 
   const getCaptchaToken = useCallback(async () => {
@@ -86,7 +87,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
     if (res.kind === 'ok') {
       logRegisterSuccessEvent()
       notify('success', translate('signup.signup_successful'), 5000)
-      navigation.navigate('login')
+      navigation.replace('login')
     } else {
       notifyApiError(res)
     }
@@ -128,7 +129,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
         if (res.kind === 'ok') {
           logRegisterSuccessEvent()
           notify('success', translate('signup.signup_successful'), 5000)
-          navigation.navigate('login')
+          navigation.replace('login')
         } else {
           notifyApiError(res)
         }
@@ -311,7 +312,6 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
         {isPasskeySupported && (
           <Button
             preset="secondary"
-            loading={isLoading}
             disabled={isLoading || !email || !fullname || !agreed}
             text={translate('passkey.sign_up.signup_passkey')}
             onPress={() => {
@@ -344,7 +344,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = (props) => {
       </View>
     </Screen>
   )
-}
+})
 
 const TermAndConditions = ({
   agreed,

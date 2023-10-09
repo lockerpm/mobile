@@ -24,6 +24,7 @@ export abstract class CipherService {
     getAllDecryptedForGrouping: (groupingId: string, folder?: boolean) => Promise<CipherView[]>;
     getAllDecryptedForUrl: (url: string, includeOtherTypes?: CipherType[],
         defaultMatch?: UriMatchType) => Promise<CipherView[]>;
+
     getAllFromApiForOrganization: (organizationId: string) => Promise<CipherView[]>;
     getLastUsedForUrl: (url: string, autofillOnPageLoad: boolean) => Promise<CipherView>;
     getLastLaunchedForUrl: (url: string, autofillOnPageLoad: boolean) => Promise<CipherView>;
@@ -38,6 +39,7 @@ export abstract class CipherService {
     saveAttachmentWithServer: (cipher: Cipher, unencryptedFile: any, admin?: boolean) => Promise<Cipher>;
     saveAttachmentRawWithServer: (cipher: Cipher, filename: string, data: ArrayBuffer,
         admin?: boolean) => Promise<Cipher>;
+
     saveCollectionsWithServer: (cipher: Cipher) => Promise<any>;
     upsert: (cipher: CipherData | CipherData[]) => Promise<any>;
     replace: (ciphers: { [id: string]: CipherData; }) => Promise<any>;

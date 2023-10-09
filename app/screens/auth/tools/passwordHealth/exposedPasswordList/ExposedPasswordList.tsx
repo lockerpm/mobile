@@ -1,18 +1,18 @@
-import React from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { FlatList, View } from 'react-native'
-import { LoadingHeader } from '../LoadingHeader'
-import { ListItem } from '../reusePasswordList/ListItem'
-import { useStores } from 'app/models'
-import { useCipherHelper } from 'app/services/hook'
-import { BROWSE_ITEMS } from 'app/navigators'
-import { CipherView } from 'core/models/view'
-import { Header, Screen, Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
+import React from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { FlatList } from "react-native"
+import { LoadingHeader } from "../LoadingHeader"
+import { ListItem } from "../reusePasswordList/ListItem"
+import { useStores } from "app/models"
+import { useCipherHelper } from "app/services/hook"
+import { BROWSE_ITEMS } from "app/navigators"
+import { CipherView } from "core/models/view"
+import { Header, Screen, Text } from "app/components/cores"
+import { translate } from "app/i18n"
 
 export const ExposedPasswordList = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { toolStore, cipherStore } = useStores()
   const { getWebsiteLogo } = useCipherHelper()
 
@@ -40,7 +40,7 @@ export const ExposedPasswordList = observer(() => {
   // Go to detail
   const goToDetail = (item) => {
     cipherStore.setSelectedCipher(item)
-    navigation.navigate('passwords__info')
+    navigation.navigate("passwords__info")
   }
 
   // -------------- RENDER ------------------
@@ -52,35 +52,36 @@ export const ExposedPasswordList = observer(() => {
       header={
         <Header
           leftIcon="arrow-left"
-          title={translate('pass_health.exposed_passwords.name')}
+          title={translate("pass_health.exposed_passwords.name")}
           onLeftPress={() => navigation.goBack()}
         />
       }
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
-      <View style={{ flex: 1 }}>
-        <LoadingHeader />
+      <LoadingHeader />
 
-        <FlatList
-          style={{ paddingHorizontal: 20 }}
-          data={listData}
-          keyExtractor={(item) => item.id.toString()}
-          ListEmptyComponent={
-            <Text
-              text={translate('common.nothing_here')}
-              style={{
-                textAlign: 'center',
-                marginTop: 20,
-              }}
-            />
-          }
-          renderItem={renderItem}
-          getItemLayout={(data, index) => ({
-            length: 71,
-            offset: 71 * index,
-            index,
-          })}
-        />
-      </View>
+      <FlatList
+        style={{ paddingHorizontal: 20 }}
+        data={listData}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={
+          <Text
+            text={translate("common.nothing_here")}
+            style={{
+              textAlign: "center",
+              marginTop: 20,
+            }}
+          />
+        }
+        renderItem={renderItem}
+        getItemLayout={(data, index) => ({
+          length: 71,
+          offset: 71 * index,
+          index,
+        })}
+      />
     </Screen>
   )
 })

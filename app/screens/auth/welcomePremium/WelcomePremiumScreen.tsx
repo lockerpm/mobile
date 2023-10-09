@@ -5,12 +5,13 @@ import { Screen, Text, Button, Icon } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { AppStackScreenProps } from 'app/navigators'
 import { translate } from 'app/i18n'
+import { observer } from 'mobx-react-lite'
 
 const LOTTIE_JSON = require('app/static/welcome-premium-bg-lottie.json')
 const HIGH_FIVE = require('assets/images/welcomePremium/HighFive.png')
 const PREMIUM = require('assets/images/welcomePremium/LockerPremium.png')
 
-export const WelcomePremiumScreen: FC<AppStackScreenProps<'welcome_premium'>> = (props) => {
+export const WelcomePremiumScreen: FC<AppStackScreenProps<'welcome_premium'>> = observer((props) => {
   const navigation = props.navigation
   const { colors } = useTheme()
 
@@ -122,4 +123,4 @@ export const WelcomePremiumScreen: FC<AppStackScreenProps<'welcome_premium'>> = 
       />
     </Screen>
   )
-}
+})

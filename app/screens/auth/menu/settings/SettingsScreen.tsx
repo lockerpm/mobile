@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { Linking, Platform } from 'react-native'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import { useNavigation } from '@react-navigation/native'
-import { AppTimeoutType, TimeoutActionType, useStores } from 'app/models'
+import { useStores } from 'app/models'
 import { useCipherData, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
@@ -11,13 +11,14 @@ import { AutofillDataType, loadShared, saveShared } from 'app/utils/keychain'
 import { Header, Screen, Text, Toggle } from 'app/components/cores'
 import { SettingsItem, MenuItemContainer, Select } from 'app/components/utils'
 import { observer } from 'mobx-react-lite'
+import { AppTimeoutType, TimeoutActionType } from 'app/static/types'
 
 const IS_IOS = Platform.OS === 'ios'
 
 export const SettingsScreen = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { user, uiStore, cipherStore } = useStores()
-  const { colors } = useTheme()
+  const { colors, setIsDark } = useTheme()
   const { notify, isBiometricAvailable } = useHelper()
   const { startSyncProcess } = useCipherData()
 
@@ -64,6 +65,7 @@ export const SettingsScreen = observer(() => {
 
   const syncDataManually = async () => {
     const res = await startSyncProcess(Date.now())
+    // @ts-ignore
     if (res.kind === 'ok') {
       notify('success', translate('success.sync_success'))
     }
@@ -119,6 +121,7 @@ export const SettingsScreen = observer(() => {
       value: uiStore.isDark ? 'dark' : 'light',
       onChange: (theme: string) => {
         uiStore.setIsDark(theme === 'dark')
+        setIsDark(theme === 'dark')
       },
       options: [
         {

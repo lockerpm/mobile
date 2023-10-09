@@ -10,8 +10,9 @@ import { CipherType } from 'core/enums'
 import { translate } from 'app/i18n'
 import { Logger } from 'app/utils/utils'
 import { Header, Screen } from 'app/components/cores'
+import { observer } from 'mobx-react-lite'
 
-export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = (props) => {
+export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
@@ -133,4 +134,4 @@ export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = (props) => 
       <QRCodeScanner onRead={onSuccess} />
     </Screen>
   )
-}
+})

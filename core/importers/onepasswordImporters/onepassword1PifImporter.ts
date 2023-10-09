@@ -93,7 +93,7 @@ export class OnePassword1PifImporter extends BaseImporter implements Importer {
   }
 
   private processStandardItem(item: any, cipher: CipherView) {
-    cipher.favorite = item.openContents && item.openContents.faveIndex ? true : false
+    cipher.favorite = !!(item.openContents && item.openContents.faveIndex)
 
     // CS
     if (item.openContents) {

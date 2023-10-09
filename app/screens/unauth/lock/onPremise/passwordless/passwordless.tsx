@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const OnPremiseLockByPasswordless = ({ handleLogout, biometryType }: Props) => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { user } = useStores()
   const { biometricLogin } = useAuthentication()
   const { cryptoService } = useCoreService()
@@ -57,7 +57,6 @@ export const OnPremiseLockByPasswordless = ({ handleLogout, biometryType }: Prop
   }, [])
 
   return (
-    <Screen safeAreaEdges={['top']}>
       <ScrollView
         horizontal
         pagingEnabled
@@ -86,6 +85,5 @@ export const OnPremiseLockByPasswordless = ({ handleLogout, biometryType }: Prop
           index={scanQrStep}
         />
       </ScrollView>
-    </Screen>
   )
 }

@@ -40,25 +40,16 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
 
     return (
       <Screen
-        backgroundColor={colors.block}
+        preset='auto'
+        padding
+        safeAreaEdges={['bottom']}
         header={
-          !fromQuickShare && (
-            <Header
-              leftIcon="arrow-left"
-              onLeftPress={() => navigation.goBack()}
-              RightActionComponent={
-                <Icon
-                  icon="dots-three"
-                  size={24}
-                  style={{
-                    alignItems: 'center',
-                    paddingLeft: 20,
-                  }}
-                  onPress={() => setShowAction(true)}
-                />
-              }
-            />
-          )
+          <Header
+            leftIcon="arrow-left"
+            onLeftPress={() => navigation.goBack()}
+            rightIcon={!fromQuickShare ? 'dots-three' : undefined}
+            onRightPress={() => setShowAction(true)}
+          />
         }
       >
         {/* Actions */}
@@ -77,212 +68,187 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
           />
         )}
 
-        <View>
-          <View
+        {selectedApp ? (
+          <Image
+            source={selectedApp.logo}
             style={{
-              flex: 1,
-              backgroundColor: colors.background,
-              paddingTop: 20,
-              paddingBottom: 30,
-              marginBottom: 10,
+              height: 55,
+              width: 55,
+              borderRadius: 8,
+              alignSelf: 'center'
             }}
-          >
-            {selectedApp ? (
-              <Image
-                source={selectedApp.logo}
-                style={{
-                  height: 55,
-                  width: 55,
-                  borderRadius: 8,
-                }}
-              />
-            ) : (
-              <Image
-                source={BROWSE_ITEMS.crypto.icon}
-                style={{ height: 55, width: 55, marginBottom: 5 }}
-              />
-            )}
-            <Text
-              preset="bold"
-              size="xl"
-              style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
-            >
-              {selectedCipher.name}
-              {notSync && (
-                <View style={{ paddingLeft: 10 }}>
-                  <Icon icon="wifi-slash" size={22} />
-                </View>
-              )}
-            </Text>
-          </View>
-        </View>
-
-        {/* Info */}
-        <View
-          style={{
-            backgroundColor: colors.background,
-            paddingVertical: 22,
-            padding: 16,
-          }}
+          />
+        ) : (
+          <Image
+            source={BROWSE_ITEMS.cryptoWallet.icon}
+            style={{ height: 55, width: 55, alignSelf: 'center' }}
+          />
+        )}
+        <Text
+          preset="bold"
+          size="xxl"
+          style={{ margin: 20, textAlign: 'center' }}
         >
-          {/* App */}
-          <View>
-            <Text
-              preset="label"
-              size="base"
-              text={translate('crypto_asset.wallet_app')}
-              style={{ marginBottom: 5 }}
-            />
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {!!selectedApp && (
-                <View
+          {selectedCipher.name}
+          {notSync && (
+            <View style={{ paddingLeft: 10 }}>
+              <Icon icon="wifi-slash" size={22} />
+            </View>
+          )}
+        </Text>
+
+        <View>
+          <Text
+            preset="label"
+            size="base"
+            text={translate('crypto_asset.wallet_app')}
+            style={{ marginBottom: 5 }}
+          />
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+            {selectedApp ? (
+              <View
+                style={{
+                  borderRadius: 20,
+                  overflow: 'hidden',
+                  marginRight: 10,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
+                <Image
+                  source={selectedApp?.logo || otherApp.logo}
+                  borderRadius={20}
                   style={{
                     borderRadius: 20,
-                    overflow: 'hidden',
-                    marginRight: 10,
-                    borderWidth: 1,
-                    borderColor: colors.border,
+                    height: 40,
+                    width: 40,
+                    backgroundColor: colors.white,
                   }}
-                >
-                  <Image
-                    source={selectedApp?.logo || otherApp.logo}
-                    borderRadius={20}
+                />
+              </View>
+            ) : <Text text={cryptoWalletData.walletApp?.name || translate('common.none')} />}
+
+          </View>
+        </View>
+
+        {/* Username */}
+        <TextInput
+          isCopyable
+          animated
+          label={translate('common.username')}
+          value={cryptoWalletData.username}
+          editable={false}
+        />
+
+        {/* Password */}
+        <TextInput
+          isPassword
+          isCopyable
+          animated
+          label={translate('common.password')}
+          value={cryptoWalletData.password}
+          editable={false}
+        />
+
+        <TextInput
+          isPassword
+          animated
+          isCopyable
+          label={'PIN'}
+          value={cryptoWalletData.pin}
+          editable={false}
+        />
+
+        {/* Address */}
+        <TextInput
+          isCopyable
+          animated
+          label={translate('crypto_asset.wallet_address')}
+          value={cryptoWalletData.address}
+          editable={false}
+        />
+
+        {/* Private key */}
+        <TextInput
+          isPassword
+          isCopyable
+          animated
+          label={translate('crypto_asset.private_key')}
+          value={cryptoWalletData.privateKey}
+          editable={false}
+        />
+
+        {/* Seed */}
+        <SeedPhraseInfo seed={cryptoWalletData.seed} />
+
+        {/* Networks */}
+        <View style={{ marginTop: 20 }}>
+          <Text
+            preset="label"
+            size="base"
+            text={translate('crypto_asset.wallet_app')}
+            style={{ marginBottom: 5 }}
+          />
+          <View
+            style={{
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            {cryptoWalletData.networks.length ? (
+              cryptoWalletData.networks.map((item) => {
+                const selectedChain = CHAIN_LIST.find((c) => c.alias === item.alias)
+                return (
+                  <View
+                    key={item.alias}
                     style={{
-                      borderRadius: 20,
-                      height: 40,
-                      width: 40,
-                      backgroundColor: colors.white,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginRight: 12,
+                      marginVertical: 2,
                     }}
-                  />
-                </View>
-              )}
-              <Text text={cryptoWalletData.walletApp?.name || translate('common.none')} />
-            </View>
-          </View>
-
-          {/* Username */}
-          <TextInput
-            isCopyable
-            label={translate('common.username')}
-            value={cryptoWalletData.username}
-            editable={false}
-            style={{ marginTop: 20 }}
-          />
-
-          {/* Password */}
-          <TextInput
-            isPassword
-            isCopyable
-            label={translate('common.password')}
-            value={cryptoWalletData.password}
-            editable={false}
-            style={{ marginTop: 20 }}
-          />
-
-          <TextInput
-            isPassword
-            isCopyable
-            label={'PIN'}
-            value={cryptoWalletData.pin}
-            editable={false}
-            style={{ marginTop: 20 }}
-          />
-
-          {/* Address */}
-          <TextInput
-            isCopyable
-            label={translate('crypto_asset.wallet_address')}
-            value={cryptoWalletData.address}
-            editable={false}
-            style={{ marginTop: 20 }}
-          />
-
-          {/* Private key */}
-          <TextInput
-            isPassword
-            isCopyable
-            label={translate('crypto_asset.private_key')}
-            value={cryptoWalletData.privateKey}
-            editable={false}
-            style={{ marginTop: 20 }}
-          />
-
-          {/* Seed */}
-          <View style={{ marginTop: 30 }}>
-            <SeedPhraseInfo seed={cryptoWalletData.seed} />
-          </View>
-
-          {/* Networks */}
-          <View style={{ marginTop: 20 }}>
-            <Text
-              preset="label"
-              size="base"
-              text={translate('crypto_asset.wallet_app')}
-              style={{ marginBottom: 5 }}
-            />
-            <View
-              style={{
-                flexWrap: 'wrap',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              {cryptoWalletData.networks.length ? (
-                cryptoWalletData.networks.map((item) => {
-                  const selectedChain = CHAIN_LIST.find((c) => c.alias === item.alias)
-                  return (
+                  >
                     <View
-                      key={item.alias}
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginRight: 12,
-                        marginVertical: 2,
+                        borderRadius: 20,
+                        overflow: 'hidden',
+                        marginRight: 10,
+                        borderWidth: 1,
+                        borderColor: colors.border,
                       }}
                     >
-                      <View
+                      <Image
+                        source={selectedChain?.logo || otherChain.logo}
+                        borderRadius={20}
                         style={{
                           borderRadius: 20,
-                          overflow: 'hidden',
-                          marginRight: 10,
-                          borderWidth: 1,
-                          borderColor: colors.border,
+                          height: 40,
+                          width: 40,
+                          backgroundColor: colors.white,
                         }}
-                      >
-                        <Image
-                          source={selectedChain?.logo || otherChain.logo}
-                          borderRadius={20}
-                          style={{
-                            borderRadius: 20,
-                            height: 40,
-                            width: 40,
-                            backgroundColor: colors.white,
-                          }}
-                        />
-                      </View>
-
-                      <Text text={item.name} />
+                      />
                     </View>
-                  )
-                })
-              ) : (
-                <Text text={translate('common.none')} />
-              )}
-            </View>
+
+                    <Text text={item.name} />
+                  </View>
+                )
+              })
+            ) : (
+              <Text text={translate('common.none')} />
+            )}
           </View>
-
-          {/* Notes */}
-          <Textarea
-            label={translate('common.notes')}
-            value={cryptoWalletData.notes}
-            editable={false}
-            copyAble
-            style={{ marginTop: 20 }}
-          />
-
-          {/* Others common info */}
-          <CipherInfoCommon cipher={selectedCipher} />
         </View>
+
+        <Textarea
+          label={translate('common.notes')}
+          value={cryptoWalletData.notes}
+          editable={false}
+          copyAble
+          style={{ marginTop: 20 }}
+        />
+
+        <CipherInfoCommon cipher={selectedCipher} />
       </Screen>
     )
   }

@@ -175,9 +175,6 @@ const RootStack = observer((props: Props) => {
   // Dynamic links background handler
   useEffect(() => {
     AppState.addEventListener('change', _handleAppStateChange)
-    return () => {
-      AppState.removeEventListener('change', _handleAppStateChange)
-    }
   }, [])
 
   // Clear user data on signal
@@ -271,7 +268,7 @@ const RootStack = observer((props: Props) => {
 })
 
 export const RootNavigator = React.forwardRef<
-  NavigationContainerRef,
+  NavigationContainerRef<any>,
   Partial<React.ComponentProps<typeof NavigationContainer>>
 >((props, ref) => {
   // Toast

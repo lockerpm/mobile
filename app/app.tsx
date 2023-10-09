@@ -1,54 +1,47 @@
-/**
- * Welcome to the main entry point of the app. In this file, we'll
- * be kicking off our app.
- *
- * Most of this file is boilerplate and you shouldn't need to modify
- * it very often. But take some time to look through and understand
- * what is going on here.
- *
- * The app navigation resides in ./app/navigators, so head over there
- * if you're interested in adding screens and navigators.
- */
-import './i18n'
-import './utils/ignoreWarnings'
-import React, { useState, useEffect, useRef } from 'react'
-import { NavigationContainerRef } from '@react-navigation/native'
-import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context'
-import SplashScreen from 'react-native-splash-screen'
-import * as storage from './utils/storage'
+/* eslint-disable import/first */
+if (__DEV__) {
+  // Load Reactotron configuration in development. We don't want to
+  // include this in our production bundle, so we are using `if (__DEV__)`
+  // to only execute this in development.
+  require("./devtools/ReactotronConfig.ts")
+}
+import "./i18n"
+import "./utils/ignoreWarnings"
+import React, { useRef } from "react"
+import { NavigationContainerRef } from "@react-navigation/native"
+import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
+import { useInitialRootStore } from "./models"
 import {
   useBackButtonHandler,
   RootNavigator,
   canExit,
   setRootNavigation,
   useNavigationPersistence,
-} from './navigators'
-import { RootStore, RootStoreProvider, setupRootStore } from './models'
-import * as Tracking from './utils/tracking'
-import * as Sentry from '@sentry/react-native'
+} from "./navigators"
+import * as storage from "./utils/storage"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { StyleSheet } from "react-native"
+import * as Tracking from "./utils/tracking"
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
-import { enableScreens } from 'react-native-screens'
-
-// Custom extras
-import { ApiResponse } from 'apisauce'
-import { getGeneralApiProblem } from './services/api/apiProblem'
-import { Settings } from 'react-native-fbsdk-next'
-import { Logger } from 'app/utils/utils'
-import { IS_PROD } from './config/constants'
-import { AppEventType, EventBus } from './utils/eventBus'
-import { api } from './services/api'
-import { autofillParserAndroid } from './utils/autofillHelper'
-import { ThemeContextProvider } from './services/context/useTheme'
-import CombineContext from './services/context/useCombineContext'
+import { enableScreens } from "react-native-screens"
+import { ApiResponse } from "apisauce"
+import { getGeneralApiProblem } from "./services/api/apiProblem"
+import { Settings } from "react-native-fbsdk-next"
+import { Logger } from "app/utils/utils"
+import { AppEventType, EventBus } from "./utils/eventBus"
+import { api } from "./services/api"
+import { autofillParserAndroid } from "./utils/autofillHelper"
+import { ThemeContextProvider } from "./services/context/useTheme"
+import CombineContext from "./services/context/useCombineContext"
 
 enableScreens()
 Settings.initializeSDK()
 Tracking.initSentry()
 Tracking.initAppFlyer()
 
-export const NAVIGATION_PERSISTENCE_KEY = 'NAVIGATION_STATE'
+export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 export type RootProp = {
   lastFill?: number
@@ -58,35 +51,36 @@ export type RootProp = {
   lastUserPasswordID?: string
   username?: string
   password?: string
+  hideSplashScreen?: () => Promise<void>
 }
 
-/**
- * This is the root component of our app.
- */
 function App(props: RootProp) {
-  const navigationRef = useRef<NavigationContainerRef>(null)
-  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
+  const { hideSplashScreen } = props
 
+  const navigationRef = useRef<NavigationContainerRef<any>>(null)
   setRootNavigation(navigationRef)
   useBackButtonHandler(navigationRef, canExit)
   const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
     storage,
-    NAVIGATION_PERSISTENCE_KEY
+    NAVIGATION_PERSISTENCE_KEY,
   )
+  const { rehydrated, rootStore } = useInitialRootStore(() => {
+    // This runs after the root store has been initialized and rehydrated.
 
-  // Kick off initial async loading actions, like loading fonts and RootStore
-  useEffect(() => {
-    ;(async () => {
-      setupRootStore().then(setRootStore)
-      SplashScreen.hide()
-    })()
-  }, [])
+    // If your initialization scripts run very fast, it's good to show the splash screen for just a bit longer to prevent flicker.
+    // Slightly delaying splash screen hiding for better UX; can be customized or removed as needed,
+    // Note: (vanilla Android) The splash-screen will not appear if you launch your app via the terminal or Android Studio. Kill the app and launch it normally by tapping on the launcher icon. https://stackoverflow.com/a/69831106
+    // Note: (vanilla iOS) You might notice the splash-screen logo change size. This happens in debug/development mode. Try building the app for release.
+    setTimeout(hideSplashScreen, 500)
+  })
 
   // Before we show the app, we have to wait for our state to be ready.
   // In the meantime, don't render anything. This will be the background
-  // color set in native by rootView's background color. You can replace
-  // with your own loading component if you wish.
-  if (!rootStore) return null
+  // color set in native by rootView's background color.
+  // In iOS: application:didFinishLaunchingWithOptions:
+  // In Android: https://stackoverflow.com/a/45838109/204044
+  // You can replace with your own loading component if you wish.
+  if (!rehydrated) return null
 
   // Set up API listener
   const monitorApiResponse = (response: ApiResponse<any>) => {
@@ -94,16 +88,15 @@ function App(props: RootProp) {
 
     if (problem) {
       Logger.debug(
-        `URL:${response.config.baseURL}${response.config.url} - Status: ${
-          response.status
-        } - Message: ${JSON.stringify(response.data)}`
+        `URL:${response.config.baseURL}${response.config.url} - Status: ${response.status
+        } - Message: ${JSON.stringify(response.data)}`,
       )
     }
 
     if (problem) {
-      if (problem.kind === 'unauthorized') {
-        const ignoredUrls = ['/users/logout', '/sso/auth']
-        const ignoredRoute = ['init', 'intro', 'onBoarding', 'login', 'forgotPassword', 'signup']
+      if (problem.kind === "unauthorized") {
+        const ignoredUrls = ["/users/logout", "/sso/auth"]
+        const ignoredRoute = ["init", "intro", "onBoarding", "login", "forgotPassword", "signup"]
         const currentRoute = navigationRef.current.getCurrentRoute()
 
         if (
@@ -121,7 +114,7 @@ function App(props: RootProp) {
           // Close all modals before navigate
           EventBus.emit(AppEventType.CLOSE_ALL_MODALS, null)
           if (navigationRef.current) {
-            navigationRef.current.navigate('init')
+            navigationRef.current.navigate("init")
           }
         }
       }
@@ -129,25 +122,25 @@ function App(props: RootProp) {
   }
   const monitorApiRequest = (request) => async () => {
     Logger.debug(
-      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
-        request.params ? JSON.stringify(request.params) : ''
-      }`
+      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${request.params ? JSON.stringify(request.params) : ""
+      }`,
     )
   }
 
-  // api.apisauce.addMonitor(monitorApiResponse)
-  // api.apisauce.addAsyncRequestTransform(monitorApiRequest)
+
+  api.apisauce.addMonitor(monitorApiResponse)
+  api.apisauce.addAsyncRequestTransform(monitorApiRequest)
 
   // if app start from android autofill service. navigate to autofill screen
   autofillParserAndroid(props)
 
   // otherwise, we're ready to render the app
   return (
-    <RootStoreProvider value={rootStore}>
+    <GestureHandlerRootView style={$style.container}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <CombineContext
           childProps={{
-            navigationRef: navigationRef,
+            navigationRef,
           }}
           components={[ThemeContextProvider]}
         >
@@ -158,8 +151,14 @@ function App(props: RootProp) {
           />
         </CombineContext>
       </SafeAreaProvider>
-    </RootStoreProvider>
+    </GestureHandlerRootView>
   )
 }
 
-export default __DEV__ && !IS_PROD ? App : Sentry.wrap(App)
+const $style = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+})
+
+export default App

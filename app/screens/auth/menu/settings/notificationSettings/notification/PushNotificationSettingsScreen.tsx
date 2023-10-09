@@ -7,8 +7,8 @@ import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { NotificationCategory } from 'app/static/types'
 import { Screen, Header, Toggle } from 'app/components/cores'
-import { translate } from 'i18n-js'
 import { MenuItemContainer, SettingsItem } from 'app/components/utils'
+import { translate } from 'app/i18n'
 
 export const PushNotificationSettingsScreen = observer(() => {
   const navigation = useNavigation()

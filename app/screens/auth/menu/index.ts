@@ -1,16 +1,16 @@
 export * from './menu/MenuScreen'
-export * from './settings/SettingsScreen'
-export * from './settings/notificationSettings'
-export * from './changeMasterPassword/ChangeMasterPasswordScreen'
-export * from './export/ExportScreen'
 export * from './help/HelpScreen'
-export * from './import/ImportScreen'
-export * from './managePlan/ManagePlanScreen'
-export * from './managePlan/PremiumFeature'
-export * from './inviteMember/InviteMemberScreen'
-export * from './referFriend/ReferFriendScreen'
-
-export * from './settings/emergencyAccess'
-export * from './managePlan/payment/PaymentScreen'
+export * from './settings/SettingsScreen'
+export * from './changeMasterPassword/ChangeMasterPasswordScreen'
+export * from './settings/notificationSettings'
 // @ts-ignore
 export * from './autofillService/AutofillServiceScreen'
+export * from './settings/emergencyAccess'
+export * from './export/ExportScreen'
+export * from './import/ImportScreen'
+export * from './managePlan/ManagePlanScreen'
+export * from './referFriend/ReferFriendScreen'
+export * from './managePlan/payment/PaymentScreen'
+export * from './inviteMember/InviteMemberScreen'
+
+

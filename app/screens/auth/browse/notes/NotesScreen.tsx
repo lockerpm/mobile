@@ -18,7 +18,7 @@ import { CipherType } from 'core/enums'
 const EMPTY_LIST = require('assets/images/emptyCipherList/note-empty-img.png')
 
 export const NotesScreen = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -68,8 +68,8 @@ export const NotesScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={['bottom']}
-      preset="auto"
+      safeAreaEdges={['top']}
+      preset="fixed"
       header={
         <CipherListHeader
           header={translate('common.note')}
@@ -95,6 +95,9 @@ export const NotesScreen = observer(() => {
           }}
         />
       }
+      contentContainerStyle={{
+        flex: 1
+      }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}

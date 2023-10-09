@@ -6,13 +6,14 @@ import { AppStackScreenProps } from 'app/navigators'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { translate } from 'app/i18n'
+import { observer } from 'mobx-react-lite'
 
 const ASSETS = {
   user: require('assets/images/intro/user.png'),
   org: require('assets/images/intro/organization.png'),
 }
 
-export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'>> = (props) => {
+export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'>> = observer((props) => {
   const navigation = props.navigation
   const { enterpriseStore, user } = useStores()
   const { colors } = useTheme()
@@ -131,7 +132,7 @@ export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'
       </View>
     </Screen>
   )
-}
+})
 
 interface ItemProp {
   leftBorderColor: ColorValue

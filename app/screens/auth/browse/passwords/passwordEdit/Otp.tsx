@@ -67,7 +67,9 @@ export const PasswordOtp = (props: Prop) => {
             onComplete={() => {
               // index === 0 && updateOtp()
               setOtp(getTOTP(otpData))
-              return [true, 0]
+              return {
+                shouldRepeat: true
+              }
             }}
             size={20}
             isPlaying

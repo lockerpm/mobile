@@ -4,8 +4,9 @@ import { RootStackScreenProps } from 'app/navigators'
 import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
 import { Button, Screen, Text, Logo } from 'app/components/cores'
+import { observer } from 'mobx-react-lite'
 
-export const OnboardingScreen: FC<RootStackScreenProps<'onBoarding'>> = (props) => {
+export const OnboardingScreen: FC<RootStackScreenProps<'onBoarding'>> = observer((props) => {
   const { colors, isDark } = useTheme()
 
   const navigateLogin = () => {
@@ -63,4 +64,4 @@ export const OnboardingScreen: FC<RootStackScreenProps<'onBoarding'>> = (props) 
       <Text text={translate('onBoarding.title')} preset="bold" />
     </Screen>
   )
-}
+})

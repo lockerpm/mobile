@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { user } = useStores()
   const { biometricLogin } = useAuthentication()
   const { cryptoService } = useCoreService()
@@ -58,7 +58,6 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
   }, [])
 
   return (
-    <Screen safeAreaEdges={['top']}>
       <ScrollView
         horizontal
         pagingEnabled
@@ -76,6 +75,7 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
             scrollTo(1)
           }}
           goBack={() => {
+            handleLogout()
             navigation.goBack()
           }}
         />
@@ -87,6 +87,5 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
           index={scanQrStep}
         />
       </ScrollView>
-    </Screen>
   )
 }

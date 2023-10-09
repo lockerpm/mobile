@@ -2,7 +2,7 @@ import moment from 'moment'
 import React, { useState, useEffect } from 'react'
 import { View, TextStyle, Dimensions } from 'react-native'
 import Intercom, { IntercomEvents } from '@intercom/intercom-react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, CommonActions } from '@react-navigation/native'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { useAuthentication, useHelper } from 'app/services/hook'
@@ -10,12 +10,13 @@ import { PlanType } from 'app/static/types'
 import { translate } from 'app/i18n'
 import { Screen, Text, TabHeader } from 'app/components/cores'
 import { MenuItem, MenuItemContainer, MenuItemProps } from 'app/components/utils'
-import { Invitation, InvitationData } from './Invitation'
 import { getVersion } from 'react-native-device-info'
 import { ReferFriendMenuItem } from './ReferFriendMenuItem'
+import { observer } from 'mobx-react-lite'
 
-export const MenuScreen = () => {
-  const navigation = useNavigation()
+
+export const MenuScreen = observer(() => {
+  const navigation = useNavigation() as any
   const { user } = useStores()
   const { colors } = useTheme()
   const { notifyApiError } = useHelper()
@@ -117,7 +118,17 @@ export const MenuScreen = () => {
       name: translate('common.logout'),
       onPress: async () => {
         await logout()
-        navigation.navigate('login')
+        navigation.dispatch(state => {
+          // Remove the home route from the stack
+          const routes = state.routes.filter(r => r.name === 'init');
+        
+          return CommonActions.reset({
+            ...state,
+            routes,
+            index: routes.length - 1,
+          });
+        });
+
       },
     },
   ]
@@ -161,7 +172,6 @@ export const MenuScreen = () => {
       ),
     },
   }
-
   // -------------- RENDER --------------------
 
   return (
@@ -224,9 +234,6 @@ export const MenuScreen = () => {
         />
       </MenuItemContainer>
 
-      {user.invitations.map((item: InvitationData) => (
-        <Invitation key={item.id} {...item} />
-      ))}
 
       <MenuItemContainer>
         {items.map((item, index) => (
@@ -238,7 +245,7 @@ export const MenuScreen = () => {
         <ReferFriendMenuItem
           onPress={() =>
             navigation.navigate('refer_friend', {
-              referLink: referLink,
+              referLink,
             })
           }
         />
@@ -301,7 +308,7 @@ export const MenuScreen = () => {
       </Text>
     </Screen>
   )
-}
+})
 
 const $planName: TextStyle = {
   fontSize: 14,

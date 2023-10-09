@@ -43,7 +43,7 @@ export const HomeHeader = (props: Props) => {
   const { colors, isDark } = useTheme()
   const { notifyApiError } = useHelper()
   const { toTrashCiphers } = useCipherData()
-  const { user, uiStore, toolStore } = useStores()
+  const { user, uiStore } = useStores()
 
   // ----------------------- PARAMS ------------------------
 
@@ -59,7 +59,7 @@ export const HomeHeader = (props: Props) => {
 
   const fetchInAppNotification = async () => {
     if (navigation.isFocused()) {
-      const res = await toolStore.fetchInAppNoti()
+      const res = await user.fetchInAppNoti()
       if (res.kind === 'ok') {
         setNotifications(res.data)
       } else {

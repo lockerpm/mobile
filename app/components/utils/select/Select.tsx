@@ -1,11 +1,12 @@
 import * as React from "react"
 import Picker from "react-native-ui-lib/picker"
 import { StyleProp, View, ViewStyle } from "react-native"
-import { PickerItemProps } from "react-native-ui-lib/typings"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useTheme } from "app/services/context"
 import { translate } from "app/i18n"
 import { SearchBar } from "../searchBar/SearchBar"
+import { PickerItemProps, PickerModes, PickerValue } from "react-native-ui-lib"
+import { ValueType } from "react-native-dropdown-picker"
 
 
 type Option = {
@@ -14,6 +15,7 @@ type Option = {
   disabled?: boolean
 }
 
+// TODO TS error after upgrade
 export interface SelectProps {
   style?: StyleProp<ViewStyle>
   value: any | any[]
@@ -57,12 +59,13 @@ export const Select = (props: SelectProps) => {
         color: colors.title
       }, style]}
       value={value}
-      mode={multiple ? 'MULTI' : 'SINGLE'}
+      mode={multiple ? PickerModes.MULTI : PickerModes.SINGLE}
       onChange={multiple
-        ? (values: any[]) => onChange(values)
-        : (item: Option) => onChange(item.value)
+        ? (values: PickerValue) => onChange(values)
+        : (item: PickerValue) => onChange(item)
       }
-      renderPicker={floating ? undefined : (value: string | number | null) => {
+      // @ts-ignore
+      renderPicker={floating ? undefined : (value: ValueType) => {
         return renderSelected(options.find((item: Option) => item.value === value) || defaultOption)
       }}
       floatingPlaceholder={floating}
@@ -104,7 +107,10 @@ export const Select = (props: SelectProps) => {
       listProps={{
         style: {
           backgroundColor: colors.background,
-          marginBottom: insets.bottom
+          paddingBottom: insets.bottom
+        },
+        contentContainerStyle: {
+          paddingBottom: "10%"
         }
       }}
       renderCustomSearch={({ onSearchChange }) => (

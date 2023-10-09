@@ -98,6 +98,7 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<'folders__ciphers'>> = 
     // Render
     return (
       <Screen
+        safeAreaEdges={['bottom', 'top']}
         header={
           <CipherListHeader
             header={folder?.name || translate('folder.unassigned')}
@@ -125,6 +126,9 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<'folders__ciphers'>> = 
             }}
           />
         }
+        contentContainerStyle={{
+          flex: 1
+        }}
       >
         <SortActionConfigModal
           isOpen={isSortOpen}

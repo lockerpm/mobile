@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { View, Dimensions, StyleProp, ViewStyle } from 'react-native'
-import Svg, { Color, Path } from 'react-native-svg'
+import { View, Dimensions, StyleProp, ViewStyle, ColorValue } from 'react-native'
+import Svg, {  Path } from 'react-native-svg'
 import Animated, {
   useAnimatedProps,
   useDerivedValue,
@@ -16,7 +16,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path)
 
 interface Props {
   style?: StyleProp<ViewStyle>
-  color: Color
+  color: ColorValue
 }
 
 export const Wave = ({ style, color }: Props) => {

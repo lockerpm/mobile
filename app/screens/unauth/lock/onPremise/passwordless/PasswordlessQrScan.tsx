@@ -14,7 +14,7 @@ interface Props {
 
 export const PasswordlessQrScan = ({ otp, goBack, index }: Props) => {
   const { width, height } = Dimensions.get('screen')
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const [onScanQR, setonScanQR] = useState(false)
   const { sessionQrLogin } = useAuthentication()
 

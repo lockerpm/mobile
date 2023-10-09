@@ -3,54 +3,48 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* CyStackLockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CyStackLockerTests.m */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+		00E356F31AD99517003FC87E /* LockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* LockerTests.m */; };
+		0C80B921A6F3F58F76C31292 /* libPods-Locker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-Locker.a */; };
+		0D0A772BA7EA41E69827AAFD /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDA292A6578B43FF8E1FF3E5 /* Inter-Regular.ttf */; };
+		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2DC4AA92A1AB7A3C653EB7CF /* libPods-Locker-LockerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00DA503449115127D317DC02 /* libPods-Locker-LockerTests.a */; };
-		2DCD954D1E0B4F2C00145EB5 /* CyStackLockerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CyStackLockerTests.m */; };
-		6EB1BF80341B4A4BBED238A4 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 701E1A13FA3E4CEBB99F9FCF /* Inter-SemiBold.ttf */; };
-		7C306D7D27B4B5A600F64944 /* AutofillHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */; };
-		7C306DB127B6467900F64944 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C306DB027B6467900F64944 /* Colors.xcassets */; };
-		7C575E432A984E9200DE0C42 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
-		7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B7BD2758CD2B005D0D8E /* assets.xcassets */; };
-		7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */; };
-		7C748AFF280EC58200424E43 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C748AFE280EC58100424E43 /* Config.xcconfig */; };
-		7C7A47382A2DE8040002FCAD /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = 7C7A47372A2DE8040002FCAD /* SwiftOTP */; };
-		7C8496E027B7759200CFEA8B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496E227B7759200CFEA8B /* MainInterface.storyboard */; };
-		7C8496E627B7765C00CFEA8B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C8496E527B7765C00CFEA8B /* Localizable.strings */; };
-		7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A609C27A38D5D00477348 /* FormFieldView.swift */; };
-		7CA1D4A827F2E3EC009E2A6E /* RCTCryptoServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4A727F2E3EC009E2A6E /* RCTCryptoServiceIos.m */; };
-		7CA1D4A927F2E3EC009E2A6E /* RCTCryptoServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4A727F2E3EC009E2A6E /* RCTCryptoServiceIos.m */; };
-		7CA1D4AC27F2E408009E2A6E /* RNCryptoServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4AB27F2E408009E2A6E /* RNCryptoServiceIos.swift */; };
-		7CA1D4AD27F2E408009E2A6E /* RNCryptoServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4AB27F2E408009E2A6E /* RNCryptoServiceIos.swift */; };
-		7CA1D4AF27F2E424009E2A6E /* RSAUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4AE27F2E424009E2A6E /* RSAUtils.swift */; };
-		7CA1D4B027F2E424009E2A6E /* RSAUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1D4AE27F2E424009E2A6E /* RSAUtils.swift */; };
-		7CAB332C279972020000B15E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332B279972020000B15E /* Utils.swift */; };
-		7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332D2799777B0000B15E /* AutofillData.swift */; };
-		7CAB3330279979650000B15E /* AutofillDataKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB332F279979650000B15E /* AutofillDataKeychain.swift */; };
-		7CAB3332279A548A0000B15E /* CredentialProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3331279A548A0000B15E /* CredentialProviderController.swift */; };
-		7CAB3334279A6AD70000B15E /* VerifyMasterPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */; };
-		7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB3335279AA04E0000B15E /* LoginListViewController.swift */; };
-		7CADBA04281A5E6600353A83 /* RCTAutofillServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CADBA03281A5E6600353A83 /* RCTAutofillServiceIos.m */; };
-		7CADBA06281A5E8A00353A83 /* RNAutofillServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CADBA05281A5E8A00353A83 /* RNAutofillServiceIos.swift */; };
-		7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		846A78FADBDA6D5B3C41A6F1 /* libPods-Locker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D706E641FE35AF39B8E85A1 /* libPods-Locker.a */; };
-		BA71A59178E142E7B6D0B309 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9ADE8DECE1740F0877EC152 /* Inter-Regular.ttf */; };
-		CA3BCB36281A78F3007A0503 /* container in Resources */ = {isa = PBXBuildFile; fileRef = CA3BCB35281A78F2007A0503 /* container */; };
-		CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA53478927181A9C00BA4901 /* AuthenticationServices.framework */; };
-		CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CA53478F27181AB400BA4901 /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CA9F41E927183FC300B0C0A5 /* KeychainAccess */; };
-		CAFA4CF8270AF9A20003FFA5 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFA4CF7270AF9A20003FFA5 /* File.swift */; };
-		FAFEC61125A24724A9D9F7A8 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 382BC146A53A4DB6B6394C4A /* Inter-Medium.ttf */; };
+		2215ACBC1E62C44583DB69A9 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AFED2E09CC2E86D1338C0F /* ExpoModulesProvider.swift */; };
+		400EB2C1E1807E6CBC68B7AB /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951E59D51E504BC9C5F46169 /* ExpoModulesProvider.swift */; };
+		4D1804180C27433DAC77EA9B /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7513C8939ACC471CA47CDCF0 /* Inter-Medium.ttf */; };
+		7699B88040F8A987B510C191 /* libPods-Locker-LockerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Locker-LockerTests.a */; };
+		7AFE8CFE79B347BB8A6EC2F7 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B3E8C478BDD34B21AF021044 /* Inter-SemiBold.ttf */; };
+		7C973A3E2A93055500875FBA /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C973A3D2A93055500875FBA /* AuthenticationServices.framework */; };
+		7C973A412A93055500875FBA /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A402A93055500875FBA /* CredentialProviderViewController.swift */; };
+		7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A422A93055500875FBA /* MainInterface.storyboard */; };
+		7C973A492A93055500875FBA /* LockerAutofill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7C973A3C2A93055500875FBA /* LockerAutofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7C973A512A93068F00875FBA /* AutofillData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A502A93068F00875FBA /* AutofillData.swift */; };
+		7C973A532A9306A700875FBA /* AutofillDataKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A522A9306A700875FBA /* AutofillDataKeychain.swift */; };
+		7C973A5A2A93075E00875FBA /* AutofillHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A562A93075E00875FBA /* AutofillHelpers.swift */; };
+		7C973A5B2A93075E00875FBA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A572A93075E00875FBA /* Localizable.strings */; };
+		7C973A5C2A93075E00875FBA /* HashCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A582A93075E00875FBA /* HashCore.swift */; };
+		7C973A5D2A93075E00875FBA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A592A93075E00875FBA /* Utils.swift */; };
+		7C973A632A9308C600875FBA /* LoginListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A612A9308C600875FBA /* LoginListViewController.swift */; };
+		7C973A642A9308C600875FBA /* VerifyMasterPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A622A9308C600875FBA /* VerifyMasterPasswordViewController.swift */; };
+		7C973A672A9308D600875FBA /* CredentialTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A652A9308D600875FBA /* CredentialTableViewCell.swift */; };
+		7C973A682A9308D600875FBA /* FormFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A662A9308D600875FBA /* FormFieldView.swift */; };
+		7CEB31E22A9309D9007F6051 /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CEB31E12A9309D9007F6051 /* assets.xcassets */; };
+		7CEB31E42A9309FE007F6051 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CEB31E32A9309FE007F6051 /* Colors.xcassets */; };
+		7CEB31E92A931B50007F6051 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEB31E82A931B50007F6051 /* KeychainAccess */; };
+		7CEB31EB2A931B5A007F6051 /* SwiftOTP in Frameworks */ = {isa = PBXBuildFile; productRef = 7CEB31EA2A931B5A007F6051 /* SwiftOTP */; };
+		7CEB31EC2A932665007F6051 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A4E2A9305EC00875FBA /* Config.xcconfig */; };
+		7CEB31F92A932780007F6051 /* RSAUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31EF2A932780007F6051 /* RSAUtils.swift */; };
+		7CEB31FA2A932780007F6051 /* RCTCryptoServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31F02A932780007F6051 /* RCTCryptoServiceIos.m */; };
+		7CEB31FB2A932780007F6051 /* RNCryptoServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31F12A932780007F6051 /* RNCryptoServiceIos.swift */; };
+		7CEB31FC2A932780007F6051 /* RNAutofillServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31F32A932780007F6051 /* RNAutofillServiceIos.swift */; };
+		7CEB31FD2A932780007F6051 /* RCTAutofillServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31F42A932780007F6051 /* RCTAutofillServiceIos.m */; };
+		7CEB32052A932812007F6051 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C973A3D2A93055500875FBA /* AuthenticationServices.framework */; };
+		7CEB32082A933FE5007F6051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB32072A933FE5007F6051 /* AppDelegate.swift */; };
+		BE406F562862D73000A81E39 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE406F552862D73000A81E39 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,123 +53,85 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = CyStackLocker;
+			remoteInfo = Locker;
 		};
-		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
+		7C973A472A93055500875FBA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
-			remoteInfo = "CyStackLocker-tvOS";
-		};
-		CA53479927181AB400BA4901 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CA53478E27181AB400BA4901;
+			remoteGlobalIDString = 7C973A3B2A93055500875FBA;
 			remoteInfo = LockerAutofill;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		CA53479F27181AB400BA4901 /* Embed App Extensions */ = {
+		7C973A4D2A93055500875FBA /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				CA53479B27181AB400BA4901 /* LockerAutofill.appex in Embed App Extensions */,
+				7C973A492A93055500875FBA /* LockerAutofill.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00DA503449115127D317DC02 /* libPods-Locker-LockerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locker-LockerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356EE1AD99517003FC87E /* LockerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LockerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* CyStackLockerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CyStackLockerTests.m; sourceTree = "<group>"; };
-		0255712E95395CF7C23FAA8F /* Pods-Locker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker.release.xcconfig"; path = "Target Support Files/Pods-Locker/Pods-Locker.release.xcconfig"; sourceTree = "<group>"; };
-		03101CE3809A4E11AB155F7C /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
-		08CCE4ADA4224320A59F6D44 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		0B1A4F466D5843E0AC831A1A /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
-		10033B5109054F0D80533C6C /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* LockerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LockerTests.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Locker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Locker.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = CyStackLocker/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = CyStackLocker/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = CyStackLocker/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CyStackLocker/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = CyStackLocker/main.m; sourceTree = "<group>"; };
-		1578E196A5C6E7A4BE11C4E3 /* Pods-CyStackLocker.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker.debug staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker/Pods-CyStackLocker.debug staging.xcconfig"; sourceTree = "<group>"; };
-		1FBE1637C013A3E761D31AB5 /* Pods-Locker.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker.debug staging.xcconfig"; path = "Target Support Files/Pods-Locker/Pods-Locker.debug staging.xcconfig"; sourceTree = "<group>"; };
-		20839F38FDD645F9BF6204AF /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
-		284748E788206C284D1FEA7A /* Pods-Locker-LockerTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.debug staging.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.debug staging.xcconfig"; sourceTree = "<group>"; };
-		29E61042944E667AE1836450 /* Pods-CyStackLocker.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker.release staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker/Pods-CyStackLocker.release staging.xcconfig"; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* Locker-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Locker-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* Locker-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Locker-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D706E641FE35AF39B8E85A1 /* libPods-Locker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locker.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		32B04630CC446F19212E357A /* Pods-CyStackLocker-CyStackLockerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.release.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.release.xcconfig"; sourceTree = "<group>"; };
-		382BC146A53A4DB6B6394C4A /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
-		39DEEF8D8E58416BB1F1C68A /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
-		3E1FD80DD6CA437A90A375BC /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
-		3ECD546F3378FD459F4E82B0 /* Pods-CyStackLocker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker/Pods-CyStackLocker.debug.xcconfig"; sourceTree = "<group>"; };
-		4675343BE3B744C9BB4B793A /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		4C5E1605FE35B2B1B3DF7A3C /* Pods-Locker.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker.release staging.xcconfig"; path = "Target Support Files/Pods-Locker/Pods-Locker.release staging.xcconfig"; sourceTree = "<group>"; };
-		4CF2CB668AC94989A4029E84 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
-		4D40708BE521DBE7DC6E68C8 /* Pods-CyStackLocker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker.release.xcconfig"; path = "Target Support Files/Pods-CyStackLocker/Pods-CyStackLocker.release.xcconfig"; sourceTree = "<group>"; };
-		56D0F3DAF1AC4D5AAB76FEEA /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
-		6102F80C8AA04C85ADA0AEE2 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
-		643666B7E5804C808CAF1052 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
-		6815861EF5345E1CDC822CF6 /* Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig"; sourceTree = "<group>"; };
-		701E1A13FA3E4CEBB99F9FCF /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
-		771E1616CFA147CD9E433C3F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLockerRelease.entitlements; path = CyStackLocker/CyStackLockerRelease.entitlements; sourceTree = "<group>"; };
-		7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
-		7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillHelpers.swift; sourceTree = "<group>"; };
-		7C306DB027B6467900F64944 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
-		7C633CDB2761EA0D00140CAA /* Toast */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Toast; path = "Pods/Toast-Swift/Toast"; sourceTree = "<group>"; };
-		7C70B7BD2758CD2B005D0D8E /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
-		7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
-		7C748AFE280EC58100424E43 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		7C8496E127B7759200CFEA8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		7C8496E527B7765C00CFEA8B /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
-		7C8A609C27A38D5D00477348 /* FormFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldView.swift; sourceTree = "<group>"; };
-		7CA1D4A727F2E3EC009E2A6E /* RCTCryptoServiceIos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTCryptoServiceIos.m; sourceTree = "<group>"; };
-		7CA1D4AB27F2E408009E2A6E /* RNCryptoServiceIos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCryptoServiceIos.swift; sourceTree = "<group>"; };
-		7CA1D4AE27F2E424009E2A6E /* RSAUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAUtils.swift; sourceTree = "<group>"; };
-		7CAB332B279972020000B15E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		7CAB332D2799777B0000B15E /* AutofillData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillData.swift; sourceTree = "<group>"; };
-		7CAB332F279979650000B15E /* AutofillDataKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillDataKeychain.swift; sourceTree = "<group>"; };
-		7CAB3331279A548A0000B15E /* CredentialProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderController.swift; sourceTree = "<group>"; };
-		7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyMasterPasswordViewController.swift; sourceTree = "<group>"; };
-		7CAB3335279AA04E0000B15E /* LoginListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
-		7CADBA03281A5E6600353A83 /* RCTAutofillServiceIos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTAutofillServiceIos.m; sourceTree = "<group>"; };
-		7CADBA05281A5E8A00353A83 /* RNAutofillServiceIos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNAutofillServiceIos.swift; sourceTree = "<group>"; };
-		7CB5348927E9C4F600E31C07 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
-		7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashCore.swift; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CyStackLocker/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8CC74A7CDBF8F743DD6B9136 /* Pods-Locker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker.debug.xcconfig"; path = "Target Support Files/Pods-Locker/Pods-Locker.debug.xcconfig"; sourceTree = "<group>"; };
-		8CE0CE211F1098E461694F3F /* Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig"; sourceTree = "<group>"; };
-		8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; path = "Target Support Files/Pods-CyStackLocker-CyStackLockerTests/Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig"; sourceTree = "<group>"; };
-		96D89FDC55DA47C5942CCE3B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
-		A06EB5D75CE1BCAB8B9346D9 /* Pods-Locker-LockerTests.release staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.release staging.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.release staging.xcconfig"; sourceTree = "<group>"; };
-		AD4DFC3A42ACAA6CE9380B62 /* Pods-Locker-LockerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.release.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.release.xcconfig"; sourceTree = "<group>"; };
-		BE663438A5A8531CBDCF351D /* Pods-Locker-LockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.debug.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.debug.xcconfig"; sourceTree = "<group>"; };
-		CA3BCB35281A78F2007A0503 /* container */ = {isa = PBXFileReference; lastKnownFileType = folder; path = container; sourceTree = "<group>"; };
-		CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CyStackLocker.entitlements; path = CyStackLocker/CyStackLocker.entitlements; sourceTree = "<group>"; };
-		CA53478927181A9C00BA4901 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
-		CA53478F27181AB400BA4901 /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		CA53479727181AB400BA4901 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CA53479827181AB400BA4901 /* LockerAutofill.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofill.entitlements; sourceTree = "<group>"; };
-		CAFA4CF6270AF9A20003FFA5 /* CyStackLocker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CyStackLocker-Bridging-Header.h"; sourceTree = "<group>"; };
-		CAFA4CF7270AF9A20003FFA5 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
-		EC932B44EDDC47BCB150E19C /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Locker/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Locker/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Locker/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Locker/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Locker/main.m; sourceTree = "<group>"; };
+		19F6CBCC0A4E27FBF8BF4A61 /* libPods-Locker-LockerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locker-LockerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B4392A12AC88292D35C810B /* Pods-Locker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker.debug.xcconfig"; path = "Target Support Files/Pods-Locker/Pods-Locker.debug.xcconfig"; sourceTree = "<group>"; };
+		5709B34CF0A7D63546082F79 /* Pods-Locker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker.release.xcconfig"; path = "Target Support Files/Pods-Locker/Pods-Locker.release.xcconfig"; sourceTree = "<group>"; };
+		5B7EB9410499542E8C5724F5 /* Pods-Locker-LockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.debug.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5DCACB8F33CDC322A6C60F78 /* libPods-Locker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locker.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7513C8939ACC471CA47CDCF0 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
+		7C973A362A93019C00875FBA /* Locker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Locker.entitlements; path = Locker/Locker.entitlements; sourceTree = "<group>"; };
+		7C973A372A9304CA00875FBA /* Locker-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Locker-Bridging-Header.h"; sourceTree = "<group>"; };
+		7C973A3C2A93055500875FBA /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C973A3D2A93055500875FBA /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		7C973A402A93055500875FBA /* CredentialProviderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderViewController.swift; sourceTree = "<group>"; };
+		7C973A432A93055500875FBA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		7C973A452A93055500875FBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7C973A462A93055500875FBA /* LockerAutofill.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockerAutofill.entitlements; sourceTree = "<group>"; };
+		7C973A4E2A9305EC00875FBA /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		7C973A502A93068F00875FBA /* AutofillData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillData.swift; sourceTree = "<group>"; };
+		7C973A522A9306A700875FBA /* AutofillDataKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillDataKeychain.swift; sourceTree = "<group>"; };
+		7C973A552A93072700875FBA /* LockerAutofillRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = LockerAutofillRelease.entitlements; sourceTree = "<group>"; };
+		7C973A562A93075E00875FBA /* AutofillHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutofillHelpers.swift; sourceTree = "<group>"; };
+		7C973A572A93075E00875FBA /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		7C973A582A93075E00875FBA /* HashCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashCore.swift; sourceTree = "<group>"; };
+		7C973A592A93075E00875FBA /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		7C973A612A9308C600875FBA /* LoginListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewController.swift; sourceTree = "<group>"; };
+		7C973A622A9308C600875FBA /* VerifyMasterPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyMasterPasswordViewController.swift; sourceTree = "<group>"; };
+		7C973A652A9308D600875FBA /* CredentialTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialTableViewCell.swift; sourceTree = "<group>"; };
+		7C973A662A9308D600875FBA /* FormFieldView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormFieldView.swift; sourceTree = "<group>"; };
+		7CEB31E12A9309D9007F6051 /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
+		7CEB31E32A9309FE007F6051 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		7CEB31E72A930AA1007F6051 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
+		7CEB31EF2A932780007F6051 /* RSAUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAUtils.swift; sourceTree = "<group>"; };
+		7CEB31F02A932780007F6051 /* RCTCryptoServiceIos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTCryptoServiceIos.m; sourceTree = "<group>"; };
+		7CEB31F12A932780007F6051 /* RNCryptoServiceIos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCryptoServiceIos.swift; sourceTree = "<group>"; };
+		7CEB31F32A932780007F6051 /* RNAutofillServiceIos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNAutofillServiceIos.swift; sourceTree = "<group>"; };
+		7CEB31F42A932780007F6051 /* RCTAutofillServiceIos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAutofillServiceIos.m; sourceTree = "<group>"; };
+		7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = VinCSSFido2ClientSDK.xcframework; sourceTree = "<group>"; };
+		7CEB32062A932AAE007F6051 /* LockerRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = LockerRelease.entitlements; path = Locker/LockerRelease.entitlements; sourceTree = "<group>"; };
+		7CEB32072A933FE5007F6051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		89C6BE57DB24E9ADA2F236DE /* Pods-Locker-LockerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.release.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.release.xcconfig"; sourceTree = "<group>"; };
+		951E59D51E504BC9C5F46169 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Locker/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		B3E8C478BDD34B21AF021044 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		BE406F552862D73000A81E39 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Locker/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CDA292A6578B43FF8E1FF3E5 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
+		D5AFED2E09CC2E86D1338C0F /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Locker-LockerTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F595791AA4B34240BB219331 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
-		F9ADE8DECE1740F0877EC152 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,7 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DC4AA92A1AB7A3C653EB7CF /* libPods-Locker-LockerTests.a in Frameworks */,
+				7699B88040F8A987B510C191 /* libPods-Locker-LockerTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,45 +147,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C575E432A984E9200DE0C42 /* AuthenticationServices.framework in Frameworks */,
-				846A78FADBDA6D5B3C41A6F1 /* libPods-Locker.a in Frameworks */,
+				7CEB32052A932812007F6051 /* AuthenticationServices.framework in Frameworks */,
+				0C80B921A6F3F58F76C31292 /* libPods-Locker.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2D02E4781E0B4A5D006451C7 /* Frameworks */ = {
+		7C973A392A93055500875FBA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2D02E48D1E0B4A5D006451C7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CA53478C27181AB400BA4901 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CA9F41EA27183FC300B0C0A5 /* KeychainAccess in Frameworks */,
-				7C7A47382A2DE8040002FCAD /* SwiftOTP in Frameworks */,
-				CA53479027181AB400BA4901 /* AuthenticationServices.framework in Frameworks */,
+				7CEB31E92A931B50007F6051 /* KeychainAccess in Frameworks */,
+				7CEB31EB2A931B5A007F6051 /* SwiftOTP in Frameworks */,
+				7C973A3E2A93055500875FBA /* AuthenticationServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* CyStackLockerTests */ = {
+		00E356EF1AD99517003FC87E /* LockerTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* CyStackLockerTests.m */,
+				00E356F21AD99517003FC87E /* LockerTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = CyStackLockerTests;
+			path = LockerTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -240,157 +182,137 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* CyStackLocker */ = {
+		13B07FAE1A68108700A75B9A /* Locker */ = {
 			isa = PBXGroup;
 			children = (
-				7CADBA02281A5E0200353A83 /* RNAutofillService */,
-				7CA1D4A627F2E3AD009E2A6E /* CryptoService */,
-				7C306D1627B3599100F64944 /* CyStackLockerRelease.entitlements */,
-				CA53478827181A9C00BA4901 /* CyStackLocker.entitlements */,
-				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
+				7C973A362A93019C00875FBA /* Locker.entitlements */,
+				7CEB32062A932AAE007F6051 /* LockerRelease.entitlements */,
+				7CEB31F22A932780007F6051 /* RNAutofillService */,
+				7CEB31EE2A932780007F6051 /* RNCryptoService */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				7CEB32072A933FE5007F6051 /* AppDelegate.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
+				BE406F552862D73000A81E39 /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = CyStackLocker;
+			name = Locker;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CA53478927181A9C00BA4901 /* AuthenticationServices.framework */,
+				7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				2D706E641FE35AF39B8E85A1 /* libPods-Locker.a */,
-				00DA503449115127D317DC02 /* libPods-Locker-LockerTests.a */,
+				5DCACB8F33CDC322A6C60F78 /* libPods-Locker.a */,
+				19F6CBCC0A4E27FBF8BF4A61 /* libPods-Locker-LockerTests.a */,
+				7C973A3D2A93055500875FBA /* AuthenticationServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3EA0BBBD3BB04A00BCC6AEE3 /* Resources */ = {
+		547A8E9E9663ECB3355FB756 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				03101CE3809A4E11AB155F7C /* AntDesign.ttf */,
-				6102F80C8AA04C85ADA0AEE2 /* Entypo.ttf */,
-				10033B5109054F0D80533C6C /* EvilIcons.ttf */,
-				4675343BE3B744C9BB4B793A /* Feather.ttf */,
-				96D89FDC55DA47C5942CCE3B /* FontAwesome.ttf */,
-				4CF2CB668AC94989A4029E84 /* FontAwesome5_Brands.ttf */,
-				56D0F3DAF1AC4D5AAB76FEEA /* FontAwesome5_Regular.ttf */,
-				39DEEF8D8E58416BB1F1C68A /* FontAwesome5_Solid.ttf */,
-				3E1FD80DD6CA437A90A375BC /* Fontisto.ttf */,
-				771E1616CFA147CD9E433C3F /* Foundation.ttf */,
-				20839F38FDD645F9BF6204AF /* Ionicons.ttf */,
-				08CCE4ADA4224320A59F6D44 /* MaterialCommunityIcons.ttf */,
-				EC932B44EDDC47BCB150E19C /* MaterialIcons.ttf */,
-				0B1A4F466D5843E0AC831A1A /* Octicons.ttf */,
-				F595791AA4B34240BB219331 /* SimpleLineIcons.ttf */,
-				643666B7E5804C808CAF1052 /* Zocial.ttf */,
-				382BC146A53A4DB6B6394C4A /* Inter-Medium.ttf */,
-				F9ADE8DECE1740F0877EC152 /* Inter-Regular.ttf */,
-				701E1A13FA3E4CEBB99F9FCF /* Inter-SemiBold.ttf */,
+				6289853FD5D818F15D17248E /* Locker */,
+				E4DC8A9EFE6F9C5F90DD96E4 /* LockerTests */,
 			);
-			name = Resources;
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
-		71ED362ACEA45F9F60DCD285 /* Pods */ = {
+		6289853FD5D818F15D17248E /* Locker */ = {
 			isa = PBXGroup;
 			children = (
-				3ECD546F3378FD459F4E82B0 /* Pods-CyStackLocker.debug.xcconfig */,
-				4D40708BE521DBE7DC6E68C8 /* Pods-CyStackLocker.release.xcconfig */,
-				8D3D2E99D3814D73E5353ACB /* Pods-CyStackLocker-CyStackLockerTests.debug.xcconfig */,
-				32B04630CC446F19212E357A /* Pods-CyStackLocker-CyStackLockerTests.release.xcconfig */,
-				1578E196A5C6E7A4BE11C4E3 /* Pods-CyStackLocker.debug staging.xcconfig */,
-				29E61042944E667AE1836450 /* Pods-CyStackLocker.release staging.xcconfig */,
-				6815861EF5345E1CDC822CF6 /* Pods-CyStackLocker-CyStackLockerTests.debug staging.xcconfig */,
-				8CE0CE211F1098E461694F3F /* Pods-CyStackLocker-CyStackLockerTests.release staging.xcconfig */,
-				8CC74A7CDBF8F743DD6B9136 /* Pods-Locker.debug.xcconfig */,
-				1FBE1637C013A3E761D31AB5 /* Pods-Locker.debug staging.xcconfig */,
-				0255712E95395CF7C23FAA8F /* Pods-Locker.release.xcconfig */,
-				4C5E1605FE35B2B1B3DF7A3C /* Pods-Locker.release staging.xcconfig */,
-				BE663438A5A8531CBDCF351D /* Pods-Locker-LockerTests.debug.xcconfig */,
-				284748E788206C284D1FEA7A /* Pods-Locker-LockerTests.debug staging.xcconfig */,
-				AD4DFC3A42ACAA6CE9380B62 /* Pods-Locker-LockerTests.release.xcconfig */,
-				A06EB5D75CE1BCAB8B9346D9 /* Pods-Locker-LockerTests.release staging.xcconfig */,
+				951E59D51E504BC9C5F46169 /* ExpoModulesProvider.swift */,
 			);
-			path = Pods;
+			name = Locker;
 			sourceTree = "<group>";
 		};
-		7C633CDA2761EA0D00140CAA /* Packages */ = {
+		7C973A3F2A93055500875FBA /* LockerAutofill */ = {
 			isa = PBXGroup;
 			children = (
-				7C633CDB2761EA0D00140CAA /* Toast */,
+				7C973A462A93055500875FBA /* LockerAutofill.entitlements */,
+				7C973A552A93072700875FBA /* LockerAutofillRelease.entitlements */,
+				7C973A4F2A93067800875FBA /* Models */,
+				7C973A542A9306AD00875FBA /* Utils */,
+				7C973A5F2A93078B00875FBA /* Views */,
+				7C973A5E2A93076E00875FBA /* Controller */,
+				7C973A452A93055500875FBA /* Info.plist */,
+				7C973A422A93055500875FBA /* MainInterface.storyboard */,
+				7C973A4E2A9305EC00875FBA /* Config.xcconfig */,
+				7CEB31E12A9309D9007F6051 /* assets.xcassets */,
+				7CEB31E32A9309FE007F6051 /* Colors.xcassets */,
 			);
-			name = Packages;
+			path = LockerAutofill;
 			sourceTree = "<group>";
 		};
-		7C80ADBD2759F29200AD45BF /* customUI */ = {
+		7C973A4F2A93067800875FBA /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				7C70B7BF2758D255005D0D8E /* CredentialTableViewCell.swift */,
-				7C8A609C27A38D5D00477348 /* FormFieldView.swift */,
-			);
-			path = customUI;
-			sourceTree = "<group>";
-		};
-		7CA1D4A627F2E3AD009E2A6E /* CryptoService */ = {
-			isa = PBXGroup;
-			children = (
-				7CA1D4A727F2E3EC009E2A6E /* RCTCryptoServiceIos.m */,
-				7CA1D4AB27F2E408009E2A6E /* RNCryptoServiceIos.swift */,
-				7CA1D4AE27F2E424009E2A6E /* RSAUtils.swift */,
-			);
-			name = CryptoService;
-			sourceTree = "<group>";
-		};
-		7CAB3325279969B60000B15E /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				7CAB332D2799777B0000B15E /* AutofillData.swift */,
-				7CAB332F279979650000B15E /* AutofillDataKeychain.swift */,
+				7C973A502A93068F00875FBA /* AutofillData.swift */,
+				7C973A522A9306A700875FBA /* AutofillDataKeychain.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		7CAB332627996A310000B15E /* Controller */ = {
+		7C973A542A9306AD00875FBA /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				7CAB3331279A548A0000B15E /* CredentialProviderController.swift */,
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		7CAB332727996A480000B15E /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				7C80ADBD2759F29200AD45BF /* customUI */,
-				7CAB3333279A6AD70000B15E /* VerifyMasterPasswordViewController.swift */,
-				7CAB3335279AA04E0000B15E /* LoginListViewController.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		7CAB332A279971E20000B15E /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				7CAB332B279972020000B15E /* Utils.swift */,
-				7C306D7C27B4B5A600F64944 /* AutofillHelpers.swift */,
-				7CE29AC0279E9A2F0055B0C5 /* HashCore.swift */,
-				7C8496E527B7765C00CFEA8B /* Localizable.strings */,
+				7C973A562A93075E00875FBA /* AutofillHelpers.swift */,
+				7C973A582A93075E00875FBA /* HashCore.swift */,
+				7C973A572A93075E00875FBA /* Localizable.strings */,
+				7C973A592A93075E00875FBA /* Utils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		7CADBA02281A5E0200353A83 /* RNAutofillService */ = {
+		7C973A5E2A93076E00875FBA /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				7CADBA03281A5E6600353A83 /* RCTAutofillServiceIos.m */,
-				7CADBA05281A5E8A00353A83 /* RNAutofillServiceIos.swift */,
+				7C973A402A93055500875FBA /* CredentialProviderViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		7C973A5F2A93078B00875FBA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7C973A602A9307BF00875FBA /* customUI */,
+				7C973A612A9308C600875FBA /* LoginListViewController.swift */,
+				7C973A622A9308C600875FBA /* VerifyMasterPasswordViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7C973A602A9307BF00875FBA /* customUI */ = {
+			isa = PBXGroup;
+			children = (
+				7C973A652A9308D600875FBA /* CredentialTableViewCell.swift */,
+				7C973A662A9308D600875FBA /* FormFieldView.swift */,
+			);
+			path = customUI;
+			sourceTree = "<group>";
+		};
+		7CEB31EE2A932780007F6051 /* RNCryptoService */ = {
+			isa = PBXGroup;
+			children = (
+				7CEB31EF2A932780007F6051 /* RSAUtils.swift */,
+				7CEB31F02A932780007F6051 /* RCTCryptoServiceIos.m */,
+				7CEB31F12A932780007F6051 /* RNCryptoServiceIos.swift */,
+			);
+			name = RNCryptoService;
+			path = Locker/RNCryptoService;
+			sourceTree = "<group>";
+		};
+		7CEB31F22A932780007F6051 /* RNAutofillService */ = {
+			isa = PBXGroup;
+			children = (
+				7CEB31F32A932780007F6051 /* RNAutofillServiceIos.swift */,
+				7CEB31F42A932780007F6051 /* RCTAutofillServiceIos.m */,
 			);
 			name = RNAutofillService;
+			path = Locker/RNAutofillService;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -403,18 +325,16 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				CA3BCB35281A78F2007A0503 /* container */,
-				CAFA4CF6270AF9A20003FFA5 /* CyStackLocker-Bridging-Header.h */,
-				7C633CDA2761EA0D00140CAA /* Packages */,
-				CAFA4CF7270AF9A20003FFA5 /* File.swift */,
-				13B07FAE1A68108700A75B9A /* CyStackLocker */,
+				7C973A372A9304CA00875FBA /* Locker-Bridging-Header.h */,
+				13B07FAE1A68108700A75B9A /* Locker */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* CyStackLockerTests */,
-				CA53479127181AB400BA4901 /* LockerAutofill */,
+				00E356EF1AD99517003FC87E /* LockerTests */,
+				7C973A3F2A93055500875FBA /* LockerAutofill */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				71ED362ACEA45F9F60DCD285 /* Pods */,
-				3EA0BBBD3BB04A00BCC6AEE3 /* Resources */,
+				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				547A8E9E9663ECB3355FB756 /* ExpoModulesProviders */,
+				F870C4FD727B4F5A93DC9A95 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -426,29 +346,38 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* Locker.app */,
 				00E356EE1AD99517003FC87E /* LockerTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* Locker-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* Locker-tvOSTests.xctest */,
-				CA53478F27181AB400BA4901 /* LockerAutofill.appex */,
+				7C973A3C2A93055500875FBA /* LockerAutofill.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CA53479127181AB400BA4901 /* LockerAutofill */ = {
+		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				CA53479827181AB400BA4901 /* LockerAutofill.entitlements */,
-				7C306D2B27B35FD100F64944 /* LockerAutofillRelease.entitlements */,
-				7CAB3325279969B60000B15E /* Models */,
-				7CAB332A279971E20000B15E /* Utils */,
-				7CAB332727996A480000B15E /* Views */,
-				7CAB332627996A310000B15E /* Controller */,
-				7C70B7BD2758CD2B005D0D8E /* assets.xcassets */,
-				7C306DB027B6467900F64944 /* Colors.xcassets */,
-				CA53479727181AB400BA4901 /* Info.plist */,
-				7C8496E227B7759200CFEA8B /* MainInterface.storyboard */,
-				7C748AFE280EC58100424E43 /* Config.xcconfig */,
+				3B4392A12AC88292D35C810B /* Pods-Locker.debug.xcconfig */,
+				5709B34CF0A7D63546082F79 /* Pods-Locker.release.xcconfig */,
+				5B7EB9410499542E8C5724F5 /* Pods-Locker-LockerTests.debug.xcconfig */,
+				89C6BE57DB24E9ADA2F236DE /* Pods-Locker-LockerTests.release.xcconfig */,
 			);
-			path = LockerAutofill;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		E4DC8A9EFE6F9C5F90DD96E4 /* LockerTests */ = {
+			isa = PBXGroup;
+			children = (
+				D5AFED2E09CC2E86D1338C0F /* ExpoModulesProvider.swift */,
+			);
+			name = LockerTests;
+			sourceTree = "<group>";
+		};
+		F870C4FD727B4F5A93DC9A95 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7513C8939ACC471CA47CDCF0 /* Inter-Medium.ttf */,
+				CDA292A6578B43FF8E1FF3E5 /* Inter-Regular.ttf */,
+				B3E8C478BDD34B21AF021044 /* Inter-SemiBold.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -458,12 +387,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "LockerTests" */;
 			buildPhases = (
-				77DA01E931F34FC3A825D18E /* [CP] Check Pods Manifest.lock */,
+				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				821B8C042C64835F8AA180E7 /* [CP] Copy Pods Resources */,
-				0383829FCA59FA159DCC2589 /* [CP] Embed Pods Frameworks */,
+				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
+				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -471,7 +400,7 @@
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
 			name = LockerTests;
-			productName = CyStackLockerTests;
+			productName = LockerTests;
 			productReference = 00E356EE1AD99517003FC87E /* LockerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -479,72 +408,35 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Locker" */;
 			buildPhases = (
-				3D9C6EB91031CB0FB90EA6D7 /* [CP] Check Pods Manifest.lock */,
+				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				105C9A386D6F7A14EE348052 /* [CP] Copy Pods Resources */,
-				EEC804BC5B13E8CB8393A370 /* [CP] Embed Pods Frameworks */,
-				CA53479F27181AB400BA4901 /* Embed App Extensions */,
-				660A1716E0E95A863DA0D28F /* [CP-User] [RNFB] Core Configuration */,
-				7C83F64427FC37F100F60DAE /* ShellScript */,
+				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
+				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				7C973A4D2A93055500875FBA /* Embed Foundation Extensions */,
+				CF3B00BA8CC8BB2FB9155EAF /* [CP-User] [RNFB] Core Configuration */,
+				868061382ACB0AAA0029A08E /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				CA53479A27181AB400BA4901 /* PBXTargetDependency */,
+				7C973A482A93055500875FBA /* PBXTargetDependency */,
 			);
 			name = Locker;
-			productName = CyStackLocker;
+			productName = Locker;
 			productReference = 13B07F961A680F5B00A75B9A /* Locker.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* Locker-tvOS */ = {
+		7C973A3B2A93055500875FBA /* LockerAutofill */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Locker-tvOS" */;
+			buildConfigurationList = 7C973A4A2A93055500875FBA /* Build configuration list for PBXNativeTarget "LockerAutofill" */;
 			buildPhases = (
-				FD10A7F122414F3F0027D42C /* Start Packager */,
-				2D02E4771E0B4A5D006451C7 /* Sources */,
-				2D02E4781E0B4A5D006451C7 /* Frameworks */,
-				2D02E4791E0B4A5D006451C7 /* Resources */,
-				2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Locker-tvOS";
-			productName = "CyStackLocker-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* Locker-tvOS.app */;
-			productType = "com.apple.product-type.application";
-		};
-		2D02E48F1E0B4A5D006451C7 /* Locker-tvOSTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Locker-tvOSTests" */;
-			buildPhases = (
-				2D02E48C1E0B4A5D006451C7 /* Sources */,
-				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
-				2D02E48E1E0B4A5D006451C7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
-			);
-			name = "Locker-tvOSTests";
-			productName = "CyStackLocker-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* Locker-tvOSTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		CA53478E27181AB400BA4901 /* LockerAutofill */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CA53479C27181AB400BA4901 /* Build configuration list for PBXNativeTarget "LockerAutofill" */;
-			buildPhases = (
-				CA53478B27181AB400BA4901 /* Sources */,
-				CA53478C27181AB400BA4901 /* Frameworks */,
-				CA53478D27181AB400BA4901 /* Resources */,
+				7C973A382A93055500875FBA /* Sources */,
+				7C973A392A93055500875FBA /* Frameworks */,
+				7C973A3A2A93055500875FBA /* Resources */,
 			);
 			buildRules = (
 			);
@@ -552,11 +444,11 @@
 			);
 			name = LockerAutofill;
 			packageProductDependencies = (
-				CA9F41E927183FC300B0C0A5 /* KeychainAccess */,
-				7C7A47372A2DE8040002FCAD /* SwiftOTP */,
+				7CEB31E82A931B50007F6051 /* KeychainAccess */,
+				7CEB31EA2A931B5A007F6051 /* SwiftOTP */,
 			);
 			productName = LockerAutofill;
-			productReference = CA53478F27181AB400BA4901 /* LockerAutofill.appex */;
+			productReference = 7C973A3C2A93055500875FBA /* LockerAutofill.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -565,35 +457,23 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1130;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1340;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
-						LastSwiftMigration = 1320;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1300;
+						LastSwiftMigration = 1120;
 					};
-					2D02E47A1E0B4A5D006451C7 = {
-						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
-					};
-					2D02E48F1E0B4A5D006451C7 = {
-						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2D02E47A1E0B4A5D006451C7;
-					};
-					CA53478E27181AB400BA4901 = {
-						CreatedOnToolsVersion = 13.0;
-						DevelopmentTeam = W7S57TNBH5;
-						ProvisioningStyle = Automatic;
+					7C973A3B2A93055500875FBA = {
+						CreatedOnToolsVersion = 14.3.1;
 					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Locker" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -603,8 +483,8 @@
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
-				CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				7C7A47362A2DE8040002FCAD /* XCRemoteSwiftPackageReference "SwiftOTP.git" */,
+				7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -612,9 +492,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* Locker */,
 				00E356ED1AD99517003FC87E /* LockerTests */,
-				2D02E47A1E0B4A5D006451C7 /* Locker-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* Locker-tvOSTests */,
-				CA53478E27181AB400BA4901 /* LockerAutofill */,
+				7C973A3B2A93055500875FBA /* LockerAutofill */,
 			);
 		};
 /* End PBXProject section */
@@ -631,39 +509,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA3BCB36281A78F3007A0503 /* container in Resources */,
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				BE406F562862D73000A81E39 /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				FAFEC61125A24724A9D9F7A8 /* Inter-Medium.ttf in Resources */,
-				BA71A59178E142E7B6D0B309 /* Inter-Regular.ttf in Resources */,
-				6EB1BF80341B4A4BBED238A4 /* Inter-SemiBold.ttf in Resources */,
+				4D1804180C27433DAC77EA9B /* Inter-Medium.ttf in Resources */,
+				0D0A772BA7EA41E69827AAFD /* Inter-Regular.ttf in Resources */,
+				7AFE8CFE79B347BB8A6EC2F7 /* Inter-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2D02E4791E0B4A5D006451C7 /* Resources */ = {
+		7C973A3A2A93055500875FBA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2D02E48E1E0B4A5D006451C7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CA53478D27181AB400BA4901 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7C70B7BE2758CD2B005D0D8E /* assets.xcassets in Resources */,
-				7C748AFF280EC58200424E43 /* Config.xcconfig in Resources */,
-				7C8496E627B7765C00CFEA8B /* Localizable.strings in Resources */,
-				7C8496E027B7759200CFEA8B /* MainInterface.storyboard in Resources */,
-				7C306DB127B6467900F64944 /* Colors.xcassets in Resources */,
+				7CEB31EC2A932665007F6051 /* Config.xcconfig in Resources */,
+				7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */,
+				7CEB31E42A9309FE007F6051 /* Colors.xcassets in Resources */,
+				7C973A5B2A93075E00875FBA /* Localizable.strings in Resources */,
+				7CEB31E22A9309D9007F6051 /* assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -676,85 +538,34 @@
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
 			);
 			name = "Bundle React Native code and images";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n    export SKIP_BUNDLING=true\nfi\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		0383829FCA59FA159DCC2589 /* [CP] Embed Pods Frameworks */ = {
+		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBAEMKit/FBAEMKit.framework/FBAEMKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework/FBSDKCoreKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit_Basics/FBSDKCoreKit_Basics.framework/FBSDKCoreKit_Basics",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework/FBSDKLoginKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKShareKit/FBSDKShareKit.framework/FBSDKShareKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Intercom/Intercom.framework/Intercom",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBAEMKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit_Basics.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Intercom.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		105C9A386D6F7A14EE348052 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/FontAwesome.swift/FontAwesome.swift.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.bundle",
-				"${PODS_ROOT}/GoogleTagManager/Frameworks/GoogleTagManager.xcframework/Resources/TagManagerResources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/intercom-react-native/IntercomFramework.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.swift.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TagManagerResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IntercomFramework.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		3D9C6EB91031CB0FB90EA6D7 /* [CP] Check Pods Manifest.lock */ = {
+		868061382ACB0AAA0029A08E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -762,34 +573,16 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Locker-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nPATH_TO_GOOGLE_PLISTS=\"${PROJECT_DIR}/Firebase\"\n\ncase \"${CONFIGURATION}\" in\n\n   \"Debug Staging\" | \"Release Staging\" )\n        cp -r \"$PATH_TO_GOOGLE_PLISTS/Staging/GoogleService-Info.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n\n   \"Debug\" | \"Release\" )\n        cp -r \"$PATH_TO_GOOGLE_PLISTS/Prod/GoogleService-Info.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n    *)\n        ;;\nesac\n";
 		};
-		660A1716E0E95A863DA0D28F /* [CP-User] [RNFB] Core Configuration */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			name = "[CP-User] [RNFB] Core Configuration";
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    _JSON_OUTPUT_BASE64=$(python -c 'import json,sys,base64;print(base64.b64encode(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"').read())['${_JSON_ROOT}'])))' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
-		};
-		77DA01E931F34FC3A825D18E /* [CP] Check Pods Manifest.lock */ = {
+		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -811,7 +604,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7C83F64427FC37F100F60DAE /* ShellScript */ = {
+		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -819,91 +612,85 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Locker-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH_TO_GOOGLE_PLISTS=\"${PROJECT_DIR}/Firebase\"\n\ncase \"${CONFIGURATION}\" in\n\n   \"Debug Staging\" | \"Release Staging\" )\n        cp -r \"$PATH_TO_GOOGLE_PLISTS/Staging/GoogleService-Info.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n\n   \"Debug\" | \"Release\" )\n        cp -r \"$PATH_TO_GOOGLE_PLISTS/Prod/GoogleService-Info.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\" ;;\n    *)\n        ;;\nesac\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
-		821B8C042C64835F8AA180E7 /* [CP] Copy Pods Resources */ = {
+		C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CF3B00BA8CC8BB2FB9155EAF /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/FontAwesome.swift/FontAwesome.swift.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.bundle",
-				"${PODS_ROOT}/GoogleTagManager/Frameworks/GoogleTagManager.xcframework/Resources/TagManagerResources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/intercom-react-native/IntercomFramework.bundle",
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "[CP-User] [RNFB] Core Configuration";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    if ! python3 --version >/dev/null 2>&1; then echo \"python3 not found, firebase.json file processing error.\" && exit 1; fi\n    _JSON_OUTPUT_BASE64=$(python3 -c 'import json,sys,base64;print(base64.b64encode(bytes(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"', '\"'rb'\"').read())['${_JSON_ROOT}']), '\"'utf-8'\"')).decode())' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.analytics_registration_with_ad_network_enabled\n  _ANALYTICS_REGISTRATION_WITH_AD_NETWORK=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_registration_with_ad_network_enabled\")\n  if [[ $_ANALYTICS_REGISTRATION_WITH_AD_NETWORK ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_REGISTRATION_WITH_AD_NETWORK_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_REGISTRATION_WITH_AD_NETWORK\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
+		};
+		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.swift.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TagManagerResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IntercomFramework.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EEC804BC5B13E8CB8393A370 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBAEMKit/FBAEMKit.framework/FBAEMKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework/FBSDKCoreKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit_Basics/FBSDKCoreKit_Basics.framework/FBSDKCoreKit_Basics",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework/FBSDKLoginKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKShareKit/FBSDKShareKit.framework/FBSDKShareKit",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Intercom/Intercom.framework/Intercom",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBAEMKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit_Basics.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Intercom.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Start Packager";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		FD10A7F122414F3F0027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -929,10 +716,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CA1D4B027F2E424009E2A6E /* RSAUtils.swift in Sources */,
-				7CA1D4AD27F2E408009E2A6E /* RNCryptoServiceIos.swift in Sources */,
-				7CA1D4A927F2E3EC009E2A6E /* RCTCryptoServiceIos.m in Sources */,
-				00E356F31AD99517003FC87E /* CyStackLockerTests.m in Sources */,
+				00E356F31AD99517003FC87E /* LockerTests.m in Sources */,
+				2215ACBC1E62C44583DB69A9 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -940,48 +725,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				7CADBA06281A5E8A00353A83 /* RNAutofillServiceIos.swift in Sources */,
-				7CA1D4AC27F2E408009E2A6E /* RNCryptoServiceIos.swift in Sources */,
-				CAFA4CF8270AF9A20003FFA5 /* File.swift in Sources */,
-				7CADBA04281A5E6600353A83 /* RCTAutofillServiceIos.m in Sources */,
-				7CA1D4A827F2E3EC009E2A6E /* RCTCryptoServiceIos.m in Sources */,
-				7CA1D4AF27F2E424009E2A6E /* RSAUtils.swift in Sources */,
+				7CEB32082A933FE5007F6051 /* AppDelegate.swift in Sources */,
+				7CEB31FB2A932780007F6051 /* RNCryptoServiceIos.swift in Sources */,
+				7CEB31F92A932780007F6051 /* RSAUtils.swift in Sources */,
+				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				7CEB31FA2A932780007F6051 /* RCTCryptoServiceIos.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				400EB2C1E1807E6CBC68B7AB /* ExpoModulesProvider.swift in Sources */,
+				7CEB31FC2A932780007F6051 /* RNAutofillServiceIos.swift in Sources */,
+				7CEB31FD2A932780007F6051 /* RCTAutofillServiceIos.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2D02E4771E0B4A5D006451C7 /* Sources */ = {
+		7C973A382A93055500875FBA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
-				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2D02E48C1E0B4A5D006451C7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2DCD954D1E0B4F2C00145EB5 /* CyStackLockerTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CA53478B27181AB400BA4901 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7CAB3334279A6AD70000B15E /* VerifyMasterPasswordViewController.swift in Sources */,
-				7CAB332C279972020000B15E /* Utils.swift in Sources */,
-				7C306D7D27B4B5A600F64944 /* AutofillHelpers.swift in Sources */,
-				7CAB3336279AA04E0000B15E /* LoginListViewController.swift in Sources */,
-				7C8A609D27A38D5D00477348 /* FormFieldView.swift in Sources */,
-				7CE29AC1279E9A2F0055B0C5 /* HashCore.swift in Sources */,
-				7CAB332E2799777B0000B15E /* AutofillData.swift in Sources */,
-				7C70B7C02758D255005D0D8E /* CredentialTableViewCell.swift in Sources */,
-				7CAB3332279A548A0000B15E /* CredentialProviderController.swift in Sources */,
-				7CAB3330279979650000B15E /* AutofillDataKeychain.swift in Sources */,
+				7C973A532A9306A700875FBA /* AutofillDataKeychain.swift in Sources */,
+				7C973A412A93055500875FBA /* CredentialProviderViewController.swift in Sources */,
+				7C973A512A93068F00875FBA /* AutofillData.swift in Sources */,
+				7C973A682A9308D600875FBA /* FormFieldView.swift in Sources */,
+				7C973A5C2A93075E00875FBA /* HashCore.swift in Sources */,
+				7C973A632A9308C600875FBA /* LoginListViewController.swift in Sources */,
+				7C973A5A2A93075E00875FBA /* AutofillHelpers.swift in Sources */,
+				7C973A642A9308C600875FBA /* VerifyMasterPasswordViewController.swift in Sources */,
+				7C973A672A9308D600875FBA /* CredentialTableViewCell.swift in Sources */,
+				7C973A5D2A93075E00875FBA /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -993,24 +762,19 @@
 			target = 13B07F861A680F5B00A75B9A /* Locker */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
-		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
+		7C973A482A93055500875FBA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* Locker-tvOS */;
-			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
-		};
-		CA53479A27181AB400BA4901 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CA53478E27181AB400BA4901 /* LockerAutofill */;
-			targetProxy = CA53479927181AB400BA4901 /* PBXContainerItemProxy */;
+			target = 7C973A3B2A93055500875FBA /* LockerAutofill */;
+			targetProxy = 7C973A472A93055500875FBA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		7C8496E227B7759200CFEA8B /* MainInterface.storyboard */ = {
+		7C973A422A93055500875FBA /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				7C8496E127B7759200CFEA8B /* Base */,
-				7CB5348927E9C4F600E31C07 /* vi */,
+				7C973A432A93055500875FBA /* Base */,
+				7CEB31E72A930AA1007F6051 /* vi */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -1020,17 +784,16 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE663438A5A8531CBDCF351D /* Pods-Locker-LockerTests.debug.xcconfig */;
+			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-Locker-LockerTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = CyStackLockerTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				INFOPLIST_FILE = LockerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1041,10 +804,9 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.locker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLockerTests-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locker.app/Locker";
 			};
@@ -1052,14 +814,13 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AD4DFC3A42ACAA6CE9380B62 /* Pods-Locker-LockerTests.release.xcconfig */;
+			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-Locker-LockerTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = CyStackLockerTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				INFOPLIST_FILE = LockerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1070,9 +831,9 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE -D EXPO_CONFIGURATION_DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.locker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLockerTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locker.app/Locker";
 			};
@@ -1080,35 +841,36 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8CC74A7CDBF8F743DD6B9136 /* Pods-Locker.debug.xcconfig */;
+			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-Locker.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 128;
+				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
+				CURRENT_PROJECT_VERSION = 133;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CyStackLocker/Info.plist;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				INFOPLIST_FILE = Locker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.35;
+				MARKETING_VERSION = 1.37;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp;
 				PRODUCT_NAME = Locker;
-				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLocker-Bridging-Header.h";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Locker-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1118,604 +880,61 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0255712E95395CF7C23FAA8F /* Pods-Locker.release.xcconfig */;
+			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-Locker.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 128;
+				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
+				CURRENT_PROJECT_VERSION = 133;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = Locker;
-				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CyStackLocker/Info.plist;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				INFOPLIST_FILE = Locker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.35;
+				MARKETING_VERSION = 1.37;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp;
 				PRODUCT_NAME = Locker;
-				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLocker-Bridging-Header.h";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Locker-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
-		2D02E4971E0B4A5E006451C7 /* Debug */ = {
+		7C973A4B2A93055500875FBA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "CyStackLocker-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.CyStackLocker-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 10.0;
-			};
-			name = Debug;
-		};
-		2D02E4981E0B4A5E006451C7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "CyStackLocker-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.CyStackLocker-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 10.0;
-			};
-			name = Release;
-		};
-		2D02E4991E0B4A5E006451C7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "CyStackLocker-tvOSTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.CyStackLocker-tvOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locker-tvOS.app/Locker-tvOS";
-				TVOS_DEPLOYMENT_TARGET = 10.1;
-			};
-			name = Debug;
-		};
-		2D02E49A1E0B4A5E006451C7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "CyStackLocker-tvOSTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.CyStackLocker-tvOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locker-tvOS.app/Locker-tvOS";
-				TVOS_DEPLOYMENT_TARGET = 10.1;
-			};
-			name = Release;
-		};
-		7C83F63827FC1DC300F60DAE /* Release Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					/usr/lib/swift,
-					"$(inherited)",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"\"\\\"$(SDKROOT)/usr/lib/swift\\\"\"",
-					"\"$(inherited)\"",
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
-				);
-				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release Staging";
-		};
-		7C83F63927FC1DC300F60DAE /* Release Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4C5E1605FE35B2B1B3DF7A3C /* Pods-Locker.release staging.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 128;
-				DEVELOPMENT_TEAM = W7S57TNBH5;
-				DISPLAY_NAME = Unlocker;
-				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CyStackLocker/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.35;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.staging;
-				PRODUCT_NAME = Unlocker;
-				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLocker-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = "Release Staging";
-		};
-		7C83F63A27FC1DC300F60DAE /* Release Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A06EB5D75CE1BCAB8B9346D9 /* Pods-Locker-LockerTests.release staging.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = CyStackLockerTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLockerTests-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locker.app/Locker";
-			};
-			name = "Release Staging";
-		};
-		7C83F63B27FC1DC300F60DAE /* Release Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "CyStackLocker-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.CyStackLocker-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 10.0;
-			};
-			name = "Release Staging";
-		};
-		7C83F63C27FC1DC300F60DAE /* Release Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "CyStackLocker-tvOSTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.CyStackLocker-tvOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locker-tvOS.app/Locker-tvOS";
-				TVOS_DEPLOYMENT_TARGET = 10.1;
-			};
-			name = "Release Staging";
-		};
-		7C83F63D27FC1DC300F60DAE /* Release Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C748AFE280EC58100424E43 /* Config.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = LockerAutofill/LockerAutofillRelease.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = W7S57TNBH5;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = LockerAutofill/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Locker;
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "Please allow to continue with face id";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.staging.LockerAutofill;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = "Release Staging";
-		};
-		7C83F63E27FC1DE200F60DAE /* Debug Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					/usr/lib/swift,
-					"$(inherited)",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"\"\\\"$(SDKROOT)/usr/lib/swift\\\"\"",
-					"\"$(inherited)\"",
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
-				);
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-			};
-			name = "Debug Staging";
-		};
-		7C83F63F27FC1DE200F60DAE /* Debug Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1FBE1637C013A3E761D31AB5 /* Pods-Locker.debug staging.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = CyStackLocker/CyStackLocker.entitlements;
-				CURRENT_PROJECT_VERSION = 128;
-				DEVELOPMENT_TEAM = W7S57TNBH5;
-				DISPLAY_NAME = Unlocker;
-				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CyStackLocker/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.35;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.staging;
-				PRODUCT_NAME = Unlocker;
-				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLocker-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = "Debug Staging";
-		};
-		7C83F64027FC1DE200F60DAE /* Debug Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 284748E788206C284D1FEA7A /* Pods-Locker-LockerTests.debug staging.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = CyStackLockerTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "CyStackLockerTests-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locker.app/Locker";
-			};
-			name = "Debug Staging";
-		};
-		7C83F64127FC1DE200F60DAE /* Debug Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "CyStackLocker-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.CyStackLocker-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 10.0;
-			};
-			name = "Debug Staging";
-		};
-		7C83F64227FC1DE200F60DAE /* Debug Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "CyStackLocker-tvOSTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.CyStackLocker-tvOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locker-tvOS.app/Locker-tvOS";
-				TVOS_DEPLOYMENT_TARGET = 10.1;
-			};
-			name = "Debug Staging";
-		};
-		7C83F64327FC1DE200F60DAE /* Debug Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C748AFE280EC58100424E43 /* Config.xcconfig */;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = LockerAutofill/LockerAutofill.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LockerAutofill/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Locker;
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "Please allow to continue with face id";
+				INFOPLIST_KEY_CFBundleDisplayName = LockerAutofill;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1724,8 +943,11 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.staging.LockerAutofill;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LockerAutofill;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SHARED_KEYCHAIN_ACCESS_GROUP = group.com.cystack.lockerapp;
+				SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.com.cystack.lockerapp;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1733,14 +955,55 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = "Debug Staging";
+			name = Debug;
+		};
+		7C973A4C2A93055500875FBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = LockerAutofill/LockerAutofillRelease.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = W7S57TNBH5;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LockerAutofill/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LockerAutofill;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LockerAutofill;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SHARED_KEYCHAIN_ACCESS_GROUP = group.com.cystack.lockerapp;
+				SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.com.cystack.lockerapp;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1758,6 +1021,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1767,7 +1031,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1783,20 +1047,26 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"\"\\\"$(SDKROOT)/usr/lib/swift\\\"\"",
-					"\"$(inherited)\"",
+					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Debug;
 		};
@@ -1805,7 +1075,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1823,6 +1093,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1832,7 +1103,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1841,104 +1112,27 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"\"\\\"$(SDKROOT)/usr/lib/swift\\\"\"",
-					"\"$(inherited)\"",
+					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		CA53479D27181AB400BA4901 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C748AFE280EC58100424E43 /* Config.xcconfig */;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = LockerAutofill/LockerAutofill.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = W7S57TNBH5;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = LockerAutofill/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Locker;
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "Please allow to continue with face id";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LockerAutofill;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		CA53479E27181AB400BA4901 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C748AFE280EC58100424E43 /* Config.xcconfig */;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = LockerAutofill/LockerAutofillRelease.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = W7S57TNBH5;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = LockerAutofill/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Locker;
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "Please allow to continue with face id";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LockerAutofill;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -1949,9 +1143,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
-				7C83F64027FC1DE200F60DAE /* Debug Staging */,
 				00E356F71AD99517003FC87E /* Release */,
-				7C83F63A27FC1DC300F60DAE /* Release Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1960,31 +1152,16 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
-				7C83F63F27FC1DE200F60DAE /* Debug Staging */,
 				13B07F951A680F5B00A75B9A /* Release */,
-				7C83F63927FC1DC300F60DAE /* Release Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Locker-tvOS" */ = {
+		7C973A4A2A93055500875FBA /* Build configuration list for PBXNativeTarget "LockerAutofill" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2D02E4971E0B4A5E006451C7 /* Debug */,
-				7C83F64127FC1DE200F60DAE /* Debug Staging */,
-				2D02E4981E0B4A5E006451C7 /* Release */,
-				7C83F63B27FC1DC300F60DAE /* Release Staging */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Locker-tvOSTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2D02E4991E0B4A5E006451C7 /* Debug */,
-				7C83F64227FC1DE200F60DAE /* Debug Staging */,
-				2D02E49A1E0B4A5E006451C7 /* Release */,
-				7C83F63C27FC1DC300F60DAE /* Release Staging */,
+				7C973A4B2A93055500875FBA /* Debug */,
+				7C973A4C2A93055500875FBA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1993,20 +1170,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
-				7C83F63E27FC1DE200F60DAE /* Debug Staging */,
 				83CBBA211A601CBA00E9B192 /* Release */,
-				7C83F63827FC1DC300F60DAE /* Release Staging */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CA53479C27181AB400BA4901 /* Build configuration list for PBXNativeTarget "LockerAutofill" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CA53479D27181AB400BA4901 /* Debug */,
-				7C83F64327FC1DE200F60DAE /* Debug Staging */,
-				CA53479E27181AB400BA4901 /* Release */,
-				7C83F63D27FC1DC300F60DAE /* Release Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2014,15 +1178,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7C7A47362A2DE8040002FCAD /* XCRemoteSwiftPackageReference "SwiftOTP.git" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-		CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+		7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
 			requirement = {
@@ -2030,18 +1186,26 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7C7A47372A2DE8040002FCAD /* SwiftOTP */ = {
+		7CEB31E82A931B50007F6051 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C7A47362A2DE8040002FCAD /* XCRemoteSwiftPackageReference "SwiftOTP.git" */;
-			productName = SwiftOTP;
-		};
-		CA9F41E927183FC300B0C0A5 /* KeychainAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CA9F41E827183FC300B0C0A5 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			package = 7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		7CEB31EA2A931B5A007F6051 /* SwiftOTP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */;
+			productName = SwiftOTP;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

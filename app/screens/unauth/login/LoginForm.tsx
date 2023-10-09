@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { LayoutAnimation, Platform, TouchableOpacity, View } from 'react-native'
+import { Platform, TouchableOpacity, View } from 'react-native'
 import { useStores } from 'app/models'
 import { Passkey, PasskeyAuthenticationResult } from 'react-native-passkey'
 import { PasskeyAuthenticationRequest } from 'react-native-passkey/lib/typescript/Passkey'
@@ -8,7 +8,7 @@ import { IosPasswordlessOptions, SocialLogin } from 'app/components/utils'
 import { translate } from 'app/i18n'
 import { useHelper } from 'app/services/hook'
 import { Logo, Text, Button, TextInput } from 'app/components/cores'
-import Animated, { ZoomIn } from 'react-native-reanimated'
+import Animated, { FadeInUp } from 'react-native-reanimated'
 import { useTheme } from 'app/services/context'
 
 type Props = {
@@ -34,10 +34,10 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
 
   const passwordRef = useRef(null)
 
-  const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [loginMethodLoading, setLoginMethodLoading] = useState<METHOD>(METHOD.NONE)
 
   const [loginMethod, setLoginMethod] = useState<METHOD>(METHOD.NONE)
   const [passkeySupported, setPasskeySupported] = useState(false)
@@ -68,12 +68,12 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
   }
 
   const handleLogin = async () => {
-    setIsLoading(true)
+    setLoginMethodLoading(METHOD.PASSWORD)
     setIsError(false)
 
     const payload = { username, password }
     const res = await user.login(payload)
-    setIsLoading(false)
+    setLoginMethodLoading(METHOD.NONE)
     if (res.kind !== 'ok') {
       setIsError(true)
       if (res.kind === 'unauthorized' && res.data) {
@@ -110,13 +110,13 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
   }
 
   const handleAuthWebauth = async (withSecurityKey?: boolean) => {
+    setLoginMethodLoading(METHOD.PASSKEY)
     const resAuthPasskeyOptions = await user.authPasskeyOptions(username)
     if (resAuthPasskeyOptions.kind === 'ok') {
       try {
         const authRequest: PasskeyAuthenticationRequest = credentialAuthOptions(
           resAuthPasskeyOptions.data
         )
-
         // Call the `authenticate` method with the retrieved request in JSON format
         // A native overlay will be displayed
         const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest, {
@@ -141,6 +141,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
           if (res.kind === 'unauthorized') {
             notify('error', translate('passkey.error.login_failed'))
           }
+
           setLoginMethod(METHOD.PASSWORD)
         }
         // The `authenticate` method returns a FIDO2 assertion result
@@ -149,12 +150,15 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
         // Handle Error...
         if (error.error === 'UserCancelled') {
           notify('error', translate('passkey.error.user_cancel'))
+        } else {
+          notify('error', translate('error.something_went_wrong'))
         }
         setLoginMethod(METHOD.PASSWORD)
       }
     } else {
       notifyApiError(resAuthPasskeyOptions)
     }
+    setLoginMethodLoading(METHOD.NONE)
   }
   const checkPasskeySupported = async () => {
     const res = await Passkey.isSupported()
@@ -182,12 +186,6 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
             isOpen={isShowCreatePasskeyOptions}
             onClose={() => {
               setIsShowCreatePasskeyOptions(false)
-              LayoutAnimation.configureNext({
-                duration: 250,
-                update: {
-                  type: LayoutAnimation.Types.easeInEaseOut,
-                },
-              })
               setLoginMethod(METHOD.PASSWORD)
             }}
             label={translate('passkey.login_passkey_options')}
@@ -230,7 +228,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
 
         {/* Password input */}
         {loginMethod === METHOD.PASSWORD && (
-          <Animated.View entering={ZoomIn}>
+          <Animated.View entering={FadeInUp}>
             <TextInput
               ref={passwordRef}
               animated
@@ -254,8 +252,8 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
               </TouchableOpacity>
             </View>
             <Button
-              loading={isLoading}
-              disabled={isLoading || !(username && password)}
+              loading={loginMethodLoading === METHOD.PASSWORD}
+              disabled={loginMethodLoading !== METHOD.NONE || !(username && password)}
               text={translate('common.login')}
               onPress={handleLogin}
               style={{
@@ -268,7 +266,6 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
 
         {loginMethod !== METHOD.PASSWORD && (
           <Button
-            loading={isLoading}
             disabled={!username}
             text={translate('common.continue')}
             onPress={getLoginMethod}
@@ -281,8 +278,8 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
         {showExtraPasskeyLogin && (
           <Button
             preset="secondary"
-            loading={isLoading}
-            disabled={isLoading || !username}
+            loading={loginMethodLoading === METHOD.PASSKEY}
+            disabled={loginMethodLoading !== METHOD.NONE || !username}
             text={translate('passkey.login_passkey')}
             onPress={() => {
               if (Platform.OS === 'ios') {

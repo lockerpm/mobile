@@ -4,17 +4,24 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React, { useEffect, useState } from 'react'
-import { AppState } from 'react-native'
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { NavigatorScreenParams, useNavigation } from '@react-navigation/native'
-import { MainTabNavigator } from './MainTabNavigator'
-import { ToolsNavigator, ToolsParamList } from './tools/ToolNavigator'
-import UserInactivity from 'react-native-user-inactivity'
-import InAppReview from 'react-native-in-app-review'
-import { AppTimeoutType, TimeoutActionType, useStores } from '../models'
-import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from '../config/constants'
-import { AppNotification, SocketEvent, SocketEventType, TrustedContact } from 'app/static/types'
+import React, { useEffect, useState } from "react"
+import { AppState } from "react-native"
+import { StackScreenProps, createStackNavigator } from "@react-navigation/stack"
+import { NavigatorScreenParams, useNavigation } from "@react-navigation/native"
+import { MainTabNavigator } from "./MainTabNavigator"
+import { ToolsNavigator, ToolsParamList } from "./tools/ToolNavigator"
+import UserInactivity from "react-native-user-inactivity"
+import InAppReview from "react-native-in-app-review"
+import { useStores } from "../models"
+import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from "../config/constants"
+import {
+  AppNotification,
+  AppTimeoutType,
+  SocketEvent,
+  SocketEventType,
+  TimeoutActionType,
+  TrustedContact,
+} from "app/static/types"
 
 import {
   SwitchDeviceScreen,
@@ -68,15 +75,15 @@ import {
   QuickSharesScreen,
   Password2FASetupScreen,
   QuickSharesDetailScreen,
-} from '../screens'
-import { CipherView } from 'core/models/view'
-import { SendView } from 'core/models/view/sendView'
-import { CollectionView } from 'core/models/view/collectionView'
-import { useAuthentication, useCipherData, useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
-import { Logger } from 'app/utils/utils'
-import { AppEventType, EventBus } from 'app/utils/eventBus'
-import { observer } from 'mobx-react-lite'
+} from "../screens"
+import { CipherView } from "core/models/view"
+import { SendView } from "core/models/view/sendView"
+import { CollectionView } from "core/models/view/collectionView"
+import { useAuthentication, useCipherData, useHelper } from "app/services/hook"
+import { translate } from "app/i18n"
+import { Logger } from "app/utils/utils"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+import { observer } from "mobx-react-lite"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -110,14 +117,14 @@ export type PrimaryParamList = {
     fromTools?: boolean
   }
   authenticator__edit: {
-    mode: 'add' | 'edit'
+    mode: "add" | "edit"
     passwordTotp?: boolean
-    passwordMode?: 'add' | 'edit' | 'clone'
+    passwordMode?: "add" | "edit" | "clone"
   }
   qrScanner: {
     totpCount?: number
     passwordTotp?: boolean
-    passwordMode?: 'add' | 'edit' | 'clone'
+    passwordMode?: "add" | "edit" | "clone"
   }
   dataBreachScanner: undefined
   dataBreachList: undefined
@@ -138,45 +145,45 @@ export type PrimaryParamList = {
     quickShare?: boolean
   }
   passwords__edit: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
     initialUrl?: string
     collection?: CollectionView
   }
   passwords_2fa_setup: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
   }
 
   notes__info: {
     quickShare?: boolean
   }
   notes__edit: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
   cards__info: {
     quickShare?: boolean
   }
   cards__edit: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
   identities__info: {
     quickShare?: boolean
   }
   identities__edit: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
   cryptoWallets__info: {
     quickShare?: boolean
   }
   cryptoWallets__edit: {
-    mode: 'add' | 'edit' | 'clone'
+    mode: "add" | "edit" | "clone"
     collection?: CollectionView
   }
 
   folders__select: {
-    mode: 'add' | 'move'
+    mode: "add" | "move"
     initialId?: string
     cipherIds?: string[]
   }
@@ -205,7 +212,7 @@ export type PrimaryParamList = {
   import: undefined
   export: undefined
   autofill: {
-    mode: 'all' | 'item'
+    mode: "all" | "item"
   }
   notificationSettings: undefined
   emailNotiSettings: undefined
@@ -239,7 +246,7 @@ export type AppStackScreenProps<T extends keyof PrimaryParamList> = StackScreenP
 const Stack = createStackNavigator<PrimaryParamList>()
 
 export const MainNavigator = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { notify, parsePushNotiData } = useHelper()
   const { lock, logout } = useAuthentication()
   const {
@@ -270,10 +277,10 @@ export const MainNavigator = observer(() => {
     // Check if sync is needed
     const lastUpdateRes = await cipherStore.getLastUpdate()
     let bumpTimestamp = 0
-    if (lastUpdateRes.kind === 'unauthorized') {
+    if (lastUpdateRes.kind === "unauthorized") {
       return
     }
-    if (lastUpdateRes.kind === 'ok') {
+    if (lastUpdateRes.kind === "ok") {
       bumpTimestamp =
         (lastUpdateRes.data.revision_date - new Date().getTimezoneOffset() * 60) * 1000
       if (bumpTimestamp <= cipherStore.lastSync) {
@@ -283,10 +290,8 @@ export const MainNavigator = observer(() => {
 
     // Send request
     const syncRes = await startSyncProcess(bumpTimestamp)
-    if (syncRes.kind !== 'ok') {
-      if (syncRes.kind === 'error') {
-        notify('error', translate('error.sync_failed'))
-      }
+    if (!syncRes || syncRes.kind !== "ok") {
+      notify("error", translate("error.sync_failed"))
       return
     }
 
@@ -338,7 +343,7 @@ export const MainNavigator = observer(() => {
     Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
-    if (nextAppState !== 'active') {
+    if (nextAppState !== "active") {
       appIsActive = false
       return
     }
@@ -363,10 +368,10 @@ export const MainNavigator = observer(() => {
         // Check user settings to lock
         if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
           await logout()
-          navigation.navigate('login')
+          navigation.navigate("login")
         } else {
           await lock()
-          navigation.navigate('lock')
+          navigation.navigate("lock")
         }
         return
       }
@@ -387,10 +392,10 @@ export const MainNavigator = observer(() => {
     if (!isActive && user.appTimeout && user.appTimeout > 0) {
       if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
         await logout()
-        navigation.navigate('login')
+        navigation.navigate("login")
       } else {
         await lock()
-        navigation.navigate('lock')
+        navigation.navigate("lock")
       }
     }
   }
@@ -401,17 +406,17 @@ export const MainNavigator = observer(() => {
     // @ts-ignore
     const ws = new WebSocket(`${WS_URL}?token=${user.apiToken}`, [], {
       headers: {
-        'CF-Access-Client-Id': CF_ACCESS_CLIENT_ID,
-        'CF-Access-Client-Secret': CF_ACCESS_CLIENT_SECRET,
+        "CF-Access-Client-Id": CF_ACCESS_CLIENT_ID,
+        "CF-Access-Client-Secret": CF_ACCESS_CLIENT_SECRET,
       },
     })
     ws.onopen = () => {
-      Logger.debug('SOCKET OPEN')
+      Logger.debug("SOCKET OPEN")
     }
 
     ws.onmessage = async (e) => {
       const data = JSON.parse(e.data)
-      Logger.debug('WEBSOCKET EVENT: ' + data.event)
+      Logger.debug("WEBSOCKET EVENT: " + data.event)
 
       switch (data.event) {
         // SYNC
@@ -473,9 +478,8 @@ export const MainNavigator = observer(() => {
 
   // Check device screen on/off
   useEffect(() => {
-    AppState.addEventListener('change', _handleAppStateChange)
+    AppState.addEventListener("change", _handleAppStateChange)
     return () => {
-      AppState.removeEventListener('change', _handleAppStateChange)
       clearTimeout(timeout)
     }
   }, [timeout])
@@ -516,7 +520,7 @@ export const MainNavigator = observer(() => {
   // Outdated data warning
   useEffect(() => {
     const listener = EventBus.createListener(AppEventType.TEMP_ID_DECTECTED, () => {
-      navigation.navigate('dataOutdated')
+      navigation.navigate("dataOutdated")
     })
     return () => {
       EventBus.removeListener(listener)
@@ -537,10 +541,10 @@ export const MainNavigator = observer(() => {
   useEffect(() => {
     const listener = EventBus.createListener(AppEventType.DECRYPT_ALL_STATUS, (status) => {
       switch (status) {
-        case 'started':
+        case "started":
           cipherStore.setIsBatchDecrypting(true)
           break
-        case 'ended':
+        case "ended":
           cipherStore.setIsBatchDecrypting(false)
           syncAutofillData()
           setBatchDecryptionEnded(true)
@@ -590,7 +594,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen
           name="authenticator__edit"
           component={AuthenticatorEditScreen}
-          initialParams={{ mode: 'add' }}
+          initialParams={{ mode: "add" }}
         />
 
         <Stack.Screen name="dataBreachScanner" component={DataBreachScannerScreen} />
@@ -610,7 +614,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen
           name="passwords__edit"
           component={PasswordEditScreen}
-          initialParams={{ mode: 'add' }}
+          initialParams={{ mode: "add" }}
         />
         <Stack.Screen name="passwords_2fa_setup" component={Password2FASetupScreen} />
 
@@ -618,25 +622,25 @@ export const MainNavigator = observer(() => {
         <Stack.Screen
           name="notes__edit"
           component={NoteEditScreen}
-          initialParams={{ mode: 'add' }}
+          initialParams={{ mode: "add" }}
         />
         <Stack.Screen name="cards__info" component={CardInfoScreen} />
         <Stack.Screen
           name="cards__edit"
           component={CardEditScreen}
-          initialParams={{ mode: 'add' }}
+          initialParams={{ mode: "add" }}
         />
         <Stack.Screen name="identities__info" component={IdentityInfoScreen} />
         <Stack.Screen
           name="identities__edit"
           component={IdentityEditScreen}
-          initialParams={{ mode: 'add' }}
+          initialParams={{ mode: "add" }}
         />
 
         <Stack.Screen
           name="folders__select"
           component={FolderSelectScreen}
-          initialParams={{ mode: 'add' }}
+          initialParams={{ mode: "add" }}
         />
         <Stack.Screen name="folders__ciphers" component={FolderCiphersScreen} />
         <Stack.Screen name="shareFolder" component={FolderSharedUsersManagementScreen} />
@@ -645,7 +649,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen
           name="cryptoWallets__edit"
           component={CryptoWalletEditScreen}
-          initialParams={{ mode: 'add' }}
+          initialParams={{ mode: "add" }}
         />
 
         <Stack.Screen name="refer_friend" component={ReferFriendScreen} />
@@ -663,7 +667,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="deviceNotiSettings" component={PushNotificationSettingsScreen} />
 
         <Stack.Screen name="welcome_premium" component={WelcomePremiumScreen} />
-        <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: 'all' }} />
+        <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: "all" }} />
 
         <Stack.Screen name="emergencyAccess" component={EmergencyAccessScreen} />
         <Stack.Screen name="yourTrustedContact" component={YourTrustedContactScreen} />
@@ -673,5 +677,4 @@ export const MainNavigator = observer(() => {
       </Stack.Navigator>
     </UserInactivity>
   )
-}
-)
+})

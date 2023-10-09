@@ -19,7 +19,7 @@ import { translate } from 'app/i18n'
 const CARD_EMPTY = require('assets/images/emptyCipherList/card-empty-img.png')
 
 export const CardsScreen = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -69,11 +69,9 @@ export const CardsScreen = observer(() => {
 
   return (
     <Screen
-      padding
-      safeAreaEdges={['bottom', 'top']}
-      contentContainerStyle={{
-        flex: 1,
-      }}
+      preset='fixed'
+      safeAreaEdges={['top']}
+   
       header={
         <CipherListHeader
           header={translate('common.card')}
@@ -99,6 +97,9 @@ export const CardsScreen = observer(() => {
           }}
         />
       }
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}

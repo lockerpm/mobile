@@ -20,7 +20,7 @@ import { translate } from 'app/i18n'
 const EMPTY = require('assets/images/emptyCipherList/folder-empty-img.png')
 
 export const FoldersScreen = observer(function FoldersScreen() {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { colors } = useTheme()
   const { getTeam } = useHelper()
   const { folderStore, collectionStore, user, uiStore, cipherStore } = useStores()
@@ -109,7 +109,7 @@ export const FoldersScreen = observer(function FoldersScreen() {
 
   return (
     <Screen
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={['bottom', 'top']}
       header={
         <CipherListHeader
           header={translate('common.folders')}

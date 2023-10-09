@@ -117,9 +117,10 @@ export const OtpListItem = memo(
           ) : (
             <CountdownCircleTimer
               onComplete={() => {
-                // index === 0 && updateOtp()
                 setOtp(getTOTP(otpData))
-                return [true, 0]
+                return {
+                  shouldRepeat: true
+                }
               }}
               size={25}
               isPlaying

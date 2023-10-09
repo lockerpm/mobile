@@ -1,6 +1,7 @@
 import React from 'react'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { MenuScreen } from '../../screens'
+import { observer } from 'mobx-react-lite'
 
 export type MenuParamList = {
   menu: undefined
@@ -10,7 +11,7 @@ export type MenuStackScreenProps<T extends keyof MenuParamList> = StackScreenPro
 
 const Stack = createStackNavigator<MenuParamList>()
 
-export const MenuNavigator = () => {
+export const MenuNavigator = observer(() => {
   return (
     <Stack.Navigator
       initialRouteName="menu"
@@ -21,4 +22,4 @@ export const MenuNavigator = () => {
       <Stack.Screen name="menu" component={MenuScreen} />
     </Stack.Navigator>
   )
-}
+})

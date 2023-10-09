@@ -17,8 +17,8 @@ import { CipherType } from 'core/enums'
 
 const EMPTY_LIST = require('assets/images/emptyCipherList/password-empty-img.png')
 
-export const PasswordsScreen = observer(function PasswordsScreen() {
-  const navigation = useNavigation()
+export const PasswordsScreen = observer(() => {
+  const navigation = useNavigation() as any
   const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -68,8 +68,7 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
 
   return (
     <Screen
-      preset="auto"
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={['top']}
       header={
         <CipherListHeader
           header={translate('common.passwords')}
@@ -95,6 +94,9 @@ export const PasswordsScreen = observer(function PasswordsScreen() {
           }}
         />
       }
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}

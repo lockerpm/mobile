@@ -178,7 +178,7 @@ export const Button = observer((props: ButtonProps) => {
 
   // Button Loading
   const $loadingStyle: Record<Presets, StyleProp<ViewStyle>> = {
-    primary: { backgroundColor: colors.palette.primary4 },
+    primary: { opacity: 0.8 },
     secondary: { backgroundColor: colors.background },
     teriatary: { backgroundColor: teriataryBackground },
   }

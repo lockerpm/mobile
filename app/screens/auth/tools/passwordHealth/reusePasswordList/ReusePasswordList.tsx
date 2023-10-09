@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import { useNavigation } from '@react-navigation/native'
-import { FlatList, View } from 'react-native'
+import { FlatList } from 'react-native'
 import { LoadingHeader } from '../LoadingHeader'
 import { ListItem } from './ListItem'
 import { useStores } from 'app/models'
@@ -12,7 +12,7 @@ import { Header, Screen, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 
 export const ReusePasswordList = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { toolStore, cipherStore } = useStores()
   const { getWebsiteLogo } = useCipherHelper()
 
@@ -57,8 +57,10 @@ export const ReusePasswordList = observer(() => {
           onLeftPress={() => navigation.goBack()}
         />
       }
+      contentContainerStyle={{
+        flex: 1
+      }}
     >
-      <View style={{ flex: 1 }}>
         <LoadingHeader />
 
         <FlatList
@@ -81,7 +83,6 @@ export const ReusePasswordList = observer(() => {
             index,
           })}
         />
-      </View>
     </Screen>
   )
 })

@@ -29,11 +29,8 @@ export const NoteInfoScreen: FC<AppStackScreenProps<'notes__info'>> = observer((
   return (
     <Screen
       preset="auto"
+      padding
       safeAreaEdges={['bottom']}
-      backgroundColor={colors.block}
-      contentContainerStyle={{
-        flex: 1,
-      }}
       header={
         <Header
           leftIcon="arrow-left"
@@ -57,56 +54,35 @@ export const NoteInfoScreen: FC<AppStackScreenProps<'notes__info'>> = observer((
         />
       )}
 
-      <View>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            backgroundColor: colors.background,
-            paddingTop: 20,
-            paddingBottom: 30,
-            marginBottom: 10,
-          }}
-        >
-          <Image
-            source={BROWSE_ITEMS.note.icon}
-            style={{
-              width: 55,
-              height: 55,
-            }}
-          />
 
-          <Text
-            preset="bold"
-            size="xl"
-            style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
-          >
-            {selectedCipher.name}
-            {notSync && (
-              <View style={{ paddingLeft: 10 }}>
-                <Icon icon="wifi-slash" size={22} />
-              </View>
-            )}
-          </Text>
-        </View>
-      </View>
-
-      <View
+      <Image
+        source={BROWSE_ITEMS.note.icon}
         style={{
-          backgroundColor: colors.background,
-          padding: 16,
-          paddingVertical: 22,
+          height: 55, width: 55, alignSelf: 'center'
         }}
-      >
-        <Textarea
-          label={translate('common.notes')}
-          value={selectedCipher.notes}
-          editable={false}
-          copyAble
-        />
+      />
 
-        <CipherInfoCommon cipher={selectedCipher} />
-      </View>
+      <Text
+        preset="bold"
+        size="xxl"
+        style={{ margin: 20, textAlign: 'center' }}
+      >
+        {selectedCipher.name}
+        {notSync && (
+          <View style={{ paddingLeft: 10 }}>
+            <Icon icon="wifi-slash" size={22} />
+          </View>
+        )}
+      </Text>
+
+      <Textarea
+        label={translate('common.notes')}
+        value={selectedCipher.notes}
+        editable={false}
+        copyAble
+      />
+
+      <CipherInfoCommon cipher={selectedCipher} />
     </Screen>
   )
 })

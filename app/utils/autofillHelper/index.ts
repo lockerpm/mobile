@@ -1,3 +1,4 @@
+/* eslint-disable n/no-callback-literal */
 import { RootProp } from "../../app";
 import { IS_IOS } from "../../config/constants";
 import { save, StorageKey } from "../storage";
@@ -17,7 +18,6 @@ export const AutofillServiceEnabled: (callback: (a: boolean, androidNotSupport?:
       // https://developer.android.com/reference/android/view/autofill/AutofillManager
       // crash on Android lower version
 
-      // eslint-disable-next-line node/no-callback-literal
       return callback(false, true)
     }
   }

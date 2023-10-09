@@ -136,7 +136,6 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
     <Screen
       preset="auto"
       safeAreaEdges={['bottom']}
-      backgroundColor={colors.block}
       header={
         <Header
           title={
@@ -153,11 +152,6 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
               disabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{
-                height: 35,
-                alignItems: 'center',
-                paddingLeft: 10,
-              }}
             />
           }
         />
@@ -165,17 +159,17 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
     >
       <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
 
-      <View style={{ backgroundColor: colors.background, padding: 16 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ padding: 16, paddingTop: 0 }}>
+        <View style={{ flexDirection: 'row' }}>
           <Image
             source={BROWSE_ITEMS.note.icon}
             style={{
-              height: 40,
-              width: 40,
+              height: 50, width: 50, marginRight: 10, marginTop: 25
             }}
           />
-          <View style={{ flex: 1, marginLeft: 10 }}>
+          <View style={{ flex: 1 }}>
             <TextInput
+              animated
               isRequired
               label={translate('common.item_name')}
               value={name}
@@ -185,20 +179,17 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
         </View>
       </View>
 
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: 16, backgroundColor: colors.block }}>
         <Text preset="label" size="base" text={translate('common.details').toUpperCase()} />
       </View>
 
       <View
         style={{
-          backgroundColor: colors.background,
           padding: 16,
           paddingBottom: 32,
         }}
       >
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <Textarea label={translate('common.notes')} value={note} onChangeText={setNote} />
-        </View>
+        <Textarea label={translate('common.notes')} value={note} onChangeText={setNote} />
       </View>
 
       {/* Custom fields */}

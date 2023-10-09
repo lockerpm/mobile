@@ -119,8 +119,8 @@ export const OtpList = observer((props: Props) => {
     const sortedData =
       toolStore.authenticatorOrder.length > 0
         ? sortBy(res, (item: CipherView) => {
-            return toolStore.authenticatorOrder.indexOf(item.id)
-          })
+          return toolStore.authenticatorOrder.indexOf(item.id)
+        })
         : [...res]
     setCiphers(sortedData)
     setAllItems(sortedData.map((c) => c.id))
@@ -189,6 +189,7 @@ export const OtpList = observer((props: Props) => {
         data={ciphers}
         keyExtractor={(item) => item.id.toString()}
         onDragEnd={handleChangeOrder}
+        // @ts-ignore
         renderItem={renderItem}
       />
       {/* Cipher list end */}

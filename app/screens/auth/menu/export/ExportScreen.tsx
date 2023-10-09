@@ -86,6 +86,7 @@ export const ExportScreen = observer(() => {
 
   return (
     <Screen
+      padding
       header={
         <Header
           leftIcon="arrow-left"

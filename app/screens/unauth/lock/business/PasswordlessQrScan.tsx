@@ -14,7 +14,7 @@ interface Props {
 
 export const BusinessPasswordlessQrScan = ({ otp, goBack, index }: Props) => {
   const { width, height } = Dimensions.get('screen')
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const [onScanQR, setonScanQR] = useState(false)
   const { sessionBusinessQrLogin } = useAuthentication()
 
@@ -42,7 +42,7 @@ export const BusinessPasswordlessQrScan = ({ otp, goBack, index }: Props) => {
       <View
         style={{
           paddingTop: 70,
-          width: width,
+          width,
           height: width,
         }}
       >

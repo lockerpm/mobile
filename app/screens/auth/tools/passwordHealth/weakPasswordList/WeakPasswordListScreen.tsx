@@ -9,19 +9,28 @@ import { CipherView } from 'core/models/view'
 import { Header, Screen, Text } from 'app/components/cores'
 import { translate } from 'app/i18n'
 import { useNavigation } from '@react-navigation/native'
+import { observer } from 'mobx-react-lite'
 
-export const WeakPasswordListScreen: FC<ToolsStackScreenProps<'weakPasswordList'>> = () => {
-  const navigation = useNavigation()
+export const WeakPasswordListScreen: FC<ToolsStackScreenProps<'weakPasswordList'>> = observer(() => {
+  const navigation = useNavigation() as any
   const { toolStore, cipherStore } = useStores()
   const { getWebsiteLogo } = useCipherHelper()
 
   // -------------- COMPUTED ------------------
 
   const listData = toolStore.weakPasswords.map((c: CipherView) => {
+    let imgLogo
+    if (c.login.uri) {
+      const { uri } = getWebsiteLogo(c.login.uri)
+      if (uri) {
+        imgLogo = { uri }
+      } else {
+        imgLogo = BROWSE_ITEMS.password.icon
+      }
+    }
     return {
       ...c,
-      logo: BROWSE_ITEMS.password.icon,
-      imgLogo: c.login.uri ? getWebsiteLogo(c.login.uri) : null,
+      imgLogo,
       strength: toolStore.passwordStrengthMap && toolStore.passwordStrengthMap.get(c.id),
     }
   })
@@ -75,4 +84,4 @@ export const WeakPasswordListScreen: FC<ToolsStackScreenProps<'weakPasswordList'
       />
     </Screen>
   )
-}
+})

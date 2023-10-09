@@ -207,15 +207,13 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
   // Render screen
   return (
     <Screen
-      contentContainerStyle={{
-        backgroundColor:
-          route.params.family || route.params.premium ? colors.background : colors.block,
-        paddingHorizontal: 0,
-      }}
+      safeAreaEdges={['bottom', 'top']}
+      backgroundColor={ route.params.family || route.params.premium ? colors.background : colors.block}
       header={
         <View
           style={{
             flexDirection: 'row',
+            paddingHorizontal: 20,
             justifyContent: 'space-between',
           }}
         >

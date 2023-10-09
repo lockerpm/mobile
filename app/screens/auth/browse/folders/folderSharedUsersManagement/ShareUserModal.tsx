@@ -99,9 +99,11 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
           setSuggestions([])
         }
       }, 500)
-      return () => clearTimeout(timeout)
+      return () => {
+        clearTimeout(timeout)
+      }
     }
-    return null
+    return undefined
   }, [email])
 
   // ----------------------- RENDER -----------------------
@@ -290,7 +292,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
                   if (e.email) {
                     addEmailToShare(e.email)
                   } else {
-                    if (groups.some((e) => e.id === e.id)) {
+                    if (groups.some((g) => g.id === e.id)) {
                       return
                     }
                     setGroups([

@@ -1,6 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+    </style>
+
+     <!-- Base application theme. -->
     <style name="DeviceCredentialHandlerTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:forceDarkAllowed">false</item>
@@ -11,6 +17,5 @@
             https://github.com/facebook/react-native/issues/31059
         -->
         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
-    </style>
-
+    </style>s
 </resources>

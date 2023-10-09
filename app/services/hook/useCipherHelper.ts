@@ -42,8 +42,12 @@ export function useCipherHelper() {
 
   // Get website logo
   const getWebsiteLogo = (uri: string) => {
+    if (!uri || uri === 'https://') {
+      // https:// is default value for uri 
+      return { uri: null }
+    }
     const domain = extractDomain(uri)
-    if (!uri || !domain) {
+    if (!domain) {
       return { uri: null }
     }
     const imgUri = `${Config.GET_LOGO_URL}/${domain}?size=120`
@@ -69,9 +73,8 @@ export function useCipherHelper() {
         return item.identity.fullName
       case CipherType.CryptoWallet: {
         const walletData = toCryptoWalletData(item.notes)
-        return `${walletData.username}${walletData.username ? ', ' : ''}${
-          walletData.networks.length
-        } networks`
+        return `${walletData.username}${walletData.username ? ', ' : ''}${walletData.networks.length
+          } networks`
       }
     }
     return ''

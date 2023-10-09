@@ -91,7 +91,6 @@ export const AuthenticatorEditScreen: FC<AppStackScreenProps<'authenticator__edi
 
     return (
       <Screen
-        backgroundColor={colors.block}
         header={
           <Header
             title={mode === 'add' ? translate('authenticator.enter_key') : translate('common.edit')}

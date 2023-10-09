@@ -1,19 +1,19 @@
 package com.cystack.locker;
 
 import android.app.Activity;
-import android.os.Bundle; // here
-import com.facebook.react.ReactActivity;
-import org.devio.rn.splashscreen.SplashScreen; // here
-import android.view.WindowManager;
+import android.os.Build;
+import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
+import com.facebook.react.defaults.DefaultReactActivityDelegate;
+import com.zoontek.rnbootsplash.RNBootSplash;
+import android.view.WindowManager;
 
-import com.facebook.react.modules.network.OkHttpClientProvider;
-import com.cystack.locker.CertificatePinningClientFactory;
-import android.util.Log;
+import expo.modules.ReactActivityDelegateWrapper;
 
 public class MainActivity extends ReactActivity {
 
@@ -23,18 +23,25 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "CyStackLocker";
+    return "Locker";
+  }
+
+
+  /**
+   * Returns the instance of the {@link ReactActivityDelegate}. There the RootView is created and
+   * you can specify the renderer you wish to use - the new renderer (Fabric) or the old renderer
+   * (Paper).
+   */
+  @Override
+  protected ReactActivityDelegate createReactActivityDelegate() {
+    return new ReactActivityDelegateWrapper(this, BuildConfig.IS_NEW_ARCHITECTURE_ENABLED, new AppActivityDelegate(this, getMainComponentName()));
   }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    SplashScreen.show(this);  // here
+    RNBootSplash.init(this);            // <- initialize the splash screen
+    super.onCreate(null);               // or super.onCreate(savedInstanceState) when not using react-native-screens
 
-    //RuntimeException android.app.ActivityThread in performLaunchActivity
-    // Unhandled
-    // Unable to start activity ComponentInfo{com.cystack.locker/com.cystack.locker.MainActivity}: androidx.fragment.app.Fragment$k
-    //https://github.com/software-mansion/react-native-screens/issues/17#issuecomment-424704067
-    super.onCreate(null);
 
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
@@ -97,8 +104,24 @@ public class MainActivity extends ReactActivity {
     }
   }
 
+
+  /**
+   * Align the back button behavior with Android S
+   * where moving root activities to background instead of finishing activities.
+   * @see <a href="https://developer.android.com/reference/android/app/Activity#onBackPressed()">onBackPressed</a>
+   */
   @Override
-  protected ReactActivityDelegate createReactActivityDelegate() {
-    return new AppActivityDelegate(this, getMainComponentName());
+  public void invokeDefaultOnBackPressed() {
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+      if (!moveTaskToBack(false)) {
+        // For non-root activities, use the default implementation to finish them.
+        super.invokeDefaultOnBackPressed();
+      }
+      return;
+    }
+
+    // Use the default back button implementation on Android S
+    // because it's doing more than {@link Activity#moveTaskToBack} in fact.
+    super.invokeDefaultOnBackPressed();
   }
 }

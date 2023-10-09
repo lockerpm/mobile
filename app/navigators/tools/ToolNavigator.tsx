@@ -12,6 +12,7 @@ import {
 import { TxKeyPath } from 'app/i18n'
 import { ImageIconTypes } from 'app/components/cores'
 import { RelayAddress, SubdomainData } from 'app/static/types'
+import { observer } from 'mobx-react-lite'
 
 // ------------------------Tools list screen routing---------------------
 export type ToolsItem = {
@@ -88,7 +89,7 @@ export type ToolsStackScreenProps<T extends keyof ToolsParamList> = StackScreenP
 
 const Stack = createStackNavigator<ToolsParamList>()
 
-export const ToolsNavigator = () => {
+export const ToolsNavigator = observer(() => {
   // ------------------ RENDER --------------------
 
   return (
@@ -106,4 +107,4 @@ export const ToolsNavigator = () => {
       <Stack.Screen name="aliasStatistic" component={AliasStatisticScreen} />
     </Stack.Navigator>
   )
-}
+})

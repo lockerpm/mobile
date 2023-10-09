@@ -15,6 +15,7 @@ import {
 } from 'react-native'
 import { ExtendedEdge, useSafeAreaInsetsStyle } from '../../../utils/useSafeAreaInsetsStyle'
 import { useTheme } from 'app/services/context'
+import { observer } from 'mobx-react-lite'
 
 interface BaseScreenProps {
   /**
@@ -207,7 +208,7 @@ function ScreenWithScrolling(props: ScreenProps) {
   )
 }
 
-export function Screen(props: ScreenProps) {
+export const Screen = observer((props: ScreenProps) => {
   const { colors } = useTheme()
   const {
     backgroundColor = colors.background,
@@ -242,7 +243,7 @@ export function Screen(props: ScreenProps) {
       </KeyboardAvoidingView>
     </View>
   )
-}
+})
 
 const $containerStyle: ViewStyle = {
   flex: 1,

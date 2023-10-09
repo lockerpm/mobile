@@ -9,8 +9,9 @@ import { ChangePassword } from './ChangePassword'
 import { MethodSelectSheet } from './methodSelecBottomSheet/BottomSheetModal'
 import Animated, { SlideInUp } from 'react-native-reanimated'
 import { View } from 'react-native'
+import { observer } from 'mobx-react-lite'
 
-export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = (props) => {
+export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = observer((props) => {
   const navigation = props.navigation
   const { user } = useStores()
   const { notify, notifyApiError } = useHelper()
@@ -30,10 +31,8 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = 
 
   const handleRequest = async () => {
     setIsLoading(true)
-    console.log(username)
     const res = await user.recoverAccount(username)
     setIsLoading(false)
-    console.log(res)
     if (res.kind !== 'ok') {
       if (res.kind === 'rejected') {
         notifyApiError(res)
@@ -110,4 +109,4 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = 
       />
     </Screen>
   )
-}
+})

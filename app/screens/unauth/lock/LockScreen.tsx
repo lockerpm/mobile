@@ -13,10 +13,11 @@ import { LockByMasterPassword } from './normal/MasterPassword'
 import { BusinessLockByPasswordless } from './business/BusinessPasswordless'
 import { OnPremiseLockByPasswordless } from './onPremise/passwordless/passwordless'
 import { OnPremiseLockMasterPassword } from './onPremise/masterPassword/OnPremiseMasterPassword'
+import { observer } from 'mobx-react-lite'
 
 const IS_IOS = Platform.OS === 'ios'
 
-export const LockScreen: FC<RootStackScreenProps<'lock'>> = (props) => {
+export const LockScreen: FC<RootStackScreenProps<'lock'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { user, uiStore } = useStores()
@@ -147,4 +148,4 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = (props) => {
   }
 
   return <View style={{ flex: 1 }}>{renderContent()}</View>
-}
+})

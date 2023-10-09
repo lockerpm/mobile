@@ -14,12 +14,13 @@ import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
+import { observer } from 'mobx-react-lite'
 
 const { RNAutofillServiceAndroid } = NativeModules
 
 const EMPTY_CIPHER = require('assets/images/emptyCipherList/autofill-empty-cipher.png')
 
-export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = (props) => {
+export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = observer((props) => {
   const navigation = props.navigation
   const { mode } = props.route.params
   const { copyToClipboard } = useHelper()
@@ -173,4 +174,4 @@ export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = (props) => {
       />
     </Screen>
   )
-}
+})

@@ -37,6 +37,13 @@ export const Textarea = (props: Props) => {
 
   // ----------------- RENDER -----------------
 
+  const $containerStyle: ViewStyle = {
+    borderColor: isFocus ? colors.primary : colors.disable,
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 12,
+  }
+
   const BUTTON_CONTAINER: ViewStyle = {
     position: 'absolute',
     zIndex: 100,
@@ -71,37 +78,34 @@ export const Textarea = (props: Props) => {
             />
           </ScrollView>
         ) : (
-          <TextInput
-            multiline
-            ref={outerRef}
-            value={value}
-            autoCapitalize="none"
-            selectionColor={colors.primary}
-            onFocus={() => {
-              setIsFocus(true)
-            }}
-            onBlur={() => {
-              setIsFocus(false)
-            }}
-            placeholderTextColor={colors.secondaryText}
-            style={[INPUT_CONTENT_CONTAINER, {
-              fontSize: 16,
-              color: colors.title,
-              textAlignVertical: 'top',
-              paddingVertical: 0,
-              minHeight: 50
-            }, inputStyle]}
-            {...rest}
-          />
+          <View style={$containerStyle}>
+            <TextInput
+              multiline
+              ref={outerRef}
+              value={value}
+              autoCapitalize="none"
+              selectionColor={colors.primary}
+              onFocus={() => {
+                setIsFocus(true)
+              }}
+              onBlur={() => {
+                setIsFocus(false)
+              }}
+              placeholderTextColor={colors.secondaryText}
+              style={[INPUT_CONTENT_CONTAINER, {
+                fontSize: 16,
+                color: colors.title,
+                textAlignVertical: 'top',
+                paddingVertical: 0,
+                minHeight: 50
+              }, inputStyle]}
+              {...rest}
+            />
+          </View>
         )
       }
       {/* Input end */}
 
-      <View style={{
-        borderBottomColor: isFocus ? colors.primary : colors.block,
-        borderBottomWidth: 1,
-        marginTop: 10
-      }} />
 
       {/* Button right */}
       <View style={BUTTON_CONTAINER}>

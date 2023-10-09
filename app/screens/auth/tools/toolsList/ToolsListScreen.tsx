@@ -8,9 +8,10 @@ import { translate } from 'app/i18n'
 import { TOOLS_ITEMS, ToolsItem } from 'app/navigators'
 import { TabHeader } from 'app/components/cores/header/TabHeader'
 import { PremiumTag } from 'app/components/utils'
+import { observer } from 'mobx-react-lite'
 
-export const ToolsListScreen = () => {
-  const navigation = useNavigation()
+export const ToolsListScreen = observer(() => {
+  const navigation = useNavigation() as any
   const { user } = useStores()
   const { colors, isDark } = useTheme()
 
@@ -47,8 +48,8 @@ export const ToolsListScreen = () => {
       <View
         style={{
           backgroundColor: isDark ? colors.block : colors.background,
-          borderRadius: 10,
-          paddingHorizontal: 14,
+          borderRadius: 12,
+          paddingHorizontal: 16,
           marginTop: 20,
         }}
       >
@@ -96,4 +97,4 @@ export const ToolsListScreen = () => {
       </View>
     </Screen>
   )
-}
+})

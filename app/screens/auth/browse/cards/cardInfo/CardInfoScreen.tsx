@@ -34,25 +34,16 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
 
   return (
     <Screen
-      backgroundColor={colors.block}
+      preset='auto'
+      padding
+      safeAreaEdges={['bottom']}
       header={
-        !fromQuickShare && (
-          <Header
-            leftIcon="arrow-left"
-            onLeftPress={() => navigation.goBack()}
-            RightActionComponent={
-              <Icon
-                icon="dots-three"
-                size={24}
-                style={{
-                  alignItems: 'center',
-                  paddingLeft: 20,
-                }}
-                onPress={() => setShowAction(true)}
-              />
-            }
-          />
-        )
+        <Header
+          leftIcon="arrow-left"
+          onLeftPress={() => navigation.goBack()}
+          rightIcon={!fromQuickShare ? 'dots-three' : undefined}
+          onRightPress={() => setShowAction(true)}
+        />
       }
     >
       {/* Actions */}
@@ -71,101 +62,79 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
         />
       )}
 
-      <View>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: colors.background,
-            paddingTop: 20,
-            paddingBottom: 30,
-            marginBottom: 10,
-          }}
-        >
-          <Image
-            source={BROWSE_ITEMS.card.icon}
-            style={{ height: 55, width: 55, marginBottom: 5 }}
-          />
-          <Text
-            preset="bold"
-            size="xl"
-            style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
-          >
-            {selectedCipher.name}
-            {notSync && (
-              <View style={{ paddingLeft: 10 }}>
-                <Icon icon="wifi-slash" size={22} />
-              </View>
-            )}
-          </Text>
-        </View>
-      </View>
-
-      <View
-        style={{
-          backgroundColor: colors.background,
-          paddingVertical: 22,
-          padding: 16,
-        }}
+      <Image
+        source={BROWSE_ITEMS.card.icon}
+        style={{ height: 55, width: 55, alignSelf: 'center' }}
+      />
+      <Text
+        preset="bold"
+        size="xxl"
+        style={{ margin: 20, textAlign: 'center' }}
       >
-        <TextInput
-          isCopyable
-          label={translate('card.card_name')}
-          value={selectedCipher.card.cardholderName}
-          editable={false}
-          style={{ marginBottom: 10 }}
-        />
+        {selectedCipher.name}
+        {notSync && (
+          <View style={{ paddingLeft: 10 }}>
+            <Icon icon="wifi-slash" size={22} />
+          </View>
+        )}
+      </Text>
 
-        {/* Brand */}
-        <TextInput
-          isCopyable
-          label={translate('card.brand')}
-          value={
-            (CARD_BRANDS.find((i) => i.value === selectedCipher.card.brand) || { label: '' }).label
-          }
-          editable={false}
-          style={{ marginVertical: 10 }}
-        />
 
-        {/* Number */}
-        <TextInput
-          isCopyable
-          label={translate('card.card_number')}
-          value={selectedCipher.card.number}
-          editable={false}
-          style={{ marginVertical: 10 }}
-        />
+      <TextInput
+        isCopyable
+        label={translate('card.card_name')}
+        value={selectedCipher.card.cardholderName}
+        editable={false}
+        containerStyle={{ marginBottom: 16 }}
+      />
 
-        {/* Exp date */}
-        <TextInput
-          isCopyable
-          label={translate('card.exp_date')}
-          value={`${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}`}
-          editable={false}
-          style={{ marginVertical: 10 }}
-        />
+      <TextInput
+        isCopyable
+        label={translate('card.brand')}
+        value={(CARD_BRANDS.find((i) => i.value === selectedCipher.card.brand) || { label: '' }).label}
+        editable={false}
+        containerStyle={{ marginBottom: 16 }}
+      />
 
-        {/* CVV */}
-        <TextInput
-          isCopyable
-          isPassword
-          label={translate('card.cvv')}
-          value={selectedCipher.card.code}
-          editable={false}
-          style={{ marginVertical: 10 }}
-        />
+      {/* Number */}
+      <TextInput
+        isCopyable
+        label={translate('card.card_number')}
+        value={selectedCipher.card.number}
+        editable={false}
+        containerStyle={{ marginBottom: 16 }}
+      />
 
-        {/* Notes */}
-        <Textarea
-          label={translate('common.notes')}
-          value={selectedCipher.notes || '123'}
-          editable={false}
-          copyAble
-          style={{ marginTop: 10 }}
-        />
+      {/* Exp date */}
+      <TextInput
+        isCopyable
+        label={translate('card.exp_date')}
+        value={`${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}`}
+        editable={false}
+        containerStyle={{ marginBottom: 16 }}
+      />
 
-        {/* Others common info */}
-        <CipherInfoCommon cipher={selectedCipher} />
-      </View>
+      {/* CVV */}
+      <TextInput
+        isCopyable
+        isPassword
+        label={translate('card.cvv')}
+        value={selectedCipher.card.code}
+        editable={false}
+        containerStyle={{ marginBottom: 16 }}
+      />
+
+      {/* Notes */}
+      <Textarea
+        label={translate('common.notes')}
+        value={selectedCipher.notes || '123'}
+        editable={false}
+        copyAble
+        style={{ marginTop: 10 }}
+      />
+
+      {/* Others common info */}
+      <CipherInfoCommon cipher={selectedCipher} />
     </Screen>
   )
 })

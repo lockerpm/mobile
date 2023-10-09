@@ -7,7 +7,7 @@ import { translate } from 'app/i18n'
 import { MenuItemContainer, SettingsItem } from 'app/components/utils'
 
 export const NotificationSettingsScreen = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { colors } = useTheme()
 
   return (

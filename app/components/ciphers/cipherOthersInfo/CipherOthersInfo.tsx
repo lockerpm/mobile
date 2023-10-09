@@ -58,7 +58,7 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
 
   return (
     <View>
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: 16, backgroundColor: colors.block }}>
         <Text
           preset="label"
           text={translate("common.others").toUpperCase()}

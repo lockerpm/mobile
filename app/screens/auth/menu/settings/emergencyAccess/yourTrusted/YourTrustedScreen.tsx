@@ -9,8 +9,9 @@ import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
 import { TrustedContact } from 'app/static/types'
 import { translate } from 'app/i18n'
+import { observer } from 'mobx-react-lite'
 
-export const YourTrustedContactScreen = () => {
+export const YourTrustedContactScreen = observer(() => {
   const navigation = useNavigation()
   const { colors } = useTheme()
   const { notifyApiError } = useHelper()
@@ -110,4 +111,4 @@ export const YourTrustedContactScreen = () => {
       />
     </Screen>
   )
-}
+})

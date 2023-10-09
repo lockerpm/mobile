@@ -17,7 +17,6 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
-  LayoutAnimation,
 } from 'react-native'
 import Animated, {
   interpolate,
@@ -228,29 +227,17 @@ export const TextInput = forwardRef(function TextField(
   const onBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setIsFocus(false)
     if (isRequiredProps && !value) {
-      LayoutAnimation.configureNext({
-        duration: 250,
-        update: {
-          type: LayoutAnimation.Types.easeInEaseOut,
-        },
-      })
       setIsRequired(true)
     }
     propsBlur && propsBlur(e)
   }
 
   const toggleStyle = useDerivedValue(() => {
-    return withTiming(bin(isFocus || value.length !== 0))
+    return withTiming(bin(isFocus || value?.length !== 0))
   }, [isFocus])
 
   useEffect(() => {
     if (isRequiredProps && !!value) {
-      LayoutAnimation.configureNext({
-        duration: 250,
-        update: {
-          type: LayoutAnimation.Types.easeInEaseOut,
-        },
-      })
       setIsRequired(false)
     }
   }, [value])
@@ -273,7 +260,7 @@ export const TextInput = forwardRef(function TextField(
           },
         ]
         : [],
-      color: interpolateColor(toggleStyle.value, [0, 1], [colors.disable, colors.primaryText]),
+      color: animated ? interpolateColor(toggleStyle.value, [0, 1], [colors.disable, colors.primaryText]) : colors.primaryText,
     }
   })
 
@@ -285,7 +272,7 @@ export const TextInput = forwardRef(function TextField(
       accessibilityState={{ disabled }}
     >
       {!!label && (
-        <Animated.Text {...LabelTextProps} style={[$labelStyles, $titleAnim]}>
+        <Animated.Text style={[$labelStyles, $titleAnim]} {...LabelTextProps} >
           {label + (isRequiredProps ? ' (*)' : '')}
         </Animated.Text>
       )}

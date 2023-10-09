@@ -12,7 +12,7 @@ import { CardView, CipherView } from 'core/models/view'
 import { CollectionView } from 'core/models/view/collectionView'
 import { CipherType } from 'core/enums'
 import { translate } from 'app/i18n'
-import { Button, Header, Screen, TextInput, Text } from 'app/components/cores'
+import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
 import { PlanStorageLimitModal } from '../../planStorageLimitModal'
 import { Select } from 'app/components/utils'
@@ -178,6 +178,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
       value: cardName,
       setter: setCardName,
       isRequired: true,
+      placeholder: '...',
     },
     {
       label: translate('card.brand'),
@@ -220,7 +221,8 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
 
   return (
     <Screen
-      backgroundColor={colors.block}
+      preset="auto"
+      safeAreaEdges={['bottom']}
       header={
         <Header
           title={
@@ -237,11 +239,6 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
               disabled={isLoading || !name.trim()}
               text={translate('common.save')}
               onPress={handleSave}
-              style={{
-                height: 35,
-                alignItems: 'center',
-                paddingLeft: 10,
-              }}
             />
           }
         />
@@ -249,12 +246,15 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
     >
       <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
 
-      {/* Title */}
-      <View style={{ backgroundColor: colors.background, padding: 16 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image source={BROWSE_ITEMS.card.icon} style={{ height: 40, width: 40 }} />
-          <View style={{ flex: 1, marginLeft: 10 }}>
+      <View style={{ padding: 16, paddingTop: 0 }}>
+        <View style={{ flexDirection: 'row' }}>
+          <Image
+            source={BROWSE_ITEMS.card.icon}
+            style={{ height: 50, width: 50, marginRight: 10, marginTop: 25 }}
+          />
+          <View style={{ flex: 1 }}>
             <TextInput
+              animated
               isRequired
               label={translate('common.item_name')}
               value={name}
@@ -263,9 +263,8 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
           </View>
         </View>
       </View>
-      {/* Title end */}
 
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: 16, backgroundColor: colors.block }}>
         <Text preset="label" size="base" text={translate('card.card_details').toUpperCase()} />
       </View>
 
@@ -273,7 +272,6 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
       <View
         style={{
           padding: 16,
-          backgroundColor: colors.background,
           paddingBottom: 32,
         }}
       >
@@ -281,11 +279,42 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
           <View key={index} style={{ flex: 1, marginTop: index !== 0 ? 20 : 0 }}>
             {item.isSelect ? (
               <Select
-                floating
                 placeholder={item.label}
                 value={item.value}
                 options={item.options}
                 onChange={(val) => item.setter(val)}
+                renderSelected={({ label }) => (
+                  <View style={{
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    borderRadius: 12,
+                    borderWidth: 1,
+                    borderColor: colors.disable
+                  }}>
+                    <View
+                      style={{
+                        justifyContent: 'space-between',
+                        width: '100%',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <View>
+                        <Text
+                          preset="label"
+                          size="base"
+                          text={label}
+                        />
+                        {!!item.value && <Text
+                          preset="bold"
+                          text={item.value}
+                          style={{ marginTop: 4 }}
+                        />}
+                      </View>
+                      <Icon icon="caret-right" size={20} color={colors.secondaryText} />
+                    </View>
+                  </View>
+                )}
               />
             ) : (
               <TextInput

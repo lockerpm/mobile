@@ -162,6 +162,7 @@ export const ImportScreen = observer(() => {
   return (
     <Screen
       padding
+      safeAreaEdges={['bottom']}
       header={
         <Header
           leftIcon="arrow-left"

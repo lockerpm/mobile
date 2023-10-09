@@ -11,7 +11,7 @@ import StoreKit
 
 
 class AutofillDataModel {
-  private let KEYCHAIN_SERVICE: String = Utils.GetStringInfo(key: "SHARED_KEYCHAIN_SERVICE") 
+  private let KEYCHAIN_SERVICE: String = Utils.GetStringInfo(key: "SHARED_KEYCHAIN_SERVICE")
   private let KEYCHAIN_ACCESS_GROUP: String = Utils.GetStringInfo(key: "SHARED_KEYCHAIN_ACCESS_GROUP")
   private let KEYCHAIN_PROPS: String = "autofill"
   private var keychainData: String!
@@ -54,7 +54,7 @@ class AutofillDataModel {
   
   private func setAutofillData(_ passwords: [String: [[String: Any]]]){
     // reset data
-    self.credentials = [] 
+    self.credentials = []
   
     if passwords["passwords"] != nil {
       for (index, item) in passwords["passwords"]!.enumerated() {

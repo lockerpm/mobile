@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
-import { Text, Button, Icon } from 'app/components/cores'
-import { Modal } from 'app/components/utils'
+import { Text, Button, Icon, BottomModal } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { EnterpriseInvitation, EnterpriseInvitationStatus } from 'app/static/types'
 import { translate } from 'app/i18n'
@@ -46,12 +45,8 @@ export const EnterpriseInvitationModal = (props: Props) => {
   // ------------------------------ RENDER -------------------------------
 
   return (
-    <Modal disableHeader isOpen={isOpen} onClose={onClose}>
+    <BottomModal title={translate('enterprise_invitation.domain.join_org')} isOpen={isOpen} onClose={onClose}>
       <View>
-        <View style={{ alignItems: 'center' }}>
-          <Text size="xl" preset="bold" text={translate('enterprise_invitation.domain.join_org')} />
-        </View>
-
         <View style={{ marginVertical: 12 }}>
           <Text text={translate('enterprise_invitation.domain.managed_by')} />
           <Text
@@ -81,7 +76,7 @@ export const EnterpriseInvitationModal = (props: Props) => {
           text={translate('enterprise_invitation.request_access', {
             name: invitationByDomain?.enterprise.name,
           })}
-          style={{ marginVertical: 8 }}
+          style={{ marginVertical: 12, marginBottom: 20, }}
         />
 
         <Button
@@ -95,7 +90,7 @@ export const EnterpriseInvitationModal = (props: Props) => {
           onPress={invitationByDomainAction}
         />
       </View>
-    </Modal>
+    </BottomModal>
   )
 }
 const Desription = ({ text }: { text: string }) => (

@@ -102,18 +102,16 @@ export const IdentityInfoScreen: FC<AppStackScreenProps<'identities__info'>> = o
 
   return (
     <Screen
-      backgroundColor={colors.block}
       preset="auto"
+      padding
       safeAreaEdges={['bottom']}
       header={
-        !fromQuickShare && (
-          <Header
-            leftIcon="arrow-left"
-            onLeftPress={() => navigation.goBack()}
-            rightIcon="dots-three"
-            onRightPress={() => setShowAction(true)}
-          />
-        )
+        <Header
+          leftIcon="arrow-left"
+          onLeftPress={() => navigation.goBack()}
+          rightIcon={!fromQuickShare ? 'dots-three' : undefined}
+          onRightPress={() => setShowAction(true)}
+        />
       }
     >
       {/* Actions */}
@@ -131,72 +129,49 @@ export const IdentityInfoScreen: FC<AppStackScreenProps<'identities__info'>> = o
           onLoadingChange={setIsLoading}
         />
       )}
-      {/* Actions end */}
 
-      {/* Intro */}
-      <View>
-        <View
-          style={{
-            backgroundColor: colors.background,
-            paddingTop: 20,
-            paddingBottom: 30,
-            marginBottom: 10,
-            flex: 1,
-            justifyContent: 'center',
-          }}
-        >
-          <Image
-            source={BROWSE_ITEMS.identity.icon}
-            style={{
-              height: 55,
-              width: 55,
-            }}
-          />
-          <Text
-            preset="bold"
-            size="xl"
-            style={{ marginTop: 10, marginHorizontal: 20, textAlign: 'center' }}
-          >
-            {selectedCipher.name}
-            {notSync && (
-              <View style={{ paddingLeft: 10 }}>
-                <Icon icon="wifi-slash" size={22} />
-              </View>
-            )}
-          </Text>
-        </View>
-      </View>
 
-      {/* Info */}
-      <View
+      <Image
+        source={BROWSE_ITEMS.identity.icon}
         style={{
-          backgroundColor: colors.background,
-          padding: 16,
-          paddingVertical: 22,
+          height: 55, width: 55, alignSelf: 'center'
         }}
+      />
+      <Text
+        preset="bold"
+        size="xxl"
+        style={{ margin: 20, textAlign: 'center' }}
       >
-        {textFields.map((item, index) => (
-          <TextInput
-            key={index}
-            isCopyable={!!item.value}
-            label={item.label}
-            value={item.value}
-            editable={false}
-            style={index !== 0 ? { marginVertical: 10 } : { marginBottom: 10 }}
-          />
-        ))}
+        {selectedCipher.name}
+        {notSync && (
+          <View style={{ paddingLeft: 10 }}>
+            <Icon icon="wifi-slash" size={22} />
+          </View>
+        )}
+      </Text>
 
-        {/* Notes */}
-        <Textarea
-          label={translate('common.notes')}
-          value={selectedCipher.notes}
+      {textFields.map((item, index) => (
+        <TextInput
+          animated
+          key={index}
+          isCopyable={!!item.value}
+          label={item.label}
+          value={item.value}
           editable={false}
-          copyAble
-          style={{ marginTop: 10 }}
+          style={index !== 0 ? { marginVertical: 10 } : { marginBottom: 10 }}
         />
+      ))}
 
-        <CipherInfoCommon cipher={selectedCipher} />
-      </View>
+      {/* Notes */}
+      <Textarea
+        label={translate('common.notes')}
+        value={selectedCipher.notes}
+        editable={false}
+        copyAble
+        style={{ marginTop: 10 }}
+      />
+
+      <CipherInfoCommon cipher={selectedCipher} />
     </Screen>
   )
 })

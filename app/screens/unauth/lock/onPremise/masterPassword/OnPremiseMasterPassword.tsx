@@ -7,8 +7,8 @@ import { OnPremisePreloginData } from 'app/static/types'
 import { BiometricsType } from '../../lock.types'
 import { useAuthentication, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
-import { translate } from 'i18n-js'
 import { Logo, Button, Screen, Text, TextInput, Icon } from 'app/components/cores'
+import { translate } from 'app/i18n'
 
 interface Props {
   data: OnPremisePreloginData
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleLogout }: Props) => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { user, uiStore } = useStores()
   const { colors } = useTheme()
   const { notify } = useHelper()

@@ -18,7 +18,7 @@ import { CipherType } from 'core/enums'
 const EMPTY_LIST = require('assets/images/emptyCipherList/identity-empty-img.png')
 
 export const IdentitiesScreen = observer(() => {
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -68,8 +68,8 @@ export const IdentitiesScreen = observer(() => {
 
   return (
     <Screen
-      preset="auto"
-      safeAreaEdges={['bottom']}
+      preset='fixed'
+      safeAreaEdges={['top']}
       header={
         <CipherListHeader
           header={translate('common.identity')}
@@ -95,6 +95,9 @@ export const IdentitiesScreen = observer(() => {
           }}
         />
       }
+      contentContainerStyle={{
+        flex: 1
+      }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}

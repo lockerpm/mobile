@@ -4,7 +4,6 @@ import { CryptoService } from '../abstractions/crypto.service';
 import { I18nService } from '../abstractions/i18n.service';
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from '../abstractions/passwordReprompt.service';
 
-import { HashPurpose } from '../enums/hashPurpose';
 
 export class PasswordRepromptService implements PasswordRepromptServiceAbstraction {
     constructor(private i18nService: I18nService, private cryptoService: CryptoService,
