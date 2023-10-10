@@ -5,19 +5,23 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Platform,
 } from 'react-native'
 import { observer } from 'mobx-react-lite'
+
 import { AppStackScreenProps } from 'app/navigators'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
 import { Logger } from 'app/utils/utils'
 import { translate } from 'app/i18n'
-import { Icon, Logo, Screen, Text } from 'app/components/cores'
-
+import { Button, Icon, Logo, Screen, Text } from 'app/components/cores'
+import { State } from './State'
+import { Row } from './Row'
 
 import {
   PurchaseError,
+  isIosStorekit2,
   requestSubscription,
   useIAP,
 } from 'react-native-iap'
@@ -28,10 +32,15 @@ import { PricePlan } from './PricePlan'
 import { FamilyPayment } from './familyPayment/FamilyPayment'
 import { PremiumPayment } from './premiumPayment/PremiumPayment'
 
+const isIos = Platform.OS === 'ios'
+const isPlay = Platform.OS === 'android'
+
+
 const subSkus = [SKU.PRE_MON, SKU.PRE_YEAR, SKU.FAM_MON, SKU.FAM_YEAR]
 
 export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props) => {
   const {
+    connected,
     subscriptions,
     getSubscriptions,
     currentPurchase,
@@ -63,6 +72,7 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
       notifyApiError(res)
     }
   }
+
   const getSubscription = async () => {
     try {
       await getSubscriptions({ skus: subSkus });
@@ -159,7 +169,7 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
         // ...(offerToken && {
         //   subscriptionOffers: [{ sku: productId, offerToken }],
         // }),
-      })
+      });
     } catch (error) {
       if (error instanceof PurchaseError) {
         Logger.error({ message: `[${error.code}]: ${error.message}`, error });
@@ -169,11 +179,37 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
     }
   };
 
+  // const purchase = async (productId: string) => {
+  //   setProcessPayment(true)
+  //   if (IS_IOS) {
+  //     RNIap.clearTransactionIOS()
+  //   }
+
+  //   RNIap.requestSubscription(productId).catch((error) => {
+  //     setProcessPayment(false)
+  //     if (error.code !== 'E_USER_CANCELLED') {
+  //       Logger.debug(JSON.stringify(error))
+  //     }
+  //   })
+  // }
+
   // -------------------- EFFECT ----------------------
+
+  // useEffect(() => {
+  //   getSubscription()
+  //   return (): void => {
+  //     if (purchaseUpdateSubscription) {
+  //       purchaseUpdateSubscription.remove()
+  //     }
+  //     if (purchaseErrorSubscription) {
+  //       purchaseErrorSubscription.remove()
+  //     }
+  //     RNIap.endConnection()
+  //   }
+  // }, [])
 
   useEffect(() => {
     getEligibleTrial()
-    getSubscription()
   }, [])
 
   useEffect(() => {
@@ -246,52 +282,10 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
     )
   }
 
-  const Content = () => {
-    if (route.params.family) return (
-      <FamilyPayment
-        isTrial={isTrial}
-        subscriptions={subscriptions}
-        onPress={setEnable}
-        isProcessPayment={processPayment}
-        isEnable={isEnable}
-        purchase={purchase}
-      />
-    )
-    if (route.params.premium) return (
-      <PremiumPayment
-        isTrial={isTrial}
-        subscriptions={subscriptions}
-        onPress={setEnable}
-        isProcessPayment={processPayment}
-        isEnable={isEnable}
-        purchase={purchase}
-      />
-    )
-
-    return (<View>
-      <View style={{ flex: 1, top: 0, minHeight: 310, width: '100%', zIndex: 1 }}>
-        <PremiumBenefits benefitTab={route.params.benefitTab} />
-      </View>
-
-      <View style={[styles.payment, { backgroundColor: colors.background }]}>
-        <Segment />
-        <PricePlan
-          isTrial={isTrial}
-          subscriptions={subscriptions}
-          onPress={setEnable}
-          isProcessPayment={processPayment}
-          isEnable={isEnable}
-          personal={payIndividual}
-          purchase={purchase}
-        />
-      </View>
-    </View>)
-  }
-
+  // Render screen
   return (
     <Screen
-      preset='auto'
-      safeAreaEdges={['top']}
+      safeAreaEdges={['bottom', 'top']}
       backgroundColor={route.params.family || route.params.premium ? colors.background : colors.block}
       header={
         <View
@@ -299,8 +293,6 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
             flexDirection: 'row',
             paddingHorizontal: 20,
             justifyContent: 'space-between',
-            alignItems: 'center',
-            height: 56,
           }}
         >
           <Logo
@@ -310,11 +302,108 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
           <Icon icon="x-circle" onPress={() => navigation.goBack()} disabled={processPayment} />
         </View>
       }
-      contentContainerStyle={{
-        flex: 1
-      }}
     >
-      <Content />
+      <State connected={connected} storekit2={isIosStorekit2()} />
+      {/* {route.params.family && (
+        <FamilyPayment
+          isTrial={isTrial}
+          subscriptions={subscriptions}
+          onPress={setEnable}
+          isProcessPayment={processPayment}
+          isEnable={isEnable}
+          purchase={purchase}
+        />
+      )}
+      {route.params.premium && (
+        <PremiumPayment
+          isTrial={isTrial}
+          subscriptions={subscriptions}
+          onPress={setEnable}
+          isProcessPayment={processPayment}
+          isEnable={isEnable}
+          purchase={purchase}
+        />
+      )}
+      {!route.params.family && !route.params.premium && (
+        <View>
+          <View style={{ flex: 1, top: 0, minHeight: 310, width: '100%', zIndex: 1 }}>
+            <PremiumBenefits benefitTab={route.params.benefitTab} />
+          </View>
+
+          <View style={[styles.payment, { backgroundColor: colors.background }]}>
+            <Segment />
+            <PricePlan
+              isTrial={isTrial}
+              subscriptions={subscriptions}
+              onPress={setEnable}
+              isProcessPayment={processPayment}
+              isEnable={isEnable}
+              personal={payIndividual}
+              purchase={purchase}
+            />
+          </View>
+        </View>
+      )} */}
+      <View style={{ marginBottom: 20, }}>
+        <Text preset='heading' text="Subscriptions" />
+
+        {subscriptions.map((subscription, index) => {
+          const owned = ownedSubscriptions.find((pId) => {
+            return pId === subscription.productId;
+          });
+          return (
+            <Row
+              key={subscription.productId}
+              fields={[
+                {
+                  label: 'Subscription Id',
+                  value: subscription.productId,
+                },
+                {
+                  label: 'type',
+                  value:
+                    'type' in subscription
+                      ? subscription.type
+                      : subscription.productType,
+                },
+              ]}
+              isLast={subscriptions.length - 1 === index}
+            >
+              {owned && <Text>Subscribed</Text>}
+              {!owned &&
+                isPlay &&
+                // On Google Play Billing V5 you might have  multiple offers for a single sku
+                'subscriptionOfferDetails' in subscription &&
+                subscription?.subscriptionOfferDetails?.map((offer, index) => (
+                  <Button
+                    key={index}
+                    text={`Subscribe ${offer.pricingPhases.pricingPhaseList
+                      .map((ppl) => ppl.billingPeriod)
+                      .join(',')}`}
+                    onPress={() => {
+                      purchase(
+                        subscription.productId,
+                        // offer.offerToken,
+                      );
+                    }}
+                  />
+                ))}
+              {!owned && (isIos) && (
+                <Button
+                  text="Subscribe"
+                  onPress={() => {
+                    purchase(subscription.productId);
+                  }}
+                />
+              )}
+            </Row>
+          );
+        })}
+      </View>
+      <Button
+        text="Get the subscriptions"
+        onPress={getSubscription}
+      />
     </Screen>
   )
 })

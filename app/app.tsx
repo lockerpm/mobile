@@ -41,6 +41,8 @@ Settings.initializeSDK()
 Tracking.initSentry()
 Tracking.initAppFlyer()
 
+// setup({ storekitMode: 'STOREKIT2_MODE' });
+
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 export type RootProp = {
@@ -161,4 +163,6 @@ const $style = StyleSheet.create({
   },
 })
 
-export default App
+export default App;
+
+

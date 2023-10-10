@@ -35,8 +35,8 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
   const passwordRef = useRef(null)
 
   const [isError, setIsError] = useState(false)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('freeplan1@maily.org')
+  const [password, setPassword] = useState('demo@123')
   const [loginMethodLoading, setLoginMethodLoading] = useState<METHOD>(METHOD.NONE)
 
   const [loginMethod, setLoginMethod] = useState<METHOD>(METHOD.NONE)

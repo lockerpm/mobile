@@ -84,6 +84,7 @@ import { translate } from "app/i18n"
 import { Logger } from "app/utils/utils"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { observer } from "mobx-react-lite"
+import { withIAPContext } from "react-native-iap"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -655,7 +656,7 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="refer_friend" component={ReferFriendScreen} />
         <Stack.Screen name="invite_member" component={InviteMemberScreen} />
         <Stack.Screen name="manage_plan" component={ManagePlanScreen} />
-        <Stack.Screen name="payment" component={PaymentScreen} initialParams={{ benefitTab: 0 }} />
+        <Stack.Screen name="payment" component={withIAPContext(PaymentScreen)} initialParams={{ benefitTab: 0 }} />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />

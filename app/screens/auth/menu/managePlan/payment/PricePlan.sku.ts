@@ -1,5 +1,4 @@
-import Config from "react-native-config"
-import { IS_IOS } from "../../../../../config/constants"
+import { Platform } from "react-native"
 
 
 interface SubsSku {
@@ -10,17 +9,21 @@ interface SubsSku {
 }
 
 const ANDROID_SKU: SubsSku = {
-    "PRE_MON": Config.ANDROID_PRE_MON_SKU,
-    "PRE_YEAR": Config.ANDROID_PRE_YEAR_SKU,
-    "FAM_MON": Config.ANDROID_FAM_MON_SKU,
-    "FAM_YEAR": Config.ANDROID_FAM_YEAR_SKU,
+    "PRE_MON": 'pm_premium_monthly',
+    "PRE_YEAR": 'pm_premium_yearly',
+    "FAM_MON": 'pm_family_monthly',
+    "FAM_YEAR": 'pm_family_yearly',
 }
 
 const IOS_SKU: SubsSku = {
-    "PRE_MON": Config.IOS_PRE_MON_SKU,
-    "PRE_YEAR": Config.IOS_PRE_YEAR_SKU,
-    "FAM_MON": Config.IOS_FAM_MON_SKU,
-    "FAM_YEAR": Config.IOS_FAM_YEAR_SKU,
+    "PRE_MON": 'locker_pm_premium_monthly',
+    "PRE_YEAR": 'locker_pm_premium_yearly',
+    "FAM_MON": 'locker_pm_family_monthly',
+    "FAM_YEAR": 'locker_pm_family_yearly',
 }
 
-export const SKU: SubsSku = IS_IOS ?  IOS_SKU : ANDROID_SKU
+export const SKU: SubsSku = Platform.select({
+    android: ANDROID_SKU,
+    ios: IOS_SKU
+})
+
