@@ -488,7 +488,7 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */,
+				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -989,7 +989,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.lockerapp.LockerAutofill;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SHARED_KEYCHAIN_ACCESS_GROUP = group.com.cystack.lockerapp;
@@ -1190,7 +1190,7 @@
 				minimumVersion = 4.0.0;
 			};
 		};
-		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
+		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
 			requirement = {
@@ -1208,7 +1208,7 @@
 		};
 		7CEB31EA2A931B5A007F6051 /* SwiftOTP */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */;
+			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */;
 			productName = SwiftOTP;
 		};
 /* End XCSwiftPackageProductDependency section */

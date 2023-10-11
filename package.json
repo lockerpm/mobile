@@ -153,6 +153,7 @@
     "react-native-shared-element": "^0.8.8",
     "react-native-simple-crypto": "^0.2.15",
     "react-native-svg": "^13.14.0",
+    "react-native-swiper-flatlist": "^3.2.3",
     "react-native-tab-view": "^3.5.2",
     "react-native-table-component": "^1.2.2",
     "react-native-tcp": "^4.0.0",
