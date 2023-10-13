@@ -286,12 +286,11 @@
     "no_subdomain": "Create your own subdomain",
     "config_modal": {
       "title": "Configuration",
-      "enable":  "Forward all emails to your root email address",
+      "enable": "Forward all emails to your root email address",
       "block": "Block all upcoming emails",
       "block_spam": "Block spam and promotion emails only",
       "note": "*When you make changes to these settings, the statistics for this alias address will be reset."
     }
-
   },
   "emergency_access": {
     "title": "Emergency Access",
@@ -369,7 +368,7 @@
     "btn": "Create Password",
     "note": "Note: Locker cannot view, store, or re-issue Master Password in case you forget or lose it."
   },
-  "confirm_create_master_pass" : {
+  "confirm_create_master_pass": {
     "title": "Important",
     "desc": "By processing, you understand that Locker CANNOT see, retrieve, or re-issue your Master Password in case you forget it. Your Master Password is only yours to keep.",
     "link": "You can learn more about Master Password here.",
@@ -658,7 +657,7 @@
     },
     "suggestion": "Users or groups in Enterprise",
     "confirm": "A user has registered a Locker account via your sharing request. Please confirm your sharing request",
-    "wait_confirm" : "Waiting for confirmation"
+    "wait_confirm": "Waiting for confirmation"
   },
   "trash": {
     "delete_item": "Delete Item",
@@ -1058,7 +1057,7 @@
       "note_2": "Add you to their groups",
       "note_3": "Apply password policies to your account"
     },
-    "data" : "All your vault data remains the same. {{mame}} can’t see your data or your Master Password.",
+    "data": "All your vault data remains the same. {{mame}} can’t see your data or your Master Password.",
     "request_access": "You have to Request access from {{mame}} in order to continue using your Locker account.",
     "domain": {
       "join_org": "Join Organization",
@@ -1089,9 +1088,9 @@
     "more_step": "One more step",
     "point_camera": "Point your camera to the QR Code on Desktop App to confirm Login"
   },
-  "quick_shares" :{
+  "quick_shares": {
     "share_option": {
-      "title" : "Choose your sharing option",
+      "title": "Choose your sharing option",
       "normal": {
         "tl": "In-app shares",
         "dec": "Share with Locker users or a group of users. They can view or edit your item."
@@ -1102,9 +1101,9 @@
       }
     },
     "title": "Get shareable link",
-    "get_link":  "Get Link to Share",
+    "get_link": "Get Link to Share",
     "copy_link": "Copy Link",
-    "config" : {
+    "config": {
       "title": "General access",
       "anyone": "Anyone with the link",
       "invited": "Only invited people",
@@ -1113,7 +1112,7 @@
       "expired": {
         "tl": "Link expires after",
         "1h": "1 hour",
-        "24h":  "24 hours",
+        "24h": "24 hours",
         "7d": "7 days",
         "14d": "14 days",
         "30d": "30 days",
@@ -1122,7 +1121,7 @@
       "or": "or",
       "access_options": {
         "unlimited": "Unlimited access",
-        "time":  "Times access"
+        "time": "Times access"
       }
     },
     "receiver": "Receiver",
@@ -1133,7 +1132,7 @@
       "copy": "Copy link",
       "stop": "Stop sharing"
     },
-    "detail" : {
+    "detail": {
       "anyone": "Anyone",
       "tl": "Quick share details",
       "share_time": "Sharing time",
@@ -1154,7 +1153,7 @@
       "signup_passkey": "Sign up with passkey",
       "signup_password": "Sign up with password",
       "passkey_options": "Choose an option to save your passkey for “Locker”",
-      "keychain" : {
+      "keychain": {
         "title": "iCloud Keychain",
         "label": "Synced across your Apple devices"
       },

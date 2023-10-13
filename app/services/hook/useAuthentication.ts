@@ -20,7 +20,8 @@ import Intercom from '@intercom/intercom-react-native'
 import { setCookiesFromUrl } from 'app/utils/analytics'
 
 export function useAuthentication() {
-  const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore } = useStores()
+  const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore, enterpriseStore } =
+    useStores()
   const {
     cryptoService,
     cryptoFunctionService,
@@ -616,6 +617,7 @@ export function useAuthentication() {
     collectionStore.clearStore(dataOnly)
     folderStore.clearStore(dataOnly)
     toolStore.clearStore(dataOnly)
+    enterpriseStore.clearStore(dataOnly)
 
     // Reset shared data
     await saveShared('autofill', '{}')

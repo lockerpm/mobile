@@ -7,7 +7,15 @@ import { useTheme } from 'app/services/context'
 import { Logger } from 'app/utils/utils'
 import { Icon, Logo, Screen } from 'app/components/cores'
 
-import { PurchaseError, requestSubscription, useIAP } from 'react-native-iap'
+import {
+  PurchaseError,
+  clearTransactionIOS,
+  flushFailedPurchasesCachedAsPendingAndroid,
+  requestSubscription,
+  useIAP,
+  withIAPContext,
+} from 'react-native-iap'
+
 import { SKU } from './PricePlan.sku'
 
 import { PremiumBenefits } from './PremiumBenefits'
@@ -21,7 +29,7 @@ import { useHelper } from 'app/services/hook'
 
 const subSkus = [SKU.PRE_MON, SKU.PRE_YEAR, SKU.FAM_MON, SKU.FAM_YEAR]
 
-export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props) => {
+const PaymentScreenContent: FC<AppStackScreenProps<'payment'>> = observer((props) => {
   const { subscriptions, getSubscriptions, currentPurchase, finishTransaction } = useIAP()
   const { user, uiStore } = useStores()
   const { notifyApiError } = useHelper()
@@ -30,7 +38,7 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
   const route = props.route
 
   // -------------------- STATE ----------------------
-  const [ownedSubscriptions, setOwnedSubscriptions] = useState<string[]>([])
+  // const [ownedSubscriptions, setOwnedSubscriptions] = useState<string[]>([])
 
   const [processPayment, setProcessPayment] = useState<boolean>(false)
 
@@ -38,6 +46,12 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
 
   const getSubscription = async () => {
     try {
+      if (!IS_IOS) {
+        await flushFailedPurchasesCachedAsPendingAndroid()
+      } else {
+        if (__DEV__) await clearTransactionIOS()
+      }
+
       await getSubscriptions({ skus: subSkus })
     } catch (error) {
       Logger.error({ message: 'handleGetSubscriptions', error })
@@ -52,48 +66,6 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
     }
   }
 
-  //   purchaseUpdateSubscription = purchaseUpdatedListener(async (purchase: SubscriptionPurchase) => {
-  //     if (purchase) {
-  //       const receipt = purchase.transactionReceipt
-  //       if (receipt) {
-  //         try {
-  //           const ackResult = await finishTransaction(purchase)
-  //           Logger.debug({ ackResult })
-  //         } catch (ackErr) {
-  //           Logger.error({ ackErr })
-  //         }
-
-  //         let res
-  //         if (IS_IOS) {
-  //           res = await user.purchaseValidation(
-  //             purchase.transactionReceipt,
-  //             purchase.productId,
-  //             purchase.originalTransactionIdentifierIOS
-  //           )
-  //         } else {
-  //           res = await user.purchaseValidation(purchase.purchaseToken, purchase.productId)
-  //         }
-  //         if (res.kind === 'ok') {
-  //           if (res.data.success) {
-  //             await user.loadPlan()
-  //             uiStore.setShowWelcomePremium(true)
-  //             navigation.navigate('welcome_premium')
-  //           } else {
-  //             Alert.alert(translate('manage_plan.verify'), res.data.detail)
-  //           }
-  //         } else {
-  //           notifyApiError(res)
-  //         }
-  //         setProcessPayment(false)
-  //       }
-  //     }
-  //   })
-
-  //   purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
-  //     Logger.error({ purchaseErrorListener: error })
-  //   })
-  // }, [])
-
   const purchase = async (
     productId: string
     // offerToken?: string,
@@ -103,7 +75,12 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
     //     `There are no subscription Offers for selected product (Only requiered for Google Play purchases): ${productId}`,
     //   );
     // }
+    console.log(productId)
     setProcessPayment(true)
+    if (IS_IOS) {
+      await clearTransactionIOS()
+    }
+
     try {
       await requestSubscription({
         sku: productId,
@@ -122,22 +99,18 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
   }
 
   // -------------------- EFFECT ----------------------
+  const checkCurrentPurchase = async () => {
+    try {
+      if (currentPurchase?.productId) {
+        console.log(currentPurchase?.productId, '----')
+        await finishTransaction({
+          purchase: currentPurchase,
+          // isConsumable: true,
+        })
 
-  useEffect(() => {
-    getSubscription()
-  }, [])
-
-  useEffect(() => {
-    const checkCurrentPurchase = async () => {
-      try {
-        if (currentPurchase?.productId) {
-          await finishTransaction({
-            purchase: currentPurchase,
-            isConsumable: true,
-          })
-
-          setOwnedSubscriptions((prev) => [...prev, currentPurchase?.productId])
-
+        // setOwnedSubscriptions((prev) => [...prev, currentPurchase?.productId])
+        if (currentPurchase.transactionReceipt) {
+          console.log('--1111--')
           let res
           if (IS_IOS) {
             res = await user.purchaseValidation(
@@ -151,6 +124,7 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
               currentPurchase.productId
             )
           }
+          console.log(res)
           if (res.kind === 'ok') {
             if (res.data.success) {
               await user.loadPlan()
@@ -162,18 +136,26 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
           } else {
             notifyApiError(res)
           }
-          setProcessPayment(false)
         }
-      } catch (error) {
+        console.log('2222')
+
         setProcessPayment(false)
-        if (error instanceof PurchaseError) {
-          Logger.error({ message: `[${error.code}]: ${error.message}`, error })
-        } else {
-          Logger.error({ message: 'handleBuyProduct', error })
-        }
+      }
+    } catch (error) {
+      setProcessPayment(false)
+      if (error instanceof PurchaseError) {
+        Logger.error({ message: `[${error.code}]: ${error.message}`, error })
+      } else {
+        Logger.error({ message: 'handleBuyProduct', error })
       }
     }
+  }
 
+  useEffect(() => {
+    getSubscription()
+  }, [])
+
+  useEffect(() => {
     checkCurrentPurchase()
   }, [currentPurchase, finishTransaction])
 
@@ -234,3 +216,5 @@ export const PaymentScreen: FC<AppStackScreenProps<'payment'>> = observer((props
     </Screen>
   )
 })
+
+export const PaymentScreen = withIAPContext(PaymentScreenContent)

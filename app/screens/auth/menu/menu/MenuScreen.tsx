@@ -14,7 +14,6 @@ import { getVersion } from 'react-native-device-info'
 import { ReferFriendMenuItem } from './ReferFriendMenuItem'
 import { observer } from 'mobx-react-lite'
 
-
 export const MenuScreen = observer(() => {
   const navigation = useNavigation() as any
   const { user } = useStores()
@@ -118,17 +117,13 @@ export const MenuScreen = observer(() => {
       name: translate('common.logout'),
       onPress: async () => {
         await logout()
-        navigation.dispatch(state => {
-          // Remove the home route from the stack
-          const routes = state.routes.filter(r => r.name === 'init');
-        
-          return CommonActions.reset({
-            ...state,
-            routes,
-            index: routes.length - 1,
-          });
-        });
 
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'init' }],
+          })
+        )
       },
     },
   ]
@@ -233,7 +228,6 @@ export const MenuScreen = observer(() => {
           }
         />
       </MenuItemContainer>
-
 
       <MenuItemContainer>
         {items.map((item, index) => (
