@@ -8,13 +8,12 @@ import { AppSelect } from './AppSelect'
 import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
-import { useCipherData, useCipherHelper, useFolder } from 'app/services/hook'
+import { useCipherData, useCipherHelper, useFolder, useHelper } from 'app/services/hook'
 import { CipherView } from 'core/models/view'
 import { CollectionView } from 'core/models/view/collectionView'
 import { CryptoWalletData, toCryptoWalletData } from 'app/utils/crypto'
 import { CipherType } from 'core/enums'
 import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { PlanStorageLimitModal } from '../../planStorageLimitModal'
 import { PasswordStrength } from 'app/components/utils'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
@@ -24,6 +23,7 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
     const navigation = props.navigation
     const route = props.route
     const { cipherStore, collectionStore } = useStores()
+    const { translate } = useHelper()
     const { colors } = useTheme()
     const { shareFolderAddItem } = useFolder()
     const { newCipher, getPasswordStrength } = useCipherHelper()
@@ -209,7 +209,10 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
             <Image
               source={BROWSE_ITEMS.cryptoWallet.icon}
               style={{
-                height: 50, width: 50, marginRight: 10, marginTop: 25
+                height: 50,
+                width: 50,
+                marginRight: 10,
+                marginTop: 25,
               }}
             />
             <View style={{ flex: 1 }}>
@@ -247,7 +250,6 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
             label={translate('common.username')}
             value={username}
             onChangeText={setUsername}
-
           />
 
           {/* Password */}
@@ -257,7 +259,6 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
             label={translate('common.password')}
             value={password}
             onChangeText={setPassword}
-
           />
           {!!password && (
             <PasswordStrength

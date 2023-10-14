@@ -8,13 +8,12 @@ import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
 import { TrustedContact } from 'app/static/types'
-import { translate } from 'app/i18n'
 import { observer } from 'mobx-react-lite'
 
 export const YourTrustedContactScreen = observer(() => {
   const navigation = useNavigation()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { user } = useStores()
 
   const isFree = user.isFreePlan

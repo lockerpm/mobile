@@ -3,11 +3,12 @@ import { View, Image, Dimensions } from 'react-native'
 import { SwiperFlatList } from 'react-native-swiper-flatlist'
 import { PREMIUM_FEATURES_IMG } from '../PremiumFeature'
 import { Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 const SCREEN_WIDTH = Dimensions.get('screen').width
 
 export const PremiumBenefits = () => {
+  const { translate } = useHelper()
   const tabs = [
     {
       img: PREMIUM_FEATURES_IMG.locker,

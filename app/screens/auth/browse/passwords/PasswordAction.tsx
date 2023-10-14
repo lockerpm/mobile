@@ -6,7 +6,6 @@ import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { Logger } from 'app/utils/utils'
 import { ActionItem, CipherAction } from 'app/components/ciphers'
-import { translate } from 'app/i18n'
 import { getTOTP, parseOTPUri } from 'app/utils/totp'
 
 type Props = {
@@ -17,7 +16,7 @@ type Props = {
 }
 
 export const PasswordAction = (props: Props) => {
-  const { copyToClipboard } = useHelper()
+  const { copyToClipboard, translate } = useHelper()
   const { cipherStore } = useStores()
 
   const selectedCipher: CipherView = cipherStore.cipherView

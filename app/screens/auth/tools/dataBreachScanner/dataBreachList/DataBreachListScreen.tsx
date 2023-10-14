@@ -1,15 +1,16 @@
-import React from "react"
-import { observer } from "mobx-react-lite"
-import { View, Image, TouchableOpacity } from "react-native"
-import { useNavigation } from "@react-navigation/core"
-import { Text, Screen, Header, Icon } from "app/components/cores"
-import { useTheme } from "app/services/context"
-import { useStores } from "app/models"
-import { translate } from "app/i18n"
+import React from 'react'
+import { observer } from 'mobx-react-lite'
+import { View, Image, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/core'
+import { Text, Screen, Header, Icon } from 'app/components/cores'
+import { useTheme } from 'app/services/context'
+import { useStores } from 'app/models'
+import { useHelper } from 'app/services/hook'
 
 export const DataBreachListScreen = observer(() => {
   const { colors } = useTheme()
   const navigation = useNavigation() as any
+  const { translate } = useHelper()
   const { toolStore } = useStores()
 
   return (
@@ -33,14 +34,14 @@ export const DataBreachListScreen = observer(() => {
         <View>
           <Text
             preset="bold"
-            text={translate("data_breach_scanner.good_news").toUpperCase()}
+            text={translate('data_breach_scanner.good_news').toUpperCase()}
             style={{
               marginBottom: 7,
               color: colors.primary,
             }}
           />
           <Text
-            text={`${toolStore.breachedEmail}${translate("data_breach_scanner.no_breaches_found")}`}
+            text={`${toolStore.breachedEmail}${translate('data_breach_scanner.no_breaches_found')}`}
           />
         </View>
       ) : (
@@ -48,14 +49,14 @@ export const DataBreachListScreen = observer(() => {
           <View>
             <Text
               preset="bold"
-              text={translate("data_breach_scanner.bad_news").toUpperCase()}
+              text={translate('data_breach_scanner.bad_news').toUpperCase()}
               style={{
                 marginBottom: 7,
                 color: colors.error,
               }}
             />
             <Text
-              text={`${toolStore.breachedEmail}${translate("data_breach_scanner.breaches_found", {
+              text={`${toolStore.breachedEmail}${translate('data_breach_scanner.breaches_found', {
                 count: toolStore.breaches.length,
               })}`}
             />
@@ -71,18 +72,18 @@ export const DataBreachListScreen = observer(() => {
                 key={index}
                 onPress={() => {
                   toolStore.setSelectedBreach(item)
-                  navigation.navigate("dataBreachDetail")
+                  navigation.navigate('dataBreachDetail')
                 }}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   borderBottomColor: colors.border,
                   borderBottomWidth: index !== toolStore.breaches.length - 1 ? 1 : 0,
-                  justifyContent: "space-between",
+                  justifyContent: 'space-between',
                   paddingVertical: 16,
                 }}
               >
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View
                     style={{
                       height: 40,

@@ -2,7 +2,7 @@ import React from 'react'
 import { Image, TouchableOpacity, View } from 'react-native'
 import { Text, Button } from 'app/components/cores'
 import { Modal } from 'app/components/utils'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 type Props = {
   isCreating: boolean
@@ -14,6 +14,7 @@ type Props = {
 const WARNING = require('assets/images/master-pw-important.png')
 
 export const ConfirmCreateMPModal = (props: Props) => {
+  const { translate } = useHelper()
   const { isOpen, onClose, onNext, isCreating } = props
 
   return (

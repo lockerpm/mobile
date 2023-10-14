@@ -4,7 +4,7 @@ import { Text, AutoImage as Image, Icon } from 'app/components/cores'
 import { WALLET_APP_LIST } from 'app/utils/crypto/applist'
 import { Select } from 'app/components/utils'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 type Props = {
   alias: string
@@ -14,6 +14,7 @@ type Props = {
 export const AppSelect = (props: Props) => {
   const { onChange, alias } = props
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   // ------------------ METHODS ------------------
 

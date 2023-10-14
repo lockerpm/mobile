@@ -8,7 +8,6 @@ import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { getTOTP, parseOTPUri } from 'app/utils/totp'
-import { translate } from 'app/i18n'
 import { CipherType } from 'core/enums'
 
 export const AuthenticatorEditScreen: FC<AppStackScreenProps<'authenticator__edit'>> = observer(
@@ -17,7 +16,7 @@ export const AuthenticatorEditScreen: FC<AppStackScreenProps<'authenticator__edi
     const route = props.route
 
     const { colors } = useTheme()
-    const { notify } = useHelper()
+    const { notify, translate } = useHelper()
 
     const { createCipher, updateCipher } = useCipherData()
     const { newCipher } = useCipherHelper()

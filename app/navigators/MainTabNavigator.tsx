@@ -3,7 +3,6 @@ import { TouchableOpacity, View } from 'react-native'
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { fontSize } from '../theme'
 import { useStores } from '../models'
 import { NavigatorScreenParams } from '@react-navigation/native'
@@ -14,6 +13,7 @@ import { MenuNavigator, MenuParamList } from './menu/MenuNavigator'
 import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen } from '../screens'
 import { SharingStatus } from 'app/static/types'
 import { observer } from 'mobx-react-lite'
+import { useHelper } from 'app/services/hook'
 
 export type TabsParamList = {
   homeTab: undefined
@@ -28,6 +28,7 @@ const Tab = createBottomTabNavigator<TabsParamList>()
 const TabBar = ({ state, descriptors, navigation }) => {
   const { colors } = useTheme()
   const { user, uiStore, cipherStore } = useStores()
+  const { translate } = useHelper()
   const insets = useSafeAreaInsets()
 
   const mappings = {
@@ -214,10 +215,14 @@ const TabBar = ({ state, descriptors, navigation }) => {
   )
 }
 
-export const  MainTabNavigator = observer(() => {
+export const MainTabNavigator = observer(() => {
   const renderTabbar = useCallback((props: BottomTabBarProps) => <TabBar {...props} />, [])
   return (
-    <Tab.Navigator screenOptions={{headerShown: false}} initialRouteName="homeTab" tabBar={renderTabbar}>
+    <Tab.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="homeTab"
+      tabBar={renderTabbar}
+    >
       <Tab.Screen name="homeTab" component={HomeTabScreen} />
       <Tab.Screen name="browseTab" component={BrowseNavigator} />
       <Tab.Screen name="authenticatorTab" component={AuthenticatorScreen} />

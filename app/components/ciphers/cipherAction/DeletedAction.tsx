@@ -3,7 +3,6 @@ import { View, Image } from 'react-native'
 import { DeleteConfirmModal } from '../../../screens/auth/browse/trash/DeleteConfirmModal'
 import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
 import { ActionSheet } from '../actionsSheet/ActionSheet'
 import { Text } from 'app/components/cores'
 import { CipherType } from 'core/enums'
@@ -27,7 +26,7 @@ export const DeletedAction = (props: DeletedActionProps) => {
   const [nextModal, setNextModal] = useState<'deleteConfirm' | null>(null)
 
   const { colors } = useTheme()
-  const { getRouteName } = useHelper()
+  const { getRouteName, translate } = useHelper()
   const { deleteCiphers, restoreCiphers } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
   const { cipherStore, uiStore } = useStores()

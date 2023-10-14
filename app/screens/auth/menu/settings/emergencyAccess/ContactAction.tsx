@@ -6,7 +6,7 @@ import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
 import { Text } from 'app/components/cores'
 import { ActionItem, ActionSheet } from 'app/components/ciphers'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   isYourTrusted: boolean
@@ -20,7 +20,8 @@ export const ContactAction = (props: Props) => {
   const { isShow, onClose, trustedContact, setOnAction, isYourTrusted } = props
   const { colors } = useTheme()
   const { user } = useStores()
-  const navigation = useNavigation()
+  const { translate } = useHelper()
+  const navigation = useNavigation() as any
 
   const [nextModal, setNextModal] = useState<'rq_modal' | null>(null)
 

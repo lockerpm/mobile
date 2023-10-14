@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { View, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useAuthentication } from 'app/services/hook'
+import { useAuthentication, useHelper } from 'app/services/hook'
 import { Header, Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 
 interface Props {
   index: number
@@ -13,6 +12,7 @@ interface Props {
 }
 
 export const PasswordlessQrScan = ({ otp, goBack, index }: Props) => {
+  const { translate } = useHelper()
   const { width, height } = Dimensions.get('screen')
   const navigation = useNavigation() as any
   const [onScanQR, setonScanQR] = useState(false)
@@ -42,7 +42,7 @@ export const PasswordlessQrScan = ({ otp, goBack, index }: Props) => {
       <View
         style={{
           paddingTop: 70,
-          width: width,
+          width,
           height: width,
         }}
       >

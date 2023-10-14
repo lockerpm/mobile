@@ -1,13 +1,14 @@
 import React, { FC } from 'react'
 import { View } from 'react-native'
 import { RootStackScreenProps } from 'app/navigators'
-import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
 import { Button, Screen, Text, Logo } from 'app/components/cores'
 import { observer } from 'mobx-react-lite'
+import { useHelper } from 'app/services/hook'
 
 export const OnboardingScreen: FC<RootStackScreenProps<'onBoarding'>> = observer((props) => {
   const { colors, isDark } = useTheme()
+  const { translate } = useHelper()
 
   const navigateLogin = () => {
     props.navigation.navigate('login')

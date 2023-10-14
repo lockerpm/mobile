@@ -9,13 +9,12 @@ import { FolderAction } from '../../folders/FolderAction'
 import { CollectionListItem } from './FolderShareListItem'
 import { ConfirmShareModal } from './ConfirmShareModal'
 import { Text } from 'app/components/cores'
-import { useCipherData, useCipherHelper } from 'app/services/hook'
+import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CollectionView } from 'core/models/view/collectionView'
 import { AccountRoleText, SharedMemberType } from 'app/static/types'
 import { Organization } from 'core/models/domain/organization'
 import { CipherView } from 'core/models/view'
-import { translate } from 'app/i18n'
 
 type Props = {
   emptyContent?: JSX.Element
@@ -35,6 +34,7 @@ export const CipherShareList = observer((props: Props) => {
   const { emptyContent, navigation, onLoadingChange, searchText, sortList } = props
   const { getCiphersFromCache } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
+  const { translate } = useHelper()
   const { cipherStore, collectionStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------

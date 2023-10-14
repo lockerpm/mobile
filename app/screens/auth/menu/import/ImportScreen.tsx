@@ -14,7 +14,6 @@ import { useCipherData, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { useCoreService } from 'app/services/coreService'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
 import { Logger } from 'app/utils/utils'
 import { CipherType } from 'core/enums'
 import { Utils } from 'core/misc/utils'
@@ -25,7 +24,7 @@ const DOMParser = require('react-native-html-parser').DOMParser
 export const ImportScreen = observer(() => {
   const navigation = useNavigation()
   const { colors } = useTheme()
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
   const { importCiphers } = useCipherData()
   const { importService } = useCoreService()
   const { user } = useStores()

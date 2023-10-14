@@ -9,7 +9,6 @@ import { CipherView } from 'core/models/view'
 import { AccountRoleText } from 'app/static/types'
 import { BROWSE_ITEMS } from 'app/navigators'
 import { DeleteConfirmModal } from '../browse/trash/DeleteConfirmModal'
-import { translate } from 'app/i18n'
 import { ActionItem, ActionSheet } from 'app/components/ciphers'
 import { CipherType } from 'core/enums'
 
@@ -26,6 +25,7 @@ interface Props {
 export const AutoFillItemAction = observer(function AutoFillItemAction(props: Props) {
   const { navigation, isOpen, onClose } = props
 
+  const { translate } = useHelper()
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [nextModal, setNextModal] = useState<'trashConfirm' | null>(null)
 

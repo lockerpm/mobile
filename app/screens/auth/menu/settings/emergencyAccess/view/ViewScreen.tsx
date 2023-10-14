@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect, FC } from "react"
-import { observer } from "mobx-react-lite"
-import orderBy from "lodash/orderBy"
-import { View } from "react-native"
-import { CipherList } from "./CipherList"
-import { AppStackScreenProps } from "app/navigators"
-import { useStores } from "app/models"
-import { useCipherData, useCipherHelper } from "app/services/hook"
-import { TrustedContact } from "app/static/types"
-import { CipherData } from "core/models/data"
-import { Cipher } from "core/models/domain"
-import { CipherView } from "core/models/view"
-import { Header, Screen, Text } from "app/components/cores"
-import { translate } from "app/i18n"
+import React, { useState, useEffect, FC } from 'react'
+import { observer } from 'mobx-react-lite'
+import orderBy from 'lodash/orderBy'
+import { View } from 'react-native'
+import { CipherList } from './CipherList'
+import { AppStackScreenProps } from 'app/navigators'
+import { useStores } from 'app/models'
+import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
+import { TrustedContact } from 'app/static/types'
+import { CipherData } from 'core/models/data'
+import { Cipher } from 'core/models/domain'
+import { CipherView } from 'core/models/view'
+import { Header, Screen, Text } from 'app/components/cores'
 
-export const ViewEAScreen: FC<AppStackScreenProps<"viewEA">> = observer((props) => {
+export const ViewEAScreen: FC<AppStackScreenProps<'viewEA'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
+  const { translate } = useHelper()
   const { user } = useStores()
 
   const { getEncKeyFromDecryptedKey } = useCipherData()
@@ -26,10 +26,10 @@ export const ViewEAScreen: FC<AppStackScreenProps<"viewEA">> = observer((props) 
   const trustContact: TrustedContact = route.params.trusted
   // -------------- PARAMS ------------------
   const [isLoading, setIsLoading] = useState(true)
-  const [searchText, setSearchText] = useState("")
+  const [searchText, setSearchText] = useState('')
   const [sortList, setSortList] = useState({
-    orderField: "revisionDate",
-    order: "desc",
+    orderField: 'revisionDate',
+    order: 'desc',
   })
 
   const [ciphers, setCiphers] = useState([])
@@ -38,7 +38,7 @@ export const ViewEAScreen: FC<AppStackScreenProps<"viewEA">> = observer((props) 
   const mount = async () => {
     setIsLoading(true)
     const fetchKeyRes = await user.viewEA(trustContact.id)
-    if (fetchKeyRes.kind !== "ok") return
+    if (fetchKeyRes.kind !== 'ok') return
     try {
       const encKey = await getEncKeyFromDecryptedKey(fetchKeyRes.data.key_encrypted)
       const decCiphers = []
@@ -50,7 +50,7 @@ export const ViewEAScreen: FC<AppStackScreenProps<"viewEA">> = observer((props) 
         promises.push(
           cipher.decrypt(encKey).then((c) => {
             decCiphers.push(c)
-          }),
+          })
         )
       })
 
@@ -69,8 +69,8 @@ export const ViewEAScreen: FC<AppStackScreenProps<"viewEA">> = observer((props) 
         res =
           orderBy(
             res,
-            [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
-            [order],
+            [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
+            [order]
           ) || []
       }
 
@@ -94,12 +94,12 @@ export const ViewEAScreen: FC<AppStackScreenProps<"viewEA">> = observer((props) 
 
   return (
     <Screen
-      safeAreaEdges={["bottom"]}
+      safeAreaEdges={['bottom']}
       header={
         <Header
           leftIcon="arrow-left"
           onLeftPress={() => navigation.goBack()}
-          title={translate("emergency_access.view")}
+          title={translate('emergency_access.view')}
         />
       }
       contentContainerStyle={{
@@ -116,7 +116,7 @@ export const ViewEAScreen: FC<AppStackScreenProps<"viewEA">> = observer((props) 
         value={sortOption}
       /> */}
       <Text
-        text={translate("emergency_access.view_user_vault", { name: trustContact.full_name })}
+        text={translate('emergency_access.view_user_vault', { name: trustContact.full_name })}
         style={{ marginLeft: 20 }}
       />
 

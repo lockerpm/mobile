@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useRef, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { useNavigation } from "@react-navigation/native"
-import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
-import { NotificationCategory } from "app/static/types"
-import { Screen, Header, Toggle } from "app/components/cores"
-import { MenuItemContainer, SettingsItem } from "app/components/utils"
-import { translate } from "app/i18n"
+import React, { useEffect, useRef, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useNavigation } from '@react-navigation/native'
+import { useStores } from 'app/models'
+import { useHelper } from 'app/services/hook'
+import { useTheme } from 'app/services/context'
+import { NotificationCategory } from 'app/static/types'
+import { Screen, Header, Toggle } from 'app/components/cores'
+import { MenuItemContainer, SettingsItem } from 'app/components/utils'
 
 export const PushEmailSettingsScreen = observer(() => {
   const navigation = useNavigation()
   const { user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
 
   // ----------------------- PARAMS -----------------------
 
@@ -36,7 +35,7 @@ export const PushEmailSettingsScreen = observer(() => {
   useEffect(() => {
     const fetchUserNotiSetting = async () => {
       const res = await user.getNotificationSettings()
-      if (res.kind !== "ok") {
+      if (res.kind !== 'ok') {
         notifyApiError(res)
       }
     }
@@ -85,7 +84,7 @@ export const PushEmailSettingsScreen = observer(() => {
           onLeftPress={() => {
             navigation.goBack()
           }}
-          title={translate("common.email")}
+          title={translate('common.email')}
         />
       }
       backgroundColor={colors.block}
@@ -93,7 +92,7 @@ export const PushEmailSettingsScreen = observer(() => {
       <MenuItemContainer>
         <SettingsItem
           disabled={enable}
-          name={translate("noti_setting.item_sharing")}
+          name={translate('noti_setting.item_sharing')}
           RightAccessory={
             <Toggle
               variant="switch"
@@ -107,7 +106,7 @@ export const PushEmailSettingsScreen = observer(() => {
         />
         <SettingsItem
           disabled={enable}
-          name={translate("noti_setting.emergency")}
+          name={translate('noti_setting.emergency')}
           RightAccessory={
             <Toggle
               variant="switch"
@@ -121,7 +120,7 @@ export const PushEmailSettingsScreen = observer(() => {
         />
         <SettingsItem
           disabled={enable}
-          name={translate("noti_setting.breach_scan")}
+          name={translate('noti_setting.breach_scan')}
           RightAccessory={
             <Toggle
               variant="switch"
@@ -135,7 +134,7 @@ export const PushEmailSettingsScreen = observer(() => {
         />
         <SettingsItem
           disabled={enable}
-          name={translate("noti_setting.tips")}
+          name={translate('noti_setting.tips')}
           RightAccessory={
             <Toggle
               variant="switch"
@@ -149,7 +148,7 @@ export const PushEmailSettingsScreen = observer(() => {
         />
         <SettingsItem
           disabled={enable}
-          name={translate("noti_setting.marketing")}
+          name={translate('noti_setting.marketing')}
           RightAccessory={
             <Toggle
               variant="switch"
@@ -163,7 +162,7 @@ export const PushEmailSettingsScreen = observer(() => {
         />
         <SettingsItem
           disabled={enable}
-          name={translate("common.other")}
+          name={translate('common.other')}
           RightAccessory={
             <Toggle
               variant="switch"

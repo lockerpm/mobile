@@ -4,7 +4,7 @@ import { Text } from 'app/components/cores'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 export const PREMIUM_FEATURES_IMG = {
   locker: require('assets/images/intro/locker.png'),
@@ -16,6 +16,7 @@ export const PREMIUM_FEATURES_IMG = {
 export const PremiumFeature = () => {
   const { colors } = useTheme()
   const { user } = useStores()
+  const { translate } = useHelper()
   const navigation = useNavigation() as any
   const isFreeAccount = user.isFreePlan
 

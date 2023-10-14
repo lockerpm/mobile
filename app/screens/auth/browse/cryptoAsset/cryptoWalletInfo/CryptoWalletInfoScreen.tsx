@@ -11,15 +11,16 @@ import { toCryptoWalletData } from 'app/utils/crypto'
 import { WALLET_APP_LIST } from 'app/utils/crypto/applist'
 import { CHAIN_LIST } from 'app/utils/crypto/chainlist'
 import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
-import { translate } from 'app/i18n'
 import { SeedPhraseInfo } from './SeedPhraseInfo'
 import { Textarea } from 'app/components/utils'
+import { useHelper } from 'app/services/hook'
 
 export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info'>> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
 
+    const { translate } = useHelper()
     const { colors } = useTheme()
     const { cipherStore } = useStores()
 
@@ -40,7 +41,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
 
     return (
       <Screen
-        preset='auto'
+        preset="auto"
         padding
         safeAreaEdges={['bottom']}
         header={
@@ -75,7 +76,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
               height: 55,
               width: 55,
               borderRadius: 8,
-              alignSelf: 'center'
+              alignSelf: 'center',
             }}
           />
         ) : (
@@ -84,11 +85,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
             style={{ height: 55, width: 55, alignSelf: 'center' }}
           />
         )}
-        <Text
-          preset="bold"
-          size="xxl"
-          style={{ margin: 20, textAlign: 'center' }}
-        >
+        <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: 'center' }}>
           {selectedCipher.name}
           {notSync && (
             <View style={{ paddingLeft: 10 }}>
@@ -126,8 +123,9 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
                   }}
                 />
               </View>
-            ) : <Text text={cryptoWalletData.walletApp?.name || translate('common.none')} />}
-
+            ) : (
+              <Text text={cryptoWalletData.walletApp?.name || translate('common.none')} />
+            )}
           </View>
         </View>
 

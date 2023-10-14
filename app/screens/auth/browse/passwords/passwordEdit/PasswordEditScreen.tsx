@@ -4,13 +4,12 @@ import { BackHandler, TouchableOpacity, View, Image } from 'react-native'
 import find from 'lodash/find'
 import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
 import { useTheme } from 'app/services/context'
-import { useCipherData, useCipherHelper, useFolder } from 'app/services/hook'
+import { useCipherData, useCipherHelper, useFolder, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CollectionView } from 'core/models/view/collectionView'
 import { CipherView, FieldView, LoginUriView, LoginView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { PlanStorageLimitModal } from '../../planStorageLimitModal'
 import { PasswordPolicyViolationsModal, PasswordStrength } from 'app/components/utils'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
@@ -23,6 +22,7 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
 
   const { colors } = useTheme()
   const { shareFolderAddItem } = useFolder()
+  const { translate } = useHelper()
   const { createCipher, updateCipher } = useCipherData()
   const { getPasswordStrength, newCipher, checkPasswordPolicy } = useCipherHelper()
   const { cipherStore, uiStore, user, collectionStore } = useStores()
@@ -290,7 +290,7 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
         style={{
           paddingBottom: 32,
           padding: 16,
-          paddingTop: 0
+          paddingTop: 0,
         }}
       >
         <TextInput
@@ -309,10 +309,7 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
         />
 
         {!!password && (
-          <PasswordStrength
-            value={getPasswordStrength(password).score}
-            style={{ marginTop: 15 }}
-          />
+          <PasswordStrength value={getPasswordStrength(password).score} style={{ marginTop: 15 }} />
         )}
         {/* Password end */}
 

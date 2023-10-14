@@ -1,13 +1,12 @@
-import React, { useState } from "react"
-import { TouchableOpacity, View } from "react-native"
-import { FieldEdit } from "./fieldEdit"
-import { TypeSelectModal } from "./TypeSelectModal"
-import { FieldView } from "core/models/view"
-import { useTheme } from "app/services/context"
-import { useCipherHelper } from "app/services/hook"
-import { FieldType } from "core/enums"
-import { Icon, Text } from "app/components/cores"
-import { translate } from "app/i18n"
+import React, { useState } from 'react'
+import { TouchableOpacity, View } from 'react-native'
+import { FieldEdit } from './fieldEdit'
+import { TypeSelectModal } from './TypeSelectModal'
+import { FieldView } from 'core/models/view'
+import { useTheme } from 'app/services/context'
+import { useCipherHelper, useHelper } from 'app/services/hook'
+import { FieldType } from 'core/enums'
+import { Icon, Text } from 'app/components/cores'
 
 type Props = {
   fields: FieldView[]
@@ -20,6 +19,7 @@ type Props = {
 export const CustomFieldsEdit = (props: Props) => {
   const { fields, setFields } = props
   const { colors } = useTheme()
+  const { translate } = useHelper()
   const { getCustomFieldDataFromType } = useCipherHelper()
 
   // -------------- PARAMS --------------
@@ -42,7 +42,7 @@ export const CustomFieldsEdit = (props: Props) => {
       type: FieldType
       name: string
       value: string
-    },
+    }
   ) => {
     const newFields = [...fields]
     newFields[index].type = values.type
@@ -75,7 +75,7 @@ export const CustomFieldsEdit = (props: Props) => {
           backgroundColor: colors.block,
         }}
       >
-        <Text preset="label" size="base" text={translate("common.custom_fields").toUpperCase()} />
+        <Text preset="label" size="base" text={translate('common.custom_fields').toUpperCase()} />
       </View>
 
       {/* Data */}
@@ -103,14 +103,14 @@ export const CustomFieldsEdit = (props: Props) => {
             setShowTypeModal(true)
           }}
           style={{
-            justifyContent: "flex-start",
-            alignItems: "center",
-            flexDirection: 'row'
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            flexDirection: 'row',
           }}
         >
           <Icon icon="plus-circle" size={20} color={colors.primary} />
           <Text
-            text={translate("common.add_new_field")}
+            text={translate('common.add_new_field')}
             color={colors.primary}
             style={{
               marginLeft: 12,

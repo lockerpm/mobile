@@ -3,11 +3,11 @@ import { Linking } from 'react-native'
 import { Screen, Header } from 'app/components/cores'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { HELP_CENTER_URL, PRIVACY_POLICY_URL, REPORT_VULN, TERMS_URL } from 'app/config/constants'
 import { Logger } from 'app/utils/utils'
 import { MenuItemContainer, SettingsItem } from 'app/components/utils'
 import { observer } from 'mobx-react-lite'
+import { useHelper } from 'app/services/hook'
 
 type Item = {
   name: string
@@ -18,6 +18,7 @@ type Item = {
 export const HelpScreen = observer(() => {
   const navigation = useNavigation() as any
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   const items: Item[] = [
     {

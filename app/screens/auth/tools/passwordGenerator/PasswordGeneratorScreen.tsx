@@ -7,7 +7,6 @@ import { useTheme } from 'app/services/context'
 import { useCipherHelper, useHelper } from 'app/services/hook'
 import { useCoreService } from 'app/services/coreService'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
 import { Button, Header, Icon, Screen, Text } from 'app/components/cores'
 import { PasswordStrength } from 'app/components/utils'
 
@@ -17,7 +16,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
     const route = props.route
 
     const { colors } = useTheme()
-    const { copyToClipboard } = useHelper()
+    const { copyToClipboard, translate } = useHelper()
     const { getPasswordStrength } = useCipherHelper()
     const { passwordGenerationService } = useCoreService()
     const { cipherStore } = useStores()

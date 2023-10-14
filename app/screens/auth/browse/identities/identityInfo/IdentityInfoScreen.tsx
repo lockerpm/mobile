@@ -7,16 +7,17 @@ import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
 import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { Header, Icon, Screen, Text, TextInput } from 'app/components/cores'
 import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
 import { Textarea } from 'app/components/utils'
+import { useHelper } from 'app/services/hook'
 
 export const IdentityInfoScreen: FC<AppStackScreenProps<'identities__info'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
   const { cipherStore } = useStores()
+  const { translate } = useHelper()
   const selectedCipher: CipherView = cipherStore.cipherView
   const { colors } = useTheme()
 
@@ -130,18 +131,15 @@ export const IdentityInfoScreen: FC<AppStackScreenProps<'identities__info'>> = o
         />
       )}
 
-
       <Image
         source={BROWSE_ITEMS.identity.icon}
         style={{
-          height: 55, width: 55, alignSelf: 'center'
+          height: 55,
+          width: 55,
+          alignSelf: 'center',
         }}
       />
-      <Text
-        preset="bold"
-        size="xxl"
-        style={{ margin: 20, textAlign: 'center' }}
-      >
+      <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: 'center' }}>
         {selectedCipher.name}
         {notSync && (
           <View style={{ paddingLeft: 10 }}>

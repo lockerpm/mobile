@@ -10,7 +10,6 @@ import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { getTOTP, parseOTPUri } from 'app/utils/totp'
 import { Screen } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
@@ -23,7 +22,7 @@ const EMPTY_CIPHER = require('assets/images/emptyCipherList/autofill-empty-ciphe
 export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = observer((props) => {
   const navigation = props.navigation
   const { mode } = props.route.params
-  const { copyToClipboard } = useHelper()
+  const { copyToClipboard, translate } = useHelper()
   const { uiStore } = useStores()
   const { getCiphersFromCache } = useCipherData()
   // -------------------- PARAMS ----------------------------

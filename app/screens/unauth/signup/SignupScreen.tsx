@@ -1,10 +1,9 @@
 import countries from 'app/static/countries.json'
 import React, { useState, useEffect, useRef, useCallback, FC } from 'react'
-import { Linking, Platform, TouchableOpacity, View} from 'react-native'
+import { Linking, Platform, TouchableOpacity, View } from 'react-native'
 import { useStores } from 'app/models'
 import { RootStackScreenProps } from 'app/navigators'
 import { useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
 import { Checkbox } from 'react-native-ui-lib'
 import Animated, { ZoomIn } from 'react-native-reanimated'
@@ -28,7 +27,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
   const navigation = props.navigation
   const { colors } = useTheme()
   const { user } = useStores()
-  const { notify, notifyApiError } = useHelper()
+  const { notify, notifyApiError, translate } = useHelper()
 
   // ---------------- PARAMS ---------------------
 
@@ -353,6 +352,7 @@ const TermAndConditions = ({
   agreed: boolean
   setAgreed: (val: boolean) => void
 }) => {
+  const { translate } = useHelper()
   const { colors } = useTheme()
   return (
     <View

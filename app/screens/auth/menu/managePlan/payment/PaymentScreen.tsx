@@ -24,7 +24,6 @@ import { FamilyPayment } from './familyPayment/FamilyPayment'
 import { PremiumPayment } from './premiumPayment/PremiumPayment'
 import { IS_IOS } from 'app/config/constants'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
 import { useHelper } from 'app/services/hook'
 
 const subSkus = [SKU.PRE_MON, SKU.PRE_YEAR, SKU.FAM_MON, SKU.FAM_YEAR]
@@ -32,7 +31,7 @@ const subSkus = [SKU.PRE_MON, SKU.PRE_YEAR, SKU.FAM_MON, SKU.FAM_YEAR]
 const PaymentScreenContent: FC<AppStackScreenProps<'payment'>> = observer((props) => {
   const { subscriptions, getSubscriptions, currentPurchase, finishTransaction } = useIAP()
   const { user, uiStore } = useStores()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { colors, isDark } = useTheme()
   const navigation = props.navigation
   const route = props.route

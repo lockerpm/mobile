@@ -4,20 +4,19 @@ import { useCipherData } from './useCipherData'
 import { useHelper } from './useHelper'
 import { Utils } from '../coreService/utils'
 import { EncString, SymmetricCryptoKey } from 'core/models/domain'
-import { AccountRoleText } from 'app/config/types'
 import { FolderView } from 'core/models/view/folderView'
 import { CipherView } from 'core/models/view'
 import { Alert } from 'react-native'
-import { translate } from 'app/i18n'
 import { CipherRequest } from 'core/models/request'
 import { Logger } from 'app/utils/utils'
 import { CollectionView } from 'core/models/view/collectionView'
+import { AccountRoleText } from 'app/static/types'
 
 export function useFolder() {
   const { cipherStore, folderStore, collectionStore, enterpriseStore, user } = useStores()
   const { cipherService, cryptoService } = useCoreService()
   const { getCiphers, reloadCache } = useCipherData()
-  const { notify, notifyApiError } = useHelper()
+  const { notify, notifyApiError, translate } = useHelper()
 
   const _generateMemberKey = async (publicKey: string, orgKey: SymmetricCryptoKey) => {
     const pk = Utils.fromB64ToArray(publicKey)

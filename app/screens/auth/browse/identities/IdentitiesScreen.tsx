@@ -11,15 +11,16 @@ import {
 } from 'app/components/ciphers'
 import { useStores } from 'app/models'
 import { Screen } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { CipherType } from 'core/enums'
+import { useHelper } from 'app/services/hook'
 
 const EMPTY_LIST = require('assets/images/emptyCipherList/identity-empty-img.png')
 
 export const IdentitiesScreen = observer(() => {
   const navigation = useNavigation() as any
   const { uiStore } = useStores()
+  const { translate } = useHelper()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -68,7 +69,7 @@ export const IdentitiesScreen = observer(() => {
 
   return (
     <Screen
-      preset='fixed'
+      preset="fixed"
       safeAreaEdges={['top']}
       header={
         <CipherListHeader
@@ -96,7 +97,7 @@ export const IdentitiesScreen = observer(() => {
         />
       }
       contentContainerStyle={{
-        flex: 1
+        flex: 1,
       }}
     >
       <SortActionConfigModal

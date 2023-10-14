@@ -7,7 +7,6 @@ import { AppStackScreenProps } from 'app/navigators'
 import { useAuthentication, useCipherHelper, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { TrustedContact } from 'app/static/types'
-import { translate } from 'app/i18n'
 import { PasswordStrength } from 'app/components/utils'
 
 export const TakeoverEAScreen: FC<AppStackScreenProps<'takeoverEA'>> = observer((props) => {
@@ -15,7 +14,7 @@ export const TakeoverEAScreen: FC<AppStackScreenProps<'takeoverEA'>> = observer(
   const route = props.route
 
   const { colors } = useTheme()
-  const { validateMasterPassword } = useHelper()
+  const { validateMasterPassword, translate } = useHelper()
   const { getPasswordStrength } = useCipherHelper()
   const { updateNewMasterPasswordEA } = useAuthentication()
 

@@ -16,7 +16,6 @@ import { FolderAction } from '../../folders/FolderAction'
 import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CollectionView } from 'core/models/view/collectionView'
-import { translate } from 'app/i18n'
 import { AccountRole, AccountRoleText } from 'app/static/types'
 import { Organization } from 'core/models/domain/organization'
 import { CipherView } from 'core/models/view'
@@ -56,7 +55,7 @@ export const CipherSharedList = observer((props: CipherSharedListProps) => {
     setSelectedItems,
     setAllItems,
   } = props
-  const { notify, getTeam } = useHelper()
+  const { notify, getTeam, translate } = useHelper()
   const { getCiphersFromCache } = useCipherData()
   const { cipherStore, collectionStore, user } = useStores()
   const { newCipher, getCipherInfo } = useCipherHelper()

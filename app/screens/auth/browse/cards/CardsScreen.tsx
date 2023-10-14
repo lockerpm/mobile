@@ -14,13 +14,14 @@ import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { Screen } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { CipherType } from 'core/enums'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 const CARD_EMPTY = require('assets/images/emptyCipherList/card-empty-img.png')
 
 export const CardsScreen = observer(() => {
   const navigation = useNavigation() as any
   const { uiStore } = useStores()
+  const { translate } = useHelper()
 
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -69,9 +70,8 @@ export const CardsScreen = observer(() => {
 
   return (
     <Screen
-      preset='fixed'
+      preset="fixed"
       safeAreaEdges={['top']}
-   
       header={
         <CipherListHeader
           header={translate('common.card')}

@@ -8,14 +8,15 @@ import { PushNotifier } from 'app/utils/pushNotification/pushNotifier'
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
 import { useStores } from 'app/models'
 import { Screen } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
+import { useHelper } from 'app/services/hook'
 
 const SHARE_EMPTY = require('assets/images/emptyCipherList/share-empty-img.png')
 
 export const SharedItemsScreen = observer(() => {
   const navigation = useNavigation()
   const { uiStore } = useStores()
+  const { translate } = useHelper()
 
   // ------------------------ PARAMS -------------------------
 
@@ -75,7 +76,7 @@ export const SharedItemsScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={[ 'top']}
+      safeAreaEdges={['top']}
       header={
         <CipherListHeader
           isShared
@@ -100,7 +101,7 @@ export const SharedItemsScreen = observer(() => {
         />
       }
       contentContainerStyle={{
-        flex: 1
+        flex: 1,
       }}
     >
       <SortActionConfigModal

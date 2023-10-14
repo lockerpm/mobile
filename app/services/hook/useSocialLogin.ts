@@ -6,11 +6,10 @@ import { appleAuth } from '@invertase/react-native-apple-authentication'
 import { getCookies, logRegisterSuccessEvent } from '../../utils/analytics'
 import { useStores } from 'app/models'
 import { useHelper } from './useHelper'
-import { translate } from 'app/i18n'
 
 export function useSocialLogin() {
   const { user } = useStores()
-  const { notifyApiError, notify, setApiTokens } = useHelper()
+  const { notifyApiError, notify, setApiTokens, translate } = useHelper()
 
   // Google
   const googleLogin = async (payload: {
@@ -140,7 +139,7 @@ export function useSocialLogin() {
 
     setIsLoading && setIsLoading(true)
     const loginRes = await user.socialLogin({
-      provider: provider,
+      provider,
       access_token: token,
       code,
       scope: 'pwdmanager',

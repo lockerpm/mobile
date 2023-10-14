@@ -8,7 +8,6 @@ import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { AccountRole, AccountRoleText } from 'app/static/types'
-import { translate } from 'app/i18n'
 import { ChangeTeamFolderModal } from './ChangeTeamFolderModal'
 import { ActionSheet } from '../actionsSheet/ActionSheet'
 import { Text } from '../../cores'
@@ -42,7 +41,7 @@ export const CipherAction = (props: CipherActionProps) => {
   const [showShareOptions, setShowShareOptions] = useState(false)
 
   const { colors } = useTheme()
-  const { getRouteName, getTeam } = useHelper()
+  const { getRouteName, getTeam, translate } = useHelper()
   const { toTrashCiphers } = useCipherData()
   const { getCipherDescription, getCipherInfo } = useCipherHelper()
   const { cipherStore, user, uiStore } = useStores()
@@ -265,7 +264,7 @@ export const CipherAction = (props: CipherActionProps) => {
             }
           }}
           style={{
-            paddingHorizontal: 20
+            paddingHorizontal: 20,
           }}
         >
           <View
@@ -284,7 +283,7 @@ export const CipherAction = (props: CipherActionProps) => {
             {premiumLock && <PremiumTag />}
           </View>
 
-          <Text preset='label' text={translate('quick_shares.share_option.normal.dec')} />
+          <Text preset="label" text={translate('quick_shares.share_option.normal.dec')} />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -292,7 +291,7 @@ export const CipherAction = (props: CipherActionProps) => {
             navigation.navigate('quick_shares', { cipher: selectedCipher })
           }}
           style={{
-            paddingHorizontal: 20
+            paddingHorizontal: 20,
           }}
         >
           <Text
@@ -303,7 +302,7 @@ export const CipherAction = (props: CipherActionProps) => {
               marginBottom: 4,
             }}
           />
-          <Text preset='label' text={translate('quick_shares.share_option.quick.dec')} />
+          <Text preset="label" text={translate('quick_shares.share_option.quick.dec')} />
         </TouchableOpacity>
       </ActionSheet>
     </View>

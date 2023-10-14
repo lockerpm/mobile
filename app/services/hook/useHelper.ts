@@ -12,19 +12,20 @@ import ReactNativeBiometrics from 'react-native-biometrics'
 import { MASTER_PW_MIN_LENGTH, MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { GeneralApiProblem } from '../api/apiProblem'
 import { NotifeeNotificationData, PushEvent } from 'app/utils/pushNotification/types'
-import { translate } from 'app/i18n'
+import { translate as tl, TxKeyPath } from '../../i18n'
+import i18n from 'i18n-js'
 
 export function useHelper() {
-  const {
-    user,
-    cipherStore,
-    collectionStore,
-    folderStore,
-    toolStore,
-    enterpriseStore,
-  } = useStores()
+  const { user, cipherStore, collectionStore, folderStore, toolStore, enterpriseStore } =
+    useStores()
   const { userService } = useCoreService()
   const insets = useSafeAreaInsets()
+
+  const translate = (tx: TxKeyPath, options?: i18n.TranslateOptions) => {
+    // Dummy to force rerender
+    const _abc = user.language
+    return tl(tx, options)
+  }
 
   // Alert message
   const notify = (
@@ -271,6 +272,7 @@ export function useHelper() {
   }
 
   return {
+    translate,
     setApiTokens,
     notify,
     randomString,

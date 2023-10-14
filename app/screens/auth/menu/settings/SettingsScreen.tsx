@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native'
 import { useStores } from 'app/models'
 import { useCipherData, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { AutofillDataType, loadShared, saveShared } from 'app/utils/keychain'
 import { Header, Screen, Text, Toggle } from 'app/components/cores'
 import { SettingsItem, MenuItemContainer, Select } from 'app/components/utils'
@@ -19,7 +18,7 @@ export const SettingsScreen = observer(() => {
   const navigation = useNavigation() as any
   const { user, uiStore, cipherStore } = useStores()
   const { colors, setIsDark } = useTheme()
-  const { notify, isBiometricAvailable } = useHelper()
+  const { notify, isBiometricAvailable, translate } = useHelper()
   const { startSyncProcess } = useCipherData()
 
   // ----------------------- PARAMS -----------------------

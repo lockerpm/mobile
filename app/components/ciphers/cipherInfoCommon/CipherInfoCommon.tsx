@@ -1,5 +1,4 @@
 import { TextInput, Text, ImageIcon } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { useHelper } from 'app/services/hook'
@@ -26,7 +25,7 @@ export interface CipherInfoCommonProps {
  */
 export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
   const { style, cipher } = props
-  const { getTeam } = useHelper()
+  const { getTeam, translate } = useHelper()
   const { user, folderStore, collectionStore, cipherStore } = useStores()
 
   const [showFullShareMember, setShowFullShareMember] = React.useState<boolean>(false)
@@ -68,7 +67,6 @@ export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
           isPassword={item.type === FieldType.Hidden}
           label={item.name}
           value={item.value}
-
         />
       ))}
 
@@ -103,37 +101,37 @@ export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
       />
       {collections.length > 0
         ? collections.map((c: CollectionView) => (
-          <View
-            key={c.id}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginBottom: 10,
-            }}
-          >
-            <ImageIcon icon="folder-share" size={30} />
-            <Text text={c.name || translate('folder.unassigned')} style={{ marginLeft: 10 }} />
-          </View>
-        ))
+            <View
+              key={c.id}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}
+            >
+              <ImageIcon icon="folder-share" size={30} />
+              <Text text={c.name || translate('folder.unassigned')} style={{ marginLeft: 10 }} />
+            </View>
+          ))
         : (!cipher.organizationId ||
-          !!folder.name ||
-          getTeam(user.teams, cipher.organizationId)) && (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <ImageIcon icon="folder" size={30} />
-            <Text
-              text={folder.name || translate('folder.unassigned')}
-              numberOfLines={2}
-              style={{ marginLeft: 10, flex: 1 }}
-            />
-          </View>
-        )}
+            !!folder.name ||
+            getTeam(user.teams, cipher.organizationId)) && (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <ImageIcon icon="folder" size={30} />
+              <Text
+                text={folder.name || translate('folder.unassigned')}
+                numberOfLines={2}
+                style={{ marginLeft: 10, flex: 1 }}
+              />
+            </View>
+          )}
     </View>
   )
 }
 
 const SharedWith = ({ shareMember, show, setShow }) => {
   const { colors } = useTheme()
-
+  const { translate } = useHelper()
   return (
     shareMember.isShared && (
       <View>

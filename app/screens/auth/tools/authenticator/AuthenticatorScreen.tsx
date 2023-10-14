@@ -5,18 +5,19 @@ import { useNavigation } from '@react-navigation/core'
 import { AuthenticatorAddAction } from './AuthenticatorAddAction'
 import { BackHandler } from 'react-native'
 import { OtpList } from './OtpList'
-import {  EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
+import { EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
 import { Screen } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { translate } from 'app/i18n'
 import { AuthenticatorHeader } from './AuthenticatorHeader'
+import { useHelper } from 'app/services/hook'
 
 const EMPTY = require('assets/images/emptyCipherList/password-empty-img.png')
 
 export const AuthenticatorScreen = observer(() => {
   const navigation = useNavigation()
   const { uiStore } = useStores()
+  const { translate } = useHelper()
 
   // -------------------- PARAMS ----------------------
 

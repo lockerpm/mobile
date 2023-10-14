@@ -11,14 +11,15 @@ import {
 } from 'app/components/ciphers'
 import { useStores } from 'app/models'
 import { Screen } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { CipherType } from 'core/enums'
+import { useHelper } from 'app/services/hook'
 
 const EMPTY_LIST = require('assets/images/emptyCipherList/password-empty-img.png')
 
 export const PasswordsScreen = observer(() => {
   const navigation = useNavigation() as any
+  const { translate } = useHelper()
   const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)

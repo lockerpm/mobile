@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react'
 import { BottomModal, Button, Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { useCoreService } from 'app/services/coreService'
-import { useCipherData } from 'app/services/hook'
+import { useCipherData, useHelper } from 'app/services/hook'
 import { View } from 'react-native'
 import { useTheme } from 'app/services/context'
 import { CollectionView } from 'core/models/view/collectionView'
@@ -16,10 +15,11 @@ interface Props {
 }
 
 export const ConfirmShareFolderModal = (props: Props) => {
-  const { isOpen, onClose } = props
+  const { isOpen, onClose, item } = props
   const { cipherStore } = useStores()
   const { colors } = useTheme()
   const { confirmShareCipher } = useCipherData()
+  const { translate } = useHelper()
   const { cryptoService } = useCoreService()
 
   const organizationId = cipherStore.cipherView?.organizationId
@@ -34,12 +34,12 @@ export const ConfirmShareFolderModal = (props: Props) => {
   // --------------- METHODS ----------------
 
   const handleConfirmShare = async () => {
-    // setIsLoading(true)
-    // const res = await confirmShareCipher(organizationId, member.id, publicKey)
-    // setIsLoading(false)
-    // if (res.kind === 'ok' || res.kind === 'unauthorized') {
-    //   onClose()
-    // }
+    setIsLoading(true)
+    const res = await confirmShareCipher(organizationId, item.id, publicKey)
+    setIsLoading(false)
+    if (res.kind === 'ok' || res.kind === 'unauthorized') {
+      onClose()
+    }
   }
 
   // --------------- EFFECT ----------------

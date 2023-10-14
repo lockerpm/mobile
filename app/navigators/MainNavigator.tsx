@@ -80,7 +80,6 @@ import { CipherView } from 'core/models/view'
 import { SendView } from 'core/models/view/sendView'
 import { CollectionView } from 'core/models/view/collectionView'
 import { useAuthentication, useCipherData, useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
 import { Logger } from 'app/utils/utils'
 import { AppEventType, EventBus } from 'app/utils/eventBus'
 import { observer } from 'mobx-react-lite'
@@ -259,6 +258,7 @@ export const MainNavigator = observer(() => {
     syncQuickShares,
   } = useCipherData()
   const { uiStore, user, cipherStore, toolStore } = useStores()
+  const { translate } = useHelper()
 
   // ------------------ PARAMS --------------------
 

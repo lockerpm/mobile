@@ -8,13 +8,12 @@ import { useTheme } from 'app/services/context'
 import { NotificationCategory } from 'app/static/types'
 import { Screen, Header, Toggle } from 'app/components/cores'
 import { MenuItemContainer, SettingsItem } from 'app/components/utils'
-import { translate } from 'app/i18n'
 
 export const PushNotificationSettingsScreen = observer(() => {
   const navigation = useNavigation()
   const { user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
 
   // ----------------------- PARAMS -----------------------
 

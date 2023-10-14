@@ -7,7 +7,6 @@ import { useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { Icon, Text } from 'app/components/cores'
 import { ActionItem, ActionSheet } from 'app/components/ciphers'
-import { translate } from 'app/i18n'
 
 interface Props {
   isFreeAccount: boolean
@@ -30,7 +29,7 @@ export const AliasItem = (props: Props) => {
     navigateStatistic,
   } = props
   const { colors } = useTheme()
-  const { copyToClipboard } = useHelper()
+  const { copyToClipboard, translate } = useHelper()
   const { toolStore } = useStores()
 
   const [isOpen, setIsOpen] = useState(false)

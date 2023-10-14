@@ -3,20 +3,20 @@ import { Text, Icon } from 'app/components/cores'
 import { View } from 'react-native'
 import { SeedPhraseInput } from '../cryptoWalletEdit/SeedPhraseInput'
 import { useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
 
 interface Props {
   seed: string
 }
 export const SeedPhraseInfo = (props: Props) => {
-  const { copyToClipboard } = useHelper()
-
+  const { copyToClipboard, translate } = useHelper()
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <View style={{
-      marginTop: 16
-    }}>
+    <View
+      style={{
+        marginTop: 16,
+      }}
+    >
       <View
         style={{
           flexDirection: 'row',
@@ -30,7 +30,7 @@ export const SeedPhraseInfo = (props: Props) => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            paddingRight: 14
+            paddingRight: 14,
           }}
         >
           <Icon

@@ -1,9 +1,9 @@
 import React from 'react'
 import { View } from 'react-native'
-import { translate } from 'app/i18n'
 import { ActionItem, ActionSheet } from 'app/components/ciphers'
 import { Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   isOpen: boolean
@@ -16,6 +16,7 @@ interface Props {
 export const SortActionConfigModal = (props: Props) => {
   const { isOpen, onClose, onSelect, value, byNameOnly } = props
   const { colors } = useTheme()
+  const { translate } = useHelper()
   const lastUpdateOptions = [
     {
       label: translate('all_items.last_updated'),

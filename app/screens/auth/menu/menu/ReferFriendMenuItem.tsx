@@ -3,12 +3,13 @@ import React from 'react'
 import { View, Image, Dimensions, TouchableOpacity } from 'react-native'
 import { Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 const REFER_LOCKER = require('assets/images/intro/refer-locker.png')
 
 export const ReferFriendMenuItem = ({ onPress }: { onPress: () => void }) => {
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   return (
     <TouchableOpacity

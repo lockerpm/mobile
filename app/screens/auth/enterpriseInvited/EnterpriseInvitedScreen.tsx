@@ -5,134 +5,140 @@ import { EnterpriseInvitation } from 'app/static/types'
 import { AppStackScreenProps } from 'app/navigators'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { observer } from 'mobx-react-lite'
+import { useHelper } from 'app/services/hook'
 
 const ASSETS = {
   user: require('assets/images/intro/user.png'),
   org: require('assets/images/intro/organization.png'),
 }
 
-export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'>> = observer((props) => {
-  const navigation = props.navigation
-  const { enterpriseStore, user } = useStores()
-  const { colors } = useTheme()
+export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'>> = observer(
+  (props) => {
+    const navigation = props.navigation
+    const { enterpriseStore, user } = useStores()
+    const { translate } = useHelper()
+    const { colors } = useTheme()
 
-  const onNext = () => {
-    navigation.navigate('mainTab', { screen: user.defaultTab })
-  }
-  // ----------------------- PARAMS ----------------------
-
-  const [isLoading, setIsLoading] = useState(false)
-  const [invitations, setInvitation] = useState<EnterpriseInvitation[]>([])
-
-  // ----------------------- METHODS ----------------------
-  const manaulInvitation = invitations.find((e) => e.domain === null)
-  if (invitations.length > 0 && manaulInvitation === undefined) {
-    onNext()
-  }
-
-  const invitationAction = async (status: 'confirmed' | 'reject') => {
-    setIsLoading(true)
-    const res = await enterpriseStore.invitationsActions(manaulInvitation?.id, status)
-    if (res.kind === 'ok' && status === 'confirmed') {
-      user.getUserPw()
+    const onNext = () => {
+      navigation.navigate('mainTab', { screen: user.defaultTab })
     }
-    setIsLoading(false)
-    onNext()
-  }
+    // ----------------------- PARAMS ----------------------
 
-  const fetchInvitations = async () => {
-    const res = await enterpriseStore.invitations()
-    setInvitation(res)
-  }
+    const [isLoading, setIsLoading] = useState(false)
+    const [invitations, setInvitation] = useState<EnterpriseInvitation[]>([])
 
-  // ----------------------- EFFECT ----------------------
-  useEffect(() => {
-    enterpriseStore.setEnterpriseInvited(false)
-    fetchInvitations()
-  }, [])
+    // ----------------------- METHODS ----------------------
+    const manaulInvitation = invitations.find((e) => e.domain === null)
+    if (invitations.length > 0 && manaulInvitation === undefined) {
+      onNext()
+    }
 
-  // ----------------------- RENDER ----------------------
-  const footer = (
-    <View>
-      <Button
-        loading={isLoading}
-        text={translate('common.accept')}
-        onPress={() => invitationAction('confirmed')}
-        style={{
-          marginBottom: 12,
-        }}
-      />
-      <Button
-        preset="secondary"
-        text={translate('common.decline')}
-        onPress={() => invitationAction('reject')}
-        textStyle={{
-          color: colors.error,
-        }}
-        style={{
-          width: '100%',
-          borderColor: colors.disable,
-        }}
-      />
-    </View>
-  )
+    const invitationAction = async (status: 'confirmed' | 'reject') => {
+      setIsLoading(true)
+      const res = await enterpriseStore.invitationsActions(manaulInvitation?.id, status)
+      if (res.kind === 'ok' && status === 'confirmed') {
+        user.getUserPw()
+      }
+      setIsLoading(false)
+      onNext()
+    }
 
-  return (
-    <Screen safeAreaEdges={['top', 'bottom']} padding footer={footer}>
-      <View style={{ alignItems: 'flex-end' }}>
-        <TouchableOpacity
-          onPress={onNext}
+    const fetchInvitations = async () => {
+      const res = await enterpriseStore.invitations()
+      setInvitation(res)
+    }
+
+    // ----------------------- EFFECT ----------------------
+    useEffect(() => {
+      enterpriseStore.setEnterpriseInvited(false)
+      fetchInvitations()
+    }, [])
+
+    // ----------------------- RENDER ----------------------
+    const footer = (
+      <View>
+        <Button
+          loading={isLoading}
+          text={translate('common.accept')}
+          onPress={() => invitationAction('confirmed')}
           style={{
-            paddingBottom: 10,
-            paddingLeft: 10,
+            marginBottom: 12,
+          }}
+        />
+        <Button
+          preset="secondary"
+          text={translate('common.decline')}
+          onPress={() => invitationAction('reject')}
+          textStyle={{
+            color: colors.error,
+          }}
+          style={{
+            width: '100%',
+            borderColor: colors.disable,
+          }}
+        />
+      </View>
+    )
+
+    return (
+      <Screen safeAreaEdges={['top', 'bottom']} padding footer={footer}>
+        <View style={{ alignItems: 'flex-end' }}>
+          <TouchableOpacity
+            onPress={onNext}
+            style={{
+              paddingBottom: 10,
+              paddingLeft: 10,
+            }}
+          >
+            <Icon icon={'x'} size={24} />
+          </TouchableOpacity>
+        </View>
+
+        <Text
+          preset="bold"
+          size="xl"
+          text={translate('enterprise_invitation.invited')}
+          style={{
+            textAlign: 'center',
+            marginBottom: 30,
+          }}
+        />
+
+        <Item
+          leftBorderColor={colors.primary}
+          backgroundColor={'rgba(44,142,93,0.05)'}
+          label={translate('enterprise_invitation.org')}
+          text={manaulInvitation?.enterprise.name}
+          asset={ASSETS.org}
+        />
+
+        <Item
+          leftBorderColor={'blue'}
+          backgroundColor={'rgba(58,75,222,0.05)'}
+          label={translate('enterprise_invitation.invited_by')}
+          text={manaulInvitation?.owner}
+          asset={ASSETS.user}
+        />
+
+        <View
+          style={{
+            marginTop: 10,
+            borderRadius: 16,
+            backgroundColor: colors.block,
+            padding: 20,
           }}
         >
-          <Icon icon={'x'} size={24} />
-        </TouchableOpacity>
-      </View>
-
-      <Text
-        preset="bold"
-        size="xl"
-        text={translate('enterprise_invitation.invited')}
-        style={{
-          textAlign: 'center',
-          marginBottom: 30,
-        }}
-      />
-
-      <Item
-        leftBorderColor={colors.primary}
-        backgroundColor={'rgba(44,142,93,0.05)'}
-        label={translate('enterprise_invitation.org')}
-        text={manaulInvitation?.enterprise.name}
-        asset={ASSETS.org}
-      />
-
-      <Item
-        leftBorderColor={'blue'}
-        backgroundColor={'rgba(58,75,222,0.05)'}
-        label={translate('enterprise_invitation.invited_by')}
-        text={manaulInvitation?.owner}
-        asset={ASSETS.user}
-      />
-
-      <View
-        style={{
-          marginTop: 10,
-          borderRadius: 16,
-          backgroundColor: colors.block,
-          padding: 20,
-        }}
-      >
-        <Text text={translate('enterprise_invitation.accept_note')} style={{ marginBottom: 12 }} />
-        <Text text={translate('enterprise_invitation.decline_note')} />
-      </View>
-    </Screen>
-  )
-})
+          <Text
+            text={translate('enterprise_invitation.accept_note')}
+            style={{ marginBottom: 12 }}
+          />
+          <Text text={translate('enterprise_invitation.decline_note')} />
+        </View>
+      </Screen>
+    )
+  }
+)
 
 interface ItemProp {
   leftBorderColor: ColorValue

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
 import { BottomModal, Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 export interface FamilyMemberProp {
   id?: number
@@ -24,6 +24,7 @@ export const Member = (props: MemberProps) => {
   const { member, family, add, onRemove } = props
   const { id, email, avatar, full_name } = member
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   const owner = id === null
   // ----------------------- PARAMS -----------------------
@@ -73,7 +74,7 @@ export const Member = (props: MemberProps) => {
         </TouchableOpacity>
       )}
 
-      <BottomModal title='' isOpen={showSheetModal} onClose={() => setShowSheetModal(false)}>
+      <BottomModal title="" isOpen={showSheetModal} onClose={() => setShowSheetModal(false)}>
         <View style={{ alignItems: 'center' }}>
           <Image
             source={avatar ? { uri: avatar } : require('./avatar.png')}

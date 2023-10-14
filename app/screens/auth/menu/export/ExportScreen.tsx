@@ -5,7 +5,6 @@ import { ConfirmPassModal } from './ConfirmPassModal'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { useCoreService } from 'app/services/coreService'
-import { translate } from 'app/i18n'
 
 import { Screen, Header } from 'app/components/cores'
 import { MenuItemContainer, SettingsItem } from 'app/components/utils'
@@ -13,7 +12,7 @@ import { MenuItemContainer, SettingsItem } from 'app/components/utils'
 export const ExportScreen = observer(() => {
   const navigation = useNavigation()
   const { colors } = useTheme()
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
   const { platformUtilsService, exportService } = useCoreService()
 
   // ----------------------- PARAMS -----------------------

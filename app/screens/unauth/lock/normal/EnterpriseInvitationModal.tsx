@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { Text, Button, Icon, BottomModal } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { EnterpriseInvitation, EnterpriseInvitationStatus } from 'app/static/types'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 type Props = {
   isOpen: boolean
@@ -13,6 +13,7 @@ type Props = {
 
 // By domain only
 export const EnterpriseInvitationModal = (props: Props) => {
+  const { translate } = useHelper()
   const { isOpen, onClose, enterpeiseInvitations } = props
   const { enterpriseStore } = useStores()
 
@@ -45,7 +46,11 @@ export const EnterpriseInvitationModal = (props: Props) => {
   // ------------------------------ RENDER -------------------------------
 
   return (
-    <BottomModal title={translate('enterprise_invitation.domain.join_org')} isOpen={isOpen} onClose={onClose}>
+    <BottomModal
+      title={translate('enterprise_invitation.domain.join_org')}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <View>
         <View style={{ marginVertical: 12 }}>
           <Text text={translate('enterprise_invitation.domain.managed_by')} />
@@ -76,7 +81,7 @@ export const EnterpriseInvitationModal = (props: Props) => {
           text={translate('enterprise_invitation.request_access', {
             name: invitationByDomain?.enterprise.name,
           })}
-          style={{ marginVertical: 12, marginBottom: 20, }}
+          style={{ marginVertical: 12, marginBottom: 20 }}
         />
 
         <Button

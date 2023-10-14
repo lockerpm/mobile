@@ -1,7 +1,6 @@
 import orderBy from 'lodash/orderBy'
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
-import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
@@ -65,7 +64,7 @@ export const CipherList = observer((props: CipherListProps) => {
     setAllItems,
   } = props
   const { colors } = useTheme()
-  const { getTeam, notify } = useHelper()
+  const { getTeam, notify, translate } = useHelper()
   const { getCiphersFromCache } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
 
@@ -252,7 +251,6 @@ export const CipherList = observer((props: CipherListProps) => {
 
     loadData()
   }, [searchText, lastSync, lastCacheUpdate, sortList])
-
 
   useEffect(() => {
     if (checkedItem) {

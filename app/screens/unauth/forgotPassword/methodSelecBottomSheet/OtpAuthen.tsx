@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
 import { Text, Button, TextInput, Icon } from 'app/components/cores'
 
 type Props = {
@@ -13,7 +12,7 @@ type Props = {
 
 export const OtpAuthen = (props: Props) => {
   const { user, uiStore } = useStores()
-  const { notify, notifyApiError } = useHelper()
+  const { notify, notifyApiError, translate } = useHelper()
 
   const { goBack, username, nextStep } = props
 

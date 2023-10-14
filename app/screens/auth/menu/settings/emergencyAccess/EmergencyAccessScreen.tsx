@@ -6,13 +6,12 @@ import { useStores } from 'app/models'
 import { EmergencyAccessStatus, TrustedContact } from 'app/static/types'
 import { Screen, Header } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { MenuItemContainer, SettingsItem } from 'app/components/utils'
 import { observer } from 'mobx-react-lite'
 
 export const EmergencyAccessScreen = observer(() => {
   const navigation = useNavigation() as any
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { user } = useStores()
   const { colors } = useTheme()
   const isFree = user.isFreePlan

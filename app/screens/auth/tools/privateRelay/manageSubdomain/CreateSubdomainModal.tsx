@@ -5,7 +5,6 @@ import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { useHelper } from 'app/services/hook'
 import { SubdomainData } from 'app/static/types'
-import { translate } from 'app/i18n'
 
 interface Props {
   isOpen: boolean
@@ -16,7 +15,7 @@ interface Props {
 export const CreateSubdomainModal = (props: Props) => {
   const { isOpen, onClose } = props
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { toolStore } = useStores()
 
   const [isLoading, setIsLoading] = useState(false)

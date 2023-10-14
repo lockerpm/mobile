@@ -7,9 +7,10 @@ import {
   TextStyle,
   ColorValue,
 } from 'react-native'
-import { isRTL, translate, TxKeyPath } from '../../../i18n'
+import { isRTL, TxKeyPath } from '../../../i18n'
 import { typography } from '../../../theme'
 import { useTheme } from 'app/services/context'
+import { useHelper } from 'app/services/hook'
 
 type Sizes = keyof typeof $sizeStyles
 type Weights = keyof typeof typography.primary
@@ -75,6 +76,7 @@ export function Text(props: TextProps) {
   } = props
 
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
@@ -93,7 +95,7 @@ export function Text(props: TextProps) {
     $presets[preset],
     $fontWeightStyles[weight],
     $sizeStyles[size],
-    color ? { color: color } : $colorPreset[preset],
+    color ? { color } : $colorPreset[preset],
     $styleOverride,
   ]
 

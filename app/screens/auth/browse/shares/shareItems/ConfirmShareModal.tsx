@@ -1,4 +1,3 @@
-import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { useCoreService } from 'app/services/coreService'
@@ -19,7 +18,7 @@ export const ConfirmShareModal = (props: Props) => {
   const { isOpen, onClose, member } = props
   const { cipherStore } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { confirmShareCipher } = useCipherData()
   const { cryptoService } = useCoreService()
 

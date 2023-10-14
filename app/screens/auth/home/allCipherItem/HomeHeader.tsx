@@ -9,7 +9,6 @@ import { SearchBar } from 'app/components/utils'
 import { DeleteConfirmModal } from '../../browse/trash/DeleteConfirmModal'
 import { useCipherData, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
 import { ShareModal } from 'app/components/ciphers'
 
 interface Props {
@@ -41,7 +40,7 @@ export const HomeHeader = (props: Props) => {
     toggleSelectAll,
   } = props
   const { colors, isDark } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { toTrashCiphers } = useCipherData()
   const { user, uiStore } = useStores()
 

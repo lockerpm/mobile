@@ -14,7 +14,6 @@ import { useTheme } from 'app/services/context'
 import { CipherView } from 'core/models/view'
 import { AppEventType, EventBus } from 'app/utils/eventBus'
 import { Button, Icon, Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { SharedUsers } from 'app/screens/auth/shareCipher/SharedUser'
 
 interface Props {
@@ -28,7 +27,7 @@ export const ShareModal = (props: Props) => {
   const { isOpen, onClose, cipherIds, onSuccess } = props
   const { cipherStore, enterpriseStore, user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { shareCipher, shareMultipleCiphers, stopShareCipher } = useCipherData()
 
   const selectedCipher: CipherView = cipherStore.cipherView

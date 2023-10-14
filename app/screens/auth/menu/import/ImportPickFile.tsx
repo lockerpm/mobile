@@ -4,7 +4,6 @@ import DocumentPicker from 'react-native-document-picker'
 import { useHelper } from 'app/services/hook'
 import { useCoreService } from 'app/services/coreService'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
 import { Logger } from 'app/utils/utils'
 import { Button, Text } from 'app/components/cores'
 import { SettingsItem, Select } from 'app/components/utils'
@@ -19,7 +18,7 @@ interface Props {
 }
 
 export const ImportPickFile = (props: Props) => {
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
   const { importService } = useCoreService()
   const { uiStore } = useStores()
 

@@ -4,7 +4,6 @@ import { useHelper } from './useHelper'
 import { useSocialLogin } from './useSocialLogin'
 import { useCoreService } from '../coreService'
 import { SymmetricCryptoKey } from 'core/models/domain'
-import { translate } from 'app/i18n'
 import moment from 'moment'
 import DeviceInfo from 'react-native-device-info'
 import { KdfType } from 'core/enums/kdfType'
@@ -33,7 +32,7 @@ export function useAuthentication() {
     messagingService,
     tokenService,
   } = useCoreService()
-  const { notify, notifyApiError, setApiTokens } = useHelper()
+  const { notify, notifyApiError, setApiTokens, translate } = useHelper()
   const { logoutAllServices } = useSocialLogin()
 
   // -------------------- AUTHENTICATION --------------------

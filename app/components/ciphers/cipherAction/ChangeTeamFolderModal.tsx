@@ -5,7 +5,6 @@ import { useCipherHelper, useHelper } from 'app/services/hook'
 import { useCoreService } from 'app/services/coreService'
 import { CipherView } from 'core/models/view'
 import { CipherRequest } from 'core/models/request'
-import { translate } from 'app/i18n'
 import { BottomModal, Button, Text } from 'app/components/cores'
 import { DropdownPicker } from 'app/components/utils'
 
@@ -17,7 +16,7 @@ interface Props {
 export const ChangeTeamFolderModal = (props: Props) => {
   const { isOpen, onClose } = props
   const { cipherStore, collectionStore } = useStores()
-  const { notify, notifyApiError } = useHelper()
+  const { notify, notifyApiError, translate } = useHelper()
   const { getPasswordStrength } = useCipherHelper()
   const { cipherService } = useCoreService()
 

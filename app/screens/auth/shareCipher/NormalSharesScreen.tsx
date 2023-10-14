@@ -15,7 +15,6 @@ import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { useCipherData, useHelper } from 'app/services/hook'
 import { CipherView } from 'core/models/view'
-import { translate } from 'app/i18n'
 import { observer } from 'mobx-react-lite'
 
 const SHARE_AVATAR = require('assets/images/icons/avatar-2.png')
@@ -27,7 +26,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = obse
   const { ciphers } = route.params
   const { cipherStore, enterpriseStore, user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { shareCipher, shareMultipleCiphers, stopShareCipher } = useCipherData()
 
   const cipherIds = ciphers?.length > 1 ? ciphers.map((c) => c.id) : null
@@ -198,7 +197,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = obse
           style={{
             width: '100%',
             flexDirection: 'row',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <TouchableOpacity
@@ -215,9 +214,11 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = obse
               containerStyle={{ paddingRight: 16, paddingVertical: 16, marginTop: 22 }}
             />
           </TouchableOpacity>
-          <View style={{
-            flex: 1
-          }}>
+          <View
+            style={{
+              flex: 1,
+            }}
+          >
             <TextInput
               animated
               onChangeText={setEmail}
@@ -230,11 +231,12 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = obse
               }}
             />
           </View>
-
         </View>
-        <View style={{
-          marginTop: 20
-        }}>
+        <View
+          style={{
+            marginTop: 20,
+          }}
+        >
           {emails.map((e, index) => {
             return (
               <View
@@ -266,7 +268,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = obse
           })}
         </View>
 
-        <View >
+        <View>
           {groups.map((e, index) => {
             return (
               <View
@@ -367,9 +369,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<'normal_shares'>> = obse
                 />
 
                 <View style={{ flex: 1, justifyContent: 'center' }}>
-                  <Text
-                    text={e.email || e.name}
-                  />
+                  <Text text={e.email || e.name} />
                 </View>
               </View>
             </TouchableOpacity>

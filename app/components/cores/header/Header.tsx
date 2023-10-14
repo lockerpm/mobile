@@ -7,12 +7,13 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
-import { isRTL, translate } from '../../../i18n'
+import { isRTL } from '../../../i18n'
 import { spacing } from '../../../theme'
 import { Icon, IconTypes } from '../icon/Icon'
 import { Text, TextProps } from '../text/Text'
 import { ExtendedEdge, useSafeAreaInsetsStyle } from 'app/utils/useSafeAreaInsetsStyle'
 import { useTheme } from 'app/services/context'
+import { useHelper } from 'app/services/hook'
 
 export interface HeaderProps {
   /**
@@ -156,7 +157,7 @@ export function Header(props: HeaderProps) {
     titleStyle: $titleStyleOverride,
     containerStyle: $containerStyleOverride,
   } = props
-
+  const { translate } = useHelper()
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
 
   const titleContent = titleTx ? translate(titleTx, titleTxOptions) : title
@@ -220,7 +221,7 @@ function HeaderAction(props: HeaderActionProps) {
         disabled={!onPress}
         activeOpacity={0.8}
       >
-        <Text preset='bold' text={content} style={$actionText} color={colors.primaryText} />
+        <Text preset="bold" text={content} style={$actionText} color={colors.primaryText} />
       </TouchableOpacity>
     )
   }

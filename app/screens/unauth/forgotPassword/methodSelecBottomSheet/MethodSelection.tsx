@@ -4,7 +4,6 @@ import { Text, Button, Icon } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { RecaptchaChecker } from 'app/components/utils'
 
 type Props = {
@@ -18,7 +17,7 @@ type Props = {
 export const MethodSelection = (props: Props) => {
   const { user, uiStore } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { methods, onSelect } = props
 
   const captchaRef = useRef(null)

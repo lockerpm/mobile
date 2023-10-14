@@ -1,10 +1,10 @@
 import { Select } from 'app/components/utils'
-import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
 import { CHAIN_LIST } from 'app/utils/crypto/chainlist'
 import React from 'react'
 import { ImageStyle, View, ViewStyle, Image } from 'react-native'
 import { Icon, Text } from 'app/components/cores'
+import { useHelper } from 'app/services/hook'
 
 type Props = {
   selected: {
@@ -17,6 +17,7 @@ type Props = {
 export const ChainSelect = (props: Props) => {
   const { onChange, selected } = props
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   // ------------------ METHODS ------------------
 

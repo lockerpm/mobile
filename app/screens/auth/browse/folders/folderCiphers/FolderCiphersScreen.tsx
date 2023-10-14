@@ -17,7 +17,6 @@ import { MAX_CIPHER_SELECTION, TEAM_CIPHER_EDITOR } from 'app/static/constants'
 import { useHelper } from 'app/services/hook'
 import { AccountRole } from 'app/static/types'
 import { Screen } from 'app/components/cores'
-import { translate } from 'app/i18n'
 
 const HOME_EMPTY_CIPHER = require('assets/images/emptyCipherList/home-empty-cipher.png')
 
@@ -30,7 +29,7 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<'folders__ciphers'>> = 
     const folders: FolderView[] = folderStore.folders
     const collections: CollectionView[] = collectionStore.collections
 
-    const { getTeam } = useHelper()
+    const { getTeam, translate } = useHelper()
 
     // Params
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -127,7 +126,7 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<'folders__ciphers'>> = 
           />
         }
         contentContainerStyle={{
-          flex: 1
+          flex: 1,
         }}
       >
         <SortActionConfigModal

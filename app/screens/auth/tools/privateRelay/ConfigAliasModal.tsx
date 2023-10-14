@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from 'react-native'
 import { RelayAddress } from 'app/static/types'
 import { BottomModal, Text, Toggle } from 'app/components/cores'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   isOpen?: boolean
@@ -14,6 +14,8 @@ interface Props {
 export const ConfigAliasModal = (props: Props) => {
   const { isOpen, onClose, item } = props
   const { toolStore } = useStores()
+  const { translate } = useHelper()
+
   // --------------- PARAMS ----------------
 
   const enum ALIAS_CONFIG {

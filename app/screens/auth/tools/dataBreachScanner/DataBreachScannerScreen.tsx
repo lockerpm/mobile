@@ -1,19 +1,18 @@
-import React, { useState } from "react"
-import { observer } from "mobx-react-lite"
-import { Text, Screen, Header, TextInput, Button } from "app/components/cores"
-import { useNavigation } from "@react-navigation/core"
-import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
-import { useStores } from "app/models"
-import { translate } from "app/i18n"
+import React, { useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { Text, Screen, Header, TextInput, Button } from 'app/components/cores'
+import { useNavigation } from '@react-navigation/core'
+import { useHelper } from 'app/services/hook'
+import { useTheme } from 'app/services/context'
+import { useStores } from 'app/models'
 
 export const DataBreachScannerScreen = observer(() => {
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const navigation = useNavigation() as any
   const { toolStore } = useStores()
 
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
@@ -22,13 +21,13 @@ export const DataBreachScannerScreen = observer(() => {
     setIsLoading(true)
 
     const res = await toolStore.checkBreaches(email)
-    if (res.kind !== "ok") {
+    if (res.kind !== 'ok') {
       setIsError(true)
       notifyApiError(res)
     } else {
       toolStore.setBreachedEmail(email)
       toolStore.setBreaches(res.data)
-      navigation.navigate("dataBreachList")
+      navigation.navigate('dataBreachList')
     }
 
     setIsLoading(false)
@@ -41,18 +40,18 @@ export const DataBreachScannerScreen = observer(() => {
       header={
         <Header
           leftIcon="arrow-left"
-          title={translate("data_breach_scanner.title")}
+          title={translate('data_breach_scanner.title')}
           onLeftPress={() => navigation.goBack()}
         />
       }
       footer={
         <Button
-          text={translate("data_breach_scanner.check")}
+          text={translate('data_breach_scanner.check')}
           disabled={isLoading || !email}
           loading={isLoading}
           onPress={handleCheck}
           style={{
-            marginHorizontal: 20
+            marginHorizontal: 20,
           }}
         />
       }
@@ -64,14 +63,14 @@ export const DataBreachScannerScreen = observer(() => {
       }}
     >
       <Text
-        text={translate("data_breach_scanner.breach_desc")}
+        text={translate('data_breach_scanner.breach_desc')}
         style={{
           marginBottom: 10,
         }}
       />
 
       <TextInput
-        label={translate("data_breach_scanner.check_email")}
+        label={translate('data_breach_scanner.check_email')}
         value={email}
         onChangeText={setEmail}
         isError={isError}

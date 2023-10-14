@@ -5,10 +5,9 @@ import { useNavigation } from '@react-navigation/native'
 import { observer } from 'mobx-react-lite'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
-import { useTool } from 'app/services/hook'
+import { useHelper, useTool } from 'app/services/hook'
 import { SharingStatus } from 'app/static/types'
 import { BROWSE_ITEMS } from 'app/navigators'
-import { translate } from 'app/i18n'
 import { CipherType } from 'core/enums'
 
 export const BrowseListScreen = observer(() => {
@@ -16,6 +15,7 @@ export const BrowseListScreen = observer(() => {
   const { colors } = useTheme()
   const { cipherStore, folderStore, collectionStore } = useStores()
   const { getCipherCount } = useTool()
+  const { translate } = useHelper()
 
   const shareNotiCount =
     cipherStore.sharingInvitations.length +
@@ -84,7 +84,7 @@ export const BrowseListScreen = observer(() => {
           borderRadius: 12,
           marginTop: 20,
           overflow: 'hidden',
-          backgroundColor: colors.background
+          backgroundColor: colors.background,
         }}
       >
         {data.map((item, index) => (

@@ -4,7 +4,6 @@ import { View, Image, TouchableOpacity } from 'react-native'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
 import { AutofillDataType, loadShared, saveShared } from 'app/utils/keychain'
 
 import { Button, Screen, Text } from 'app/components/cores'
@@ -15,7 +14,7 @@ const FACEID = require('assets/images/intro/faceid.png')
 export const BiometricUnlockIntroScreen = observer(() => {
   const navigation = useNavigation() as any
   const { user } = useStores()
-  const { isBiometricAvailable, notify } = useHelper()
+  const { isBiometricAvailable, notify, translate } = useHelper()
 
   // ----------------------- PARAMS ----------------------
 
@@ -87,16 +86,20 @@ export const BiometricUnlockIntroScreen = observer(() => {
   // ----------------------- RENDER ----------------------
 
   return (
-    <Screen padding safeAreaEdges={['top', 'bottom']}
+    <Screen
+      padding
+      safeAreaEdges={['top', 'bottom']}
       contentContainerStyle={{
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
       }}
       footer={
-        <View style={{
-          paddingHorizontal: 20
-        }}>
+        <View
+          style={{
+            paddingHorizontal: 20,
+          }}
+        >
           <Button
             disabled={isLoading}
             loading={isLoading}
@@ -116,12 +119,17 @@ export const BiometricUnlockIntroScreen = observer(() => {
               width: '100%',
             }}
           >
-            <Text preset="bold" text={translate('biometric_intro.later_btn')} style={{
-              textAlign: 'center'
-            }} />
+            <Text
+              preset="bold"
+              text={translate('biometric_intro.later_btn')}
+              style={{
+                textAlign: 'center',
+              }}
+            />
           </TouchableOpacity>
         </View>
-      }>
+      }
+    >
       <Image source={FACEID} style={{ height: 216, width: 242 }} />
 
       <Text
@@ -131,7 +139,7 @@ export const BiometricUnlockIntroScreen = observer(() => {
         style={{ marginBottom: 10, marginTop: 30, textAlign: 'center' }}
       />
 
-      <Text style={{ textAlign: 'center', maxWidth: "90%" }} tx={'biometric_intro.desc'} />
+      <Text style={{ textAlign: 'center', maxWidth: '90%' }} tx={'biometric_intro.desc'} />
     </Screen>
   )
 })

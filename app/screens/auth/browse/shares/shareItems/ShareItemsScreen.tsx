@@ -7,13 +7,14 @@ import { PushNotifier } from 'app/utils/pushNotification/pushNotifier'
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
 import { useStores } from 'app/models'
 import { Screen } from 'app/components/cores'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 const SHARE_EMPTY = require('assets/images/emptyCipherList/share-empty-img.png')
 
 export const ShareItemsScreen = observer(() => {
   const navigation = useNavigation() as any
   const { user } = useStores()
+  const { translate } = useHelper()
 
   // --------------------- PARAMS -------------------------
 
@@ -77,7 +78,7 @@ export const ShareItemsScreen = observer(() => {
         />
       }
       contentContainerStyle={{
-        flex: 1
+        flex: 1,
       }}
     >
       <SortActionConfigModal

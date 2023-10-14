@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleProp, TextStyle, ViewStyle } from 'react-native'
 import Animated, { Extrapolate, interpolate, useAnimatedStyle } from 'react-native-reanimated'
 import { Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   style?: StyleProp<ViewStyle>
@@ -12,6 +12,7 @@ interface Props {
 export const TITLE_HEIGHT = 90
 
 export const AnimatedTitle = ({ style, animIndex }: Props) => {
+  const { translate } = useHelper()
   const intros = [
     {
       title: translate('intro.security.title'),

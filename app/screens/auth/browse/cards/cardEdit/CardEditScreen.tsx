@@ -6,12 +6,11 @@ import { TextInputMaskOptionProp, TextInputMaskTypeProp } from 'react-native-mas
 import { CARD_BRANDS } from '../constants'
 import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
 import { useTheme } from 'app/services/context'
-import { useCipherData, useCipherHelper, useFolder } from 'app/services/hook'
+import { useCipherData, useCipherHelper, useFolder, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CardView, CipherView } from 'core/models/view'
 import { CollectionView } from 'core/models/view/collectionView'
 import { CipherType } from 'core/enums'
-import { translate } from 'app/i18n'
 import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
 import { PlanStorageLimitModal } from '../../planStorageLimitModal'
@@ -38,6 +37,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
   const { mode } = route.params
   const { colors } = useTheme()
 
+  const { translate } = useHelper()
   const { shareFolderAddItem } = useFolder()
   const { createCipher, updateCipher } = useCipherData()
   const { newCipher } = useCipherHelper()
@@ -284,13 +284,15 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
                 options={item.options}
                 onChange={(val) => item.setter(val)}
                 renderSelected={({ label }) => (
-                  <View style={{
-                    paddingHorizontal: 16,
-                    paddingVertical: 12,
-                    borderRadius: 12,
-                    borderWidth: 1,
-                    borderColor: colors.disable
-                  }}>
+                  <View
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 12,
+                      borderRadius: 12,
+                      borderWidth: 1,
+                      borderColor: colors.disable,
+                    }}
+                  >
                     <View
                       style={{
                         justifyContent: 'space-between',
@@ -300,16 +302,10 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
                       }}
                     >
                       <View>
-                        <Text
-                          preset="label"
-                          size="base"
-                          text={label}
-                        />
-                        {!!item.value && <Text
-                          preset="bold"
-                          text={item.value}
-                          style={{ marginTop: 4 }}
-                        />}
+                        <Text preset="label" size="base" text={label} />
+                        {!!item.value && (
+                          <Text preset="bold" text={item.value} style={{ marginTop: 4 }} />
+                        )}
                       </View>
                       <Icon icon="caret-right" size={20} color={colors.secondaryText} />
                     </View>

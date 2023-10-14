@@ -4,8 +4,8 @@ import { ContactAction } from './ContactAction'
 import { EmergencyAccessStatus, TrustedContact } from 'app/static/types'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
 import { BottomModal, Button, Text } from 'app/components/cores'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   isYourTrusted: boolean
@@ -17,6 +17,7 @@ export const Contact = (props: Props) => {
   const { trustedContact, setOnAction, isYourTrusted } = props
   const { colors } = useTheme()
   const { user } = useStores()
+  const { translate } = useHelper()
 
   // ----------------------- PARAMS -----------------------
 

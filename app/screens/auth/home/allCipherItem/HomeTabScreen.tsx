@@ -2,13 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Alert, BackHandler, View, AppState } from 'react-native'
 import { Logger } from 'app/utils/utils'
-import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { useTheme } from 'app/services/context'
 import Intercom from '@intercom/intercom-react-native'
 import { AutofillServiceEnabled } from 'app/utils/autofillHelper'
 import { useStores } from 'app/models'
-import { useAuthentication } from 'app/services/hook'
+import { useAuthentication, useHelper } from 'app/services/hook'
 import { useNavigation } from '@react-navigation/native'
 import { Icon, Screen, Text } from 'app/components/cores'
 
@@ -26,6 +25,7 @@ const HOME_EMPTY_CIPHER = require('assets/images/emptyCipherList/home-empty-ciph
 export const HomeTabScreen = observer(() => {
   const navigation: any = useNavigation()
   const { uiStore, user } = useStores()
+  const { translate } = useHelper()
   const { lock } = useAuthentication()
 
   // -------------- PARAMS ------------------
@@ -233,6 +233,7 @@ export const HomeTabScreen = observer(() => {
 const SuggestEnableAutofill = ({ isShow, onClose }) => {
   const navigation = useNavigation() as any
   const { colors } = useTheme()
+  const { translate } = useHelper()
   return (
     isShow && (
       <View

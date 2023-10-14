@@ -4,7 +4,7 @@ import { BottomModal, Text, Button } from 'app/components/cores'
 import { SubdomainData } from 'app/static/types'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   isOpen: boolean
@@ -17,6 +17,7 @@ export const EditSubdomainModal = (props: Props) => {
   const { isOpen, onClose, subdomain, setSubdomain } = props
   const { colors } = useTheme()
   const { toolStore } = useStores()
+  const { translate } = useHelper()
 
   const [isLoading, setIsLoading] = useState(false)
   const [domain, setDomain] = useState('')

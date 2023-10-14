@@ -5,12 +5,11 @@ import { PasswordAction } from '../PasswordAction'
 import { PasswordOtp } from '../passwordEdit/Otp'
 import { Text, Screen, Header, Icon, TextInput } from 'app/components/cores'
 import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
-import { useCipherHelper } from 'app/services/hook'
+import { useCipherHelper, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
-import { translate } from 'app/i18n'
 import { PasswordStrength, Textarea } from 'app/components/utils'
 
 export const PasswordInfoScreen: FC<AppStackScreenProps<'passwords__info'>> = observer((props) => {
@@ -18,6 +17,7 @@ export const PasswordInfoScreen: FC<AppStackScreenProps<'passwords__info'>> = ob
   const route = props.route
   const { getWebsiteLogo, getPasswordStrength } = useCipherHelper()
   const { cipherStore } = useStores()
+  const { translate } = useHelper()
   const selectedCipher: CipherView = cipherStore.cipherView
 
   const [showAction, setShowAction] = useState(false)
@@ -71,14 +71,12 @@ export const PasswordInfoScreen: FC<AppStackScreenProps<'passwords__info'>> = ob
         />
       )}
 
+      <Image
+        source={source}
+        style={{ height: 55, width: 55, borderRadius: 8, alignSelf: 'center' }}
+      />
 
-      <Image source={source} style={{ height: 55, width: 55, borderRadius: 8, alignSelf: 'center' }} />
-
-      <Text
-        preset="bold"
-        size="xxl"
-        style={{ margin: 20, textAlign: 'center' }}
-      >
+      <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: 'center' }}>
         {selectedCipher.name}
         {notSync && (
           <View style={{ paddingLeft: 10 }}>
@@ -140,14 +138,14 @@ export const PasswordInfoScreen: FC<AppStackScreenProps<'passwords__info'>> = ob
               !selectedCipher.login.uri
                 ? undefined
                 : () => {
-                  Linking.openURL(selectedCipher.login.uri).catch(() => {
-                    Linking.openURL('https://' + selectedCipher.login.uri)
-                  })
-                }
+                    Linking.openURL(selectedCipher.login.uri).catch(() => {
+                      Linking.openURL('https://' + selectedCipher.login.uri)
+                    })
+                  }
             }
             containerStyle={{
               alignSelf: 'center',
-              paddingRight: 12
+              paddingRight: 12,
             }}
           />
         )}

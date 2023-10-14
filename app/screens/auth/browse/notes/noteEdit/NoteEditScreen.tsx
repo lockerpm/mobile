@@ -7,9 +7,8 @@ import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
 import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { useTheme } from 'app/services/context'
-import { useCipherData, useCipherHelper, useFolder } from 'app/services/hook'
+import { useCipherData, useCipherHelper, useFolder, useHelper } from 'app/services/hook'
 import { Button, Header, Screen, TextInput, Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { Textarea } from 'app/components/utils'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
 import { CipherType } from 'core/enums'
@@ -20,6 +19,7 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
   const route = props.route
   const { mode } = route.params
   const { cipherStore, collectionStore } = useStores()
+  const { translate } = useHelper()
 
   const selectedCipher: CipherView = cipherStore.cipherView
   const { colors } = useTheme()
@@ -164,7 +164,10 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
           <Image
             source={BROWSE_ITEMS.note.icon}
             style={{
-              height: 50, width: 50, marginRight: 10, marginTop: 25
+              height: 50,
+              width: 50,
+              marginRight: 10,
+              marginTop: 25,
             }}
           />
           <View style={{ flex: 1 }}>

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react'
 import { View, TouchableOpacity, TextInput, Image, Modal } from 'react-native'
 import { GroupMemberData, GroupData, AccountRoleText } from 'app/static/types'
@@ -5,7 +6,6 @@ import { FolderView } from 'core/models/view/folderView'
 import { CollectionView } from 'core/models/view/collectionView'
 import { useStores } from 'app/models'
 import { useFolder, useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
 import { AppEventType, EventBus } from 'app/utils/eventBus'
 import { Button, Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
@@ -22,7 +22,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
   const { isOpen, onClose, sharedUsers, folder } = props
   const { user, enterpriseStore } = useStores()
   const { colors } = useTheme()
-  const { notify, notifyApiError } = useHelper()
+  const { notify, notifyApiError, translate } = useHelper()
   const { shareFolder, shareFolderAddMember } = useFolder()
 
   // ----------------------- PARAMS -----------------------

@@ -5,15 +5,15 @@ import { FlatList } from 'react-native'
 import { LoadingHeader } from '../LoadingHeader'
 import { ListItem } from './ListItem'
 import { useStores } from 'app/models'
-import { useCipherHelper } from 'app/services/hook'
+import { useCipherHelper, useHelper } from 'app/services/hook'
 import { CipherView } from 'core/models/view'
 import { BROWSE_ITEMS } from 'app/navigators'
 import { Header, Screen, Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 
 export const ReusePasswordList = observer(() => {
   const navigation = useNavigation() as any
   const { toolStore, cipherStore } = useStores()
+  const { translate } = useHelper()
   const { getWebsiteLogo } = useCipherHelper()
 
   // -------------- COMPUTED ------------------
@@ -58,31 +58,31 @@ export const ReusePasswordList = observer(() => {
         />
       }
       contentContainerStyle={{
-        flex: 1
+        flex: 1,
       }}
     >
-        <LoadingHeader />
+      <LoadingHeader />
 
-        <FlatList
-          style={{ paddingHorizontal: 20 }}
-          data={listData}
-          keyExtractor={(item) => item.id.toString()}
-          ListEmptyComponent={
-            <Text
-              text={translate('common.nothing_here')}
-              style={{
-                textAlign: 'center',
-                marginTop: 20,
-              }}
-            />
-          }
-          renderItem={renderItem}
-          getItemLayout={(data, index) => ({
-            length: 71,
-            offset: 71 * index,
-            index,
-          })}
-        />
+      <FlatList
+        style={{ paddingHorizontal: 20 }}
+        data={listData}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={
+          <Text
+            text={translate('common.nothing_here')}
+            style={{
+              textAlign: 'center',
+              marginTop: 20,
+            }}
+          />
+        }
+        renderItem={renderItem}
+        getItemLayout={(data, index) => ({
+          length: 71,
+          offset: 71 * index,
+          index,
+        })}
+      />
     </Screen>
   )
 })

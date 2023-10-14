@@ -2,8 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { Alert, BackHandler, Platform, View } from 'react-native'
 import { useStores } from 'app/models'
 import { api } from 'app/services/api'
-import { translate } from 'app/i18n'
-import { useAuthentication } from 'app/services/hook'
+import { useAuthentication, useHelper } from 'app/services/hook'
 import { RootStackScreenProps } from 'app/navigators'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import { BiometricsType, LockType } from './lock.types'
@@ -20,6 +19,8 @@ const IS_IOS = Platform.OS === 'ios'
 export const LockScreen: FC<RootStackScreenProps<'lock'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
+
+  const { translate } = useHelper()
   const { user, uiStore } = useStores()
   const { logout } = useAuthentication()
 

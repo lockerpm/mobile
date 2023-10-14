@@ -6,7 +6,6 @@ import { SendView } from 'core/models/view/sendView'
 import React from 'react'
 import { View, Image } from 'react-native'
 import { Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 
 type Props = {
   isOpen: boolean
@@ -22,7 +21,7 @@ type Props = {
 export const QuickSharesItemAction = (props: Props) => {
   const { isOpen, onClose, selectedCipher, navigation } = props
   const { colors } = useTheme()
-  const { notifyApiError, copyToClipboard } = useHelper()
+  const { notifyApiError, copyToClipboard, translate } = useHelper()
   const { getCipherInfo } = useCipherHelper()
   const { cipherStore } = useStores()
 

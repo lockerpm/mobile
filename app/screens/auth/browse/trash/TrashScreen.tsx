@@ -11,13 +11,14 @@ import {
 } from 'app/components/ciphers'
 import { Screen } from 'app/components/cores'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
+import { useHelper } from 'app/services/hook'
 
 const TRASH_EMPTY = require('assets/images/emptyCipherList/trash-empty-img.png')
 
 export const TrashScreen = observer(() => {
   const navigation = useNavigation()
+  const { translate } = useHelper()
 
   const { uiStore } = useStores()
 
@@ -68,7 +69,7 @@ export const TrashScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={[ 'top']}
+      safeAreaEdges={['top']}
       header={
         <CipherListHeader
           isTrash
@@ -93,7 +94,7 @@ export const TrashScreen = observer(() => {
         />
       }
       contentContainerStyle={{
-        flex: 1
+        flex: 1,
       }}
     >
       <SortActionConfigModal

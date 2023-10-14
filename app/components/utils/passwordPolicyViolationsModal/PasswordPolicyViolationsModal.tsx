@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal } from '../modal/Modal'
 import { Button, Text } from '../../cores'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   isOpen: boolean
@@ -14,6 +14,7 @@ interface Props {
 
 export const PasswordPolicyViolationsModal = (props: Props) => {
   const { isOpen, onClose, onConfirm, violations, teamName, confirmText } = props
+  const { translate } = useHelper()
 
   return (
     <Modal

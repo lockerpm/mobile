@@ -10,7 +10,6 @@ import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { BROWSE_ITEMS } from 'app/navigators'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { translate } from 'app/i18n'
 import { AutoFillItemAction } from './AutofillItemAction'
 
 interface AutoFillListProps {
@@ -45,9 +44,10 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
     setSelectedItems,
     setAllItems,
   } = props
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
   const { getWebsiteLogo } = useCipherHelper()
   const { getCiphersFromCache } = useCipherData()
+
   const { cipherStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------

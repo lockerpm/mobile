@@ -2,9 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useStores } from 'app/models'
-import { useCipherData } from 'app/services/hook'
+import { useCipherData, useHelper } from 'app/services/hook'
 import { TEAM_COLLECTION_EDITOR } from 'app/static/constants'
-import { translate } from 'app/i18n'
 import { GeneralApiProblem } from 'app/services/api/apiProblem'
 import { FolderView } from 'core/models/view/folderView'
 import { CollectionView } from 'core/models/view/collectionView'
@@ -18,6 +17,7 @@ interface Props {
 export const NewFolderModal = observer((props: Props) => {
   const { isOpen, onClose } = props
   const { folderStore, user, collectionStore, uiStore } = useStores()
+  const { translate } = useHelper()
   const { createFolder, createCollection } = useCipherData()
 
   // --------------- PARAMS ----------------

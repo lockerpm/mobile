@@ -4,48 +4,8 @@ import { SKU } from './PricePlan.sku'
 import { Subscription } from 'react-native-iap'
 import { useTheme } from 'app/services/context'
 import { Text, Button, Toggle } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
-
-const planText = {
-  per: {
-    monthly: {
-      subId: SKU.PRE_MON,
-      title: translate('payment.price.per.monthly.title'),
-      subtitle: translate('payment.price.per.monthly.subtitle'),
-      onSale: translate('payment.price.per.monthly.sale'),
-      pay_title: translate('payment.price.per.monthly.pay_title'),
-      discount: translate('payment.price.per.monthly.discount'),
-    },
-    yearly: {
-      subId: SKU.PRE_YEAR,
-      title: translate('payment.price.per.yearly.title'),
-      subtitle: translate('payment.price.per.yearly.subtitle'),
-      onSale: translate('payment.price.per.yearly.sale'),
-      pay_title: translate('payment.price.per.yearly.pay_title'),
-      discount: translate('payment.price.per.yearly.discount'),
-    },
-  },
-  fam: {
-    monthly: {
-      subId: SKU.FAM_MON,
-      title: translate('payment.price.fam.monthly.title'),
-      subtitle: translate('payment.price.fam.monthly.subtitle'),
-      onSale: translate('payment.price.fam.monthly.sale'),
-      pay_title: translate('payment.price.fam.monthly.pay_title'),
-      discount: translate('payment.price.fam.monthly.discount'),
-    },
-    yearly: {
-      subId: SKU.FAM_YEAR,
-      title: translate('payment.price.fam.yearly.title'),
-      subtitle: translate('payment.price.fam.yearly.subtitle'),
-      onSale: translate('payment.price.fam.yearly.sale'),
-      pay_title: translate('payment.price.fam.yearly.pay_title'),
-      discount: translate('payment.price.fam.yearly.discount'),
-    },
-  },
-}
 
 interface PricePlanItemProps {
   onPress: () => void
@@ -111,7 +71,7 @@ interface PricePlanProps {
 
 export const PricePlan = (props: PricePlanProps) => {
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
 
   const [payIndividual, setPayIndividual] = useState(true)
   const [isMonthly, setIsMonthly] = useState(true)
@@ -131,6 +91,45 @@ export const PricePlan = (props: PricePlanProps) => {
   useEffect(() => {
     getEligibleTrial()
   }, [])
+
+  const planText = {
+    per: {
+      monthly: {
+        subId: SKU.PRE_MON,
+        title: translate('payment.price.per.monthly.title'),
+        subtitle: translate('payment.price.per.monthly.subtitle'),
+        onSale: translate('payment.price.per.monthly.sale'),
+        pay_title: translate('payment.price.per.monthly.pay_title'),
+        discount: translate('payment.price.per.monthly.discount'),
+      },
+      yearly: {
+        subId: SKU.PRE_YEAR,
+        title: translate('payment.price.per.yearly.title'),
+        subtitle: translate('payment.price.per.yearly.subtitle'),
+        onSale: translate('payment.price.per.yearly.sale'),
+        pay_title: translate('payment.price.per.yearly.pay_title'),
+        discount: translate('payment.price.per.yearly.discount'),
+      },
+    },
+    fam: {
+      monthly: {
+        subId: SKU.FAM_MON,
+        title: translate('payment.price.fam.monthly.title'),
+        subtitle: translate('payment.price.fam.monthly.subtitle'),
+        onSale: translate('payment.price.fam.monthly.sale'),
+        pay_title: translate('payment.price.fam.monthly.pay_title'),
+        discount: translate('payment.price.fam.monthly.discount'),
+      },
+      yearly: {
+        subId: SKU.FAM_YEAR,
+        title: translate('payment.price.fam.yearly.title'),
+        subtitle: translate('payment.price.fam.yearly.subtitle'),
+        onSale: translate('payment.price.fam.yearly.sale'),
+        pay_title: translate('payment.price.fam.yearly.pay_title'),
+        discount: translate('payment.price.fam.yearly.discount'),
+      },
+    },
+  }
 
   const plan = payIndividual ? planText.per : planText.fam
   const billingCycle = !isMonthly ? plan.yearly : plan.monthly
@@ -202,6 +201,7 @@ export const PricePlan = (props: PricePlanProps) => {
 // user selects plan segment
 const Segment = ({ payIndividual, setPayIndividual }) => {
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   useEffect(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)

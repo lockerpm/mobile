@@ -15,14 +15,13 @@ import { useStores } from 'app/models'
 import { FolderView } from 'core/models/view/folderView'
 import { CollectionView } from 'core/models/view/collectionView'
 import { TEAM_COLLECTION_EDITOR } from 'app/static/constants'
-import { translate } from 'app/i18n'
 
 const EMPTY = require('assets/images/emptyCipherList/folder-empty-img.png')
 
 export const FoldersScreen = observer(function FoldersScreen() {
   const navigation = useNavigation() as any
   const { colors } = useTheme()
-  const { getTeam } = useHelper()
+  const { getTeam, translate } = useHelper()
   const { folderStore, collectionStore, user, uiStore, cipherStore } = useStores()
 
   const folders: FolderView[] = folderStore.folders

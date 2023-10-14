@@ -7,7 +7,6 @@ import { AppStackScreenProps } from 'app/navigators'
 import { useStores } from 'app/models'
 import { useFolder, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { Header, Icon, ImageIcon, Screen, Text } from 'app/components/cores'
 import { AccountRole } from 'app/static/types'
 
@@ -17,7 +16,7 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
   const { mode, initialId, cipherIds = [] } = route.params
   const { folderStore, cipherStore, collectionStore } = useStores()
   const { colors } = useTheme()
-  const { notify, notifyApiError, getTeam } = useHelper()
+  const { notify, notifyApiError, getTeam, translate } = useHelper()
   const { shareFolderAddMultipleItems } = useFolder()
 
   const [showNewFolderModal, setShowNewFolderModal] = useState(false)
@@ -98,10 +97,10 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
           {[...folderStore.notSynchedFolders, ...folderStore.notUpdatedFolders].includes(
             item.id
           ) && (
-              <View style={{ marginLeft: 10 }}>
-                <Icon icon="wifi-slash" size={22} color={colors.title} />
-              </View>
-            )}
+            <View style={{ marginLeft: 10 }}>
+              <Icon icon="wifi-slash" size={22} color={colors.title} />
+            </View>
+          )}
         </View>
 
         {selectedFolder === item.id && <Icon icon="check" size={18} color={colors.primary} />}

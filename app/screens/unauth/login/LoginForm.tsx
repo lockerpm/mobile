@@ -5,7 +5,6 @@ import { Passkey, PasskeyAuthenticationResult } from 'react-native-passkey'
 import { PasskeyAuthenticationRequest } from 'react-native-passkey/lib/typescript/Passkey'
 import { credentialAuthOptions, publicKeyCredentialWithAssertion } from 'app/utils/passkey'
 import { IosPasswordlessOptions, SocialLogin } from 'app/components/utils'
-import { translate } from 'app/i18n'
 import { useHelper } from 'app/services/hook'
 import { Logo, Text, Button, TextInput } from 'app/components/cores'
 import Animated, { FadeInUp } from 'react-native-reanimated'
@@ -28,7 +27,7 @@ const IS_IOS = Platform.OS === 'ios'
 export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
   const { user } = useStores()
   const { colors } = useTheme()
-  const { notify, notifyApiError, setApiTokens } = useHelper()
+  const { notify, notifyApiError, setApiTokens, translate } = useHelper()
 
   // ------------------ Params -----------------------
 

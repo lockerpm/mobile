@@ -5,9 +5,8 @@ import { useNavigation } from '@react-navigation/native'
 import ProgressBar from 'react-native-ui-lib/progressBar'
 import { CipherType } from 'core/enums'
 import { useTheme } from 'app/services/context'
-import { useTool } from 'app/services/hook'
+import { useHelper, useTool } from 'app/services/hook'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
 import { FREE_PLAN_LIMIT } from 'app/static/constants'
 
 interface PlanItemUsage {
@@ -66,12 +65,12 @@ const ItemStorage = (props: PlanStorageProps) => {
 
       {!isUnlimited && (
         <ProgressBar
-          height={6}
-          containerStyle={{
+          style={{
+            height: 6,
             borderRadius: 4,
+            backgroundColor,
           }}
-          progressBackgroundColor={colors.block}
-          backgroundColor={backgroundColor}
+          progressColor={colors.block}
           // @ts-ignore
           progress={isUnlimited ? 0 : (cipherCount / limits) * 100}
         />
@@ -82,8 +81,9 @@ const ItemStorage = (props: PlanStorageProps) => {
 
 export const PlanUsage = () => {
   const { colors } = useTheme()
-  const navigation = useNavigation()
+  const navigation = useNavigation() as any
   const { user } = useStores()
+  const { translate } = useHelper()
 
   const isFreeAccount = user.isFreePlan
   const items: PlanItemUsage[] = [

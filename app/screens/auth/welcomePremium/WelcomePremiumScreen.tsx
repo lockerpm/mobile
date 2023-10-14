@@ -4,8 +4,8 @@ import LottieView from 'lottie-react-native'
 import { Screen, Text, Button, Icon } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { AppStackScreenProps } from 'app/navigators'
-import { translate } from 'app/i18n'
 import { observer } from 'mobx-react-lite'
+import { useHelper } from 'app/services/hook'
 
 const LOTTIE_JSON = require('app/static/welcome-premium-bg-lottie.json')
 const HIGH_FIVE = require('assets/images/welcomePremium/HighFive.png')
@@ -15,6 +15,7 @@ export const WelcomePremiumScreen: FC<AppStackScreenProps<'welcome_premium'>> = 
   (props) => {
     const navigation = props.navigation
     const { colors } = useTheme()
+    const { translate } = useHelper()
 
     const backgroundSecondary: ColorValue = '#21632F'
 

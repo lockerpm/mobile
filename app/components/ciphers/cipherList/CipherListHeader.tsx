@@ -1,11 +1,10 @@
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
-import { useCipherData } from 'app/services/hook'
+import { useCipherData, useHelper } from 'app/services/hook'
 import React, { useState } from 'react'
 import { View, BackHandler } from 'react-native'
 import { Text, Icon, TabHeader } from 'app/components/cores'
 import { SearchBar } from 'app/components/utils'
-import { translate } from 'app/i18n'
 import { DeleteConfirmModal } from 'app/screens/auth/browse/trash/DeleteConfirmModal'
 import { ShareModal } from '../cipherAction/ShareModal'
 
@@ -55,6 +54,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
     isShared,
   } = props
   const { colors } = useTheme()
+  const { translate } = useHelper()
   const { toTrashCiphers, restoreCiphers, deleteCiphers } = useCipherData()
   const { user, uiStore } = useStores()
 

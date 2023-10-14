@@ -5,8 +5,8 @@ import { Icon, Text, Toggle } from 'app/components/cores'
 import { AccountRole } from 'app/static/types'
 import { CipherView } from 'core/models/view'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { PremiumTag } from 'app/components/utils'
+import { useHelper } from 'app/services/hook'
 
 type Prop = {
   item: CipherSharedType
@@ -34,6 +34,7 @@ export const CipherSharedListItem = memo(
   (props: Prop) => {
     const { item, isSelecting, toggleItemSelection, openActionMenu, isSelected, org } = props
     const { colors } = useTheme()
+    const { translate } = useHelper()
 
     const getDescription = (item: CipherSharedType) => {
       if (item.isShared) {

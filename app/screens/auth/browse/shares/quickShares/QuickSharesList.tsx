@@ -5,11 +5,10 @@ import { QuickSharesCipherListItem } from './QuickSharesListItem'
 import { QuickSharesItemAction } from './QuickSharesItemAction'
 import { useCoreService } from 'app/services/coreService'
 import { useStores } from 'app/models'
-import { useCipherData } from 'app/services/hook'
+import { useCipherData, useHelper } from 'app/services/hook'
 import { SendView } from 'core/models/view/sendView'
 import { Logger } from 'app/utils/utils'
 import { Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 
 type Props = {
   emptyContent?: JSX.Element
@@ -26,6 +25,7 @@ export const QuickSharesList = (props: Props) => {
   const { emptyContent, navigation, onLoadingChange, searchText, sortList } = props
   const { sendService } = useCoreService()
   const { cipherStore } = useStores()
+  const { translate } = useHelper()
   const { syncQuickShares } = useCipherData()
 
   // ------------------------ PARAMS ----------------------------

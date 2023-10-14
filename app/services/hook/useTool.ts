@@ -5,7 +5,6 @@ import { useHelper } from './useHelper'
 import { useCipherData } from './useCipherData'
 import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
-import { translate } from 'app/i18n'
 import { Logger } from 'app/utils/utils'
 
 export function useTool() {
@@ -13,7 +12,7 @@ export function useTool() {
   const { passwordGenerationService, auditService } = useCoreService()
 
   const { getCiphers, getEncryptedCiphers } = useCipherData()
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
 
   // ----------------------------- METHODS ---------------------------
 
@@ -163,7 +162,6 @@ export function useTool() {
       toolStore.setPasswordUseMap(passwordUseMap)
       toolStore.setExposedPasswords(exposedPasswordCiphers)
       toolStore.setExposedPasswordMap(exposedPasswordMap)
- 
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))
       Logger.error('loadPasswordsHealth: ' + e)

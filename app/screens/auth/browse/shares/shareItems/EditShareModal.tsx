@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BottomModal, Button, Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
-import { useCipherData } from 'app/services/hook'
+import { useCipherData, useHelper } from 'app/services/hook'
 import { AccountRoleText, SharedMemberType } from 'app/static/types'
 import { CipherView } from 'core/models/view'
 import { DropdownPicker } from 'app/components/utils'
@@ -15,6 +14,7 @@ interface Props {
 
 export const EditShareModal = (props: Props) => {
   const { isOpen, onClose, member } = props
+  const { translate } = useHelper()
   const { cipherStore } = useStores()
   const { editShareCipher } = useCipherData()
 

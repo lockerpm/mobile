@@ -1,22 +1,23 @@
-import * as React from "react"
-import { Icon, IconTypes, Text } from "../../cores"
-import { StyleProp, ViewStyle, View } from "react-native"
-import ProgressBar from "react-native-ui-lib/progressBar"
-import { useTheme } from "app/services/context"
-import { translate } from "app/i18n"
+import * as React from 'react'
+import { Icon, IconTypes, Text } from '../../cores'
+import { StyleProp, ViewStyle, View } from 'react-native'
+import ProgressBar from 'react-native-ui-lib/progressBar'
+import { useTheme } from 'app/services/context'
+import { useHelper } from 'app/services/hook'
 
 export interface PasswordStrengthProps {
   style?: StyleProp<ViewStyle>
   value: number
-  preset?: "progress" | "text"
+  preset?: 'progress' | 'text'
 }
 
 /**
  * Describe your component here
  */
 export const PasswordStrength = function PasswordStrength(props: PasswordStrengthProps) {
-  const { value, style, preset = "progress" } = props
+  const { value, style, preset = 'progress' } = props
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   const config: {
     [name: string]: {
@@ -26,42 +27,42 @@ export const PasswordStrength = function PasswordStrength(props: PasswordStrengt
       isFill?: boolean
     }
   } = {
-    "-1": {
-      text: "",
+    '-1': {
+      text: '',
       color: colors.primary,
     },
     0: {
-      text: translate("password_strength.very_weak"),
+      text: translate('password_strength.very_weak'),
       color: colors.error,
-      icon: "shield",
+      icon: 'shield',
     },
     1: {
-      text: translate("password_strength.weak"),
+      text: translate('password_strength.weak'),
       color: colors.error,
-      icon: "shield",
+      icon: 'shield',
     },
     2: {
-      text: translate("password_strength.medium"),
+      text: translate('password_strength.medium'),
       color: colors.palette.orange5,
-      icon: "shield",
+      icon: 'shield',
       isFill: true,
     },
     3: {
-      text: translate("password_strength.good"),
+      text: translate('password_strength.good'),
       color: colors.primary,
-      icon: "shield-check",
+      icon: 'shield-check',
     },
     4: {
-      text: translate("password_strength.strong"),
+      text: translate('password_strength.strong'),
       color: colors.primary,
-      icon: "shield-check",
+      icon: 'shield-check',
       isFill: true,
     },
   }
 
   return (
-    <View style={[{ width: "100%" }, style]}>
-      {preset === "progress" && (
+    <View style={[{ width: '100%' }, style]}>
+      {preset === 'progress' && (
         <ProgressBar
           style={{
             height: 8,
@@ -75,8 +76,8 @@ export const PasswordStrength = function PasswordStrength(props: PasswordStrengt
 
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           marginTop: 5,
         }}
       >
@@ -95,7 +96,6 @@ export const PasswordStrength = function PasswordStrength(props: PasswordStrengt
           text={config[value]?.text}
         />
       </View>
-   
     </View>
   )
 }

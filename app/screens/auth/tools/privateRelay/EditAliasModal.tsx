@@ -4,8 +4,8 @@ import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { RelayAddress } from 'app/static/types'
 import { BottomModal, Text, Button } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import Animated, { FadeInDown } from 'react-native-reanimated'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   isOpen?: boolean
@@ -18,6 +18,8 @@ export const EditAliasModal = (props: Props) => {
   const { isOpen, onClose, item, onEdit } = props
   const { colors } = useTheme()
   const { toolStore } = useStores()
+  const { translate } = useHelper()
+
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)

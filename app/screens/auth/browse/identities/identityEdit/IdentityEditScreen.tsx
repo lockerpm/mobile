@@ -5,12 +5,11 @@ import find from 'lodash/find'
 import { PlanStorageLimitModal } from '../../planStorageLimitModal'
 import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
 import { useTheme } from 'app/services/context'
-import { useCipherData, useCipherHelper, useFolder } from 'app/services/hook'
+import { useCipherData, useCipherHelper, useFolder, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CipherView, IdentityView } from 'core/models/view'
 import { CollectionView } from 'core/models/view/collectionView'
 import { CipherType } from 'core/enums'
-import { translate } from 'app/i18n'
 import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
 import { Select } from 'app/components/utils'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
@@ -28,6 +27,7 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
   const route = props.route
   const { mode } = route.params
   const { colors } = useTheme()
+  const { translate } = useHelper()
   const { shareFolderAddItem } = useFolder()
   const { createCipher, updateCipher } = useCipherData()
   const { newCipher } = useCipherHelper()
@@ -331,7 +331,10 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
           <Image
             source={BROWSE_ITEMS.identity.icon}
             style={{
-              height: 50, width: 50, marginRight: 10, marginTop: 25
+              height: 50,
+              width: 50,
+              marginRight: 10,
+              marginTop: 25,
             }}
           />
 
@@ -371,19 +374,14 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
                 alignItems: 'center',
               }}
             >
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-                <Text
-                  preset="bold"
-                  text={label + ": "}
-                />
-                {!!title && <Text
-                  preset="bold"
-                  text={title}
-                  style={{ marginTop: 4 }}
-                />}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                <Text preset="bold" text={label + ': '} />
+                {!!title && <Text preset="bold" text={title} style={{ marginTop: 4 }} />}
               </View>
               <Icon icon="caret-right" size={20} color={colors.secondaryText} />
             </View>
@@ -416,7 +414,7 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
         style={{
           backgroundColor: colors.background,
           padding: 16,
-          paddingTop: 0
+          paddingTop: 0,
         }}
       >
         {addressDetails.map((item, index) => (

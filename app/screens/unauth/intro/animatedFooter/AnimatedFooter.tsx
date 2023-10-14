@@ -8,7 +8,7 @@ import { Icon, Text } from 'app/components/cores'
 import { AnimatedTitle } from './AnimatedText'
 import { AnimatedTabIndicator } from './Indicator'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   animIndex: Animated.SharedValue<number>
@@ -20,6 +20,7 @@ const INTRO_LENGTH = 4
 
 export const AnimatedFooter = observer(({ animIndex, scrollTo, index, goStart }: Props) => {
   const { colors } = useTheme()
+  const { translate } = useHelper()
   const insert = useSafeAreaInsets()
 
   const goNext = () => {

@@ -3,12 +3,13 @@ import { observer } from 'mobx-react-lite'
 import { useNavigation } from '@react-navigation/native'
 import { Screen, Header } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { MenuItemContainer, SettingsItem } from 'app/components/utils'
+import { useHelper } from 'app/services/hook'
 
 export const NotificationSettingsScreen = observer(() => {
   const navigation = useNavigation() as any
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   return (
     <Screen

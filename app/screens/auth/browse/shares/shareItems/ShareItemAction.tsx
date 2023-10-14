@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 import { View, Image } from 'react-native'
 import { EditShareModal } from './EditShareModal'
 import { SharedMemberType } from 'app/static/types'
-import { useCipherData, useCipherHelper } from 'app/services/hook'
+import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { ActionItem, ActionSheet } from 'app/components/ciphers'
 import { Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 
 type Props = {
   isOpen: boolean
@@ -24,6 +23,7 @@ export const ShareItemAction = (props: Props) => {
   const { isOpen, onClose, onLoadingChange, member, goToDetail } = props
   const { stopShareCipher } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
+  const { translate } = useHelper()
   const { cipherStore, uiStore } = useStores()
 
   // Params

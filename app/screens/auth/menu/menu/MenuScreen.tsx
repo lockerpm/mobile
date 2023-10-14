@@ -7,7 +7,6 @@ import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
 import { useAuthentication, useHelper } from 'app/services/hook'
 import { PlanType } from 'app/static/types'
-import { translate } from 'app/i18n'
 import { Screen, Text, TabHeader } from 'app/components/cores'
 import { MenuItem, MenuItemContainer, MenuItemProps } from 'app/components/utils'
 import { getVersion } from 'react-native-device-info'
@@ -18,7 +17,7 @@ export const MenuScreen = observer(() => {
   const navigation = useNavigation() as any
   const { user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
   const { lock, logout } = useAuthentication()
 
   const appVersion = `${getVersion()}`

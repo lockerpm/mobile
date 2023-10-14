@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react"
-import { View, TouchableOpacity, TextInput, Modal } from "react-native"
-import { Member } from "./Member"
+import React, { useEffect, useState } from 'react'
+import { View, TouchableOpacity, TextInput, Modal } from 'react-native'
+import { Member } from './Member'
 
-import { Icon, Text, Screen, Header } from "app/components/cores"
-import { useStores } from "app/models"
-import { useHelper } from "app/services/hook"
-import { useTheme } from "app/services/context"
-import { FAMILY_MEMBER_LIMIT } from "app/static/constants"
-import { translate } from "app/i18n"
-import { AppEventType, EventBus } from "app/utils/eventBus"
+import { Icon, Text, Screen, Header } from 'app/components/cores'
+import { useStores } from 'app/models'
+import { useHelper } from 'app/services/hook'
+import { useTheme } from 'app/services/context'
+import { FAMILY_MEMBER_LIMIT } from 'app/static/constants'
+import { AppEventType, EventBus } from 'app/utils/eventBus'
 
 interface InviteProps {
   isShow: boolean
@@ -20,10 +19,10 @@ export const InviteMemberModal = (props: InviteProps) => {
   const { isShow, onClose, familyMembers, setRelad } = props
   const { user } = useStores()
   const { colors } = useTheme()
-  const { notifyApiError, notify } = useHelper()
+  const { notifyApiError, notify, translate } = useHelper()
 
   // ----------------------- PARAMS -----------------------
-  const [email, setEmail] = useState<string>("")
+  const [email, setEmail] = useState<string>('')
   const [emails, setEmails] = useState<string[]>([])
 
   // ----------------------- METHODS -----------------------
@@ -39,7 +38,7 @@ export const InviteMemberModal = (props: InviteProps) => {
 
     if (!emails.includes(e) && !isOwner && !isIncluded) {
       setEmails([...emails, e])
-      setEmail("")
+      setEmail('')
     }
   }
   const removeEmailFromInviteList = (val: string) => {
@@ -49,8 +48,8 @@ export const InviteMemberModal = (props: InviteProps) => {
   const addFamilyMember = async (emails?: string[]) => {
     const res = await user.addFamilyMember(emails)
     onClose(false)
-    if (res.kind === "ok") {
-      notify("success", translate("invite_member.add_noti"))
+    if (res.kind === 'ok') {
+      notify('success', translate('invite_member.add_noti'))
       setEmails([])
       setRelad(true)
     } else {
@@ -84,7 +83,7 @@ export const InviteMemberModal = (props: InviteProps) => {
           <Header
             leftIcon="x"
             onLeftPress={() => onClose(false)}
-            rightText={emails.length < 1 ? undefined : translate("invite_member.action")}
+            rightText={emails.length < 1 ? undefined : translate('invite_member.action')}
             onRightPress={() => {
               addFamilyMember(emails)
             }}
@@ -99,7 +98,7 @@ export const InviteMemberModal = (props: InviteProps) => {
           preset="bold"
           size="xl"
           style={{ marginTop: 12 }}
-          text={translate("invite_member.title")}
+          text={translate('invite_member.title')}
         />
 
         <View
@@ -110,8 +109,8 @@ export const InviteMemberModal = (props: InviteProps) => {
         >
           <View
             style={{
-              width: "100%",
-              flexDirection: "row",
+              width: '100%',
+              flexDirection: 'row',
             }}
           >
             <TouchableOpacity
@@ -120,10 +119,10 @@ export const InviteMemberModal = (props: InviteProps) => {
               }}
               style={{ marginRight: 16, marginVertical: 16 }}
             >
-              <Icon icon={"user-plus"} size={24} color={colors.title} />
+              <Icon icon={'user-plus'} size={24} color={colors.title} />
             </TouchableOpacity>
             <TextInput
-              placeholder={translate("invite_member.placeholder")}
+              placeholder={translate('invite_member.placeholder')}
               placeholderTextColor={colors.secondaryText}
               selectionColor={colors.primary}
               style={{ color: colors.title }}
@@ -148,8 +147,8 @@ export const InviteMemberModal = (props: InviteProps) => {
                     backgroundColor: colors.block,
                     paddingLeft: 10,
                     marginBottom: 16,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                     paddingVertical: 3,
                   }}
                 >
@@ -159,7 +158,7 @@ export const InviteMemberModal = (props: InviteProps) => {
                     onPress={() => removeEmailFromInviteList(e)}
                     style={{
                       paddingHorizontal: 12,
-                      alignItems: "center",
+                      alignItems: 'center',
                     }}
                   >
                     <Icon icon="x-circle" size={20} color={colors.title} />
@@ -171,7 +170,7 @@ export const InviteMemberModal = (props: InviteProps) => {
         </View>
 
         <View style={{ marginTop: 20, marginBottom: 20 }}>
-          <Text>{translate("invite_member.select_person")}</Text>
+          <Text>{translate('invite_member.select_person')}</Text>
         </View>
         {email.length > 0 && (
           <TouchableOpacity onPress={() => addEmailToInviteList(email)}>

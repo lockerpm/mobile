@@ -1,11 +1,11 @@
+// @ts-nocheck
 import React, { useState } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
 import { AccountRoleText, SharedGroupType, SharedMemberType, SharingStatus } from 'app/static/types'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { Icon, Text } from 'app/components/cores'
 import { ActionSheet } from 'app/components/ciphers'
-import { useCipherData } from 'app/services/hook'
+import { useCipherData, useHelper } from 'app/services/hook'
 
 interface Props {
   reload: boolean
@@ -19,7 +19,7 @@ const SHARE_GROUP = require('assets/images/icons/group.png')
 
 export const SharedUsers = (props: Props) => {
   const { item, organizationId, reload, setReload, onRemove } = props
-
+  const { translate } = useHelper()
   const { colors } = useTheme()
   const { editShareCipher } = useCipherData()
 

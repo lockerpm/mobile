@@ -14,14 +14,13 @@ import { SendRequest } from 'core/models/request/sendRequest'
 import { Logger } from 'app/utils/utils'
 import { Utils } from 'app/services/coreService/utils'
 import { Button, Header, Icon, Screen, Text, Toggle } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
 import { ActionSheet } from 'app/components/ciphers'
 
 const { width } = Dimensions.get('screen')
 
 export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observer((props) => {
-  const { copyToClipboard, notifyApiError } = useHelper()
+  const { copyToClipboard, notifyApiError, translate } = useHelper()
   const { sendService } = useCoreService()
   const { getCipherDescription, getCipherInfo } = useCipherHelper()
   const { cipherStore } = useStores()
@@ -294,6 +293,7 @@ const QuickShareConfig = ({
   setMaxAccessCount,
   setExpireAfter,
 }: QuickShareConfigProps) => {
+  const { translate } = useHelper()
   const { colors } = useTheme()
   const [openExpireSelect, setOpenExpireSelect] = useState(false)
   const [openAccessSelect, setOpenAccessSelect] = useState(false)
@@ -625,6 +625,7 @@ const QuickSharesInfo = ({
   expirationDate,
 }: QuickSharesInfoProps) => {
   const { colors } = useTheme()
+  const { translate } = useHelper()
   const expried = moment.unix(expirationDate / 1000).format('Do MMM YYYY, h:mm:ss A')
   return (
     <View

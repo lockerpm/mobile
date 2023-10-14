@@ -13,13 +13,14 @@ import {
 import { CipherType, FieldType, SecureNoteType } from 'core/enums'
 import { toCryptoWalletData } from 'app/utils/crypto'
 import { WALLET_APP_LIST } from 'app/utils/crypto/applist'
-import { translate } from 'app/i18n'
 import { PolicyType } from 'app/static/types/enum'
 import { CipherAppView, MasterPasswordPolicy, PasswordPolicy } from 'app/static/types'
 import { ImageSourcePropType } from 'react-native'
 import { BROWSE_ITEMS } from 'app/navigators'
+import { useHelper } from './useHelper'
 
 export function useCipherHelper() {
+  const { translate } = useHelper()
   const { passwordGenerationService } = useCoreService()
   const { user, uiStore } = useStores()
 
@@ -43,7 +44,7 @@ export function useCipherHelper() {
   // Get website logo
   const getWebsiteLogo = (uri: string) => {
     if (!uri || uri === 'https://') {
-      // https:// is default value for uri 
+      // https:// is default value for uri
       return { uri: null }
     }
     const domain = extractDomain(uri)
@@ -73,17 +74,16 @@ export function useCipherHelper() {
         return item.identity.fullName
       case CipherType.CryptoWallet: {
         const walletData = toCryptoWalletData(item.notes)
-        return `${walletData.username}${walletData.username ? ', ' : ''}${walletData.networks.length
-          } networks`
+        return `${walletData.username}${walletData.username ? ', ' : ''}${
+          walletData.networks.length
+        } networks`
       }
     }
     return ''
   }
 
   // Get cipher logo
-  const getCipherInfo: (
-    item: CipherView
-  ) => {
+  const getCipherInfo: (item: CipherView) => {
     img: ImageSourcePropType
     path: string
   } = (item: CipherView) => {

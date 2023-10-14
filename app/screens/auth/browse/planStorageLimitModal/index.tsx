@@ -3,8 +3,8 @@ import React from 'react'
 import { Image } from 'react-native'
 import { BottomModal, Button, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { PREMIUM_FEATURES_IMG } from '../../menu/managePlan/PremiumFeature'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   isOpen: boolean
@@ -14,6 +14,7 @@ interface Props {
 export const PlanStorageLimitModal = ({ isOpen, onClose }: Props) => {
   const { colors } = useTheme()
   const navigation = useNavigation()
+  const { translate } = useHelper()
 
   return (
     <BottomModal

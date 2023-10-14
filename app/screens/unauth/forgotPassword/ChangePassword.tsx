@@ -3,7 +3,6 @@ import { View } from 'react-native'
 import { Button, TextInput } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
 
 type Props = {
   nextStep: () => void
@@ -12,7 +11,7 @@ type Props = {
 
 export const ChangePassword = (props: Props) => {
   const { user } = useStores()
-  const { notify, notifyApiError } = useHelper()
+  const { notify, notifyApiError, translate } = useHelper()
   const { nextStep, token } = props
 
   // ------------------ Params -----------------------

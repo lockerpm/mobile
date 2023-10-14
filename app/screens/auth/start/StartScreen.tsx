@@ -3,13 +3,12 @@ import { useStores } from 'app/models'
 import NetInfo from '@react-native-community/netinfo'
 import { AppStackScreenProps } from 'app/navigators'
 import { useCipherData, useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
 import { Loading } from 'app/components/utils'
 import { observer } from 'mobx-react-lite'
 
 export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) => {
   const { user, uiStore, enterpriseStore } = useStores()
-  const { isBiometricAvailable, boostrapPushNotifier, parsePushNotiData } = useHelper()
+  const { isBiometricAvailable, boostrapPushNotifier, parsePushNotiData, translate } = useHelper()
   const { loadFolders, loadCollections, loadOrganizations } = useCipherData()
   const navigation = props.navigation
   // ------------------------- PARAMS ----------------------------

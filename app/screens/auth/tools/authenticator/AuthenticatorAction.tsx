@@ -7,7 +7,6 @@ import { useCipherData, useHelper } from 'app/services/hook'
 import { CipherView } from 'core/models/view'
 import { useStores } from 'app/models'
 import { getTOTP, parseOTPUri } from 'app/utils/totp'
-import { translate } from 'app/i18n'
 import { ActionItem, ActionSheet } from 'app/components/ciphers'
 import { useTheme } from 'app/services/context'
 
@@ -22,7 +21,7 @@ type Props = {
 export const AuthenticatorAction = observer((props: Props) => {
   const { navigation, isOpen, onClose, onLoadingChange, cipher } = props
   const { colors } = useTheme()
-  const { copyToClipboard } = useHelper()
+  const { copyToClipboard, translate } = useHelper()
   const { deleteCiphers } = useCipherData()
   const { cipherStore } = useStores()
 

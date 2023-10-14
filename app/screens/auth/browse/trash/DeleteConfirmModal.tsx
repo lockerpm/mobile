@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { View, Image } from 'react-native'
 import { BottomModal, Button, Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { useTheme } from 'app/services/context'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   isOpen?: boolean
@@ -17,6 +17,8 @@ const TRASH = require('assets/images/intro/trash.png')
 
 export const DeleteConfirmModal = (props: Props) => {
   const { isOpen, onClose, onConfirm, title, desc, btnText } = props
+  const { translate } = useHelper()
+
   const [isLoading, setIsLoading] = useState(false)
 
   const { colors } = useTheme()

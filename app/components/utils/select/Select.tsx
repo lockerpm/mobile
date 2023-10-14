@@ -1,13 +1,12 @@
-import * as React from "react"
-import Picker from "react-native-ui-lib/picker"
-import { StyleProp, View, ViewStyle } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useTheme } from "app/services/context"
-import { translate } from "app/i18n"
-import { SearchBar } from "../searchBar/SearchBar"
-import { PickerItemProps, PickerModes, PickerValue } from "react-native-ui-lib"
-import { ValueType } from "react-native-dropdown-picker"
-
+import * as React from 'react'
+import Picker from 'react-native-ui-lib/picker'
+import { StyleProp, View, ViewStyle } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useTheme } from 'app/services/context'
+import { SearchBar } from '../searchBar/SearchBar'
+import { PickerItemProps, PickerModes, PickerValue } from 'react-native-ui-lib'
+import { ValueType } from 'react-native-dropdown-picker'
+import { useHelper } from 'app/services/hook'
 
 type Option = {
   label: string
@@ -41,86 +40,100 @@ export interface SelectProps {
 export const Select = (props: SelectProps) => {
   const { colors } = useTheme()
   const insets = useSafeAreaInsets()
+  const { translate } = useHelper()
 
   const {
-    style, value, onChange, options,
-    floating, renderSelected, renderItem, placeholder, title, multiple,
-    showSearch, searchPlaceholder = translate('common.search')
+    style,
+    value,
+    onChange,
+    options,
+    floating,
+    renderSelected,
+    renderItem,
+    placeholder,
+    title,
+    multiple,
+    showSearch,
+    searchPlaceholder = translate('common.search'),
   } = props
 
   const defaultOption = {
     value: null,
-    label: placeholder
+    label: placeholder,
   }
 
   return (
     <Picker
-      style={[{
-        color: colors.title
-      }, style]}
+      style={[
+        {
+          color: colors.title,
+        },
+        style,
+      ]}
       value={value}
       mode={multiple ? PickerModes.MULTI : PickerModes.SINGLE}
-      onChange={multiple
-        ? (values: PickerValue) => onChange(values)
-        : (item: PickerValue) => onChange(item)
+      onChange={
+        multiple ? (values: PickerValue) => onChange(values) : (item: PickerValue) => onChange(item)
       }
       // @ts-ignore
-      renderPicker={floating ? undefined : (value: ValueType) => {
-        return renderSelected(options.find((item: Option) => item.value === value) || defaultOption)
-      }}
+      renderPicker={
+        floating
+          ? undefined
+          : (value: ValueType) => {
+              return renderSelected(
+                options.find((item: Option) => item.value === value) || defaultOption
+              )
+            }
+      }
       floatingPlaceholder={floating}
       placeholder={placeholder}
       showSearch={showSearch}
       searchPlaceholder={searchPlaceholder}
       floatingPlaceholderStyle={{
         fontSize: 16,
-        color: colors.secondaryText
+        color: colors.secondaryText,
       }}
       enableErrors={false}
       topBarProps={{
         title,
         titleStyle: {
           color: colors.title,
-          fontSize: 24
+          fontSize: 24,
         },
         containerStyle: {
           backgroundColor: colors.background,
-          paddingVertical: 5
+          paddingVertical: 5,
         },
         cancelLabel: translate('common.cancel'),
         cancelButtonProps: {
           labelStyle: {
             fontSize: 16,
-            color: colors.secondaryText
-          }
+            color: colors.secondaryText,
+          },
         },
         cancelIcon: null,
         doneLabel: translate('common.save'),
         doneButtonProps: {
           labelStyle: {
             fontSize: 16,
-            color: colors.primary
-          }
+            color: colors.primary,
+          },
         },
-        doneIcon: null
+        doneIcon: null,
       }}
       listProps={{
         style: {
           backgroundColor: colors.background,
-          paddingBottom: insets.bottom
+          paddingBottom: insets.bottom,
         },
         contentContainerStyle: {
-          paddingBottom: "10%"
-        }
+          paddingBottom: '10%',
+        },
       }}
       renderCustomSearch={({ onSearchChange }) => (
         <View style={{ paddingHorizontal: 20 }}>
-          <SearchBar
-            placeholder=".."
-            onChangeText={onSearchChange}
-          />
+          <SearchBar placeholder=".." onChangeText={onSearchChange} />
         </View>
-
       )}
     >
       {options.map((option) => (
@@ -132,7 +145,7 @@ export const Select = (props: SelectProps) => {
           // @ts-ignore
           labelStyle={{
             fontSize: 16,
-            color: colors.title
+            color: colors.title,
           }}
           selectedIconColor={colors.primary}
           // @ts-ignore

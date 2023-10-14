@@ -1,19 +1,19 @@
-import React from "react"
-import { observer } from "mobx-react-lite"
-import { useNavigation } from "@react-navigation/native"
-import { FlatList } from "react-native"
-import { LoadingHeader } from "../LoadingHeader"
-import { ListItem } from "../reusePasswordList/ListItem"
-import { useStores } from "app/models"
-import { useCipherHelper } from "app/services/hook"
-import { BROWSE_ITEMS } from "app/navigators"
-import { CipherView } from "core/models/view"
-import { Header, Screen, Text } from "app/components/cores"
-import { translate } from "app/i18n"
+import React from 'react'
+import { observer } from 'mobx-react-lite'
+import { useNavigation } from '@react-navigation/native'
+import { FlatList } from 'react-native'
+import { LoadingHeader } from '../LoadingHeader'
+import { ListItem } from '../reusePasswordList/ListItem'
+import { useStores } from 'app/models'
+import { useCipherHelper, useHelper } from 'app/services/hook'
+import { BROWSE_ITEMS } from 'app/navigators'
+import { CipherView } from 'core/models/view'
+import { Header, Screen, Text } from 'app/components/cores'
 
 export const ExposedPasswordList = observer(() => {
   const navigation = useNavigation() as any
   const { toolStore, cipherStore } = useStores()
+  const { translate } = useHelper()
   const { getWebsiteLogo } = useCipherHelper()
 
   // -------------- COMPUTED ------------------
@@ -40,7 +40,7 @@ export const ExposedPasswordList = observer(() => {
   // Go to detail
   const goToDetail = (item) => {
     cipherStore.setSelectedCipher(item)
-    navigation.navigate("passwords__info")
+    navigation.navigate('passwords__info')
   }
 
   // -------------- RENDER ------------------
@@ -52,7 +52,7 @@ export const ExposedPasswordList = observer(() => {
       header={
         <Header
           leftIcon="arrow-left"
-          title={translate("pass_health.exposed_passwords.name")}
+          title={translate('pass_health.exposed_passwords.name')}
           onLeftPress={() => navigation.goBack()}
         />
       }
@@ -68,9 +68,9 @@ export const ExposedPasswordList = observer(() => {
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={
           <Text
-            text={translate("common.nothing_here")}
+            text={translate('common.nothing_here')}
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               marginTop: 20,
             }}
           />

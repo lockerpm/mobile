@@ -7,7 +7,6 @@ import { useFolder, useHelper } from 'app/services/hook'
 import { CollectionView } from 'core/models/view/collectionView'
 import { SharedGroupType, SharedMemberType } from 'app/static/types'
 import { Header, Screen, Text, Button } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { AddUserShareFolderModal } from './ShareUserModal'
 import { SharedUsers } from './SharedUser'
 
@@ -17,7 +16,7 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<'shareFol
     const route = props.route
 
     const { cipherStore, collectionStore } = useStores()
-    const { notifyApiError } = useHelper()
+    const { notifyApiError, translate } = useHelper()
     const { shareFolderRemoveMember } = useFolder()
     const collection: CollectionView = collectionStore.collections.find(
       (c) => c.id === route.params.collectionId

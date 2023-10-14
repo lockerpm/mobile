@@ -5,7 +5,7 @@ import { Icon, Text } from 'app/components/cores'
 import { CipherView } from 'core/models/view'
 import { SharedMemberType, SharingStatus } from 'app/static/types'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 type Prop = {
   item: CipherShareType
@@ -27,6 +27,7 @@ export const CipherShareListItem = memo(
   (props: Prop) => {
     const { item, openActionMenu, setShowConfirmModal } = props
     const { colors } = useTheme()
+    const { translate } = useHelper()
 
     // Get cipher description
     const getDescription = (item: CipherShareType) => {

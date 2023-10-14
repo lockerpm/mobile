@@ -7,7 +7,6 @@ import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { beautifyName, decodeGoogleAuthenticatorImport, getTOTP, parseOTPUri } from 'app/utils/totp'
 import { CipherType } from 'core/enums'
-import { translate } from 'app/i18n'
 import { Logger } from 'app/utils/utils'
 import { Header, Screen } from 'app/components/cores'
 import { observer } from 'mobx-react-lite'
@@ -18,7 +17,7 @@ export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((p
 
   const { user, cipherStore } = useStores()
   const { colors } = useTheme()
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
   const { newCipher } = useCipherHelper()
   const { createCipher, importCiphers } = useCipherData()
 

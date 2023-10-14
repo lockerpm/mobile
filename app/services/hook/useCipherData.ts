@@ -18,7 +18,6 @@ import {
 import { Cipher, EncString, SymmetricCryptoKey } from 'core/models/domain'
 import { FolderView } from 'core/models/view/folderView'
 import { AutofillDataType, loadShared, saveShared } from 'app/utils/keychain'
-import { translate } from 'app/i18n'
 import { GetCiphersParams } from 'app/static/types'
 import { ImportCiphersRequest } from 'core/models/request/importCiphersRequest'
 import { KvpRequest } from 'core/models/request/kvpRequest'
@@ -44,7 +43,7 @@ export function useCipherData() {
     syncService,
     cryptoService,
   } = useCoreService()
-  const { notify, randomString, notifyApiError, getTeam } = useHelper()
+  const { notify, randomString, notifyApiError, getTeam, translate } = useHelper()
   const { newCipher } = useCipherHelper()
   const syncQueue = SyncQueue
 

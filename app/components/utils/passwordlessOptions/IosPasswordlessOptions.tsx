@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, Icon, ImageIconTypes, ImageIcon, Text, Logo, Toggle } from '../../cores'
 import { useTheme } from 'app/services/context'
 import { Dialog } from 'react-native-ui-lib'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   /**
@@ -43,6 +43,7 @@ export const IosPasswordlessOptions = ({
   action,
 }: Props) => {
   const { colors } = useTheme()
+  const { translate } = useHelper()
   const inset = useSafeAreaInsets()
   const $containerStyle: StyleProp<ViewStyle> = [
     {
@@ -55,14 +56,16 @@ export const IosPasswordlessOptions = ({
 
   const header = () => {
     return (
-      <View style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        backgroundColor: colors.block,
-        paddingHorizontal: 16,
-        paddingVertical: 16,
-      }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          backgroundColor: colors.block,
+          paddingHorizontal: 16,
+          paddingVertical: 16,
+        }}
+      >
         <Text preset="bold" text={title} style={{ fontSize: 24, lineHeight: 28 }} />
         <Icon icon="x-circle" size={24} onPress={onClose} />
       </View>
@@ -158,14 +161,11 @@ const Options = ({ title, label, icon, isSelect, action }: OptionsProps) => {
             }}
           >
             <Text text={title} />
-            <Text preset='label' text={label} size="base" style={{ maxWidth: '90%' }} />
+            <Text preset="label" text={label} size="base" style={{ maxWidth: '90%' }} />
           </View>
         </View>
 
-        <Toggle
-          disabled={true}
-          value={isSelect}
-        />
+        <Toggle disabled={true} value={isSelect} />
       </View>
     </TouchableOpacity>
   )

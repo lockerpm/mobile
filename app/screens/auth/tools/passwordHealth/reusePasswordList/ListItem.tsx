@@ -3,8 +3,7 @@ import { TouchableOpacity, View, Image } from 'react-native'
 import isEqual from 'lodash/isEqual'
 import { Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
-import { useCipherHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
+import { useCipherHelper, useHelper } from 'app/services/hook'
 
 type Prop = {
   item: any
@@ -15,6 +14,7 @@ export const ListItem = memo(
   (props: Prop) => {
     const { item, goToDetail } = props
     const { colors } = useTheme()
+    const { translate } = useHelper()
     const { getCipherDescription } = useCipherHelper()
 
     return (

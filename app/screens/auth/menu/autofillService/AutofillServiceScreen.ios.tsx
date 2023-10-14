@@ -6,7 +6,7 @@ import { View, Image, Linking, AppState } from 'react-native'
 import { AutofillServiceEnabled } from 'app/utils/autofillHelper'
 import { Step } from './EnableAutofillStep'
 import { Button, Header, Screen, Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 const ACTIVE = require('assets/images/autofill/autofillActive.png')
 const IOS_HINT = require('assets/images/autofill/IosHint.png')
@@ -17,6 +17,7 @@ const Locker = require('assets/images/icons/autofill/locker.png')
 
 export const AutofillServiceScreen = observer(() => {
   const navigation = useNavigation() as any
+  const { translate } = useHelper()
 
   const appState = useRef(AppState.currentState)
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
@@ -51,26 +52,26 @@ export const AutofillServiceScreen = observer(() => {
         ) : null
       }
       footer={
-          <Button
-            text={enabled ? translate('common.ok') : translate('common.open_settings')}
-            onPress={() => {
-              if (enabled) {
-                navigation.navigate('mainTab', { screen: 'homeTab' })
-              } else {
-                Linking.canOpenURL('app-settings:').then((supported) => {
-                  if (supported) {
-                    Linking.openURL('App-prefs:root=General&path=Passwords')
-                  }
-                })
-              }
-            }}
-            style={{
-              marginHorizontal: 20
-            }}
-          />
+        <Button
+          text={enabled ? translate('common.ok') : translate('common.open_settings')}
+          onPress={() => {
+            if (enabled) {
+              navigation.navigate('mainTab', { screen: 'homeTab' })
+            } else {
+              Linking.canOpenURL('app-settings:').then((supported) => {
+                if (supported) {
+                  Linking.openURL('App-prefs:root=General&path=Passwords')
+                }
+              })
+            }
+          }}
+          style={{
+            marginHorizontal: 20,
+          }}
+        />
       }
       contentContainerStyle={{
-        flex: 1
+        flex: 1,
       }}
     >
       {enabled && (

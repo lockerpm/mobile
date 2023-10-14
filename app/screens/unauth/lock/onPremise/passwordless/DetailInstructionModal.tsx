@@ -1,8 +1,8 @@
-import { translate } from "app/i18n"
-import { useTheme } from "app/services/context"
-import React from "react"
-import { View } from "react-native"
-import { Text, BottomModal, ImageIcon } from "app/components/cores"
+import { useTheme } from 'app/services/context'
+import React from 'react'
+import { View } from 'react-native'
+import { Text, BottomModal, ImageIcon } from 'app/components/cores'
+import { useHelper } from 'app/services/hook'
 
 export const DetailInstructionModal = ({
   isOpen,
@@ -11,12 +11,13 @@ export const DetailInstructionModal = ({
   isOpen: boolean
   onClose: () => void
 }) => {
-  const {colors} = useTheme()
+  const { translate } = useHelper()
+  const { colors } = useTheme()
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose} title={translate("common.instruction")}>
+    <BottomModal isOpen={isOpen} onClose={onClose} title={translate('common.instruction')}>
       <View
         style={{
-          width: "100%",
+          width: '100%',
           padding: 20,
           backgroundColor: colors.block,
           borderRadius: 12,
@@ -27,22 +28,22 @@ export const DetailInstructionModal = ({
         <Instruction
           step="01."
           icon="app-logo"
-          text={translate("onpremise_passwordless.instruction.1")}
+          text={translate('onpremise_passwordless.instruction.1')}
         />
         <Instruction
           step="02."
           icon="avatar"
-          text={translate("onpremise_passwordless.instruction.2")}
+          text={translate('onpremise_passwordless.instruction.2')}
         />
         <Instruction
           step="03."
           icon="key-hole"
-          text={translate("onpremise_passwordless.instruction.3")}
+          text={translate('onpremise_passwordless.instruction.3')}
         />
         <Instruction
           step="04."
           icon="number-square-one"
-          text={translate("onpremise_passwordless.instruction.4")}
+          text={translate('onpremise_passwordless.instruction.4')}
         />
       </View>
     </BottomModal>

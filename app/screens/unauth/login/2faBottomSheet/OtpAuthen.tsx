@@ -4,7 +4,6 @@ import { Checkbox } from 'react-native-ui-lib'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
-import { translate } from 'app/i18n'
 import { Text, Button, TextInput, Icon } from 'app/components/cores'
 
 type Props = {
@@ -19,7 +18,7 @@ type Props = {
 export const OtpAuthen = (props: Props) => {
   const { user } = useStores()
   const { colors } = useTheme()
-  const { notify, setApiTokens } = useHelper()
+  const { notify, setApiTokens, translate } = useHelper()
 
   const { goBack, method, email, username, password, onLoggedIn } = props
 

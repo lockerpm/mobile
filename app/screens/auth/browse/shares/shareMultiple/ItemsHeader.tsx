@@ -3,9 +3,9 @@ import { View } from 'react-native'
 import { Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { MAX_MULTIPLE_SHARE_COUNT } from 'app/static/constants'
-import { translate } from 'app/i18n'
 import { SearchBar } from 'app/components/utils'
 import { ShareModal } from 'app/components/ciphers'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   openSort: () => void
@@ -30,6 +30,7 @@ export const ShareMultipleHeader = (props: Props) => {
     toggleSelectAll,
   } = props
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   // ----------------------- PARAMS ------------------------
 

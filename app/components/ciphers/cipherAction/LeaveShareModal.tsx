@@ -3,7 +3,6 @@ import { View, Image, TouchableOpacity } from 'react-native'
 import { BottomModal, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { useCipherData, useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
 
 interface Props {
   isOpen?: boolean
@@ -16,7 +15,7 @@ const TRASH = require('assets/images/intro/trash.png')
 
 export const LeaveShareModal = (props: Props) => {
   const { colors } = useTheme()
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
   const { isOpen, onClose, cipherId, organizationId } = props
   const { leaveShare } = useCipherData()
 

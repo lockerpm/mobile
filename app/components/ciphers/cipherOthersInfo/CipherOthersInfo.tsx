@@ -1,14 +1,13 @@
-import find from "lodash/find"
-import React, { useState } from "react"
-import { TouchableOpacity, View } from "react-native"
-import { Textarea } from "../../utils"
-import { Text, Icon } from "../../cores"
+import find from 'lodash/find'
+import React, { useState } from 'react'
+import { TouchableOpacity, View } from 'react-native'
+import { Textarea } from '../../utils'
+import { Text, Icon } from '../../cores'
 
-import { OwnershipSelectionModal } from "../cipherAction/OwnershipSelectionModal"
-import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
-import { translate } from "app/i18n"
-
+import { OwnershipSelectionModal } from '../cipherAction/OwnershipSelectionModal'
+import { useStores } from 'app/models'
+import { useTheme } from 'app/services/context'
+import { useHelper } from 'app/services/hook'
 
 export interface CipherOthersInfoProps {
   navigation: any
@@ -41,8 +40,9 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
     collectionIds,
     setOrganizationId,
     setCollectionIds,
-    isOwner
+    isOwner,
   } = props
+  const { translate } = useHelper()
   const { folderStore, collectionStore } = useStores()
   const { colors } = useTheme()
 
@@ -61,7 +61,7 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
       <View style={{ padding: 16, backgroundColor: colors.block }}>
         <Text
           preset="label"
-          text={translate("common.others").toUpperCase()}
+          text={translate('common.others').toUpperCase()}
           style={{ fontSize: 14 }}
         />
       </View>
@@ -79,30 +79,28 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
           <TouchableOpacity
             disabled={isDeleted}
             onPress={() => {
-              navigation.navigate("folders__select", {
-                mode: "add",
+              navigation.navigate('folders__select', {
+                mode: 'add',
                 initialId: folderId || collectionId,
               })
             }}
           >
             <View
-              style={
-                {
-                  justifyContent: "space-between",
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  width: "100%",
-                }
-              }
+              style={{
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: '100%',
+              }}
             >
               <View>
                 <Text
                   preset="label"
-                  text={translate("common.folders")}
+                  text={translate('common.folders')}
                   style={{ fontSize: 14, marginBottom: 5 }}
                 />
                 <Text
-                  text={folder?.name || collection?.name || translate("common.none")}
+                  text={folder?.name || collection?.name || translate('common.none')}
                   numberOfLines={2}
                 />
               </View>
@@ -114,11 +112,7 @@ export const CipherOthersInfo = (props: CipherOthersInfoProps) => {
         {/* Note */}
         {hasNote && (
           <View style={{ flex: 1, marginTop: 20 }}>
-            <Textarea
-              label={translate("common.notes")}
-              value={note}
-              onChangeText={onChangeNote}
-            />
+            <Textarea label={translate('common.notes')} value={note} onChangeText={onChangeNote} />
           </View>
         )}
       </View>

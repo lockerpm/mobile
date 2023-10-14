@@ -13,7 +13,6 @@ import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { translate } from 'app/i18n'
 
 interface Props {
   navigation: any
@@ -47,7 +46,7 @@ export const OtpList = observer((props: Props) => {
     setSelectedItems,
     setAllItems,
   } = props
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
   const { getCiphersFromCache } = useCipherData()
   const { cipherStore, toolStore } = useStores()
 
@@ -119,8 +118,8 @@ export const OtpList = observer((props: Props) => {
     const sortedData =
       toolStore.authenticatorOrder.length > 0
         ? sortBy(res, (item: CipherView) => {
-          return toolStore.authenticatorOrder.indexOf(item.id)
-        })
+            return toolStore.authenticatorOrder.indexOf(item.id)
+          })
         : [...res]
     setCiphers(sortedData)
     setAllItems(sortedData.map((c) => c.id))

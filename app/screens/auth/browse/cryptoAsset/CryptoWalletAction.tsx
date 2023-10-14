@@ -1,5 +1,4 @@
 import { ActionItem, CipherAction } from 'app/components/ciphers'
-import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
 import { toCryptoWalletData } from 'app/utils/crypto'
@@ -17,6 +16,7 @@ type Props = {
 export const CryptoWalletAction = observer((props: Props) => {
   const { copyToClipboard } = useHelper()
   const { cipherStore } = useStores()
+  const { translate } = useHelper()
   const selectedCipher = cipherStore.cipherView
 
   const data = toCryptoWalletData(selectedCipher.notes)

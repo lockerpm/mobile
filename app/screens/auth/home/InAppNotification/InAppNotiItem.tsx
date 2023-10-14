@@ -4,7 +4,6 @@ import { Linking, TouchableOpacity, View } from 'react-native'
 import { relativeTime } from 'app/utils/utils'
 import { NotificationCategory } from 'app/static/types'
 import { useHelper } from 'app/services/hook'
-import { translate } from 'app/i18n'
 import { useStores } from 'app/models'
 import { ImageIcon, ImageIconTypes, Text } from 'app/components/cores'
 
@@ -20,12 +19,12 @@ interface Props {
 }
 export const NotiListItem = (props: Props) => {
   const { type, title, lang, id, metadata, publish_time } = props
-  const navigation = useNavigation()
-  const { notifyApiError } = useHelper()
-  const { user, toolStore } = useStores()
+  const navigation = useNavigation() as any
+  const { notifyApiError, translate } = useHelper()
+  const { user } = useStores()
 
   const markRead = async () => {
-    const res = await toolStore.markReadInAppNoti(id)
+    const res = await user.markReadInAppNoti(id)
     if (res.kind !== 'ok') {
       notifyApiError(res)
     }

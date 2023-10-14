@@ -11,8 +11,8 @@ import { CipherView } from 'core/models/view'
 
 import { Header, Icon, Screen, Text, TextInput } from 'app/components/cores'
 import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
-import { translate } from 'app/i18n'
 import { Textarea } from 'app/components/utils'
+import { useHelper } from 'app/services/hook'
 
 export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((props) => {
   const navigation = props.navigation
@@ -20,6 +20,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
 
   const { cipherStore } = useStores()
   const { colors } = useTheme()
+  const { translate } = useHelper()
 
   const selectedCipher: CipherView = cipherStore.cipherView
 
@@ -34,7 +35,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
 
   return (
     <Screen
-      preset='auto'
+      preset="auto"
       padding
       safeAreaEdges={['bottom']}
       header={
@@ -66,11 +67,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
         source={BROWSE_ITEMS.card.icon}
         style={{ height: 55, width: 55, alignSelf: 'center' }}
       />
-      <Text
-        preset="bold"
-        size="xxl"
-        style={{ margin: 20, textAlign: 'center' }}
-      >
+      <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: 'center' }}>
         {selectedCipher.name}
         {notSync && (
           <View style={{ paddingLeft: 10 }}>
@@ -78,7 +75,6 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
           </View>
         )}
       </Text>
-
 
       <TextInput
         isCopyable
@@ -91,7 +87,9 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
       <TextInput
         isCopyable
         label={translate('card.brand')}
-        value={(CARD_BRANDS.find((i) => i.value === selectedCipher.card.brand) || { label: '' }).label}
+        value={
+          (CARD_BRANDS.find((i) => i.value === selectedCipher.card.brand) || { label: '' }).label
+        }
         editable={false}
         containerStyle={{ marginBottom: 16 }}
       />

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'app/services/context'
 import { useStores } from 'app/models'
 import { BottomModal, Button, Icon, Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 interface Props {
   imported: number
@@ -18,6 +18,7 @@ const LOCKER_IMG = require('assets/images/intro/locker.png')
 export const ImportResult = (props: Props) => {
   const navigation = useNavigation() as any
   const { colors } = useTheme()
+  const { translate } = useHelper()
   const { user } = useStores()
   const { imported, total, isLimited, setIsLimited } = props
   const isFreeAccount = user.isFreePlan

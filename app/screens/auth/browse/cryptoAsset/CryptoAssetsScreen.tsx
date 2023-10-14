@@ -13,12 +13,13 @@ import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { Screen } from 'app/components/cores'
 import { useStores } from 'app/models'
 import { CipherType } from 'core/enums'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 const EMPTY_IMG = require('assets/images/emptyCipherList/crypto-empty-img.png')
 
 export const CryptoAssetsScreen = observer(() => {
   const navigation = useNavigation() as any
+  const { translate } = useHelper()
   const { uiStore } = useStores()
 
   const [isSortOpen, setIsSortOpen] = useState(false)

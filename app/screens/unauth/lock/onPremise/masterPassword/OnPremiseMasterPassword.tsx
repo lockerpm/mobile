@@ -8,7 +8,6 @@ import { BiometricsType } from '../../lock.types'
 import { useAuthentication, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { Logo, Button, Screen, Text, TextInput, Icon } from 'app/components/cores'
-import { translate } from 'app/i18n'
 
 interface Props {
   data: OnPremisePreloginData
@@ -21,7 +20,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
   const navigation = useNavigation() as any
   const { user, uiStore } = useStores()
   const { colors } = useTheme()
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
   const { sessionLogin, biometricLogin } = useAuthentication()
   const { cryptoService } = useCoreService()
 

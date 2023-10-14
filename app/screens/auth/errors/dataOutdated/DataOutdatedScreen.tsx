@@ -4,14 +4,13 @@ import { View } from 'react-native'
 import { AppStackScreenProps } from 'app/navigators'
 import { useCipherData, useHelper } from 'app/services/hook'
 import { useStores } from 'app/models'
-import { translate } from 'app/i18n'
 import { observer } from 'mobx-react-lite'
 
 const DATA_IMG = require('assets/images/intro/intro1.png')
 
 export const DataOutdatedScreen: FC<AppStackScreenProps<'dataOutdated'>> = observer((props) => {
   const navigation = props.navigation
-  const { notify } = useHelper()
+  const { notify, translate } = useHelper()
   const { cipherStore } = useStores()
   const { startSyncProcess } = useCipherData()
 

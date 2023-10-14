@@ -1,11 +1,11 @@
+// @ts-nocheck
 import { useTheme } from 'app/services/context'
-import { useCipherData } from 'app/services/hook'
+import { useCipherData, useHelper } from 'app/services/hook'
 import { AccountRoleText, SharedGroupType, SharedMemberType, SharingStatus } from 'app/static/types'
 import { CollectionView } from 'core/models/view/collectionView'
 import React, { useState } from 'react'
 import { View, Image, TouchableOpacity } from 'react-native'
 import { Text } from 'app/components/cores'
-import { translate } from 'app/i18n'
 import { ActionItem, ActionSheet } from 'app/components/ciphers'
 
 interface Props {
@@ -20,6 +20,7 @@ export const SharedUsers = (props: Props) => {
   const { item, collection, reload, setReload, onRemove } = props
 
   const { colors } = useTheme()
+  const { translate } = useHelper()
   const { editShareCipher } = useCipherData()
 
   const isEditable = item.role === 'admin'

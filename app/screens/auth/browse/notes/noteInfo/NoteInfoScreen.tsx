@@ -9,13 +9,15 @@ import { Header, Icon, Screen, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
 import { Textarea } from 'app/components/utils'
-import { translate } from 'app/i18n'
+import { useHelper } from 'app/services/hook'
 
 export const NoteInfoScreen: FC<AppStackScreenProps<'notes__info'>> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
   const { colors } = useTheme()
+  const { translate } = useHelper()
+
   const { cipherStore } = useStores()
   const selectedCipher = cipherStore.cipherView
 
@@ -54,19 +56,16 @@ export const NoteInfoScreen: FC<AppStackScreenProps<'notes__info'>> = observer((
         />
       )}
 
-
       <Image
         source={BROWSE_ITEMS.note.icon}
         style={{
-          height: 55, width: 55, alignSelf: 'center'
+          height: 55,
+          width: 55,
+          alignSelf: 'center',
         }}
       />
 
-      <Text
-        preset="bold"
-        size="xxl"
-        style={{ margin: 20, textAlign: 'center' }}
-      >
+      <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: 'center' }}>
         {selectedCipher.name}
         {notSync && (
           <View style={{ paddingLeft: 10 }}>
