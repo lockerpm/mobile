@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useStores } from 'app/models'
 import { RootStackScreenProps } from 'app/navigators'
 import { useHelper } from 'app/services/hook'
@@ -148,9 +149,7 @@ export const SSOEmailLoginScreen: FC<RootStackScreenProps<'ssoLogin'>> = observe
         size="xl"
         text="Sign in to your company"
         style={{
-          fontSize: 20,
-          marginBottom: 16,
-          marginTop: 32,
+          marginBottom: 20,
           textAlign: 'center',
         }}
       />
@@ -174,7 +173,7 @@ export const SSOEmailLoginScreen: FC<RootStackScreenProps<'ssoLogin'>> = observe
 
       {IS_IOS && (
         <Button
-          loading={loaddingAuthen === 3}
+          // loading={loaddingAuthen === 3}
           text="Ble Authen"
           onPress={() => {
             handleWebauthLoginIOS()
@@ -188,7 +187,7 @@ export const SSOEmailLoginScreen: FC<RootStackScreenProps<'ssoLogin'>> = observe
 
       {usbAuthen && (
         <Button
-          loading={loaddingAuthen === 1}
+          // loading={loaddingAuthen === 1}
           text="Usb Authen"
           onPress={() => {
             handleWebauthLoginAndroid('usb')
@@ -202,7 +201,7 @@ export const SSOEmailLoginScreen: FC<RootStackScreenProps<'ssoLogin'>> = observe
 
       {nfcAuthen && (
         <Button
-          loading={loaddingAuthen === 2}
+          // loading={loaddingAuthen === 2}
           text="Nfc Authen"
           onPress={() => {
             handleWebauthLoginAndroid('nfc')

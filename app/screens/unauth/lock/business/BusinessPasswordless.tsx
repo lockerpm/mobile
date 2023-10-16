@@ -50,6 +50,7 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
+    setOtp(randomOtpNumber())
     navigation.addListener('focus', () => {
       if (user.isBiometricUnlock) {
         handleUnlockBiometric()
@@ -58,34 +59,34 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
   }, [])
 
   return (
-      <ScrollView
-        horizontal
-        pagingEnabled
-        scrollEnabled={false}
-        ref={scrollViewRef}
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={width}
-        decelerationRate="fast"
-        scrollEventThrottle={16}
-      >
-        <OtpPasswordlessGenerator
-          otp={otp}
-          setOtp={setOtp}
-          goNext={() => {
-            scrollTo(1)
-          }}
-          goBack={() => {
-            handleLogout()
-            navigation.goBack()
-          }}
-        />
-        <BusinessPasswordlessQrScan
-          otp={otp}
-          goBack={() => {
-            scrollTo(0)
-          }}
-          index={scanQrStep}
-        />
-      </ScrollView>
+    <ScrollView
+      horizontal
+      pagingEnabled
+      scrollEnabled={false}
+      ref={scrollViewRef}
+      showsHorizontalScrollIndicator={false}
+      snapToInterval={width}
+      decelerationRate="fast"
+      scrollEventThrottle={16}
+    >
+      <OtpPasswordlessGenerator
+        otp={otp}
+        setOtp={setOtp}
+        goNext={() => {
+          scrollTo(1)
+        }}
+        goBack={() => {
+          handleLogout()
+          navigation.goBack()
+        }}
+      />
+      <BusinessPasswordlessQrScan
+        otp={otp}
+        goBack={() => {
+          scrollTo(0)
+        }}
+        index={scanQrStep}
+      />
+    </ScrollView>
   )
 }

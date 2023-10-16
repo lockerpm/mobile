@@ -44,13 +44,13 @@ export const SSOIdentifierScreen: FC<RootStackScreenProps<'ssoIdentifier'>> = ob
         size="xl"
         text="Sign in to your company"
         style={{
-          marginBottom: 16,
-          marginTop: 32,
+          marginBottom: 20,
           textAlign: 'center',
         }}
       />
 
       <TextInput
+        animated
         label={'Enter your SSO Identifier'}
         onChangeText={setSsoId}
         value={ssoId}

@@ -37,6 +37,8 @@ import { AppEventType, EventBus } from 'app/utils/eventBus'
 import { StorageKey, save } from 'app/utils/storage'
 import { Logger } from 'app/utils/utils'
 import { Header } from 'app/components/cores'
+import { SSOIdentifierScreen } from 'app/screens/unauth/sso/SSOIdentifierScreen'
+import { SSOEmailLoginScreen } from 'app/screens/unauth/sso/SSOEmailLoginScreen'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -220,6 +222,17 @@ const RootStack = observer((props: Props) => {
           options={{
             headerShown: false,
             gestureEnabled: false,
+          }}
+        />
+
+        <Stack.Screen name="ssoIdentifier" component={SSOIdentifierScreen} />
+        <Stack.Screen
+          name="ssoLogin"
+          component={SSOEmailLoginScreen}
+          initialParams={{
+            host: '',
+            use_sso: false,
+            identifier: '',
           }}
         />
       </Stack.Navigator>
