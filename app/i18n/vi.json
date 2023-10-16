@@ -1159,5 +1159,21 @@
     "login_passkey_setting": "Đăng nhập với passkeys",
     "login_passkey": "Đăng nhập bằng passkey",
     "login_passkey_options": "Chọn một nơi mà bạn đã lưu trữ passkey cho Locker"
+  },
+  "sso": {
+    "id": {
+      "title": "Đăng nhập vào doanh nghiệp",
+      "identifier": "Nhập mã định danh doanh nghiệp",
+      "sso_info": "Bạn không biết mã định danh doanh nghiệp? ",
+      "enter_email": "Đăng nhập bằng email",
+      "create_sso": "Tạo mã định danh cho doanh nghiệp của bạn?",
+      "contact_at": "Liên hệ với chúng tôi tại ",
+      "contact": "contact@locker.io"
+    },
+    "email": {
+      "ble": "Xác thực thông qua BLE",
+      "usb": "Xác thực thông qua USB",
+      "nfc": "Xác thực thông qua NFC"
+    }
   }
 }

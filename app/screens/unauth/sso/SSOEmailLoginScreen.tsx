@@ -147,7 +147,7 @@ export const SSOEmailLoginScreen: FC<RootStackScreenProps<'ssoLogin'>> = observe
       <Text
         preset="bold"
         size="xl"
-        text="Sign in to your company"
+        text={translate('sso.id.title')}
         style={{
           marginBottom: 20,
           textAlign: 'center',
@@ -166,7 +166,7 @@ export const SSOEmailLoginScreen: FC<RootStackScreenProps<'ssoLogin'>> = observe
 
       <Button
         disabled={!username}
-        text="Continue"
+        text={translate('common.continue')}
         onPress={handleLogin}
         style={{ marginTop: 24, marginBottom: 16 }}
       />
@@ -174,7 +174,7 @@ export const SSOEmailLoginScreen: FC<RootStackScreenProps<'ssoLogin'>> = observe
       {IS_IOS && (
         <Button
           // loading={loaddingAuthen === 3}
-          text="Ble Authen"
+          text={translate('sso.email.ble')}
           onPress={() => {
             handleWebauthLoginIOS()
           }}
@@ -188,7 +188,7 @@ export const SSOEmailLoginScreen: FC<RootStackScreenProps<'ssoLogin'>> = observe
       {usbAuthen && (
         <Button
           // loading={loaddingAuthen === 1}
-          text="Usb Authen"
+          text={translate('sso.email.usb')}
           onPress={() => {
             handleWebauthLoginAndroid('usb')
           }}
@@ -202,7 +202,7 @@ export const SSOEmailLoginScreen: FC<RootStackScreenProps<'ssoLogin'>> = observe
       {nfcAuthen && (
         <Button
           // loading={loaddingAuthen === 2}
-          text="Nfc Authen"
+          text={translate('sso.email.nfc')}
           onPress={() => {
             handleWebauthLoginAndroid('nfc')
           }}
@@ -213,15 +213,11 @@ export const SSOEmailLoginScreen: FC<RootStackScreenProps<'ssoLogin'>> = observe
         />
       )}
 
-      <Text
-        preset="label"
-        text="Looking to create an SSO Identifier instead?"
-        style={{ marginTop: 12 }}
-      />
+      <Text preset="label" text={translate('sso.id.create_sso')} style={{ marginTop: 4 }} />
       <Text style={{ marginTop: 4 }}>
-        Contact us at{' '}
+        {translate('sso.id.contact_at')}
         <Text preset="bold" style={{ textDecorationLine: 'underline' }}>
-          contact@locker.io
+          {translate('sso.id.contact')}
         </Text>
       </Text>
     </Screen>

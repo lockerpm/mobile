@@ -8,7 +8,7 @@ import { RootStackScreenProps } from 'app/navigators'
 export const SSOIdentifierScreen: FC<RootStackScreenProps<'ssoIdentifier'>> = observer((props) => {
   const navigation = props.navigation
   const { user } = useStores()
-  const { notifyApiError } = useHelper()
+  const { notifyApiError, translate } = useHelper()
 
   const [ssoId, setSsoId] = useState('')
 
@@ -39,10 +39,11 @@ export const SSOIdentifierScreen: FC<RootStackScreenProps<'ssoIdentifier'>> = ob
         preset={'default'}
         style={{ height: 80, width: 70, marginBottom: 10, alignSelf: 'center' }}
       />
+
       <Text
         preset="bold"
         size="xl"
-        text="Sign in to your company"
+        text={translate('sso.id.title')}
         style={{
           marginBottom: 20,
           textAlign: 'center',
@@ -51,7 +52,7 @@ export const SSOIdentifierScreen: FC<RootStackScreenProps<'ssoIdentifier'>> = ob
 
       <TextInput
         animated
-        label={'Enter your SSO Identifier'}
+        label={translate('sso.id.identifier')}
         onChangeText={setSsoId}
         value={ssoId}
         style={{ marginBottom: 12 }}
@@ -60,31 +61,27 @@ export const SSOIdentifierScreen: FC<RootStackScreenProps<'ssoIdentifier'>> = ob
 
       <Button
         disabled={!ssoId}
-        text="Continue"
+        text={translate('common.continue')}
         onPress={onSubmit}
         style={{ marginTop: 24, marginBottom: 16 }}
       />
 
       <Text>
-        Don't know your SSO Identifier?{' '}
+        {translate('sso.id.sso_info')}
         <Text
           preset="bold"
           onPress={() => {
             navigation.navigate('ssoLogin')
           }}
         >
-          Enter your email
+          {translate('sso.id.enter_email')}
         </Text>
       </Text>
-      <Text
-        preset="label"
-        text="Looking to create an SSO Identifier instead?"
-        style={{ marginTop: 4 }}
-      />
+      <Text preset="label" text={translate('sso.id.create_sso')} style={{ marginTop: 4 }} />
       <Text style={{ marginTop: 4 }}>
-        Contact us at{' '}
+        {translate('sso.id.contact_at')}
         <Text preset="bold" style={{ textDecorationLine: 'underline' }}>
-          contact@locker.io
+          {translate('sso.id.contact')}
         </Text>
       </Text>
     </Screen>

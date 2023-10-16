@@ -1165,5 +1165,21 @@
     "login_passkey_setting": "Login with passkeys",
     "login_passkey": "Log in with passkey",
     "login_passkey_options": "Choose an option in which you've stored your passkey for Locker"
+  },
+  "sso": {
+    "id": {
+      "title": "Sign in to your company",
+      "identifier": "Enter your SSO Identifier",
+      "sso_info": "Don't know your SSO Identifier? ",
+      "enter_email": "Enter your email",
+      "create_sso": "Looking to create an SSO Identifier instead?",
+      "contact_at": "Contact us at ",
+      "contact": "contact@locker.io"
+    },
+    "email": {
+      "ble": "Authentication via BLE",
+      "usb": "Authentication via USB",
+      "nfc": "Authentication via NFC"
+    }
   }
 }
