@@ -7,18 +7,18 @@ export enum AccountRole {
 
 export enum LockPMType {
   ONPREMISE = 'onPremise',
-  INDIVIDUAL = 'individual'
+  INDIVIDUAL = 'individual',
 }
 
 export enum AccountType {
-  PERSONAL = "personal",
-  ENTERPRISE = "enterprise"
+  PERSONAL = 'personal',
+  ENTERPRISE = 'enterprise',
 }
 
 export enum EnterpriseGroupRoleText {
   PRIMARY_ADMIN = 'primary_admin',
   ADMIN = 'admin',
-  MEMBER = 'member'
+  MEMBER = 'member',
 }
 export enum EnterpriseInvitationStatus {
   INVITED = 'invited',
@@ -36,7 +36,7 @@ export enum SocketEvent {
   SYNC = 'sync',
   MEMBERS = 'members',
   EMERGENCY_ACCESS = 'emergency_access',
-  QUICK_SHARE = 'quick_share'
+  QUICK_SHARE = 'quick_share',
 }
 
 export enum SocketEventType {
@@ -81,13 +81,13 @@ export enum PlanType {
   FREE = 'pm_free',
   PREMIUM = 'pm_premium',
   FAMILY = 'pm_family',
-  LIFETIME = 'pm_lifetime_premium',
+  LIFETIME_PREMIUM = 'pm_lifetime_premium',
   LIFETIME_FAMILY = 'pm_lifetime_family',
 }
 
 export enum PlanTypeDuration {
   MONTHLY = 'monthly',
-  YEARLY = 'yearly'
+  YEARLY = 'yearly',
 }
 
 export enum InvitationStatus {
@@ -126,7 +126,7 @@ export enum PolicyType {
 
 export enum LoginMethod {
   PASSWORD = 'password',
-  PASSWORDLESS = 'passwordless'
+  PASSWORDLESS = 'passwordless',
 }
 
 export enum AppTimeoutType {
@@ -134,6 +134,6 @@ export enum AppTimeoutType {
   APP_CLOSE = 0,
 }
 export enum TimeoutActionType {
-  LOCK = "lock",
-  LOGOUT = "logout",
+  LOCK = 'lock',
+  LOGOUT = 'logout',
 }

@@ -657,7 +657,7 @@
     },
     "suggestion": "Người dùng hoặc nhóm trong doanh nghiệp",
     "confirm": "Người dùng đã đăng kí tài khoản thông qua chia sẻ của bản, xác nhận chia sẻ lại dữ liệu.",
-    "wait_confirm" : "Chờ xác nhận"
+    "wait_confirm": "Chờ xác nhận"
   },
   "trash": {
     "delete_item": "Xóa",
@@ -726,7 +726,7 @@
     "use_password": "Sử dụng mật khẩu"
   },
   "authenticator": {
-    "title": "Authenticator",
+    "title": "Mã xác thực",
     "desc": "Tạo mã Xác minh 2 bước (2FA) trên điện thoại của bạn",
     "copy_code": "Sao chép mã OTP",
     "scan_a_qr": "Quét mã QR",
@@ -1082,9 +1082,9 @@
     "more_step": "Bước cuối cùng",
     "point_camera": "Quét mã QR trên ứng dụng máy tính của bạn để xác nhận Đăng nhập"
   },
-  "quick_shares" :{
+  "quick_shares": {
     "share_option": {
-      "title" : "Tùy chọn chia sẻ",
+      "title": "Tùy chọn chia sẻ",
       "normal": {
         "tl": "Chia sẻ nội bộ",
         "dec": "Chia sẻ với người dùng Locker khác, cho phép xem hoặc chỉnh sửa mục được chia sẻ."
@@ -1095,9 +1095,9 @@
       }
     },
     "title": "Chia sẻ qua liên kết",
-    "get_link":  "Nhận liên kết",
+    "get_link": "Nhận liên kết",
     "copy_link": "Sao chép liên kết",
-    "config" : {
+    "config": {
       "title": "Quyền truy cập",
       "anyone": "Bất kỳ ai có liên kết",
       "invited": "Chỉ người được mời",
@@ -1106,7 +1106,7 @@
       "expired": {
         "tl": "Hết hạn sau",
         "1h": "1 giờ",
-        "24h":  "24 giờ",
+        "24h": "24 giờ",
         "7d": "7 ngày",
         "14d": "14 ngày",
         "30d": "30 ngày",
@@ -1115,7 +1115,7 @@
       "or": "hoặc",
       "access_options": {
         "unlimited": "Không giới hạn",
-        "time":  "Lượt truy cập"
+        "time": "Lượt truy cập"
       }
     },
     "receiver": "Người nhận",
@@ -1126,7 +1126,7 @@
       "copy": "Sao chép liên kết",
       "stop": "Ngừng chia sẻ"
     },
-    "detail" : {
+    "detail": {
       "anyone": "Bất kì ai",
       "tl": "Chi tiết",
       "share_time": "Thời gian tạo",
@@ -1147,7 +1147,7 @@
       "signup_passkey": "Đăng ký bằng passkey",
       "signup_password": "Đăng ký bằng mật khẩu",
       "passkey_options": "Cọn phương thức khởi tạo passkey cho “Locker”",
-      "keychain" : {
+      "keychain": {
         "title": "iCloud Keychain",
         "label": "Đồng bộ trên các thiết bị Apple của bạn."
       },

@@ -8,7 +8,6 @@ import { InviteMemberModal } from './InviteModal'
 import { useStores } from 'app/models'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
-import { PlanType } from 'app/static/types'
 import { FAMILY_MEMBER_LIMIT } from 'app/static/constants'
 import { observer } from 'mobx-react-lite'
 
@@ -23,8 +22,7 @@ export const InviteMemberScreen = observer(() => {
   const [familyMembers, setFamilyMembers] = useState<FamilyMemberProp[]>([])
   const [showInviteMemberModal, setShowInviteMemberModal] = useState(false)
 
-  const isFamilyAccount =
-    user.plan?.alias === PlanType.FAMILY || user.plan?.alias === PlanType.LIFETIME_FAMILY
+  const isFamilyAccount = user.isFamilyPlan || user.isLifeTimeFamilyPlan
 
   // ----------------------- METHODS -----------------------
 

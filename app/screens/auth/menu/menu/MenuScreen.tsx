@@ -21,8 +21,8 @@ export const MenuScreen = observer(() => {
   const { lock, logout } = useAuthentication()
 
   const appVersion = `${getVersion()}`
-  const isFreeAccount = user.plan?.alias === PlanType.FREE
-  const isPremiumAccount = user.plan?.alias === PlanType.PREMIUM
+  const isFreeAccount = user.isFreePlan
+  const isPremiumAccount = user.isShowPremiumFeature
 
   const [showFingerprint, setShowFingerprint] = useState(false)
   const [referLink, setReferLink] = useState<string>(null)
@@ -82,13 +82,16 @@ export const MenuScreen = observer(() => {
           navigation.navigate('invite_member')
         }
       },
-      hide: user.pwd_user_type === 'enterprise' || user.isLifeTimePlan,
+      hide: user.pwd_user_type === 'enterprise' || user.isLifeTimePremiumPlan,
     },
     {
       icon: 'star',
       name: translate('menu.plan'),
       onPress: () => navigation.navigate('payment'),
-      hide: user.pwd_user_type === 'enterprise' || user.isLifeTimePlan,
+      hide:
+        user.pwd_user_type === 'enterprise' ||
+        user.isLifeTimePremiumPlan ||
+        user.isLifeTimeFamilyPlan,
     },
     {
       icon: 'gear',
@@ -129,8 +132,12 @@ export const MenuScreen = observer(() => {
   const isSmallWidth = Dimensions.get('screen').width < 390
 
   const item3 = {
+    pm_lifetime_family: {
+      node: <Text text="LIFETIME FAMILY" style={$planName} color={colors.primary} />,
+    },
+
     pm_lifetime_premium: {
-      node: <Text text="LIFETIME" style={$planName} color={colors.primary} />,
+      node: <Text text="LIFETIME PREMIUM" style={$planName} color={colors.primary} />,
     },
     pm_free: {
       node: <Text text="FREE" style={$planName}></Text>,

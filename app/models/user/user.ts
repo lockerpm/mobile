@@ -89,16 +89,19 @@ export const UserModel = types
   .actions(withSetPropAction)
   .views((self) => ({
     get isFreePlan() {
-      return self.plan && self.plan.alias === PlanType.FREE
+      return self.plan?.alias === PlanType.FREE
     },
     get isFamilyPlan() {
-      return self.plan && self.plan.alias === PlanType.FAMILY
+      return self.plan?.alias === PlanType.FAMILY
     },
-    get isLifeTimePlan() {
-      return self.plan && self.plan.alias === PlanType.LIFETIME
+    get isLifeTimePremiumPlan() {
+      return self.plan?.alias === PlanType.LIFETIME_PREMIUM
+    },
+    get isLifeTimeFamilyPlan() {
+      return self.plan?.alias === PlanType.LIFETIME_FAMILY
     },
     get isShowPremiumFeature() {
-      return self.plan && self.plan.alias === PlanType.PREMIUM
+      return self.plan?.alias === PlanType.PREMIUM
     },
     get isEnterprise() {
       return self.pwd_user_type === 'enterprise' && self.enterprise
