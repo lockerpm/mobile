@@ -1,13 +1,14 @@
-import React, { useCallback, useState } from "react"
-import { Dimensions, Platform, View, ViewStyle } from "react-native"
-import { ImageIcon, Text } from "../../cores"
-import { useHelper, useSocialLogin } from "app/services/hook"
-import { GITHUB_CONFIG } from "app/config/constants"
-import { getUrlParameterByName } from "app/utils/utils"
-import { WebViewModal } from "../../webviewModal/WebviewModal"
+import React, { useCallback, useState } from 'react'
+import { Dimensions, Platform, View, ViewStyle } from 'react-native'
+import { ImageIcon, Text } from '../../cores'
+import { useHelper, useSocialLogin } from 'app/services/hook'
+import { GITHUB_CONFIG } from 'app/config/constants'
+import { getUrlParameterByName } from 'app/utils/utils'
+import { WebViewModal } from '../../webviewModal/WebviewModal'
+import { useNavigation } from '@react-navigation/native'
 
-const IS_IOS = Platform.OS === "ios"
-const SCREEN_WIDTH = Dimensions.get("screen").width
+const IS_IOS = Platform.OS === 'ios'
+const SCREEN_WIDTH = Dimensions.get('screen').width
 
 interface Props {
   /**
@@ -17,18 +18,19 @@ interface Props {
 }
 
 export const SocialLogin = ({ onLoggedIn }: Props) => {
+  const navigation = useNavigation() as any
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLogin()
 
   const SOCIAL_LOGIN: {
     [service: string]: {
       hide?: boolean
-      icon: "apple" | "google" | "facebook" | "github" | "sso"
+      icon: 'apple' | 'google' | 'facebook' | 'github' | 'sso'
       handler: () => void
     }
   } = {
     facebook: {
-      icon: "facebook",
+      icon: 'facebook',
       handler: () => {
         return facebookLogin({
           onLoggedIn,
@@ -36,7 +38,7 @@ export const SocialLogin = ({ onLoggedIn }: Props) => {
       },
     },
     google: {
-      icon: "google",
+      icon: 'google',
       handler: () => {
         return googleLogin({
           onLoggedIn,
@@ -45,7 +47,7 @@ export const SocialLogin = ({ onLoggedIn }: Props) => {
     },
     apple: {
       hide: !IS_IOS,
-      icon: "apple",
+      icon: 'apple',
       handler: () => {
         return appleLogin({
           onLoggedIn,
@@ -54,21 +56,21 @@ export const SocialLogin = ({ onLoggedIn }: Props) => {
     },
 
     github: {
-      icon: "github",
+      icon: 'github',
       handler: () => {
         setShowGitHubLogin(true)
       },
     },
     sso: {
-      icon: "sso",
+      icon: 'sso',
       handler: () => {
-        //
+        navigation.navigate('ssoIdentifier')
       },
     },
   }
 
   const SocialLoginFlexLayout = useCallback(() => {
-    if (Platform.OS === "android" || SCREEN_WIDTH > 320) {
+    if (Platform.OS === 'android' || SCREEN_WIDTH > 320) {
       return (
         <View style={$centerRowSpaceBtw}>
           {Object.values(SOCIAL_LOGIN)
@@ -129,7 +131,7 @@ export const SocialLogin = ({ onLoggedIn }: Props) => {
         }}
       />
 
-      <Text text="Or login with" style={{ textAlign: "center", marginVertical: 16 }} />
+      <Text text="Or login with" style={{ textAlign: 'center', marginVertical: 16 }} />
 
       <SocialLoginFlexLayout />
     </View>
@@ -149,12 +151,12 @@ export const GitHubLoginModal = (props: GitHubLoginModalProps) => {
   const url = `${GITHUB_CONFIG.authorizationEndpoint}?client_id=${
     GITHUB_CONFIG.clientId
   }&redirect_uri=${encodeURIComponent(GITHUB_CONFIG.redirectUrl)}&scope=${encodeURIComponent(
-    GITHUB_CONFIG.scopes.join(" "),
+    GITHUB_CONFIG.scopes.join(' ')
   )}&state=${randomString()}`
 
   const onURLChange = (url: string) => {
     if (url.startsWith(GITHUB_CONFIG.redirectUrl)) {
-      const code = getUrlParameterByName("code", url)
+      const code = getUrlParameterByName('code', url)
       onClose()
       onDone(code)
     }
@@ -164,7 +166,7 @@ export const GitHubLoginModal = (props: GitHubLoginModalProps) => {
 }
 
 const $centerRowSpaceBtw: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "center",
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
 }

@@ -1,11 +1,20 @@
-import { DeviceType } from "core/enums"
-import { AccountRoleText, EmergencyAccessStatus, EmergencyAccessType, InvitationStatus, NotificationCategory, PlanType, PlanTypeDuration, PolicyType } from "./enum"
-import { CipherRequest } from "core/models/request/cipherRequest"
+import { DeviceType } from 'core/enums'
+import {
+  AccountRoleText,
+  EmergencyAccessStatus,
+  EmergencyAccessType,
+  InvitationStatus,
+  NotificationCategory,
+  PlanType,
+  PlanTypeDuration,
+  PolicyType,
+} from './enum'
+import { CipherRequest } from 'core/models/request/cipherRequest'
 
 export type GetPMTokenData = {
-  SERVICE_URL: "/"
-  SERVICE_SCOPE: "pwdmanager"
-  CLIENT: "mobile"
+  SERVICE_URL: '/'
+  SERVICE_SCOPE: 'pwdmanager'
+  CLIENT: 'mobile'
 }
 
 export type Enterprise = {
@@ -27,7 +36,7 @@ export type SessionSnapshot = {
   private_key: string
   has_no_master_pw_item: boolean
   is_factor2?: boolean
-  methods: { type: string, data: any }[]
+  methods: { type: string; data: any }[]
 }
 
 export type UserTeam = {
@@ -117,7 +126,7 @@ export type TeamPolicies = [
 export type Billing = {
   id: number
   created_time: number
-  currency: "VNP" | "USD"
+  currency: 'VNP' | 'USD'
   description: string
   discount: number
   duration: PlanTypeDuration
@@ -188,9 +197,8 @@ export type TrustedContact = {
   wait_time_days: number
 }
 
-
 export type SessionLoginRequest = {
-  client_id: "mobile"
+  client_id: 'mobile'
   password: string
   device_name: string
   device_type: DeviceType
@@ -229,7 +237,7 @@ export type ChangePasswordRequest = {
 }
 
 export type FeedbackRequest = {
-  type: "feedback" | "support"
+  type: 'feedback' | 'support'
   description: string
 }
 
@@ -237,7 +245,6 @@ export type UpdateFCMRequest = {
   fcm_id: string
   device_identifier: string
 }
-
 
 export type UserSubscripePlan = {
   name: string
@@ -247,4 +254,16 @@ export type UserSubscripePlan = {
   duration: PlanTypeDuration
   next_billing_time: number
   payment_method: string
+}
+
+export type OnPremiseIdentifierData = {
+  host: string
+  use_sso: boolean
+  identifier: string
+}
+
+export type OnpremisePreloginPayload = {
+  email?: string
+  code?: string
+  identifier?: string
 }

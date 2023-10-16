@@ -7,6 +7,7 @@ import {
   Enterprise,
   LoginData,
   NotificationSettingData,
+  OnpremisePreloginPayload,
   RegisterLockerRequest,
   RegisterPasskeyOptionRequest,
   RegisterPasskeyRequest,
@@ -677,8 +678,12 @@ export const UserModel = types
     },
     // On Premise
     // user is on premise
-    onPremisePreLogin: async (email: string) => {
-      const res = await idApi.onPremisePreLogin(email)
+    onPremisePreLogin: async (payload: OnpremisePreloginPayload) => {
+      const res = await idApi.onPremisePreLogin(payload)
+      return res
+    },
+    onPremiseIdentifier: async (identifier: string) => {
+      const res = await idApi.onPremiseIdentifier(identifier)
       return res
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

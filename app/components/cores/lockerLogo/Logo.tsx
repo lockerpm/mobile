@@ -44,7 +44,12 @@ interface LogoProps extends TouchableOpacityProps {
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Icon.md)
  */
 export function Logo(props: LogoProps) {
-  const { preset, containerStyle: $containerStyleOverride, resizeMode, ...WrapperProps } = props
+  const {
+    preset,
+    containerStyle: $containerStyleOverride,
+    resizeMode = 'center',
+    ...WrapperProps
+  } = props
 
   const isPressable = !!WrapperProps.onPress
   const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress

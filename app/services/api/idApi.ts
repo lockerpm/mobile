@@ -22,6 +22,8 @@ import {
   ResetIDPasswordWithCode,
   SetNewPasswordSocialLoginRequest,
   SocialLoginRequest,
+  OnPremiseIdentifierData,
+  OnpremisePreloginPayload,
 } from 'app/static/types'
 import { LoginMethod } from 'app/static/types/enum'
 import { Logger } from 'app/utils/utils'
@@ -114,9 +116,7 @@ class IdApi {
   }
 
   // authentication PASSKEY
-  async authPasskeyOptions(
-    username: string
-  ): Promise<
+  async authPasskeyOptions(username: string): Promise<
     | {
         kind: 'ok'
         data: PasskeyAuthenticationRequest
@@ -198,9 +198,7 @@ class IdApi {
   }
 
   // register PASSKEY
-  async registerPasskeyOptions(
-    payload: RegisterPasskeyOptionRequest
-  ): Promise<
+  async registerPasskeyOptions(payload: RegisterPasskeyOptionRequest): Promise<
     | {
         kind: 'ok'
         data: PasskeyRegistrationRequest
@@ -228,9 +226,7 @@ class IdApi {
     }
   }
 
-  async registerPasskey(
-    payload: RegisterPasskeyRequest
-  ): Promise<
+  async registerPasskey(payload: RegisterPasskeyRequest): Promise<
     | {
         kind: 'ok'
       }
@@ -279,9 +275,7 @@ class IdApi {
   }
 
   // Account recovery
-  async recoverAccount(payload: {
-    username: string
-  }): Promise<
+  async recoverAccount(payload: { username: string }): Promise<
     | {
         kind: 'ok'
         data: AccountRecovery[]
@@ -333,9 +327,7 @@ class IdApi {
   }
 
   // Reset ID password with code
-  async resetPasswordWithCode(
-    payload: ResetIDPasswordWithCode
-  ): Promise<
+  async resetPasswordWithCode(payload: ResetIDPasswordWithCode): Promise<
     | {
         kind: 'ok'
         data: {
@@ -390,9 +382,7 @@ class IdApi {
   }
 
   // Set new ID password when signup by using social login
-  async setPassword(
-    payload: SetNewPasswordSocialLoginRequest
-  ): Promise<
+  async setPassword(payload: SetNewPasswordSocialLoginRequest): Promise<
     | {
         kind: 'ok'
       }
@@ -447,9 +437,7 @@ class IdApi {
   }
 
   // Logout
-  async logout(
-    token: string
-  ): Promise<
+  async logout(token: string): Promise<
     | {
         kind: 'ok'
       }
@@ -498,9 +486,7 @@ class IdApi {
     }
   }
 
-  async onPremisePreLogin(
-    email: string
-  ): Promise<
+  async onPremisePreLogin(preLoginPayload: OnpremisePreloginPayload): Promise<
     | {
         kind: 'ok'
         data: OnPremisePreloginData[]
@@ -510,7 +496,32 @@ class IdApi {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/users/onpremise/prelogin`,
-        { email }
+        preLoginPayload
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: 'ok', data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: 'bad-data' }
+    }
+  }
+
+  async onPremiseIdentifier(identifier: string): Promise<
+    | {
+        kind: 'ok'
+        data: OnPremiseIdentifierData
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        `/cystack_platform/pm/users/onpremise/identifier`,
+        { identifier }
       )
 
       // the typical ways to die when calling an api

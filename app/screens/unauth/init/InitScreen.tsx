@@ -198,7 +198,7 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
     }
 
     if (user.onPremiseUser) {
-      const res = await user.onPremisePreLogin(user.email)
+      const res = await user.onPremisePreLogin({ email: user.email })
       if (res.kind === 'ok') {
         if (res.data[0].activated) {
           navigation.navigate('lock', {

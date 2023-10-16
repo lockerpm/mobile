@@ -16,7 +16,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links'
 import WebView from 'react-native-webview'
 import { observer } from 'mobx-react-lite'
 import { useStores } from '../models'
-import { OnPremisePreloginData } from 'app/static/types'
+import { OnPremiseIdentifierData, OnPremisePreloginData } from 'app/static/types'
 import { ErrorToast, InfoToast, SuccessToast } from 'app/components/utils'
 import {
   IntroScreen,
@@ -67,6 +67,10 @@ export type RootParamList = {
   signup: undefined
   createMasterPassword: undefined
   mainStack: undefined
+
+  // vinsso
+  ssoIdentifier: undefined
+  ssoLogin: OnPremiseIdentifierData
 }
 
 export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
