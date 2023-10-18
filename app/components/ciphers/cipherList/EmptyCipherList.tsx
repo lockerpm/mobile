@@ -17,7 +17,7 @@ export const EmptyCipherList = (props: EmptyCipherListProps) => {
 
   return (
     <View style={[{ alignItems: 'center', marginTop: '10%' }, style]}>
-      <Image source={img} style={imgStyle} />
+      <Image source={img} resizeMode='contain' style={imgStyle} />
 
       <Text
         preset="bold"

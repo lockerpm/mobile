@@ -77,7 +77,7 @@ export const ShareItemAction = (props: Props) => {
         header={
           <View style={{ width: '100%', paddingHorizontal: 20 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Image source={cipherMapper.img} style={{ height: 40, width: 40, borderRadius: 8 }} />
+              <Image resizeMode='contain' source={cipherMapper.img} style={{ height: 40, width: 40, borderRadius: 8 }} />
               <View style={{ marginLeft: 10, flex: 1 }}>
                 <Text preset="bold" text={selectedCipher.name} numberOfLines={2} />
               </View>

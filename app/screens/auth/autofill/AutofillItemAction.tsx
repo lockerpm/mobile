@@ -93,7 +93,7 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
         header={
           <View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 10 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Image source={cipherMapper.img} style={{ height: 40, width: 40, borderRadius: 8 }} />
+              <Image source={cipherMapper.img} resizeMode='contain' style={{ height: 40, width: 40, borderRadius: 8 }} />
               <View style={{ marginLeft: 10 }}>
                 <Text preset="bold" text={selectedCipher.name} />
                 {selectedCipher.type === CipherType.Login && !!selectedCipher.login.username && (

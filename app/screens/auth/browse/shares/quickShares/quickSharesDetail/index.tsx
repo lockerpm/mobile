@@ -95,7 +95,7 @@ export const QuickSharesDetailScreen: FC<AppStackScreenProps<'quickShareItemsDet
           }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={cipherMapper.img} style={{ height: 40, width: 40, borderRadius: 8 }} />
+            <Image resizeMode='contain' source={cipherMapper.img} style={{ height: 40, width: 40, borderRadius: 8 }} />
             <View style={{ marginLeft: 10 }}>
               <Text preset="bold" text={send.cipher.name} numberOfLines={2} />
               {!!getCipherDescription(send.cipher) && (

@@ -162,7 +162,7 @@ export const AutofillServiceScreen = observer(() => {
       <View style={{ justifyContent: 'center', flex: 1 }}>
         {enabled && (
           <View style={{ alignItems: 'center' }}>
-            <Image source={ACTIVE} style={{ width: 335, height: 215 }}></Image>
+            <Image resizeMode='contain' source={ACTIVE} style={{ width: 335, height: 215 }}></Image>
             <View style={{ marginTop: 24 }}>
               <Text
                 preset="bold"

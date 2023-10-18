@@ -15,7 +15,7 @@ export const Step = (props: StepProps) => {
         flexDirection: 'row',
       }}
     >
-      <Image source={props.img} style={{ width: 24, height: 24 }} />
+      <Image resizeMode='contain' source={props.img} style={{ width: 24, height: 24 }} />
       <Text
         text={props.text}
         style={{

@@ -21,7 +21,7 @@ export const ConfirmCreateMPModal = (props: Props) => {
     <Modal disableHeader isOpen={isOpen} onClose={onClose} ignoreBackgroundPress={true}>
       <View style={{ alignItems: 'center' }}>
         <Text preset="bold" size="xl" text={translate('confirm_create_master_pass.title')} />
-        <Image source={WARNING} style={{ width: 120, height: 120 }} />
+        <Image resizeMode='contain' source={WARNING} style={{ width: 120, height: 120 }} />
         <Text
           text={translate('confirm_create_master_pass.desc')}
           style={{ textAlign: 'center', fontSize: 14 }}

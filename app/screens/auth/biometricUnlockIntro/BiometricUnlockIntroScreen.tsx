@@ -130,7 +130,7 @@ export const BiometricUnlockIntroScreen = observer(() => {
         </View>
       }
     >
-      <Image source={FACEID} style={{ height: 216, width: 242 }} />
+      <Image source={FACEID} resizeMode='contain' style={{ height: 216, width: 242 }} />
 
       <Text
         preset="bold"

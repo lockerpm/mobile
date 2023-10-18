@@ -47,7 +47,7 @@ export function Logo(props: LogoProps) {
   const {
     preset,
     containerStyle: $containerStyleOverride,
-    resizeMode = 'center',
+    resizeMode = 'contain',
     ...WrapperProps
   } = props
 

@@ -21,7 +21,7 @@ export const SwitchDeviceScreen: FC<AppStackScreenProps<'switchDevice'>> = obser
   return (
     <Screen padding preset="auto" safeAreaEdges={['top']}>
       <View style={{ alignItems: 'center', paddingTop: '5%' }}>
-        <Image source={SWITCH} />
+        <Image resizeMode='contain' source={SWITCH} />
 
         <Text preset="bold" size="xl" style={{ marginBottom: 10, marginTop: 30 }}>
           2 device switches left

@@ -68,5 +68,5 @@ export function AutoImage(props: AutoImageProps) {
     [maxWidth, maxHeight],
   )
 
-  return <Image {...ImageProps} style={[{ width, height }, props.style]} />
+  return <Image {...ImageProps} resizeMode='contain' style={[{ width, height }, props.style]} />
 }

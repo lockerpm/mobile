@@ -55,11 +55,11 @@ export const PremiumFeature = () => {
         isFreeAccount
           ? navigation.navigate('payment', { benefitTab: 3 })
           : navigation.navigate('mainTab', {
-              screen: 'browseTab',
-              params: {
-                screen: 'shares',
-              },
-            })
+            screen: 'browseTab',
+            params: {
+              screen: 'shares',
+            },
+          })
       },
     },
   }
@@ -121,7 +121,7 @@ const PremiumFeatureItem = (prop: {
         },
       ]}
     >
-      <Image source={prop.item.img} style={{ height: '80%', width: '80%' }} />
+      <Image resizeMode='contain' source={prop.item.img} style={{ height: '80%', width: '80%' }} />
       <Text text={prop.item.desc} style={{ fontSize: 12, marginVertical: 10 }} />
     </TouchableOpacity>
   )

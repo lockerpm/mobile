@@ -121,7 +121,7 @@ export const ImportResult = (props: Props) => {
         }}
       >
         <View style={{ alignItems: 'center' }}>
-          <Image source={LOCKER_IMG} style={{ height: 60, width: 60, marginBottom: 12 }} />
+          <Image resizeMode='contain' source={LOCKER_IMG} style={{ height: 60, width: 60, marginBottom: 12 }} />
           <Text
             text={`${imported}/${total} ` + translate('import.imported_free.note')}
             style={{ maxWidth: '90%', textAlign: 'center', marginBottom: 16 }}

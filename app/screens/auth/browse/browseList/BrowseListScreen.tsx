@@ -106,7 +106,7 @@ export const BrowseListScreen = observer(() => {
             {item.svgIcon ? (
               <item.svgIcon height={40} width={40} />
             ) : (
-              <Image source={item?.icon} style={{ height: 40, width: 40 }} />
+              <Image resizeMode='contain' source={item?.icon} style={{ height: 40, width: 40 }} />
             )}
             <View
               style={{ flex: 1, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center' }}

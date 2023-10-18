@@ -34,12 +34,12 @@ export const AddCipherActionModal = (props: Props) => {
             onClose()
             navigation.navigate(`${item.routeName}__edit`, {
               mode: 'add',
-              collection: collection,
+              collection,
             })
           }}
         >
-          <View style={{ flexDirection: 'row', paddingVertical: 12, paddingHorizontal: 20 }}>
-            <Image source={item.icon} style={{ height: 40, width: 40 }} />
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 20 }}>
+            <Image source={item.icon} style={{ height: 40, width: 40 }} resizeMode='contain' />
             <Text tx={item.label} style={{ marginLeft: 12 }} />
           </View>
         </TouchableOpacity>

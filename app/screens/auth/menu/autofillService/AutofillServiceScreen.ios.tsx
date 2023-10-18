@@ -76,7 +76,7 @@ export const AutofillServiceScreen = observer(() => {
     >
       {enabled && (
         <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-          <Image source={ACTIVE} style={{ width: 335, height: 215 }}></Image>
+          <Image resizeMode='contain' source={ACTIVE} style={{ width: 335, height: 215 }}></Image>
           <View style={{ marginTop: 24, alignItems: 'center' }}>
             <Text
               preset="bold"
@@ -103,7 +103,7 @@ export const AutofillServiceScreen = observer(() => {
               textAlign: 'center',
             }}
           />
-          <Image source={IOS_HINT} style={{ width: 335, height: 215 }}></Image>
+          <Image resizeMode='contain' source={IOS_HINT} style={{ width: 335, height: 215 }}></Image>
           <View>
             <Text
               text="Step-by-step, in Settings → Passwords:"

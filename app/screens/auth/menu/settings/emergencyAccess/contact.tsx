@@ -139,8 +139,8 @@ export const Contact = (props: Props) => {
                   backgroundColor: isInvited
                     ? colors.warning
                     : isConfirm || isApproved
-                    ? colors.primary
-                    : colors.title,
+                      ? colors.primary
+                      : colors.title,
                   paddingHorizontal: 5,
                 }}
               >

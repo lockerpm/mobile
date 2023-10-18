@@ -36,7 +36,7 @@ export const LeaveShareModal = (props: Props) => {
   return (
     <BottomModal isOpen={isOpen} onClose={onClose} title={''}>
       <View style={{ alignItems: 'center' }}>
-        <Image source={TRASH} style={{ height: 110, width: 100 }} />
+        <Image source={TRASH} resizeMode='contain' style={{ height: 110, width: 100 }} />
         <Text
           preset="bold"
           size="xl"

@@ -68,7 +68,7 @@ export const AppSelect = (props: Props) => {
           }}
         >
           <View style={IMG_CONTAINER}>
-            <Image source={findApp(value)?.logo || otherApp.logo} borderRadius={20} style={IMG} />
+            <Image resizeMode='contain' source={findApp(value)?.logo || otherApp.logo} borderRadius={20} style={IMG} />
           </View>
           <Text text={itemLabel} style={{ flex: 1, marginRight: 20 }} />
           {isSelected && <Icon icon="check" color={colors.primary} size={24} />}

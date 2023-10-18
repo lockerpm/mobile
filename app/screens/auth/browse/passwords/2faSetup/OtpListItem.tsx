@@ -50,9 +50,7 @@ export const OtpListItem = memo(
           {/* Content */}
           <View style={{ flex: 1 }}>
             <View style={{ marginRight: 12, flex: 1, alignItems: 'center' }}>
-              <View style={{ flex: 1 }}>
-                <Text preset="bold" text={item.name} numberOfLines={1} ellipsizeMode="tail" />
-              </View>
+              <Text preset="bold" text={item.name} numberOfLines={1} ellipsizeMode="tail" />
 
               {item.notSync && (
                 <View style={{ marginLeft: 10 }}>
@@ -77,7 +75,9 @@ export const OtpListItem = memo(
               onComplete={() => {
                 // index === 0 && updateOtp()
                 setOtp(getTOTP(otpData))
-                return [true, 0]
+                return {
+                  shouldRepeat: true
+                }
               }}
               size={25}
               isPlaying
