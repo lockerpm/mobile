@@ -37,7 +37,7 @@ export const LoginScreen: FC<RootStackScreenProps<'login'>> = observer((props) =
         navigation.replace('createMasterPassword')
       }
     } else {
-      notify('error', translate('passkey.error.login_failed'))
+      notify('error', translate('error.login_failed'))
     }
   }
 

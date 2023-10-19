@@ -1137,29 +1137,6 @@
     "delete_expired": "Xoá chia sẻ hết hạn",
     "shared_begin": "Được chia sẻ {{time}}"
   },
-  "passkey": {
-    "error": {
-      "user_cancel": "Người dùng huỷ yêu cầu.",
-      "login_failed": "Đăng nhập bằng passkey thất bại."
-    },
-    "sign_up": {
-      "continue_password": "Tiếp tục với mật khẩu",
-      "signup_passkey": "Đăng ký bằng passkey",
-      "signup_password": "Đăng ký bằng mật khẩu",
-      "passkey_options": "Cọn phương thức khởi tạo passkey cho “Locker”",
-      "keychain": {
-        "title": "iCloud Keychain",
-        "label": "Đồng bộ trên các thiết bị Apple của bạn."
-      },
-      "security_key": {
-        "title": "Khoá bảo mật",
-        "label": "Sử dụng khoá bảo mật bên ngoài."
-      }
-    },
-    "login_passkey_setting": "Đăng nhập với passkeys",
-    "login_passkey": "Đăng nhập bằng passkey",
-    "login_passkey_options": "Chọn một nơi mà bạn đã lưu trữ passkey cho Locker"
-  },
   "sso": {
     "id": {
       "title": "Đăng nhập vào doanh nghiệp",

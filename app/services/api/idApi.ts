@@ -2,20 +2,13 @@ import { ApiResponse } from 'apisauce'
 import { Api, api } from './api'
 import { GeneralApiProblem, getGeneralApiProblem } from './apiProblem'
 import {
-  PasskeyAuthenticationRequest,
-  PasskeyRegistrationRequest,
-} from 'react-native-passkey/lib/typescript/Passkey'
-import {
   AccountRecovery,
   LoginData,
   UseLoginMethod,
   LoginResult,
   WebauthCredential,
   OnPremisePreloginData,
-  AuthPasskeyRequest,
   EmailOtpRequestRequest,
-  RegisterPasskeyOptionRequest,
-  RegisterPasskeyRequest,
   RegisterRequest,
   ResetIDPasswordRequest,
   ResetIDPasswordWithCode,
@@ -86,68 +79,6 @@ class IdApi {
     }
   }
 
-  // authentication PASSKEY
-  async authPasskeyOptions(username: string): Promise<
-    | {
-        kind: 'ok'
-        data: PasskeyAuthenticationRequest
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.deleteHeader('Authorization')
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        '/sso/users/webauthn/auth/options',
-        { username }
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: 'ok', data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'unknown', temporary: true }
-    }
-  }
-
-  async authPasskey(
-    payload: AuthPasskeyRequest,
-    deviceId?: string
-  ): Promise<
-    | {
-        kind: 'ok'
-        data: LoginResult
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.deleteHeader('Authorization')
-      this.api.apisauce.setHeader('device-id', deviceId)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        '/sso/users/webauthn/auth',
-        payload
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-
-      return { kind: 'ok', data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'unknown', temporary: true }
-    }
-  }
-
   // ID register
   async register(payload: RegisterRequest): Promise<{ kind: 'ok' } | GeneralApiProblem> {
     try {
@@ -155,62 +86,6 @@ class IdApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post('/sso/users', payload)
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: 'ok' }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'unknown', temporary: true }
-    }
-  }
-
-  // register PASSKEY
-  async registerPasskeyOptions(payload: RegisterPasskeyOptionRequest): Promise<
-    | {
-        kind: 'ok'
-        data: PasskeyRegistrationRequest
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.deleteHeader('Authorization')
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        '/sso/users/webauthn/register/options',
-        payload
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: 'ok', data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'unknown', temporary: true }
-    }
-  }
-
-  async registerPasskey(payload: RegisterPasskeyRequest): Promise<
-    | {
-        kind: 'ok'
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.deleteHeader('Authorization')
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        '/sso/users/webauthn/register',
-        payload
-      )
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)

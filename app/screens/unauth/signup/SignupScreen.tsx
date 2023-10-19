@@ -1,23 +1,14 @@
 import countries from 'app/static/countries.json'
-import React, { useState, useEffect, useRef, useCallback, FC } from 'react'
-import { Linking, Platform, TouchableOpacity, View } from 'react-native'
+import React, { useState, useRef, useCallback, FC } from 'react'
+import { Linking, TouchableOpacity, View } from 'react-native'
 import { useStores } from 'app/models'
 import { RootStackScreenProps } from 'app/navigators'
 import { useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { Checkbox } from 'react-native-ui-lib'
-import Animated, { ZoomIn } from 'react-native-reanimated'
 import { Screen, Text, Button, TextInput, Logo, Header } from 'app/components/cores'
-import {
-  CountryPicker,
-  CountryCode,
-  RecaptchaChecker,
-  IosPasswordlessOptions,
-} from 'app/components/utils'
-import { Passkey, PasskeyRegistrationResult } from 'react-native-passkey'
-import { PasskeyRegistrationRequest } from 'react-native-passkey/lib/typescript/Passkey'
-import { credentialCreationOptions, publicKeyCredentialWithAttestation } from 'app/utils/passkey'
-import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL } from 'app/config/constants'
+import { CountryPicker, CountryCode, RecaptchaChecker } from 'app/components/utils'
+import { PRIVACY_POLICY_URL, TERMS_URL } from 'app/config/constants'
 import { getCookies, logRegisterSuccessEvent } from 'app/utils/analytics'
 import { Logger } from 'app/utils/utils'
 import { observer } from 'mobx-react-lite'
@@ -40,19 +31,11 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
   const [country, setCountry] = useState<CountryCode>('VN')
   const [agreed, setAgreed] = useState(false)
 
-  const [isSignupWithPassword, setIsSignupWithPassword] = useState(false)
-  const [isPasskeySupported, setIsPasskeySupported] = useState(true)
-
-  const [isShowCreatePasskeyOptions, setIsShowCreatePasskeyOptions] = useState(false)
-  const [isIcloudSelected, setIsIcloudSelected] = useState(true)
-
   const [showCountryPicker, setShowContryPicker] = useState(false)
 
   // ---------------- COMPUTED ---------------------
 
-  const formValidated = isSignupWithPassword
-    ? email && password && password === confirmPassword && fullname && agreed
-    : email && fullname && agreed
+  const formValidated = email && password && password === confirmPassword && fullname && agreed
 
   // ---------------- METHODS ---------------------
 
@@ -91,75 +74,8 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
     }
   }
 
-  const handleRegisterWebauth = async (
-    email: string,
-    fullname: string,
-    withSecurityKey?: boolean
-  ) => {
-    const resPassKeyOptions = await user.registerPasskeyOptions({
-      email,
-      full_name: fullname,
-      algorithms: ['es256', 'rs256'],
-    })
-    if (resPassKeyOptions.kind === 'ok') {
-      try {
-        const requestJson: PasskeyRegistrationRequest = credentialCreationOptions(
-          resPassKeyOptions.data
-        )
-
-        // @ts-ignore
-        const result: PasskeyRegistrationResult = await Passkey.register(requestJson, {
-          withSecurityKey,
-        })
-
-        const res = await user.registerPasskey({
-          email,
-          password: '',
-          country,
-          confirm_password: '',
-          full_name: fullname,
-          request_code: '',
-          scope: 'pwdmanager',
-          utm_source: await getCookies('utm_source'),
-          response: publicKeyCredentialWithAttestation(result),
-        })
-        setIsLoading(false)
-        if (res.kind === 'ok') {
-          logRegisterSuccessEvent()
-          notify('success', translate('signup.signup_successful'), 5000)
-          navigation.replace('login')
-        } else {
-          notifyApiError(res)
-        }
-      } catch (error) {
-        // Handle Error...
-      }
-    } else {
-      notifyApiError(resPassKeyOptions)
-    }
-  }
-
-  const onRegisterWebauth = async () => {
-    if (isIcloudSelected) {
-      handleRegisterWebauth(email, fullname)
-    } else {
-      handleRegisterWebauth(email, fullname, true)
-    }
-  }
-
-  const checkPasskeySupported = async () => {
-    const res = await Passkey.isSupported()
-    if (!res) {
-      setIsPasskeySupported(false)
-      setIsSignupWithPassword(true)
-    }
-  }
-
   // ---------------- EFFECT --------------------
 
-  useEffect(() => {
-    checkPasskeySupported()
-  }, [])
   // ---------------- RENDER ---------------------
 
   const Footer = useCallback(
@@ -192,23 +108,6 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
     <Screen preset="auto" contentContainerStyle={{ paddingBottom: 20 }}>
       <RecaptchaChecker ref={captchaRef} />
 
-      {IS_IOS && (
-        <IosPasswordlessOptions
-          isOpen={isShowCreatePasskeyOptions}
-          onClose={() => {
-            setIsShowCreatePasskeyOptions(false)
-          }}
-          title={translate('common.sign_up')}
-          label={translate('passkey.sign_up.passkey_options')}
-          isIcloudSelected={isIcloudSelected}
-          setIsIcloudSelected={setIsIcloudSelected}
-          action={async () => {
-            setIsShowCreatePasskeyOptions(false)
-            await onRegisterWebauth()
-          }}
-        />
-      )}
-
       <Header leftIcon="arrow-left" onLeftPress={goBack} />
 
       <View style={{ paddingHorizontal: 20 }}>
@@ -231,26 +130,22 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
           onChangeText={setEmail}
         />
 
-        {isSignupWithPassword && (
-          <Animated.View entering={ZoomIn}>
-            <TextInput
-              animated
-              isRequired
-              isPassword
-              label={translate('common.password')}
-              onChangeText={setPassword}
-              value={password}
-            />
-            <TextInput
-              animated
-              isRequired
-              isPassword
-              label={translate('signup.confirm_password')}
-              onChangeText={setConfirmPassword}
-              value={confirmPassword}
-            />
-          </Animated.View>
-        )}
+        <TextInput
+          animated
+          isRequired
+          isPassword
+          label={translate('common.password')}
+          onChangeText={setPassword}
+          value={password}
+        />
+        <TextInput
+          animated
+          isRequired
+          isPassword
+          label={translate('signup.confirm_password')}
+          onChangeText={setConfirmPassword}
+          value={confirmPassword}
+        />
 
         <TextInput
           animated
@@ -278,17 +173,9 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
         <Button
           loading={isLoading}
           disabled={isLoading || !formValidated}
-          text={
-            isSignupWithPassword
-              ? translate('passkey.sign_up.signup_password')
-              : translate('passkey.sign_up.continue_password')
-          }
+          text={translate('common.sign_up')}
           onPress={() => {
-            if (isSignupWithPassword) {
-              getCaptchaToken().then(handleRegister)
-            } else {
-              setIsSignupWithPassword(true)
-            }
+            getCaptchaToken().then(handleRegister)
           }}
           style={{
             width: '100%',
@@ -296,27 +183,6 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
             marginBottom: 20,
           }}
         />
-
-        {isPasskeySupported && (
-          <Button
-            preset="secondary"
-            disabled={isLoading || !email || !fullname || !agreed}
-            text={translate('passkey.sign_up.signup_passkey')}
-            onPress={() => {
-              if (Platform.OS === 'ios') {
-                setIsShowCreatePasskeyOptions(true)
-              } else {
-                handleRegisterWebauth(email, fullname)
-              }
-            }}
-            style={{
-              width: '100%',
-              height: 50,
-              marginBottom: 12,
-            }}
-          />
-        )}
-
         <Footer />
 
         <CountryPicker

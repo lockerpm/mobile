@@ -2,15 +2,12 @@
 import { Instance, SnapshotIn, SnapshotOut, cast, types } from 'mobx-state-tree'
 import { withSetPropAction } from '../helpers/withSetPropAction'
 import {
-  AuthPasskeyRequest,
   ChangePasswordRequest,
   Enterprise,
   LoginData,
   NotificationSettingData,
   OnpremisePreloginPayload,
   RegisterLockerRequest,
-  RegisterPasskeyOptionRequest,
-  RegisterPasskeyRequest,
   RegisterRequest,
   SessionLoginRequest,
   SessionOtpLoginRequest,
@@ -367,33 +364,6 @@ export const UserModel = types
       return res
     },
 
-    authPasskey: async (payload: AuthPasskeyRequest) => {
-      const res = await idApi.authPasskey(payload, self.deviceId)
-      if (res.kind === 'ok') {
-        if (res.data.token) {
-          const pmRes = await userApi.getPMToken(
-            res.data.token,
-            {
-              SERVICE_URL: '/',
-              SERVICE_SCOPE: 'pwdmanager',
-              CLIENT: 'mobile',
-            },
-            self.deviceId
-          )
-          if (pmRes.kind === 'ok') {
-            self.setApiToken(pmRes.data.access_token)
-            self.setLoggedIn(true)
-          }
-          return pmRes
-        }
-      }
-      return res
-    },
-    authPasskeyOptions: async (username: string) => {
-      const res = await idApi.authPasskeyOptions(username)
-      return res
-    },
-
     getPMToken: async (token: string) => {
       const pmRes = await userApi.getPMToken(
         token,
@@ -414,16 +384,6 @@ export const UserModel = types
 
     register: async (payload: RegisterRequest) => {
       const res = await idApi.register(payload)
-      return res
-    },
-
-    registerPasskeyOptions: async (payload: RegisterPasskeyOptionRequest) => {
-      const res = await idApi.registerPasskeyOptions(payload)
-      return res
-    },
-
-    registerPasskey: async (payload: RegisterPasskeyRequest) => {
-      const res = await idApi.registerPasskey(payload)
       return res
     },
 

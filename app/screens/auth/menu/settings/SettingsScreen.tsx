@@ -133,16 +133,6 @@ export const SettingsScreen = observer(() => {
         },
       ],
     },
-    passkey: {
-      value: false,
-      onChage: () => {
-        Linking.openURL(
-          `https://id.locker.io/authenticate?token=${encodeURI(user.apiToken)}&path=${encodeURI(
-            '/security/webauthn'
-          )}`
-        )
-      },
-    },
     biometric: {
       value: user.isBiometricUnlock,
       onChage: (isActive: boolean) => {
@@ -261,11 +251,6 @@ export const SettingsScreen = observer(() => {
           name={translate('settings.autofill_service')}
           onPress={() => navigation.navigate('autofillService')}
         />
-        <SettingsItem
-          name={translate('passkey.login_passkey_setting')}
-          onPress={settings.passkey.onChage}
-        />
-
         <SettingsItem
           name={translate('common.biometric_unlocking')}
           onPress={() => settings.biometric.onChage(!settings.biometric.value)}

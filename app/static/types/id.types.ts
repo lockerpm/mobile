@@ -1,8 +1,3 @@
-import {
-  PasskeyAuthenticationResult,
-  PasskeyRegistrationResult,
-} from 'react-native-passkey/lib/typescript/Passkey'
-
 export type UseLoginMethod = {
   webauthn: boolean
   is_random_password: boolean
@@ -50,11 +45,6 @@ export type OnPremisePreloginData = {
   set_up_passwordless: boolean
 }
 
-export type AuthPasskeyRequest = {
-  username: string
-  response: PasskeyAuthenticationResult
-}
-
 export type RegisterRequest = {
   email: string
   password: string
@@ -66,18 +56,6 @@ export type RegisterRequest = {
   request_code: string
   scope: string
   utm_source?: string
-}
-
-export type RegisterPasskeyOptionRequest = {
-  algorithms: string[]
-  email: string
-  full_name: string
-}
-
-export type RegisterPasskeyRequest = RegisterRequest & {
-  response: PasskeyRegistrationResult & {
-    authenticatorAttachment: string
-  }
 }
 
 export type EmailOtpRequestRequest = {
