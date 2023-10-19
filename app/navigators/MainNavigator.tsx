@@ -423,8 +423,16 @@ export const MainNavigator = observer(() => {
         case SocketEvent.SYNC:
           switch (data.type) {
             case SocketEventType.CIPHER_UPDATE: {
-              const cipherId = data.data.id
-              syncSingleCipher(cipherId)
+              if (data.data.ids) {
+                Promise.all(
+                  data.data.ids.map(async (id) => {
+                    syncSingleCipher(id)
+                  })
+                )
+              } else {
+                const cipherId = data.data.id
+                syncSingleCipher(cipherId)
+              }
               break
             }
             case SocketEventType.FOLDER_UPDATE: {
