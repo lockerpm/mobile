@@ -1,6 +1,4 @@
 <resources>
-    <string name="facebook_app_id">1260309664112849</string>
-    <string name="facebook_client_token">082ae6329b491d0314aa527e2f83179e</string>
     <string name="mp_title">Locker Password Manager</string>
     <string name="mp_subtitle">Enter your Master Password to unlock</string>
     <string name="mp_master_pass">Master Password</string>

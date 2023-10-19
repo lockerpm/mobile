@@ -30,21 +30,6 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.576960862167-0gor6mqlftu7co4tdn58rg4vdgqlsten</string>
-				<string>com.googleusercontent.apps.576960862167-4do74ag7spnibiqh9gkpqa2sgd9s1aks</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>fb1260309664112849</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>com.cystack.lockerapp</string>
 			<key>CFBundleURLSchemes</key>

@@ -43,7 +43,6 @@ export const ActionSheet = ({ isOpen, onClose, children, header, itemHeight = 64
     setTimeout(onClose, 200)
   }, [])
 
-
   return (
     <Modal transparent animationType="fade" visible={isOpen} onDismiss={onClose}>
       <View
