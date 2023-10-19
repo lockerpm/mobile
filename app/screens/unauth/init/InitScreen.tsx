@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react'
 import { Alert, Linking, Platform, View } from 'react-native'
 
 import VersionCheck from 'react-native-version-check'
-import Intercom from '@intercom/intercom-react-native'
 import dynamicLinks from '@react-native-firebase/dynamic-links'
 import NetInfo from '@react-native-community/netinfo'
 import DeviceInfo from 'react-native-device-info'
@@ -137,8 +136,6 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
     if (checkTrustFall()) {
       return
     }
-
-    await Intercom.logout()
 
     const connectionState = await NetInfo.fetch()
 

@@ -1,7 +1,6 @@
 import moment from 'moment'
 import React, { useState, useEffect } from 'react'
 import { View, TextStyle, Dimensions } from 'react-native'
-import Intercom, { IntercomEvents } from '@intercom/intercom-react-native'
 import { useNavigation, CommonActions } from '@react-navigation/native'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
@@ -27,14 +26,7 @@ export const MenuScreen = observer(() => {
   const [showFingerprint, setShowFingerprint] = useState(false)
   const [referLink, setReferLink] = useState<string>(null)
 
-  // Intercom service
-  const [unreadConversationCount, setUnreadConversationCount] = useState<number>(0)
-
   // -------------------METHODS-----------------------
-  const getUnreadConversationCount = async () => {
-    const res = await Intercom.getUnreadConversationCount()
-    setUnreadConversationCount(res)
-  }
 
   const getReferralsLink = async () => {
     const res = await user.getReferLink()
@@ -52,19 +44,6 @@ export const MenuScreen = observer(() => {
       getReferralsLink()
     } else {
       // user.getEnterprise()
-    }
-  }, [])
-
-  useEffect(() => {
-    getUnreadConversationCount()
-    const countListener = Intercom.addEventListener(
-      IntercomEvents.IntercomUnreadCountDidChange,
-      (response) => {
-        setUnreadConversationCount(response.count as number)
-      }
-    )
-    return () => {
-      countListener.remove()
     }
   }, [])
 
@@ -250,39 +229,6 @@ export const MenuScreen = observer(() => {
           }
         />
       )}
-
-      <MenuItemContainer>
-        <MenuItem
-          icon={'headset'}
-          name={translate('menu.fingerprint')}
-          onPress={() => Intercom.displayMessenger()}
-          content={
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-              <Text text={translate('common.customer_service')} style={{ paddingHorizontal: 10 }} />
-              {unreadConversationCount > 0 && (
-                <View
-                  style={{
-                    backgroundColor: colors.error,
-                    borderRadius: 20,
-                    minWidth: 17,
-                    height: 17,
-                  }}
-                >
-                  <Text
-                    text={unreadConversationCount.toString()}
-                    style={{
-                      fontSize: 12,
-                      textAlign: 'center',
-                      color: colors.white,
-                      lineHeight: 17,
-                    }}
-                  />
-                </View>
-              )}
-            </View>
-          }
-        />
-      </MenuItemContainer>
 
       <MenuItemContainer>
         {items2.map((item, index) => (

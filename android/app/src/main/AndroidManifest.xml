@@ -75,8 +75,6 @@
     
 
       <meta-data android:name="asset_statements" android:resource="@string/asset_statements" />
-      <meta-data android:name="io.sentry.anr.enable" android:value="false" />
       <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
-      <meta-data android:name="io.intercom.android.sdk.host" android:value=".intercom-messenger.com" />
     </application>
 </manifest>

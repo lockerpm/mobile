@@ -4,7 +4,6 @@ import { Alert, BackHandler, View, AppState } from 'react-native'
 import { Logger } from 'app/utils/utils'
 import { MAX_CIPHER_SELECTION } from 'app/static/constants'
 import { useTheme } from 'app/services/context'
-import Intercom from '@intercom/intercom-react-native'
 import { AutofillServiceEnabled } from 'app/utils/autofillHelper'
 import { useStores } from 'app/models'
 import { useAuthentication, useHelper } from 'app/services/hook'
@@ -69,24 +68,6 @@ export const HomeTabScreen = observer(() => {
       setSortOption('last_updated')
     }
   }, [searchText])
-
-  // Intercom support
-  useEffect(() => {
-    const registerIntercomUser = async () => {
-      if (user.isLoggedInPw) {
-        try {
-          await Intercom.loginUserWithUserAttributes({
-            email: user.email,
-            userId: user.pwd_user_id,
-            name: user.full_name || user.username,
-          })
-        } catch (error) {
-          Logger.error(error)
-        }
-      }
-    }
-    registerIntercomUser()
-  }, [user.isLoggedInPw])
 
   // Navigation event listener
   useEffect(() => {

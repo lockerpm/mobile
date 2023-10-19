@@ -21,7 +21,6 @@ import {
 import * as storage from './utils/storage'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { StyleSheet } from 'react-native'
-import * as Tracking from './utils/tracking'
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
@@ -36,8 +35,6 @@ import { ThemeContextProvider } from './services/context/useTheme'
 import CombineContext from './services/context/useCombineContext'
 
 enableScreens()
-Tracking.initSentry()
-Tracking.initAppFlyer()
 
 // setup({ storekitMode: 'STOREKIT2_MODE' });
 

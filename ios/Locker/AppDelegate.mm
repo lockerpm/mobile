@@ -6,7 +6,6 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 
-#import <IntercomModule.h>
 #import <TrustKit/TrustKit.h>
 
 @implementation AppDelegate
@@ -28,8 +27,6 @@
   [RNBootSplash initWithStoryboard:@"LaunchScreen" rootView:rootView];
 
   [FIRApp configure];
-
-  [IntercomModule initialize:@"ios_sdk-b3558c685a17ec60d659f373a4cbb6ca9c39e167" withAppId:@"hjus3ol6"];
   
   return YES;
 }
