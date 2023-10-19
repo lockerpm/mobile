@@ -4,6 +4,7 @@ import { View, TouchableWithoutFeedback } from 'react-native'
 import { useTheme } from 'app/services/context'
 import { Modal } from 'react-native-ui-lib'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 
 interface Props {
   /**
@@ -43,9 +44,8 @@ export const ActionSheet = ({ isOpen, onClose, children, header, itemHeight = 64
     setTimeout(onClose, 200)
   }, [])
 
-
-  return (
-    <Modal transparent animationType="fade" visible={isOpen} onDismiss={onClose}>
+  const BottomSheetContent = gestureHandlerRootHOC(() => {
+    return (
       <View
         style={{
           flex: 1,
@@ -81,6 +81,11 @@ export const ActionSheet = ({ isOpen, onClose, children, header, itemHeight = 64
           </BottomSheetScrollView>
         </BottomSheet>
       </View>
+    )
+  })
+  return (
+    <Modal transparent animationType="fade" visible={isOpen} onDismiss={onClose}>
+      <BottomSheetContent />
     </Modal>
   )
 }
