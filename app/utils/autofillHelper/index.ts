@@ -1,12 +1,13 @@
 /* eslint-disable n/no-callback-literal */
-import { RootProp } from "../../app";
-import { IS_IOS } from "../../config/constants";
-import { save, StorageKey } from "../storage";
-import { NativeModules, Platform } from "react-native";
+import { RootProp } from '../../app'
+import { IS_IOS } from '../../config/constants'
+import { save, StorageKey } from '../storage'
+import { NativeModules, Platform } from 'react-native'
 const { RNAutofillServiceIos, RNAutofillServiceAndroid } = NativeModules
 
-
-export const AutofillServiceEnabled: (callback: (a: boolean, androidNotSupport?: boolean) => void) => void = (callback) => {
+export const AutofillServiceEnabled: (
+  callback: (a: boolean, androidNotSupport?: boolean) => void
+) => void = (callback) => {
   if (Platform.OS === 'ios') {
     return RNAutofillServiceIos.isAutofillServiceActived(callback)
   }
@@ -26,10 +27,10 @@ export const AutofillServiceEnabled: (callback: (a: boolean, androidNotSupport?:
 }
 
 export const parseSearchText = (bundle: string) => {
-  const meaninglessSearch = ['com', 'net', 'app', 'package', 'io']
+  const meaninglessSearch = ['com', 'net', 'app', 'package', 'io', 'www']
   const _sp = bundle.split('.')
   let result = ''
-  _sp.forEach(pt => {
+  _sp.forEach((pt) => {
     if (!meaninglessSearch.includes(pt)) {
       result += pt + ' '
     }
