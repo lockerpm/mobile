@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import { useStores } from 'app/models'
 import { useHelper } from './useHelper'
-import { useSocialLogin } from './useSocialLogin'
 import { useCoreService } from '../coreService'
 import { SymmetricCryptoKey } from 'core/models/domain'
 import moment from 'moment'
@@ -33,7 +32,6 @@ export function useAuthentication() {
     tokenService,
   } = useCoreService()
   const { notify, notifyApiError, setApiTokens, translate } = useHelper()
-  const { logoutAllServices } = useSocialLogin()
 
   // -------------------- AUTHENTICATION --------------------
 
@@ -588,7 +586,6 @@ export function useAuthentication() {
       await user.updateFCM(null)
       await user.logout()
       await clearAllData()
-      await logoutAllServices()
       await Intercom.logout()
     } catch (e) {
       notify('error', translate('error.something_went_wrong'))

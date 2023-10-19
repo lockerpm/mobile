@@ -14,7 +14,6 @@ import {
   RegisterRequest,
   SessionLoginRequest,
   SessionOtpLoginRequest,
-  SocialLoginRequest,
   UserSubscripePlan,
   UserTeam,
 } from 'app/static/types'
@@ -335,11 +334,6 @@ export const UserModel = types
       return res
     },
 
-    setSocialPassword: async (new_password: string, token: string, username?: string) => {
-      const res = await idApi.setPassword({ new_password, token, username })
-      return res
-    },
-
     webAuthListCredentials: async (paging: number) => {
       const res = await idApi.webAuthListCredentials(self.apiToken, paging)
       return res
@@ -397,11 +391,6 @@ export const UserModel = types
     },
     authPasskeyOptions: async (username: string) => {
       const res = await idApi.authPasskeyOptions(username)
-      return res
-    },
-
-    socialLogin: async (payload: SocialLoginRequest) => {
-      const res = await idApi.socialLogin(payload, self.deviceId)
       return res
     },
 

@@ -10,7 +10,6 @@ import {
   LoginData,
   UseLoginMethod,
   LoginResult,
-  SocialLogin,
   WebauthCredential,
   OnPremisePreloginData,
   AuthPasskeyRequest,
@@ -20,8 +19,6 @@ import {
   RegisterRequest,
   ResetIDPasswordRequest,
   ResetIDPasswordWithCode,
-  SetNewPasswordSocialLoginRequest,
-  SocialLoginRequest,
   OnPremiseIdentifierData,
   OnpremisePreloginPayload,
 } from 'app/static/types'
@@ -75,32 +72,6 @@ class IdApi {
         `/sso/auth${isOtp ? '/otp' : ''}`,
         payload
       )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-
-      return { kind: 'ok', data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
-  // ID social login
-  async socialLogin(
-    payload: SocialLoginRequest,
-    deviceId: string
-  ): Promise<{ kind: 'ok'; data: SocialLogin } | GeneralApiProblem> {
-    try {
-      this.api.apisauce.deleteHeader('Authorization')
-      this.api.apisauce.setHeader('device-id', deviceId)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post('/sso/auth/social', payload)
-
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -369,30 +340,6 @@ class IdApi {
         '/sso/users/new_password',
         payload
       )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: 'ok' }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
-  // Set new ID password when signup by using social login
-  async setPassword(payload: SetNewPasswordSocialLoginRequest): Promise<
-    | {
-        kind: 'ok'
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.deleteHeader('Authorization')
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post('/sso/new_password', payload)
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)

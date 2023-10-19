@@ -25,13 +25,6 @@ export type LoginData = {
   save_device?: boolean
 }
 
-export type SocialLogin = {
-  is_first?: boolean
-  new_user?: boolean
-  token: string
-  tmp_token?: string
-}
-
 export type WebauthCredential = {
   id: string
   created_time: number
@@ -60,14 +53,6 @@ export type OnPremisePreloginData = {
 export type AuthPasskeyRequest = {
   username: string
   response: PasskeyAuthenticationResult
-}
-
-export type SocialLoginRequest = {
-  provider: string
-  access_token?: string
-  code?: string
-  scope?: string
-  utm_source?: string
 }
 
 export type RegisterRequest = {
@@ -110,10 +95,4 @@ export type ResetIDPasswordRequest = {
 export type ResetIDPasswordWithCode = {
   username: string
   code: string
-}
-
-export type SetNewPasswordSocialLoginRequest = {
-  new_password: string
-  token: string
-  username: string
 }

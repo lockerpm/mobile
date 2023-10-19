@@ -11,7 +11,6 @@ import { Screen, Text, Button, TextInput, Logo, Header } from 'app/components/co
 import {
   CountryPicker,
   CountryCode,
-  SocialLogin,
   RecaptchaChecker,
   IosPasswordlessOptions,
 } from 'app/components/utils'
@@ -148,16 +147,6 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
     }
   }
 
-  const onLoggedIn = async (_newUser: boolean, _token: string) => {
-    const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-    if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
-      if (user.is_pwd_manager) {
-        navigation.navigate('lock')
-      } else {
-        navigation.navigate('createMasterPassword')
-      }
-    }
-  }
   const checkPasskeySupported = async () => {
     const res = await Passkey.isSupported()
     if (!res) {
@@ -327,8 +316,6 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
             }}
           />
         )}
-
-        <SocialLogin onLoggedIn={onLoggedIn} />
 
         <Footer />
 
