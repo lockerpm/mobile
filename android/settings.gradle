@@ -15,4 +15,4 @@ project(':react-native-randombytes').projectDir = new File(rootProject.projectDi
 include ':react-native-fs'
 project(':react-native-fs').projectDir = new File(settingsDir, '../node_modules/react-native-fs/android')
 
-include ':fido2-client', ':app'
+include ':app'

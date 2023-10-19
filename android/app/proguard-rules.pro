@@ -22,18 +22,6 @@
   public *;
 }
 
-#VinCSS js inject
--keepclassmembers class net.vincss.fido2.core.models.common.CollectedClientData { *; }
-
-#VinCSS FIDO2 SDK
--keep class net.vincss.fido2.core.models.common.** { *; }
--keep class net.vincss.fido2.Fido2Manager { *; }
--keep class net.vincss.fido2.Fido2Manager$Companion { *; }
--keep class net.vincss.fido2.ClientSDKConfig { *; }
--keep class net.vincss.fido2.ClientSDKConfig$Companion { *; }
--keep class net.vincss.fido2.ClientSDKConfig$CommunicationMethod { *; }
--keep class net.vincss.fido2.core.constants.Errors { *; }
-
 
 -keepattributes InnerClasses
  -keep class **.R
@@ -55,8 +43,3 @@
 # General
 -keepattributes SourceFile,LineNumberTable,*Annotation*,EnclosingMethod,Signature,Exceptions,InnerClasses
 
-# passkey
--if class androidx.credentials.CredentialManager
--keep class androidx.credentials.playservices.** {
-  *;
-}

@@ -7,8 +7,6 @@ apply plugin: "kotlin-kapt"
 project.ext.envConfigFiles = [
   productionDebug: "/app/config/.env.production",
   productionRelease: "/app/config/.env.production",
-  stagingRelease: "/app/config/.env.staging",
-  stagingDebug: "/app/config/.env.staging"
 ]
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
@@ -187,15 +185,6 @@ android {
             resValue "string", "app_name", "Locker"   
             resValue "string", "service_name", "Locker" 
         }
-
-        staging {
-            // We can have build-specific configurations here. Like using applicationIdSuffix to create different package name (ex. ".staging")
-            dimension "version"
-            applicationIdSuffix ".staging"
-            versionNameSuffix "-staging"
-            resValue "string", "app_name", "Unlocker"
-            resValue "string", "service_name", "Unlocker"
-        }
     }
 
 
@@ -249,21 +238,6 @@ dependencies {
     implementation 'com.tencent:mmkv:1.3.0'
     
     implementation project(':react-native-fs')
-
-    // FIDO Vinsso
-    implementation project(path: ':fido2-client')
-    implementation 'io.github.chaosleung:pinview:1.4.4'
-    implementation 'com.google.guava:guava:27.0.1-android'
-    // implementations for fido2 sdk
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0"
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.0'
-    // implementation 'org.bouncycastle:bcpkix-jdk15on:1.56'
-    def room_version = "2.3.0"
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation 'commons-codec:commons-codec:1.10'
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
