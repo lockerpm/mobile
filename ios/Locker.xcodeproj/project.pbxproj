@@ -18,8 +18,6 @@
 		4D1804180C27433DAC77EA9B /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7513C8939ACC471CA47CDCF0 /* Inter-Medium.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-Locker-LockerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Locker-LockerTests.a */; };
 		7AFE8CFE79B347BB8A6EC2F7 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B3E8C478BDD34B21AF021044 /* Inter-SemiBold.ttf */; };
-		7C8FB3752ADD298800DA5BCE /* VinCSSFido2ClientSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */; };
-		7C8FB3762ADD298900DA5BCE /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7C973A3E2A93055500875FBA /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C973A3D2A93055500875FBA /* AuthenticationServices.framework */; };
 		7C973A412A93055500875FBA /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A402A93055500875FBA /* CredentialProviderViewController.swift */; };
 		7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A422A93055500875FBA /* MainInterface.storyboard */; };
@@ -45,9 +43,6 @@
 		7CEB31FC2A932780007F6051 /* RNAutofillServiceIos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31F32A932780007F6051 /* RNAutofillServiceIos.swift */; };
 		7CEB31FD2A932780007F6051 /* RCTAutofillServiceIos.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB31F42A932780007F6051 /* RCTAutofillServiceIos.m */; };
 		7CEB32082A933FE5007F6051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB32072A933FE5007F6051 /* AppDelegate.swift */; };
-		7CED251E2ADD1FF100142D59 /* RCTVinSSO.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CED251B2ADD1FF100142D59 /* RCTVinSSO.m */; };
-		7CED251F2ADD1FF100142D59 /* RNVinSSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED251C2ADD1FF100142D59 /* RNVinSSO.swift */; };
-		7CED25202ADD1FF100142D59 /* VinSsoWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED251D2ADD1FF100142D59 /* VinSsoWebViewController.swift */; };
 		86E9828D2AD5AD9300EB485E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86E9828C2AD5AD9300EB485E /* StoreKit.framework */; };
 		BE406F562862D73000A81E39 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE406F552862D73000A81E39 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -70,17 +65,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		7C8FB3772ADD298900DA5BCE /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				7C8FB3762ADD298900DA5BCE /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7C973A4D2A93055500875FBA /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -141,9 +125,6 @@
 		7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = VinCSSFido2ClientSDK.xcframework; sourceTree = "<group>"; };
 		7CEB32062A932AAE007F6051 /* LockerRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = LockerRelease.entitlements; path = Locker/LockerRelease.entitlements; sourceTree = "<group>"; };
 		7CEB32072A933FE5007F6051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7CED251B2ADD1FF100142D59 /* RCTVinSSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTVinSSO.m; sourceTree = "<group>"; };
-		7CED251C2ADD1FF100142D59 /* RNVinSSO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNVinSSO.swift; sourceTree = "<group>"; };
-		7CED251D2ADD1FF100142D59 /* VinSsoWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VinSsoWebViewController.swift; sourceTree = "<group>"; };
 		86E9828C2AD5AD9300EB485E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Locker-LockerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.release.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.release.xcconfig"; sourceTree = "<group>"; };
 		951E59D51E504BC9C5F46169 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Locker/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
@@ -167,7 +148,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C8FB3752ADD298800DA5BCE /* VinCSSFido2ClientSDK.xcframework in Frameworks */,
 				86E9828D2AD5AD9300EB485E /* StoreKit.framework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-Locker.a in Frameworks */,
 			);
@@ -208,7 +188,6 @@
 			children = (
 				7C973A362A93019C00875FBA /* Locker.entitlements */,
 				7CEB32062A932AAE007F6051 /* LockerRelease.entitlements */,
-				7CED251A2ADD1FF100142D59 /* RNVinSSO */,
 				7CEB31F22A932780007F6051 /* RNAutofillService */,
 				7CEB31EE2A932780007F6051 /* RNCryptoService */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -338,17 +317,6 @@
 			path = Locker/RNAutofillService;
 			sourceTree = "<group>";
 		};
-		7CED251A2ADD1FF100142D59 /* RNVinSSO */ = {
-			isa = PBXGroup;
-			children = (
-				7CED251B2ADD1FF100142D59 /* RCTVinSSO.m */,
-				7CED251C2ADD1FF100142D59 /* RNVinSSO.swift */,
-				7CED251D2ADD1FF100142D59 /* VinSsoWebViewController.swift */,
-			);
-			name = RNVinSSO;
-			path = Locker/RNVinSSO;
-			sourceTree = "<group>";
-		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -450,7 +418,6 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
-				7C8FB3772ADD298900DA5BCE /* Embed Frameworks */,
 				7C973A4D2A93055500875FBA /* Embed Foundation Extensions */,
 				CF3B00BA8CC8BB2FB9155EAF /* [CP-User] [RNFB] Core Configuration */,
 				868061382ACB0AAA0029A08E /* ShellScript */,
@@ -519,7 +486,7 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */,
+				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -763,13 +730,10 @@
 				7CEB32082A933FE5007F6051 /* AppDelegate.swift in Sources */,
 				7CEB31FB2A932780007F6051 /* RNCryptoServiceIos.swift in Sources */,
 				7CEB31F92A932780007F6051 /* RSAUtils.swift in Sources */,
-				7CED25202ADD1FF100142D59 /* VinSsoWebViewController.swift in Sources */,
-				7CED251E2ADD1FF100142D59 /* RCTVinSSO.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				7CEB31FA2A932780007F6051 /* RCTCryptoServiceIos.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				400EB2C1E1807E6CBC68B7AB /* ExpoModulesProvider.swift in Sources */,
-				7CED251F2ADD1FF100142D59 /* RNVinSSO.swift in Sources */,
 				7CEB31FC2A932780007F6051 /* RNAutofillServiceIos.swift in Sources */,
 				7CEB31FD2A932780007F6051 /* RCTAutofillServiceIos.m in Sources */,
 			);
@@ -1224,7 +1188,7 @@
 				minimumVersion = 4.0.0;
 			};
 		};
-		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
+		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
 			requirement = {
@@ -1242,7 +1206,7 @@
 		};
 		7CEB31EA2A931B5A007F6051 /* SwiftOTP */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */;
+			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */;
 			productName = SwiftOTP;
 		};
 /* End XCSwiftPackageProductDependency section */

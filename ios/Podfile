@@ -8,12 +8,6 @@ require File.join(File.dirname(`cd #{pod_folder} && node --print "require.resolv
 require_relative '../node_modules/react-native-permissions/scripts/setup'
 
 
-# vinsso dependencies
-plugin 'cocoapods-user-defined-build-types'
-enable_user_defined_build_types!
-
-
-
 require 'json'
 podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties.json'))) rescue {}
 
@@ -88,13 +82,7 @@ target 'Locker' do
   pod 'GoogleTagManager'
 
   pod 'Toast-Swift', '~> 5.0.1'
-  
 
-  # vinsso 
-  pod "PromiseKit", "~> 6.3.4", :build_type => :dynamic_framework
-  pod "CryptoSwift", "~> 1.3.8", :build_type => :dynamic_framework
-  pod 'SwiftCBOR', "~> 0.4", :build_type => :dynamic_framework
-  pod 'BlueECC', "~> 1.2.5", :build_type => :dynamic_framework
   
   target 'LockerTests' do
     inherit! :complete
