@@ -10,7 +10,6 @@ import { CollectionView } from 'core/models/view/collectionView'
 import { CipherView, FieldView, LoginUriView, LoginView } from 'core/models/view'
 import { CipherType } from 'core/enums'
 import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
-import { PlanStorageLimitModal } from '../../planStorageLimitModal'
 import { PasswordPolicyViolationsModal, PasswordStrength } from 'app/components/utils'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
 import { PasswordOtp } from './Otp'
@@ -64,9 +63,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
   const [organizationId, setOrganizationId] = useState(null)
   const [collectionIds, setCollectionIds] = useState([])
   const [fields, setFields] = useState<FieldView[]>([])
-
-  // plan storage limit modal
-  const [isOpenModal, setIsOpenModal] = useState(false)
 
   // ----------------- EFFECTS ------------------
   // Set initial data
@@ -222,12 +218,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
       handleBack()
     } else {
       setIsLoading(false)
-
-      // reach limit plan stogare
-      // @ts-ignore
-      if (res?.data?.code === '5002') {
-        setIsOpenModal(true)
-      }
     }
   }
 
@@ -260,8 +250,6 @@ export const PasswordEditScreen: FC<AppStackScreenProps<'passwords__edit'>> = ob
         />
       }
     >
-      <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
-
       <View style={{ padding: 16, paddingTop: 0 }}>
         <View style={{ flexDirection: 'row' }}>
           <Image

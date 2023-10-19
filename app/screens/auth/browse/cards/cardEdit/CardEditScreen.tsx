@@ -13,7 +13,6 @@ import { CollectionView } from 'core/models/view/collectionView'
 import { CipherType } from 'core/enums'
 import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
-import { PlanStorageLimitModal } from '../../planStorageLimitModal'
 import { Select } from 'app/components/utils'
 
 type InputItem = {
@@ -81,9 +80,6 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
     mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null
   )
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
-  // plan storage limit modal
-  const [isOpenModal, setIsOpenModal] = useState(false)
-  // Watchers
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -162,12 +158,6 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
       navigation.goBack()
     } else {
       setIsLoading(false)
-
-      // reach limit plan stogare
-      // @ts-ignore
-      if (res?.data?.code === '5002') {
-        setIsOpenModal(true)
-      }
     }
   }
 
@@ -244,8 +234,6 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
         />
       }
     >
-      <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
-
       <View style={{ padding: 16, paddingTop: 0 }}>
         <View style={{ flexDirection: 'row' }}>
           <Image

@@ -14,7 +14,6 @@ import { CollectionView } from 'core/models/view/collectionView'
 import { CryptoWalletData, toCryptoWalletData } from 'app/utils/crypto'
 import { CipherType } from 'core/enums'
 import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
-import { PlanStorageLimitModal } from '../../planStorageLimitModal'
 import { PasswordStrength } from 'app/components/utils'
 import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
 
@@ -73,8 +72,6 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
     const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
 
     const [isLoading, setIsLoading] = useState(false)
-    // plan storage limit modal
-    const [isOpenModal, setIsOpenModal] = useState(false)
     // -------------------------- COMPUTED ------------------------------
 
     // -------------------------- EFFECTS ------------------------------
@@ -166,12 +163,6 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
         navigation.goBack()
       } else {
         setIsLoading(false)
-
-        // reach limit plan stogare
-        // @ts-ignore
-        if (res?.data?.code === '5002') {
-          setIsOpenModal(true)
-        }
       }
     }
 
@@ -202,8 +193,6 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
           />
         }
       >
-        <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
-
         <View style={{ padding: 16, paddingTop: 0 }}>
           <View style={{ flexDirection: 'row' }}>
             <Image

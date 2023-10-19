@@ -1612,7 +1612,7 @@
     node-forge "^1.2.1"
     nullthrows "^1.1.1"
 
-"@expo/config-plugins@6.0.2", "@expo/config-plugins@^6.0.1", "@expo/config-plugins@~6.0.0":
+"@expo/config-plugins@6.0.2", "@expo/config-plugins@~6.0.0":
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-6.0.2.tgz#cf07319515022ba94d9aa9fa30e0cff43a14256f"
   integrity sha512-Cn01fXMHwjU042EgO9oO3Mna0o/UCrW91MQLMbJa4pXM41CYGjNgVy1EVXiuRRx/upegHhvltBw5D+JaUm8aZQ==
@@ -12359,13 +12359,6 @@ react-native-html-parser@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/react-native-html-parser/-/react-native-html-parser-0.1.0.tgz#c35de1dc325562da26e68befa423bac34505ba48"
   integrity sha512-G5d0pk7TA9YgjVJhLRf2zMOOf1HXd8ItM9JYsTS2pXoEfSRfMfRU5iTj03LGwvHU2NT9kc18NDJeLgZY6+Bbvg==
-
-react-native-iap@^12.10.8:
-  version "12.10.8"
-  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-12.10.8.tgz#4cf1670ca3401381b48a822ef444e0835f9af4f3"
-  integrity sha512-n5iw1Lzw0tXN54sx/bcS5nttfnJ6ecQb95FYzLHN3NIsrRK9nkudcf5LhmNXznHkfh6YdMk0w8V1vRWRWiDRcA==
-  dependencies:
-    "@expo/config-plugins" "^6.0.1"
 
 react-native-in-app-review@^4.3.3:
   version "4.3.3"

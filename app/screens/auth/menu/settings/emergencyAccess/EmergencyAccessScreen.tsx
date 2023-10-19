@@ -67,9 +67,7 @@ export const EmergencyAccessScreen = observer(() => {
         <SettingsItem
           name={translate('emergency_access.your_trust')}
           onPress={() => {
-            isFree
-              ? navigation.navigate('payment', { premium: true })
-              : navigation.navigate('yourTrustedContact')
+            navigation.navigate('yourTrustedContact')
           }}
           // status={
           //   pendingRequest > 0

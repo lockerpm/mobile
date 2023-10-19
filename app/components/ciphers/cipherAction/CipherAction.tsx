@@ -261,11 +261,7 @@ export const CipherAction = (props: CipherActionProps) => {
         <TouchableOpacity
           onPress={() => {
             setShowShareOptions(false)
-            if (premiumLock) {
-              navigation.navigate('payment')
-            } else {
-              navigation.navigate('normal_shares', { ciphers: [selectedCipher] })
-            }
+            navigation.navigate('normal_shares', { ciphers: [selectedCipher] })
           }}
           style={{
             paddingHorizontal: 20,

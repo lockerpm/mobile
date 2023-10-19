@@ -2,12 +2,9 @@ import { ApiResponse } from 'apisauce'
 import { Api, api } from './api'
 import { GeneralApiProblem, getGeneralApiProblem } from './apiProblem'
 import { Logger } from '../../utils/utils'
-import { IS_IOS } from '../../config/constants'
 import {
-  Billing,
   BlockFailedLoginPolicy,
   Enterprise,
-  FamilyMember,
   GetPMTokenData,
   MasterPasswordPolicy,
   PasswordPolicy,
@@ -320,9 +317,7 @@ class UserApi {
   }
 
   // Get plan
-  async getPlan(
-    token: string
-  ): Promise<
+  async getPlan(token: string): Promise<
     | {
         kind: 'ok'
         data: UserPlan
@@ -350,9 +345,7 @@ class UserApi {
   }
 
   // Get invitations
-  async getInvitations(
-    token: string
-  ): Promise<
+  async getInvitations(token: string): Promise<
     | {
         kind: 'ok'
         data: UserInvitations[]
@@ -668,188 +661,6 @@ class UserApi {
       }
 
       return { kind: 'ok' }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
-  // Get Billing Documents
-  async getBillingDocuments(
-    token: string,
-    page: number
-  ): Promise<
-    | {
-        kind: 'ok'
-        data: Billing[]
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        '/cystack_platform/pm/payments/invoices',
-        { page: page }
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: 'ok', data: response.data.results }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
-  // Get Billing Documents
-  async purchaseValidation(
-    token: string,
-    receipt?: string,
-    subscriptionId?: string,
-    originalTransactionIdentifierIOS?: string
-  ): Promise<
-    | {
-        kind: 'ok'
-        data: {
-          success: boolean
-          detail: string
-        }
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      let response: ApiResponse<any>
-      // make the api call
-      if (IS_IOS) {
-        // if (originalTransactionIdentifierIOS) {
-        response = await this.api.apisauce.post('/payments/webhook/ios/validate', {
-          scope: 'pwdmanager',
-          receipt_data: receipt,
-          original_transaction_id: originalTransactionIdentifierIOS,
-        })
-      } else {
-        response = await this.api.apisauce.post('/payments/webhook/android/validate', {
-          scope: 'pwdmanager',
-          receipt_data: { token: receipt, plan_id: subscriptionId },
-        })
-      }
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: 'ok', data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
-  async getFamilyMember(
-    token: string
-  ): Promise<
-    | {
-        kind: 'ok'
-        data: FamilyMember[]
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        '/cystack_platform/pm/family/members'
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: 'ok', data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
-  async addFamilyMember(
-    token: string,
-    emailMembers: string[]
-  ): Promise<{ kind: 'ok'; data: any } | GeneralApiProblem> {
-    try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        '/cystack_platform/pm/family/members',
-        { family_members: emailMembers }
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: 'ok', data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data', data: e.message.code }
-    }
-  }
-
-  async removeFamilyMember(
-    token: string,
-    memberId: string
-  ): Promise<{ kind: 'ok' } | GeneralApiProblem> {
-    try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.delete(
-        '/cystack_platform/pm/family/members/' + memberId
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: 'ok' }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
-  async getTrialEligible(
-    token: string
-  ): Promise<
-    | {
-        kind: 'ok'
-        data: {
-          personal_trial_applied: boolean
-        }
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.post('/payments/webhook/trial', {
-        scope: 'pwdmanager',
-      })
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: 'ok', data: response.data }
     } catch (e) {
       Logger.error(e.message)
       return { kind: 'bad-data' }

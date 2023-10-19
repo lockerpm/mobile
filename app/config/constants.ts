@@ -15,7 +15,6 @@ export const WS_URL = Config.WS_URL
 export const TERMS_URL = Config.TERMS_URL
 export const PRIVACY_POLICY_URL = Config.PRIVACY_POLICY_URL
 export const HELP_CENTER_URL = Config.HELP_CENTER_URL
-export const MANAGE_PLAN_URL = Config.MANAGE_PLAN_URL
 export const REPORT_VULN = Config.REPORT_VULN
 
 export const SHARED_KEYCHAIN_SERVICE = Config.SHARED_KEYCHAIN_SERVICE

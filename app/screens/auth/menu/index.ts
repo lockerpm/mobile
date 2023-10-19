@@ -8,9 +8,3 @@ export * from './autofillService/AutofillServiceScreen'
 export * from './settings/emergencyAccess'
 export * from './export/ExportScreen'
 export * from './import/ImportScreen'
-export * from './managePlan/ManagePlanScreen'
-export * from './referFriend/ReferFriendScreen'
-export * from './managePlan/payment/PaymentScreen'
-export * from './inviteMember/InviteMemberScreen'
-
-

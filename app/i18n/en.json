@@ -645,7 +645,6 @@
   "menu": {
     "product_of": "A product of ",
     "versoin": "Version ",
-    "invite_noti": "Upgrade to Family Plan and invite your friends joining Locker!",
     "fingerprint": "Fingerprint",
     "plan": "Manage Plan",
     "expired_time": "Expired",
@@ -809,131 +808,10 @@
     "network": "Networks",
     "wallet_app": "Wallet App"
   },
-  "payment": {
-    "individual": "Individual",
-    "family_text": "Family",
-    "family_plan": "Family Plan",
-    "ads": "Enjoy all Locker Premium features with Yearly Plan to save up to 75%. ",
-    "ads_family": "Enjoy all Locker Premium Features, for 6 accounts, with discounted prices. ",
-    "trial": "(Start with 2 weeks free trial)",
-    "cancel_text": "Recurring billing. Cancel anytime",
-    "benefit": {
-      "locker": "Unlimited Passwords, Secure Notes, Payment Cards, Identities, Crypto Backups",
-      "web": "Dark Web Monitoring protects your accounts from massive data breaches",
-      "emergency_contact": "Emergency Contact let trusted accounts access your vault when needed",
-      "share_password": "Share Passwords and items securely with your friends and family members"
-    },
-    "family": {
-      "header": "Upgrade to Family",
-      "ads": "Enjoy Locker Premium with your friends and family members, with the best price",
-      "benefits": {
-        "family": "Up to 6 members in a shared plan",
-        "storage": "Unlimited storage",
-        "health": "Password health checker",
-        "weak": "Weak password warnings",
-        "scaner": "Data breach scanner",
-        "emergency": "Emergency access",
-        "share": "Secure password sharing"
-      },
-      "month": "$9.99 / Month",
-      "year": "$71.99 / Year"
-    },
-    "premium": {
-      "header": "Upgrade to Premium",
-      "ads": "Enjoy Locker Premium with advanced features",
-      "month": "$4.99 / Month",
-      "year": "$15.49 / Year"
-    },
-    "price": {
-      "per": {
-        "monthly": {
-          "title": "$4.99/month",
-          "subtitle": "Billed monthly",
-          "sale": "",
-          "pay_title": "Upgrade now for $4.99",
-          "discount": "Upgrade now for $3.49 (save 30%) for first cycle. Then $4.99/month"
-        },
-        "yearly": {
-          "title": "$15.49/year",
-          "subtitle": "$1.29/month - billed yearly",
-          "sale": "Save 75%",
-          "pay_title": "Upgrade now for $15.49",
-          "discount": "Upgrade now for $10.99 (save 30%) for first cycle. Then $15.49/year"
-        }
-      },
-      "fam": {
-        "yearly": {
-          "title": "$71.99/year/6 people",
-          "subtitle": "$5.99 per month/6 people. Billed yearly",
-          "sale": "Save 80%",
-          "pay_title": "Upgrade now for $71.99",
-          "discount": "Upgrade now for $50.99 (save 30%) for first cycle. Then $71.99/year"
-        },
-        "monthly": {
-          "title": "$9.99/month/6 people",
-          "subtitle": "Billed monthly",
-          "sale": "Save 67%",
-          "pay_title": "Upgrade now for $9.99",
-          "discount": "Upgrade now for $6.99 (save 30%) for first cycle. Then $9.99/month"
-        }
-      }
-    }
-  },
-  "manage_plan": {
-    "verify": "Purchase Verification",
-    "verify_msg": "Locker can not verify your purchase",
-    "usage": {
-      "title": "Plan Usage",
-      "login": "Passwords",
-      "card": "Payment Cards",
-      "identity": "Identities",
-      "note": "Secure Notes",
-      "crypto": "Crypto Backups"
-    },
-    "feature": {
-      "title": "Explore your full premium feature",
-      "locker": "Unlimited items",
-      "emergency_contact": {
-        "header": "Emergency Contact",
-        "text": "Add trusted contacts and grant them access to your Locker account in cases of emergency",
-        "link": "To add Emergency Contacts, go to Locker Web Vault at: locker.io/vault",
-        "button": "Got it"
-      },
-      "web": "Dark Web Monitoring",
-      "share_password": "Share Passwords"
-    },
-    "free": {
-      "button": "Increase unlimited with Premium"
-    }
-  },
-  "invite_member": {
-    "header": "Manage member",
-    "info_upgrade": "Upgrade to Family Plan and invite your friends joining Locker!",
-    "add_noti": "Add members successfully ",
-    "delete_noti": "Delete member successfully",
-    "confirm": "Are you sure you want to remove this user from Family Plan?",
-    "action": "Invite",
-    "title": "Add member to your Family Plan",
-    "placeholder": "Invite People to your plan",
-    "list_member_title": "Member you added to the plan will appear at the list below",
-    "select_person": "SELECT A PERSON",
-    "number_member": "Member on Your plan",
-    "remove": "Remove family member"
-  },
   "outdated_data": {
     "desc": "Looks like you are trying to update an unsynchronized item. Please wait for the synchronization process to finish, or you can manually synchronize your data here",
     "go_back": "Go Back",
     "synchronizing": "Synchronizing..."
-  },
-  "refer_friend": {
-    "menu_title": "Invite friends and get Premium for Free",
-    "menu_title_tablet": "Invite friends and both you and your friends will receive 1 month of Locker Premium for Free",
-    "navigate_tablet": "Share now",
-    "navigate": "Show me how",
-    "title": "Invite friends and get Premium for Free",
-    "desc": "When invited (your friend creates Master Password successfully), both you and your friends will receive 1 month of Locker Premium for Free",
-    "btn": "Share",
-    "refer_header": "Hey,\nI use Locker Password Manager to manage my passwords. You might find it helpful too.\nYou can try Locker Premium for 1 month with my referral link:\n"
   },
   "welcome_premium": {
     "title": "Congrats! You’re now experience Locker Premium",
@@ -958,12 +836,10 @@
       "system": {
         "system": "System email",
         "welcome": "Welcome Email",
-        "payment_success": "Payment successful",
         "mp_hint": "Master Password hint",
         "family_remove": "Family Removed",
         "family_invite": "Family Invitation",
         "email_verification": "Email verification",
-        "payment_failed": "Credit card account payment failed",
         "account_expired": "Bank transfer account expired",
         "downgraded": "Account downgraded",
         "trial": "Trial successful",

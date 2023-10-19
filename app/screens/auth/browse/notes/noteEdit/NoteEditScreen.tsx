@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Image, View } from 'react-native'
 import find from 'lodash/find'
-import { PlanStorageLimitModal } from '../../planStorageLimitModal'
 import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
 import { useStores } from 'app/models'
 import { CipherView } from 'core/models/view'
@@ -54,8 +53,6 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
   // Params
   const [isLoading, setIsLoading] = useState(false)
 
-  // plan storage limit modal
-  const [isOpenModal, setIsOpenModal] = useState(false)
   const selectedCollection: CollectionView = route.params.collection
   // Watchers
   useEffect(() => {
@@ -122,12 +119,6 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
       navigation.goBack()
     } else {
       setIsLoading(false)
-
-      // reach limit plan stogare
-      // @ts-ignore
-      if (res?.data?.code === '5002') {
-        setIsOpenModal(true)
-      }
     }
   }
 
@@ -157,8 +148,6 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
         />
       }
     >
-      <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
-
       <View style={{ padding: 16, paddingTop: 0 }}>
         <View style={{ flexDirection: 'row' }}>
           <Image

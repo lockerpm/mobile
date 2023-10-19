@@ -646,7 +646,6 @@
   "menu": {
     "product_of": "Một sản phẩm của ",
     "versoin": "Phiên bản ",
-    "invite_noti": "Nâng cấp lên gói Family để sử dụng Locker tiết kiệm hơn với những người thân!",
     "fingerprint": "Định danh",
     "plan": "Quản lý gói cước",
     "expired_time": "Hết hạn",
@@ -810,125 +809,10 @@
     "network": "Mạng Blockchain",
     "wallet_app": "Ví Blockchain"
   },
-  "payment": {
-    "individual": "Cá nhân",
-    "family_text": "Gia đình",
-    "family_plan": "Gói gia đình",
-    "ads": "Tận hưởng tất cả các tính năng của Locker Premium với gói hàng năm để tiết kiệm đến 75%. ",
-    "ads_family": "Tận hưởng tất cả các tinh năng của Locker Premium cho 6 tài khoản với giá ưu đãi. ",
-    "trial": "(Bắt đầu với 2 tuần dùng thử miễn phí)",
-    "cancel_text": "Thanh toán định kỳ. Hủy bất cứ lúc nào",
-    "benefit": {
-      "locker": "Lưu trữ không giới hạn, Ghi chú bảo mật, Thẻ thanh toán, Tài sản tiền điện tử",
-      "web": "Giám sát Dark Web bảo vệ tài khoản của bạn khỏi các vi phạm dữ liệu lớn",
-      "emergency_contact": "Liên hệ khẩn cấp cho phép các tài khoản đáng tin cậy truy cập dữ liệu của bạn",
-      "share_password": "Chia sẻ mật khẩu an toàn với bạn bè và thành viên gia đình của bạn"
-    },
-    "family": {
-      "header": "Nâng cấp lên Family",
-      "ads": "Trải nghiệm các tính năng của Locker Premium với bạn bè, người thân với giá tốt nhất",
-      "benefits": {
-        "family": "Bao gồm 6 thành viên trong gói",
-        "storage": "Lưu trữ không giới hạn",
-        "health": "Kiểm tra độ mạnh yếu của mật khẩu",
-        "weak": "Gửi cảnh báo mật khẩu yếu",
-        "scaner": "Trình quét vi phạm dữ liệu",
-        "emergency": "Truy cập khẩn cấp",
-        "share": "Chia sẻ mật khẩu"
-      },
-      "month": "$9.99 / Tháng",
-      "year": "$71.99 / Năm"
-    },
-    "price": {
-      "per": {
-        "monthly": {
-          "title": "$4.99/tháng",
-          "subtitle": "Thanh toán theo tháng",
-          "sale": "",
-          "pay_title": "Nâng cấp ngay với $4.99",
-          "discount": "Nâng cấp ngay với $3.49 cho tháng đầu. Sau đó $4.99/tháng"
-        },
-        "yearly": {
-          "title": "$15.49/năm",
-          "subtitle": "$1.29/tháng - thanh toán theo năm",
-          "sale": "Tiết kiệm 75%",
-          "pay_title": "Nâng cấp ngay với $15.49",
-          "discount": "Nâng cấp ngay với $10.99 cho năm đầu. Sau đó $15.49/năm"
-        }
-      },
-      "fam": {
-        "yearly": {
-          "title": "$71.99/năm/6 người",
-          "subtitle": "Tận hưởng tất cả các tính năng của Locker, cho 6 người",
-          "sale": "Tiết kiệm 80%",
-          "pay_title": "Nâng cấp ngay với $71.99",
-          "discount": "Nâng cấp ngay với $50.99 cho năm đầu. Sau đó $71.99/năm"
-        },
-        "monthly": {
-          "title": "$9.99/tháng/6 người",
-          "subtitle": "Thanh toán theo tháng",
-          "sale": "Tiết kiệm 67%",
-          "pay_title": "Nâng cấp ngay với $9.99",
-          "discount": "Nâng cấp ngay $6.99 cho tháng đầu. Sau đó $9.99/tháng"
-        }
-      }
-    }
-  },
-  "manage_plan": {
-    "verify": "Xác nhận",
-    "verify_msg": "Locker Không thể xác nhận đơn mua hàng của bạn",
-    "usage": {
-      "title": "Lưu lượng đã sử dụng",
-      "login": "Mật khẩu",
-      "card": "Thẻ thanh toán",
-      "identity": "Định danh",
-      "note": "Ghi chú",
-      "crypto": "Crypto Backups"
-    },
-    "feature": {
-      "title": "Tính năng nâng cao",
-      "locker": "Lưu trữ không giới hạn",
-      "emergency_contact": {
-        "header": "Liên hệ khẩn cấp",
-        "text": "Tính năng này cho phép bạn lấy lại tài khoản trong trường hợp khẩn cấp",
-        "link": "Để sử dụng tính năng, vui lòng truy cập: locker.io/vault",
-        "button": "OK"
-      },
-      "web": "Giám sát lộ dữ liệu",
-      "share_password": "Chia sẻ mật khẩu"
-    },
-    "free": {
-      "button": "Nâng cấp lên Premium"
-    }
-  },
-  "invite_member": {
-    "header": "Quản lý thành viên",
-    "info_upgrade": "Nâng cấp lên gói Family và mời bạn bè gia đình sử dụng Locker!",
-    "add_noti": "Thêm thành viên thành công",
-    "delete_noti": "Xoá thành viên thành công",
-    "confirm": "Bạn có chắc muốn xoá người dùng này khỏi gói Family Plan?",
-    "action": "Mời",
-    "title": "Thêm thành viên vào gói Family của bạn",
-    "placeholder": "Nhập email thành viên",
-    "list_member_title": "Danh sách các thành viên trong gói",
-    "select_person": "Chọn email để thêm vào danh sách mời",
-    "number_member": "Số lượng ",
-    "remove": "Xoá thành viên"
-  },
   "outdated_data": {
     "desc": "Có vẻ như bạn đang cố gắng cập nhật một mục chưa được đồng bộ hóa. Vui lòng đợi quá trình đồng bộ hóa kết thúc hoặc bạn có thể đồng bộ hóa dữ liệu của mình theo cách thủ công tại đây",
     "go_back": "Quay lại",
     "synchronizing": "Đang đồng bộ..."
-  },
-  "refer_friend": {
-    "menu_title": "Mời thêm bạn và nhận miễn phí gói Premium",
-    "navigate": "Mời ngay thôi",
-    "menu_title_tablet": "Mời bạn bè trải nghiệm Locker với 1 tháng Premium miễn phí",
-    "navigate_tablet": "Chia sẻ ngay",
-    "title": "Mời bạn bè cùng trải nghiệm Locker Premium",
-    "desc": "Khi bạn bè của bạn đăng kí tài khoản và tạo Master Password thành công, bạn và người ấy sẽ nhận được 1 tháng sử dụng Locker Premium miễn phí",
-    "btn": "Chia sẻ",
-    "refer_header": "Xin chào,\nTôi dùng trình quản lý mật khẩu Locker để quản lý mật khẩu của mình. Bạn có thể thấy nó cũng hữu ích đấy!\nHãy trải nghiệm Locker Premium 1 tháng với đường dẫn giới thiệu dưới đây nhé:\n"
   },
   "welcome_premium": {
     "title": "Chúc mừng! Tài khoản của bạn đã được nâng cấp lên Premium",
@@ -953,12 +837,10 @@
       "system": {
         "system": "Email hệ thống",
         "welcome": "Chào mừng người dùng mới",
-        "payment_success": "Thanh toán thành công",
         "mp_hint": "Gợi ý Master Password",
         "family_remove": "Xoá thành viên gói Family",
         "family_invite": "Mời thanh viên gói Family",
         "email_verification": "Xác nhận email",
-        "payment_failed": "Thanh toán thất bại",
         "account_expired": "Tài khoản thanh toán hết hạn",
         "downgraded": "Hạ cấp tài khoản",
         "trial": "Dùng thử tính năng Premium",

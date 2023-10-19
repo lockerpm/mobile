@@ -21,10 +21,6 @@ export const ToolsListScreen = observer(() => {
   // -----------------------METHODS----------------------------
 
   const handleNavigate = (item: ToolsItem) => {
-    if (item.premium && isFreeAccount) {
-      navigation.navigate('payment')
-      return
-    }
     switch (item.routeName) {
       case 'authenticator':
         navigation.navigate('mainTab', { screen: 'authenticatorTab' })

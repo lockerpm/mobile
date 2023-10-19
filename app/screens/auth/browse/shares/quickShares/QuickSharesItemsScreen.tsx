@@ -63,11 +63,7 @@ export const QuickShareItemsScreen = observer(() => {
           header={translate('quick_shares.share_option.quick.tl')}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
-            if (isFreeAccount) {
-              navigation.navigate('payment')
-            } else {
-              navigation.navigate('mainTab', { screen: 'homeTab' })
-            }
+            navigation.navigate('mainTab', { screen: 'homeTab' })
           }}
           onSearch={setSearchText}
           searchText={searchText}
@@ -96,27 +92,14 @@ export const QuickShareItemsScreen = observer(() => {
         searchText={searchText}
         sortList={sortList}
         emptyContent={
-          isFreeAccount ? (
-            <EmptyCipherList
-              img={SHARE_EMPTY}
-              imgStyle={{ height: 55, width: 55 }}
-              title={translate('shares.empty.title')}
-              desc={translate('error.not_available_for_free')}
-              buttonText={translate('common.upgrade')}
-              addItem={() => {
-                navigation.navigate('payment')
-              }}
-            />
-          ) : (
-            <EmptyCipherList
-              img={SHARE_EMPTY}
-              imgStyle={{ height: 55, width: 55 }}
-              title={translate('shares.empty.title')}
-              desc={translate('shares.empty.desc_share')}
-              buttonText={translate('shares.start_sharing')}
-              addItem={() => navigation.navigate('mainTab', { screen: 'homeTab' })}
-            />
-          )
+          <EmptyCipherList
+            img={SHARE_EMPTY}
+            imgStyle={{ height: 55, width: 55 }}
+            title={translate('shares.empty.title')}
+            desc={translate('shares.empty.desc_share')}
+            buttonText={translate('shares.start_sharing')}
+            addItem={() => navigation.navigate('mainTab', { screen: 'homeTab' })}
+          />
         }
       />
     </Screen>

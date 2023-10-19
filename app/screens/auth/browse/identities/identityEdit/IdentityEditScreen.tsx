@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Image, View } from 'react-native'
 import find from 'lodash/find'
-import { PlanStorageLimitModal } from '../../planStorageLimitModal'
 import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
 import { useTheme } from 'app/services/context'
 import { useCipherData, useCipherHelper, useFolder, useHelper } from 'app/services/hook'
@@ -87,8 +86,6 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
     mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null
   )
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
-  // plan storage limit modal
-  const [isOpenModal, setIsOpenModal] = useState(false)
   // ------------------ EFFECTS -----------------------
 
   useEffect(() => {
@@ -176,12 +173,6 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
       navigation.goBack()
     } else {
       setIsLoading(false)
-
-      // reach limit plan stogare
-      // @ts-ignore
-      if (res?.data?.code === '5002') {
-        setIsOpenModal(true)
-      }
     }
   }
 
@@ -323,8 +314,6 @@ export const IdentityEditScreen: FC<AppStackScreenProps<'identities__edit'>> = o
         />
       }
     >
-      <PlanStorageLimitModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
-
       {/* Name */}
       <View style={{ padding: 16, paddingTop: 0 }}>
         <View style={{ flexDirection: 'row' }}>

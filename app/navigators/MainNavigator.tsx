@@ -54,11 +54,7 @@ import {
   AutoFillScreen,
   NotificationSettingsScreen,
   ShareMultipleScreen,
-  PaymentScreen,
-  ManagePlanScreen,
-  InviteMemberScreen,
   DataOutdatedScreen,
-  ReferFriendScreen,
   FolderSharedUsersManagementScreen,
   PushEmailSettingsScreen,
   PushNotificationSettingsScreen,
@@ -194,16 +190,6 @@ export type PrimaryParamList = {
   shareFolder: {
     collectionId: string
   }
-  manage_plan: undefined
-  payment: {
-    benefitTab?: 0 | 1 | 2 | 3
-    family?: boolean
-    premium?: boolean
-  }
-  refer_friend: {
-    referLink: string | null
-  }
-  invite_member: undefined
   settings: undefined
   changeMasterPassword: undefined
   help: undefined
@@ -659,11 +645,6 @@ export const MainNavigator = observer(() => {
           component={CryptoWalletEditScreen}
           initialParams={{ mode: 'add' }}
         />
-
-        <Stack.Screen name="refer_friend" component={ReferFriendScreen} />
-        <Stack.Screen name="invite_member" component={InviteMemberScreen} />
-        <Stack.Screen name="manage_plan" component={ManagePlanScreen} />
-        <Stack.Screen name="payment" component={PaymentScreen} initialParams={{ benefitTab: 0 }} />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen name="changeMasterPassword" component={ChangeMasterPasswordScreen} />
         <Stack.Screen name="help" component={HelpScreen} />
