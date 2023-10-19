@@ -5,8 +5,6 @@ import {
   EmergencyAccessType,
   InvitationStatus,
   NotificationCategory,
-  PlanType,
-  PlanTypeDuration,
   PolicyType,
 } from './enum'
 import { CipherRequest } from 'core/models/request/cipherRequest'
@@ -49,16 +47,6 @@ export type UserTeam = {
   is_business: boolean
   locker: boolean
   organization_id: string
-}
-
-export type UserPlan = {
-  name: string
-  alias: PlanType
-  is_family: boolean
-  cancel_at_period_end: boolean
-  duration: PlanTypeDuration
-  next_billing_time: number
-  payment_method: string
 }
 
 export type UserInvitations = {
@@ -122,31 +110,6 @@ export type TeamPolicies = [
   BlockFailedLoginPolicy,
   PasswordlessPolicy
 ]
-
-export type Billing = {
-  id: number
-  created_time: number
-  currency: 'VNP' | 'USD'
-  description: string
-  discount: number
-  duration: PlanTypeDuration
-  failure_reason?: string
-  payment_id: string
-  payment_method: string
-  plan: string
-  status: string
-  total_price: number
-  transaction_type: string
-}
-
-export type FamilyMember = {
-  id: number
-  email: string
-  avatar?: string
-  created_time?: string
-  username?: string
-  full_name?: string
-}
 
 export type NotificationSettingData = {
   category: {
@@ -244,16 +207,6 @@ export type FeedbackRequest = {
 export type UpdateFCMRequest = {
   fcm_id: string
   device_identifier: string
-}
-
-export type UserSubscripePlan = {
-  name: string
-  alias: PlanType
-  is_family: boolean
-  cancel_at_period_end: boolean
-  duration: PlanTypeDuration
-  next_billing_time: number
-  payment_method: string
 }
 
 export type OnPremiseIdentifierData = {

@@ -42,7 +42,7 @@ export const AuthenticatorHeader = (props: Props) => {
   const { translate } = useHelper()
   const { colors } = useTheme()
   const { toTrashCiphers } = useCipherData()
-  const { user, uiStore } = useStores()
+  const { uiStore } = useStores()
 
   // ----------------------- PARAMS ------------------------
 
@@ -50,8 +50,6 @@ export const AuthenticatorHeader = (props: Props) => {
   const [showShareModal, setShowShareModal] = useState(false)
 
   // ----------------------- COMPUTED ------------------------
-
-  const isFreeAccount = user.isFreePlan
 
   // Header right
   const renderHeaderRight = () => (
@@ -89,7 +87,7 @@ export const AuthenticatorHeader = (props: Props) => {
       />
       {selectedItems.length > 0 && (
         <>
-          {!uiStore.isOffline && !isFreeAccount && (
+          {!uiStore.isOffline && (
             <Icon
               icon="share"
               size={24}

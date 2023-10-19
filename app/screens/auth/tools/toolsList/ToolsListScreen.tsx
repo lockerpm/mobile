@@ -1,22 +1,17 @@
 import React from 'react'
 import { View, TouchableOpacity } from 'react-native'
-import { useStores } from 'app/models'
 import { Text, Screen, Icon, ImageIcon } from 'app/components/cores'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'app/services/context'
 import { TOOLS_ITEMS, ToolsItem } from 'app/navigators'
 import { TabHeader } from 'app/components/cores/header/TabHeader'
-import { PremiumTag } from 'app/components/utils'
 import { observer } from 'mobx-react-lite'
 import { useHelper } from 'app/services/hook'
 
 export const ToolsListScreen = observer(() => {
   const navigation = useNavigation() as any
-  const { user } = useStores()
   const { translate } = useHelper()
   const { colors, isDark } = useTheme()
-
-  const isFreeAccount = user.isFreePlan
 
   // -----------------------METHODS----------------------------
 
@@ -70,11 +65,8 @@ export const ToolsListScreen = observer(() => {
                     tx={item.label}
                     style={{
                       marginBottom: 3,
-                      marginRight: item.premium ? 7 : 0,
                     }}
                   />
-
-                  {item.premium && isFreeAccount && <PremiumTag />}
                 </View>
 
                 <Text preset="label" tx={item.desc} size="base" />

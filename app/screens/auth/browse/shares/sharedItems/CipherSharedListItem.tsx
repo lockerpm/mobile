@@ -5,7 +5,6 @@ import { Icon, Text, Toggle } from 'app/components/cores'
 import { AccountRole } from 'app/static/types'
 import { CipherView } from 'core/models/view'
 import { useTheme } from 'app/services/context'
-import { PremiumTag } from 'app/components/utils'
 import { useHelper } from 'app/services/hook'
 
 type Prop = {
@@ -89,9 +88,6 @@ export const CipherSharedListItem = memo(
               <View style={{ flex: 1 }}>
                 <Text preset="bold" text={item.name} numberOfLines={1} />
               </View>
-
-              {/* Pending status */}
-              {item.isShared && <PremiumTag />}
 
               {item.notSync && (
                 <View style={{ marginLeft: 10 }}>

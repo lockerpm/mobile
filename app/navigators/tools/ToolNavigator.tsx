@@ -16,7 +16,6 @@ export type ToolsItem = {
   desc: TxKeyPath
   icon: ImageIconTypes
   routeName: string
-  premium?: boolean
 }
 
 type ToolsItemContainer = {
@@ -44,14 +43,12 @@ export const TOOLS_ITEMS: ToolsItemContainer = {
     desc: 'pass_health.desc',
     icon: 'password-health',
     routeName: 'passwordHealth',
-    premium: true,
   },
   dataBreachScanner: {
     label: 'data_breach_scanner.title',
     desc: 'data_breach_scanner.desc',
     icon: 'data-breach-scanner',
     routeName: 'dataBreachScanner',
-    premium: true,
   },
 }
 

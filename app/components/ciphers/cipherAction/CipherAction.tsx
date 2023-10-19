@@ -12,7 +12,6 @@ import { ChangeTeamFolderModal } from './ChangeTeamFolderModal'
 import { ActionSheet } from '../actionsSheet/ActionSheet'
 import { Text } from '../../cores'
 import { ActionItem } from '../actionsSheet/ActionSheetItem'
-import { PremiumTag } from 'app/components/utils'
 
 export interface CipherActionProps {
   children?: React.ReactNode
@@ -37,7 +36,6 @@ export const CipherAction = (props: CipherActionProps) => {
     'changeTeamFolder' | 'share' | 'trashConfirm' | 'leaveConfirm' | null
   >(null)
 
-  // const [showShareModal, setShowShareModal] = useState(false)
   const [showShareOptions, setShowShareOptions] = useState(false)
 
   const { colors } = useTheme()
@@ -47,8 +45,8 @@ export const CipherAction = (props: CipherActionProps) => {
   const { cipherStore, user, uiStore } = useStores()
   const selectedCipher: CipherView = { ...cipherStore.cipherView }
   selectedCipher.revisionDate = null
-  // Computed
-  const premiumLock = user.isFreePlan
+
+  // ------------------------------COMPUTED-------------------------------------
   const lockerMasterPassword = selectedCipher.type === CipherType.MasterPassword
   const emergencyView = isEmergencyView === undefined ? false : isEmergencyView
   const organizations = cipherStore.organizations
@@ -280,7 +278,6 @@ export const CipherAction = (props: CipherActionProps) => {
                 marginBottom: 4,
               }}
             />
-            {premiumLock && <PremiumTag />}
           </View>
 
           <Text preset="label" text={translate('quick_shares.share_option.normal.dec')} />

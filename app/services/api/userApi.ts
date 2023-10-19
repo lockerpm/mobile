@@ -12,7 +12,6 @@ import {
   SessionSnapshot,
   TeamPolicies,
   TrustedContact,
-  UserPlan,
   UserTeam,
   ChangePasswordRequest,
   FeedbackRequest,
@@ -316,34 +315,6 @@ class UserApi {
     }
   }
 
-  // Get plan
-  async getPlan(token: string): Promise<
-    | {
-        kind: 'ok'
-        data: UserPlan
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        '/cystack_platform/pm/payments/plan'
-      )
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      const data = response.data
-
-      return { kind: 'ok', data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
   // Get invitations
   async getInvitations(token: string): Promise<
     | {
@@ -452,28 +423,6 @@ class UserApi {
       }
 
       return { kind: 'ok' }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
-  async getReferLink(
-    token: string
-  ): Promise<{ kind: 'ok'; data: { referral_link: string } } | GeneralApiProblem> {
-    try {
-      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
-      const response: ApiResponse<any> = await this.api.apisauce.get(
-        '/cystack_platform/pm/referrals'
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-
-      return { kind: 'ok', data: response.data }
     } catch (e) {
       Logger.error(e.message)
       return { kind: 'bad-data' }

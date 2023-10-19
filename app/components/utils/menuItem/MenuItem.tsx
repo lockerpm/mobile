@@ -10,7 +10,6 @@ export type MenuItemProps = {
   onPress?: () => void
   disabled?: boolean
   hide?: boolean
-  family?: boolean
   content?: React.ReactNode
   rightIcon?: IconTypes
 }
@@ -22,7 +21,6 @@ export const MenuItem = ({
   onPress,
   disabled,
   hide,
-  family,
   content,
   rightIcon,
 }: MenuItemProps) => {
@@ -50,14 +48,7 @@ export const MenuItem = ({
       )}
 
       <View style={{ flex: 1, flexDirection: 'row' }}>
-        {!content ? (
-          <>
-            <Text text={name} />
-            {family && <Text text={'FAMILY'} color={colors.primary} style={{ marginLeft: 12 }} />}
-          </>
-        ) : (
-          content
-        )}
+        {!content ? <Text text={name} /> : content}
       </View>
 
       <Icon icon={rightIcon || 'caret-right'} size={20} />

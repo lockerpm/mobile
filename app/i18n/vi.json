@@ -201,7 +201,6 @@
         "service_configuration_fetch_error": "Không thể tìm nạp cấu hình dịch vụ. Vui lòng thử lại"
       }
     },
-    "limit_storage": "Nâng cấp lên gói Premium để lưu trữ không giới hạn",
     "cannot_select_more": "Không thể chọn nhiều hơn {{count}} mục",
     "cannot_update_more_at_once": "Không thể thay đổi nhiều hơn {{count}} mục cùng một lúc.",
     "rooted_device": "Thiết bị của bạn đã bị can thiệp hệ điều hành, vì vậy không tương thích với ứng dụng này.",
@@ -260,7 +259,6 @@
     },
     "view_vault": "Xem kho dữ liệu",
     "takeover_vault": "Chiếm quyền kho dữ liệu",
-    "free_guild": "Bạn đang dùng tài khoản Free. Nâng cấp lên Premium để thêm Liên hệ khẩn cấp",
     "reset_master_pw": "Đặt lại Master Password",
     "reset_pw": "Đặt lại mật khẩu Locker",
     "reset_master_pw_user": "Đặt lại Master Password cho {{name}}",
@@ -677,8 +675,7 @@
       "desc": "Thêm một lớp bảo mật bổ sung mỗi khi đăng nhập",
       "btn": "Bắt đầu"
     },
-    "secret_key": "Mã khoá",
-    "limited_import": "Bạn đã nhập {{imported}}/{{total}} mã TOTP{{s}}, nâng cấp lên Premium để lưu trữ không giới hạn"
+    "secret_key": "Mã khoá"
   },
   "pass_health": {
     "title": "Mức độ bảo mật của mật khẩu",
@@ -776,11 +773,7 @@
     "success": "Nhập dữ liệu thành công! Các mục của bạn sẽ xuất hiện trong thời gian ngắn",
     "pls_select_right_format": "Yêu cầu phải là tệp {{format}}",
     "limited": "Lượng lưu trữ gói hiện tại đã đạt giới hạn",
-    "imported_free": {
-      "note": "dữ liệu được nhập. Nâng cấp lên gói Premium để lưu trữ không giới hạn",
-      "result": "dữ liệu được nhập",
-      "guild": "Nâng cấp lên gói Premium để lưu trữ không giới hạn"
-    },
+
     "imported": "Nhập dữ liệu thành công",
     "result_btn": "Quay về trang chủ",
     "progress": "Đang tiến hành nhập dữ liệu.."
@@ -814,18 +807,6 @@
     "go_back": "Quay lại",
     "synchronizing": "Đang đồng bộ..."
   },
-  "welcome_premium": {
-    "title": "Chúc mừng! Tài khoản của bạn đã được nâng cấp lên Premium",
-    "all_features": "Trải nghiệm tất các các tính năng nâng cao của Locker!",
-    "features": {
-      "unlimited": "Lưu trữ không giới hạn",
-      "share": "Chia sẻ cho bạn bè",
-      "monitor": "Giám sát bảo mật",
-      "emergency": "Liên hệ khẩn cấp",
-      "more": "Và các tính năng khác..."
-    },
-    "btn": "Tuyệt vời!"
-  },
   "noti_setting": {
     "in_app_noti": "Thông báo trên thiết bị",
     "marketing": "Các email tiếp thị và quảng cáo",
@@ -842,9 +823,7 @@
         "family_invite": "Mời thanh viên gói Family",
         "email_verification": "Xác nhận email",
         "account_expired": "Tài khoản thanh toán hết hạn",
-        "downgraded": "Hạ cấp tài khoản",
-        "trial": "Dùng thử tính năng Premium",
-        "premium_upgraded": "Nâng cấp tài khoản Premium"
+        "downgraded": "Hạ cấp tài khoản"
       },
       "master_pw_change": "Thay đổi master password",
       "login_new_device": "Đăng nhập ở thiết bị mới",

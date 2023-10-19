@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native'
 import { QuickSharesList } from './QuickSharesList'
 import { PushNotifier } from 'app/utils/pushNotification'
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
-import { useStores } from 'app/models'
 import { Screen } from 'app/components/cores'
 import { useHelper } from 'app/services/hook'
 
@@ -13,7 +12,6 @@ const SHARE_EMPTY = require('assets/images/emptyCipherList/share-empty-img.png')
 
 export const QuickShareItemsScreen = observer(() => {
   const navigation = useNavigation() as any
-  const { user } = useStores()
   const { translate } = useHelper()
   // --------------------- PARAMS -------------------------
 
@@ -27,8 +25,6 @@ export const QuickShareItemsScreen = observer(() => {
   const [sortOption, setSortOption] = useState('last_updated')
 
   // --------------------- COMPUTED -------------------------
-
-  const isFreeAccount = user.isFreePlan
 
   // --------------------- EFFECTS -------------------------
 

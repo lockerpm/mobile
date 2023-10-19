@@ -56,7 +56,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
   const { colors } = useTheme()
   const { translate } = useHelper()
   const { toTrashCiphers, restoreCiphers, deleteCiphers } = useCipherData()
-  const { user, uiStore } = useStores()
+  const { uiStore } = useStores()
 
   // ----------------------- PARAMS ------------------------
 
@@ -65,7 +65,6 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
 
   // ----------------------- COMPUTED ------------------------
 
-  const isFreeAccount = user.isFreePlan
   // ----------------------- METHODS ------------------------
 
   const handleDelete = async () => {
@@ -181,7 +180,7 @@ export const CipherListHeader = (props: CipherListHeaderProps) => {
             </>
           ) : (
             <>
-              {!uiStore.isOffline && !isShared && !isFreeAccount && (
+              {!uiStore.isOffline && !isShared && (
                 <Icon
                   icon="share"
                   size={24}

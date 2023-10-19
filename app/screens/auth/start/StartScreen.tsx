@@ -39,19 +39,12 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
       // Sync teams and plan
       if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
         await user.loadTeams()
-        await user.loadPlan()
       }
     }
 
     // Load folders and collections
     setMsg(translate('start.decrypting'))
     Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
-
-    // TODO: check device limit
-    const isDeviceLimitReached = false
-    if (isDeviceLimitReached) {
-      navigation.navigate('switchDevice')
-    }
 
     setMsg('')
 

@@ -15,7 +15,7 @@ export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((p
   const navigation = props.navigation
   const route = props.route
 
-  const { user, cipherStore } = useStores()
+  const { cipherStore } = useStores()
   const { colors } = useTheme()
   const { notify, translate } = useHelper()
   const { newCipher } = useCipherHelper()
@@ -24,7 +24,6 @@ export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((p
   const [isLoading, setIsLoading] = useState(false)
 
   // --------------------------COMPUTED-------------------------
-  const isFreeAccount = user.isFreePlan
   const totpCount = route.params.totpCount || 0
 
   const onSuccess = async (e) => {
@@ -89,18 +88,7 @@ export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((p
         setImportedCount: () => null,
         setTotalCount: () => null,
         setIsLimited: () => null,
-        isFreeAccount,
       } as any)
-      if (isFreeAccount && ciphers.length > totpCount) {
-        notify(
-          'error',
-          translate('authenticator.limited_import', {
-            imported: ciphers.length - totpCount,
-            total: ciphers.length,
-            s: ciphers.length - totpCount > 1 ? 's' : '',
-          })
-        )
-      }
     } catch (e) {
       Logger.error('Import google qr: ' + e)
       notify('error', translate('authenticator.invalid_qr'))

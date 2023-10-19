@@ -75,6 +75,4 @@ const logoRegistry = {
   'locker-bg-dark': require('assets/images/logo/locker-dark.png'),
   'horizontal-dark': require('assets/images/logo/logo-horizontal-dark.png'),
   'horizontal-light': require('assets/images/logo/logo-horizontal-light.png'),
-  'locker-premium': require('assets/images/logo/locker-premium.png'),
-  'locker-premium-dark': require('assets/images/logo/locker-premium-dark.png'),
 }

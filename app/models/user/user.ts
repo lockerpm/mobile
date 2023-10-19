@@ -11,15 +11,12 @@ import {
   RegisterRequest,
   SessionLoginRequest,
   SessionOtpLoginRequest,
-  UserSubscripePlan,
   UserTeam,
 } from 'app/static/types'
 import {
   AccountType,
   AppTimeoutType,
   EmergencyAccessType,
-  PlanType,
-  PlanTypeDuration,
   PolicyType,
   TimeoutActionType,
 } from 'app/static/types/enum'
@@ -61,7 +58,6 @@ export const UserModel = types
     // Others data
     enterprise: types.maybeNull(types.frozen<Enterprise>()),
     teams: types.array(types.frozen<UserTeam>()),
-    plan: types.maybeNull(types.frozen<UserSubscripePlan>()),
     invitations: types.array(types.string),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
@@ -85,21 +81,6 @@ export const UserModel = types
   })
   .actions(withSetPropAction)
   .views((self) => ({
-    get isFreePlan() {
-      return self.plan?.alias === PlanType.FREE
-    },
-    get isFamilyPlan() {
-      return self.plan?.alias === PlanType.FAMILY
-    },
-    get isLifeTimePremiumPlan() {
-      return self.plan?.alias === PlanType.LIFETIME_PREMIUM
-    },
-    get isLifeTimeFamilyPlan() {
-      return self.plan?.alias === PlanType.LIFETIME_FAMILY
-    },
-    get isShowPremiumFeature() {
-      return self.plan?.alias === PlanType.PREMIUM
-    },
     get isEnterprise() {
       return self.pwd_user_type === 'enterprise' && self.enterprise
     },
@@ -157,9 +138,6 @@ export const UserModel = types
     },
     setTeams: (teams: UserTeam[]) => {
       self.teams = cast(teams)
-    },
-    setPlan: (plan: UserSubscripePlan) => {
-      self.plan = cast(plan)
     },
     setInvitations: (invitations: any[]) => {
       self.invitations = cast(invitations)
@@ -273,7 +251,6 @@ export const UserModel = types
       self.teams = cast([])
       self.enterprise = null
       self.invitations = cast([])
-      self.plan = null
       self.fingerprint = ''
       self.onPremiseUser = false
       self.onPremiseLastBaseUrl = ''
@@ -485,25 +462,6 @@ export const UserModel = types
       }
       return res
     },
-    loadPlan: async () => {
-      if (self.pwd_user_type === 'enterprise') {
-        self.setPlan({
-          name: 'Premium',
-          is_family: false,
-          alias: PlanType.PREMIUM,
-          cancel_at_period_end: false,
-          duration: PlanTypeDuration.MONTHLY,
-          next_billing_time: 0,
-          payment_method: 'mobile',
-        })
-        return null
-      }
-      const res = await userApi.getPlan(self.apiToken)
-      if (res.kind === 'ok') {
-        self.setPlan(res.data)
-      }
-      return res
-    },
     getTeamPolicies: async (organizationId: string) => {
       const res = await userApi.getTeamPolicies(self.apiToken, organizationId)
       return res
@@ -526,30 +484,7 @@ export const UserModel = types
       })
       return res
     },
-    getBillingDocuments: async (page: number) => {
-      const res = await userApi.getBillingDocuments(self.apiToken, page)
-      return res
-    },
-    getFamilyMember: async () => {
-      const res = await userApi.getFamilyMember(self.apiToken)
-      return res
-    },
-    addFamilyMember: async (memberEmails: string[]) => {
-      const res = await userApi.addFamilyMember(self.apiToken, memberEmails)
-      return res
-    },
-    removeFamilyMember: async (memberID: string) => {
-      const res = await userApi.removeFamilyMember(self.apiToken, memberID)
-      return res
-    },
-    getReferLink: async () => {
-      const res = await userApi.getReferLink(self.apiToken)
-      return res
-    },
-    getTrialEligible: async () => {
-      const res = await userApi.getTrialEligible(self.apiToken)
-      return res
-    },
+
     // NOTIFICATION SETTING
     getNotificationSettings: async () => {
       const res = await userApi.getNotificationSettings(self.apiToken)
@@ -636,21 +571,6 @@ export const UserModel = types
       return res
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({
-    purchaseValidation: async (
-      receipt?: string,
-      subscriptionId?: string,
-      originalTransactionIdentifierIOS?: string
-    ) => {
-      const res = await userApi.purchaseValidation(
-        self.apiToken,
-        receipt,
-        subscriptionId,
-        originalTransactionIdentifierIOS
-      )
-      return res
-    },
-  }))
   .postProcessSnapshot(omit(['isLoggedInPw', 'isMobileLangChange', 'isPasswordlessLogin']))
 
 export interface User extends Instance<typeof UserModel> {}

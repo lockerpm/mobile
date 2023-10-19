@@ -175,7 +175,6 @@ export const FolderAction = (props: Props) => {
               )
             ) : (
               <ActionItem
-                isPremium
                 name={translate('common.share')}
                 icon="share"
                 action={() => {

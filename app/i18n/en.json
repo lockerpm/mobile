@@ -201,7 +201,6 @@
         "service_configuration_fetch_error": "Could not fetch the service configuration. Please try again"
       }
     },
-    "limit_storage": "Upgrade to Premium to get Unlimited Storage",
     "cannot_select_more": "Cannot select more than {{count}} items",
     "cannot_update_more_at_once": "Cannot update more than {{count}} items at once",
     "rooted_device": "The operating system on your devices has been modified in an unauthorized way, therefore it is not compatible with this application.",
@@ -259,7 +258,6 @@
     },
     "view_vault": "View their vault",
     "takeover_vault": "Take over their vault",
-    "free_guild": "You are in Free plan. Upgrade to Premium to add Emergency Contact",
     "reset_master_pw": "Reset their Locker Master Password",
     "reset_pw": "Reset their Locker Password",
     "reset_master_pw_user": "Reset Master Password for {{name}}",
@@ -676,8 +674,7 @@
       "desc": "Add an additional layer of security when signing in",
       "btn": "Get Started"
     },
-    "secret_key": "Secret key",
-    "limited_import": "You have imported {{imported}}/{{total}} item{{s}}, please upgrade to Premium for unlimited storage"
+    "secret_key": "Secret key"
   },
   "pass_health": {
     "title": "Password Health",
@@ -775,11 +772,6 @@
     "success": "Data imported! Your items will appear shortly",
     "pls_select_right_format": "Must be a {{format}} file",
     "limited": "Your Free Plan Storage is Limited",
-    "imported_free": {
-      "note": "items were imported. Upgrade to Premium to add unlimited items",
-      "result": "items were imported",
-      "guild": "Upgrade to Premium to add unlimited items"
-    },
     "imported": "Succesfully Imported",
     "result_btn": "Back to home",
     "progress": "Importing your backup data"
@@ -813,18 +805,6 @@
     "go_back": "Go Back",
     "synchronizing": "Synchronizing..."
   },
-  "welcome_premium": {
-    "title": "Congrats! You’re now experience Locker Premium",
-    "all_features": "Check out all of the super features you have access to!",
-    "features": {
-      "unlimited": "Add unlimited items",
-      "share": "Share passwords and items",
-      "monitor": "Monitor your security",
-      "emergency": "Set up Emergency Contacts",
-      "more": "And a lot more..."
-    },
-    "btn": "Awesome!"
-  },
   "noti_setting": {
     "in_app_noti": "In app notification",
     "marketing": "Marketing & Promotion emails",
@@ -837,13 +817,10 @@
         "system": "System email",
         "welcome": "Welcome Email",
         "mp_hint": "Master Password hint",
-        "family_remove": "Family Removed",
-        "family_invite": "Family Invitation",
         "email_verification": "Email verification",
         "account_expired": "Bank transfer account expired",
         "downgraded": "Account downgraded",
-        "trial": "Trial successful",
-        "premium_upgraded": "Premium upgraded"
+        "trial": "Trial successful"
       },
       "master_pw_change": "Master Password Change",
       "login_new_device": "Login with new devices",

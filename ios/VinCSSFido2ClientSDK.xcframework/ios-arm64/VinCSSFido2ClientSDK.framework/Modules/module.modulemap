@@ -1,4 +1,0 @@
-framework module VinCSSFido2ClientSDK {
-  header "VinCSSFido2ClientSDK-Swift.h"
-  requires objc
-}

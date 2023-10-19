@@ -24,7 +24,6 @@ import {
 } from 'app/static/types'
 
 import {
-  SwitchDeviceScreen,
   StartScreen,
   BiometricUnlockIntroScreen,
   PasswordEditScreen,
@@ -50,7 +49,6 @@ import {
   AuthenticatorEditScreen,
   CryptoWalletEditScreen,
   CryptoWalletInfoScreen,
-  WelcomePremiumScreen,
   AutoFillScreen,
   NotificationSettingsScreen,
   ShareMultipleScreen,
@@ -105,7 +103,6 @@ export type PrimaryParamList = {
   start: undefined
 
   enterpriseInvited: undefined
-  switchDevice: undefined
   biometricUnlockIntro: undefined
 
   passwordGenerator: {
@@ -204,8 +201,6 @@ export type PrimaryParamList = {
   deviceNotiSettings: undefined
   shareMultiple: undefined
 
-  welcome_premium: undefined
-
   app_list_noti: {
     notifications: AppNotification
   }
@@ -287,7 +282,6 @@ export const MainNavigator = observer(() => {
       cipherStore.setSelectedCipher(updatedCipher)
     }
     user.loadTeams()
-    user.loadPlan()
   }
 
   // Check invitation
@@ -565,7 +559,6 @@ export const MainNavigator = observer(() => {
       >
         <Stack.Screen name="start" component={StartScreen} />
         <Stack.Screen name="enterpriseInvited" component={EnterpriseInvitedScreen} />
-        <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
 
         <Stack.Screen name="dataOutdated" component={DataOutdatedScreen} />
@@ -655,7 +648,6 @@ export const MainNavigator = observer(() => {
         <Stack.Screen name="emailNotiSettings" component={PushEmailSettingsScreen} />
         <Stack.Screen name="deviceNotiSettings" component={PushNotificationSettingsScreen} />
 
-        <Stack.Screen name="welcome_premium" component={WelcomePremiumScreen} />
         <Stack.Screen name="autofill" component={AutoFillScreen} initialParams={{ mode: 'all' }} />
 
         <Stack.Screen name="emergencyAccess" component={EmergencyAccessScreen} />

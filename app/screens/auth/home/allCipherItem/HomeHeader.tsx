@@ -52,8 +52,6 @@ export const HomeHeader = (props: Props) => {
 
   // ----------------------- COMPUTED ------------------------
 
-  const isFreeAccount = user.isFreePlan
-
   // ----------------------- METHODS ------------------------
 
   const fetchInAppNotification = async () => {
@@ -149,7 +147,7 @@ export const HomeHeader = (props: Props) => {
       />
       {selectedItems.length > 0 && (
         <>
-          {!uiStore.isOffline && !isFreeAccount && (
+          {!uiStore.isOffline && (
             <Icon
               icon="share"
               size={24}

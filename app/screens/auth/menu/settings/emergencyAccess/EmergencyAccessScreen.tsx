@@ -14,8 +14,6 @@ export const EmergencyAccessScreen = observer(() => {
   const { notifyApiError, translate } = useHelper()
   const { user } = useStores()
   const { colors } = useTheme()
-  const isFree = user.isFreePlan
-
   // ----------------------- PARAMS -----------------------
   const [grant, setGrant] = useState<TrustedContact[]>([])
   const [trusted, setTrusted] = useState<TrustedContact[]>([])

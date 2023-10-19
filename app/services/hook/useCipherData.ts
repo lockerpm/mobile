@@ -657,7 +657,7 @@ export function useCipherData() {
 
   // Import
   const importCiphers = async (payload) => {
-    const { importResult, setImportedCount, setTotalCount, setIsLimited, isFreeAccount } = payload
+    const { importResult, setImportedCount, setTotalCount, setIsLimited } = payload
     setTotalCount(importResult.ciphers.length)
     // Offline
     if (uiStore.isOffline) {
@@ -666,7 +666,6 @@ export function useCipherData() {
         setImportedCount,
         setTotalCount,
         setIsLimited,
-        isFreeAccount,
       })
       notify(
         'success',
@@ -677,79 +676,16 @@ export function useCipherData() {
     // Online
     const request = new ImportCiphersRequest()
 
-    if (isFreeAccount) {
-      let numberOfImportedCipher = 0
-      let currentLoginCount = await _getCipherCount(CipherType.Login)
-      let currentCardCount = await _getCipherCount(CipherType.Card)
-      let currentIdentityCount = await _getCipherCount(CipherType.Identity)
-      let currentNoteCount = await _getCipherCount(CipherType.SecureNote)
-      let currentCryptoCount = await _getCipherCount(CipherType.CryptoWallet)
-
-      // TODO
-      // unlimited for other cipher types
-
-      for (let i = 0; i < importResult.ciphers.length; i++) {
-        const cipher = importResult.ciphers[i]
-
-        if (cipher.type === CipherType.Login) {
-          if (currentLoginCount < FREE_PLAN_LIMIT.LOGIN) {
-            currentLoginCount += 1
-          } else {
-            setIsLimited(true)
-            continue
-          }
-        } else if (cipher.type === CipherType.SecureNote) {
-          if (currentNoteCount < FREE_PLAN_LIMIT.NOTE) {
-            currentNoteCount += 1
-          } else {
-            setIsLimited(true)
-            continue
-          }
-        } else if (cipher.type === CipherType.CryptoWallet) {
-          if (currentCryptoCount < FREE_PLAN_LIMIT.CRYPTO) {
-            currentCryptoCount += 1
-          } else {
-            setIsLimited(true)
-            continue
-          }
-        } else if (cipher.type === CipherType.Card) {
-          if (currentCardCount < FREE_PLAN_LIMIT.PAYMENT_CARD) {
-            currentCardCount += 1
-          } else {
-            setIsLimited(true)
-            continue
-          }
-          break
-        } else if (cipher.type === CipherType.Identity) {
-          if (currentIdentityCount < FREE_PLAN_LIMIT.IDENTITY) {
-            currentIdentityCount += 1
-          } else {
-            setIsLimited(true)
-            continue
-          }
-        }
-
-        const countDuplicate = await _countDuplicateCipherName(cipher)
-        if (countDuplicate > 0) {
-          cipher.name = `${cipher.name} (${countDuplicate})`
-        }
-        const enc = await cipherService.encrypt(cipher)
-        request.ciphers.push(new CipherRequest(enc))
-        numberOfImportedCipher += 1
-        setImportedCount(numberOfImportedCipher)
+    for (let i = 0; i < importResult.ciphers.length; i++) {
+      const cipher = importResult.ciphers[i]
+      const countDuplicate = await _countDuplicateCipherName(cipher)
+      if (countDuplicate > 0) {
+        cipher.name = `${cipher.name} (${countDuplicate})`
       }
-    } else {
-      for (let i = 0; i < importResult.ciphers.length; i++) {
-        const cipher = importResult.ciphers[i]
-        const countDuplicate = await _countDuplicateCipherName(cipher)
-        if (countDuplicate > 0) {
-          cipher.name = `${cipher.name} (${countDuplicate})`
-        }
-        const enc = await cipherService.encrypt(cipher)
+      const enc = await cipherService.encrypt(cipher)
 
-        request.ciphers.push(new CipherRequest(enc))
-        setImportedCount(i + 1)
-      }
+      request.ciphers.push(new CipherRequest(enc))
+      setImportedCount(i + 1)
     }
     if (importResult.folders != null) {
       for (let i = 0; i < importResult.folders.length; i++) {
@@ -824,7 +760,6 @@ export function useCipherData() {
     setImportedCount: (val: number) => void
     setTotalCount: (val: number) => void
     setIsLimited: (val: boolean) => void
-    isFreeAccount: boolean
     isCaching?: boolean
     cipherRequests?: (CipherRequest & { id?: string })[]
     folderRequests?: (FolderRequest & { id?: string })[]
@@ -834,7 +769,6 @@ export function useCipherData() {
       setImportedCount,
       setTotalCount,
       setIsLimited,
-      isFreeAccount,
       isCaching,
       cipherRequests,
       folderRequests,
@@ -845,82 +779,19 @@ export function useCipherData() {
 
     // Prepare ciphers
     if (!cipherRequests) {
-      if (isFreeAccount) {
-        let numberOfImportedCipher = 0
-        let currentLoginCount = await _getCipherCount(CipherType.Login)
-        let currentCardCount = await _getCipherCount(CipherType.Card)
-        let currentIdentityCount = await _getCipherCount(CipherType.Identity)
-        let currentNoteCount = await _getCipherCount(CipherType.SecureNote)
-        let currentCryptoCount = await _getCipherCount(CipherType.CryptoWallet)
-        for (let i = 0; i < importResult.ciphers.length; i++) {
-          const cipher = importResult.ciphers[i]
-
-          if (cipher.type === CipherType.Login) {
-            if (currentLoginCount < FREE_PLAN_LIMIT.LOGIN) {
-              currentLoginCount += 1
-            } else {
-              setIsLimited(true)
-              continue
-            }
-          } else if (cipher.type === CipherType.SecureNote) {
-            if (currentNoteCount < FREE_PLAN_LIMIT.NOTE) {
-              currentNoteCount += 1
-            } else {
-              setIsLimited(true)
-              continue
-            }
-          } else if (cipher.type === CipherType.CryptoWallet) {
-            if (currentCryptoCount < FREE_PLAN_LIMIT.CRYPTO) {
-              currentCryptoCount += 1
-            } else {
-              setIsLimited(true)
-              continue
-            }
-          } else if (cipher.type === CipherType.Card) {
-            if (currentCardCount < FREE_PLAN_LIMIT.PAYMENT_CARD) {
-              currentCardCount += 1
-            } else {
-              setIsLimited(true)
-              continue
-            }
-            break
-          } else if (cipher.type === CipherType.Identity) {
-            if (currentIdentityCount < FREE_PLAN_LIMIT.IDENTITY) {
-              currentIdentityCount += 1
-            } else {
-              setIsLimited(true)
-              continue
-            }
-          }
-
-          const countDuplicate = await _countDuplicateCipherName(cipher)
-          if (countDuplicate > 0) {
-            cipher.name = `${cipher.name} (${countDuplicate})`
-          }
-          const enc = await cipherService.encrypt(cipher)
-          const cr = new CipherRequest(enc)
-          const tempId = TEMP_PREFIX + randomString()
-          // @ts-ignore
-          cr.id = tempId
-          ciphers.push(cr)
-          numberOfImportedCipher += 1
-          setImportedCount(numberOfImportedCipher)
+      for (let i = 0; i < importResult.ciphers.length; i++) {
+        const cipher = importResult.ciphers[i]
+        const countDuplicate = await _countDuplicateCipherName(cipher)
+        if (countDuplicate > 0) {
+          cipher.name = `${cipher.name} (${countDuplicate})`
         }
-      } else {
-        for (let i = 0; i < importResult.ciphers.length; i++) {
-          const cipher = importResult.ciphers[i]
-          const countDuplicate = await _countDuplicateCipherName(cipher)
-          if (countDuplicate > 0) {
-            cipher.name = `${cipher.name} (${countDuplicate})`
-          }
-          const enc = await cipherService.encrypt(cipher)
-          const cr = new CipherRequest(enc)
-          const tempId = TEMP_PREFIX + randomString()
-          // @ts-ignore
-          cr.id = tempId
-          ciphers.push(cr)
-          setImportedCount(i + 1)
-        }
+        const enc = await cipherService.encrypt(cipher)
+        const cr = new CipherRequest(enc)
+        const tempId = TEMP_PREFIX + randomString()
+        // @ts-ignore
+        cr.id = tempId
+        ciphers.push(cr)
+        setImportedCount(i + 1)
       }
     }
 

@@ -13,7 +13,6 @@ import { Screen, Header } from 'app/components/cores'
 import { useCipherData, useHelper } from 'app/services/hook'
 import { useTheme } from 'app/services/context'
 import { useCoreService } from 'app/services/coreService'
-import { useStores } from 'app/models'
 import { Logger } from 'app/utils/utils'
 import { CipherType } from 'core/enums'
 import { Utils } from 'core/misc/utils'
@@ -27,11 +26,9 @@ export const ImportScreen = observer(() => {
   const { notify, translate } = useHelper()
   const { importCiphers } = useCipherData()
   const { importService } = useCoreService()
-  const { user } = useStores()
 
   // -------------------- PARAMS --------------------
 
-  const isFreeAccount = user.isFreePlan
   const fileData = {
     name: '',
     uri: '',
@@ -113,7 +110,6 @@ export const ImportScreen = observer(() => {
             setImportedCount,
             setTotalCount,
             setIsLimited,
-            isFreeAccount,
           })
           setFile(fileData)
           setStep(2)

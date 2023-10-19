@@ -1,6 +1,5 @@
-import moment from 'moment'
 import React, { useState } from 'react'
-import { View, TextStyle, Dimensions, Image } from 'react-native'
+import { View, Image } from 'react-native'
 import { useNavigation, CommonActions } from '@react-navigation/native'
 import { useStores } from 'app/models'
 import { useTheme } from 'app/services/context'
@@ -60,50 +59,6 @@ export const MenuScreen = observer(() => {
       },
     },
   ]
-  const isSmallWidth = Dimensions.get('screen').width < 390
-
-  const item3 = {
-    pm_lifetime_family: {
-      node: <Text text="LIFETIME FAMILY" style={$planName} color={colors.primary} />,
-    },
-
-    pm_lifetime_premium: {
-      node: <Text text="LIFETIME PREMIUM" style={$planName} color={colors.primary} />,
-    },
-    pm_free: {
-      node: <Text text="FREE" style={$planName}></Text>,
-    },
-    pm_premium: {
-      node: (
-        <View style={{ flexDirection: isSmallWidth ? 'column' : 'row' }}>
-          <Text text="PREMIUM" color={colors.primary} style={$planName} />
-          <Text
-            text={
-              translate('menu.expired_time') +
-              ': ' +
-              moment(user.plan?.next_billing_time * 1000).format('DD MMMM YYYY')
-            }
-            style={[$planName, { marginLeft: isSmallWidth ? 0 : 8 }]}
-          />
-        </View>
-      ),
-    },
-    pm_family: {
-      node: (
-        <View style={{ flexDirection: isSmallWidth ? 'column' : 'row' }}>
-          <Text text="FAMILY" color={colors.primary} style={$planName} />
-          <Text
-            text={
-              translate('menu.expired_time') +
-              ': ' +
-              moment(user.plan?.next_billing_time * 1000).format('DD MMMM YYYY')
-            }
-            style={[$planName, { marginLeft: isSmallWidth ? 0 : 8 }]}
-          />
-        </View>
-      ),
-    },
-  }
   // -------------- RENDER --------------------
 
   return (
@@ -121,7 +76,6 @@ export const MenuScreen = observer(() => {
           />
           <View style={{ flex: 1 }}>
             <Text text={user.email} />
-            {user.pwd_user_type !== 'enterprise' && user.plan && item3[user.plan.alias]?.node}
             {user.pwd_user_type === 'enterprise' && user.enterprise && (
               <View
                 style={{
@@ -192,8 +146,3 @@ export const MenuScreen = observer(() => {
     </Screen>
   )
 })
-
-const $planName: TextStyle = {
-  fontSize: 14,
-  marginTop: 5,
-}

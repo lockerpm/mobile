@@ -53,10 +53,6 @@ export function useTool() {
   // Load weak passwords
   const loadPasswordsHealth = async () => {
     try {
-      if (user.isFreePlan) {
-        return
-      }
-
       if (cipherStore.isSynching || cipherStore.isBatchDecrypting) {
         toolStore.setDataLoading(true)
         return

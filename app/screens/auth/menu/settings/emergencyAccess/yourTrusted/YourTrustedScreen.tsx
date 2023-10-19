@@ -16,8 +16,6 @@ export const YourTrustedContactScreen = observer(() => {
   const { notifyApiError, translate } = useHelper()
   const { user } = useStores()
 
-  const isFree = user.isFreePlan
-
   // ----------------------- PARAMS -----------------------
   const [isShowAddModal, setIsShowAddModal] = useState(false)
   const [trustedContacts, setTrustedContacts] = useState<TrustedContact[]>([])
@@ -41,25 +39,12 @@ export const YourTrustedContactScreen = observer(() => {
   // ----------------------- RENDER -----------------------
 
   const ListEmpty = () => (
-    <View>
-      {isFree && (
-        <View
-          style={{
-            alignItems: 'center',
-          }}
-        >
-          <Text text={translate('emergency_access.free_guild')} style={{ textAlign: 'center' }} />
-        </View>
-      )}
-      {!isFree && (
-        <View
-          style={{
-            alignItems: 'center',
-          }}
-        >
-          <Text text={'No data'} style={{ textAlign: 'center' }} />
-        </View>
-      )}
+    <View
+      style={{
+        alignItems: 'center',
+      }}
+    >
+      <Text text={'No data'} style={{ textAlign: 'center' }} />
     </View>
   )
 
@@ -74,7 +59,6 @@ export const YourTrustedContactScreen = observer(() => {
           title={translate('emergency_access.title')}
           RightActionComponent={
             <Button
-              disabled={isFree}
               onPress={() => setIsShowAddModal(true)}
               preset="teriatary"
               text={translate('common.add')}

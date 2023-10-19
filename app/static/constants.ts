@@ -12,9 +12,6 @@ export const BACKGROUND_DECRYPT_REINDEX_EVERY = 2
 export const MAX_CIPHER_SELECTION = 10000
 export const MASTER_PW_MIN_LENGTH = 8
 
-// FAMILY
-export const FAMILY_MEMBER_LIMIT = 6
-
 // FREE
 export const FREE_PLAN_LIMIT = {
   CRYPTO: 5,
@@ -27,5 +24,5 @@ export const FREE_PLAN_LIMIT = {
 export const GEN = {
   MALE: 't',
   FEMALE: 'f',
-  OTHER: 'o'
+  OTHER: 'o',
 }

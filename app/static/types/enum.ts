@@ -77,19 +77,6 @@ export enum SharingType {
   ONLY_FILL = 'Only fill',
 }
 
-export enum PlanType {
-  FREE = 'pm_free',
-  PREMIUM = 'pm_premium',
-  FAMILY = 'pm_family',
-  LIFETIME_PREMIUM = 'pm_lifetime_premium',
-  LIFETIME_FAMILY = 'pm_lifetime_family',
-}
-
-export enum PlanTypeDuration {
-  MONTHLY = 'monthly',
-  YEARLY = 'yearly',
-}
-
 export enum InvitationStatus {
   INVITED = 'invited',
   REJECTED = 'rejected',
