@@ -4,20 +4,22 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 buildscript {
     ext {
-        buildToolsVersion = findProperty('android.buildToolsVersion') ?: '33.0.0'
-        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '24')
-        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '33')
-        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '33')
-                if (findProperty('android.kotlinVersion')) {
-            kotlinVersion = findProperty('android.kotlinVersion')
-        }
-        frescoVersion = findProperty('expo.frescoVersion') ?: '2.5.0'
+        buildToolsVersion = '33.0.0'
+        minSdkVersion = 24
+        compileSdkVersion = 33
+        targetSdkVersion = 33
+        
+        kotlinVersion = '1.8.22'
+        frescoVersion = '2.5.0'
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
 
-        googlePlayServicesAuthVersion = "20.6.0"
-        kotlinVersion = "1.8.22"
+        // Self-hosted custom gradle properties
+        bundleId = 'com.cystack.locker'
+        appName = 'Locker'
+        versionCode = 4135
+        versionName = '1.37'
     }
     repositories {
         google()
@@ -27,6 +29,8 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath('com.android.tools.build:gradle:7.3.1')
         classpath('com.facebook.react:react-native-gradle-plugin')
+
+        // Firebase services
         classpath 'com.google.gms:google-services:4.3.15'
     }
 }

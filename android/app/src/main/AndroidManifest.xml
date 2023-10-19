@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="@string/build_config_package" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/> 
@@ -41,7 +41,7 @@
             <category android:name="android.intent.category.BROWSABLE"/>
             <data android:host="locker.io" android:scheme="https"/>
             <data android:host="lockerio.page.link" android:scheme="https"/>
-            <data android:scheme="com.cystack.locker"/>
+            <data android:scheme="@string/build_config_package"/>
       </intent-filter>
       </activity>
 
@@ -51,7 +51,7 @@
         android:noHistory="true"
       >
         <intent-filter>
-          <data android:scheme="com.cystack.locker" />
+          <data android:scheme="@string/build_config_package" />
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE"/>
@@ -72,9 +72,7 @@
           android:resource="@xml/autofill_service_configuration"
         />
       </service>
-    
 
-      <meta-data android:name="asset_statements" android:resource="@string/asset_statements" />
       <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
     </application>
 </manifest>

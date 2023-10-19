@@ -1,5 +1,5 @@
-import en from "../app/i18n/en"
 import { exec } from "child_process"
+import en from 'app/i18n/en.json'
 
 // Use this array for keys that for whatever reason aren't greppable so they
 // don't hold your test suite hostage by always failing.
