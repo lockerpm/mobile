@@ -1,7 +1,7 @@
 import { useTheme } from 'app/services/context'
+import { typography } from 'app/theme'
 import React, { useState } from 'react'
 import { TextInput, View } from 'react-native'
-
 
 type Props = {
   value: string
@@ -15,20 +15,23 @@ export const LabelInput = (props: Props) => {
   const [isFocus, setIsFocus] = useState(false)
 
   return (
-    <View style={{
-      borderBottomWidth: 1,
-      borderBottomColor: isFocus ? colors.primary : colors.border
-    }}>
+    <View
+      style={{
+        borderBottomWidth: 1,
+        borderBottomColor: isFocus ? colors.primary : colors.border,
+      }}
+    >
       <TextInput
         value={value}
         onChangeText={onChange}
         placeholderTextColor={colors.secondaryText}
         selectionColor={colors.primary}
         style={{
-          color: colors.secondaryText,
-          fontSize: 14,
+          color: colors.title,
+          fontSize: 16,
+          fontFamily: typography.primary.medium,
           paddingTop: 0,
-          paddingBottom: 4
+          paddingBottom: 4,
         }}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}

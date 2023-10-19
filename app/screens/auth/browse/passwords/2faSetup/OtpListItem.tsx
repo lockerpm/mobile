@@ -1,10 +1,10 @@
 import React, { memo, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import isEqual from 'lodash/isEqual'
-import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { getTOTP, parseOTPUri } from 'app/utils/totp'
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
 type Prop = {
   item: any
@@ -48,10 +48,27 @@ export const OtpListItem = memo(
           }}
         >
           {/* Content */}
-          <View style={{ flex: 1 }}>
-            <View style={{ marginRight: 12, flex: 1, alignItems: 'center' }}>
-              <Text preset="bold" text={item.name} numberOfLines={1} ellipsizeMode="tail" />
+          <View
+            style={{
+              flex: 1,
+            }}
+          >
+            <Text
+              preset="bold"
+              text={item.name}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={{ maxWidth: '90%' }}
+            />
 
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text
+                text={otp}
+                size="large"
+                style={{
+                  color: colors.primary,
+                }}
+              />
               {item.notSync && (
                 <View style={{ marginLeft: 10 }}>
                   <Icon icon="wifi-slash" size={22} />
@@ -59,34 +76,31 @@ export const OtpListItem = memo(
               )}
             </View>
 
-            <Text
-              text={otp}
-              size="large"
+            <View
               style={{
-                color: colors.primary,
+                position: 'absolute',
+                opacity: 0,
               }}
-            />
+            >
+              <CountdownCircleTimer
+                onComplete={() => {
+                  // index === 0 && updateOtp()
+                  setOtp(getTOTP(otpData))
+                  return {
+                    shouldRepeat: true,
+                  }
+                }}
+                size={25}
+                isPlaying
+                duration={30}
+                colors={colors.primary}
+                initialRemainingTime={getRemainingTime(otpData.period)}
+                strokeWidth={4}
+              />
+            </View>
           </View>
-          {/* Content end */}
 
           {isSelected && <Icon icon="check" size={22} color={colors.primary} />}
-          <View style={{ opacity: 0, position: 'absolute' }}>
-            <CountdownCircleTimer
-              onComplete={() => {
-                // index === 0 && updateOtp()
-                setOtp(getTOTP(otpData))
-                return {
-                  shouldRepeat: true
-                }
-              }}
-              size={25}
-              isPlaying
-              duration={30}
-              colors={colors.primary}
-              initialRemainingTime={getRemainingTime(otpData.period)}
-              strokeWidth={4}
-            />
-          </View>
         </View>
       </TouchableOpacity>
     )

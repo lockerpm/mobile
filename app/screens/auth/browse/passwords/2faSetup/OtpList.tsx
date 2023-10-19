@@ -105,11 +105,10 @@ export const OtpList = observer((props: Props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Cipher list */}
       <DraggableFlatList
         style={{ height: '100%' }}
         contentContainerStyle={{
-          paddingTop: 16,
+          paddingHorizontal: 16,
         }}
         data={ciphers}
         keyExtractor={(item) => item.id.toString()}
@@ -127,7 +126,6 @@ export const OtpList = observer((props: Props) => {
           </View>
         }
       />
-      {/* Cipher list end */}
     </View>
   )
 })

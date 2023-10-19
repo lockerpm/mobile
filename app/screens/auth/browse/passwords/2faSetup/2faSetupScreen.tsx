@@ -97,10 +97,13 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup
           style={{
             backgroundColor: colors.background,
             flex: 1,
-            padding: 16,
           }}
         >
-          <SearchBar value={searchText} onChangeText={setSearchText} />
+          <SearchBar
+            value={searchText}
+            onChangeText={setSearchText}
+            containerStyle={{ margin: 16 }}
+          />
           <OtpList
             searchText={searchText}
             sortList={{
