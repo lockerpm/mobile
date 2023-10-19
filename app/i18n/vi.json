@@ -185,10 +185,6 @@
     "not_allowed_to_copy_pw": "Không thể thực hiện hành động này! Mật khẩu này chỉ có thể sử dụng cho tính năng Tự động điền!",
     "not_available_for_free": "Tính năng này không khả dụng đối với tài khoản miễn phí!",
     "could_not_complete": "Không thể thực hiện hành động. Vui lòng thử lại",
-    "relay_add": "Thêm email không thành công",
-    "relay_save": "Lưu không thành công",
-    "relay_email_limit": "Bạn chỉ có thể tạo tối đa 5 email ẩn danh",
-    "relay_email_duplicate": "Địa chỉ email này đã tồn tại",
     "social_login": {
       "cannot_get_email": "Không thể truy xuất email từ tài khoản này",
       "apple": {
@@ -234,64 +230,7 @@
     "sync_success": "Đồng bộ hóa hoàn tất",
     "will_sync_when_online": "Dữ liệu của bạn sẽ được đồng bộ khi có kết nối internet."
   },
-  "private_relay": {
-    "title": "Email ẩn danh",
-    "tool": "Ẩn địa chỉ email của bạn khỏi các nhà cung cấp dịch vụ trực tuyến",
-    "root_email": "Địa chỉ email gốc của bạn",
-    "btn": "Thêm",
-    "label": "Địa chỉ email ẩn danh",
-    "desc": {
-      "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
-      "two": "Bạn có thể tạo và dùng tối đa 05 email ẩn danh tại một thời điểm",
-      "three": "Bạn có thể sửa đổi 01 email ẩn danh theo ý bạn"
-    },
-    "desc_premium": {
-      "one": "Tất cả email gửi đến địa chỉ ẩn danh sẽ được chuyển tiếp đến địa chỉ email gốc",
-      "two": "Bạn có thể trả lời người gửi thông qua email ẩn danh",
-      "three": "Bạn có thể sửa đổi một email ẩn danh và tên miền phụ theo ý bạn"
-    },
-    "copy": "Sao chép email",
-    "edit": "Sửa địa chỉ email",
-    "edit_modal": {
-      "titel": "Thay đổi địa chỉ email",
-      "current": "Email hiện tại",
-      "new": "Địa chỉ email mới",
-      "confirm_title": "Xác nhận thay đổi dịa chỉ"
-    },
-    "error": {
-      "taken": "Địa chỉ email này đã tồn tại",
-      "minimum": "Địa chỉ email yêu cầu ít nhất 6 ký tự",
-      "not_valid": "Địa chỉ email này không hợp lệ"
-    },
-    "edit_warning": "Địa chỉ Email ẩn danh sẽ không thể khôi phục sau khi bị xóa. Locker sẽ không chuyển tiếp email tới {{alias}}, bao gồm cả các email đặt lại mật khẩu cho các tài khoản trực tuyến của bạn. Nếu bạn đã dùng địa chỉ email ẩn danh này để đăng ký các tài khoản trực tuyến, hãy cập nhật thông tin tài khoản đó trước khi xóa địa chỉ email ẩn danh này",
-    "manage_subdomain": {
-      "your_subdomain": "Tên miền phụ",
-      "desc": {
-        "one": "Tên miền phụ cho phép tạo địa chỉ email tùy chỉnh theo thương hiệu của bạn",
-        "two": "Bạn có thể tạo một tên miền phụ"
-      },
-      "manage": "Quản lý",
-      "title": "Quản lý tên miền phụ",
-      "num_alias": "Số email được tạo bởi tên miền",
-      "block_email": "Số email bị chặn",
-      "forwarded_email": "Số email được chuyển tiếp",
-      "create_date": "Ngày tạo",
-      "use_subdomain": "Sử dụng tên miền này để tạo các địa chỉ mới",
-      "edit_btn": "Thay đổi tên miền phụ",
-      "new": "Tạo mới tên miền phụ",
-      "edit_note": "*Tên miền hiện tại sẽ bị xóa vĩnh viễn khi bạn thay đổi sang một tên miền mới. Tất cả địa chỉ email gắn với tên miền hiện tại sẽ bị xóa khi bạn thực hiện hành động này"
-    },
-    "statistic": "Báo cáo",
-    "config": "Tuỳ chỉnh",
-    "no_subdomain": "Tạo tên miền của riêng bạn",
-    "config_modal": {
-      "title": "Tuỳ chỉnh",
-      "enable": "Chuyển tiếp tất cả email tới địa chỉ email gốc",
-      "block": "Chặn tất cả email đến",
-      "block_spam": "Chỉ chặn email spam và quảng cáo",
-      "note": "*Khi bạn thực hiện thay đổi, số liệu trong báo cáo cho địa chỉ này sẽ được tính lại."
-    }
-  },
+
   "emergency_access": {
     "title": "Liên hệ khẩn cấp",
     "des": "Tính năng này cấp cho phép chủ sở hữu tài khoản Locker khác khả năng truy cập vào kho tiền của bạn trong một số tình huống khẩn cấp.",

@@ -1,14 +1,14 @@
-import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
-import { withSetPropAction } from "../helpers/withSetPropAction"
-import { omit } from "ramda"
-import { toolApi } from "app/services/api/toolApi"
-import { BreanchResult } from "app/static/types"
-import { CipherView } from "core/models/view"
+import { Instance, SnapshotIn, SnapshotOut, cast, types } from 'mobx-state-tree'
+import { withSetPropAction } from '../helpers/withSetPropAction'
+import { omit } from 'ramda'
+import { toolApi } from 'app/services/api/toolApi'
+import { BreanchResult } from 'app/static/types'
+import { CipherView } from 'core/models/view'
 /**
  * Model description here for TypeScript hints.
  */
 export const ToolStoreModel = types
-  .model("ToolStore")
+  .model('ToolStore')
   .props({
     apiToken: types.maybeNull(types.string),
 
@@ -29,7 +29,7 @@ export const ToolStoreModel = types
     exposedPasswordMap: types.maybeNull(types.frozen()),
 
     // Authenticator
-    authenticatorOrder: types.optional(types.array(types.string), [])
+    authenticatorOrder: types.optional(types.array(types.string), []),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -135,78 +135,26 @@ export const ToolStoreModel = types
       self.passwordUseMap = null
       self.exposedPasswordMap = null
     },
-
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     // ----------------- API -------------------
-
-    // PRIVATE RELAY 
-    fetchRelayListAddresses: async () => {
-      const res = await toolApi.fetchRelayListAddresses(self.apiToken)
-      return res
-    },
-
-    generateRelayNewAddress: async () => {
-      const res = await toolApi.generateRelayNewAddress(self.apiToken)
-      return res
-    },
-
-    updateRelayAddress: async (addressId: number, address: string) => {
-      const res = await toolApi.updateRelayAddress(self.apiToken, addressId, address)
-      return res
-    },
-
-    deleteRelayAddress: async (addressId: number) => {
-      const res = await toolApi.deleteRelayAddress(self.apiToken, addressId)
-      return res
-    },
-
-    configRelayAddress: async (id: number, address: string, enabled: boolean, blockSpam: boolean) => {
-      const res = await toolApi.configRelayAddress(self.apiToken, id, address, enabled, blockSpam)
-      return res
-    },
-
-    fetchSubdomain: async () => {
-      const res = await toolApi.fetchSubdomain(self.apiToken)
-      return res
-    },
-
-    createSubdomain: async (subdomain: string) => {
-      const res = await toolApi.createSubdomain(self.apiToken, subdomain)
-      return res
-    },
-
-    editSubdomain: async (id: number, subdomain: string) => {
-      const res = await toolApi.editSubdomain(self.apiToken, id, subdomain)
-      return res
-    },
-
-    useSubdomain: async (useSubdomain: boolean) => {
-      const res = await toolApi.useSubdomain(self.apiToken, useSubdomain)
-      return res
-    },
-
-    fetchUseSubdomain: async () => {
-      const res = await toolApi.fetchUseSubdomain(self.apiToken)
-      return res
-    },
-
     checkBreaches: async (email: string) => {
       const res = await toolApi.checkBreaches(self.apiToken, email)
       return res
-    }
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .postProcessSnapshot(omit([
-    'isLoadingHealth',
-    'lastHealthCheck',
-    'weakPasswords',
-    'reusedPasswords',
-    'passwordUseMap',
-    'exposedPasswordMap'
-  ]))
+  .postProcessSnapshot(
+    omit([
+      'isLoadingHealth',
+      'lastHealthCheck',
+      'weakPasswords',
+      'reusedPasswords',
+      'passwordUseMap',
+      'exposedPasswordMap',
+    ])
+  )
 
-
-export interface ToolStore extends Instance<typeof ToolStoreModel> { }
-export interface ToolStoreSnapshotOut extends SnapshotOut<typeof ToolStoreModel> { }
-export interface ToolStoreSnapshotIn extends SnapshotIn<typeof ToolStoreModel> { }
+export interface ToolStore extends Instance<typeof ToolStoreModel> {}
+export interface ToolStoreSnapshotOut extends SnapshotOut<typeof ToolStoreModel> {}
+export interface ToolStoreSnapshotIn extends SnapshotIn<typeof ToolStoreModel> {}
 export const createToolStoreDefaultModel = () => types.optional(ToolStoreModel, {})

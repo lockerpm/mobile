@@ -5,13 +5,9 @@ import {
   WeakPasswordListScreen,
   ReusePasswordList,
   ExposedPasswordList,
-  PrivateRelay,
-  ManageSubdomainScreen,
-  AliasStatisticScreen,
 } from '../../screens'
 import { TxKeyPath } from 'app/i18n'
 import { ImageIconTypes } from 'app/components/cores'
-import { RelayAddress, SubdomainData } from 'app/static/types'
 import { observer } from 'mobx-react-lite'
 
 // ------------------------Tools list screen routing---------------------
@@ -26,7 +22,6 @@ export type ToolsItem = {
 type ToolsItemContainer = {
   passwordGenerator: ToolsItem
   authenticator: ToolsItem
-  privateRelay: ToolsItem
   passwordHealth: ToolsItem
   dataBreachScanner: ToolsItem
 }
@@ -37,12 +32,6 @@ export const TOOLS_ITEMS: ToolsItemContainer = {
     desc: 'pass_generator.desc',
     icon: 'password-generator',
     routeName: 'passwordGenerator',
-  },
-  privateRelay: {
-    label: 'private_relay.title',
-    desc: 'private_relay.tool',
-    icon: 'private-relay',
-    routeName: 'privateRelay',
   },
   authenticator: {
     label: 'authenticator.title',
@@ -73,13 +62,6 @@ export type ToolsParamList = {
   weakPasswordList: undefined
   reusePasswordList: undefined
   exposedPasswordList: undefined
-  privateRelay: undefined
-  manageSubdomain: {
-    subdomain: SubdomainData
-  }
-  aliasStatistic: {
-    alias: RelayAddress
-  }
 }
 
 export type ToolsStackScreenProps<T extends keyof ToolsParamList> = StackScreenProps<
@@ -102,9 +84,6 @@ export const ToolsNavigator = observer(() => {
       <Stack.Screen name="weakPasswordList" component={WeakPasswordListScreen} />
       <Stack.Screen name="reusePasswordList" component={ReusePasswordList} />
       <Stack.Screen name="exposedPasswordList" component={ExposedPasswordList} />
-      <Stack.Screen name="privateRelay" component={PrivateRelay} />
-      <Stack.Screen name="manageSubdomain" component={ManageSubdomainScreen} />
-      <Stack.Screen name="aliasStatistic" component={AliasStatisticScreen} />
     </Stack.Navigator>
   )
 })

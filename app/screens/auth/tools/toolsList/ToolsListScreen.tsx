@@ -32,9 +32,6 @@ export const ToolsListScreen = observer(() => {
       case 'passwordHealth':
         navigation.navigate('toolsStack', { screen: 'passwordHealth' })
         break
-      case 'privateRelay':
-        navigation.navigate('toolsStack', { screen: 'privateRelay' })
-        break
       default:
         navigation.navigate(item.routeName, { fromTools: true })
     }
@@ -55,10 +52,6 @@ export const ToolsListScreen = observer(() => {
         }}
       >
         {Object.values(TOOLS_ITEMS).map((item, index) => {
-          if (user.onPremiseUser && item.routeName === 'privateRelay') {
-            return null
-          }
-
           return (
             <TouchableOpacity
               key={index}

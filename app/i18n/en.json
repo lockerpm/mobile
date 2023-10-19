@@ -185,10 +185,6 @@
     "not_allowed_to_copy_pw": "Cannot perform this action! This password can only be used in Auto-fill service!",
     "not_available_for_free": "This feature is not available for free account!",
     "could_not_complete": "The operation couldn't be completed. Please try again",
-    "relay_add": "Failed to add",
-    "relay_save": "Failed to save",
-    "relay_email_limit": "You have reached the limit of 5/5 email aliases",
-    "relay_email_duplicate": "This address is already taken. Please choose another",
     "social_login": {
       "cannot_get_email": "Cannot retrieve public email from this account",
       "apple": {
@@ -233,64 +229,6 @@
     "share_invitaion_accepted": "Done! The shared item will be decrypted shortly",
     "sync_success": "Data synchronized!",
     "will_sync_when_online": "Your data will be synced when there is an internet connection"
-  },
-  "private_relay": {
-    "title": "Locker Private Email",
-    "tool": "Hide your email from online service providers",
-    "root_email": "Your root email",
-    "btn": "New alias",
-    "label": "Your alias addresses",
-    "desc": {
-      "one": "All emails to your alias addresses will be forwarded to your root email",
-      "two": "You can create and use up to 05 concurrent alias addresses",
-      "three": "You have 01 customizable alias"
-    },
-    "desc_premium": {
-      "one": "All emails to your alias addresses will be forwarded to your root email",
-      "two": "You can reply to sender address via Locker Private Email aliases",
-      "three": "You have one customizable alias and one subdomain"
-    },
-    "copy": "Copy alias",
-    "edit": "Edit alias address",
-    "edit_modal": {
-      "titel": "Edit Alias Address",
-      "current": "Current Address",
-      "new": "New Address",
-      "confirm_title": "Confirm Edit Alias"
-    },
-    "error": {
-      "taken": "This address is already taken",
-      "minimum": "Ensure this field has at least 6 characters",
-      "not_valid": "This address is not valid"
-    },
-    "edit_warning": "Once you delete this alias, it cannot be recovered. Locker Relay will no longer forward messages sent to {{alias}}, including messages that allow you to reset lost passwords. If you use this email alias to log in to sites, you should update your login with a different email address before you delete this one.",
-    "manage_subdomain": {
-      "your_subdomain": "Your subdomain",
-      "desc": {
-        "one": "Custom sub-domain allows you to create custom email domain",
-        "two": "You can create one (editable) subdomain"
-      },
-      "manage": "Manage",
-      "title": "Manage Subdomain",
-      "num_alias": "Number of email aliases",
-      "block_email": "Blocked emails",
-      "forwarded_email": "forwarded_email",
-      "create_date": "Created date",
-      "use_subdomain": "Use subdomain to generate future aliases",
-      "edit_btn": "Edit Subdomain",
-      "new": "New subdomain",
-      "edit_note": "*Current sub-domain will be permanently deleted when you change to a new sub-domain. All email aliases created from your current sub-domain will also be then deleted when you perform this action"
-    },
-    "statistic": "Statistics",
-    "config": "Configuration",
-    "no_subdomain": "Create your own subdomain",
-    "config_modal": {
-      "title": "Configuration",
-      "enable": "Forward all emails to your root email address",
-      "block": "Block all upcoming emails",
-      "block_spam": "Block spam and promotion emails only",
-      "note": "*When you make changes to these settings, the statistics for this alias address will be reset."
-    }
   },
   "emergency_access": {
     "title": "Emergency Access",
