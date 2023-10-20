@@ -1,7 +1,6 @@
 import { useStores } from 'app/models'
 import extractDomain from 'extract-domain'
 import { useCoreService } from '../coreService'
-import Config from 'react-native-config'
 import {
   CardView,
   CipherView,
@@ -18,6 +17,7 @@ import { CipherAppView, MasterPasswordPolicy, PasswordPolicy } from 'app/static/
 import { ImageSourcePropType } from 'react-native'
 import { BROWSE_ITEMS } from 'app/navigators'
 import { useHelper } from './useHelper'
+import { GET_LOGO_URL } from 'app/config/constants'
 
 export function useCipherHelper() {
   const { translate } = useHelper()
@@ -51,8 +51,11 @@ export function useCipherHelper() {
     if (!domain) {
       return { uri: null }
     }
-    const imgUri = `${Config.GET_LOGO_URL}/${domain}?size=120`
-    return { uri: imgUri }
+    if (GET_LOGO_URL) {
+      const imgUri = `${GET_LOGO_URL}/${domain}?size=120`
+      return { uri: imgUri }
+    }
+    return { uri: null }
   }
 
   // Password strength

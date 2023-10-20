@@ -44,10 +44,6 @@ public class MainActivity extends ReactActivity {
 
 
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-
-    if (BuildConfig.IS_PROD.equals("1")) {
-      // OkHttpClientProvider.setOkHttpClientFactory(new CertificatePinningClientFactory());
-    }
   }
 
   public static class AppActivityDelegate extends ReactActivityDelegate {

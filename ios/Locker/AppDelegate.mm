@@ -6,14 +6,10 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 
-#import <TrustKit/TrustKit.h>
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-//  [self initTrustKit];
-  
   self.moduleName = @"Locker";
 
   // You can add your custom initial props in the dictionary below.
@@ -112,24 +108,5 @@
         [colourView removeFromSuperview];
     }];
 }
-
-- (void)initTrustKit {
-     NSDictionary *trustKitConfig =
-     @{
-       kTSKSwizzleNetworkDelegates: @NO,
-       kTSKPinnedDomains : @{
-         [RNCConfig envFor:@"SSL_PINNING_HOST"] : @{
-              kTSKEnforcePinning : @YES,
-              kTSKIncludeSubdomains:@YES,
-              kTSKPublicKeyHashes : @[
-                  [RNCConfig envFor:@"SSL_PINNING_PUB_KEY_1"],
-                  [RNCConfig envFor:@"SSL_PINNING_PUB_KEY_2"]
-              ]
-         },
-       }
-     };
-    [TrustKit initSharedInstanceWithConfiguration:trustKitConfig];
-}
-
 
 @end

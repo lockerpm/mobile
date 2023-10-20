@@ -13,7 +13,7 @@ import { ToolsNavigator, ToolsParamList } from './tools/ToolNavigator'
 import UserInactivity from 'react-native-user-inactivity'
 import InAppReview from 'react-native-in-app-review'
 import { useStores } from '../models'
-import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from '../config/constants'
+import { IS_IOS, WS_URL } from '../config/constants'
 import {
   AppNotification,
   AppTimeoutType,
@@ -383,13 +383,7 @@ export const MainNavigator = observer(() => {
   // Web socket
   const generateSocket = () => {
     // Note: using undocumented param (https://stackoverflow.com/questions/37246446/sending-cookies-with-react-native-websockets)
-    // @ts-ignore
-    const ws = new WebSocket(`${WS_URL}?token=${user.apiToken}`, [], {
-      headers: {
-        'CF-Access-Client-Id': CF_ACCESS_CLIENT_ID,
-        'CF-Access-Client-Secret': CF_ACCESS_CLIENT_SECRET,
-      },
-    })
+    const ws = new WebSocket(`${WS_URL}?token=${user.apiToken}`, [])
     ws.onopen = () => {
       Logger.debug('SOCKET OPEN')
     }

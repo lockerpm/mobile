@@ -68,11 +68,11 @@ export function Logo(props: LogoProps) {
 }
 
 const logoRegistry = {
-  default: require('assets/images/logo/locker.png'),
-  'app-logo-secondary': require('assets/images/icons/app-logo-secondary.png'),
-  'vertical-dark': require('assets/images/logo/logo-vertical-dark.png'),
-  'vertical-light': require('assets/images/logo/logo-vertical-light.png'),
-  'locker-bg-dark': require('assets/images/logo/locker-dark.png'),
-  'horizontal-dark': require('assets/images/logo/logo-horizontal-dark.png'),
-  'horizontal-light': require('assets/images/logo/logo-horizontal-light.png'),
+  default: require('assets/logo/locker.png'),
+  'app-logo-secondary': require('assets/logo/app-logo-secondary.png'),
+  'vertical-dark': require('assets/logo/logo-vertical-dark.png'),
+  'vertical-light': require('assets/logo/logo-vertical-light.png'),
+  'locker-bg-dark': require('assets/logo/locker-dark.png'),
+  'horizontal-dark': require('assets/logo/logo-horizontal-dark.png'),
+  'horizontal-light': require('assets/logo/logo-horizontal-light.png'),
 }

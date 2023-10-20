@@ -13,6 +13,10 @@ export const RecaptchaChecker = forwardRef((_props, ref) => {
   const waitForToken = () => {
     return new Promise<string>((resolve) => {
       token = ''
+      if (!RECAPTCHA_SITE_KEY) {
+        // return null
+        resolve(token)
+      }
       recaptcha.current.open()
       const interval = setInterval(() => {
         if (token) {
@@ -41,7 +45,7 @@ export const RecaptchaChecker = forwardRef((_props, ref) => {
     token,
   }))
 
-  return (
+  return RECAPTCHA_SITE_KEY ? (
     <Recaptcha
       ref={recaptcha}
       siteKey={RECAPTCHA_SITE_KEY}
@@ -51,5 +55,5 @@ export const RecaptchaChecker = forwardRef((_props, ref) => {
       onError={onError}
       size="invisible"
     />
-  )
+  ) : null
 })

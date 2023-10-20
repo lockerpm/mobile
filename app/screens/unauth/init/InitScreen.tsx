@@ -10,7 +10,6 @@ import JailMonkey from 'jail-monkey'
 import { RootStackScreenProps } from 'app/navigators'
 import { useStores } from 'app/models'
 import { load, StorageKey } from 'app/utils/storage'
-import { IS_PROD } from 'app/config/constants'
 import { Logger } from 'app/utils/utils'
 import { useAuthentication, useHelper } from 'app/services/hook'
 import { Text } from 'app/components/cores'
@@ -102,7 +101,6 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
 
   const checkAppUpdate = () => {
     !__DEV__ &&
-      IS_PROD &&
       VersionCheck.needUpdate()
         .then(async (res) => {
           if (res.isNeeded) {
