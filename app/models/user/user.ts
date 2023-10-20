@@ -279,6 +279,7 @@ export const UserModel = types
             self.setLanguage(res.user.language)
           }
         }
+        console.log("------------asd", res.user)
         self.saveUser(res.user)
       }
       return res

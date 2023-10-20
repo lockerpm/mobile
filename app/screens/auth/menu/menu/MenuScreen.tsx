@@ -16,6 +16,7 @@ export const MenuScreen = observer(() => {
   const { translate } = useHelper()
   const { lock, logout } = useAuthentication()
 
+  console.log(user.full_name, user.avatar, ',,,,,')
   const appVersion = `${getVersion()}`
 
   const [showFingerprint, setShowFingerprint] = useState(false)

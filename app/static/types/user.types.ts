@@ -176,7 +176,7 @@ export type SessionOtpLoginRequest = {
 } & SessionLoginRequest
 
 export type RegisterLockerRequest = {
-  name: string
+  full_name: string
   email: string
   master_password_hash: string
   master_password_hint: string

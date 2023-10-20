@@ -4,42 +4,38 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React, { useEffect, useState } from 'react'
-import { AppState, Modal, Platform, View } from 'react-native'
-import NetInfo from '@react-native-community/netinfo'
-import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Toast, { BaseToastProps } from 'react-native-toast-message'
-import dynamicLinks from '@react-native-firebase/dynamic-links'
-import WebView from 'react-native-webview'
-import { observer } from 'mobx-react-lite'
-import { useStores } from '../models'
-import { OnPremiseIdentifierData, OnPremisePreloginData } from 'app/static/types'
-import { ErrorToast, InfoToast, SuccessToast } from 'app/components/utils'
+import React, { useEffect, useState } from "react"
+import { AppState, Modal, Platform, View } from "react-native"
+import NetInfo from "@react-native-community/netinfo"
+import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
+import { StackScreenProps, createStackNavigator } from "@react-navigation/stack"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import Toast, { BaseToastProps } from "react-native-toast-message"
+import dynamicLinks from "@react-native-firebase/dynamic-links"
+import WebView from "react-native-webview"
+import { observer } from "mobx-react-lite"
+import { useStores } from "../models"
+import { OnPremiseIdentifierData, OnPremisePreloginData } from "app/static/types"
+import { ErrorToast, InfoToast, SuccessToast } from "app/components/utils"
 import {
   IntroScreen,
   InitScreen,
   OnboardingScreen,
-  LockScreen,
   LoginScreen,
   SignupScreen,
-  CreateMasterPasswordScreen,
   ForgotPasswordScreen,
   LockType,
-} from '../screens'
-import { MainNavigator } from './MainNavigator'
-import { useAuthentication, useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { NotifeeNotificationData, PushNotifier } from 'app/utils/pushNotification'
-import { AppEventType, EventBus } from 'app/utils/eventBus'
-import { StorageKey, save } from 'app/utils/storage'
-import { Logger } from 'app/utils/utils'
-import { Header } from 'app/components/cores'
-import { SSOIdentifierScreen } from 'app/screens/unauth/sso/SSOIdentifierScreen'
-import { SSOEmailLoginScreen } from 'app/screens/unauth/sso/SSOEmailLoginScreen'
+} from "../screens"
+import { MainNavigator } from "./MainNavigator"
+import { useAuthentication, useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { NotifeeNotificationData, PushNotifier } from "app/utils/pushNotification"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+import { StorageKey, save } from "app/utils/storage"
+import { Logger } from "app/utils/utils"
+import { Header } from "app/components/cores"
 
-const IS_IOS = Platform.OS === 'ios'
+const IS_IOS = Platform.OS === "ios"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -88,7 +84,7 @@ const RootStack = observer((props: Props) => {
   const { clearAllData, handleDynamicLink } = useAuthentication()
   const { uiStore, user } = useStores()
   const insets = useSafeAreaInsets()
-  const [updateBlogUrl, setUpdateBlogUrl] = useState('')
+  const [updateBlogUrl, setUpdateBlogUrl] = useState("")
   // ------------------- METHODS -------------------
 
   const androidHandleNotiPress = async () => {
@@ -129,7 +125,7 @@ const RootStack = observer((props: Props) => {
     Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
-    if (nextAppState !== 'active') {
+    if (nextAppState !== "active") {
       return
     }
 
@@ -144,7 +140,7 @@ const RootStack = observer((props: Props) => {
   useEffect(() => {
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
-      Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
+      Logger.debug(offline ? "OFFLINE" : "ONLINE")
       uiStore.setIsOffline(offline)
     })
 
@@ -175,7 +171,7 @@ const RootStack = observer((props: Props) => {
 
   // Dynamic links background handler
   useEffect(() => {
-    AppState.addEventListener('change', _handleAppStateChange)
+    AppState.addEventListener("change", _handleAppStateChange)
   }, [])
 
   // Clear user data on signal
@@ -202,15 +198,16 @@ const RootStack = observer((props: Props) => {
         <Stack.Screen name="init" component={InitScreen} />
         <Stack.Screen name="intro" component={IntroScreen} />
         <Stack.Screen name="onBoarding" component={OnboardingScreen} />
-        <Stack.Screen
-          name="lock"
-          component={LockScreen}
-          initialParams={{ type: LockType.Individual }}
-        />
+
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="signup" component={SignupScreen} />
-        <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
+        {/* <Stack.Screen
+          name="lock"
+          component={LockScreen}
+          initialParams={{ type: LockType.Individual }}
+        />    */}
+        {/* <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} /> */}
         <Stack.Screen
           name="mainStack"
           component={MainNavigator}
@@ -219,25 +216,14 @@ const RootStack = observer((props: Props) => {
             gestureEnabled: false,
           }}
         />
-
-        <Stack.Screen name="ssoIdentifier" component={SSOIdentifierScreen} />
-        <Stack.Screen
-          name="ssoLogin"
-          component={SSOEmailLoginScreen}
-          initialParams={{
-            host: '',
-            use_sso: false,
-            identifier: '',
-          }}
-        />
       </Stack.Navigator>
       <Modal
         visible={!!updateBlogUrl}
         animationType="slide"
         onRequestClose={() => {
-          setUpdateBlogUrl('')
+          setUpdateBlogUrl("")
         }}
-        supportedOrientations={['portrait', 'landscape']}
+        supportedOrientations={["portrait", "landscape"]}
       >
         <View
           style={{
@@ -251,7 +237,7 @@ const RootStack = observer((props: Props) => {
             incognito
             startInLoadingState
             source={{ uri: updateBlogUrl }}
-            originWhitelist={['https://*', 'com.cystack.locker://*']}
+            originWhitelist={["https://*", "com.cystack.locker://*"]}
           />
           <View
             style={{
@@ -261,7 +247,7 @@ const RootStack = observer((props: Props) => {
               paddingVertical: 12,
               paddingHorizontal: 16,
               backgroundColor: colors.background,
-              position: 'absolute',
+              position: "absolute",
               borderBottomColor: colors.border,
               borderBottomWidth: 0.5,
             }}
@@ -269,7 +255,7 @@ const RootStack = observer((props: Props) => {
             <Header
               leftIcon="arrow-left"
               onLeftPress={() => {
-                setUpdateBlogUrl('')
+                setUpdateBlogUrl("")
               }}
             />
           </View>
@@ -298,12 +284,12 @@ export const RootNavigator = React.forwardRef<
   )
 })
 
-RootNavigator.displayName = 'RootNavigator'
+RootNavigator.displayName = "RootNavigator"
 
 /**
  * This is a list of all the route names that will exit the app if the back button
  * is pressed while in that screen. Only affects Android.
  */
-const exitRoutes: string[] = ['init', 'onBoarding']
+const exitRoutes: string[] = ["init", "onBoarding"]
 
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)

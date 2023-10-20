@@ -5,13 +5,8 @@ import { useHelper } from 'app/services/hook'
 import { Logo, Text, Button, TextInput } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 
-type Props = {
-  nextStep: (username: string, password: string, methods: { type: string; data: any }[]) => void
-  onLoggedIn: (newUser: boolean, token: string) => Promise<void>
-  handleForgot: () => void
-}
 
-export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
+export const LoginForm = () => {
   const { user } = useStores()
   const { colors } = useTheme()
   const { notify, notifyApiError, setApiTokens, translate } = useHelper()
@@ -57,14 +52,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
         notifyApiError(res)
       }
     } else {
-      if (res.data.is_factor2) {
-        nextStep(username, password, res.data.methods)
-      } else {
-        setPassword('')
-        // @ts-ignore
-        setApiTokens(res.data?.access_token)
-        onLoggedIn(false, '')
-      }
+     
     }
   }
 
@@ -114,9 +102,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
             marginTop: 12,
           }}
         >
-          <TouchableOpacity onPress={handleForgot}>
-            <Text text={translate('login.forgot_password')} color={colors.primary} />
-          </TouchableOpacity>
+       
         </View>
         <Button
           loading={loginLoading}

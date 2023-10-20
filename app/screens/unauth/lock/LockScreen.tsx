@@ -10,8 +10,6 @@ import { LoginMethod } from 'app/static/types/enum'
 
 import { LockByMasterPassword } from './normal/MasterPassword'
 import { BusinessLockByPasswordless } from './business/BusinessPasswordless'
-import { OnPremiseLockByPasswordless } from './onPremise/passwordless/passwordless'
-import { OnPremiseLockMasterPassword } from './onPremise/masterPassword/OnPremiseMasterPassword'
 import { observer } from 'mobx-react-lite'
 
 const IS_IOS = Platform.OS === 'ios'
@@ -129,18 +127,6 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = observer((props) => 
       handleLogout,
     }
 
-    if (route.params.type === LockType.OnPremise) {
-      if (lockMethod === LoginMethod.PASSWORD) {
-        return (
-          <OnPremiseLockMasterPassword
-            data={route.params.data}
-            email={route.params.email}
-            {...commonProps}
-          />
-        )
-      }
-      return <OnPremiseLockByPasswordless {...commonProps} />
-    }
 
     if (lockMethod === LoginMethod.PASSWORD) {
       return <LockByMasterPassword {...commonProps} />

@@ -8,8 +8,8 @@ import { BusinessPasswordlessQrScan } from './PasswordlessQrScan'
 import { useAuthentication } from 'app/services/hook'
 import { useCoreService } from 'app/services/coreService'
 import { BiometricsType } from '../lock.types'
+import { OtpPasswordlessGenerator, randomOtpNumber } from './OtpGenerator'
 
-import { OtpPasswordlessGenerator, randomOtpNumber } from '../onPremise/passwordless/OtpGenerator'
 
 const { width } = Dimensions.get('screen')
 

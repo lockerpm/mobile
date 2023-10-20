@@ -33,17 +33,22 @@ class UserApi {
 
   // Get me
   async getUser(token: string): Promise<{ kind: 'ok'; user: UserSnapshot } | GeneralApiProblem> {
+    console.log(token, "....")
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get('/me')
       // the typical ways to die when calling an api
+      console.log(response)
       if (!response.ok) {
+        console.log("...................................")
         const problem = getGeneralApiProblem(response)
         if (problem) return problem
       }
       const user = response.data
+
+      console.log(user)
       return { kind: 'ok', user }
     } catch (e) {
       Logger.error(e.message)

@@ -1,20 +1,20 @@
 /* eslint-disable camelcase */
-import { useStores } from 'app/models'
-import { useHelper } from './useHelper'
-import { useCoreService } from '../coreService'
-import { SymmetricCryptoKey } from 'core/models/domain'
-import moment from 'moment'
-import DeviceInfo from 'react-native-device-info'
-import { KdfType } from 'core/enums/kdfType'
-import { Utils } from '../coreService/utils'
-import ReactNativeBiometrics from 'react-native-biometrics'
-import { CipherRequest } from 'core/models/request'
-import { CipherType } from 'core/enums'
-import { CipherView, LoginUriView, LoginView } from 'core/models/view'
-import { Logger, delay, getUrlParameterByName } from 'app/utils/utils'
-import { saveShared } from 'app/utils/keychain'
-import { StorageKey, remove, removeSecure } from 'app/utils/storage'
-import { setCookiesFromUrl } from 'app/utils/analytics'
+import { useStores } from "app/models"
+import { useHelper } from "./useHelper"
+import { useCoreService } from "../coreService"
+import { SymmetricCryptoKey } from "core/models/domain"
+import moment from "moment"
+import DeviceInfo from "react-native-device-info"
+import { KdfType } from "core/enums/kdfType"
+import { Utils } from "../coreService/utils"
+import ReactNativeBiometrics from "react-native-biometrics"
+import { CipherRequest } from "core/models/request"
+import { CipherType } from "core/enums"
+import { CipherView, LoginUriView, LoginView } from "core/models/view"
+import { Logger, delay, getUrlParameterByName } from "app/utils/utils"
+import { saveShared } from "app/utils/keychain"
+import { StorageKey, remove, removeSecure } from "app/utils/storage"
+import { setCookiesFromUrl } from "app/utils/analytics"
 
 export function useAuthentication() {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore, enterpriseStore } =
@@ -40,58 +40,56 @@ export function useAuthentication() {
     keyHash: string,
     kdf: number,
     kdfIterations: number,
-    masterPassword?: string,
+    masterPassword: string,
+    email: string,
     createMasterPasswordItem?: () => Promise<void>,
-    onPremiseData?: boolean
   ) => {
     // Session login API
     const res = await user.sessionLogin({
-      client_id: 'mobile',
+      client_id: "mobile",
       password: keyHash, // keyHash,
       device_name: platformUtilsService.getDeviceString(),
       device_type: platformUtilsService.getDevice(),
       // device_identifier: await storageService.get('device_id') || randomString(),
       device_identifier: await DeviceInfo.getUniqueId(),
-      email: user.email,
+      email,
     })
-    if (res.kind === 'unauthorized') {
-      notify('error', translate('error.token_expired'))
-      return { kind: 'unauthorized' }
+    if (res.kind === "unauthorized") {
+      notify("error", translate("error.token_expired"))
+      return { kind: "unauthorized" }
     }
 
-    if (res.kind !== 'ok') {
-      if (res.kind === 'bad-data') {
-        if (res.data.code === '1008') {
+    if (res.kind !== "ok") {
+      if (res.kind === "bad-data") {
+        if (res.data.code === "1008") {
           notify(
-            'error',
-            `${translate('error.login_locked')} ${moment
-              .duration(res.data.wait, 'seconds')
-              .humanize()}`
+            "error",
+            `${translate("error.login_locked")} ${moment
+              .duration(res.data.wait, "seconds")
+              .humanize()}`,
           )
-        } else if (res.data.code === '1009') {
-          return { kind: 'enterprise-lock' }
-        } else if (res.data.code === '1010') {
-          return { kind: 'enterprise-system-lock' }
+        } else if (res.data.code === "1009") {
+          return { kind: "enterprise-lock" }
+        } else if (res.data.code === "1010") {
+          return { kind: "enterprise-system-lock" }
         } else {
           notifyApiError(res)
         }
         return res
       }
 
-      notify('error', translate('error.session_login_failed'))
+      notify("error", translate("error.session_login_failed"))
       return res
     }
 
-    if (onPremiseData) {
-      setApiTokens(res.data?.access_token)
-      await Promise.all([user.getUser(), user.getUserPw()])
-    }
+    setApiTokens(res.data?.access_token)
+    await Promise.all([user.getUser(), user.getUserPw()])
 
     // Setup service
-    messagingService.send('loggedIn')
+    messagingService.send("loggedIn")
 
     await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
-    await userService.setInformation(tokenService.getUserId(), user.email, kdf, kdfIterations)
+    await userService.setInformation(tokenService.getUserId(), email, kdf, kdfIterations)
     await cryptoService.setKey(key)
     await cryptoService.setKeyHash(keyHash)
     await cryptoService.setEncKey(res.data.key)
@@ -100,7 +98,7 @@ export function useAuthentication() {
     if (masterPassword) {
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
         masterPassword,
-        key.keyB64
+        key.keyB64,
       )
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
       // await syncAutofillData();
@@ -110,7 +108,7 @@ export function useAuthentication() {
       uiStore.setHasNoMasterPwItem(true)
       await createMasterPasswordItem()
     }
-    return { kind: 'ok' }
+    return { kind: "ok" }
   }
 
   // Login vault using API
@@ -120,29 +118,30 @@ export function useAuthentication() {
     kdf: number,
     kdfIterations: number,
     masterPassword: string,
+    email: string,
     method: string,
     otp: string,
-    save_device: boolean
+    save_device: boolean,
   ) => {
     // Session login API
     const res = await user.sessionOtpLogin({
-      client_id: 'mobile',
+      client_id: "mobile",
       password: keyHash, // keyHash,
       device_name: platformUtilsService.getDeviceString(),
       device_type: platformUtilsService.getDevice(),
       // device_identifier: await storageService.get('device_id') || randomString(),
       device_identifier: await DeviceInfo.getUniqueId(),
-      email: user.email,
+      email,
       method,
       otp,
       save_device,
     })
-    if (res.kind === 'unauthorized') {
-      notify('error', translate('error.token_expired'))
-      return { kind: 'unauthorized' }
+    if (res.kind === "unauthorized") {
+      notify("error", translate("error.token_expired"))
+      return { kind: "unauthorized" }
     }
-    if (res.kind !== 'ok') {
-      notify('error', translate('error.session_login_failed'))
+    if (res.kind !== "ok") {
+      notify("error", translate("error.session_login_failed"))
       return res
     }
 
@@ -150,10 +149,10 @@ export function useAuthentication() {
     await Promise.all([user.getUser(), user.getUserPw()])
 
     // Setup service
-    messagingService.send('loggedIn')
+    messagingService.send("loggedIn")
 
     await tokenService.setTokens(res.data.access_token, res.data.refresh_token)
-    await userService.setInformation(tokenService.getUserId(), user.email, kdf, kdfIterations)
+    await userService.setInformation(tokenService.getUserId(), email, kdf, kdfIterations)
     await cryptoService.setKey(key)
     await cryptoService.setKeyHash(keyHash)
     await cryptoService.setEncKey(res.data.key)
@@ -162,20 +161,20 @@ export function useAuthentication() {
     if (masterPassword) {
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
         masterPassword,
-        key.keyB64
+        key.keyB64,
       )
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
       // await syncAutofillData();
     }
 
-    return { kind: 'ok' }
+    return { kind: "ok" }
   }
 
   // Session login
   const sessionLogin = async (
     masterPassword: string,
+    email: string,
     createMasterPasswordItem?: () => Promise<void>,
-    onPremiseData?: boolean
   ): Promise<{ kind: string }> => {
     try {
       await delay(200)
@@ -183,7 +182,7 @@ export function useAuthentication() {
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
 
-      const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
+      const key = await cryptoService.makeKey(masterPassword, email, kdf, kdfIterations)
 
       // Offline compare
       if (uiStore.isOffline) {
@@ -191,11 +190,11 @@ export function useAuthentication() {
         if (storedKeyHash) {
           const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
           if (passwordValid) {
-            messagingService.send('loggedIn')
+            messagingService.send("loggedIn")
 
             // Fake set key
             await cryptoService.setKey(key)
-            return { kind: 'ok' }
+            return { kind: "ok" }
           }
         }
       }
@@ -208,19 +207,19 @@ export function useAuthentication() {
         kdf,
         kdfIterations,
         masterPassword,
+        email,
         createMasterPasswordItem,
-        onPremiseData
       )
     } catch (e) {
-      notify('error', translate('error.session_login_failed'))
-      return { kind: 'bad-data' }
+      notify("error", translate("error.session_login_failed"))
+      return { kind: "bad-data" }
     }
   }
   // password less qr login
   const sessionQrLogin = async (
+    email: string,
     qr: string,
     qrOtp: string,
-    onPremise?: boolean
   ): Promise<{ kind: string }> => {
     try {
       await delay(100)
@@ -230,24 +229,28 @@ export function useAuthentication() {
       const keyBuff = Utils.fromUtf8ToArray(keyStr).buffer
 
       // parse qr
-      const iv = Utils.fromB64ToArray(qr.split('.')[0]).buffer
-      const encryptB64 = Utils.fromB64ToArray(qr.split('.')[1]).buffer
+      const iv = Utils.fromB64ToArray(qr.split(".")[0]).buffer
+      const encryptB64 = Utils.fromB64ToArray(qr.split(".")[1]).buffer
 
       const dataBuffer = await cryptoFunctionService.aesDecrypt(encryptB64, iv, keyBuff)
       const data = Utils.fromBufferToUtf8(dataBuffer)
-      const [keyHash, keyB64, encType] = data.split('.')
+      const [keyHash, keyB64, encType] = data.split(".")
 
       const key = new SymmetricCryptoKey(Utils.fromB64ToArray(keyB64).buffer, parseInt(encType))
       // Online session login
-      return _loginUsingApi(key, keyHash, kdf, kdfIterations, '', () => null, onPremise)
+      return _loginUsingApi(key, keyHash, kdf, kdfIterations, "", email, () => null)
     } catch (e) {
-      notify('error', translate('error.session_login_failed'))
-      return { kind: 'bad-data' }
+      notify("error", translate("error.session_login_failed"))
+      return { kind: "bad-data" }
     }
   }
 
   // password less qr login
-  const sessionBusinessQrLogin = async (qr: string, qrOtp: string): Promise<{ kind: string }> => {
+  const sessionBusinessQrLogin = async (
+    email: string,
+    qr: string,
+    qrOtp: string,
+  ): Promise<{ kind: string }> => {
     try {
       await delay(100)
       const kdf = KdfType.PBKDF2_SHA256
@@ -256,29 +259,30 @@ export function useAuthentication() {
       const keyBuff = Utils.fromUtf8ToArray(keyStr).buffer
 
       // parse qr
-      const iv = Utils.fromB64ToArray(qr.split('.')[0]).buffer
-      const encryptB64 = Utils.fromB64ToArray(qr.split('.')[1]).buffer
+      const iv = Utils.fromB64ToArray(qr.split(".")[0]).buffer
+      const encryptB64 = Utils.fromB64ToArray(qr.split(".")[1]).buffer
 
       const dataBuffer = await cryptoFunctionService.aesDecrypt(encryptB64, iv, keyBuff)
       const data = Utils.fromBufferToUtf8(dataBuffer)
-      const [keyHash, keyB64, encType] = data.split('.')
+      const [keyHash, keyB64, encType] = data.split(".")
 
       const key = new SymmetricCryptoKey(Utils.fromB64ToArray(keyB64).buffer, parseInt(encType))
       // Online session login
-      return _loginUsingApi(key, keyHash, kdf, kdfIterations)
+      return _loginUsingApi(key, keyHash, kdf, kdfIterations, "", email)
     } catch (e) {
-      notify('error', translate('error.session_login_failed'))
-      return { kind: 'bad-data' }
+      notify("error", translate("error.session_login_failed"))
+      return { kind: "bad-data" }
     }
   }
 
   // Session login
   const sessionOtpLoginWithHashPassword = async (
+    email: string,
     masterPasswordHash: string,
     key: SymmetricCryptoKey,
     method: string,
     otp: string,
-    save_device: boolean
+    save_device: boolean,
   ): Promise<{ kind: string }> => {
     try {
       await delay(200)
@@ -291,23 +295,25 @@ export function useAuthentication() {
         masterPasswordHash,
         kdf,
         kdfIterations,
-        '',
+        "",
+        email,
         method,
         otp,
-        save_device
+        save_device,
       )
     } catch (e) {
-      notify('error', translate('error.session_login_failed'))
-      return { kind: 'bad-data' }
+      notify("error", translate("error.session_login_failed"))
+      return { kind: "bad-data" }
     }
   }
 
   // Session login
   const sessionOtpLogin = async (
     masterPassword: string,
+    email: string,
     method: string,
     otp: string,
-    save_device: boolean
+    save_device: boolean,
   ): Promise<{ kind: string }> => {
     try {
       await delay(200)
@@ -315,7 +321,7 @@ export function useAuthentication() {
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
 
-      const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
+      const key = await cryptoService.makeKey(masterPassword, email, kdf, kdfIterations)
 
       // Offline compare
       if (uiStore.isOffline) {
@@ -323,11 +329,11 @@ export function useAuthentication() {
         if (storedKeyHash) {
           const passwordValid = await cryptoService.compareAndUpdateKeyHash(masterPassword, key)
           if (passwordValid) {
-            messagingService.send('loggedIn')
+            messagingService.send("loggedIn")
 
             // Fake set key
             await cryptoService.setKey(key)
-            return { kind: 'ok' }
+            return { kind: "ok" }
           }
         }
       }
@@ -340,46 +346,47 @@ export function useAuthentication() {
         kdf,
         kdfIterations,
         masterPassword,
+        email,
         method,
         otp,
-        save_device
+        save_device,
       )
     } catch (e) {
-      notify('error', translate('error.session_login_failed'))
-      return { kind: 'bad-data' }
+      notify("error", translate("error.session_login_failed"))
+      return { kind: "bad-data" }
     }
   }
 
   // Biometric login
-  const biometricLogin = async (): Promise<{ kind: string }> => {
+  const biometricLogin = async (email: string): Promise<{ kind: string }> => {
     try {
       await delay(200)
       const { available } = await ReactNativeBiometrics.isSensorAvailable()
       if (!available) {
-        notify('error', translate('error.biometric_not_support'))
-        return { kind: 'bad-data' }
+        notify("error", translate("error.biometric_not_support"))
+        return { kind: "bad-data" }
       }
 
       // Validate biometric
       const { success } = await ReactNativeBiometrics.simplePrompt({
-        promptMessage: 'Unlock Locker',
+        promptMessage: "Unlock Locker",
       })
       if (!success) {
-        notify('error', translate('error.biometric_unlock_failed'))
-        return { kind: 'bad-data' }
+        notify("error", translate("error.biometric_unlock_failed"))
+        return { kind: "bad-data" }
       }
       // Offline login
       if (uiStore.isOffline) {
         const hasKey = await cryptoService.hasKey()
         if (!hasKey) {
-          notify('error', translate('error.session_login_failed'))
-          return { kind: 'bad-data' }
+          notify("error", translate("error.session_login_failed"))
+          return { kind: "bad-data" }
         }
         // Fake set key
-        messagingService.send('loggedIn')
+        messagingService.send("loggedIn")
         const storedKey = await cryptoService.getKey()
         await cryptoService.setKey(storedKey)
-        return { kind: 'ok' }
+        return { kind: "ok" }
       }
 
       // Online login
@@ -387,27 +394,33 @@ export function useAuthentication() {
       const keyHash = await cryptoService.getKeyHash()
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
-      return _loginUsingApi(key, keyHash, kdf, kdfIterations)
+      return _loginUsingApi(key, keyHash, kdf, kdfIterations, "", email)
     } catch (e) {
-      return { kind: 'bad-data' }
+      return { kind: "bad-data" }
     }
   }
 
   // Set master password
-  const registerLocker = async (masterPassword: string, hint: string, passwordStrength: number) => {
+  const registerLocker = async (
+    email: string,
+    fullName: string,
+    masterPassword: string,
+    hint: string,
+    passwordStrength: number,
+  ) => {
     try {
       await delay(200)
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
-      const referenceData = ''
-      const key = await cryptoService.makeKey(masterPassword, user.email, kdf, kdfIterations)
+      const referenceData = ""
+      const key = await cryptoService.makeKey(masterPassword, email, kdf, kdfIterations)
       const encKey = await cryptoService.makeEncKey(key)
       const hashedPassword = await cryptoService.hashPassword(masterPassword, key)
       const keys = await cryptoService.makeKeyPair(encKey[0])
 
       const res = await user.registerLocker({
-        name: user.full_name,
-        email: user.email,
+        full_name: fullName ,
+        email,
         master_password_hash: hashedPassword,
         master_password_hint: hint,
         key: encKey[1].encryptedString,
@@ -422,9 +435,9 @@ export function useAuthentication() {
       })
 
       // API failed
-      if (res.kind !== 'ok') {
+      if (res.kind !== "ok") {
         notifyApiError(res)
-        return { kind: 'bad-data' }
+        return { kind: "bad-data" }
       }
 
       await cryptoService.setKey(key)
@@ -434,19 +447,19 @@ export function useAuthentication() {
 
       const autofillHashedPassword = await cryptoService.hashPasswordAutofill(
         masterPassword,
-        key.keyB64
+        key.keyB64,
       )
       await cryptoService.setAutofillKeyHash(autofillHashedPassword)
 
       // Success
-      notify('success', translate('success.master_password_updated'))
+      notify("success", translate("success.master_password_updated"))
 
       await delay(500)
 
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      return { kind: 'bad-data' }
+      notify("error", translate("error.something_went_wrong"))
+      return { kind: "bad-data" }
     }
   }
 
@@ -455,20 +468,20 @@ export function useAuthentication() {
     newPassword: string,
     email: string,
     eaID: string,
-    lockerPassword?: boolean
+    lockerPassword?: boolean,
   ): Promise<{ kind: string }> => {
     try {
       if (lockerPassword) {
         const res = await user.lockerPasswordEA(eaID, newPassword)
-        if (res.kind !== 'ok') {
+        if (res.kind !== "ok") {
           notifyApiError(res)
-          return { kind: 'bad-data' }
+          return { kind: "bad-data" }
         }
         // Setup service
-        notify('success', translate('success.locker_password_updated'))
+        notify("success", translate("success.locker_password_updated"))
       } else {
         const fetchKeyRes = await user.takeoverEA(eaID)
-        if (fetchKeyRes.kind !== 'ok') return { kind: 'bad-data' }
+        if (fetchKeyRes.kind !== "ok") return { kind: "bad-data" }
         const { key_encrypted, kdf, kdf_iterations } = fetchKeyRes.data
         const oldKeyBuffer = await cryptoService.rsaDecrypt(key_encrypted)
         const oldEncKey = new SymmetricCryptoKey(oldKeyBuffer)
@@ -490,18 +503,18 @@ export function useAuthentication() {
           master_password_cipher: data,
         }
         const res = await user.passwordEA(eaID, payload)
-        if (res.kind !== 'ok') {
+        if (res.kind !== "ok") {
           notifyApiError(res)
-          return { kind: 'bad-data' }
+          return { kind: "bad-data" }
         }
         // Setup service
-        notify('success', translate('success.master_password_updated'))
+        notify("success", translate("success.master_password_updated"))
       }
 
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      return { kind: 'bad-data' }
+      notify("error", translate("error.something_went_wrong"))
+      return { kind: "bad-data" }
     }
   }
 
@@ -509,13 +522,13 @@ export function useAuthentication() {
     const cipher = new CipherView()
     cipher.type = CipherType.Login
     const loginData = new LoginView()
-    loginData.username = 'locker.io'
+    loginData.username = "locker.io"
     loginData.password = newPassword
     const uriView = new LoginUriView()
-    uriView.uri = 'https://locker.io'
+    uriView.uri = "https://locker.io"
     loginData.uris = [uriView]
     cipher.login = loginData
-    cipher.name = 'Locker Master Password'
+    cipher.name = "Locker Master Password"
     return cipher
   }
 
@@ -535,7 +548,7 @@ export function useAuthentication() {
   const changeMasterPassword = async (
     oldPassword: string,
     newPassword: string,
-    hint: string
+    hint: string,
   ): Promise<{ kind: string }> => {
     try {
       // createMasterPwItem
@@ -563,19 +576,19 @@ export function useAuthentication() {
         master_password_cipher: data,
         new_master_password_hint: hint,
       })
-      if (res.kind !== 'ok') {
+      if (res.kind !== "ok") {
         notifyApiError(res)
-        return { kind: 'bad-data' }
+        return { kind: "bad-data" }
       }
 
       // Setup service
-      notify('success', translate('success.master_password_updated'))
+      notify("success", translate("success.master_password_updated"))
       await cryptoService.clearKeys()
       await logout()
-      return { kind: 'ok' }
+      return { kind: "ok" }
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      return { kind: 'bad-data' }
+      notify("error", translate("error.something_went_wrong"))
+      return { kind: "bad-data" }
     }
   }
 
@@ -586,8 +599,8 @@ export function useAuthentication() {
       await user.logout()
       await clearAllData()
     } catch (e) {
-      notify('error', translate('error.something_went_wrong'))
-      Logger.error('logout: ' + e)
+      notify("error", translate("error.something_went_wrong"))
+      Logger.error("logout: " + e)
     }
   }
 
@@ -614,13 +627,13 @@ export function useAuthentication() {
     enterpriseStore.clearStore(dataOnly)
 
     // Reset shared data
-    await saveShared('autofill', '{}')
+    await saveShared("autofill", "{}")
 
     // Reset push noti data
     await remove(StorageKey.PUSH_NOTI_DATA)
 
     // TODO: remove this when RSA problem is fixed
-    await removeSecure('decOrgKeys')
+    await removeSecure("decOrgKeys")
 
     // Clear services
     await Promise.all([
@@ -647,23 +660,23 @@ export function useAuthentication() {
 
     // Redirect
     const WHITELIST_HOSTS = [
-      'https://locker.io',
-      'https://id.locker.io',
-      'https://staging.locker.io',
+      "https://locker.io",
+      "https://id.locker.io",
+      "https://staging.locker.io",
     ]
     const host = WHITELIST_HOSTS.find((h) => url.startsWith(h))
     if (host) {
       const path = url.split(host)[1]
 
       // Register
-      if (path.startsWith('/register')) {
-        navigation?.navigate('signup')
+      if (path.startsWith("/register")) {
+        navigation?.navigate("signup")
         return !!navigation
       }
 
       // Authenticate
-      if (path.startsWith('/authenticate')) {
-        const token = getUrlParameterByName('token', url)
+      if (path.startsWith("/authenticate")) {
+        const token = getUrlParameterByName("token", url)
         if (token) {
           const tempUserRes = await user.getUser({
             customToken: token,
@@ -671,7 +684,7 @@ export function useAuthentication() {
           })
 
           // Ignore if token is not valid or current user is correct
-          if (tempUserRes.kind !== 'ok' || tempUserRes.user.email === user.email) {
+          if (tempUserRes.kind !== "ok" || tempUserRes.user.email === user.email) {
             return false
           }
 
@@ -679,14 +692,14 @@ export function useAuthentication() {
           if (user.isLoggedIn) {
             await logout()
           }
-          navigation?.navigate('init')
+          navigation?.navigate("init")
           setApiTokens(token)
           const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-          if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
+          if (userRes.kind === "ok" && userPwRes.kind === "ok") {
             if (user.is_pwd_manager) {
-              navigation?.navigate('lock')
+              navigation?.navigate("lock")
             } else {
-              navigation?.navigate('createMasterPassword')
+              navigation?.navigate("createMasterPassword")
             }
             return !!navigation
           }
@@ -694,13 +707,13 @@ export function useAuthentication() {
       }
 
       // emergencyAccess
-      if (path.startsWith('/settings/security')) {
+      if (path.startsWith("/settings/security")) {
         uiStore.setIsDeeplinkEmergencyAccess(true)
         return false
       }
 
       // emergencyAccess
-      if (path.startsWith('/shares')) {
+      if (path.startsWith("/shares")) {
         uiStore.setIsDeeplinkShares(true)
         return false
       }

@@ -168,7 +168,7 @@ export const TextInput = forwardRef(function TextField(
   })()
   const disabled = TextInputProps.editable === false || status === 'disabled'
 
-  const helper = helperProps || (isRequired && 'This field is required')
+  const helper = value ? helperProps : (isRequired && 'This field is required')
   const placeholderContent = placeholder && placeholder + (isRequiredProps ? ' (*)' : '')
 
   const $containerStyles: StyleProp<ViewStyle> = [
