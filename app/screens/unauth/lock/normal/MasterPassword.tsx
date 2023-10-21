@@ -96,7 +96,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
     if (masterPassword) {
       setIsError(false)
       setIsUnlocking(true)
-      const res = await sessionLogin(masterPassword, createMasterPasswordItem)
+      const res = await sessionLogin(masterPassword, user.email, createMasterPasswordItem)
       setIsUnlocking(false)
       if (res.kind === 'ok') {
         setMasterPassword('')
@@ -136,7 +136,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
       return
     }
     setIsBioUnlocking(true)
-    const res = await biometricLogin()
+    const res = await biometricLogin(user.email)
     setIsBioUnlocking(false)
     if (res.kind === 'ok') {
       setMasterPassword('')

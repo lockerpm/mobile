@@ -14,8 +14,8 @@ import { Logger } from 'app/utils/utils'
 import { useAuthentication, useHelper } from 'app/services/hook'
 import { Text } from 'app/components/cores'
 import { Loading } from 'app/components/utils'
-import { LockType } from '../lock/lock.types'
 import { observer } from 'mobx-react-lite'
+import { LoginMethod } from 'app/static/types'
 
 const IS_IOS = Platform.OS === 'ios'
 
@@ -43,11 +43,7 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
   // Create master pass or unlock
   const goLockOrCreatePassword = () => {
     if (user.is_pwd_manager) {
-      if (user.onPremiseUser) {
-        navigation.navigate('lock', { type: LockType.OnPremise })
-      } else {
-        navigation.navigate('lock', { type: LockType.Individual })
-      }
+      navigation.navigate('lock', { type: LoginMethod.PASSWORD })
     } else {
       navigation.navigate('createMasterPassword')
     }
@@ -190,22 +186,6 @@ export const InitScreen: FC<RootStackScreenProps<'init'>> = observer((props) => 
     if (!connectionState.isConnected || isAutoFill || isOnSaveLogin || isAutoFillItem) {
       goLockOrCreatePassword()
       return
-    }
-
-    if (user.onPremiseUser) {
-      const res = await user.onPremisePreLogin({ email: user.email })
-      if (res.kind === 'ok') {
-        if (res.data[0].activated) {
-          navigation.navigate('lock', {
-            type: LockType.OnPremise,
-            data: res.data[0],
-            email: user.email,
-          })
-        } else {
-          navigation.navigate('login')
-        }
-        return
-      }
     }
 
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])

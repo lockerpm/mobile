@@ -1,26 +1,28 @@
-import React, { FC, useEffect, useState } from 'react'
-import { Alert, BackHandler, Platform, View } from 'react-native'
-import { useStores } from 'app/models'
-import { api } from 'app/services/api'
-import { useAuthentication, useHelper } from 'app/services/hook'
-import { RootStackScreenProps } from 'app/navigators'
-import ReactNativeBiometrics from 'react-native-biometrics'
-import { BiometricsType, LockType } from './lock.types'
-import { LoginMethod } from 'app/static/types/enum'
+import React, { FC, useEffect, useState } from "react"
+import { Alert, BackHandler, Platform, View } from "react-native"
+import { useStores } from "app/models"
+import { useAuthentication, useHelper } from "app/services/hook"
+import { RootStackScreenProps } from "app/navigators"
+import ReactNativeBiometrics from "react-native-biometrics"
+import { BiometricsType } from "./lock.types"
+import { LoginMethod } from "app/static/types/enum"
 
-import { LockByMasterPassword } from './normal/MasterPassword'
-import { BusinessLockByPasswordless } from './business/BusinessPasswordless'
-import { observer } from 'mobx-react-lite'
+import { LockByMasterPassword } from "./normal/MasterPassword"
+import { BusinessLockByPasswordless } from "./business/BusinessPasswordless"
+import { observer } from "mobx-react-lite"
+import { CommonActions } from "@react-navigation/native"
 
-const IS_IOS = Platform.OS === 'ios'
+const IS_IOS = Platform.OS === "ios"
 
-export const LockScreen: FC<RootStackScreenProps<'lock'>> = observer((props) => {
+export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
   const { translate } = useHelper()
   const { user, uiStore } = useStores()
   const { logout } = useAuthentication()
+
+  const userEmail = user.email || route.params.email
 
   // ---------------------- PARAMS -------------------------
 
@@ -49,34 +51,23 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = observer((props) => 
   }
 
   const fetchBusinessLoginMethod = async () => {
-    if (route.params.type === LockType.Individual) {
-      const res = await user.businessLoginMethod()
-      if (res.kind === 'ok') {
+    if (route.params.type === LoginMethod.PASSWORD) {
+      const res = await user.preloginMethod(userEmail)
+      if (res.kind === "ok") {
         setLogMethod(res.data.login_method)
       }
     }
   }
 
-  const fetchLockType = () => {
-    // Om Premise setup
-    if (route.params.type === LockType.OnPremise) {
-      if (route.params.data.login_method !== LoginMethod.PASSWORD) {
-        setLogMethod(LoginMethod.PASSWORDLESS)
-        user.setPasswordlessLogin(true)
-      }
-
-      route.params.email && user.setOnPremaiseEmail(route.params.email)
-      user.setOnPremiseUser(true)
-      if (route.params.data?.base_api) {
-        user.setOnPremiseLastBaseUrl(route.params.data.base_api + '/v3')
-        api.apisauce.setBaseURL(route.params.data.base_api + '/v3')
-      }
-    }
-  }
 
   const handleLogout = async () => {
     await logout()
-    navigation.replace('login')
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "init" }],
+      }),
+    )
   }
 
   // -------------- EFFECT ------------------
@@ -85,13 +76,12 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = observer((props) => 
   useEffect(() => {
     detectbiometryType()
     fetchBusinessLoginMethod()
-    fetchLockType()
   }, [])
 
   // Handle back press
   useEffect(() => {
     const handleBack = (e) => {
-      if (!['POP', 'GO_BACK'].includes(e.data.action.type)) {
+      if (!["POP", "GO_BACK"].includes(e.data.action.type)) {
         navigation.dispatch(e.data.action)
         return
       }
@@ -101,21 +91,21 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = observer((props) => 
         BackHandler.exitApp()
         return
       }
-      Alert.alert(translate('alert.logout') + user.email + '?', '', [
+      Alert.alert(translate("alert.logout") + userEmail + "?", "", [
         {
-          text: translate('common.cancel'),
-          style: 'cancel',
+          text: translate("common.cancel"),
+          style: "cancel",
         },
         {
-          text: translate('common.logout'),
-          style: 'destructive',
+          text: translate("common.logout"),
+          style: "destructive",
           onPress: handleLogout,
         },
       ])
     }
-    navigation.addListener('beforeRemove', handleBack)
+    navigation.addListener("beforeRemove", handleBack)
     return () => {
-      navigation.removeListener('beforeRemove', handleBack)
+      navigation.removeListener("beforeRemove", handleBack)
     }
   }, [navigation])
 
@@ -127,11 +117,10 @@ export const LockScreen: FC<RootStackScreenProps<'lock'>> = observer((props) => 
       handleLogout,
     }
 
-
     if (lockMethod === LoginMethod.PASSWORD) {
       return <LockByMasterPassword {...commonProps} />
     }
-    return <BusinessLockByPasswordless {...commonProps} />
+    return <BusinessLockByPasswordless {...commonProps} email={userEmail} />
   }
 
   return <View style={{ flex: 1 }}>{renderContent()}</View>

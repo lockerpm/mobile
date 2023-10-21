@@ -5,11 +5,6 @@ export enum AccountRole {
   MEMBER = 2,
 }
 
-export enum LockPMType {
-  ONPREMISE = 'onPremise',
-  INDIVIDUAL = 'individual',
-}
-
 export enum AccountType {
   PERSONAL = 'personal',
   ENTERPRISE = 'enterprise',

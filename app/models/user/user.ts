@@ -6,7 +6,6 @@ import {
   Enterprise,
   LoginData,
   NotificationSettingData,
-  OnpremisePreloginPayload,
   RegisterLockerRequest,
   RegisterRequest,
   SessionLoginRequest,
@@ -62,9 +61,6 @@ export const UserModel = types
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
 
-    // On premise user
-    onPremiseUser: types.maybeNull(types.boolean),
-    onPremiseLastBaseUrl: types.maybeNull(types.string),
     isPasswordlessLogin: types.maybeNull(types.boolean),
 
     // User settings
@@ -98,14 +94,8 @@ export const UserModel = types
     setOnPremaiseEmail: (email: string) => {
       self.email = email
     },
-    setOnPremiseUser: (val: boolean) => {
-      self.onPremiseUser = val
-    },
     setPasswordlessLogin: (val: boolean) => {
       self.isPasswordlessLogin = val
-    },
-    setOnPremiseLastBaseUrl: (baseUrl: string) => {
-      self.onPremiseLastBaseUrl = baseUrl
     },
     saveUser: (userSnapshot: UserSnapshotIn) => {
       self.isLoggedIn = true
@@ -252,8 +242,6 @@ export const UserModel = types
       self.enterprise = null
       self.invitations = cast([])
       self.fingerprint = ''
-      self.onPremiseUser = false
-      self.onPremiseLastBaseUrl = ''
       remove(StorageKey.APP_CURRENT_USER)
     },
     clearSettings: () => {
@@ -279,7 +267,6 @@ export const UserModel = types
             self.setLanguage(res.user.language)
           }
         }
-        console.log("------------asd", res.user)
         self.saveUser(res.user)
       }
       return res
@@ -314,8 +301,8 @@ export const UserModel = types
       return res
     },
 
-    loginMethod: async (username: string) => {
-      const res = await idApi.loginMethod(username)
+    preloginMethod: async (username: string) => {
+      const res = await idApi.preloginMethod(username)
       return res
     },
 
@@ -410,7 +397,7 @@ export const UserModel = types
       const res = await userApi.getUserPw(self.apiToken)
       if (res.kind === 'ok') {
         self.saveUserPw(res.user)
-        if (res.user.pwd_user_type === AccountType.ENTERPRISE && !self.onPremiseUser) {
+        if (res.user.pwd_user_type === AccountType.ENTERPRISE ) {
           const _res = await userApi.getEnterprise(self.apiToken)
           if (_res.kind === 'ok') {
             self.saveEnterprise(_res.data)
@@ -559,16 +546,6 @@ export const UserModel = types
     // business
     businessLoginMethod: async () => {
       const res = await idApi.businessLoginMethod()
-      return res
-    },
-    // On Premise
-    // user is on premise
-    onPremisePreLogin: async (payload: OnpremisePreloginPayload) => {
-      const res = await idApi.onPremisePreLogin(payload)
-      return res
-    },
-    onPremiseIdentifier: async (identifier: string) => {
-      const res = await idApi.onPremiseIdentifier(identifier)
       return res
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

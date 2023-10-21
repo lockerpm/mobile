@@ -1,27 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC, useRef, useState } from "react"
+import React, { FC,  useState } from "react"
 import { View } from "react-native"
 import { RootStackScreenProps } from "app/navigators"
 import { Screen, Text, TextInput, Button, Logo } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
 import { useAuthentication, useHelper } from "app/services/hook"
-import { LoginMethod } from "app/static/types"
-import { BiometricsType } from "../lock/lock.types"
-import { useStores } from "app/models"
-import ReactNativeBiometrics from "react-native-biometrics"
 import { useNavigation } from "@react-navigation/native"
+import { useStores } from "app/models"
+import { LoginMethod } from "app/static/types"
+import Animated, { FadeInUp } from "react-native-reanimated"
 
-export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) => {
+export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
   const navigation = useNavigation() as any
   const { colors } = useTheme()
+  const { user } = useStores()
   const { translate } = useHelper()
-  const { user, uiStore } = useStores()
-  const { sessionLogin, biometricLogin, logout } = useAuthentication()
+  const { sessionLogin } = useAuthentication()
 
   // ------------------------------ PARAMS -------------------------------
 
-  const passwordRef = useRef(null)
+  const [lockMethod, setLogMethod] = useState<LoginMethod | null>(null)
 
   const [isError, setIsError] = useState(false)
 
@@ -30,6 +28,20 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
   const [loginLoading, setLoginLoading] = useState(false)
 
   // ------------------------------ METHODS -------------------------------
+
+  const fetchPreloginMethod = async () => {
+    const res = await user.preloginMethod(username)
+    if (res.kind === "ok") {
+      if (res.data.login_method === LoginMethod.PASSWORD) {
+        setLogMethod(LoginMethod.PASSWORD)
+      } else {
+        navigation.navigate('lock', {
+          type: LoginMethod.PASSWORDLESS,
+          email: res.data.email
+        })
+      }
+    }
+  }
 
   const handleLogin = async () => {
     if (password) {
@@ -41,7 +53,7 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
       if (res.kind === "ok") {
         setPassword("")
         navigation.navigate("mainStack", { screen: "start" })
-      }  else {
+      } else {
         setIsError(true)
       }
     } else {
@@ -88,36 +100,43 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
             label={translate("login.email_or_username")}
             value={username}
             onChangeText={setUsername}
-            onSubmitEditing={() => passwordRef.current && passwordRef.current.focus()}
           />
 
-          <TextInput
-            ref={passwordRef}
-            animated
-            isRequired
-            isPassword
-            isError={isError}
-            label={translate("common.password")}
-            onChangeText={setPassword}
-            value={password}
-            onSubmitEditing={handleLogin}
-          />
-          <View
-            style={{
-              width: "100%",
-              alignItems: "flex-start",
-              marginTop: 12,
-            }}
-          />
-          <Button
-            loading={loginLoading}
-            disabled={loginLoading || !(username && password)}
-            text={translate("common.login")}
-            onPress={handleLogin}
-            style={{
-              marginVertical: 16,
-            }}
-          />
+          {lockMethod === LoginMethod.PASSWORD && (
+            <Animated.View entering={FadeInUp}>
+              <TextInput
+                animated
+                isRequired
+                isPassword
+                isError={isError}
+                label={translate("common.password")}
+                onChangeText={setPassword}
+                value={password}
+                onSubmitEditing={handleLogin}
+              />
+
+              <Button
+                loading={loginLoading}
+                disabled={loginLoading || !(username && password)}
+                text={translate("common.login")}
+                onPress={handleLogin}
+                style={{
+                  marginVertical: 16,
+                }}
+              />
+            </Animated.View>
+          )}
+
+          {!lockMethod && (
+            <Button
+              disabled={!username}
+              text={translate("common.continue")}
+              onPress={fetchPreloginMethod}
+              style={{
+                marginVertical: 16,
+              }}
+            />
+          )}
         </View>
         <View
           style={{

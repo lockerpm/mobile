@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import { View, Image } from 'react-native'
-import { useNavigation, CommonActions } from '@react-navigation/native'
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { useAuthentication, useHelper } from 'app/services/hook'
-import { Screen, Text, TabHeader } from 'app/components/cores'
-import { MenuItem, MenuItemContainer, MenuItemProps } from 'app/components/utils'
-import { getVersion } from 'react-native-device-info'
-import { observer } from 'mobx-react-lite'
+import React, { useState } from "react"
+import { View, Image } from "react-native"
+import { useNavigation, CommonActions } from "@react-navigation/native"
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { useAuthentication, useHelper } from "app/services/hook"
+import { Screen, Text, TabHeader } from "app/components/cores"
+import { MenuItem, MenuItemContainer, MenuItemProps } from "app/components/utils"
+import { getVersion } from "react-native-device-info"
+import { observer } from "mobx-react-lite"
 
 export const MenuScreen = observer(() => {
   const navigation = useNavigation() as any
@@ -16,7 +16,6 @@ export const MenuScreen = observer(() => {
   const { translate } = useHelper()
   const { lock, logout } = useAuthentication()
 
-  console.log(user.full_name, user.avatar, ',,,,,')
   const appVersion = `${getVersion()}`
 
   const [showFingerprint, setShowFingerprint] = useState(false)
@@ -25,37 +24,37 @@ export const MenuScreen = observer(() => {
 
   const items: MenuItemProps[] = [
     {
-      icon: 'gear',
-      name: translate('common.settings'),
-      onPress: () => navigation.navigate('settings'),
+      icon: "gear",
+      name: translate("common.settings"),
+      onPress: () => navigation.navigate("settings"),
     },
     {
-      icon: 'question',
-      name: translate('common.help'),
-      onPress: () => navigation.navigate('help'),
+      icon: "question",
+      name: translate("common.help"),
+      onPress: () => navigation.navigate("help"),
     },
   ]
 
   const items2: MenuItemProps[] = [
     {
-      icon: 'lock-key',
-      name: translate('common.lock'),
+      icon: "lock-key",
+      name: translate("common.lock"),
       onPress: async () => {
         await lock()
-        navigation.navigate('lock')
+        navigation.navigate("lock")
       },
     },
     {
-      icon: 'sign-out',
-      name: translate('common.logout'),
+      icon: "sign-out",
+      name: translate("common.logout"),
       onPress: async () => {
         await logout()
 
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{ name: 'init' }],
-          })
+            routes: [{ name: "init" }],
+          }),
         )
       },
     },
@@ -67,25 +66,30 @@ export const MenuScreen = observer(() => {
       preset="auto"
       padding
       backgroundColor={colors.block}
-      header={<TabHeader title={translate('common.menu')} />}
+      header={<TabHeader title={translate("common.menu")} />}
     >
       <MenuItemContainer>
-        <View style={{ padding: 16, flexDirection: 'row', alignItems: 'center' }}>
-          <Image
-            source={{ uri: user.avatar }}
-            style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10 }}
-          />
+        <View style={{ padding: 16, flexDirection: "row", alignItems: "center" }}>
+          <View style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10 }}>
+            {!user.avatar && (
+              <Image
+                source={{ uri: user.avatar }}
+                style={{ width: 40, height: 40, borderRadius: 20 }}
+              />
+            )}
+          </View>
+
           <View style={{ flex: 1 }}>
             <Text text={user.email} />
-            {user.pwd_user_type === 'enterprise' && user.enterprise && (
+            {user.pwd_user_type === "enterprise" && user.enterprise && (
               <View
                 style={{
-                  flexDirection: 'row',
+                  flexDirection: "row",
                   marginTop: 5,
-                  alignItems: 'center',
+                  alignItems: "center",
                 }}
               >
-                <Text text={translate('common.enterprise') + ':'} style={{ marginRight: 8 }} />
+                <Text text={translate("common.enterprise") + ":"} style={{ marginRight: 8 }} />
                 <Text preset="bold" text={user.enterprise.name} color={colors.primary} />
               </View>
             )}
@@ -95,13 +99,13 @@ export const MenuScreen = observer(() => {
 
       <MenuItemContainer>
         <MenuItem
-          icon={'fingerprint'}
-          name={translate('menu.fingerprint')}
+          icon={"fingerprint"}
+          name={translate("menu.fingerprint")}
           onPress={() => setShowFingerprint(!showFingerprint)}
-          rightIcon={showFingerprint ? 'eye-slash' : 'eye'}
+          rightIcon={showFingerprint ? "eye-slash" : "eye"}
           content={
             <View style={{ flex: 1 }}>
-              <Text text={translate('menu.fingerprint')} />
+              <Text text={translate("menu.fingerprint")} />
               {showFingerprint && (
                 <Text
                   style={{
@@ -131,17 +135,17 @@ export const MenuScreen = observer(() => {
       <View
         style={{
           marginTop: 24,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <Text preset="label">{translate('menu.product_of')}</Text>
+        <Text preset="label">{translate("menu.product_of")}</Text>
         <Text preset="label" weight="semibold">
-          {'CyStack'}
+          {"CyStack"}
         </Text>
       </View>
-      <Text preset="label" style={{ marginVertical: 8, textAlign: 'center' }}>
+      <Text preset="label" style={{ marginVertical: 8, textAlign: "center" }}>
         Locker - {appVersion}
       </Text>
     </Screen>

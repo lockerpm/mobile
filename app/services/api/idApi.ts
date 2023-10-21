@@ -4,16 +4,13 @@ import { GeneralApiProblem, getGeneralApiProblem } from './apiProblem'
 import {
   AccountRecovery,
   LoginData,
-  UseLoginMethod,
   LoginResult,
   WebauthCredential,
-  OnPremisePreloginData,
   EmailOtpRequestRequest,
   RegisterRequest,
   ResetIDPasswordRequest,
   ResetIDPasswordWithCode,
-  OnPremiseIdentifierData,
-  OnpremisePreloginPayload,
+  PreloginUserSnapshot,
 } from 'app/static/types'
 import { LoginMethod } from 'app/static/types/enum'
 import { Logger } from 'app/utils/utils'
@@ -25,16 +22,16 @@ import { Logger } from 'app/utils/utils'
 class IdApi {
   private api: Api = api
 
-  // ID login
-  async loginMethod(
+  // login method
+  async preloginMethod(
     username: string
-  ): Promise<{ kind: 'ok'; data: UseLoginMethod } | GeneralApiProblem> {
+  ): Promise<{ kind: 'ok'; data: PreloginUserSnapshot } | GeneralApiProblem> {
     try {
       this.api.apisauce.deleteHeader('Authorization')
 
       // make the api call
-      const response: ApiResponse<any> = await this.api.apisauce.post(`/sso/auth/method`, {
-        username,
+      const response: ApiResponse<any> = await this.api.apisauce.post(`/cystack_platform/pm/users/prelogin`, {
+        email: username,
       })
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -294,56 +291,6 @@ class IdApi {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.get(
         `cystack_platform/pm/users/me/login_method`
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: 'ok', data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
-  async onPremisePreLogin(preLoginPayload: OnpremisePreloginPayload): Promise<
-    | {
-        kind: 'ok'
-        data: OnPremisePreloginData[]
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/users/onpremise/prelogin`,
-        preLoginPayload
-      )
-
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-      return { kind: 'ok', data: response.data }
-    } catch (e) {
-      Logger.error(e.message)
-      return { kind: 'bad-data' }
-    }
-  }
-
-  async onPremiseIdentifier(identifier: string): Promise<
-    | {
-        kind: 'ok'
-        data: OnPremiseIdentifierData
-      }
-    | GeneralApiProblem
-  > {
-    try {
-      const response: ApiResponse<any> = await this.api.apisauce.post(
-        `/cystack_platform/pm/users/onpremise/identifier`,
-        { identifier }
       )
 
       // the typical ways to die when calling an api

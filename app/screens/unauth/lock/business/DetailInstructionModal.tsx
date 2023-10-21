@@ -24,7 +24,6 @@ export const DetailInstructionModal = ({
           marginTop: 16,
         }}
       >
-        {/* <Text preset="label" text={translate("onpremise_passwordless.instruction")} style={{ marginBottom: 16 }} /> */}
         <Instruction
           step="01."
           icon="app-logo"

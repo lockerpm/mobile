@@ -6,12 +6,13 @@ import { useAuthentication, useHelper } from 'app/services/hook'
 import { Header, Text } from 'app/components/cores'
 
 interface Props {
+  email: string
   index: number
   otp: number
   goBack: () => void
 }
 
-export const BusinessPasswordlessQrScan = ({ otp, goBack, index }: Props) => {
+export const BusinessPasswordlessQrScan = ({ otp, goBack, index, email }: Props) => {
   const { translate } = useHelper()
   const { width, height } = Dimensions.get('screen')
   const navigation = useNavigation() as any
@@ -19,7 +20,7 @@ export const BusinessPasswordlessQrScan = ({ otp, goBack, index }: Props) => {
   const { sessionBusinessQrLogin } = useAuthentication()
 
   const onSuccess = async (e) => {
-    const res = await sessionBusinessQrLogin(e.data, otp.toString())
+    const res = await sessionBusinessQrLogin(email, e.data, otp.toString())
 
     if (res.kind === 'ok') {
       navigation.navigate('mainStack', { screen: 'start' })

@@ -209,11 +209,6 @@ export type UpdateFCMRequest = {
   device_identifier: string
 }
 
-export type OnPremiseIdentifierData = {
-  host: string
-  use_sso: boolean
-  identifier: string
-}
 
 export type OnpremisePreloginPayload = {
   email?: string

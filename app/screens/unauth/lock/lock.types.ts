@@ -9,8 +9,3 @@ export const enum BiometricsType {
    */
   Biometrics = "biometric",
 }
-
-export const enum LockType {
-  Individual = "individual",
-  OnPremise = "onPremise",
-}

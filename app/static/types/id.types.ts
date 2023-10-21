@@ -1,3 +1,5 @@
+import { LoginMethod } from "./enum"
+
 export type UseLoginMethod = {
   webauthn: boolean
   is_random_password: boolean
@@ -34,16 +36,6 @@ export type AccountRecovery = {
   data: any
 }
 
-export type OnPremisePreloginData = {
-  activated: boolean
-  alias: string
-  avatar: string
-  base_api: string
-  login_method: 'password' | 'passwordless' | string
-  email: string
-  require_passwordless: boolean
-  set_up_passwordless: boolean
-}
 
 export type RegisterRequest = {
   email: string
@@ -73,4 +65,14 @@ export type ResetIDPasswordRequest = {
 export type ResetIDPasswordWithCode = {
   username: string
   code: string
+}
+
+export type PreloginUserSnapshot = {
+  email: string
+  name: string
+  avatar: string
+  activated: boolean
+  set_up_passwordless: boolean
+  login_method: LoginMethod
+  require_passwordless: boolean
 }

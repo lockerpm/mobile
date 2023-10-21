@@ -15,7 +15,7 @@ import dynamicLinks from "@react-native-firebase/dynamic-links"
 import WebView from "react-native-webview"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../models"
-import { OnPremiseIdentifierData, OnPremisePreloginData } from "app/static/types"
+import { LoginMethod } from "app/static/types"
 import { ErrorToast, InfoToast, SuccessToast } from "app/components/utils"
 import {
   IntroScreen,
@@ -24,7 +24,7 @@ import {
   LoginScreen,
   SignupScreen,
   ForgotPasswordScreen,
-  LockType,
+  LockScreen,
 } from "../screens"
 import { MainNavigator } from "./MainNavigator"
 import { useAuthentication, useHelper } from "app/services/hook"
@@ -54,9 +54,7 @@ export type RootParamList = {
   }
   onBoarding: undefined
   lock: {
-    type?: LockType
-    // onpremise data
-    data?: OnPremisePreloginData
+    type?: LoginMethod
     email?: string
   }
   login: undefined
@@ -64,10 +62,6 @@ export type RootParamList = {
   signup: undefined
   createMasterPassword: undefined
   mainStack: undefined
-
-  // vinsso
-  ssoIdentifier: undefined
-  ssoLogin: OnPremiseIdentifierData
 }
 
 export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
@@ -202,12 +196,11 @@ const RootStack = observer((props: Props) => {
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="signup" component={SignupScreen} />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="lock"
           component={LockScreen}
-          initialParams={{ type: LockType.Individual }}
-        />    */}
-        {/* <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} /> */}
+          initialParams={{ type: LoginMethod.PASSWORD }}
+        />   
         <Stack.Screen
           name="mainStack"
           component={MainNavigator}
