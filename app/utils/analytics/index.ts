@@ -1,8 +1,6 @@
 import { getUrlParameterByName, Logger } from '../utils'
 import CookieManager from '@react-native-cookies/cookies'
 import moment from 'moment'
-import analytics from '@react-native-firebase/analytics'
-import DeviceInfo from 'react-native-device-info'
 
 const WHITELIST_HOSTS = ['https://locker.io', 'https://id.locker.io', 'https://staging.locker.io']
 const COOKIES_URL = 'https://locker.io'
@@ -49,24 +47,4 @@ export const getUtmCookies = async () => {
 export const getCookies = async (name: string) => {
   const cookies = await getUtmCookies()
   return cookies[name]
-}
-
-// Register success
-export const logRegisterSuccessEvent = async () => {
-  const cookies = await getUtmCookies()
-  const device_identifier = DeviceInfo.getUniqueId()
-  await analytics().logEvent('register_success', {
-    ...cookies,
-    device_identifier,
-  })
-}
-
-// Create master pw
-export const logCreateMasterPwEvent = async () => {
-  const cookies = await getUtmCookies()
-  const device_identifier = DeviceInfo.getUniqueId()
-  await analytics().logEvent('create_master_pw', {
-    ...cookies,
-    device_identifier,
-  })
 }
