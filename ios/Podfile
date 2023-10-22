@@ -121,6 +121,7 @@ target 'Locker' do
           #https://github.com/facebook/react-native/issues/37748#issuecomment-1580589448
           config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', '_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION']
           
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         end
       end
