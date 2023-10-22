@@ -216,7 +216,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
           label={translate('login.email_or_username')}
           value={username}
           onChangeText={(val) => {
-            if (passkeySupported && loginMethod === METHOD.NONE) {
+            if (passkeySupported && loginMethod !== METHOD.NONE) {
               setLoginMethod(METHOD.NONE)
               setShowExtraPasskeyLogin(false)
             }
