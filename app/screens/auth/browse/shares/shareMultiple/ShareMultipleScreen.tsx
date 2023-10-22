@@ -46,7 +46,7 @@ export const ShareMultipleScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={['bottom', 'top']}
       header={
         <ShareMultipleHeader
           navigation={navigation}
@@ -66,6 +66,7 @@ export const ShareMultipleScreen = observer(() => {
           }}
         />
       }
+      contentContainerStyle={{ flex: 1 }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}

@@ -77,50 +77,42 @@ export const LoginScreen: FC<RootStackScreenProps<'login'>> = observer((props) =
 
   return (
     <Screen
-      KeyboardAvoidingViewProps={{
-        enabled: false,
-      }}
+      preset='auto'
       padding
       safeAreaEdges={['top', 'bottom']}
-      contentContainerStyle={{ flex: 1 }}
+      contentContainerStyle={{ flex: 1, justifyContent: 'space-between', }}
     >
+
+      <TwoFAAuthenSheet
+        credential={credential}
+        isOpen={isShow2FASheet}
+        onClose={() => {
+          setIsShow2FASheet(false)
+        }}
+        onLoggedIn={onLoggedIn}
+      />
+
+      <LoginForm handleForgot={handleForgot} onLoggedIn={onLoggedIn} nextStep={nextStep} />
+
       <View
         style={{
-          flex: 1,
-          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginVertical: 12,
         }}
       >
-        <LoginForm handleForgot={handleForgot} onLoggedIn={onLoggedIn} nextStep={nextStep} />
-
-        <TwoFAAuthenSheet
-          credential={credential}
-          isOpen={isShow2FASheet}
-          onClose={() => {
-            setIsShow2FASheet(false)
-          }}
-          onLoggedIn={onLoggedIn}
-        />
-
-        <View
+        <Text
+          text={translate('login.no_account')}
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginVertical: 12,
+            marginRight: 12,
           }}
-        >
-          <Text
-            text={translate('login.no_account')}
-            style={{
-              marginRight: 12,
-            }}
-          />
-          <Text
-            color={colors.primary}
-            text={translate('common.sign_up')}
-            onPress={() => navigation.navigate('signup')}
-          />
-        </View>
+        />
+        <Text
+          color={colors.primary}
+          text={translate('common.sign_up')}
+          onPress={() => navigation.navigate('signup')}
+        />
       </View>
     </Screen>
   )

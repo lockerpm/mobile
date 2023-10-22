@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View } from 'react-native'
+import { Dimensions, View } from 'react-native'
 import { Icon, Text } from 'app/components/cores'
 import { useTheme } from 'app/services/context'
 import { MAX_MULTIPLE_SHARE_COUNT } from 'app/static/constants'
@@ -52,10 +52,10 @@ export const ShareMultipleHeader = (props: Props) => {
         alignItems: 'center',
       }}
     >
-      <Icon icon="check-bold" size={24} onPress={toggleSelectAll} />
+      <Icon icon="check-bold" size={24} onPress={toggleSelectAll} containerStyle={{ padding: 8 }} />
 
       {selectedItems.length > 0 && !isExceeded && (
-        <Icon icon="share" size={20} onPress={() => setShowShareModal(true)} />
+        <Icon icon="share" size={20} onPress={() => setShowShareModal(true)} containerStyle={{ padding: 8 }} />
       )}
 
       <Icon
@@ -86,17 +86,19 @@ export const ShareMultipleHeader = (props: Props) => {
       />
 
       <Text
-        size="large"
+        preset='bold'
         color={isExceeded ? colors.error : colors.title}
         text={
           selectedItems.length
             ? `${selectedItems.length} ${translate('common.selected')} (${translate(
-                'common.max'
-              )} ${MAX_MULTIPLE_SHARE_COUNT})`
+              'common.max'
+            )} ${MAX_MULTIPLE_SHARE_COUNT})`
             : translate('common.select')
         }
+        ellipsizeMode='tail'
         style={{
           marginLeft: 5,
+          maxWidth: Dimensions.get('screen').width / 2
         }}
       />
     </View>
