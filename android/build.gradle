@@ -16,8 +16,8 @@ buildscript {
         ndkVersion = "23.1.7779620"
 
         // Self-hosted custom gradle properties
-        bundleId = 'com.cystack.locker'
-        appName = 'Locker'
+        bundleId = 'com.cystack.locker.selfhost'
+        appName = 'SHLocker'
         versionCode = 4135
         versionName = '1.37'
     }

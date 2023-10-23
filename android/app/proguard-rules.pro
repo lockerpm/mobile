@@ -8,7 +8,7 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
--keep class com.cystack.locker.BuildConfig { *; }
+-keep class com.cystack.locker.selfhost.BuildConfig { *; }
 
 -keep class com.facebook.jni.** { *; }
 -keep public class com.horcrux.svg.** {*;}

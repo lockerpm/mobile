@@ -64,7 +64,7 @@ export const AutofillServiceScreen = observer(() => {
         desc: translate('autofill_service.android.android_autofill.desc'),
         image: HINT,
         action: () => {
-          RNAndroidSettingsTool.ACTION_REQUEST_SET_AUTOFILL_SERVICE('packge:com.cystack.locker')
+          RNAndroidSettingsTool.ACTION_REQUEST_SET_AUTOFILL_SERVICE('packge:com.cystack.locker.selfhost')
         },
         disabled: api < 26,
         border: false,
@@ -221,7 +221,7 @@ export const AutofillServiceScreen = observer(() => {
             if (enabled) {
               navigation.navigate('mainTab', { screen: 'homeTab' })
             } else {
-              RNAndroidSettingsTool.ACTION_REQUEST_SET_AUTOFILL_SERVICE('packge:com.cystack.locker')
+              RNAndroidSettingsTool.ACTION_REQUEST_SET_AUTOFILL_SERVICE('packge:com.cystack.locker.selfhost')
             }
           }}
           style={{

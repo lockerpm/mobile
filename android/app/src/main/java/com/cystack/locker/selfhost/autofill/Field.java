@@ -1,4 +1,4 @@
-package com.cystack.locker.autofill;
+package com.cystack.locker.selfhost.autofill;
 
 import android.app.assist.AssistStructure;
 import android.os.Build;

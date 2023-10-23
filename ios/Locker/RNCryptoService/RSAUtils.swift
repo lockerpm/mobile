@@ -12,7 +12,7 @@ class RSAUtils: NSObject {
     
     public class RSAUtilsError: NSError {
         init(_ message: String) {
-            super.init(domain: "com.cystack.lockerapp.RSAUtils", code: 500, userInfo: [
+            super.init(domain: "com.cystack.locker.selfhost.RSAUtils", code: 500, userInfo: [
                 NSLocalizedDescriptionKey: message
                 ])
         }

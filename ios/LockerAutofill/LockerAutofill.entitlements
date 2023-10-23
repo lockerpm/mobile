@@ -6,11 +6,11 @@
         <true/>
         <key>com.apple.security.application-groups</key>
 	    <array>
-		    <string>group.com.cystack.lockerapp</string>
+		    <string>group.com.cystack.locker.selfhost</string>
 	    </array>
 	    <key>keychain-access-groups</key>
 	    <array>
-		    <string>$(AppIdentifierPrefix)com.cystack.lockerapp</string>
+		    <string>$(AppIdentifierPrefix)com.cystack.locker.selfhost</string>
 	    </array>
     </dict>
 </plist>

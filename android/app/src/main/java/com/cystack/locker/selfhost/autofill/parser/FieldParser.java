@@ -1,4 +1,4 @@
-package com.cystack.locker.autofill.parser;
+package com.cystack.locker.selfhost.autofill.parser;
 
 import android.app.assist.AssistStructure;
 import android.os.Build;
@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.cystack.locker.autofill.Field;
-import com.cystack.locker.autofill.Utils;
+import com.cystack.locker.selfhost.autofill.Field;
+import com.cystack.locker.selfhost.autofill.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

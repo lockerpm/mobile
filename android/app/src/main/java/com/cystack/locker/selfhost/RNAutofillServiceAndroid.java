@@ -1,4 +1,4 @@
-package com.cystack.locker;
+package com.cystack.locker.selfhost;
 
 import static android.view.autofill.AutofillManager.EXTRA_AUTHENTICATION_RESULT;
 
@@ -23,10 +23,10 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 
-import com.cystack.locker.R;
-import com.cystack.locker.autofill.AutofillItem;
-import com.cystack.locker.autofill.Utils;
-import com.cystack.locker.autofill.Field;
+import com.cystack.locker.selfhost.R;
+import com.cystack.locker.selfhost.autofill.AutofillItem;
+import com.cystack.locker.selfhost.autofill.Utils;
+import com.cystack.locker.selfhost.autofill.Field;
 
 import java.util.ArrayList;
 import java.util.Objects;

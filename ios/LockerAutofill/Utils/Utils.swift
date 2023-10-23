@@ -146,5 +146,5 @@ extension String {
 }
 
 extension UserDefaults {
-  static let group = UserDefaults(suiteName: "group.com.cystack.lockerapp")!
+  static let group = UserDefaults(suiteName: "group.com.cystack.locker.selfhost")!
 }

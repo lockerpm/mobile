@@ -76,7 +76,7 @@ def reactNativeArchitectures() {
 
 android {
     
-    namespace 'com.cystack.locker'
+    namespace 'com.cystack.locker.selfhost'
 
     ndkVersion rootProject.ext.ndkVersion
     compileSdkVersion rootProject.ext.compileSdkVersion

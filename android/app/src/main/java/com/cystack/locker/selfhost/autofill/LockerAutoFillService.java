@@ -1,4 +1,4 @@
-package com.cystack.locker.autofill;
+package com.cystack.locker.selfhost.autofill;
 
 import android.app.PendingIntent;
 import android.app.assist.AssistStructure;
@@ -16,8 +16,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.cystack.locker.autofill.parser.Parser;
-import com.cystack.locker.RNAutofillServiceAndroid;
+import com.cystack.locker.selfhost.autofill.parser.Parser;
+import com.cystack.locker.selfhost.RNAutofillServiceAndroid;
 
 import java.util.ArrayList;
 import java.util.List;

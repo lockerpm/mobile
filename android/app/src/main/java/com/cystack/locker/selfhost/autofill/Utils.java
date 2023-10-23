@@ -1,4 +1,4 @@
-package com.cystack.locker.autofill;
+package com.cystack.locker.selfhost.autofill;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
@@ -38,8 +38,8 @@ import androidx.autofill.inline.UiVersions;
 import androidx.autofill.inline.v1.InlineSuggestionUi;
 
 import com.tencent.mmkv.MMKV;
-import com.cystack.locker.R;
-import com.cystack.locker.RNAutofillServiceAndroid;
+import com.cystack.locker.selfhost.R;
+import com.cystack.locker.selfhost.RNAutofillServiceAndroid;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -52,8 +52,8 @@ public class Utils {
     public static HashSet<String> BlacklistedUris = new HashSet<String>(
             Arrays.asList("com.android.settings",
                     "com.android.settings.intelligence",
-                    "com.cystack.locker",
-                    "com.cystack.locker.staging"));
+                    "com.cystack.locker.selfhost",
+                    "com.cystack.locker.selfhost.staging"));
     public static HashSet<String> CompatBrowsers = new HashSet<String>(
             Arrays.asList("alook.browser",
                     "alook.browser.google",

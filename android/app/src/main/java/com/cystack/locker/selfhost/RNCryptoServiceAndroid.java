@@ -1,4 +1,4 @@
-package com.cystack.locker;
+package com.cystack.locker.selfhost;
 
 import android.content.Context;
 
