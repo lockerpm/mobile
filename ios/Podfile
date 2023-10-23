@@ -1,6 +1,5 @@
 pod_folder = Pathname.new(__FILE__).dirname.realpath
 
-require File.join(File.dirname(`cd #{pod_folder} && node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require File.join(File.dirname(`cd #{pod_folder} && node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
 require File.join(File.dirname(`cd #{pod_folder} && node --print "require.resolve('@react-native-community/cli-platform-ios/package.json')"`), "native_modules")
 
@@ -36,13 +35,8 @@ setup_permissions([
 # because `react-native-flipper` depends on (FlipperKit,...), which will be excluded. To fix this,
 # you can also exclude `react-native-flipper` in `react-native.config.js`
 #
-# ```js
-# module.exports = {
-#   dependencies: {
-#     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
-#   }
-# }
-# ```
+
+
 flipper_config = FlipperConfiguration.disabled
 if ENV['NO_FLIPPER'] == "1" || ENV['CI'] then
   # Explicitly disabled through environment variables
@@ -58,7 +52,6 @@ end
 
 
 target 'Locker' do
-  use_expo_modules!
   use_modular_headers!
   
   config = use_native_modules!
@@ -75,7 +68,7 @@ target 'Locker' do
     # Hermes is now enabled by default. Disable by setting this in Podfile.properties.json.
     # Upcoming versions of React Native may rely on get_default_flags(), but
     # we make it explicit here to aid in the React Native upgrade process.
-    :hermes_enabled => podfile_properties['expo.jsEngine'] == nil || podfile_properties['expo.jsEngine'] == 'hermes',
+    :hermes_enabled => false,
     :fabric_enabled => flags[:fabric_enabled],
     # Note that if you have use_frameworks! enabled, Flipper will not work if enabled
 #    :flipper_configuration => flipper_config,
@@ -128,11 +121,4 @@ target 'Locker' do
     end
   end
 
-  post_integrate do |installer|
-    begin
-      expo_patch_react_imports!(installer)
-    rescue => e
-      Pod::UI.warn e
-    end
-  end
 end

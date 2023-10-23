@@ -15,13 +15,7 @@ apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.grad
 import com.android.build.OutputFile
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
-def expoDebuggableVariants = ['debug']
-// Override `debuggableVariants` for expo-updates debugging
-if (System.getenv('EX_UPDATES_NATIVE_DEBUG') == "1") {
-  react {
-    expoDebuggableVariants = []
-  }
-}
+
 
 
 /**
@@ -29,10 +23,8 @@ if (System.getenv('EX_UPDATES_NATIVE_DEBUG') == "1") {
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
 react {
-    entryFile = file(["node", "-e", "require('expo/scripts/resolveAppEntry')", projectRoot, "android", "absolute"].execute(null, rootDir).text.trim())
     reactNativeDir = new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim()).getParentFile().getAbsoluteFile()
     hermesCommand = new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim()).getParentFile().getAbsolutePath() + "/sdks/hermesc/%OS-BIN%/hermesc"
-    debuggableVariants = expoDebuggableVariants
 
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '..'
@@ -78,9 +70,8 @@ react {
     // hermesFlags = ["-O", "-output-source-map"]
 }
 
-// Override `hermesEnabled` by `expo.jsEngine`
 ext {
-  hermesEnabled = (findProperty('expo.jsEngine') ?: "hermes") == "hermes"
+  hermesEnabled = false
 }
 
 /**
@@ -120,11 +111,12 @@ def reactNativeArchitectures() {
 }
 
 android {
+    namespace "com.cystack.locker"
+
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.cystack.locker"
     defaultConfig {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -236,7 +228,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-
     // androidx 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 

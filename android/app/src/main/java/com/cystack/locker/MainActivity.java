@@ -13,8 +13,6 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import com.zoontek.rnbootsplash.RNBootSplash;
 import android.view.WindowManager;
 
-import expo.modules.ReactActivityDelegateWrapper;
-
 public class MainActivity extends ReactActivity {
 
   /**
@@ -34,7 +32,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
-    return new ReactActivityDelegateWrapper(this, BuildConfig.IS_NEW_ARCHITECTURE_ENABLED, new AppActivityDelegate(this, getMainComponentName()));
+    return new AppActivityDelegate(this, getMainComponentName());
   }
 
   @Override
