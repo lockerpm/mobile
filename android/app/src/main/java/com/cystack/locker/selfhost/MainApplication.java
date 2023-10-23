@@ -1,7 +1,6 @@
 package com.cystack.locker.selfhost;
 
 import android.app.Application;
-import android.content.res.Configuration;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.PackageList;
@@ -14,13 +13,10 @@ import com.facebook.soloader.SoLoader;
 
 import java.util.List;
 
-import expo.modules.ApplicationLifecycleDispatcher;
-import expo.modules.ReactNativeHostWrapper;
-
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
-    new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {
+    new DefaultReactNativeHost(this) {
       @Override
       public boolean getUseDeveloperSupport() {
         return BuildConfig.DEBUG;
@@ -49,7 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
       protected Boolean isHermesEnabled() {
         return BuildConfig.IS_HERMES_ENABLED;
       }
-  });
+  };
 
   @Override
   public ReactNativeHost getReactNativeHost() {
@@ -68,11 +64,4 @@ public class MainApplication extends Application implements ReactApplication {
 
     ApplicationLifecycleDispatcher.onApplicationCreate(this);
   }
-
-  @Override
-  public void onConfigurationChanged(@NonNull Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    ApplicationLifecycleDispatcher.onConfigurationChanged(this, newConfig);
-  }
-
 }

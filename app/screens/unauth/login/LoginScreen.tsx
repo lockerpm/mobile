@@ -67,9 +67,7 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
 
   return (
     <Screen
-      KeyboardAvoidingViewProps={{
-        enabled: false,
-      }}
+      preset='auto'
       padding
       safeAreaEdges={["top", "bottom"]}
       contentContainerStyle={{ flex: 1 }}

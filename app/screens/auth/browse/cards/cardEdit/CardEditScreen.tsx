@@ -77,7 +77,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
     mode !== 'add' ? selectedCipher.collectionIds : []
   )
   const [collection, setCollection] = useState(
-    mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null
+    mode !== 'add' && !!collectionIds ? collectionIds[0] : null
   )
   const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
 

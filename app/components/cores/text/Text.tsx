@@ -1,16 +1,16 @@
-import i18n from 'i18n-js'
-import React from 'react'
+import i18n from "i18n-js"
+import React from "react"
 import {
   StyleProp,
   Text as RNText,
   TextProps as RNTextProps,
   TextStyle,
   ColorValue,
-} from 'react-native'
-import { isRTL, TxKeyPath } from '../../../i18n'
-import { typography } from '../../../theme'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
+} from "react-native"
+import { TxKeyPath } from "../../../i18n"
+import { typography } from "../../../theme"
+import { useTheme } from "app/services/context"
+import { useHelper } from "app/services/hook"
 
 type Sizes = keyof typeof $sizeStyles
 type Weights = keyof typeof typography.primary
@@ -81,7 +81,7 @@ export function Text(props: TextProps) {
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
 
-  const preset: Presets = $presets[props.preset] ? props.preset : 'default'
+  const preset: Presets = $presets[props.preset] ? props.preset : "default"
 
   const $colorPreset = {
     default: { color: colors.primaryText },
@@ -91,7 +91,6 @@ export function Text(props: TextProps) {
     helper: { color: colors.secondaryText },
   }
   const $styles: StyleProp<TextStyle> = [
-    $rtlStyle,
     $presets[preset],
     $fontWeightStyles[weight],
     $sizeStyles[size],
@@ -134,5 +133,3 @@ const $presets = {
 
   helper: [$baseStyle, $sizeStyles.small] as StyleProp<TextStyle>,
 }
-
-const $rtlStyle: TextStyle = isRTL ? { writingDirection: 'rtl' } : {}

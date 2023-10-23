@@ -188,7 +188,7 @@ export const HomeHeader = (props: Props) => {
         }}
       />
       <Text
-        size="xl"
+        preset='bold'
         text={
           selectedItems.length
             ? `${selectedItems.length} ${translate('common.selected')}`

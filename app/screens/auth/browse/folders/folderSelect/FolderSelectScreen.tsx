@@ -97,10 +97,10 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
           {[...folderStore.notSynchedFolders, ...folderStore.notUpdatedFolders].includes(
             item.id
           ) && (
-            <View style={{ marginLeft: 10 }}>
-              <Icon icon="wifi-slash" size={22} color={colors.title} />
-            </View>
-          )}
+              <View style={{ marginLeft: 10 }}>
+                <Icon icon="wifi-slash" size={22} color={colors.title} />
+              </View>
+            )}
         </View>
 
         {selectedFolder === item.id && <Icon icon="check" size={18} color={colors.primary} />}
@@ -120,6 +120,7 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
           onLeftPress={() => navigation.goBack()}
           leftText={translate('common.cancel')}
           rightText={translate('common.save')}
+          rightTextColor={colors.primary}
           onRightPress={handleMove}
         />
       }
@@ -137,7 +138,7 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text tx={'folder.no_folder'} style={{ flex: 1 }} />
 
-          {!selectedFolder && <Icon icon="check" size={18} color={colors.primary} />}
+          {selectedFolder === 'unassigned' && <Icon icon="check" size={18} color={colors.primary} />}
         </View>
       </TouchableOpacity>
 

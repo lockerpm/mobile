@@ -210,7 +210,7 @@ export const TextInput = forwardRef(function TextField(
   }
 
   const validateMask = (text: string) => {
-    if (maskType || maskOptions) {
+    if (text && (maskType || maskOptions)) {
       const masked = MaskService.toMask(maskType || 'custom', text, maskOptions)
       return masked
     }
@@ -233,8 +233,8 @@ export const TextInput = forwardRef(function TextField(
   }
 
   const toggleStyle = useDerivedValue(() => {
-    return withTiming(bin(isFocus || value?.length !== 0))
-  }, [isFocus])
+    return withTiming(bin(isFocus || !!value || disabled))
+  }, [isFocus, value])
 
   useEffect(() => {
     if (isRequiredProps && !!value) {

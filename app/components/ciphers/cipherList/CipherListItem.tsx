@@ -91,10 +91,8 @@ export const CipherListItem = memo(
 
           {isSelecting && !isMasterPwItem && (
             <Toggle
+              disabled
               value={isSelected}
-              onValueChange={() => {
-                toggleItemSelection(item.id)
-              }}
               containerStyle={{
                 marginLeft: 15,
               }}
