@@ -1,11 +1,10 @@
-/* eslint-disable react-native/no-unused-styles */
-import React, { useState, useEffect, FC } from 'react'
-import { View, Alert } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import { AppStackScreenProps } from 'app/navigators'
-import { useTheme } from 'app/services/context'
-import { Logger } from 'app/utils/utils'
-import { Icon, Logo, Screen } from 'app/components/cores'
+import React, { useState, useEffect, FC } from "react"
+import { View, Alert, Platform } from "react-native"
+import { observer } from "mobx-react-lite"
+import { AppStackScreenProps } from "app/navigators"
+import { useTheme } from "app/services/context"
+import { Logger } from "app/utils/utils"
+import { Icon, Logo, Screen } from "app/components/cores"
 
 import {
   PurchaseError,
@@ -13,22 +12,23 @@ import {
   flushFailedPurchasesCachedAsPendingAndroid,
   requestSubscription,
   useIAP,
-  withIAPContext,
-} from 'react-native-iap'
+} from "react-native-iap"
 
-import { SKU } from './PricePlan.sku'
+import { SKU } from "./PricePlan.sku"
 
-import { PremiumBenefits } from './PremiumBenefits'
-import { PricePlan } from './PricePlan'
-import { FamilyPayment } from './familyPayment/FamilyPayment'
-import { PremiumPayment } from './premiumPayment/PremiumPayment'
-import { IS_IOS } from 'app/config/constants'
-import { useStores } from 'app/models'
-import { useHelper } from 'app/services/hook'
+import { PremiumBenefits } from "./PremiumBenefits"
+import { PricePlan } from "./PricePlan"
+import { FamilyPayment } from "./familyPayment/FamilyPayment"
+import { PremiumPayment } from "./premiumPayment/PremiumPayment"
+import { useStores } from "app/models"
+import { useHelper } from "app/services/hook"
 
 const subSkus = [SKU.PRE_MON, SKU.PRE_YEAR, SKU.FAM_MON, SKU.FAM_YEAR]
 
-const PaymentScreenContent: FC<AppStackScreenProps<'payment'>> = observer((props) => {
+const IS_IOS = Platform.OS === "ios"
+const IS_ANDROID = Platform.OS === "android"
+
+export const PaymentScreen: FC<AppStackScreenProps<"payment">> = observer((props) => {
   const { subscriptions, getSubscriptions, currentPurchase, finishTransaction } = useIAP()
   const { user, uiStore } = useStores()
   const { notifyApiError, translate } = useHelper()
@@ -53,10 +53,10 @@ const PaymentScreenContent: FC<AppStackScreenProps<'payment'>> = observer((props
 
       await getSubscriptions({ skus: subSkus })
     } catch (error) {
-      Logger.error({ message: 'handleGetSubscriptions', error })
-      Alert.alert('Fail to get in-app-purchase information', '', [
+      Logger.error({ message: "handleGetSubscriptions", error })
+      Alert.alert("Fail to get in-app-purchase information", "", [
         {
-          text: 'OK',
+          text: "OK",
           onPress: () => {
             navigation.goBack()
           },
@@ -65,43 +65,49 @@ const PaymentScreenContent: FC<AppStackScreenProps<'payment'>> = observer((props
     }
   }
 
-  const purchase = async (
-    productId: string
-    // offerToken?: string,
-  ) => {
-    // if (isPlay && !offerToken) {
-    //   console.warn(
-    //     `There are no subscription Offers for selected product (Only requiered for Google Play purchases): ${productId}`,
-    //   );
-    // }
-    console.log(productId)
+  const purchase = async (productId: string) => {
     setProcessPayment(true)
     if (IS_IOS) {
       await clearTransactionIOS()
     }
 
     try {
-      await requestSubscription({
-        sku: productId,
-        // ...(offerToken && {
-        //   subscriptionOffers: [{ sku: productId, offerToken }],
-        // }),
-      })
+      if (IS_IOS) {
+        await requestSubscription({
+          sku: productId,
+        })
+      }
+
+      if (IS_ANDROID) {
+        // Stupid code :V but it works. improve in future
+        // On Google Play Billing V5 you might have  multiple offers for a single sku
+        const subscription = subscriptions.find((s) => s.productId === productId)
+        if ("subscriptionOfferDetails" in subscription) {
+          const offerToken =
+            subscription?.subscriptionOfferDetails.length > 0 &&
+            subscription?.subscriptionOfferDetails[0].offerToken
+          if (offerToken) {
+            await requestSubscription({
+              sku: productId,
+              subscriptionOffers: [{ sku: productId, offerToken }],
+            })
+          }
+        }
+      }
     } catch (error) {
-      setProcessPayment(false)
       if (error instanceof PurchaseError) {
         Logger.error({ message: `[${error.code}]: ${error.message}`, error })
       } else {
-        Logger.error({ message: 'handleBuySubscription', error })
+        Logger.error({ message: "handleBuySubscription", error })
       }
     }
+    setProcessPayment(false)
   }
 
   // -------------------- EFFECT ----------------------
   const checkCurrentPurchase = async () => {
     try {
       if (currentPurchase?.productId) {
-        console.log(currentPurchase?.productId, '----')
         await finishTransaction({
           purchase: currentPurchase,
           // isConsumable: true,
@@ -109,34 +115,31 @@ const PaymentScreenContent: FC<AppStackScreenProps<'payment'>> = observer((props
 
         // setOwnedSubscriptions((prev) => [...prev, currentPurchase?.productId])
         if (currentPurchase.transactionReceipt) {
-          console.log('--1111--')
           let res
           if (IS_IOS) {
             res = await user.purchaseValidation(
               currentPurchase.transactionReceipt,
               currentPurchase.productId,
-              currentPurchase.originalTransactionIdentifierIOS
+              currentPurchase.originalTransactionIdentifierIOS,
             )
           } else {
             res = await user.purchaseValidation(
               currentPurchase.purchaseToken,
-              currentPurchase.productId
+              currentPurchase.productId,
             )
           }
-          console.log(res)
-          if (res.kind === 'ok') {
+          if (res.kind === "ok") {
             if (res.data.success) {
               await user.loadPlan()
               uiStore.setShowWelcomePremium(true)
-              navigation.navigate('welcome_premium')
+              navigation.navigate("welcome_premium")
             } else {
-              Alert.alert(translate('manage_plan.verify'), res.data.detail)
+              Alert.alert(translate("manage_plan.verify"), res.data.detail)
             }
           } else {
             notifyApiError(res)
           }
         }
-        console.log('2222')
 
         setProcessPayment(false)
       }
@@ -145,7 +148,7 @@ const PaymentScreenContent: FC<AppStackScreenProps<'payment'>> = observer((props
       if (error instanceof PurchaseError) {
         Logger.error({ message: `[${error.code}]: ${error.message}`, error })
       } else {
-        Logger.error({ message: 'handleBuyProduct', error })
+        Logger.error({ message: "handleBuyProduct", error })
       }
     }
   }
@@ -186,22 +189,22 @@ const PaymentScreenContent: FC<AppStackScreenProps<'payment'>> = observer((props
   return (
     <Screen
       preset="auto"
-      safeAreaEdges={['top']}
+      safeAreaEdges={["top"]}
       backgroundColor={
         route.params.family || route.params.premium ? colors.background : colors.block
       }
       header={
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
             paddingHorizontal: 20,
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            justifyContent: "space-between",
+            alignItems: "center",
             height: 56,
           }}
         >
           <Logo
-            preset={isDark ? 'locker-premium' : 'locker-premium-dark'}
+            preset={isDark ? "locker-premium" : "locker-premium-dark"}
             style={{ height: 32, width: 152 }}
           />
           <Icon icon="x-circle" onPress={() => navigation.goBack()} disabled={processPayment} />
@@ -215,5 +218,3 @@ const PaymentScreenContent: FC<AppStackScreenProps<'payment'>> = observer((props
     </Screen>
   )
 })
-
-export const PaymentScreen = withIAPContext(PaymentScreenContent)
