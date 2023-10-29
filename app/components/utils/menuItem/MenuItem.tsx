@@ -24,7 +24,6 @@ export const MenuItem = ({
   content,
   rightIcon,
 }: MenuItemProps) => {
-  const { colors } = useTheme()
 
   if (hide) return null
 

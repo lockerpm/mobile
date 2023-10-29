@@ -158,8 +158,8 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/plugin-proposal-decorators": "^7.23.2",
-    "@babel/plugin-proposal-optional-catch-binding": "7.18.6",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
+    "@babel/plugin-proposal-optional-catch-binding": "7.18.6",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@react-native-community/cli-platform-ios": "^8.0.2",
@@ -195,6 +195,7 @@
     "patch-package": "6.4.7",
     "postinstall-prepare": "1.0.1",
     "prettier": "2.8.8",
+    "prompt-sync": "^4.2.0",
     "query-string": "^7.0.1",
     "react-devtools-core": "4.24.7",
     "react-dom": "18.2.0",
@@ -202,6 +203,7 @@
     "react-test-renderer": "18.2.0",
     "reactotron-core-client": "^2.8.10",
     "regenerator-runtime": "^0.13.4",
+    "replace-in-file": "^7.0.2",
     "rn-nodeify": "tradle/rn-nodeify",
     "ts-jest": "29",
     "typescript": "^5.0.4"

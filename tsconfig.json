@@ -18,5 +18,5 @@
     "baseUrl": "./"
   },
   "exclude": ["node_modules"],
-  "include": ["index.js", "App.js", "app", "core", "test", "*.js"]
+  "include": ["index.js", "App.js", "app", "core", "test", "*.js", "self-hosted"]
 }
