@@ -38,7 +38,7 @@ function refactorAndroidPackage(sourceDir, targetDir) {
         if (stat.isDirectory()) {
           mkdirIfNotExist(newPath)
 
-          moveFiles(oldPath, newPath)
+          refactorAndroidPackage(oldPath, newPath)
             .then(() => {
               if (files.indexOf(file) === files.length - 1) {
                 resolve()
@@ -100,7 +100,7 @@ function deleteOldAndroidPackage({ paths, oldPackage, package }) {
     // path need to remove
     const unusedDir = oldPackagePath.slice(0, index + 1)
     paths.forEach((p) => {
-      const removeDir = path.join(p, unusedDir)
+      const removeDir = path.join(p, ...unusedDir)
       fs.rmSync(removeDir, { recursive: true, force: true })
     })
   } catch (error) {
