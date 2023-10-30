@@ -5,8 +5,8 @@ apply plugin: "kotlin-android"
 apply plugin: "kotlin-kapt"
 
 project.ext.envConfigFiles = [
-  debug: "/app/config/.env.production",
-  release: "/app/config/.env.production",
+  debug: "/app/config/.env",
+  release: "/app/config/.env",
 ]
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
