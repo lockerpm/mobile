@@ -1,14 +1,14 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react'
-import { View, TouchableOpacity, TextInput, Image, Modal } from 'react-native'
-import { GroupMemberData, GroupData, AccountRoleText } from 'app/static/types'
-import { FolderView } from 'core/models/view/folderView'
-import { CollectionView } from 'core/models/view/collectionView'
-import { useStores } from 'app/models'
-import { useFolder, useHelper } from 'app/services/hook'
-import { AppEventType, EventBus } from 'app/utils/eventBus'
-import { Button, Icon, Text } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
+import React, { useEffect, useState } from "react"
+import { View, TouchableOpacity, Image, Modal } from "react-native"
+import { GroupMemberData, GroupData, AccountRoleText } from "app/static/types"
+import { FolderView } from "core/models/view/folderView"
+import { CollectionView } from "core/models/view/collectionView"
+import { useStores } from "app/models"
+import { useFolder, useHelper } from "app/services/hook"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+import { Button, Header, Icon, Text, TextInput } from "app/components/cores"
+import { useTheme } from "app/services/context"
 
 interface InviteProps {
   isOpen: boolean
@@ -27,7 +27,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
 
   // ----------------------- PARAMS -----------------------
 
-  const [email, setEmail] = useState<string>('')
+  const [email, setEmail] = useState<string>("")
   const [emails, setEmails] = useState<string[]>([])
 
   const [groups, setGroups] = useState<{ name: string; id: string }[]>([])
@@ -44,7 +44,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
     const isIncluded = sharedUsers?.some((element) => element.email === e)
     if (!emails.includes(e) && !isOwner && !isIncluded) {
       setEmails([...emails, e])
-      setEmail('')
+      setEmail("")
     }
   }
 
@@ -61,9 +61,9 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
     }
 
     onClose()
-    if (res.kind === 'ok' || res.kind === 'unauthorized') {
-      if (res.kind === 'ok') {
-        notify('success', translate('shares.share_folder.success.shared'))
+    if (res.kind === "ok" || res.kind === "unauthorized") {
+      if (res.kind === "ok") {
+        notify("success", translate("shares.share_folder.success.shared"))
         setEmails([])
       }
     }
@@ -71,7 +71,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
 
   const searchGroupOrMember = async (query: string) => {
     const res = await enterpriseStore.searchGroupOrMember(user.enterprise.id, query)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setSuggestions([...res.data.groups, ...res.data.members].slice(0, 4))
     } else {
       notifyApiError(res)
@@ -114,41 +114,36 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
       animationType="slide"
       onRequestClose={() => {
         onClose()
-        setEmail('')
+        setEmail("")
         setEmails([])
         setGroups([])
         setSuggestions([])
       }}
     >
-      <View style={{ flex: 1, backgroundColor: colors.background, padding: 16 }}>
-        <View
-          style={{
-            marginTop: 10,
-            height: 40,
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Icon icon="x-circle" size={18} onPress={() => onClose()} />
+      <Header
+        leftIcon="x-circle"
+        onLeftPress={() => onClose()}
+        containerStyle={{
+          paddingTop: 0,
+        }}
+        RightActionComponent={
           <Button
             preset="teriatary"
             disabled={emails?.length < 1 && groups.length < 1}
             onPress={() => {
               addFolderMember(emails)
             }}
-          >
-            <Text
-              text={translate('common.done')}
-              style={{
-                color: emails?.length > 0 || groups.length > 0 ? colors.primary : colors.disable,
-              }}
-            />
-          </Button>
-        </View>
+            text={translate("common.done")}
+            textStyle={{
+              color: emails?.length > 0 || groups.length > 0 ? colors.primary : colors.disable,
+            }}
+          />
+        }
+      />
 
+      <View style={{ flex: 1, backgroundColor: colors.background, paddingHorizontal: 16 }}>
         <View style={{ marginTop: 8 }}>
-          <Text preset="bold" size="xl" text={translate('shares.share_folder.select_member')} />
+          <Text preset="bold" size="xl" text={translate("shares.share_folder.select_member")} />
         </View>
 
         <View
@@ -159,8 +154,9 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
         >
           <View
             style={{
-              width: '100%',
-              flexDirection: 'row',
+              width: "100%",
+              flexDirection: "row",
+              marginVertical: 12,
             }}
           >
             <TouchableOpacity
@@ -172,9 +168,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
               <Icon icon="user-plus" size={24} color={colors.title} />
             </TouchableOpacity>
             <TextInput
-              placeholder={translate('shares.share_folder.add_email')}
-              placeholderTextColor={colors.title}
-              selectionColor={colors.primary}
+              placeholder={translate("shares.share_folder.add_email")}
               onChangeText={setEmail}
               value={email}
               clearButtonMode="unless-editing"
@@ -182,10 +176,10 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
               onSubmitEditing={() => {
                 addEmailToShare(email)
               }}
-              style={{
-                color: colors.title,
+              containerStyle={{
+                flex: 1,
               }}
-            ></TextInput>
+            />
           </View>
           <View>
             {emails.map((e, index) => {
@@ -199,8 +193,8 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
                     backgroundColor: colors.block,
                     paddingLeft: 10,
                     marginBottom: 16,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    flexDirection: "row",
+                    justifyContent: "space-between",
                     paddingVertical: 4,
                   }}
                 >
@@ -232,8 +226,8 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
                     backgroundColor: colors.block,
                     paddingLeft: 10,
                     marginBottom: 16,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    flexDirection: "row",
+                    justifyContent: "space-between",
                     paddingVertical: 4,
                   }}
                 >
@@ -254,7 +248,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
         </View>
 
         <View style={{ marginTop: 20, marginBottom: 20 }}>
-          <Text>{translate('invite_member.select_person')}</Text>
+          <Text>{translate("invite_member.select_person")}</Text>
         </View>
         {!!email && (
           <TouchableOpacity onPress={() => addEmailToShare(email)}>
@@ -262,19 +256,19 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
               style={{
                 borderBottomColor: colors.border,
                 borderBottomWidth: 1,
-                width: '100%',
-                flexDirection: 'row',
+                width: "100%",
+                flexDirection: "row",
                 marginBottom: 15,
                 paddingVertical: 14,
-                justifyContent: 'flex-start',
+                justifyContent: "flex-start",
               }}
             >
               <Image
-                source={require('./avatar.png')}
+                source={require("./avatar.png")}
                 style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
               />
 
-              <View style={{ flex: 1, justifyContent: 'center' }}>
+              <View style={{ flex: 1, justifyContent: "center" }}>
                 <Text text={email}></Text>
               </View>
             </View>
@@ -284,7 +278,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
         {/* Enterprise suggestion */}
         {suggestions.length > 0 && (
           <View style={{ marginTop: 20, marginBottom: 20 }}>
-            <Text style={{ marginBottom: 8 }}>{'User or group in Enterprise'.toUpperCase()}</Text>
+            <Text style={{ marginBottom: 8 }}>{"User or group in Enterprise".toUpperCase()}</Text>
             {suggestions.map((e, index) => (
               <TouchableOpacity
                 key={e + index.toString()}
@@ -309,18 +303,18 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
                   style={{
                     borderBottomColor: colors.border,
                     borderBottomWidth: 1,
-                    width: '100%',
-                    flexDirection: 'row',
+                    width: "100%",
+                    flexDirection: "row",
                     paddingVertical: 8,
-                    justifyContent: 'flex-start',
+                    justifyContent: "flex-start",
                   }}
                 >
                   <Image
-                    source={e.email ? { uri: e.avatar } : require('./group.png')}
+                    source={e.email ? { uri: e.avatar } : require("./group.png")}
                     style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
                   />
 
-                  <View style={{ flex: 1, justifyContent: 'center' }}>
+                  <View style={{ flex: 1, justifyContent: "center" }}>
                     <Text text={e.email || e.name}></Text>
                   </View>
                 </View>

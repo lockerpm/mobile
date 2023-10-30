@@ -1,11 +1,11 @@
-import React from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { Linking, TouchableOpacity, View } from 'react-native'
-import { relativeTime } from 'app/utils/utils'
-import { NotificationCategory } from 'app/static/types'
-import { useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { ImageIcon, ImageIconTypes, Text } from 'app/components/cores'
+import React from "react"
+import { useNavigation } from "@react-navigation/native"
+import { Linking, TouchableOpacity, View } from "react-native"
+import { relativeTime } from "app/utils/utils"
+import { NotificationCategory } from "app/static/types"
+import { useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { ImageIcon, ImageIconTypes, Text } from "app/components/cores"
 
 interface Props {
   lang: string
@@ -25,7 +25,7 @@ export const NotiListItem = (props: Props) => {
 
   const markRead = async () => {
     const res = await user.markReadInAppNoti(id)
-    if (res.kind !== 'ok') {
+    if (res.kind !== "ok") {
       notifyApiError(res)
     }
   }
@@ -38,62 +38,64 @@ export const NotiListItem = (props: Props) => {
     switch (type) {
       case NotificationCategory.ITEM_SHARE:
         return {
-          title: translate('noti_setting.item_sharing'),
-          icon: 'share-item',
+          title: translate("noti_setting.item_sharing"),
+          icon: "share-item",
           onPress: async () => {
             await markRead()
-            navigation.navigate('mainTab', {
-              screen: 'browseTab',
+            navigation.navigate("mainTab", {
+              screen: "browseTab",
             })
-            navigation.navigate('mainTab', {
-              screen: 'browseTab',
+            navigation.navigate("mainTab", {
+              screen: "browseTab",
               params: {
-                screen: 'sharedItems',
+                screen: "sharedItems",
               },
             })
           },
         }
       case NotificationCategory.EMERGENCY:
         return {
-          title: translate('noti_setting.emergency'),
-          icon: 'emergency',
+          title: translate("noti_setting.emergency"),
+          icon: "emergency",
           onPress: async () => {
             const { is_grantor } = metadata
             if (is_grantor === undefined) {
-              navigation.navigate('emergencyAccess')
+              navigation.navigate("emergencyAccess")
             } else {
-              navigation.navigate(is_grantor ? 'yourTrustedContact' : 'contactsTrustedYou')
+              navigation.navigate(is_grantor ? "yourTrustedContact" : "contactsTrustedYou")
             }
           },
         }
       case NotificationCategory.DATA_BREACH:
         return {
-          icon: 'data-breach-scanner',
+          icon: "data-breach-scanner",
         }
       case NotificationCategory.MARKETING:
         return {
-          icon: 'marketing',
+          icon: "marketing",
         }
       case NotificationCategory.PW_TIPS:
         return {
-          title: translate('noti_setting.tips'),
-          icon: 'pw-tips',
+          title: translate("noti_setting.tips"),
+          icon: "pw-tips",
           onPress: async () => {
             const { link } = metadata
             Linking.openURL(link[user.language])
           },
         }
+      default:
+        return null
     }
   })()
 
-  return (
+  return property ? (
     <TouchableOpacity
       style={{
-        flexDirection: 'row',
+        flexDirection: "row",
         maxHeight: 108,
         flex: 1,
       }}
-      onPress={property.onPress}
+      onPress={property?.onPress}
     >
       <ImageIcon icon={property.icon} size={40} />
       <View style={{ marginLeft: 16, flex: 1 }}>
@@ -108,5 +110,5 @@ export const NotiListItem = (props: Props) => {
         <Text preset="label" text={relativeTime(publish_time * 1000, lang)} />
       </View>
     </TouchableOpacity>
-  )
+  ) : null
 }

@@ -1,11 +1,13 @@
-import { ActionItem, ActionSheet } from 'app/components/ciphers'
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { useCipherHelper, useHelper } from 'app/services/hook'
-import { SendView } from 'core/models/view/sendView'
-import React from 'react'
-import { View, Image } from 'react-native'
-import { Text } from 'app/components/cores'
+import { ActionItem, ActionSheet } from "app/components/ciphers"
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { useCipherHelper, useHelper } from "app/services/hook"
+import { SendView } from "core/models/view/sendView"
+import React from "react"
+import { View, Image } from "react-native"
+import { Text } from "app/components/cores"
+import { observer } from "mobx-react-lite"
+import { Utils } from "app/services/coreService/utils"
 
 type Props = {
   isOpen: boolean
@@ -18,7 +20,7 @@ type Props = {
 /**
  * Describe your component here
  */
-export const QuickSharesItemAction = (props: Props) => {
+export const QuickSharesItemAction = observer((props: Props) => {
   const { isOpen, onClose, selectedCipher, navigation } = props
   const { colors } = useTheme()
   const { notifyApiError, copyToClipboard, translate } = useHelper()
@@ -38,14 +40,17 @@ export const QuickSharesItemAction = (props: Props) => {
 
   const stopQuickShare = async () => {
     const res = await cipherStore.stopQuickSharing(selectedCipher)
-    if (res.kind !== 'ok') {
+    if (res.kind !== "ok") {
       notifyApiError(res)
     }
     onClose()
   }
 
   const copyShareLink = () => {
-    const url = cipherStore.getPublicShareUrl(selectedCipher.accessId, selectedCipher.key)
+    const url = cipherStore.getPublicShareUrl(
+      selectedCipher.accessId,
+      Utils.bufferToBase64url(selectedCipher.key),
+    )
     copyToClipboard(url)
     onClose()
   }
@@ -55,8 +60,8 @@ export const QuickSharesItemAction = (props: Props) => {
       isOpen={isOpen}
       onClose={onClose}
       header={
-        <View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 10 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image
               source={cipherMapper.img}
               style={{ height: 40, width: 40, borderRadius: 8, opacity: isExpired ? 0.3 : 1 }}
@@ -75,18 +80,18 @@ export const QuickSharesItemAction = (props: Props) => {
     >
       {!isExpired && (
         <ActionItem
-          name={translate('quick_shares.action.detail')}
+          name={translate("quick_shares.action.detail")}
           icon="list-bullets"
           action={() => {
             onClose()
-            navigation.navigate('quickShareItemsDetail', { send: selectedCipher })
+            navigation.navigate("quickShareItemsDetail", { send: selectedCipher })
           }}
         />
       )}
 
       {!isExpired && (
         <ActionItem
-          name={translate('quick_shares.action.copy')}
+          name={translate("quick_shares.action.copy")}
           icon="link"
           action={copyShareLink}
         />
@@ -95,8 +100,8 @@ export const QuickSharesItemAction = (props: Props) => {
       <ActionItem
         name={
           isExpired
-            ? translate('quick_shares.delete_expired')
-            : translate('quick_shares.action.stop')
+            ? translate("quick_shares.delete_expired")
+            : translate("quick_shares.action.stop")
         }
         icon="trash"
         color={colors.error}
@@ -104,4 +109,4 @@ export const QuickSharesItemAction = (props: Props) => {
       />
     </ActionSheet>
   )
-}
+})

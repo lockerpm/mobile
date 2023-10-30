@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { QuickSharesList } from './QuickSharesList'
-import { PushNotifier } from 'app/utils/pushNotification'
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
-import { Screen } from 'app/components/cores'
-import { useHelper } from 'app/services/hook'
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { QuickSharesList } from "./QuickSharesList"
+import { PushNotifier } from "app/utils/pushNotification"
+import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
+import { useStores } from "app/models"
+import { Screen } from "app/components/cores"
+import { useHelper } from "app/services/hook"
 
-const SHARE_EMPTY = require('assets/images/emptyCipherList/share-empty-img.png')
+const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
 
 export const QuickShareItemsScreen = observer(() => {
   const navigation = useNavigation() as any
@@ -16,13 +17,13 @@ export const QuickShareItemsScreen = observer(() => {
   // --------------------- PARAMS -------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
 
   // --------------------- COMPUTED -------------------------
 
@@ -30,7 +31,7 @@ export const QuickShareItemsScreen = observer(() => {
 
   // Clear noti
   useEffect(() => {
-    PushNotifier.cancelNotification('share_confirm')
+    PushNotifier.cancelNotification("share_confirm")
   }, [navigation])
 
   useEffect(() => {
@@ -38,14 +39,14 @@ export const QuickShareItemsScreen = observer(() => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
 
@@ -53,10 +54,10 @@ export const QuickShareItemsScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={['top']}
+      safeAreaEdges={["top"]}
       header={
         <CipherListHeader
-          header={translate('quick_shares.share_option.quick.tl')}
+          header={translate("quick_shares.share_option.quick.tl")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
             navigation.navigate('mainTab', { screen: 'homeTab' })

@@ -1,25 +1,25 @@
-import { observer } from 'mobx-react-lite'
-import React, { FC, useRef, useState } from 'react'
-import { Dimensions, TextInput, TouchableOpacity, View, Image } from 'react-native'
-import Animated from 'react-native-reanimated'
-import moment from 'moment'
-import { AppStackScreenProps } from 'app/navigators'
-import { useCipherHelper, useHelper } from 'app/services/hook'
-import { useCoreService } from 'app/services/coreService'
-import { useStores } from 'app/models'
-import { CipherType } from 'core/enums'
-import { Send } from 'core/models/domain/send'
-import { SendView } from 'core/models/view/sendView'
-import { SendRequest } from 'core/models/request/sendRequest'
-import { Logger } from 'app/utils/utils'
-import { Utils } from 'app/services/coreService/utils'
-import { Button, Header, Icon, Screen, Text, Toggle } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { ActionSheet } from 'app/components/ciphers'
+import { observer } from "mobx-react-lite"
+import React, { FC, useEffect, useRef, useState } from "react"
+import { Dimensions, TouchableOpacity, View, Image } from "react-native"
+import Animated from "react-native-reanimated"
+import moment from "moment"
+import { AppStackScreenProps } from "app/navigators"
+import { useCipherHelper, useHelper } from "app/services/hook"
+import { useCoreService } from "app/services/coreService"
+import { useStores } from "app/models"
+import { CipherType } from "core/enums"
+import { Send } from "core/models/domain/send"
+import { SendView } from "core/models/view/sendView"
+import { SendRequest } from "core/models/request/sendRequest"
+import { Logger } from "app/utils/utils"
+import { Utils } from "app/services/coreService/utils"
+import { Button, Header, Icon, Screen, Text, Toggle, TextInput } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { ActionSheet } from "app/components/ciphers"
 
-const { width } = Dimensions.get('screen')
+const { width } = Dimensions.get("screen")
 
-export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observer((props) => {
+export const QuickSharesScreen: FC<AppStackScreenProps<"quick_shares">> = observer((props) => {
   const { copyToClipboard, notifyApiError, translate } = useHelper()
   const { sendService } = useCoreService()
   const { getCipherDescription, getCipherInfo } = useCipherHelper()
@@ -35,7 +35,7 @@ export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observ
     ...cipherView,
     imgLogo: cipherInfo.img,
     notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-      cipherView.id
+      cipherView.id,
     ),
     isDeleted: cipherView.isDeleted,
   }
@@ -50,15 +50,15 @@ export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observ
   const [expireAfter, setExpireAfter] = useState<null | number>(60 * 60 * 24)
 
   const [countAccess, setCountAccess] = useState(false)
-  const [maxAccessCount, setMaxAccessCount] = useState('1')
+  const [maxAccessCount, setMaxAccessCount] = useState("1")
   // const [password, setPassword] = useState("")
 
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState("")
   const [emails, setEmails] = useState<string[]>([])
 
   const [quickSharesInfo, setQuickSharesInfo] = useState({
-    id: '',
-    accessId: '',
+    id: "",
+    accessId: "",
     requireOtp: false,
     expirationDate: 0,
     key: null,
@@ -69,7 +69,7 @@ export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observ
     if (!!e && !emails.includes(e)) {
       setEmails([...emails, e])
     }
-    setEmail('')
+    setEmail("")
   }
   const removeEmail = (val: string) => {
     setEmails(emails.filter((e) => e !== val))
@@ -89,8 +89,8 @@ export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observ
       // @ts-ignore
       send.cipher = cipherView
       send.cipherId = cipher.id
-      send.password = ''
-      send.maxAccessCount = countAccess ? parseInt(maxAccessCount || '1') : null
+      send.password = ""
+      send.maxAccessCount = countAccess ? parseInt(maxAccessCount || "1") : null
       send.expirationDate = expireAfter ? new Date(Date.now() + expireAfter * 1000) : null
       send.requireOtp = requireOtp
       send.emails = requireOtp ? emails : []
@@ -108,7 +108,7 @@ export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observ
 
       // Send api
       const res = await cipherStore.quickShare(sendRequest)
-      if (res.kind === 'ok') {
+      if (res.kind === "ok") {
         setQuickSharesInfo({
           id: res.data.id,
           accessId: res.data.access_id,
@@ -134,26 +134,34 @@ export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observ
     copyToClipboard(
       cipherStore.getPublicShareUrl(
         quickSharesInfo.accessId,
-        Utils.bufferToBase64url(quickSharesInfo.key)
-      )
+        Utils.bufferToBase64url(quickSharesInfo.key),
+      ),
     )
   }
+
+  useEffect(() => {
+    if (!requireOtp) {
+      setEmails([])
+    }
+  }, [requireOtp])
+
   return (
     <Screen
       preset="scroll"
-      safeAreaEdges={['top', 'bottom']}
+      safeAreaEdges={["bottom"]}
       header={
         <Header
-          leftText={translate('common.cancel')}
+          leftText={translate("common.cancel")}
           onLeftPress={() => navigation.goBack()}
-          title={translate('quick_shares.title')}
+          title={translate("quick_shares.title")}
         />
       }
       footer={
         <Button
+          disabled={page === 0 && requireOtp ? emails.length === 0 : false}
           loading={isSharing}
           text={
-            page === 0 ? translate('quick_shares.get_link') : translate('quick_shares.copy_link')
+            page === 0 ? translate("quick_shares.get_link") : translate("quick_shares.copy_link")
           }
           style={{
             marginHorizontal: 16,
@@ -165,7 +173,7 @@ export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observ
         padding: 16,
       }}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Image
           source={cipher.imgLogo}
           style={{
@@ -177,7 +185,7 @@ export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observ
 
         <View style={{ flex: 1, marginLeft: 12 }}>
           {/* Name */}
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text preset="bold" numberOfLines={1} text={cipher.name} />
           </View>
           {/* Name end */}
@@ -195,7 +203,7 @@ export const QuickSharesScreen: FC<AppStackScreenProps<'quick_shares'>> = observ
       </View>
 
       <Animated.ScrollView
-        // scrollEnabled={false}
+        scrollEnabled={false}
         horizontal
         pagingEnabled
         ref={scrollViewRef}
@@ -243,8 +251,8 @@ const QuickShareOption = ({
   return (
     <TouchableOpacity
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         paddingVertical: 5,
         marginVertical: 5,
       }}
@@ -252,7 +260,7 @@ const QuickShareOption = ({
     >
       <Toggle variant="checkbox" value={isSelect} />
       <Icon
-        icon={isAnyone ? 'users-three' : 'user'}
+        icon={isAnyone ? "users-three" : "user"}
         size={24}
         color={iconColor}
         style={{ marginHorizontal: 12 }}
@@ -301,38 +309,38 @@ const QuickShareConfig = ({
 
   const ExpireData = [
     {
-      label: translate('quick_shares.config.expired.1h'),
+      label: translate("quick_shares.config.expired.1h"),
       val: 60 * 60 * 1,
     },
     {
-      label: translate('quick_shares.config.expired.24h'),
+      label: translate("quick_shares.config.expired.24h"),
       val: 60 * 60 * 24,
     },
     {
-      label: translate('quick_shares.config.expired.7d'),
+      label: translate("quick_shares.config.expired.7d"),
       val: 60 * 60 * 24 * 7,
     },
     {
-      label: translate('quick_shares.config.expired.14d'),
+      label: translate("quick_shares.config.expired.14d"),
       val: 60 * 60 * 24 * 14,
     },
     {
-      label: translate('quick_shares.config.expired.30d'),
+      label: translate("quick_shares.config.expired.30d"),
       val: 60 * 60 * 24 * 30,
     },
     {
-      label: translate('quick_shares.config.expired.no_expired'),
+      label: translate("quick_shares.config.expired.no_expired"),
       val: null,
     },
   ]
 
   const AccessCountOptions = [
     {
-      label: translate('quick_shares.config.access_options.unlimited'),
+      label: translate("quick_shares.config.access_options.unlimited"),
       value: false,
     },
     {
-      label: translate('quick_shares.config.access_options.time'),
+      label: translate("quick_shares.config.access_options.time"),
       value: true,
     },
   ]
@@ -344,7 +352,7 @@ const QuickShareConfig = ({
     >
       <Text
         preset="bold"
-        text={translate('quick_shares.config.title')}
+        text={translate("quick_shares.config.title")}
         style={{
           marginTop: 24,
           marginBottom: 4,
@@ -357,7 +365,7 @@ const QuickShareConfig = ({
         action={() => {
           setRequireOtp(false)
         }}
-        text={translate('quick_shares.config.anyone')}
+        text={translate("quick_shares.config.anyone")}
         iconColor={colors.title}
       />
       <QuickShareOption
@@ -366,7 +374,7 @@ const QuickShareConfig = ({
         action={() => {
           setRequireOtp(true)
         }}
-        text={translate('quick_shares.config.invited')}
+        text={translate("quick_shares.config.invited")}
         iconColor={colors.title}
       />
 
@@ -378,52 +386,38 @@ const QuickShareConfig = ({
         >
           <Text
             preset="bold"
-            text={translate('quick_shares.config.email')}
+            text={translate("quick_shares.config.email")}
             style={{
               marginBottom: 12,
             }}
           />
           <View
             style={{
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              borderWidth: 1,
-              borderRadius: 8,
-              borderColor: colors.border,
-              padding: 2,
-              paddingLeft: 12,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            <TextInput
-              placeholder={translate('shares.share_folder.add_email')}
-              placeholderTextColor={colors.title}
-              selectionColor={colors.primary}
-              onChangeText={setEmail}
-              value={email}
-              clearButtonMode="unless-editing"
-              clearTextOnFocus={true}
-              onSubmitEditing={addEmail}
+            <View
               style={{
-                color: colors.title,
-                flex: 1,
+                width: "80%",
               }}
-            />
+            >
+              <TextInput
+                placeholder={translate("shares.share_folder.add_email")}
+                selectionColor={colors.primary}
+                onChangeText={setEmail}
+                value={email}
+                clearButtonMode="unless-editing"
+                clearTextOnFocus={true}
+                onSubmitEditing={addEmail}
+              />
+            </View>
 
-            <Button
-              disabled={!email}
-              text={translate('common.add')}
-              style={{
-                width: 60,
-                height: 20,
-                paddingHorizontal: 0,
-              }}
-              onPress={addEmail}
-            />
+            <Button disabled={!email} text={translate("common.add")} onPress={addEmail} />
           </View>
           <Text
-            text={translate('quick_shares.config.verify')}
+            text={translate("quick_shares.config.verify")}
             style={{
               marginTop: 12,
               marginBottom: 12,
@@ -438,27 +432,27 @@ const QuickShareConfig = ({
             <View
               key={index}
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
+                flexDirection: "row",
+                justifyContent: "space-between",
                 marginVertical: 8,
               }}
             >
               <Text text={e} />
-              <Icon icon="trash" onPress={() => removeEmail(e)} />
+              <Icon icon="trash" onPress={() => removeEmail(e)} color={colors.error} />
             </View>
           )
         })}
 
       <Text
         preset="bold"
-        text={translate('quick_shares.config.expired.tl')}
+        text={translate("quick_shares.config.expired.tl")}
         style={{ marginVertical: 12 }}
       />
 
       <TouchableOpacity
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: "row",
+          alignItems: "center",
           borderWidth: 1,
           borderRadius: 8,
           borderColor: colors.border,
@@ -471,18 +465,18 @@ const QuickShareConfig = ({
         <Text text={ExpireData.find((e) => e.val === expireAfter).label} />
       </TouchableOpacity>
 
-      <Text text={translate('quick_shares.config.or')} style={{ marginVertical: 12 }} />
+      <Text text={translate("quick_shares.config.or")} style={{ marginVertical: 12 }} />
 
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: "row",
+          alignItems: "center",
         }}
       >
         <TouchableOpacity
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             borderWidth: 1,
             borderRadius: 8,
             borderColor: colors.border,
@@ -500,13 +494,12 @@ const QuickShareConfig = ({
         {countAccess && (
           <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
+              flexDirection: "row",
+              alignItems: "center",
               borderWidth: 1,
               borderRadius: 8,
               borderColor: colors.border,
-              padding: 12,
-              paddingHorizontal: 16,
+              padding: 16,
               marginBottom: 12,
             }}
             onTouchStart={() => {
@@ -518,10 +511,10 @@ const QuickShareConfig = ({
               keyboardType="number-pad"
               value={maxAccessCount.toString()}
               onChangeText={(value) => {
-                setMaxAccessCount(value.replace(/[^0-9]/g, ''))
+                setMaxAccessCount(value.replace(/[^0-9]/g, ""))
               }}
               onBlur={() => {
-                if (!maxAccessCount || maxAccessCount === '0') setMaxAccessCount('1')
+                if (!maxAccessCount || maxAccessCount === "0") setMaxAccessCount("1")
               }}
               maxLength={8}
             />
@@ -533,11 +526,13 @@ const QuickShareConfig = ({
         isOpen={openExpireSelect}
         onClose={() => setOpenExpireSelect(false)}
         header={
-          <Text
-            preset="bold"
-            text={translate('quick_shares.config.expired.tl')}
-            style={{ fontSize: 20 }}
-          />
+          <View style={{ padding: 16 }}>
+            <Text
+              preset="bold"
+              text={translate("quick_shares.config.expired.tl")}
+              style={{ fontSize: 20 }}
+            />
+          </View>
         }
       >
         {ExpireData.map((e) => (
@@ -547,22 +542,19 @@ const QuickShareConfig = ({
               setOpenExpireSelect(false)
               setExpireAfter(e.val)
             }}
+            style={{
+              padding: 16,
+            }}
           >
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <Text
-                text={e.label}
-                style={{
-                  marginVertical: 14,
-                  marginBottom: 2,
-                }}
-              />
-              {expireAfter === e.val && <Icon icon="check" />}
+              <Text text={e.label} />
+              {expireAfter === e.val && <Icon icon="check" color={colors.primary} />}
             </View>
           </TouchableOpacity>
         ))}
@@ -572,11 +564,13 @@ const QuickShareConfig = ({
         isOpen={openAccessSelect}
         onClose={() => setOpenAccessSelect(false)}
         header={
-          <Text
-            preset="bold"
-            text={translate('quick_shares.config.expired.tl')}
-            style={{ fontSize: 20 }}
-          />
+          <View style={{ padding: 16 }}>
+            <Text
+              preset="bold"
+              text={translate("quick_shares.config.expired.tl")}
+              style={{ fontSize: 20 }}
+            />
+          </View>
         }
       >
         {AccessCountOptions.map((a) => (
@@ -589,19 +583,14 @@ const QuickShareConfig = ({
           >
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                padding: 16,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <Text
-                text={a.label}
-                style={{
-                  marginVertical: 14,
-                  marginBottom: 2,
-                }}
-              />
-              {countAccess === a.value && <Icon icon="check" />}
+              <Text text={a.label} />
+              {countAccess === a.value && <Icon icon="check" color={colors.primary} />}
             </View>
           </TouchableOpacity>
         ))}
@@ -626,7 +615,7 @@ const QuickSharesInfo = ({
 }: QuickSharesInfoProps) => {
   const { colors } = useTheme()
   const { translate } = useHelper()
-  const expried = moment.unix(expirationDate / 1000).format('Do MMM YYYY, h:mm:ss A')
+  const expried = moment.unix(expirationDate / 1000).format("Do MMM YYYY, h:mm:ss A")
   return (
     <View
       style={{
@@ -634,7 +623,7 @@ const QuickSharesInfo = ({
       }}
     >
       <Text
-        text={translate('quick_shares.receiver')}
+        text={translate("quick_shares.receiver")}
         style={{
           marginTop: 24,
           marginBottom: 14,
@@ -650,12 +639,12 @@ const QuickSharesInfo = ({
         {emails.map((e) => (
           <Text key={e} text={e} />
         ))}
-        {emails?.length === 0 && <Text text={'Anyone'} />}
+        {emails?.length === 0 && <Text text={"Anyone"} />}
       </View>
 
       {!!expirationDate && (
         <Text
-          text={translate('quick_shares.expired', { time: expried })}
+          text={translate("quick_shares.expired", { time: expried })}
           style={{
             marginTop: 26,
           }}

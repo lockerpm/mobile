@@ -1,16 +1,16 @@
-import React, { useState, useEffect, FC } from 'react'
-import { View, FlatList } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import { AppStackScreenProps } from 'app/navigators'
-import { useStores } from 'app/models'
-import { useFolder, useHelper } from 'app/services/hook'
-import { CollectionView } from 'core/models/view/collectionView'
-import { SharedGroupType, SharedMemberType } from 'app/static/types'
-import { Header, Screen, Text, Button } from 'app/components/cores'
-import { AddUserShareFolderModal } from './ShareUserModal'
-import { SharedUsers } from './SharedUser'
+import React, { useState, useEffect, FC } from "react"
+import { View, FlatList } from "react-native"
+import { observer } from "mobx-react-lite"
+import { AppStackScreenProps } from "app/navigators"
+import { useStores } from "app/models"
+import { useFolder, useHelper } from "app/services/hook"
+import { CollectionView } from "core/models/view/collectionView"
+import { SharedGroupType, SharedMemberType } from "app/static/types"
+import { Header, Screen, Text, Button } from "app/components/cores"
+import { AddUserShareFolderModal } from "./ShareUserModal"
+import { SharedUsers } from "./SharedUser"
 
-export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<'shareFolder'>> = observer(
+export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFolder">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
@@ -19,7 +19,7 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<'shareFol
     const { notifyApiError, translate } = useHelper()
     const { shareFolderRemoveMember } = useFolder()
     const collection: CollectionView = collectionStore.collections.find(
-      (c) => c.id === route.params.collectionId
+      (c) => c.id === route.params.collectionId,
     )
     // ----------------------- PARAMS -----------------------
 
@@ -33,13 +33,13 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<'shareFol
       const data = []
       sharedGroups.forEach((e) => {
         data.push({
-          type: 'group',
+          type: "group",
           ...e,
         })
       })
       sharedUsers.forEach((e) => {
         data.push({
-          type: 'user',
+          type: "user",
           ...e,
         })
       })
@@ -50,7 +50,7 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<'shareFol
 
     const getSharedUsers = async () => {
       const res = await cipherStore.loadMyShares()
-      if (res.kind !== 'ok') {
+      if (res.kind !== "ok") {
         notifyApiError(res)
       }
       const share = cipherStore.myShares.find((s) => s.id === collection.organizationId)
@@ -66,7 +66,7 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<'shareFol
 
     const onRemove = async (collection: CollectionView, id: string, isGroup?: boolean) => {
       const res = await shareFolderRemoveMember(collection, id, isGroup)
-      if (res.kind === 'ok' || res.kind === 'unauthorized') {
+      if (res.kind === "ok" || res.kind === "unauthorized") {
         const sharedUserCount = await getSharedUsers()
         if (sharedUserCount === 0) {
           navigation.goBack()
@@ -88,7 +88,7 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<'shareFol
             onLeftPress={() => {
               navigation.goBack()
             }}
-            title={translate('shares.share_folder.manage_user')}
+            title={translate("shares.share_folder.manage_user")}
           />
         }
         contentContainerStyle={{ flex: 1 }}
@@ -104,14 +104,14 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<'shareFol
         />
 
         <View style={{ padding: 16 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text preset="bold" text={translate('shares.share_folder.share_with')} />
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <Text preset="bold" text={translate("shares.share_folder.share_with")} />
             <Button
               preset="teriatary"
               onPress={() => {
                 setShowSelectUserModal(true)
               }}
-              text={translate('common.add')}
+              text={translate("common.add")}
             />
           </View>
         </View>
@@ -123,7 +123,7 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<'shareFol
           keyExtractor={(_, index) => String(index)}
           ListEmptyComponent={() => (
             <View>
-              <Text text={translate('shares.share_folder.no_shared_users')} />
+              <Text text={translate("shares.share_folder.no_shared_users")} />
             </View>
           )}
           renderItem={({ item }) => (
@@ -138,5 +138,5 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<'shareFol
         />
       </Screen>
     )
-  }
+  },
 )

@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { View, FlatList } from 'react-native'
-import orderBy from 'lodash/orderBy'
-import { QuickSharesCipherListItem } from './QuickSharesListItem'
-import { QuickSharesItemAction } from './QuickSharesItemAction'
-import { useCoreService } from 'app/services/coreService'
-import { useStores } from 'app/models'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { SendView } from 'core/models/view/sendView'
-import { Logger } from 'app/utils/utils'
-import { Text } from 'app/components/cores'
+import React, { useState, useEffect } from "react"
+import { View, FlatList } from "react-native"
+import orderBy from "lodash/orderBy"
+import { QuickSharesCipherListItem } from "./QuickSharesListItem"
+import { QuickSharesItemAction } from "./QuickSharesItemAction"
+import { useCoreService } from "app/services/coreService"
+import { useStores } from "app/models"
+import { useCipherData, useHelper } from "app/services/hook"
+import { SendView } from "core/models/view/sendView"
+import { Logger } from "app/utils/utils"
+import { Screen, Text } from "app/components/cores"
+import { observer } from "mobx-react-lite"
 
 type Props = {
   emptyContent?: JSX.Element
@@ -21,7 +22,7 @@ type Props = {
   }
 }
 
-export const QuickSharesList = (props: Props) => {
+export const QuickSharesList = observer((props: Props) => {
   const { emptyContent, navigation, onLoadingChange, searchText, sortList } = props
   const { sendService } = useCoreService()
   const { cipherStore } = useStores()
@@ -70,8 +71,8 @@ export const QuickSharesList = (props: Props) => {
       res =
         orderBy(
           res,
-          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order]
+          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order],
         ) || []
     }
 
@@ -86,8 +87,8 @@ export const QuickSharesList = (props: Props) => {
 
   // ------------------------ RENDER ----------------------------
 
-  return ciphers.length ? (
-    <View style={{ flex: 1 }}>
+  return (
+    <Screen contentContainerStyle={{ flex: 1 }}>
       <QuickSharesItemAction
         isOpen={showAction}
         onClose={() => setShowAction(false)}
@@ -101,6 +102,21 @@ export const QuickSharesList = (props: Props) => {
           paddingHorizontal: 20,
         }}
         data={ciphers}
+        ListEmptyComponent={
+          emptyContent && !searchText.trim() ? (
+            <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
+          ) : (
+            <View style={{ paddingHorizontal: 20 }}>
+              <Text
+                preset="label"
+                text={translate("error.no_results_found") + ` '${searchText}'`}
+                style={{
+                  textAlign: "center",
+                }}
+              />
+            </View>
+          )
+        }
         keyExtractor={(item, index) => String(index)}
         renderItem={({ item }) => (
           <QuickSharesCipherListItem
@@ -112,18 +128,6 @@ export const QuickSharesList = (props: Props) => {
           />
         )}
       />
-    </View>
-  ) : emptyContent && !searchText.trim() ? (
-    <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
-  ) : (
-    <View style={{ paddingHorizontal: 20 }}>
-      <Text
-        preset="label"
-        text={translate('error.no_results_found') + ` '${searchText}'`}
-        style={{
-          textAlign: 'center',
-        }}
-      />
-    </View>
+    </Screen>
   )
-}
+})
