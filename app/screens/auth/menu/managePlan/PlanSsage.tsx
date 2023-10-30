@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { View, ViewStyle, StyleProp } from 'react-native'
-import { Text, Button } from 'app/components/cores'
-import { useNavigation } from '@react-navigation/native'
-import ProgressBar from 'react-native-ui-lib/progressBar'
-import { CipherType } from 'core/enums'
-import { useTheme } from 'app/services/context'
-import { useHelper, useTool } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { FREE_PLAN_LIMIT } from 'app/static/constants'
+import React, { useEffect, useState } from "react"
+import { View, ViewStyle, StyleProp } from "react-native"
+import { Text, Button } from "app/components/cores"
+import { useNavigation } from "@react-navigation/native"
+import ProgressBar from "react-native-ui-lib/progressBar"
+import { CipherType } from "core/enums"
+import { useTheme } from "app/services/context"
+import { useHelper, useTool } from "app/services/hook"
+import { useStores } from "app/models"
+import { FREE_PLAN_LIMIT } from "app/static/constants"
 
 interface PlanItemUsage {
   cipherType: CipherType
@@ -48,18 +48,18 @@ const ItemStorage = (props: PlanStorageProps) => {
   }, [])
 
   return (
-    <View style={[{ width: '100%', marginVertical: 4 }, style]}>
+    <View style={[{ width: "100%", marginVertical: 4 }, style]}>
       <View
         style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          justifyContent: "space-between",
           marginBottom: 8,
         }}
       >
         <Text text={title} />
         <Text>
-          {' '}
-          {cipherCount}/{isUnlimited ? '∞' : limits}
+          {" "}
+          {cipherCount}/{isUnlimited ? "∞" : limits}
         </Text>
       </View>
 
@@ -68,9 +68,9 @@ const ItemStorage = (props: PlanStorageProps) => {
           style={{
             height: 6,
             borderRadius: 4,
-            backgroundColor,
+            backgroundColor: colors.background,
           }}
-          progressColor={colors.block}
+          progressColor={backgroundColor}
           // @ts-ignore
           progress={isUnlimited ? 0 : (cipherCount / limits) * 100}
         />
@@ -89,27 +89,27 @@ export const PlanUsage = () => {
   const items: PlanItemUsage[] = [
     {
       cipherType: CipherType.Login,
-      title: translate('manage_plan.usage.login'),
+      title: translate("manage_plan.usage.login"),
       limits: FREE_PLAN_LIMIT.LOGIN,
     },
     {
       cipherType: CipherType.Card,
-      title: translate('manage_plan.usage.card'),
+      title: translate("manage_plan.usage.card"),
       limits: FREE_PLAN_LIMIT.PAYMENT_CARD,
     },
     {
       cipherType: CipherType.Identity,
-      title: translate('manage_plan.usage.identity'),
+      title: translate("manage_plan.usage.identity"),
       limits: FREE_PLAN_LIMIT.IDENTITY,
     },
     {
       cipherType: CipherType.SecureNote,
-      title: translate('manage_plan.usage.note'),
+      title: translate("manage_plan.usage.note"),
       limits: FREE_PLAN_LIMIT.NOTE,
     },
     {
       cipherType: CipherType.CryptoWallet,
-      title: translate('manage_plan.usage.crypto'),
+      title: translate("manage_plan.usage.crypto"),
       limits: FREE_PLAN_LIMIT.CRYPTO,
     },
   ]
@@ -124,10 +124,10 @@ export const PlanUsage = () => {
           backgroundColor: colors.block,
         }}
       >
-        {isFreeAccount && <Text preset="bold" text={'Plan Usage'} style={{ marginBottom: 8 }} />}
+        {isFreeAccount && <Text preset="bold" text={"Plan Usage"} style={{ marginBottom: 8 }} />}
         {!isFreeAccount && (
-          <View style={{ flex: 1, flexDirection: 'row', marginBottom: 8 }}>
-            <Text preset="default" text={'Plan Usage'} />
+          <View style={{ flex: 1, flexDirection: "row", marginBottom: 8 }}>
+            <Text preset="default" text={"Plan Usage"} />
             <View
               style={{
                 marginLeft: 8,
@@ -140,8 +140,8 @@ export const PlanUsage = () => {
               <Text
                 preset="bold"
                 text={
-                  user.pwd_user_type === 'enterprise'
-                    ? translate('common.enterprise')
+                  user.pwd_user_type === "enterprise"
+                    ? translate("common.enterprise")
                     : user.plan?.name.toUpperCase()
                 }
                 size="base"
@@ -166,9 +166,9 @@ export const PlanUsage = () => {
       {isFreeAccount && (
         <Button
           onPress={() => {
-            navigation.navigate('payment')
+            navigation.navigate("payment")
           }}
-          text={translate('manage_plan.free.button')}
+          text={translate("manage_plan.free.button")}
           style={{ marginTop: 12 }}
         />
       )}

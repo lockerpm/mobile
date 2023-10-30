@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { AddTrustedContactModal } from './AddTrustedContactModal'
-import { Contact } from '../Contact'
-import { FlatList, View } from 'react-native'
-import { Button, Header, Screen, Text } from 'app/components/cores'
-import { useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { useStores } from 'app/models'
-import { TrustedContact } from 'app/static/types'
-import { observer } from 'mobx-react-lite'
+import React, { useEffect, useState } from "react"
+import { useNavigation } from "@react-navigation/native"
+import { AddTrustedContactModal } from "./AddTrustedContactModal"
+import { Contact } from "../Contact"
+import { FlatList, View } from "react-native"
+import { Button, Header, Screen, Text } from "app/components/cores"
+import { useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { TrustedContact } from "app/static/types"
+import { observer } from "mobx-react-lite"
 
 export const YourTrustedContactScreen = observer(() => {
-  const navigation = useNavigation()
-  const { colors } = useTheme()
+  const navigation = useNavigation() as any
   const { notifyApiError, translate } = useHelper()
   const { user } = useStores()
 
@@ -26,7 +24,7 @@ export const YourTrustedContactScreen = observer(() => {
 
   const trusted = async () => {
     const res = await user.trustedEA()
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setTrustedContacts(res.data)
     } else {
       notifyApiError(res)
@@ -45,19 +43,19 @@ export const YourTrustedContactScreen = observer(() => {
       {isFree && (
         <View
           style={{
-            alignItems: 'center',
+            alignItems: "center",
           }}
         >
-          <Text text={translate('emergency_access.free_guild')} style={{ textAlign: 'center' }} />
+          <Text text={translate("emergency_access.free_guild")} style={{ textAlign: "center" }} />
         </View>
       )}
       {!isFree && (
         <View
           style={{
-            alignItems: 'center',
+            alignItems: "center",
           }}
         >
-          <Text text={'No data'} style={{ textAlign: 'center' }} />
+          <Text text={"No data"} style={{ textAlign: "center" }} />
         </View>
       )}
     </View>
@@ -71,18 +69,22 @@ export const YourTrustedContactScreen = observer(() => {
           onLeftPress={() => {
             navigation.goBack()
           }}
-          title={translate('emergency_access.title')}
+          title={translate("emergency_access.title")}
           RightActionComponent={
             <Button
               disabled={isFree}
-              onPress={() => setIsShowAddModal(true)}
+              onPress={() => {
+                setIsShowAddModal(true)
+              }}
               preset="teriatary"
-              text={translate('common.add')}
+              text={translate("common.add")}
             />
           }
         />
       }
-      backgroundColor={colors.block}
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
       <AddTrustedContactModal
         onAction={() => {
@@ -96,6 +98,9 @@ export const YourTrustedContactScreen = observer(() => {
       />
       <FlatList
         ListEmptyComponent={<ListEmpty />}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+        }}
         data={trustedContacts}
         keyExtractor={(item, index) => String(index)}
         renderItem={({ item }) => (

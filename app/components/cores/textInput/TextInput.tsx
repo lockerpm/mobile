@@ -6,7 +6,7 @@ import React, {
   useImperativeHandle,
   useRef,
   useState,
-} from 'react'
+} from "react"
 import {
   NativeSyntheticEvent,
   StyleProp,
@@ -17,30 +17,34 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
-} from 'react-native'
+} from "react-native"
 import Animated, {
   interpolate,
   interpolateColor,
   useAnimatedStyle,
   useDerivedValue,
   withTiming,
-} from 'react-native-reanimated'
-import { bin } from 'react-native-redash'
-import { Icon } from '../icon/Icon'
-import { Text, TextProps } from '../text/Text'
-import { useTheme } from 'app/services/context'
-import { typography } from 'app/theme'
-import { useHelper } from 'app/services/hook'
-import { MaskService, TextInputMaskTypeProp, TextInputMaskOptionProp } from "react-native-masked-text"
+} from "react-native-reanimated"
+import { bin } from "react-native-redash"
+import { Icon } from "../icon/Icon"
+import { Text, TextProps } from "../text/Text"
+import { useTheme } from "app/services/context"
+import { typography } from "app/theme"
+import { useHelper } from "app/services/hook"
+import {
+  MaskService,
+  TextInputMaskTypeProp,
+  TextInputMaskOptionProp,
+} from "react-native-masked-text"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
-  status: TextFieldProps['status']
+  status: TextFieldProps["status"]
   multiline: boolean
   editable: boolean
 }
 
-export interface TextFieldProps extends Omit<TextInputProps, 'ref'> {
+export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
   /**
    *  error style modifier for different input states.
    */
@@ -69,11 +73,11 @@ export interface TextFieldProps extends Omit<TextInputProps, 'ref'> {
   /**
    * A style modifier for different input states.
    */
-  status?: 'error' | 'disabled'
+  status?: "error" | "disabled"
   /**
    * Title
    */
-  label?: TextProps['text']
+  label?: TextProps["text"]
   /**
    * Pass any additional props directly to the label Text component.
    */
@@ -81,7 +85,7 @@ export interface TextFieldProps extends Omit<TextInputProps, 'ref'> {
   /**
    * The helper text to display if not using .
    */
-  helper?: TextProps['text']
+  helper?: TextProps["text"]
   /**
    * Pass any additional props directly to the helper Text component.
    */
@@ -89,7 +93,7 @@ export interface TextFieldProps extends Omit<TextInputProps, 'ref'> {
   /**
    * The placeholder text to display if not using .
    */
-  placeholder?: TextProps['text']
+  placeholder?: TextProps["text"]
   /**
    * Optional input style override.
    */
@@ -128,7 +132,7 @@ export interface TextFieldProps extends Omit<TextInputProps, 'ref'> {
  */
 export const TextInput = forwardRef(function TextField(
   props: TextFieldProps,
-  ref: Ref<RNTextInput>
+  ref: Ref<RNTextInput>,
 ) {
   const {
     isRequired: isRequiredProps,
@@ -152,7 +156,7 @@ export const TextInput = forwardRef(function TextField(
     inputWrapperStyle: $inputWrapperStyleOverride,
     onFocus: propsFocus,
     onBlur: propsBlur,
-    value = '',
+    value = "",
     ...TextInputProps
   } = props
   const { copyToClipboard } = useHelper()
@@ -162,17 +166,17 @@ export const TextInput = forwardRef(function TextField(
   const [isShowText, setIsShowText] = useState(false)
   const input = useRef<RNTextInput>()
   const status = (() => {
-    const _status = ((isRequired || isError) && 'error') || (isDisabled && 'disabled')
+    const _status = ((isRequired || isError) && "error") || (isDisabled && "disabled")
     if (_status) return _status
     return statusProps
   })()
-  const disabled = TextInputProps.editable === false || status === 'disabled'
+  const disabled = TextInputProps.editable === false || status === "disabled"
 
-  const helper = helperProps || (isRequired && 'This field is required')
-  const placeholderContent = placeholder && placeholder + (isRequiredProps ? ' (*)' : '')
+  const helper = helperProps || (isRequired && "This field is required")
+  const placeholderContent = placeholder && placeholder + (isRequiredProps ? " (*)" : "")
 
   const $containerStyles: StyleProp<ViewStyle> = [
-    { width: '100%', alignItems: 'flex-start', marginVertical: 2 },
+    { width: "100%", alignItems: "flex-start", marginVertical: 2 },
     $containerStyleOverride,
   ]
   const $labelStyles: StyleProp<TextStyle> = [
@@ -183,7 +187,7 @@ export const TextInput = forwardRef(function TextField(
   const $inputWrapperStyles = [
     $inputWrapperStyle,
     { borderColor: isFocus && !disabled ? colors.primary : colors.disable },
-    status === 'error' && { borderColor: colors.error },
+    status === "error" && { borderColor: colors.error },
     TextInputProps.multiline && { minHeight: 112 },
     LeftAccessory && { paddingStart: 0 },
     RightAccessory && { paddingEnd: 0 },
@@ -193,13 +197,13 @@ export const TextInput = forwardRef(function TextField(
   const $inputStyles = [
     $inputStyle,
     disabled && { color: colors.disable },
-    TextInputProps.multiline && { height: 'auto' },
+    TextInputProps.multiline && { height: "auto" },
     $inputStyleOverride,
   ]
 
   const $helperStyles = [
     $helperStyle,
-    status === 'error' && { color: colors.error },
+    status === "error" && { color: colors.error },
     HelperTextProps?.style,
   ]
 
@@ -211,7 +215,7 @@ export const TextInput = forwardRef(function TextField(
 
   const validateMask = (text: string) => {
     if (text && (maskType || maskOptions)) {
-      const masked = MaskService.toMask(maskType || 'custom', text, maskOptions)
+      const masked = MaskService.toMask(maskType || "custom", text, maskOptions)
       return masked
     }
     return text
@@ -249,18 +253,20 @@ export const TextInput = forwardRef(function TextField(
       paddingHorizontal: 4,
       transform: animated
         ? [
-          {
-            scale: interpolate(toggleStyle.value, [0, 1], [1, 0.9]),
-          },
-          {
-            translateX: interpolate(toggleStyle.value, [0, 1], [12, 0]),
-          },
-          {
-            translateY: interpolate(toggleStyle.value, [0, 1], [39, 14]),
-          },
-        ]
+            {
+              scale: interpolate(toggleStyle.value, [0, 1], [1, 0.9]),
+            },
+            {
+              translateX: interpolate(toggleStyle.value, [0, 1], [12, 0]),
+            },
+            {
+              translateY: interpolate(toggleStyle.value, [0, 1], [39, 14]),
+            },
+          ]
         : [],
-      color: animated ? interpolateColor(toggleStyle.value, [0, 1], [colors.disable, colors.primaryText]) : colors.primaryText,
+      color: animated
+        ? interpolateColor(toggleStyle.value, [0, 1], [colors.disable, colors.primaryText])
+        : colors.primaryText,
     }
   })
 
@@ -272,8 +278,8 @@ export const TextInput = forwardRef(function TextField(
       accessibilityState={{ disabled }}
     >
       {!!label && (
-        <Animated.Text style={[$labelStyles, $titleAnim]} {...LabelTextProps} >
-          {label + (isRequiredProps ? ' (*)' : '')}
+        <Animated.Text style={[$labelStyles, $titleAnim]} {...LabelTextProps}>
+          {label + (isRequiredProps ? " (*)" : "")}
         </Animated.Text>
       )}
 
@@ -289,18 +295,18 @@ export const TextInput = forwardRef(function TextField(
 
         <RNTextInput
           ref={input}
+          autoCapitalize="none"
           underlineColorAndroid={colors.transparent}
           textAlignVertical="top"
           placeholder={placeholderContent}
           placeholderTextColor={colors.disable}
           value={validateMask(value)}
-          {...TextInputProps}
           secureTextEntry={!isShowText && isPassword}
           selectionColor={colors.primary}
           onFocus={onFucus}
           onBlur={onBlur}
           editable={!disabled}
-          // cursorColor={colors.primary}
+          {...TextInputProps}
           style={$inputStyles}
         />
 
@@ -310,23 +316,21 @@ export const TextInput = forwardRef(function TextField(
               setIsShowText(!isShowText)
             }}
             containerStyle={$rightAccessoryStyle}
-            icon={!isShowText ? 'eye' : 'eye-slash'}
+            icon={!isShowText ? "eye" : "eye-slash"}
             color={colors.primaryText}
             size={20}
           />
         )}
 
-        {
-          isCopyable && (
-            <Icon
-              onPress={() => copyToClipboard(value)}
-              containerStyle={$rightAccessoryStyle}
-              icon={'copy'}
-              color={colors.primaryText}
-              size={20}
-            />
-          )
-        }
+        {isCopyable && (
+          <Icon
+            onPress={() => copyToClipboard(value)}
+            containerStyle={$rightAccessoryStyle}
+            icon={"copy"}
+            color={colors.primaryText}
+            size={20}
+          />
+        )}
 
         {!!RightAccessory && !isPassword && !isCopyable && (
           <RightAccessory
@@ -338,7 +342,7 @@ export const TextInput = forwardRef(function TextField(
         )}
       </View>
 
-      {!!helper && status === 'error' && (
+      {!!helper && status === "error" && (
         <Text preset="label" text={helper} {...HelperTextProps} style={$helperStyles} />
       )}
     </TouchableOpacity>
@@ -346,16 +350,16 @@ export const TextInput = forwardRef(function TextField(
 })
 
 const $inputWrapperStyle: ViewStyle = {
-  flexDirection: 'row',
-  alignItems: 'flex-start',
+  flexDirection: "row",
+  alignItems: "flex-start",
   borderWidth: 1,
   borderRadius: 8,
-  overflow: 'hidden',
+  overflow: "hidden",
 }
 
 const $inputStyle: TextStyle = {
   flex: 1,
-  alignSelf: 'stretch',
+  alignSelf: "stretch",
   fontSize: 16,
   height: 24,
   paddingVertical: 0,
@@ -371,13 +375,13 @@ const $rightAccessoryStyle: ViewStyle = {
   paddingEnd: 12,
   height: 48,
   paddingLeft: 4,
-  justifyContent: 'center',
-  alignItems: 'center',
+  justifyContent: "center",
+  alignItems: "center",
 }
 const $leftAccessoryStyle: ViewStyle = {
   paddingEnd: 12,
   height: 48,
   paddingLeft: 4,
-  justifyContent: 'center',
-  alignItems: 'center',
+  justifyContent: "center",
+  alignItems: "center",
 }

@@ -90,7 +90,8 @@ function App(props: RootProp) {
 
     if (problem) {
       Logger.debug(
-        `URL:${response.config.baseURL}${response.config.url} - Status: ${response.status
+        `URL:${response.config.baseURL}${response.config.url} - Status: ${
+          response.status
         } - Message: ${JSON.stringify(response.data)}`,
       )
     }
@@ -124,11 +125,11 @@ function App(props: RootProp) {
   }
   const monitorApiRequest = (request) => async () => {
     Logger.debug(
-      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${request.params ? JSON.stringify(request.params) : ""
+      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
+        request.params ? JSON.stringify(request.params) : ""
       }`,
     )
   }
-
 
   api.apisauce.addMonitor(monitorApiResponse)
   api.apisauce.addAsyncRequestTransform(monitorApiRequest)
@@ -163,6 +164,4 @@ const $style = StyleSheet.create({
   },
 })
 
-export default App;
-
-
+export default App

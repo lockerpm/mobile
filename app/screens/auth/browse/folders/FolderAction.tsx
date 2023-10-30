@@ -1,18 +1,18 @@
-import React, { useState } from 'react'
-import { View } from 'react-native'
-import { RenameFolderModal } from './RenameFolderModal'
-import { DeleteConfirmModal } from '../trash/DeleteConfirmModal'
-import { AddUserShareFolderModal } from './folderSharedUsersManagement/ShareUserModal'
-import { useNavigation } from '@react-navigation/native'
-import { ImageIcon, Text } from 'app/components/cores'
-import { FolderView } from 'core/models/view/folderView'
-import { CollectionView } from 'core/models/view/collectionView'
-import { useStores } from 'app/models'
-import { useCipherData, useFolder, useHelper } from 'app/services/hook'
-import { AccountRole, AccountRoleText } from 'app/static/types'
-import { GeneralApiProblem } from 'app/services/api/apiProblem'
-import { ActionItem, ActionSheet, LeaveShareModal } from 'app/components/ciphers'
-import { useTheme } from 'app/services/context'
+import React, { useEffect, useState } from "react"
+import { Platform, View } from "react-native"
+import { RenameFolderModal } from "./RenameFolderModal"
+import { DeleteConfirmModal } from "../trash/DeleteConfirmModal"
+import { AddUserShareFolderModal } from "./folderSharedUsersManagement/ShareUserModal"
+import { useNavigation } from "@react-navigation/native"
+import { ImageIcon, Text } from "app/components/cores"
+import { FolderView } from "core/models/view/folderView"
+import { CollectionView } from "core/models/view/collectionView"
+import { useStores } from "app/models"
+import { useCipherData, useFolder, useHelper } from "app/services/hook"
+import { AccountRole, AccountRoleText } from "app/static/types"
+import { GeneralApiProblem } from "app/services/api/apiProblem"
+import { ActionItem, ActionSheet, LeaveShareModal } from "app/components/ciphers"
+import { useTheme } from "app/services/context"
 
 type Props = {
   isOpen?: boolean
@@ -53,7 +53,7 @@ export const FolderAction = (props: Props) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showConfirmLeaveModal, setShowConfirmLeaveModal] = useState(false)
   const [nextModal, setNextModal] = useState<
-    'rename' | 'deleteConfirm' | 'share' | 'leaveConfirm' | null
+    "rename" | "deleteConfirm" | "share" | "leaveConfirm" | null
   >(null)
   const [showShareModal, setShowShareModal] = useState(false)
 
@@ -71,7 +71,7 @@ export const FolderAction = (props: Props) => {
       res = await deleteCollection(folder)
     }
 
-    if (res.kind !== 'ok') {
+    if (res.kind !== "ok") {
       // @ts-ignore
       notifyApiError(res)
     }
@@ -81,21 +81,41 @@ export const FolderAction = (props: Props) => {
   const handleActionSheetClose = () => {
     onClose()
     switch (nextModal) {
-      case 'rename':
+      case "rename":
         setIsRenameOpen(true)
         break
-      case 'deleteConfirm':
+      case "deleteConfirm":
         setShowConfirmModal(true)
         break
-      case 'share':
+      case "share":
         setShowShareModal(true)
         break
-      case 'leaveConfirm':
+      case "leaveConfirm":
         setShowConfirmLeaveModal(true)
         break
     }
     setNextModal(null)
   }
+
+  useEffect(() => {
+    if (Platform.OS === "android" && !isOpen) {
+      switch (nextModal) {
+        case "rename":
+          setIsRenameOpen(true)
+          break
+        case "deleteConfirm":
+          setShowConfirmModal(true)
+          break
+        case "share":
+          setShowShareModal(true)
+          break
+        case "leaveConfirm":
+          setShowConfirmLeaveModal(true)
+          break
+      }
+      setNextModal(null)
+    }
+  }, [isOpen, nextModal])
   // ---------------- RENDER -----------------
 
   return (
@@ -127,18 +147,18 @@ export const FolderAction = (props: Props) => {
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        title={translate('folder.delete_modal.title')}
-        desc={translate('folder.delete_modal.desc')}
-        btnText={translate('folder.delete_modal.btn')}
+        title={translate("folder.delete_modal.title")}
+        desc={translate("folder.delete_modal.desc")}
+        btnText={translate("folder.delete_modal.btn")}
       />
 
       <ActionSheet
         isOpen={isOpen}
         onClose={handleActionSheetClose}
         header={
-          <View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 10 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <ImageIcon icon={isCollection ? 'folder-share' : 'folder'} size={30} />
+          <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <ImageIcon icon={isCollection ? "folder-share" : "folder"} size={30} />
               <View
                 style={{
                   marginLeft: 10,
@@ -154,10 +174,10 @@ export const FolderAction = (props: Props) => {
         {editable && (
           <>
             <ActionItem
-              name={translate('common.rename')}
+              name={translate("common.rename")}
               icon="edit"
               action={() => {
-                setNextModal('rename')
+                setNextModal("rename")
                 onClose()
               }}
             />
@@ -165,28 +185,32 @@ export const FolderAction = (props: Props) => {
             {isCollection ? (
               isOwner && (
                 <ActionItem
-                  name={translate('shares.share_folder.manage_user')}
+                  name={translate("shares.share_folder.manage_user")}
                   icon="users-three"
                   action={() => {
-                    navigation.navigate('shareFolder', { collectionId: folder?.id })
+                    navigation.navigate("shareFolder", { collectionId: folder?.id })
                     onClose()
                   }}
                 />
               )
             ) : (
               <ActionItem
-                isPremium
-                name={translate('common.share')}
+                isPremium={user.isFreePlan}
+                name={translate("common.share")}
                 icon="share"
                 action={() => {
-                  setNextModal('share')
+                  if (user.isFreePlan) {
+                    navigation.navigate("payment")
+                    return
+                  }
+                  setNextModal("share")
                   onClose()
                 }}
               />
             )}
             {isOwner && isCollection && (
               <ActionItem
-                name={translate('shares.stop_sharing')}
+                name={translate("shares.stop_sharing")}
                 icon="x-circle"
                 action={() => {
                   // @ts-ignore
@@ -199,11 +223,11 @@ export const FolderAction = (props: Props) => {
             {isShared && (
               <ActionItem
                 disabled={uiStore.isOffline}
-                name={translate('shares.leave')}
+                name={translate("shares.leave")}
                 icon="sign-out"
                 color={colors.error}
                 action={() => {
-                  setNextModal('leaveConfirm')
+                  setNextModal("leaveConfirm")
                   onClose()
                 }}
               />
@@ -211,11 +235,11 @@ export const FolderAction = (props: Props) => {
 
             {isOwner && (
               <ActionItem
-                name={translate('folder.delete_folder')}
+                name={translate("folder.delete_folder")}
                 icon="trash"
                 color={colors.error}
                 action={() => {
-                  setNextModal('deleteConfirm')
+                  setNextModal("deleteConfirm")
                   onClose()
                 }}
               />
@@ -226,11 +250,11 @@ export const FolderAction = (props: Props) => {
         {!editable && isShared && (
           <ActionItem
             disabled={uiStore.isOffline}
-            name={translate('shares.leave')}
+            name={translate("shares.leave")}
             icon="sign-out"
             color={colors.error}
             action={() => {
-              setNextModal('leaveConfirm')
+              setNextModal("leaveConfirm")
               onClose()
             }}
           />

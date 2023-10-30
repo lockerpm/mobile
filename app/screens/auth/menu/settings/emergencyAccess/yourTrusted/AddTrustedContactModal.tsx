@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { View, TouchableOpacity, TextInput, Modal } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import { Button, Header, Screen, Text, Toggle } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { EmergencyAccessType } from 'app/static/types'
-import { AppEventType, EventBus } from 'app/utils/eventBus'
+import React, { useEffect, useState } from "react"
+import { View, TouchableOpacity, Modal } from "react-native"
+import { observer } from "mobx-react-lite"
+import { Button, Header, Screen, Text, Toggle, TextInput } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { useCipherData, useHelper } from "app/services/hook"
+import { EmergencyAccessType } from "app/static/types"
+import { AppEventType, EventBus } from "app/utils/eventBus"
 
 interface InviteProps {
   isShow: boolean
@@ -19,64 +19,64 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
   const { inviteEA } = useCipherData()
 
   // ----------------------- PARAMS -----------------------
-  const [email, setEmail] = useState<string>('')
+  const [email, setEmail] = useState<string>("")
   const [accessRight, setAccessRight] = useState(false) // false for view, true for takeover
   const [waitTime, setWaitTime] = useState(1)
-  const [emailError, setEmailError] = useState('')
+  const [emailError, setEmailError] = useState("")
   const role = [
     {
       value: !accessRight,
       action: () => {
         setAccessRight(!accessRight)
       },
-      text: translate('emergency_access.add.view'),
+      text: translate("emergency_access.add.view"),
     },
     {
       value: accessRight,
       action: () => {
         setAccessRight(!accessRight)
       },
-      text: translate('emergency_access.add.takeover'),
+      text: translate("emergency_access.add.takeover"),
     },
   ]
   const time = [
     {
       value: 1,
-      text: '1 ' + translate('emergency_access.add.day'),
+      text: "1 " + translate("emergency_access.add.day"),
     },
     {
       value: 3,
-      text: '3 ' + translate('emergency_access.add.day'),
+      text: "3 " + translate("emergency_access.add.day"),
     },
     {
       value: 7,
-      text: '7 ' + translate('emergency_access.add.day'),
+      text: "7 " + translate("emergency_access.add.day"),
     },
     {
       value: 14,
-      text: '14 ' + translate('emergency_access.add.day'),
+      text: "14 " + translate("emergency_access.add.day"),
     },
     {
       value: 30,
-      text: '30 ' + translate('emergency_access.add.day'),
+      text: "30 " + translate("emergency_access.add.day"),
     },
   ]
   // ----------------------- METHODS -----------------------
   const onAdd = async () => {
-    if (!email.includes('@')) return
+    if (!email.includes("@")) return
     const res = await inviteEA(
       email.toLowerCase(),
       accessRight ? EmergencyAccessType.TAKEOVER : EmergencyAccessType.VIEW,
-      waitTime
+      waitTime,
     )
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       onClose()
     }
-    if (res.kind === 'exist-data') {
-      setEmailError(translate('emergency_access.add.exist_error'))
+    if (res.kind === "exist-data") {
+      setEmailError(translate("emergency_access.add.exist_error"))
     }
-    if (res.kind === 'bad-data') {
-      setEmailError(translate('error.invalid_data'))
+    if (res.kind === "bad-data") {
+      setEmailError(translate("error.invalid_data"))
     }
   }
 
@@ -94,14 +94,14 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
 
   useEffect(() => {
     if (!isShow) {
-      setEmail('')
+      setEmail("")
       setAccessRight(false)
       setWaitTime(1)
     }
   }, [isShow])
 
   useEffect(() => {
-    setEmailError('')
+    setEmailError("")
   }, [email])
 
   // ----------------------- RENDER -----------------------
@@ -113,60 +113,59 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
       onRequestClose={() => onClose()}
     >
       <Screen
+        preset="scroll"
+        safeAreaEdges={["bottom"]}
+        padding
         header={
           <Header
             leftIcon="x"
             onLeftPress={onClose}
-            title={translate('emergency_access.add_trust')}
+            title={translate("emergency_access.add_trust")}
+            containerStyle={{ paddingTop: 0 }}
             RightActionComponent={
               <Button
                 disabled={!email}
-                text={translate('common.add')}
+                text={translate("common.add")}
                 preset="teriatary"
                 onPress={onAdd}
               />
             }
           />
         }
+        contentContainerStyle={{ flex: 1 }}
       >
-        <Text preset="bold" text={translate('emergency_access.add.email')} />
+        <Text preset="bold" text={translate("emergency_access.add.email")} />
 
-        <View>
-          <View
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            borderColor: emailError !== "" ? colors.error : colors.border,
+            backgroundColor: colors.background,
+            marginBottom: 10,
+            marginTop: 12,
+          }}
+        >
+          <TextInput
+            value={email}
+            onChangeText={setEmail}
+            placeholder={"email@gmail.com"}
+            selectionColor={colors.primary}
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderColor: emailError !== '' ? colors.error : colors.border,
-              backgroundColor: colors.background,
-              borderWidth: 1,
-              borderRadius: 8,
-              paddingLeft: 16,
-              marginBottom: 10,
-              marginTop: 12,
+              color: colors.title,
+              fontSize: 16,
             }}
-          >
-            <TextInput
-              value={email}
-              onChangeText={setEmail}
-              placeholder={'email@gmail.com'}
-              placeholderTextColor={colors.title}
-              selectionColor={colors.primary}
-              style={{
-                height: 44,
-                color: colors.title,
-                fontSize: 16,
-                flex: 1,
-              }}
-            />
-          </View>
-          <Text preset="label" text={emailError} style={{ color: colors.error, fontSize: 14 }} />
+          />
         </View>
+        {!!emailError && (
+          <Text preset="label" text={emailError} style={{ color: colors.error, fontSize: 14 }} />
+        )}
 
         {role.map((item, index) => (
           <View key={index}>
             <TouchableOpacity
               onPress={item.action}
-              style={{ flexDirection: 'row', marginVertical: 16 }}
+              style={{ flexDirection: "row", marginVertical: 16 }}
             >
               <Toggle variant="checkbox" value={item.value} onValueChange={item.action} />
               <Text text={item.text} style={{ marginLeft: 12 }} />
@@ -176,12 +175,12 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
 
         <Text
           preset="bold"
-          text={translate('emergency_access.add.wait_time')}
+          text={translate("emergency_access.add.wait_time")}
           style={{ marginTop: 16 }}
         />
         <Text
           preset="label"
-          text={translate('emergency_access.add.text')}
+          text={translate("emergency_access.add.text")}
           style={{ marginTop: 8, fontSize: 14 }}
         />
 
@@ -191,7 +190,7 @@ export const AddTrustedContactModal = observer(function AddTrustedContactModal(p
               onPress={() => {
                 setWaitTime(item.value)
               }}
-              style={{ flexDirection: 'row', marginVertical: 16 }}
+              style={{ flexDirection: "row", marginVertical: 16 }}
             >
               <Toggle
                 variant="checkbox"

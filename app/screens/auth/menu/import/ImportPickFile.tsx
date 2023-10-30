@@ -1,13 +1,14 @@
-import React from 'react'
-import { View } from 'react-native'
-import DocumentPicker from 'react-native-document-picker'
-import { useHelper } from 'app/services/hook'
-import { useCoreService } from 'app/services/coreService'
-import { useStores } from 'app/models'
-import { Logger } from 'app/utils/utils'
-import { Button, Text } from 'app/components/cores'
-import { SettingsItem, Select } from 'app/components/utils'
-import { FileData } from 'app/static/types'
+import React from "react"
+import { View } from "react-native"
+import DocumentPicker from "react-native-document-picker"
+import { useHelper } from "app/services/hook"
+import { useCoreService } from "app/services/coreService"
+import { useStores } from "app/models"
+import { Logger } from "app/utils/utils"
+import { Button, Text } from "app/components/cores"
+import { SettingsItem, Select } from "app/components/utils"
+import { FileData } from "app/static/types"
+import { useTheme } from "app/services/context"
 
 interface Props {
   format: any
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export const ImportPickFile = (props: Props) => {
+  const { colors } = useTheme()
   const { notify, translate } = useHelper()
   const { importService } = useCoreService()
   const { uiStore } = useStores()
@@ -51,7 +53,7 @@ export const ImportPickFile = (props: Props) => {
     if (file.name) {
       return file.name
     }
-    const uriComponents = file?.uri?.split('/')
+    const uriComponents = file?.uri?.split("/")
     return uriComponents[uriComponents.length - 1]
   }
 
@@ -61,7 +63,7 @@ export const ImportPickFile = (props: Props) => {
       uiStore.setIsPerformOverlayTask(true)
 
       const targetFormat = formats.find((i) => i.value === format)
-      const targetExtension = targetFormat.label?.split(' (')[1]?.split(')')[0]
+      const targetExtension = targetFormat.label?.split(" (")[1]?.split(")")[0]
 
       const res = await DocumentPicker.pickSingle({
         type: [DocumentPicker.types.allFiles],
@@ -70,14 +72,14 @@ export const ImportPickFile = (props: Props) => {
       if (getFileName(res).endsWith(`.${targetExtension}`)) {
         setFile(res)
       } else {
-        notify('error', translate('import.pls_select_right_format', { format: targetExtension }))
+        notify("error", translate("import.pls_select_right_format", { format: targetExtension }))
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
       } else {
-        Logger.error('Import pick file: ' + err)
-        notify('error', translate('error.something_went_wrong'))
+        Logger.error("Import pick file: " + err)
+        notify("error", translate("error.something_went_wrong"))
       }
     }
   }
@@ -89,14 +91,14 @@ export const ImportPickFile = (props: Props) => {
         value={format}
         onChange={(val: string) => setFormat(val)}
         options={formats}
-        title={translate('import.format')}
+        title={translate("import.format")}
         renderSelected={({ label }) => (
-          <SettingsItem name={translate('import.format')} RightAccessory={<Text text={label} />} />
+          <SettingsItem name={translate("import.format")} RightAccessory={<Text text={label} />} />
         )}
       />
 
       <SettingsItem
-        name={translate('import.file')}
+        name={translate("import.file")}
         onPress={pickFile}
         RightAccessory={
           <Text
@@ -108,13 +110,17 @@ export const ImportPickFile = (props: Props) => {
             }}
           />
         }
+        containerStyle={{
+          borderTopColor: colors.border,
+          borderTopWidth: 1.5,
+        }}
       />
       <Button
         disabled={!file.uri}
-        text={translate('settings.import')}
+        text={translate("settings.import")}
         onPress={() => handleImport()}
         style={{
-          marginTop: 30,
+          marginTop: 20,
           marginBottom: 10,
         }}
       />

@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { Contact } from '../Contact'
-import { View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
-import { Header, Screen, Text } from 'app/components/cores'
-import { useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { useStores } from 'app/models'
-import { TrustedContact } from 'app/static/types'
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { Contact } from "../Contact"
+import { View } from "react-native"
+import { FlatList } from "react-native-gesture-handler"
+import { Header, Screen, Text } from "app/components/cores"
+import { useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { TrustedContact } from "app/static/types"
 
 export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScreen() {
   const navigation = useNavigation()
-  const { colors } = useTheme()
   const { notifyApiError, translate } = useHelper()
   const { user } = useStores()
 
@@ -25,7 +23,7 @@ export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScre
 
   const granted = async () => {
     const res = await user.grantedEA()
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setTrustedContacts(res.data)
     } else {
       notifyApiError(res)
@@ -46,22 +44,27 @@ export const ContactsTrustedYouScreen = observer(function ContactsTrustedYouScre
           onLeftPress={() => {
             navigation.goBack()
           }}
-          title={translate('emergency_access.trust_you')}
+          title={translate("emergency_access.trust_you")}
         />
       }
-      backgroundColor={colors.block}
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
       <FlatList
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View
             style={{
-              alignItems: 'center',
+              alignItems: "center",
             }}
           >
-            <Text text={'No data'} style={{ textAlign: 'center' }} />
+            <Text text={"No data"} style={{ textAlign: "center" }} />
           </View>
         }
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+        }}
         data={trustedContacts}
         keyExtractor={(item, index) => String(index)}
         renderItem={({ item }) => (

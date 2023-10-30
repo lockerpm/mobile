@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
-import { FolderView } from 'core/models/view/folderView'
-import { CollectionView } from 'core/models/view/collectionView'
-import { useStores } from 'app/models'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { BottomModal, Button, TextInput } from 'app/components/cores'
+import React, { useState } from "react"
+import { observer } from "mobx-react-lite"
+import { FolderView } from "core/models/view/folderView"
+import { CollectionView } from "core/models/view/collectionView"
+import { useStores } from "app/models"
+import { useCipherData, useHelper } from "app/services/hook"
+import { BottomModal, Button, TextInput } from "app/components/cores"
 
 interface Props {
   isOpen?: boolean
@@ -20,7 +20,7 @@ export const RenameFolderModal = observer((props: Props) => {
 
   // --------------- PARAMS ----------------
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   // --------------- COMPUTED ----------------
@@ -47,7 +47,7 @@ export const RenameFolderModal = observer((props: Props) => {
 
     const data = { ...folder }
     data.name = name
-    let res = { kind: 'unknown' }
+    let res = { kind: "unknown" }
 
     // @ts-ignore
     if (!data.organizationId) {
@@ -60,10 +60,10 @@ export const RenameFolderModal = observer((props: Props) => {
 
     setIsLoading(false)
 
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       onClose()
     } else {
-      if (res.kind === 'unauthorized') {
+      if (res.kind === "unauthorized") {
         onClose()
       }
     }
@@ -71,30 +71,27 @@ export const RenameFolderModal = observer((props: Props) => {
 
   // --------------- EFFECT ----------------
 
-  useEffect(() => {
-    setName(folder.name || '')
-  }, [isOpen])
-
   // --------------- RENDER ----------------
 
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose} title={translate('folder.rename_folder')}>
+    <BottomModal isOpen={isOpen} onClose={onClose} title={translate("folder.rename_folder")}>
       <TextInput
         isError={isExisted}
-        helper={translate('folder.folder_existed')}
-        label={translate('folder.folder_name')}
+        helper={translate("folder.folder_existed")}
+        label={translate("folder.folder_name")}
+        placeholder={name}
         value={name}
         onChangeText={(txt) => setName(txt)}
         onSubmitEditing={renameFolder}
       />
 
       <Button
-        text={translate('common.save')}
+        text={translate("common.save")}
         disabled={isLoading || !name.trim() || isExisted}
         loading={isLoading}
         onPress={renameFolder}
         style={{
-          width: '100%',
+          width: "100%",
           marginTop: 30,
         }}
       />

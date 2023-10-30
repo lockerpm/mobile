@@ -1,7 +1,7 @@
-import React from 'react'
-import { ActivityIndicator, TouchableOpacity } from 'react-native'
-import { Icon, Text } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
+import React from "react"
+import { ActivityIndicator, TouchableOpacity, ViewStyle } from "react-native"
+import { Icon, Text } from "app/components/cores"
+import { useTheme } from "app/services/context"
 
 type SettingsItemProps = {
   name: string
@@ -10,6 +10,10 @@ type SettingsItemProps = {
   onPress?: () => void
   disabled?: boolean
   isLoading?: boolean
+  /**
+   * Helpful when adding margin or border
+   */
+  containerStyle?: ViewStyle
 }
 
 export const SettingsItem = ({
@@ -19,6 +23,7 @@ export const SettingsItem = ({
   onPress,
   disabled,
   isLoading,
+  containerStyle,
 }: SettingsItemProps) => {
   const { colors } = useTheme()
 
@@ -33,12 +38,15 @@ export const SettingsItem = ({
     <TouchableOpacity
       disabled={!onPress || disabled}
       onPress={onPress}
-      style={{
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 16,
-      }}
+      style={[
+        {
+          justifyContent: "space-between",
+          flexDirection: "row",
+          alignItems: "center",
+          padding: 16,
+        },
+        containerStyle,
+      ]}
     >
       <Text
         text={name}
