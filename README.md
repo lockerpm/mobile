@@ -49,9 +49,8 @@ cd mobile
 
 ### Android
 
-1. Generate signing key (keystore file) Then move the file have gegerated to android/app/
-2. Create android/gradle.properties in folder android/ follow android/gradle.properties.example content. then edit `MYAPP_UPLOAD_**` properties with value when you create keystore file.
-3. Create Firebase Android App with the bundle id (recommend bundle is same ios app bundle id) then download google-services.json file and move the file to android/app
+1. Generate signing key and setting up Gradle variables flow [This Docs](https://reactnative.dev/docs/signed-apk-android) 
+2. Create Firebase Android App with the bundle id (recommend bundle is same ios app bundle id) then download google-services.json file and move the file to android/app
 
 ### Buld and debug
 
