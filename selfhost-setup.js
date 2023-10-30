@@ -135,6 +135,7 @@ const replaceBundleIdOptions = {
     "./android/app/src/**/**/**/**/**/**/**/*.java",
     "./android/app/src/**/**/**/**/**/**/**/**/*.java",
     "./app/components/webviewModal/WebviewModal.tsx",
+    "./app/config/constants.ts",
     "./app/navigators/RootNavigator.tsx",
     "./app/screens/auth/menu/autofillService/AutofillServiceScreen.android.tsx",
     "./ios/Locker/Info.plist",
