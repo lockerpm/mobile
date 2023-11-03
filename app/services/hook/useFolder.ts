@@ -307,7 +307,7 @@ export function useFolder() {
     }
   }
 
-  const shareFolderRemoveItem = async (collection: CollectionView, cipher: CipherView) => {
+  const shareFolderRemoveItem = async (id: string, organizationId: string, cipher: CipherView) => {
     try {
       const personalKey = await cryptoService.getEncKey()
 
@@ -320,15 +320,11 @@ export function useFolder() {
         },
       }
 
-      const res = await collectionStore.removeShareItem(
-        collection.id,
-        collection.organizationId,
-        payload
-      )
+      const res = await collectionStore.removeShareItem(id, organizationId, payload)
 
       if (res.kind === 'ok') {
         await reloadCache()
-        notify('success', 'Remove shared item  success')
+        // notify('success', 'Remove shared item  success')
       } else {
         notifyApiError(res)
       }
