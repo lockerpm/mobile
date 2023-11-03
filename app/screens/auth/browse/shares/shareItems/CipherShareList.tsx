@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from 'react'
-import { View, SectionList } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import orderBy from 'lodash/orderBy'
-import { ShareItemAction } from './ShareItemAction'
-import { CipherShareListItem, CipherShareType } from './CipherShareListItem'
-import { FolderAction } from '../../folders/FolderAction'
-import { CollectionListItem } from './FolderShareListItem'
-import { ConfirmShareModal } from './ConfirmShareModal'
-import { Text } from 'app/components/cores'
-import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { CollectionView } from 'core/models/view/collectionView'
-import { AccountRoleText, SharedMemberType } from 'app/static/types'
-import { Organization } from 'core/models/domain/organization'
-import { CipherView } from 'core/models/view'
+import React, { useState, useEffect } from "react"
+import { View, SectionList } from "react-native"
+import { observer } from "mobx-react-lite"
+import orderBy from "lodash/orderBy"
+import { ShareItemAction } from "./ShareItemAction"
+import { CipherShareListItem, CipherShareType } from "./CipherShareListItem"
+import { FolderAction } from "../../folders/FolderAction"
+import { CollectionListItem } from "./FolderShareListItem"
+import { ConfirmShareModal } from "./ConfirmShareModal"
+import { Text } from "app/components/cores"
+import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { CollectionView } from "core/models/view/collectionView"
+import { AccountRoleText, SharedGroupType, SharedMemberType } from "app/static/types"
+import { Organization } from "core/models/domain/organization"
+import { CipherView } from "core/models/view"
 
 type Props = {
   emptyContent?: JSX.Element
@@ -44,12 +44,12 @@ export const CipherShareList = observer((props: Props) => {
   const [showCollectionAction, setShowCollectionAction] = useState(false)
   const [selectedCollection, setSelectedCollection] = useState<CollectionView>(null)
   const [selectedMember, setSelectedMember] = useState<SharedMemberType>(null)
+  const [selectedGroup, setSelectedGroup] = useState<SharedGroupType>(null)
 
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   // ------------------------ COMPUTED ----------------------------
 
   const organizations = cipherStore.organizations
-  const allCiphers = ciphers
   const myShares = cipherStore.myShares
 
   // ------------------------ EFFECTS ----------------------------
@@ -92,7 +92,9 @@ export const CipherShareList = observer((props: Props) => {
 
         const share = _getShare(c.organizationId)
         const org = _getOrg(c.organizationId)
-        return org && org.type === 0 && share && share.members.length > 0
+        return (
+          org && org.type === 0 && share && (share.members.length > 0 || share.groups.length > 0)
+        )
       },
     ]
 
@@ -113,29 +115,49 @@ export const CipherShareList = observer((props: Props) => {
         ...c,
         imgLogo: cipherInfo.img,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-          c.id
+          c.id,
         ),
-        description: '',
+        description: "",
         status: null,
       }
 
       // Display for each sharing member
       const share = _getShare(c.organizationId)
       share.members.forEach((m) => {
-        let shareType = ''
+        let shareType = ""
         switch (m.role) {
           case AccountRoleText.MEMBER:
             // shareType = !m.hide_passwords ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
-            shareType = translate('shares.share_type.view')
+            shareType = translate("shares.share_type.view")
             break
           case AccountRoleText.ADMIN:
-            shareType = translate('shares.share_type.edit')
+            shareType = translate("shares.share_type.edit")
             break
         }
 
-        data.description = `${translate('shares.shared_with')} ${m.full_name} - ${shareType}`
+        data.description = `${translate("shares.shared_with")} ${m.full_name} - ${shareType}`
         data.status = m.status
         data.member = m
+
+        // @ts-ignore
+        res.push({ ...data })
+      })
+
+      share.groups.forEach((group) => {
+        let shareType = ""
+        switch (group.role) {
+          case AccountRoleText.MEMBER:
+            // shareType = !m.hide_passwords ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
+            shareType = translate("shares.share_type.view")
+            break
+          case AccountRoleText.ADMIN:
+            shareType = translate("shares.share_type.edit")
+            break
+        }
+
+        data.description = `${translate("shares.shared_with")} ${group.name} - ${shareType}`
+        // data.status = m.status
+        data.group = group
 
         // @ts-ignore
         res.push({ ...data })
@@ -148,8 +170,8 @@ export const CipherShareList = observer((props: Props) => {
       res =
         orderBy(
           res,
-          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order]
+          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order],
         ) || []
     }
 
@@ -165,13 +187,23 @@ export const CipherShareList = observer((props: Props) => {
   // Handle action menu open
   const openCipherActionMenu = (item: CipherShareType) => {
     cipherStore.setSelectedCipher(item)
-    setSelectedMember(item.member)
+    if (item.member) {
+      setSelectedMember(item.member)
+    }
+    if (item.group) {
+      setSelectedGroup(item.group)
+    }
     setShowAction(true)
   }
   // Handle action menu open
   const openShowConfirmModal = (item: CipherShareType) => {
     cipherStore.setSelectedCipher(item)
-    setSelectedMember(item.member)
+    if (item.member) {
+      setSelectedMember(item.member)
+    }
+    if (item.group) {
+      setSelectedGroup(item.group)
+    }
     setShowConfirmModal(true)
   }
 
@@ -194,12 +226,13 @@ export const CipherShareList = observer((props: Props) => {
     },
     {
       type: 1,
-      data: [...allCiphers.filter((c) => !c.collectionIds?.length)],
+      data: [...ciphers.filter((c) => !c.collectionIds?.length)],
     },
   ]
+
   // ------------------------ RENDER ----------------------------
 
-  return allCiphers.length ? (
+  return (
     <View style={{ flex: 1 }}>
       {/* Action menus */}
 
@@ -214,6 +247,7 @@ export const CipherShareList = observer((props: Props) => {
         onClose={() => setShowAction(false)}
         onLoadingChange={onLoadingChange}
         member={selectedMember}
+        group={selectedGroup}
         goToDetail={goToDetail}
       />
 
@@ -249,17 +283,20 @@ export const CipherShareList = observer((props: Props) => {
             )}
           </View>
         )}
-      />
-    </View>
-  ) : emptyContent && !searchText.trim() ? (
-    <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
-  ) : (
-    <View style={{ paddingHorizontal: 20 }}>
-      <Text
-        text={translate('error.no_results_found') + ` '${searchText}'`}
-        style={{
-          textAlign: 'center',
-        }}
+        ListEmptyComponent={
+          emptyContent && !searchText.trim() ? (
+            <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
+          ) : (
+            <View style={{ paddingHorizontal: 20 }}>
+              <Text
+                text={translate("error.no_results_found") + ` '${searchText}'`}
+                style={{
+                  textAlign: "center",
+                }}
+              />
+            </View>
+          )
+        }
       />
     </View>
   )

@@ -1,11 +1,11 @@
-import React, { memo } from 'react'
-import { TouchableOpacity, View, Image } from 'react-native'
-import isEqual from 'lodash/isEqual'
-import { Icon, Text } from 'app/components/cores'
-import { CipherView } from 'core/models/view'
-import { SharedMemberType, SharingStatus } from 'app/static/types'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
+import React, { memo } from "react"
+import { TouchableOpacity, View, Image } from "react-native"
+import isEqual from "lodash/isEqual"
+import { Icon, Text } from "app/components/cores"
+import { CipherView } from "core/models/view"
+import { SharedGroupType, SharedMemberType, SharingStatus } from "app/static/types"
+import { useTheme } from "app/services/context"
+import { useHelper } from "app/services/hook"
 
 type Prop = {
   item: CipherShareType
@@ -21,6 +21,7 @@ export type CipherShareType = CipherView & {
   description?: string
   status?: string
   member?: SharedMemberType
+  group?: SharedGroupType
 }
 
 export const CipherShareListItem = memo(
@@ -47,23 +48,19 @@ export const CipherShareListItem = memo(
             height: 70.5,
           }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             {/* Cipher avatar */}
-            {item.svg ? (
-              <item.svg height={40} width={40} />
-            ) : (
-              <Image
-                source={item.imgLogo || item.logo}
-                style={{
-                  height: 40,
-                  width: 40,
-                  borderRadius: 8,
-                }}
-              />
-            )}
+            <Image
+              source={item.imgLogo || item.logo}
+              style={{
+                height: 40,
+                width: 40,
+                borderRadius: 8,
+              }}
+            />
 
             <View style={{ flex: 1, marginLeft: 12 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <View style={{ flex: 1 }}>
                   <Text
                     preset="bold"
@@ -94,11 +91,11 @@ export const CipherShareListItem = memo(
                       size="small"
                       text={
                         item.status === SharingStatus.ACCEPTED
-                          ? translate('shares.wait_confirm')
+                          ? translate("shares.wait_confirm")
                           : item.status.toUpperCase()
                       }
                       style={{
-                        fontWeight: 'bold',
+                        fontWeight: "bold",
                         color: colors.background,
                       }}
                     />
@@ -127,12 +124,12 @@ export const CipherShareListItem = memo(
         {item?.status === SharingStatus.ACCEPTED && (
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               marginVertical: 8,
             }}
           >
             <Text
-              text={translate('shares.confirm')}
+              text={translate("shares.confirm")}
               style={{
                 flex: 2,
                 fontSize: 14,
@@ -144,8 +141,8 @@ export const CipherShareListItem = memo(
                   setShowConfirmModal(item)
                 }}
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                   borderRadius: 8,
                   borderColor: colors.primary,
                   borderWidth: 1,
@@ -155,7 +152,7 @@ export const CipherShareListItem = memo(
               >
                 <Icon icon="check" color={colors.primary} size={24} />
                 <Text
-                  text={translate('common.confirm')}
+                  text={translate("common.confirm")}
                   style={{
                     marginLeft: 8,
                     color: colors.primary,
@@ -170,7 +167,7 @@ export const CipherShareListItem = memo(
     )
   },
   (prev, next) => {
-    const whitelist = ['openActionMenu']
+    const whitelist = ["openActionMenu"]
     const prevProps = Object.keys(prev)
     const nextProps = Object.keys(next)
     if (!isEqual(prevProps, nextProps)) {
@@ -183,5 +180,5 @@ export const CipherShareListItem = memo(
       return val && isEqual(prev[key], next[key])
     }, true)
     return isPropsEqual
-  }
+  },
 )

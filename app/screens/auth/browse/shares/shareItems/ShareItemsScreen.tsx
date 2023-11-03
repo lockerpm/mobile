@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { CipherShareList } from './CipherShareList'
-import { PushNotifier } from 'app/utils/pushNotification/pushNotifier'
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
-import { useStores } from 'app/models'
-import { Screen } from 'app/components/cores'
-import { useHelper } from 'app/services/hook'
+import React, { useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { CipherShareList } from "./CipherShareList"
+import { PushNotifier } from "app/utils/pushNotification/pushNotifier"
+import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
+import { useStores } from "app/models"
+import { Screen } from "app/components/cores"
+import { useHelper } from "app/services/hook"
 
-const SHARE_EMPTY = require('assets/images/emptyCipherList/share-empty-img.png')
+const SHARE_EMPTY = require("assets/images/emptyCipherList/share-empty-img.png")
 
 export const ShareItemsScreen = observer(() => {
   const navigation = useNavigation() as any
@@ -19,13 +19,13 @@ export const ShareItemsScreen = observer(() => {
   // --------------------- PARAMS -------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
 
   // --------------------- COMPUTED -------------------------
 
@@ -35,7 +35,7 @@ export const ShareItemsScreen = observer(() => {
 
   // Clear noti
   useEffect(() => {
-    PushNotifier.cancelNotification('share_confirm')
+    PushNotifier.cancelNotification("share_confirm")
   }, [navigation])
 
   useEffect(() => {
@@ -43,14 +43,14 @@ export const ShareItemsScreen = observer(() => {
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
 
@@ -58,16 +58,16 @@ export const ShareItemsScreen = observer(() => {
 
   return (
     <Screen
-      safeAreaEdges={['top']}
+      safeAreaEdges={["top"]}
       header={
         <CipherListHeader
-          header={translate('shares.share_items')}
+          header={translate("shares.share_items")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
             if (isFreeAccount) {
-              navigation.navigate('payment')
+              navigation.navigate("payment")
             } else {
-              navigation.navigate('shareMultiple')
+              navigation.navigate("shareMultiple")
             }
           }}
           onSearch={setSearchText}
@@ -101,21 +101,21 @@ export const ShareItemsScreen = observer(() => {
             <EmptyCipherList
               img={SHARE_EMPTY}
               imgStyle={{ height: 55, width: 55 }}
-              title={translate('shares.empty.title')}
-              desc={translate('error.not_available_for_free')}
-              buttonText={translate('common.upgrade')}
+              title={translate("shares.empty.title")}
+              desc={translate("error.not_available_for_free")}
+              buttonText={translate("common.upgrade")}
               addItem={() => {
-                navigation.navigate('payment')
+                navigation.navigate("payment")
               }}
             />
           ) : (
             <EmptyCipherList
               img={SHARE_EMPTY}
               imgStyle={{ height: 55, width: 55 }}
-              title={translate('shares.empty.title')}
-              desc={translate('shares.empty.desc_share')}
-              buttonText={translate('shares.start_sharing')}
-              addItem={() => navigation.navigate('shareMultiple')}
+              title={translate("shares.empty.title")}
+              desc={translate("shares.empty.desc_share")}
+              buttonText={translate("shares.start_sharing")}
+              addItem={() => navigation.navigate("shareMultiple")}
             />
           )
         }

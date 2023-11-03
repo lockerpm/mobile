@@ -1659,6 +1659,43 @@ export function useCipherData() {
     }
   }
 
+  // Stop share for Groups
+  const stopShareCipherForGroup = async (cipher: CipherView, groupId: string) => {
+    try {
+      // Prepare cipher
+      const personalKey = await cryptoService.getEncKey()
+      const cipherEnc = await cipherService.encrypt(cipher, personalKey)
+      const data = new CipherRequest(cipherEnc)
+
+      // Send API
+      const res = await cipherStore.stopShareCipherForGroup(cipher.organizationId, {
+        cipher: {
+          id: cipher.id,
+          ...data,
+        },
+      })
+      if (res.kind === 'ok') {
+        notify('success', translate('success.done'))
+
+        // Remove member in local my share first
+        const myShares = [...cipherStore.myShares]
+        for (const share of myShares) {
+          if (share.id === cipher.organizationId) {
+            share.groups = share.groups.filter((g) => g.id !== groupId)
+          }
+        }
+        cipherStore.setMyShares(myShares)
+      } else {
+        notifyApiError(res)
+      }
+      return res
+    } catch (e) {
+      notify('error', translate('error.something_went_wrong'))
+      Logger.error('stopShareCipher: ' + e)
+      return { kind: 'unknown' }
+    }
+  }
+
   // Edit share cipher
   const editShareCipher = async (
     organizationId: string,
@@ -2315,6 +2352,7 @@ export function useCipherData() {
     shareMultipleCiphers,
     confirmShareCipher,
     stopShareCipher,
+    stopShareCipherForGroup,
     editShareCipher,
     leaveShare,
     acceptShareInvitation,
