@@ -1,11 +1,11 @@
-import React, { memo } from 'react'
-import { NativeModules, TouchableOpacity, View, Image } from 'react-native'
-import isEqual from 'lodash/isEqual'
-import { Icon, Text, Toggle } from 'app/components/cores'
-import { useCipherHelper, useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { CipherView } from 'core/models/view'
-import { getTOTP, parseOTPUri } from 'app/utils/totp'
+import React, { memo } from "react"
+import { NativeModules, TouchableOpacity, View, Image } from "react-native"
+import isEqual from "lodash/isEqual"
+import { Icon, Text, Toggle } from "app/components/cores"
+import { useCipherHelper, useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { CipherView } from "core/models/view"
+import { getTOTP, parseOTPUri } from "app/utils/totp"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -30,7 +30,7 @@ export const AutofillListItem = memo(
         item.login.username,
         item.login.password,
         item.name,
-        item.login.uri
+        item.login.uri,
       )
     }
 
@@ -55,22 +55,18 @@ export const AutofillListItem = memo(
           height: 70.5,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {item.svg ? (
-            <item.svg height={40} width={40} />
-          ) : (
-            <Image
-              source={item.imgLogo}
-              style={{
-                height: 40,
-                width: 40,
-                borderRadius: 8,
-              }}
-            />
-          )}
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image
+            source={item.imgLogo}
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 8,
+            }}
+          />
 
           <View style={{ flex: 1, marginLeft: 12 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View style={{ flex: 1 }}>
                 <Text preset="bold" numberOfLines={1} text={item.name} />
               </View>
@@ -114,7 +110,7 @@ export const AutofillListItem = memo(
     )
   },
   (prev, next) => {
-    const whitelist = ['toggleItemSelection', 'openActionMenu']
+    const whitelist = ["toggleItemSelection", "openActionMenu"]
     const prevProps = Object.keys(prev)
     const nextProps = Object.keys(next)
     if (!isEqual(prevProps, nextProps)) {
@@ -127,5 +123,5 @@ export const AutofillListItem = memo(
       return val && isEqual(prev[key], next[key])
     }, true)
     return isPropsEqual
-  }
+  },
 )

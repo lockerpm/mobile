@@ -1,20 +1,20 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react'
-import { TextInput, View, Modal, TouchableOpacity, Image, FlatList } from 'react-native'
+import React, { useEffect, useState } from "react"
+import { TextInput, View, Modal, TouchableOpacity, Image, FlatList } from "react-native"
 import {
   GroupMemberData,
   GroupData,
   SharedMemberType,
   SharedGroupType,
   AccountRoleText,
-} from 'app/static/types'
-import { useStores } from 'app/models'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { CipherView } from 'core/models/view'
-import { AppEventType, EventBus } from 'app/utils/eventBus'
-import { Button, Icon, Text } from 'app/components/cores'
-import { SharedUsers } from 'app/screens/auth/shareCipher/SharedUser'
+} from "app/static/types"
+import { useStores } from "app/models"
+import { useCipherData, useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { CipherView } from "core/models/view"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+import { Button, Icon, Text } from "app/components/cores"
+import { SharedUsers } from "app/screens/auth/shareCipher/SharedUser"
 
 interface Props {
   isOpen?: boolean
@@ -34,9 +34,9 @@ export const ShareModal = (props: Props) => {
 
   // --------------- PARAMS ----------------
   const [page, setPage] = useState<0 | 1>(0)
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState("")
   const [emails, setEmails] = useState<string[]>([])
-  const [shareType, setShareType] = useState('view')
+  const [shareType, setShareType] = useState("view")
   const [groups, setGroups] = useState<{ name: string; id: string }[]>([])
   type Suggest = GroupData | GroupMemberData
   const [suggestions, setSuggestions] = useState<Suggest[]>([])
@@ -50,13 +50,13 @@ export const ShareModal = (props: Props) => {
     const data = []
     sharedGroups.forEach((e) => {
       data.push({
-        type: 'group',
+        type: "group",
         ...e,
       })
     })
     sharedUsers.forEach((e) => {
       data.push({
-        type: 'user',
+        type: "user",
         ...e,
       })
     })
@@ -73,7 +73,7 @@ export const ShareModal = (props: Props) => {
     if (!!e && !emails.includes(e)) {
       setEmails([...emails, e])
     }
-    setEmail('')
+    setEmail("")
   }
 
   const removeEmail = (val: string) => {
@@ -82,7 +82,7 @@ export const ShareModal = (props: Props) => {
 
   const getSharedUsers = async () => {
     const res = await cipherStore.loadMyShares()
-    if (res.kind !== 'ok') {
+    if (res.kind !== "ok") {
       notifyApiError(res)
     }
     const share = cipherStore.myShares.find((s) => s.id === selectedCipher.organizationId)
@@ -98,7 +98,7 @@ export const ShareModal = (props: Props) => {
 
   const onRemove = async (id: string, _isGroup?: boolean) => {
     const res = await stopShareCipher(selectedCipher, id)
-    if (res.kind === 'ok' || res.kind === 'unauthorized') {
+    if (res.kind === "ok" || res.kind === "unauthorized") {
       const sharedUserCount = await getSharedUsers()
       if (sharedUserCount === 0) {
         setPage(0)
@@ -111,10 +111,10 @@ export const ShareModal = (props: Props) => {
     let role = AccountRoleText.MEMBER
     let autofillOnly = false
     switch (shareType) {
-      case 'only_fill':
+      case "only_fill":
         autofillOnly = true
         break
-      case 'edit':
+      case "edit":
         role = AccountRoleText.ADMIN
         break
     }
@@ -123,8 +123,8 @@ export const ShareModal = (props: Props) => {
       ? await shareMultipleCiphers(cipherIds, emails, role, autofillOnly, groups)
       : await shareCipher(selectedCipher, emails, role, autofillOnly, groups)
 
-    if (res.kind === 'ok' || res.kind === 'unauthorized') {
-      if (res.kind === 'ok') {
+    if (res.kind === "ok" || res.kind === "unauthorized") {
+      if (res.kind === "ok") {
         onSuccess && onSuccess()
       }
       onClose()
@@ -134,7 +134,7 @@ export const ShareModal = (props: Props) => {
 
   const searchGroupOrMember = async (query: string) => {
     const res = await enterpriseStore.searchGroupOrMember(user.enterprise.id, query)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setSuggestions([...res.data.groups, ...res.data.members].slice(0, 4))
     } else {
       notifyApiError(res)
@@ -142,11 +142,11 @@ export const ShareModal = (props: Props) => {
   }
 
   const reset = () => {
-    setEmail('')
+    setEmail("")
     setEmails([])
     setGroups([])
     setSuggestions([])
-    setShareType('view')
+    setShareType("view")
     setReload(true)
     setSharedUsers([])
     setSharedGroups([])
@@ -198,18 +198,18 @@ export const ShareModal = (props: Props) => {
       <View
         style={{
           marginTop: 8,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
         }}
       >
         <Text
           preset="bold"
           size="xl"
-          style={{ maxWidth: '50%' }}
+          style={{ maxWidth: "50%" }}
           text={
             cipherIds
-              ? translate('shares.share_x_items', { count: cipherIds.length })
+              ? translate("shares.share_x_items", { count: cipherIds.length })
               : selectedCipher.name
           }
         />
@@ -217,7 +217,7 @@ export const ShareModal = (props: Props) => {
           <Button
             preset="teriatary"
             onPress={() => setPage(1)}
-            text={translate('shares.share_folder.manage_user')}
+            text={translate("shares.share_folder.manage_user")}
           />
         )}
       </View>
@@ -230,8 +230,8 @@ export const ShareModal = (props: Props) => {
       >
         <View
           style={{
-            width: '100%',
-            flexDirection: 'row',
+            width: "100%",
+            flexDirection: "row",
           }}
         >
           <TouchableOpacity
@@ -243,7 +243,7 @@ export const ShareModal = (props: Props) => {
             <Icon icon="user-plus" size={24} color={colors.title} />
           </TouchableOpacity>
           <TextInput
-            placeholder={translate('shares.share_folder.add_email')}
+            placeholder={translate("shares.share_folder.add_email")}
             placeholderTextColor={colors.title}
             selectionColor={colors.primary}
             onChangeText={setEmail}
@@ -270,8 +270,8 @@ export const ShareModal = (props: Props) => {
                   backgroundColor: colors.block,
                   paddingLeft: 10,
                   marginBottom: 16,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                   paddingVertical: 4,
                 }}
               >
@@ -282,7 +282,7 @@ export const ShareModal = (props: Props) => {
                   onPress={() => removeEmail(e)}
                   containerStyle={{
                     paddingHorizontal: 12,
-                    alignItems: 'center',
+                    alignItems: "center",
                   }}
                 />
               </View>
@@ -302,8 +302,8 @@ export const ShareModal = (props: Props) => {
                   backgroundColor: colors.block,
                   paddingLeft: 10,
                   marginBottom: 16,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                   paddingVertical: 4,
                 }}
               >
@@ -314,7 +314,7 @@ export const ShareModal = (props: Props) => {
                   onPress={() => setGroups(groups.filter((group) => group.id !== e.id))}
                   containerStyle={{
                     paddingHorizontal: 12,
-                    alignItems: 'center',
+                    alignItems: "center",
                   }}
                 />
               </View>
@@ -324,7 +324,7 @@ export const ShareModal = (props: Props) => {
       </View>
 
       <View style={{ marginTop: 20, marginBottom: 20 }}>
-        <Text>{translate('invite_member.select_person')}</Text>
+        <Text>{translate("invite_member.select_person")}</Text>
       </View>
       {!!email && (
         <TouchableOpacity onPress={() => addEmail(email)}>
@@ -332,20 +332,20 @@ export const ShareModal = (props: Props) => {
             style={{
               borderBottomColor: colors.border,
               borderBottomWidth: 1,
-              width: '100%',
-              flexDirection: 'row',
+              width: "100%",
+              flexDirection: "row",
               marginBottom: 15,
               paddingVertical: 14,
-              justifyContent: 'flex-start',
+              justifyContent: "flex-start",
             }}
           >
             <Image
-              resizeMode='contain'
-              source={require('./assets/avatar.png')}
+              resizeMode="contain"
+              source={require("./assets/avatar.png")}
               style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
             />
 
-            <View style={{ flex: 1, justifyContent: 'center' }}>
+            <View style={{ flex: 1, justifyContent: "center" }}>
               <Text text={email}></Text>
             </View>
           </View>
@@ -355,7 +355,7 @@ export const ShareModal = (props: Props) => {
       {/* Enterprise suggestion */}
       {suggestions.length > 0 && (
         <View style={{ marginTop: 20, marginBottom: 20 }}>
-          <Text style={{ marginBottom: 20 }}>{translate('shares.suggestion')}</Text>
+          <Text style={{ marginBottom: 20 }}>{translate("shares.suggestion")}</Text>
           {suggestions.map((e, index) => (
             <TouchableOpacity
               key={e + index.toString()}
@@ -380,19 +380,19 @@ export const ShareModal = (props: Props) => {
                 style={{
                   borderBottomColor: colors.border,
                   borderBottomWidth: 1,
-                  width: '100%',
-                  flexDirection: 'row',
+                  width: "100%",
+                  flexDirection: "row",
                   paddingVertical: 8,
-                  justifyContent: 'flex-start',
+                  justifyContent: "flex-start",
                 }}
               >
                 <Image
-                  resizeMode='contain'
-                  source={e.email ? { uri: e.avatar } : require('./assets/group.png')}
+                  resizeMode="contain"
+                  source={e.email ? { uri: e.avatar } : require("./assets/group.png")}
                   style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
                 />
 
-                <View style={{ flex: 1, justifyContent: 'center' }}>
+                <View style={{ flex: 1, justifyContent: "center" }}>
                   <Text text={e.email || e.name}></Text>
                 </View>
               </View>
@@ -408,17 +408,17 @@ export const ShareModal = (props: Props) => {
       <View
         style={{
           marginVertical: 20,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          justifyContent: "space-between",
         }}
       >
-        <Text preset="bold" text={translate('shares.share_folder.share_with')} />
+        <Text preset="bold" text={translate("shares.share_folder.share_with")} />
         <Button
           preset="teriatary"
           onPress={() => {
             setPage(0)
           }}
-          text={translate('common.add')}
+          text={translate("common.add")}
         />
       </View>
 
@@ -428,7 +428,7 @@ export const ShareModal = (props: Props) => {
         keyExtractor={(_, index) => String(index)}
         ListEmptyComponent={() => (
           <View>
-            <Text text={translate('shares.share_folder.no_shared_users')} />
+            <Text text={translate("shares.share_folder.no_shared_users")} />
           </View>
         )}
         renderItem={({ item }) => (
@@ -458,9 +458,9 @@ export const ShareModal = (props: Props) => {
           style={{
             marginTop: 10,
             height: 40,
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-between",
           }}
         >
           <Icon icon="x" size={18} onPress={() => onClose()} />
@@ -472,7 +472,7 @@ export const ShareModal = (props: Props) => {
               }}
             >
               <Text
-                text={translate('common.done')}
+                text={translate("common.done")}
                 style={{
                   color: emails?.length > 0 || groups.length > 0 ? colors.primary : colors.disable,
                 }}

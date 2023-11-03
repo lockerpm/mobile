@@ -1,18 +1,20 @@
-import React, { useState } from 'react'
-import { View, Image } from 'react-native'
-import { EditShareModal } from './EditShareModal'
-import { SharedMemberType } from 'app/static/types'
-import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { CipherView } from 'core/models/view'
-import { ActionItem, ActionSheet } from 'app/components/ciphers'
-import { Text } from 'app/components/cores'
+import React, { useEffect, useState } from "react"
+import { View, Image, Platform } from "react-native"
+import { EditShareModal } from "./EditShareModal"
+import { SharedGroupType, SharedMemberType } from "app/static/types"
+import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { CipherView } from "core/models/view"
+import { ActionItem, ActionSheet } from "app/components/ciphers"
+import { Text } from "app/components/cores"
+import { useTheme } from "app/services/context"
 
 type Props = {
   isOpen: boolean
   onClose: () => void
   onLoadingChange: (val: boolean) => void
   member: SharedMemberType
+  group?: SharedGroupType
   goToDetail: (val: any) => void
 }
 
@@ -20,15 +22,15 @@ type Props = {
  * Describe your component here
  */
 export const ShareItemAction = (props: Props) => {
-  const { isOpen, onClose, onLoadingChange, member, goToDetail } = props
-  const { stopShareCipher } = useCipherData()
+  const { isOpen, onClose, onLoadingChange, member, goToDetail, group } = props
+  const { stopShareCipher, stopShareCipherForGroup } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
   const { translate } = useHelper()
   const { cipherStore, uiStore } = useStores()
-
+  const { colors } = useTheme()
   // Params
 
-  const [nextModal, setNextModal] = useState<'edit' | 'confirm' | null>(null)
+  const [nextModal, setNextModal] = useState<"edit" | "confirm" | null>(null)
   const [showEditModal, setShowEditModal] = useState(false)
 
   // Computed
@@ -45,22 +47,39 @@ export const ShareItemAction = (props: Props) => {
   const handleStopShare = async () => {
     onClose()
     onLoadingChange(true)
-    await stopShareCipher(selectedCipher, member.id)
+    if (member) {
+      await stopShareCipher(selectedCipher, member.id)
+    }
+    if (group) {
+      await stopShareCipherForGroup(selectedCipher, group.id)
+    }
     onLoadingChange(false)
   }
 
   const handleActionSheetClose = () => {
     onClose()
     switch (nextModal) {
-      case 'confirm':
+      case "confirm":
         break
-      case 'edit':
+      case "edit":
         setShowEditModal(true)
         break
     }
     setNextModal(null)
   }
 
+  useEffect(() => {
+    if (Platform.OS === "android" && !isOpen) {
+      switch (nextModal) {
+        case "confirm":
+          break
+        case "edit":
+          setShowEditModal(true)
+          break
+      }
+      setNextModal(null)
+    }
+  }, [isOpen, nextModal])
   // Render
 
   return (
@@ -69,15 +88,20 @@ export const ShareItemAction = (props: Props) => {
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
         member={member}
+        group={group}
       />
 
       <ActionSheet
         isOpen={isOpen}
         onClose={handleActionSheetClose}
         header={
-          <View style={{ width: '100%', paddingHorizontal: 20 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Image resizeMode='contain' source={cipherMapper.img} style={{ height: 40, width: 40, borderRadius: 8 }} />
+          <View style={{ width: "100%", paddingHorizontal: 20 }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image
+                resizeMode="contain"
+                source={cipherMapper.img}
+                style={{ height: 40, width: 40, borderRadius: 8 }}
+              />
               <View style={{ marginLeft: 10, flex: 1 }}>
                 <Text preset="bold" text={selectedCipher.name} numberOfLines={2} />
               </View>
@@ -86,7 +110,7 @@ export const ShareItemAction = (props: Props) => {
         }
       >
         <ActionItem
-          name={translate('common.details')}
+          name={translate("common.details")}
           icon="list-bullets"
           action={() => {
             goToDetail(selectedCipher)
@@ -96,10 +120,10 @@ export const ShareItemAction = (props: Props) => {
 
         <ActionItem
           disabled={uiStore.isOffline}
-          name={translate('common.edit')}
+          name={translate("common.edit")}
           icon="edit"
           action={() => {
-            setNextModal('edit')
+            setNextModal("edit")
             onClose()
           }}
         />
@@ -107,7 +131,8 @@ export const ShareItemAction = (props: Props) => {
         <ActionItem
           disabled={uiStore.isOffline}
           icon="x-circle"
-          name={translate('shares.stop_sharing')}
+          color={colors.error}
+          name={translate("shares.stop_sharing")}
           action={handleStopShare}
         />
       </ActionSheet>

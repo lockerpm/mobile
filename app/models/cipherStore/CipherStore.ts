@@ -1,20 +1,31 @@
-import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
-import { withSetPropAction } from "../helpers/withSetPropAction"
+import { Instance, SnapshotIn, SnapshotOut, cast, types } from 'mobx-state-tree'
+import { withSetPropAction } from '../helpers/withSetPropAction'
 import { QUICK_SHARE_BASE_URL } from 'app/config/constants'
-import { omit } from "ramda"
-import { ConfirmShareCipherData, EditShareCipherData, ImportCipherData, ImportCipherWithFolderData, ImportFolderData, MoveFolderData, MyShareType, ShareCipherData, ShareMultipleCiphersData, SharingInvitationType, StopShareCipherData } from "app/static/types"
-import { CipherView } from "core/models/view/cipherView"
-import { Organization } from "core/models/domain/organization"
-import { cipherApi } from "app/services/api/cipherApi"
-import { CipherRequest } from "core/models/request/cipherRequest"
-import { SendRequest } from "core/models/request/sendRequest"
-
+import { omit } from 'ramda'
+import {
+  ConfirmShareCipherData,
+  EditShareCipherData,
+  ImportCipherData,
+  ImportCipherWithFolderData,
+  ImportFolderData,
+  MoveFolderData,
+  MyShareType,
+  ShareCipherData,
+  ShareMultipleCiphersData,
+  SharingInvitationType,
+  StopShareCipherData,
+} from 'app/static/types'
+import { CipherView } from 'core/models/view/cipherView'
+import { Organization } from 'core/models/domain/organization'
+import { cipherApi } from 'app/services/api/cipherApi'
+import { CipherRequest } from 'core/models/request/cipherRequest'
+import { SendRequest } from 'core/models/request/sendRequest'
 
 /**
  * Model description here for TypeScript hints.
  */
 export const CipherStoreModel = types
-  .model("CipherStore")
+  .model('CipherStore')
   .props({
     apiToken: types.maybeNull(types.string),
 
@@ -214,7 +225,7 @@ export const CipherStoreModel = types
       id: string,
       data: CipherRequest,
       score: number,
-      collectionIds: string[],
+      collectionIds: string[]
     ) => {
       const res = await cipherApi.putCipher(self.apiToken, id, data, score, collectionIds)
       return res
@@ -224,7 +235,7 @@ export const CipherStoreModel = types
       id: string,
       data: CipherRequest,
       score: number,
-      collectionIds: string[],
+      collectionIds: string[]
     ) => {
       const res = await cipherApi.shareCipherToTeam(self.apiToken, id, data, score, collectionIds)
       return res
@@ -273,16 +284,21 @@ export const CipherStoreModel = types
     stopShareCipher: async (
       organizationId: string,
       memberId: string,
-      payload: StopShareCipherData,
+      payload: StopShareCipherData
     ) => {
       const res = await cipherApi.stopShareCipher(self.apiToken, organizationId, memberId, payload)
+      return res
+    },
+
+    stopShareCipherForGroup: async (organizationId: string, payload: StopShareCipherData) => {
+      const res = await cipherApi.stopShareCipherForGroup(self.apiToken, organizationId, payload)
       return res
     },
 
     editShareCipher: async (
       organizationId: string,
       memberId: string,
-      payload: EditShareCipherData,
+      payload: EditShareCipherData
     ) => {
       const res = await cipherApi.editShareCipher(self.apiToken, organizationId, memberId, payload)
       return res
@@ -291,20 +307,20 @@ export const CipherStoreModel = types
     confirmShareCipher: async (
       organizationId: string,
       memberId: string,
-      payload: ConfirmShareCipherData,
+      payload: ConfirmShareCipherData
     ) => {
       const res = await cipherApi.confirmShareCipher(
         self.apiToken,
         organizationId,
         memberId,
-        payload,
+        payload
       )
       return res
     },
 
     loadSharingInvitations: async () => {
       const res = await cipherApi.getSharingInvitations(self.apiToken)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         self.setSharingInvitations(res.data)
       }
       return res
@@ -312,7 +328,7 @@ export const CipherStoreModel = types
 
     loadMyShares: async () => {
       const res = await cipherApi.getMyShares(self.apiToken)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         self.setMyShares(res.data)
       }
       return res
@@ -325,7 +341,7 @@ export const CipherStoreModel = types
 
     respondShare: async (id: string, accepted: boolean) => {
       const res = await cipherApi.respondShareInvitation(self.apiToken, id, {
-        status: accepted ? "accept" : "reject",
+        status: accepted ? 'accept' : 'reject',
       })
       return res
     },
@@ -348,14 +364,16 @@ export const CipherStoreModel = types
     },
     syncQuickShares: async (page: number) => {
       const res = await cipherApi.syncQuickShares(self.apiToken, page)
-      if (res.kind === "ok") {
+      if (res.kind === 'ok') {
         return res.data
       }
       return []
     },
 
     getPublicShareUrl: (accessId, key) => {
-      return `${QUICK_SHARE_BASE_URL}/shares/quick-share-item/${accessId}#${encodeURIComponent(key)}`
+      return `${QUICK_SHARE_BASE_URL}/shares/quick-share-item/${accessId}#${encodeURIComponent(
+        key
+      )}`
     },
 
     stopQuickSharing: async (send) => {
@@ -366,21 +384,20 @@ export const CipherStoreModel = types
   }))
   .postProcessSnapshot(
     omit([
-      "generatedPassword",
-      "selectedCipher",
-      "selectedFolder",
-      "selectedCollection",
-      "isSynching",
-      "isSynchingOffline",
-      "isSynchingAutofill",
-      "isBatchDecrypting",
-      "organizations",
-      "lastUpdate",
-    ]),
+      'generatedPassword',
+      'selectedCipher',
+      'selectedFolder',
+      'selectedCollection',
+      'isSynching',
+      'isSynchingOffline',
+      'isSynchingAutofill',
+      'isBatchDecrypting',
+      'organizations',
+      'lastUpdate',
+    ])
   )
 
-
-export interface CipherStore extends Instance<typeof CipherStoreModel> { }
-export interface CipherStoreSnapshotOut extends SnapshotOut<typeof CipherStoreModel> { }
-export interface CipherStoreSnapshotIn extends SnapshotIn<typeof CipherStoreModel> { }
+export interface CipherStore extends Instance<typeof CipherStoreModel> {}
+export interface CipherStoreSnapshotOut extends SnapshotOut<typeof CipherStoreModel> {}
+export interface CipherStoreSnapshotIn extends SnapshotIn<typeof CipherStoreModel> {}
 export const createCipherStoreDefaultModel = () => types.optional(CipherStoreModel, {})

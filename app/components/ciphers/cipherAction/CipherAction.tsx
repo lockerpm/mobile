@@ -238,7 +238,7 @@ export const CipherAction = (props: CipherActionProps) => {
               />
             )}
 
-            {!lockerMasterPassword && !isInFolderShare && (
+            {!lockerMasterPassword && (
               <ActionItem
                 disabled={uiStore.isOffline && !!selectedCipher.organizationId}
                 name={translate("trash.to_trash")}
