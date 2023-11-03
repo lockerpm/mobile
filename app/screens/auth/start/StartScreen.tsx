@@ -1,19 +1,19 @@
-import React, { FC, useEffect, useState } from 'react'
-import { useStores } from 'app/models'
-import NetInfo from '@react-native-community/netinfo'
-import { AppStackScreenProps } from 'app/navigators'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { Loading } from 'app/components/utils'
-import { observer } from 'mobx-react-lite'
+import React, { FC, useEffect, useState } from "react"
+import { useStores } from "app/models"
+import NetInfo from "@react-native-community/netinfo"
+import { AppStackScreenProps } from "app/navigators"
+import { useCipherData, useHelper } from "app/services/hook"
+import { Loading } from "app/components/utils"
+import { observer } from "mobx-react-lite"
 
-export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) => {
+export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) => {
   const { user, uiStore, enterpriseStore } = useStores()
   const { isBiometricAvailable, boostrapPushNotifier, parsePushNotiData, translate } = useHelper()
   const { loadFolders, loadCollections, loadOrganizations } = useCipherData()
   const navigation = props.navigation
   // ------------------------- PARAMS ----------------------------
 
-  const [msg, setMsg] = useState('')
+  const [msg, setMsg] = useState("")
 
   // ------------------------- METHODS ----------------------------
 
@@ -44,16 +44,16 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
     }
 
     // Load folders and collections
-    setMsg(translate('start.decrypting'))
+    setMsg(translate("start.decrypting"))
     Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
 
     // TODO: check device limit
     const isDeviceLimitReached = false
     if (isDeviceLimitReached) {
-      navigation.navigate('switchDevice')
+      navigation.navigate("switchDevice")
     }
 
-    setMsg('')
+    setMsg("")
 
     // Parse push noti data
     const navigationRequest = await parsePushNotiData()
@@ -73,36 +73,37 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
       if (!user.biometricIntroShown && !user.isBiometricUnlock) {
         const available = await isBiometricAvailable()
         if (available) {
-          navigation.navigate('biometricUnlockIntro')
+          navigation.navigate("biometricUnlockIntro")
           return
         }
       }
     }
+    // navigation.navigate("autofill")
 
     // Done -> navigate
     if (uiStore.isDeeplinkEmergencyAccess) {
       uiStore.setIsDeeplinkEmergencyAccess(false)
-      navigation?.navigate('mainTab', { screen: 'menuTab' })
-      navigation.navigate('emergencyAccess')
+      navigation?.navigate("mainTab", { screen: "menuTab" })
+      navigation.navigate("emergencyAccess")
     } else if (uiStore.isDeeplinkShares) {
       uiStore.setIsDeeplinkShares(false)
-      navigation?.navigate('mainTab', { screen: 'browseTab' })
+      navigation?.navigate("mainTab", { screen: "browseTab" })
 
       // @ts-ignore TODO
-      navigation?.navigate('mainTab', { screen: 'browseTab', params: { screen: 'shares' } })
+      navigation?.navigate("mainTab", { screen: "browseTab", params: { screen: "shares" } })
     } else if (uiStore.isFromAutoFill) {
       uiStore.setIsFromAutoFill(false)
-      navigation.navigate('autofill')
+      navigation.navigate("autofill")
     } else if (uiStore.isFromAutoFillItem) {
       uiStore.setIsFromAutoFillItem(false)
-      navigation.navigate('autofill', { mode: 'item' })
+      navigation.navigate("autofill", { mode: "item" })
     } else if (uiStore.isOnSaveLogin) {
       // uiStore.setIsOnSaveLogin(false)
-      navigation.navigate('passwords__edit', { mode: 'add' })
+      navigation.navigate("passwords__edit", { mode: "add" })
     } else if (enterpriseStore.isEnterpriseInvitations) {
-      navigation.navigate('enterpriseInvited')
+      navigation.navigate("enterpriseInvited")
     } else {
-      navigation.navigate('mainTab', { screen: user.defaultTab })
+      navigation.navigate("mainTab", { screen: user.defaultTab })
     }
   }
 
@@ -110,7 +111,7 @@ export const StartScreen: FC<AppStackScreenProps<'start'>> = observer((props) =>
 
   // Always move forward
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', mounted)
+    const unsubscribe = navigation.addListener("focus", mounted)
     return unsubscribe
   }, [navigation])
 

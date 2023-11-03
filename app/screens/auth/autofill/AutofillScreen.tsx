@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC, useEffect, useState } from 'react'
-import { BackHandler, NativeModules } from 'react-native'
-import { AutoFillList } from './AutofillList'
-import { parseSearchText } from 'app/utils/autofillHelper'
-import { AppStackScreenProps } from 'app/navigators'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { CipherView } from 'core/models/view'
-import { CipherType } from 'core/enums'
-import { getTOTP, parseOTPUri } from 'app/utils/totp'
-import { Screen } from 'app/components/cores'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
+import React, { FC, useEffect, useState } from "react"
+import { BackHandler, NativeModules } from "react-native"
+import { AutoFillList } from "./AutofillList"
+import { parseSearchText } from "app/utils/autofillHelper"
+import { AppStackScreenProps } from "app/navigators"
+import { useCipherData, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { CipherView } from "core/models/view"
+import { CipherType } from "core/enums"
+import { getTOTP, parseOTPUri } from "app/utils/totp"
+import { Screen } from "app/components/cores"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
 
-import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from 'app/components/ciphers'
-import { observer } from 'mobx-react-lite'
+import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
+import { observer } from "mobx-react-lite"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
-const EMPTY_CIPHER = require('assets/images/emptyCipherList/autofill-empty-cipher.png')
+const EMPTY_CIPHER = require("assets/images/emptyCipherList/autofill-empty-cipher.png")
 
-export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = observer((props) => {
+export const AutoFillScreen: FC<AppStackScreenProps<"autofill">> = observer((props) => {
   const navigation = props.navigation
   const { mode } = props.route.params
   const { copyToClipboard, translate } = useHelper()
@@ -28,13 +28,13 @@ export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = observer((pro
   // -------------------- PARAMS ----------------------------
 
   const [isSortOpen, setIsSortOpen] = useState(false)
-  const [searchText, setSearchText] = useState(parseSearchText(uiStore.deepLinkUrl) || '')
+  const [searchText, setSearchText] = useState(parseSearchText(uiStore.deepLinkUrl) || "")
   const [isLoading, setIsLoading] = useState(true)
   const [sortList, setSortList] = useState({
-    orderField: 'revisionDate',
-    order: 'desc',
+    orderField: "revisionDate",
+    order: "desc",
   })
-  const [sortOption, setSortOption] = useState('last_updated')
+  const [sortOption, setSortOption] = useState("last_updated")
   const [selectedItems, setSelectedItems] = useState([])
   const [isSelecting, setIsSelecting] = useState(false)
   const [allItems, setAllItems] = useState([])
@@ -54,9 +54,9 @@ export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = observer((pro
       BackHandler.exitApp()
       return false
     }
-    BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+    BackHandler.addEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      BackHandler.removeEventListener("hardwareBackPress", checkSelectBeforeLeaving)
     }
   }, [isSelecting])
 
@@ -65,25 +65,25 @@ export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = observer((pro
     if (searchText) {
       if (searchText.trim().length === 1) {
         setSortList(null)
-        setSortOption('most_relevant')
+        setSortOption("most_relevant")
       }
     } else {
       setSortList({
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       })
-      setSortOption('last_updated')
+      setSortOption("last_updated")
     }
   }, [searchText])
 
   // Suggest save
   useEffect(() => {
-    if (mode === 'item') {
+    if (mode === "item") {
       const check = async () => {
         const id = uiStore.saveLastId
         const allLogins = await getCiphersFromCache({
           deleted: false,
-          searchText: '',
+          searchText: "",
           filters: [(c: CipherView) => c.type === CipherType.Login && c.id === id],
         })
 
@@ -107,33 +107,25 @@ export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = observer((pro
   return (
     <Screen
       padding
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={["bottom"]}
       header={
         <CipherListHeader
           isAutoFill
-          header={translate('common.passwords')}
+          header={translate("common.passwords")}
           openSort={() => setIsSortOpen(true)}
           openAdd={() => {
-            navigation.navigate('passwords__edit', { mode: 'add', initialUrl: uiStore.deepLinkUrl })
+            navigation.navigate("passwords__edit", { mode: "add", initialUrl: uiStore.deepLinkUrl })
           }}
           onSearch={setSearchText}
           searchText={searchText}
           navigation={navigation}
           isSelecting={isSelecting}
-          setIsSelecting={setIsSelecting}
-          selectedItems={selectedItems}
-          setSelectedItems={setSelectedItems}
           setIsLoading={setIsLoading}
-          toggleSelectAll={() => {
-            const maxLength = Math.min(allItems.length, MAX_CIPHER_SELECTION)
-            if (selectedItems.length < maxLength) {
-              setSelectedItems(allItems.slice(0, maxLength))
-            } else {
-              setSelectedItems([])
-            }
-          }}
         />
       }
+      contentContainerStyle={{
+        flex: 1,
+      }}
     >
       <SortActionConfigModal
         isOpen={isSortOpen}
@@ -159,12 +151,12 @@ export const AutoFillScreen: FC<AppStackScreenProps<'autofill'>> = observer((pro
           <EmptyCipherList
             img={EMPTY_CIPHER}
             imgStyle={{ height: 55, width: 120 }}
-            title={translate('password.empty.title')}
-            desc={translate('password.empty.desc')}
-            buttonText={translate('password.empty.btn')}
+            title={translate("password.empty.title")}
+            desc={translate("password.empty.desc")}
+            buttonText={translate("password.empty.btn")}
             addItem={() => {
-              navigation.navigate('passwords__edit', {
-                mode: 'add',
+              navigation.navigate("passwords__edit", {
+                mode: "add",
                 initialUrl: uiStore.deepLinkUrl,
               })
             }}

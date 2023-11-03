@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { View, FlatList } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import orderBy from 'lodash/orderBy'
-import { AutofillListItem } from './AutofillListItem'
-import { Text } from 'app/components/cores'
-import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { CipherView } from 'core/models/view'
-import { CipherType } from 'core/enums'
-import { BROWSE_ITEMS } from 'app/navigators'
-import { MAX_CIPHER_SELECTION } from 'app/static/constants'
-import { AutoFillItemAction } from './AutofillItemAction'
+import React, { useState, useEffect } from "react"
+import { View, FlatList } from "react-native"
+import { observer } from "mobx-react-lite"
+import orderBy from "lodash/orderBy"
+import { AutofillListItem } from "./AutofillListItem"
+import { Text } from "app/components/cores"
+import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { CipherView } from "core/models/view"
+import { CipherType } from "core/enums"
+import { BROWSE_ITEMS } from "app/navigators"
+import { MAX_CIPHER_SELECTION } from "app/static/constants"
+import { AutoFillItemAction } from "./AutofillItemAction"
 
 interface AutoFillListProps {
   emptyContent?: JSX.Element
@@ -54,7 +54,7 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
 
   const [showPasswordAction, setShowPasswordAction] = useState(false)
   const [ciphers, setCiphers] = useState([])
-  const [checkedItem, setCheckedItem] = useState('')
+  const [checkedItem, setCheckedItem] = useState("")
 
   // ------------------------ WATCHERS ----------------------------
 
@@ -94,13 +94,18 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
         imgLogo: null,
         svg: null,
         notSync: [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-          c.id
+          c.id,
         ),
         isDeleted: c.isDeleted,
       }
-      if (c.login.uri) {
-        data.imgLogo = getWebsiteLogo(c.login.uri)
+      let img = {}
+      const { uri } = getWebsiteLogo(c.login.uri)
+      if (uri) {
+        img = { uri }
+      } else {
+        img = BROWSE_ITEMS.password.icon
       }
+      data.imgLogo = img
       data.logo = BROWSE_ITEMS.password.icon
       return data
     })
@@ -111,8 +116,8 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
       res =
         orderBy(
           res,
-          [(c) => (orderField === 'name' ? c.name && c.name.toLowerCase() : c.revisionDate)],
-          [order]
+          [(c) => (orderField === "name" ? c.name && c.name.toLowerCase() : c.revisionDate)],
+          [order],
         ) || []
     }
 
@@ -140,7 +145,7 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
     let selected = [...selectedItems]
     if (!selected.includes(id)) {
       if (selected.length === MAX_CIPHER_SELECTION) {
-        notify('error', translate('error.cannot_select_more', { count: MAX_CIPHER_SELECTION }))
+        notify("error", translate("error.cannot_select_more", { count: MAX_CIPHER_SELECTION }))
         return
       }
       selected.push(id)
@@ -190,9 +195,9 @@ export const AutoFillList = observer((props: AutoFillListProps) => {
   ) : (
     <View style={{ paddingHorizontal: 20 }}>
       <Text
-        text={translate('error.no_results_found') + ` '${searchText}'`}
+        text={translate("error.no_results_found") + ` '${searchText}'`}
         style={{
-          textAlign: 'center',
+          textAlign: "center",
         }}
       />
     </View>
