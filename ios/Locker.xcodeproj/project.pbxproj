@@ -476,7 +476,7 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */,
+				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -1142,7 +1142,7 @@
 				minimumVersion = 4.0.0;
 			};
 		};
-		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
+		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
 			requirement = {
@@ -1160,7 +1160,7 @@
 		};
 		7CEB31EA2A931B5A007F6051 /* SwiftOTP */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */;
+			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */;
 			productName = SwiftOTP;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -377,6 +377,7 @@ class FolderApi {
     }
   }
 
+  // remove shared item in folder
   async removeShareItem(
     token: string,
     id: string,

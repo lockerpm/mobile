@@ -94,7 +94,7 @@ export const QuickSharesScreen: FC<AppStackScreenProps<"quick_shares">> = observ
       send.expirationDate = expireAfter ? new Date(Date.now() + expireAfter * 1000) : null
       send.requireOtp = requireOtp
       send.emails = requireOtp ? emails : []
-      send.eachEmailAccessCount = requireOtp ? 1 : null
+      send.eachEmailAccessCount = null
 
       const sendView = new SendView(send)
 

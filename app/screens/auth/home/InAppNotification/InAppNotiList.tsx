@@ -1,13 +1,13 @@
-import React, { FC } from 'react'
-import { FlatList, View } from 'react-native'
-import { Screen, Header, Text } from 'app/components/cores'
-import { NotiListItem } from './InAppNotiItem'
-import { AppStackScreenProps } from 'app/navigators'
-import { useStores } from 'app/models'
-import { observer } from 'mobx-react-lite'
-import { useHelper } from 'app/services/hook'
+import React, { FC } from "react"
+import { FlatList, View } from "react-native"
+import { Screen, Header, Text } from "app/components/cores"
+import { NotiListItem } from "./InAppNotiItem"
+import { AppStackScreenProps } from "app/navigators"
+import { useStores } from "app/models"
+import { observer } from "mobx-react-lite"
+import { useHelper } from "app/services/hook"
 
-export const InAppListNotificationScreen: FC<AppStackScreenProps<'app_list_noti'>> = observer(
+export const InAppListNotificationScreen: FC<AppStackScreenProps<"app_list_noti">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
@@ -16,14 +16,14 @@ export const InAppListNotificationScreen: FC<AppStackScreenProps<'app_list_noti'
 
     return (
       <Screen
-        safeAreaEdges={['bottom']}
+        safeAreaEdges={["bottom"]}
         header={
           <Header
             leftIcon="arrow-left"
             onLeftPress={() => {
               navigation.goBack()
             }}
-            title={translate('common.notifications')}
+            title={translate("common.notifications")}
           />
         }
         contentContainerStyle={{
@@ -33,7 +33,7 @@ export const InAppListNotificationScreen: FC<AppStackScreenProps<'app_list_noti'
         <FlatList
           data={route.params?.notifications?.results}
           ListEmptyComponent={() => (
-            <View style={{ alignItems: 'center' }}>
+            <View style={{ alignItems: "center" }}>
               <Text text="(no data)" />
             </View>
           )}
@@ -42,10 +42,9 @@ export const InAppListNotificationScreen: FC<AppStackScreenProps<'app_list_noti'
             paddingHorizontal: 20,
           }}
           keyExtractor={(_, index) => String(index)}
-          ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
           renderItem={({ item }) => <NotiListItem lang={user.language} {...item} />}
         />
       </Screen>
     )
-  }
+  },
 )
