@@ -92,8 +92,7 @@ export const NotiListItem = (props: Props) => {
     <TouchableOpacity
       style={{
         flexDirection: "row",
-        maxHeight: 108,
-        flex: 1,
+        marginBottom: 12,
       }}
       onPress={property?.onPress}
     >
@@ -101,12 +100,7 @@ export const NotiListItem = (props: Props) => {
       <View style={{ marginLeft: 16, flex: 1 }}>
         <Text preset="bold" text={property.title} style={{ marginBottom: 4 }} />
 
-        <Text
-          text={title[lang]}
-          ellipsizeMode="tail"
-          numberOfLines={3}
-          style={{ marginBottom: 4, maxHeight: 60 }}
-        />
+        <Text text={title[lang]} style={{ marginBottom: 4 }} />
         <Text preset="label" text={relativeTime(publish_time * 1000, lang)} />
       </View>
     </TouchableOpacity>
