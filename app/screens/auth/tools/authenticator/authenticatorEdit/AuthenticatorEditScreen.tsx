@@ -103,10 +103,6 @@ export const AuthenticatorEditScreen: FC<AppStackScreenProps<"authenticator__edi
                 preset="teriatary"
                 text={translate("common.save")}
                 onPress={handleSave}
-                style={{
-                  height: 35,
-                  alignItems: "center",
-                }}
               />
             }
           />

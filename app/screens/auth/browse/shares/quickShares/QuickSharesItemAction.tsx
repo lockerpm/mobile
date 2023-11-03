@@ -47,6 +47,7 @@ export const QuickSharesItemAction = observer((props: Props) => {
   }
 
   const copyShareLink = () => {
+    console.log(selectedCipher.key)
     const url = cipherStore.getPublicShareUrl(
       selectedCipher.accessId,
       Utils.bufferToBase64url(selectedCipher.key),
