@@ -12,7 +12,6 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "../../../../models"
 import { useCipherDataMixins } from "../../../../services/mixins/cipher/data"
 import { Logger } from "../../../../utils/logger"
-import { PlanType } from "../../../../config/types"
 import { ImportResult } from "./import-result"
 import { ImportProgress } from "./import-progress"
 import { ImportPickFile } from "./import-pick-file"
@@ -36,7 +35,7 @@ export const ImportScreen = observer(() => {
 
   // -------------------- PARAMS --------------------
 
-  const isFreeAccount = user.plan?.alias === PlanType.FREE
+  const isFreeAccount = user.isFreePlan
   const fileData = {
     name: "",
     uri: "",

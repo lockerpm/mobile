@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Loading } from "../../../components"
-import Flurry from "react-native-flurry-sdk"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../services/mixins"
 import { useStores } from "../../../models"
@@ -54,9 +53,6 @@ export const StartScreen = observer(() => {
         await user.loadPlan()
       }
     }
-
-    // Log user id
-    Flurry.setUserId(user.pwd_user_id)
 
     // Load folders and collections
     setMsg(translate("start.decrypting"))

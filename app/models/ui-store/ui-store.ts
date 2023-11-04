@@ -30,11 +30,18 @@ export const UiStoreModel = types
     isOffline: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
     isPerformOverlayTask: types.maybeNull(types.boolean),
-    hasNoMasterPwItem: types.maybeNull(types.boolean)
+    hasNoMasterPwItem: types.maybeNull(types.boolean),
+
+
+    cacheCode:  types.maybeNull(types.string),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
 
+
+    setCacheCode: (code: string) => {
+      self.cacheCode = code
+    },
 
     setHasNoMasterPwItem: (val: boolean) => {
       self.hasNoMasterPwItem = val

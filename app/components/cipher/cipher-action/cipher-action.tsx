@@ -52,7 +52,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
   const selectedCipher: CipherView = { ...cipherStore.cipherView }
   selectedCipher.revisionDate = null
   // Computed
-  const premiumLock = (user.plan?.alias === PlanType.FREE) || !user.plan
+  const premiumLock = user.isFreePlan
   const lockerMasterPassword = selectedCipher.type === CipherType.MasterPassword
   const emergencyView = isEmergencyView === undefined ? false : isEmergencyView
   const organizations = cipherStore.organizations
@@ -239,7 +239,7 @@ export const CipherAction = observer((props: CipherActionProps) => {
                 />
               )}
 
-              {!lockerMasterPassword && !isInFolderShare && (
+              {!lockerMasterPassword && !isInFolderShare && !isShared && (
                 <ActionItem
                   onClose={onClose}
                   disabled={uiStore.isOffline}

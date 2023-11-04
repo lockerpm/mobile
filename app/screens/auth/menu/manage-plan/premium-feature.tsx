@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { TouchableOpacity, View, ViewStyle, Dimensions } from "react-native"
+import { TouchableOpacity, View, ViewStyle } from "react-native"
 import { Text, AutoImage as Image, Button, Modal } from "../../../../components"
 import { useNavigation } from "@react-navigation/native"
 import { useMixins } from "../../../../services/mixins"
 import { commonStyles } from "../../../../theme"
 import { useStores } from "../../../../models"
-import { PlanType } from "../../../../config/types"
 import { useAdaptiveLayoutMixins } from "../../../../services/mixins/adaptive-layout"
 
 export const PremiumFeature = () => {
@@ -14,7 +13,7 @@ export const PremiumFeature = () => {
     const navigation = useNavigation()
     const {isPortrait, isTablet} = useAdaptiveLayoutMixins()
     const [modalVisible, setModalVisible] = useState(false);
-    const isFreeAccount = (user.plan?.alias === PlanType.FREE) || !user.plan
+    const isFreeAccount = user.isFreePlan
 
 
     useEffect(() => {

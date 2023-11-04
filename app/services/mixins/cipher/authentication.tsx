@@ -21,6 +21,7 @@ import { CipherView, LoginUriView, LoginView } from "../../../../core/models/vie
 import { CipherType } from "../../../../core/enums"
 import { CipherRequest } from "../../../../core/models/request/cipherRequest"
 import { Utils } from "../../../../core/misc/utils"
+import { BASE_URL } from "../../../config/constants"
 
 const { createContext, useContext } = React
 
@@ -181,6 +182,7 @@ export const CipherAuthenticationMixinsProvider = observer(
           return { kind: "on-premise-2fa" }
         } else {
           setApiTokens(res.data?.access_token)
+
           await Promise.all([user.getUser(), user.getUserPw()])
         }
       }
@@ -340,15 +342,12 @@ export const CipherAuthenticationMixinsProvider = observer(
         const kdfIterations = 100000
         const keyStr = (qrOtp + qrOtp + qrOtp).slice(0, 16)
         const keyBuff = Utils.fromUtf8ToArray(keyStr).buffer
-
         // parse qr
         const iv = Utils.fromB64ToArray(qr.split(".")[0]).buffer
         const encryptB64 = Utils.fromB64ToArray(qr.split(".")[1]).buffer
-
         const dataBuffer = await cryptoFunctionService.aesDecrypt(encryptB64, iv, keyBuff)
         const data = Utils.fromBufferToUtf8(dataBuffer)
         const [keyHash, keyB64, encType] = data.split(".")
-
         const key = new SymmetricCryptoKey(Utils.fromB64ToArray(keyB64).buffer, parseInt(encType))
         setSymmetricCryptoKey(key)
         // Online session login
@@ -720,9 +719,11 @@ export const CipherAuthenticationMixinsProvider = observer(
     // Logout
     const logout = async () => {
       try {
+        user.environment.api.apisauce.setBaseURL(BASE_URL)
         await user.updateFCM(null)
         await user.logout()
         await clearAllData()
+        setApiTokens("")
         await logoutAllServices()
         await Intercom.logout()
       } catch (e) {

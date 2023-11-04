@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
-import { View } from "react-native"
+import { Platform, View, useWindowDimensions } from "react-native"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../models"
 import { AutoImage as Image, Text, FloatingInput, Button } from "../../../components"
@@ -13,9 +13,9 @@ import { useNavigation } from "@react-navigation/native"
 import { Passkey, PasskeyAuthenticationResult } from "react-native-passkey"
 import { PasskeyAuthenticationRequest } from "react-native-passkey/lib/typescript/Passkey"
 import { credentialAuthOptions, publicKeyCredentialWithAssertion } from "../../../utils/passkey"
+import { IosPasskeyOptions } from "../signup/ios-passkey-options"
 
 type Props = {
-  onPremise: boolean
   nextStep: (username: string, password: string, methods: { type: string; data: any }[]) => void
   onLoggedIn: (newUser: boolean, token: string) => void
   handleForgot: () => void
@@ -29,10 +29,11 @@ enum METHOD {
 
 export const DefaultLogin = observer((props: Props) => {
   const navigation = useNavigation()
+  const width = useWindowDimensions().width
   const { user, uiStore } = useStores()
-  const { translate, notify, notifyApiError, setApiTokens } = useMixins()
+  const { translate, notify, notifyApiError, setApiTokens , color} = useMixins()
   const { googleLogin, facebookLogin, githubLogin, appleLogin } = useSocialLoginMixins()
-  const { nextStep, onLoggedIn, handleForgot, onPremise } = props
+  const { nextStep, onLoggedIn, handleForgot } = props
   // ------------------ Params -----------------------
 
   const [isLoading, setIsLoading] = useState(false)
@@ -47,6 +48,8 @@ export const DefaultLogin = observer((props: Props) => {
 
   const [showGitHubLogin, setShowGitHubLogin] = useState(false)
 
+  const [isShowCreatePasskeyOptions, setIsShowCreatePasskeyOptions] = useState(false)
+  const [isIcloudSelected, setIsIcloudSelected] = useState(true)
   // ------------------ Methods ----------------------
 
   const getLoginMethod = async () => {
@@ -54,7 +57,11 @@ export const DefaultLogin = observer((props: Props) => {
     if (res.kind === "ok") {
       if (res.data.webauthn) {
         setLoginMethod(METHOD.PASSKEY)
-        await handleAuthWebauth()
+        if (IS_IOS){
+          setIsShowCreatePasskeyOptions(true)
+        } else {
+          await handleAuthWebauth()
+        }
         setShowExtraPasskeyLogin(true)
         return
       }
@@ -68,82 +75,56 @@ export const DefaultLogin = observer((props: Props) => {
     setIsLoading(true)
     setIsError(false)
 
-    if (!onPremise) {
-      const payload = { username, password }
-      const res = await user.login(payload)
-      setIsLoading(false)
-      if (res.kind !== "ok") {
-        setIsError(true)
-        if (res.kind === "unauthorized" && res.data) {
-          const errorData: {
-            code: string
-            message: string
-          } = res.data
-          switch (errorData.code) {
-            case "1001": {
-              notify("error", translate("error.wrong_username_or_password"))
-              break
-            }
-            case "1003": {
-              notify("error", translate("error.account_not_activated"))
-              break
-            }
-            default: {
-              notify("error", errorData.message)
-            }
+    const payload = { username, password }
+    const res = await user.login(payload)
+    setIsLoading(false)
+    if (res.kind !== "ok") {
+      setIsError(true)
+      if (res.kind === "unauthorized" && res.data) {
+        const errorData: {
+          code: string
+          message: string
+        } = res.data
+        switch (errorData.code) {
+          case "1001": {
+            notify("error", translate("error.wrong_username_or_password"))
+            break
           }
-        } else {
-          notifyApiError(res)
+          case "1003": {
+            notify("error", translate("error.account_not_activated"))
+            break
+          }
+          default: {
+            notify("error", errorData.message)
+          }
         }
       } else {
-        setPassword("")
-        if (res.data.is_factor2) {
-          nextStep(username, password, res.data.methods)
-        } else {
-          // @ts-ignore
-          setApiTokens(res.data?.access_token)
-          onLoggedIn(false, "")
-        }
+        notifyApiError(res)
       }
     } else {
-      const res = await user.onPremisePreLogin(username)
-      setIsLoading(false)
-      if (res.kind !== "ok") {
-        setIsError(true)
-        if (res.kind === "unauthorized" && res.data) {
-          const errorData: {
-            code: string
-            message: string
-          } = res.data
-          notify("error", errorData.message)
-        } else {
-          notifyApiError(res)
-        }
+      setPassword("")
+      if (res.data.is_factor2) {
+        nextStep(username, password, res.data.methods)
       } else {
-        if (res.data.length === 0) {
-          notify("error", translate("error.onpremise_login_failed"))
-        }
-        if (res.data[0]?.activated) {
-          navigation.navigate("lock", {
-            type: "onPremise",
-            data: res.data[0],
-            email: username,
-          })
-        }
+        // @ts-ignore
+        setApiTokens(res.data?.access_token)
+        onLoggedIn(false, "")
       }
     }
   }
 
-  const handleAuthWebauth = async () => {
+  const handleAuthWebauth = async (withSecurityKey?: boolean) => {
     const resAuthPasskeyOptions = await user.authPasskeyOptions(username)
     if (resAuthPasskeyOptions.kind === "ok") {
       try {
         const authRequest: PasskeyAuthenticationRequest = credentialAuthOptions(
           resAuthPasskeyOptions.data,
         )
+
+        // return
         // Call the `authenticate` method with the retrieved request in JSON format
         // A native overlay will be displayed
-        const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest)
+        const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest,  { withSecurityKey })
 
         const res = await user.authPasskey({
           username,
@@ -180,11 +161,6 @@ export const DefaultLogin = observer((props: Props) => {
   }
   // ------------------------------ DATA -------------------------------
   const checkPasskeySupported = async () => {
-    if (onPremise) {
-      setLoginMethod(METHOD.PASSWORD)
-      return
-    }
-
     const res = await Passkey.isSupported()
     if (res) {
       setLoginMethod(METHOD.NONE)
@@ -245,9 +221,43 @@ export const DefaultLogin = observer((props: Props) => {
         setShowGitHubLogin(true)
       },
     },
+    sso: {
+      icon: SOCIAL_LOGIN_ICON.sso,
+      handler: () => {
+        navigation.setParams({
+          host: "",
+          use_sso: false,
+          identifier: "",
+        })
+        navigation.navigate("ssoIdentifier")
+      },
+    },
   }
 
   // ------------------------------ RENDER -------------------------------
+  const AuthWithPasskey = () => {
+    if (!showExtraPasskeyLogin) return null
+    return (
+      <Button
+        preset="outline"
+        isLoading={isLoading}
+        isDisabled={isLoading || !username }
+        text={translate("passkey.login_passkey")}
+        onPress={() => {
+          if (Platform.OS === "ios") {
+            setIsShowCreatePasskeyOptions(true)
+          } else {
+            handleAuthWebauth(false)
+          }
+        }}
+        style={{
+          width: "100%",
+          height: 50,
+          marginBottom: 12
+        }}
+      />
+    )
+  }
 
   // ------------------------------ RENDER -------------------------------
 
@@ -265,6 +275,22 @@ export const DefaultLogin = observer((props: Props) => {
             })
           }}
         />
+              {IS_IOS && (
+        <IosPasskeyOptions
+          isOpen={isShowCreatePasskeyOptions}
+          onClose={() => {
+            setIsShowCreatePasskeyOptions(false)
+          }}
+          label={translate('passkey.login_passkey_options')}
+          title={translate("common.login")}
+          isIcloudSelected={isIcloudSelected}
+          setIsIcloudSelected={setIsIcloudSelected}
+          action={async () => {
+            setIsShowCreatePasskeyOptions(false)
+            await handleAuthWebauth(!isIcloudSelected)
+          }}
+        />
+      )}
 
         <Image
           source={APP_ICON.icon}
@@ -295,7 +321,7 @@ export const DefaultLogin = observer((props: Props) => {
         {/* Username input end */}
 
         {/* Password input */}
-        {!onPremise && loginMethod === METHOD.PASSWORD && (
+        {loginMethod === METHOD.PASSWORD && (
           <FloatingInput
             outerRef={passwordRef}
             isPassword
@@ -309,7 +335,7 @@ export const DefaultLogin = observer((props: Props) => {
         )}
         {/* Password input end */}
 
-        {!onPremise && loginMethod === METHOD.PASSWORD && (
+        { loginMethod === METHOD.PASSWORD && (
           <View
             style={{
               width: "100%",
@@ -328,9 +354,7 @@ export const DefaultLogin = observer((props: Props) => {
         {loginMethod === METHOD.PASSWORD && (
           <Button
             isLoading={isLoading}
-            isDisabled={
-              isLoading || (!onPremise && !(username && password)) || (onPremise && !username)
-            }
+            isDisabled={isLoading || !(username && password)}
             text={translate("common.login")}
             onPress={handleLogin}
             style={{
@@ -355,7 +379,7 @@ export const DefaultLogin = observer((props: Props) => {
           />
         )}
 
-        {!onPremise && showExtraPasskeyLogin && (
+        {/* {!onPremise && showExtraPasskeyLogin && (
           <Button
             preset="outline"
             isLoading={isLoading}
@@ -367,31 +391,36 @@ export const DefaultLogin = observer((props: Props) => {
               marginBottom: 12,
             }}
           />
-        )}
+        )} */}
+        {AuthWithPasskey()}
 
-        {!onPremise && (
-          <View style={commonStyles.CENTER_VIEW}>
-            <Text
-              text={IS_PROD ? translate("common.or_login_with") : ""}
-              style={{ marginBottom: spacing.tiny }}
-            />
+        <View style={commonStyles.CENTER_VIEW}>
+          <Text
+            text={IS_PROD ? translate("common.or_login_with") : ""}
+            style={{ marginBottom: spacing.tiny }}
+          />
 
-            <View style={commonStyles.CENTER_HORIZONTAL_VIEW}>
-              {Object.values(SOCIAL_LOGIN)
-                .filter((item) => !item.hide)
-                .map((item, index) => (
-                  <Button
-                    key={index}
-                    preset="ghost"
-                    onPress={item.handler}
-                    style={{ marginHorizontal: spacing.smaller }}
-                  >
-                    <item.icon height={40} width={40} />
-                  </Button>
-                ))}
-            </View>
+          <View
+            style={[
+              commonStyles.CENTER_HORIZONTAL_VIEW,
+              { maxWidth: width - 32, justifyContent: "center" },
+            ]}
+          >
+            {Object.values(SOCIAL_LOGIN)
+              .filter((item) => !item.hide)
+              .map((item, index) => (
+                <Button
+                  key={index}
+                  preset="ghost"
+                  onPress={item.handler}
+                  style={{ marginHorizontal: spacing.smaller }}
+                >
+                  <item.icon height={40} width={40} />
+                </Button>
+              ))}
           </View>
-        )}
+        </View>
+
       </View>
     </View>
   )

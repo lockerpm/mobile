@@ -15,7 +15,7 @@ export const ToolsListScreen = observer(() => {
   const { user, uiStore } = useStores()
   const { translate, color } = useMixins()
 
-  const isFreeAccount = user.plan && user.plan.alias === PlanType.FREE
+  const isFreeAccount = user.isFreePlan
   return (
     <Layout
       borderBottom

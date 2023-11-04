@@ -15,7 +15,6 @@ import { useCipherHelpersMixins } from "../../../../../services/mixins/cipher/he
 import { useCipherDataMixins } from "../../../../../services/mixins/cipher/data"
 import { Logger } from "../../../../../utils/logger"
 import { useStores } from "../../../../../models"
-import { PlanType } from "../../../../../config/types"
 import { RouteProp, useRoute } from "@react-navigation/native"
 import { PrimaryParamList } from "../../../../../navigators"
 
@@ -32,7 +31,7 @@ export const QRScannerScreen = function QRScannerScreen() {
   const [isLoading, setIsLoading] = useState(false)
 
   // --------------------------COMPUTED-------------------------
-  const isFreeAccount = user.plan?.alias === PlanType.FREE || !user.plan
+  const isFreeAccount = user.isFreePlan
   const totpCount = route.params.totpCount || 0
 
   const onSuccess = async (e) => {

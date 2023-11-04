@@ -401,7 +401,7 @@ export const PasswordEditScreen = observer(() => {
 
       {/** OTP */}
       <View style={commonStyles.SECTION_PADDING}>
-        <Text text={translate("password.2fa_setup")} style={{ fontSize: fontSize.small }} />
+        <Text text={translate("password.2fa_setup").toUpperCase()} style={{ fontSize: fontSize.small }} />
       </View>
 
       <TouchableOpacity

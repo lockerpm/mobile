@@ -27,6 +27,7 @@ export const PasswordlessQrScan = observer(
     const { sessionQrLogin } = useCipherAuthenticationMixins()
 
     const onSuccess = async (e) => {
+
       const res = await sessionQrLogin(
         e.data,
         otp.toString(),

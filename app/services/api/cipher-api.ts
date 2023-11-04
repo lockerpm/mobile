@@ -418,7 +418,7 @@ export class CipherApi {
     }
   }
 
-  //QUICK SHARES
+  // QUICK SHARES
   async quickShareCipher(
     token: string,
     payload: QuickShareCipherData,
@@ -725,7 +725,7 @@ export class CipherApi {
     }
   }
 
-  //------------------QUICK SHARE--------------------------------------
+  // ------------------QUICK SHARE--------------------------------------
 
   async quickShare(token: string, sendRequest: SendRequest): Promise<QuickSharesResult> {
     try {
