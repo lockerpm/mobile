@@ -3,3 +3,5 @@
 //
 
 #import <React/RCTBridgeModule.h>
+
+#import <VinCSSFido2ClientSDK/VinCSSFido2ClientSDK-Swift.h>

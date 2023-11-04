@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react"
 import NetInfo from "@react-native-community/netinfo"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import { MainNavigator } from "./main-navigator"
 import {
   IntroScreen,
   InitScreen,
@@ -19,6 +18,7 @@ import {
   CreateMasterPasswordScreen,
   ForgotPasswordScreen,
   CountrySelectorScreen,
+  SSOEmailLoginScreen,
 } from "../screens"
 import { useStores } from "../models"
 import Toast, { BaseToastProps } from "react-native-toast-message"
@@ -33,11 +33,12 @@ import dynamicLinks from "@react-native-firebase/dynamic-links"
 import { AppState, Modal, View } from "react-native"
 import { AppEventType, EventBus } from "../utils/event-bus"
 import { useCipherAuthenticationMixins } from "../services/mixins/cipher/authentication"
-import { TestScreen } from "../screens/test-screen"
-import { OnPremisePreloginData } from "../services/api"
+import { OnPremiseIdentifierData, OnPremisePreloginData } from "../services/api"
+import { SSOIdentifierScreen } from "../screens/unauth/sso-identifier/ssp-identifier-screen"
 import WebView from "react-native-webview"
 import { IS_IOS } from "../config/constants"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { MainNavigator } from "./main-navigator"
 import { Header, OverlayLoading } from "../components"
 import Intercom, { Visibility } from "@intercom/intercom-react-native"
 
@@ -63,6 +64,9 @@ export type RootParamList = {
     data?: OnPremisePreloginData
     email?: string
   }
+
+  ssoIdentifier: undefined
+  ssoLogin: OnPremiseIdentifierData
   login: undefined
   forgotPassword: undefined
   signup: undefined
@@ -102,8 +106,7 @@ const RootStack = observer((props: Props) => {
 
     const res = await parsePushNotiData({
       notifeeData: data,
-      tipTrick: true
-      
+      tipTrick: true,
     })
     if (!!res.url) setUpdateBlogUrl(res.url)
 
@@ -114,10 +117,11 @@ const RootStack = observer((props: Props) => {
         navigationRef.current.navigate(res.path, res.params)
       }
     } else {
-      !res.url && save(StorageKey.PUSH_NOTI_DATA, {
-        type: data.type,
-        // url: data.url,
-      })
+      !res.url &&
+        save(StorageKey.PUSH_NOTI_DATA, {
+          type: data.type,
+          // url: data.url,
+        })
     }
   }
 
@@ -208,10 +212,18 @@ const RootStack = observer((props: Props) => {
         <Stack.Screen name="onBoarding" component={OnboardingScreen} />
         <Stack.Screen name="lock" component={LockScreen} initialParams={{ type: "individual" }} />
         <Stack.Screen name="login" component={LoginScreen} />
-        <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
-        <Stack.Screen name="signup" component={SignupScreen} />
-        <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
-        <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
+
+        <Stack.Screen name="ssoIdentifier" component={SSOIdentifierScreen} />
+        <Stack.Screen
+          name="ssoLogin"
+          component={SSOEmailLoginScreen}
+          initialParams={{
+            host: "",
+            use_sso: false,
+            identifier: "",
+          }}
+        />
+
         <Stack.Screen
           name="mainStack"
           component={MainNavigator}
@@ -220,8 +232,13 @@ const RootStack = observer((props: Props) => {
             gestureEnabled: false,
           }}
         />
-        <Stack.Screen name="test" component={TestScreen} />
+
+        <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
+        <Stack.Screen name="signup" component={SignupScreen} />
+        <Stack.Screen name="createMasterPassword" component={CreateMasterPasswordScreen} />
+        <Stack.Screen name="countrySelector" component={CountrySelectorScreen} />
       </Stack.Navigator>
+
       <Modal
         visible={!!updateBlogUrl}
         animationType="slide"

@@ -34,22 +34,37 @@ class LoginListViewController: UIViewController {
     self.tableView.delegate = self
     self.tableView.dataSource = self
     
-    self.searchBar.text = delegate.uri
+    let searchStr = prepareInitSearch(searchStr: delegate.uri)
     
+    self.searchBar.text = searchStr
+    
+    print(prepareInitSearch(searchStr: delegate.uri))
     var initCredentials: [AutofillData] = []
 
-    // get matches credentiral username
-    for credential in credentials {
-      if (isMatchCredentials(credential: credential, searchPattern: delegate.uri)) {
-        initCredentials.append(credential)
+    if searchStr.isEmpty {
+      initCredentials = credentials
+    } else {
+      // get matches credentiral username
+      for credential in credentials {
+        if (isMatchCredentials(credential: credential, searchPattern: searchStr)) {
+          initCredentials.append(credential)
+        }
       }
     }
 
     filterCredentials = initCredentials
   }
   
+  
+  
   @IBAction func cancel(_ sender: AnyObject?) {
     delegate.cancel()
+  }
+  
+  func prepareInitSearch(searchStr: String ) ->String {
+    let meaninglessSearch: [String] = ["com", "net", "app", "package", "io"]
+    let patterns = searchStr.components(separatedBy: ".").filter { !meaninglessSearch.contains($0)}
+    return patterns.joined(separator: " ")
   }
   
   func completeRequest(data: AutofillData){
@@ -61,34 +76,44 @@ class LoginListViewController: UIViewController {
 extension LoginListViewController: UISearchBarDelegate {
   //mark search bar config, handle search function.
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    let trimmedSearch = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
     filterCredentials = []
 
-    if searchText == "" {
+    if trimmedSearch.isEmpty {
       filterCredentials = credentials
-    }
-    // get matches credentiral username
-    for credential in credentials {
-      if (isMatchCredentials(credential: credential, searchPattern: searchText)) {
-          filterCredentials.append(credential)
+    } else {
+      // get matches credentiral username
+      for credential in credentials {
+        if (isMatchCredentials(credential: credential, searchPattern: trimmedSearch)) {
+            filterCredentials.append(credential)
+        }
       }
     }
+    print(trimmedSearch, "Ádkjasbdjkhasbdhjbasd")
+
 
     self.tableView.reloadData()
   }
   
   private func isMatchCredentials(credential: AutofillData, searchPattern: String) -> Bool {
+    let patterns = searchPattern.components(separatedBy: " ")
+    
     let username: String = credential.username.lowercased()
     let uri = credential.uri.lowercased()
     let name = credential.name.lowercased()
-    if username.contains(searchPattern.lowercased()) {
-        return true
+    
+    for pattern in patterns {
+      if username.contains(pattern.lowercased()) {
+          return true
+      }
+      if uri.contains(pattern.lowercased()) {
+          return true
+      }
+      if name.contains(pattern.lowercased()) {
+          return true
+      }
     }
-    if uri.contains(searchPattern.lowercased()) {
-        return true
-    }
-    if name.contains(searchPattern.lowercased()) {
-        return true
-    }
+  
     return false
   }
 }

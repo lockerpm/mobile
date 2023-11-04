@@ -14,9 +14,7 @@ import ConfigIcon from "./config.svg"
 import ConfigIconLight from "./config-light.svg"
 import PlusIcon from "./plus.svg"
 import PlusIconLight from "./plus-light.svg"
-import { PlanType } from "../../../../config/types"
 import { AppNotification } from "../../../../services/api"
-import { CipherType } from "../../../../../core/enums"
 
 interface Props {
   openSort: Function
@@ -74,7 +72,7 @@ export const ItemsHeader = observer((props: Props) => {
 
   // ----------------------- COMPUTED ------------------------
 
-  const isFreeAccount = user.plan?.alias === PlanType.FREE || !user.plan
+  const isFreeAccount = user.isFreePlan
 
   // ----------------------- METHODS ------------------------
 

@@ -613,8 +613,8 @@
     "share_folder": {
       "error_share_item": "Folders with shared items can’t be shared. Remove or stop shared items and try again",
       "manage_user": "Manage Share",
-      "share_with": "This folder has been shared with",
-      "select_member": "Shared this folder with",
+      "share_with": "This item has been shared with",
+      "select_member": "Shared this item with",
       "add_email": "Add email to share",
       "viewer": "Viewer",
       "editor": "Editor",
@@ -1056,8 +1056,8 @@
       "note_2": "Add you to their groups",
       "note_3": "Apply password policies to your account"
     },
-    "data" : "All your vault data remains the same. {{mame}} can’t see your data or your Master Password.",
-    "request_access": "You have to Request access from {{mame}} in order to continue using your Locker account.",
+    "data" : "All your vault data remains the same. {{name}} can’t see your data or your Master Password.",
+    "request_access": "You have to Request access from {{name}} in order to continue using your Locker account.",
     "domain": {
       "join_org": "Join Organization",
       "managed_by": "This account is managed by: "
@@ -1150,9 +1150,19 @@
     "sign_up": {
       "continue_password": "Continue with password",
       "signup_passkey": "Sign up with passkey",
-      "signup_password": "Sign up with password"
+      "signup_password": "Sign up with password",
+      "passkey_options": "Choose an option to save your passkey for “Locker”",
+      "keychain" : {
+        "title": "iCloud Keychain",
+        "label": "Synced across your Apple devices"
+      },
+      "security_key": {
+        "title": "Security Key",
+        "label": "Use an external security key"
+      }
     },
     "login_passkey_setting": "Login with passkeys",
-    "login_passkey": "Log in with passkey"
+    "login_passkey": "Log in with passkey",
+    "login_passkey_options": "Choose an option in which you've stored your passkey for Locker"
   }
 }

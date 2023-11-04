@@ -16,15 +16,8 @@ import FFolderIcon from './images/folder/folder.svg'
 import FFolderShareIcon from './images/folder/folder-share.svg'
 import FFolderAddIcon from './images/folder/folder-add.svg'
 
-import DriverLicenseIcon from './images/vault/driver-license.svg'
-import CitizenIDIcon from './images/vault/citizen-id.svg'
-import PassportIcon from './images/vault/passport.svg'
-import SocialSecurituNumberIcon from './images/vault/social-security-number.svg'
-import WirelessIcon from './images/vault/wireless-router.svg'
-import ServerIcon from './images/vault/server.svg'
-import ApiCipherIcon from './images/vault/api-cipher.svg'
-import DatabaseIcon from './images/vault/database.svg'
 
+import SSO from './images/icons/sso.svg'
 import GitHub from './images/icons/github.svg'
 import GitHubLight from './images/icons/github-light.svg'
 import Facebook from './images/icons/facebook.svg'
@@ -242,6 +235,7 @@ export const APP_ICON = {
 
 
 export const SOCIAL_LOGIN_ICON = {
+  sso: SSO,
   google: Google,
   facebook: Facebook,
   github: GitHub,

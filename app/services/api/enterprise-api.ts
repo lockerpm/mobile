@@ -107,7 +107,6 @@ export class EnterpriseApi {
     }
   }
 
-  // Edit share cipher
   async invitationsActions(token: string, id: string, status: "confirmed" | "reject"): Promise<EmptyResult> {
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)

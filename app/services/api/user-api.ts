@@ -44,6 +44,8 @@ import {
   OnPremisePreLoginResult,
   SessionOtpLoginData,
   BusinessLoginMethodResult,
+  OnPremiseIdentifierResult,
+  OnpremisePreloginPayload,
   RegisterPasskeyOptionData,
   RegisterPasskeyData,
   LoginMethodResult,
@@ -178,6 +180,8 @@ export class UserApi {
         `/sso/auth${isOtp ? "/otp" : ""}`,
         payload,
       )
+
+      
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -688,12 +692,13 @@ export class UserApi {
   async sessionOtpLogin(token: string, payload: SessionOtpLoginData): Promise<SessionLoginResult> {
     try {
       this.api.apisauce.setHeader("Authorization", `Bearer ${token}`)
-
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(
         "/cystack_platform/pm/users/session/otp",
         payload,
       )
+
+
       // the typical ways to die when calling an api
       if (!response.ok) {
         const problem = getGeneralApiProblem(response)
@@ -1497,12 +1502,30 @@ export class UserApi {
       return { kind: "bad-data" }
     }
   }
-
-  async onPremisePreLogin(email: string): Promise<OnPremisePreLoginResult> {
+  async onPremisePreLogin(preLoginPayload: OnpremisePreloginPayload): Promise<OnPremisePreLoginResult> {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/pm/users/onpremise/prelogin`,
-        { email },
+        preLoginPayload,
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  async onPremiseIdentifier(identifier: string): Promise<OnPremiseIdentifierResult> {
+    try {
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        `/cystack_platform/pm/users/onpremise/identifier`,
+        { identifier },
       )
 
       // the typical ways to die when calling an api

@@ -14,6 +14,7 @@ import {
   EnterpriseInvitationStatus,
   InvitationStatus,
   NotificationCategory,
+  PlanType,
 } from "../../config/types"
 import { ProfileResponse } from "../../../core/models/response/profileResponse"
 import { ProfileOrganizationResponse } from "../../../core/models/response/profileOrganizationResponse"
@@ -120,15 +121,16 @@ export type GetFolderResult = { kind: "ok"; data: FolderResponse } | GeneralApiP
 export type GetOrganizationResult =
   | { kind: "ok"; data: ProfileOrganizationResponse }
   | GeneralApiProblem
-  export type SyncQuickSharesResult =
-  | { kind: "ok"; data: any[] }
-  | GeneralApiProblem
-  export type QuickSharesResult =
-  | { kind: "ok"; data: {
-    id: string,
-    cipher_id: string,
-    access_id: string,
-  } }
+export type SyncQuickSharesResult = { kind: "ok"; data: any[] } | GeneralApiProblem
+export type QuickSharesResult =
+  | {
+      kind: "ok"
+      data: {
+        id: string
+        cipher_id: string
+        access_id: string
+      }
+    }
   | GeneralApiProblem
 export type PostFolderResult = { kind: "ok"; data: FolderResponse } | GeneralApiProblem
 export type PostCollectionResult = { kind: "ok"; data: CollectionResponse } | GeneralApiProblem
@@ -140,7 +142,7 @@ export type GetPlanResult =
       kind: "ok"
       data: {
         name: string
-        alias: string
+        alias: PlanType
         is_family: boolean
         cancel_at_period_end: boolean
         duration: "monthly" | "yearly"
@@ -296,7 +298,7 @@ export type QuickShareCipherResult =
   | {
       kind: "ok"
       data: {
-        access_id: String
+        access_id: string
         cipher_id: string
         id: string
       }
@@ -394,6 +396,13 @@ export type OnPremisePreLoginResult =
     }
   | GeneralApiProblem
 
+export type OnPremiseIdentifierResult =
+  | {
+      kind: "ok"
+      data: OnPremiseIdentifierData
+    }
+  | GeneralApiProblem
+
 export type BusinessLoginMethodResult =
   | {
       kind: "ok"
@@ -411,10 +420,16 @@ export type OnPremisePreloginData = {
   avatar: string
   base_api: string
   login_method: "password" | "passwordless" | string
+  email: string
   require_passwordless: boolean
   set_up_passwordless: boolean
 }
 
+export type OnPremiseIdentifierData = {
+  host: string
+  use_sso: boolean
+  identifier: string
+}
 export type NotificationSettingData = {
   category: {
     id: NotificationCategory
@@ -783,6 +798,11 @@ export type EnterpriseInvitation = {
   status: EnterpriseInvitationStatus
 }
 
+export type OnpremisePreloginPayload = {
+  email?: string
+  code?: string
+  identifier?: string
+}
 export type WebauthCredential = {
   id: string
   created_time: number

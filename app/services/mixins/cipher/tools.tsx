@@ -72,7 +72,7 @@ export const CipherToolsMixinsProvider = observer((props: { children: boolean | 
   // Load weak passwords
   const loadPasswordsHealth = async () => {
     try {
-      if (!user.plan || user.plan?.alias === PlanType.FREE) {
+      if (user.isFreePlan) {
         return
       }
 

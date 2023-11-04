@@ -10,7 +10,7 @@ import {
   ViewStyle,
 } from "react-native"
 
-type IconTypes = keyof typeof imgIconRegistry
+export  type IconTypes = keyof typeof imgIconRegistry
 
 interface IconProps extends TouchableOpacityProps {
   /**
@@ -80,6 +80,9 @@ export function ImageIcon(props: IconProps) {
  * Colorful image icon
  */
 export const imgIconRegistry = {
+  'app-logo-secondary': require('../../../../assets/icon/app-logo-secondary.png'),
+  'security-key': require('../../../../assets/icon/security-key.png'),
+  keychain: require('../../../../assets/icon/keychain.png'),
   desktop: require('../../../../assets/icon/desktop.png'),
   identification: require('../../../../assets/icon/identification.png'),
   mobile: require('../../../../assets/icon/mobile.png'),

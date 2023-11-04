@@ -13,17 +13,25 @@ export class HeyLoginCsvImporter extends BaseImporter implements Importer {
     }
 
     // CS
-    const existingKeys = ['url', 'note', 'username', 'password', 'customFields']
+    const existingKeys = [
+      'url',
+      'note',
+      'username',
+      'password',
+      'customFields',
+      'totp'
+    ]
 
     results.forEach(value => {
       const cipher = this.initLoginCipher()
       cipher.name = this.getValueOrDefault(
-        this.nameFromUrl(value.url) || '',
+        this.nameFromUrl(value.url) || value.username || '',
         '--'
       )
       cipher.notes = this.getValueOrDefault(value.note)
       cipher.login.username = this.getValueOrDefault(value.username)
       cipher.login.password = this.getValueOrDefault(value.password)
+      cipher.login.totp = this.getValueOrDefault(value.totp)
       cipher.login.uris = this.makeUriArray(value.url)
       try {
         const customFields = JSON.parse(value.customFields)

@@ -97,7 +97,10 @@
 
 	<key>IntercomCustomURL</key>
 	<string>intercom-messenger.com</string>
-
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>App need to use Bluetooth for FIDO2 transportation</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>App need to use Bluetooth for FIDO2 transportation</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>

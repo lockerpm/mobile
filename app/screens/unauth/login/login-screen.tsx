@@ -9,13 +9,13 @@ import { DefaultLogin } from "./default"
 import { MethodSelection } from "./2fa/method-selection"
 import { Otp } from "./2fa/otp"
 import { useStores } from "../../../models"
+import { BASE_URL } from "../../../config/constants"
 
 export const LoginScreen = observer(() => {
   const navigation = useNavigation()
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { translate } = useMixins()
   // ------------------------------ PARAMS -------------------------------
-
   const [isScreenLoading, setIsScreenLoading] = useState(false)
   const [index, setIndex] = useState(0)
   const [credential, setCredential] = useState({
@@ -44,10 +44,10 @@ export const LoginScreen = observer(() => {
 
   // -------------- EFFECT ------------------
 
-  // useEffect(() => {
-  //     user.setOnPremiseUser(false)
-  //     user.environment.api.apisauce.setBaseURL(BASE_URL)
-  // }, [])
+  useEffect(() => {
+      user.setOnPremiseUser(false)
+      user.environment.api.apisauce.setBaseURL(BASE_URL)
+  }, [])
 
   useEffect(() => {
     const handleBack = (e) => {
@@ -66,6 +66,8 @@ export const LoginScreen = observer(() => {
       navigation.removeListener("beforeRemove", handleBack)
     }
   }, [navigation])
+
+
 
   // ------------------------------ RENDER -------------------------------
 
@@ -98,7 +100,6 @@ export const LoginScreen = observer(() => {
     >
       {index === 0 && (
         <DefaultLogin
-          onPremise={false}
           handleForgot={() => navigation.navigate("forgotPassword")}
           onLoggedIn={onLoggedIn}
           nextStep={(
