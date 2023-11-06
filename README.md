@@ -44,7 +44,7 @@ cd mobile
     * Data Protection-Complete Protection
     * Push Notification
 2. Go to https://appstoreconnect.apple.com/apps, create new app with the bundle id 
-3. Create Firebase Ios App with the bundle id then download GoogleService-Info.plist
+3. Create Firebase Ios App with the bundle id then download GoogleService-Info.plist and configure Firebase Cloud Messaging for iOS App 
 4. Open mobile/ios/Firebase/Prod (create if not exist) then move file  GoogleService-Info.plist just downloaded to the folder
 
 ### Android

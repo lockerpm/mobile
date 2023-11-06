@@ -71,7 +71,7 @@ export const MenuScreen = observer(() => {
       <MenuItemContainer>
         <View style={{ padding: 16, flexDirection: "row", alignItems: "center" }}>
           <View style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10 }}>
-            {!user.avatar && (
+            {!!user.avatar && (
               <Image
                 source={{ uri: user.avatar }}
                 style={{ width: 40, height: 40, borderRadius: 20 }}

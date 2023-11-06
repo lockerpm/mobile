@@ -803,6 +803,20 @@
     "network": "Mạng Blockchain",
     "wallet_app": "Ví Blockchain"
   },
+  "invite_member": {
+    "header": "Quản lý thành viên",
+    "info_upgrade": "Nâng cấp lên gói Family và mời bạn bè gia đình sử dụng Locker!",
+    "add_noti": "Thêm thành viên thành công",
+    "delete_noti": "Xoá thành viên thành công",
+    "confirm": "Bạn có chắc muốn xoá người dùng này khỏi gói Family Plan?",
+    "action": "Mời",
+    "title": "Thêm thành viên vào gói Family của bạn",
+    "placeholder": "Nhập email thành viên",
+    "list_member_title": "Danh sách các thành viên trong gói",
+    "select_person": "Chọn email để thêm vào danh sách mời",
+    "number_member": "Số lượng ",
+    "remove": "Xoá thành viên"
+  },
   "outdated_data": {
     "desc": "Có vẻ như bạn đang cố gắng cập nhật một mục chưa được đồng bộ hóa. Vui lòng đợi quá trình đồng bộ hóa kết thúc hoặc bạn có thể đồng bộ hóa dữ liệu của mình theo cách thủ công tại đây",
     "go_back": "Quay lại",

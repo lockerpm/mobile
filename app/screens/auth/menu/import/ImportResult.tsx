@@ -16,8 +16,6 @@ export const ImportResult = (props: Props) => {
   const navigation = useNavigation() as any
   const { colors } = useTheme()
   const { translate } = useHelper()
-  const { imported, total } = props
-  const isAllImported = imported === total
 
   return (
     <View>
@@ -39,21 +37,16 @@ export const ImportResult = (props: Props) => {
             alignItems: 'center',
           }}
         >
-          {isAllImported ? (
-            <Icon icon={'check'} size={24} color={colors.primary} />
-          ) : (
-            <Icon icon={'warning'} size={24} color={colors.error} />
-          )}
+          <Icon icon={'check'} size={24} color={colors.primary} />
           <Text
             preset="bold"
-            text={`${props.imported}/${props.total} ` + translate('import.imported_free.result')}
+            text={`${props.imported}/${props.total} ` + translate('common.items')}
             style={{
-              color: isAllImported ? colors.primary : colors.error,
+              color: colors.primary,
               marginLeft: 10,
             }}
           />
         </View>
-        {isAllImported && (
           <Button
             text={translate('import.result_btn')}
             onPress={() => navigation.navigate('mainTab', {})}
@@ -63,7 +56,6 @@ export const ImportResult = (props: Props) => {
               marginBottom: 10,
             }}
           />
-        )}
       </View>
     </View>
   )

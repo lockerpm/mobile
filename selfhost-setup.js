@@ -3,6 +3,9 @@ const input = require("prompt-sync")({ sigint: true })
 const fs = require("fs")
 const path = require("path")
 
+const LOCKER_BUNDLE_ID_SELFHOST = 'com.cystack.locker.selfhost'
+const LOCKER_TEAM_ID = 'W7S57TNBH5'
+
 // const appDir = path.dirname(require.main.filename);
 
 /**
@@ -148,7 +151,7 @@ const replaceBundleIdOptions = {
   ],
 
   // test selfhosted bundle id , teamid
-  from: [/com.cystack.locker.selfhost/g, /W7S57TNBH5/g],
+  from: [new RegExp(LOCKER_BUNDLE_ID_SELFHOST, "g"), new RegExp(LOCKER_TEAM_ID, "g")],
   to: [bundleId, teamId],
 }
 
@@ -165,7 +168,7 @@ replace(replaceBundleIdOptions)
     // refactoring android package
     const androidSrcDir = "./android/app/src"
     const modes = ["debug", "main", "release"]
-    const oldPackage = "com.cystack.locker.selfhost".replaceAll(".", "/")
+    const oldPackage = LOCKER_BUNDLE_ID_SELFHOST.replaceAll(".", "/")
     const package = bundleId.replaceAll(".", "/")
 
     Promise.all(

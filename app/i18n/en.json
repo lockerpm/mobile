@@ -801,6 +801,20 @@
     "network": "Networks",
     "wallet_app": "Wallet App"
   },
+  "invite_member": {
+    "header": "Manage member",
+    "info_upgrade": "Upgrade to Family Plan and invite your friends joining Locker!",
+    "add_noti": "Add members successfully ",
+    "delete_noti": "Delete member successfully",
+    "confirm": "Are you sure you want to remove this user from Family Plan?",
+    "action": "Invite",
+    "title": "Add member to your Family Plan",
+    "placeholder": "Invite People to your plan",
+    "list_member_title": "Member you added to the plan will appear at the list below",
+    "select_person": "SELECT A PERSON",
+    "number_member": "Member on Your plan",
+    "remove": "Remove family member"
+  },
   "outdated_data": {
     "desc": "Looks like you are trying to update an unsynchronized item. Please wait for the synchronization process to finish, or you can manually synchronize your data here",
     "go_back": "Go Back",
