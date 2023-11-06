@@ -78,7 +78,6 @@ public class AutofillDataKeychain {
             hashMassterPass = authen.getString("hashPass");
             userAvatar = authen.getString("avatar");
             faceIdEnabled = jsonObject.getBoolean("faceIdEnabled");        
-             Log.e(TAG, "----------- no error sss");
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
 
