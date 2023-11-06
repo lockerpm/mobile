@@ -1,12 +1,12 @@
-import React, { FC } from 'react'
-import moment from 'moment'
-import { View } from 'react-native'
-import { Screen, Header, Text } from 'app/components/cores'
-import { ToolsStackScreenProps } from 'app/navigators'
-import { observer } from 'mobx-react-lite'
-import { useHelper } from 'app/services/hook'
+import React, { FC } from "react"
+import moment from "moment"
+import { View } from "react-native"
+import { Screen, Header, Text } from "app/components/cores"
+import { observer } from "mobx-react-lite"
+import { useHelper } from "app/services/hook"
+import { ToolsStackScreenProps } from "app/navigators/navigators.types"
 
-export const AliasStatisticScreen: FC<ToolsStackScreenProps<'aliasStatistic'>> = observer(
+export const AliasStatisticScreen: FC<ToolsStackScreenProps<"aliasStatistic">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
@@ -17,20 +17,20 @@ export const AliasStatisticScreen: FC<ToolsStackScreenProps<'aliasStatistic'>> =
 
     const data = [
       {
-        label: translate('private_relay.title'),
+        label: translate("private_relay.title"),
         data: alias.full_address,
       },
       {
-        label: translate('private_relay.manage_subdomain.block_email'),
+        label: translate("private_relay.manage_subdomain.block_email"),
         data: alias.num_blocked.toString(),
       },
       {
-        label: translate('private_relay.manage_subdomain.forwarded_email'),
+        label: translate("private_relay.manage_subdomain.forwarded_email"),
         data: alias.num_forwarded.toString(),
       },
       {
-        label: translate('private_relay.manage_subdomain.create_date'),
-        data: moment.unix(alias.created_time).format('DD/MM/YYYY'),
+        label: translate("private_relay.manage_subdomain.create_date"),
+        data: moment.unix(alias.created_time).format("DD/MM/YYYY"),
       },
     ]
 
@@ -40,7 +40,7 @@ export const AliasStatisticScreen: FC<ToolsStackScreenProps<'aliasStatistic'>> =
         padding
         header={
           <Header
-            title={'Statistic'}
+            title={"Statistic"}
             leftIcon="arrow-left"
             onLeftPress={() => navigation.goBack()}
           />
@@ -50,8 +50,8 @@ export const AliasStatisticScreen: FC<ToolsStackScreenProps<'aliasStatistic'>> =
           <View key={index}>
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
+                flexDirection: "row",
+                justifyContent: "space-between",
                 marginVertical: 16,
               }}
             >
@@ -59,7 +59,7 @@ export const AliasStatisticScreen: FC<ToolsStackScreenProps<'aliasStatistic'>> =
               <Text
                 text={item.data}
                 style={{
-                  maxWidth: '50%',
+                  maxWidth: "50%",
                 }}
               />
             </View>
@@ -67,5 +67,5 @@ export const AliasStatisticScreen: FC<ToolsStackScreenProps<'aliasStatistic'>> =
         ))}
       </Screen>
     )
-  }
+  },
 )

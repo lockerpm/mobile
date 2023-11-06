@@ -1,7 +1,6 @@
 import React, { useState, useEffect, FC } from "react"
 import { View, FlatList } from "react-native"
 import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "app/navigators"
 import { useStores } from "app/models"
 import { useFolder, useHelper } from "app/services/hook"
 import { CollectionView } from "core/models/view/collectionView"
@@ -9,6 +8,7 @@ import { SharedGroupType, SharedMemberType } from "app/static/types"
 import { Header, Screen, Text, Button } from "app/components/cores"
 import { AddUserShareFolderModal } from "./ShareUserModal"
 import { SharedUsers } from "./SharedUser"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFolder">> = observer(
   (props) => {

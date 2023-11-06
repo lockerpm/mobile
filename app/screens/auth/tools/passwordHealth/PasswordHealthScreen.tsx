@@ -1,16 +1,16 @@
-import React, { FC, useEffect } from 'react'
-import { TouchableOpacity, View } from 'react-native'
-import { Header, Icon, ImageIcon, Screen, Text } from 'app/components/cores'
-import { LoadingHeader } from './LoadingHeader'
-import { ToolsStackScreenProps } from 'app/navigators'
-import { useTheme } from 'app/services/context'
-import { useStores } from 'app/models'
-import { useHelper, useTool } from 'app/services/hook'
-import { PasswordHealthQueue } from 'app/utils/queue'
-import { AppEventType, EventBus } from 'app/utils/eventBus'
-import { observer } from 'mobx-react-lite'
+import React, { FC, useEffect } from "react"
+import { TouchableOpacity, View } from "react-native"
+import { Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
+import { LoadingHeader } from "./LoadingHeader"
+import { useTheme } from "app/services/context"
+import { useStores } from "app/models"
+import { useHelper, useTool } from "app/services/hook"
+import { PasswordHealthQueue } from "app/utils/queue"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+import { observer } from "mobx-react-lite"
+import { ToolsStackScreenProps } from "app/navigators/navigators.types"
 
-export const PasswordHealthScreen: FC<ToolsStackScreenProps<'passwordHealth'>> = observer(
+export const PasswordHealthScreen: FC<ToolsStackScreenProps<"passwordHealth">> = observer(
   (props) => {
     const navigation = props.navigation
     const { colors } = useTheme()
@@ -54,8 +54,8 @@ export const PasswordHealthScreen: FC<ToolsStackScreenProps<'passwordHealth'>> =
           width: 40,
           backgroundColor: count > 0 ? colors.error : colors.primary,
           borderRadius: 20,
-          justifyContent: 'center',
-          alignItems: 'center',
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <Text preset="bold" text={count.toString()} color={colors.white} />
@@ -68,7 +68,7 @@ export const PasswordHealthScreen: FC<ToolsStackScreenProps<'passwordHealth'>> =
         backgroundColor={colors.block}
         header={
           <Header
-            title={translate('pass_health.title')}
+            title={translate("pass_health.title")}
             leftIcon="arrow-left"
             onLeftPress={() => navigation.goBack()}
           />
@@ -86,29 +86,29 @@ export const PasswordHealthScreen: FC<ToolsStackScreenProps<'passwordHealth'>> =
           }}
         >
           <Options
-            title={translate('pass_health.weak_passwords.name')}
-            desc={translate('pass_health.weak_passwords.desc')}
+            title={translate("pass_health.weak_passwords.name")}
+            desc={translate("pass_health.weak_passwords.desc")}
             left={renderWarningCounter(toolStore.weakPasswords.length)}
-            action={() => navigation.navigate('weakPasswordList')}
+            action={() => navigation.navigate("weakPasswordList")}
             bordered
           />
           <Options
             bordered
-            title={translate('pass_health.reused_passwords.name')}
-            desc={translate('pass_health.reused_passwords.desc')}
+            title={translate("pass_health.reused_passwords.name")}
+            desc={translate("pass_health.reused_passwords.desc")}
             left={renderWarningCounter(toolStore.reusedPasswords.length)}
-            action={() => navigation.navigate('reusePasswordList')}
+            action={() => navigation.navigate("reusePasswordList")}
           />
           <Options
-            title={translate('pass_health.exposed_passwords.name')}
-            desc={translate('pass_health.exposed_passwords.desc')}
+            title={translate("pass_health.exposed_passwords.name")}
+            desc={translate("pass_health.exposed_passwords.desc")}
             left={<ImageIcon icon="data-breach-scanner" size={40} />}
-            action={() => navigation.navigate('exposedPasswordList')}
+            action={() => navigation.navigate("exposedPasswordList")}
           />
         </View>
       </Screen>
     )
-  }
+  },
 )
 
 // Render an option
@@ -130,19 +130,19 @@ const Options = ({
     <TouchableOpacity onPress={action}>
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: "row",
+          alignItems: "center",
           borderBottomColor: colors.border,
           borderBottomWidth: bordered ? 1 : 0,
-          justifyContent: 'space-between',
+          justifyContent: "space-between",
           paddingVertical: 16,
         }}
       >
         <View
           style={{
             flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
           {left}

@@ -10,12 +10,12 @@ import {
   SharedGroupType,
   AccountRoleText,
 } from "app/static/types"
-import { AppStackScreenProps } from "app/navigators"
 import { useStores } from "app/models"
 import { useTheme } from "app/services/context"
 import { useCipherData, useHelper } from "app/services/hook"
 import { CipherView } from "core/models/view"
 import { observer } from "mobx-react-lite"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 const SHARE_AVATAR = require("assets/images/icons/avatar-2.png")
 const SHARE_GROUP = require("assets/images/icons/group.png")

@@ -1,14 +1,14 @@
-import React from 'react'
-import { View, TouchableOpacity } from 'react-native'
-import { useStores } from 'app/models'
-import { Text, Screen, Icon, ImageIcon } from 'app/components/cores'
-import { useNavigation } from '@react-navigation/native'
-import { useTheme } from 'app/services/context'
-import { TOOLS_ITEMS, ToolsItem } from 'app/navigators'
-import { TabHeader } from 'app/components/cores/header/TabHeader'
-import { PremiumTag } from 'app/components/utils'
-import { observer } from 'mobx-react-lite'
-import { useHelper } from 'app/services/hook'
+import React from "react"
+import { View, TouchableOpacity } from "react-native"
+import { useStores } from "app/models"
+import { Text, Screen, Icon, ImageIcon } from "app/components/cores"
+import { useNavigation } from "@react-navigation/native"
+import { useTheme } from "app/services/context"
+import { TabHeader } from "app/components/cores/header/TabHeader"
+import { PremiumTag } from "app/components/utils"
+import { observer } from "mobx-react-lite"
+import { useHelper } from "app/services/hook"
+import { TOOLS_ITEMS, ToolsItem } from "app/navigators/navigators.route"
 
 export const ToolsListScreen = observer(() => {
   const navigation = useNavigation() as any
@@ -22,18 +22,18 @@ export const ToolsListScreen = observer(() => {
 
   const handleNavigate = (item: ToolsItem) => {
     if (item.premium && isFreeAccount) {
-      navigation.navigate('payment')
+      navigation.navigate("payment")
       return
     }
     switch (item.routeName) {
-      case 'authenticator':
-        navigation.navigate('mainTab', { screen: 'authenticatorTab' })
+      case "authenticator":
+        navigation.navigate("mainTab", { screen: "authenticatorTab" })
         break
-      case 'passwordHealth':
-        navigation.navigate('toolsStack', { screen: 'passwordHealth' })
+      case "passwordHealth":
+        navigation.navigate("toolsStack", { screen: "passwordHealth" })
         break
-      case 'privateRelay':
-        navigation.navigate('toolsStack', { screen: 'privateRelay' })
+      case "privateRelay":
+        navigation.navigate("toolsStack", { screen: "privateRelay" })
         break
       default:
         navigation.navigate(item.routeName, { fromTools: true })
@@ -44,7 +44,7 @@ export const ToolsListScreen = observer(() => {
     <Screen
       padding
       backgroundColor={isDark ? colors.background : colors.block}
-      header={<TabHeader title={translate('common.tools')} />}
+      header={<TabHeader title={translate("common.tools")} />}
     >
       <View
         style={{
@@ -55,7 +55,7 @@ export const ToolsListScreen = observer(() => {
         }}
       >
         {Object.values(TOOLS_ITEMS).map((item, index) => {
-          if (user.onPremiseUser && item.routeName === 'privateRelay') {
+          if (user.onPremiseUser && item.routeName === "privateRelay") {
             return null
           }
 
@@ -68,15 +68,15 @@ export const ToolsListScreen = observer(() => {
               style={{
                 borderBottomColor: colors.border,
                 borderBottomWidth: index === Object.keys(TOOLS_ITEMS).length - 1 ? 0 : 1,
-                flexDirection: 'row',
-                alignItems: 'center',
+                flexDirection: "row",
+                alignItems: "center",
                 paddingVertical: 12,
               }}
             >
               <ImageIcon icon={item.icon} size={40} />
 
               <View style={{ flex: 1, paddingHorizontal: 10 }}>
-                <View style={{ flexWrap: 'wrap', flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexWrap: "wrap", flexDirection: "row", alignItems: "center" }}>
                   <Text
                     tx={item.label}
                     style={{

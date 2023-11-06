@@ -4,20 +4,19 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React, { useEffect, useState } from 'react'
-import { AppState, Modal, Platform, View } from 'react-native'
-import NetInfo from '@react-native-community/netinfo'
-import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Intercom, { Visibility } from '@intercom/intercom-react-native'
-import Toast, { BaseToastProps } from 'react-native-toast-message'
-import dynamicLinks from '@react-native-firebase/dynamic-links'
-import WebView from 'react-native-webview'
-import { observer } from 'mobx-react-lite'
-import { useStores } from '../models'
-import { OnPremiseIdentifierData, OnPremisePreloginData } from 'app/static/types'
-import { ErrorToast, InfoToast, SuccessToast } from 'app/components/utils'
+import React, { useEffect, useState } from "react"
+import { AppState, Modal, Platform, View } from "react-native"
+import NetInfo from "@react-native-community/netinfo"
+import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
+import { createStackNavigator } from "@react-navigation/stack"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import Intercom, { Visibility } from "@intercom/intercom-react-native"
+import Toast, { BaseToastProps } from "react-native-toast-message"
+import dynamicLinks from "@react-native-firebase/dynamic-links"
+import WebView from "react-native-webview"
+import { observer } from "mobx-react-lite"
+import { useStores } from "../models"
+import { ErrorToast, InfoToast, SuccessToast } from "app/components/utils"
 import {
   IntroScreen,
   InitScreen,
@@ -28,54 +27,20 @@ import {
   CreateMasterPasswordScreen,
   ForgotPasswordScreen,
   LockType,
-} from '../screens'
-import { MainNavigator } from './MainNavigator'
-import { useAuthentication, useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { NotifeeNotificationData, PushNotifier } from 'app/utils/pushNotification'
-import { AppEventType, EventBus } from 'app/utils/eventBus'
-import { StorageKey, save } from 'app/utils/storage'
-import { Logger } from 'app/utils/utils'
-import { Header } from 'app/components/cores'
-import { SSOIdentifierScreen } from 'app/screens/unauth/sso/SSOIdentifierScreen'
-import { SSOEmailLoginScreen } from 'app/screens/unauth/sso/SSOEmailLoginScreen'
+} from "../screens"
+import { MainNavigator } from "./MainNavigator"
+import { useAuthentication, useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { NotifeeNotificationData, PushNotifier } from "app/utils/pushNotification"
+import { AppEventType, EventBus } from "app/utils/eventBus"
+import { StorageKey, save } from "app/utils/storage"
+import { Logger } from "app/utils/utils"
+import { Header } from "app/components/cores"
+import { SSOIdentifierScreen } from "app/screens/unauth/sso/SSOIdentifierScreen"
+import { SSOEmailLoginScreen } from "app/screens/unauth/sso/SSOEmailLoginScreen"
+import { RootParamList } from "./navigators.types"
 
-const IS_IOS = Platform.OS === 'ios'
-
-/**
- * This type allows TypeScript to know what routes are defined in this navigator
- * as well as what properties (if any) they might take when navigating to them.
- *
- * We recommend using MobX-State-Tree store(s) to handle state rather than navigation params.
- *
- * For more information, see this documentation:
- *   https://reactnavigation.org/docs/params/
- *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
- */
-export type RootParamList = {
-  init: undefined
-  intro: {
-    preview?: boolean
-  }
-  onBoarding: undefined
-  lock: {
-    type?: LockType
-    // onpremise data
-    data?: OnPremisePreloginData
-    email?: string
-  }
-  login: undefined
-  forgotPassword: undefined
-  signup: undefined
-  createMasterPassword: undefined
-  mainStack: undefined
-
-  // vinsso
-  ssoIdentifier: undefined
-  ssoLogin: OnPremiseIdentifierData
-}
-
-export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
+const IS_IOS = Platform.OS === "ios"
 
 const Stack = createStackNavigator<RootParamList>()
 
@@ -89,7 +54,7 @@ const RootStack = observer((props: Props) => {
   const { clearAllData, handleDynamicLink } = useAuthentication()
   const { uiStore, user } = useStores()
   const insets = useSafeAreaInsets()
-  const [updateBlogUrl, setUpdateBlogUrl] = useState('')
+  const [updateBlogUrl, setUpdateBlogUrl] = useState("")
   // ------------------- METHODS -------------------
 
   const androidHandleNotiPress = async () => {
@@ -130,7 +95,7 @@ const RootStack = observer((props: Props) => {
     Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
-    if (nextAppState !== 'active') {
+    if (nextAppState !== "active") {
       return
     }
 
@@ -149,7 +114,7 @@ const RootStack = observer((props: Props) => {
   useEffect(() => {
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !state.isConnected
-      Logger.debug(offline ? 'OFFLINE' : 'ONLINE')
+      Logger.debug(offline ? "OFFLINE" : "ONLINE")
       uiStore.setIsOffline(offline)
     })
 
@@ -180,7 +145,7 @@ const RootStack = observer((props: Props) => {
 
   // Dynamic links background handler
   useEffect(() => {
-    AppState.addEventListener('change', _handleAppStateChange)
+    AppState.addEventListener("change", _handleAppStateChange)
   }, [])
 
   // Clear user data on signal
@@ -230,9 +195,9 @@ const RootStack = observer((props: Props) => {
           name="ssoLogin"
           component={SSOEmailLoginScreen}
           initialParams={{
-            host: '',
+            host: "",
             use_sso: false,
-            identifier: '',
+            identifier: "",
           }}
         />
       </Stack.Navigator>
@@ -240,9 +205,9 @@ const RootStack = observer((props: Props) => {
         visible={!!updateBlogUrl}
         animationType="slide"
         onRequestClose={() => {
-          setUpdateBlogUrl('')
+          setUpdateBlogUrl("")
         }}
-        supportedOrientations={['portrait', 'landscape']}
+        supportedOrientations={["portrait", "landscape"]}
       >
         <View
           style={{
@@ -256,7 +221,7 @@ const RootStack = observer((props: Props) => {
             incognito
             startInLoadingState
             source={{ uri: updateBlogUrl }}
-            originWhitelist={['https://*', 'com.cystack.locker://*']}
+            originWhitelist={["https://*", "com.cystack.locker://*"]}
           />
           <View
             style={{
@@ -266,7 +231,7 @@ const RootStack = observer((props: Props) => {
               paddingVertical: 12,
               paddingHorizontal: 16,
               backgroundColor: colors.background,
-              position: 'absolute',
+              position: "absolute",
               borderBottomColor: colors.border,
               borderBottomWidth: 0.5,
             }}
@@ -274,7 +239,7 @@ const RootStack = observer((props: Props) => {
             <Header
               leftIcon="arrow-left"
               onLeftPress={() => {
-                setUpdateBlogUrl('')
+                setUpdateBlogUrl("")
               }}
             />
           </View>
@@ -303,12 +268,12 @@ export const RootNavigator = React.forwardRef<
   )
 })
 
-RootNavigator.displayName = 'RootNavigator'
+RootNavigator.displayName = "RootNavigator"
 
 /**
  * This is a list of all the route names that will exit the app if the back button
  * is pressed while in that screen. Only affects Android.
  */
-const exitRoutes: string[] = ['init', 'onBoarding']
+const exitRoutes: string[] = ["init", "onBoarding"]
 
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)

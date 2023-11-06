@@ -1,26 +1,26 @@
-import React, { FC, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import find from 'lodash/find'
-import { BackHandler } from 'react-native'
+import React, { FC, useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import find from "lodash/find"
+import { BackHandler } from "react-native"
 import {
   AddCipherActionModal,
   CipherList,
   CipherListHeader,
   EmptyCipherList,
   SortActionConfigModal,
-} from 'app/components/ciphers'
-import { AppStackScreenProps } from 'app/navigators'
-import { useStores } from 'app/models'
-import { FolderView } from 'core/models/view/folderView'
-import { CollectionView } from 'core/models/view/collectionView'
-import { MAX_CIPHER_SELECTION, TEAM_CIPHER_EDITOR } from 'app/static/constants'
-import { useHelper } from 'app/services/hook'
-import { AccountRole } from 'app/static/types'
-import { Screen } from 'app/components/cores'
+} from "app/components/ciphers"
+import { useStores } from "app/models"
+import { FolderView } from "core/models/view/folderView"
+import { CollectionView } from "core/models/view/collectionView"
+import { MAX_CIPHER_SELECTION, TEAM_CIPHER_EDITOR } from "app/static/constants"
+import { useHelper } from "app/services/hook"
+import { AccountRole } from "app/static/types"
+import { Screen } from "app/components/cores"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
-const HOME_EMPTY_CIPHER = require('assets/images/emptyCipherList/home-empty-cipher.png')
+const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
 
-export const FolderCiphersScreen: FC<AppStackScreenProps<'folders__ciphers'>> = observer(
+export const FolderCiphersScreen: FC<AppStackScreenProps<"folders__ciphers">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
@@ -36,12 +36,12 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<'folders__ciphers'>> = 
     const [isLoading, setIsLoading] = useState(true)
     const [isSortOpen, setIsSortOpen] = useState(false)
     const [isAddOpen, setIsAddOpen] = useState(false)
-    const [searchText, setSearchText] = useState('')
+    const [searchText, setSearchText] = useState("")
     const [sortList, setSortList] = useState({
-      orderField: 'revisionDate',
-      order: 'desc',
+      orderField: "revisionDate",
+      order: "desc",
     })
-    const [sortOption, setSortOption] = useState('last_updated')
+    const [sortOption, setSortOption] = useState("last_updated")
     const [selectedItems, setSelectedItems] = useState([])
     const [isSelecting, setIsSelecting] = useState(false)
     const [allItems, setAllItems] = useState([])
@@ -72,9 +72,9 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<'folders__ciphers'>> = 
         }
         return false
       }
-      BackHandler.addEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+      BackHandler.addEventListener("hardwareBackPress", checkSelectBeforeLeaving)
       return () => {
-        BackHandler.removeEventListener('hardwareBackPress', checkSelectBeforeLeaving)
+        BackHandler.removeEventListener("hardwareBackPress", checkSelectBeforeLeaving)
       }
     }, [isSelecting])
 
@@ -83,24 +83,24 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<'folders__ciphers'>> = 
       if (searchText) {
         if (searchText.trim().length === 1) {
           setSortList(null)
-          setSortOption('most_relevant')
+          setSortOption("most_relevant")
         }
       } else {
         setSortList({
-          orderField: 'revisionDate',
-          order: 'desc',
+          orderField: "revisionDate",
+          order: "desc",
         })
-        setSortOption('last_updated')
+        setSortOption("last_updated")
       }
     }, [searchText])
 
     // Render
     return (
       <Screen
-        safeAreaEdges={['bottom', 'top']}
+        safeAreaEdges={["bottom", "top"]}
         header={
           <CipherListHeader
-            header={folder?.name || translate('folder.unassigned')}
+            header={folder?.name || translate("folder.unassigned")}
             openSort={() => setIsSortOpen(true)}
             openAdd={
               hasAddFolderPermission || hasAddCollectionPermission
@@ -167,9 +167,9 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<'folders__ciphers'>> = 
                 height: 55,
                 width: 120,
               }}
-              title={translate('all_items.empty.title')}
-              desc={translate('all_items.empty.desc')}
-              buttonText={translate('all_items.empty.btn')}
+              title={translate("all_items.empty.title")}
+              desc={translate("all_items.empty.desc")}
+              buttonText={translate("all_items.empty.btn")}
               addItem={
                 hasAddFolderPermission || hasAddCollectionPermission
                   ? () => {
@@ -182,5 +182,5 @@ export const FolderCiphersScreen: FC<AppStackScreenProps<'folders__ciphers'>> = 
         />
       </Screen>
     )
-  }
+  },
 )

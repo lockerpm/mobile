@@ -1,12 +1,12 @@
 import React, { FC, useRef, useState } from "react"
 import { Dimensions, StyleSheet } from "react-native"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { RootStackScreenProps } from "app/navigators"
 import { Icon, Screen } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { AnimatedFooter } from "./animatedFooter/AnimatedFooter"
 import { Wave } from "./Wave"
 import { Intro1, Intro2, Intro3, Intro4 } from "./intro/Intro"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
 
 const SCREEN_WIDTH = Dimensions.get("screen").width
 

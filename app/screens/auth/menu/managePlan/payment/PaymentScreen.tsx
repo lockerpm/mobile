@@ -1,7 +1,6 @@
 import React, { useState, useEffect, FC } from "react"
 import { View, Alert, Platform } from "react-native"
 import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "app/navigators"
 import { useTheme } from "app/services/context"
 import { Logger } from "app/utils/utils"
 import { Icon, Logo, Screen } from "app/components/cores"
@@ -22,6 +21,7 @@ import { FamilyPayment } from "./familyPayment/FamilyPayment"
 import { PremiumPayment } from "./premiumPayment/PremiumPayment"
 import { useStores } from "app/models"
 import { useHelper } from "app/services/hook"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 const subSkus = [SKU.PRE_MON, SKU.PRE_YEAR, SKU.FAM_MON, SKU.FAM_YEAR]
 

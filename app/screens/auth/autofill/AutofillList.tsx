@@ -8,9 +8,9 @@ import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { CipherType } from "core/enums"
-import { BROWSE_ITEMS } from "app/navigators"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { AutoFillItemAction } from "./AutofillItemAction"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 interface AutoFillListProps {
   emptyContent?: JSX.Element

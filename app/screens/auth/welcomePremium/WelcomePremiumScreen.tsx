@@ -1,27 +1,27 @@
-import React, { FC } from 'react'
-import { View, Image, ColorValue } from 'react-native'
-import LottieView from 'lottie-react-native'
-import { Screen, Text, Button, Icon } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { AppStackScreenProps } from 'app/navigators'
-import { observer } from 'mobx-react-lite'
-import { useHelper } from 'app/services/hook'
+import React, { FC } from "react"
+import { View, Image, ColorValue } from "react-native"
+import LottieView from "lottie-react-native"
+import { Screen, Text, Button, Icon } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { observer } from "mobx-react-lite"
+import { useHelper } from "app/services/hook"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
-const LOTTIE_JSON = require('app/static/welcome-premium-bg-lottie.json')
-const HIGH_FIVE = require('assets/images/welcomePremium/HighFive.png')
-const PREMIUM = require('assets/images/welcomePremium/LockerPremium.png')
+const LOTTIE_JSON = require("app/static/welcome-premium-bg-lottie.json")
+const HIGH_FIVE = require("assets/images/welcomePremium/HighFive.png")
+const PREMIUM = require("assets/images/welcomePremium/LockerPremium.png")
 
-export const WelcomePremiumScreen: FC<AppStackScreenProps<'welcome_premium'>> = observer(
+export const WelcomePremiumScreen: FC<AppStackScreenProps<"welcome_premium">> = observer(
   (props) => {
     const navigation = props.navigation
     const { colors } = useTheme()
     const { translate } = useHelper()
 
-    const backgroundSecondary: ColorValue = '#21632F'
+    const backgroundSecondary: ColorValue = "#21632F"
 
     const UnlockFeature = ({ text }) => {
       return (
-        <View style={{ flexDirection: 'row', marginVertical: 4, alignItems: 'center' }}>
+        <View style={{ flexDirection: "row", marginVertical: 4, alignItems: "center" }}>
           <Icon icon="check" color={colors.white} size={16} />
           <Text
             text={text}
@@ -37,18 +37,18 @@ export const WelcomePremiumScreen: FC<AppStackScreenProps<'welcome_premium'>> = 
     return (
       <Screen
         padding
-        safeAreaEdges={['bottom']}
+        safeAreaEdges={["bottom"]}
         backgroundColor={colors.primary}
         footerPadding
         footer={
           <Button
             preset="secondary"
-            text={translate('welcome_premium.btn')}
+            text={translate("welcome_premium.btn")}
             onPress={() => {
-              navigation.navigate('mainTab')
+              navigation.navigate("mainTab")
             }}
             textStyle={{
-              fontWeight: 'bold',
+              fontWeight: "bold",
               color: colors.primary,
             }}
           />
@@ -61,13 +61,13 @@ export const WelcomePremiumScreen: FC<AppStackScreenProps<'welcome_premium'>> = 
           source={LOTTIE_JSON}
           style={{
             zIndex: 2,
-            height: '100%',
-            position: 'absolute',
+            height: "100%",
+            position: "absolute",
           }}
           autoPlay
           loop
         />
-        <View style={{ zIndex: 1, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ zIndex: 1, flex: 1, alignItems: "center", justifyContent: "center" }}>
           <Image
             source={PREMIUM}
             style={{
@@ -86,20 +86,20 @@ export const WelcomePremiumScreen: FC<AppStackScreenProps<'welcome_premium'>> = 
 
           <Text
             preset="bold"
-            text={translate('welcome_premium.title')}
+            text={translate("welcome_premium.title")}
             size="xl"
             style={{
               marginTop: 24,
               color: colors.white,
-              textAlign: 'center',
+              textAlign: "center",
             }}
           />
           <Text
-            text={translate('welcome_premium.all_features')}
+            text={translate("welcome_premium.all_features")}
             style={{
               marginTop: 16,
               color: colors.white,
-              textAlign: 'center',
+              textAlign: "center",
             }}
           />
 
@@ -108,19 +108,19 @@ export const WelcomePremiumScreen: FC<AppStackScreenProps<'welcome_premium'>> = 
               maxWidth: 650,
               marginTop: 16,
               borderRadius: 10,
-              width: '100%',
+              width: "100%",
               backgroundColor: backgroundSecondary,
               paddingHorizontal: 16,
               paddingVertical: 8,
             }}
           >
-            <UnlockFeature text={translate('welcome_premium.features.unlimited')} />
-            <UnlockFeature text={translate('welcome_premium.features.share')} />
-            <UnlockFeature text={translate('welcome_premium.features.monitor')} />
-            <UnlockFeature text={translate('welcome_premium.features.emergency')} />
+            <UnlockFeature text={translate("welcome_premium.features.unlimited")} />
+            <UnlockFeature text={translate("welcome_premium.features.share")} />
+            <UnlockFeature text={translate("welcome_premium.features.monitor")} />
+            <UnlockFeature text={translate("welcome_premium.features.emergency")} />
 
             <Text
-              text={translate('welcome_premium.features.more')}
+              text={translate("welcome_premium.features.more")}
               style={{
                 color: colors.white,
               }}
@@ -129,5 +129,5 @@ export const WelcomePremiumScreen: FC<AppStackScreenProps<'welcome_premium'>> = 
         </View>
       </Screen>
     )
-  }
+  },
 )

@@ -1,14 +1,14 @@
-import React from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation } from '@react-navigation/native'
-import { FlatList } from 'react-native'
-import { LoadingHeader } from '../LoadingHeader'
-import { ListItem } from './ListItem'
-import { useStores } from 'app/models'
-import { useCipherHelper, useHelper } from 'app/services/hook'
-import { CipherView } from 'core/models/view'
-import { BROWSE_ITEMS } from 'app/navigators'
-import { Header, Screen, Text } from 'app/components/cores'
+import React from "react"
+import { observer } from "mobx-react-lite"
+import { useNavigation } from "@react-navigation/native"
+import { FlatList } from "react-native"
+import { LoadingHeader } from "../LoadingHeader"
+import { ListItem } from "./ListItem"
+import { useStores } from "app/models"
+import { useCipherHelper, useHelper } from "app/services/hook"
+import { CipherView } from "core/models/view"
+import { Header, Screen, Text } from "app/components/cores"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 export const ReusePasswordList = observer(() => {
   const navigation = useNavigation() as any
@@ -41,7 +41,7 @@ export const ReusePasswordList = observer(() => {
   // Go to detail
   const goToDetail = (item) => {
     cipherStore.setSelectedCipher(item)
-    navigation.navigate('passwords__info')
+    navigation.navigate("passwords__info")
   }
 
   // -------------- RENDER ------------------
@@ -53,7 +53,7 @@ export const ReusePasswordList = observer(() => {
       header={
         <Header
           leftIcon="arrow-left"
-          title={translate('pass_health.reused_passwords.name')}
+          title={translate("pass_health.reused_passwords.name")}
           onLeftPress={() => navigation.goBack()}
         />
       }
@@ -69,9 +69,9 @@ export const ReusePasswordList = observer(() => {
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={
           <Text
-            text={translate('common.nothing_here')}
+            text={translate("common.nothing_here")}
             style={{
-              textAlign: 'center',
+              textAlign: "center",
               marginTop: 20,
             }}
           />

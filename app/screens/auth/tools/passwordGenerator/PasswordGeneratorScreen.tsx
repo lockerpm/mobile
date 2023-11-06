@@ -1,16 +1,16 @@
-import React, { useState, useEffect, FC } from 'react'
-import { observer } from 'mobx-react-lite'
-import { View } from 'react-native'
-import { Slider, Checkbox } from 'react-native-ui-lib'
-import { AppStackScreenProps } from 'app/navigators'
-import { useTheme } from 'app/services/context'
-import { useCipherHelper, useHelper } from 'app/services/hook'
-import { useCoreService } from 'app/services/coreService'
-import { useStores } from 'app/models'
-import { Button, Header, Icon, Screen, Text } from 'app/components/cores'
-import { PasswordStrength } from 'app/components/utils'
+import React, { useState, useEffect, FC } from "react"
+import { observer } from "mobx-react-lite"
+import { View } from "react-native"
+import { Slider, Checkbox } from "react-native-ui-lib"
+import { useTheme } from "app/services/context"
+import { useCipherHelper, useHelper } from "app/services/hook"
+import { useCoreService } from "app/services/coreService"
+import { useStores } from "app/models"
+import { Button, Header, Icon, Screen, Text } from "app/components/cores"
+import { PasswordStrength } from "app/components/utils"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
-export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'>> = observer(
+export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
@@ -22,7 +22,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
     const { cipherStore } = useStores()
     const { fromTools } = route.params
 
-    const [password, setPassword] = useState('')
+    const [password, setPassword] = useState("")
     const [passwordLen, setPasswordLen] = useState(16)
     const [sliderValue, setSliderValue] = useState(16)
     const [options, setOptions] = useState({
@@ -36,24 +36,24 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
 
     const OPTIONS = [
       {
-        label: translate('pass_generator.use_upper'),
-        key: 'uppercase',
+        label: translate("pass_generator.use_upper"),
+        key: "uppercase",
       },
       {
-        label: translate('pass_generator.use_lower'),
-        key: 'lowercase',
+        label: translate("pass_generator.use_lower"),
+        key: "lowercase",
       },
       {
-        label: translate('pass_generator.use_digits'),
-        key: 'number',
+        label: translate("pass_generator.use_digits"),
+        key: "number",
       },
       {
-        label: translate('pass_generator.use_symbol'),
-        key: 'special',
+        label: translate("pass_generator.use_symbol"),
+        key: "special",
       },
       {
-        label: translate('pass_generator.avoid_ambiguous'),
-        key: 'ambiguous',
+        label: translate("pass_generator.avoid_ambiguous"),
+        key: "ambiguous",
       },
     ]
 
@@ -75,20 +75,20 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
     // Render
     return (
       <Screen
-        safeAreaEdges={['bottom']}
+        safeAreaEdges={["bottom"]}
         backgroundColor={colors.block}
         footerPadding
         header={
           <Header
             leftIcon="arrow-left"
-            title={translate('pass_generator.title')}
+            title={translate("pass_generator.title")}
             onLeftPress={() => navigation.goBack()}
           />
         }
         footer={
           <View>
             <Button
-              text={translate('pass_generator.use_password')}
+              text={translate("pass_generator.use_password")}
               onPress={() => {
                 if (fromTools) {
                   copyToClipboard(password)
@@ -100,7 +100,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
             />
             <Button
               preset="secondary"
-              text={translate('common.regenerate')}
+              text={translate("common.regenerate")}
               onPress={regenerate}
               style={{ marginTop: 10 }}
             />
@@ -115,7 +115,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
             padding: 16,
           }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text text={password} style={{ flex: 1, fontSize: 20 }} />
             <Icon icon="copy" size={18} onPress={() => copyToClipboard(password)} />
           </View>
@@ -124,7 +124,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
         {/* Password end */}
 
         <View style={{ padding: 16 }}>
-          <Text preset="label" size="base" text={translate('common.options').toUpperCase()} />
+          <Text preset="label" size="base" text={translate("common.options").toUpperCase()} />
         </View>
 
         {/* Options */}
@@ -135,7 +135,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
           }}
         >
           {/* Password length */}
-          <Text text={`${translate('common.length')}: ${passwordLen}`} />
+          <Text text={`${translate("common.length")}: ${passwordLen}`} />
           <Slider
             value={sliderValue}
             thumbTintColor={colors.primary}
@@ -181,5 +181,5 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<'passwordGenerator'
         </View>
       </Screen>
     )
-  }
+  },
 )

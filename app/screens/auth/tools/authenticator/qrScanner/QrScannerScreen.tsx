@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC, useState } from 'react'
-import QRCodeScanner from 'react-native-qrcode-scanner'
-import { AppStackScreenProps } from 'app/navigators'
-import { useStores } from 'app/models'
-import { useCipherData, useCipherHelper, useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { beautifyName, decodeGoogleAuthenticatorImport, getTOTP, parseOTPUri } from 'app/utils/totp'
-import { CipherType } from 'core/enums'
-import { Logger } from 'app/utils/utils'
-import { Header, Screen } from 'app/components/cores'
-import { observer } from 'mobx-react-lite'
+import React, { FC, useState } from "react"
+import QRCodeScanner from "react-native-qrcode-scanner"
+import { useStores } from "app/models"
+import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { beautifyName, decodeGoogleAuthenticatorImport, getTOTP, parseOTPUri } from "app/utils/totp"
+import { CipherType } from "core/enums"
+import { Logger } from "app/utils/utils"
+import { Header, Screen } from "app/components/cores"
+import { observer } from "mobx-react-lite"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
-export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((props) => {
+export const QRScannerScreen: FC<AppStackScreenProps<"qrScanner">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
@@ -28,7 +28,7 @@ export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((p
   const totpCount = route.params.totpCount || 0
 
   const onSuccess = async (e) => {
-    if (e.data.startsWith('otpauth-migration://')) {
+    if (e.data.startsWith("otpauth-migration://")) {
       handleGoogleAuthenticatorImport(e.data)
     } else {
       handleSaveQr(e.data)
@@ -47,16 +47,16 @@ export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((p
         await createCipher(cipher, 0, [])
         setIsLoading(false)
       } else {
-        notify('error', translate('authenticator.invalid_qr'))
+        notify("error", translate("authenticator.invalid_qr"))
       }
     } catch (e) {
-      notify('error', translate('authenticator.invalid_qr'))
+      notify("error", translate("authenticator.invalid_qr"))
     }
     if (!route.params.passwordTotp) {
       navigation.goBack()
     } else {
       cipherStore.setSelectedTotp(uri)
-      navigation.navigate('passwords__edit', {
+      navigation.navigate("passwords__edit", {
         mode: route.params.passwordMode,
       })
     }
@@ -74,13 +74,13 @@ export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((p
           `otpauth://totp/${encodeURIComponent(otp.account)}` +
           `?secret=${otp.secret}` +
           `&issuer=${encodeURIComponent(otp.account)}` +
-          `&algorithm=${otp.algorithm.toLowerCase().split('-').join('')}` +
+          `&algorithm=${otp.algorithm.toLowerCase().split("-").join("")}` +
           `&digits=${otp.digits}&period=${otp.period}`
         return payload
       })
 
       if (!ciphers.length) {
-        notify('error', translate('authenticator.invalid_qr'))
+        notify("error", translate("authenticator.invalid_qr"))
         return
       }
 
@@ -93,24 +93,24 @@ export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((p
       } as any)
       if (isFreeAccount && ciphers.length > totpCount) {
         notify(
-          'error',
-          translate('authenticator.limited_import', {
+          "error",
+          translate("authenticator.limited_import", {
             imported: ciphers.length - totpCount,
             total: ciphers.length,
-            s: ciphers.length - totpCount > 1 ? 's' : '',
-          })
+            s: ciphers.length - totpCount > 1 ? "s" : "",
+          }),
         )
       }
     } catch (e) {
-      Logger.error('Import google qr: ' + e)
-      notify('error', translate('authenticator.invalid_qr'))
+      Logger.error("Import google qr: " + e)
+      notify("error", translate("authenticator.invalid_qr"))
     }
     setIsLoading(false)
     if (!route.params.passwordTotp) {
       navigation.goBack()
     } else {
       cipherStore.setSelectedTotp(uri)
-      navigation.navigate('passwords__edit', {
+      navigation.navigate("passwords__edit", {
         mode: route.params.passwordMode,
       })
     }
@@ -120,12 +120,12 @@ export const QRScannerScreen: FC<AppStackScreenProps<'qrScanner'>> = observer((p
 
   return (
     <Screen
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={["bottom"]}
       backgroundColor={colors.block}
       header={
         <Header
           leftIcon="arrow-left"
-          title={translate('authenticator.scan_a_qr')}
+          title={translate("authenticator.scan_a_qr")}
           onLeftPress={() => navigation.goBack()}
         />
       }

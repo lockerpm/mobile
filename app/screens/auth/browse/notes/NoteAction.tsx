@@ -1,7 +1,8 @@
-import { ActionItem, CipherAction } from 'app/components/ciphers'
-import { useStores } from 'app/models'
-import { useHelper } from 'app/services/hook'
-import React from 'react'
+import { ActionItem } from "app/components/ciphers/actionsSheet/ActionSheetItem"
+import { CipherAction } from "app/components/ciphers/cipherAction/CipherAction"
+import { useStores } from "app/models"
+import { useHelper } from "app/services/hook"
+import React from "react"
 
 type Props = {
   isOpen?: boolean
@@ -17,7 +18,7 @@ export const NoteAction = (props: Props) => {
 
   const renderContent = () => (
     <ActionItem
-      name={translate('note.copy_note')}
+      name={translate("note.copy_note")}
       icon="copy"
       action={() => copyToClipboard(selectedCipher.notes)}
       disabled={!selectedCipher.notes}

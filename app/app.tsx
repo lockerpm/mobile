@@ -7,7 +7,7 @@ if (__DEV__) {
 }
 import "./i18n"
 import "./utils/ignoreWarnings"
-import React, { useRef } from "react"
+import React, { ComponentType, useRef } from "react"
 import { NavigationContainerRef } from "@react-navigation/native"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { useInitialRootStore } from "./models"
@@ -22,6 +22,8 @@ import * as storage from "./utils/storage"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
 import * as Tracking from "./utils/tracking"
+import * as Sentry from "@sentry/react-native"
+import RNBootSplash from "react-native-bootsplash"
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
@@ -45,7 +47,7 @@ Tracking.initAppFlyer()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
-export type RootProp = {
+export interface RootProp extends JSX.IntrinsicAttributes {
   lastFill?: number
   autofill?: number
   savePassword?: number
@@ -53,12 +55,9 @@ export type RootProp = {
   lastUserPasswordID?: string
   username?: string
   password?: string
-  hideSplashScreen?: () => Promise<void>
 }
 
-function App(props: RootProp) {
-  const { hideSplashScreen } = props
-
+const App: ComponentType<RootProp> = (props: RootProp) => {
   const navigationRef = useRef<NavigationContainerRef<any>>(null)
   setRootNavigation(navigationRef)
   useBackButtonHandler(navigationRef, canExit)
@@ -73,7 +72,7 @@ function App(props: RootProp) {
     // Slightly delaying splash screen hiding for better UX; can be customized or removed as needed,
     // Note: (vanilla Android) The splash-screen will not appear if you launch your app via the terminal or Android Studio. Kill the app and launch it normally by tapping on the launcher icon. https://stackoverflow.com/a/69831106
     // Note: (vanilla iOS) You might notice the splash-screen logo change size. This happens in debug/development mode. Try building the app for release.
-    setTimeout(hideSplashScreen, 500)
+    setTimeout(RNBootSplash.hide, 500)
   })
 
   // Before we show the app, we have to wait for our state to be ready.
@@ -164,4 +163,4 @@ const $style = StyleSheet.create({
   },
 })
 
-export default App
+export default __DEV__ ? App : Sentry.wrap(App)

@@ -1,27 +1,18 @@
-import React, { useCallback } from 'react'
-import { TouchableOpacity, View } from 'react-native'
-import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from 'app/services/context'
-import { fontSize } from '../theme'
-import { useStores } from '../models'
-import { NavigatorScreenParams } from '@react-navigation/native'
-import { Icon, Text } from 'app/components/cores'
-
-import { BrowseNavigator, BrowseParamList } from './browse/BrowseNavigator'
-import { MenuNavigator, MenuParamList } from './menu/MenuNavigator'
-import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen } from '../screens'
-import { SharingStatus } from 'app/static/types'
-import { observer } from 'mobx-react-lite'
-import { useHelper } from 'app/services/hook'
-
-export type TabsParamList = {
-  homeTab: undefined
-  browseTab: NavigatorScreenParams<BrowseParamList>
-  authenticatorTab: undefined
-  toolsTab: undefined
-  menuTab: NavigatorScreenParams<MenuParamList>
-}
+import React, { useCallback } from "react"
+import { TouchableOpacity, View } from "react-native"
+import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useTheme } from "app/services/context"
+import { fontSize } from "../theme"
+import { useStores } from "../models"
+import { Icon, Text } from "app/components/cores"
+import { BrowseNavigator } from "./browse/BrowseNavigator"
+import { MenuNavigator } from "./menu/MenuNavigator"
+import { HomeTabScreen, ToolsListScreen, AuthenticatorScreen } from "../screens"
+import { SharingStatus } from "app/static/types"
+import { observer } from "mobx-react-lite"
+import { useHelper } from "app/services/hook"
+import { TabsParamList } from "./navigators.types"
 
 const Tab = createBottomTabNavigator<TabsParamList>()
 
@@ -33,13 +24,13 @@ const TabBar = ({ state, descriptors, navigation }) => {
 
   const mappings = {
     homeTab: {
-      label: translate('common.home'),
-      icon: 'home',
+      label: translate("common.home"),
+      icon: "home",
       notiCount: 0,
     },
     browseTab: {
-      label: translate('common.browse'),
-      icon: 'browser',
+      label: translate("common.browse"),
+      icon: "browser",
       notiCount:
         cipherStore.sharingInvitations.length +
         cipherStore.myShares.reduce((total, s) => {
@@ -47,18 +38,18 @@ const TabBar = ({ state, descriptors, navigation }) => {
         }, 0),
     },
     authenticatorTab: {
-      label: 'OTP',
-      icon: 'authenticator',
+      label: "OTP",
+      icon: "authenticator",
       notiCount: 0,
     },
     toolsTab: {
-      label: translate('common.tools'),
-      icon: 'tools',
+      label: translate("common.tools"),
+      icon: "tools",
       notiCount: 0,
     },
     menuTab: {
-      label: translate('common.menu'),
-      icon: 'menu',
+      label: translate("common.menu"),
+      icon: "menu",
       notiCount: user.invitations.length,
     },
   }
@@ -78,9 +69,9 @@ const TabBar = ({ state, descriptors, navigation }) => {
         <View
           style={{
             backgroundColor: colors.primaryText,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
             paddingVertical: 4,
           }}
         >
@@ -93,7 +84,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
                   color: colors.white,
                   marginLeft: 5,
                 }}
-                text={translate('navigator.is_offline')}
+                text={translate("navigator.is_offline")}
               />
             </>
           ) : cipherStore.isBatchDecrypting ? (
@@ -104,7 +95,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
                   color: colors.white,
                   marginLeft: 5,
                 }}
-                text={translate('start.decrypting')}
+                text={translate("start.decrypting")}
               />
             </>
           ) : (
@@ -116,7 +107,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
                   color: colors.white,
                   marginLeft: 5,
                 }}
-                text={translate('start.synching')}
+                text={translate("start.synching")}
               />
             </>
           )}
@@ -125,7 +116,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
       {/* Status bar end */}
 
       {/* Tab items */}
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: "row" }}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key]
 
@@ -137,7 +128,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
 
           const onPress = () => {
             const event = navigation.emit({
-              type: 'tabPress',
+              type: "tabPress",
               target: route.key,
               canPreventDefault: true,
             })
@@ -150,7 +141,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
 
           const onLongPress = () => {
             navigation.emit({
-              type: 'tabLongPress',
+              type: "tabLongPress",
               target: route.key,
             })
           }
@@ -163,8 +154,8 @@ const TabBar = ({ state, descriptors, navigation }) => {
               onLongPress={onLongPress}
               style={{
                 flex: 1,
-                alignItems: 'center',
-                flexDirection: 'column',
+                alignItems: "center",
+                flexDirection: "column",
               }}
             >
               <Icon
@@ -181,16 +172,16 @@ const TabBar = ({ state, descriptors, navigation }) => {
                     borderRadius: 20,
                     minWidth: 17,
                     height: 17,
-                    position: 'absolute',
+                    position: "absolute",
                     top: 3,
                     right: 20,
                   }}
                 >
                   <Text
-                    text={notiCount >= 100 ? '99+' : notiCount.toString()}
+                    text={notiCount >= 100 ? "99+" : notiCount.toString()}
                     style={{
                       fontSize: 12,
-                      textAlign: 'center',
+                      textAlign: "center",
                       color: colors.white,
                       lineHeight: 17,
                     }}

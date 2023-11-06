@@ -1,24 +1,24 @@
-import React, { FC, useState } from 'react'
-import { TouchableOpacity, View } from 'react-native'
-import { OtpList } from './OtpList'
-import { Text, Screen, Header, Icon } from 'app/components/cores'
-import { AppStackScreenProps } from 'app/navigators'
-import { useStores } from 'app/models'
-import { CipherView } from 'core/models/view'
-import { useTheme } from 'app/services/context'
-import { AuthenticatorAddAction } from 'app/screens/auth/tools/authenticator/AuthenticatorAddAction'
-import { SearchBar } from 'app/components/utils'
-import { observer } from 'mobx-react-lite'
-import { useHelper } from 'app/services/hook'
+import React, { FC, useState } from "react"
+import { TouchableOpacity, View } from "react-native"
+import { OtpList } from "./OtpList"
+import { Text, Screen, Header, Icon } from "app/components/cores"
+import { useStores } from "app/models"
+import { CipherView } from "core/models/view"
+import { useTheme } from "app/services/context"
+import { AuthenticatorAddAction } from "app/screens/auth/tools/authenticator/AuthenticatorAddAction"
+import { SearchBar } from "app/components/utils"
+import { observer } from "mobx-react-lite"
+import { useHelper } from "app/services/hook"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
-export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup'>> = observer(
+export const Password2FASetupScreen: FC<AppStackScreenProps<"passwords_2fa_setup">> = observer(
   (props) => {
     const navigation: any = props.navigation
     const route = props.route
 
     const { cipherStore } = useStores()
 
-    const [searchText, setSearchText] = useState('')
+    const [searchText, setSearchText] = useState("")
     const [selectedOtp, setSelectedOtp] = useState<CipherView>(null)
     const [isAddOpen, setIsAddOpen] = useState(false)
     const { translate } = useHelper()
@@ -26,17 +26,17 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup
 
     return (
       <Screen
-        safeAreaEdges={['bottom']}
+        safeAreaEdges={["bottom"]}
         header={
           <Header
             leftIcon="arrow-left"
             onLeftPress={() => {
               navigation.goBack()
             }}
-            title={translate('password.2fa_setup')}
-            rightText={translate('common.save')}
+            title={translate("password.2fa_setup")}
+            rightText={translate("common.save")}
             onRightPress={() => {
-              cipherStore.setSelectedTotp(selectedOtp?.notes || '-1')
+              cipherStore.setSelectedTotp(selectedOtp?.notes || "-1")
               navigation.goBack()
             }}
           />
@@ -63,25 +63,25 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup
           <TouchableOpacity
             style={{
               padding: 16,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
             onPress={() => setSelectedOtp(null)}
           >
-            <Text text={translate('password.no_otp')} />
+            <Text text={translate("password.no_otp")} />
             {selectedOtp === null && <Icon icon="check" size={19} color={colors.primary} />}
           </TouchableOpacity>
           <TouchableOpacity
             style={{
               padding: 16,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
             onPress={() => setIsAddOpen(true)}
           >
-            <Text text={translate('password.add_otp')} />
+            <Text text={translate("password.add_otp")} />
           </TouchableOpacity>
         </View>
 
@@ -107,8 +107,8 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup
           <OtpList
             searchText={searchText}
             sortList={{
-              orderField: 'revisionDate',
-              order: 'desc',
+              orderField: "revisionDate",
+              order: "desc",
             }}
             selectedOtp={selectedOtp}
             setSelectedOtp={setSelectedOtp}
@@ -116,5 +116,5 @@ export const Password2FASetupScreen: FC<AppStackScreenProps<'passwords_2fa_setup
         </View>
       </Screen>
     )
-  }
+  },
 )

@@ -1,14 +1,9 @@
-import messaging, { FirebaseMessagingTypes } from "@react-native-firebase/messaging"
-import notifee, {
-  Notification,
-  EventType,
-  Event,
-  AndroidLaunchActivityFlag,
-} from "@notifee/react-native"
-import { IS_IOS } from "../../config/constants"
-import { Logger } from "../utils"
-import { NotifeeNotificationData, PushEvent } from "./types"
-import { load, save, StorageKey } from "../storage"
+import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging'
+import notifee, { EventType, Event } from '@notifee/react-native'
+import { IS_IOS } from '../../config/constants'
+import { Logger } from '../utils'
+import { NotifeeNotificationData, PushEvent } from './types'
+import { load, save, StorageKey } from '../storage'
 import {
   handleNewShare,
   handleConfirmShare,
@@ -18,7 +13,7 @@ import {
   handleRequestEA,
   handleRequestEAResponseEA,
   handleTipTrick,
-} from "./handler"
+} from './handler'
 
 export class PushNotifier {
   // Request permission
@@ -47,7 +42,7 @@ export class PushNotifier {
 
     // Firebase
     messaging().onMessage(async (message: FirebaseMessagingTypes.RemoteMessage) => {
-      Logger.debug("Firebase: FOREGROUND HANDLER")
+      Logger.debug('Firebase: FOREGROUND HANDLER')
       Logger.debug(message.data)
       const { event, data } = message.data
 
@@ -97,13 +92,13 @@ export class PushNotifier {
           break
         }
         default:
-          Logger.debug("Unknow FCM event: " + JSON.stringify(message))
+          Logger.debug('Unknow FCM event: ' + JSON.stringify(message))
       }
     })
 
     // Notifee - Handle user interaction with notification here
     return notifee.onForegroundEvent((event: Event) => {
-      Logger.debug("Notifee: FOREGROUND HANDLER")
+      Logger.debug('Notifee: FOREGROUND HANDLER')
 
       const { detail, type } = event
 
@@ -118,7 +113,7 @@ export class PushNotifier {
     // Firebase
     messaging().setBackgroundMessageHandler(
       async (message: FirebaseMessagingTypes.RemoteMessage) => {
-        Logger.debug("Firebase: BACKGROUND HANDLER")
+        Logger.debug('Firebase: BACKGROUND HANDLER')
         Logger.debug(message.data)
         const currentUser = await load(StorageKey.APP_CURRENT_USER)
         if (!currentUser) {
@@ -171,15 +166,15 @@ export class PushNotifier {
             break
           }
           default:
-            Logger.debug("Unknow FCM event: " + JSON.stringify(message))
+            Logger.debug('Unknow FCM event: ' + JSON.stringify(message))
         }
-      },
+      }
     )
 
     // Notifee
     notifee.onBackgroundEvent(async (event: Event) => {
       // Handle user interaction with notification here
-      Logger.debug("BACKGROUND HANDLER NOTIFEE")
+      Logger.debug('BACKGROUND HANDLER NOTIFEE')
       const { type, detail } = event
       if (type === EventType.PRESS) {
         const data: NotifeeNotificationData = detail.notification.data
@@ -213,29 +208,5 @@ export class PushNotifier {
   // Cancel notification
   static cancelNotification(id: string) {
     return notifee.cancelNotification(id)
-  }
-
-  // Display push notification
-  static async _notify(data: Notification) {
-    // Create a channel
-    const channelId = await notifee.createChannel({
-      id: "default",
-      name: "Default Channel",
-    })
-
-    // Display a notification
-    await notifee.displayNotification({
-      ...data,
-      android: {
-        channelId,
-        pressAction: {
-          launchActivity: "default",
-          id: "default",
-          launchActivityFlags: [AndroidLaunchActivityFlag.SINGLE_TOP],
-        },
-        smallIcon: "locker_small",
-        color: "#268334",
-      },
-    })
   }
 }

@@ -1,29 +1,29 @@
-import countries from 'app/static/countries.json'
-import React, { useState, useEffect, useRef, useCallback, FC } from 'react'
-import { Linking, Platform, TouchableOpacity, View } from 'react-native'
-import { useStores } from 'app/models'
-import { RootStackScreenProps } from 'app/navigators'
-import { useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { Checkbox } from 'react-native-ui-lib'
-import Animated, { ZoomIn } from 'react-native-reanimated'
-import { Screen, Text, Button, TextInput, Logo, Header } from 'app/components/cores'
+import countries from "app/static/countries.json"
+import React, { useState, useEffect, useRef, useCallback, FC } from "react"
+import { Linking, Platform, TouchableOpacity, View } from "react-native"
+import { useStores } from "app/models"
+import { useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { Checkbox } from "react-native-ui-lib"
+import Animated, { ZoomIn } from "react-native-reanimated"
+import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
 import {
   CountryPicker,
   CountryCode,
   SocialLogin,
   RecaptchaChecker,
   IosPasswordlessOptions,
-} from 'app/components/utils'
-import { Passkey, PasskeyRegistrationResult } from 'react-native-passkey'
-import { PasskeyRegistrationRequest } from 'react-native-passkey/lib/typescript/Passkey'
-import { credentialCreationOptions, publicKeyCredentialWithAttestation } from 'app/utils/passkey'
-import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL } from 'app/config/constants'
-import { getCookies, logRegisterSuccessEvent } from 'app/utils/analytics'
-import { Logger } from 'app/utils/utils'
-import { observer } from 'mobx-react-lite'
+} from "app/components/utils"
+import { Passkey, PasskeyRegistrationResult } from "react-native-passkey"
+import { PasskeyRegistrationRequest } from "react-native-passkey/lib/typescript/Passkey"
+import { credentialCreationOptions, publicKeyCredentialWithAttestation } from "app/utils/passkey"
+import { IS_IOS, PRIVACY_POLICY_URL, TERMS_URL } from "app/config/constants"
+import { getCookies, logRegisterSuccessEvent } from "app/utils/analytics"
+import { Logger } from "app/utils/utils"
+import { observer } from "mobx-react-lite"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
 
-export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props) => {
+export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props) => {
   const navigation = props.navigation
   const { colors } = useTheme()
   const { user } = useStores()
@@ -34,11 +34,11 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
   const captchaRef = useRef(null)
 
   const [isLoading, setIsLoading] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [fullname, setFullname] = useState('')
-  const [country, setCountry] = useState<CountryCode>('VN')
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [fullname, setFullname] = useState("")
+  const [country, setCountry] = useState<CountryCode>("VN")
   const [agreed, setAgreed] = useState(false)
 
   const [isSignupWithPassword, setIsSignupWithPassword] = useState(false)
@@ -62,7 +62,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
   }
 
   const navigateLogin = () => {
-    props.navigation.replace('login')
+    props.navigation.replace("login")
   }
 
   const getCaptchaToken = useCallback(async () => {
@@ -79,14 +79,14 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
       full_name: fullname,
       phone: undefined,
       request_code: captchaToken,
-      scope: 'pwdmanager',
-      utm_source: await getCookies('utm_source'),
+      scope: "pwdmanager",
+      utm_source: await getCookies("utm_source"),
     })
     setIsLoading(false)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       logRegisterSuccessEvent()
-      notify('success', translate('signup.signup_successful'), 5000)
-      navigation.replace('login')
+      notify("success", translate("signup.signup_successful"), 5000)
+      navigation.replace("login")
     } else {
       notifyApiError(res)
     }
@@ -95,17 +95,17 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
   const handleRegisterWebauth = async (
     email: string,
     fullname: string,
-    withSecurityKey?: boolean
+    withSecurityKey?: boolean,
   ) => {
     const resPassKeyOptions = await user.registerPasskeyOptions({
       email,
       full_name: fullname,
-      algorithms: ['es256', 'rs256'],
+      algorithms: ["es256", "rs256"],
     })
-    if (resPassKeyOptions.kind === 'ok') {
+    if (resPassKeyOptions.kind === "ok") {
       try {
         const requestJson: PasskeyRegistrationRequest = credentialCreationOptions(
-          resPassKeyOptions.data
+          resPassKeyOptions.data,
         )
 
         // @ts-ignore
@@ -115,20 +115,20 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
 
         const res = await user.registerPasskey({
           email,
-          password: '',
+          password: "",
           country,
-          confirm_password: '',
+          confirm_password: "",
           full_name: fullname,
-          request_code: '',
-          scope: 'pwdmanager',
-          utm_source: await getCookies('utm_source'),
+          request_code: "",
+          scope: "pwdmanager",
+          utm_source: await getCookies("utm_source"),
           response: publicKeyCredentialWithAttestation(result),
         })
         setIsLoading(false)
-        if (res.kind === 'ok') {
+        if (res.kind === "ok") {
           logRegisterSuccessEvent()
-          notify('success', translate('signup.signup_successful'), 5000)
-          navigation.replace('login')
+          notify("success", translate("signup.signup_successful"), 5000)
+          navigation.replace("login")
         } else {
           notifyApiError(res)
         }
@@ -150,11 +150,11 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
 
   const onLoggedIn = async (_newUser: boolean, _token: string) => {
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-    if (userRes.kind === 'ok' && userPwRes.kind === 'ok') {
+    if (userRes.kind === "ok" && userPwRes.kind === "ok") {
       if (user.is_pwd_manager) {
-        navigation.navigate('lock')
+        navigation.navigate("lock")
       } else {
-        navigation.navigate('createMasterPassword')
+        navigation.navigate("createMasterPassword")
       }
     }
   }
@@ -184,20 +184,20 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
         <Text
           preset="label"
           style={{
-            textAlign: 'center',
+            textAlign: "center",
             marginVertical: 12,
           }}
         >
-          {translate('signup.has_account') + ' '}
+          {translate("signup.has_account") + " "}
           <Text
             onPress={navigateLogin}
             style={{ color: colors.primary }}
-            text={translate('common.login')}
+            text={translate("common.login")}
           />
         </Text>
       </View>
     ),
-    []
+    [],
   )
   return (
     <Screen preset="auto" contentContainerStyle={{ paddingBottom: 20 }}>
@@ -209,8 +209,8 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
           onClose={() => {
             setIsShowCreatePasskeyOptions(false)
           }}
-          title={translate('common.sign_up')}
-          label={translate('passkey.sign_up.passkey_options')}
+          title={translate("common.sign_up")}
+          label={translate("passkey.sign_up.passkey_options")}
           isIcloudSelected={isIcloudSelected}
           setIsIcloudSelected={setIsIcloudSelected}
           action={async () => {
@@ -224,20 +224,20 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
 
       <View style={{ paddingHorizontal: 20 }}>
         <Logo
-          preset={'default'}
-          style={{ height: 80, width: 70, marginBottom: 10, alignSelf: 'center' }}
+          preset={"default"}
+          style={{ height: 80, width: 70, marginBottom: 10, alignSelf: "center" }}
         />
         <Text
           preset="bold"
           size="xl"
-          text={translate('signup.title')}
-          style={{ textAlign: 'center' }}
+          text={translate("signup.title")}
+          style={{ textAlign: "center" }}
         />
 
         <TextInput
           isRequired
           animated
-          label={translate('common.email')}
+          label={translate("common.email")}
           value={email}
           onChangeText={setEmail}
         />
@@ -248,7 +248,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
               animated
               isRequired
               isPassword
-              label={translate('common.password')}
+              label={translate("common.password")}
               onChangeText={setPassword}
               value={password}
             />
@@ -256,7 +256,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
               animated
               isRequired
               isPassword
-              label={translate('signup.confirm_password')}
+              label={translate("signup.confirm_password")}
               onChangeText={setConfirmPassword}
               value={confirmPassword}
             />
@@ -265,7 +265,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
 
         <TextInput
           animated
-          label={translate('common.fullname')}
+          label={translate("common.fullname")}
           value={fullname}
           onChangeText={setFullname}
         />
@@ -274,8 +274,8 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
           animated
           isRequired
           editable={false}
-          label={translate('common.country')}
-          value={countries[country] ? countries[country].country_name : ''}
+          label={translate("common.country")}
+          value={countries[country] ? countries[country].country_name : ""}
           style={{
             color: colors.primaryText,
           }}
@@ -291,8 +291,8 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
           disabled={isLoading || !formValidated}
           text={
             isSignupWithPassword
-              ? translate('passkey.sign_up.signup_password')
-              : translate('passkey.sign_up.continue_password')
+              ? translate("passkey.sign_up.signup_password")
+              : translate("passkey.sign_up.continue_password")
           }
           onPress={() => {
             if (isSignupWithPassword) {
@@ -302,7 +302,7 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
             }
           }}
           style={{
-            width: '100%',
+            width: "100%",
             marginTop: 30,
             marginBottom: 20,
           }}
@@ -312,16 +312,16 @@ export const SignupScreen: FC<RootStackScreenProps<'signup'>> = observer((props)
           <Button
             preset="secondary"
             disabled={isLoading || !email || !fullname || !agreed}
-            text={translate('passkey.sign_up.signup_passkey')}
+            text={translate("passkey.sign_up.signup_passkey")}
             onPress={() => {
-              if (Platform.OS === 'ios') {
+              if (Platform.OS === "ios") {
                 setIsShowCreatePasskeyOptions(true)
               } else {
                 handleRegisterWebauth(email, fullname)
               }
             }}
             style={{
-              width: '100%',
+              width: "100%",
               height: 50,
               marginBottom: 12,
             }}
@@ -357,9 +357,9 @@ const TermAndConditions = ({
   return (
     <View
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-start",
         marginTop: 10,
       }}
     >
@@ -378,10 +378,10 @@ const TermAndConditions = ({
       />
       <TouchableOpacity onPress={() => setAgreed(!agreed)}>
         <Text>
-          {translate('signup.agree_with') + ' '}
+          {translate("signup.agree_with") + " "}
           <Text
             color={colors.primary}
-            text={translate('signup.terms')}
+            text={translate("signup.terms")}
             onPress={() => {
               Linking.canOpenURL(TERMS_URL)
                 .then((val) => {
@@ -390,9 +390,9 @@ const TermAndConditions = ({
                 .catch((e) => Logger.error(e))
             }}
           />
-          <Text text={' ' + translate('common.and') + ' '} />
+          <Text text={" " + translate("common.and") + " "} />
           <Text
-            text={translate('signup.conditions')}
+            text={translate("signup.conditions")}
             color={colors.primary}
             onPress={() => {
               Linking.canOpenURL(PRIVACY_POLICY_URL)
