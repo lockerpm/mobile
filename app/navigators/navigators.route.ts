@@ -76,7 +76,6 @@ export type ToolsItem = {
 type ToolsItemContainer = {
   passwordGenerator: ToolsItem
   authenticator: ToolsItem
-  privateRelay: ToolsItem
   passwordHealth: ToolsItem
   dataBreachScanner: ToolsItem
 }
@@ -87,12 +86,6 @@ export const TOOLS_ITEMS: ToolsItemContainer = {
     desc: 'pass_generator.desc',
     icon: 'password-generator',
     routeName: 'passwordGenerator',
-  },
-  privateRelay: {
-    label: 'private_relay.title',
-    desc: 'private_relay.tool',
-    icon: 'private-relay',
-    routeName: 'privateRelay',
   },
   authenticator: {
     label: 'authenticator.title',

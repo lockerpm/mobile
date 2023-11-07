@@ -1,14 +1,6 @@
 import { NavigatorScreenParams } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
-import { LockType } from 'app/screens/unauth/lock/lock.types'
-import {
-  AppNotification,
-  OnPremiseIdentifierData,
-  OnPremisePreloginData,
-  RelayAddress,
-  SubdomainData,
-  TrustedContact,
-} from 'app/static/types'
+import { AppNotification, LoginMethod, TrustedContact } from 'app/static/types'
 import { CipherView } from 'core/models/view/cipherView'
 import { CollectionView } from 'core/models/view/collectionView'
 import { SendView } from 'core/models/view/sendView'
@@ -21,9 +13,7 @@ export type RootParamList = {
   }
   onBoarding: undefined
   lock: {
-    type?: LockType
-    // onpremise data
-    data?: OnPremisePreloginData
+    type?: LoginMethod
     email?: string
   }
   login: undefined
@@ -31,10 +21,6 @@ export type RootParamList = {
   signup: undefined
   createMasterPassword: undefined
   mainStack: undefined
-
-  // vinsso
-  ssoIdentifier: undefined
-  ssoLogin: OnPremiseIdentifierData
 }
 
 export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
@@ -87,12 +73,6 @@ export type ToolsParamList = {
   reusePasswordList: undefined
   exposedPasswordList: undefined
   privateRelay: undefined
-  manageSubdomain: {
-    subdomain: SubdomainData
-  }
-  aliasStatistic: {
-    alias: RelayAddress
-  }
 }
 
 export type ToolsStackScreenProps<T extends keyof ToolsParamList> = StackScreenProps<
