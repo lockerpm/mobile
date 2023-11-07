@@ -1,11 +1,11 @@
-import isEqual from 'lodash/isEqual'
-import React, { memo } from 'react'
-import { View, TouchableOpacity } from 'react-native'
-import { Icon, Text, Toggle, AutoImage as Image } from '../../cores'
-import { CipherType } from 'core/enums'
-import { useCipherHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { CipherAppView } from 'app/static/types'
+import isEqual from "lodash/isEqual"
+import React, { memo } from "react"
+import { View, TouchableOpacity } from "react-native"
+import { Icon, Text, Toggle, AutoImage as Image } from "../../cores"
+import { CipherType } from "core/enums"
+import { useCipherHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { CipherAppView } from "app/static/types"
 
 type Prop = {
   item: CipherAppView
@@ -46,7 +46,7 @@ export const CipherListItem = memo(
           height: 70.5,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
             source={item.imgLogo}
             style={{
@@ -58,26 +58,7 @@ export const CipherListItem = memo(
 
           <View style={{ flex: 1, marginLeft: 12 }}>
             {/* Name */}
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Text preset="bold" numberOfLines={1} text={item.name} style={{ maxWidth: '80%' }} />
-
-              {/* Belong to team icon */}
-              {isShared && (
-                <Icon icon="users-three" size={22} containerStyle={{ marginLeft: 10 }} />
-              )}
-              {/* Belong to team icon end */}
-
-              {/* Not sync icon */}
-              {item.notSync && (
-                <Icon icon="wifi-slash" size={22} containerStyle={{ marginLeft: 10 }} />
-              )}
-            </View>
+            <Text preset="bold" numberOfLines={1} text={item.name} style={{ maxWidth: "80%" }} />
 
             {!!getCipherDescription(item) && (
               <Text
@@ -88,6 +69,12 @@ export const CipherListItem = memo(
               />
             )}
           </View>
+
+          {/* Belong to team icon */}
+          {isShared && <Icon icon="users-three" size={22} containerStyle={{ marginLeft: 10 }} />}
+
+          {/* Not sync icon */}
+          {item.notSync && <Icon icon="wifi-slash" size={22} containerStyle={{ marginLeft: 10 }} />}
 
           {isSelecting && !isMasterPwItem && (
             <Toggle
@@ -103,7 +90,7 @@ export const CipherListItem = memo(
     )
   },
   (prev, next) => {
-    const whitelist = ['toggleItemSelection', 'openActionMenu']
+    const whitelist = ["toggleItemSelection", "openActionMenu"]
     const prevProps = Object.keys(prev)
     const nextProps = Object.keys(next)
     if (!isEqual(prevProps, nextProps)) {
@@ -116,5 +103,5 @@ export const CipherListItem = memo(
       return val && isEqual(prev[key], next[key])
     }, true)
     return isPropsEqual
-  }
+  },
 )

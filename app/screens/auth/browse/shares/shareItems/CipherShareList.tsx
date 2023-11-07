@@ -12,7 +12,7 @@ import { Text } from "app/components/cores"
 import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CollectionView } from "core/models/view/collectionView"
-import { AccountRoleText, SharedGroupType, SharedMemberType } from "app/static/types"
+import { AccountRole, AccountRoleText, SharedGroupType, SharedMemberType } from "app/static/types"
 import { Organization } from "core/models/domain/organization"
 import { CipherView } from "core/models/view"
 
@@ -34,7 +34,7 @@ export const CipherShareList = observer((props: Props) => {
   const { emptyContent, navigation, onLoadingChange, searchText, sortList } = props
   const { getCiphersFromCache } = useCipherData()
   const { getCipherInfo } = useCipherHelper()
-  const { translate } = useHelper()
+  const { translate, getTeam } = useHelper()
   const { cipherStore, collectionStore } = useStores()
 
   // ------------------------ PARAMS ----------------------------
@@ -219,10 +219,17 @@ export const CipherShareList = observer((props: Props) => {
     navigation.navigate(`${cipherInfo.path}__info`)
   }
 
+  const sharesCollection = collectionStore.collections.filter((i) => {
+    // Computed
+    const shareRole = getTeam(organizations, i.organizationId).type
+    const isOwner = shareRole === AccountRole.OWNER
+    return isOwner && i.name?.includes(searchText.toLowerCase())
+  })
+
   const DATA = [
     {
       type: 2,
-      data: [...collectionStore.collections],
+      data: [...sharesCollection],
     },
     {
       type: 1,
