@@ -66,23 +66,7 @@ export const AutofillListItem = memo(
           />
 
           <View style={{ flex: 1, marginLeft: 12 }}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View style={{ flex: 1 }}>
-                <Text preset="bold" numberOfLines={1} text={item.name} />
-              </View>
-
-              {item.organizationId && (
-                <View style={{ marginLeft: 10 }}>
-                  <Icon icon="users-three" size={22} />
-                </View>
-              )}
-
-              {item.notSync && (
-                <View style={{ marginLeft: 10 }}>
-                  <Icon icon="wifi-slash" size={22} />
-                </View>
-              )}
-            </View>
+            <Text preset="bold" numberOfLines={1} text={item.name} style={{ maxWidth: "80%" }} />
 
             {!!getCipherDescription(item) && (
               <Text
@@ -93,6 +77,11 @@ export const AutofillListItem = memo(
               />
             )}
           </View>
+          {item.organizationId && (
+            <Icon icon="users-three" size={22} containerStyle={{ marginLeft: 10 }} />
+          )}
+
+          {item.notSync && <Icon icon="wifi-slash" size={22} containerStyle={{ marginLeft: 10 }} />}
 
           {isSelecting ? (
             <Toggle

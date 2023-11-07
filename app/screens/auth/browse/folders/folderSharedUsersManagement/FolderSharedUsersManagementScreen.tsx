@@ -103,8 +103,10 @@ export const FolderSharedUsersManagementScreen: FC<AppStackScreenProps<"shareFol
           isLoading={reload}
         />
 
-        <View style={{ padding: 16 }}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={{ paddingHorizontal: 16 }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
+          >
             <Text preset="bold" text={translate("shares.share_folder.share_with")} />
             <Button
               preset="teriatary"

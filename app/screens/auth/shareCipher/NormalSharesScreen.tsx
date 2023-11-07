@@ -182,7 +182,8 @@ export const NormalSharesScreen: FC<AppStackScreenProps<"normal_shares">> = obse
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          alignItems: "flex-start",
+          // alignItems: "flex-start",
+          alignItems: "center",
         }}
       >
         <Text style={{ maxWidth: "50%" }} preset="bold" size="xl" text={selectedCipher.name} />
