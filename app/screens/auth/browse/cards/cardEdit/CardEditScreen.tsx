@@ -1,26 +1,27 @@
-import find from 'lodash/find'
-import React, { FC, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { View, Image } from 'react-native'
-import { TextInputMaskOptionProp, TextInputMaskTypeProp } from 'react-native-masked-text'
-import { CARD_BRANDS } from '../constants'
-import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
-import { useTheme } from 'app/services/context'
-import { useCipherData, useCipherHelper, useFolder, useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { CardView, CipherView } from 'core/models/view'
-import { CollectionView } from 'core/models/view/collectionView'
-import { CipherType } from 'core/enums'
-import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
-import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
-import { Select } from 'app/components/utils'
+import find from "lodash/find"
+import React, { FC, useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { View, Image } from "react-native"
+import { TextInputMaskOptionProp, TextInputMaskTypeProp } from "react-native-masked-text"
+import { CARD_BRANDS } from "../constants"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { useTheme } from "app/services/context"
+import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { CardView, CipherView } from "core/models/view"
+import { CollectionView } from "core/models/view/collectionView"
+import { CipherType } from "core/enums"
+import { Button, Header, Screen, TextInput, Text, Icon } from "app/components/cores"
+import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
+import { Select } from "app/components/utils"
 
 type InputItem = {
   label: string
   value: string
   setter: (val: any) => void
   isRequired?: boolean
-  inputType?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad' | 'decimal-pad'
+  inputType?: "default" | "email-address" | "numeric" | "phone-pad" | "number-pad" | "decimal-pad"
   placeholder?: string
   isPassword?: boolean
   maskType?: TextInputMaskTypeProp
@@ -29,7 +30,7 @@ type InputItem = {
   options?: { label: string; value: string | number | null }[]
 }
 
-export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((props) => {
+export const CardEditScreen: FC<AppStackScreenProps<"cards__edit">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
@@ -51,7 +52,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
       return true
     }
     const org = cipherStore.myShares.find(
-      (s) => s.organization_id === selectedCipher.organizationId
+      (s) => s.organization_id === selectedCipher.organizationId,
     )
     return !!org
   })()
@@ -60,31 +61,31 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
 
   // Forms
 
-  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  const [cardName, setCardName] = useState(mode !== 'add' ? selectedCipher.card.cardholderName : '')
-  const [brand, setBrand] = useState(mode !== 'add' ? selectedCipher.card.brand : '')
-  const [cardNumber, setCardNumber] = useState(mode !== 'add' ? selectedCipher.card.number : '')
+  const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
+  const [cardName, setCardName] = useState(mode !== "add" ? selectedCipher.card.cardholderName : "")
+  const [brand, setBrand] = useState(mode !== "add" ? selectedCipher.card.brand : "")
+  const [cardNumber, setCardNumber] = useState(mode !== "add" ? selectedCipher.card.number : "")
   const [expDate, setExpDate] = useState(
-    mode !== 'add' ? `${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}` : ''
+    mode !== "add" ? `${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}` : "",
   )
-  const [securityCode, setSecurityCode] = useState(mode !== 'add' ? selectedCipher.card.code : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
-  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
+  const [securityCode, setSecurityCode] = useState(mode !== "add" ? selectedCipher.card.code : "")
+  const [note, setNote] = useState(mode !== "add" ? selectedCipher.notes : "")
+  const [folder, setFolder] = useState(mode !== "add" ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(
-    mode === 'edit' ? selectedCipher.organizationId : null
+    mode === "edit" ? selectedCipher.organizationId : null,
   )
   const [collectionIds, setCollectionIds] = useState(
-    mode !== 'add' ? selectedCipher.collectionIds : []
+    mode !== "add" ? selectedCipher.collectionIds : [],
   )
   const [collection, setCollection] = useState(
-    mode !== 'add' && !!collectionIds ? collectionIds[0] : null
+    mode !== "add" && !!collectionIds ? collectionIds[0] : null,
   )
-  const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+  const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === 'unassigned') {
+        if (cipherStore.selectedFolder === "unassigned") {
           setFolder(null)
         } else {
           if (!selectedCollection) setFolder(cipherStore.selectedFolder)
@@ -110,7 +111,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
-    if (mode === 'add') {
+    if (mode === "add") {
       payload = newCipher(CipherType.Card)
     } else {
       // @ts-ignore
@@ -122,7 +123,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
     data.brand = brand
     data.number = cardNumber
     if (expDate) {
-      const splitDate = expDate.split('/')
+      const splitDate = expDate.split("/")
       data.expMonth = splitDate[0]
       data.expYear = splitDate[1]
     }
@@ -135,14 +136,14 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
     payload.card = data
     payload.organizationId = organizationId
 
-    let res = { kind: 'unknown' }
-    if (['add', 'clone'].includes(mode)) {
+    let res = { kind: "unknown" }
+    if (["add", "clone"].includes(mode)) {
       res = await createCipher(payload, 0, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       // for shared folder
       if (isOwner) {
         if (selectedCollection) {
@@ -164,47 +165,47 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
   // Render
   const cardDetails: InputItem[] = [
     {
-      label: translate('card.card_name'),
+      label: translate("card.card_name"),
       value: cardName,
       setter: setCardName,
       isRequired: true,
-      placeholder: '...',
+      placeholder: "...",
     },
     {
-      label: translate('card.brand'),
+      label: translate("card.brand"),
       value: brand,
       setter: setBrand,
       isSelect: true,
       options: CARD_BRANDS,
     },
     {
-      label: translate('card.card_number'),
+      label: translate("card.card_number"),
       value: cardNumber,
       setter: setCardNumber,
-      inputType: 'numeric',
-      maskType: 'credit-card',
-      placeholder: '0000 0000 0000 0000',
+      inputType: "numeric",
+      maskType: "credit-card",
+      placeholder: "0000 0000 0000 0000",
     },
     {
-      label: translate('card.exp_date'),
+      label: translate("card.exp_date"),
       value: expDate,
       setter: setExpDate,
-      inputType: 'numeric',
-      maskType: 'datetime',
+      inputType: "numeric",
+      maskType: "datetime",
       maskOptions: {
-        format: 'MM/YY',
+        format: "MM/YY",
       },
-      placeholder: 'MM/YY',
+      placeholder: "MM/YY",
     },
     {
-      label: translate('card.cvv'),
+      label: translate("card.cvv"),
       value: securityCode,
       setter: setSecurityCode,
       maskOptions: {
-        mask: '999',
+        mask: "999",
       },
-      inputType: 'numeric',
-      placeholder: '000',
+      inputType: "numeric",
+      placeholder: "000",
       isPassword: true,
     },
   ]
@@ -212,22 +213,22 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
   return (
     <Screen
       preset="auto"
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={["bottom"]}
       header={
         <Header
           title={
-            mode === 'add'
-              ? `${translate('common.add')} ${translate('common.card')}`
-              : translate('common.edit')
+            mode === "add"
+              ? `${translate("common.add")} ${translate("common.card")}`
+              : translate("common.edit")
           }
-          leftText={translate('common.cancel')}
+          leftText={translate("common.cancel")}
           onLeftPress={() => navigation.goBack()}
           RightActionComponent={
             <Button
               loading={isLoading}
               preset="teriatary"
               disabled={isLoading || !name.trim()}
-              text={translate('common.save')}
+              text={translate("common.save")}
               onPress={handleSave}
             />
           }
@@ -235,7 +236,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
       }
     >
       <View style={{ padding: 16, paddingTop: 0 }}>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: "row" }}>
           <Image
             source={BROWSE_ITEMS.card.icon}
             style={{ height: 50, width: 50, marginRight: 10, marginTop: 25 }}
@@ -244,7 +245,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
             <TextInput
               animated
               isRequired
-              label={translate('common.item_name')}
+              label={translate("common.item_name")}
               value={name}
               onChangeText={setName}
             />
@@ -253,7 +254,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
       </View>
 
       <View style={{ padding: 16, backgroundColor: colors.block }}>
-        <Text preset="label" size="base" text={translate('card.card_details').toUpperCase()} />
+        <Text preset="label" size="base" text={translate("card.card_details").toUpperCase()} />
       </View>
 
       {/* Info */}
@@ -283,10 +284,10 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
                   >
                     <View
                       style={{
-                        justifyContent: 'space-between',
-                        width: '100%',
-                        flexDirection: 'row',
-                        alignItems: 'center',
+                        justifyContent: "space-between",
+                        width: "100%",
+                        flexDirection: "row",
+                        alignItems: "center",
                       }}
                     >
                       <View>
@@ -304,7 +305,7 @@ export const CardEditScreen: FC<AppStackScreenProps<'cards__edit'>> = observer((
               <TextInput
                 isRequired={item.isRequired}
                 isPassword={item.isPassword}
-                keyboardType={item.inputType || 'default'}
+                keyboardType={item.inputType || "default"}
                 maskType={item.maskType}
                 maskOptions={item.maskOptions}
                 label={item.label}

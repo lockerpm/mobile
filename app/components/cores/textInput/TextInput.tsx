@@ -28,7 +28,6 @@ import Animated, {
 import { bin } from "react-native-redash"
 import { Icon } from "../icon/Icon"
 import { Text, TextProps } from "../text/Text"
-import { useTheme } from "app/services/context"
 import { typography } from "app/theme"
 import { useHelper } from "app/services/hook"
 import {
@@ -36,6 +35,7 @@ import {
   TextInputMaskTypeProp,
   TextInputMaskOptionProp,
 } from "react-native-masked-text"
+import { useTheme } from "app/services/context/useTheme"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>

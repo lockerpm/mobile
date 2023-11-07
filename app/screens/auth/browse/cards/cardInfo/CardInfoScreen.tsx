@@ -1,20 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { View, Image } from 'react-native'
-import { CardAction } from '../CardAction'
-import { CARD_BRANDS } from '../constants'
-import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { CipherView } from 'core/models/view'
+import React, { FC, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { View, Image } from "react-native"
+import { CardAction } from "../CardAction"
+import { CARD_BRANDS } from "../constants"
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { CipherView } from "core/models/view"
 
-import { Header, Icon, Screen, Text, TextInput } from 'app/components/cores'
-import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
-import { Textarea } from 'app/components/utils'
-import { useHelper } from 'app/services/hook'
+import { Header, Icon, Screen, Text, TextInput } from "app/components/cores"
+import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
+import { Textarea } from "app/components/utils"
+import { useHelper } from "app/services/hook"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
-export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((props) => {
+export const CardInfoScreen: FC<AppStackScreenProps<"cards__info">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
@@ -25,7 +26,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
   const selectedCipher: CipherView = cipherStore.cipherView
 
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-    selectedCipher.id
+    selectedCipher.id,
   )
 
   const [showAction, setShowAction] = useState(false)
@@ -37,12 +38,12 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
     <Screen
       preset="auto"
       padding
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={["bottom"]}
       header={
         <Header
           leftIcon="arrow-left"
           onLeftPress={() => navigation.goBack()}
-          rightIcon={!fromQuickShare ? 'dots-three' : undefined}
+          rightIcon={!fromQuickShare ? "dots-three" : undefined}
           onRightPress={() => setShowAction(true)}
         />
       }
@@ -65,9 +66,9 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
 
       <Image
         source={BROWSE_ITEMS.card.icon}
-        style={{ height: 55, width: 55, alignSelf: 'center' }}
+        style={{ height: 55, width: 55, alignSelf: "center" }}
       />
-      <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: 'center' }}>
+      <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: "center" }}>
         {selectedCipher.name}
         {notSync && (
           <View style={{ paddingLeft: 10 }}>
@@ -78,7 +79,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
 
       <TextInput
         isCopyable
-        label={translate('card.card_name')}
+        label={translate("card.card_name")}
         value={selectedCipher.card.cardholderName}
         editable={false}
         containerStyle={{ marginBottom: 16 }}
@@ -86,9 +87,9 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
 
       <TextInput
         isCopyable
-        label={translate('card.brand')}
+        label={translate("card.brand")}
         value={
-          (CARD_BRANDS.find((i) => i.value === selectedCipher.card.brand) || { label: '' }).label
+          (CARD_BRANDS.find((i) => i.value === selectedCipher.card.brand) || { label: "" }).label
         }
         editable={false}
         containerStyle={{ marginBottom: 16 }}
@@ -97,7 +98,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
       {/* Number */}
       <TextInput
         isCopyable
-        label={translate('card.card_number')}
+        label={translate("card.card_number")}
         value={selectedCipher.card.number}
         editable={false}
         containerStyle={{ marginBottom: 16 }}
@@ -106,7 +107,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
       {/* Exp date */}
       <TextInput
         isCopyable
-        label={translate('card.exp_date')}
+        label={translate("card.exp_date")}
         value={`${selectedCipher.card.expMonth}/${selectedCipher.card.expYear}`}
         editable={false}
         containerStyle={{ marginBottom: 16 }}
@@ -116,7 +117,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
       <TextInput
         isCopyable
         isPassword
-        label={translate('card.cvv')}
+        label={translate("card.cvv")}
         value={selectedCipher.card.code}
         editable={false}
         containerStyle={{ marginBottom: 16 }}
@@ -124,8 +125,8 @@ export const CardInfoScreen: FC<AppStackScreenProps<'cards__info'>> = observer((
 
       {/* Notes */}
       <Textarea
-        label={translate('common.notes')}
-        value={selectedCipher.notes || '123'}
+        label={translate("common.notes")}
+        value={selectedCipher.notes || "123"}
         editable={false}
         copyAble
         style={{ marginTop: 10 }}

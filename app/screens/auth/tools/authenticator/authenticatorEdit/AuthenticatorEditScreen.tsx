@@ -1,13 +1,14 @@
 import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
-import { AppStackScreenProps, TOOLS_ITEMS } from "app/navigators"
 import { Button, Header, ImageIcon, Screen, TextInput } from "app/components/cores"
 import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
 import { CipherType } from "core/enums"
+import { TOOLS_ITEMS } from "app/navigators/navigators.route"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 export const AuthenticatorEditScreen: FC<AppStackScreenProps<"authenticator__edit">> = observer(
   (props) => {

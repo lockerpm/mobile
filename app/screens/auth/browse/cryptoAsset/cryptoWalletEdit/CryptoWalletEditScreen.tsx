@@ -1,23 +1,24 @@
-import React, { FC, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { View, Image, TouchableOpacity } from 'react-native'
-import find from 'lodash/find'
-import { SeedPhraseInput } from './SeedPhraseInput'
-import { ChainSelect } from './ChainSelect'
-import { AppSelect } from './AppSelect'
-import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { useCipherData, useCipherHelper, useFolder, useHelper } from 'app/services/hook'
-import { CipherView } from 'core/models/view'
-import { CollectionView } from 'core/models/view/collectionView'
-import { CryptoWalletData, toCryptoWalletData } from 'app/utils/crypto'
-import { CipherType } from 'core/enums'
-import { Button, Header, Screen, TextInput, Text, Icon } from 'app/components/cores'
-import { PasswordStrength } from 'app/components/utils'
-import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
+import React, { FC, useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { View, Image, TouchableOpacity } from "react-native"
+import find from "lodash/find"
+import { SeedPhraseInput } from "./SeedPhraseInput"
+import { ChainSelect } from "./ChainSelect"
+import { AppSelect } from "./AppSelect"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
+import { CipherView } from "core/models/view"
+import { CollectionView } from "core/models/view/collectionView"
+import { CryptoWalletData, toCryptoWalletData } from "app/utils/crypto"
+import { CipherType } from "core/enums"
+import { Button, Header, Screen, TextInput, Text, Icon } from "app/components/cores"
+import { PasswordStrength } from "app/components/utils"
+import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
 
-export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit'>> = observer(
+export const CryptoWalletEditScreen: FC<AppStackScreenProps<"cryptoWallets__edit">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
@@ -37,39 +38,39 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
         return true
       }
       const org = cipherStore.myShares.find(
-        (s) => s.organization_id === selectedCipher.organizationId
+        (s) => s.organization_id === selectedCipher.organizationId,
       )
       return !!org
     })()
     // ------------------------- PARAMS ------------------------------------
 
-    const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
+    const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
 
     const [walletApp, setWalletApp] = useState(
-      mode !== 'add' ? cryptoWalletData.walletApp : { alias: null, name: null }
+      mode !== "add" ? cryptoWalletData.walletApp : { alias: null, name: null },
     )
-    const [username, setUsername] = useState(mode !== 'add' ? cryptoWalletData.username : '')
-    const [password, setPassword] = useState(mode !== 'add' ? cryptoWalletData.password : '')
-    const [pin, setPin] = useState(mode !== 'add' ? cryptoWalletData.pin || '' : '')
-    const [address, setAddress] = useState(mode !== 'add' ? cryptoWalletData.address : '')
-    const [privateKey, setPrivateKey] = useState(mode !== 'add' ? cryptoWalletData.privateKey : '')
-    const [seed, setSeed] = useState(mode !== 'add' ? cryptoWalletData.seed : '           ')
+    const [username, setUsername] = useState(mode !== "add" ? cryptoWalletData.username : "")
+    const [password, setPassword] = useState(mode !== "add" ? cryptoWalletData.password : "")
+    const [pin, setPin] = useState(mode !== "add" ? cryptoWalletData.pin || "" : "")
+    const [address, setAddress] = useState(mode !== "add" ? cryptoWalletData.address : "")
+    const [privateKey, setPrivateKey] = useState(mode !== "add" ? cryptoWalletData.privateKey : "")
+    const [seed, setSeed] = useState(mode !== "add" ? cryptoWalletData.seed : "           ")
     const [networks, setNetworks] = useState<{ alias: string; name: string }[]>(
-      mode !== 'add' ? cryptoWalletData.networks : []
+      mode !== "add" ? cryptoWalletData.networks : [],
     )
-    const [note, setNote] = useState(mode !== 'add' ? cryptoWalletData.notes : '')
+    const [note, setNote] = useState(mode !== "add" ? cryptoWalletData.notes : "")
 
-    const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
+    const [folder, setFolder] = useState(mode !== "add" ? selectedCipher.folderId : null)
     const [organizationId, setOrganizationId] = useState(
-      mode === 'edit' ? selectedCipher.organizationId : null
+      mode === "edit" ? selectedCipher.organizationId : null,
     )
     const [collectionIds, setCollectionIds] = useState(
-      mode !== 'add' ? selectedCipher.collectionIds : []
+      mode !== "add" ? selectedCipher.collectionIds : [],
     )
     const [collection, setCollection] = useState(
-      mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null
+      mode !== "add" && collectionIds.length > 0 ? collectionIds[0] : null,
     )
-    const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+    const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
 
     const [isLoading, setIsLoading] = useState(false)
     // -------------------------- COMPUTED ------------------------------
@@ -77,14 +78,14 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
     // -------------------------- EFFECTS ------------------------------
 
     useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
+      const unsubscribe = navigation.addListener("focus", () => {
         if (cipherStore.generatedPassword) {
           setPassword(cipherStore.generatedPassword)
-          cipherStore.setGeneratedPassword('')
+          cipherStore.setGeneratedPassword("")
         }
 
         if (cipherStore.selectedFolder) {
-          if (cipherStore.selectedFolder === 'unassigned') {
+          if (cipherStore.selectedFolder === "unassigned") {
             setFolder(null)
           } else {
             if (!selectedCollection) setFolder(cipherStore.selectedFolder)
@@ -110,7 +111,7 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
     const handleSave = async () => {
       setIsLoading(true)
       let payload: CipherView
-      if (mode === 'add') {
+      if (mode === "add") {
         payload = newCipher(CipherType.CryptoWallet)
       } else {
         // @ts-ignore
@@ -140,13 +141,13 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
         type: 0,
       }
 
-      let res = { kind: 'unknown' }
-      if (['add', 'clone'].includes(mode)) {
+      let res = { kind: "unknown" }
+      if (["add", "clone"].includes(mode)) {
         res = await createCipher(payload, 0, collectionIds)
       } else {
         res = await updateCipher(payload.id, payload, 0, collectionIds)
       }
-      if (res.kind === 'ok') {
+      if (res.kind === "ok") {
         if (isOwner) {
           // for shared folder
           if (selectedCollection) {
@@ -171,22 +172,22 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
     return (
       <Screen
         preset="auto"
-        safeAreaEdges={['bottom']}
+        safeAreaEdges={["bottom"]}
         header={
           <Header
             title={
-              mode === 'add'
-                ? `${translate('common.add')} ${translate('common.crypto_wallet')}`
-                : translate('common.edit')
+              mode === "add"
+                ? `${translate("common.add")} ${translate("common.crypto_wallet")}`
+                : translate("common.edit")
             }
             onLeftPress={() => navigation.goBack()}
-            leftText={translate('common.cancel')}
+            leftText={translate("common.cancel")}
             RightActionComponent={
               <Button
                 loading={isLoading}
                 preset="teriatary"
                 disabled={isLoading || !name.trim()}
-                text={translate('common.save')}
+                text={translate("common.save")}
                 onPress={handleSave}
               />
             }
@@ -194,7 +195,7 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
         }
       >
         <View style={{ padding: 16, paddingTop: 0 }}>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: "row" }}>
             <Image
               source={BROWSE_ITEMS.cryptoWallet.icon}
               style={{
@@ -208,7 +209,7 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
               <TextInput
                 animated
                 isRequired
-                label={translate('common.item_name')}
+                label={translate("common.item_name")}
                 value={name}
                 onChangeText={setName}
               />
@@ -217,7 +218,7 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
         </View>
 
         <View style={{ padding: 16, backgroundColor: colors.block }}>
-          <Text preset="label" size="base" text={translate('common.details').toUpperCase()} />
+          <Text preset="label" size="base" text={translate("common.details").toUpperCase()} />
         </View>
 
         {/* Info */}
@@ -236,7 +237,7 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
 
           <TextInput
             animated
-            label={translate('common.username')}
+            label={translate("common.username")}
             value={username}
             onChangeText={setUsername}
           />
@@ -245,7 +246,7 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
           <TextInput
             isPassword
             animated
-            label={translate('common.password')}
+            label={translate("common.password")}
             value={password}
             onChangeText={setPassword}
           />
@@ -257,24 +258,24 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
           )}
 
           <TouchableOpacity
-            onPress={() => navigation.navigate('passwordGenerator')}
+            onPress={() => navigation.navigate("passwordGenerator")}
             style={{
               marginTop: 16,
             }}
           >
             <View
               style={{
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-                alignItems: 'center',
+                justifyContent: "space-between",
+                flexDirection: "row",
+                alignItems: "center",
               }}
             >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Icon icon="repeat" size={20} color={colors.primary} />
                 <Text
                   color={colors.primary}
                   size="base"
-                  text={translate('common.generate')}
+                  text={translate("common.generate")}
                   style={{ marginLeft: 7 }}
                 />
               </View>
@@ -282,11 +283,11 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
             </View>
           </TouchableOpacity>
 
-          <TextInput animated isPassword label={'PIN'} value={pin} onChangeText={setPin} />
+          <TextInput animated isPassword label={"PIN"} value={pin} onChangeText={setPin} />
 
           <TextInput
             animated
-            label={translate('crypto_asset.wallet_address')}
+            label={translate("crypto_asset.wallet_address")}
             value={address}
             onChangeText={setAddress}
           />
@@ -294,14 +295,14 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
           <TextInput
             isPassword
             animated
-            label={translate('crypto_asset.private_key')}
+            label={translate("crypto_asset.private_key")}
             value={privateKey}
             onChangeText={setPrivateKey}
           />
 
           {/* Seed */}
           <View style={{ flex: 1, marginTop: 20 }}>
-            <Text preset="label" size="base" text={translate('crypto_asset.seed')} />
+            <Text preset="label" size="base" text={translate("crypto_asset.seed")} />
             <SeedPhraseInput seed={seed} setSeed={setSeed} />
           </View>
 
@@ -328,5 +329,5 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<'cryptoWallets__edit
         />
       </Screen>
     )
-  }
+  },
 )

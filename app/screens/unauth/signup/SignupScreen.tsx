@@ -1,7 +1,7 @@
 import React, { useState, useCallback, FC } from "react"
 import { Linking, TouchableOpacity, View } from "react-native"
-import { RootStackScreenProps } from "app/navigators"
-import { useAuthentication,  useCipherHelper, useHelper } from "app/services/hook"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
+import { useAuthentication, useCipherHelper, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { Checkbox } from "react-native-ui-lib"
 import { Screen, Text, Button, TextInput, Logo, Header } from "app/components/cores"
@@ -49,7 +49,7 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props)
 
     const res = await registerLocker(email, fullname, masterPassword, hint, passwordStrength)
     if (res.kind === "ok") {
-        navigation.navigate("login")
+      navigation.navigate("login")
     }
     setIsLoading(false)
   }

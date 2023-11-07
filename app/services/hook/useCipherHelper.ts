@@ -15,9 +15,9 @@ import { WALLET_APP_LIST } from 'app/utils/crypto/applist'
 import { PolicyType } from 'app/static/types/enum'
 import { CipherAppView, MasterPasswordPolicy, PasswordPolicy } from 'app/static/types'
 import { ImageSourcePropType } from 'react-native'
-import { BROWSE_ITEMS } from 'app/navigators'
 import { useHelper } from './useHelper'
 import { GET_LOGO_URL } from 'app/config/constants'
+import { BROWSE_ITEMS } from 'app/navigators/navigators.route'
 
 export function useCipherHelper() {
   const { translate } = useHelper()

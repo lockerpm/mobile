@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { View, Image } from 'react-native'
-import { Screen, Header, Text, TextInput, Icon } from 'app/components/cores'
-import { CryptoWalletAction } from '../CryptoWalletAction'
-import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
-import { useTheme } from 'app/services/context'
-import { useStores } from 'app/models'
-import { toCryptoWalletData } from 'app/utils/crypto'
-import { WALLET_APP_LIST } from 'app/utils/crypto/applist'
-import { CHAIN_LIST } from 'app/utils/crypto/chainlist'
-import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
-import { SeedPhraseInfo } from './SeedPhraseInfo'
-import { Textarea } from 'app/components/utils'
-import { useHelper } from 'app/services/hook'
+import React, { FC, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { View, Image } from "react-native"
+import { Screen, Header, Text, TextInput, Icon } from "app/components/cores"
+import { CryptoWalletAction } from "../CryptoWalletAction"
+import { useTheme } from "app/services/context"
+import { useStores } from "app/models"
+import { toCryptoWalletData } from "app/utils/crypto"
+import { WALLET_APP_LIST } from "app/utils/crypto/applist"
+import { CHAIN_LIST } from "app/utils/crypto/chainlist"
+import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
+import { SeedPhraseInfo } from "./SeedPhraseInfo"
+import { Textarea } from "app/components/utils"
+import { useHelper } from "app/services/hook"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
-export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info'>> = observer(
+export const CryptoWalletInfoScreen: FC<AppStackScreenProps<"cryptoWallets__info">> = observer(
   (props) => {
     const navigation = props.navigation
     const route = props.route
@@ -27,11 +28,11 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
     const selectedCipher = cipherStore.cipherView
     const cryptoWalletData = toCryptoWalletData(selectedCipher.notes)
     const selectedApp = WALLET_APP_LIST.find((a) => a.alias === cryptoWalletData.walletApp.alias)
-    const otherApp = WALLET_APP_LIST.find((a) => a.alias === 'other')
-    const otherChain = CHAIN_LIST.find((c) => c.alias === 'other')
+    const otherApp = WALLET_APP_LIST.find((a) => a.alias === "other")
+    const otherChain = CHAIN_LIST.find((c) => c.alias === "other")
 
     const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-      selectedCipher.id
+      selectedCipher.id,
     )
 
     const [showAction, setShowAction] = useState(false)
@@ -43,12 +44,12 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
       <Screen
         preset="auto"
         padding
-        safeAreaEdges={['bottom']}
+        safeAreaEdges={["bottom"]}
         header={
           <Header
             leftIcon="arrow-left"
             onLeftPress={() => navigation.goBack()}
-            rightIcon={!fromQuickShare ? 'dots-three' : undefined}
+            rightIcon={!fromQuickShare ? "dots-three" : undefined}
             onRightPress={() => setShowAction(true)}
           />
         }
@@ -76,16 +77,16 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
               height: 55,
               width: 55,
               borderRadius: 8,
-              alignSelf: 'center',
+              alignSelf: "center",
             }}
           />
         ) : (
           <Image
             source={BROWSE_ITEMS.cryptoWallet.icon}
-            style={{ height: 55, width: 55, alignSelf: 'center' }}
+            style={{ height: 55, width: 55, alignSelf: "center" }}
           />
         )}
-        <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: 'center' }}>
+        <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: "center" }}>
           {selectedCipher.name}
           {notSync && (
             <View style={{ paddingLeft: 10 }}>
@@ -98,15 +99,15 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
           <Text
             preset="label"
             size="base"
-            text={translate('crypto_asset.wallet_app')}
+            text={translate("crypto_asset.wallet_app")}
             style={{ marginBottom: 5 }}
           />
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
             {selectedApp ? (
               <View
                 style={{
                   borderRadius: 20,
-                  overflow: 'hidden',
+                  overflow: "hidden",
                   marginRight: 10,
                   borderWidth: 1,
                   borderColor: colors.border,
@@ -124,7 +125,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
                 />
               </View>
             ) : (
-              <Text text={cryptoWalletData.walletApp?.name || translate('common.none')} />
+              <Text text={cryptoWalletData.walletApp?.name || translate("common.none")} />
             )}
           </View>
         </View>
@@ -133,7 +134,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
         <TextInput
           isCopyable
           animated
-          label={translate('common.username')}
+          label={translate("common.username")}
           value={cryptoWalletData.username}
           editable={false}
         />
@@ -143,7 +144,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
           isPassword
           isCopyable
           animated
-          label={translate('common.password')}
+          label={translate("common.password")}
           value={cryptoWalletData.password}
           editable={false}
         />
@@ -152,7 +153,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
           isPassword
           animated
           isCopyable
-          label={'PIN'}
+          label={"PIN"}
           value={cryptoWalletData.pin}
           editable={false}
         />
@@ -161,7 +162,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
         <TextInput
           isCopyable
           animated
-          label={translate('crypto_asset.wallet_address')}
+          label={translate("crypto_asset.wallet_address")}
           value={cryptoWalletData.address}
           editable={false}
         />
@@ -171,7 +172,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
           isPassword
           isCopyable
           animated
-          label={translate('crypto_asset.private_key')}
+          label={translate("crypto_asset.private_key")}
           value={cryptoWalletData.privateKey}
           editable={false}
         />
@@ -184,14 +185,14 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
           <Text
             preset="label"
             size="base"
-            text={translate('crypto_asset.wallet_app')}
+            text={translate("crypto_asset.wallet_app")}
             style={{ marginBottom: 5 }}
           />
           <View
             style={{
-              flexWrap: 'wrap',
-              flexDirection: 'row',
-              alignItems: 'center',
+              flexWrap: "wrap",
+              flexDirection: "row",
+              alignItems: "center",
             }}
           >
             {cryptoWalletData.networks.length ? (
@@ -201,8 +202,8 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
                   <View
                     key={item.alias}
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
+                      flexDirection: "row",
+                      alignItems: "center",
                       marginRight: 12,
                       marginVertical: 2,
                     }}
@@ -210,7 +211,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
                     <View
                       style={{
                         borderRadius: 20,
-                        overflow: 'hidden',
+                        overflow: "hidden",
                         marginRight: 10,
                         borderWidth: 1,
                         borderColor: colors.border,
@@ -233,13 +234,13 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
                 )
               })
             ) : (
-              <Text text={translate('common.none')} />
+              <Text text={translate("common.none")} />
             )}
           </View>
         </View>
 
         <Textarea
-          label={translate('common.notes')}
+          label={translate("common.notes")}
           value={cryptoWalletData.notes}
           editable={false}
           copyAble
@@ -249,5 +250,5 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<'cryptoWallets__info
         <CipherInfoCommon cipher={selectedCipher} />
       </Screen>
     )
-  }
+  },
 )

@@ -1,13 +1,8 @@
-import React from 'react'
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { MenuScreen } from '../../screens'
-import { observer } from 'mobx-react-lite'
-
-export type MenuParamList = {
-  menu: undefined
-}
-
-export type MenuStackScreenProps<T extends keyof MenuParamList> = StackScreenProps<MenuParamList, T>
+import React from "react"
+import { createStackNavigator } from "@react-navigation/stack"
+import { MenuScreen } from "../../screens"
+import { observer } from "mobx-react-lite"
+import { MenuParamList } from "../navigators.types"
 
 const Stack = createStackNavigator<MenuParamList>()
 

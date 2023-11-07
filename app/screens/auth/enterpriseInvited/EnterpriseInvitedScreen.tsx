@@ -1,19 +1,19 @@
-import React, { FC, useEffect, useState } from 'react'
-import { Text, Screen, Button, Icon } from 'app/components/cores'
-import { ColorValue, ImageSourcePropType, TouchableOpacity, View, Image } from 'react-native'
-import { EnterpriseInvitation } from 'app/static/types'
-import { AppStackScreenProps } from 'app/navigators'
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { observer } from 'mobx-react-lite'
-import { useHelper } from 'app/services/hook'
+import React, { FC, useEffect, useState } from "react"
+import { Text, Screen, Button, Icon } from "app/components/cores"
+import { ColorValue, ImageSourcePropType, TouchableOpacity, View, Image } from "react-native"
+import { EnterpriseInvitation } from "app/static/types"
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { observer } from "mobx-react-lite"
+import { useHelper } from "app/services/hook"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 const ASSETS = {
-  user: require('assets/images/intro/user.png'),
-  org: require('assets/images/intro/organization.png'),
+  user: require("assets/images/intro/user.png"),
+  org: require("assets/images/intro/organization.png"),
 }
 
-export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'>> = observer(
+export const EnterpriseInvitedScreen: FC<AppStackScreenProps<"enterpriseInvited">> = observer(
   (props) => {
     const navigation = props.navigation
     const { enterpriseStore, user } = useStores()
@@ -21,7 +21,7 @@ export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'
     const { colors } = useTheme()
 
     const onNext = () => {
-      navigation.navigate('mainTab', { screen: user.defaultTab })
+      navigation.navigate("mainTab", { screen: user.defaultTab })
     }
     // ----------------------- PARAMS ----------------------
 
@@ -34,10 +34,10 @@ export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'
       onNext()
     }
 
-    const invitationAction = async (status: 'confirmed' | 'reject') => {
+    const invitationAction = async (status: "confirmed" | "reject") => {
       setIsLoading(true)
       const res = await enterpriseStore.invitationsActions(manaulInvitation?.id, status)
-      if (res.kind === 'ok' && status === 'confirmed') {
+      if (res.kind === "ok" && status === "confirmed") {
         user.getUserPw()
       }
       setIsLoading(false)
@@ -60,21 +60,21 @@ export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'
       <View>
         <Button
           loading={isLoading}
-          text={translate('common.accept')}
-          onPress={() => invitationAction('confirmed')}
+          text={translate("common.accept")}
+          onPress={() => invitationAction("confirmed")}
           style={{
             marginBottom: 12,
           }}
         />
         <Button
           preset="secondary"
-          text={translate('common.decline')}
-          onPress={() => invitationAction('reject')}
+          text={translate("common.decline")}
+          onPress={() => invitationAction("reject")}
           textStyle={{
             color: colors.error,
           }}
           style={{
-            width: '100%',
+            width: "100%",
             borderColor: colors.disable,
           }}
         />
@@ -82,8 +82,8 @@ export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'
     )
 
     return (
-      <Screen safeAreaEdges={['top', 'bottom']} padding footer={footer}>
-        <View style={{ alignItems: 'flex-end' }}>
+      <Screen safeAreaEdges={["top", "bottom"]} padding footer={footer}>
+        <View style={{ alignItems: "flex-end" }}>
           <TouchableOpacity
             onPress={onNext}
             style={{
@@ -91,32 +91,32 @@ export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'
               paddingLeft: 10,
             }}
           >
-            <Icon icon={'x'} size={24} />
+            <Icon icon={"x"} size={24} />
           </TouchableOpacity>
         </View>
 
         <Text
           preset="bold"
           size="xl"
-          text={translate('enterprise_invitation.invited')}
+          text={translate("enterprise_invitation.invited")}
           style={{
-            textAlign: 'center',
+            textAlign: "center",
             marginBottom: 30,
           }}
         />
 
         <Item
           leftBorderColor={colors.primary}
-          backgroundColor={'rgba(44,142,93,0.05)'}
-          label={translate('enterprise_invitation.org')}
+          backgroundColor={"rgba(44,142,93,0.05)"}
+          label={translate("enterprise_invitation.org")}
           text={manaulInvitation?.enterprise.name}
           asset={ASSETS.org}
         />
 
         <Item
-          leftBorderColor={'blue'}
-          backgroundColor={'rgba(58,75,222,0.05)'}
-          label={translate('enterprise_invitation.invited_by')}
+          leftBorderColor={"blue"}
+          backgroundColor={"rgba(58,75,222,0.05)"}
+          label={translate("enterprise_invitation.invited_by")}
           text={manaulInvitation?.owner}
           asset={ASSETS.user}
         />
@@ -130,14 +130,14 @@ export const EnterpriseInvitedScreen: FC<AppStackScreenProps<'enterpriseInvited'
           }}
         >
           <Text
-            text={translate('enterprise_invitation.accept_note')}
+            text={translate("enterprise_invitation.accept_note")}
             style={{ marginBottom: 12 }}
           />
-          <Text text={translate('enterprise_invitation.decline_note')} />
+          <Text text={translate("enterprise_invitation.decline_note")} />
         </View>
       </Screen>
     )
-  }
+  },
 )
 
 interface ItemProp {
@@ -152,8 +152,8 @@ const Item = (props: ItemProp) => (
   <View
     style={{
       borderRadius: 8,
-      overflow: 'hidden',
-      flexDirection: 'row',
+      overflow: "hidden",
+      flexDirection: "row",
       marginBottom: 12,
     }}
   >
@@ -169,7 +169,7 @@ const Item = (props: ItemProp) => (
         backgroundColor: props.backgroundColor,
         paddingLeft: 20,
         paddingVertical: 8,
-        width: '100%',
+        width: "100%",
       }}
     >
       <Text
@@ -181,8 +181,8 @@ const Item = (props: ItemProp) => (
       />
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: "row",
+          alignItems: "center",
         }}
       >
         <Image
@@ -193,7 +193,7 @@ const Item = (props: ItemProp) => (
             marginRight: 12,
           }}
         />
-        <Text style={{ maxWidth: '75%' }} preset="bold" size="large" text={props.text} />
+        <Text style={{ maxWidth: "75%" }} preset="bold" size="large" text={props.text} />
       </View>
     </View>
   </View>

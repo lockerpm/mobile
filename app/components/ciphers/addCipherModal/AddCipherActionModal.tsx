@@ -1,10 +1,10 @@
-import React from 'react'
-import { useStores } from 'app/models'
-import { BROWSE_ITEMS } from 'app/navigators'
-import { CollectionView } from 'core/models/view/collectionView'
-import { ActionSheet } from '../actionsSheet/ActionSheet'
-import { TouchableOpacity, View, Image } from 'react-native'
-import { Text } from '../../cores'
+import React from "react"
+import { useStores } from "app/models"
+import { CollectionView } from "core/models/view/collectionView"
+import { ActionSheet } from "../actionsSheet/ActionSheet"
+import { TouchableOpacity, View, Image } from "react-native"
+import { Text } from "../../cores"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 interface Props {
   isOpen: boolean
@@ -33,13 +33,20 @@ export const AddCipherActionModal = (props: Props) => {
             }
             onClose()
             navigation.navigate(`${item.routeName}__edit`, {
-              mode: 'add',
+              mode: "add",
               collection,
             })
           }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 20 }}>
-            <Image source={item.icon} style={{ height: 40, width: 40 }} resizeMode='contain' />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              paddingVertical: 12,
+              paddingHorizontal: 20,
+            }}
+          >
+            <Image source={item.icon} style={{ height: 40, width: 40 }} resizeMode="contain" />
             <Text tx={item.label} style={{ marginLeft: 12 }} />
           </View>
         </TouchableOpacity>

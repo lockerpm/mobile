@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react"
 import { AppState, Modal, Platform, View } from "react-native"
 import NetInfo from "@react-native-community/netinfo"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
-import { StackScreenProps, createStackNavigator } from "@react-navigation/stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import Toast, { BaseToastProps } from "react-native-toast-message"
 import dynamicLinks from "@react-native-firebase/dynamic-links"
@@ -34,37 +34,9 @@ import { AppEventType, EventBus } from "app/utils/eventBus"
 import { StorageKey, save } from "app/utils/storage"
 import { Logger } from "app/utils/utils"
 import { Header } from "app/components/cores"
+import { RootParamList } from "./navigators.types"
 
 const IS_IOS = Platform.OS === "ios"
-
-/**
- * This type allows TypeScript to know what routes are defined in this navigator
- * as well as what properties (if any) they might take when navigating to them.
- *
- * We recommend using MobX-State-Tree store(s) to handle state rather than navigation params.
- *
- * For more information, see this documentation:
- *   https://reactnavigation.org/docs/params/
- *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
- */
-export type RootParamList = {
-  init: undefined
-  intro: {
-    preview?: boolean
-  }
-  onBoarding: undefined
-  lock: {
-    type?: LoginMethod
-    email?: string
-  }
-  login: undefined
-  forgotPassword: undefined
-  signup: undefined
-  createMasterPassword: undefined
-  mainStack: undefined
-}
-
-export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>
 
 const Stack = createStackNavigator<RootParamList>()
 
@@ -200,7 +172,7 @@ const RootStack = observer((props: Props) => {
           name="lock"
           component={LockScreen}
           initialParams={{ type: LoginMethod.PASSWORD }}
-        />   
+        />
         <Stack.Screen
           name="mainStack"
           component={MainNavigator}

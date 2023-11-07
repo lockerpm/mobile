@@ -1,16 +1,16 @@
-import React, { FC, useState } from 'react'
-import { RootStackScreenProps } from 'app/navigators'
-import { Button, Header, Screen, TextInput } from 'app/components/cores'
+import React, { FC, useState } from "react"
+import { Button, Header, Screen, TextInput } from "app/components/cores"
 
-import { useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { ChangePassword } from './ChangePassword'
-import { MethodSelectSheet } from './methodSelecBottomSheet/BottomSheetModal'
-import Animated, { SlideInUp } from 'react-native-reanimated'
-import { View } from 'react-native'
-import { observer } from 'mobx-react-lite'
+import { useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { ChangePassword } from "./ChangePassword"
+import { MethodSelectSheet } from "./methodSelecBottomSheet/BottomSheetModal"
+import Animated, { SlideInUp } from "react-native-reanimated"
+import { View } from "react-native"
+import { observer } from "mobx-react-lite"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
 
-export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = observer(
+export const ForgotPasswordScreen: FC<RootStackScreenProps<"forgotPassword">> = observer(
   (props) => {
     const navigation = props.navigation
     const { user } = useStores()
@@ -18,11 +18,11 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = 
     // ------------------------------ PARAMS -------------------------------
 
     const [isError, setIsError] = useState(false)
-    const [username, setUsername] = useState('')
+    const [username, setUsername] = useState("")
 
     const [methods, setMethods] = useState([])
 
-    const [token, setToken] = useState('')
+    const [token, setToken] = useState("")
 
     const [isLoading, setIsLoading] = useState(false)
     const [showMethodSelectSheet, setShowMethodSelectSheet] = useState(false)
@@ -33,13 +33,13 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = 
       setIsLoading(true)
       const res = await user.recoverAccount(username)
       setIsLoading(false)
-      if (res.kind !== 'ok') {
-        if (res.kind === 'rejected') {
+      if (res.kind !== "ok") {
+        if (res.kind === "rejected") {
           notifyApiError(res)
           return
         }
         setIsError(true)
-        notify('error', translate('error.no_associated_account'))
+        notify("error", translate("error.no_associated_account"))
       } else {
         setMethods(res.data)
         setShowMethodSelectSheet(true)
@@ -50,7 +50,7 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = 
 
     return (
       <Screen
-        safeAreaEdges={['bottom']}
+        safeAreaEdges={["bottom"]}
         padding
         header={
           <Header
@@ -58,8 +58,8 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = 
             onLeftPress={() => navigation.goBack()}
             title={
               !token
-                ? translate('forgot_password.title')
-                : translate('forgot_password.set_new_password')
+                ? translate("forgot_password.title")
+                : translate("forgot_password.set_new_password")
             }
           />
         }
@@ -69,7 +69,7 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = 
             <TextInput
               animated
               isError={isError}
-              label={translate('forgot_password.username_or_email')}
+              label={translate("forgot_password.username_or_email")}
               value={username}
               onChangeText={setUsername}
               onSubmitEditing={handleRequest}
@@ -78,10 +78,10 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = 
             <Button
               loading={isLoading}
               disabled={isLoading || !username}
-              text={translate('forgot_password.request')}
+              text={translate("forgot_password.request")}
               onPress={handleRequest}
               style={{
-                width: '100%',
+                width: "100%",
                 marginTop: 16,
               }}
             />
@@ -93,7 +93,7 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = 
             <ChangePassword
               token={token}
               nextStep={() => {
-                navigation.navigate('login')
+                navigation.navigate("login")
               }}
             />
           </Animated.View>
@@ -109,5 +109,5 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<'forgotPassword'>> = 
         />
       </Screen>
     )
-  }
+  },
 )

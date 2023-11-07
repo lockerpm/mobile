@@ -1,16 +1,17 @@
-import React, { FC } from 'react'
-import { FlatList } from 'react-native'
-import { LoadingHeader } from '../LoadingHeader'
-import { ListItem } from './ListItem'
-import { BROWSE_ITEMS, ToolsStackScreenProps } from 'app/navigators'
-import { useStores } from 'app/models'
-import { useCipherHelper, useHelper } from 'app/services/hook'
-import { CipherView } from 'core/models/view'
-import { Header, Screen, Text } from 'app/components/cores'
-import { useNavigation } from '@react-navigation/native'
-import { observer } from 'mobx-react-lite'
+import React, { FC } from "react"
+import { FlatList } from "react-native"
+import { LoadingHeader } from "../LoadingHeader"
+import { ListItem } from "./ListItem"
+import { useStores } from "app/models"
+import { useCipherHelper, useHelper } from "app/services/hook"
+import { CipherView } from "core/models/view"
+import { Header, Screen, Text } from "app/components/cores"
+import { useNavigation } from "@react-navigation/native"
+import { observer } from "mobx-react-lite"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { ToolsStackScreenProps } from "app/navigators/navigators.types"
 
-export const WeakPasswordListScreen: FC<ToolsStackScreenProps<'weakPasswordList'>> = observer(
+export const WeakPasswordListScreen: FC<ToolsStackScreenProps<"weakPasswordList">> = observer(
   () => {
     const navigation = useNavigation() as any
     const { toolStore, cipherStore } = useStores()
@@ -41,7 +42,7 @@ export const WeakPasswordListScreen: FC<ToolsStackScreenProps<'weakPasswordList'
     // Go to detail
     const goToDetail = (item) => {
       cipherStore.setSelectedCipher(item)
-      navigation.navigate('passwords__info')
+      navigation.navigate("passwords__info")
     }
 
     // -------------- RENDER ------------------
@@ -52,7 +53,7 @@ export const WeakPasswordListScreen: FC<ToolsStackScreenProps<'weakPasswordList'
       <Screen
         header={
           <Header
-            title={translate('pass_health.weak_passwords.name')}
+            title={translate("pass_health.weak_passwords.name")}
             leftIcon="arrow-left"
             onLeftPress={() => navigation.goBack()}
           />
@@ -69,9 +70,9 @@ export const WeakPasswordListScreen: FC<ToolsStackScreenProps<'weakPasswordList'
           keyExtractor={(item) => item.id.toString()}
           ListEmptyComponent={
             <Text
-              text={translate('common.nothing_here')}
+              text={translate("common.nothing_here")}
               style={{
-                textAlign: 'center',
+                textAlign: "center",
                 marginTop: 20,
               }}
             />
@@ -85,5 +86,5 @@ export const WeakPasswordListScreen: FC<ToolsStackScreenProps<'weakPasswordList'
         />
       </Screen>
     )
-  }
+  },
 )

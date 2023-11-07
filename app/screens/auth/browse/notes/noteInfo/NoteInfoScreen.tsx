@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { Image, View } from 'react-native'
-import { NoteAction } from '../NoteAction'
-import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
-import { useStores } from 'app/models'
-import { Header, Icon, Screen, Text } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { CipherInfoCommon, DeletedAction } from 'app/components/ciphers'
-import { Textarea } from 'app/components/utils'
-import { useHelper } from 'app/services/hook'
+import React, { FC, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { Image, View } from "react-native"
+import { NoteAction } from "../NoteAction"
+import { useStores } from "app/models"
+import { Header, Icon, Screen, Text } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
+import { Textarea } from "app/components/utils"
+import { useHelper } from "app/services/hook"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
-export const NoteInfoScreen: FC<AppStackScreenProps<'notes__info'>> = observer((props) => {
+export const NoteInfoScreen: FC<AppStackScreenProps<"notes__info">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
 
@@ -22,7 +23,7 @@ export const NoteInfoScreen: FC<AppStackScreenProps<'notes__info'>> = observer((
   const selectedCipher = cipherStore.cipherView
 
   const notSync = [...cipherStore.notSynchedCiphers, ...cipherStore.notUpdatedCiphers].includes(
-    selectedCipher.id
+    selectedCipher.id,
   )
 
   const [showAction, setShowAction] = useState(false)
@@ -32,12 +33,12 @@ export const NoteInfoScreen: FC<AppStackScreenProps<'notes__info'>> = observer((
     <Screen
       preset="auto"
       padding
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={["bottom"]}
       header={
         <Header
           leftIcon="arrow-left"
           onLeftPress={() => navigation.goBack()}
-          rightIcon={!fromQuickShare ? 'dots-three' : undefined}
+          rightIcon={!fromQuickShare ? "dots-three" : undefined}
           onRightPress={() => setShowAction(true)}
         />
       }
@@ -61,11 +62,11 @@ export const NoteInfoScreen: FC<AppStackScreenProps<'notes__info'>> = observer((
         style={{
           height: 55,
           width: 55,
-          alignSelf: 'center',
+          alignSelf: "center",
         }}
       />
 
-      <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: 'center' }}>
+      <Text preset="bold" size="xxl" style={{ margin: 20, textAlign: "center" }}>
         {selectedCipher.name}
         {notSync && (
           <View style={{ paddingLeft: 10 }}>
@@ -75,7 +76,7 @@ export const NoteInfoScreen: FC<AppStackScreenProps<'notes__info'>> = observer((
       </Text>
 
       <Textarea
-        label={translate('common.notes')}
+        label={translate("common.notes")}
         value={selectedCipher.notes}
         editable={false}
         copyAble

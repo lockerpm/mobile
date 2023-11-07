@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC, useRef, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { TouchableOpacity, View } from 'react-native'
-import { NewFolderModal } from '../NewFolderModal'
-import { AppStackScreenProps } from 'app/navigators'
-import { useStores } from 'app/models'
-import { useFolder, useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { Header, Icon, ImageIcon, Screen, Text } from 'app/components/cores'
-import { AccountRole } from 'app/static/types'
+import React, { FC, useRef, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { TouchableOpacity, View } from "react-native"
+import { NewFolderModal } from "../NewFolderModal"
+import { useStores } from "app/models"
+import { useFolder, useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { Header, Icon, ImageIcon, Screen, Text } from "app/components/cores"
+import { AccountRole } from "app/static/types"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
-export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = observer((props) => {
+export const FolderSelectScreen: FC<AppStackScreenProps<"folders__select">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { mode, initialId, cipherIds = [] } = route.params
@@ -35,14 +35,14 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
     }
   }
   const handleMoveFolder = async () => {
-    if (mode === 'move') {
+    if (mode === "move") {
       setIsLoading(true)
       const res = await cipherStore.moveToFolder({
         ids: cipherIds,
         folderId: selectedFolder,
       })
-      if (res.kind === 'ok') {
-        notify('success', translate('folder.item_moved'))
+      if (res.kind === "ok") {
+        notify("success", translate("folder.item_moved"))
       } else {
         notifyApiError(res)
       }
@@ -54,14 +54,14 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
   }
 
   const handleMoveToCollection = async () => {
-    if (mode === 'move') {
+    if (mode === "move") {
       setIsLoading(true)
       const res = await shareFolderAddMultipleItems(
         collectionStore.collections.find((c) => c.id === selectedFolder),
-        cipherIds
+        cipherIds,
       )
-      if (res.kind === 'ok') {
-        notify('success', translate('folder.item_moved'))
+      if (res.kind === "ok") {
+        notify("success", translate("folder.item_moved"))
       }
       setIsLoading(false)
     } else {
@@ -82,12 +82,12 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
         backgroundColor: colors.background,
       }}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <ImageIcon icon={!isCollection ? 'folder' : 'folder-share'} size={30} />
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <ImageIcon icon={!isCollection ? "folder" : "folder-share"} size={30} />
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             flex: 1,
             marginLeft: 10,
           }}
@@ -95,12 +95,12 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
           <Text text={item.name} numberOfLines={2} />
 
           {[...folderStore.notSynchedFolders, ...folderStore.notUpdatedFolders].includes(
-            item.id
+            item.id,
           ) && (
-              <View style={{ marginLeft: 10 }}>
-                <Icon icon="wifi-slash" size={22} color={colors.title} />
-              </View>
-            )}
+            <View style={{ marginLeft: 10 }}>
+              <Icon icon="wifi-slash" size={22} color={colors.title} />
+            </View>
+          )}
         </View>
 
         {selectedFolder === item.id && <Icon icon="check" size={18} color={colors.primary} />}
@@ -115,11 +115,11 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
       header={
         <Header
           title={
-            mode === 'add' ? translate('folder.add_to_folder') : translate('folder.move_to_folder')
+            mode === "add" ? translate("folder.add_to_folder") : translate("folder.move_to_folder")
           }
           onLeftPress={() => navigation.goBack()}
-          leftText={translate('common.cancel')}
-          rightText={translate('common.save')}
+          leftText={translate("common.cancel")}
+          rightText={translate("common.save")}
           rightTextColor={colors.primary}
           onRightPress={handleMove}
         />
@@ -128,17 +128,19 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
       <NewFolderModal isOpen={showNewFolderModal} onClose={() => setShowNewFolderModal(false)} />
 
       <TouchableOpacity
-        onPress={() => setSelectedFolder('unassigned')}
+        onPress={() => setSelectedFolder("unassigned")}
         style={{
           backgroundColor: colors.background,
           padding: 16,
           marginBottom: 10,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text tx={'folder.no_folder'} style={{ flex: 1 }} />
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Text tx={"folder.no_folder"} style={{ flex: 1 }} />
 
-          {selectedFolder === 'unassigned' && <Icon icon="check" size={18} color={colors.primary} />}
+          {selectedFolder === "unassigned" && (
+            <Icon icon="check" size={18} color={colors.primary} />
+          )}
         </View>
       </TouchableOpacity>
 
@@ -150,10 +152,10 @@ export const FolderSelectScreen: FC<AppStackScreenProps<'folders__select'>> = ob
           padding: 16,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <ImageIcon size={30} icon="folder-add" />
 
-          <Text text={translate('folder.new_folder')} style={{ flex: 1, marginLeft: 10 }} />
+          <Text text={translate("folder.new_folder")} style={{ flex: 1, marginLeft: 10 }} />
           <Icon icon="caret-right" size={20} color={colors.title} />
         </View>
       </TouchableOpacity>

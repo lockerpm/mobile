@@ -1,19 +1,20 @@
-import React, { FC, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { Image, View } from 'react-native'
-import find from 'lodash/find'
-import { AppStackScreenProps, BROWSE_ITEMS } from 'app/navigators'
-import { useStores } from 'app/models'
-import { CipherView } from 'core/models/view'
-import { useTheme } from 'app/services/context'
-import { useCipherData, useCipherHelper, useFolder, useHelper } from 'app/services/hook'
-import { Button, Header, Screen, TextInput, Text } from 'app/components/cores'
-import { Textarea } from 'app/components/utils'
-import { CipherOthersInfo, CustomFieldsEdit } from 'app/components/ciphers'
-import { CipherType } from 'core/enums'
-import { CollectionView } from 'core/models/view/collectionView'
+import React, { FC, useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { Image, View } from "react-native"
+import find from "lodash/find"
+import { useStores } from "app/models"
+import { CipherView } from "core/models/view"
+import { useTheme } from "app/services/context"
+import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
+import { Button, Header, Screen, TextInput, Text } from "app/components/cores"
+import { Textarea } from "app/components/utils"
+import { CipherOthersInfo, CustomFieldsEdit } from "app/components/ciphers"
+import { CipherType } from "core/enums"
+import { CollectionView } from "core/models/view/collectionView"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
-export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((props) => {
+export const NoteEditScreen: FC<AppStackScreenProps<"notes__edit">> = observer((props) => {
   const navigation = props.navigation
   const route = props.route
   const { mode } = route.params
@@ -31,24 +32,24 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
       return true
     }
     const org = cipherStore.myShares.find(
-      (s) => s.organization_id === selectedCipher.organizationId
+      (s) => s.organization_id === selectedCipher.organizationId,
     )
     return !!org
   })()
   // Forms
-  const [name, setName] = useState(mode !== 'add' ? selectedCipher.name : '')
-  const [note, setNote] = useState(mode !== 'add' ? selectedCipher.notes : '')
-  const [folder, setFolder] = useState(mode !== 'add' ? selectedCipher.folderId : null)
+  const [name, setName] = useState(mode !== "add" ? selectedCipher.name : "")
+  const [note, setNote] = useState(mode !== "add" ? selectedCipher.notes : "")
+  const [folder, setFolder] = useState(mode !== "add" ? selectedCipher.folderId : null)
   const [organizationId, setOrganizationId] = useState(
-    mode === 'edit' ? selectedCipher.organizationId : null
+    mode === "edit" ? selectedCipher.organizationId : null,
   )
   const [collectionIds, setCollectionIds] = useState(
-    mode !== 'add' ? selectedCipher.collectionIds : []
+    mode !== "add" ? selectedCipher.collectionIds : [],
   )
   const [collection, setCollection] = useState(
-    mode !== 'add' && collectionIds.length > 0 ? collectionIds[0] : null
+    mode !== "add" && collectionIds.length > 0 ? collectionIds[0] : null,
   )
-  const [fields, setFields] = useState(mode !== 'add' ? selectedCipher.fields || [] : [])
+  const [fields, setFields] = useState(mode !== "add" ? selectedCipher.fields || [] : [])
 
   // Params
   const [isLoading, setIsLoading] = useState(false)
@@ -56,9 +57,9 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
   const selectedCollection: CollectionView = route.params.collection
   // Watchers
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       if (cipherStore.selectedFolder) {
-        if (cipherStore.selectedFolder === 'unassigned') {
+        if (cipherStore.selectedFolder === "unassigned") {
           setFolder(null)
         } else {
           if (!selectedCollection) setFolder(cipherStore.selectedFolder)
@@ -83,7 +84,7 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
   const handleSave = async () => {
     setIsLoading(true)
     let payload: CipherView
-    if (mode === 'add') {
+    if (mode === "add") {
       payload = newCipher(CipherType.SecureNote)
     } else {
       // @ts-ignore
@@ -96,14 +97,14 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
     payload.folderId = folder
     payload.organizationId = organizationId
 
-    let res = { kind: 'unknown' }
-    if (['add', 'clone'].includes(mode)) {
+    let res = { kind: "unknown" }
+    if (["add", "clone"].includes(mode)) {
       res = await createCipher(payload, 0, collectionIds)
     } else {
       res = await updateCipher(payload.id, payload, 0, collectionIds)
     }
 
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       if (isOwner) {
         // for shared folder
         if (selectedCollection) {
@@ -126,22 +127,22 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
   return (
     <Screen
       preset="auto"
-      safeAreaEdges={['bottom']}
+      safeAreaEdges={["bottom"]}
       header={
         <Header
           title={
-            mode === 'add'
-              ? `${translate('common.add')} ${translate('common.note')}`
-              : translate('common.edit')
+            mode === "add"
+              ? `${translate("common.add")} ${translate("common.note")}`
+              : translate("common.edit")
           }
-          leftText={translate('common.cancel')}
+          leftText={translate("common.cancel")}
           onLeftPress={() => navigation.goBack()}
           RightActionComponent={
             <Button
               preset="teriatary"
               loading={isLoading}
               disabled={isLoading || !name.trim()}
-              text={translate('common.save')}
+              text={translate("common.save")}
               onPress={handleSave}
             />
           }
@@ -149,7 +150,7 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
       }
     >
       <View style={{ padding: 16, paddingTop: 0 }}>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: "row" }}>
           <Image
             source={BROWSE_ITEMS.note.icon}
             style={{
@@ -163,7 +164,7 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
             <TextInput
               animated
               isRequired
-              label={translate('common.item_name')}
+              label={translate("common.item_name")}
               value={name}
               onChangeText={setName}
             />
@@ -172,7 +173,7 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
       </View>
 
       <View style={{ padding: 16, backgroundColor: colors.block }}>
-        <Text preset="label" size="base" text={translate('common.details').toUpperCase()} />
+        <Text preset="label" size="base" text={translate("common.details").toUpperCase()} />
       </View>
 
       <View
@@ -181,7 +182,7 @@ export const NoteEditScreen: FC<AppStackScreenProps<'notes__edit'>> = observer((
           paddingBottom: 32,
         }}
       >
-        <Textarea label={translate('common.notes')} value={note} onChangeText={setNote} />
+        <Textarea label={translate("common.notes")} value={note} onChangeText={setNote} />
       </View>
 
       {/* Custom fields */}

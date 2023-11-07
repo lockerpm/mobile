@@ -3,7 +3,6 @@ import React, { FC, useEffect, useRef, useState } from "react"
 import { Dimensions, TouchableOpacity, View, Image } from "react-native"
 import Animated from "react-native-reanimated"
 import moment from "moment"
-import { AppStackScreenProps } from "app/navigators"
 import { useCipherHelper, useHelper } from "app/services/hook"
 import { useCoreService } from "app/services/coreService"
 import { useStores } from "app/models"
@@ -16,6 +15,7 @@ import { Utils } from "app/services/coreService/utils"
 import { Button, Header, Icon, Screen, Text, Toggle, TextInput } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { ActionSheet } from "app/components/ciphers"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 const { width } = Dimensions.get("screen")
 

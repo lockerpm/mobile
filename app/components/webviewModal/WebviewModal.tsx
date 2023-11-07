@@ -4,8 +4,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { WebView } from "react-native-webview"
 import { AppEventType, EventBus } from "app/utils/eventBus"
 import { useTheme } from "app/services/context"
-import {  Icon } from "../cores"
-import { OverlayLoading } from "../utils"
+import { Icon } from "../cores"
+import { OverlayLoading } from "../utils/loading/Loading"
 
 type Props = {
   url: string

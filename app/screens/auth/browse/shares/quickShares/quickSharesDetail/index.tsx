@@ -1,5 +1,4 @@
 import { useStores } from "app/models"
-import { AppStackScreenProps } from "app/navigators"
 import { useTheme } from "app/services/context"
 import { useCipherHelper, useHelper } from "app/services/hook"
 import moment from "moment"
@@ -7,6 +6,7 @@ import React, { FC } from "react"
 import { TouchableOpacity, View, ViewStyle, Image } from "react-native"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 export const QuickSharesDetailScreen: FC<AppStackScreenProps<"quickShareItemsDetail">> = observer(
   (props) => {

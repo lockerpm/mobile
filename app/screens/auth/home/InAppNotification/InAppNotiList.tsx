@@ -2,10 +2,10 @@ import React, { FC } from "react"
 import { FlatList, View } from "react-native"
 import { Screen, Header, Text } from "app/components/cores"
 import { NotiListItem } from "./InAppNotiItem"
-import { AppStackScreenProps } from "app/navigators"
 import { useStores } from "app/models"
 import { observer } from "mobx-react-lite"
 import { useHelper } from "app/services/hook"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 export const InAppListNotificationScreen: FC<AppStackScreenProps<"app_list_noti">> = observer(
   (props) => {

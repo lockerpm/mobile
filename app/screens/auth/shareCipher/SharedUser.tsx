@@ -1,11 +1,10 @@
-// @ts-nocheck
 import React, { useState } from "react"
 import { View, Image, TouchableOpacity } from "react-native"
 import { AccountRoleText, SharedGroupType, SharedMemberType, SharingStatus } from "app/static/types"
 import { useTheme } from "app/services/context"
 import { Icon, Text } from "app/components/cores"
-import { ActionSheet } from "app/components/ciphers"
 import { useCipherData, useHelper } from "app/services/hook"
+import { ActionSheet } from "app/components/ciphers/actionsSheet/ActionSheet"
 
 interface Props {
   reload: boolean

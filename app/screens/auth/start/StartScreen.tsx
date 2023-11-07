@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from "react"
 import { useStores } from "app/models"
 import NetInfo from "@react-native-community/netinfo"
-import { AppStackScreenProps } from "app/navigators"
 import { useCipherData, useHelper } from "app/services/hook"
 import { Loading } from "app/components/utils"
 import { observer } from "mobx-react-lite"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) => {
   const { user, uiStore, enterpriseStore } = useStores()

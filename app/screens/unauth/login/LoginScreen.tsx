@@ -1,6 +1,6 @@
-import React, { FC,  useState } from "react"
+import React, { FC, useState } from "react"
 import { View } from "react-native"
-import { RootStackScreenProps } from "app/navigators"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { Screen, Text, TextInput, Button, Logo } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
@@ -35,9 +35,9 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
       if (res.data.login_method === LoginMethod.PASSWORD) {
         setLogMethod(LoginMethod.PASSWORD)
       } else {
-        navigation.navigate('lock', {
+        navigation.navigate("lock", {
           type: LoginMethod.PASSWORDLESS,
-          email: res.data.email
+          email: res.data.email,
         })
       }
     }
@@ -67,7 +67,7 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
 
   return (
     <Screen
-      preset='auto'
+      preset="auto"
       padding
       safeAreaEdges={["top", "bottom"]}
       contentContainerStyle={{ flex: 1 }}

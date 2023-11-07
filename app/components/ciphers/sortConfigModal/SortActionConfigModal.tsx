@@ -1,9 +1,10 @@
-import React from 'react'
-import { View } from 'react-native'
-import { ActionItem, ActionSheet } from 'app/components/ciphers'
-import { Text } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
+import React from "react"
+import { View } from "react-native"
+import { Text } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { useHelper } from "app/services/hook"
+import { ActionSheet } from "../actionsSheet/ActionSheet"
+import { ActionItem } from "../actionsSheet/ActionSheetItem"
 
 interface Props {
   isOpen: boolean
@@ -19,43 +20,43 @@ export const SortActionConfigModal = (props: Props) => {
   const { translate } = useHelper()
   const lastUpdateOptions = [
     {
-      label: translate('all_items.last_updated'),
-      value: 'last_updated',
+      label: translate("all_items.last_updated"),
+      value: "last_updated",
       sort: {
-        orderField: 'revisionDate',
-        order: 'desc',
+        orderField: "revisionDate",
+        order: "desc",
       },
     },
     {
-      label: translate('all_items.first_updated'),
-      value: 'first_updated',
+      label: translate("all_items.first_updated"),
+      value: "first_updated",
       sort: {
-        orderField: 'revisionDate',
-        order: 'asc',
+        orderField: "revisionDate",
+        order: "asc",
       },
     },
   ]
 
   const nameOptions = [
     {
-      label: translate('all_items.most_relevant'),
-      value: 'most_relevant',
+      label: translate("all_items.most_relevant"),
+      value: "most_relevant",
       sort: null,
     },
     {
-      label: 'A - Z',
-      value: 'az',
+      label: "A - Z",
+      value: "az",
       sort: {
-        orderField: 'name',
-        order: 'asc',
+        orderField: "name",
+        order: "asc",
       },
     },
     {
-      label: 'Z - A',
-      value: 'za',
+      label: "Z - A",
+      value: "za",
       sort: {
-        orderField: 'name',
-        order: 'desc',
+        orderField: "name",
+        order: "desc",
       },
     },
   ]
@@ -72,7 +73,7 @@ export const SortActionConfigModal = (props: Props) => {
       header={
         <View
           style={{
-            width: '100%',
+            width: "100%",
             paddingHorizontal: 20,
             borderBottomColor: colors.border,
             borderBottomWidth: 1,
@@ -80,7 +81,7 @@ export const SortActionConfigModal = (props: Props) => {
         >
           <Text
             preset="bold"
-            text={translate('common.sort')}
+            text={translate("common.sort")}
             size="large"
             style={{
               marginBottom: 10,
@@ -93,7 +94,7 @@ export const SortActionConfigModal = (props: Props) => {
         <ActionItem
           key={index}
           name={item.label}
-          icon={value === item.value ? 'check' : undefined}
+          icon={value === item.value ? "check" : undefined}
           iconColor={colors.primary}
           action={() => {
             onSelect && onSelect(item.value, item.sort)

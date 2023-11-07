@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react"
 import { Alert, BackHandler, Platform, View } from "react-native"
 import { useStores } from "app/models"
 import { useAuthentication, useHelper } from "app/services/hook"
-import { RootStackScreenProps } from "app/navigators"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
 import ReactNativeBiometrics from "react-native-biometrics"
 import { BiometricsType } from "./lock.types"
 import { LoginMethod } from "app/static/types/enum"
@@ -58,7 +58,6 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
       }
     }
   }
-
 
   const handleLogout = async () => {
     await logout()

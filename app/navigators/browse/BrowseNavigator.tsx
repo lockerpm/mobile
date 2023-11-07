@@ -1,5 +1,5 @@
-import React from 'react'
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import React from "react"
+import { createStackNavigator } from "@react-navigation/stack"
 import {
   BrowseListScreen,
   FoldersScreen,
@@ -13,34 +13,10 @@ import {
   SharedItemsScreen,
   CryptoAssetsScreen,
   QuickShareItemsScreen,
-} from '../../screens'
-import { SendView } from 'core/models/view/sendView'
-import { TxKeyPath } from 'app/i18n'
-import { ImageSourcePropType, ImageURISource } from 'react-native'
-import { observer } from 'mobx-react-lite'
+} from "../../screens"
 
-export type BrowseParamList = {
-  browseList: undefined
-  folders: undefined
-  cards: undefined
-  passwords: undefined
-  notes: undefined
-  identities: undefined
-  shares: undefined
-  sharedItems: undefined
-  quickShareItems: undefined
-  quickShareItemsDetail: {
-    send: SendView
-  }
-  shareItems: undefined
-  trash: undefined
-  cryptoWallets: undefined
-}
-
-export type BrowseStackScreenProps<T extends keyof BrowseParamList> = StackScreenProps<
-  BrowseParamList,
-  T
->
+import { observer } from "mobx-react-lite"
+import { BrowseParamList } from "../navigators.types"
 
 const Stack = createStackNavigator<BrowseParamList>()
 
@@ -69,63 +45,3 @@ export const BrowseNavigator = observer(() => {
     </Stack.Navigator>
   )
 })
-
-export type BrowseItem = {
-  label: TxKeyPath
-  icon: ImageSourcePropType & ImageURISource
-  routeName: string
-  addable?: boolean
-  group?: string
-}
-
-type BrowseItemContainer = {
-  [name: string]: BrowseItem
-}
-
-export const BROWSE_ITEMS: BrowseItemContainer = {
-  folder: {
-    label: 'common.folders',
-    icon: require('assets/images/icons/vault/folder.png'),
-    routeName: 'folders',
-  },
-  password: {
-    label: 'common.passwords',
-    icon: require('assets/images/icons/vault/password.png'),
-    routeName: 'passwords',
-    addable: true,
-  },
-  note: {
-    label: 'common.note',
-    icon: require('assets/images/icons/vault/note.png'),
-    routeName: 'notes',
-    addable: true,
-  },
-  card: {
-    label: 'common.card',
-    icon: require('assets/images/icons/vault/card.png'),
-    routeName: 'cards',
-    addable: true,
-  },
-  cryptoWallet: {
-    label: 'common.crypto_wallet',
-    icon: require('assets/images/icons/vault/crypto-wallet.png'),
-    routeName: 'cryptoWallets',
-    addable: true,
-  },
-  identity: {
-    label: 'common.identity',
-    icon: require('assets/images/icons/vault/info.png'),
-    routeName: 'identities',
-    addable: true,
-  },
-  shares: {
-    label: 'shares.shares',
-    icon: require('assets/images/icons/vault/shared.png'),
-    routeName: 'shares',
-  },
-  trash: {
-    label: 'common.trash',
-    icon: require('assets/images/icons/vault/trash.png'),
-    routeName: 'trash',
-  },
-}

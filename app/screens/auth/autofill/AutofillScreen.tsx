@@ -3,7 +3,6 @@ import React, { FC, useEffect, useState } from "react"
 import { BackHandler, NativeModules } from "react-native"
 import { AutoFillList } from "./AutofillList"
 import { parseSearchText } from "app/utils/autofillHelper"
-import { AppStackScreenProps } from "app/navigators"
 import { useCipherData, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { CipherView } from "core/models/view"
@@ -14,6 +13,7 @@ import { MAX_CIPHER_SELECTION } from "app/static/constants"
 
 import { CipherListHeader, EmptyCipherList, SortActionConfigModal } from "app/components/ciphers"
 import { observer } from "mobx-react-lite"
+import { AppStackScreenProps } from "app/navigators/navigators.types"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
