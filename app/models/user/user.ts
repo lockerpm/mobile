@@ -10,6 +10,7 @@ import {
   RegisterRequest,
   SessionLoginRequest,
   SessionOtpLoginRequest,
+  UserInvitations,
   UserTeam,
 } from 'app/static/types'
 import {
@@ -57,7 +58,7 @@ export const UserModel = types
     // Others data
     enterprise: types.maybeNull(types.frozen<Enterprise>()),
     teams: types.array(types.frozen<UserTeam>()),
-    invitations: types.array(types.string),
+    invitations: types.array(types.frozen<UserInvitations>()),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
 
@@ -397,7 +398,7 @@ export const UserModel = types
       const res = await userApi.getUserPw(self.apiToken)
       if (res.kind === 'ok') {
         self.saveUserPw(res.user)
-        if (res.user.pwd_user_type === AccountType.ENTERPRISE ) {
+        if (res.user.pwd_user_type === AccountType.ENTERPRISE) {
           const _res = await userApi.getEnterprise(self.apiToken)
           if (_res.kind === 'ok') {
             self.saveEnterprise(_res.data)

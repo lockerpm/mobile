@@ -219,7 +219,6 @@ export const MainNavigator = observer(() => {
       }
     }
   }
-
   // Web socket
   const generateSocket = () => {
     // Note: using undocumented param (https://stackoverflow.com/questions/37246446/sending-cookies-with-react-native-websockets)

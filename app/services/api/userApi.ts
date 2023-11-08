@@ -29,11 +29,8 @@ import { UserSnapshotIn as UserSnapshot } from 'app/models'
 class UserApi {
   private api: Api = api
 
-  async preloginMethod(
-    username: string
-  ): Promise<{ kind: 'ok'; data: any } | GeneralApiProblem> {
+  async preloginMethod(username: string): Promise<{ kind: 'ok'; data: any } | GeneralApiProblem> {
     try {
-
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.post(`/users/prelogin`, {
         username,
@@ -456,7 +453,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        '/cystack_platform/pm/notifcation/settings',
+        '/cystack_platform/pm/notification/settings',
         { type: 'notification' }
       )
 
@@ -482,7 +479,7 @@ class UserApi {
     try {
       this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
       const response: ApiResponse<any> = await this.api.apisauce.put(
-        `/cystack_platform/pm/notifcation/settings/${categoryId}`,
+        `/cystack_platform/pm/notification/settings/${categoryId}`,
         { mail, notification }
       )
 
