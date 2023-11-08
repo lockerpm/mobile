@@ -18,6 +18,7 @@ import {
 export class PushNotifier {
   // Request permission
   static async getPermission() {
+    await notifee.requestPermission()
     const authStatus = await messaging().requestPermission()
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||

@@ -122,16 +122,16 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
       }
     }
   }
-  const monitorApiRequest = (request) => async () => {
-    Logger.debug(
-      `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
-        request.params ? JSON.stringify(request.params) : ""
-      }`,
-    )
-  }
+  // const monitorApiRequest = (request) => async () => {
+  //   Logger.debug(
+  //     `Sending API ${request.method}  ${request.baseURL}${request.url} -- ${
+  //       request.params ? JSON.stringify(request.params) : ""
+  //     }`,
+  //   )
+  // }
 
   api.apisauce.addMonitor(monitorApiResponse)
-  api.apisauce.addAsyncRequestTransform(monitorApiRequest)
+  // api.apisauce.addAsyncRequestTransform(monitorApiRequest)
 
   // if app start from android autofill service. navigate to autofill screen
   autofillParserAndroid(props)

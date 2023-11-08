@@ -247,7 +247,6 @@ export const handleTipTrick = async (data: string | object) => {
   const tipTrickdata: TipTrickData = parseDataType(data)
   const { language } = await _getCurrentUser()
   // const isVn = language === 'vi'
-
   const text = tipTrickdata.data.title[language]
 
   notify({

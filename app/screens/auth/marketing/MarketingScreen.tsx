@@ -56,16 +56,16 @@ export const MarketingScreen = observer(() => {
           source={user.language === "en" ? IMAGE_EN : IMAGE_VI}
           style={{
             height,
-            width,
+            width: width - 40,
           }}
-          resizeMode="center"
+          resizeMode="contain"
         />
       </TouchableWithoutFeedback>
 
       <TouchableOpacity
         style={{
           position: "absolute",
-          top: "15%",
+          top: "10%",
           right: 0,
           padding: 20,
         }}
