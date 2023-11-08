@@ -7,7 +7,6 @@ export const notify = async (data: Notification) => {
     id: 'default',
     name: 'Default Channel',
   })
-
   // Display a notification
   await notifee.displayNotification({
     ...data,
@@ -18,7 +17,7 @@ export const notify = async (data: Notification) => {
         id: 'default',
         launchActivityFlags: [AndroidLaunchActivityFlag.SINGLE_TOP],
       },
-      smallIcon: 'locker_small',
+      // smallIcon: 'locker_small',
       color: '#268334',
     },
   })

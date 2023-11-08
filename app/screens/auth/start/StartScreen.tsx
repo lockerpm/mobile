@@ -29,6 +29,7 @@ export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) =>
     }
   }
 
+  console.log(user.fcmToken)
   const mounted = async () => {
     const connectionState = await NetInfo.fetch()
     // Sync
@@ -46,7 +47,7 @@ export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) =>
     setMsg(translate("start.decrypting"))
     Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
 
-    setMsg('')
+    setMsg("")
 
     // Parse push noti data
     const navigationRequest = await parsePushNotiData()

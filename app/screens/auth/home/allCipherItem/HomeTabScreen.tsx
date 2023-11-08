@@ -44,7 +44,6 @@ export const HomeTabScreen = observer(() => {
 
   const appState = useRef(AppState.currentState)
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
-
   // ------------------------ EFFECT ----------------------------
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
