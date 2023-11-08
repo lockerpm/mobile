@@ -102,6 +102,8 @@ export type ToolsStackScreenProps<T extends keyof ToolsParamList> = StackScreenP
 // ---------------------------MAIN Navigator---------------------------
 
 export type PrimaryParamList = {
+  marketing: undefined
+
   mainTab: {
     screen?: string
   }

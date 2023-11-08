@@ -226,6 +226,8 @@ export const CipherShareList = observer((props: Props) => {
     return isOwner && i.name?.includes(searchText.toLowerCase())
   })
 
+  const sharesCiphers = ciphers.filter((c) => !c.collectionIds?.length)
+
   const DATA = [
     {
       type: 2,
@@ -233,7 +235,7 @@ export const CipherShareList = observer((props: Props) => {
     },
     {
       type: 1,
-      data: [...ciphers.filter((c) => !c.collectionIds?.length)],
+      data: [...sharesCiphers],
     },
   ]
 
@@ -270,7 +272,7 @@ export const CipherShareList = observer((props: Props) => {
         style={{
           paddingHorizontal: 20,
         }}
-        sections={DATA || []}
+        sections={sharesCollection?.length + sharesCiphers?.length > 0 ? DATA : []}
         keyExtractor={(item, index) => String(index)}
         renderItem={({ item, index, section }) => (
           <View>
@@ -292,7 +294,7 @@ export const CipherShareList = observer((props: Props) => {
         )}
         ListEmptyComponent={
           emptyContent && !searchText.trim() ? (
-            <View style={{ paddingHorizontal: 20 }}>{emptyContent}</View>
+            <View style={{ paddingHorizontal: 20, flex: 1 }}>{emptyContent}</View>
           ) : (
             <View style={{ paddingHorizontal: 20 }}>
               <Text

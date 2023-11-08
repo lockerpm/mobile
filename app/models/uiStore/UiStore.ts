@@ -1,11 +1,11 @@
-import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
-import { withSetPropAction } from "../helpers/withSetPropAction"
+import { Instance, SnapshotIn, SnapshotOut, types } from 'mobx-state-tree'
+import { withSetPropAction } from '../helpers/withSetPropAction'
 import { omit } from 'ramda'
 /**
  * Model description here for TypeScript hints.
  */
 export const UiStoreModel = types
-  .model("UiStore")
+  .model('UiStore')
   .props({
     // Data
     isDark: types.maybeNull(types.boolean),
@@ -24,12 +24,15 @@ export const UiStoreModel = types
     selectedCountry: types.maybeNull(types.string),
     deepLinkAction: types.maybeNull(types.string),
     deepLinkUrl: types.maybeNull(types.string),
-    saveLogin: types.maybeNull(types.frozen<{ domain: string, username: string, password: string }>()),
+    saveLogin: types.maybeNull(
+      types.frozen<{ domain: string; username: string; password: string }>()
+    ),
     saveLastId: types.maybeNull(types.string),
     isOffline: types.maybeNull(types.boolean),
     isSelecting: types.maybeNull(types.boolean),
     isPerformOverlayTask: types.maybeNull(types.boolean),
-    hasNoMasterPwItem: types.maybeNull(types.boolean)
+    hasNoMasterPwItem: types.maybeNull(types.boolean),
+    isShowedPopupMarketing: types.maybeNull(types.boolean),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -42,9 +45,14 @@ export const UiStoreModel = types
       self.isOffline = isOffline
     },
 
+    setIsShowedPopupMarketing: (val: boolean) => {
+      self.isShowedPopupMarketing = val
+    },
+
     setShowWelcomePremium: (val: boolean) => {
       self.showWelcomePremium = val
     },
+
     setIsShowedAppReview: (val: boolean) => {
       self.isShowedAppReview = val
     },
@@ -56,7 +64,6 @@ export const UiStoreModel = types
     setShowedAppReview: (val: number) => {
       self.inAppReviewShowDate = val
     },
-
 
     setIsDark: (isDark: boolean) => {
       self.isDark = isDark
@@ -114,25 +121,27 @@ export const UiStoreModel = types
     setLockResendOtpResetPasswordTime(val: number) {
       self.lockResendOtpResetPasswordTime = val
     },
-
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .postProcessSnapshot(omit([
-    'isSelecting',
-    'isOffline',
-    'isPerformOverlayTask',
-    'isFromAutoFillItem',
-    'isOnSaveLogin',
-    'selectedCountry',
-    'deepLinkAction',
-    'deepLinkUrl',
-    'saveLogin',
-    'saveLastId',
-    'hasNoMasterPwItem',
-    'isDeeplinkShares',
-    'isDeeplinkEmergencyAccess'
-  ]))
+  .postProcessSnapshot(
+    omit([
+      'isSelecting',
+      'isOffline',
+      'isPerformOverlayTask',
+      'isFromAutoFillItem',
+      'isOnSaveLogin',
+      'selectedCountry',
+      'deepLinkAction',
+      'deepLinkUrl',
+      'saveLogin',
+      'saveLastId',
+      'hasNoMasterPwItem',
+      'isDeeplinkShares',
+      'isDeeplinkEmergencyAccess',
+      'isShowedPopupMarketing',
+    ])
+  )
 
-export interface UiStore extends Instance<typeof UiStoreModel> { }
-export interface UiStoreSnapshotOut extends SnapshotOut<typeof UiStoreModel> { }
-export interface UiStoreSnapshotIn extends SnapshotIn<typeof UiStoreModel> { }
+export interface UiStore extends Instance<typeof UiStoreModel> {}
+export interface UiStoreSnapshotOut extends SnapshotOut<typeof UiStoreModel> {}
+export interface UiStoreSnapshotIn extends SnapshotIn<typeof UiStoreModel> {}
 export const createUiStoreDefaultModel = () => types.optional(UiStoreModel, {})

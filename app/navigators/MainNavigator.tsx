@@ -75,6 +75,7 @@ import { AppEventType, EventBus } from "app/utils/eventBus"
 import { observer } from "mobx-react-lite"
 import { withIAPContext } from "react-native-iap"
 import { PrimaryParamList } from "./navigators.types"
+import { MarketingScreen } from "app/screens/auth/marketing/MarketingScreen"
 
 const Stack = createStackNavigator<PrimaryParamList>()
 
@@ -412,6 +413,15 @@ export const MainNavigator = observer(() => {
         }}
       >
         <Stack.Screen name="start" component={StartScreen} />
+        <Stack.Screen
+          name="marketing"
+          component={MarketingScreen}
+          options={{
+            presentation: "transparentModal",
+            detachPreviousScreen: false,
+          }}
+        />
+
         <Stack.Screen name="enterpriseInvited" component={EnterpriseInvitedScreen} />
         <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
