@@ -48,7 +48,12 @@ export const HomeTabScreen = observer(() => {
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
   // ------------------------ EFFECT ----------------------------
   useEffect(() => {
-    if (!uiStore.isShowedPopupMarketing) {
+    if (
+      !uiStore.isShowedPopupMarketing &&
+      !user.isLifeTimeFamilyPlan &&
+      !user.isLifeTimePremiumPlan &&
+      user.pwd_user_type !== "enterprise"
+    ) {
       navigation.navigate("marketing")
     }
     const subscription = AppState.addEventListener("change", (nextAppState) => {

@@ -1147,6 +1147,7 @@
   "passkey": {
     "error": {
       "user_cancel": "The user cancelled the request.",
+      "no_credential": "No viable credential is available for the the user.",
       "login_failed": "Failed to log in with passkey."
     },
     "sign_up": {

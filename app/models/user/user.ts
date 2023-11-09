@@ -15,6 +15,7 @@ import {
   SessionLoginRequest,
   SessionOtpLoginRequest,
   SocialLoginRequest,
+  UserInvitations,
   UserSubscripePlan,
   UserTeam,
 } from 'app/static/types'
@@ -66,7 +67,7 @@ export const UserModel = types
     enterprise: types.maybeNull(types.frozen<Enterprise>()),
     teams: types.array(types.frozen<UserTeam>()),
     plan: types.maybeNull(types.frozen<UserSubscripePlan>()),
-    invitations: types.array(types.string),
+    invitations: types.array(types.frozen<UserInvitations>()),
     introShown: types.maybeNull(types.boolean),
     biometricIntroShown: types.maybeNull(types.boolean),
 

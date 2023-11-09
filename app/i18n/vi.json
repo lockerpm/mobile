@@ -1141,6 +1141,7 @@
   "passkey": {
     "error": {
       "user_cancel": "Người dùng huỷ yêu cầu.",
+      "no_credential": "Không có thông tin xác thực khả thi có sẵn cho người dùng.",
       "login_failed": "Đăng nhập bằng passkey thất bại."
     },
     "sign_up": {

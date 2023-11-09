@@ -46,8 +46,8 @@ export const MarketingScreen = observer(() => {
     >
       <TouchableWithoutFeedback
         onPress={() => {
-          Linking.canOpenURL("https://locker.io/promo/cyber-month-2023").then((val) => {
-            if (val) Linking.openURL("https://locker.io/promo/cyber-month-2023")
+          Linking.canOpenURL("https://locker.io/promo/cyber-month-2023?utm_source=app&utm_medium=popup&utm_campaign=cybersale&utm_term=1").then((val) => {
+            if (val) Linking.openURL("https://locker.io/promo/cyber-month-2023?utm_source=app&utm_medium=popup&utm_campaign=cybersale&utm_term=1")
           })
           goBack()
         }}

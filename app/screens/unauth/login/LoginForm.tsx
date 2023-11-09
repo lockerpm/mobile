@@ -116,6 +116,7 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
         const authRequest: PasskeyAuthenticationRequest = credentialAuthOptions(
           resAuthPasskeyOptions.data,
         )
+        console.log(authRequest)
         // Call the `authenticate` method with the retrieved request in JSON format
         // A native overlay will be displayed
         const result: PasskeyAuthenticationResult = await Passkey.authenticate(authRequest, {
@@ -149,9 +150,13 @@ export const LoginForm = ({ nextStep, onLoggedIn, handleForgot }: Props) => {
         // Handle Error...
         if (error.error === "UserCancelled") {
           notify("error", translate("passkey.error.user_cancel"))
+        } else if (error.error === "NotCredentials") {
+          notify("error", translate("passkey.error.no_credential"))
         } else {
           notify("error", translate("error.something_went_wrong"))
         }
+
+        console.log(error)
         setLoginMethod(METHOD.PASSWORD)
       }
     } else {
