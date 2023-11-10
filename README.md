@@ -53,13 +53,13 @@ cd mobile
 
 ### Buld and debug
 
-Install dependencies
+Install dependencies.
 
 ```sh
 yarn
 ```
 
-Replace locker.selfhost bundle id with your id and edit android app package name
+Replace locker.selfhost bundle ID with your ID and edit Android app package name.
 
 ```sh
 yarn self-host
@@ -67,7 +67,7 @@ yarn self-host
 
 Then enter your app bundle id vs [Team ID](https://developer.apple.com/account#MembershipDetailsCard).
 
-After the process is complete successfuly. You can run app in iOS or android
+After the process is complete successfuly. You can run app in iOS or Android.
 
 ```sh
 yarn ios
