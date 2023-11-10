@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { View, FlatList } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import { useStores } from 'app/models'
-import { CipherView } from 'core/models/view'
-import { CipherType } from 'core/enums'
-import { CipherListItem } from 'app/components/ciphers'
-import { PasswordAction } from 'app/screens/auth/browse/passwords/PasswordAction'
-import { CardAction } from 'app/screens/auth/browse/cards/CardAction'
-import { IdentityAction } from 'app/screens/auth/browse/identities/IdentityAction'
-import { NoteAction } from 'app/screens/auth/browse/notes/NoteAction'
-import { CryptoWalletAction } from 'app/screens/auth/browse/cryptoAsset/CryptoWalletAction'
+import React, { useState, useEffect } from "react"
+import { View, FlatList } from "react-native"
+import { observer } from "mobx-react-lite"
+import { useStores } from "app/models"
+import { CipherView } from "core/models/view"
+import { CipherType } from "core/enums"
+import { CipherListItem } from "app/components/ciphers"
+import { PasswordAction } from "app/screens/auth/browse/passwords/PasswordAction"
+import { CardAction } from "app/screens/auth/browse/cards/CardAction"
+import { IdentityAction } from "app/screens/auth/browse/identities/IdentityAction"
+import { NoteAction } from "app/screens/auth/browse/notes/NoteAction"
+import { CryptoWalletAction } from "app/screens/auth/browse/cryptoAsset/CryptoWalletAction"
 
 export interface CipherListProps {
   ciphers: any[]
@@ -33,7 +33,7 @@ export const CipherList = observer((props: CipherListProps) => {
   const [showIdentityAction, setShowIdentityAction] = useState(false)
   const [showCardAction, setShowCardAction] = useState(false)
   const [showCryptoWalletAction, setShowCryptoWalletAction] = useState(false)
-  const [checkedItem, setCheckedItem] = useState('')
+  const [checkedItem, setCheckedItem] = useState("")
 
   // ------------------------ COMPUTED ----------------------------
 
@@ -130,9 +130,6 @@ export const CipherList = observer((props: CipherListProps) => {
 
       {/* Cipher list */}
       <FlatList
-        style={{
-          paddingHorizontal: 20,
-        }}
         data={ciphers}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}

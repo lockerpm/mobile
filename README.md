@@ -44,12 +44,12 @@ cd mobile
     - Push Notification
 2.  Go to https://appstoreconnect.apple.com/apps, create new app with the bundle ID
 3.  Create a Firebase iOS App with the bundle ID then download GoogleService-Info.plist and configure Firebase Cloud Messaging for iOS App
-4.  Open mobile/iOS/Firebase/Prod (create if not exist) then move the file GoogleService-Info.plist just downloaded to the folder
+4.  Open mobile/ios/Firebase/Prod (create if not exist) then move the file GoogleService-Info.plist just downloaded to the folder
 
 ### Android
 
 1. Generate signing key and set up Gradle variables flow [This Docs](https://reactnative.dev/docs/signed-apk-android)
-2. Create Firebase Android App with the bundle ID (recommend bundle is same ios app bundle ID) then download google-services.json file and move the file to the Android app
+2. Create Firebase Android App with the bundle ID (recommend bundle is same iOS app bundle ID) then download google-services.json file and move the file to the Android app
 
 ### Buld and debug
 
@@ -67,7 +67,7 @@ yarn self-host
 
 Then enter your app bundle id vs [Team ID](https://developer.apple.com/account#MembershipDetailsCard).
 
-After the process is complete successfuly. You can run app in ios or android
+After the process is complete successfuly. You can run app in iOS or android
 
 ```sh
 yarn ios
