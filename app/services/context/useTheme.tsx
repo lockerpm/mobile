@@ -1,5 +1,5 @@
-import { colorsDark, colorsLight } from 'app/theme'
-import React, { createContext, useContext, useState } from 'react'
+import { colorsDark, colorsLight } from "app/theme"
+import React, { createContext, useContext, useState } from "react"
 
 const ThemeContext: React.Context<{
   isDark: boolean
@@ -19,7 +19,7 @@ function ThemeContextProvider({ children }) {
       value={{
         isDark,
         setIsDark,
-        colors: isDark ? colorsDark : colorsLight,
+        colors: isDark ? colorsLight : colorsLight,
       }}
     >
       {children}
