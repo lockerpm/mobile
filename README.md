@@ -25,7 +25,7 @@ Set up the Backend server before running this project. Follow [Backend Setup](ht
 
 ### Environment variables
 
-After you set up your backend server successfully, you must manually set your API endpoints and web socket settings by creating a `app/config/.env` with the following `app/config/env.example.js` content.
+After you set up your backend server successfully, you must manually set your API endpoints and web socket settings by creating a `app/config/.env` with the following `app/config/environment.example.js` content.
 
 ## Configuration
 
