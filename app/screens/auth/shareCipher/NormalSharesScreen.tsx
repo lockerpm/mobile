@@ -167,7 +167,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<"normal_shares">> = obse
       }, 500)
       return () => clearTimeout(timeout)
     }
-    return null
+    return undefined
   }, [email])
 
   useEffect(() => {

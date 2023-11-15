@@ -1,12 +1,11 @@
-import React, { memo } from 'react'
-import { TouchableOpacity, View, Image } from 'react-native'
-import isEqual from 'lodash/isEqual'
-import { Icon, Text, Toggle } from 'app/components/cores'
-import { AccountRole } from 'app/static/types'
-import { CipherView } from 'core/models/view'
-import { useTheme } from 'app/services/context'
-import { PremiumTag } from 'app/components/utils'
-import { useHelper } from 'app/services/hook'
+import React, { memo } from "react"
+import { TouchableOpacity, View, Image } from "react-native"
+import isEqual from "lodash/isEqual"
+import { Icon, Text, Toggle } from "app/components/cores"
+import { AccountRole } from "app/static/types"
+import { CipherView } from "core/models/view"
+import { useTheme } from "app/services/context"
+import { useHelper } from "app/services/hook"
 
 type Prop = {
   item: CipherSharedType
@@ -41,19 +40,19 @@ export const CipherSharedListItem = memo(
         return item.description
       }
 
-      let shareType = ''
+      let shareType = ""
       if (org) {
         switch (org.type) {
           case AccountRole.MEMBER:
             // shareType = item.viewPassword ? translate('shares.share_type.view') : translate('shares.share_type.only_fill')
-            shareType = translate('shares.share_type.view')
+            shareType = translate("shares.share_type.view")
             break
           case AccountRole.ADMIN:
-            shareType = translate('shares.share_type.edit')
+            shareType = translate("shares.share_type.edit")
             break
         }
       }
-      return org ? `${org.name} - ${shareType}` : ''
+      return org ? `${org.name} - ${shareType}` : ""
     }
 
     return (
@@ -74,7 +73,7 @@ export const CipherSharedListItem = memo(
           height: 70.5,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
             source={item.imgLogo}
             style={{
@@ -85,13 +84,29 @@ export const CipherSharedListItem = memo(
           />
 
           <View style={{ flex: 1, marginLeft: 12 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View style={{ flex: 1 }}>
                 <Text preset="bold" text={item.name} numberOfLines={1} />
               </View>
 
               {/* Pending status */}
-              {item.isShared && <PremiumTag />}
+              {item.isShared && (
+                <View
+                  style={{
+                    paddingHorizontal: 10,
+                    paddingVertical: 2,
+                    backgroundColor: colors.warning,
+                    borderRadius: 3,
+                  }}
+                >
+                  <Text
+                    text={translate("common.pending")}
+                    preset="bold"
+                    size="small"
+                    color={colors.background}
+                  />
+                </View>
+              )}
 
               {item.notSync && (
                 <View style={{ marginLeft: 10 }}>
@@ -137,7 +152,7 @@ export const CipherSharedListItem = memo(
     )
   },
   (prev, next) => {
-    const whitelist = ['toggleItemSelection', 'openActionMenu']
+    const whitelist = ["toggleItemSelection", "openActionMenu"]
     const prevProps = Object.keys(prev)
     const nextProps = Object.keys(next)
     if (!isEqual(prevProps, nextProps)) {
@@ -150,5 +165,5 @@ export const CipherSharedListItem = memo(
       return val && isEqual(prev[key], next[key])
     }, true)
     return isPropsEqual
-  }
+  },
 )

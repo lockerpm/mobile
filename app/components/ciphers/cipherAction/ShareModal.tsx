@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useEffect, useState } from "react"
-import { TextInput, View, Modal, TouchableOpacity, Image, FlatList } from "react-native"
+import { View, Modal, TouchableOpacity, Image, FlatList } from "react-native"
 import {
   GroupMemberData,
   GroupData,
@@ -13,7 +13,7 @@ import { useCipherData, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { CipherView } from "core/models/view"
 import { AppEventType, EventBus } from "app/utils/eventBus"
-import { Button, Icon, Text } from "app/components/cores"
+import { Button, Header, Icon, Text, TextInput } from "app/components/cores"
 import { SharedUsers } from "app/screens/auth/shareCipher/SharedUser"
 
 interface Props {
@@ -197,7 +197,7 @@ export const ShareModal = (props: Props) => {
     <View>
       <View
         style={{
-          marginTop: 8,
+          marginTop: 16,
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "flex-start",
@@ -232,6 +232,7 @@ export const ShareModal = (props: Props) => {
           style={{
             width: "100%",
             flexDirection: "row",
+            marginVertical: 12,
           }}
         >
           <TouchableOpacity
@@ -252,6 +253,9 @@ export const ShareModal = (props: Props) => {
             clearTextOnFocus={true}
             onSubmitEditing={() => {
               addEmail(email)
+            }}
+            containerStyle={{
+              flex: 1,
             }}
             style={{
               color: colors.title,
@@ -453,34 +457,29 @@ export const ShareModal = (props: Props) => {
         reset()
       }}
     >
-      <View style={{ flex: 1, backgroundColor: colors.background, padding: 16 }}>
-        <View
-          style={{
-            marginTop: 10,
-            height: 40,
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <Icon icon="x" size={18} onPress={() => onClose()} />
-          {page === 0 && (
-            <TouchableOpacity
+      <Header
+        leftIcon="x-circle"
+        onLeftPress={() => onClose()}
+        containerStyle={{
+          paddingTop: 0,
+        }}
+        RightActionComponent={
+          page === 0 && (
+            <Button
+              preset="teriatary"
               disabled={emails?.length < 1 && groups.length < 1}
               onPress={() => {
                 handleShare()
               }}
-            >
-              <Text
-                text={translate("common.done")}
-                style={{
-                  color: emails?.length > 0 || groups.length > 0 ? colors.primary : colors.disable,
-                }}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-
+              text={translate("common.done")}
+              textStyle={{
+                color: emails?.length > 0 || groups.length > 0 ? colors.primary : colors.disable,
+              }}
+            />
+          )
+        }
+      />
+      <View style={{ flex: 1, backgroundColor: colors.background, paddingHorizontal: 16 }}>
         {page === 0 && renderAddUser()}
         {page === 1 && renderManageShare()}
       </View>
