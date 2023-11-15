@@ -2318,7 +2318,7 @@ export function useCipherData() {
       const userId = await userService.getUserId()
       await syncService.syncSends(userId, res)
     } catch (error) {
-      console.log(error)
+      Logger.error(error)
     }
     cipherStore.setLastSyncQuickShare()
   }
