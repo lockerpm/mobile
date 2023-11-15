@@ -3,8 +3,9 @@ const input = require("prompt-sync")({ sigint: true })
 const fs = require("fs")
 const path = require("path")
 
-const LOCKER_BUNDLE_ID_SELFHOST = 'com.cystack.locker.selfhost'
-const LOCKER_TEAM_ID = 'W7S57TNBH5'
+const LOCKER_BUNDLE_ID_SELFHOST = "com.cystack.locker.selfhost"
+const LOCKER_TEAM_ID = "W7S57TNBH5"
+const LOCKER_APP_NAME = "SHLocker"
 
 // const appDir = path.dirname(require.main.filename);
 
@@ -111,9 +112,11 @@ function deleteOldAndroidPackage({ paths, oldPackage, package }) {
   }
 }
 
-// Get custom self hosted app bundle id and apple development team id
+// Get custom self hosted app name, bundle id and apple development team id
+let appName = input("Enter app name: ")
 let bundleId = input("Enter app bundleId: ")
 let teamId = input("Enter apple development team: ")
+appName = appName.trim()
 bundleId = bundleId.trim()
 teamId = teamId.trim()
 
@@ -134,6 +137,7 @@ const replaceBundleIdOptions = {
     "./android/app/build.gradle",
     "./android/app/proguard-rules.pro",
     "./android/app/src/main/AndroidManifest.xml",
+    "./android/app/src/main/res/values/strings.xml",
     "./android/app/src/**/**/**/**/**/**/*.java",
     "./android/app/src/**/**/**/**/**/**/**/*.java",
     "./android/app/src/**/**/**/**/**/**/**/**/*.java",
@@ -151,8 +155,12 @@ const replaceBundleIdOptions = {
   ],
 
   // test selfhosted bundle id , teamid
-  from: [new RegExp(LOCKER_BUNDLE_ID_SELFHOST, "g"), new RegExp(LOCKER_TEAM_ID, "g")],
-  to: [bundleId, teamId],
+  from: [
+    new RegExp(LOCKER_BUNDLE_ID_SELFHOST, "g"),
+    new RegExp(LOCKER_TEAM_ID, "g"),
+    new RegExp(LOCKER_APP_NAME, "g"),
+  ],
+  to: [bundleId, teamId, appName],
 }
 
 // // Replacing process
