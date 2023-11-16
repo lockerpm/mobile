@@ -1,7 +1,7 @@
 <resources>
     <string name="mp_title">SHLocker Password Manager</string>
-    <string name="mp_subtitle">Enter your Master Password to unlock</string>
-    <string name="mp_master_pass">Master Password</string>
+    <string name="mp_subtitle">Enter your Password to unlock</string>
+    <string name="mp_master_pass">Password</string>
     <string name="mp_login">Unlock</string>
     <string name="mp_faceid">Use Face id/Touch id</string>
     <string name="cancel">Cancel</string>

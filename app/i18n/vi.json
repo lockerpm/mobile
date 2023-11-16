@@ -34,7 +34,7 @@
     "edit": "Sửa",
     "email": "Email",
     "enterprise": "Doanh nghiệp",
-    "enter_master_pass": "Nhập Master Password",
+    "enter_master_pass": "Nhập mật khẩu",
     "expired": "Hết hạn",
     "faceID_unlocking": "Mở khóa bằng Face ID",
     "female": "Nữ",
@@ -57,7 +57,7 @@
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
     "male": "Nam",
-    "master_pass": "Master Password",
+    "master_pass": "Mật khẩu",
     "max": "Tối đa",
     "minute": "phút",
     "minutes": "phút",
@@ -157,7 +157,7 @@
   "error": {
     "master_password": "Không thể tự động tạo Siêu Mật Khẩu tự động",
     "not_supported": "Không hỗ trợ",
-    "not_valid_for_biometric": "Bạn cần nhập lại Master Password để kích hoạt lại FaceID/TouchID",
+    "not_valid_for_biometric": "Bạn cần nhập lại mật khẩu để kích hoạt lại FaceID/TouchID",
     "biometric_not_enable": "Mở khóa bằng Face ID/Touch ID chưa được kích hoạt",
     "biometric_not_support": "Thiết bị không hỗ trợ mở khóa bằng Face ID/Touch ID",
     "biometric_unlock_failed": "Xác thực bằng Face ID/Touch ID không thành công",
@@ -218,7 +218,7 @@
     "done": "Hoàn tất",
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
     "invitation_rejected": "Đã từ chối lời mời",
-    "master_password_updated": "Master Password đã được cập nhật",
+    "master_password_updated": "Mật khẩu đã được cập nhật",
     "locker_password_updated": "Mật khẩu Locker đã được cập nhật",
     "biometric_enabled": "Mở khóa bằng Face ID/Touch ID đã được kích hoạt",
     "cipher_created": "Thêm mới thành công",
@@ -253,7 +253,7 @@
       "email": "Địa chỉ email",
       "exist_error": "Địa chỉ liên hệ khẩn cấp đã được thêm trước đó",
       "view": "Có thể xem tất cả mục trong kho của bạn",
-      "takeover": "Có thể đặt lại Master Password của bạn",
+      "takeover": "Có thể đặt lại mật khẩu của bạn",
       "wait_time": "Thời gian chờ",
       "text": "Thời gian cần thiết trước khi tự động cấp quyền truy cập",
       "day": "ngày",
@@ -261,9 +261,9 @@
     },
     "view_vault": "Xem kho dữ liệu",
     "takeover_vault": "Chiếm quyền kho dữ liệu",
-    "reset_master_pw": "Đặt lại Master Password",
+    "reset_master_pw": "Đặt lại mật khẩu",
     "reset_pw": "Đặt lại mật khẩu Locker",
-    "reset_master_pw_user": "Đặt lại Master Password cho {{name}}",
+    "reset_master_pw_user": "Đặt lại mật khẩu cho {{name}}",
     "reset_pw_user": "Đặt lại mật khẩu Locker cho {{name}}",
     "change_pw": {
       "title": "Đặt lại mật khẩu",
@@ -271,7 +271,7 @@
       "confirm": "Xác nhận mật khẩu"
     },
     "change_master_pass": {
-      "title": "Đăt lại Master Password"
+      "title": "Đăt lại mật khẩu"
     },
     "view_user_vault": "Bạn đang xem tất cả các mục trong kho của {{name}}",
     "pending_trusted": "{{count}} yêu cầu",
@@ -300,19 +300,19 @@
     "strong": "Mạnh"
   },
   "create_master_pass": {
-    "title": "Tạo Master Password",
-    "desc": "Master Password là mật khẩu mở khóa Locker của bạn. Đây là mật khẩu duy nhất bạn cần nhớ để truy cập tất cả các mật khẩu khác được lưu trữ trong Locker. Vui lòng không chia sẻ mật khẩu này với bất kỳ ai.",
-    "confirm_master_pass": "Xác nhận Master Password",
+    "title": "Tạo mật khẩu",
+    "desc": "mật khẩu là mật khẩu mở khóa Locker của bạn. Đây là mật khẩu duy nhất bạn cần nhớ để truy cập tất cả các mật khẩu khác được lưu trữ trong Locker. Vui lòng không chia sẻ mật khẩu này với bất kỳ ai.",
+    "confirm_master_pass": "Xác nhận mật khẩu",
     "hint": "Gợi ý (không bắt buộc)",
     "btn": "Tạo mật khẩu",
-    "note": "Lưu ý: Locker không thể xem, không thể lưu trữ, cũng như không thể cấp lại Master Password trong trường hợp bạn quên hoặc đánh mất."
+    "note": "Lưu ý: Locker không thể xem, không thể lưu trữ, cũng như không thể cấp lại mật khẩu trong trường hợp bạn quên hoặc đánh mất."
   },
   "confirm_create_master_pass": {
     "title": "Quan trọng",
-    "desc": "Khi tiếp tục, bạn đã hiểu rằng đội ngũ Locker không thể nhìn, thay đổi, hoặc cấp lại Master Password của bạn trong trường hợp bạn quên Master Password. Bạn là người duy nhất sở hữu Master Password.",
+    "desc": "Khi tiếp tục, bạn đã hiểu rằng đội ngũ Locker không thể nhìn, thay đổi, hoặc cấp lại mật khẩu của bạn trong trường hợp bạn quên mật khẩu. Bạn là người duy nhất sở hữu mật khẩu.",
     "link": "Xem thêm.",
     "next_btn": "Tôi đã hiểu",
-    "back_btn": "Tôi muốn thay đổi Master Password"
+    "back_btn": "Tôi muốn thay đổi mật khẩu"
   },
   "intro": {
     "security": {
@@ -333,10 +333,10 @@
     }
   },
   "lock": {
-    "master_pass_changed": "Master Password đã thay đổi. Vui lòng đăng nhập bằng mật khẩu mới",
-    "hint_sent": "Gợi ý Master Password đã được gửi. Vui lòng kiểm tra email của bạn để được hướng dẫn",
+    "master_pass_changed": "mật khẩu đã thay đổi. Vui lòng đăng nhập bằng mật khẩu mới",
+    "hint_sent": "Gợi ý mật khẩu đã được gửi. Vui lòng kiểm tra email của bạn để được hướng dẫn",
     "title": "Chào mừng trở lại!",
-    "desc": "Nhập Master Password của bạn để đăng nhập",
+    "desc": "Nhập mật khẩu của bạn để đăng nhập",
     "get_hint": "Nhận gợi ý"
   },
   "onBoarding": {
@@ -523,8 +523,8 @@
     }
   },
   "password": {
-    "locker_master_password": "Master Password Locker",
-    "master_password_note": "Đây là Master Password Locker của bạn. Mật khẩu này sẽ tự động thay đổi khi bạn thay đổi Master Password trong phần Cài Đặt. Chúng tôi tạo ra mục này để bạn xem lại khi quên Master Password. Đừng lo, việc tái tạo Master Password diễn ra ngay tại thiết bị của bạn, đội ngũ Locker vẫn không thể xem, sửa, can thiệp tới Master Password của bạn.",
+    "locker_master_password": "Mật khẩu Locker",
+    "master_password_note": "Đây là mật khẩu Locker của bạn. Mật khẩu này sẽ tự động thay đổi khi bạn thay đổi mật khẩu trong phần Cài Đặt. Chúng tôi tạo ra mục này để bạn xem lại khi quên mật khẩu. Đừng lo, việc tái tạo mật khẩu diễn ra ngay tại thiết bị của bạn, đội ngũ Locker vẫn không thể xem, sửa, can thiệp tới mật khẩu của bạn.",
     "login_details": "Thông tin đăng nhập",
     "username": "Email / Tên người dùng",
     "website_url": "Địa chỉ website",
@@ -628,7 +628,7 @@
     }
   },
   "change_master_pass": {
-    "title": "Thay đổi Master Password",
+    "title": "Thay đổi mật khẩu",
     "current": "Mật khẩu hiện tại",
     "new": "Mật khẩu mới",
     "confirm": "Xác nhận mật khẩu mới"
@@ -712,7 +712,7 @@
   },
   "settings": {
     "autofill_service": "Tự động điền (Auto-fill)",
-    "change_master_pass": "Thay đổi Master Password",
+    "change_master_pass": "Thay đổi mật khẩu",
     "danger_zone": "Khu vực nguy hiểm",
     "deauthorize_sessions": "Vô hiệu hóa tất cả các phiên",
     "deauthorize_sessions_desc": "Bạn lo lắng rằng tài khoản của mình đang được đăng nhập trên một thiết bị khác? Xác nhận để vô hiệu hoá tất cả các máy tính hoặc thiết bị mà bạn đã sử dụng trước đó. Bước bảo mật này được khuyến nghị nếu trước đây bạn đã sử dụng máy tính công cộng hoặc vô tình lưu mật khẩu trên thiết bị không phải của bạn.",
@@ -834,7 +834,7 @@
       "system": {
         "system": "Email hệ thống",
         "welcome": "Chào mừng người dùng mới",
-        "mp_hint": "Gợi ý Master Password",
+        "mp_hint": "Gợi ý mật khẩu",
         "email_verification": "Xác nhận email",
         "account_expired": "Tài khoản thanh toán hết hạn",
         "downgraded": "Hạ cấp tài khoản"
@@ -865,7 +865,7 @@
       "note_2": "Thêm bạn vào nhóm",
       "note_3": "Áp dụng các chính sách về mật khẩu"
     },
-    "data": "Tài khoản của bạn vẫn được bảo mật. {{name}} không thể thấy được dữ liệu cũng như Master Password của bạn.",
+    "data": "Tài khoản của bạn vẫn được bảo mật. {{name}} không thể thấy được dữ liệu cũng như mật khẩu của bạn.",
     "request_access": " Bạn bắt buộc phải yêu cầu tham gia vào {{name}} để tiếp tục sử dụng tài khoản Locker",
     "domain": {
       "join_org": "Tham gia doanh nghiệp",

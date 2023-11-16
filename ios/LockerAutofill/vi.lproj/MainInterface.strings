@@ -2,7 +2,7 @@
 /* Class = "UIBarButtonItem"; title = "Cancel"; ObjectID = "1mO-wz-8ct"; */
 "1mO-wz-8ct.title" = "Huỷ";
 
-/* Class = "UILabel"; text = "Verify Master Password"; ObjectID = "BHt-Az-rZe"; */
+/* Class = "UILabel"; text = "Verify Password"; ObjectID = "BHt-Az-rZe"; */
 "BHt-Az-rZe.text" = "Xác thực mật khẩu chính";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "F76-pU-sgw"; */
@@ -17,7 +17,7 @@
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Iqt-pY-FVh"; */
 "Iqt-pY-FVh.normalTitle" = "Mở khoá";
 
-/* Class = "UILabel"; text = "Verify your Master Password to unlock"; ObjectID = "RW4-xA-kRE"; */
+/* Class = "UILabel"; text = "Verify your Password to unlock"; ObjectID = "RW4-xA-kRE"; */
 "RW4-xA-kRE.text" = "Nhập mật khẩu chính để mở khoá";
 
 /* Class = "UISearchBar"; UJx-sW-kG0.scopeButtonTitles[0] = "Title"; ObjectID = "UJx-sW-kG0"; */

@@ -57,7 +57,7 @@
     "login": "Login",
     "logout": "Log Out",
     "male": "Male",
-    "master_pass": "Master Password",
+    "master_pass": "Password",
     "max": "Max",
     "minute": "minute",
     "minutes": "minutes",
@@ -155,9 +155,9 @@
     "logout": "Log out from "
   },
   "error": {
-    "master_password": "Cannot auto create Master Password item",
+    "master_password": "Cannot auto create Password item",
     "not_supported": "Not supported",
-    "not_valid_for_biometric": "Log in with Master Password to re-enable FaceID/TouchID",
+    "not_valid_for_biometric": "Log in with Password to re-enable FaceID/TouchID",
     "biometric_not_enable": "Face ID/Touch ID unlocking is not enabled",
     "biometric_not_support": "Face ID/Touch ID unlocking is not supported",
     "biometric_unlock_failed": "Face ID/Touch ID verification failed",
@@ -252,7 +252,7 @@
       "email": "Email address",
       "exist_error": "The emergency email already exists",
       "view": "View: They can view all your vault items",
-      "takeover": "Takeover: They can reset your Master Password",
+      "takeover": "Takeover: They can reset your Password",
       "wait_time": "Wait time",
       "text": "Time required before automatically granting access.",
       "day": "day",
@@ -260,9 +260,9 @@
     },
     "view_vault": "View their vault",
     "takeover_vault": "Take over their vault",
-    "reset_master_pw": "Reset their Locker Master Password",
+    "reset_master_pw": "Reset their Locker Password",
     "reset_pw": "Reset their Locker Password",
-    "reset_master_pw_user": "Reset Master Password for {{name}}",
+    "reset_master_pw_user": "Reset Password for {{name}}",
     "reset_pw_user": "Reset Locker Password for {{name}}",
     "change_pw": {
       "title": "Reset Password",
@@ -270,7 +270,7 @@
       "confirm": "Confirm password"
     },
     "change_master_pass": {
-      "title": "Reset Master Password"
+      "title": "Reset Password"
     },
     "view_user_vault": "You are now viewing {{name}}'s vault items",
     "pending_trusted": "{{count}} request{{s}}",
@@ -299,19 +299,19 @@
     "strong": "Strong"
   },
   "create_master_pass": {
-    "title": "Create Master Password",
-    "desc": "Master Password is your Locker unlock password. This is the only password you need to remember to access all other passwords stored in Locker. Please do not share this password with anyone.",
-    "confirm_master_pass": "Confirm Master Password",
+    "title": "Create Password",
+    "desc": "Password is your Locker unlock password. This is the only password you need to remember to access all other passwords stored in Locker. Please do not share this password with anyone.",
+    "confirm_master_pass": "Confirm Password",
     "hint": "Hint (optional)",
     "btn": "Create Password",
-    "note": "Note: Locker cannot view, store, or re-issue Master Password in case you forget or lose it."
+    "note": "Note: Locker cannot view, store, or re-issue Password in case you forget or lose it."
   },
   "confirm_create_master_pass": {
     "title": "Important",
-    "desc": "By processing, you understand that Locker CANNOT see, retrieve, or re-issue your Master Password in case you forget it. Your Master Password is only yours to keep.",
-    "link": "You can learn more about Master Password here.",
+    "desc": "By processing, you understand that Locker CANNOT see, retrieve, or re-issue your Password in case you forget it. Your Password is only yours to keep.",
+    "link": "You can learn more about Password here.",
     "next_btn": "I understand. Let’s get started!",
-    "back_btn": "Go back, I want to change my Master Password"
+    "back_btn": "Go back, I want to change my Password"
   },
   "intro": {
     "security": {
@@ -333,10 +333,10 @@
   },
   "lock": {
     "master_pass_changed": "Master password changed. Please login using new password",
-    "hint_sent": "Master Password hint sent. Please check your email for instructions",
+    "hint_sent": "Password hint sent. Please check your email for instructions",
     "title": "Welcome Back!",
-    "desc": "Enter your Master Password to Log In",
-    "get_hint": "Get Master Password hint"
+    "desc": "Enter your Password to Log In",
+    "get_hint": "Get Password hint"
   },
   "onBoarding": {
     "no_account": "Don't have an account?",
@@ -522,8 +522,8 @@
     }
   },
   "password": {
-    "locker_master_password": "Locker Master Password",
-    "master_password_note": "This is your Locker Master Password. It will change accordingly as you change your Master Password. We created this item for you so you don't forget your Master Password. Don't worry, this operation happens within your device and we still can't see or edit your Master Password from our server. Have fun using Locker.",
+    "locker_master_password": "Locker Password",
+    "master_password_note": "This is your Locker Password. It will change accordingly as you change your Password. We created this item for you so you don't forget your Password. Don't worry, this operation happens within your device and we still can't see or edit your Password from our server. Have fun using Locker.",
     "login_details": "Login Details",
     "username": "Email or Username",
     "website_url": "Website",
@@ -627,10 +627,10 @@
     }
   },
   "change_master_pass": {
-    "title": "Change Master Password",
-    "current": "Current Master Password",
-    "new": "New Master Password",
-    "confirm": "Confirm Master Password"
+    "title": "Change Password",
+    "current": "Current Password",
+    "new": "New Password",
+    "confirm": "Confirm Password"
   },
   "help": {
     "tutorial": "Open tutorial",
@@ -711,7 +711,7 @@
   },
   "settings": {
     "autofill_service": "Auto-fill Service",
-    "change_master_pass": "Change Master Password",
+    "change_master_pass": "Change Password",
     "danger_zone": "Danger Zone",
     "deauthorize_sessions": "Deauthorize sessions",
     "deauthorize_sessions_desc": "Concerned your account is logged in on another device? Proceed below to deauthorize all computers or devices that you have previously used. This security step is recommended if you previously used a public computer or accidentally saved your password on a device that isn't yours.",
@@ -832,13 +832,13 @@
       "system": {
         "system": "System email",
         "welcome": "Welcome Email",
-        "mp_hint": "Master Password hint",
+        "mp_hint": "Password hint",
         "email_verification": "Email verification",
         "account_expired": "Bank transfer account expired",
         "downgraded": "Account downgraded",
         "trial": "Trial successful"
       },
-      "master_pw_change": "Master Password Change",
+      "master_pw_change": "Password Change",
       "login_new_device": "Login with new devices",
       "item_sharing": {
         "new": "New items shared",
@@ -864,7 +864,7 @@
       "note_2": "Add you to their groups",
       "note_3": "Apply password policies to your account"
     },
-    "data": "All your vault data remains the same. {{mame}} can’t see your data or your Master Password.",
+    "data": "All your vault data remains the same. {{mame}} can’t see your data or your Password.",
     "request_access": "You have to Request access from {{mame}} in order to continue using your Locker account.",
     "domain": {
       "join_org": "Join Organization",

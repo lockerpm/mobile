@@ -79,7 +79,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
     uriView.uri = "https://locker.io"
     data.uris = [uriView]
 
-    payload.name = "Locker Master Password"
+    payload.name = "Locker Password"
     payload.login = data
     const pwStrength = getPasswordStrength(masterPassword)
     const res = await createCipher(payload, pwStrength.score, [], true)

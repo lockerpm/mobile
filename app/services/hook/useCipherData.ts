@@ -60,7 +60,7 @@ export function useCipherData() {
     uriView.uri = 'https://locker.io'
     data.uris = [uriView]
 
-    payload.name = 'Locker Master Password'
+    payload.name = 'Locker Password'
     payload.login = data
 
     const res = await createCipher(payload, passwordStrength, [], true)

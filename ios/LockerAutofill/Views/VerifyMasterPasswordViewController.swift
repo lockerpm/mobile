@@ -34,7 +34,7 @@ class VerifyMasterPasswordViewController: UIViewController {
     super.viewDidLoad()
 //    isModalInPresentation = true //disable the pull-down gesture
    
-    masterPassword.setLabel(label: Utils.Translate("Master Password"), passwordField: true)
+    masterPassword.setLabel(label: Utils.Translate("Password"), passwordField: true)
     makeEmailView()
   }
  
