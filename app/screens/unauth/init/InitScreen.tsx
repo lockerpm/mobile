@@ -188,10 +188,7 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
     }
 
     const [userRes, userPwRes] = await Promise.all([user.getUser(), user.getUserPw()])
-    if (
-      ["ok", "unauthorized"].includes(userRes.kind) &&
-      ["ok", "unauthorized"].includes(userPwRes.kind)
-    ) {
+    if (["ok"].includes(userRes.kind) && ["ok", "unauthorized"].includes(userPwRes.kind)) {
       goLockOrCreatePassword()
     } else {
       navigation.navigate("login")

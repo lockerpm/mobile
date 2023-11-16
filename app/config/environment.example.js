@@ -14,22 +14,3 @@ WS_URL = ""
  * (Required when quick share item)
  */
 QUICK_SHARE_BASE_URL = ""
-
-/**
- * Get website logo to display in item logo (OPTIONAL)
- */
-GET_LOGO_URL = ""
-
-/**
- * Some web address (OPTIONAL)
- */
-TERMS_URL = ""
-PRIVACY_POLICY_URL = ""
-HELP_CENTER_URL = ""
-REPORT_VULN = ""
-
-/**
- * Add captcha code when registering or forgetting password (OPTIONAL)
- */
-RECAPTCHA_SITE_KEY = ""
-RECAPTCHA_BASE_URL = ""
