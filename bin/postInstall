@@ -20,7 +20,9 @@ if (["darwin", "linux"].includes(process.platform)) {
  *   2. Find an Xcode project dir
  *   3. Run `pod install`, if fails run `pod repo update` and try again
  */
-run('npx pod-install')
+run("npx pod-install")
+
+run("yarn self-host")
 
 // Run baby run
 function run(command) {

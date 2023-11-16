@@ -59,13 +59,7 @@ Install dependencies.
 yarn
 ```
 
-Replace locker.selfhost bundle ID with your ID and edit Android app package name.
-
-```sh
-yarn self-host
-```
-
-Then enter your app bundle id vs [Team ID](https://developer.apple.com/account#MembershipDetailsCard).
+Replace app icon, app bundle ID, app assets with your own app assets by follow [this](./selfhost/README.md).
 
 After the process is complete successfuly. You can run app in iOS or Android.
 
