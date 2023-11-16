@@ -1,4 +1,4 @@
 react-native.config.js
 babel.config.js
 metro.config.js
-self-hosted/*
+selfhost

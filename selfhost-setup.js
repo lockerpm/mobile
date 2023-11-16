@@ -1,7 +1,12 @@
 const replace = require("replace-in-file")
-const input = require("prompt-sync")({ sigint: true })
 const fs = require("fs")
 const path = require("path")
+const selfhostConfigEnv = require("./selfhost/env")
+
+// Get custom self hosted app name, bundle id and apple development team id
+const appName = selfhostConfigEnv.APP_NAME
+const bundleId = selfhostConfigEnv.BUNDLE_ID
+const teamId = selfhostConfigEnv.TEAM_ID
 
 const LOCKER_BUNDLE_ID_SELFHOST = "com.cystack.locker.selfhost"
 const LOCKER_TEAM_ID = "W7S57TNBH5"
@@ -25,7 +30,7 @@ function mkdirIfNotExist(dir) {
  * @param {string} targetDir
  * @returns
  */
-function refactorAndroidPackage(sourceDir, targetDir) {
+function recursivelyMovingFiles(sourceDir, targetDir) {
   mkdirIfNotExist(targetDir)
   return new Promise((resolve, reject) => {
     fs.readdir(sourceDir, (err, files) => {
@@ -42,7 +47,7 @@ function refactorAndroidPackage(sourceDir, targetDir) {
         if (stat.isDirectory()) {
           mkdirIfNotExist(newPath)
 
-          refactorAndroidPackage(oldPath, newPath)
+          recursivelyMovingFiles(oldPath, newPath)
             .then(() => {
               if (files.indexOf(file) === files.length - 1) {
                 resolve()
@@ -109,81 +114,71 @@ function deleteOldAndroidPackage({ paths, oldPackage, package }) {
     })
   } catch (error) {
     console.log(error)
+    throw new Error()
   }
 }
 
-// Get custom self hosted app name, bundle id and apple development team id
-let appName = input("Enter app name: ")
-let bundleId = input("Enter app bundleId: ")
-let teamId = input("Enter apple development team: ")
-appName = appName.trim()
-bundleId = bundleId.trim()
-teamId = teamId.trim()
+const replaceDefaultLockerBundleIDandAppName = async () => {
+  console.log("Replacing App bundle ID, App name, Team ID...")
+  const replaceBundleIdOptions = {
+    // find and replace locker with new bundle id
+    files: [
+      "./android/build.gradle",
+      "./android/app/BUCK",
+      "./android/app/build.gradle",
+      "./android/app/proguard-rules.pro",
+      "./android/app/src/main/AndroidManifest.xml",
+      "./android/app/src/main/res/values/strings.xml",
+      "./android/app/src/**/**/**/**/**/**/*.java",
+      "./android/app/src/**/**/**/**/**/**/**/*.java",
+      "./android/app/src/**/**/**/**/**/**/**/**/*.java",
+      "./app/components/webviewModal/WebviewModal.tsx",
+      "./app/config/constants.ts",
+      "./app/navigators/RootNavigator.tsx",
+      "./app/screens/auth/menu/autofillService/AutofillServiceScreen.android.tsx",
+      "./ios/Locker/Info.plist",
+      "./ios/Locker/*.entitlements",
+      "./ios/Locker/RNCryptoService/RSAUtils.swift",
+      "./ios/Locker.xcodeproj/project.pbxproj",
+      "./ios/LockerAutofill/Config.xcconfig",
+      "./ios/LockerAutofill/*.entitlements",
+      "./ios/LockerAutofill/Utils/Utils.swift",
+    ],
 
-// validate app bundle id
-regexp = /^[a-z0-9]+(\.[a-z0-9]+)+$/gi
-if (regexp.test(bundleId)) {
-  console.log("Valid app bundle id.")
-} else {
-  console.log("Invalid app bundle id.")
-  throw new Error()
-}
+    // test selfhosted bundle id , teamid
+    from: [
+      new RegExp(LOCKER_BUNDLE_ID_SELFHOST, "g"),
+      new RegExp(LOCKER_TEAM_ID, "g"),
+      new RegExp(LOCKER_APP_NAME, "g"),
+    ],
+    to: [bundleId, teamId, appName],
+  }
 
-const replaceBundleIdOptions = {
-  // find and replace locker with new bundle id
-  files: [
-    "./android/build.gradle",
-    "./android/app/BUCK",
-    "./android/app/build.gradle",
-    "./android/app/proguard-rules.pro",
-    "./android/app/src/main/AndroidManifest.xml",
-    "./android/app/src/main/res/values/strings.xml",
-    "./android/app/src/**/**/**/**/**/**/*.java",
-    "./android/app/src/**/**/**/**/**/**/**/*.java",
-    "./android/app/src/**/**/**/**/**/**/**/**/*.java",
-    "./app/components/webviewModal/WebviewModal.tsx",
-    "./app/config/constants.ts",
-    "./app/navigators/RootNavigator.tsx",
-    "./app/screens/auth/menu/autofillService/AutofillServiceScreen.android.tsx",
-    "./ios/Locker/Info.plist",
-    "./ios/Locker/*.entitlements",
-    "./ios/Locker/RNCryptoService/RSAUtils.swift",
-    "./ios/Locker.xcodeproj/project.pbxproj",
-    "./ios/LockerAutofill/Config.xcconfig",
-    "./ios/LockerAutofill/*.entitlements",
-    "./ios/LockerAutofill/Utils/Utils.swift",
-  ],
-
-  // test selfhosted bundle id , teamid
-  from: [
-    new RegExp(LOCKER_BUNDLE_ID_SELFHOST, "g"),
-    new RegExp(LOCKER_TEAM_ID, "g"),
-    new RegExp(LOCKER_APP_NAME, "g"),
-  ],
-  to: [bundleId, teamId, appName],
-}
-
-// // Replacing process
-replace(replaceBundleIdOptions)
-  .then((results) => {
-    console.log("Modified files:")
+  try {
+    const results = await replace(replaceBundleIdOptions)
     const changedFiles = results.filter((result) => result.hasChanged).map((result) => result.file)
-
     changedFiles.forEach((element) => {
       console.log(element)
     })
+  } catch (error) {
+    console.error("Replacing App bundle ID, app name error: ", error)
+    throw new Error()
+  }
+}
 
-    // refactoring android package
-    const androidSrcDir = "./android/app/src"
-    const modes = ["debug", "main", "release"]
-    const oldPackage = LOCKER_BUNDLE_ID_SELFHOST.replaceAll(".", "/")
-    const package = bundleId.replaceAll(".", "/")
-
+const refactoringAndroidPackage = async () => {
+  console.log("Refactor android package...")
+  const androidSrcDir = "./android/app/src"
+  const modes = ["debug", "main", "release"]
+  const oldPackage = LOCKER_BUNDLE_ID_SELFHOST.replaceAll(".", "/")
+  const package = bundleId.replaceAll(".", "/")
+  const mainAndroidPackageDir = path.join(androidSrcDir, "main", "java", package)
+  if (!fs.existsSync(mainAndroidPackageDir)) {
     Promise.all(
       modes.map((mode) => {
         const sourceDir = path.join(androidSrcDir, mode, "java", oldPackage)
         const targetDir = path.join(androidSrcDir, mode, "java", package)
-        return refactorAndroidPackage(sourceDir, targetDir)
+        return recursivelyMovingFiles(sourceDir, targetDir)
       }),
     )
       .then(() => {
@@ -196,9 +191,64 @@ replace(replaceBundleIdOptions)
           package,
         })
       })
-      .catch((err) => console.log(err))
-  })
-  .catch((error) => {
-    console.error("Error occurred:", error)
-    throw new Error()
-  })
+      .catch((err) => {
+        console.log("Refactor android package error: ", err)
+        throw new Error()
+      })
+  } else {
+    console.log(`Android package ${bundleId} path exist.`)
+  }
+}
+
+const replaceAppAssets = async () => {
+  // console.log("Replacing App icon...")
+  const tasks = [
+    {
+      source: "./selfhost/icons/android",
+      target: "./android/app/src/main/res",
+      title: "Replacing Android App icon",
+    },
+    {
+      source: "./selfhost/icons/app",
+      target: "./ios/Locker/Images.xcassets",
+      title: "Replacing IOS App icon and SplashScreen",
+    },
+    {
+      source: "./selfhost/icons/service",
+      target: "./ios/LockerAutofill/assets.xcassets",
+      title: "Replacing IOS Service icon",
+    },
+    {
+      source: "./selfhost/logo",
+      target: "./assets/logo",
+      title: "Replacing Logo in app",
+    },
+  ]
+
+  await Promise.all(
+    tasks.map(async (task) => {
+      try {
+        console.log(task.title, "..")
+        await recursivelyMovingFiles(task.source, task.target)
+      } catch (e) {
+        // console.log(task.title, " error: ", e)
+        throw new Error(task.title, " error: ", e)
+      }
+    }),
+  )
+}
+
+const main = async () => {
+  // validate app bundle id
+  regexp = /^[a-z0-9]+(\.[a-z0-9]+)+$/gi
+  if (!regexp.test(bundleId)) {
+    throw new Error("Invalid app bundle id.")
+  }
+
+  await replaceDefaultLockerBundleIDandAppName()
+  await refactoringAndroidPackage()
+  await replaceAppAssets()
+}
+
+// ---------------- MAIN APP-------------
+main()
