@@ -28,9 +28,10 @@ function mkdirIfNotExist(dir) {
  * Recursively moving files and directory from source path to target path
  * @param {string} sourceDir
  * @param {string} targetDir
+ * @param {string} mode ('copy' | 'cut') Copy or move
  * @returns
  */
-function recursivelyMovingFiles(sourceDir, targetDir) {
+function recursivelyMovingFiles(sourceDir, targetDir, mode) {
   mkdirIfNotExist(targetDir)
   return new Promise((resolve, reject) => {
     fs.readdir(sourceDir, (err, files) => {
@@ -47,7 +48,7 @@ function recursivelyMovingFiles(sourceDir, targetDir) {
         if (stat.isDirectory()) {
           mkdirIfNotExist(newPath)
 
-          recursivelyMovingFiles(oldPath, newPath)
+          recursivelyMovingFiles(oldPath, newPath, mode)
             .then(() => {
               if (files.indexOf(file) === files.length - 1) {
                 resolve()
@@ -55,7 +56,7 @@ function recursivelyMovingFiles(sourceDir, targetDir) {
             })
             .catch((err) => reject(err))
         } else if (stat.isFile()) {
-          fs.rename(oldPath, newPath, (err) => {
+          const callBack = (err) => {
             if (err) {
               reject(err)
               return
@@ -64,7 +65,12 @@ function recursivelyMovingFiles(sourceDir, targetDir) {
             if (files.indexOf(file) === files.length - 1) {
               resolve()
             }
-          })
+          }
+          if (mode === "copy") {
+            fs.copyFile(oldPath, newPath, 0, callBack)
+          } else {
+            fs.rename(oldPath, newPath, callBack)
+          }
         }
       })
     })
@@ -178,7 +184,7 @@ const refactoringAndroidPackage = async () => {
       modes.map((mode) => {
         const sourceDir = path.join(androidSrcDir, mode, "java", oldPackage)
         const targetDir = path.join(androidSrcDir, mode, "java", newPackage)
-        return recursivelyMovingFiles(sourceDir, targetDir)
+        return recursivelyMovingFiles(sourceDir, targetDir, "cut")
       }),
     )
       .then(() => {
@@ -228,7 +234,7 @@ const replaceAppAssets = async () => {
   const exeTask = async (task) => {
     try {
       console.log(task.title, "..")
-      await recursivelyMovingFiles(task.source, task.target)
+      await recursivelyMovingFiles(task.source, task.target, "copy")
     } catch (e) {
       console.log(task.title, " error: ", e)
       throw new Error()
