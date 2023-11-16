@@ -1,7 +1,7 @@
-const replace = require("replace-in-file")
-const fs = require("fs")
-const path = require("path")
-const selfhostConfigEnv = require("./selfhost/env")
+import replace from "replace-in-file"
+import fs from "fs"
+import path from "path"
+import * as selfhostConfigEnv from "./selfhost/env.js"
 
 // Get custom self hosted app name, bundle id and apple development team id
 const appName = selfhostConfigEnv.APP_NAME
@@ -79,10 +79,10 @@ function recursivelyMovingFiles(sourceDir, targetDir) {
  *  package: string
  * }} param0
  */
-function deleteOldAndroidPackage({ paths, oldPackage, package }) {
+function deleteOldAndroidPackage({ paths, oldPackage, newPackage }) {
   try {
     const oldPackagePath = oldPackage.split("/")
-    const packagePath = package.split("/")
+    const packagePath = newPackage.split("/")
 
     // search for directories outside the new package path
     let index = 0
@@ -171,13 +171,13 @@ const refactoringAndroidPackage = async () => {
   const androidSrcDir = "./android/app/src"
   const modes = ["debug", "main", "release"]
   const oldPackage = LOCKER_BUNDLE_ID_SELFHOST.replaceAll(".", "/")
-  const package = bundleId.replaceAll(".", "/")
-  const mainAndroidPackageDir = path.join(androidSrcDir, "main", "java", package)
+  const newPackage = bundleId.replaceAll(".", "/")
+  const mainAndroidPackageDir = path.join(androidSrcDir, "main", "java", newPackage)
   if (!fs.existsSync(mainAndroidPackageDir)) {
     Promise.all(
       modes.map((mode) => {
         const sourceDir = path.join(androidSrcDir, mode, "java", oldPackage)
-        const targetDir = path.join(androidSrcDir, mode, "java", package)
+        const targetDir = path.join(androidSrcDir, mode, "java", newPackage)
         return recursivelyMovingFiles(sourceDir, targetDir)
       }),
     )
@@ -188,7 +188,7 @@ const refactoringAndroidPackage = async () => {
             return path.join(androidSrcDir, mode, "java")
           }),
           oldPackage,
-          package,
+          newPackage,
         })
       })
       .catch((err) => {
@@ -240,7 +240,7 @@ const replaceAppAssets = async () => {
 
 const main = async () => {
   // validate app bundle id
-  regexp = /^[a-z0-9]+(\.[a-z0-9]+)+$/gi
+  const regexp = /^[a-z0-9]+(\.[a-z0-9]+)+$/gi
   if (!regexp.test(bundleId)) {
     throw new Error("Invalid app bundle id.")
   }
