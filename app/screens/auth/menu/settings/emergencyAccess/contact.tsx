@@ -95,6 +95,7 @@ export const Contact = (props: Props) => {
             setShowRequestModal(true)
           }
         }}
+        setShowRequestModal={setShowRequestModal}
         trustedContact={trustedContact}
         setOnAction={setOnAction}
       />
