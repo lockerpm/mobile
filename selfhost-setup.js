@@ -209,12 +209,12 @@ const replaceAppAssets = async () => {
       title: "Replacing Android App icon",
     },
     {
-      source: "./selfhost/icons/app",
+      source: "./selfhost/icons/ios/app",
       target: "./ios/Locker/Images.xcassets",
       title: "Replacing IOS App icon and SplashScreen",
     },
     {
-      source: "./selfhost/icons/service",
+      source: "./selfhost/icons/ios/service",
       target: "./ios/LockerAutofill/assets.xcassets",
       title: "Replacing IOS Service icon",
     },
@@ -225,17 +225,17 @@ const replaceAppAssets = async () => {
     },
   ]
 
-  await Promise.all(
-    tasks.map(async (task) => {
-      try {
-        console.log(task.title, "..")
-        await recursivelyMovingFiles(task.source, task.target)
-      } catch (e) {
-        // console.log(task.title, " error: ", e)
-        throw new Error(task.title, " error: ", e)
-      }
-    }),
-  )
+  const exeTask = async (task) => {
+    try {
+      console.log(task.title, "..")
+      await recursivelyMovingFiles(task.source, task.target)
+    } catch (e) {
+      console.log(task.title, " error: ", e)
+      throw new Error()
+    }
+  }
+
+  await Promise.all(tasks.map((task) => exeTask(task)))
 }
 
 const main = async () => {
