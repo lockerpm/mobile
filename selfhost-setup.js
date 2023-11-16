@@ -1,7 +1,7 @@
-import replace from "replace-in-file"
-import fs from "fs"
-import path from "path"
-import * as selfhostConfigEnv from "./selfhost/env.js"
+const replace = require("replace-in-file")
+const fs = require("fs")
+const path = require("path")
+const selfhostConfigEnv = require("./selfhost/env.js")
 
 // Get custom self hosted app name, bundle id and apple development team id
 const appName = selfhostConfigEnv.APP_NAME
