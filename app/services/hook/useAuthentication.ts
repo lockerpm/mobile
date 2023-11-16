@@ -14,7 +14,6 @@ import { CipherView, LoginUriView, LoginView } from 'core/models/view'
 import { Logger, delay, getUrlParameterByName } from 'app/utils/utils'
 import { saveShared } from 'app/utils/keychain'
 import { StorageKey, remove, removeSecure } from 'app/utils/storage'
-import { setCookiesFromUrl } from 'app/utils/analytics'
 
 export function useAuthentication() {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore, enterpriseStore } =
@@ -655,9 +654,6 @@ export function useAuthentication() {
 
   // Handle dynamic link
   const handleDynamicLink = async (url: string, navigation?: any) => {
-    // Set UTM
-    setCookiesFromUrl(url)
-
     // Redirect
     const WHITELIST_HOSTS = [
       'https://locker.io',
