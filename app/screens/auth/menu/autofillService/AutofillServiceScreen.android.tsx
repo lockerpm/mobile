@@ -12,7 +12,7 @@ import { useTheme } from 'app/services/context'
 import { observer } from 'mobx-react-lite'
 import { useHelper } from 'app/services/hook'
 
-const HINT = require('assets/images/autofill/androidHint.png')
+const HINT = require('assets/logo/iconInImgs/androidHint.png')
 const PER = require('assets/images/autofill/otherXiaomiPermission.png')
 const ACTIVE = require('assets/images/autofill/autofillActive.png')
 

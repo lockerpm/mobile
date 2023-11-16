@@ -12,10 +12,10 @@ import { withPause } from "react-native-redash"
 const SCREEN_WIDTH = Dimensions.get("screen").width
 
 const SCREEN_IMAGE = {
-  SECURITY: require("assets/images/onboard/security.png"),
-  OTP: require("assets/images/onboard/otp.png"),
-  AUTOFILL: require("assets/images/onboard/autofill.png"),
-  SYNC: require("assets/images/onboard/sync.png"),
+  SECURITY: require("assets/logo/onboard/security.png"),
+  OTP: require("assets/logo/onboard/otp.png"),
+  AUTOFILL: require("assets/logo/onboard/autofill.png"),
+  SYNC: require("assets/logo/onboard/sync.png"),
 }
 
 interface Props {

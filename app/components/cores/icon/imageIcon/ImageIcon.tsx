@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { ComponentType } from 'react'
+import * as React from "react"
+import { ComponentType } from "react"
 import {
   Image,
   ImageStyle,
@@ -8,7 +8,7 @@ import {
   TouchableOpacityProps,
   View,
   ViewStyle,
-} from 'react-native'
+} from "react-native"
 
 export type ImageIconTypes = keyof typeof imageRegistry
 
@@ -37,7 +37,7 @@ interface IconProps extends TouchableOpacityProps {
   /**
    * An optional function to be called when the icon is pressed
    */
-  onPress?: TouchableOpacityProps['onPress']
+  onPress?: TouchableOpacityProps["onPress"]
 }
 
 /**
@@ -62,7 +62,7 @@ export function ImageIcon(props: IconProps) {
 
   return (
     <Wrapper
-      accessibilityRole={isPressable ? 'imagebutton' : undefined}
+      accessibilityRole={isPressable ? "imagebutton" : undefined}
       {...WrapperProps}
       style={$containerStyleOverride}
     >
@@ -79,38 +79,38 @@ export function ImageIcon(props: IconProps) {
 }
 
 export const imageRegistry = {
-  apple: require('assets/images/icons/apple.png'),
-  facebook: require('assets/images/icons/facebook.png'),
-  github: require('assets/images/icons/github.png'),
-  google: require('assets/images/icons/google.png'),
-  sso: require('assets/images/icons/sso.png'),
-  'security-key': require('assets/images/icons/security-key.png'),
-  keychain: require('assets/images/icons/keychain.png'),
-  desktop: require('assets/images/icons/desktop.png'),
-  identification: require('assets/images/icons/identification.png'),
-  mobile: require('assets/images/icons/mobile.png'),
-  password: require('assets/images/icons/password.png'),
-  wallet: require('assets/images/icons/wallet.png'),
-  wand: require('assets/images/icons/wand.png'),
-  'app-logo': require('assets/images/icons/app-logo.png'),
-  avatar: require('assets/images/icons/avatar.png'),
-  'key-hole': require('assets/images/icons/key-hole.png'),
-  'number-square-one': require('assets/images/icons/number-square-one.png'),
-  'root-email': require('assets/images/icons/root-email.png'),
-  'password-generator': require('assets/images/icons/tools/password-generator.png'),
-  authenticator: require('assets/images/icons/tools/authenticator.png'),
-  'password-health': require('assets/images/icons/tools/password-health.png'),
-  'data-breach-scanner': require('assets/images/icons/tools/data-breach-scanner.png'),
-  emergency: require('assets/images/icons/appNoti/emergency.png'),
-  marketing: require('assets/images/icons/appNoti/marketing.png'),
-  'pw-tips': require('assets/images/icons/appNoti/pw-tips.png'),
-  'share-item': require('assets/images/icons/appNoti/share-item.png'),
+  apple: require("assets/images/icons/apple.png"),
+  facebook: require("assets/images/icons/facebook.png"),
+  github: require("assets/images/icons/github.png"),
+  google: require("assets/images/icons/google.png"),
+  sso: require("assets/images/icons/sso.png"),
+  "security-key": require("assets/images/icons/security-key.png"),
+  keychain: require("assets/images/icons/keychain.png"),
+  desktop: require("assets/images/icons/desktop.png"),
+  identification: require("assets/images/icons/identification.png"),
+  mobile: require("assets/images/icons/mobile.png"),
+  password: require("assets/images/icons/password.png"),
+  wallet: require("assets/images/icons/wallet.png"),
+  wand: require("assets/images/icons/wand.png"),
+  "app-logo": require("assets/logo/app-logo.png"),
+  avatar: require("assets/images/icons/avatar.png"),
+  "key-hole": require("assets/images/icons/key-hole.png"),
+  "number-square-one": require("assets/images/icons/number-square-one.png"),
+  "root-email": require("assets/images/icons/root-email.png"),
+  "password-generator": require("assets/images/icons/tools/password-generator.png"),
+  authenticator: require("assets/images/icons/tools/authenticator.png"),
+  "password-health": require("assets/images/icons/tools/password-health.png"),
+  "data-breach-scanner": require("assets/images/icons/tools/data-breach-scanner.png"),
+  emergency: require("assets/images/icons/appNoti/emergency.png"),
+  marketing: require("assets/images/icons/appNoti/marketing.png"),
+  "pw-tips": require("assets/images/icons/appNoti/pw-tips.png"),
+  "share-item": require("assets/images/icons/appNoti/share-item.png"),
 
-  folder: require('assets/images/icons/folder/folder.png'),
-  'folder-add': require('assets/images/icons/folder/folder-add.png'),
-  'folder-share': require('assets/images/icons/folder/folder-share.png'),
+  folder: require("assets/images/icons/folder/folder.png"),
+  "folder-add": require("assets/images/icons/folder/folder-add.png"),
+  "folder-share": require("assets/images/icons/folder/folder-share.png"),
 }
 
 const $imageStyle: ImageStyle = {
-  resizeMode: 'contain',
+  resizeMode: "contain",
 }
