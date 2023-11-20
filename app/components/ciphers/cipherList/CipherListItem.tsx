@@ -6,6 +6,7 @@ import { CipherType } from "core/enums"
 import { useCipherHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { CipherAppView } from "app/static/types"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 type Prop = {
   item: CipherAppView
@@ -48,6 +49,7 @@ export const CipherListItem = memo(
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
+            defaultSource={BROWSE_ITEMS.password.icon}
             source={item.imgLogo}
             style={{
               height: 40,

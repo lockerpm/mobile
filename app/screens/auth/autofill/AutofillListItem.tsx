@@ -6,6 +6,7 @@ import { useCipherHelper, useHelper } from "app/services/hook"
 import { useTheme } from "app/services/context"
 import { CipherView } from "core/models/view"
 import { getTOTP, parseOTPUri } from "app/utils/totp"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 const { RNAutofillServiceAndroid } = NativeModules
 
@@ -57,6 +58,7 @@ export const AutofillListItem = memo(
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
+            defaultSource={BROWSE_ITEMS.password.icon}
             source={item.imgLogo}
             style={{
               height: 40,

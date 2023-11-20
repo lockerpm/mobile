@@ -8,6 +8,7 @@ import { CipherView } from "core/models/view"
 import { ActionItem, ActionSheet } from "app/components/ciphers"
 import { Text } from "app/components/cores"
 import { useTheme } from "app/services/context"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 type Props = {
   isOpen: boolean
@@ -98,6 +99,7 @@ export const ShareItemAction = (props: Props) => {
           <View style={{ width: "100%", paddingHorizontal: 20 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
+                defaultSource={BROWSE_ITEMS.password.icon}
                 resizeMode="contain"
                 source={cipherMapper.img}
                 style={{ height: 40, width: 40, borderRadius: 8 }}

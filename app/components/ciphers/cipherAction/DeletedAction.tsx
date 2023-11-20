@@ -8,6 +8,7 @@ import { Text } from "app/components/cores"
 import { CipherType } from "core/enums"
 import { ActionItem } from "../actionsSheet/ActionSheetItem"
 import { useTheme } from "app/services/context"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 export interface DeletedActionProps {
   children?: React.ReactNode
@@ -102,6 +103,7 @@ export const DeletedAction = (props: DeletedActionProps) => {
           <View style={{ width: "100%", paddingHorizontal: 20 }}>
             <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
               <Image
+                defaultSource={BROWSE_ITEMS.password.icon}
                 source={cipherMapper.img}
                 resizeMode="contain"
                 style={{ height: 40, width: 40, borderRadius: 8 }}

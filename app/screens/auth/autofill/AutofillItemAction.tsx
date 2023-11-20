@@ -94,6 +94,7 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
           <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
+                defaultSource={BROWSE_ITEMS.password.icon}
                 source={cipherMapper.img}
                 resizeMode="contain"
                 style={{ height: 40, width: 40, borderRadius: 8 }}

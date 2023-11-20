@@ -1,11 +1,12 @@
-import React, { memo } from 'react'
-import { TouchableOpacity, View, Image } from 'react-native'
-import isEqual from 'lodash/isEqual'
-import moment from 'moment'
-import { SendView } from 'core/models/view/sendView'
-import { useTheme } from 'app/services/context'
-import { useCipherHelper, useHelper } from 'app/services/hook'
-import { Text } from 'app/components/cores'
+import React, { memo } from "react"
+import { TouchableOpacity, View, Image } from "react-native"
+import isEqual from "lodash/isEqual"
+import moment from "moment"
+import { SendView } from "core/models/view/sendView"
+import { useTheme } from "app/services/context"
+import { useCipherHelper, useHelper } from "app/services/hook"
+import { Text } from "app/components/cores"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 type Prop = {
   item: SendView
@@ -40,8 +41,9 @@ export const QuickSharesCipherListItem = memo(
           height: 70.5,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
+            defaultSource={BROWSE_ITEMS.password.icon}
             source={cipher.imgLogo}
             style={{
               height: 40,
@@ -53,9 +55,9 @@ export const QuickSharesCipherListItem = memo(
           <View style={{ flex: 1, marginLeft: 12 }}>
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
               <Text
@@ -69,7 +71,7 @@ export const QuickSharesCipherListItem = memo(
               {isExpired && (
                 <View
                   style={{
-                    position: 'absolute',
+                    position: "absolute",
                     right: 0,
                     top: 0,
                     backgroundColor: colors.warning,
@@ -79,7 +81,7 @@ export const QuickSharesCipherListItem = memo(
                   }}
                 >
                   <Text
-                    text={translate('common.expired').toUpperCase()}
+                    text={translate("common.expired").toUpperCase()}
                     style={{
                       color: colors.background,
                       fontSize: 12,
@@ -91,7 +93,7 @@ export const QuickSharesCipherListItem = memo(
 
             <Text
               size="base"
-              text={translate('quick_shares.shared_begin', { time: description })}
+              text={translate("quick_shares.shared_begin", { time: description })}
               numberOfLines={1}
             />
           </View>
@@ -100,7 +102,7 @@ export const QuickSharesCipherListItem = memo(
     )
   },
   (prev, next) => {
-    const whitelist = ['toggleItemSelection', 'openActionMenu']
+    const whitelist = ["toggleItemSelection", "openActionMenu"]
     const prevProps = Object.keys(prev)
     const nextProps = Object.keys(next)
     if (!isEqual(prevProps, nextProps)) {
@@ -113,5 +115,5 @@ export const QuickSharesCipherListItem = memo(
       return val && isEqual(prev[key], next[key])
     }, true)
     return isPropsEqual
-  }
+  },
 )

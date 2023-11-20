@@ -7,6 +7,7 @@ import { TouchableOpacity, View, ViewStyle, Image } from "react-native"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 export const QuickSharesDetailScreen: FC<AppStackScreenProps<"quickShareItemsDetail">> = observer(
   (props) => {
@@ -98,6 +99,7 @@ export const QuickSharesDetailScreen: FC<AppStackScreenProps<"quickShareItemsDet
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image
+              defaultSource={BROWSE_ITEMS.password.icon}
               resizeMode="contain"
               source={cipherMapper.img}
               style={{ height: 40, width: 40, borderRadius: 8 }}

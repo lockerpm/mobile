@@ -16,6 +16,7 @@ import { Button, Header, Icon, Screen, Text, Toggle, TextInput } from "app/compo
 import { useTheme } from "app/services/context"
 import { ActionSheet } from "app/components/ciphers"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 const { width } = Dimensions.get("screen")
 
@@ -175,6 +176,7 @@ export const QuickSharesScreen: FC<AppStackScreenProps<"quick_shares">> = observ
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Image
+          defaultSource={BROWSE_ITEMS.password.icon}
           source={cipher.imgLogo}
           style={{
             height: 40,

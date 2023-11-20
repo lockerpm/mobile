@@ -1,9 +1,10 @@
-import React, { memo } from 'react'
-import { TouchableOpacity, View, Image } from 'react-native'
-import isEqual from 'lodash/isEqual'
-import { Icon, Text } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { useCipherHelper, useHelper } from 'app/services/hook'
+import React, { memo } from "react"
+import { TouchableOpacity, View, Image } from "react-native"
+import isEqual from "lodash/isEqual"
+import { Icon, Text } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { useCipherHelper, useHelper } from "app/services/hook"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 type Prop = {
   item: any
@@ -27,8 +28,9 @@ export const ListItem = memo(
           height: 70.5,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
+            defaultSource={BROWSE_ITEMS.password.icon}
             source={item.imgLogo}
             style={{
               height: 40,
@@ -38,7 +40,7 @@ export const ListItem = memo(
           />
 
           <View style={{ flex: 1, marginLeft: 12 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View style={{ flex: 1 }}>
                 <Text preset="bold" text={item.name} numberOfLines={1} />
               </View>
@@ -59,9 +61,9 @@ export const ListItem = memo(
                 }}
               >
                 <Text
-                  text={`${item.count} ${translate('common.times')}`}
+                  text={`${item.count} ${translate("common.times")}`}
                   style={{
-                    fontWeight: 'bold',
+                    fontWeight: "bold",
                     color: colors.white,
                     fontSize: 12,
                   }}
@@ -83,7 +85,7 @@ export const ListItem = memo(
     )
   },
   (prev, next) => {
-    const whitelist = ['goToDetail']
+    const whitelist = ["goToDetail"]
     const prevProps = Object.keys(prev)
     const nextProps = Object.keys(next)
     if (!isEqual(prevProps, nextProps)) {
@@ -96,5 +98,5 @@ export const ListItem = memo(
       return val && isEqual(prev[key], next[key])
     }, true)
     return isPropsEqual
-  }
+  },
 )

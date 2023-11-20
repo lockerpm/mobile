@@ -44,7 +44,6 @@ export function useCipherHelper() {
   // Get website logo
   const getWebsiteLogo = (uri: string) => {
     if (!uri || uri === 'https://') {
-      // https:// is default value for uri
       return { uri: null }
     }
     const domain = extractDomain(uri)

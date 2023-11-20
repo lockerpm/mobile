@@ -73,6 +73,7 @@ export const PasswordInfoScreen: FC<AppStackScreenProps<"passwords__info">> = ob
       )}
 
       <Image
+        defaultSource={BROWSE_ITEMS.password.icon}
         source={source}
         style={{ height: 55, width: 55, borderRadius: 8, alignSelf: "center" }}
       />

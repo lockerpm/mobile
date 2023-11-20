@@ -13,6 +13,7 @@ import { ActionSheet } from "../actionsSheet/ActionSheet"
 import { Text } from "../../cores"
 import { ActionItem } from "../actionsSheet/ActionSheetItem"
 import { PremiumTag } from "app/components/utils"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 export interface CipherActionProps {
   children?: React.ReactNode
@@ -176,6 +177,7 @@ export const CipherAction = (props: CipherActionProps) => {
           <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
+                defaultSource={BROWSE_ITEMS.password.icon}
                 source={cipherMapper.img}
                 resizeMode="contain"
                 style={{ height: 40, width: 40, borderRadius: 8 }}

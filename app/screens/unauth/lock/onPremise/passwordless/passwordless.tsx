@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useNavigation } from '@react-navigation/native'
-import React, { useEffect, useRef, useState } from 'react'
-import { Dimensions, ScrollView } from 'react-native'
-import { Screen } from 'app/components/cores'
-import { useStores } from 'app/models'
-import { OtpPasswordlessGenerator, randomOtpNumber } from './OtpGenerator'
-import { PasswordlessQrScan } from './PasswordlessQrScan'
-import { useCoreService } from 'app/services/coreService'
-import { BiometricsType } from '../../lock.types'
-import { useAuthentication } from 'app/services/hook'
+import { useNavigation } from "@react-navigation/native"
+import React, { useEffect, useRef, useState } from "react"
+import { Dimensions, ScrollView } from "react-native"
+import { useStores } from "app/models"
+import { OtpPasswordlessGenerator, randomOtpNumber } from "./OtpGenerator"
+import { PasswordlessQrScan } from "./PasswordlessQrScan"
+import { useCoreService } from "app/services/coreService"
+import { BiometricsType } from "../../lock.types"
+import { useAuthentication } from "app/services/hook"
 
-const { width } = Dimensions.get('screen')
+const { width } = Dimensions.get("screen")
 
 interface Props {
   biometryType: BiometricsType
@@ -41,16 +40,17 @@ export const OnPremiseLockByPasswordless = ({ handleLogout, biometryType }: Prop
   const handleUnlockBiometric = async () => {
     const key = await cryptoService.getKey()
     if (!key) return
+
     const res = await biometricLogin()
-    if (res.kind === 'ok') {
-      navigation.navigate('mainStack', { screen: 'start' })
+    if (res.kind === "ok") {
+      navigation.navigate("mainStack", { screen: "start" })
     }
   }
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
     setOtp(randomOtpNumber())
-    navigation.addListener('focus', () => {
+    navigation.addListener("focus", () => {
       if (user.isBiometricUnlock) {
         handleUnlockBiometric()
       }

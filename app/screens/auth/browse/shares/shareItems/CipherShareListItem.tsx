@@ -6,6 +6,7 @@ import { CipherView } from "core/models/view"
 import { SharedGroupType, SharedMemberType, SharingStatus } from "app/static/types"
 import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 type Prop = {
   item: CipherShareType
@@ -51,6 +52,7 @@ export const CipherShareListItem = memo(
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             {/* Cipher avatar */}
             <Image
+              defaultSource={BROWSE_ITEMS.password.icon}
               source={item.imgLogo || item.logo}
               style={{
                 height: 40,

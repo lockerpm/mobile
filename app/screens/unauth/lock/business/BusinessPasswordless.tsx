@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useRef, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { Dimensions, ScrollView } from 'react-native'
-import { Screen } from 'app/components/cores'
-import { useStores } from 'app/models'
-import { BusinessPasswordlessQrScan } from './PasswordlessQrScan'
-import { useAuthentication } from 'app/services/hook'
-import { useCoreService } from 'app/services/coreService'
-import { BiometricsType } from '../lock.types'
+import React, { useEffect, useRef, useState } from "react"
+import { useNavigation } from "@react-navigation/native"
+import { Dimensions, ScrollView } from "react-native"
+import { Screen } from "app/components/cores"
+import { useStores } from "app/models"
+import { BusinessPasswordlessQrScan } from "./PasswordlessQrScan"
+import { useAuthentication } from "app/services/hook"
+import { useCoreService } from "app/services/coreService"
+import { BiometricsType } from "../lock.types"
 
-import { OtpPasswordlessGenerator, randomOtpNumber } from '../onPremise/passwordless/OtpGenerator'
+import { OtpPasswordlessGenerator, randomOtpNumber } from "../onPremise/passwordless/OtpGenerator"
+import { AppTimeoutType } from "app/static/types"
 
-const { width } = Dimensions.get('screen')
+const { width } = Dimensions.get("screen")
 
 interface Props {
   biometryType: BiometricsType
@@ -43,15 +44,15 @@ export const BusinessLockByPasswordless = ({ handleLogout }: Props) => {
     if (!key) return
 
     const res = await biometricLogin()
-    if (res.kind === 'ok') {
-      navigation.navigate('mainStack', { screen: 'start' })
+    if (res.kind === "ok") {
+      navigation.navigate("mainStack", { screen: "start" })
     }
   }
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
     setOtp(randomOtpNumber())
-    navigation.addListener('focus', () => {
+    navigation.addListener("focus", () => {
       if (user.isBiometricUnlock) {
         handleUnlockBiometric()
       }

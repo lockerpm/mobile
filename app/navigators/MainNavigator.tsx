@@ -4,7 +4,7 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { AppState } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { useNavigation } from "@react-navigation/native"
@@ -173,52 +173,62 @@ export const MainNavigator = observer(() => {
     }
   }
 
+  const activeHandling = useRef(false)
+
   // On app return from background -> lock? + sync autofill data + check push noti navigation
   const _handleAppStateChange = async (nextAppState: string) => {
+    // if (prevAppState.current === nextAppState) {
+    //   return
+    // }
+    // prevAppState.current = nextAppState
+
     Logger.debug(nextAppState)
 
     // Ohter state (background/inactive)
     if (nextAppState !== "active") {
       appIsActive = false
+      activeHandling.current = false
       return
     }
 
-    // Sync autofill data on iOS
-    if (IS_IOS && !appIsActive) {
-      syncAutofillData()
-    }
+    if (!activeHandling.current) {
+      activeHandling.current = true
+      // Sync autofill data on iOS
+      if (IS_IOS && !appIsActive) {
+        syncAutofillData()
+      }
 
-    // Active
-    if (!appIsActive) {
-      appIsActive = true
+      // Active
+      if (!appIsActive) {
+        appIsActive = true
 
-      // Check lock screen
-      if (user.appTimeout === AppTimeoutType.SCREEN_OFF) {
-        // Dont lock if user just return from overlay task
-        if (uiStore.isPerformOverlayTask) {
-          uiStore.setIsPerformOverlayTask(false)
+        //  Check lock screen
+        if (user.appTimeout === AppTimeoutType.SCREEN_OFF) {
+          // Dont lock if user just return from overlay task
+
+          // Check user settings to lock
+          if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
+            await logout()
+            navigation.navigate("login")
+          } else {
+            await lock()
+            navigation.navigate("lock")
+          }
+
+          activeHandling.current = false
           return
         }
 
-        // Check user settings to lock
-        if (user.appTimeoutAction === TimeoutActionType.LOGOUT) {
-          await logout()
-          navigation.navigate("login")
-        } else {
-          await lock()
-          navigation.navigate("lock")
+        // Check push noti data
+        const navigationRequest = await parsePushNotiData()
+        if (navigationRequest.path) {
+          // handle navigate browse
+          navigationRequest.tempParams &&
+            navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
+          navigation.navigate(navigationRequest.path, navigationRequest.params)
         }
-        return
       }
-
-      // Check push noti data
-      const navigationRequest = await parsePushNotiData()
-      if (navigationRequest.path) {
-        // handle navigate browse
-        navigationRequest.tempParams &&
-          navigation.navigate(navigationRequest.path, navigationRequest.tempParams)
-        navigation.navigate(navigationRequest.path, navigationRequest.params)
-      }
+      activeHandling.current = false
     }
   }
 
@@ -321,8 +331,10 @@ export const MainNavigator = observer(() => {
 
   // Check device screen on/off
   useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange)
+    const subscription = AppState.addEventListener("change", _handleAppStateChange)
+
     return () => {
+      subscription.remove()
       clearTimeout(timeout)
     }
   }, [timeout])

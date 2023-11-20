@@ -136,6 +136,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
       return
     }
     setIsBioUnlocking(true)
+
     const res = await biometricLogin()
     setIsBioUnlocking(false)
     if (res.kind === "ok") {

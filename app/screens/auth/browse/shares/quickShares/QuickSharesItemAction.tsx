@@ -8,6 +8,7 @@ import { View, Image } from "react-native"
 import { Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { Utils } from "app/services/coreService/utils"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 
 type Props = {
   isOpen: boolean
@@ -63,6 +64,7 @@ export const QuickSharesItemAction = observer((props: Props) => {
         <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image
+              defaultSource={BROWSE_ITEMS.password.icon}
               source={cipherMapper.img}
               style={{ height: 40, width: 40, borderRadius: 8, opacity: isExpired ? 0.3 : 1 }}
             />
