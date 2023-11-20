@@ -1,12 +1,12 @@
 // @ts-nocheck
-import { useTheme } from 'app/services/context'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { AccountRoleText, SharedGroupType, SharedMemberType, SharingStatus } from 'app/static/types'
-import { CollectionView } from 'core/models/view/collectionView'
-import React, { useState } from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
-import { Text } from 'app/components/cores'
-import { ActionItem, ActionSheet } from 'app/components/ciphers'
+import { useTheme } from "app/services/context"
+import { useCipherData, useHelper } from "app/services/hook"
+import { AccountRoleText, SharedGroupType, SharedMemberType, SharingStatus } from "app/static/types"
+import { CollectionView } from "core/models/view/collectionView"
+import React, { useState } from "react"
+import { View, Image, TouchableOpacity } from "react-native"
+import { Text } from "app/components/cores"
+import { ActionItem, ActionSheet } from "app/components/ciphers"
 
 interface Props {
   reload: boolean
@@ -23,16 +23,16 @@ export const SharedUsers = (props: Props) => {
   const { translate } = useHelper()
   const { editShareCipher } = useCipherData()
 
-  const isEditable = item.role === 'admin'
+  const isEditable = item.role === "admin"
 
-  const onEditRole = async (shareType: 'only_fill' | 'edit') => {
+  const onEditRole = async (shareType: "only_fill" | "edit") => {
     let role = AccountRoleText.MEMBER
     let autofillOnly = false
     switch (shareType) {
-      case 'only_fill':
+      case "only_fill":
         autofillOnly = true
         break
-      case 'edit':
+      case "edit":
         role = AccountRoleText.ADMIN
         break
     }
@@ -41,9 +41,9 @@ export const SharedUsers = (props: Props) => {
       item.id,
       role,
       autofillOnly,
-      item.type === 'group'
+      item.type === "group",
     )
-    if (res.kind === 'ok' || res.kind === 'unauthorized') {
+    if (res.kind === "ok" || res.kind === "unauthorized") {
       setShowSheetModal(false)
       setReload(!reload)
     }
@@ -58,37 +58,38 @@ export const SharedUsers = (props: Props) => {
       style={{
         borderBottomColor: colors.block,
         borderBottomWidth: 1,
-        width: '100%',
-        flexDirection: 'row',
+        width: "100%",
+        flexDirection: "row",
         marginBottom: 15,
         paddingVertical: 14,
-        justifyContent: 'flex-start',
+        justifyContent: "flex-start",
       }}
     >
       <Image
-        source={item.avatar ? { uri: item.avatar } : require('./group.png')}
+        resizeMode="contain"
+        source={item.avatar ? { uri: item.avatar } : require("./group.png")}
         style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
       />
 
       <TouchableOpacity
-        style={{ flex: 1, justifyContent: 'center' }}
+        style={{ flex: 1, justifyContent: "center" }}
         onPress={() => setShowSheetModal(true)}
       >
         <Text text={item.email || item.name} />
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: "row" }}>
           <Text
             preset="default"
             text={
               !isEditable
-                ? translate('shares.share_type.view')
-                : translate('shares.share_type.edit')
+                ? translate("shares.share_type.view")
+                : translate("shares.share_type.edit")
             }
           />
           {/* Sharing status */}
           {item.status && (
             <View
               style={{
-                alignSelf: 'center',
+                alignSelf: "center",
                 marginLeft: 10,
                 paddingHorizontal: 10,
                 paddingVertical: 2,
@@ -105,7 +106,7 @@ export const SharedUsers = (props: Props) => {
                 size="small"
                 text={item.status.toUpperCase()}
                 style={{
-                  fontWeight: 'bold',
+                  fontWeight: "bold",
                   color: colors.background,
                 }}
               />
@@ -119,15 +120,16 @@ export const SharedUsers = (props: Props) => {
         onClose={() => setShowSheetModal(false)}
         header={
           <View style={{ paddingHorizontal: 20 }}>
-            <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+            <View style={{ flexDirection: "row", marginBottom: 16 }}>
               <Image
-                source={item.avatar ? { uri: item.avatar } : require('./group.png')}
+                resizeMode="contain"
+                source={item.avatar ? { uri: item.avatar } : require("./group.png")}
                 style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
               />
 
-              <View style={{ justifyContent: 'center', height: 40, marginLeft: 16 }}>
+              <View style={{ justifyContent: "center", height: 40, marginLeft: 16 }}>
                 {item.full_name && <Text>{item.full_name}</Text>}
-                <Text preset={item.name ? 'default' : 'label'}>{item.email || item.name}</Text>
+                <Text preset={item.name ? "default" : "label"}>{item.email || item.name}</Text>
               </View>
             </View>
           </View>
@@ -136,31 +138,31 @@ export const SharedUsers = (props: Props) => {
         <ActionItem
           containerStyle={{ backgroundColor: !isEditable && colors.block }}
           action={() => {
-            onEditRole('only_fill')
+            onEditRole("only_fill")
           }}
           icon="eye"
           disabled={!isEditable}
-          name={translate('shares.share_folder.viewer')}
+          name={translate("shares.share_folder.viewer")}
         />
 
         <ActionItem
           containerStyle={{ backgroundColor: isEditable && colors.block }}
           action={() => {
-            onEditRole('edit')
+            onEditRole("edit")
           }}
           icon="edit"
           disabled={isEditable}
-          name={translate('shares.share_folder.editor')}
+          name={translate("shares.share_folder.editor")}
         />
 
         <ActionItem
           action={() => {
-            onRemove(collection, item.id, item.type === 'group')
+            onRemove(collection, item.id, item.type === "group")
             setShowSheetModal(false)
           }}
           icon="user-minus"
           color={colors.error}
-          name={translate('shares.share_folder.remove')}
+          name={translate("shares.share_folder.remove")}
         />
       </ActionSheet>
     </View>

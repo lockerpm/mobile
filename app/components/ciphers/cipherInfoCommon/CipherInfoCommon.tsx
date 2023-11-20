@@ -1,18 +1,18 @@
-import { TextInput, Text, ImageIcon } from 'app/components/cores'
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
-import { SharedMemberType } from 'app/static/types'
-import { FieldType } from 'core/enums'
-import { CipherView } from 'core/models/view'
-import { CollectionView } from 'core/models/view/collectionView'
-import filter from 'lodash/filter'
-import find from 'lodash/find'
-import * as React from 'react'
-import { StyleProp, View, ViewStyle, Image, TouchableOpacity } from 'react-native'
+import { TextInput, Text, ImageIcon } from "app/components/cores"
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { useHelper } from "app/services/hook"
+import { SharedMemberType } from "app/static/types"
+import { FieldType } from "core/enums"
+import { CipherView } from "core/models/view"
+import { CollectionView } from "core/models/view/collectionView"
+import filter from "lodash/filter"
+import find from "lodash/find"
+import * as React from "react"
+import { StyleProp, View, ViewStyle, Image, TouchableOpacity } from "react-native"
 
 const CONTAINER: ViewStyle = {
-  justifyContent: 'center',
+  justifyContent: "center",
 }
 
 export interface CipherInfoCommonProps {
@@ -36,7 +36,7 @@ export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
     return (
       filter(
         collectionStore.collections,
-        (e) => cipher.collectionIds && cipher.collectionIds.includes(e.id)
+        (e) => cipher.collectionIds && cipher.collectionIds.includes(e.id),
       ) || []
     )
   })()
@@ -74,14 +74,14 @@ export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
       <Text
         preset="label"
         size="base"
-        text={translate('common.owned_by')}
+        text={translate("common.owned_by")}
         style={{ marginTop: 20, marginBottom: 5 }}
       />
       <Text
         text={
           getTeam(user.teams, cipher.organizationId).name ||
           getTeam(cipherStore.organizations, cipher.organizationId).name ||
-          translate('common.me')
+          translate("common.me")
         }
       />
 
@@ -96,7 +96,7 @@ export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
       <Text
         preset="label"
         size="base"
-        text={translate('common.folders')}
+        text={translate("common.folders")}
         style={{ marginTop: 20, marginBottom: 10 }}
       />
       {collections.length > 0
@@ -104,22 +104,22 @@ export const CipherInfoCommon = (props: CipherInfoCommonProps) => {
             <View
               key={c.id}
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
+                flexDirection: "row",
+                alignItems: "center",
                 marginBottom: 10,
               }}
             >
               <ImageIcon icon="folder-share" size={30} />
-              <Text text={c.name || translate('folder.unassigned')} style={{ marginLeft: 10 }} />
+              <Text text={c.name || translate("folder.unassigned")} style={{ marginLeft: 10 }} />
             </View>
           ))
         : (!cipher.organizationId ||
             !!folder.name ||
             getTeam(user.teams, cipher.organizationId)) && (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <ImageIcon icon="folder" size={30} />
               <Text
-                text={folder.name || translate('folder.unassigned')}
+                text={folder.name || translate("folder.unassigned")}
                 numberOfLines={2}
                 style={{ marginLeft: 10, flex: 1 }}
               />
@@ -137,13 +137,13 @@ const SharedWith = ({ shareMember, show, setShow }) => {
       <View>
         <Text
           preset="label"
-          text={translate('common.share_with')}
+          text={translate("common.share_with")}
           style={{ fontSize: 14, marginTop: 20, marginBottom: 5 }}
         />
         <View
           style={{
-            flexDirection: show ? 'column' : 'row',
-            alignItems: !show ? 'center' : 'flex-start',
+            flexDirection: show ? "column" : "row",
+            alignItems: !show ? "center" : "flex-start",
           }}
         >
           {shareMember.member.map((element, index) => {
@@ -155,11 +155,12 @@ const SharedWith = ({ shareMember, show, setShow }) => {
                   key={index}
                   style={{
                     marginVertical: 5,
-                    flexDirection: 'row',
-                    alignItems: 'center',
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
                   <Image
+                    resizeMode="contain"
                     source={{ uri: element.avatar }}
                     style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
                   />
@@ -171,7 +172,7 @@ const SharedWith = ({ shareMember, show, setShow }) => {
 
           <TouchableOpacity style={{ marginTop: 10 }} onPress={() => setShow(!show)}>
             <Text
-              text={!show ? translate('common.see_all') : translate('common.collapse')}
+              text={!show ? translate("common.see_all") : translate("common.collapse")}
               color={colors.primary}
             />
           </TouchableOpacity>

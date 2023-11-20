@@ -102,6 +102,7 @@ export const Contact = (props: Props) => {
 
       <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
         <Image
+          resizeMode="contain"
           source={{ uri: trustedContact.avatar }}
           style={{ height: 40, width: 40, borderRadius: 20, marginRight: 12 }}
         />

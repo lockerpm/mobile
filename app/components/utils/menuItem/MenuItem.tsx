@@ -1,7 +1,7 @@
-import React from 'react'
-import { TouchableOpacity, View, ViewProps, Image } from 'react-native'
-import { Icon, IconTypes, Text } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
+import React from "react"
+import { TouchableOpacity, View, ViewProps, Image } from "react-native"
+import { Icon, IconTypes, Text } from "app/components/cores"
+import { useTheme } from "app/services/context"
 
 export type MenuItemProps = {
   icon: IconTypes
@@ -24,7 +24,6 @@ export const MenuItem = ({
   content,
   rightIcon,
 }: MenuItemProps) => {
-
   if (hide) return null
 
   return (
@@ -33,24 +32,25 @@ export const MenuItem = ({
       onPress={onPress}
       style={{
         padding: 16,
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
       }}
     >
       {!imageSource ? (
         <Icon icon={icon} containerStyle={{ marginRight: 10 }} />
       ) : (
         <Image
+          resizeMode="contain"
           source={{ uri: imageSource }}
           style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10 }}
         />
       )}
 
-      <View style={{ flex: 1, flexDirection: 'row' }}>
+      <View style={{ flex: 1, flexDirection: "row" }}>
         {!content ? <Text text={name} /> : content}
       </View>
 
-      <Icon icon={rightIcon || 'caret-right'} size={20} />
+      <Icon icon={rightIcon || "caret-right"} size={20} />
     </TouchableOpacity>
   )
 }
@@ -67,7 +67,7 @@ export const MenuItemContainer = ({ title, children, style, ...viewProps }: Cont
       {!!title && <Text preset="label" text={title.toUpperCase()} style={{ marginVertical: 2 }} />}
       <View
         style={[
-          { borderRadius: 12, overflow: 'hidden', backgroundColor: colors.background },
+          { borderRadius: 12, overflow: "hidden", backgroundColor: colors.background },
           style,
         ]}
         {...viewProps}

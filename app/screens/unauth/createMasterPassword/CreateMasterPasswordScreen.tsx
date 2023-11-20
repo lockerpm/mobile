@@ -178,6 +178,7 @@
 //             {!!user.avatar && (
 //               <View style={{ borderRadius: 14, overflow: "hidden" }}>
 //                 <Image
+// resizeMode="contain"
 //                   source={{ uri: user.avatar }}
 //                   style={{
 //                     height: 28,

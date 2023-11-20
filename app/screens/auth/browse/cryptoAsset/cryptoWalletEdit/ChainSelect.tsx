@@ -1,10 +1,10 @@
-import { Select } from 'app/components/utils'
-import { useTheme } from 'app/services/context'
-import { CHAIN_LIST } from 'app/utils/crypto/chainlist'
-import React from 'react'
-import { ImageStyle, View, ViewStyle, Image } from 'react-native'
-import { Icon, Text } from 'app/components/cores'
-import { useHelper } from 'app/services/hook'
+import { Select } from "app/components/utils"
+import { useTheme } from "app/services/context"
+import { CHAIN_LIST } from "app/utils/crypto/chainlist"
+import React from "react"
+import { ImageStyle, View, ViewStyle, Image } from "react-native"
+import { Icon, Text } from "app/components/cores"
+import { useHelper } from "app/services/hook"
 
 type Props = {
   selected: {
@@ -27,13 +27,13 @@ export const ChainSelect = (props: Props) => {
 
   // ------------------ COMPUTED ------------------
 
-  const otherChain = findChain('other')
+  const otherChain = findChain("other")
 
   // ------------------ RENDER ------------------
 
   const IMG_CONTAINER: ViewStyle = {
     borderRadius: 20,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginRight: 10,
     borderWidth: 1,
     borderColor: colors.border,
@@ -43,7 +43,7 @@ export const ChainSelect = (props: Props) => {
     borderRadius: 20,
     height: 40,
     width: 40,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   }
 
   return (
@@ -59,19 +59,20 @@ export const ChainSelect = (props: Props) => {
         label: c.name,
         value: c.alias,
       }))}
-      title={translate('crypto_asset.network')}
+      title={translate("crypto_asset.network")}
       renderItem={(value, { isSelected }, itemLabel) => (
         <View
           style={{
             backgroundColor: colors.background,
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             paddingHorizontal: 16,
             paddingVertical: 8,
           }}
         >
           <View style={IMG_CONTAINER}>
             <Image
+              resizeMode="contain"
               source={findChain(value)?.logo || otherChain.logo}
               borderRadius={20}
               style={IMG}
@@ -85,24 +86,24 @@ export const ChainSelect = (props: Props) => {
         <View style={{ flex: 1 }}>
           <View
             style={{
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
+              width: "100%",
+              flexDirection: "row",
+              alignItems: "center",
             }}
           >
             <View style={{ flex: 1 }}>
               <Text
                 preset="label"
                 size="base"
-                text={translate('crypto_asset.network')}
+                text={translate("crypto_asset.network")}
                 style={{ marginBottom: 5 }}
               />
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                   flex: 1,
-                  flexWrap: 'wrap',
+                  flexWrap: "wrap",
                 }}
               >
                 {selected.length ? (
@@ -112,14 +113,15 @@ export const ChainSelect = (props: Props) => {
                       <View
                         key={item.alias}
                         style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
+                          flexDirection: "row",
+                          alignItems: "center",
                           marginRight: 12,
                           marginVertical: 2,
                         }}
                       >
                         <View style={IMG_CONTAINER}>
                           <Image
+                            resizeMode="contain"
                             source={selectedChain?.logo || otherChain.logo}
                             borderRadius={20}
                             style={IMG}
@@ -131,7 +133,7 @@ export const ChainSelect = (props: Props) => {
                     )
                   })
                 ) : (
-                  <Text text={translate('common.none')} />
+                  <Text text={translate("common.none")} />
                 )}
               </View>
             </View>

@@ -58,6 +58,7 @@ export const NoteInfoScreen: FC<AppStackScreenProps<"notes__info">> = observer((
       )}
 
       <Image
+        resizeMode="contain"
         source={BROWSE_ITEMS.note.icon}
         style={{
           height: 55,

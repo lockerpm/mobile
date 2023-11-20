@@ -69,6 +69,7 @@ export const WelcomePremiumScreen: FC<AppStackScreenProps<"welcome_premium">> = 
         />
         <View style={{ zIndex: 1, flex: 1, alignItems: "center", justifyContent: "center" }}>
           <Image
+            resizeMode="contain"
             source={PREMIUM}
             style={{
               width: 152,
@@ -76,6 +77,7 @@ export const WelcomePremiumScreen: FC<AppStackScreenProps<"welcome_premium">> = 
             }}
           />
           <Image
+            resizeMode="contain"
             source={HIGH_FIVE}
             style={{
               marginTop: 24,

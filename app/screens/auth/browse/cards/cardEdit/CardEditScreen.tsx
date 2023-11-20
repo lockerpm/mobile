@@ -238,6 +238,7 @@ export const CardEditScreen: FC<AppStackScreenProps<"cards__edit">> = observer((
       <View style={{ padding: 16, paddingTop: 0 }}>
         <View style={{ flexDirection: "row" }}>
           <Image
+            resizeMode="contain"
             source={BROWSE_ITEMS.card.icon}
             style={{ height: 50, width: 50, marginRight: 10, marginTop: 25 }}
           />

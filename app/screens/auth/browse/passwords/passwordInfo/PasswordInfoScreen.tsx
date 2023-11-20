@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Linking, View, Image } from "react-native"
+import { Linking, View } from "react-native"
 import { PasswordAction } from "../PasswordAction"
 import { PasswordOtp } from "../passwordEdit/Otp"
 import { Text, Screen, Header, Icon, TextInput } from "app/components/cores"
@@ -12,6 +12,8 @@ import { CipherInfoCommon, DeletedAction } from "app/components/ciphers"
 import { PasswordStrength, Textarea } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 export const PasswordInfoScreen: FC<AppStackScreenProps<"passwords__info">> = observer((props) => {
   const navigation = props.navigation
@@ -72,7 +74,9 @@ export const PasswordInfoScreen: FC<AppStackScreenProps<"passwords__info">> = ob
         />
       )}
 
-      <Image
+      <CipherIconImage
+        resizeMode="contain"
+        defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
         source={source}
         style={{ height: 55, width: 55, borderRadius: 8, alignSelf: "center" }}
       />

@@ -264,6 +264,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
               }}
             >
               <Image
+                resizeMode="contain"
                 source={require("./avatar.png")}
                 style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
               />
@@ -310,6 +311,7 @@ export const AddUserShareFolderModal = (props: InviteProps) => {
                   }}
                 >
                   <Image
+                    resizeMode="contain"
                     source={e.email ? { uri: e.avatar } : require("./group.png")}
                     style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
                   />

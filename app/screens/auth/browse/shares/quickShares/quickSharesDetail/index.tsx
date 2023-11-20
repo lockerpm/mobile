@@ -3,10 +3,13 @@ import { useTheme } from "app/services/context"
 import { useCipherHelper, useHelper } from "app/services/hook"
 import moment from "moment"
 import React, { FC } from "react"
-import { TouchableOpacity, View, ViewStyle, Image } from "react-native"
+import { TouchableOpacity, View, ViewStyle } from "react-native"
 import { Button, Header, Icon, Screen, Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 export const QuickSharesDetailScreen: FC<AppStackScreenProps<"quickShareItemsDetail">> = observer(
   (props) => {
@@ -97,8 +100,8 @@ export const QuickSharesDetailScreen: FC<AppStackScreenProps<"quickShareItemsDet
           }}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Image
-              resizeMode="contain"
+            <CipherIconImage
+              defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
               source={cipherMapper.img}
               style={{ height: 40, width: 40, borderRadius: 8 }}
             />

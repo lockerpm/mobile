@@ -65,6 +65,7 @@ export const CardInfoScreen: FC<AppStackScreenProps<"cards__info">> = observer((
       )}
 
       <Image
+        resizeMode="contain"
         source={BROWSE_ITEMS.card.icon}
         style={{ height: 55, width: 55, alignSelf: "center" }}
       />

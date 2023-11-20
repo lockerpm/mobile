@@ -1,10 +1,13 @@
-import React, { memo } from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
-import isEqual from 'lodash/isEqual'
-import { Text } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { useCipherHelper } from 'app/services/hook'
-import { PasswordStrength } from 'app/components/utils'
+import React, { memo } from "react"
+import { View, TouchableOpacity } from "react-native"
+import isEqual from "lodash/isEqual"
+import { Text } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { useCipherHelper } from "app/services/hook"
+import { PasswordStrength } from "app/components/utils"
+import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 type Prop = {
   item: any
@@ -27,8 +30,9 @@ export const ListItem = memo(
           height: 70.5,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <CipherIconImage
+            defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
             source={item.imgLogo}
             style={{
               height: 40,
@@ -38,7 +42,7 @@ export const ListItem = memo(
           />
 
           <View style={{ flex: 1, marginLeft: 12 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View style={{ flex: 1 }}>
                 <Text
                   preset="bold"
@@ -73,7 +77,7 @@ export const ListItem = memo(
     )
   },
   (prev, next) => {
-    const whitelist = ['goToDetail']
+    const whitelist = ["goToDetail"]
     const prevProps = Object.keys(prev)
     const nextProps = Object.keys(next)
     if (!isEqual(prevProps, nextProps)) {
@@ -86,5 +90,5 @@ export const ListItem = memo(
       return val && isEqual(prev[key], next[key])
     }, true)
     return isPropsEqual
-  }
+  },
 )

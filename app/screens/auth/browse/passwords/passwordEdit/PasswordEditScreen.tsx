@@ -254,6 +254,7 @@ export const PasswordEditScreen: FC<AppStackScreenProps<"passwords__edit">> = ob
       <View style={{ padding: 16, paddingTop: 0 }}>
         <View style={{ flexDirection: "row" }}>
           <Image
+            resizeMode="contain"
             source={BROWSE_ITEMS.password.icon}
             style={{ height: 50, width: 50, marginRight: 10, marginTop: 25 }}
           />
