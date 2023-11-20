@@ -163,6 +163,7 @@ export const NoteEditScreen: FC<AppStackScreenProps<"notes__edit">> = observer((
       <View style={{ padding: 16, paddingTop: 0 }}>
         <View style={{ flexDirection: "row" }}>
           <Image
+            resizeMode="contain"
             source={BROWSE_ITEMS.note.icon}
             style={{
               height: 50,

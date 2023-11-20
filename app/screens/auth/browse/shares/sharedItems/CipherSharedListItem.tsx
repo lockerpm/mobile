@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { TouchableOpacity, View, Image } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import isEqual from "lodash/isEqual"
 import { Icon, Text, Toggle } from "app/components/cores"
 import { AccountRole } from "app/static/types"
@@ -7,6 +7,8 @@ import { CipherView } from "core/models/view"
 import { useTheme } from "app/services/context"
 import { useHelper } from "app/services/hook"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 type Prop = {
   item: CipherSharedType
@@ -75,8 +77,8 @@ export const CipherSharedListItem = memo(
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            defaultSource={BROWSE_ITEMS.password.icon}
+          <CipherIconImage
+            defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
             source={item.imgLogo}
             style={{
               height: 40,

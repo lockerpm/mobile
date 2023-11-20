@@ -46,6 +46,7 @@ export const Member = (props: MemberProps) => {
       }}
     >
       <Image
+        resizeMode="contain"
         source={avatar ? { uri: avatar } : require("./avatar.png")}
         style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
       />
@@ -86,6 +87,7 @@ export const Member = (props: MemberProps) => {
           }}
         >
           <Image
+            resizeMode="contain"
             source={avatar ? { uri: avatar } : require("./avatar.png")}
             style={{ height: 40, width: 40, borderRadius: 20, marginRight: 12 }}
           />

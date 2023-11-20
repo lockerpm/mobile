@@ -133,6 +133,7 @@ export const IdentityInfoScreen: FC<AppStackScreenProps<"identities__info">> = o
       )}
 
       <Image
+        resizeMode="contain"
         source={BROWSE_ITEMS.identity.icon}
         style={{
           height: 55,

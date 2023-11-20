@@ -4,11 +4,13 @@ import { useTheme } from "app/services/context"
 import { useCipherHelper, useHelper } from "app/services/hook"
 import { SendView } from "core/models/view/sendView"
 import React from "react"
-import { View, Image } from "react-native"
+import { View } from "react-native"
 import { Text } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { Utils } from "app/services/coreService/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 type Props = {
   isOpen: boolean
@@ -63,8 +65,8 @@ export const QuickSharesItemAction = observer((props: Props) => {
       header={
         <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Image
-              defaultSource={BROWSE_ITEMS.password.icon}
+            <CipherIconImage
+              defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
               source={cipherMapper.img}
               style={{ height: 40, width: 40, borderRadius: 8, opacity: isExpired ? 0.3 : 1 }}
             />

@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
-import Countries from 'app/static/countries.json'
-import Flags from 'app/static/flags.json'
-import { View, Modal, TouchableWithoutFeedback, Image, Keyboard } from 'react-native'
-import { TouchableHighlight, Text, Icon } from '../../cores'
-import { useTheme } from 'app/services/context'
-import { SearchBar } from '../searchBar/SearchBar'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import Countries from "app/static/countries.json"
+import Flags from "app/static/flags.json"
+import { View, Modal, TouchableWithoutFeedback, Image, Keyboard } from "react-native"
+import { TouchableHighlight, Text, Icon } from "../../cores"
+import { useTheme } from "app/services/context"
+import { SearchBar } from "../searchBar/SearchBar"
 
 export type CountryCode = keyof typeof Countries
 
@@ -31,7 +31,7 @@ interface Props {
 export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) => {
   const { colors } = useTheme()
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("")
 
   const items = Object.keys(Countries).map((code) => {
     return {
@@ -45,7 +45,7 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
   const sheetRef = useRef<BottomSheet>(null)
 
   // variables
-  const snapPoints = useMemo(() => ['45%', '90%'], [])
+  const snapPoints = useMemo(() => ["45%", "90%"], [])
 
   const showSheet = useCallback(() => {
     sheetRef.current?.snapToIndex(0)
@@ -81,13 +81,14 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
     >
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: "row",
+          alignItems: "center",
           paddingHorizontal: 20,
           paddingVertical: 15,
         }}
       >
         <Image
+          resizeMode="contain"
           source={{ uri: item.flag }}
           style={{
             height: 22,
@@ -137,7 +138,7 @@ export const CountryPicker = ({ value, onValueChange, isOpen, onClose }: Props) 
               (i) =>
                 !search.trim() ||
                 i.country_name.toUpperCase().includes(search.toUpperCase()) ||
-                i.country_code.includes(search.toUpperCase())
+                i.country_code.includes(search.toUpperCase()),
             )}
             keyboardShouldPersistTaps="never"
             keyExtractor={(item) => item.country_code}

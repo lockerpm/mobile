@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { TouchableOpacity, View, Image } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import isEqual from "lodash/isEqual"
 import moment from "moment"
 import { SendView } from "core/models/view/sendView"
@@ -7,6 +7,8 @@ import { useTheme } from "app/services/context"
 import { useCipherHelper, useHelper } from "app/services/hook"
 import { Text } from "app/components/cores"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 type Prop = {
   item: SendView
@@ -42,8 +44,8 @@ export const QuickSharesCipherListItem = memo(
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            defaultSource={BROWSE_ITEMS.password.icon}
+          <CipherIconImage
+            defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
             source={cipher.imgLogo}
             style={{
               height: 40,

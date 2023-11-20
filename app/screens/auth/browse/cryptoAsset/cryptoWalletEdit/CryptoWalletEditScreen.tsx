@@ -208,6 +208,7 @@ export const CryptoWalletEditScreen: FC<AppStackScreenProps<"cryptoWallets__edit
         <View style={{ padding: 16, paddingTop: 0 }}>
           <View style={{ flexDirection: "row" }}>
             <Image
+              resizeMode="contain"
               source={BROWSE_ITEMS.cryptoWallet.icon}
               style={{
                 height: 50,

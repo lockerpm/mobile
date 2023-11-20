@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { TouchableOpacity, View, Image, Platform } from "react-native"
+import { TouchableOpacity, View, Platform } from "react-native"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/DeleteConfirmModal"
 import { LeaveShareModal } from "./LeaveShareModal"
 import { useCipherData, useCipherHelper, useFolder, useHelper } from "app/services/hook"
@@ -14,6 +14,8 @@ import { Text } from "../../cores"
 import { ActionItem } from "../actionsSheet/ActionSheetItem"
 import { PremiumTag } from "app/components/utils"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { CipherIconImage } from "../cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 export interface CipherActionProps {
   children?: React.ReactNode
@@ -176,8 +178,8 @@ export const CipherAction = (props: CipherActionProps) => {
         header={
           <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                defaultSource={BROWSE_ITEMS.password.icon}
+              <CipherIconImage
+                defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
                 source={cipherMapper.img}
                 resizeMode="contain"
                 style={{ height: 40, width: 40, borderRadius: 8 }}

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useRef, useState } from "react"
-import { Dimensions, TouchableOpacity, View, Image } from "react-native"
+import { Dimensions, TouchableOpacity, View } from "react-native"
 import Animated from "react-native-reanimated"
 import moment from "moment"
 import { useCipherHelper, useHelper } from "app/services/hook"
@@ -17,6 +17,8 @@ import { useTheme } from "app/services/context"
 import { ActionSheet } from "app/components/ciphers"
 import { AppStackScreenProps } from "app/navigators/navigators.types"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 const { width } = Dimensions.get("screen")
 
@@ -175,8 +177,8 @@ export const QuickSharesScreen: FC<AppStackScreenProps<"quick_shares">> = observ
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Image
-          defaultSource={BROWSE_ITEMS.password.icon}
+        <CipherIconImage
+          defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
           source={cipher.imgLogo}
           style={{
             height: 40,

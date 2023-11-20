@@ -72,6 +72,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<"cryptoWallets__info
 
         {selectedApp ? (
           <Image
+            resizeMode="contain"
             source={selectedApp.logo}
             style={{
               height: 55,
@@ -82,6 +83,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<"cryptoWallets__info
           />
         ) : (
           <Image
+            resizeMode="contain"
             source={BROWSE_ITEMS.cryptoWallet.icon}
             style={{ height: 55, width: 55, alignSelf: "center" }}
           />
@@ -114,6 +116,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<"cryptoWallets__info
                 }}
               >
                 <Image
+                  resizeMode="contain"
                   source={selectedApp?.logo || otherApp.logo}
                   borderRadius={20}
                   style={{
@@ -218,6 +221,7 @@ export const CryptoWalletInfoScreen: FC<AppStackScreenProps<"cryptoWallets__info
                       }}
                     >
                       <Image
+                        resizeMode="contain"
                         source={selectedChain?.logo || otherChain.logo}
                         borderRadius={20}
                         style={{

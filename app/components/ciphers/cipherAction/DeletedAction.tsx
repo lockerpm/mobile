@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, Image, Platform } from "react-native"
+import { View, Platform } from "react-native"
 import { DeleteConfirmModal } from "../../../screens/auth/browse/trash/DeleteConfirmModal"
 import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
@@ -9,6 +9,8 @@ import { CipherType } from "core/enums"
 import { ActionItem } from "../actionsSheet/ActionSheetItem"
 import { useTheme } from "app/services/context"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { CipherIconImage } from "../cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 export interface DeletedActionProps {
   children?: React.ReactNode
@@ -102,8 +104,8 @@ export const DeletedAction = (props: DeletedActionProps) => {
         header={
           <View style={{ width: "100%", paddingHorizontal: 20 }}>
             <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-              <Image
-                defaultSource={BROWSE_ITEMS.password.icon}
+              <CipherIconImage
+                defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
                 source={cipherMapper.img}
                 resizeMode="contain"
                 style={{ height: 40, width: 40, borderRadius: 8 }}

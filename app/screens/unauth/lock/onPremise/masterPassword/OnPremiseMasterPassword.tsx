@@ -145,6 +145,7 @@ export const OnPremiseLockMasterPassword = ({ data, email, biometryType, handleL
             {!!data?.avatar && (
               <View style={{ borderRadius: 14, overflow: "hidden" }}>
                 <Image
+                  resizeMode="contain"
                   source={{ uri: data.avatar }}
                   style={{
                     height: 28,

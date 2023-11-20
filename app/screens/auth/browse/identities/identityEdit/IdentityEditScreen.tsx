@@ -330,6 +330,7 @@ export const IdentityEditScreen: FC<AppStackScreenProps<"identities__edit">> = o
       <View style={{ padding: 16, paddingTop: 0 }}>
         <View style={{ flexDirection: "row" }}>
           <Image
+            resizeMode="contain"
             source={BROWSE_ITEMS.identity.icon}
             style={{
               height: 50,

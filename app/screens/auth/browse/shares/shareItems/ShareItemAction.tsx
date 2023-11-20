@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, Image, Platform } from "react-native"
+import { View, Platform } from "react-native"
 import { EditShareModal } from "./EditShareModal"
 import { SharedGroupType, SharedMemberType } from "app/static/types"
 import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
@@ -9,6 +9,8 @@ import { ActionItem, ActionSheet } from "app/components/ciphers"
 import { Text } from "app/components/cores"
 import { useTheme } from "app/services/context"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 type Props = {
   isOpen: boolean
@@ -98,9 +100,8 @@ export const ShareItemAction = (props: Props) => {
         header={
           <View style={{ width: "100%", paddingHorizontal: 20 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                defaultSource={BROWSE_ITEMS.password.icon}
-                resizeMode="contain"
+              <CipherIconImage
+                defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
                 source={cipherMapper.img}
                 style={{ height: 40, width: 40, borderRadius: 8 }}
               />

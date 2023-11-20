@@ -256,6 +256,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
           >
             {!!user.avatar && (
               <Image
+                resizeMode="contain"
                 source={{ uri: user.avatar }}
                 style={{
                   height: 28,

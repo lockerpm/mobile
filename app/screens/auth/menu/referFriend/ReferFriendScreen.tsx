@@ -70,6 +70,7 @@ export const ReferFriendScreen: FC<AppStackScreenProps<"refer_friend">> = observ
           onPress={() => navigation.goBack()}
         />
         <Image
+          resizeMode="contain"
           source={require("assets/images/intro/refer.png")}
           style={{
             marginTop: 20,

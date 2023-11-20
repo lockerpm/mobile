@@ -375,6 +375,7 @@ export const NormalSharesScreen: FC<AppStackScreenProps<"normal_shares">> = obse
                 }}
               >
                 <Image
+                  resizeMode="contain"
                   source={e.email ? { uri: e.avatar } : SHARE_GROUP}
                   style={{ height: 40, width: 40, borderRadius: 20, marginRight: 10 }}
                 />

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View, Image } from "react-native"
+import { View } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Text } from "app/components/cores"
 import { useCipherData, useCipherHelper, useHelper } from "app/services/hook"
@@ -11,6 +11,8 @@ import { DeleteConfirmModal } from "../browse/trash/DeleteConfirmModal"
 import { ActionItem, ActionSheet } from "app/components/ciphers"
 import { CipherType } from "core/enums"
 import { BROWSE_ITEMS } from "app/navigators/navigators.route"
+import { CipherIconImage } from "app/components/ciphers/cipherList/CipherIconImage"
+import { IS_IOS } from "app/config/constants"
 
 interface Props {
   isOpen?: boolean
@@ -93,8 +95,8 @@ export const AutoFillItemAction = observer(function AutoFillItemAction(props: Pr
         header={
           <View style={{ width: "100%", paddingHorizontal: 20, marginBottom: 10 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                defaultSource={BROWSE_ITEMS.password.icon}
+              <CipherIconImage
+                defaultSource={IS_IOS ? BROWSE_ITEMS.password.icon : undefined}
                 source={cipherMapper.img}
                 resizeMode="contain"
                 style={{ height: 40, width: 40, borderRadius: 8 }}

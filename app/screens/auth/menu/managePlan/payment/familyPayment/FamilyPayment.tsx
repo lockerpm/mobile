@@ -1,15 +1,15 @@
-import React from 'react'
-import { View, Image } from 'react-native'
-import { SKU } from '../PricePlan.sku'
-import { Text, Button, Icon } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
+import React from "react"
+import { View, Image } from "react-native"
+import { SKU } from "../PricePlan.sku"
+import { Text, Button, Icon } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { useHelper } from "app/services/hook"
 
 interface Props {
   purchase: (subID: string) => void
   isProcessPayment: boolean
 }
-const SECURITY = require('assets/images/intro/intro1.png')
+const SECURITY = require("assets/images/intro/intro1.png")
 
 export const FamilyPayment = (props: Props) => {
   const { colors } = useTheme()
@@ -17,48 +17,49 @@ export const FamilyPayment = (props: Props) => {
 
   const benefits = [
     {
-      preset: 'black',
-      text: translate('payment.family.benefits.family'),
+      preset: "black",
+      text: translate("payment.family.benefits.family"),
     },
     {
-      text: translate('payment.family.benefits.storage'),
+      text: translate("payment.family.benefits.storage"),
     },
     {
-      text: translate('payment.family.benefits.health'),
+      text: translate("payment.family.benefits.health"),
     },
     {
-      text: translate('payment.family.benefits.weak'),
+      text: translate("payment.family.benefits.weak"),
     },
     {
-      text: translate('payment.family.benefits.scaner'),
+      text: translate("payment.family.benefits.scaner"),
     },
     {
-      text: translate('payment.family.benefits.emergency'),
+      text: translate("payment.family.benefits.emergency"),
     },
     {
-      text: translate('payment.family.benefits.share'),
+      text: translate("payment.family.benefits.share"),
     },
   ]
 
   return (
-    <View style={{ width: '100%' }}>
+    <View style={{ width: "100%" }}>
       <View
         style={{
-          alignItems: 'center',
+          alignItems: "center",
         }}
       >
         <Image
+          resizeMode="contain"
           source={SECURITY}
           style={{
             width: 200,
             height: 200,
           }}
         />
-        <Text preset="bold" text={translate('payment.family.header')} />
+        <Text preset="bold" text={translate("payment.family.header")} />
         <Text
-          text={translate('payment.family.ads')}
+          text={translate("payment.family.ads")}
           style={{
-            textAlign: 'center',
+            textAlign: "center",
             marginTop: 8,
             marginHorizontal: 20,
           }}
@@ -78,14 +79,14 @@ export const FamilyPayment = (props: Props) => {
           <View
             key={String(index)}
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               marginVertical: 6,
             }}
           >
             <Icon icon="check" size={20} />
             <Text
               text={e.text}
-              preset={e.preset ? 'default' : 'label'}
+              preset={e.preset ? "default" : "label"}
               style={{ marginLeft: 12 }}
             />
           </View>
@@ -104,7 +105,7 @@ export const FamilyPayment = (props: Props) => {
           }}
         >
           <Text preset="bold" style={{ color: colors.primary }}>
-            {props.isProcessPayment ? '' : translate('payment.family.month')}
+            {props.isProcessPayment ? "" : translate("payment.family.month")}
           </Text>
         </Button>
         <Button
@@ -117,7 +118,7 @@ export const FamilyPayment = (props: Props) => {
           }}
         >
           <Text preset="bold" style={{ color: colors.white }}>
-            {props.isProcessPayment ? '' : translate('payment.family.year')}
+            {props.isProcessPayment ? "" : translate("payment.family.year")}
           </Text>
         </Button>
       </View>

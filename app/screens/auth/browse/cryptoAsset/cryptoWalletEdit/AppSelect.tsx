@@ -1,10 +1,10 @@
-import React from 'react'
-import { ImageStyle, View, ViewStyle } from 'react-native'
-import { Text, AutoImage as Image, Icon } from 'app/components/cores'
-import { WALLET_APP_LIST } from 'app/utils/crypto/applist'
-import { Select } from 'app/components/utils'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
+import React from "react"
+import { ImageStyle, View, ViewStyle } from "react-native"
+import { Text, AutoImage as Image, Icon } from "app/components/cores"
+import { WALLET_APP_LIST } from "app/utils/crypto/applist"
+import { Select } from "app/components/utils"
+import { useTheme } from "app/services/context"
+import { useHelper } from "app/services/hook"
 
 type Props = {
   alias: string
@@ -25,13 +25,13 @@ export const AppSelect = (props: Props) => {
   // ------------------ COMPUTED ------------------
 
   const selectedApp = findApp(alias)
-  const otherApp = findApp('other')
+  const otherApp = findApp("other")
 
   // ------------------ RENDER ------------------
 
   const IMG_CONTAINER: ViewStyle = {
     borderRadius: 20,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginRight: 10,
     borderWidth: 1,
     borderColor: colors.border,
@@ -41,7 +41,7 @@ export const AppSelect = (props: Props) => {
     borderRadius: 20,
     height: 40,
     width: 40,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   }
 
   return (
@@ -56,19 +56,24 @@ export const AppSelect = (props: Props) => {
         label: a.name,
         value: a.alias,
       }))}
-      title={translate('crypto_asset.wallet_app')}
+      title={translate("crypto_asset.wallet_app")}
       renderItem={(value, { isSelected }, itemLabel) => (
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             backgroundColor: colors.background,
             paddingHorizontal: 16,
             paddingVertical: 8,
           }}
         >
           <View style={IMG_CONTAINER}>
-            <Image resizeMode='contain' source={findApp(value)?.logo || otherApp.logo} borderRadius={20} style={IMG} />
+            <Image
+              resizeMode="contain"
+              source={findApp(value)?.logo || otherApp.logo}
+              borderRadius={20}
+              style={IMG}
+            />
           </View>
           <Text text={itemLabel} style={{ flex: 1, marginRight: 20 }} />
           {isSelected && <Icon icon="check" color={colors.primary} size={24} />}
@@ -78,30 +83,31 @@ export const AppSelect = (props: Props) => {
         <View style={{ flex: 1 }}>
           <View
             style={{
-              justifyContent: 'space-between',
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
+              justifyContent: "space-between",
+              width: "100%",
+              flexDirection: "row",
+              alignItems: "center",
             }}
           >
             <View>
               <Text
                 preset="label"
                 size="base"
-                text={translate('crypto_asset.wallet_app')}
+                text={translate("crypto_asset.wallet_app")}
                 style={{ marginBottom: 5 }}
               />
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
                 {!!alias && (
                   <View style={IMG_CONTAINER}>
                     <Image
+                      resizeMode="contain"
                       source={selectedApp?.logo || otherApp.logo}
                       borderRadius={20}
                       style={IMG}
                     />
                   </View>
                 )}
-                <Text text={label || translate('common.none')} />
+                <Text text={label || translate("common.none")} />
               </View>
             </View>
             <Icon icon="caret-right" size={20} color={colors.secondaryText} />
