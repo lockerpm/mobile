@@ -162,7 +162,7 @@ const RootStack = observer((props: Props) => {
   // -------------------- RENDER ----------------------
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <Stack.Navigator
         initialRouteName="init"
         screenOptions={{

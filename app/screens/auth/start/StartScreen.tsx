@@ -47,12 +47,6 @@ export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) =>
     setMsg(translate("start.decrypting"))
     Promise.all([loadFolders(), loadCollections(), loadOrganizations()])
 
-    // TODO: check device limit
-    const isDeviceLimitReached = false
-    if (isDeviceLimitReached) {
-      navigation.navigate("switchDevice")
-    }
-
     setMsg("")
 
     // Parse push noti data

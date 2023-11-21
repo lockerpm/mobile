@@ -17,7 +17,6 @@ import { CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET, IS_IOS, WS_URL } from "..
 import { AppTimeoutType, SocketEvent, SocketEventType, TimeoutActionType } from "app/static/types"
 
 import {
-  SwitchDeviceScreen,
   StartScreen,
   BiometricUnlockIntroScreen,
   PasswordEditScreen,
@@ -435,7 +434,6 @@ export const MainNavigator = observer(() => {
         />
 
         <Stack.Screen name="enterpriseInvited" component={EnterpriseInvitedScreen} />
-        <Stack.Screen name="switchDevice" component={SwitchDeviceScreen} />
         <Stack.Screen name="biometricUnlockIntro" component={BiometricUnlockIntroScreen} />
 
         <Stack.Screen name="dataOutdated" component={DataOutdatedScreen} />
