@@ -49,7 +49,7 @@ type Props = {
 }
 const RootStack = observer((props: Props) => {
   const { navigationRef } = props
-  const { colors } = useTheme()
+  const { colors, setIsDark } = useTheme()
   const { parsePushNotiData } = useHelper()
   const { clearAllData, handleDynamicLink } = useAuthentication()
   const { uiStore, user } = useStores()
@@ -108,6 +108,7 @@ const RootStack = observer((props: Props) => {
 
   useEffect(() => {
     Intercom.setInAppMessageVisibility(Visibility.GONE)
+    setIsDark(uiStore.isDark)
   }, [])
 
   // Check internet connection

@@ -246,17 +246,18 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
       <View
         style={{
           borderWidth: 1,
-          borderColor: colors.palette.orange7,
-          backgroundColor: colors.palette.orange1,
+          marginVertical: 12,
+          marginHorizontal: 16,
+          borderColor: colors.palette.orange8,
+          backgroundColor: colors.palette.orange3,
           flexDirection: "row",
           paddingVertical: 16,
           paddingHorizontal: 20,
-          width: "100%",
+          borderRadius: 12,
         }}
       >
         <Icon
           icon="keyboard"
-          color={colors.palette.neutral9}
           size={32}
           containerStyle={{
             marginRight: 16,
@@ -264,10 +265,7 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
         />
 
         <View style={{ marginRight: 80 }}>
-          <Text
-            color={colors.palette.neutral9}
-            text={translate("all_items.enable_autofill.content")}
-          />
+          <Text text={translate("all_items.enable_autofill.content")} />
           <Text
             preset="bold"
             text={translate("all_items.enable_autofill.btn")}
@@ -289,7 +287,6 @@ const SuggestEnableAutofill = ({ isShow, onClose }) => {
         >
           <Icon
             icon="x"
-            color={colors.palette.neutral9}
             size={20}
             onPress={() => {
               onClose(true)

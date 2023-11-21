@@ -78,6 +78,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator"
         safeAreaEdges={["bottom"]}
         backgroundColor={colors.block}
         footerPadding
+        padding
         header={
           <Header
             leftIcon="arrow-left"
@@ -113,6 +114,7 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator"
             marginTop: 16,
             backgroundColor: colors.background,
             padding: 16,
+            borderRadius: 12,
           }}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -121,17 +123,23 @@ export const PasswordGeneratorScreen: FC<AppStackScreenProps<"passwordGenerator"
           </View>
           <PasswordStrength preset="text" value={getPasswordStrength(password).score} />
         </View>
-        {/* Password end */}
 
-        <View style={{ padding: 16 }}>
-          <Text preset="label" size="base" text={translate("common.options").toUpperCase()} />
-        </View>
+        <Text
+          preset="bold"
+          color={colors.secondaryText}
+          size="base"
+          text={translate("common.options").toUpperCase()}
+          style={{
+            paddingVertical: 12,
+          }}
+        />
 
         {/* Options */}
         <View
           style={{
             backgroundColor: colors.background,
             padding: 16,
+            borderRadius: 12,
           }}
         >
           {/* Password length */}

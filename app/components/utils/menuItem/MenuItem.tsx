@@ -61,7 +61,7 @@ export const MenuItem = ({
         )}
       </View>
 
-      <Icon icon={rightIcon || "caret-right"} size={20} />
+      <Icon icon={rightIcon || "caret-right"} size={20} color={colors.secondaryText} />
     </TouchableOpacity>
   )
 }
@@ -73,9 +73,17 @@ interface ContainerProps extends ViewProps {
 
 export const MenuItemContainer = ({ title, children, style, ...viewProps }: ContainerProps) => {
   const { colors } = useTheme()
+  const arrayLength = Array.isArray(children) ? children.length : 1
   return (
     <View style={{ marginTop: 16 }}>
-      {!!title && <Text preset="label" text={title.toUpperCase()} style={{ marginVertical: 2 }} />}
+      {!!title && (
+        <Text
+          preset="bold"
+          color={colors.secondaryText}
+          text={title.toUpperCase()}
+          style={{ marginVertical: 2 }}
+        />
+      )}
       <View
         style={[
           { borderRadius: 12, overflow: "hidden", backgroundColor: colors.background },
@@ -89,7 +97,7 @@ export const MenuItemContainer = ({ title, children, style, ...viewProps }: Cont
               key={index}
               style={{
                 borderBottomColor: colors.border,
-                borderBottomWidth: 1,
+                borderBottomWidth: index !== arrayLength - 1 ? 1 : 0,
               }}
             >
               {child}

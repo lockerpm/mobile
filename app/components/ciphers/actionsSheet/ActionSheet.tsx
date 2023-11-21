@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo, useRef } from "react"
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet"
-import { View, TouchableWithoutFeedback, Modal } from "react-native"
+import { View, TouchableWithoutFeedback, Modal, StyleSheet, Platform } from "react-native"
 import { useTheme } from "app/services/context"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { gestureHandlerRootHOC } from "react-native-gesture-handler"
+import { BlurView } from "@react-native-community/blur"
 
 interface Props {
   /**
@@ -61,12 +62,49 @@ export const ActionSheet = ({ isOpen, onClose, children, header, itemHeight = 64
           enablePanDownToClose
           backdropComponent={() => (
             <TouchableWithoutFeedback onPress={closeSheet} style={{ flex: 1 }}>
-              <View style={{ flex: 1, backgroundColor: colors.transparentModal }} />
+              <BlurView
+                blurType={Platform.OS === "ios" ? "ultraThinMaterialDark" : "dark"}
+                blurAmount={0}
+                // @ts-ignore
+                blurRadius={10}
+                overlayColor="rgba(0,0,0,0.1)"
+                style={[StyleSheet.absoluteFillObject, { backgroundColor: colors.transparent }]}
+              />
             </TouchableWithoutFeedback>
           )}
+          handleComponent={() => (
+            <View
+              style={{
+                paddingVertical: 4,
+                justifyContent: "center",
+                alignItems: "center",
+                borderTopLeftRadius: 12,
+                borderTopRightRadius: 12,
+              }}
+            >
+              <View
+                style={{
+                  marginVertical: 5,
+                  height: 4,
+                  borderRadius: 2,
+                  width: 50,
+                  backgroundColor: colors.primaryText,
+                }}
+              />
+            </View>
+          )}
+          backgroundStyle={{
+            backgroundColor: colors.background,
+          }}
         >
           {header}
-          <BottomSheetScrollView contentContainerStyle={{ paddingBottom: insets.bottom }}>
+
+          <BottomSheetScrollView
+            contentContainerStyle={{
+              paddingBottom: insets.bottom,
+              backgroundColor: colors.background,
+            }}
+          >
             {React.Children.map(children, (child, index) => {
               return (
                 <View

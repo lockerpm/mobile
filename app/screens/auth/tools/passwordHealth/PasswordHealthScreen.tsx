@@ -160,7 +160,7 @@ const Options = ({
           </View>
         </View>
 
-        <Icon icon="caret-right" size={20} color={colors.primaryText} />
+        <Icon icon="caret-right" size={20} color={colors.secondaryText} />
       </View>
     </TouchableOpacity>
   )

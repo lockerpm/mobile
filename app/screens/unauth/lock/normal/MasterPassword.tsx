@@ -31,7 +31,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
   // ---------------------- PARAMS -------------------------
 
   const [isValidForBiometric, setIsValidForBiometric] = useState(false)
-  const [masterPassword, setMasterPassword] = useState("")
+  const [masterPassword, setMasterPassword] = useState("demo@123")
   const [isUnlocking, setIsUnlocking] = useState(false)
   const [isBioUnlocking, setIsBioUnlocking] = useState(false)
   const [isSendingHint, setIsSendingHint] = useState(false)

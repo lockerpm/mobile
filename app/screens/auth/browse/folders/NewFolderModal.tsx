@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useStores } from 'app/models'
-import { useCipherData, useHelper } from 'app/services/hook'
-import { TEAM_COLLECTION_EDITOR } from 'app/static/constants'
-import { GeneralApiProblem } from 'app/services/api/apiProblem'
-import { FolderView } from 'core/models/view/folderView'
-import { CollectionView } from 'core/models/view/collectionView'
-import { BottomModal, Button, TextInput } from 'app/components/cores'
+import React, { useState, useEffect } from "react"
+import { observer } from "mobx-react-lite"
+import { useStores } from "app/models"
+import { useCipherData, useHelper } from "app/services/hook"
+import { TEAM_COLLECTION_EDITOR } from "app/static/constants"
+import { GeneralApiProblem } from "app/services/api/apiProblem"
+import { FolderView } from "core/models/view/folderView"
+import { CollectionView } from "core/models/view/collectionView"
+import { BottomModal, Button, TextInput } from "app/components/cores"
 
 interface Props {
   isOpen?: boolean
@@ -22,13 +22,13 @@ export const NewFolderModal = observer((props: Props) => {
 
   // --------------- PARAMS ----------------
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  const [owner, setOwner] = useState('me')
+  const [owner, setOwner] = useState("me")
 
   const [owners, setOwners] = useState([
-    { label: translate('common.me'), value: 'me' },
+    { label: translate("common.me"), value: "me" },
     ...user.teams
       .filter((team) => {
         return TEAM_COLLECTION_EDITOR.includes(team.role)
@@ -47,7 +47,7 @@ export const NewFolderModal = observer((props: Props) => {
     if (!name.trim() || isLoading) {
       return false
     }
-    if (owner === 'me') {
+    if (owner === "me") {
       return folderStore.folders.some((f) => f.name && f.name === name)
     }
     return collectionStore.collections.some((f) => f.name && f.name === name)
@@ -63,7 +63,7 @@ export const NewFolderModal = observer((props: Props) => {
     setIsLoading(true)
 
     let res: { kind: string } | GeneralApiProblem
-    if (owner === 'me') {
+    if (owner === "me") {
       const data = new FolderView()
       data.name = name
       res = await createFolder(data)
@@ -75,11 +75,11 @@ export const NewFolderModal = observer((props: Props) => {
     }
 
     setIsLoading(false)
-    if (res.kind === 'ok') {
-      setName('')
+    if (res.kind === "ok") {
+      setName("")
       onClose()
     } else {
-      if (res.kind === 'unauthorized') {
+      if (res.kind === "unauthorized") {
         onClose()
       }
     }
@@ -89,30 +89,31 @@ export const NewFolderModal = observer((props: Props) => {
 
   useEffect(() => {
     if (uiStore.isOffline) {
-      setOwner('me')
+      setOwner("me")
     }
   }, [isOpen, uiStore.isOffline])
 
   // --------------- RENDER ----------------
 
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose} title={translate('folder.create_folder')}>
+    <BottomModal isOpen={isOpen} onClose={onClose} title={translate("folder.create_folder")}>
       <TextInput
+        animated
         isError={isExisted}
-        helper={translate('folder.folder_existed')}
-        label={translate('folder.folder_name')}
+        helper={translate("folder.folder_existed")}
+        label={translate("folder.folder_name")}
         value={name}
         onChangeText={(txt) => setName(txt)}
         onSubmitEditing={handleCreateFolder}
       />
 
       <Button
-        text={translate('common.create')}
+        text={translate("common.create")}
         disabled={isLoading || !name.trim() || isExisted}
         loading={isLoading}
         onPress={handleCreateFolder}
         style={{
-          width: '100%',
+          width: "100%",
           marginTop: 30,
         }}
       />

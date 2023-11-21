@@ -68,7 +68,7 @@ export const colorsDark = {
    * A helper for making something see-thru.
    */
   transparent: 'rgba(0, 0, 0, 0)',
-  transparentModal: 'rgba(0, 0, 0, 0.3)',
+  transparentModal: 'rgba(255, 255, 255, 0.1)',
 
   toastBackground: 'rgba(100, 100, 100, 1)',
   /**
@@ -88,7 +88,7 @@ export const colorsDark = {
   infoLight: paletteDark.blue1,
   success: paletteDark.green6,
   warning: paletteDark.gold6,
-  error: paletteDark.red5,
+  error: paletteDark.red6,
 
   /**
    * Neutral color
@@ -99,11 +99,11 @@ export const colorsDark = {
    * The neutral color of CyStack is based on transparency, as shown on the right:
    */
   title: paletteDark.neutral1,
-  primaryText: paletteDark.neutral1,
-  secondaryText: paletteDark.neutral5,
+  primaryText: paletteDark.neutral2,
+  secondaryText: paletteDark.neutral6,
   disable: paletteDark.neutral5,
   border: paletteDark.neutral7,
   divider: paletteDark.neutral8,
-  background: paletteDark.neutral9,
-  block: paletteDark.neutral7,
+  background: '#000000',
+  block: paletteDark.neutral9,
 }

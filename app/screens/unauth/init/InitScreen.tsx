@@ -17,11 +17,13 @@ import { Loading } from "app/components/utils"
 import { LockType } from "../lock/lock.types"
 import { observer } from "mobx-react-lite"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
+import { useTheme } from "app/services/context"
 
 const IS_IOS = Platform.OS === "ios"
 
 export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => {
   const { translate } = useHelper()
+  const { colors } = useTheme()
   const { user, cipherStore, uiStore } = useStores()
   const navigation = props.navigation
 
@@ -232,7 +234,7 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
   // ------------------ RENDER ---------------------
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       {isRooted && (
         <View
           style={{

@@ -236,20 +236,28 @@ export const MenuScreen = observer(() => {
       </MenuItemContainer>
 
       <MenuItemContainer>
-        {items.map((item, index) => (
-          <MenuItem key={index} {...item} />
-        ))}
+        {items
+          .filter((item) => !item.hide)
+          .map((item, index) => (
+            <MenuItem key={index} {...item} />
+          ))}
       </MenuItemContainer>
 
-      {user.pwd_user_type !== "enterprise" && (
-        <ReferFriendMenuItem
-          onPress={() =>
-            navigation.navigate("refer_friend", {
-              referLink,
-            })
-          }
-        />
-      )}
+      {
+        !(
+          user.pwd_user_type === "enterprise" ||
+          user.isLifeTimePremiumPlan ||
+          (user.isLifeTimeFamilyPlan && (
+            <ReferFriendMenuItem
+              onPress={() =>
+                navigation.navigate("refer_friend", {
+                  referLink,
+                })
+              }
+            />
+          ))
+        )
+      }
 
       <MenuItemContainer>
         <MenuItem

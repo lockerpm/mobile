@@ -116,17 +116,17 @@ export const PlanUsage = () => {
   // -------------------- RENDER ----------------------
 
   return (
-    <View style={{ backgroundColor: colors.background, marginBottom: 10, padding: 16 }}>
+    <View style={{ padding: 16, paddingBottom: 0 }}>
       <View
         style={{
           borderRadius: 10,
           padding: 16,
-          backgroundColor: colors.block,
+          backgroundColor: colors.background,
         }}
       >
-        {isFreeAccount && <Text preset="bold" text={"Plan Usage"} style={{ marginBottom: 8 }} />}
+        {isFreeAccount && <Text preset="bold" text={"Plan Usage"} />}
         {!isFreeAccount && (
-          <View style={{ flex: 1, flexDirection: "row", marginBottom: 8 }}>
+          <View style={{ flex: 1, flexDirection: "row" }}>
             <Text preset="default" text={"Plan Usage"} />
             <View
               style={{

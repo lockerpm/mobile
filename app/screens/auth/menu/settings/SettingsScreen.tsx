@@ -117,23 +117,23 @@ export const SettingsScreen = observer(() => {
         },
       ],
     },
-    // theme: {
-    //   value: uiStore.isDark ? "dark" : "light",
-    //   onChange: (theme: string) => {
-    //     uiStore.setIsDark(theme === "dark")
-    //     setIsDark(theme === "dark")
-    //   },
-    //   options: [
-    //     {
-    //       label: translate("settings.light_theme"),
-    //       value: "light",
-    //     },
-    //     {
-    //       label: translate("settings.dark_theme"),
-    //       value: "dark",
-    //     },
-    //   ],
-    // },
+    theme: {
+      value: uiStore.isDark ? "dark" : "light",
+      onChange: (theme: string) => {
+        uiStore.setIsDark(theme === "dark")
+        setIsDark(theme === "dark")
+      },
+      options: [
+        {
+          label: translate("settings.light_theme"),
+          value: "light",
+        },
+        {
+          label: translate("settings.dark_theme"),
+          value: "dark",
+        },
+      ],
+    },
     passkey: {
       value: false,
       onChage: () => {
@@ -239,7 +239,7 @@ export const SettingsScreen = observer(() => {
           )}
         />
 
-        {/* <Select
+        <Select
           value={settings.theme.value}
           onChange={settings.theme.onChange}
           options={settings.theme.options}
@@ -250,7 +250,7 @@ export const SettingsScreen = observer(() => {
               RightAccessory={<Text text={label} />}
             />
           )}
-        /> */}
+        />
       </MenuItemContainer>
 
       <MenuItemContainer title={translate("common.security")}>

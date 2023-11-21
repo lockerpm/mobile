@@ -1,8 +1,8 @@
-import * as React from 'react'
-import { StyleProp, TextInput, TextInputProps, View, ViewStyle } from 'react-native'
-import { SharedValue } from 'react-native-reanimated'
-import { Text, Icon } from '../../cores'
-import { useTheme } from 'app/services/context'
+import * as React from "react"
+import { StyleProp, TextInput, TextInputProps, View, ViewStyle } from "react-native"
+import { SharedValue } from "react-native-reanimated"
+import { Text, Icon } from "../../cores"
+import { useTheme } from "app/services/context"
 
 export interface SearchBarProps extends TextInputProps {
   /**
@@ -25,9 +25,9 @@ export const SearchBar = (props: SearchBarProps) => {
 
   const CONTAINER: StyleProp<ViewStyle> = [
     {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: colors.palette.neutral4,
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: colors.block,
       borderRadius: 8,
       paddingLeft: 16,
       paddingRight: 8,

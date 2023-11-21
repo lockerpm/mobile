@@ -19,7 +19,7 @@ function ThemeContextProvider({ children }) {
       value={{
         isDark,
         setIsDark,
-        colors: isDark ? colorsLight : colorsLight,
+        colors: isDark ? colorsDark : colorsLight,
       }}
     >
       {children}

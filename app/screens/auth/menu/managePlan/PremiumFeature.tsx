@@ -1,20 +1,19 @@
-import React from 'react'
-import { TouchableOpacity, View, ViewStyle, Image } from 'react-native'
-import { Text } from 'app/components/cores'
-import { useNavigation } from '@react-navigation/native'
-import { useTheme } from 'app/services/context'
-import { useStores } from 'app/models'
-import { useHelper } from 'app/services/hook'
+import React from "react"
+import { TouchableOpacity, View, ViewStyle, Image } from "react-native"
+import { Text } from "app/components/cores"
+import { useNavigation } from "@react-navigation/native"
+import { useTheme } from "app/services/context"
+import { useStores } from "app/models"
+import { useHelper } from "app/services/hook"
 
 export const PREMIUM_FEATURES_IMG = {
-  locker: require('assets/images/intro/locker.png'),
-  emergencyContact: require('assets/images/intro/emergency-contact.png'),
-  web: require('assets/images/intro/web.png'),
-  sharePassword: require('assets/images/intro/share-password.png'),
+  locker: require("assets/images/intro/locker.png"),
+  emergencyContact: require("assets/images/intro/emergency-contact.png"),
+  web: require("assets/images/intro/web.png"),
+  sharePassword: require("assets/images/intro/share-password.png"),
 }
 
 export const PremiumFeature = () => {
-  const { colors } = useTheme()
   const { user } = useStores()
   const { translate } = useHelper()
   const navigation = useNavigation() as any
@@ -23,43 +22,43 @@ export const PremiumFeature = () => {
   const item = {
     locker: {
       img: PREMIUM_FEATURES_IMG.locker,
-      desc: translate('manage_plan.feature.locker'),
+      desc: translate("manage_plan.feature.locker"),
       action: () => {
         isFreeAccount
-          ? navigation.navigate('payment', { benefitTab: 0 })
-          : navigation.navigate('mainTab', { screen: 'homeTab' })
+          ? navigation.navigate("payment", { benefitTab: 0 })
+          : navigation.navigate("mainTab", { screen: "homeTab" })
       },
     },
     emergencyContact: {
       img: PREMIUM_FEATURES_IMG.emergencyContact,
-      desc: translate('manage_plan.feature.emergency_contact.header'),
+      desc: translate("manage_plan.feature.emergency_contact.header"),
       action: () => {
         isFreeAccount
-          ? navigation.navigate('payment', { benefitTab: 2 })
-          : navigation.navigate('yourTrustedContact')
+          ? navigation.navigate("payment", { benefitTab: 2 })
+          : navigation.navigate("yourTrustedContact")
       },
     },
     web: {
       img: PREMIUM_FEATURES_IMG.web,
-      desc: translate('manage_plan.feature.web'),
+      desc: translate("manage_plan.feature.web"),
       action: () => {
         isFreeAccount
-          ? navigation.navigate('payment', { benefitTab: 1 })
-          : navigation.navigate('mainTab', { screen: 'toolsTab' })
+          ? navigation.navigate("payment", { benefitTab: 1 })
+          : navigation.navigate("mainTab", { screen: "toolsTab" })
       },
     },
     sharePassword: {
       img: PREMIUM_FEATURES_IMG.sharePassword,
-      desc: translate('manage_plan.feature.share_password'),
+      desc: translate("manage_plan.feature.share_password"),
       action: () => {
         isFreeAccount
-          ? navigation.navigate('payment', { benefitTab: 3 })
-          : navigation.navigate('mainTab', {
-            screen: 'browseTab',
-            params: {
-              screen: 'shares',
-            },
-          })
+          ? navigation.navigate("payment", { benefitTab: 3 })
+          : navigation.navigate("mainTab", {
+              screen: "browseTab",
+              params: {
+                screen: "shares",
+              },
+            })
       },
     },
   }
@@ -68,17 +67,17 @@ export const PremiumFeature = () => {
 
   const ROW_ITEMS: ViewStyle = {
     height: 130,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
   }
 
   return (
-    <View style={{ backgroundColor: colors.background, padding: 16 }}>
+    <View style={{ padding: 16 }}>
       <Text
         preset="bold"
-        text={translate('manage_plan.feature.title')}
-        style={{ marginBottom: 20 }}
+        text={translate("manage_plan.feature.title")}
+        style={{ marginBottom: 12 }}
       />
       <View>
         <View style={ROW_ITEMS}>
@@ -107,8 +106,8 @@ const PremiumFeatureItem = (prop: {
     flex: 1,
     padding: 20,
     borderRadius: 10,
-    alignItems: 'center',
-    backgroundColor: colors.block,
+    alignItems: "center",
+    backgroundColor: colors.background,
   }
   return (
     <TouchableOpacity
@@ -121,7 +120,7 @@ const PremiumFeatureItem = (prop: {
         },
       ]}
     >
-      <Image resizeMode='contain' source={prop.item.img} style={{ height: '80%', width: '80%' }} />
+      <Image resizeMode="contain" source={prop.item.img} style={{ height: "80%", width: "80%" }} />
       <Text text={prop.item.desc} style={{ fontSize: 12, marginVertical: 10 }} />
     </TouchableOpacity>
   )

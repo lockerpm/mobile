@@ -31,7 +31,7 @@ export const SettingsItem = ({
     if (isLoading) return <ActivityIndicator size="small" color={colors.primary} />
     if (RightAccessory) return RightAccessory
 
-    return <Icon icon="caret-right" size={20} />
+    return <Icon icon="caret-right" size={20} color={colors.secondaryText} />
   }
 
   return (

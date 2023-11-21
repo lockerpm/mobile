@@ -1,9 +1,9 @@
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import React from 'react'
-import { StyleProp, View, ViewStyle } from 'react-native'
-import { Text } from 'app/components/cores'
-import { useHelper } from 'app/services/hook'
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import React from "react"
+import { StyleProp, View, ViewStyle } from "react-native"
+import { Text } from "app/components/cores"
+import { useHelper } from "app/services/hook"
 
 type Props = {
   style?: StyleProp<ViewStyle>
@@ -23,10 +23,10 @@ export const LoadingHeader = (props: Props) => {
       <View
         style={[
           {
-            backgroundColor: colors.title,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
+            backgroundColor: colors.background,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
             paddingVertical: 4,
           },
           style,
@@ -34,17 +34,16 @@ export const LoadingHeader = (props: Props) => {
       >
         <Text
           size="base"
-          color={colors.white}
           style={{
             marginLeft: 5,
           }}
-          text={title + '...'}
+          text={title + "..."}
         />
       </View>
     )
   }
 
-  if (isDataLoading) return <Render title={translate('common.loading') + '...'} />
-  if (isLoadingHealth) return <Render title={translate('common.calculating') + '...'} />
+  if (isDataLoading) return <Render title={translate("common.loading") + "..."} />
+  if (isLoadingHealth) return <Render title={translate("common.calculating") + "..."} />
   return null
 }
