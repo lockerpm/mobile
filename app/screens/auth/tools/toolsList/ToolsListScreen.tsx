@@ -11,7 +11,7 @@ import { useHelper } from "app/services/hook"
 export const ToolsListScreen = observer(() => {
   const navigation = useNavigation() as any
   const { translate } = useHelper()
-  const { colors, isDark } = useTheme()
+  const { colors } = useTheme()
 
   // -----------------------METHODS----------------------------
 
@@ -31,12 +31,12 @@ export const ToolsListScreen = observer(() => {
   return (
     <Screen
       padding
-      backgroundColor={isDark ? colors.background : colors.block}
+      backgroundColor={colors.block}
       header={<TabHeader title={translate("common.tools")} />}
     >
       <View
         style={{
-          backgroundColor: isDark ? colors.block : colors.background,
+          backgroundColor: colors.background,
           borderRadius: 12,
           paddingHorizontal: 16,
           marginTop: 20,
@@ -72,7 +72,7 @@ export const ToolsListScreen = observer(() => {
                 <Text preset="label" tx={item.desc} size="base" />
               </View>
 
-              <Icon icon="caret-right" size={20} color={colors.title} />
+              <Icon icon="caret-right" size={20} color={colors.secondaryText} />
             </TouchableOpacity>
           )
         })}

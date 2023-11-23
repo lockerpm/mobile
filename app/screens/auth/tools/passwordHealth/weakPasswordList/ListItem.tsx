@@ -54,11 +54,7 @@ export const ListItem = memo(
                 />
               </View>
 
-              <View
-                style={{
-                  paddingBottom: 4,
-                }}
-              >
+              <View>
                 <PasswordStrength preset="text" value={item.strength} />
               </View>
             </View>

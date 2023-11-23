@@ -94,7 +94,6 @@ export type PrimaryParamList = {
   start: undefined
 
   enterpriseInvited: undefined
-  switchDevice: undefined
   biometricUnlockIntro: undefined
 
   passwordGenerator: {

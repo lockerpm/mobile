@@ -180,13 +180,19 @@ export const TextInput = forwardRef(function TextField(
     $containerStyleOverride,
   ]
   const $labelStyles: StyleProp<TextStyle> = [
-    { fontSize: 16, fontFamily: typography.primary.medium, marginBottom: 4 },
+    {
+      fontSize: 16,
+      fontFamily: typography.primary.medium,
+      marginBottom: 4,
+    },
     LabelTextProps?.style,
   ]
 
   const $inputWrapperStyles = [
     $inputWrapperStyle,
-    { borderColor: isFocus && !disabled ? colors.primary : colors.disable },
+    {
+      borderColor: isFocus && !disabled ? colors.primary : colors.disable,
+    },
     status === "error" && { borderColor: colors.error },
     TextInputProps.multiline && { minHeight: 112 },
     LeftAccessory && { paddingStart: 0 },
@@ -196,7 +202,7 @@ export const TextInput = forwardRef(function TextField(
 
   const $inputStyles = [
     $inputStyle,
-    disabled && { color: colors.disable },
+    { color: disabled ? colors.disable : colors.primaryText },
     TextInputProps.multiline && { height: "auto" },
     $inputStyleOverride,
   ]

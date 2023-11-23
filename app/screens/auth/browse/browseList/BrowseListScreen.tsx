@@ -135,7 +135,7 @@ export const BrowseListScreen = observer(() => {
             </View>
             {<Text preset="label" text={item.total} style={{ marginRight: 12 }} />}
 
-            <Icon icon="caret-right" size={20} />
+            <Icon icon="caret-right" size={20} color={colors.secondaryText} />
           </TouchableOpacity>
         ))}
       </View>

@@ -45,7 +45,7 @@ type Props = {
 }
 const RootStack = observer((props: Props) => {
   const { navigationRef } = props
-  const { colors } = useTheme()
+  const { colors, setIsDark } = useTheme()
   const { parsePushNotiData } = useHelper()
   const { clearAllData, handleDynamicLink } = useAuthentication()
   const { uiStore, user } = useStores()
@@ -102,6 +102,10 @@ const RootStack = observer((props: Props) => {
 
   // ------------------- EFFECTS -------------------
 
+  useEffect(() => {
+    setIsDark(uiStore.isDark)
+  }, [])
+
   // Check internet connection
   useEffect(() => {
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
@@ -153,7 +157,7 @@ const RootStack = observer((props: Props) => {
   // -------------------- RENDER ----------------------
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <Stack.Navigator
         initialRouteName="init"
         screenOptions={{

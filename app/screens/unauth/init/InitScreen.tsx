@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react"
-import { Alert, Linking, View } from "react-native"
+import { Alert, Linking, Platform, View } from "react-native"
 
 import VersionCheck from "react-native-version-check"
 import dynamicLinks from "@react-native-firebase/dynamic-links"
@@ -7,7 +7,6 @@ import NetInfo from "@react-native-community/netinfo"
 import DeviceInfo from "react-native-device-info"
 import JailMonkey from "jail-monkey"
 
-import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { useStores } from "app/models"
 import { load, StorageKey } from "app/utils/storage"
 import { Logger } from "app/utils/utils"
@@ -16,10 +15,14 @@ import { Text } from "app/components/cores"
 import { Loading } from "app/components/utils"
 import { observer } from "mobx-react-lite"
 import { LoginMethod } from "app/static/types"
-import { IS_IOS } from "app/config/constants"
+import { RootStackScreenProps } from "app/navigators/navigators.types"
+import { useTheme } from "app/services/context"
+
+const IS_IOS = Platform.OS === "ios"
 
 export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => {
   const { translate } = useHelper()
+  const { colors } = useTheme()
   const { user, cipherStore, uiStore } = useStores()
   const navigation = props.navigation
 
@@ -204,7 +207,7 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
   // ------------------ RENDER ---------------------
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       {isRooted && (
         <View
           style={{
