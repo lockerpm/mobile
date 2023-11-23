@@ -48,26 +48,6 @@ export function useCipherData() {
   const syncQueue = SyncQueue
 
   // ----------------------------- METHODS ---------------------------
-  // Prepare to save password
-  const createMasterPasswordItem = async (masterPassword: string, passwordStrength: number) => {
-    const payload: CipherView = newCipher(CipherType.MasterPassword)
-
-    const data = new LoginView()
-    data.username = 'locker.io'
-    data.password = masterPassword
-
-    const uriView = new LoginUriView()
-    uriView.uri = 'https://locker.io'
-    data.uris = [uriView]
-
-    payload.name = 'Locker Password'
-    payload.login = data
-
-    const res = await createCipher(payload, passwordStrength, [], true)
-    if (res.kind !== 'ok') {
-      notify('error', translate('error.master_password'))
-    }
-  }
 
   const createRandomPasswords = async (params: { count: number; type: CipherType }) => {
     const { count, type } = params
@@ -2243,6 +2223,5 @@ export function useCipherData() {
     syncProfile,
 
     createRandomPasswords,
-    createMasterPasswordItem,
   }
 }

@@ -40,8 +40,7 @@ export function useAuthentication() {
     kdf: number,
     kdfIterations: number,
     masterPassword: string,
-    email: string,
-    createMasterPasswordItem?: () => Promise<void>
+    email: string
   ) => {
     // Session login API
     const res = await user.sessionLogin({
@@ -103,10 +102,6 @@ export function useAuthentication() {
       // await syncAutofillData();
     }
 
-    if (res.data.has_no_master_pw_item && createMasterPasswordItem !== undefined) {
-      uiStore.setHasNoMasterPwItem(true)
-      await createMasterPasswordItem()
-    }
     return { kind: 'ok' }
   }
 
@@ -170,11 +165,7 @@ export function useAuthentication() {
   }
 
   // Session login
-  const sessionLogin = async (
-    masterPassword: string,
-    email: string,
-    createMasterPasswordItem?: () => Promise<void>
-  ): Promise<{ kind: string }> => {
+  const sessionLogin = async (masterPassword: string, email: string): Promise<{ kind: string }> => {
     try {
       await delay(200)
 
@@ -200,15 +191,7 @@ export function useAuthentication() {
 
       // Online session login
       const keyHash = await cryptoService.hashPassword(masterPassword, key)
-      return _loginUsingApi(
-        key,
-        keyHash,
-        kdf,
-        kdfIterations,
-        masterPassword,
-        email,
-        createMasterPasswordItem
-      )
+      return _loginUsingApi(key, keyHash, kdf, kdfIterations, masterPassword, email)
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
       return { kind: 'bad-data' }
@@ -237,7 +220,7 @@ export function useAuthentication() {
 
       const key = new SymmetricCryptoKey(Utils.fromB64ToArray(keyB64).buffer, parseInt(encType))
       // Online session login
-      return _loginUsingApi(key, keyHash, kdf, kdfIterations, '', email, () => null)
+      return _loginUsingApi(key, keyHash, kdf, kdfIterations, '', email)
     } catch (e) {
       notify('error', translate('error.session_login_failed'))
       return { kind: 'bad-data' }

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { Alert, BackHandler, View, Image, TouchableOpacity } from "react-native"
-import { useAuthentication, useCipherData, useCipherHelper, useHelper } from "app/services/hook"
+import { useAuthentication, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { EnterpriseInvitation } from "app/static/types"
 import { BiometricsType } from "../lock.types"
 import { useNavigation } from "@react-navigation/native"
 import { useTheme } from "app/services/context"
-import { CipherView, LoginUriView, LoginView } from "core/models/view"
-import { CipherType } from "core/enums"
 import { useCoreService } from "app/services/coreService"
 import { Logo, Button, Screen, Text, TextInput, Header, Icon } from "app/components/cores"
 import { EnterpriseInvitationModal } from "./EnterpriseInvitationModal"
@@ -23,8 +21,6 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
   const { user, uiStore, enterpriseStore } = useStores()
   const { notify, notifyApiError, translate } = useHelper()
   const { sessionLogin, biometricLogin } = useAuthentication()
-  const { createCipher } = useCipherData()
-  const { getPasswordStrength, newCipher } = useCipherHelper()
 
   const { cryptoService } = useCoreService()
 
@@ -67,27 +63,6 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
     }
   }
 
-  // Prepare to save password
-  const createMasterPasswordItem = async () => {
-    const payload: CipherView = newCipher(CipherType.MasterPassword)
-
-    const data = new LoginView()
-    data.username = "locker.io"
-    data.password = masterPassword
-
-    const uriView = new LoginUriView()
-    uriView.uri = "https://locker.io"
-    data.uris = [uriView]
-
-    payload.name = "Locker Password"
-    payload.login = data
-    const pwStrength = getPasswordStrength(masterPassword)
-    const res = await createCipher(payload, pwStrength.score, [], true)
-    if (res.kind !== "ok") {
-      notify("error", translate("error.master_password"))
-    }
-  }
-
   const handleUnlock = async () => {
     if (showInvitation) {
       setIsShowInvitation(true)
@@ -96,7 +71,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
     if (masterPassword) {
       setIsError(false)
       setIsUnlocking(true)
-      const res = await sessionLogin(masterPassword, user.email, createMasterPasswordItem)
+      const res = await sessionLogin(masterPassword, user.email)
       setIsUnlocking(false)
       if (res.kind === "ok") {
         setMasterPassword("")
