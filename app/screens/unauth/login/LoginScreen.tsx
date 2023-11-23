@@ -47,7 +47,7 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
     if (password) {
       setIsError(false)
       setLoginLoading(true)
-      const res = await sessionLogin(password, username, () => null)
+      const res = await sessionLogin(password, username)
       setLoginLoading(false)
 
       if (res.kind === "ok") {

@@ -25,7 +25,7 @@ export const MenuItem = ({
   rightIcon,
 }: MenuItemProps) => {
   if (hide) return null
-
+  const { colors } = useTheme()
   return (
     <TouchableOpacity
       disabled={disabled}

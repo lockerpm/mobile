@@ -293,16 +293,6 @@ export const SettingsScreen = observer(() => {
           onPress={() => navigation.navigate("export")}
         />
       </MenuItemContainer>
-
-      <MenuItemContainer title={translate("settings.danger_zone")}>
-        <SettingsItem
-          color={colors.error}
-          name={translate("settings.delete_account")}
-          onPress={() => {
-            Linking.openURL("https://locker.io/settings/account")
-          }}
-        />
-      </MenuItemContainer>
     </Screen>
   )
 })
