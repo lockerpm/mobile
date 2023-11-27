@@ -7,7 +7,7 @@
 import React, { useEffect, useState } from "react"
 import { AppState, Modal, Platform, View } from "react-native"
 import NetInfo from "@react-native-community/netinfo"
-import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
+import { DefaultTheme, NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import Intercom, { Visibility } from "@intercom/intercom-react-native"
@@ -254,6 +254,14 @@ export const RootNavigator = React.forwardRef<
   NavigationContainerRef<any>,
   Partial<React.ComponentProps<typeof NavigationContainer>>
 >((props, ref) => {
+  const { colors } = useTheme()
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: colors.background,
+    },
+  }
   // Toast
   const toastConfig = {
     success: (props: BaseToastProps) => <SuccessToast {...props} />,
@@ -262,7 +270,7 @@ export const RootNavigator = React.forwardRef<
   }
 
   return (
-    <NavigationContainer {...props} ref={ref}>
+    <NavigationContainer {...props} theme={MyTheme} ref={ref}>
       <RootStack navigationRef={ref} />
       <Toast config={toastConfig} />
     </NavigationContainer>
