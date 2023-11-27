@@ -107,7 +107,7 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
       IS_PROD &&
       VersionCheck.needUpdate()
         .then(async (res) => {
-          if (res.isNeeded) {
+          const showAlert = () => {
             Alert.alert(
               translate("alert.update.title"),
               translate("alert.update.content", { version: res.latestVersion }),
@@ -127,6 +127,17 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
               ],
             )
           }
+
+          const { currentVersion, latestVersion } = res
+          try {
+            if (parseFloat(currentVersion) < parseFloat(latestVersion)) {
+              showAlert()
+            }
+          } catch (e) {
+            if (res.isNeeded) {
+              showAlert()
+            }
+          }
         })
         .catch((e) => {
           Logger.error(e)
@@ -138,6 +149,8 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
     if (checkTrustFall()) {
       return
     }
+
+    console.log(parseFloat("1.40") > parseFloat("1.39"))
 
     await Intercom.logout()
 
