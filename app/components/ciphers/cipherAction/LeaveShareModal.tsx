@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { View, Image, TouchableOpacity } from 'react-native'
-import { BottomModal, Text } from 'app/components/cores'
-import { useTheme } from 'app/services/context'
-import { useCipherData, useHelper } from 'app/services/hook'
+import React, { useState } from "react"
+import { View, Image, TouchableOpacity } from "react-native"
+import { BottomModal, Text } from "app/components/cores"
+import { useTheme } from "app/services/context"
+import { useCipherData, useHelper } from "app/services/hook"
 
 interface Props {
   isOpen?: boolean
@@ -11,7 +11,7 @@ interface Props {
   organizationId: string
 }
 
-const TRASH = require('assets/images/intro/trash.png')
+const TRASH = require("assets/images/intro/trash.png")
 
 export const LeaveShareModal = (props: Props) => {
   const { colors } = useTheme()
@@ -24,30 +24,30 @@ export const LeaveShareModal = (props: Props) => {
   const handleLeave = async () => {
     setIsLoading(true)
     const res = await leaveShare(organizationId, cipherId)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       setIsLoading(false)
       onClose()
-      notify('success', translate('success.done'))
+      notify("success", translate("success.done"))
     } else {
       setIsLoading(false)
     }
   }
 
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose} title={''}>
-      <View style={{ alignItems: 'center' }}>
-        <Image source={TRASH} resizeMode='contain' style={{ height: 110, width: 100 }} />
+    <BottomModal isOpen={isOpen} onClose={onClose} title={""}>
+      <View style={{ alignItems: "center" }}>
+        <Image source={TRASH} resizeMode="contain" style={{ height: 110, width: 100 }} />
         <Text
           preset="bold"
           size="xl"
-          text={translate('common.warning')}
+          text={translate("common.warning")}
           style={{ marginBottom: 10, marginTop: 20 }}
         />
         <Text
           preset="label"
           size="base"
-          text={translate('shares.leave_desc')}
-          style={{ textAlign: 'center' }}
+          text={translate("shares.leave_desc")}
+          style={{ textAlign: "center" }}
         />
       </View>
 
@@ -56,12 +56,15 @@ export const LeaveShareModal = (props: Props) => {
         onPress={handleLeave}
         style={{
           backgroundColor: colors.error,
-          width: '100%',
+          width: "100%",
           marginTop: 30,
           borderRadius: 12,
+          paddingVertical: 12,
+          paddingHorizontal: 16,
+          alignItems: "center",
         }}
       >
-        <Text text={translate('shares.leave')} style={{ color: colors.white }} />
+        <Text text={translate("shares.leave")} style={{ color: colors.white }} />
       </TouchableOpacity>
     </BottomModal>
   )

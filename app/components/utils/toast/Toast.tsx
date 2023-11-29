@@ -1,8 +1,8 @@
-import React from 'react'
-import { Dimensions, View } from 'react-native'
-import { BaseToast, BaseToastProps } from 'react-native-toast-message'
-import { useTheme } from 'app/services/context'
-import { Icon } from '../../cores'
+import React from "react"
+import { Dimensions, View } from "react-native"
+import { BaseToast, BaseToastProps } from "react-native-toast-message"
+import { useTheme } from "app/services/context"
+import { Icon } from "../../cores"
 
 export const InfoToast = (props: BaseToastProps) => {
   const { colors } = useTheme()
@@ -14,7 +14,7 @@ export const InfoToast = (props: BaseToastProps) => {
         borderLeftWidth: 0,
         borderRadius: 8,
         height: undefined,
-        width: Dimensions.get('screen').width - 40,
+        width: Dimensions.get("screen").width - 40,
         backgroundColor: colors.toastBackground,
         paddingVertical: 10,
       }}
@@ -29,8 +29,8 @@ export const InfoToast = (props: BaseToastProps) => {
       renderLeadingIcon={() => (
         <View
           style={{
-            height: '100%',
-            justifyContent: 'center',
+            height: "100%",
+            justifyContent: "center",
             marginLeft: 15,
           }}
         >
@@ -42,7 +42,7 @@ export const InfoToast = (props: BaseToastProps) => {
 }
 
 export const SuccessToast = (props: BaseToastProps) => {
-  const { colors, isDark } = useTheme()
+  const { colors } = useTheme()
 
   return (
     <BaseToast
@@ -51,12 +51,12 @@ export const SuccessToast = (props: BaseToastProps) => {
         borderLeftWidth: 0,
         borderRadius: 8,
         height: undefined,
-        width: Dimensions.get('screen').width - 40,
+        width: Dimensions.get("screen").width - 40,
         backgroundColor: colors.toastBackground,
         paddingVertical: 10,
       }}
       text2Style={{
-        color: isDark ? colors.primary : colors.white,
+        color: colors.white,
         fontSize: 14,
       }}
       text2NumberOfLines={0}
@@ -66,8 +66,8 @@ export const SuccessToast = (props: BaseToastProps) => {
       renderLeadingIcon={() => (
         <View
           style={{
-            height: '100%',
-            justifyContent: 'center',
+            height: "100%",
+            justifyContent: "center",
             marginLeft: 15,
           }}
         >
@@ -79,7 +79,7 @@ export const SuccessToast = (props: BaseToastProps) => {
 }
 
 export const ErrorToast = (props: BaseToastProps) => {
-  const { colors, isDark } = useTheme()
+  const { colors } = useTheme()
 
   return (
     <BaseToast
@@ -88,12 +88,12 @@ export const ErrorToast = (props: BaseToastProps) => {
         borderLeftWidth: 0,
         borderRadius: 8,
         height: undefined,
-        width: Dimensions.get('screen').width - 40,
+        width: Dimensions.get("screen").width - 40,
         backgroundColor: colors.toastBackground,
         paddingVertical: 10,
       }}
       text2Style={{
-        color: isDark ? colors.error : colors.white,
+        color: colors.white,
         fontSize: 14,
       }}
       text2NumberOfLines={0}
@@ -103,8 +103,8 @@ export const ErrorToast = (props: BaseToastProps) => {
       renderLeadingIcon={() => (
         <View
           style={{
-            height: '100%',
-            justifyContent: 'center',
+            height: "100%",
+            justifyContent: "center",
             marginLeft: 15,
           }}
         >

@@ -27,6 +27,7 @@ export const PasswordAction = (props: Props) => {
       Logger.debug({ err: e.toString(), effort: "Try to open url with 'https://' prefix" })
       Linking.openURL("https://" + selectedCipher.login.uri)
     })
+    props.onClose && props.onClose()
   }
 
   const renderContent = () => (
@@ -42,7 +43,10 @@ export const PasswordAction = (props: Props) => {
         <ActionItem
           name={translate("password.copy_username")}
           icon="copy"
-          action={() => copyToClipboard(selectedCipher.login.username)}
+          action={() => {
+            props.onClose && props.onClose()
+            copyToClipboard(selectedCipher.login.username)
+          }}
           disabled={!selectedCipher.login.username}
         />
       )}
@@ -50,14 +54,20 @@ export const PasswordAction = (props: Props) => {
       <ActionItem
         name={translate("password.copy_password")}
         icon="copy"
-        action={() => copyToClipboard(selectedCipher.login.password)}
+        action={() => {
+          props.onClose && props.onClose()
+          copyToClipboard(selectedCipher.login.password)
+        }}
         disabled={!selectedCipher.login.password || !selectedCipher.viewPassword}
       />
 
       <ActionItem
         name={translate("password.copy_totp")}
         icon="copy"
-        action={() => copyToClipboard(getTOTP(parseOTPUri(selectedCipher.login.totp)))}
+        action={() => {
+          props.onClose && props.onClose()
+          copyToClipboard(getTOTP(parseOTPUri(selectedCipher.login.totp)))
+        }}
         disabled={!selectedCipher.login.totp}
       />
     </>

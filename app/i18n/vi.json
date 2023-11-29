@@ -33,6 +33,7 @@
     "decline": "Từ chối",
     "edit": "Sửa",
     "email": "Email",
+    "enable": "Kích hoạt",
     "enterprise": "Doanh nghiệp",
     "enter_master_pass": "Nhập Master Password",
     "expired": "Hết hạn",
@@ -137,7 +138,8 @@
     "database": "Database",
     "dob": "Ngày sinh",
     "nationality": "Quốc tịch",
-    "invalid_date": "Ngày không hợp lệ"
+    "invalid_date": "Ngày không hợp lệ",
+    "required_text": "Không được để trống"
   },
   "navigator": {
     "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."

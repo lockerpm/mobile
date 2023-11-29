@@ -254,7 +254,7 @@ const Item = ({
             alignItems: "center",
           }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View style={{ flexDirection: "row", alignItems: "center", maxWidth: "80%" }}>
             <ImageIcon icon={"root-email"} size={36} />
             <View style={{ marginLeft: 8 }}>
               <Text
@@ -266,7 +266,7 @@ const Item = ({
                     : translate("private_relay.no_subdomain")
                 }
               />
-              {!!title && <Text preset="bold" text={title} />}
+              {!!title && <Text preset="bold" text={title + "asdasdasdasdasd"} />}
             </View>
           </View>
           <Icon icon={showDesc ? "caret-up" : "caret-down"} size={20} />

@@ -1,12 +1,12 @@
-import * as React from 'react'
-import Picker from 'react-native-ui-lib/picker'
-import { StyleProp, View, ViewStyle } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from 'app/services/context'
-import { SearchBar } from '../searchBar/SearchBar'
-import { PickerItemProps, PickerModes, PickerValue } from 'react-native-ui-lib'
-import { ValueType } from 'react-native-dropdown-picker'
-import { useHelper } from 'app/services/hook'
+import * as React from "react"
+import Picker from "react-native-ui-lib/picker"
+import { StyleProp, View, ViewStyle } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useTheme } from "app/services/context"
+import { SearchBar } from "../searchBar/SearchBar"
+import { PickerItemProps, PickerModes, PickerValue } from "react-native-ui-lib"
+import { ValueType } from "react-native-dropdown-picker"
+import { useHelper } from "app/services/hook"
 
 type Option = {
   label: string
@@ -30,7 +30,7 @@ export interface SelectProps {
   renderItem?: (
     value: string,
     props: PickerItemProps & { isSelected: boolean },
-    itemLabel: string
+    itemLabel: string,
   ) => React.ReactNode
 }
 
@@ -54,7 +54,7 @@ export const Select = (props: SelectProps) => {
     title,
     multiple,
     showSearch,
-    searchPlaceholder = translate('common.search'),
+    searchPlaceholder = translate("common.search"),
   } = props
 
   const defaultOption = {
@@ -81,7 +81,7 @@ export const Select = (props: SelectProps) => {
           ? undefined
           : (value: ValueType) => {
               return renderSelected(
-                options.find((item: Option) => item.value === value) || defaultOption
+                options.find((item: Option) => item.value === value) || defaultOption,
               )
             }
       }
@@ -104,7 +104,7 @@ export const Select = (props: SelectProps) => {
           backgroundColor: colors.background,
           paddingVertical: 5,
         },
-        cancelLabel: translate('common.cancel'),
+        cancelLabel: translate("common.cancel"),
         cancelButtonProps: {
           labelStyle: {
             fontSize: 16,
@@ -112,7 +112,7 @@ export const Select = (props: SelectProps) => {
           },
         },
         cancelIcon: null,
-        doneLabel: translate('common.save'),
+        doneLabel: translate("common.save"),
         doneButtonProps: {
           labelStyle: {
             fontSize: 16,
@@ -127,11 +127,11 @@ export const Select = (props: SelectProps) => {
           paddingBottom: insets.bottom,
         },
         contentContainerStyle: {
-          paddingBottom: '10%',
+          paddingBottom: "10%",
         },
       }}
       renderCustomSearch={({ onSearchChange }) => (
-        <View style={{ paddingHorizontal: 20 }}>
+        <View style={{ paddingHorizontal: 20, backgroundColor: colors.background }}>
           <SearchBar placeholder=".." onChangeText={onSearchChange} />
         </View>
       )}

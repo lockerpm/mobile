@@ -23,19 +23,28 @@ export const IdentityAction = (props: Props) => {
       <ActionItem
         name={translate("identity.copy_full_name")}
         icon="copy"
-        action={() => copyToClipboard(selectedCipher.identity.fullName)}
+        action={() => {
+          props.onClose && props.onClose()
+          copyToClipboard(selectedCipher.identity.fullName)
+        }}
         disabled={!selectedCipher.identity.fullName}
       />
       <ActionItem
         name={translate("identity.copy_full_address")}
         icon="copy"
-        action={() => copyToClipboard(selectedCipher.identity.fullAddress)}
+        action={() => {
+          props.onClose && props.onClose()
+          copyToClipboard(selectedCipher.identity.fullAddress)
+        }}
         disabled={!selectedCipher.identity.fullAddress}
       />
       <ActionItem
         name={translate("identity.copy_full_address_2")}
         icon="copy"
-        action={() => copyToClipboard(selectedCipher.identity.fullAddressPart2)}
+        action={() => {
+          props.onClose && props.onClose()
+          copyToClipboard(selectedCipher.identity.fullAddressPart2)
+        }}
         disabled={!selectedCipher.identity.fullAddressPart2}
       />
     </>
