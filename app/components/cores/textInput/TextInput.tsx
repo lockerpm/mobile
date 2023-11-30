@@ -159,7 +159,7 @@ export const TextInput = forwardRef(function TextField(
     value = "",
     ...TextInputProps
   } = props
-  const { copyToClipboard } = useHelper()
+  const { translate, copyToClipboard } = useHelper()
   const { colors } = useTheme()
   const [isFocus, setIsFocus] = useState(false)
   const [isRequired, setIsRequired] = useState(false)
@@ -172,7 +172,7 @@ export const TextInput = forwardRef(function TextField(
   })()
   const disabled = TextInputProps.editable === false || status === "disabled"
 
-  const helper = value ? helperProps : isRequired && "This field is required"
+  const helper = value ? helperProps : isRequired && translate("common.required_text")
   const placeholderContent = placeholder && placeholder + (isRequiredProps ? " (*)" : "")
 
   const $containerStyles: StyleProp<ViewStyle> = [

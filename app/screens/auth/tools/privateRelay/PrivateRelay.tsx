@@ -266,7 +266,7 @@ const Item = ({
                     : translate("private_relay.no_subdomain")
                 }
               />
-              {!!title && <Text preset="bold" text={title + "asdasdasdasdasd"} />}
+              {!!title && <Text preset="bold" text={title} />}
             </View>
           </View>
           <Icon icon={showDesc ? "caret-up" : "caret-down"} size={20} />

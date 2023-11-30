@@ -49,7 +49,6 @@ export const OnPremiseLockByPasswordless = ({ handleLogout, biometryType }: Prop
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    setOtp(randomOtpNumber())
     navigation.addListener("focus", () => {
       if (user.isBiometricUnlock) {
         handleUnlockBiometric()
