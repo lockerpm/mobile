@@ -14,7 +14,7 @@ interface Props {
   goBack: () => void
 }
 
-const OTP_EXPIRED_COUNTER = 10
+const OTP_EXPIRED_COUNTER = 60
 
 export const OtpPasswordlessGenerator = ({ otp, setOtp, goNext, goBack }: Props) => {
   const { translate } = useHelper()
