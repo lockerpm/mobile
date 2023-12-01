@@ -127,11 +127,10 @@ export const randomOtpNumber = () => {
 }
 
 function getDigit(number: number, i: number) {
-  return parseInt(number.toString().charAt(i))
+  return parseInt(number.toString().charAt(i)) || 0
 }
 
 const NumberDisplay = memo(({ number, width }: { number: number; width: number }) => {
-  console.log(number, "--")
   return (
     <View style={{ width, height: 50, paddingHorizontal: 20 }}>
       <View

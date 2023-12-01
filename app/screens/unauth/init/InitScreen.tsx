@@ -150,8 +150,6 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
       return
     }
 
-    console.log(parseFloat("1.40") > parseFloat("1.39"))
-
     await Intercom.logout()
 
     const connectionState = await NetInfo.fetch()
