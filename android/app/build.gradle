@@ -121,8 +121,8 @@ android {
         applicationId "com.cystack.locker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4152
-        versionName "1.41"
+        versionCode 4153
+        versionName "1.42"
 
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.cystack.locker'
@@ -213,7 +213,6 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
-    
     // RN BootSplash
     implementation("androidx.core:core-splashscreen:1.0.0")
 
@@ -234,6 +233,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-fido:18.1.0'
     implementation("com.squareup.okhttp3:okhttp-urlconnection:4.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0' 
 
     // implementation 'com.google.android.play:core:1.10.3'
 

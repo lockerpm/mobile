@@ -1,12 +1,3 @@
-/* eslint-disable import/first */
-if (__DEV__) {
-  // Load Reactotron configuration in development. We don't want to
-  // include this in our production bundle, so we are using `if (__DEV__)`
-  // to only execute this in development.
-  require("./devtools/ReactotronConfig.ts")
-}
-import "./i18n"
-import "./utils/ignoreWarnings"
 import React, { ComponentType, useRef } from "react"
 import { NavigationContainerRef } from "@react-navigation/native"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
@@ -20,46 +11,17 @@ import {
 } from "./navigators"
 import * as storage from "./utils/storage"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { StyleSheet } from "react-native"
-import * as Tracking from "./utils/tracking"
-import * as Sentry from "@sentry/react-native"
-import SystemNavigationBar from "react-native-system-navigation-bar"
-// This puts screens in a native ViewController or Activity. If you want fully native
-// stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
-// https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
-import { enableScreens } from "react-native-screens"
 import { ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./services/api/apiProblem"
-import { Settings } from "react-native-fbsdk-next"
 import { Logger } from "app/utils/utils"
 import { AppEventType, EventBus } from "./utils/eventBus"
 import { api } from "./services/api"
 import { autofillParserAndroid } from "./utils/autofillHelper"
 import { ThemeContextProvider } from "./services/context/useTheme"
 import CombineContext from "./services/context/useCombineContext"
-import { colors } from "react-native-swiper-flatlist/src/themes"
+import { RootProp, NAVIGATION_PERSISTENCE_KEY, $style } from "./app"
 
-enableScreens()
-Settings.initializeSDK()
-Tracking.initSentry()
-Tracking.initAppFlyer()
-
-// setup({ storekitMode: 'STOREKIT2_MODE' });
-
-export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
-
-export interface RootProp extends JSX.IntrinsicAttributes {
-  lastFill?: number
-  autofill?: number
-  savePassword?: number
-  domain?: string
-  lastUserPasswordID?: string
-  username?: string
-  password?: string
-  hideSplashScreen: () => Promise<void>
-}
-
-const App: ComponentType<RootProp> = (props: RootProp) => {
+export const App: ComponentType<RootProp> = (props: RootProp) => {
   const navigationRef = useRef<NavigationContainerRef<any>>(null)
   setRootNavigation(navigationRef)
   useBackButtonHandler(navigationRef, canExit)
@@ -69,7 +31,6 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
   )
   const { rehydrated, rootStore } = useInitialRootStore(() => {
     // This runs after the root store has been initialized and rehydrated.
-
     // If your initialization scripts run very fast, it's good to show the splash screen for just a bit longer to prevent flicker.
     // Slightly delaying splash screen hiding for better UX; can be customized or removed as needed,
     // Note: (vanilla Android) The splash-screen will not appear if you launch your app via the terminal or Android Studio. Kill the app and launch it normally by tapping on the launcher icon. https://stackoverflow.com/a/69831106
@@ -138,7 +99,7 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
   // if app start from android autofill service. navigate to autofill screen
   autofillParserAndroid(props)
 
-  SystemNavigationBar.setNavigationColor("transparent")
+  SystemNavigationBar.setNavigationColor("translucent")
   // otherwise, we're ready to render the app
   return (
     <GestureHandlerRootView style={$style.container}>
@@ -159,11 +120,3 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
     </GestureHandlerRootView>
   )
 }
-
-const $style = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-})
-
-export default __DEV__ ? App : Sentry.wrap(App)

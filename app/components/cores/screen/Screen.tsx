@@ -8,7 +8,6 @@ import {
   ScrollView,
   ScrollViewProps,
   StatusBar,
-  StatusBarProps,
   StyleProp,
   View,
   ViewStyle,
@@ -55,17 +54,9 @@ interface BaseScreenProps {
    */
   backgroundColor?: string
   /**
-   * Status bar setting. Defaults to dark.
-   */
-  statusBarStyle?: "light-content" | "dark-content"
-  /**
    * By how much should we offset the keyboard? Defaults to 0.
    */
   keyboardOffset?: number
-  /**
-   * Pass any additional props directly to the StatusBar component.
-   */
-  StatusBarProps?: StatusBarProps
   /**
    * Pass any additional props directly to the KeyboardAvoidingView component.
    */
@@ -215,8 +206,6 @@ export const Screen = observer((props: ScreenProps) => {
     KeyboardAvoidingViewProps,
     keyboardOffset = 16,
     safeAreaEdges,
-    StatusBarProps,
-    statusBarStyle = isDark ? "light-content" : "dark-content",
   } = props
 
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
@@ -225,7 +214,10 @@ export const Screen = observer((props: ScreenProps) => {
 
   return (
     <View style={[$containerStyle, { backgroundColor }, $containerInsets]}>
-      <StatusBar barStyle={statusBarStyle} {...StatusBarProps} />
+      <StatusBar
+        barStyle={isDark ? "light-content" : "dark-content"}
+        backgroundColor={colors.background}
+      />
 
       <KeyboardAvoidingView
         behavior={isIos ? "padding" : undefined}
