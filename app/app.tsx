@@ -37,7 +37,6 @@ import { api } from "./services/api"
 import { autofillParserAndroid } from "./utils/autofillHelper"
 import { ThemeContextProvider } from "./services/context/useTheme"
 import CombineContext from "./services/context/useCombineContext"
-import { colors } from "react-native-swiper-flatlist/src/themes"
 
 enableScreens()
 Settings.initializeSDK()
