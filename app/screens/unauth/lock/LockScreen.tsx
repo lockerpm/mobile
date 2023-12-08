@@ -26,7 +26,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
 
   // ---------------------- PARAMS -------------------------
 
-  const [lockMethod, setLogMethod] = useState<LoginMethod>(LoginMethod.PASSWORD)
+  const [lockMethod, setLogMethod] = useState<LoginMethod>(route.params.type)
   const [biometryType, setBiometryType] = useState<BiometricsType>(BiometricsType.Biometrics)
 
   // ---------------------- COMPUTED -------------------------
@@ -56,7 +56,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
       if (res.kind === "ok") {
         setLogMethod(res.data.login_method)
       }
-    }
+    } 
   }
 
   const handleLogout = async () => {

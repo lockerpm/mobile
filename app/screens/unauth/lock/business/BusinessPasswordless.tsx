@@ -2,12 +2,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { Dimensions, ScrollView } from "react-native"
-import { Screen } from "app/components/cores"
 import { useStores } from "app/models"
 import { BusinessPasswordlessQrScan } from "./PasswordlessQrScan"
 import { useAuthentication } from "app/services/hook"
 import { useCoreService } from "app/services/coreService"
-import { BiometricsType } from "../lock.types"
 import { OtpPasswordlessGenerator, randomOtpNumber } from "./OtpGenerator"
 
 const { width } = Dimensions.get("screen")
@@ -56,22 +54,6 @@ export const BusinessLockByPasswordless = ({ handleLogout, email }: Props) => {
     })
   }, [])
 
-  const Test = useCallback(
-    () => (
-      <OtpPasswordlessGenerator
-        otp={otp}
-        setOtp={setOtp}
-        goNext={() => {
-          scrollTo(1)
-        }}
-        goBack={() => {
-          handleLogout()
-          navigation.goBack()
-        }}
-      />
-    ),
-    [otp],
-  )
 
   return (
     <ScrollView
@@ -84,7 +66,17 @@ export const BusinessLockByPasswordless = ({ handleLogout, email }: Props) => {
       decelerationRate="fast"
       scrollEventThrottle={16}
     >
-      <Test />
+     <OtpPasswordlessGenerator
+        otp={otp}
+        setOtp={setOtp}
+        goNext={() => {
+          scrollTo(1)
+        }}
+        goBack={() => {
+          handleLogout()
+          navigation.goBack()
+        }}
+      />
       <BusinessPasswordlessQrScan
         email={email}
         otp={otp}

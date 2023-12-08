@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect, useRef } from "react"
 import { Alert, BackHandler, View, AppState, LayoutAnimation } from "react-native"
-import { Logger } from "app/utils/utils"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { useTheme } from "app/services/context"
 import { AutofillServiceEnabled } from "app/utils/autofillHelper"

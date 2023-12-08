@@ -31,7 +31,10 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
 
   const fetchPreloginMethod = async () => {
     const res = await user.preloginMethod(username)
+
     if (res.kind === "ok") {
+
+      console.log(res.data)
       if (res.data.login_method === LoginMethod.PASSWORD) {
         setLogMethod(LoginMethod.PASSWORD)
       } else {
