@@ -21,6 +21,7 @@ import {
 import * as storage from "./utils/storage"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
+import SystemNavigationBar from "react-native-system-navigation-bar"
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
@@ -130,6 +131,7 @@ const App = (props: RootProp) => {
   // if app start from android autofill service. navigate to autofill screen
   autofillParserAndroid(props)
 
+  SystemNavigationBar.setNavigationColor("transparent")
   // otherwise, we're ready to render the app
   return (
     <GestureHandlerRootView style={$style.container}>

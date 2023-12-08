@@ -27,35 +27,50 @@ export const CryptoWalletAction = observer((props: Props) => {
       <ActionItem
         name={translate("crypto_asset.copy_address")}
         icon="copy"
-        action={() => copyToClipboard(data.address)}
+        action={() => {
+          props.onClose && props.onClose()
+          copyToClipboard(data.address)
+        }}
         disabled={!data.address}
       />
 
       <ActionItem
         name={translate("crypto_asset.copy_password")}
         icon="copy"
-        action={() => copyToClipboard(data.password)}
+        action={() => {
+          props.onClose && props.onClose()
+          copyToClipboard(data.password)
+        }}
         disabled={!data.password}
       />
 
       <ActionItem
         name={translate("crypto_asset.copy_pin")}
         icon="copy"
-        action={() => copyToClipboard(data.password)}
+        action={() => {
+          props.onClose && props.onClose()
+          copyToClipboard(data.pin)
+        }}
         disabled={!data.password}
       />
 
       <ActionItem
         name={translate("crypto_asset.copy_private_key")}
         icon="copy"
-        action={() => copyToClipboard(data.privateKey)}
+        action={() => {
+          props.onClose && props.onClose()
+          copyToClipboard(data.privateKey)
+        }}
         disabled={!data.privateKey}
       />
 
       <ActionItem
         name={translate("crypto_asset.copy_seed")}
         icon="copy"
-        action={() => copyToClipboard(data.seed)}
+        action={() => {
+          props.onClose && props.onClose()
+          copyToClipboard(data.seed)
+        }}
         disabled={!data.seed}
       />
       {__DEV__ && (

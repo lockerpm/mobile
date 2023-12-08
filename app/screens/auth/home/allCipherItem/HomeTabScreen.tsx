@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect, useRef } from "react"
-import { Alert, BackHandler, View, AppState } from "react-native"
+import { Alert, BackHandler, View, AppState, LayoutAnimation } from "react-native"
+import { Logger } from "app/utils/utils"
 import { MAX_CIPHER_SELECTION } from "app/static/constants"
 import { useTheme } from "app/services/context"
 import { AutofillServiceEnabled } from "app/utils/autofillHelper"
@@ -17,18 +17,20 @@ import {
   AddCipherActionModal,
 } from "app/components/ciphers"
 import { observer } from "mobx-react-lite"
+import { SuggestEnableFaceID } from "./SuggestEnableFaceID"
 
 const HOME_EMPTY_CIPHER = require("assets/images/emptyCipherList/home-empty-cipher.png")
 
 export const HomeTabScreen = observer(() => {
   const navigation: any = useNavigation()
-  const { uiStore } = useStores()
-  const { translate } = useHelper()
+  const { uiStore, user } = useStores()
+  const { translate, isBiometricAvailable } = useHelper()
   const { lock } = useAuthentication()
 
   // -------------- PARAMS ------------------
   const [isAutofillEnabled, setIsAutofillEnabled] = useState(true)
   const [isShowAutofillSuggest, setShowAutofillSuggest] = useState(true)
+  const [isShowFaceIDSuggest, setShowFaceIDSuggest] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isSortOpen, setIsSortOpen] = useState(false)
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -44,6 +46,13 @@ export const HomeTabScreen = observer(() => {
 
   const appState = useRef(AppState.currentState)
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
+
+  const handleShowFaceIDSuggest = async () => {
+    if (!user.isBiometricUnlock) {
+      const available = await isBiometricAvailable()
+      if (available) setShowFaceIDSuggest(true)
+    }
+  }
   // ------------------------ EFFECT ----------------------------
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
@@ -112,6 +121,7 @@ export const HomeTabScreen = observer(() => {
 
   // Mounted
   useEffect(() => {
+    handleShowFaceIDSuggest()
     if (uiStore.deepLinkAction === "add") {
       if (["add", "save"].includes(uiStore.deepLinkAction)) {
         navigation.navigate("passwords__edit", { mode: "add" })
@@ -178,8 +188,29 @@ export const HomeTabScreen = observer(() => {
       />
 
       <SuggestEnableAutofill
-        isShow={isShowAutofillSuggest && !isAutofillEnabled}
-        onClose={() => setShowAutofillSuggest(false)}
+        isShow={isShowAutofillSuggest && !isAutofillEnabled && !isShowFaceIDSuggest}
+        onClose={() => {
+          LayoutAnimation.configureNext({
+            duration: 250,
+            update: {
+              type: LayoutAnimation.Types.easeInEaseOut,
+            },
+          })
+          setShowAutofillSuggest(false)
+        }}
+      />
+
+      <SuggestEnableFaceID
+        isShow={isShowFaceIDSuggest}
+        onClose={() => {
+          LayoutAnimation.configureNext({
+            duration: 250,
+            update: {
+              type: LayoutAnimation.Types.easeInEaseOut,
+            },
+          })
+          setShowFaceIDSuggest(false)
+        }}
       />
 
       <CipherList

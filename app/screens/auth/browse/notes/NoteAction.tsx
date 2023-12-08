@@ -20,7 +20,10 @@ export const NoteAction = (props: Props) => {
     <ActionItem
       name={translate("note.copy_note")}
       icon="copy"
-      action={() => copyToClipboard(selectedCipher.notes)}
+      action={() => {
+        props.onClose && props.onClose()
+        copyToClipboard(selectedCipher.notes)
+      }}
       disabled={!selectedCipher.notes}
     />
   )

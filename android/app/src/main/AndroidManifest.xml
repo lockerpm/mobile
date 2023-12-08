@@ -30,6 +30,7 @@
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize"
         android:exported="true"
+        android:theme="@style/BootTheme"
       >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -49,7 +50,7 @@
         android:exported="false"
         android:name="com.google.android.gms.tagmanager.TagManagerPreviewActivity"
         android:noHistory="true"
-      >
+          tools:ignore="AppLinkUrlError">
         <intent-filter>
           <data android:scheme="@string/build_config_package" />
           <action android:name="android.intent.action.VIEW" />

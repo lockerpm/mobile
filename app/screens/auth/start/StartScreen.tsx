@@ -64,7 +64,11 @@ export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) =>
     }
 
     if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
-      if (!user.biometricIntroShown && !user.isBiometricUnlock) {
+      if (
+        (!user.biometricIntroShown || uiStore.isStartFromPasswordLess) &&
+        !user.isBiometricUnlock
+      ) {
+        uiStore.setStartFromPasswordLess(false)
         const available = await isBiometricAvailable()
         if (available) {
           navigation.navigate("biometricUnlockIntro")

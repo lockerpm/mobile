@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import { TextInput, View } from 'react-native'
-import { Text, Icon } from 'app/components/cores'
-import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import { useHelper } from 'app/services/hook'
-import { useTheme } from 'app/services/context'
-import { getTOTP, parseOTPUri } from 'app/utils/totp'
+import React, { useState } from "react"
+import { TextInput, View } from "react-native"
+import { Text, Icon } from "app/components/cores"
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer"
+import { useHelper } from "app/services/hook"
+import { useTheme } from "app/services/context"
+import { getTOTP, parseOTPUri } from "app/utils/totp"
 
 type Prop = {
   data: string
@@ -31,8 +31,8 @@ export const PasswordOtp = (props: Prop) => {
     <View
       style={{
         backgroundColor: colors.background,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexDirection: "row",
+        justifyContent: "space-between",
       }}
     >
       <View>
@@ -48,8 +48,8 @@ export const PasswordOtp = (props: Prop) => {
 
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
           <TextInput
@@ -68,7 +68,7 @@ export const PasswordOtp = (props: Prop) => {
               // index === 0 && updateOtp()
               setOtp(getTOTP(otpData))
               return {
-                shouldRepeat: true
+                shouldRepeat: true,
               }
             }}
             size={20}
@@ -83,23 +83,26 @@ export const PasswordOtp = (props: Prop) => {
       {secure && (
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             marginRight: 10,
           }}
         >
           <Icon
-            icon={!hide ? 'eye-slash' : 'eye'}
-            size={18}
+            icon={!hide ? "eye-slash" : "eye"}
+            size={20}
             color={colors.title}
             onPress={() => {
               setHide(!hide)
             }}
+            containerStyle={{
+              marginRight: 16,
+            }}
           />
 
           <Icon
-            icon={'copy'}
-            size={18}
+            icon={"copy"}
+            size={20}
             color={colors.title}
             onPress={() => {
               copyToClipboard(getTOTP(otpData))

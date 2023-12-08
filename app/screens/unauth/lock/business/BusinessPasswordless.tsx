@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { Dimensions, ScrollView } from "react-native"
 import { Screen } from "app/components/cores"
@@ -49,13 +49,29 @@ export const BusinessLockByPasswordless = ({ handleLogout, email }: Props) => {
 
   // Auto trigger face id / touch id + detect biometry type
   useEffect(() => {
-    setOtp(randomOtpNumber())
     navigation.addListener("focus", () => {
       if (user.isBiometricUnlock) {
         handleUnlockBiometric()
       }
     })
   }, [])
+
+  const Test = useCallback(
+    () => (
+      <OtpPasswordlessGenerator
+        otp={otp}
+        setOtp={setOtp}
+        goNext={() => {
+          scrollTo(1)
+        }}
+        goBack={() => {
+          handleLogout()
+          navigation.goBack()
+        }}
+      />
+    ),
+    [otp],
+  )
 
   return (
     <ScrollView
@@ -68,17 +84,7 @@ export const BusinessLockByPasswordless = ({ handleLogout, email }: Props) => {
       decelerationRate="fast"
       scrollEventThrottle={16}
     >
-      <OtpPasswordlessGenerator
-        otp={otp}
-        setOtp={setOtp}
-        goNext={() => {
-          scrollTo(1)
-        }}
-        goBack={() => {
-          handleLogout()
-          navigation.goBack()
-        }}
-      />
+      <Test />
       <BusinessPasswordlessQrScan
         email={email}
         otp={otp}

@@ -33,6 +33,7 @@
     "decline": "Decline",
     "edit": "Edit",
     "email": "Email",
+    "enable": "Enable",
     "enterprise": "Enterprise",
     "enter_master_pass": "Enter master password",
     "expired": "Expired",
@@ -137,7 +138,8 @@
     "database": "Database",
     "dob": "Date of birth",
     "nationality": "Nationality",
-    "invalid_date": "Invalid date"
+    "invalid_date": "Invalid date",
+    "required_text": "This field is required"
   },
   "navigator": {
     "is_offline": "Locker is currently in offline mode."
@@ -391,6 +393,7 @@
   "biometric_intro": {
     "title": "Unlock your vault with Face ID/Touch ID",
     "desc": "Use face recognition or fingerprint to protect your passwords",
+    "suggest": "Use Face ID/Touch ID to easy unlock your vault",
     "use_btn": "Use Face ID/Touch ID",
     "later_btn": "I'll do it later"
   },
