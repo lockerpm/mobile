@@ -22,17 +22,17 @@ export const SignupScreen: FC<RootStackScreenProps<"signup">> = observer((props)
   // ---------------- PARAMS ---------------------
 
   const [isLoading, setIsLoading] = useState(false)
-  const [email, setEmail] = useState("selfhost@gmail.com")
-  const [masterPassword, setMasterPassword] = useState("Rongden1211")
-  const [confirmPassword, setConfirmPassword] = useState("Rongden1211")
+  const [email, setEmail] = useState("")
+  const [masterPassword, setMasterPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
-  const [hint, setHint] = useState("Rongden1211")
+  const [hint, setHint] = useState("")
   const [passwordStrength, setPasswordStrength] = useState(-1)
 
   const [showConfirmCreateModal, setShowConfirmCreateModal] = useState<boolean>(false)
 
-  const [fullname, setFullname] = useState("thinhnn")
-  const [agreed, setAgreed] = useState(true)
+  const [fullname, setFullname] = useState("")
+  const [agreed, setAgreed] = useState(false)
 
   // ---------------- COMPUTED ---------------------
 

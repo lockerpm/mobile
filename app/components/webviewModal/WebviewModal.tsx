@@ -66,13 +66,13 @@ export const WebViewModal = (props: Props) => {
             onURLChange && onURLChange(request.url)
 
             // Prevent self deep linking
-            if (request.url?.startsWith("com.cystack.locker.selfhost")) {
+            if (request.url?.startsWith("net.vincss.passwordmanager")) {
               return false
             }
 
             return true
           }}
-          originWhitelist={["https://*", "com.cystack.locker.selfhost://*"]}
+          originWhitelist={["https://*", "net.vincss.passwordmanager://*"]}
         />
       </View>
     </Modal>

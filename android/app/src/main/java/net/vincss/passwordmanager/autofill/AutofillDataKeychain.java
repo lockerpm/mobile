@@ -1,4 +1,4 @@
-package com.cystack.locker.selfhost.autofill;
+package net.vincss.passwordmanager.autofill;
 
 
 
@@ -25,7 +25,7 @@ import org.json.JSONObject;
 
 public class AutofillDataKeychain {
     private static final String TAG = "LockerAutoFillService";
-    private static final String service = "W7S57TNBH5.com.cystack.locker.selfhost";
+    private static final String service = "W7S57TNBH5.net.vincss.passwordmanager";
 
    private final PrefsStorage prefsStorage;
    private final CipherStorage cipherStorage;

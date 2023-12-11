@@ -1,6 +1,6 @@
-const BUNDLE_ID = "com.cystack.locker.selfhost"
+const BUNDLE_ID = "net.vincss.passwordmanager"
 const TEAM_ID = "W7S57TNBH5"
-const APP_NAME = "SHLocker"
+const APP_NAME = "VinCSS Locker"
 
 module.exports = { 
   APP_NAME, 

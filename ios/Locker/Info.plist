@@ -31,10 +31,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.cystack.locker.selfhost</string>
+			<string>net.vincss.passwordmanager</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>tagmanager.c.com.cystack.locker.selfhost</string>
+				<string>tagmanager.c.net.vincss.passwordmanager</string>
 			</array>
 		</dict>
 		<dict>
@@ -44,7 +44,7 @@
 			<string>Bundle ID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.cystack.locker.selfhost</string>
+				<string>net.vincss.passwordmanager</string>
 			</array>
 		</dict>
 	</array>

@@ -65,7 +65,7 @@ export const AutofillServiceScreen = observer(() => {
         image: HINT,
         action: () => {
           RNAndroidSettingsTool.ACTION_REQUEST_SET_AUTOFILL_SERVICE(
-            "packge:com.cystack.locker.selfhost",
+            "packge:net.vincss.passwordmanager",
           )
         },
         disabled: api < 26,
@@ -225,7 +225,7 @@ export const AutofillServiceScreen = observer(() => {
               navigation.navigate("mainTab", { screen: "homeTab" })
             } else {
               RNAndroidSettingsTool.ACTION_REQUEST_SET_AUTOFILL_SERVICE(
-                "packge:com.cystack.locker.selfhost",
+                "packge:net.vincss.passwordmanager",
               )
             }
           }}

@@ -5,4 +5,5 @@
     <color name="stroke">#979797</color>
     <color name="white">#ffffff</color>
     <color name="gray">#617296</color>
+    <color name="bootsplash_background">#FFFFFF</color>
 </resources>

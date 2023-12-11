@@ -1,4 +1,4 @@
-package com.cystack.locker.selfhost.autofill;
+package net.vincss.passwordmanager.autofill;
 
 import android.app.PendingIntent;
 import android.app.assist.AssistStructure;
@@ -16,8 +16,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.cystack.locker.selfhost.autofill.parser.Parser;
-import com.cystack.locker.selfhost.RNAutofillServiceAndroid;
+import net.vincss.passwordmanager.autofill.parser.Parser;
+import net.vincss.passwordmanager.RNAutofillServiceAndroid;
 
 import java.util.ArrayList;
 import java.util.List;

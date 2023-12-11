@@ -1,5 +1,5 @@
 <resources>
-    <string name="mp_title">SHLocker Password Manager</string>
+    <string name="mp_title">VinCSS Locker Password Manager</string>
     <string name="mp_subtitle">Enter your Password to unlock</string>
     <string name="mp_master_pass">Password</string>
     <string name="mp_login">Unlock</string>

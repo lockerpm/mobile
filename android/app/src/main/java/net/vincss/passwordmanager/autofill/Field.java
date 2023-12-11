@@ -1,4 +1,4 @@
-package com.cystack.locker.selfhost.autofill;
+package net.vincss.passwordmanager.autofill;
 
 import android.app.assist.AssistStructure;
 import android.os.Build;

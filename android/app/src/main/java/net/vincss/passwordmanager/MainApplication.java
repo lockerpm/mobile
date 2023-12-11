@@ -1,4 +1,4 @@
-package com.cystack.locker.selfhost;
+package net.vincss.passwordmanager;
 
 import android.app.Application;
 import androidx.annotation.NonNull;

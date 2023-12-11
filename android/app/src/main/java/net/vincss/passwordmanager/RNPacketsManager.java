@@ -1,4 +1,4 @@
-package com.cystack.locker.selfhost;
+package net.vincss.passwordmanager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;

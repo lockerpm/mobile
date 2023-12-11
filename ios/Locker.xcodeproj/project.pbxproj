@@ -476,7 +476,7 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
 				7C973A302A93008B00875FBA /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */,
+				7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -761,7 +761,7 @@
 					"$(inherited)",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.locker.selfhost;
+				PRODUCT_BUNDLE_IDENTIFIER = net.vincss.passwordmanager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locker.app/Locker";
@@ -788,7 +788,7 @@
 					"$(inherited)",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.locker.selfhost;
+				PRODUCT_BUNDLE_IDENTIFIER = net.vincss.passwordmanager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locker.app/Locker";
@@ -805,7 +805,7 @@
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
-				DISPLAY_NAME = SHLocker;
+				DISPLAY_NAME = "VinCSS Locker";
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				INFOPLIST_FILE = Locker/Info.plist;
@@ -821,7 +821,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.locker.selfhost;
+				PRODUCT_BUNDLE_IDENTIFIER = net.vincss.passwordmanager;
 				PRODUCT_NAME = Locker;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -844,7 +844,7 @@
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
-				DISPLAY_NAME = SHLocker;
+				DISPLAY_NAME = "VinCSS Locker";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				INFOPLIST_FILE = Locker/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -859,7 +859,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.locker.selfhost;
+				PRODUCT_BUNDLE_IDENTIFIER = net.vincss.passwordmanager;
 				PRODUCT_NAME = Locker;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -900,10 +900,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.locker.selfhost.LockerAutofill;
+				PRODUCT_BUNDLE_IDENTIFIER = net.vincss.passwordmanager.LockerAutofill;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SHARED_KEYCHAIN_ACCESS_GROUP = group.com.cystack.locker.selfhost;
-				SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.com.cystack.locker.selfhost;
+				SHARED_KEYCHAIN_ACCESS_GROUP = group.net.vincss.passwordmanager;
+				SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.net.vincss.passwordmanager;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -942,10 +942,10 @@
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cystack.locker.selfhost.LockerAutofill;
+				PRODUCT_BUNDLE_IDENTIFIER = net.vincss.passwordmanager.LockerAutofill;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SHARED_KEYCHAIN_ACCESS_GROUP = group.com.cystack.locker.selfhost;
-				SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.com.cystack.locker.selfhost;
+				SHARED_KEYCHAIN_ACCESS_GROUP = group.net.vincss.passwordmanager;
+				SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.net.vincss.passwordmanager;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1142,7 +1142,7 @@
 				minimumVersion = 4.0.0;
 			};
 		};
-		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */ = {
+		7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
 			requirement = {
@@ -1160,7 +1160,7 @@
 		};
 		7CEB31EA2A931B5A007F6051 /* SwiftOTP */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP.git" */;
+			package = 7C973A332A9300C500875FBA /* XCRemoteSwiftPackageReference "SwiftOTP" */;
 			productName = SwiftOTP;
 		};
 /* End XCSwiftPackageProductDependency section */
