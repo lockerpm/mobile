@@ -36,10 +36,6 @@ export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) =>
       // Refresh FCM
       refreshFCM()
 
-      // Sync teams and plan
-      if (!uiStore.isFromAutoFill && !uiStore.isOnSaveLogin && !uiStore.isFromAutoFillItem) {
-        await user.loadTeams()
-      }
     }
 
     // Load folders and collections

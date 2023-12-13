@@ -407,12 +407,6 @@ export const UserModel = types
       }
       return res
     },
-    getEnterprise: async () => {
-      const _res = await userApi.getEnterprise(self.apiToken)
-      if (_res.kind === 'ok') {
-        self.saveEnterprise(_res.data)
-      }
-    },
 
     sessionLogin: async (payload: SessionLoginRequest) => {
       const res = await userApi.sessionLogin(self.apiToken, payload)
@@ -443,13 +437,6 @@ export const UserModel = types
     },
     lock: () => {
       self.setLoggedInPw(false)
-    },
-    loadTeams: async () => {
-      const res = await userApi.getTeams(self.apiToken)
-      if (res.kind === 'ok') {
-        self.setTeams(res.teams)
-      }
-      return res
     },
     getTeamPolicies: async (organizationId: string) => {
       const res = await userApi.getTeamPolicies(self.apiToken, organizationId)

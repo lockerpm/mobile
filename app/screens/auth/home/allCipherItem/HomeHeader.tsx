@@ -39,7 +39,7 @@ export const HomeHeader = (props: Props) => {
     setSelectedItems,
     toggleSelectAll,
   } = props
-  const { colors, isDark } = useTheme()
+  const { colors } = useTheme()
   const { notifyApiError, translate } = useHelper()
   const { toTrashCiphers } = useCipherData()
   const { user, uiStore } = useStores()
@@ -244,10 +244,17 @@ export const HomeHeader = (props: Props) => {
         {isSelecting ? (
           renderHeaderSelectLeft()
         ) : (
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}>
+
           <Logo
-            preset={isDark ? "horizontal-light" : "horizontal-dark"}
-            style={{ height: 35, width: 115 }}
+            preset={"default"}
+            style={{ height: 35, width: 35, marginRight: 8 }}
           />
+          <Text preset="bold" size="large" weight="semibold" text={'VinCSS Locker'} />
+          </View>
         )}
 
         {isSelecting ? renderHeaderSelectRight() : renderHeaderRight()}

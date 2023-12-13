@@ -14,10 +14,6 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
     props.navigation.navigate("login")
   }
 
-  // const navigateSignup = () => {
-  //   props.navigation.navigate("signup")
-  // }
-
   const footer = () => (
     <View
       style={{
@@ -25,19 +21,6 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
       }}
     >
       <Button preset="primary" text={translate("common.login")} onPress={navigateLogin} />
-      {/* <Text
-        style={{
-          textAlign: "center",
-          marginVertical: 12,
-        }}
-      >
-        {translate("onBoarding.has_account") + " "}
-        <Text
-          onPress={navigateLogin}
-          style={{ color: colors.primary }}
-          text={translate("common.login")}
-        />
-      </Text> */}
     </View>
   )
 

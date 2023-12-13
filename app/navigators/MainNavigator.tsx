@@ -121,7 +121,6 @@ export const MainNavigator = observer(() => {
       const updatedCipher = await getCipherById(cipherStore.selectedCipher.id)
       cipherStore.setSelectedCipher(updatedCipher)
     }
-    user.loadTeams()
   }
 
   // Check invitation
