@@ -15,10 +15,10 @@ buildscript {
         ndkVersion = "26.1.10909125"
 
         // Self-hosted custom gradle properties
-        bundleId = 'net.vincss.passwordmanager'
+        bundleId = 'com.cystack.locker.vincss'
         appName = 'VinCSS Locker'
-        versionCode = 4135
-        versionName = '1.37'
+        versionCode = 4003
+        versionName = '1.0.0'
     }
     repositories {
         google()

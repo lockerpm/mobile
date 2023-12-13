@@ -1,4 +1,4 @@
-package net.vincss.passwordmanager.autofill;
+package com.cystack.locker.vincss.autofill;
 
 import android.os.Parcel;
 import android.os.Parcelable;

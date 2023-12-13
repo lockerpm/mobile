@@ -1,4 +1,4 @@
-const BUNDLE_ID = "net.vincss.passwordmanager"
+const BUNDLE_ID = "com.cystack.locker.vincss"
 const TEAM_ID = "W7S57TNBH5"
 const APP_NAME = "VinCSS Locker"
 

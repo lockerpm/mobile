@@ -8,11 +8,11 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.net.vincss.passwordmanager</string>
+		<string>group.com.cystack.locker.vincss</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)net.vincss.passwordmanager</string>
+		<string>$(AppIdentifierPrefix)com.cystack.locker.vincss</string>
 	</array>
 </dict>
 </plist>

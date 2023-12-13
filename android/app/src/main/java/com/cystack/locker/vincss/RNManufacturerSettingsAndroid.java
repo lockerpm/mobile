@@ -1,4 +1,4 @@
-package net.vincss.passwordmanager;
+package com.cystack.locker.vincss;
 
 import android.content.Intent;
 import android.os.Build;

@@ -7,16 +7,16 @@ import { useHelper } from "app/services/hook"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
 
 export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer((props) => {
-  const { colors, isDark } = useTheme()
+  const {  isDark } = useTheme()
   const { translate } = useHelper()
 
   const navigateLogin = () => {
     props.navigation.navigate("login")
   }
 
-  const navigateSignup = () => {
-    props.navigation.navigate("signup")
-  }
+  // const navigateSignup = () => {
+  //   props.navigation.navigate("signup")
+  // }
 
   const footer = () => (
     <View
@@ -24,8 +24,8 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
         marginHorizontal: 20,
       }}
     >
-      <Button preset="primary" text={translate("common.sign_up")} onPress={navigateSignup} />
-      <Text
+      <Button preset="primary" text={translate("common.login")} onPress={navigateLogin} />
+      {/* <Text
         style={{
           textAlign: "center",
           marginVertical: 12,
@@ -37,7 +37,7 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
           style={{ color: colors.primary }}
           text={translate("common.login")}
         />
-      </Text>
+      </Text> */}
     </View>
   )
 

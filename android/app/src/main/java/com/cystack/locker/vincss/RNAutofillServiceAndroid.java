@@ -1,4 +1,4 @@
-package net.vincss.passwordmanager;
+package com.cystack.locker.vincss;
 
 import static android.view.autofill.AutofillManager.EXTRA_AUTHENTICATION_RESULT;
 
@@ -23,10 +23,10 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 
-import net.vincss.passwordmanager.R;
-import net.vincss.passwordmanager.autofill.AutofillItem;
-import net.vincss.passwordmanager.autofill.Utils;
-import net.vincss.passwordmanager.autofill.Field;
+import com.cystack.locker.vincss.R;
+import com.cystack.locker.vincss.autofill.AutofillItem;
+import com.cystack.locker.vincss.autofill.Utils;
+import com.cystack.locker.vincss.autofill.Field;
 
 import java.util.ArrayList;
 import java.util.Objects;

@@ -12,7 +12,7 @@ class RSAUtils: NSObject {
     
     public class RSAUtilsError: NSError {
         init(_ message: String) {
-            super.init(domain: "net.vincss.passwordmanager.RSAUtils", code: 500, userInfo: [
+            super.init(domain: "com.cystack.locker.vincss.RSAUtils", code: 500, userInfo: [
                 NSLocalizedDescriptionKey: message
                 ])
         }

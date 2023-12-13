@@ -8,5 +8,5 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
-SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.net.vincss.passwordmanager
-SHARED_KEYCHAIN_ACCESS_GROUP = group.net.vincss.passwordmanager
+SHARED_KEYCHAIN_SERVICE = W7S57TNBH5.com.cystack.locker.vincss
+SHARED_KEYCHAIN_ACCESS_GROUP = group.com.cystack.locker.vincss

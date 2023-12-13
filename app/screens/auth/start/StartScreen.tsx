@@ -29,7 +29,6 @@ export const StartScreen: FC<AppStackScreenProps<"start">> = observer((props) =>
     }
   }
 
-  console.log(user.fcmToken)
   const mounted = async () => {
     const connectionState = await NetInfo.fetch()
     // Sync

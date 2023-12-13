@@ -19,7 +19,7 @@
     "bundle:ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
     "bundle:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "release:ios": "echo 'Not implemented yet: release:ios. Use Xcode. More info: https://reactnative.dev/docs/next/publishing-to-app-store'",
-    "release:android": "cd android && ./gradlew assembleProductionRelease && cd - ",
+    "release:android": "cd android && ./gradlew app:assembleRelease && cd - ",
     "clean": "npx react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
     "self-host": "node selfhost-setup.js"

@@ -2,7 +2,6 @@ import React, { FC, useState } from "react"
 import { View } from "react-native"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { Screen, Text, TextInput, Button, Logo } from "app/components/cores"
-import { useTheme } from "app/services/context"
 import { observer } from "mobx-react-lite"
 import { useAuthentication, useHelper } from "app/services/hook"
 import { useNavigation } from "@react-navigation/native"
@@ -12,7 +11,6 @@ import Animated, { FadeInUp } from "react-native-reanimated"
 
 export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
   const navigation = useNavigation() as any
-  const { colors } = useTheme()
   const { user } = useStores()
   const { translate } = useHelper()
   const { sessionLogin } = useAuthentication()
@@ -31,10 +29,7 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
 
   const fetchPreloginMethod = async () => {
     const res = await user.preloginMethod(username)
-
     if (res.kind === "ok") {
-
-      console.log(res.data)
       if (res.data.login_method === LoginMethod.PASSWORD) {
         setLogMethod(LoginMethod.PASSWORD)
       } else {
@@ -139,7 +134,7 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
             />
           )}
         </View>
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -158,7 +153,7 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
             text={translate("common.sign_up")}
             onPress={() => navigation.navigate("signup")}
           />
-        </View>
+        </View> */}
       </View>
     </Screen>
   )

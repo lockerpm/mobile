@@ -1,4 +1,4 @@
-package net.vincss.passwordmanager.autofill;
+package com.cystack.locker.vincss.autofill;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
@@ -38,8 +38,8 @@ import androidx.autofill.inline.UiVersions;
 import androidx.autofill.inline.v1.InlineSuggestionUi;
 
 import com.tencent.mmkv.MMKV;
-import net.vincss.passwordmanager.R;
-import net.vincss.passwordmanager.RNAutofillServiceAndroid;
+import com.cystack.locker.vincss.R;
+import com.cystack.locker.vincss.RNAutofillServiceAndroid;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -52,8 +52,8 @@ public class Utils {
     public static HashSet<String> BlacklistedUris = new HashSet<String>(
             Arrays.asList("com.android.settings",
                     "com.android.settings.intelligence",
-                    "net.vincss.passwordmanager",
-                    "net.vincss.passwordmanager.staging"));
+                    "com.cystack.locker.vincss",
+                    "com.cystack.locker.vincss.staging"));
     public static HashSet<String> CompatBrowsers = new HashSet<String>(
             Arrays.asList("alook.browser",
                     "alook.browser.google",

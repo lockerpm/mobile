@@ -206,7 +206,7 @@ const RootStack = observer((props: Props) => {
             incognito
             startInLoadingState
             source={{ uri: updateBlogUrl }}
-            originWhitelist={["https://*", "net.vincss.passwordmanager://*"]}
+            originWhitelist={["https://*", "com.cystack.locker.vincss://*"]}
           />
           <View
             style={{
