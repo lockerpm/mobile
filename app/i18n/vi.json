@@ -149,7 +149,7 @@
     "enterprise_system_lock": "Tài khoản đã bị khóa bởi gói doanh nghiệp đã hết hạn. Vui lòng liên hệ quản trị viên của bạn để mở khóa tài khoản",
     "update": {
       "title": "Cập nhật ứng dụng?",
-      "content": "Locker {{version}} đã có mặt tại của hàng CH play. Cập nhật ngay!",
+      "content": "Locker {{version}} đã có mặt tại của hàng. Cập nhật ngay!",
       "later": "Sau",
       "now": "Cập nhật"
     },
