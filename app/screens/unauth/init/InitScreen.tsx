@@ -124,7 +124,7 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
 
           const { currentVersion, latestVersion } = res
           try {
-            if (parseFloat(currentVersion) < parseFloat(latestVersion)) {
+            if (currentVersion < latestVersion) {
               showAlert()
             }
           } catch (e) {
