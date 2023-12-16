@@ -27,6 +27,7 @@ export const AutofillServiceEnabled: (
 }
 
 export const parseSearchText = (bundle: string) => {
+  if (!bundle) return ''
   const meaninglessSearch = ['com', 'net', 'app', 'package', 'io', 'www']
   const _sp = bundle.split('.')
   let result = ''
