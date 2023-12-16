@@ -21,8 +21,8 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
 
   const [isError, setIsError] = useState(false)
 
-  const [username, setUsername] = useState("thinhnn@cystack.net")
-  const [password, setPassword] = useState("thinh1999")
+  const [username, setUsername] = useState("duchm@cystack.net")
+  const [password, setPassword] = useState("12345678")
   const [loginLoading, setLoginLoading] = useState(false)
 
   // ------------------------------ METHODS -------------------------------

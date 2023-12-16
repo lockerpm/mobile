@@ -371,7 +371,7 @@ export const CipherStoreModel = types
     },
 
     getPublicShareUrl: (accessId, key) => {
-      return `${QUICK_SHARE_BASE_URL}/quick-share/${accessId}#${encodeURIComponent(
+      return `${QUICK_SHARE_BASE_URL}/quick-shares/${accessId}#${encodeURIComponent(
         key
       )}`
     },
