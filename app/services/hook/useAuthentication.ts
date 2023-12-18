@@ -1,19 +1,16 @@
 /* eslint-disable camelcase */
-import { useStores } from "app/models"
-import { useHelper } from "./useHelper"
-import { useCoreService } from "../coreService"
-import { SymmetricCryptoKey } from "core/models/domain"
-import moment from "moment"
-import DeviceInfo from "react-native-device-info"
-import { KdfType } from "core/enums/kdfType"
-import { Utils } from "../coreService/utils"
-import ReactNativeBiometrics from "react-native-biometrics"
-import { CipherRequest } from "core/models/request"
-import { CipherType } from "core/enums"
-import { CipherView, LoginUriView, LoginView } from "core/models/view"
-import { Logger, delay, getUrlParameterByName } from "app/utils/utils"
-import { saveShared } from "app/utils/keychain"
-import { StorageKey, remove, removeSecure } from "app/utils/storage"
+import { useStores } from 'app/models'
+import { useHelper } from './useHelper'
+import { useCoreService } from '../coreService'
+import { SymmetricCryptoKey } from 'core/models/domain'
+import moment from 'moment'
+import DeviceInfo from 'react-native-device-info'
+import { KdfType } from 'core/enums/kdfType'
+import { Utils } from '../coreService/utils'
+import ReactNativeBiometrics from 'react-native-biometrics'
+import { Logger, delay, getUrlParameterByName } from 'app/utils/utils'
+import { saveShared } from 'app/utils/keychain'
+import { StorageKey, remove, removeSecure } from 'app/utils/storage'
 
 export function useAuthentication() {
   const { uiStore, user, cipherStore, folderStore, collectionStore, toolStore, enterpriseStore } =
@@ -475,15 +472,11 @@ export function useAuthentication() {
         const encKey = await cryptoService.remakeEncKey(key, oldEncKey)
 
         // Update  Password item
-        const cipher = _createMasterPwItem(newPassword)
-        const cipherEnc = await cipherService.encrypt(cipher, encKey[0])
-        const data = new CipherRequest(cipherEnc)
-        data.type = CipherType.MasterPassword
 
         const payload = {
           key: encKey[1].encryptedString,
           new_master_password_hash: masterPasswordHash,
-          master_password_cipher: data,
+          master_password_cipher: null,
         }
         const res = await user.passwordEA(eaID, payload)
         if (res.kind !== "ok") {
@@ -501,32 +494,6 @@ export function useAuthentication() {
     }
   }
 
-  const _createMasterPwItem = (newPassword: string) => {
-    const cipher = new CipherView()
-    cipher.type = CipherType.Login
-    const loginData = new LoginView()
-    loginData.username = "locker.io"
-    loginData.password = newPassword
-    const uriView = new LoginUriView()
-    uriView.uri = "https://locker.io"
-    loginData.uris = [uriView]
-    cipher.login = loginData
-    cipher.name = "Locker Password"
-    return cipher
-  }
-
-  const _createMasterPwItemRequest = async (newPassword: string) => {
-    try {
-      const cipher = _createMasterPwItem(newPassword)
-      const cipherEnc = await cipherService.encrypt(cipher)
-      const data = new CipherRequest(cipherEnc)
-      data.type = CipherType.MasterPassword
-      return data
-    } catch (e) {
-      return null
-    }
-  }
-
   // Change master password
   const changeMasterPassword = async (
     oldPassword: string,
@@ -534,9 +501,6 @@ export function useAuthentication() {
     hint: string,
   ): Promise<{ kind: string }> => {
     try {
-      // createMasterPwItem
-      const data = await _createMasterPwItemRequest(newPassword)
-
       await delay(200)
       const kdf = KdfType.PBKDF2_SHA256
       const kdfIterations = 100000
@@ -556,7 +520,7 @@ export function useAuthentication() {
         key: encKey[1].encryptedString,
         new_master_password_hash: keyHash,
         master_password_hash: oldKeyHash,
-        master_password_cipher: data,
+        master_password_cipher: null,
         new_master_password_hint: hint,
       })
       if (res.kind !== "ok") {

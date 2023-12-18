@@ -262,18 +262,16 @@ export const CipherAction = (props: CipherActionProps) => {
               />
             )}
 
-            {!lockerMasterPassword && (
-              <ActionItem
-                disabled={uiStore.isOffline && !!selectedCipher.organizationId}
-                name={translate("trash.to_trash")}
-                icon="trash"
-                color={colors.error}
-                action={() => {
-                  onClose()
-                  setNextModal("trashConfirm")
-                }}
-              />
-            )}
+            <ActionItem
+              disabled={uiStore.isOffline && !!selectedCipher.organizationId}
+              name={translate("trash.to_trash")}
+              icon="trash"
+              color={colors.error}
+              action={() => {
+                onClose()
+                setNextModal("trashConfirm")
+              }}
+            />
           </View>
         )}
 
