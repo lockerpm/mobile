@@ -8,9 +8,4 @@
     <string name="title_activity_login_list">LoginList</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
-    <string name="asset_statements" translatable="false">
-    [{
-        \"include\": \"https://locker.io/.well-known/assetlinks.json\"
-    }]
-    </string>
 </resources>

@@ -952,21 +952,5 @@
     },
     "delete_expired": "Delete expired item",
     "shared_begin": "Shared {{time}}"
-  },
-  "sso": {
-    "id": {
-      "title": "Sign in to your company",
-      "identifier": "Enter your SSO Identifier",
-      "sso_info": "Don't know your SSO Identifier? ",
-      "enter_email": "Enter your email",
-      "create_sso": "Looking to create an SSO Identifier instead?",
-      "contact_at": "Contact us at ",
-      "contact": "contact@locker.io"
-    },
-    "email": {
-      "ble": "Authentication via BLE",
-      "usb": "Authentication via USB",
-      "nfc": "Authentication via NFC"
-    }
   }
 }

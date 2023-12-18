@@ -604,9 +604,7 @@ export function useAuthentication() {
   const handleDynamicLink = async (url: string, navigation?: any) => {
     // Redirect
     const WHITELIST_HOSTS = [
-      "https://locker.io",
-      "https://id.locker.io",
-      "https://staging.locker.io",
+      "https://locker.vincss.net",
     ]
     const host = WHITELIST_HOSTS.find((h) => url.startsWith(h))
     if (host) {
