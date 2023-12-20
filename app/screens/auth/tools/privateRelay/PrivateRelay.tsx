@@ -30,6 +30,8 @@ export const PrivateRelay: FC<ToolsStackScreenProps<"privateRelay">> = observer(
   const [showCreateSubdomainModal, setShowCreateSubdomainModal] = useState(false)
   const [subdomain, setSubdomain] = useState<SubdomainData>(null)
 
+  console.log(subdomain)
+
   const isFreeAccount = user.isFreePlan
   const isReachLimit = isFreeAccount && alias.length >= FREE_PLAM_ALIAS_LIMIT
   const suffixitle = isFreeAccount ? ` (${alias.length}/5)` : ` (${alias.length})`
@@ -37,10 +39,10 @@ export const PrivateRelay: FC<ToolsStackScreenProps<"privateRelay">> = observer(
   const fetchRelayDomain = async () => {
     const res = await toolStore.fetchSubdomain()
     if (res.kind === "ok") {
-      if (res.data.length === 0) {
+      if (res.data.results.length === 0) {
         setSubdomain(null)
       } else {
-        setSubdomain(res.data[0])
+        setSubdomain(res.data.results[0])
       }
     }
   }

@@ -30,15 +30,15 @@ export const ManageSubdomainScreen: FC<ToolsStackScreenProps<"manageSubdomain">>
       },
       {
         label: translate("private_relay.manage_subdomain.num_alias"),
-        data: subdomain.num_alias.toString(),
+        data: subdomain.num_alias,
       },
       {
         label: translate("private_relay.manage_subdomain.block_email"),
-        data: subdomain.num_spam.toString(),
+        data: subdomain?.num_spam || 0,
       },
       {
         label: translate("private_relay.manage_subdomain.forwarded_email"),
-        data: subdomain.num_forwarded.toString(),
+        data: subdomain?.num_forwarded || 0,
       },
       {
         label: translate("private_relay.manage_subdomain.create_date"),
@@ -103,7 +103,7 @@ export const ManageSubdomainScreen: FC<ToolsStackScreenProps<"manageSubdomain">>
               }}
             >
               <Text preset="label" text={item.label} />
-              <Text text={item.data} />
+              <Text>{item.data}</Text>
             </View>
           </View>
         ))}

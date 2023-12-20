@@ -82,9 +82,7 @@ class ToolApi {
 
   // ---------------------- PRIVATE RELAY ----------------------
 
-  async fetchRelayListAddresses(
-    token: string
-  ): Promise<
+  async fetchRelayListAddresses(token: string): Promise<
     | {
         kind: 'ok'
         data: {
@@ -274,7 +272,7 @@ class ToolApi {
       const response: ApiResponse<any> = await this.api.apisauce.post(
         `/cystack_platform/relay/subdomains`,
         {
-          subdomain: subdomain,
+          subdomain,
         }
       )
       // the typical ways to die when calling an api
@@ -319,12 +317,15 @@ class ToolApi {
     }
   }
 
-  async fetchSubdomain(
-    token: string
-  ): Promise<
+  async fetchSubdomain(token: string): Promise<
     | {
         kind: 'ok'
-        data: SubdomainData[]
+        data: {
+          count: number
+          next: null
+          previous: null
+          results: SubdomainData[]
+        }
       }
     | GeneralApiProblem
   > {
