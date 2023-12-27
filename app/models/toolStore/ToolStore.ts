@@ -1,14 +1,14 @@
-import { Instance, SnapshotIn, SnapshotOut, cast, types } from "mobx-state-tree"
-import { withSetPropAction } from "../helpers/withSetPropAction"
-import { omit } from "ramda"
-import { toolApi } from "app/services/api/toolApi"
-import { BreanchResult } from "app/static/types"
-import { CipherView } from "core/models/view"
+import { Instance, SnapshotIn, SnapshotOut, cast, types } from 'mobx-state-tree'
+import { withSetPropAction } from '../helpers/withSetPropAction'
+import { omit } from 'ramda'
+import { toolApi } from 'app/services/api/toolApi'
+import { BreanchResult } from 'app/static/types'
+import { CipherView } from 'core/models/view'
 /**
  * Model description here for TypeScript hints.
  */
 export const ToolStoreModel = types
-  .model("ToolStore")
+  .model('ToolStore')
   .props({
     apiToken: types.maybeNull(types.string),
 
@@ -29,7 +29,7 @@ export const ToolStoreModel = types
     exposedPasswordMap: types.maybeNull(types.frozen()),
 
     // Authenticator
-    authenticatorOrder: types.optional(types.array(types.string), [])
+    authenticatorOrder: types.optional(types.array(types.string), []),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -135,14 +135,13 @@ export const ToolStoreModel = types
       self.passwordUseMap = null
       self.exposedPasswordMap = null
     },
-
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     // ----------------- API -------------------
 
-    // PRIVATE RELAY 
-    fetchRelayListAddresses: async () => {
-      const res = await toolApi.fetchRelayListAddresses(self.apiToken)
+    // PRIVATE RELAY
+    fetchRelayListAddresses: async (page?: number) => {
+      const res = await toolApi.fetchRelayListAddresses(self.apiToken, page)
       return res
     },
 
@@ -161,7 +160,12 @@ export const ToolStoreModel = types
       return res
     },
 
-    configRelayAddress: async (id: number, address: string, enabled: boolean, blockSpam: boolean) => {
+    configRelayAddress: async (
+      id: number,
+      address: string,
+      enabled: boolean,
+      blockSpam: boolean
+    ) => {
       const res = await toolApi.configRelayAddress(self.apiToken, id, address, enabled, blockSpam)
       return res
     },
@@ -194,19 +198,20 @@ export const ToolStoreModel = types
     checkBreaches: async (email: string) => {
       const res = await toolApi.checkBreaches(self.apiToken, email)
       return res
-    }
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .postProcessSnapshot(omit([
-    'isLoadingHealth',
-    'lastHealthCheck',
-    'weakPasswords',
-    'reusedPasswords',
-    'passwordUseMap',
-    'exposedPasswordMap'
-  ]))
+  .postProcessSnapshot(
+    omit([
+      'isLoadingHealth',
+      'lastHealthCheck',
+      'weakPasswords',
+      'reusedPasswords',
+      'passwordUseMap',
+      'exposedPasswordMap',
+    ])
+  )
 
-
-export interface ToolStore extends Instance<typeof ToolStoreModel> { }
-export interface ToolStoreSnapshotOut extends SnapshotOut<typeof ToolStoreModel> { }
-export interface ToolStoreSnapshotIn extends SnapshotIn<typeof ToolStoreModel> { }
+export interface ToolStore extends Instance<typeof ToolStoreModel> {}
+export interface ToolStoreSnapshotOut extends SnapshotOut<typeof ToolStoreModel> {}
+export interface ToolStoreSnapshotIn extends SnapshotIn<typeof ToolStoreModel> {}
 export const createToolStoreDefaultModel = () => types.optional(ToolStoreModel, {})

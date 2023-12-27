@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
-import { TouchableOpacity, View } from 'react-native'
-import moment from 'moment'
-import { RelayAddress } from 'app/static/types'
-import { useTheme } from 'app/services/context'
-import { useHelper } from 'app/services/hook'
-import { useStores } from 'app/models'
-import { Icon, Text } from 'app/components/cores'
-import { ActionItem, ActionSheet } from 'app/components/ciphers'
+import React, { useState } from "react"
+import { TouchableOpacity, View } from "react-native"
+import moment from "moment"
+import { RelayAddress } from "app/static/types"
+import { useTheme } from "app/services/context"
+import { useHelper } from "app/services/hook"
+import { useStores } from "app/models"
+import { Icon, Text } from "app/components/cores"
+import { ActionItem, ActionSheet } from "app/components/ciphers"
 
 interface Props {
   isFreeAccount: boolean
   item: RelayAddress
-  index: number
+  isEdited: boolean
   deleteRelayAddress: (id: number) => void
   setShowEditModal: () => void
   setShowConfigModal: () => void
@@ -22,7 +22,7 @@ export const AliasItem = (props: Props) => {
   const {
     isFreeAccount,
     item,
-    index,
+    isEdited,
     deleteRelayAddress,
     setShowConfigModal,
     setShowEditModal,
@@ -36,7 +36,7 @@ export const AliasItem = (props: Props) => {
 
   const handleRemove = async () => {
     const res = await toolStore.deleteRelayAddress(item.id)
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       deleteRelayAddress(item.id)
     }
   }
@@ -45,34 +45,34 @@ export const AliasItem = (props: Props) => {
     setIsOpen(false)
 
     switch (nextModal) {
-      case 'copy':
+      case "copy":
         copyToClipboard(item.full_address)
         break
-      case 'edit':
+      case "edit":
         setShowEditModal()
         break
-      case 'config':
+      case "config":
         setShowConfigModal()
         break
-      case 'remove':
+      case "remove":
         handleRemove()
         break
     }
   }
 
   return (
-    <View style={{ marginVertical: 16 }}>
+    <View style={{ marginVertical: 16, marginBottom: isEdited ? 16 : 0 }}>
       <TouchableOpacity
         onPress={() => {
           setIsOpen(true)
         }}
       >
         <View
-          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+          style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
         >
           <View>
             <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
-            <Text text={moment.unix(item.created_time).format('DD/MM/YYYY')} />
+            <Text text={moment.unix(item.created_time).format("DD/MM/YYYY")} />
           </View>
 
           <Icon icon="dots-three" size={24} />
@@ -84,35 +84,35 @@ export const AliasItem = (props: Props) => {
           setIsOpen(false)
         }}
         header={
-          <View style={{ width: '100%', paddingHorizontal: 20 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ width: "100%", paddingHorizontal: 20 }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View>
                 <Text preset="bold" text={item.full_address} style={{ marginBottom: 4 }} />
-                <Text text={moment.unix(item.created_time).format('DD/MM/YYYY')} />
+                <Text text={moment.unix(item.created_time).format("DD/MM/YYYY")} />
               </View>
             </View>
           </View>
         }
       >
         <ActionItem
-          name={translate('private_relay.copy')}
+          name={translate("private_relay.copy")}
           icon="copy"
           action={() => {
-            handleActionSheetClose('copy')
+            handleActionSheetClose("copy")
           }}
         />
-        {index === 0 && (
+        {isEdited && (
           <ActionItem
-            name={translate('private_relay.edit')}
+            name={translate("private_relay.edit")}
             icon="edit"
             action={() => {
-              handleActionSheetClose('edit')
+              handleActionSheetClose("edit")
             }}
           />
         )}
         {!isFreeAccount && (
           <ActionItem
-            name={translate('private_relay.statistic')}
+            name={translate("private_relay.statistic")}
             icon="file-text"
             action={() => {
               setIsOpen(false)
@@ -122,19 +122,19 @@ export const AliasItem = (props: Props) => {
         )}
         {!isFreeAccount && (
           <ActionItem
-            name={translate('private_relay.config')}
+            name={translate("private_relay.config")}
             icon="gear"
             action={() => {
-              handleActionSheetClose('config')
+              handleActionSheetClose("config")
             }}
           />
         )}
         <ActionItem
-          name={translate('common.delete')}
+          name={translate("common.delete")}
           icon="trash"
           color={colors.error}
           action={() => {
-            handleActionSheetClose('remove')
+            handleActionSheetClose("remove")
           }}
         />
       </ActionSheet>

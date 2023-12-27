@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { TextInput, View } from 'react-native'
-import { useStores } from 'app/models'
-import { useTheme } from 'app/services/context'
-import { RelayAddress } from 'app/static/types'
-import { BottomModal, Text, Button } from 'app/components/cores'
-import Animated, { FadeInDown } from 'react-native-reanimated'
-import { useHelper } from 'app/services/hook'
+import React, { useEffect, useState } from "react"
+import { TextInput, View } from "react-native"
+import { useStores } from "app/models"
+import { useTheme } from "app/services/context"
+import { RelayAddress } from "app/static/types"
+import { BottomModal, Text, Button } from "app/components/cores"
+import Animated, { FadeInDown } from "react-native-reanimated"
+import { useHelper } from "app/services/hook"
 
 interface Props {
   isOpen?: boolean
   onClose?: () => void
   item: RelayAddress
-  onEdit: () => void
+  onEdit: (full_address: string) => void
 }
 
 export const EditAliasModal = (props: Props) => {
@@ -23,20 +23,22 @@ export const EditAliasModal = (props: Props) => {
   // --------------- PARAMS ----------------
 
   const [isLoading, setIsLoading] = useState(false)
-  const [newAddress, setNewAddress] = useState('')
-  const [updateError, setUpdateError] = useState('')
+  const [newAddress, setNewAddress] = useState("")
+  const [updateError, setUpdateError] = useState("")
   const [isConfirm, setIsConfirm] = useState(false)
 
   // --------------- METHODS ----------------
 
   const handleEdit = async () => {
     setIsLoading(true)
+    const domain = item.full_address.replace(item.address, "")
+
     const res = await toolStore.updateRelayAddress(item.id, newAddress.toLowerCase())
-    if (res.kind === 'ok') {
+    if (res.kind === "ok") {
       onClose()
-      onEdit()
+      onEdit(newAddress.toLowerCase().trim() + domain)
     } else {
-      if (res.kind === 'bad-data') {
+      if (res.kind === "bad-data") {
         const errorData: {
           details?: {
             [key: string]: string[]
@@ -44,7 +46,7 @@ export const EditAliasModal = (props: Props) => {
           code: string
           message?: string
         } = res.data
-        let errorMessage = ''
+        let errorMessage = ""
         if (errorData.details) {
           for (const key of Object.keys(errorData.details)) {
             if (errorData.details[key][0]) {
@@ -65,8 +67,8 @@ export const EditAliasModal = (props: Props) => {
   // --------------- EFFECT ----------------'
 
   useEffect(() => {
-    setUpdateError('')
-    setNewAddress('')
+    setUpdateError("")
+    setNewAddress("")
     setIsConfirm(false)
   }, [isOpen])
 
@@ -78,7 +80,7 @@ export const EditAliasModal = (props: Props) => {
         <Text
           preset="label"
           size="base"
-          text={translate('private_relay.edit_modal.current')}
+          text={translate("private_relay.edit_modal.current")}
           style={{
             marginTop: 10,
             marginBottom: 4,
@@ -90,7 +92,7 @@ export const EditAliasModal = (props: Props) => {
         <Text
           preset="label"
           size="base"
-          text={translate('private_relay.edit_modal.new')}
+          text={translate("private_relay.edit_modal.new")}
           style={{
             marginTop: 24,
             marginBottom: 4,
@@ -100,9 +102,9 @@ export const EditAliasModal = (props: Props) => {
         <View
           style={{
             borderWidth: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
             height: 44,
             borderColor: colors.primary,
             borderRadius: 8,
@@ -114,9 +116,9 @@ export const EditAliasModal = (props: Props) => {
             value={newAddress}
             onChangeText={(text: string) => {
               setNewAddress(text)
-              if (updateError !== '') setUpdateError('')
+              if (updateError !== "") setUpdateError("")
             }}
-            placeholder={'... '}
+            placeholder={"... "}
             placeholderTextColor={colors.secondaryText}
             selectionColor={colors.primary}
             style={{
@@ -126,7 +128,7 @@ export const EditAliasModal = (props: Props) => {
             }}
           />
           <Text
-            text={item.full_address.replace(item.address, '')}
+            text={item.full_address.replace(item.address, "")}
             style={{
               marginLeft: 2,
               right: 0,
@@ -143,8 +145,8 @@ export const EditAliasModal = (props: Props) => {
       />
 
       <Button
-        text={translate('common.save')}
-        disabled={isLoading || !newAddress || updateError !== ''}
+        text={translate("common.save")}
+        disabled={isLoading || !newAddress || updateError !== ""}
         loading={isLoading}
         onPress={() => setIsConfirm(true)}
       />
@@ -154,7 +156,7 @@ export const EditAliasModal = (props: Props) => {
   const renderConfirmEdit = () => (
     <Animated.View entering={FadeInDown}>
       <Text
-        text={translate('private_relay.edit_warning', { alias: item.full_address })}
+        text={translate("private_relay.edit_warning", { alias: item.full_address })}
         style={{
           marginTop: 4,
           marginBottom: 4,
@@ -163,14 +165,14 @@ export const EditAliasModal = (props: Props) => {
       <View
         style={{
           marginTop: 12,
-          justifyContent: 'flex-end',
-          flexDirection: 'row',
-          alignItems: 'center',
+          justifyContent: "flex-end",
+          flexDirection: "row",
+          alignItems: "center",
         }}
       >
         <Button
           preset="secondary"
-          text={translate('common.cancel')}
+          text={translate("common.cancel")}
           onPress={() => {
             setIsConfirm(false)
             onClose()
@@ -180,7 +182,7 @@ export const EditAliasModal = (props: Props) => {
           }}
         />
         <Button
-          text={translate('common.save')}
+          text={translate("common.save")}
           loading={isLoading}
           onPress={handleEdit}
           style={{
@@ -198,8 +200,8 @@ export const EditAliasModal = (props: Props) => {
       onClose={onClose}
       title={
         !isConfirm
-          ? translate('private_relay.edit_modal.titel')
-          : translate('private_relay.edit_modal.confirm_title')
+          ? translate("private_relay.edit_modal.titel")
+          : translate("private_relay.edit_modal.confirm_title")
       }
     >
       {!isConfirm && renderEdit()}

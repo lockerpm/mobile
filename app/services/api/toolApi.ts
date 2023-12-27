@@ -82,7 +82,10 @@ class ToolApi {
 
   // ---------------------- PRIVATE RELAY ----------------------
 
-  async fetchRelayListAddresses(token: string): Promise<
+  async fetchRelayListAddresses(
+    token: string,
+    page?: number
+  ): Promise<
     | {
         kind: 'ok'
         data: {
@@ -99,7 +102,8 @@ class ToolApi {
 
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        '/cystack_platform/relay/addresses'
+        '/cystack_platform/relay/addresses',
+        { page }
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
