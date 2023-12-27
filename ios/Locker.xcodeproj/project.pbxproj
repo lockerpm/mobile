@@ -91,6 +91,8 @@
 		5B7EB9410499542E8C5724F5 /* Pods-Locker-LockerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locker-LockerTests.debug.xcconfig"; path = "Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-Locker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locker.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7513C8939ACC471CA47CDCF0 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
+		7C347A0B2B3C068100327E6E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
+		7C347A0E2B3C0BDF00327E6E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainInterface.strings; sourceTree = "<group>"; };
 		7C973A362A93019C00875FBA /* Locker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Locker.entitlements; path = Locker/Locker.entitlements; sourceTree = "<group>"; };
 		7C973A372A9304CA00875FBA /* Locker-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Locker-Bridging-Header.h"; sourceTree = "<group>"; };
 		7C973A3C2A93055500875FBA /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,7 +115,6 @@
 		7C973A662A9308D600875FBA /* FormFieldView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormFieldView.swift; sourceTree = "<group>"; };
 		7CEB31E12A9309D9007F6051 /* assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = assets.xcassets; sourceTree = "<group>"; };
 		7CEB31E32A9309FE007F6051 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
-		7CEB31E72A930AA1007F6051 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
 		7CEB31EF2A932780007F6051 /* RSAUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAUtils.swift; sourceTree = "<group>"; };
 		7CEB31F02A932780007F6051 /* RCTCryptoServiceIos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTCryptoServiceIos.m; sourceTree = "<group>"; };
 		7CEB31F12A932780007F6051 /* RNCryptoServiceIos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCryptoServiceIos.swift; sourceTree = "<group>"; };
@@ -730,7 +731,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				7C973A432A93055500875FBA /* Base */,
-				7CEB31E72A930AA1007F6051 /* vi */,
+				7C347A0B2B3C068100327E6E /* vi */,
+				7C347A0E2B3C0BDF00327E6E /* en */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
