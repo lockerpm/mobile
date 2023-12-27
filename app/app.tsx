@@ -131,6 +131,7 @@ const App = (props: RootProp) => {
   // if app start from android autofill service. navigate to autofill screen
   autofillParserAndroid(props)
 
+  SystemNavigationBar.fullScreen(false)
   SystemNavigationBar.setNavigationColor("transparent")
   // otherwise, we're ready to render the app
   return (
