@@ -1,9 +1,9 @@
 
 /* Class = "UIButton"; configuration.title = " Unlock with Face ID/Touch ID"; ObjectID = "314-LN-7ic"; */
-"314-LN-7ic.configuration.title" = " Mở khoá bằng Face ID/Touch ID";
+"314-LN-7ic.configuration.title" = " Unlock with Face ID/Touch ID";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "314-LN-7ic"; */
-"314-LN-7ic.normalTitle" = " Mở khoá bằng Face ID/Touch ID";
+"314-LN-7ic.normalTitle" = " Unlock with Face ID/Touch ID";
 
 /* Class = "UISearchBar"; 7Hg-tT-hcc.scopeButtonTitles[0] = "Title"; ObjectID = "7Hg-tT-hcc"; */
 "7Hg-tT-hcc.scopeButtonTitles[0]" = "Title";
@@ -12,28 +12,28 @@
 "7Hg-tT-hcc.scopeButtonTitles[1]" = "Title";
 
 /* Class = "UIBarButtonItem"; title = "Cancel"; ObjectID = "9HW-uz-U66"; */
-"9HW-uz-U66.title" = "Huỷ";
+"9HW-uz-U66.title" = "Cancel";
 
 /* Class = "UILabel"; text = "Verify Master Password"; ObjectID = "CdV-R9-W9l"; */
-"CdV-R9-W9l.text" = "Xác thực mật khẩu chính";
+"CdV-R9-W9l.text" = "Verify Master Password";
 
 /* Class = "UIButton"; configuration.title = "Unlock"; ObjectID = "I52-ga-KLY"; */
-"I52-ga-KLY.configuration.title" = "Mở khoá";
+"I52-ga-KLY.configuration.title" = "Unlock";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "I52-ga-KLY"; */
-"I52-ga-KLY.normalTitle" = "Mở khoá";
+"I52-ga-KLY.normalTitle" = "Unlock";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "ODF-fV-c96"; */
 "ODF-fV-c96.normalTitle" = "Button";
 
 /* Class = "UIButton"; configuration.title = "Cancel"; ObjectID = "Yjt-a8-RKp"; */
-"Yjt-a8-RKp.configuration.title" = "Huỷ";
+"Yjt-a8-RKp.configuration.title" = "Cancel";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Yjt-a8-RKp"; */
-"Yjt-a8-RKp.normalTitle" = "Huỷ";
+"Yjt-a8-RKp.normalTitle" = "Cancel";
 
 /* Class = "UILabel"; text = "Verify your Master Password to unlock"; ObjectID = "bT0-7Z-hW5"; */
-"bT0-7Z-hW5.text" = "Nhập mật khẩu chính để mở khoá";
+"bT0-7Z-hW5.text" = "Verify your Master Password to unlock";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "ebM-gT-HNl"; */
 "ebM-gT-HNl.text" = "Label";
@@ -42,4 +42,4 @@
 "fmG-jG-AB8.text" = "Label";
 
 /* Class = "UINavigationItem"; title = "Login List"; ObjectID = "sUB-ay-zik"; */
-"sUB-ay-zik.title" = "Danh sách mật khẩu";
+"sUB-ay-zik.title" = "Login List";

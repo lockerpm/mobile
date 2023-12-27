@@ -136,12 +136,16 @@ class Utils {
 
 extension String {
     func locolized() -> String {
+      let locale = NSLocale.current.languageCode
+      if ( locale == "vi") {
         return NSLocalizedString(
             self,
             tableName: "Localizable",
             bundle: .main,
             value: self,
             comment: self)
+      }
+      return self
     }
 }
 
