@@ -20,7 +20,7 @@ export type RootParamList = {
   forgotPassword: undefined
   signup: undefined
   createMasterPassword: undefined
-  mainStack: undefined
+  mainStack:  NavigatorScreenParams<PrimaryParamList>;
 }
 
 export type RootStackScreenProps<T extends keyof RootParamList> = StackScreenProps<RootParamList, T>

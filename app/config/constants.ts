@@ -14,7 +14,7 @@ export const SHARED_KEYCHAIN_ACCESS_GROUP = 'group.com.cystack.locker.vincss'
 
 // VIN SSO AUTHEN
 export const VIN_AUTH_ENDPOINT = Config.VIN_AUTH_ENDPOINT
-export const VIN_AUTH_CALLBACK = Config.VIN_AUTH_CALLBACK
+export const VIN_AUTH_CALLBACK = 'https://locker.vincss.net/sign-in'
 
 
 // User custom

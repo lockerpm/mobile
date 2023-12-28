@@ -205,7 +205,7 @@ export const InitScreen: FC<RootStackScreenProps<"init">> = observer((props) => 
     if (["ok"].includes(userRes.kind) && ["ok", "unauthorized"].includes(userPwRes.kind)) {
       goLockOrCreatePassword()
     } else {
-      navigation.navigate("login")
+      navigation.navigate("onBoarding")
     }
   }
   // ------------------ EFFECTS ---------------------

@@ -215,3 +215,12 @@ export type OnpremisePreloginPayload = {
   code?: string
   identifier?: string
 }
+
+export type SSOUserData = {
+    displayName: string
+    email? : string,
+    mail:string,
+    name?: string,
+    uid: string,
+    username: string
+}

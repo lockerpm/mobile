@@ -4,13 +4,12 @@ import { RootStackScreenProps } from "app/navigators/navigators.types"
 import { Screen, Text, TextInput, Button, Logo } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { useAuthentication, useHelper } from "app/services/hook"
-import { useNavigation } from "@react-navigation/native"
 import { useStores } from "app/models"
 import { LoginMethod } from "app/static/types"
 import Animated, { FadeInUp } from "react-native-reanimated"
 
-export const LoginScreen: FC<RootStackScreenProps<"login">> = observer(() => {
-  const navigation = useNavigation() as any
+export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) => {
+  const navigation = props.navigation
   const { user } = useStores()
   const { translate } = useHelper()
   const { sessionLogin } = useAuthentication()

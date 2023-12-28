@@ -13,9 +13,10 @@ import { EnterpriseInvitationModal } from "./EnterpriseInvitationModal"
 interface Props {
   biometryType: BiometricsType
   handleLogout: () => void
+  email: string
 }
 
-export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
+export const LockByMasterPassword = ({ biometryType, handleLogout, email }: Props) => {
   const { colors } = useTheme()
   const navigation = useNavigation() as any
   const { user, uiStore, enterpriseStore } = useStores()
@@ -71,13 +72,13 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
     if (masterPassword) {
       setIsError(false)
       setIsUnlocking(true)
-      const res = await sessionLogin(masterPassword, user.email)
+      const res = await sessionLogin(masterPassword, email)
       setIsUnlocking(false)
       if (res.kind === "ok") {
         setMasterPassword("")
         navigation.navigate("mainStack", { screen: "start" })
       } else if (res.kind === "unauthorized") {
-        navigation.navigate("login", { type: "individual" })
+        navigation.navigate("onBoarding")
       } else if (res.kind === "enterprise-lock") {
         Alert.alert("", translate("alert.enterprise_lock"), [
           {
@@ -111,7 +112,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
       return
     }
     setIsBioUnlocking(true)
-    const res = await biometricLogin(user.email)
+    const res = await biometricLogin(email)
     setIsBioUnlocking(false)
     if (res.kind === "ok") {
       setMasterPassword("")
@@ -121,7 +122,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
 
   const handleGetHint = async () => {
     setIsSendingHint(true)
-    const res = await user.sendPasswordHint(user.email)
+    const res = await user.sendPasswordHint(email)
     setIsSendingHint(false)
     if (res.kind === "ok") {
       notify("success", translate("lock.hint_sent"), 5000)
@@ -131,9 +132,10 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
   }
 
   const fetchEnterpriseInvitation = async () => {
-
-    const res = await enterpriseStore.invitations()
-    setEnterpriseInvitations(res)
+    if (enterpriseStore.apiToken) {
+      const res = await enterpriseStore.invitations()
+      setEnterpriseInvitations(res)
+    }
   }
 
   // -------------- EFFECT ------------------
@@ -244,7 +246,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout }: Props) => {
 
             <Text
               size="base"
-              text={user.email}
+              text={email}
               style={{
                 marginHorizontal: 10,
               }}

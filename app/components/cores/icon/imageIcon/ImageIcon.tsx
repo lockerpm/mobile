@@ -109,6 +109,7 @@ export const imageRegistry = {
   folder: require("assets/images/icons/folder/folder.png"),
   "folder-add": require("assets/images/icons/folder/folder-add.png"),
   "folder-share": require("assets/images/icons/folder/folder-share.png"),
+  "usb": require('assets/icons/usb.png')
 }
 
 const $imageStyle: ImageStyle = {

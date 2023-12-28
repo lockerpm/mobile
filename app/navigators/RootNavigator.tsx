@@ -169,7 +169,7 @@ const RootStack = observer((props: Props) => {
         <Stack.Screen name="intro" component={IntroScreen} />
         <Stack.Screen name="onBoarding" component={OnboardingScreen} />
 
-        <Stack.Screen name="login" component={LoginScreen} />
+        <Stack.Screen name="login" component={LoginScreen}  />
         <Stack.Screen name="forgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="signup" component={SignupScreen} />
         <Stack.Screen

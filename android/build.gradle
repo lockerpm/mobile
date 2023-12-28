@@ -17,8 +17,8 @@ buildscript {
         // Self-hosted custom gradle properties
         bundleId = 'com.cystack.locker.vincss'
         appName = 'VinCSS Locker'
-        versionCode = 4008
-        versionName = '1.0.0'
+        versionCode = 4009
+        versionName = '1.0.1'
     }
     repositories {
         google()

@@ -69,13 +69,12 @@ export const AdnroidPasswordlessOptions = ({ isOpen, onClose, login }: Props) =>
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           backgroundColor: colors.block,
           paddingHorizontal: 16,
           paddingVertical: 16,
         }}
       >
-        <Text preset="bold" text={"TEST"} style={{ fontSize: 24, lineHeight: 28 }} />
         <Icon icon="x-circle" size={24} onPress={onClose} />
       </View>
     )
@@ -92,13 +91,12 @@ export const AdnroidPasswordlessOptions = ({ isOpen, onClose, login }: Props) =>
       panDirection={null}
     >
       <View style={{ paddingHorizontal: 16, backgroundColor: colors.block }}>
-        <Text text={"TEST@"} style={{ textAlign: "center" }} />
 
         {usbAuthen && (
           <Options
             title={"USB"}
-            label={"USB"}
-            icon="keychain"
+            label={translate('onBoarding.usb')}
+            icon="usb"
             isSelect={isSelectMethod === ANDROID_PWL_METHOD.USB}
             action={() => {
               setSelectMethod(ANDROID_PWL_METHOD.USB)
@@ -107,8 +105,8 @@ export const AdnroidPasswordlessOptions = ({ isOpen, onClose, login }: Props) =>
         )}
         {nfcAuthen && (
           <Options
-            title={"UFC"}
-            label={"UFC"}
+            title={"NFC"}
+            label={translate('onBoarding.nfc')}
             icon="security-key"
             isSelect={isSelectMethod === ANDROID_PWL_METHOD.NFC}
             action={() => {
@@ -128,6 +126,7 @@ export const AdnroidPasswordlessOptions = ({ isOpen, onClose, login }: Props) =>
         }}
         onPress={() => {
           login(isSelectMethod)
+          onClose()
         }}
       />
     </Dialog>

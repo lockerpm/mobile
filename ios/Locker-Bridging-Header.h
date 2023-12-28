@@ -6,3 +6,5 @@
 
 #import <React/RCTBridgeModule.h>
 
+// vinsso
+#import <VinCSSFido2ClientSDK/VinCSSFido2ClientSDK-Swift.h>

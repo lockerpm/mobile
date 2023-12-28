@@ -12,6 +12,7 @@ import {
   ResetIDPasswordWithCode,
   PreloginUserSnapshot,
   OnpremisePreloginPayload,
+  SSOUserData,
 } from 'app/static/types'
 import { LoginMethod } from 'app/static/types/enum'
 import { Logger } from 'app/utils/utils'
@@ -355,7 +356,7 @@ class IdApi {
   async onPremisePreLogin(preLoginPayload: OnpremisePreloginPayload): Promise<
     | {
         kind: 'ok'
-        data: OnpremisePreloginPayload[]
+        data: SSOUserData
       }
     | GeneralApiProblem
   > {

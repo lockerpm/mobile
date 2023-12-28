@@ -28,7 +28,7 @@ export const BusinessPasswordlessQrScan = ({ otp, goBack, index, email }: Props)
       uiStore.setStartFromPasswordLess(true)
       navigation.navigate("mainStack", { screen: "start" })
     } else if (res.kind === "unauthorized") {
-      navigation.navigate("login", { type: "onPremise" })
+      navigation.navigate("onBoarding")
     }
   }
 

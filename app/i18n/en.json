@@ -343,7 +343,9 @@
   "onBoarding": {
     "no_account": "Don't have an account?",
     "has_account": "Already have an account?",
-    "title": "Your Digital Vault"
+    "title": "Your Digital Vault",
+    "usb": "Connect the security key to your phone via charging port",
+    "nfc": "Hold the security key close to the back (or top) of your phone to connect"
   },
   "login": {
     "title": "Sign in to your account",

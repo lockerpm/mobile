@@ -51,7 +51,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
   }
 
   const fetchBusinessLoginMethod = async () => {
-    if (route.params.type === LoginMethod.PASSWORD) {
+    if (route.params.type !== LoginMethod.PASSWORDLESS) {
       const res = await user.preloginMethod(userEmail)
       if (res.kind === "ok") {
         setLogMethod(res.data.login_method)
@@ -117,7 +117,7 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     }
 
     if (lockMethod === LoginMethod.PASSWORD) {
-      return <LockByMasterPassword {...commonProps} />
+      return <LockByMasterPassword {...commonProps} email={userEmail} />
     }
     return <BusinessLockByPasswordless {...commonProps} email={userEmail} />
   }

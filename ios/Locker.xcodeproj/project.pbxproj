@@ -22,6 +22,7 @@
 		7C347A162B3C16E800327E6E /* RCTVinSSO.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C347A132B3C16E800327E6E /* RCTVinSSO.m */; };
 		7C347A172B3C16E800327E6E /* RNVinSSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C347A142B3C16E800327E6E /* RNVinSSO.swift */; };
 		7C347A182B3C16E800327E6E /* VinSsoWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C347A152B3C16E800327E6E /* VinSsoWebViewController.swift */; };
+		7C347A1A2B3D2C9400327E6E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C347A192B3D2C9400327E6E /* AppDelegate.swift */; };
 		7C973A3E2A93055500875FBA /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C973A3D2A93055500875FBA /* AuthenticationServices.framework */; };
 		7C973A412A93055500875FBA /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A402A93055500875FBA /* CredentialProviderViewController.swift */; };
 		7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A422A93055500875FBA /* MainInterface.storyboard */; };
@@ -112,6 +113,7 @@
 		7C347A132B3C16E800327E6E /* RCTVinSSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTVinSSO.m; sourceTree = "<group>"; };
 		7C347A142B3C16E800327E6E /* RNVinSSO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNVinSSO.swift; sourceTree = "<group>"; };
 		7C347A152B3C16E800327E6E /* VinSsoWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VinSsoWebViewController.swift; sourceTree = "<group>"; };
+		7C347A192B3D2C9400327E6E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C973A362A93019C00875FBA /* Locker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Locker.entitlements; path = Locker/Locker.entitlements; sourceTree = "<group>"; };
 		7C973A372A9304CA00875FBA /* Locker-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Locker-Bridging-Header.h"; sourceTree = "<group>"; };
 		7C973A3C2A93055500875FBA /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,6 +210,7 @@
 				7CEB31EE2A932780007F6051 /* RNCryptoService */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				7C347A192B3D2C9400327E6E /* AppDelegate.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				BE406F552862D73000A81E39 /* LaunchScreen.storyboard */,
@@ -442,11 +445,11 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				B512E258E7BA7E09F976A18D /* [CP] Embed Pods Frameworks */,
+				7C347A112B3C152700327E6E /* Embed Frameworks */,
 				7C973A4D2A93055500875FBA /* Embed Foundation Extensions */,
 				CF3B00BA8CC8BB2FB9155EAF /* [CP-User] [RNFB] Core Configuration */,
 				868061382ACB0AAA0029A08E /* ShellScript */,
-				7C347A112B3C152700327E6E /* Embed Frameworks */,
-				B512E258E7BA7E09F976A18D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -753,6 +756,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C347A1A2B3D2C9400327E6E /* AppDelegate.swift in Sources */,
 				7CEB31FB2A932780007F6051 /* RNCryptoServiceIos.swift in Sources */,
 				7C347A162B3C16E800327E6E /* RCTVinSSO.m in Sources */,
 				7CEB31F92A932780007F6051 /* RSAUtils.swift in Sources */,
@@ -877,7 +881,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = "VinCSS Locker";
 				ENABLE_BITCODE = NO;
@@ -888,7 +892,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -916,7 +920,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locker/Locker.entitlements;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = W7S57TNBH5;
 				DISPLAY_NAME = "VinCSS Locker";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -926,7 +930,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

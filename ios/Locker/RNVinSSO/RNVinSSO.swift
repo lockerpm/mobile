@@ -28,7 +28,8 @@ class VinCssSsoLoginModule: NSObject {
       modelVC.resolver = resolve
       
       let navController = UINavigationController(rootViewController: modelVC)
-      navController.modalPresentationStyle = .pageSheet
+      navController.modalPresentationStyle = .fullScreen
+//      navController.set
       navController.setNavigationBarHidden(true, animated: true)
       let topController = UIApplication.topMostViewController()
       topController?.present(navController, animated: true, completion: nil)

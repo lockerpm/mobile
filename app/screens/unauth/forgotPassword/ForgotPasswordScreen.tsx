@@ -93,7 +93,7 @@ export const ForgotPasswordScreen: FC<RootStackScreenProps<"forgotPassword">> = 
             <ChangePassword
               token={token}
               nextStep={() => {
-                navigation.navigate("login")
+                navigation.navigate("onBoarding")
               }}
             />
           </Animated.View>

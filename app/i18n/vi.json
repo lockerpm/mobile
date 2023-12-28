@@ -344,7 +344,9 @@
   "onBoarding": {
     "no_account": "Chưa có tài khoản?",
     "has_account": "Đã có tài khoản?",
-    "title": "Your Digital Vault"
+    "title": "Your Digital Vault",
+    "usb": "Kết nối khóa bảo mật với điện thoại qua cổng sạc của máy",
+    "nfc": "Đặt khóa bảo mật gần mặt sau (hoặc phía trên) của điện thoại để kết nối"
   },
   "login": {
     "title": "Đăng nhập tài khoản",
