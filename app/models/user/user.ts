@@ -536,6 +536,17 @@ export const UserModel = types
       const res = await idApi.businessLoginMethod()
       return res
     },
+
+    // ------------------SSO==----------------------
+    ssoCheckExist: async () => {
+      const res = await idApi.ssoCheckExist()
+      return res
+    },
+    onPremisePreLogin:async (code:string) => {
+      const res = await idApi.onPremisePreLogin({code})
+      return res
+    }
+
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .postProcessSnapshot(omit(['isLoggedInPw', 'isMobileLangChange', 'isPasswordlessLogin']))
 

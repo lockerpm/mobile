@@ -11,6 +11,7 @@ import {
   ResetIDPasswordRequest,
   ResetIDPasswordWithCode,
   PreloginUserSnapshot,
+  OnpremisePreloginPayload,
 } from 'app/static/types'
 import { LoginMethod } from 'app/static/types/enum'
 import { Logger } from 'app/utils/utils'
@@ -290,7 +291,7 @@ class IdApi {
   > {
     try {
       const response: ApiResponse<any> = await this.api.apisauce.get(
-        `cystack_platform/pm/users/me/login_method`
+        `/cystack_platform/pm/users/me/login_method`
       )
 
       // the typical ways to die when calling an api
@@ -304,6 +305,78 @@ class IdApi {
       return { kind: 'bad-data' }
     }
   }
+
+  async ssoCheckExist(): Promise<
+    | {
+        kind: 'ok'
+        data: {
+          existed: boolean,
+          sso_configuration: {
+            id: string
+            identifier: string
+            enabled: boolean
+            sso_provider: string
+            sso_provider_options: {
+              client_id: string
+              authority: string
+              authorization_endpoint: string
+              token_endpoint: string
+              redirect_behavior: string
+              userinfo_endpoint: string
+            }
+            creation_date: number
+            revision_date: number
+            created_by: {
+              id: number
+              username: string
+            }
+          }
+        }
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/sso_configuration/check_exists`
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: 'ok', data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: 'bad-data' }
+    }
+  }
+
+  async onPremisePreLogin(preLoginPayload: OnpremisePreloginPayload): Promise<
+    | {
+        kind: 'ok'
+        data: OnpremisePreloginPayload[]
+      }
+    | GeneralApiProblem
+  > {
+    try {
+      const response: ApiResponse<any> = await this.api.apisauce.post(
+        `/sso_configuration/get_user`,
+        preLoginPayload
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+      return { kind: 'ok', data: response.data }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: 'bad-data' }
+    }
+  }
+
 }
 
 export const idApi = new IdApi()

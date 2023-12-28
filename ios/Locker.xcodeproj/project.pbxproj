@@ -17,6 +17,11 @@
 		4D1804180C27433DAC77EA9B /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7513C8939ACC471CA47CDCF0 /* Inter-Medium.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-Locker-LockerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Locker-LockerTests.a */; };
 		7AFE8CFE79B347BB8A6EC2F7 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B3E8C478BDD34B21AF021044 /* Inter-SemiBold.ttf */; };
+		7C347A0F2B3C152700327E6E /* VinCSSFido2ClientSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */; };
+		7C347A102B3C152700327E6E /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7CEB32012A9327D8007F6051 /* VinCSSFido2ClientSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7C347A162B3C16E800327E6E /* RCTVinSSO.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C347A132B3C16E800327E6E /* RCTVinSSO.m */; };
+		7C347A172B3C16E800327E6E /* RNVinSSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C347A142B3C16E800327E6E /* RNVinSSO.swift */; };
+		7C347A182B3C16E800327E6E /* VinSsoWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C347A152B3C16E800327E6E /* VinSsoWebViewController.swift */; };
 		7C973A3E2A93055500875FBA /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C973A3D2A93055500875FBA /* AuthenticationServices.framework */; };
 		7C973A412A93055500875FBA /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C973A402A93055500875FBA /* CredentialProviderViewController.swift */; };
 		7C973A442A93055500875FBA /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C973A422A93055500875FBA /* MainInterface.storyboard */; };
@@ -62,6 +67,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		7C347A112B3C152700327E6E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7C347A102B3C152700327E6E /* VinCSSFido2ClientSDK.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7C973A4D2A93055500875FBA /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -93,6 +109,9 @@
 		7513C8939ACC471CA47CDCF0 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		7C347A0B2B3C068100327E6E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/MainInterface.strings; sourceTree = "<group>"; };
 		7C347A0E2B3C0BDF00327E6E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainInterface.strings; sourceTree = "<group>"; };
+		7C347A132B3C16E800327E6E /* RCTVinSSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTVinSSO.m; sourceTree = "<group>"; };
+		7C347A142B3C16E800327E6E /* RNVinSSO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNVinSSO.swift; sourceTree = "<group>"; };
+		7C347A152B3C16E800327E6E /* VinSsoWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VinSsoWebViewController.swift; sourceTree = "<group>"; };
 		7C973A362A93019C00875FBA /* Locker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Locker.entitlements; path = Locker/Locker.entitlements; sourceTree = "<group>"; };
 		7C973A372A9304CA00875FBA /* Locker-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Locker-Bridging-Header.h"; sourceTree = "<group>"; };
 		7C973A3C2A93055500875FBA /* LockerAutofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockerAutofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +163,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C347A0F2B3C152700327E6E /* VinCSSFido2ClientSDK.xcframework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-Locker.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -183,6 +203,7 @@
 			children = (
 				7C973A362A93019C00875FBA /* Locker.entitlements */,
 				7CEB32062A932AAE007F6051 /* LockerRelease.entitlements */,
+				7C347A122B3C16E800327E6E /* RNVinSSO */,
 				7CEB31F22A932780007F6051 /* RNAutofillService */,
 				7CEB31EE2A932780007F6051 /* RNCryptoService */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -222,6 +243,17 @@
 				951E59D51E504BC9C5F46169 /* ExpoModulesProvider.swift */,
 			);
 			name = Locker;
+			sourceTree = "<group>";
+		};
+		7C347A122B3C16E800327E6E /* RNVinSSO */ = {
+			isa = PBXGroup;
+			children = (
+				7C347A132B3C16E800327E6E /* RCTVinSSO.m */,
+				7C347A142B3C16E800327E6E /* RNVinSSO.swift */,
+				7C347A152B3C16E800327E6E /* VinSsoWebViewController.swift */,
+			);
+			name = RNVinSSO;
+			path = Locker/RNVinSSO;
 			sourceTree = "<group>";
 		};
 		7C973A3F2A93055500875FBA /* LockerAutofill */ = {
@@ -387,6 +419,7 @@
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
+				55D96812683F24FC772EB39D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -412,6 +445,8 @@
 				7C973A4D2A93055500875FBA /* Embed Foundation Extensions */,
 				CF3B00BA8CC8BB2FB9155EAF /* [CP-User] [RNFB] Core Configuration */,
 				868061382ACB0AAA0029A08E /* ShellScript */,
+				7C347A112B3C152700327E6E /* Embed Frameworks */,
+				B512E258E7BA7E09F976A18D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -541,6 +576,23 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
+		55D96812683F24FC772EB39D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locker-LockerTests/Pods-Locker-LockerTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		868061382ACB0AAA0029A08E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -578,6 +630,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B512E258E7BA7E09F976A18D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locker/Pods-Locker-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
@@ -685,8 +754,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CEB31FB2A932780007F6051 /* RNCryptoServiceIos.swift in Sources */,
+				7C347A162B3C16E800327E6E /* RCTVinSSO.m in Sources */,
 				7CEB31F92A932780007F6051 /* RSAUtils.swift in Sources */,
+				7C347A172B3C16E800327E6E /* RNVinSSO.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				7C347A182B3C16E800327E6E /* VinSsoWebViewController.swift in Sources */,
 				7CEB31FA2A932780007F6051 /* RCTCryptoServiceIos.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				7CEB31FC2A932780007F6051 /* RNAutofillServiceIos.swift in Sources */,

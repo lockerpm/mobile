@@ -177,6 +177,21 @@ dependencies {
     implementation 'com.tencent:mmkv:1.3.0'
     
     implementation project(':react-native-fs')
+
+    // FIDO Vinsso
+    implementation project(path: ':fido2-client')
+    implementation 'io.github.chaosleung:pinview:1.4.4'
+    implementation 'com.google.guava:guava:27.0.1-android'
+    // implementations for fido2 sdk
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0"
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.0'
+    // implementation 'org.bouncycastle:bcpkix-jdk15on:1.56'
+    def room_version = "2.3.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation 'commons-codec:commons-codec:1.10'
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

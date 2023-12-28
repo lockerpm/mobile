@@ -12,6 +12,11 @@ export const WS_URL = Config.WS_URL
 export const SHARED_KEYCHAIN_SERVICE = 'W7S57TNBH5.com.cystack.locker.vincss'
 export const SHARED_KEYCHAIN_ACCESS_GROUP = 'group.com.cystack.locker.vincss'
 
+// VIN SSO AUTHEN
+export const VIN_AUTH_ENDPOINT = Config.VIN_AUTH_ENDPOINT
+export const VIN_AUTH_CALLBACK = Config.VIN_AUTH_CALLBACK
+
+
 // User custom
 export const GET_LOGO_URL = ''
 export const TERMS_URL = ''
