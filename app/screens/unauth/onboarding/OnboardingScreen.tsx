@@ -95,7 +95,6 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
     }
 
     const code = getUrlParameterByName("code", result.url)
-    notify("success", code)
 
     await loginWithCode(code)
     setIsLoading(false)

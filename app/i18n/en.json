@@ -142,14 +142,14 @@
     "required_text": "This field is required"
   },
   "navigator": {
-    "is_offline": "Locker is currently in offline mode."
+    "is_offline": "VinCSS is currently in offline mode."
   },
   "alert": {
     "enterprise_lock": "The account is locked by the enterprise. Please contact your enterprise admin to unblock account.",
     "enterprise_system_lock": "The account is locked because the Enterprise plan is expired. Please contact your enterprise admin to unblock account.",
     "update": {
       "title": "Update App?",
-      "content": "A new version of Locker is available! Click to update Locker version {{version}}.",
+      "content": "A new version of VinCSS Password Manager is available! Click to update App version {{version}}.",
       "later": "Later",
       "now": "Update now"
     },
@@ -221,7 +221,7 @@
     "invitation_accepted": "Invitation accepted. Please wait for the admin confirmation",
     "invitation_rejected": "Invitation rejected",
     "master_password_updated": "Master password is updated",
-    "locker_password_updated": "Locker password is updated",
+    "locker_password_updated": "VinCSS password is updated",
     "biometric_enabled": "Face ID/Touch ID unlocking is enabled",
     "cipher_created": "New item created!",
     "cipher_deleted": "Item deleted!",
@@ -235,7 +235,7 @@
   },
   "emergency_access": {
     "title": "Emergency Access",
-    "des": "This feature grants other Locker account owner(s) the ability to access to your vault in some emergency situations",
+    "des": "This feature grants other VinCSS account owner(s) the ability to access to your vault in some emergency situations",
     "label": "{{pending}} pending requests",
     "view": "View",
     "takeover": "Take over",
@@ -262,10 +262,10 @@
     },
     "view_vault": "View their vault",
     "takeover_vault": "Take over their vault",
-    "reset_master_pw": "Reset their Locker Password",
-    "reset_pw": "Reset their Locker Password",
+    "reset_master_pw": "Reset their VinCSS Password",
+    "reset_pw": "Reset their VinCSS Password",
     "reset_master_pw_user": "Reset Password for {{name}}",
-    "reset_pw_user": "Reset Locker Password for {{name}}",
+    "reset_pw_user": "Reset VinCSS Password for {{name}}",
     "change_pw": {
       "title": "Reset Password",
       "new": "New password",
@@ -302,15 +302,15 @@
   },
   "create_master_pass": {
     "title": "Create Password",
-    "desc": "Password is your Locker unlock password. This is the only password you need to remember to access all other passwords stored in Locker. Please do not share this password with anyone.",
+    "desc": "Password is your VinCSS unlock password. This is the only password you need to remember to access all other passwords stored in VinCSS. Please do not share this password with anyone.",
     "confirm_master_pass": "Confirm Password",
     "hint": "Hint (optional)",
     "btn": "Create Password",
-    "note": "Note: Locker cannot view, store, or re-issue Password in case you forget or lose it."
+    "note": "Note: VinCSS cannot view, store, or re-issue Password in case you forget or lose it."
   },
   "confirm_create_master_pass": {
     "title": "Important",
-    "desc": "By processing, you understand that Locker CANNOT see, retrieve, or re-issue your Password in case you forget it. Your Password is only yours to keep.",
+    "desc": "By processing, you understand that VinCSS CANNOT see, retrieve, or re-issue your Password in case you forget it. Your Password is only yours to keep.",
     "link": "You can learn more about Password here.",
     "next_btn": "I understand. Let’s get started!",
     "back_btn": "Go back, I want to change my Password"
@@ -322,7 +322,7 @@
     },
     "sync": {
       "title": "Unlimited Sync",
-      "desc": "You can access your Locker's data from any devices."
+      "desc": "You can access your VinCSS's data from any devices."
     },
     "autofill": {
       "title": "Auto-fill",
@@ -330,7 +330,7 @@
     },
     "otp": {
       "title": "In-app OTP",
-      "desc": "Increase your account security with OTP integrated in Locker."
+      "desc": "Increase your account security with OTP integrated in VinCSS."
     }
   },
   "lock": {
@@ -527,8 +527,8 @@
     }
   },
   "password": {
-    "locker_master_password": "Locker Password",
-    "master_password_note": "This is your Locker Password. It will change accordingly as you change your Password. We created this item for you so you don't forget your Password. Don't worry, this operation happens within your device and we still can't see or edit your Password from our server. Have fun using Locker.",
+    "locker_master_password": "VinCSS Password",
+    "master_password_note": "This is your VinCSS Password. It will change accordingly as you change your Password. We created this item for you so you don't forget your Password. Don't worry, this operation happens within your device and we still can't see or edit your Password from our server. Have fun using VinCSS.",
     "login_details": "Login Details",
     "username": "Email or Username",
     "website_url": "Website",
@@ -599,7 +599,7 @@
       "fingerprint_desc": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
     },
     "suggestion": "Users or groups in Enterprise",
-    "confirm": "A user has registered a Locker account via your sharing request. Please confirm your sharing request",
+    "confirm": "A user has registered a VinCSS account via your sharing request. Please confirm your sharing request",
     "wait_confirm": "Waiting for confirmation"
   },
   "trash": {
@@ -724,7 +724,7 @@
     "deauthorize_sessions_success": "All sessions are deauthorized!",
     "delete_account": "Delete Account",
     "delete_account_warning": "Proceed below to delete your account and all associated data.",
-    "delete_account_success": "Your Locker account has been deleted!",
+    "delete_account_success": "Your VinCSS account has been deleted!",
     "delete_all_items": "Delete all account items",
     "delete_all_items_warning": "Proceed below to delete all items and folders in your vault. Items that belong to an organization that you share with will not be deleted.",
     "delete_all_items_success": "Your vault has been purged!",
@@ -752,19 +752,19 @@
       "step_2": "2. Tap \"Passwords\"",
       "step_3": "3. Tap \"AutoFill Passwords\"",
       "step_4": "4. Turn on AutoFill",
-      "step_5": "5. Select \"Locker\""
+      "step_5": "5. Select \"VinCSS\""
     },
     "android": {
       "btn": "Go setting",
       "other_permission": {
         "header": "Xiaomi Permission",
         "name_xiaomi": "Display pop-up windows while running in the background",
-        "desc": "Enable this permission to allow Locker's autofill service to display the user interface for selecting credentials for the application."
+        "desc": "Enable this permission to allow VinCSS's autofill service to display the user interface for selecting credentials for the application."
       },
       "android_autofill": {
         "header": "Autofill Service",
         "name": "Android Auto-fill",
-        "desc": "The Locker auto-fill service uses the Android Autofill Framework to assist in filling logins into other apps on your device"
+        "desc": "The VinCSS auto-fill service uses the Android Autofill Framework to assist in filling logins into other apps on your device"
       }
     }
   },
@@ -809,7 +809,7 @@
   },
   "invite_member": {
     "header": "Manage member",
-    "info_upgrade": "Upgrade to Family Plan and invite your friends joining Locker!",
+    "info_upgrade": "Upgrade to Family Plan and invite your friends joining VinCSS!",
     "add_noti": "Add members successfully ",
     "delete_noti": "Delete member successfully",
     "confirm": "Are you sure you want to remove this user from Family Plan?",
@@ -858,7 +858,7 @@
     }
   },
   "enterprise_invitation": {
-    "invited": "You are invited to Locker Business",
+    "invited": "You are invited to VinCSS Business",
     "org": "Organization",
     "invited_by": "Invited by",
     "accept_note": "If you accept this invitation, your account will be upgraded to Business User plan. Admins can perform certain actions to your account such as applying policies, locking, or disabling your account.",
@@ -870,7 +870,7 @@
       "note_3": "Apply password policies to your account"
     },
     "data": "All your vault data remains the same. {{mame}} can’t see your data or your Password.",
-    "request_access": "You have to Request access from {{mame}} in order to continue using your Locker account.",
+    "request_access": "You have to Request access from {{mame}} in order to continue using your VinCSS account.",
     "domain": {
       "join_org": "Join Organization",
       "managed_by": "This account is managed by: "
@@ -885,15 +885,15 @@
     "onpremise": "On-Premise"
   },
   "onpremise_passwordless": {
-    "title": "Enter the OTP code below to your Locker Desktop app to log in. Make sure that you’ve already registered your account on Desktop app with a FIDO device.",
+    "title": "Enter the OTP code below to your VinCSS Desktop app to log in. Make sure that you’ve already registered your account on Desktop app with a FIDO device.",
     "expired": "Code Expires in: {{ss}}s",
     "new_otp": "Generate a new one",
     "instruction": {
       "label": "Instruction",
       "1": "Log in on Desktop app",
-      "2": "Click on your profile menu on the top right",
-      "3": "Choose Passwordless Mobile Login",
-      "4": "Enter the OTP",
+      "2": "Open Settings > Security > Mobile Passwordless Login",
+      "3": "Click the Scan QR Code button",
+      "4": "Enter the OTP to get the QR code",
       "go_back": "Go Back"
     },
     "qr_scan": "Scan QR code",
@@ -905,11 +905,11 @@
       "title": "Choose your sharing option",
       "normal": {
         "tl": "In-app shares",
-        "dec": "Share with Locker users or a group of users. They can view or edit your item."
+        "dec": "Share with VinCSS users or a group of users. They can view or edit your item."
       },
       "quick": {
         "tl": "Quick shares",
-        "dec": "Send a link of the item to anyone, they don't need a Locker account to view it."
+        "dec": "Send a link of the item to anyone, they don't need a VinCSS account to view it."
       }
     },
     "title": "Get shareable link",

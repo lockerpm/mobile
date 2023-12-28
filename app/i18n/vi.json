@@ -142,18 +142,18 @@
     "required_text": "Không được để trống"
   },
   "navigator": {
-    "is_offline": "Locker hiện đang ở chế độ ngoại tuyến."
+    "is_offline": "VinCSS hiện đang ở chế độ ngoại tuyến."
   },
   "alert": {
     "enterprise_lock": "Tài khoản đã bị khóa bởi doanh nghiệp. Vui lòng liên hệ quản trị viên của bạn để mở khóa tài khoản",
     "enterprise_system_lock": "Tài khoản đã bị khóa bởi gói doanh nghiệp đã hết hạn. Vui lòng liên hệ quản trị viên của bạn để mở khóa tài khoản",
     "update": {
       "title": "Cập nhật ứng dụng?",
-      "content": "Locker {{version}} đã có mặt tại của hàng. Cập nhật ngay!",
+      "content": "VinCSS {{version}} đã có mặt tại của hàng. Cập nhật ngay!",
       "later": "Sau",
       "now": "Cập nhật"
     },
-    "lock_app": "Khoá Locker?",
+    "lock_app": "Khoá VinCSS?",
     "logout": "Đăng xuất khỏi "
   },
   "error": {
@@ -221,7 +221,7 @@
     "invitation_accepted": "Đã chấp nhận lời mời. Hãy đợi xác nhận từ quản trị.",
     "invitation_rejected": "Đã từ chối lời mời",
     "master_password_updated": "Mật khẩu đã được cập nhật",
-    "locker_password_updated": "Mật khẩu Locker đã được cập nhật",
+    "locker_password_updated": "Mật khẩu VinCSS đã được cập nhật",
     "biometric_enabled": "Mở khóa bằng Face ID/Touch ID đã được kích hoạt",
     "cipher_created": "Thêm mới thành công",
     "cipher_deleted": "Xóa thành công",
@@ -236,7 +236,7 @@
 
   "emergency_access": {
     "title": "Liên hệ khẩn cấp",
-    "des": "Tính năng này cấp cho phép chủ sở hữu tài khoản Locker khác khả năng truy cập vào kho tiền của bạn trong một số tình huống khẩn cấp.",
+    "des": "Tính năng này cấp cho phép chủ sở hữu tài khoản VinCSS khác khả năng truy cập vào kho tiền của bạn trong một số tình huống khẩn cấp.",
     "label": "{{pending}} YÊU CẦU ĐANG CHỜ",
     "view": "Xem",
     "takeover": "Chiếm quyền",
@@ -264,9 +264,9 @@
     "view_vault": "Xem kho dữ liệu",
     "takeover_vault": "Chiếm quyền kho dữ liệu",
     "reset_master_pw": "Đặt lại mật khẩu",
-    "reset_pw": "Đặt lại mật khẩu Locker",
+    "reset_pw": "Đặt lại mật khẩu VinCSS",
     "reset_master_pw_user": "Đặt lại mật khẩu cho {{name}}",
-    "reset_pw_user": "Đặt lại mật khẩu Locker cho {{name}}",
+    "reset_pw_user": "Đặt lại mật khẩu VinCSS cho {{name}}",
     "change_pw": {
       "title": "Đặt lại mật khẩu",
       "new": "Mật khẩu mới",
@@ -303,15 +303,15 @@
   },
   "create_master_pass": {
     "title": "Tạo mật khẩu",
-    "desc": "mật khẩu là mật khẩu mở khóa Locker của bạn. Đây là mật khẩu duy nhất bạn cần nhớ để truy cập tất cả các mật khẩu khác được lưu trữ trong Locker. Vui lòng không chia sẻ mật khẩu này với bất kỳ ai.",
+    "desc": "mật khẩu là mật khẩu mở khóa VinCSS của bạn. Đây là mật khẩu duy nhất bạn cần nhớ để truy cập tất cả các mật khẩu khác được lưu trữ trong VinCSS. Vui lòng không chia sẻ mật khẩu này với bất kỳ ai.",
     "confirm_master_pass": "Xác nhận mật khẩu",
     "hint": "Gợi ý (không bắt buộc)",
     "btn": "Tạo mật khẩu",
-    "note": "Lưu ý: Locker không thể xem, không thể lưu trữ, cũng như không thể cấp lại mật khẩu trong trường hợp bạn quên hoặc đánh mất."
+    "note": "Lưu ý: VinCSS không thể xem, không thể lưu trữ, cũng như không thể cấp lại mật khẩu trong trường hợp bạn quên hoặc đánh mất."
   },
   "confirm_create_master_pass": {
     "title": "Quan trọng",
-    "desc": "Khi tiếp tục, bạn đã hiểu rằng đội ngũ Locker không thể nhìn, thay đổi, hoặc cấp lại mật khẩu của bạn trong trường hợp bạn quên mật khẩu. Bạn là người duy nhất sở hữu mật khẩu.",
+    "desc": "Khi tiếp tục, bạn đã hiểu rằng đội ngũ VinCSS không thể nhìn, thay đổi, hoặc cấp lại mật khẩu của bạn trong trường hợp bạn quên mật khẩu. Bạn là người duy nhất sở hữu mật khẩu.",
     "link": "Xem thêm.",
     "next_btn": "Tôi đã hiểu",
     "back_btn": "Tôi muốn thay đổi mật khẩu"
@@ -323,7 +323,7 @@
     },
     "sync": {
       "title": "Đồng bộ hóa không giới hạn",
-      "desc": "Bạn có thể truy cập dữ liệu của Locker từ bất kỳ thiết bị nào."
+      "desc": "Bạn có thể truy cập dữ liệu của VinCSS từ bất kỳ thiết bị nào."
     },
     "autofill": {
       "title": "Tự động điền",
@@ -394,7 +394,7 @@
     "decrypting": "Giải mã dữ liệu..."
   },
   "biometric_intro": {
-    "title": "Mở khóa Locker bằng Face ID/Touch ID",
+    "title": "Mở khóa VinCSS bằng Face ID/Touch ID",
     "desc": "Sử dụng nhận dạng khuôn mặt hoặc vân tay để bảo vệ mật khẩu của bạn",
     "use_btn": "Sử dụng Face ID/Touch ID",
     "later_btn": "Để sau"
@@ -527,8 +527,8 @@
     }
   },
   "password": {
-    "locker_master_password": "Mật khẩu Locker",
-    "master_password_note": "Đây là mật khẩu Locker của bạn. Mật khẩu này sẽ tự động thay đổi khi bạn thay đổi mật khẩu trong phần Cài Đặt. Chúng tôi tạo ra mục này để bạn xem lại khi quên mật khẩu. Đừng lo, việc tái tạo mật khẩu diễn ra ngay tại thiết bị của bạn, đội ngũ Locker vẫn không thể xem, sửa, can thiệp tới mật khẩu của bạn.",
+    "locker_master_password": "Mật khẩu VinCSS",
+    "master_password_note": "Đây là mật khẩu VinCSS của bạn. Mật khẩu này sẽ tự động thay đổi khi bạn thay đổi mật khẩu trong phần Cài Đặt. Chúng tôi tạo ra mục này để bạn xem lại khi quên mật khẩu. Đừng lo, việc tái tạo mật khẩu diễn ra ngay tại thiết bị của bạn, đội ngũ VinCSS vẫn không thể xem, sửa, can thiệp tới mật khẩu của bạn.",
     "login_details": "Thông tin đăng nhập",
     "username": "Email / Tên người dùng",
     "website_url": "Địa chỉ website",
@@ -726,7 +726,7 @@
     "delete_account_warning": "Mục này để xóa tài khoản và toàn bộ dữ liệu tài khoản.",
     "delete_account_success": "Xoá tài khoản thành công!",
     "delete_all_items": "Xóa tất cả dữ liệu",
-    "delete_all_items_warning": "Mục này để xóa tất cả dữ liệu trong không gian Locker của bạn. Dữ liệu tổ chức, nếu có, sẽ không được xóa.",
+    "delete_all_items_warning": "Mục này để xóa tất cả dữ liệu trong không gian VinCSS của bạn. Dữ liệu tổ chức, nếu có, sẽ không được xóa.",
     "delete_all_items_success": "Xoá dữ liệu thành công!",
     "on_app_close": "Khi tắt ứng dụng",
     "on_screen_off": "Khi tắt màn hình",
@@ -752,19 +752,19 @@
       "step_2": "2. Chọn \"Mật khẩu\"",
       "step_3": "3. Chọn \"Tự động điền mật khẩu\"",
       "step_4": "4. Bật \"Tự động điền mật khẩu\"",
-      "step_5": "5. Chọn \"Locker\""
+      "step_5": "5. Chọn \"VinCSS\""
     },
     "android": {
       "btn": "Mở cài đặt",
       "other_permission": {
         "header": "Xiaomi Permission",
         "name_xiaomi": "Hiện thị cửa sổ pop-up khi chạy trong nền",
-        "desc": "Kích hoạt quyền này để cho phép dịch vụ tự động điền của Locker hiện thị giao diện phục vụ người dùng chọn thông tin đăng nhập cho ứng dụng"
+        "desc": "Kích hoạt quyền này để cho phép dịch vụ tự động điền của VinCSS hiện thị giao diện phục vụ người dùng chọn thông tin đăng nhập cho ứng dụng"
       },
       "android_autofill": {
         "header": "Dịch vụ tự động điền",
         "name": "Tự động điền mật khẩu",
-        "desc": "Dịch vụ tự động điền của Locker sử dụng AutoFill Framework của Android để hỗ trợ điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn"
+        "desc": "Dịch vụ tự động điền của VinCSS sử dụng AutoFill Framework của Android để hỗ trợ điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn"
       }
     }
   },
@@ -810,7 +810,7 @@
   },
   "invite_member": {
     "header": "Quản lý thành viên",
-    "info_upgrade": "Nâng cấp lên gói Family và mời bạn bè gia đình sử dụng Locker!",
+    "info_upgrade": "Nâng cấp lên gói Family và mời bạn bè gia đình sử dụng VinCSS!",
     "add_noti": "Thêm thành viên thành công",
     "delete_noti": "Xoá thành viên thành công",
     "confirm": "Bạn có chắc muốn xoá người dùng này khỏi gói Family Plan?",
@@ -870,7 +870,7 @@
       "note_3": "Áp dụng các chính sách về mật khẩu"
     },
     "data": "Tài khoản của bạn vẫn được bảo mật. {{name}} không thể thấy được dữ liệu cũng như mật khẩu của bạn.",
-    "request_access": " Bạn bắt buộc phải yêu cầu tham gia vào {{name}} để tiếp tục sử dụng tài khoản Locker",
+    "request_access": " Bạn bắt buộc phải yêu cầu tham gia vào {{name}} để tiếp tục sử dụng tài khoản VinCSS",
     "domain": {
       "join_org": "Tham gia doanh nghiệp",
       "managed_by": "Tên miền này được quản lý bởi: "
@@ -885,7 +885,7 @@
     "onpremise": "On-Premise"
   },
   "onpremise_passwordless": {
-    "title": "Nhập mã OTP dưới đây vào ứng dụng Locker trên máy tính của bạn. Hãy đảm bảo rằng bạn đã đăng ký tài khoản trên ứng dụng máy tính với thiết bị FIDO.",
+    "title": "Nhập mã OTP dưới đây vào ứng dụng VinCSS trên máy tính của bạn. Hãy đảm bảo rằng bạn đã đăng ký tài khoản trên ứng dụng máy tính với thiết bị FIDO.",
     "expired": "Mã hết hiệu lực trong: {{ss}}s",
     "new_otp": "Tạo mã mới",
     "instruction": {
@@ -905,11 +905,11 @@
       "title": "Tùy chọn chia sẻ",
       "normal": {
         "tl": "Chia sẻ nội bộ",
-        "dec": "Chia sẻ với người dùng Locker khác, cho phép xem hoặc chỉnh sửa mục được chia sẻ."
+        "dec": "Chia sẻ với người dùng VinCSS khác, cho phép xem hoặc chỉnh sửa mục được chia sẻ."
       },
       "quick": {
         "tl": "Chia sẻ nhanh",
-        "dec": "Gửi một liên kết cho bất kỳ ai, cho phép xem mà không cần tài khoản Locker."
+        "dec": "Gửi một liên kết cho bất kỳ ai, cho phép xem mà không cần tài khoản VinCSS."
       }
     },
     "title": "Chia sẻ qua liên kết",
