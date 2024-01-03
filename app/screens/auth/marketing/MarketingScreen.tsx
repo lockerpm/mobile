@@ -1,9 +1,9 @@
-import { useNavigation } from "@react-navigation/native"
-import { Icon } from "app/components/cores"
-import { useStores } from "app/models"
-import { useTheme } from "app/services/context"
-import { observer } from "mobx-react-lite"
-import React, { useEffect, useRef } from "react"
+import { Icon } from 'app/components/cores'
+import { useStores } from 'app/models'
+import { AppStackScreenProps } from 'app/navigators/navigators.types'
+import { useTheme } from 'app/services/context'
+import { observer } from 'mobx-react-lite'
+import React, { FC, useEffect, useRef } from 'react'
 import {
   Dimensions,
   Image,
@@ -11,16 +11,14 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-} from "react-native"
+} from 'react-native'
 
-const IMAGE_VI = require("./vi.png")
-const IMAGE_EN = require("./en.png")
-
-export const MarketingScreen = observer(() => {
-  const navigation = useNavigation()
+export const MarketingScreen: FC<AppStackScreenProps<'marketing'>> = observer((props) => {
+  const navigation = props.navigation
+  const data = props.route.params.data
   const { colors } = useTheme()
-  const { uiStore, user } = useStores()
-  const { width, height } = Dimensions.get("screen")
+  const { uiStore } = useStores()
+  const { width, height } = Dimensions.get('screen')
 
   const isGoBack = useRef(false)
 
@@ -38,22 +36,23 @@ export const MarketingScreen = observer(() => {
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
         padding: 20,
         backgroundColor: colors.transparentModal,
       }}
     >
       <TouchableWithoutFeedback
         onPress={() => {
-          Linking.canOpenURL("https://locker.io/promo/cyber-month-2023?utm_source=app&utm_medium=popup&utm_campaign=cybersale&utm_term=1").then((val) => {
-            if (val) Linking.openURL("https://locker.io/promo/cyber-month-2023?utm_source=app&utm_medium=popup&utm_campaign=cybersale&utm_term=1")
+          Linking.canOpenURL(data.link).then((val) => {
+            if (val) Linking.openURL(data.link)
           })
           goBack()
         }}
       >
         <Image
-          source={user.language === "en" ? IMAGE_EN : IMAGE_VI}
+          source={{ uri: data.image }}
+          onError={(e) => console.log(e)}
           style={{
             height,
             width: width - 40,
@@ -64,8 +63,8 @@ export const MarketingScreen = observer(() => {
 
       <TouchableOpacity
         style={{
-          position: "absolute",
-          top: "10%",
+          position: 'absolute',
+          top: '10%',
           right: 0,
           padding: 20,
         }}

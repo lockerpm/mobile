@@ -1,10 +1,10 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
-import BottomSheet from '@gorhom/bottom-sheet'
-import { View, Modal, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import { useTheme } from 'app/services/context'
-import { MethodSelection } from './MethodSelection'
-import { OtpAuthen } from './OtpAuthen'
-import Animated, { FadeInDown } from 'react-native-reanimated'
+import React, { useCallback, useMemo, useRef, useState } from "react"
+import BottomSheet from "@gorhom/bottom-sheet"
+import { View, Modal, TouchableWithoutFeedback, Keyboard } from "react-native"
+import { useTheme } from "app/services/context"
+import { MethodSelection } from "./MethodSelection"
+import { OtpAuthen } from "./OtpAuthen"
+import Animated, { FadeInDown } from "react-native-reanimated"
 
 interface Props {
   credential: {
@@ -32,14 +32,14 @@ export const TwoFAAuthenSheet = ({ credential, isOpen, onClose, onLoggedIn }: Pr
   const { colors } = useTheme()
 
   const [index, setIndex] = useState(0)
-  const [method, setMethod] = useState('')
-  const [partialEmail, setPartialEamil] = useState('')
+  const [method, setMethod] = useState("")
+  const [partialEmail, setPartialEamil] = useState("")
 
   // ref
   const sheetRef = useRef<BottomSheet>(null)
 
   // variables
-  const snapPoints = useMemo(() => ['40%', '80%'], [])
+  const snapPoints = useMemo(() => ["40%", "80%"], [])
 
   const showFullSheet = useCallback(() => {
     sheetRef.current?.snapToIndex(1)
@@ -71,6 +71,9 @@ export const TwoFAAuthenSheet = ({ credential, isOpen, onClose, onLoggedIn }: Pr
           onClose={onClose}
           onChange={onSheetChange}
           enablePanDownToClose
+          handleStyle={{
+            backgroundColor: colors.background,
+          }}
           backdropComponent={() => (
             <TouchableWithoutFeedback onPress={closeSheet} style={{ flex: 1 }}>
               <View style={{ flex: 1, backgroundColor: colors.transparentModal }} />
@@ -79,6 +82,8 @@ export const TwoFAAuthenSheet = ({ credential, isOpen, onClose, onLoggedIn }: Pr
         >
           <View
             style={{
+              flex: 1,
+              backgroundColor: colors.background,
               paddingHorizontal: 20,
             }}
           >

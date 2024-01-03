@@ -687,6 +687,12 @@ export const UserModel = types
       const res = await idApi.onPremiseIdentifier(identifier)
       return res
     },
+
+    // Marketing
+    fetchMarketingContent: async () => {
+      const res = await userApi.fetchMarketingContent(self.apiToken, self.language)
+      return res
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     purchaseValidation: async (

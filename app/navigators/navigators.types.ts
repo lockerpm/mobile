@@ -3,6 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { LockType } from 'app/screens/unauth/lock/lock.types'
 import {
   AppNotification,
+  MarketingContent,
   OnPremiseIdentifierData,
   OnPremisePreloginData,
   RelayAddress,
@@ -102,7 +103,9 @@ export type ToolsStackScreenProps<T extends keyof ToolsParamList> = StackScreenP
 // ---------------------------MAIN Navigator---------------------------
 
 export type PrimaryParamList = {
-  marketing: undefined
+  marketing: {
+    data: MarketingContent
+  }
 
   mainTab: {
     screen?: string

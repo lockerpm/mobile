@@ -25,6 +25,7 @@ import {
   UpdateFCMRequest,
   UserInvitations,
   NotificationSettingData,
+  MarketingContent,
 } from 'app/static/types'
 import { CipherResponse } from 'core/models/response/cipherResponse'
 import { PolicyType } from 'app/static/types/enum'
@@ -320,9 +321,7 @@ class UserApi {
   }
 
   // Get plan
-  async getPlan(
-    token: string
-  ): Promise<
+  async getPlan(token: string): Promise<
     | {
         kind: 'ok'
         data: UserPlan
@@ -350,9 +349,7 @@ class UserApi {
   }
 
   // Get invitations
-  async getInvitations(
-    token: string
-  ): Promise<
+  async getInvitations(token: string): Promise<
     | {
         kind: 'ok'
         data: UserInvitations[]
@@ -691,7 +688,7 @@ class UserApi {
       // make the api call
       const response: ApiResponse<any> = await this.api.apisauce.get(
         '/cystack_platform/pm/payments/invoices',
-        { page: page }
+        { page }
       )
       // the typical ways to die when calling an api
       if (!response.ok) {
@@ -752,9 +749,7 @@ class UserApi {
     }
   }
 
-  async getFamilyMember(
-    token: string
-  ): Promise<
+  async getFamilyMember(token: string): Promise<
     | {
         kind: 'ok'
         data: FamilyMember[]
@@ -826,9 +821,7 @@ class UserApi {
     }
   }
 
-  async getTrialEligible(
-    token: string
-  ): Promise<
+  async getTrialEligible(token: string): Promise<
     | {
         kind: 'ok'
         data: {
@@ -1108,6 +1101,30 @@ class UserApi {
       }
 
       return { kind: 'ok' }
+    } catch (e) {
+      Logger.error(e.message)
+      return { kind: 'bad-data' }
+    }
+  }
+
+  // marketing
+  async fetchMarketingContent(
+    token: string,
+    language: string
+  ): Promise<{ kind: 'ok'; data: MarketingContent } | GeneralApiProblem> {
+    try {
+      this.api.apisauce.setHeader('Authorization', `Bearer ${token}`)
+      const response: ApiResponse<any> = await this.api.apisauce.get(
+        `/cystack_platform/pm/marketing/banner?language=${language}`
+      )
+
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+
+      return { kind: 'ok', data: response.data }
     } catch (e) {
       Logger.error(e.message)
       return { kind: 'bad-data' }
