@@ -32,10 +32,16 @@ export const UiStoreModel = types
     isPerformOverlayTask: types.maybeNull(types.boolean),
     hasNoMasterPwItem: types.maybeNull(types.boolean),
     isStartFromPasswordLess: types.maybeNull(types.boolean),
+
+    isFromPassword: types.maybeNull(types.boolean),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setIsFromPassword: (val: boolean) => {
+      self.isFromPassword = val
+    },
+
     setStartFromPasswordLess: (val: boolean) => {
       self.isStartFromPasswordLess = val
     },
@@ -133,6 +139,7 @@ export const UiStoreModel = types
       'isDeeplinkShares',
       'isDeeplinkEmergencyAccess',
       'isStartFromPasswordLess',
+      'isFromPassword'
     ])
   )
 

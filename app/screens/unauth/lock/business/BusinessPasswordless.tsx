@@ -7,17 +7,19 @@ import { BusinessPasswordlessQrScan } from "./PasswordlessQrScan"
 import { useAuthentication } from "app/services/hook"
 import { useCoreService } from "app/services/coreService"
 import { OtpPasswordlessGenerator, randomOtpNumber } from "./OtpGenerator"
+import { LoginMethod } from "app/static/types"
 
 const { width } = Dimensions.get("screen")
 
 interface Props {
   email: string
   handleLogout: () => void // or cancel
+  setLogMethod: (val: LoginMethod) => void
 }
 
-export const BusinessLockByPasswordless = ({ handleLogout, email }: Props) => {
+export const BusinessLockByPasswordless = ({ handleLogout, email, setLogMethod }: Props) => {
   const navigation = useNavigation() as any
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { biometricLogin } = useAuthentication()
   const { cryptoService } = useCoreService()
 
@@ -73,8 +75,12 @@ export const BusinessLockByPasswordless = ({ handleLogout, email }: Props) => {
           scrollTo(1)
         }}
         goBack={() => {
-          handleLogout()
-          navigation.goBack()
+          if (uiStore.isFromPassword) {
+            uiStore.setIsFromPassword(false)
+            setLogMethod(LoginMethod.PASSWORD)
+          } else {
+            handleLogout()
+          }
         }}
       />
       <BusinessPasswordlessQrScan

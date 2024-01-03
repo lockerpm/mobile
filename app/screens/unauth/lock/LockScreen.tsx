@@ -114,12 +114,13 @@ export const LockScreen: FC<RootStackScreenProps<"lock">> = observer((props) => 
     const commonProps = {
       biometryType,
       handleLogout,
+      setLogMethod
     }
 
     if (lockMethod === LoginMethod.PASSWORD) {
       return <LockByMasterPassword {...commonProps} email={userEmail} />
     }
-    return <BusinessLockByPasswordless {...commonProps} email={userEmail} />
+    return <BusinessLockByPasswordless {...commonProps} email={userEmail}  />
   }
 
   return <View style={{ flex: 1 }}>{renderContent()}</View>

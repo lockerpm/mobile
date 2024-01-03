@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react"
-import { Alert, BackHandler, View, Image, TouchableOpacity } from "react-native"
+import React, {  useEffect, useState } from "react"
+import { Alert, BackHandler, View, Image } from "react-native"
 import { useAuthentication, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
-import { EnterpriseInvitation } from "app/static/types"
+import { EnterpriseInvitation, LoginMethod } from "app/static/types"
 import { BiometricsType } from "../lock.types"
 import { useNavigation } from "@react-navigation/native"
 import { useTheme } from "app/services/context"
@@ -14,9 +14,10 @@ interface Props {
   biometryType: BiometricsType
   handleLogout: () => void
   email: string
+  setLogMethod: (val: LoginMethod) => void
 }
 
-export const LockByMasterPassword = ({ biometryType, handleLogout, email }: Props) => {
+export const LockByMasterPassword = ({ biometryType, handleLogout, email, setLogMethod }: Props) => {
   const { colors } = useTheme()
   const navigation = useNavigation() as any
   const { user, uiStore, enterpriseStore } = useStores()
@@ -162,6 +163,7 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, email }: Prop
   }, [])
 
   // ---------------------- RENDER -------------------------
+
   return (
     <Screen
       preset="auto"
@@ -274,8 +276,37 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, email }: Prop
           }}
         />
 
-        <TouchableOpacity
+        <Button
+          preset="secondary"
+          disabled={isUnlocking}
+          onPress={() => {
+            uiStore.setIsFromPassword(true)
+            setLogMethod(LoginMethod.PASSWORDLESS)
+          }}
+          style={{
+            marginTop: 20,
+          }}
+        >
+          <>
+            <Icon icon="qr-code" color={colors.primary} />
+            <Text
+              color={colors.primary}
+              preset="bold"
+              text={translate("lock.qr_lock")}
+              style={{
+                padding: 4,
+                marginLeft: 4,
+              }}
+            />
+          </>
+        </Button>
+
+        <Button
+          preset="teriatary"
           disabled={isBioUnlocking}
+          textStyle={{
+            color: colors.primaryText,
+          }}
           onPress={() => {
             if (!user.isBiometricUnlock) {
               notify("error", translate("error.biometric_not_enable"))
@@ -288,24 +319,20 @@ export const LockByMasterPassword = ({ biometryType, handleLogout, email }: Prop
             handleUnlockBiometric()
           }}
           style={{
-            width: "100%",
-            marginVertical: 25,
-            alignItems: "center",
+            marginTop: 20,
           }}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
+          <>
             <Icon icon={biometryType === BiometricsType.FaceID ? "face-id" : "fingerprint"} />
             <Text
-              // @ts-ignore
               text={translate(`common.${biometryType}_unlocking`)}
+              style={{
+                padding: 4,
+                marginLeft: 4,
+              }}
             />
-          </View>
-        </TouchableOpacity>
+          </>
+        </Button>
       </View>
       <Button
         preset="teriatary"

@@ -229,7 +229,7 @@ export const Button = observer((props: ButtonProps) => {
   return (
     <Pressable disabled={disabled} style={$viewStyle} accessibilityRole="button" {...rest}>
       {(state) => (
-        <View>
+        <View style={{flexDirection: 'row', alignItems: 'center' }}>
           <LeftIcon state={state} />
 
           <Text preset="bold" text={loading ? "" : text} style={$textStyle(state)} />

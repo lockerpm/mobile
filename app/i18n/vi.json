@@ -339,7 +339,8 @@
     "hint_sent": "Gợi ý mật khẩu đã được gửi. Vui lòng kiểm tra email của bạn để được hướng dẫn",
     "title": "Chào mừng trở lại!",
     "desc": "Nhập mật khẩu của bạn để đăng nhập",
-    "get_hint": "Nhận gợi ý"
+    "get_hint": "Nhận gợi ý",
+    "qr_lock": "Quét QR trên ứng dụng Web hoặc Desktop"
   },
   "onBoarding": {
     "no_account": "Chưa có tài khoản?",
@@ -891,9 +892,9 @@
     "instruction": {
       "label": "Hướng dẫn",
       "1": "Đăng nhập vào ứng dụng máy tính",
-      "2": "Nhấp chuột vào menu hồ sơ của bạn ở góc trên bên phải",
-      "3": "Chọn Đăng nhập không mật khẩu vào điện thoại",
-      "4": "Nhập mã OTP",
+      "2": "Chọn Cài đặt -> Bảo mật -> Đăng nhập Passwordles điện thoại",
+      "3": "Chọn quyét mã QR",
+      "4": "Nhập mã OTP để tạo mã QR",
       "go_back": "Quay lại"
     },
     "qr_scan": "Quét mã QR",

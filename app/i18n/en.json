@@ -338,7 +338,8 @@
     "hint_sent": "Password hint sent. Please check your email for instructions",
     "title": "Welcome Back!",
     "desc": "Enter your Password to Log In",
-    "get_hint": "Get Password hint"
+    "get_hint": "Get Password hint",
+    "qr_lock": "Scan a QR code on web app/desktop app"
   },
   "onBoarding": {
     "no_account": "Don't have an account?",
