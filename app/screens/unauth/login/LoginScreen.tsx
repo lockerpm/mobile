@@ -1,18 +1,20 @@
 import React, { FC, useState } from "react"
 import { View } from "react-native"
 import { RootStackScreenProps } from "app/navigators/navigators.types"
-import { Screen, Text, TextInput, Button, Logo } from "app/components/cores"
+import { Screen, Text, TextInput, Button, Logo, Icon } from "app/components/cores"
 import { observer } from "mobx-react-lite"
 import { useAuthentication, useHelper } from "app/services/hook"
 import { useStores } from "app/models"
 import { LoginMethod } from "app/static/types"
 import Animated, { FadeInUp } from "react-native-reanimated"
+import { useTheme } from "app/services/context"
 
 export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) => {
   const navigation = props.navigation
-  const { user } = useStores()
+  const { user, uiStore } = useStores()
   const { translate } = useHelper()
   const { sessionLogin } = useAuthentication()
+  const { colors } = useTheme()
 
   // ------------------------------ PARAMS -------------------------------
 
@@ -119,6 +121,31 @@ export const LoginScreen: FC<RootStackScreenProps<"login">> = observer((props) =
                   marginVertical: 16,
                 }}
               />
+
+              <Button
+                preset="secondary"
+                disabled={loginLoading }
+                onPress={() => {
+                  uiStore.setIsFromPassword(true)
+                  navigation.navigate('lock', {
+                    email: username,
+                    type: LoginMethod.PASSWORDLESS
+                  })
+                }}
+              >
+                <>
+                  <Icon icon="qr-code" color={colors.primary} />
+                  <Text
+                    color={colors.primary}
+                    preset="bold"
+                    text={translate("lock.qr_lock")}
+                    style={{
+                      padding: 4,
+                      marginLeft: 4,
+                    }}
+                  />
+                </>
+              </Button>
             </Animated.View>
           )}
 

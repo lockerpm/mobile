@@ -253,7 +253,7 @@ export const HomeHeader = (props: Props) => {
             preset={"default"}
             style={{ height: 35, width: 35, marginRight: 8 }}
           />
-          <Text preset="bold" size="large" weight="semibold" text={'VinCSS Locker'} />
+          <Text preset="bold" size="large" weight="semibold" text={'VinCSS'} />
           </View>
         )}
 

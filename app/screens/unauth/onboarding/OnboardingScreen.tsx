@@ -101,8 +101,10 @@ export const OnboardingScreen: FC<RootStackScreenProps<"onBoarding">> = observer
   }
 
   const loginOnPress = () => {
-    if (!ssoConfig) navigateLogin()
-
+    if (!ssoConfig) {
+      navigateLogin()
+      return
+    }
     if (IS_ANDROID) {
       setShowPasswordLessAndroidOptions(true)
     } else {

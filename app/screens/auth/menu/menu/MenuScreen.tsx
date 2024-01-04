@@ -28,11 +28,6 @@ export const MenuScreen = observer(() => {
       name: translate("common.settings"),
       onPress: () => navigation.navigate("settings"),
     },
-    {
-      icon: "question",
-      name: translate("common.help"),
-      onPress: () => navigation.navigate("help"),
-    },
   ]
 
   const items2: MenuItemProps[] = [
@@ -66,6 +61,25 @@ export const MenuScreen = observer(() => {
       preset="auto"
       padding
       backgroundColor={colors.block}
+      footer={
+        <>
+          <View
+            style={{
+              marginTop: 24,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text preset="label" size="medium">
+              {translate("menu.product_of")}
+            </Text>
+          </View>
+          <Text preset="label" weight="semibold" style={{ marginVertical: 8, textAlign: "center" }}>
+            {"VinCSS & CyStack"} - {appVersion}
+          </Text>
+        </>
+      }
       header={<TabHeader title={translate("common.menu")} />}
     >
       <MenuItemContainer>
@@ -133,23 +147,6 @@ export const MenuScreen = observer(() => {
           <MenuItem key={index} {...item} />
         ))}
       </MenuItemContainer>
-
-      <View
-        style={{
-          marginTop: 24,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text preset="label">{translate("menu.product_of")}</Text>
-        <Text preset="label" weight="semibold">
-          {"CyStack"}
-        </Text>
-      </View>
-      <Text preset="label" style={{ marginVertical: 8, textAlign: "center" }}>
-        Locker - {appVersion}
-      </Text>
     </Screen>
   )
 })
