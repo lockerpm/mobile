@@ -75,6 +75,8 @@ export function useAuthentication() {
           return { kind: 'enterprise-lock' }
         } else if (res.data.code === '1010') {
           return { kind: 'enterprise-system-lock' }
+        } else if (res.data.code === '1011') {
+          return { kind: 'enterprise-belongs' }
         } else {
           notifyApiError(res)
         }
@@ -87,8 +89,8 @@ export function useAuthentication() {
 
     if (onPremiseData) {
       setApiTokens(res.data?.access_token)
-      await Promise.all([user.getUser(), user.getUserPw()])
     }
+    await Promise.all([user.getUser(), user.getUserPw()])
 
     // Setup service
     messagingService.send('loggedIn')
