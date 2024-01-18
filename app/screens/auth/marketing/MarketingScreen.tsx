@@ -52,7 +52,6 @@ export const MarketingScreen: FC<AppStackScreenProps<'marketing'>> = observer((p
       >
         <Image
           source={{ uri: data.image }}
-          onError={(e) => console.log(e)}
           style={{
             height,
             width: width - 40,

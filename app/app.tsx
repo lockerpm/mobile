@@ -68,7 +68,6 @@ const App: ComponentType<RootProp> = (props: RootProp) => {
     NAVIGATION_PERSISTENCE_KEY
   )
 
-  console.log(props)
   const { rehydrated, rootStore } = useInitialRootStore(() => {
     // This runs after the root store has been initialized and rehydrated.
 
